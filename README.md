@@ -105,4 +105,4 @@ To get support [contact me directly](https://spincoding.com/contact/).
 
 ### License
 
-This boilerplate is [MIT licensed](./LICENSE.md).
+This boilerplate is [GNU GPL licensed](./LICENSE.md).
