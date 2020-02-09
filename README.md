@@ -87,13 +87,9 @@ Please make sure that your node server is up and running. Check if your ServerSi
 
 There is a good chance your window or global variables are undefined when doing SSR. Please have a look at [Stack Overflow](https://stackoverflow.com/questions/38951721/react-js-server-side-issue-window-not-found) to find ways to fix your code.
 
-## Disclaimer
-
-The boilerplate has been based on the [CRA (Create React App)](https://github.com/facebook/create-react-app), [Create React App preset for Storybook](https://github.com/storybookjs/presets/tree/master/packages/preset-create-react-app) and standard ASP.NET Core MVC template.
-
 ## Documentation
 
-You will learn more about this boilerplate [on the website](https://spincoding.com).
+You will learn more about Giuru [on the website](https://giuru.com).
 
 ## Contributing
 
@@ -105,4 +101,4 @@ To get support [contact me directly](https://spincoding.com/contact/).
 
 ### License
 
-This boilerplate is [GNU GPL licensed](./LICENSE.md).
+Giuru is [GNU GPL licensed](./LICENSE.md).
