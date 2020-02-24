@@ -1,55 +1,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helm.fullname" . }}
+  name: react-ssr-web-deployment
   labels:
-    {{- include "helm.labels" . | nindent 4 }}
+    app: react-ssr-web
 spec:
-  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "helm.selectorLabels" . | nindent 6 }}
+      app: react-ssr-web
   template:
     metadata:
       labels:
-        {{- include "helm.selectorLabels" . | nindent 8 }}
+        app: react-ssr-web
     spec:
-    {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
-      serviceAccountName: {{ include "helm.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: 80
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-    {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
+      - name: react-ssr-web-container
+        image: giuru.azurecr.io/react-ssr-web:latest
+        ports:
+        - containerPort: 3000
+      imagePullSecrets:
+      - name: giurusecret
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aspnetcore-web-deployment
+  labels:
+    app: aspnetcore-web
+spec:
+  selector:
+    matchLabels:
+      app: aspnetcore-web
+  template:
+    metadata:
+      labels:
+        app: aspnetcore-web
+    spec:
+      containers:
+      - name: aspnetcore-web-container
+        image: giuru.azurecr.io/aspnetcore-web:v1
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: giurusecret

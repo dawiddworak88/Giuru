@@ -1,15 +1,25 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "helm.fullname" . }}
-  labels:
-    {{- include "helm.labels" . | nindent 4 }}
+  name: react-ssr-web-service
 spec:
-  type: {{ .Values.service.type }}
-  ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+  type: ClusterIP
   selector:
-    {{- include "helm.selectorLabels" . | nindent 4 }}
+    app: react-ssr-web
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aspnetcore-web-service
+spec:
+  type: ClusterIP
+  selector:
+    app: aspnetcore-web
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
