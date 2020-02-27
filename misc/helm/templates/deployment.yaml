@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-ssr-web-deployment
+  labels:
+    app: react-ssr-web
+spec:
+  selector:
+    matchLabels:
+      app: react-ssr-web
+  template:
+    metadata:
+      labels:
+        app: react-ssr-web
+    spec:
+      containers:
+      - name: react-ssr-web-container
+        image: giuru.azurecr.io/react-ssr-web:9a72d875fe134514d74d9f5a8368d421bd3aea03
+        ports:
+        - containerPort: 3000
+      imagePullSecrets:
+      - name: giurusecret
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aspnetcore-web-deployment
+  labels:
+    app: aspnetcore-web
+spec:
+  selector:
+    matchLabels:
+      app: aspnetcore-web
+  template:
+    metadata:
+      labels:
+        app: aspnetcore-web
+    spec:
+      containers:
+      - name: aspnetcore-web-container
+        image: giuru.azurecr.io/aspnetcore-web:9a72d875fe134514d74d9f5a8368d421bd3aea03
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: giurusecret
