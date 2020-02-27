@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: react-ssr-web-container
-        image: giuru.azurecr.io/react-ssr-web:latest
+        image: giuru.azurecr.io/react-ssr-web:9a72d875fe134514d74d9f5a8368d421bd3aea03
         ports:
         - containerPort: 3000
       imagePullSecrets:
@@ -38,7 +38,7 @@ spec:
     spec:
       containers:
       - name: aspnetcore-web-container
-        image: giuru.azurecr.io/aspnetcore-web:v1
+        image: giuru.azurecr.io/aspnetcore-web:9a72d875fe134514d74d9f5a8368d421bd3aea03
         ports:
         - containerPort: 80
       imagePullSecrets:
