@@ -12,6 +12,8 @@ RUN npm install
 
 COPY --chown=node:node . .
 
+ENV NODE_ENV=development
+
 EXPOSE 3000
 
-CMD ["NODE_ENV=development", "BABEL_ENV=development", "node", "server/bootstrap.js" ]
+CMD ["node", "server/bootstrap.js" ]

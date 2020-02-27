@@ -12,6 +12,8 @@ RUN npm install
 
 COPY --chown=node:node . .
 
+ENV NODE_ENV=production
+
 EXPOSE 9009
 
-CMD ["NODE_ENV=production", "BABEL_ENV=production", "npm", "run", "storybook" ]
+CMD ["npm", "run", "storybook" ]
