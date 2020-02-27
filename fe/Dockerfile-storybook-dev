@@ -14,4 +14,4 @@ COPY --chown=node:node . .
 
 EXPOSE 9009
 
-CMD [ "npm", "run", "storybook" ]
+CMD ["NODE_ENV=development", "BABEL_ENV=development", "npm", "run", "storybook" ]
