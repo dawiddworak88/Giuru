@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 
-import HomePage from '../../src/pages/HomePage/HomePage';
+import HomePage from '../../src/project/AspNetCore/areas/Home/pages/HomePage/HomePage';
 
 const Components = {
     HomePage

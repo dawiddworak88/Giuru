@@ -626,9 +626,9 @@ var react_default = /*#__PURE__*/__webpack_require__.n(react);
 var react_dom = __webpack_require__(2);
 var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
 
-// CONCATENATED MODULE: ./src/pages/HomePage/logo.svg
+// CONCATENATED MODULE: ./src/project/AspNetCore/areas/Home/pages/HomePage/logo.svg
 /* harmony default export */ var logo = ("/dist/images/logo.svg");
-// CONCATENATED MODULE: ./src/pages/HomePage/HomePage.js
+// CONCATENATED MODULE: ./src/project/AspNetCore/areas/Home/pages/HomePage/HomePage.js
 
 
 
@@ -645,7 +645,7 @@ function HomePage(props) {
 }
 
 /* harmony default export */ var HomePage_HomePage = (HomePage);
-// CONCATENATED MODULE: ./src/pages/HomePage/index.js
+// CONCATENATED MODULE: ./src/project/AspNetCore/areas/Home/pages/HomePage/index.js
 
 
 

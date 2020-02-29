@@ -1,8 +1,8 @@
 import React from 'react';
 import { linkTo } from '@storybook/addon-links';
 import { Welcome } from '@storybook/react/demo';
-import '../pages/HomePage/HomePage.scss';
-import HomePage from '../pages/HomePage/HomePage';
+import '../project/AspNetCore/areas/Home/pages/HomePage/HomePage.scss';
+import HomePage from '../project/AspNetCore/areas/Home/pages/HomePage/HomePage';
 
 export default {
   title: 'Welcome',

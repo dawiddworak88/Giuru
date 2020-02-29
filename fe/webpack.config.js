@@ -58,7 +58,7 @@ var browserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
-        homepage: ["./src/pages/HomePage/index.js", "./src/pages/HomePage/HomePage.scss"]
+        homepage: ["./src/project/AspNetCore/areas/Home/pages/HomePage/index.js", "./src/project/AspNetCore/areas/Home/pages/HomePage/HomePage.scss"]
     },
     output: {
         publicPath: path.resolve(__dirname, "../be/src/Project/AspNetCore/wwwroot/dist/js"),

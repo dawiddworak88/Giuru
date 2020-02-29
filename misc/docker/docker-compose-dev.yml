@@ -22,8 +22,8 @@ services:
       - "3000:3000"
   aspnetcore-web:
     build: 
-      context: ../../be/src
-      dockerfile: Dockerfile-dev
+      context: ../../be
+      dockerfile: Dockerfile-AspNetCore
     image: aspnetcore-web:aspnetcore
     restart: always
     depends_on: 
