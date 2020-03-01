@@ -1,0 +1,24 @@
+﻿using AspNetCore.Localization.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using System.Globalization;
+
+namespace AspNetCore.Extensions.Controllers
+{
+    [LocalizationCookieFilter]
+    public class BaseController : Controller
+    {
+        protected string CurrentLanguage => CultureInfo.CurrentUICulture.Name;
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            var routeValues = context.RouteData.Values;
+
+            if (routeValues != null && !routeValues.ContainsKey("culture"))
+            {
+                routeValues.Add("culture", CurrentLanguage);
+                context.Result = new RedirectToRouteResult(routeValues);
+            }
+        }
+    }
+}

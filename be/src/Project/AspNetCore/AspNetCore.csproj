@@ -12,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\AspNetCore.Extensions\AspNetCore.Extensions.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\AspNetCore.Localization\AspNetCore.Localization.csproj" />
     <ProjectReference Include="..\..\Infrastructure\AspNetCore.Prerendering\AspNetCore.Prerendering.csproj" />
   </ItemGroup>
 

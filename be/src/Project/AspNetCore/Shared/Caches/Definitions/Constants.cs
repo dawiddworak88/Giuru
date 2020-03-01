@@ -1,4 +1,4 @@
-﻿namespace AspNetCore.Definitions
+﻿namespace AspNetCore.Shared.Caches.Definitions
 {
     public static class Constants
     {

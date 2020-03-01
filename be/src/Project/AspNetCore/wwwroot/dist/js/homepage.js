@@ -626,8 +626,53 @@ var react_default = /*#__PURE__*/__webpack_require__.n(react);
 var react_dom = __webpack_require__(2);
 var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
 
-// CONCATENATED MODULE: ./src/project/AspNetCore/areas/Home/pages/HomePage/logo.svg
-/* harmony default export */ var logo = ("/dist/images/logo.svg");
+// CONCATENATED MODULE: ./src/shared/layouts/images/logo.png
+/* harmony default export */ var logo = ("/dist/images/logo.png");
+// CONCATENATED MODULE: ./src/project/AspNetCore/shared/components/Header/Header.js
+
+
+
+function Header(props) {
+  var isActiveHook = Object(react["useState"])(false);
+  var isActive = isActiveHook[0];
+  var setIsActive = isActiveHook[1];
+  return react_default.a.createElement("header", null, react_default.a.createElement("nav", {
+    className: "navbar is-spaced"
+  }, react_default.a.createElement("div", {
+    className: "navbar-brand"
+  }, react_default.a.createElement("a", {
+    href: props.logo.targetUrl
+  }, react_default.a.createElement("img", {
+    src: logo,
+    alt: props.logo.logoAltLabel
+  })), react_default.a.createElement("div", {
+    role: "button",
+    onClick: function onClick() {
+      return setIsActive(!isActive);
+    },
+    className: isActive ? 'navbar-burger is-active' : 'navbar-burger',
+    "aria-label": "menu",
+    "aria-expanded": "false"
+  }, react_default.a.createElement("span", {
+    "aria-hidden": "true"
+  }), react_default.a.createElement("span", {
+    "aria-hidden": "true"
+  }), react_default.a.createElement("span", {
+    "aria-hidden": "true"
+  }))), react_default.a.createElement("div", {
+    className: isActive ? 'navbar-menu is-active' : 'navbar-menu'
+  }, react_default.a.createElement("div", {
+    className: "navbar-start"
+  }), react_default.a.createElement("div", {
+    className: "navbar-end"
+  }, react_default.a.createElement("div", {
+    className: "navbar-item"
+  }, react_default.a.createElement("div", {
+    className: "buttons m-b-0"
+  }))))));
+}
+
+/* harmony default export */ var Header_Header = (Header);
 // CONCATENATED MODULE: ./src/project/AspNetCore/areas/Home/pages/HomePage/HomePage.js
 
 
@@ -635,13 +680,9 @@ var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
 function HomePage(props) {
   return react_default.a.createElement("div", {
     className: "home-page"
-  }, react_default.a.createElement("header", {
-    className: "home-page-header"
-  }, react_default.a.createElement("img", {
-    src: logo,
-    className: "home-page-logo",
-    alt: "logo"
-  }), react_default.a.createElement("p", null, props.welcome), react_default.a.createElement("p", null, props.learnMore)));
+  }, react_default.a.createElement(Header_Header, props.header), react_default.a.createElement("section", {
+    className: "section"
+  }, react_default.a.createElement("p", null, props.welcome), react_default.a.createElement("p", null, props.learnMore)));
 }
 
 /* harmony default export */ var HomePage_HomePage = (HomePage);
