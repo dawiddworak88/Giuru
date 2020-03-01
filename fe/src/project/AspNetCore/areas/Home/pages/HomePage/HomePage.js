@@ -1,18 +1,16 @@
 import React from 'react';
-import logo from './logo.svg';
+import Header from '../../../../shared/components/Header/Header';
 
 function HomePage(props) {
   return (
     <div className="home-page">
-      <header className="home-page-header">
-        <img src={logo} className="home-page-logo" alt="logo" />
-        <p>
-          {props.welcome}
-        </p>
-        <p>
-          {props.learnMore}
-        </p>
-      </header>
+      <Header {...props.header}></Header>
+      <p>
+        {props.welcome}
+      </p>
+      <p>
+        {props.learnMore}
+      </p>
     </div>
   );
 }

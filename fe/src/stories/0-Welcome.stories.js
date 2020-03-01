@@ -11,7 +11,11 @@ export default {
 
 export const ToStorybook = () => <Welcome showApp={linkTo('Button')} />;
 
-export const HomePageStory = () => <HomePage welcome="Welcome from Storybook" learnMore="Learn more!" />
+var header = {
+
+};
+
+export const HomePageStory = () => <HomePage header={header} welcome="Welcome from Storybook" learnMore="Learn more!" />
 
 ToStorybook.story = {
   name: 'to Storybook',
