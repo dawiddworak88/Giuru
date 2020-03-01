@@ -5,12 +5,14 @@ function HomePage(props) {
   return (
     <div className="home-page">
       <Header {...props.header}></Header>
-      <p>
-        {props.welcome}
-      </p>
-      <p>
-        {props.learnMore}
-      </p>
+      <section className="section">
+        <p>
+          {props.welcome}
+        </p>
+        <p>
+          {props.learnMore}
+        </p>
+      </section>
     </div>
   );
 }

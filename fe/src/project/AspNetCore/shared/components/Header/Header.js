@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import logo from '../../layouts/images/logo.png';
+import logo from '../../../../../shared/layouts/images/logo.png';
 
 function Header(props) {
 
@@ -14,11 +14,11 @@ function Header(props) {
                     <a href={props.logo.targetUrl}>
                         <img src={logo} alt={props.logo.logoAltLabel} />
                     </a>
-                    <a role="button" onClick={() => setIsActive(!isActive)} className={isActive ? 'navbar-burger is-active' : 'navbar-burger'} aria-label="menu" aria-expanded="false">
+                    <div role="button" onClick={() => setIsActive(!isActive)} className={isActive ? 'navbar-burger is-active' : 'navbar-burger'} aria-label="menu" aria-expanded="false">
                         <span aria-hidden="true"></span>
                         <span aria-hidden="true"></span>
                         <span aria-hidden="true"></span>
-                    </a>
+                    </div>
                 </div>
                 <div className={isActive ? 'navbar-menu is-active' : 'navbar-menu'}>
                     <div className="navbar-start">
