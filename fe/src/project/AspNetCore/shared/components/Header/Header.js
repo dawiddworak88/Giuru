@@ -5,7 +5,7 @@ import logo from '../../../../../shared/layouts/images/logo.png';
 
 function Header(props) {
 
-    const isActiveArray = useState(false); const isActive = isActiveArray[0]; const setIsActive = isActiveArray[1];
+    const isActiveHook = useState(false); const isActive = isActiveHook[0]; const setIsActive = isActiveHook[1];
 
     return (
         <header>
