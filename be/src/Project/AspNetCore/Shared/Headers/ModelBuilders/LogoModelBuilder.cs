@@ -6,11 +6,8 @@ namespace AspNetCore.Shared.Headers.ModelBuilders
 {
     public class LogoModelBuilder : IModelBuilder<LogoViewModel>
     {
-        private readonly IStringLocalizer<LogoModelBuilder> globalLocalizer;
-
-        public LogoModelBuilder(IStringLocalizer<LogoModelBuilder> globalLocalizer)
+        public LogoModelBuilder()
         {
-            this.globalLocalizer = globalLocalizer;
         }
 
         public LogoViewModel BuildModel()

@@ -6,18 +6,13 @@ using Microsoft.Extensions.Localization;
 
 namespace AspNetCore.Areas.Home.ModelBuilders
 {
-    public class HomeModelBuilder : IModelBuilder<HomePageViewModel>
+    public class HomePageModelBuilder : IModelBuilder<HomePageViewModel>
     {
-        private readonly IStringLocalizer<HomeModelBuilder> globalLocalizer;
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly LinkGenerator linkGenerator;
 
-        public HomeModelBuilder(
-            IStringLocalizer<HomeModelBuilder> globalLocalizer,
-            IModelBuilder<HeaderViewModel> headerModelBuilder,
-            LinkGenerator linkGenerator)
+        public HomePageModelBuilder(IModelBuilder<HeaderViewModel> headerModelBuilder, LinkGenerator linkGenerator)
         {
-            this.globalLocalizer = globalLocalizer;
             this.headerModelBuilder = headerModelBuilder;
             this.linkGenerator = linkGenerator;
         }
@@ -26,7 +21,9 @@ namespace AspNetCore.Areas.Home.ModelBuilders
         {
             var viewModel = new HomePageViewModel
             {
-                Header = headerModelBuilder.BuildModel()
+                Header = headerModelBuilder.BuildModel(),
+                Welcome = "Welcome",
+                LearnMore = "Learn more"
             };
 
             return viewModel;

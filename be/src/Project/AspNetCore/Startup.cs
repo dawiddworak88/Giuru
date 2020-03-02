@@ -1,6 +1,8 @@
 using System.IO.Compression;
 using AspNetCore.Localization.Definitions;
+using AspNetCore.Localization.Extensions;
 using AspNetCore.Shared.Caches.Definitions;
+using AspNetCore.Shared.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -23,6 +25,8 @@ namespace AspNetCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCultureRouteConstraint();
+
             services.AddControllersWithViews();
 
             services.Configure<GzipCompressionProviderOptions>(options =>
@@ -35,6 +39,8 @@ namespace AspNetCore
                 options.EnableForHttps = true;
                 options.Providers.Add<GzipCompressionProvider>();
             });
+
+            services.RegisterDependencies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
