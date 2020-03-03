@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.IO.Compression;
 using AspNetCore.Localization.Definitions;
 using AspNetCore.Localization.Extensions;
@@ -5,10 +6,12 @@ using AspNetCore.Shared.Caches.Definitions;
 using AspNetCore.Shared.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 
 namespace AspNetCore
@@ -25,6 +28,10 @@ namespace AspNetCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLocalizationConfiguration(this.Configuration);
+
+            services.AddLocalization();
+
             services.AddCultureRouteConstraint();
 
             services.AddControllersWithViews();
@@ -44,7 +51,7 @@ namespace AspNetCore
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<LocalizationConfiguration> localizationOptions)
         {
             if (env.IsDevelopment())
             {
@@ -71,6 +78,8 @@ namespace AspNetCore
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
 
             app.UseEndpoints(endpoints =>
             {
