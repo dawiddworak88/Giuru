@@ -1,8 +1,8 @@
 ﻿using AspNetCore.Areas.Home.ViewModel;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.Localization;
 using AspNetCore.Shared.Headers.ViewModels;
 using Microsoft.Extensions.Localization;
+using Feature.Localization;
 
 namespace AspNetCore.Areas.Home.ModelBuilders
 {
@@ -10,11 +10,11 @@ namespace AspNetCore.Areas.Home.ModelBuilders
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
 
-        private readonly IStringLocalizer<Global> globalLocalizer;
+        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
 
         public HomePageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder, 
-            IStringLocalizer<Global> globalLocalizer)
+            IStringLocalizer<GlobalResources> globalLocalizer)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.globalLocalizer = globalLocalizer;
