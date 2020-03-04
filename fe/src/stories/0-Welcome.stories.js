@@ -6,6 +6,26 @@ var header = {
   logo: {
     targetUrl: '/',
     logoAltLabel: 'Logo'
+  },
+  languageSwitcher: {
+    availableLanguages: [
+      {
+        uniqueId: 'EN',
+        url: '#',
+        text: 'EN'
+      },
+      {
+        uniqueId: 'DE',
+        url: '#',
+        text: 'DE'
+      },
+      {
+        uniqueId: 'PL',
+        url: '#',
+        text: 'PL'
+      }
+    ],
+    defaultLanguageUniqueId: 'PL'
   }
 };
 

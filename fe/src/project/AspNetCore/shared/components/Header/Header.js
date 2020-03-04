@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import LanguageSwitcher from '../../../../../shared/components/LanguageSwitcher';
 
 import logo from '../../../../../shared/layouts/images/logo.png';
 
@@ -25,8 +26,7 @@ function Header(props) {
                     </div>
                     <div className="navbar-end">
                         <div className="navbar-item">
-                            <div className="buttons m-b-0">
-                            </div>
+                            <LanguageSwitcher {...props.languageSwitcher} />
                         </div>
                     </div>
                 </div>
