@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AspNetCore.Localization.Definitions
+namespace Foundation.Localization.Definitions
 {
     public class LocalizationConstants
     {

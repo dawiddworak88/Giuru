@@ -25,7 +25,7 @@ var header = {
         text: 'PL'
       }
     ],
-    defaultLanguageUniqueId: 'PL'
+    selectedLanguageUniqueId: 'PL'
   }
 };
 

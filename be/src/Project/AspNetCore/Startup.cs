@@ -1,18 +1,17 @@
-using System.Globalization;
 using System.IO.Compression;
-using AspNetCore.Localization.Definitions;
-using AspNetCore.Localization.Extensions;
+using Foundation.Localization.Definitions;
+using Foundation.Localization.Extensions;
 using AspNetCore.Shared.Caches.Definitions;
 using AspNetCore.Shared.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using Feature.Localization.DependencyInjection;
 
 namespace AspNetCore
 {
@@ -34,6 +33,8 @@ namespace AspNetCore
 
             services.AddCultureRouteConstraint();
 
+            services.AddHttpContextAccessor();
+
             services.AddControllersWithViews();
 
             services.Configure<GzipCompressionProviderOptions>(options =>
@@ -47,6 +48,7 @@ namespace AspNetCore
                 options.Providers.Add<GzipCompressionProvider>();
             });
 
+            services.RegisterLocalizationDependencies();
             services.RegisterDependencies();
         }
 

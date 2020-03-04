@@ -1,4 +1,4 @@
-﻿namespace AspNetCore.Prerendering
+﻿namespace Foundation.Prerendering
 {
     public class PrerenderRequest
     {

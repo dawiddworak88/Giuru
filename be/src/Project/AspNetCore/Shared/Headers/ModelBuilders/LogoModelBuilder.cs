@@ -1,6 +1,5 @@
-﻿using AspNetCore.Extensions.ModelBuilders;
+﻿using Foundation.Extensions.ModelBuilders;
 using AspNetCore.Shared.Headers.ViewModels;
-using Microsoft.Extensions.Localization;
 
 namespace AspNetCore.Shared.Headers.ModelBuilders
 {

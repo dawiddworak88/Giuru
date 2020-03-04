@@ -1,4 +1,4 @@
-﻿using AspNetCore.Localization.Definitions;
+﻿using Foundation.Localization.Definitions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AspNetCore.Localization.Extensions
+namespace Foundation.Localization.Extensions
 {
     public class LocalizationCookieFilterAttribute : Attribute, IAsyncResourceFilter
     {

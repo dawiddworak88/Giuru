@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Routing.Constraints;
 
-namespace AspNetCore.Localization.Extensions
+namespace Foundation.Localization.Extensions
 {
     public class CultureRouteConstraint : RegexRouteConstraint
     {

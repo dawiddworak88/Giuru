@@ -1,4 +1,4 @@
-﻿namespace AspNetCore.Localization
+﻿namespace Foundation.Localization
 {
     public class Global
     {

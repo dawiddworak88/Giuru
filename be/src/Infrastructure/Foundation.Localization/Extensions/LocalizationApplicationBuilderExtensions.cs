@@ -1,4 +1,4 @@
-﻿using AspNetCore.Localization.Definitions;
+﻿using Foundation.Localization.Definitions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Localization.Routing;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 
-namespace AspNetCore.Localization.Extensions
+namespace Foundation.Localization.Extensions
 {
     public static class LocalizationApplicationBuilderExtensions
     {

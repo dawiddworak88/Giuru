@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using AspNetCore.Shared.Headers.ModelBuilders;
-using AspNetCore.Extensions.ModelBuilders;
 using AspNetCore.Shared.Headers.ViewModels;
 using AspNetCore.Areas.Home.ViewModel;
 using AspNetCore.Areas.Home.ModelBuilders;
+using Foundation.Extensions.ModelBuilders;
 
 namespace AspNetCore.Shared.DependencyInjection
 {

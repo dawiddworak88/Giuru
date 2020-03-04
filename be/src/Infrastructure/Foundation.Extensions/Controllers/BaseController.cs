@@ -1,9 +1,9 @@
-﻿using AspNetCore.Localization.Extensions;
+﻿using Foundation.Localization.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Globalization;
 
-namespace AspNetCore.Extensions.Controllers
+namespace Foundation.Extensions.Controllers
 {
     [LocalizationCookieFilter]
     public class BaseController : Controller

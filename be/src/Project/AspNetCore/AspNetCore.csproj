@@ -2,9 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>e4d6c6f6-2c59-4530-831c-0633787b203d</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,9 +9,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructure\AspNetCore.Extensions\AspNetCore.Extensions.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\AspNetCore.Localization\AspNetCore.Localization.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\AspNetCore.Prerendering\AspNetCore.Prerendering.csproj" />
+    <ProjectReference Include="..\..\Feature\Feature.Localization\Feature.Localization.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Foundation.Extensions\Foundation.Extensions.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Foundation.Localization\Foundation.Localization.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Foundation.Prerendering\Foundation.Prerendering.csproj" />
   </ItemGroup>
 
   <ItemGroup>

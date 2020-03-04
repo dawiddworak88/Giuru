@@ -1,9 +1,9 @@
-﻿using AspNetCore.Localization.Definitions;
+﻿using Foundation.Localization.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AspNetCore.Localization.Extensions
+namespace Foundation.Localization.Extensions
 {
     public static class LocalizationServiceCollectionExtensions
     {

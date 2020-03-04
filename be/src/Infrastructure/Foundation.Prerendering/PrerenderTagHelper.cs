@@ -11,7 +11,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace AspNetCore.Prerendering
+namespace Foundation.Prerendering
 {
     [HtmlTargetElement(Attributes = PrerenderModuleAttributeName)]
     public class PrerenderTagHelper : TagHelper

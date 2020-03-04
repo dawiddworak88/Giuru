@@ -1,8 +1,7 @@
 ﻿using AspNetCore.Areas.Home.ViewModel;
-using AspNetCore.Extensions.ModelBuilders;
-using AspNetCore.Localization;
+using Foundation.Extensions.ModelBuilders;
+using Foundation.Localization;
 using AspNetCore.Shared.Headers.ViewModels;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 
 namespace AspNetCore.Areas.Home.ModelBuilders

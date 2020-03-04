@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AspNetCore.Localization.Definitions
+namespace Foundation.Localization.Definitions
 {
     public class LocalizationConfiguration
     {

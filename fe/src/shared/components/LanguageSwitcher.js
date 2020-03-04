@@ -7,11 +7,11 @@ function LanguageSwitcher(props) {
 
         if (typeof window !== 'undefined' && e && e.target) {
 
-            window.href = e.target.value;
+            window.location.href = e.target.value;
         }
     }
 
-    const languages = props.availableLanguages.map(language => <option key={language.uniqueId} value={language.url} selected={language.uniqueId === props.defaultLanguageUniqueId}>{language.text}</option> );
+    const languages = props.availableLanguages.map(language => <option key={language.uniqueId} value={language.url} selected={language.uniqueId === props.selectedLanguageUniqueId}>{language.text}</option> );
 
     return (
         <div className="select">
@@ -24,7 +24,7 @@ function LanguageSwitcher(props) {
 
 LanguageSwitcher.propTypes = {
     availableLanguages: PropTypes.array.isRequired,
-    defaultLanguageUniqueId: PropTypes.string.isRequired
+    selectedLanguageUniqueId: PropTypes.string.isRequired
 };
 
 export default LanguageSwitcher;

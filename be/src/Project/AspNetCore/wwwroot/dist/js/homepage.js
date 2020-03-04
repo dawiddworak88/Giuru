@@ -626,9 +626,37 @@ var react_default = /*#__PURE__*/__webpack_require__.n(react);
 var react_dom = __webpack_require__(2);
 var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
 
+// CONCATENATED MODULE: ./src/shared/components/LanguageSwitcher.js
+
+
+function LanguageSwitcher(props) {
+  function handleLanguageChange(e) {
+    if (typeof window !== 'undefined' && e && e.target) {
+      window.location.href = e.target.value;
+    }
+  }
+
+  var languages = props.availableLanguages.map(function (language) {
+    return react_default.a.createElement("option", {
+      key: language.uniqueId,
+      value: language.url,
+      selected: language.uniqueId === props.selectedLanguageUniqueId
+    }, language.text);
+  });
+  return react_default.a.createElement("div", {
+    className: "select"
+  }, react_default.a.createElement("select", {
+    onChange: function onChange(e) {
+      return handleLanguageChange(e);
+    }
+  }, languages));
+}
+
+/* harmony default export */ var components_LanguageSwitcher = (LanguageSwitcher);
 // CONCATENATED MODULE: ./src/shared/layouts/images/logo.png
 /* harmony default export */ var logo = ("/dist/images/logo.png");
 // CONCATENATED MODULE: ./src/project/AspNetCore/shared/components/Header/Header.js
+
 
 
 
@@ -667,9 +695,7 @@ function Header(props) {
     className: "navbar-end"
   }, react_default.a.createElement("div", {
     className: "navbar-item"
-  }, react_default.a.createElement("div", {
-    className: "buttons m-b-0"
-  }))))));
+  }, react_default.a.createElement(components_LanguageSwitcher, props.languageSwitcher))))));
 }
 
 /* harmony default export */ var Header_Header = (Header);
