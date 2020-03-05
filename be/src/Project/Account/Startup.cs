@@ -1,7 +1,6 @@
 using System.IO.Compression;
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
-using AspNetCore.Shared.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -13,7 +12,7 @@ using Microsoft.Net.Http.Headers;
 using Feature.Localization.DependencyInjection;
 using Foundation.Extensions.Definitions;
 
-namespace AspNetCore
+namespace Account
 {
     public class Startup
     {
@@ -49,7 +48,6 @@ namespace AspNetCore
             });
 
             services.RegisterLocalizationDependencies();
-            services.RegisterDependencies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,11 +85,11 @@ namespace AspNetCore
             {
                 endpoints.MapControllerRoute(
                             name: "localizedAreaRoute",
-                            pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Home}/{controller=Home}/{action=Index}/{id?}");
+                            pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Accounts}/{controller=SignIn}/{action=Index}/{id?}");
 
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{area:exists=Home}/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area:exists=Accounts}/{controller=SignIn}/{action=Index}/{id?}");
             });
         }
     }

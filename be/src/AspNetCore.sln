@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Localization", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Prerendering", "Infrastructure\Foundation.Prerendering\Foundation.Prerendering.csproj", "{B0DF3321-36DD-4CEA-8AF1-9C09D8D4876E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Account", "Project\Account\Account.csproj", "{7672ABA1-EA8C-4A72-8899-61F9906AFB1D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{B0DF3321-36DD-4CEA-8AF1-9C09D8D4876E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B0DF3321-36DD-4CEA-8AF1-9C09D8D4876E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B0DF3321-36DD-4CEA-8AF1-9C09D8D4876E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7672ABA1-EA8C-4A72-8899-61F9906AFB1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7672ABA1-EA8C-4A72-8899-61F9906AFB1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7672ABA1-EA8C-4A72-8899-61F9906AFB1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7672ABA1-EA8C-4A72-8899-61F9906AFB1D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 		{47C8B835-4FB6-4035-942A-D189B9ED1297} = {89A813A9-9007-46EC-8F17-F2816F9202CC}
 		{F0F60886-9666-4CEF-834B-1A85F981A615} = {89A813A9-9007-46EC-8F17-F2816F9202CC}
 		{B0DF3321-36DD-4CEA-8AF1-9C09D8D4876E} = {89A813A9-9007-46EC-8F17-F2816F9202CC}
+		{7672ABA1-EA8C-4A72-8899-61F9906AFB1D} = {A255FB45-9923-4EDC-B9BE-95ECE400570C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0F50684-572D-4B8F-8A02-B5C72CD028EE}
