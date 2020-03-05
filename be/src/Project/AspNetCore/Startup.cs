@@ -49,6 +49,7 @@ namespace AspNetCore
             });
 
             services.RegisterLocalizationDependencies();
+
             services.RegisterDependencies();
         }
 

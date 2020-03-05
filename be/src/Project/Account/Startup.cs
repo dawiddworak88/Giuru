@@ -11,6 +11,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Feature.Localization.DependencyInjection;
 using Foundation.Extensions.Definitions;
+using Microsoft.IdentityModel.Tokens;
+using Foundation.Database.Shared.DependencyInjection;
+using Feature.Account.DependencyInjection;
 
 namespace Account
 {
@@ -48,6 +51,10 @@ namespace Account
             });
 
             services.RegisterLocalizationDependencies();
+
+            services.RegisterDatabaseDependencies(this.Configuration);
+
+            services.RegisterAccountDependencies(this.Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -76,6 +83,8 @@ namespace Account
             });
 
             app.UseRouting();
+
+            app.UseAccountIdentityServer();
 
             app.UseAuthorization();
 
