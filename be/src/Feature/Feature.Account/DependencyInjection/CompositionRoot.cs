@@ -15,13 +15,13 @@ namespace Feature.Account.DependencyInjection
             .AddEntityFrameworkStores<DatabaseContext>()
             .AddDefaultTokenProviders();
 
-            services.AddIdentityServer()
-                .AddSigningCredential(cert)
-                .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddInMemoryApiResources(Config.GetApiResources())
-                .AddInMemoryClients(Config.GetClients(stsConfig))
-                .AddAspNetIdentity<ApplicationUser>()
-                .AddProfileService<IdentityWithAdditionalClaimsProfileService>();
+            //services.AddIdentityServer()
+            //    .AddSigningCredential(cert)
+            //    .AddInMemoryIdentityResources(Config.GetIdentityResources())
+            //    .AddInMemoryApiResources(Config.GetApiResources())
+            //    .AddInMemoryClients(Config.GetClients(stsConfig))
+            //    .AddAspNetIdentity<ApplicationUser>()
+            //    .AddProfileService<IdentityWithAdditionalClaimsProfileService>();
 
             services.AddAuthentication()
             .AddOpenIdConnect("aad", "Login with Azure AD", options =>

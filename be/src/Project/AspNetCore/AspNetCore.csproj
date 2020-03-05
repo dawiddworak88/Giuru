@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Feature\Feature.Localization\Feature.Localization.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Foundation.Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Foundation.Localization\Foundation.Localization.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Foundation.Prerendering\Foundation.Prerendering.csproj" />
