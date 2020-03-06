@@ -23,14 +23,16 @@ namespace Feature.Account.DependencyInjection
             //    .AddAspNetIdentity<ApplicationUser>()
             //    .AddProfileService<IdentityWithAdditionalClaimsProfileService>();
 
+            var accountConfiguration = configuration.GetSection("Account")?.GetSection("AzureAd");
+
             services.AddAuthentication()
-            .AddOpenIdConnect("aad", "Login with Azure AD", options =>
+            .AddOpenIdConnect("AAD", "Azure AD", options =>
             {
-                options.Authority = $"https://login.microsoftonline.com/common";
+                options.Authority = accountConfiguration?.GetValue<string>("Authority");
                 options.TokenValidationParameters =
                         new TokenValidationParameters { ValidateIssuer = false };
-                options.ClientId = "99eb0b9d-ca40-476e-b5ac-6f4c32bfb530";
-                options.CallbackPath = "/signin-oidc";
+                options.ClientId = accountConfiguration?.GetValue<string>("ClientId");
+                options.CallbackPath = accountConfiguration.GetValue<string>("CallbackPath");
             });
         }
     }
