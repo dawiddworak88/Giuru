@@ -5,11 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IdentityServer4" Version="3.1.2" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\..\Feature\Feature.Account\Feature.Account.csproj" />
     <ProjectReference Include="..\..\Feature\Feature.Localization\Feature.Localization.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Foundation.Localization\Foundation.Localization.csproj" />
   </ItemGroup>
 
