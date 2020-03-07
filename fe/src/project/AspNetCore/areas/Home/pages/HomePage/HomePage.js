@@ -1,4 +1,6 @@
 import React from 'react';
+import { Camera } from 'react-feather';
+import favicon from '../../../../../../shared/layouts/images/favicon.png';
 import Header from '../../../../shared/components/Header/Header';
 
 function HomePage(props) {
@@ -11,6 +13,9 @@ function HomePage(props) {
         </p>
         <p>
           {props.learnMore}
+        </p>
+        <p>
+          <Camera />
         </p>
       </section>
     </div>
