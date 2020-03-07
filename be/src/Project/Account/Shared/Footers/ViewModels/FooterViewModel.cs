@@ -1,7 +1,7 @@
 ﻿using Feature.PageContent.Shared.Links.ViewModels;
 using System.Collections.Generic;
 
-namespace AspNetCore.Shared.Footers.ViewModels
+namespace Account.Shared.Footers.ViewModels
 {
     public class FooterViewModel
     {

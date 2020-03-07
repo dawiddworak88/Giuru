@@ -1,4 +1,4 @@
-﻿namespace AspNetCore.Shared.Footers.Definitions
+﻿namespace Feature.PageContent.Shared.Footers.Definitions
 {
     public static class Constants
     {

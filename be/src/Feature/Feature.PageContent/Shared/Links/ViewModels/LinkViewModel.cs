@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Feature.PageContent.Shared.Links
+namespace Feature.PageContent.Shared.Links.ViewModels
 {
     public class LinkViewModel
     {

@@ -1,7 +1,7 @@
-﻿using Foundation.Extensions.ModelBuilders;
-using AspNetCore.Shared.Headers.ViewModels;
+﻿using Account.Shared.Headers.ViewModels;
+using Foundation.Extensions.ModelBuilders;
 
-namespace AspNetCore.Shared.Headers.ModelBuilders
+namespace Account.Shared.Headers.ModelBuilders
 {
     public class LogoModelBuilder : IModelBuilder<LogoViewModel>
     {

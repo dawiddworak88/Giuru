@@ -28,7 +28,6 @@ function Header(props) {
                         {links}
                     </div>
                     <div className="navbar-end">
-                        <a  className="navbar-item" href={props.loginLink.url}>{props.loginLink.text}</a>
                         <div className="navbar-item">
                             <LanguageSwitcher {...props.languageSwitcher} />
                         </div>
@@ -41,8 +40,7 @@ function Header(props) {
 
 Header.propTypes = {
     logo: PropTypes.object.isRequired,
-    links: PropTypes.array.isRequired,
-    loginLink: PropTypes.object.isRequired
+    links: PropTypes.array.isRequired
 }
 
 export default Header;

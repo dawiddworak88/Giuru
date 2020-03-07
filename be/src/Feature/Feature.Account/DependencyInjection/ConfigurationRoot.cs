@@ -6,7 +6,7 @@ namespace Feature.Account.DependencyInjection
     {
         public static void UseAccountIdentityServer(this IApplicationBuilder app)
         {
-            app.UseIdentityServer();
+            // app.UseIdentityServer();
         }
     }
 }

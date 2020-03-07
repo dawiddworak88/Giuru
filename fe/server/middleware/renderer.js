@@ -1,10 +1,15 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 
+// AspNetCore
 import HomePage from '../../src/project/AspNetCore/areas/Home/pages/HomePage/HomePage';
 
+// Account
+import SignIn from '../../src/project/Account/areas/Accounts/pages/SignIn/SignIn';
+
 const Components = {
-    HomePage
+	HomePage,
+	SignIn
   };
 
 export default (req, res, next) => {

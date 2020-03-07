@@ -1,4 +1,4 @@
-﻿namespace AspNetCore.Shared.Headers.ViewModels
+﻿namespace Account.Shared.Headers.ViewModels
 {
     public class LogoViewModel
     {

@@ -14,6 +14,7 @@ using Foundation.Extensions.Definitions;
 using Microsoft.IdentityModel.Tokens;
 using Foundation.Database.Shared.DependencyInjection;
 using Feature.Account.DependencyInjection;
+using Account.Shared.DependencyInjection;
 
 namespace Account
 {
@@ -55,6 +56,8 @@ namespace Account
             services.RegisterDatabaseDependencies(this.Configuration);
 
             services.RegisterAccountDependencies(this.Configuration);
+
+            services.RegisterDependencies();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

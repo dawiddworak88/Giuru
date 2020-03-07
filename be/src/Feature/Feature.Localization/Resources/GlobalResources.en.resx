@@ -129,7 +129,13 @@
   <data name="PriceList" xml:space="preserve">
     <value>Price List</value>
   </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
   <data name="SignIn" xml:space="preserve">
     <value>Sign in</value>
+  </data>
+  <data name="TermsAndConditions" xml:space="preserve">
+    <value>Terms and Conditions</value>
   </data>
 </root>
