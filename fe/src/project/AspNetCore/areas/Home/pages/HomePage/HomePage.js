@@ -1,7 +1,11 @@
 import React from 'react';
 import { Camera } from 'react-feather';
-import favicon from '../../../../../../shared/layouts/images/favicon.png';
 import Header from '../../../../shared/components/Header/Header';
+import Footer from '../../../../shared/components/Footer/Footer';
+
+/* eslint-disable no-unused-vars */
+import favicon from '../../../../../../shared/layouts/images/favicon.png';
+/* eslint-enable no-unused-vars */
 
 function HomePage(props) {
   return (
@@ -18,6 +22,7 @@ function HomePage(props) {
           <Camera />
         </p>
       </section>
+      <Footer {...props.footer}></Footer>
     </div>
   );
 }

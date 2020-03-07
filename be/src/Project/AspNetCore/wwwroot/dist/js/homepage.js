@@ -781,8 +781,6 @@ camera_Camera.defaultProps = {
   size: '24'
 };
 /* harmony default export */ var camera = (camera_Camera);
-// CONCATENATED MODULE: ./src/shared/layouts/images/favicon.png
-/* harmony default export */ var favicon = ("/dist/images/favicon.png");
 // CONCATENATED MODULE: ./src/shared/components/LanguageSwitcher.js
 
 
@@ -856,18 +854,43 @@ function Header(props) {
 }
 
 /* harmony default export */ var Header_Header = (Header);
+// CONCATENATED MODULE: ./src/project/AspNetCore/shared/components/Footer/Footer.js
+
+
+function Footer(props) {
+  var links = props.links.map(function (link) {
+    return react_default.a.createElement("li", null, react_default.a.createElement("a", {
+      href: link.url
+    }, link.text));
+  });
+  return react_default.a.createElement("footer", {
+    className: "footer"
+  }, react_default.a.createElement("div", {
+    className: "content"
+  }, react_default.a.createElement("ul", null, links)), react_default.a.createElement("div", {
+    className: "content has-text-centered has-text-white"
+  }, props.copyright));
+}
+
+/* harmony default export */ var Footer_Footer = (Footer);
+// CONCATENATED MODULE: ./src/shared/layouts/images/favicon.png
+/* harmony default export */ var favicon = ("/dist/images/favicon.png");
 // CONCATENATED MODULE: ./src/project/AspNetCore/areas/Home/pages/HomePage/HomePage.js
 
 
 
 
+/* eslint-disable no-unused-vars */
+
+
+/* eslint-enable no-unused-vars */
 
 function HomePage(props) {
   return react_default.a.createElement("div", {
     className: "home-page"
   }, react_default.a.createElement(Header_Header, props.header), react_default.a.createElement("section", {
     className: "section"
-  }, react_default.a.createElement("p", null, props.welcome), react_default.a.createElement("p", null, props.learnMore), react_default.a.createElement("p", null, react_default.a.createElement(camera, null))));
+  }, react_default.a.createElement("p", null, props.welcome), react_default.a.createElement("p", null, props.learnMore), react_default.a.createElement("p", null, react_default.a.createElement(camera, null))), react_default.a.createElement(Footer_Footer, props.footer));
 }
 
 /* harmony default export */ var HomePage_HomePage = (HomePage);

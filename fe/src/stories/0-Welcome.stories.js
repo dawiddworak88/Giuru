@@ -29,7 +29,15 @@ var header = {
   }
 };
 
-export const HomePageStory = () => <HomePage header={header} welcome="Welcome from Storybook" learnMore="Learn more!" />
+var footer = {
+  copyright: 'Copyright © 2021 Giuru',
+  links: [
+    { text: 'Price List', url: '#price-list' },
+    { text: 'Contact', url: '#contact' }
+  ]
+};
+
+export const HomePageStory = () => <HomePage header={header} footer={footer} welcome="Welcome from Storybook" learnMore="Learn more!" />
 
 HomePageStory.story = {
   name: 'Home Page',

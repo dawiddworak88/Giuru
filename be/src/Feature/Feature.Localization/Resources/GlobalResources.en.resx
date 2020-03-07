@@ -120,4 +120,13 @@
   <data name="Close" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="Copyright" xml:space="preserve">
+    <value>Copyright © [year] Giuru</value>
+  </data>
+  <data name="PriceList" xml:space="preserve">
+    <value>Price List</value>
+  </data>
 </root>
