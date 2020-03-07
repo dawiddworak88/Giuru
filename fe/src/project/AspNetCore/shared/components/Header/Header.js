@@ -8,6 +8,8 @@ function Header(props) {
 
     const isActiveHook = useState(false); const isActive = isActiveHook[0]; const setIsActive = isActiveHook[1];
 
+    const links = props.links.map(link => <a key={link.uniqueId} className="navbar-item" href={link.url}>{link.text}</a>);
+
     return (
         <header>
             <nav className="navbar is-spaced">
@@ -23,8 +25,10 @@ function Header(props) {
                 </div>
                 <div className={isActive ? 'navbar-menu is-active' : 'navbar-menu'}>
                     <div className="navbar-start">
+                        {links}
                     </div>
                     <div className="navbar-end">
+                        <a href={props.loginLink.url}>{props.loginLink.text}</a>
                         <div className="navbar-item">
                             <LanguageSwitcher {...props.languageSwitcher} />
                         </div>
@@ -36,7 +40,9 @@ function Header(props) {
 }
 
 Header.propTypes = {
-    logo: PropTypes.object.isRequired
+    logo: PropTypes.object.isRequired,
+    links: PropTypes.array.isRequired,
+    loginLink: PropTypes.object.isRequired
 }
 
 export default Header;

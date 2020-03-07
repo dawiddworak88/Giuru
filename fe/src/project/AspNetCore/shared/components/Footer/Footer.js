@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 function Footer(props) {
 
-    const links = props.links.map(link => <li><a href={link.url}>{link.text}</a></li>);
+    const links = props.links.map(link => <li key={link.uniqueId}><a href={link.url}>{link.text}</a></li>);
 
     return (
         <footer className="footer">

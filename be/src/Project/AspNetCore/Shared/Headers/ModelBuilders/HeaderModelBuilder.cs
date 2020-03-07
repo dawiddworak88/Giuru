@@ -1,6 +1,13 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using AspNetCore.Shared.Headers.ViewModels;
 using Feature.Localization.ViewModels;
+using System.Collections.Generic;
+using Feature.PageContent.Shared.Links;
+using System;
+using Feature.Localization;
+using Microsoft.Extensions.Localization;
+using AspNetCore.Shared.Configurations;
+using Microsoft.Extensions.Options;
 
 namespace AspNetCore.Shared.Headers.ModelBuilders
 {
@@ -10,20 +17,40 @@ namespace AspNetCore.Shared.Headers.ModelBuilders
 
         private readonly IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel;
 
+        private readonly IOptions<ServicesEndpointsConfiguration> servicesEndpointsConfiguration;
+
+        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+
         public HeaderModelBuilder(
             IModelBuilder<LogoViewModel> logoModelBuilder,
-            IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel)
+            IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel,
+            IOptions<ServicesEndpointsConfiguration> servicesEndpointsConfiguration,
+            IStringLocalizer<GlobalResources> globalLocalizer)
         {
             this.logoModelBuilder = logoModelBuilder;
             this.languageSwitcherViewModel = languageSwitcherViewModel;
+            this.servicesEndpointsConfiguration = servicesEndpointsConfiguration;
+            this.globalLocalizer = globalLocalizer;
         }
 
         public HeaderViewModel BuildModel()
         {
+            var links = new List<LinkViewModel>
+            {
+                new LinkViewModel { UniqueId = Guid.NewGuid(), Text = this.globalLocalizer["PriceList"], Url = "#price-list" },
+                new LinkViewModel { UniqueId = Guid.NewGuid(), Text = this.globalLocalizer["Contact"], Url = "#contact" }
+            };
+
             return new HeaderViewModel
             {
                 Logo = this.logoModelBuilder.BuildModel(),
-                LanguageSwitcher = this.languageSwitcherViewModel.BuildModel()
+                LanguageSwitcher = this.languageSwitcherViewModel.BuildModel(),
+                LoginLink = new LinkViewModel
+                {
+                    Url = this.servicesEndpointsConfiguration.Value.AccountEndpoint,
+                    Text = this.globalLocalizer["SignIn"]
+                },
+                Links = links
             };
         }
     }

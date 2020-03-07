@@ -819,6 +819,13 @@ function Header(props) {
   var isActiveHook = Object(react["useState"])(false);
   var isActive = isActiveHook[0];
   var setIsActive = isActiveHook[1];
+  var links = props.links.map(function (link) {
+    return react_default.a.createElement("a", {
+      key: link.uniqueId,
+      className: "navbar-item",
+      href: link.url
+    }, link.text);
+  });
   return react_default.a.createElement("header", null, react_default.a.createElement("nav", {
     className: "navbar is-spaced"
   }, react_default.a.createElement("div", {
@@ -846,9 +853,11 @@ function Header(props) {
     className: isActive ? 'navbar-menu is-active' : 'navbar-menu'
   }, react_default.a.createElement("div", {
     className: "navbar-start"
-  }), react_default.a.createElement("div", {
+  }, links), react_default.a.createElement("div", {
     className: "navbar-end"
-  }, react_default.a.createElement("div", {
+  }, react_default.a.createElement("a", {
+    href: props.loginLink.url
+  }, props.loginLink.text), react_default.a.createElement("div", {
     className: "navbar-item"
   }, react_default.a.createElement(components_LanguageSwitcher, props.languageSwitcher))))));
 }

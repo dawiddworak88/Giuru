@@ -26,14 +26,22 @@ var header = {
       }
     ],
     selectedLanguageUniqueId: 'PL'
+  },
+  links: [
+    { uniqueId: "1", url: "#price-list", text: "Price List" },
+    { uniqueId: "2", url: "#contact", text: "Contact" }
+  ],
+  loginLink: {
+    url: "#", 
+    text: "Sign in"
   }
 };
 
 var footer = {
   copyright: 'Copyright © 2021 Giuru',
   links: [
-    { text: 'Price List', url: '#price-list' },
-    { text: 'Contact', url: '#contact' }
+    { uniqueId: "1", text: 'Price List', url: '#price-list' },
+    { uniqueId: "2", text: 'Contact', url: '#contact' }
   ]
 };
 
