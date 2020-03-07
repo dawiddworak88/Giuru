@@ -6,7 +6,7 @@ import Footer from '../../../../shared/components/Footer/Footer';
 import favicon from '../../../../../../shared/layouts/images/favicon.png';
 /* eslint-enable no-unused-vars */
 
-function SignIn(props) {
+function SignInPage(props) {
   return (
     <div className="sign-in-page">
       <Header {...props.header}></Header>
@@ -17,4 +17,4 @@ function SignIn(props) {
   );
 }
 
-export default SignIn;
+export default SignInPage;

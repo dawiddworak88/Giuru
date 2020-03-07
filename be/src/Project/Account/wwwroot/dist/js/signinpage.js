@@ -729,7 +729,7 @@ function Footer(props) {
 /* harmony default export */ var Footer_Footer = (Footer);
 // CONCATENATED MODULE: ./src/shared/layouts/images/favicon.png
 /* harmony default export */ var favicon = ("/dist/images/favicon.png");
-// CONCATENATED MODULE: ./src/project/Account/areas/Accounts/pages/SignIn/SignIn.js
+// CONCATENATED MODULE: ./src/project/Account/areas/Accounts/pages/SignIn/SignInPage.js
 
 
 
@@ -738,7 +738,7 @@ function Footer(props) {
 
 /* eslint-enable no-unused-vars */
 
-function SignIn(props) {
+function SignInPage(props) {
   return react_default.a.createElement("div", {
     className: "sign-in-page"
   }, react_default.a.createElement(Header_Header, props.header), react_default.a.createElement("section", {
@@ -746,12 +746,12 @@ function SignIn(props) {
   }), react_default.a.createElement(Footer_Footer, props.footer));
 }
 
-/* harmony default export */ var SignIn_SignIn = (SignIn);
+/* harmony default export */ var SignIn_SignInPage = (SignInPage);
 // CONCATENATED MODULE: ./src/project/Account/areas/Accounts/pages/SignIn/index.js
 
 
 
-react_dom_default.a.hydrate(react_default.a.createElement(SignIn_SignIn, window.data), document.getElementById('root'));
+react_dom_default.a.hydrate(react_default.a.createElement(SignIn_SignInPage, window.data), document.getElementById('root'));
 
 /***/ })
 /******/ ]);

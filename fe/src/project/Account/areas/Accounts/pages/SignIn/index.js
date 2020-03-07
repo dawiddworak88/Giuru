@@ -1,5 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import SignIn from './SignIn';
+import SignInPage from './SignInPage';
 
-ReactDOM.hydrate(<SignIn {...window.data} />, document.getElementById('root'));
+ReactDOM.hydrate(<SignInPage {...window.data} />, document.getElementById('root'));

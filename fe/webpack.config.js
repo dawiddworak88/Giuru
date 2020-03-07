@@ -121,7 +121,7 @@ var accountBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
-        signinpage: ["./src/project/Account/areas/Accounts/pages/SignIn/index.js", "./src/project/Account/areas/Accounts/pages/SignIn/SignIn.scss"]
+        signinpage: ["./src/project/Account/areas/Accounts/pages/SignIn/index.js", "./src/project/Account/areas/Accounts/pages/SignIn/SignInPage.scss"]
     },
     output: {
         publicPath: path.resolve(__dirname, "../be/src/Project/Account/wwwroot/dist/js"),
