@@ -1,4 +1,5 @@
-﻿using Foundation.Database.Areas.Accounts.Entities;
+﻿using Feature.Account.Configurations;
+using Foundation.Database.Areas.Accounts.Entities;
 using Foundation.Database.Shared.Contexts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -15,13 +16,12 @@ namespace Feature.Account.DependencyInjection
             .AddEntityFrameworkStores<DatabaseContext>()
             .AddDefaultTokenProviders();
 
-            //services.AddIdentityServer()
-            //    .AddSigningCredential(cert)
-            //    .AddInMemoryIdentityResources(Config.GetIdentityResources())
-            //    .AddInMemoryApiResources(Config.GetApiResources())
-            //    .AddInMemoryClients(Config.GetClients(stsConfig))
-            //    .AddAspNetIdentity<ApplicationUser>()
-            //    .AddProfileService<IdentityWithAdditionalClaimsProfileService>();
+            var builder = services.AddIdentityServer()
+            .AddInMemoryIdentityResources(IdentityServerConfig.Ids)
+            .AddInMemoryClients(IdentityServerConfig.Clients)
+            .AddAspNetIdentity<ApplicationUser>();
+
+            builder.AddDeveloperSigningCredential();
 
             var accountConfiguration = configuration.GetSection("Account")?.GetSection("AzureAd");
 
