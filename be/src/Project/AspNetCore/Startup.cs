@@ -13,6 +13,7 @@ using Microsoft.Net.Http.Headers;
 using Feature.Localization.DependencyInjection;
 using Foundation.Extensions.Definitions;
 using Foundation.Database.Shared.DependencyInjection;
+using Feature.Account.DependencyInjection;
 
 namespace AspNetCore
 {
@@ -48,6 +49,8 @@ namespace AspNetCore
                 options.EnableForHttps = true;
                 options.Providers.Add<GzipCompressionProvider>();
             });
+
+            services.RegisterClientAccountDependencies(this.Configuration);
 
             services.RegisterLocalizationDependencies();
 

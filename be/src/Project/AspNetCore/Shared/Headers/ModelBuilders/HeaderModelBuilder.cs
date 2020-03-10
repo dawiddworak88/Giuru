@@ -8,6 +8,8 @@ using Feature.Localization;
 using Microsoft.Extensions.Localization;
 using AspNetCore.Shared.Configurations;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Routing;
+using System.Globalization;
 
 namespace AspNetCore.Shared.Headers.ModelBuilders
 {
@@ -17,6 +19,8 @@ namespace AspNetCore.Shared.Headers.ModelBuilders
 
         private readonly IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel;
 
+        private readonly LinkGenerator linkGenerator;
+
         private readonly IOptions<ServicesEndpointsConfiguration> servicesEndpointsConfiguration;
 
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
@@ -24,11 +28,13 @@ namespace AspNetCore.Shared.Headers.ModelBuilders
         public HeaderModelBuilder(
             IModelBuilder<LogoViewModel> logoModelBuilder,
             IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel,
+            LinkGenerator linkGenerator,
             IOptions<ServicesEndpointsConfiguration> servicesEndpointsConfiguration,
             IStringLocalizer<GlobalResources> globalLocalizer)
         {
             this.logoModelBuilder = logoModelBuilder;
             this.languageSwitcherViewModel = languageSwitcherViewModel;
+            this.linkGenerator = linkGenerator;
             this.servicesEndpointsConfiguration = servicesEndpointsConfiguration;
             this.globalLocalizer = globalLocalizer;
         }
@@ -47,7 +53,7 @@ namespace AspNetCore.Shared.Headers.ModelBuilders
                 LanguageSwitcher = this.languageSwitcherViewModel.BuildModel(),
                 LoginLink = new LinkViewModel
                 {
-                    Url = this.servicesEndpointsConfiguration.Value.AccountEndpoint,
+                    Url = linkGenerator.GetPathByAction("Index2", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
                     Text = this.globalLocalizer["SignIn"]
                 },
                 Links = links

@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../../../../shared/components/Header/Header';
 import Footer from '../../../../shared/components/Footer/Footer';
+import SignInForm from '../../components/SignIn/SignInForm';
 
 /* eslint-disable no-unused-vars */
 import favicon from '../../../../../../shared/layouts/images/favicon.png';
@@ -10,7 +11,10 @@ function SignInPage(props) {
   return (
     <div className="sign-in-page">
       <Header {...props.header}></Header>
-      <section className="section">
+      <section className="section is-flex-centered">
+        <div className="account-card">
+          <SignInForm />
+        </div>
       </section>
       <Footer {...props.footer}></Footer>
     </div>

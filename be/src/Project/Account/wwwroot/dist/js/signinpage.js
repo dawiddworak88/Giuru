@@ -742,8 +742,30 @@ function SignInPage(props) {
   return react_default.a.createElement("div", {
     className: "sign-in-page"
   }, react_default.a.createElement(Header_Header, props.header), react_default.a.createElement("section", {
-    className: "section"
-  }), react_default.a.createElement(Footer_Footer, props.footer));
+    className: "section is-flex-centered"
+  }, react_default.a.createElement("div", {
+    className: "account-card"
+  }, react_default.a.createElement("form", {
+    className: "is-modern-form has-text-centered",
+    method: "post"
+  }, react_default.a.createElement("div", null, react_default.a.createElement("h1", {
+    className: "title is-1"
+  }, "Sign in")), react_default.a.createElement("div", {
+    className: "field"
+  }, react_default.a.createElement("input", {
+    type: "text",
+    placeholder: "Enter e-mail"
+  })), react_default.a.createElement("div", {
+    className: "field"
+  }, react_default.a.createElement("input", {
+    type: "password",
+    placeholder: "Enter password"
+  })), react_default.a.createElement("div", {
+    className: "field"
+  }, react_default.a.createElement("button", {
+    className: "button is-primary",
+    type: "submit"
+  }, "Sign in"))))), react_default.a.createElement(Footer_Footer, props.footer));
 }
 
 /* harmony default export */ var SignIn_SignInPage = (SignInPage);
