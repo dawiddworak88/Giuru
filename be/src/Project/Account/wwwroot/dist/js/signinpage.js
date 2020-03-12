@@ -727,9 +727,503 @@ function Footer(props) {
 }
 
 /* harmony default export */ var Footer_Footer = (Footer);
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js
+
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        _defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
+function _iterableToArrayLimit(arr, i) {
+  if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
+    return;
+  }
+
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance");
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js
+
+
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
+function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
+
+function _typeof(obj) {
+  if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
+    _typeof = function _typeof(obj) {
+      return _typeof2(obj);
+    };
+  } else {
+    _typeof = function _typeof(obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
+    };
+  }
+
+  return _typeof(obj);
+}
+// CONCATENATED MODULE: ./src/shared/helpers/forms/utils.js
+
+var VALUE = 'value';
+var ERROR = 'error';
+
+function is_bool(value) {
+  return typeof value === 'boolean';
+}
+/**
+ * Determines a value if it's an object
+ *
+ * @param {object} value
+ */
+
+
+function is_object(value) {
+  return _typeof(value) === 'object' && value !== null;
+}
+function get_prop_values(stateSchema, prop) {
+  return Object.keys(stateSchema).reduce(function (field, key) {
+    field[key] = is_bool(prop) ? prop : stateSchema[key][prop];
+    return field;
+  }, {});
+}
+// CONCATENATED MODULE: ./src/shared/helpers/forms/useForm.js
+
+
+
+
+
+/**
+ * useForm hooks to handle your validation in your forms
+ *
+ * @param {object} stateSchema stateSchema.
+ * @param {object} stateValidatorSchema stateSchemaValidation to validate your forms in react.
+ * @param {function} submitFormCallback function to be execute during form submission.
+ */
+
+function useForm() {
+  var stateSchema = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var stateValidatorSchema = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var submitFormCallback = arguments.length > 2 ? arguments[2] : undefined;
+
+  var _useState = Object(react["useState"])(stateSchema),
+      _useState2 = _slicedToArray(_useState, 2),
+      state = _useState2[0],
+      setStateSchema = _useState2[1];
+
+  var _useState3 = Object(react["useState"])(get_prop_values(state, VALUE)),
+      _useState4 = _slicedToArray(_useState3, 2),
+      values = _useState4[0],
+      setValues = _useState4[1];
+
+  var _useState5 = Object(react["useState"])(get_prop_values(state, ERROR)),
+      _useState6 = _slicedToArray(_useState5, 2),
+      errors = _useState6[0],
+      setErrors = _useState6[1];
+
+  var _useState7 = Object(react["useState"])(get_prop_values(state, false)),
+      _useState8 = _slicedToArray(_useState7, 2),
+      dirty = _useState8[0],
+      setDirty = _useState8[1];
+
+  var _useState9 = Object(react["useState"])(true),
+      _useState10 = _slicedToArray(_useState9, 2),
+      disable = _useState10[0],
+      setDisable = _useState10[1];
+
+  var _useState11 = Object(react["useState"])(false),
+      _useState12 = _slicedToArray(_useState11, 2),
+      isDirty = _useState12[0],
+      setIsDirty = _useState12[1]; // Get a local copy of stateSchema
+
+
+  Object(react["useEffect"])(function () {
+    setStateSchema(stateSchema);
+    setDisable(true); // Disable button in initial render.
+
+    setInitialErrorState();
+  }, []); // eslint-disable-line
+  // Set a brand new field values and errors 
+  // If stateSchema changes
+
+  Object(react["useEffect"])(function () {
+    var values = get_prop_values(state, VALUE);
+    setValues(values);
+    setErrors(Object.keys(values).reduce(function (accu, curr) {
+      accu[curr] = validateField(curr, values[curr]);
+      return accu;
+    }, {}));
+  }, [state]); // eslint-disable-line
+  // For every changed in our state this will be fired
+  // To be able to disable the button
+
+  Object(react["useEffect"])(function () {
+    if (isDirty) {
+      setDisable(validateErrorState());
+    }
+  }, [errors, isDirty]); // eslint-disable-line
+  // Set a value of a specific field
+
+  var setFieldValue = function setFieldValue(_ref) {
+    var name = _ref.name,
+        value = _ref.value;
+    setValues(function (prevState) {
+      return _objectSpread2({}, prevState, _defineProperty({}, name, value));
+    });
+    setDirty(function (prevState) {
+      return _objectSpread2({}, prevState, _defineProperty({}, name, true));
+    });
+  }; // Set an error of a specific field
+
+
+  var setFieldError = function setFieldError(_ref2) {
+    var name = _ref2.name,
+        error = _ref2.error;
+    return setErrors(function (prevState) {
+      return _objectSpread2({}, prevState, _defineProperty({}, name, error));
+    });
+  }; // Validate fields in forms
+
+
+  var validateField = Object(react["useCallback"])(function (name, value) {
+    var validator = stateValidatorSchema; // Making sure that stateValidatorSchema name is same in
+    // stateSchema
+
+    if (!validator[name]) return;
+    var field = validator[name];
+    var error = '';
+
+    if (is_object(field['required']) && error === '') {
+      var required = field['required'];
+
+      if (required['isRequired'] && !value) {
+        error = required['error'];
+      }
+    }
+
+    if (is_object(field['validator']) && error === '') {
+      var validateFieldByCallback = field['validator']; // Test the function callback if the value is meet the criteria
+
+      if (!validateFieldByCallback['func'](value, values)) {
+        error = validateFieldByCallback['error'];
+      }
+    }
+
+    return error;
+  }, [stateValidatorSchema, values]); // Set Initial Error State
+  // When hooks was first rendered...
+
+  var setInitialErrorState = Object(react["useCallback"])(function () {
+    Object.keys(errors).map(function (name) {
+      return setFieldError({
+        name: name,
+        error: validateField(name, values[name])
+      });
+    });
+  }, [errors, values, validateField]); // Used to disable submit button if there's a value in errors
+  // or the required field in state has no value.
+  // Wrapped in useCallback to cached the function to avoid intensive memory leaked
+  // in every re-render in component
+
+  var validateErrorState = Object(react["useCallback"])(function () {
+    return Object.values(errors).some(function (error) {
+      return error;
+    });
+  }, [errors]); // Use this callback function to safely submit the form
+  // without any errors in state...
+
+  var handleOnSubmit = Object(react["useCallback"])(function (event) {
+    event.preventDefault(); // Making sure that there's no error in the state
+    // before calling the submit callback function
+
+    if (!validateErrorState()) {
+      submitFormCallback(values);
+    }
+  }, [validateErrorState, submitFormCallback, values]); // Event handler for handling changes in input.
+
+  var handleOnChange = Object(react["useCallback"])(function (event) {
+    setIsDirty(true);
+    var name = event.target.name;
+    var value = event.target.value;
+    var error = validateField(name, value);
+    setFieldValue({
+      name: name,
+      value: value
+    });
+    setFieldError({
+      name: name,
+      error: error
+    });
+  }, [validateField]);
+  return {
+    dirty: dirty,
+    values: values,
+    errors: errors,
+    disable: disable,
+    setStateSchema: setStateSchema,
+    setFieldValue: setFieldValue,
+    setFieldError: setFieldError,
+    handleOnChange: handleOnChange,
+    handleOnSubmit: handleOnSubmit,
+    validateErrorState: validateErrorState
+  };
+}
+
+/* harmony default export */ var forms_useForm = (useForm);
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+// CONCATENATED MODULE: ./src/shared/helpers/validators/EmailValidator.js
+
+
+
+var EmailValidator_EmailValidator =
+/*#__PURE__*/
+function () {
+  function EmailValidator() {
+    _classCallCheck(this, EmailValidator);
+  }
+
+  _createClass(EmailValidator, null, [{
+    key: "validateFormat",
+    value: function validateFormat(email) {
+      var format = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/); // eslint-disable-line
+
+      if (format.test(String(email).toLowerCase())) {
+        return true;
+      }
+
+      return false;
+    }
+  }]);
+
+  return EmailValidator;
+}();
+
+
+// CONCATENATED MODULE: ./src/shared/helpers/validators/PasswordValidator.js
+
+
+
+var PasswordValidator_PasswordValidator =
+/*#__PURE__*/
+function () {
+  function PasswordValidator() {
+    _classCallCheck(this, PasswordValidator);
+  }
+
+  _createClass(PasswordValidator, null, [{
+    key: "validateFormat",
+    value: function validateFormat(password) {
+      var format = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
+
+      if (format.test(password)) {
+        return true;
+      }
+
+      return false;
+    }
+  }]);
+
+  return PasswordValidator;
+}();
+
+
+// CONCATENATED MODULE: ./src/project/Account/areas/Accounts/components/SignIn/SignInForm.js
+
+
+
+
+
+function SignInForm(props) {
+  var stateSchema = {
+    email: {
+      value: '',
+      error: ''
+    },
+    password: {
+      value: '',
+      error: ''
+    }
+  };
+  var stateValidatorSchema = {
+    email: {
+      required: {
+        isRequired: true,
+        error: 'Enter e-mail'
+      },
+      validator: {
+        func: function func(value) {
+          return EmailValidator_EmailValidator.validateFormat(value);
+        },
+        error: 'Invalid email format.'
+      }
+    },
+    password: {
+      required: {
+        isRequired: true,
+        error: 'Enter password'
+      },
+      validator: {
+        func: function func(value) {
+          return PasswordValidator_PasswordValidator.validateFormat(value);
+        },
+        error: 'Invalid password format.'
+      }
+    }
+  };
+
+  function onSubmitForm(state) {
+    alert(JSON.stringify(state));
+  }
+
+  var _useForm = forms_useForm(stateSchema, stateValidatorSchema, onSubmitForm),
+      values = _useForm.values,
+      errors = _useForm.errors,
+      dirty = _useForm.dirty,
+      handleOnChange = _useForm.handleOnChange,
+      handleOnSubmit = _useForm.handleOnSubmit,
+      disable = _useForm.disable;
+
+  var email = values.email,
+      password = values.password;
+  return react_default.a.createElement("form", {
+    className: "is-modern-form has-text-centered",
+    onSubmit: handleOnSubmit,
+    method: "post"
+  }, react_default.a.createElement("div", null, react_default.a.createElement("h1", {
+    className: "title is-1"
+  }, "Sign in")), react_default.a.createElement("div", {
+    className: "field"
+  }, react_default.a.createElement("input", {
+    type: "text",
+    placeholder: "Enter e-mail",
+    name: "email",
+    value: email,
+    onChange: handleOnChange
+  }), errors.email && dirty.email && react_default.a.createElement("span", {
+    role: "alert",
+    className: "has-text-danger is-size-7 has-text-weight-bold"
+  }, errors.email)), react_default.a.createElement("div", {
+    className: "field"
+  }, react_default.a.createElement("input", {
+    type: "password",
+    placeholder: "Enter password",
+    name: "password",
+    value: password,
+    onChange: handleOnChange
+  }), errors.password && dirty.password && react_default.a.createElement("span", {
+    role: "alert",
+    className: "has-text-danger is-size-7 has-text-weight-bold"
+  }, errors.password)), react_default.a.createElement("div", {
+    className: "field"
+  }, react_default.a.createElement("button", {
+    className: "button is-primary is-fullwidth",
+    type: "submit",
+    disabled: disable
+  }, "Sign in")));
+}
+
+/* harmony default export */ var SignIn_SignInForm = (SignInForm);
 // CONCATENATED MODULE: ./src/shared/layouts/images/favicon.png
 /* harmony default export */ var favicon = ("/dist/images/favicon.png");
 // CONCATENATED MODULE: ./src/project/Account/areas/Accounts/pages/SignIn/SignInPage.js
+
 
 
 
@@ -745,27 +1239,7 @@ function SignInPage(props) {
     className: "section is-flex-centered"
   }, react_default.a.createElement("div", {
     className: "account-card"
-  }, react_default.a.createElement("form", {
-    className: "is-modern-form has-text-centered",
-    method: "post"
-  }, react_default.a.createElement("div", null, react_default.a.createElement("h1", {
-    className: "title is-1"
-  }, "Sign in")), react_default.a.createElement("div", {
-    className: "field"
-  }, react_default.a.createElement("input", {
-    type: "text",
-    placeholder: "Enter e-mail"
-  })), react_default.a.createElement("div", {
-    className: "field"
-  }, react_default.a.createElement("input", {
-    type: "password",
-    placeholder: "Enter password"
-  })), react_default.a.createElement("div", {
-    className: "field"
-  }, react_default.a.createElement("button", {
-    className: "button is-primary",
-    type: "submit"
-  }, "Sign in"))))), react_default.a.createElement(Footer_Footer, props.footer));
+  }, react_default.a.createElement(SignIn_SignInForm, null))), react_default.a.createElement(Footer_Footer, props.footer));
 }
 
 /* harmony default export */ var SignIn_SignInPage = (SignInPage);
