@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Foundation.Extensions\Foundation.Extensions.csproj" />
   </ItemGroup>
 
 </Project>

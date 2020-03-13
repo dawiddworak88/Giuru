@@ -1,6 +1,9 @@
 ﻿using Feature.Account.Configurations;
+using Feature.Account.ModelBuilders.SignInForm;
+using Feature.Account.ViewModels.SignInForm;
 using Foundation.Database.Areas.Accounts.Entities;
 using Foundation.Database.Shared.Contexts;
+using Foundation.Extensions.ModelBuilders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +16,8 @@ namespace Feature.Account.DependencyInjection
     {
         public static void RegisterAccountDependencies(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<IModelBuilder<SignInFormViewModel>, SignInFormModelBuilder>();
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<DatabaseContext>()
             .AddDefaultTokenProviders();

@@ -6,7 +6,7 @@ import logo from '../../../../../shared/layouts/images/logo.png';
 
 function Header(props) {
 
-    const isActiveHook = useState(false); const isActive = isActiveHook[0]; const setIsActive = isActiveHook[1];
+    const [isActive, setIsActive] = useState(false);
 
     const links = props.links.map(link => <a key={link.uniqueId} className="navbar-item" href={link.url}>{link.text}</a>);
 

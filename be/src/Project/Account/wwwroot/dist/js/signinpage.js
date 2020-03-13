@@ -626,6 +626,51 @@ var react_default = /*#__PURE__*/__webpack_require__.n(react);
 var react_dom = __webpack_require__(2);
 var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
 
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
+function _iterableToArrayLimit(arr, i) {
+  if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
+    return;
+  }
+
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance");
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js
+
+
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+}
 // CONCATENATED MODULE: ./src/shared/components/LanguageSwitcher.js
 
 
@@ -660,10 +705,13 @@ function LanguageSwitcher(props) {
 
 
 
+
 function Header(props) {
-  var isActiveHook = Object(react["useState"])(false);
-  var isActive = isActiveHook[0];
-  var setIsActive = isActiveHook[1];
+  var _useState = Object(react["useState"])(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      isActive = _useState2[0],
+      setIsActive = _useState2[1];
+
   var links = props.links.map(function (link) {
     return react_default.a.createElement("a", {
       key: link.uniqueId,
@@ -777,51 +825,6 @@ function _objectSpread2(target) {
   }
 
   return target;
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
-function _iterableToArrayLimit(arr, i) {
-  if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
-    return;
-  }
-
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
-
-  try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
-    }
-  }
-
-  return _arr;
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance");
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js
-
-
-
-function _slicedToArray(arr, i) {
-  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
 }
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
 function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
@@ -1145,25 +1148,25 @@ function SignInForm(props) {
     email: {
       required: {
         isRequired: true,
-        error: 'Enter e-mail'
+        error: props.emailRequiredErrorMessage
       },
       validator: {
         func: function func(value) {
           return EmailValidator_EmailValidator.validateFormat(value);
         },
-        error: 'Invalid email format.'
+        error: props.emailFormatErrorMessage
       }
     },
     password: {
       required: {
         isRequired: true,
-        error: 'Enter password'
+        error: props.passwordRequiredErrorMessage
       },
       validator: {
         func: function func(value) {
           return PasswordValidator_PasswordValidator.validateFormat(value);
         },
-        error: 'Invalid password format.'
+        error: props.passwordFormatErrorMessage
       }
     }
   };
@@ -1188,11 +1191,11 @@ function SignInForm(props) {
     method: "post"
   }, react_default.a.createElement("div", null, react_default.a.createElement("h1", {
     className: "title is-1"
-  }, "Sign in")), react_default.a.createElement("div", {
+  }, props.signInText)), react_default.a.createElement("div", {
     className: "field"
   }, react_default.a.createElement("input", {
     type: "text",
-    placeholder: "Enter e-mail",
+    placeholder: props.enterEmailText,
     name: "email",
     value: email,
     onChange: handleOnChange
@@ -1203,7 +1206,7 @@ function SignInForm(props) {
     className: "field"
   }, react_default.a.createElement("input", {
     type: "password",
-    placeholder: "Enter password",
+    placeholder: props.enterPasswordText,
     name: "password",
     value: password,
     onChange: handleOnChange
@@ -1216,7 +1219,7 @@ function SignInForm(props) {
     className: "button is-primary is-fullwidth",
     type: "submit",
     disabled: disable
-  }, "Sign in")));
+  }, props.signInText)));
 }
 
 /* harmony default export */ var SignIn_SignInForm = (SignInForm);
@@ -1239,7 +1242,7 @@ function SignInPage(props) {
     className: "section is-flex-centered"
   }, react_default.a.createElement("div", {
     className: "account-card"
-  }, react_default.a.createElement(SignIn_SignInForm, null))), react_default.a.createElement(Footer_Footer, props.footer));
+  }, react_default.a.createElement(SignIn_SignInForm, props.signInForm))), react_default.a.createElement(Footer_Footer, props.footer));
 }
 
 /* harmony default export */ var SignIn_SignInPage = (SignInPage);

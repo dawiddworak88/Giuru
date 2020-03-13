@@ -1,6 +1,7 @@
 ﻿using Account.Areas.Accounts.ViewModels;
 using Account.Shared.Footers.ViewModels;
 using Account.Shared.Headers.ViewModels;
+using Feature.Account.ViewModels.SignInForm;
 using Feature.Localization;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
@@ -11,18 +12,18 @@ namespace Account.Areas.Accounts.ModelBuilders
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
 
-        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+        private readonly IModelBuilder<SignInFormViewModel> signInFormModelBuilder;
 
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public SignInModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
-            IModelBuilder<FooterViewModel> footerModelBuilder,
-            IStringLocalizer<GlobalResources> globalLocalizer)
+            IModelBuilder<SignInFormViewModel> signInFormModelBuilder,
+            IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
+            this.signInFormModelBuilder = signInFormModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
-            this.globalLocalizer = globalLocalizer;
         }
 
         public SignInViewModel BuildModel()
@@ -30,6 +31,7 @@ namespace Account.Areas.Accounts.ModelBuilders
             var viewModel = new SignInViewModel
             {
                 Header = headerModelBuilder.BuildModel(),
+                SignInForm = signInFormModelBuilder.BuildModel(),
                 Footer = footerModelBuilder.BuildModel()
             };
 

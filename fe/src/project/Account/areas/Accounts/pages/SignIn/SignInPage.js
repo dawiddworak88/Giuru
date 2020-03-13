@@ -13,7 +13,7 @@ function SignInPage(props) {
       <Header {...props.header}></Header>
       <section className="section is-flex-centered">
         <div className="account-card">
-          <SignInForm />
+          <SignInForm {...props.signInForm} />
         </div>
       </section>
       <Footer {...props.footer}></Footer>
