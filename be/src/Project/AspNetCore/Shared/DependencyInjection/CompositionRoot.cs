@@ -4,6 +4,10 @@ using AspNetCore.Shared.Headers.ViewModels;
 using AspNetCore.Areas.Home.ViewModel;
 using AspNetCore.Areas.Home.ModelBuilders;
 using Foundation.Extensions.ModelBuilders;
+using AspNetCore.Shared.Footers.ViewModels;
+using AspNetCore.Shared.Footers.ModelBuilders;
+using Microsoft.Extensions.Configuration;
+using AspNetCore.Shared.Configurations;
 
 namespace AspNetCore.Shared.DependencyInjection
 {
@@ -13,7 +17,13 @@ namespace AspNetCore.Shared.DependencyInjection
         {
             services.AddScoped<IModelBuilder<HomePageViewModel>, HomePageModelBuilder>();
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
+            services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
+        }
+
+        public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<ServicesEndpointsConfiguration>(configuration.GetSection("ServicesEndpoints"));
         }
     }
 }

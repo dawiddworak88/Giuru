@@ -13,6 +13,7 @@ using Microsoft.Net.Http.Headers;
 using Feature.Localization.DependencyInjection;
 using Foundation.Extensions.Definitions;
 using Foundation.Database.Shared.DependencyInjection;
+using Feature.Account.DependencyInjection;
 
 namespace AspNetCore
 {
@@ -49,11 +50,15 @@ namespace AspNetCore
                 options.Providers.Add<GzipCompressionProvider>();
             });
 
+            services.RegisterClientAccountDependencies(this.Configuration);
+
             services.RegisterLocalizationDependencies();
 
             services.RegisterDatabaseDependencies(this.Configuration);
 
             services.RegisterDependencies();
+
+            services.ConfigureOptions(this.Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

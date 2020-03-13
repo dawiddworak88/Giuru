@@ -120,4 +120,22 @@
   <data name="Close" xml:space="preserve">
     <value>Schliessen</value>
   </data>
+  <data name="Contact" xml:space="preserve">
+    <value>Kontakt</value>
+  </data>
+  <data name="Copyright" xml:space="preserve">
+    <value>Copyright © [year] Giuru</value>
+  </data>
+  <data name="PriceList" xml:space="preserve">
+    <value>Preisliste</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Datenschutz-Bestimmungen</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Einloggen</value>
+  </data>
+  <data name="TermsAndConditions" xml:space="preserve">
+    <value>Geschäftsbedingungen</value>
+  </data>
 </root>

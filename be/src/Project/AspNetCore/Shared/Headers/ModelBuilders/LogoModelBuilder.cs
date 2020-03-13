@@ -5,10 +5,6 @@ namespace AspNetCore.Shared.Headers.ModelBuilders
 {
     public class LogoModelBuilder : IModelBuilder<LogoViewModel>
     {
-        public LogoModelBuilder()
-        {
-        }
-
         public LogoViewModel BuildModel()
         {
             return new LogoViewModel

@@ -225,3 +225,6 @@ node_modules/
 
 ### Logs
 log-*.txt
+
+# RSA Keys
+*.rsa

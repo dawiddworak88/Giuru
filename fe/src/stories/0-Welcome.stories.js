@@ -26,10 +26,26 @@ var header = {
       }
     ],
     selectedLanguageUniqueId: 'PL'
+  },
+  links: [
+    { uniqueId: "1", url: "#price-list", text: "Price List" },
+    { uniqueId: "2", url: "#contact", text: "Contact" }
+  ],
+  loginLink: {
+    url: "#", 
+    text: "Sign in"
   }
 };
 
-export const HomePageStory = () => <HomePage header={header} welcome="Welcome from Storybook" learnMore="Learn more!" />
+var footer = {
+  copyright: 'Copyright © 2021 Giuru',
+  links: [
+    { uniqueId: "1", text: 'Price List', url: '#price-list' },
+    { uniqueId: "2", text: 'Contact', url: '#contact' }
+  ]
+};
+
+export const HomePageStory = () => <HomePage header={header} footer={footer} welcome="Welcome from Storybook" learnMore="Learn more!" />
 
 HomePageStory.story = {
   name: 'Home Page',

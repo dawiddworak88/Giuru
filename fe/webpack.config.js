@@ -67,4 +67,67 @@ var browserConfig = {
     }
 };
 
-module.exports = [browserConfig];
+var accountBrowserConfig = {
+    module: {
+        rules: [
+            {
+                test: /\.(scss|css)$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    "css-loader",
+                    "postcss-loader",
+                    "sass-loader"
+                ]
+            },
+            {
+                test: /\.(png|svg|jpg|gif)$/,
+                use: [{
+                    loader: "file-loader",
+                    options: {
+                        name: "[name].[ext]",
+                        outputPath: "../images",
+                        publicPath: "/dist/images"
+                    }
+                }]
+            },
+            {
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
+                use: [
+                    { loader: "babel-loader" }
+                ]
+            }
+        ]
+    },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: "../../dist/css/[name].css",
+        }),
+        new CleanWebpackPlugin({
+            dry: false,
+            dangerouslyAllowCleanPatternsOutsideProject: true
+        }),
+        new CopyWebpackPlugin([{
+            from: path.resolve(__dirname, "wwwroot/src/*.png"),
+            to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
+        }])
+    ],
+    optimization: {
+        minimizer: [
+            new OptimizeCSSAssetsPlugin({})
+        ]
+    },
+    resolve: {
+        extensions: [".js", ".jsx"]
+    },
+    entry: {
+        signinpage: ["./src/project/Account/areas/Accounts/pages/SignIn/index.js", "./src/project/Account/areas/Accounts/pages/SignIn/SignInPage.scss"]
+    },
+    output: {
+        publicPath: path.resolve(__dirname, "../be/src/Project/Account/wwwroot/dist/js"),
+        path: path.resolve(__dirname, "../be/src/Project/Account/wwwroot/dist/js"),
+        filename: "[name].js"
+    }
+};
+
+module.exports = [browserConfig, accountBrowserConfig];
