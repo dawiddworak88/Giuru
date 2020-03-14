@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: aspnetcore-ingress-v2
+  name: giuru-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
@@ -10,13 +10,22 @@ metadata:
 spec:
   tls:
   - hosts:
-    - giuru.com
+    - {{ .Values.giurudomain }}
+    secretName: tls-secret
+    - {{ .Values.accountgiurudomain }}
     secretName: tls-secret
   rules:
-  - host: giuru.com
+  - host: {{ .Values.giurudomain }}
     http:
       paths:
       - backend:
           serviceName: aspnetcore-web-service
+          servicePort: 80
+        path: /(.*)
+  - host: {{ .Values.accountgiurudomain }}
+    http:
+      paths:
+      - backend:
+          serviceName: account-web-service
           servicePort: 80
         path: /(.*)
