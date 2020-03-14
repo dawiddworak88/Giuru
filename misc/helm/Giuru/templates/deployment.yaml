@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: react-ssr-web-container
-        image: giuru.azurecr.io/react-ssr-web:93e404ea70b884a6e994706548d4bc6e18c3e0aa
+        image: giuru.azurecr.io/react-ssr-web:{{ .Values.image.tag }}
         ports:
         - containerPort: 3000
       imagePullSecrets:
@@ -38,7 +38,30 @@ spec:
     spec:
       containers:
       - name: aspnetcore-web-container
-        image: giuru.azurecr.io/aspnetcore-web:93e404ea70b884a6e994706548d4bc6e18c3e0aa
+        image: giuru.azurecr.io/aspnetcore-web:{{ .Values.image.tag }}
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: giurusecret
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account-web-deployment
+  labels:
+    app: account-web
+spec:
+  selector:
+    matchLabels:
+      app: account-web
+  template:
+    metadata:
+      labels:
+        app: account-web
+    spec:
+      containers:
+      - name: account-web-container
+        image: giuru.azurecr.io/account-web:{{ .Values.image.tag }}
         ports:
         - containerPort: 80
       imagePullSecrets:
