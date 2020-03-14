@@ -1,0 +1,19 @@
+﻿<div id="root" asp-prerender-module="SignIn" asp-prerender-data="@Model">
+</div>
+
+<script>
+    window.data = @Html.Raw(Json.Serialize(@Model));
+</script>
+
+@section MetaTags {
+    <title>Sign in</title>
+    <meta name="description" content="Sign in" />
+}
+
+@section HeadStyles {
+    <link rel="stylesheet" href="~/dist/css/signinpage.css" type="text/css" asp-append-version="true" />
+}
+
+@section BodyScripts {
+    <script src="~/dist/js/signinpage.js" asp-append-version="true"></script>
+}

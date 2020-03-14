@@ -1,18 +1,57 @@
 import React from 'react';
-import { linkTo } from '@storybook/addon-links';
-import { Welcome } from '@storybook/react/demo';
-import '../pages/HomePage/HomePage.scss';
-import HomePage from '../pages/HomePage/HomePage';
+import '../project/AspNetCore/areas/Home/pages/HomePage/HomePage.scss';
+import HomePage from '../project/AspNetCore/areas/Home/pages/HomePage/HomePage';
 
-export default {
-  title: 'Welcome',
-  component: Welcome,
+var header = {
+  logo: {
+    targetUrl: '/',
+    logoAltLabel: 'Logo'
+  },
+  languageSwitcher: {
+    availableLanguages: [
+      {
+        uniqueId: 'EN',
+        url: '#',
+        text: 'EN'
+      },
+      {
+        uniqueId: 'DE',
+        url: '#',
+        text: 'DE'
+      },
+      {
+        uniqueId: 'PL',
+        url: '#',
+        text: 'PL'
+      }
+    ],
+    selectedLanguageUniqueId: 'PL'
+  },
+  links: [
+    { uniqueId: "1", url: "#price-list", text: "Price List" },
+    { uniqueId: "2", url: "#contact", text: "Contact" }
+  ],
+  loginLink: {
+    url: "#", 
+    text: "Sign in"
+  }
 };
 
-export const ToStorybook = () => <Welcome showApp={linkTo('Button')} />;
+var footer = {
+  copyright: 'Copyright © 2021 Giuru',
+  links: [
+    { uniqueId: "1", text: 'Price List', url: '#price-list' },
+    { uniqueId: "2", text: 'Contact', url: '#contact' }
+  ]
+};
 
-export const HomePageStory = () => <HomePage welcome="Welcome from Storybook" learnMore="Learn more!" />
+export const HomePageStory = () => <HomePage header={header} footer={footer} welcome="Welcome from Storybook" learnMore="Learn more!" />
 
-ToStorybook.story = {
-  name: 'to Storybook',
+HomePageStory.story = {
+  name: 'Home Page',
+};
+
+export default {
+  title: 'AspNetCore.Pages',
+  component: HomePageStory,
 };

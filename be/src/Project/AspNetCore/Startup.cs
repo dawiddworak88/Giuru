@@ -1,17 +1,19 @@
-using System;
-using System.Collections.Generic;
 using System.IO.Compression;
-using System.Linq;
-using System.Threading.Tasks;
-using AspNetCore.Definitions;
+using Foundation.Localization.Definitions;
+using Foundation.Localization.Extensions;
+using AspNetCore.Shared.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
+using Feature.Localization.DependencyInjection;
+using Foundation.Extensions.Definitions;
+using Foundation.Database.Shared.DependencyInjection;
+using Feature.Account.DependencyInjection;
 
 namespace AspNetCore
 {
@@ -27,6 +29,14 @@ namespace AspNetCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLocalizationConfiguration(this.Configuration);
+
+            services.AddLocalization();
+
+            services.AddCultureRouteConstraint();
+
+            services.AddHttpContextAccessor();
+
             services.AddControllersWithViews();
 
             services.Configure<GzipCompressionProviderOptions>(options =>
@@ -39,10 +49,20 @@ namespace AspNetCore
                 options.EnableForHttps = true;
                 options.Providers.Add<GzipCompressionProvider>();
             });
+
+            services.RegisterClientAccountDependencies(this.Configuration);
+
+            services.RegisterLocalizationDependencies();
+
+            services.RegisterDatabaseDependencies(this.Configuration);
+
+            services.RegisterDependencies();
+
+            services.ConfigureOptions(this.Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<LocalizationConfiguration> localizationOptions)
         {
             if (env.IsDevelopment())
             {
@@ -54,6 +74,9 @@ namespace AspNetCore
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.ConfigureDatabaseMigrations();
+
             app.UseHttpsRedirection();
             app.UseResponseCompression();
 
@@ -62,7 +85,7 @@ namespace AspNetCore
                 OnPrepareResponse = ctx =>
                 {
                     ctx.Context.Response.Headers[HeaderNames.CacheControl] =
-                        "public,max-age=" + Constants.CacheControlMaxAgeSeconds;
+                        "public,max-age=" + CacheControlConstants.CacheControlMaxAgeSeconds;
                 }
             });
 
@@ -70,11 +93,17 @@ namespace AspNetCore
 
             app.UseAuthorization();
 
+            app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                            name: "localizedAreaRoute",
+                            pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Home}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area:exists=Home}/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
