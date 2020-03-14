@@ -5,12 +5,12 @@ WORKDIR /app
 
 COPY ./src/Infrastructure ./Infrastructure/
 COPY ./src/Feature ./Feature/
-COPY ./src/Project/AspNetCore ./Project/AspNetCore/
-RUN dotnet publish ./Project/AspNetCore/AspNetCore.csproj -c Release -o out
+COPY ./src/Project/Account ./Project/Account/
+RUN dotnet publish ./Project/Account/Account.csproj -c Release -o out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.2
 WORKDIR /app
 COPY --from=build-env /app/out .
 
-ENTRYPOINT ["dotnet", "AspNetCore.dll"]
+ENTRYPOINT ["dotnet", "Account.dll"]
