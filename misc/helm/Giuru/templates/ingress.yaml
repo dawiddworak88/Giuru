@@ -1,30 +1,7 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: account-ingress
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
-spec:
-  tls:
-  - hosts:
-    - {{ .Values.ingress.accountdomain }}
-    secretName: account-secret
-  rules:
-  - host: {{ .Values.ingress.accountdomain }}
-    http:
-      paths:
-      - backend:
-          serviceName: account-web-service
-          servicePort: 80
-        path: /(.*)
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: giuru-ingress
+  name: giuru-tls
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
@@ -34,12 +11,20 @@ spec:
   tls:
   - hosts:
     - {{ .Values.ingress.domain }}
-    secretName: giuru-secret
+    - {{ .Values.ingress.accountdomain }}
+    secretName: tls-secret
   rules:
-  - host: {{ .Values.ingress.domain }}
+  - host: giuru.com
     http:
       paths:
       - backend:
           serviceName: aspnetcore-web-service
+          servicePort: 80
+        path: /
+  - host: {{ .Values.ingress.domain }}
+    http:
+      paths:
+      - backend:
+          serviceName: account-web-service
           servicePort: 80
         path: /(.*)
