@@ -14,14 +14,14 @@ spec:
     - {{ .Values.ingress.accountdomain }}
     secretName: tls-secret
   rules:
-  - host: giuru.com
+  - host: {{ .Values.ingress.domain }}
     http:
       paths:
       - backend:
           serviceName: aspnetcore-web-service
           servicePort: 80
-        path: /
-  - host: {{ .Values.ingress.domain }}
+        path: /(.*)
+  - host: {{ .Values.ingress.accountdomain }}
     http:
       paths:
       - backend:
