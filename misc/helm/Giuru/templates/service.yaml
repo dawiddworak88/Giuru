@@ -31,7 +31,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: account
+    app: account-web
   ports:
   - protocol: TCP
     port: 80
