@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: react-ssr-web-service
+  namespace: ingress-basic
 spec:
   type: ClusterIP
   selector:
@@ -15,6 +16,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: aspnetcore-web-service
+  namespace: ingress-basic
 spec:
   type: ClusterIP
   selector:
@@ -28,6 +30,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: account-web-service
+  namespace: ingress-basic
 spec:
   type: ClusterIP
   selector:
