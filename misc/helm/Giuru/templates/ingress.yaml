@@ -10,7 +10,7 @@ spec:
   tls:
   - hosts:
     - {{ .Values.ingress.accountdomain }}
-    secretName: account-secret
+    secretName: tls-secret
   rules:
   - host: {{ .Values.ingress.accountdomain }}
     http:
