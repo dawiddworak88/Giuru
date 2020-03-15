@@ -10,19 +10,18 @@ metadata:
 spec:
   tls:
   - hosts:
-    - {{ .Values.giurudomain }}
-    secretName: tls-secret
-    - {{ .Values.accountgiurudomain }}
+    - {{ .Values.ingress.domain }}
+    - {{ .Values.ingress.accountdomain }}
     secretName: tls-secret
   rules:
-  - host: {{ .Values.giurudomain }}
+  - host: {{ .Values.ingress.domain }}
     http:
       paths:
       - backend:
           serviceName: aspnetcore-web-service
           servicePort: 80
         path: /(.*)
-  - host: {{ .Values.accountgiurudomain }}
+  - host: {{ .Values.ingress.accountdomain }}
     http:
       paths:
       - backend:
