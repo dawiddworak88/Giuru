@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: react-ssr-web-container
-        image: giuru.azurecr.io/react-ssr-web:{{ .Values.image.tag }}
+        image: {{ .Values.image.registry }}/react-ssr-web:{{ .Values.image.tag }}
         ports:
         - containerPort: 3000
       imagePullSecrets:
@@ -40,7 +40,7 @@ spec:
     spec:
       containers:
       - name: aspnetcore-web-container
-        image: giuru.azurecr.io/aspnetcore-web:{{ .Values.image.tag }}
+        image: {{ .Values.image.registry }}/aspnetcore-web:{{ .Values.image.tag }}
         ports:
         - containerPort: 80
       imagePullSecrets:
@@ -64,7 +64,7 @@ spec:
     spec:
       containers:
       - name: account-web-container
-        image: giuru.azurecr.io/account-web:{{ .Values.image.tag }}
+        image: {{ .Values.image.registry }}/account-web:{{ .Values.image.tag }}
         ports:
         - containerPort: 80
       imagePullSecrets:
