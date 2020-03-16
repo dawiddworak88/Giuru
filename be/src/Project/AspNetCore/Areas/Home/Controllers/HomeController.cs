@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AspNetCore.Areas.Home.Controllers
 {
     [Area("Home")]
+    [Authorize]
     public class HomeController : BaseController
     {
         private readonly IModelBuilder<HomePageViewModel> homePageModelBuilder;
@@ -16,6 +17,7 @@ namespace AspNetCore.Areas.Home.Controllers
             this.homePageModelBuilder = homePageModelBuilder;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var viewModel = this.homePageModelBuilder.BuildModel();
