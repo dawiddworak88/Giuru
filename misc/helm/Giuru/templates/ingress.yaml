@@ -11,7 +11,7 @@ spec:
   - hosts:
     - giuru.com
     - account.giuru.com
-    secretName: tls-secret
+    secretName: giuru-tls-secret
   rules:
   - host: giuru.com
     http:
