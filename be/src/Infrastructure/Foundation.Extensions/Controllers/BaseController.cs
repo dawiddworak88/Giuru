@@ -16,8 +16,8 @@ namespace Foundation.Extensions.Controllers
 
             if (routeValues != null && !routeValues.ContainsKey("culture"))
             {
-                //routeValues.Add("culture", CurrentLanguage);
-                //context.Result = new RedirectToRouteResult(routeValues);
+                routeValues.Add("culture", CurrentLanguage);
+                context.Result = new RedirectToRouteResult(routeValues);
             }
         }
     }

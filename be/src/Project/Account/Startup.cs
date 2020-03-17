@@ -11,9 +11,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Feature.Localization.DependencyInjection;
 using Foundation.Extensions.Definitions;
-using Microsoft.IdentityModel.Tokens;
+// using Microsoft.IdentityModel.Tokens;
 using Foundation.Database.Shared.DependencyInjection;
-using Feature.Account.DependencyInjection;
+// using Feature.Account.DependencyInjection;
 using Account.Shared.DependencyInjection;
 
 namespace Account
@@ -55,7 +55,7 @@ namespace Account
 
             services.RegisterDatabaseDependencies(this.Configuration);
 
-            services.RegisterAccountDependencies(this.Configuration);
+            // services.RegisterAccountDependencies(this.Configuration);
 
             services.RegisterDependencies();
         }
@@ -90,7 +90,7 @@ namespace Account
 
             app.UseRouting();
 
-            app.UseAccountIdentityServer();
+            // app.UseAccountIdentityServer();
 
             app.UseAuthorization();
 
