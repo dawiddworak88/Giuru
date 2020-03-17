@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: react-ssr-web-deployment
-  namespace: ingress-basic
   labels:
     app: react-ssr-web
 spec:
@@ -26,7 +25,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: aspnetcore-web-deployment
-  namespace: ingress-basic
   labels:
     app: aspnetcore-web
 spec:
