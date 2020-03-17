@@ -21,7 +21,7 @@ spec:
           serviceName: aspnetcore-web-service
           servicePort: 80
         path: /(.*)
-  - host: giuru.com
+  - host: account.giuru.com
     http:
       paths:
       - backend:
