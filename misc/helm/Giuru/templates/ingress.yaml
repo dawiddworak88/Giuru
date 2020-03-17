@@ -10,6 +10,7 @@ spec:
   tls:
   - hosts:
     - giuru.com
+    - account.giuru.com
     secretName: tls-secret
   rules:
   - host: giuru.com
@@ -17,5 +18,12 @@ spec:
       paths:
       - backend:
           serviceName: aspnetcore-web-service
+          servicePort: 80
+        path: /(.*)
+  - host: account.giuru.com
+    http:
+      paths:
+      - backend:
+          serviceName: account-web-service
           servicePort: 80
         path: /(.*)
