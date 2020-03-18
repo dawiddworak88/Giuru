@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: giuruingress
+  name: wildcard-giuru-ingress
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
@@ -11,7 +11,7 @@ spec:
   - hosts:
     - giuru.com
     - account.giuru.com
-    secretName: tls-secret
+    secretName: wildcard
   rules:
   - host: giuru.com
     http:
