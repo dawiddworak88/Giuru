@@ -1,5 +1,6 @@
 ﻿using IdentityServer4;
 using IdentityServer4.Models;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 
 namespace Feature.Account.Configurations
@@ -13,25 +14,39 @@ namespace Feature.Account.Configurations
                 new IdentityResources.Profile(),
             };
 
-        public static IEnumerable<Client> Clients =>
-            new List<Client>
+        public static IEnumerable<Client> GetClients(IConfiguration configuration)
+        {
+            var clientsList = new List<Client>();
+
+            var clientsConfiguration = configuration.GetSection("Account")?.GetSection("Clients")?.GetChildren();
+
+            if (clientsConfiguration != null)
             {
-                new Client
+                foreach (var clientConfiguration in clientsConfiguration)
                 {
-                    ClientId = "daa95085-cde4-4732-91ca-cfdf6027de22",
-                    ClientSecrets = { new Secret("145ade68-286d-4e4e-8895-557ba23098c9".Sha256()) },
-                    AllowedGrantTypes = GrantTypes.Code,
-                    RequireConsent = false,
-                    RequirePkce = true,
-                    RedirectUris = { "https://localhost:44377/signin-oidc" },
-                    PostLogoutRedirectUris = { "https://localhost:44377/signout-callback-oidc" },
-                    AllowedScopes = new List<string>
+                    var client = new Client
                     {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile
-                    },
-                    AllowOfflineAccess = true
+                        ClientId = clientConfiguration.GetValue<string>("ClientId"),
+                        ClientSecrets = { new Secret(clientConfiguration.GetValue<string>("ClientSecret").Sha256()) },
+                        AllowedGrantTypes = GrantTypes.Code,
+                        RequireConsent = false,
+                        RequirePkce = true,
+                        RedirectUris = { $"{clientConfiguration.GetValue<string>("Host")}{clientConfiguration.GetValue<string>("SignInOidc")}" },
+                        PostLogoutRedirectUris = { $"{clientConfiguration.GetValue<string>("Host")}/{clientConfiguration.GetValue<string>("SignOutCallbackOidc")}" },
+                        AllowedScopes = new List<string>
+                        {
+                            IdentityServerConstants.StandardScopes.OpenId,
+                            IdentityServerConstants.StandardScopes.Profile
+                        },
+                        AllowOfflineAccess = true
+                    };
+
+                    clientsList.Add(client);
                 }
-            };
+            }
+
+            return clientsList;
+        }
+            
     }
 }
