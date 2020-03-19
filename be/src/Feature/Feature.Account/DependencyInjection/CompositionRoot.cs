@@ -32,7 +32,7 @@ namespace Feature.Account.DependencyInjection
                 options.Events.RaiseSuccessEvents = true;
             })
             .AddInMemoryIdentityResources(IdentityServerConfig.Ids)
-            .AddInMemoryClients(IdentityServerConfig.Clients)
+            .AddInMemoryClients(IdentityServerConfig.GetClients(configuration))
             .AddAspNetIdentity<ApplicationUser>();
 
             builder.AddDeveloperSigningCredential();
