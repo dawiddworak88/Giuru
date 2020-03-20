@@ -31,7 +31,11 @@ namespace Feature.Account.Configurations
                         AllowedGrantTypes = GrantTypes.Code,
                         RequireConsent = false,
                         RequirePkce = true,
-                        RedirectUris = { $"{clientConfiguration.GetValue<string>("Host")}{clientConfiguration.GetValue<string>("SignInOidc")}" },
+                        RedirectUris = 
+                        { 
+                            $"{Definitions.Constants.HttpsScheme}://{clientConfiguration.GetValue<string>("Host")}{clientConfiguration.GetValue<string>("SignInOidc")}",
+                            $"{Definitions.Constants.HttpScheme}://{clientConfiguration.GetValue<string>("Host")}{clientConfiguration.GetValue<string>("SignInOidc")}"
+                        },
                         PostLogoutRedirectUris = { $"{clientConfiguration.GetValue<string>("Host")}/{clientConfiguration.GetValue<string>("SignOutCallbackOidc")}" },
                         AllowedScopes = new List<string>
                         {
