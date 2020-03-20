@@ -3,6 +3,6 @@
     public static class Constants
     {
         public const string HttpsScheme = "https";
-        public const string HttpScheme = "https";
+        public const string HttpScheme = "http";
     }
 }
