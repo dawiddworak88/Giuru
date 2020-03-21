@@ -5,8 +5,8 @@ WORKDIR /app
 
 COPY ./src/Infrastructure ./Infrastructure/
 COPY ./src/Feature ./Feature/
-COPY ./src/Project/Account ./Project/Account/
-RUN dotnet publish ./Project/Account/Account.csproj -c Release -o out
+COPY ./src/Project/Web/Account ./Project/Web/Account/
+RUN dotnet publish ./Project/Web/Account/Account.csproj -c Release -o out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.2

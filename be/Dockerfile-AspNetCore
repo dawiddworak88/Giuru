@@ -5,8 +5,8 @@ WORKDIR /app
 
 COPY ./src/Infrastructure ./Infrastructure/
 COPY ./src/Feature ./Feature/
-COPY ./src/Project/AspNetCore ./Project/AspNetCore/
-RUN dotnet publish ./Project/AspNetCore/AspNetCore.csproj -c Release -o out
+COPY ./src/Project/Web/AspNetCore ./Project/Web/AspNetCore/
+RUN dotnet publish ./Project/Web/AspNetCore/AspNetCore.csproj -c Release -o out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.2

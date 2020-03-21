@@ -61,8 +61,8 @@ var browserConfig = {
         homepage: ["./src/project/AspNetCore/areas/Home/pages/HomePage/index.js", "./src/project/AspNetCore/areas/Home/pages/HomePage/HomePage.scss"]
     },
     output: {
-        publicPath: path.resolve(__dirname, "../be/src/Project/AspNetCore/wwwroot/dist/js"),
-        path: path.resolve(__dirname, "../be/src/Project/AspNetCore/wwwroot/dist/js"),
+        publicPath: path.resolve(__dirname, "../be/src/Project/Web/AspNetCore/wwwroot/dist/js"),
+        path: path.resolve(__dirname, "../be/src/Project/Web/AspNetCore/wwwroot/dist/js"),
         filename: "[name].js"
     }
 };
@@ -124,8 +124,8 @@ var accountBrowserConfig = {
         signinpage: ["./src/project/Account/areas/Accounts/pages/SignIn/index.js", "./src/project/Account/areas/Accounts/pages/SignIn/SignInPage.scss"]
     },
     output: {
-        publicPath: path.resolve(__dirname, "../be/src/Project/Account/wwwroot/dist/js"),
-        path: path.resolve(__dirname, "../be/src/Project/Account/wwwroot/dist/js"),
+        publicPath: path.resolve(__dirname, "../be/src/Project/Web/Account/wwwroot/dist/js"),
+        path: path.resolve(__dirname, "../be/src/Project/Web/Account/wwwroot/dist/js"),
         filename: "[name].js"
     }
 };
