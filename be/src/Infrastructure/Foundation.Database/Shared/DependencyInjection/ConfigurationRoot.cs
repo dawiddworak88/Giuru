@@ -14,12 +14,12 @@ namespace Foundation.Database.Shared.DependencyInjection
             using (var scope = scopeFactory.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetService<DatabaseContext>();
+
                 if (!dbContext.AllMigrationsApplied())
                 {
                     dbContext.Database.Migrate();
+                    dbContext.EnsureSeeded();
                 }
-
-                dbContext.EnsureSeeded();
             }
         }
     }
