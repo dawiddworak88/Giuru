@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Foundation.Database.Areas.Accounts.Seeds;
+using Foundation.Database.Areas.Tenants.Seeds;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System.Linq;
 
@@ -21,6 +23,8 @@ namespace Foundation.Database.Shared.Contexts
 
         public static void EnsureSeeded(this DatabaseContext context)
         {
+            AccountsSeed.SeedAccounts(context);
+            TenantsSeed.SeedTenants(context);
         }
     }
 }

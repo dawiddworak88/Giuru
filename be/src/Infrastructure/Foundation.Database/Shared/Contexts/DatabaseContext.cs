@@ -1,4 +1,5 @@
 ﻿using Foundation.Database.Areas.Accounts.Entities;
+using Foundation.Database.Areas.Tenants.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,5 +20,9 @@ namespace Foundation.Database.Shared.Contexts
         {
             optionsBuilder.UseLazyLoadingProxies();
         }
+
+        public DbSet<ApplicationUser> Accounts { get; set; }
+
+        public DbSet<Tenant> Tenants { get; set; }
     }
 }
