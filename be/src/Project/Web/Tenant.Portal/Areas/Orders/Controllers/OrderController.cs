@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Tenant.Portal.Areas.Orders.Controllers
 {
     [Area("Orders")]
-    [Authorize]
+    [AllowAnonymous]
     public class OrderController : BaseController
     {
         private readonly IModelBuilder<OrderPageViewModel> orderPageModelBuilder;
