@@ -10,6 +10,7 @@ spec:
   - hosts:
     - {{ .Values.ingress.domain }}
     - {{ .Values.ingress.accountdomain }}
+    - {{ .Values.ingress.tenantportaldomain }}
     secretName: wildcard
   rules:
   - host: {{ .Values.ingress.domain }}
@@ -24,5 +25,12 @@ spec:
       paths:
       - backend:
           serviceName: account-web-service
+          servicePort: 80
+        path: /
+  - host: {{ .Values.ingress.tenantportaldomain }}
+    http:
+      paths:
+      - backend:
+          serviceName: tenant-portal-web-service
           servicePort: 80
         path: /
