@@ -130,4 +130,67 @@ var accountBrowserConfig = {
     }
 };
 
-module.exports = [browserConfig, accountBrowserConfig];
+var tenantPortalBrowserConfig = {
+    module: {
+        rules: [
+            {
+                test: /\.(scss|css)$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    "css-loader",
+                    "postcss-loader",
+                    "sass-loader"
+                ]
+            },
+            {
+                test: /\.(png|svg|jpg|gif)$/,
+                use: [{
+                    loader: "file-loader",
+                    options: {
+                        name: "[name].[ext]",
+                        outputPath: "../images",
+                        publicPath: "/dist/images"
+                    }
+                }]
+            },
+            {
+                test: /\.(js|jsx)$/,
+                exclude: /node_modules/,
+                use: [
+                    { loader: "babel-loader" }
+                ]
+            }
+        ]
+    },
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: "../../dist/css/[name].css",
+        }),
+        new CleanWebpackPlugin({
+            dry: false,
+            dangerouslyAllowCleanPatternsOutsideProject: true
+        }),
+        new CopyWebpackPlugin([{
+            from: path.resolve(__dirname, "wwwroot/src/*.png"),
+            to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
+        }])
+    ],
+    optimization: {
+        minimizer: [
+            new OptimizeCSSAssetsPlugin({})
+        ]
+    },
+    resolve: {
+        extensions: [".js", ".jsx"]
+    },
+    entry: {
+        orderpage: ["./src/project/Tenant.Portal/areas/Orders/pages/OrderPage/index.js", "./src/project/Tenant.Portal/areas/Orders/pages/OrderPage/OrderPage.scss"]
+    },
+    output: {
+        publicPath: path.resolve(__dirname, "../be/src/Project/Web/Tenant.Portal/wwwroot/dist/js"),
+        path: path.resolve(__dirname, "../be/src/Project/Web/Tenant.Portal/wwwroot/dist/js"),
+        filename: "[name].js"
+    }
+};
+
+module.exports = [browserConfig, accountBrowserConfig, tenantPortalBrowserConfig];

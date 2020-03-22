@@ -7,9 +7,13 @@ import HomePage from '../../src/project/AspNetCore/areas/Home/pages/HomePage/Hom
 // Account
 import SignInPage from '../../src/project/Account/areas/Accounts/pages/SignIn/SignInPage';
 
+// Tenant Portal
+import OrderPage from '../../src/project/Tenant.Portal/areas/Orders/pages/OrderPage/OrderPage';
+
 const Components = {
 	HomePage,
-	SignInPage
+	SignInPage,
+	OrderPage
   };
 
 export default (req, res, next) => {
