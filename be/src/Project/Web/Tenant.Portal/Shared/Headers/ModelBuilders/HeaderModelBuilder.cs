@@ -1,17 +1,17 @@
 ﻿using Foundation.Extensions.ModelBuilders;
-using AspNetCore.Shared.Headers.ViewModels;
+using Tenant.Portal.Shared.Headers.ViewModels;
 using Feature.Localization.ViewModels;
 using System.Collections.Generic;
 using Feature.PageContent.Shared.Links.ViewModels;
 using System;
 using Feature.Localization;
 using Microsoft.Extensions.Localization;
-using AspNetCore.Shared.Configurations;
+using Tenant.Portal.Shared.Configurations;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Routing;
 using System.Globalization;
 
-namespace AspNetCore.Shared.Headers.ModelBuilders
+namespace Tenant.Portal.Shared.Headers.ModelBuilders
 {
     public class HeaderModelBuilder : IModelBuilder<HeaderViewModel>
     {
@@ -53,8 +53,8 @@ namespace AspNetCore.Shared.Headers.ModelBuilders
                 LanguageSwitcher = this.languageSwitcherViewModel.BuildModel(),
                 LoginLink = new LinkViewModel
                 {
-                    Url = this.servicesEndpointsConfiguration.Value.PortalEndpoint,
-                    Text = this.globalLocalizer["Portal"]
+                    Url = linkGenerator.GetPathByAction("Index2", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
+                    Text = this.globalLocalizer["SignIn"]
                 },
                 Links = links
             };
