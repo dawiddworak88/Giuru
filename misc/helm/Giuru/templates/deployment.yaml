@@ -60,3 +60,24 @@ spec:
         image: {{ .Values.image.registry }}/account-web:{{ .Values.image.tag }}
         ports:
         - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tenant-portal-web-deployment
+  labels:
+    app: tenant-portal-web
+spec:
+  selector:
+    matchLabels:
+      app: tenant-portal-web
+  template:
+    metadata:
+      labels:
+        app: tenant-portal-web
+    spec:
+      containers:
+      - name: tenant-portal-web-container
+        image: {{ .Values.image.registry }}/tenant-portal-web:{{ .Values.image.tag }}
+        ports:
+        - containerPort: 80
