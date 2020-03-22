@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Feature.Localization.DependencyInjection;
 using Foundation.Database.Shared.DependencyInjection;
-using Feature.Account.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
 
 namespace AspNetCore
@@ -52,8 +51,6 @@ namespace AspNetCore
             env.UseGeneralException(app);
 
             app.ConfigureDatabaseMigrations();
-
-            app.UseHttpsRedirection();
 
             app.UseResponseCompression();
 

@@ -53,8 +53,6 @@ namespace Account
 
             app.ConfigureDatabaseMigrations();
 
-            app.UseHttpsRedirection();
-
             app.UseResponseCompression();
 
             app.UseGeneralStaticFiles();
