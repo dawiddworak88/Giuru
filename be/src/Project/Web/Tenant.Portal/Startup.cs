@@ -55,8 +55,6 @@ namespace Tenant.Portal
 
             app.ConfigureDatabaseMigrations();
 
-            app.UseHttpsRedirection();
-
             app.UseResponseCompression();
 
             app.UseGeneralStaticFiles();
