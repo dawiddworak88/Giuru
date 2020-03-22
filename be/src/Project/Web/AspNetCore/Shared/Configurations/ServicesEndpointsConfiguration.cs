@@ -2,6 +2,6 @@
 {
     public class ServicesEndpointsConfiguration
     {
-        public string AccountEndpoint { get; set; }
+        public string PortalEndpoint { get; set; }
     }
 }

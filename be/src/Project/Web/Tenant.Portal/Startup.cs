@@ -1,8 +1,6 @@
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
-using AspNetCore.Shared.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+using Tenant.Portal.Shared.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -10,8 +8,10 @@ using Feature.Localization.DependencyInjection;
 using Foundation.Database.Shared.DependencyInjection;
 using Feature.Account.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Builder;
 
-namespace AspNetCore
+namespace Tenant.Portal
 {
     public class Startup
     {
@@ -33,6 +33,8 @@ namespace AspNetCore
             services.AddHttpContextAccessor();
 
             services.AddControllersWithViews();
+
+            services.RegisterClientAccountDependencies(this.Configuration);
 
             services.RegisterLocalizationDependencies();
 
@@ -61,17 +63,19 @@ namespace AspNetCore
 
             app.UseRouting();
 
+            app.UseAuthorization();
+
             app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                             name: "localizedAreaRoute",
-                            pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Home}/{controller=Home}/{action=Index}/{id?}");
+                            pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Orders}/{controller=Order}/{action=Index}/{id?}");
 
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{area:exists=Home}/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area:exists=Orders}/{controller=Order}/{action=Index}/{id?}");
             });
         }
     }
