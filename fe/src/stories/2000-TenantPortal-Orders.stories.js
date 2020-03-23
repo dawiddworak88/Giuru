@@ -37,6 +37,13 @@ var header = {
   }
 };
 
+var menuTiles = {
+  ordersText: "Zamówienia",
+  productsText: "Produkty",
+  clientsText: "Klienci",
+  settingsText: "Ustawienia"
+};
+
 var footer = {
   copyright: 'Copyright © 2021 Giuru',
   links: [
@@ -45,7 +52,7 @@ var footer = {
   ]
 };
 
-export const OrderPageStory = () => <OrderPage header={header} footer={footer} />
+export const OrderPageStory = () => <OrderPage header={header} menuTiles={menuTiles} footer={footer} />
 
 OrderPageStory.story = {
   name: 'Orders Page',
