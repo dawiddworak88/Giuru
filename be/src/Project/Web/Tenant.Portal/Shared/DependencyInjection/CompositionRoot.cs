@@ -8,6 +8,8 @@ using Tenant.Portal.Shared.Footers.ViewModels;
 using Tenant.Portal.Shared.Footers.ModelBuilders;
 using Microsoft.Extensions.Configuration;
 using Tenant.Portal.Shared.Configurations;
+using Tenant.Portal.Shared.MenuTiles.ViewModels;
+using Tenant.Portal.Shared.MenuTiles.ModelBuilders;
 
 namespace Tenant.Portal.Shared.DependencyInjection
 {
@@ -17,6 +19,7 @@ namespace Tenant.Portal.Shared.DependencyInjection
         {
             services.AddScoped<IModelBuilder<OrderPageViewModel>, OrderPageModelBuilder>();
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
+            services.AddScoped<IModelBuilder<MenuTilesViewModel>, MenuTilesModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
         }

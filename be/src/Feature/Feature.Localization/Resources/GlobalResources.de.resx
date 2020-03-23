@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Clients" xml:space="preserve">
+    <value>Kunden</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Schliessen</value>
   </data>
@@ -126,6 +129,9 @@
   <data name="Copyright" xml:space="preserve">
     <value>Copyright © [year] Giuru</value>
   </data>
+  <data name="Orders" xml:space="preserve">
+    <value>Bestellungen</value>
+  </data>
   <data name="Portal" xml:space="preserve">
     <value>Portal</value>
   </data>
@@ -134,6 +140,12 @@
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Datenschutz-Bestimmungen</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>Produkte</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Einstellungen</value>
   </data>
   <data name="SignIn" xml:space="preserve">
     <value>Einloggen</value>
