@@ -13,11 +13,10 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: ls
 
 - script: cd be/src
 
-- script: dotnet build --configuration $(buildConfiguration) '/be/src/AspNetCore.sln'
+- script: dotnet build --configuration $(buildConfiguration)
 
 - task: SonarCloudPrepare@1
   inputs:
