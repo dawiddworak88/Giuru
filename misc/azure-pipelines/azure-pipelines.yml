@@ -13,8 +13,9 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- script: ls
 
-- script: cd /be/src
+- script: cd be/src
 
 - script: dotnet build --configuration $(buildConfiguration) '/be/src/AspNetCore.sln'
 
