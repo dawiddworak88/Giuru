@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-    - develop
+  - develop
     
 pool:
   vmImage: 'ubuntu-latest'
@@ -13,17 +13,18 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+
 - script: dotnet build /be/src/AspNetCore.sln --configuration $(buildConfiguration)
 
 - task: SonarCloudPrepare@1
     inputs:
-    SonarCloud: 'Giuru SonarCloud'
-    organization: 'dawiddworak88'
-    scannerMode: 'MSBuild'
-    projectKey: 'Giuru'
+      SonarCloud: 'Giuru SonarCloud'
+      organization: 'dawiddworak88'
+      scannerMode: 'MSBuild'
+      projectKey: 'Giuru'
 
 - task: SonarCloudAnalyze@1
 
 - task: SonarCloudPublish@1
     inputs:
-    pollingTimeoutSec: '300'
+      pollingTimeoutSec: '300'
