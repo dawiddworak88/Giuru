@@ -14,7 +14,6 @@ variables:
 
 steps:
 - script: dotnet build /be/src/AspNetCore.sln --configuration $(buildConfiguration)
-    displayName: 'dotnet build $(buildConfiguration)'
 
 - task: SonarCloudPrepare@1
     inputs:
