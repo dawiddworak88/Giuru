@@ -14,14 +14,14 @@ variables:
 
 steps:
 
-- script: dotnet build --configuration $(buildConfiguration) be/src/AspNetCore.sln
-
 - task: SonarCloudPrepare@1
   inputs:
     SonarCloud: 'Giuru SonarCloud'
     organization: 'dawiddworak88'
     scannerMode: 'MSBuild'
     projectKey: 'Giuru'
+
+- script: dotnet build --configuration $(buildConfiguration) be/src/AspNetCore.sln
 
 - task: SonarCloudAnalyze@1
 
