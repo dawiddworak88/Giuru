@@ -16,6 +16,8 @@ steps:
 
 - script: cd be/src
 
+- script: ls
+
 - script: dotnet build --configuration $(buildConfiguration)
 
 - task: SonarCloudPrepare@1
