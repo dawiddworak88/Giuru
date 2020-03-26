@@ -17,14 +17,14 @@ steps:
 - script: dotnet build /be/src/AspNetCore.sln --configuration $(buildConfiguration)
 
 - task: SonarCloudPrepare@1
-    inputs:
-      SonarCloud: 'Giuru SonarCloud'
-      organization: 'dawiddworak88'
-      scannerMode: 'MSBuild'
-      projectKey: 'Giuru'
+  inputs:
+    SonarCloud: 'Giuru SonarCloud'
+    organization: 'dawiddworak88'
+    scannerMode: 'MSBuild'
+    projectKey: 'Giuru'
 
 - task: SonarCloudAnalyze@1
 
 - task: SonarCloudPublish@1
-    inputs:
-      pollingTimeoutSec: '300'
+  inputs:
+    pollingTimeoutSec: '300'
