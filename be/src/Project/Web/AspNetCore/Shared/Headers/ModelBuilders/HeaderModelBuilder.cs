@@ -8,7 +8,6 @@ using Feature.Localization;
 using Microsoft.Extensions.Localization;
 using AspNetCore.Shared.Configurations;
 using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Routing;
 
 namespace AspNetCore.Shared.Headers.ModelBuilders
 {
