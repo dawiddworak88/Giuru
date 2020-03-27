@@ -19,7 +19,7 @@ steps:
     SonarCloud: 'Giuru SonarCloud'
     organization: 'dawiddworak88'
     scannerMode: 'MSBuild'
-    projectKey: 'Giuru'
+    projectKey: 'giuru'
 
 - script: dotnet build --configuration $(buildConfiguration) be/src/AspNetCore.sln
 
