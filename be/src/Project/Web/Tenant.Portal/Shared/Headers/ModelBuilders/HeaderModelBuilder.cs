@@ -6,8 +6,6 @@ using Feature.PageContent.Shared.Links.ViewModels;
 using System;
 using Feature.Localization;
 using Microsoft.Extensions.Localization;
-using Tenant.Portal.Shared.Configurations;
-using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Routing;
 using System.Globalization;
 

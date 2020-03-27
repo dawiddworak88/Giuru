@@ -4,7 +4,6 @@ using Feature.Localization.ViewModels;
 using Feature.PageContent.Shared.Links.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 

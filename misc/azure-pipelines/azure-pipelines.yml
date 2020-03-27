@@ -22,6 +22,7 @@ steps:
     projectKey: 'giuru'
 
 - script: dotnet build --configuration $(buildConfiguration) be/src/AspNetCore.sln
+  displayName: 'Build solution'
 
 - task: SonarCloudAnalyze@1
 
