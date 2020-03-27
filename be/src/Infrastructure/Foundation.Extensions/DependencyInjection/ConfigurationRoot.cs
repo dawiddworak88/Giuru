@@ -1,5 +1,4 @@
 ﻿using Foundation.Extensions.Definitions;
-using Foundation.Localization.Definitions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;

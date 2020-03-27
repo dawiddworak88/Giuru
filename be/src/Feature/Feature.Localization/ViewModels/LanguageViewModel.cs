@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Feature.Localization.ViewModels
+﻿namespace Feature.Localization.ViewModels
 {
     public class LanguageViewModel
     {

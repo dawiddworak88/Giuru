@@ -2,9 +2,7 @@
 using Account.Shared.Footers.ViewModels;
 using Account.Shared.Headers.ViewModels;
 using Feature.Account.ViewModels.SignInForm;
-using Feature.Localization;
 using Foundation.Extensions.ModelBuilders;
-using Microsoft.Extensions.Localization;
 
 namespace Account.Areas.Accounts.ModelBuilders
 {

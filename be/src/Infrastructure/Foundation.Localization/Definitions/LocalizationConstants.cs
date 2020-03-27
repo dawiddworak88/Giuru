@@ -2,7 +2,7 @@
 
 namespace Foundation.Localization.Definitions
 {
-    public class LocalizationConstants
+    public static class LocalizationConstants
     {
         public const string CultureRouteConstraint = "cultureCode";
 

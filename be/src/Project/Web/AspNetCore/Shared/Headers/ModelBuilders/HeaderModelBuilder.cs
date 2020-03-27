@@ -9,7 +9,6 @@ using Microsoft.Extensions.Localization;
 using AspNetCore.Shared.Configurations;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Routing;
-using System.Globalization;
 
 namespace AspNetCore.Shared.Headers.ModelBuilders
 {

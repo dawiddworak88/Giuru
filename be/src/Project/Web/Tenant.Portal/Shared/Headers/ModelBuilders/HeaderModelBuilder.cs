@@ -21,21 +21,17 @@ namespace Tenant.Portal.Shared.Headers.ModelBuilders
 
         private readonly LinkGenerator linkGenerator;
 
-        private readonly IOptions<ServicesEndpointsConfiguration> servicesEndpointsConfiguration;
-
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
 
         public HeaderModelBuilder(
             IModelBuilder<LogoViewModel> logoModelBuilder,
             IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel,
             LinkGenerator linkGenerator,
-            IOptions<ServicesEndpointsConfiguration> servicesEndpointsConfiguration,
             IStringLocalizer<GlobalResources> globalLocalizer)
         {
             this.logoModelBuilder = logoModelBuilder;
             this.languageSwitcherViewModel = languageSwitcherViewModel;
             this.linkGenerator = linkGenerator;
-            this.servicesEndpointsConfiguration = servicesEndpointsConfiguration;
             this.globalLocalizer = globalLocalizer;
         }
 
