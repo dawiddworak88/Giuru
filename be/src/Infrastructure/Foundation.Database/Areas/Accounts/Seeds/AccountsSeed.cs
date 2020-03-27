@@ -6,6 +6,7 @@ namespace Foundation.Database.Areas.Accounts.Seeds
 {
     public static class AccountsSeed
     {
+        #pragma warning disable S2068
         public static void SeedAccounts(DatabaseContext context)
         {
             if (!context.Accounts.Any(x => x.Email == "dawid.dworak@giuru.com"))
@@ -54,5 +55,6 @@ namespace Foundation.Database.Areas.Accounts.Seeds
 
             context.SaveChanges();
         }
+        #pragma warning restore S2068
     }
 }
