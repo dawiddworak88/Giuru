@@ -20,7 +20,6 @@ steps:
     organization: 'dawiddworak88'
     scannerMode: 'MSBuild'
     projectKey: 'giuru'
-    extraProperties: sonar.exclusions="**/Migrations/**,**/wwwroot/**,**/*.ruleset"
 
 - script: dotnet build --configuration $(buildConfiguration) be/src/AspNetCore.sln
   displayName: 'Build solution'
