@@ -2,8 +2,8 @@
 using Foundation.Extensions.ModelBuilders;
 using AspNetCore.Shared.Headers.ViewModels;
 using Microsoft.Extensions.Localization;
-using Feature.Localization;
 using AspNetCore.Shared.Footers.ViewModels;
+using Foundation.Localization;
 
 namespace AspNetCore.Areas.Home.ModelBuilders
 {

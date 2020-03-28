@@ -3,10 +3,10 @@ using AspNetCore.Shared.Headers.ViewModels;
 using Feature.Localization.ViewModels;
 using System.Collections.Generic;
 using Feature.PageContent.Shared.Links.ViewModels;
-using Feature.Localization;
 using Microsoft.Extensions.Localization;
 using AspNetCore.Shared.Configurations;
 using Microsoft.Extensions.Options;
+using Foundation.Localization;
 
 namespace AspNetCore.Shared.Headers.ModelBuilders
 {

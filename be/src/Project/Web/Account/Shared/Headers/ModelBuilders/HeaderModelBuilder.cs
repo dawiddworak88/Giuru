@@ -1,8 +1,8 @@
 ﻿using Account.Shared.Headers.ViewModels;
-using Feature.Localization;
 using Feature.Localization.ViewModels;
 using Feature.PageContent.Shared.Links.ViewModels;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.Localization;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 

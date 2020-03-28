@@ -1,6 +1,6 @@
-﻿using Feature.Localization;
-using Feature.PageContent.MenuTiles.ViewModels;
+﻿using Feature.PageContent.MenuTiles.ViewModels;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.Localization;
 using Foundation.Presentation.Definitions;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;

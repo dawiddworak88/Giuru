@@ -3,10 +3,10 @@ using Tenant.Portal.Shared.Headers.ViewModels;
 using Feature.Localization.ViewModels;
 using System.Collections.Generic;
 using Feature.PageContent.Shared.Links.ViewModels;
-using Feature.Localization;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Routing;
 using System.Globalization;
+using Foundation.Localization;
 
 namespace Tenant.Portal.Shared.Headers.ModelBuilders
 {

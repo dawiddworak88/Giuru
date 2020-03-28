@@ -1,8 +1,8 @@
 ﻿using Account.Shared.Footers.ViewModels;
-using Feature.Localization;
 using Feature.PageContent.Shared.Footers.Definitions;
 using Feature.PageContent.Shared.Links.ViewModels;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.Localization;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;

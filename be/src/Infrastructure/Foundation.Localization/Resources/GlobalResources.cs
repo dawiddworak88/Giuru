@@ -1,4 +1,4 @@
-﻿namespace Feature.Localization
+﻿namespace Foundation.Localization
 {
     public class GlobalResources
     {
