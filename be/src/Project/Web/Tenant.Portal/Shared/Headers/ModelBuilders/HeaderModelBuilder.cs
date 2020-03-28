@@ -1,15 +1,12 @@
 ﻿using Foundation.Extensions.ModelBuilders;
-using Tenant.Portal.Shared.Headers.ViewModels;
-using Feature.Localization.ViewModels;
 using System.Collections.Generic;
-using Feature.PageContent.Shared.Links.ViewModels;
-using System;
-using Feature.Localization;
+using Feature.PageContent.Components.Links.ViewModels;
 using Microsoft.Extensions.Localization;
-using Tenant.Portal.Shared.Configurations;
-using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Routing;
 using System.Globalization;
+using Foundation.Localization;
+using Feature.PageContent.Components.Headers.ViewModels;
+using Feature.PageContent.Components.LanguageSwitchers.ViewModels;
 
 namespace Tenant.Portal.Shared.Headers.ModelBuilders
 {
@@ -21,32 +18,22 @@ namespace Tenant.Portal.Shared.Headers.ModelBuilders
 
         private readonly LinkGenerator linkGenerator;
 
-        private readonly IOptions<ServicesEndpointsConfiguration> servicesEndpointsConfiguration;
-
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
 
         public HeaderModelBuilder(
             IModelBuilder<LogoViewModel> logoModelBuilder,
             IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel,
             LinkGenerator linkGenerator,
-            IOptions<ServicesEndpointsConfiguration> servicesEndpointsConfiguration,
             IStringLocalizer<GlobalResources> globalLocalizer)
         {
             this.logoModelBuilder = logoModelBuilder;
             this.languageSwitcherViewModel = languageSwitcherViewModel;
             this.linkGenerator = linkGenerator;
-            this.servicesEndpointsConfiguration = servicesEndpointsConfiguration;
             this.globalLocalizer = globalLocalizer;
         }
 
         public HeaderViewModel BuildModel()
         {
-            var links = new List<LinkViewModel>
-            {
-                new LinkViewModel { UniqueId = Guid.NewGuid(), Text = this.globalLocalizer["PriceList"], Url = "#price-list" },
-                new LinkViewModel { UniqueId = Guid.NewGuid(), Text = this.globalLocalizer["Contact"], Url = "#contact" }
-            };
-
             return new HeaderViewModel
             {
                 Logo = this.logoModelBuilder.BuildModel(),
@@ -56,7 +43,7 @@ namespace Tenant.Portal.Shared.Headers.ModelBuilders
                     Url = linkGenerator.GetPathByAction("Index2", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
                     Text = this.globalLocalizer["SignIn"]
                 },
-                Links = links
+                Links = new List<LinkViewModel>()
             };
         }
     }

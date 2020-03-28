@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using AspNetCore.Shared.Headers.ModelBuilders;
-using AspNetCore.Shared.Headers.ViewModels;
 using AspNetCore.Areas.Home.ViewModel;
 using AspNetCore.Areas.Home.ModelBuilders;
 using Foundation.Extensions.ModelBuilders;
-using AspNetCore.Shared.Footers.ViewModels;
 using AspNetCore.Shared.Footers.ModelBuilders;
 using Microsoft.Extensions.Configuration;
 using AspNetCore.Shared.Configurations;
+using Feature.PageContent.Components.Headers.ViewModels;
+using Feature.PageContent.Components.Footers.ViewModels;
 
 namespace AspNetCore.Shared.DependencyInjection
 {

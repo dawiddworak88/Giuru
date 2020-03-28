@@ -1,9 +1,9 @@
 ﻿using Account.Areas.Accounts.ModelBuilders;
 using Account.Areas.Accounts.ViewModels;
 using Account.Shared.Footers.ModelBuilders;
-using Account.Shared.Footers.ViewModels;
 using Account.Shared.Headers.ModelBuilders;
-using Account.Shared.Headers.ViewModels;
+using Feature.PageContent.Components.Footers.ViewModels;
+using Feature.PageContent.Components.Headers.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.DependencyInjection;
 

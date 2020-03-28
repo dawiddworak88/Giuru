@@ -20,7 +20,7 @@ namespace Foundation.Localization.Extensions
                 context.HttpContext.Response.Cookies.Append(
                     CookieRequestCultureProvider.DefaultCookieName,
                     CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(language)),
-                    new CookieOptions { Expires = LocalizationConstants.ExpirationDateOfLocalizationCookie });
+                    new CookieOptions { Expires = LocalizationConstants.ExpirationDateOfLocalizationCookie, HttpOnly = true, Secure = true });
             }
 
             await next();

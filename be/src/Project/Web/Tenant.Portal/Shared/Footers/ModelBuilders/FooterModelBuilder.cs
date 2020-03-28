@@ -1,11 +1,11 @@
-﻿using Tenant.Portal.Shared.Footers.ViewModels;
-using Feature.Localization;
-using Feature.PageContent.Shared.Footers.Definitions;
-using Feature.PageContent.Shared.Links.ViewModels;
+﻿using Feature.PageContent.Components.Footers.Definitions;
+using Feature.PageContent.Components.Links.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
+using Foundation.Localization;
+using Feature.PageContent.Components.Footers.ViewModels;
 
 namespace Tenant.Portal.Shared.Footers.ModelBuilders
 {
@@ -20,17 +20,10 @@ namespace Tenant.Portal.Shared.Footers.ModelBuilders
 
         public FooterViewModel BuildModel()
         {
-            var links = new List<LinkViewModel>
-            {
-                new LinkViewModel { UniqueId = Guid.NewGuid(), Text = this.globalLocalizer["PriceList"], Url = "#price-list" },
-                new LinkViewModel { UniqueId = Guid.NewGuid(), Text = this.globalLocalizer["Contact"], Url = "#contact" }
-                
-            };
-
             var viewModel = new FooterViewModel 
             {
                 Copyright = this.globalLocalizer["Copyright"]?.Value.Replace(Constants.YearToken, DateTime.Now.Year.ToString()),
-                Links = links
+                Links = new List<LinkViewModel>()
             };
 
             return viewModel;

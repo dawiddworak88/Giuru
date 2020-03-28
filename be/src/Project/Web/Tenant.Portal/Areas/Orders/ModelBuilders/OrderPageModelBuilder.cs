@@ -1,10 +1,8 @@
 ﻿using Tenant.Portal.Areas.Orders.ViewModel;
 using Foundation.Extensions.ModelBuilders;
-using Tenant.Portal.Shared.Headers.ViewModels;
-using Microsoft.Extensions.Localization;
-using Feature.Localization;
-using Tenant.Portal.Shared.Footers.ViewModels;
-using Tenant.Portal.Shared.MenuTiles.ViewModels;
+using Feature.PageContent.MenuTiles.ViewModels;
+using Feature.PageContent.Components.Headers.ViewModels;
+using Feature.PageContent.Components.Footers.ViewModels;
 
 namespace Tenant.Portal.Areas.Orders.ModelBuilders
 {
@@ -16,18 +14,18 @@ namespace Tenant.Portal.Areas.Orders.ModelBuilders
 
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IModelBuilder<OrderCatalogViewModel> orderCatalogModelBuilder;
 
         public OrderPageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IModelBuilder<FooterViewModel> footerModelBuilder,
-            IStringLocalizer<GlobalResources> globalLocalizer)
+            IModelBuilder<OrderCatalogViewModel> orderCatalogModelBuilder,
+            IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
+            this.orderCatalogModelBuilder = orderCatalogModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
-            this.globalLocalizer = globalLocalizer;
         }
 
         public OrderPageViewModel BuildModel()
@@ -36,9 +34,8 @@ namespace Tenant.Portal.Areas.Orders.ModelBuilders
             {
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
-                Footer = footerModelBuilder.BuildModel(),
-                Welcome = this.globalLocalizer["Close"],
-                LearnMore = "Learn more"
+                Catalog = orderCatalogModelBuilder.BuildModel(),
+                Footer = footerModelBuilder.BuildModel()
             };
 
             return viewModel;

@@ -1,7 +1,6 @@
 ﻿using AspNetCore.Areas.Home.ViewModel;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCore.Areas.Home.Controllers

@@ -1,4 +1,4 @@
-﻿using Account.Shared.Headers.ViewModels;
+﻿using Feature.PageContent.Components.Headers.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 
 namespace Account.Shared.Headers.ModelBuilders

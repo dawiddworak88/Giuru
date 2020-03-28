@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Feature.Localization.DependencyInjection;
 using Foundation.Database.Shared.DependencyInjection;
 using Feature.Account.DependencyInjection;
 using Account.Shared.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
+using Feature.PageContent.DependencyInjection;
 
 namespace Account
 {
@@ -49,7 +49,7 @@ namespace Account
         {
             app.UseForwardedHeaders();
 
-            env.UseGeneralException(app);
+            app.UseGeneralException();
 
             app.ConfigureDatabaseMigrations();
 
