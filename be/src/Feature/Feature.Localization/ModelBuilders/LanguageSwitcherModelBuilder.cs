@@ -37,13 +37,13 @@ namespace Feature.Localization.ModelBuilders
                     url += this.httpContextAccessor.HttpContext.Request.QueryString.Value;
                 }
 
-                languages.Add(new LanguageViewModel { UniqueId = language.ToUpperInvariant(), Text = language.ToUpperInvariant(), Url = url });
+                languages.Add(new LanguageViewModel { Text = language.ToUpperInvariant(), Url = url });
             }
 
             return new LanguageSwitcherViewModel
             {
                 AvailableLanguages = languages,
-                SelectedLanguageUniqueId = CultureInfo.CurrentUICulture.Name.ToUpperInvariant()
+                SelectedLanguageText = CultureInfo.CurrentUICulture.Name.ToUpperInvariant()
             };
         }
     }

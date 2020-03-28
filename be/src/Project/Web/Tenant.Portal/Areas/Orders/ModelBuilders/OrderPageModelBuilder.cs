@@ -4,7 +4,7 @@ using Tenant.Portal.Shared.Headers.ViewModels;
 using Microsoft.Extensions.Localization;
 using Feature.Localization;
 using Tenant.Portal.Shared.Footers.ViewModels;
-using Tenant.Portal.Shared.MenuTiles.ViewModels;
+using Feature.PageContent.MenuTiles.ViewModels;
 
 namespace Tenant.Portal.Areas.Orders.ModelBuilders
 {

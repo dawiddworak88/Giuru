@@ -1083,7 +1083,7 @@ function _nonIterableRest() {
 function _slicedToArray(arr, i) {
   return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
 }
-// CONCATENATED MODULE: ./src/shared/components/LanguageSwitcher.js
+// CONCATENATED MODULE: ./src/shared/components/LanguageSwitcher/LanguageSwitcher.js
 
 
 function LanguageSwitcher(props) {
@@ -1093,11 +1093,11 @@ function LanguageSwitcher(props) {
     }
   }
 
-  var languages = props.availableLanguages.map(function (language) {
+  var languages = props.availableLanguages.map(function (language, index) {
     return /*#__PURE__*/react_default.a.createElement("option", {
-      key: language.uniqueId,
+      key: index,
       value: language.url,
-      selected: language.uniqueId === props.selectedLanguageUniqueId
+      selected: language.text === props.selectedLanguageText
     }, language.text);
   });
   return /*#__PURE__*/react_default.a.createElement("div", {
@@ -1109,10 +1109,10 @@ function LanguageSwitcher(props) {
   }, languages));
 }
 
-/* harmony default export */ var components_LanguageSwitcher = (LanguageSwitcher);
+/* harmony default export */ var LanguageSwitcher_LanguageSwitcher = (LanguageSwitcher);
 // CONCATENATED MODULE: ./src/shared/layouts/images/logo.png
 /* harmony default export */ var logo = ("/dist/images/logo.png");
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/shared/components/Header/Header.js
+// CONCATENATED MODULE: ./src/shared/components/Header/Header.js
 
 
 
@@ -1124,9 +1124,9 @@ function Header(props) {
       isActive = _useState2[0],
       setIsActive = _useState2[1];
 
-  var links = props.links.map(function (link) {
+  var links = props.links.map(function (link, index) {
     return /*#__PURE__*/react_default.a.createElement("a", {
-      key: link.uniqueId,
+      key: index,
       className: "navbar-item",
       href: link.url
     }, link.text);
@@ -1162,17 +1162,17 @@ function Header(props) {
     className: "navbar-end"
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "navbar-item"
-  }, /*#__PURE__*/react_default.a.createElement(components_LanguageSwitcher, props.languageSwitcher))))));
+  }, /*#__PURE__*/react_default.a.createElement(LanguageSwitcher_LanguageSwitcher, props.languageSwitcher))))));
 }
 
 /* harmony default export */ var Header_Header = (Header);
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/shared/components/Footer/Footer.js
+// CONCATENATED MODULE: ./src/shared/components/Footer/Footer.js
 
 
 function Footer(props) {
-  var links = props.links.map(function (link) {
+  var links = props.links.map(function (link, index) {
     return /*#__PURE__*/react_default.a.createElement("li", {
-      key: link.uniqueId
+      key: index
     }, /*#__PURE__*/react_default.a.createElement("a", {
       href: link.url
     }, link.text));
@@ -14626,13 +14626,14 @@ zoom_out_ZoomOut.defaultProps = {
 
 
 
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/shared/components/MenuTiles/Tile.js
+// CONCATENATED MODULE: ./src/shared/components/MenuTiles/Tile.js
 
 
 
 function Tile(props) {
   var IconTag = dist_namespaceObject[props.icon];
-  return /*#__PURE__*/react_default.a.createElement("div", {
+  return /*#__PURE__*/react_default.a.createElement("a", {
+    href: props.url,
     className: "tile"
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "tile__icon"
@@ -14644,32 +14645,46 @@ function Tile(props) {
 }
 
 /* harmony default export */ var MenuTiles_Tile = (Tile);
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/shared/components/MenuTiles/MenuTiles.js
+// CONCATENATED MODULE: ./src/shared/components/MenuTiles/MenuTiles.js
 
 
 
 function MenuTiles(props) {
   return /*#__PURE__*/react_default.a.createElement("nav", {
     className: "section menu-tiles"
-  }, /*#__PURE__*/react_default.a.createElement(MenuTiles_Tile, {
-    icon: "ShoppingCart",
-    title: props.ordersText
-  }), /*#__PURE__*/react_default.a.createElement(MenuTiles_Tile, {
-    icon: "Package",
-    title: props.productsText
-  }), /*#__PURE__*/react_default.a.createElement(MenuTiles_Tile, {
-    icon: "Users",
-    title: props.clientsText
-  }), /*#__PURE__*/react_default.a.createElement(MenuTiles_Tile, {
-    icon: "Settings",
-    title: props.settingsText
+  }, props.tiles.map(function (tile, index) {
+    return /*#__PURE__*/react_default.a.createElement(MenuTiles_Tile, {
+      key: index,
+      icon: tile.icon,
+      title: tile.title,
+      url: tile.url
+    });
   }));
 }
 
 /* harmony default export */ var MenuTiles_MenuTiles = (MenuTiles);
+// CONCATENATED MODULE: ./src/shared/components/Catalog/Catalog.js
+
+
+
+function Catalog(props) {
+  return /*#__PURE__*/react_default.a.createElement("section", {
+    className: "section catalog"
+  }, /*#__PURE__*/react_default.a.createElement("h1", {
+    className: "title is-4"
+  }, props.title), /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement("a", {
+    href: "/",
+    class: "button is-primary"
+  }, /*#__PURE__*/react_default.a.createElement("span", {
+    className: "icon"
+  }, /*#__PURE__*/react_default.a.createElement(plus, null)), /*#__PURE__*/react_default.a.createElement("span", null, props.newText))));
+}
+
+/* harmony default export */ var Catalog_Catalog = (Catalog);
 // CONCATENATED MODULE: ./src/shared/layouts/images/favicon.png
 /* harmony default export */ var favicon = ("/dist/images/favicon.png");
 // CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Orders/pages/OrderPage/OrderPage.js
+
 
 
 
@@ -14682,7 +14697,7 @@ function MenuTiles(props) {
 function OrderPage(props) {
   return /*#__PURE__*/react_default.a.createElement("div", {
     className: "home-page"
-  }, /*#__PURE__*/react_default.a.createElement(Header_Header, props.header), /*#__PURE__*/react_default.a.createElement(MenuTiles_MenuTiles, props.menuTiles), /*#__PURE__*/react_default.a.createElement("section", {
+  }, /*#__PURE__*/react_default.a.createElement(Header_Header, props.header), /*#__PURE__*/react_default.a.createElement(MenuTiles_MenuTiles, props.menuTiles), /*#__PURE__*/react_default.a.createElement(Catalog_Catalog, props.catalog), /*#__PURE__*/react_default.a.createElement("section", {
     className: "section"
   }, /*#__PURE__*/react_default.a.createElement("p", null, props.welcome), /*#__PURE__*/react_default.a.createElement("p", null, props.learnMore)), /*#__PURE__*/react_default.a.createElement(Footer_Footer, props.footer));
 }

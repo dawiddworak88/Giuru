@@ -22,8 +22,8 @@ namespace Account.Shared.Footers.ModelBuilders
         {
             var links = new List<LinkViewModel>
             {
-                new LinkViewModel { UniqueId = Guid.NewGuid(), Text = this.globalLocalizer["PrivacyPolicy"], Url = "#" },
-                new LinkViewModel { UniqueId = Guid.NewGuid(), Text = this.globalLocalizer["TermsAndConditions"], Url = "#" }
+                new LinkViewModel { Text = this.globalLocalizer["PrivacyPolicy"], Url = "#" },
+                new LinkViewModel { Text = this.globalLocalizer["TermsAndConditions"], Url = "#" }
 
             };
 

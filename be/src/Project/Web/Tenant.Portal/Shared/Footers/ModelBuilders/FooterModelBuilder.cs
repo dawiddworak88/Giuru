@@ -20,17 +20,10 @@ namespace Tenant.Portal.Shared.Footers.ModelBuilders
 
         public FooterViewModel BuildModel()
         {
-            var links = new List<LinkViewModel>
-            {
-                new LinkViewModel { UniqueId = Guid.NewGuid(), Text = this.globalLocalizer["PriceList"], Url = "#price-list" },
-                new LinkViewModel { UniqueId = Guid.NewGuid(), Text = this.globalLocalizer["Contact"], Url = "#contact" }
-                
-            };
-
             var viewModel = new FooterViewModel 
             {
                 Copyright = this.globalLocalizer["Copyright"]?.Value.Replace(Constants.YearToken, DateTime.Now.Year.ToString()),
-                Links = links
+                Links = new List<LinkViewModel>()
             };
 
             return viewModel;

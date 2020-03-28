@@ -691,7 +691,7 @@ function _nonIterableRest() {
 function _slicedToArray(arr, i) {
   return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
 }
-// CONCATENATED MODULE: ./src/shared/components/LanguageSwitcher.js
+// CONCATENATED MODULE: ./src/shared/components/LanguageSwitcher/LanguageSwitcher.js
 
 
 function LanguageSwitcher(props) {
@@ -701,11 +701,11 @@ function LanguageSwitcher(props) {
     }
   }
 
-  var languages = props.availableLanguages.map(function (language) {
+  var languages = props.availableLanguages.map(function (language, index) {
     return /*#__PURE__*/react_default.a.createElement("option", {
-      key: language.uniqueId,
+      key: index,
       value: language.url,
-      selected: language.uniqueId === props.selectedLanguageUniqueId
+      selected: language.text === props.selectedLanguageText
     }, language.text);
   });
   return /*#__PURE__*/react_default.a.createElement("div", {
@@ -717,10 +717,10 @@ function LanguageSwitcher(props) {
   }, languages));
 }
 
-/* harmony default export */ var components_LanguageSwitcher = (LanguageSwitcher);
+/* harmony default export */ var LanguageSwitcher_LanguageSwitcher = (LanguageSwitcher);
 // CONCATENATED MODULE: ./src/shared/layouts/images/logo.png
 /* harmony default export */ var logo = ("/dist/images/logo.png");
-// CONCATENATED MODULE: ./src/project/Account/shared/components/Header/Header.js
+// CONCATENATED MODULE: ./src/shared/components/Header/Header.js
 
 
 
@@ -732,9 +732,9 @@ function Header(props) {
       isActive = _useState2[0],
       setIsActive = _useState2[1];
 
-  var links = props.links.map(function (link) {
+  var links = props.links.map(function (link, index) {
     return /*#__PURE__*/react_default.a.createElement("a", {
-      key: link.uniqueId,
+      key: index,
       className: "navbar-item",
       href: link.url
     }, link.text);
@@ -770,17 +770,17 @@ function Header(props) {
     className: "navbar-end"
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "navbar-item"
-  }, /*#__PURE__*/react_default.a.createElement(components_LanguageSwitcher, props.languageSwitcher))))));
+  }, /*#__PURE__*/react_default.a.createElement(LanguageSwitcher_LanguageSwitcher, props.languageSwitcher))))));
 }
 
 /* harmony default export */ var Header_Header = (Header);
-// CONCATENATED MODULE: ./src/project/Account/shared/components/Footer/Footer.js
+// CONCATENATED MODULE: ./src/shared/components/Footer/Footer.js
 
 
 function Footer(props) {
-  var links = props.links.map(function (link) {
+  var links = props.links.map(function (link, index) {
     return /*#__PURE__*/react_default.a.createElement("li", {
-      key: link.uniqueId
+      key: index
     }, /*#__PURE__*/react_default.a.createElement("a", {
       href: link.url
     }, link.text));

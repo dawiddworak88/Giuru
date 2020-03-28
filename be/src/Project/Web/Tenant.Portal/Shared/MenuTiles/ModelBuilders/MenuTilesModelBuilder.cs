@@ -1,7 +1,9 @@
 ﻿using Feature.Localization;
+using Feature.PageContent.MenuTiles.ViewModels;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.Presentation.Definitions;
 using Microsoft.Extensions.Localization;
-using Tenant.Portal.Shared.MenuTiles.ViewModels;
+using System.Collections.Generic;
 
 namespace Tenant.Portal.Shared.MenuTiles.ModelBuilders
 {
@@ -17,11 +19,14 @@ namespace Tenant.Portal.Shared.MenuTiles.ModelBuilders
         public MenuTilesViewModel BuildModel()
         {
             return new MenuTilesViewModel
-            { 
-                OrdersText = this.globalLocalizer["Orders"],
-                ProductsText = this.globalLocalizer["Products"],
-                ClientsText = this.globalLocalizer["Clients"],
-                SettingsText = this.globalLocalizer["Settings"]
+            {
+                Tiles = new List<MenuTileViewModel>
+                {
+                    new MenuTileViewModel { Icon = IconsConstants.ShoppingCart, Title = this.globalLocalizer["Orders"], Url = "#" },
+                    new MenuTileViewModel { Icon = IconsConstants.Package, Title = this.globalLocalizer["Products"], Url = "#" },
+                    new MenuTileViewModel { Icon = IconsConstants.Users, Title = this.globalLocalizer["Clients"], Url = "#" },
+                    new MenuTileViewModel { Icon = IconsConstants.Settings, Title = this.globalLocalizer["Settings"], Url = "#" }
+                }
             };
         }
     }

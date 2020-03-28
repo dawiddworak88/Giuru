@@ -10,26 +10,23 @@ var header = {
   languageSwitcher: {
     availableLanguages: [
       {
-        uniqueId: 'EN',
         url: '#',
         text: 'EN'
       },
       {
-        uniqueId: 'DE',
         url: '#',
         text: 'DE'
       },
       {
-        uniqueId: 'PL',
         url: '#',
         text: 'PL'
       }
     ],
-    selectedLanguageUniqueId: 'PL'
+    selectedLanguageText: 'EN'
   },
   links: [
-    { uniqueId: "1", url: "#privacy-policy", text: "Price List" },
-    { uniqueId: "2", url: "#regulations", text: "Regulations" }
+    { url: "#privacy-policy", text: "Price List" },
+    { url: "#regulations", text: "Regulations" }
   ],
   loginLink: {
     url: "#", 
@@ -50,8 +47,8 @@ var signInForm = {
 var footer = {
   copyright: 'Copyright © 2021 Giuru',
   links: [
-    { uniqueId: "1", url: "#privacy-policy", text: "Price List" },
-    { uniqueId: "2", url: "#regulations", text: "Regulations" }
+    { url: "#privacy-policy", text: "Price List" },
+    { url: "#regulations", text: "Regulations" }
   ]
 };
 

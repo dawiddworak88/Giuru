@@ -7,20 +7,21 @@ function Tile(props) {
     const IconTag = Icon[props.icon];
 
     return (
-        <div className="tile">
+        <a href={props.url} className="tile">
             <div className="tile__icon">
                 <IconTag size={32} />
             </div>
             <div className="tile__title">
                 {props.title}
             </div>
-        </div>
+        </a>
     );
 }
 
 Tile.propTypes = {
     title: PropTypes.string.isRequired,
-    icon: PropTypes.string.isRequired
+    icon: PropTypes.string.isRequired,
+    url: PropTypes.string
 };
 
 export default Tile;

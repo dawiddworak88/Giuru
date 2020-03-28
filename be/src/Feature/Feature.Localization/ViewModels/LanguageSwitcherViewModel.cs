@@ -5,6 +5,6 @@ namespace Feature.Localization.ViewModels
     public class LanguageSwitcherViewModel
     {
         public List<LanguageViewModel> AvailableLanguages { get; set; }
-        public string SelectedLanguageUniqueId { get; set; }
+        public string SelectedLanguageText { get; set; }
     }
 }

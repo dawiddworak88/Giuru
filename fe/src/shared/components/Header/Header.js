@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import LanguageSwitcher from '../../../../../shared/components/LanguageSwitcher';
+import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 
-import logo from '../../../../../shared/layouts/images/logo.png';
+import logo from '../../layouts/images/logo.png';
 
 function Header(props) {
 
     const [isActive, setIsActive] = useState(false);
 
-    const links = props.links.map(link => <a key={link.uniqueId} className="navbar-item" href={link.url}>{link.text}</a>);
+    const links = props.links.map((link, index) => <a key={index} className="navbar-item" href={link.url}>{link.text}</a>);
 
     return (
         <header>

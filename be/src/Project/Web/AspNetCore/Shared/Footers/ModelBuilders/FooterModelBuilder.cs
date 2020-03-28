@@ -22,8 +22,8 @@ namespace AspNetCore.Shared.Footers.ModelBuilders
         {
             var links = new List<LinkViewModel>
             {
-                new LinkViewModel { UniqueId = Guid.NewGuid(), Text = this.globalLocalizer["PriceList"], Url = "#price-list" },
-                new LinkViewModel { UniqueId = Guid.NewGuid(), Text = this.globalLocalizer["Contact"], Url = "#contact" }
+                new LinkViewModel { Text = this.globalLocalizer["PriceList"], Url = "#price-list" },
+                new LinkViewModel { Text = this.globalLocalizer["Contact"], Url = "#contact" }
                 
             };
 

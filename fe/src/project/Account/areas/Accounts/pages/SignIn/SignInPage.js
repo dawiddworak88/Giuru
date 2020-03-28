@@ -1,6 +1,6 @@
 import React from 'react';
-import Header from '../../../../shared/components/Header/Header';
-import Footer from '../../../../shared/components/Footer/Footer';
+import Header from '../../../../../../shared/components/Header/Header';
+import Footer from '../../../../../../shared/components/Footer/Footer';
 import SignInForm from '../../components/SignIn/SignInForm';
 
 /* eslint-disable no-unused-vars */

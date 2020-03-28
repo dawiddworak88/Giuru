@@ -783,7 +783,70 @@ camera_Camera.defaultProps = {
   size: '24'
 };
 /* harmony default export */ var camera = (camera_Camera);
-// CONCATENATED MODULE: ./src/shared/components/LanguageSwitcher.js
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
+function _iterableToArrayLimit(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+
+  return arr2;
+}
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(n);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js
+
+
+
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+}
+// CONCATENATED MODULE: ./src/shared/components/LanguageSwitcher/LanguageSwitcher.js
 
 
 function LanguageSwitcher(props) {
@@ -793,11 +856,11 @@ function LanguageSwitcher(props) {
     }
   }
 
-  var languages = props.availableLanguages.map(function (language) {
+  var languages = props.availableLanguages.map(function (language, index) {
     return /*#__PURE__*/react_default.a.createElement("option", {
-      key: language.uniqueId,
+      key: index,
       value: language.url,
-      selected: language.uniqueId === props.selectedLanguageUniqueId
+      selected: language.text === props.selectedLanguageText
     }, language.text);
   });
   return /*#__PURE__*/react_default.a.createElement("div", {
@@ -809,21 +872,24 @@ function LanguageSwitcher(props) {
   }, languages));
 }
 
-/* harmony default export */ var components_LanguageSwitcher = (LanguageSwitcher);
+/* harmony default export */ var LanguageSwitcher_LanguageSwitcher = (LanguageSwitcher);
 // CONCATENATED MODULE: ./src/shared/layouts/images/logo.png
 /* harmony default export */ var logo = ("/dist/images/logo.png");
-// CONCATENATED MODULE: ./src/project/AspNetCore/shared/components/Header/Header.js
+// CONCATENATED MODULE: ./src/shared/components/Header/Header.js
+
 
 
 
 
 function Header(props) {
-  var isActiveHook = Object(react["useState"])(false);
-  var isActive = isActiveHook[0];
-  var setIsActive = isActiveHook[1];
-  var links = props.links.map(function (link) {
+  var _useState = Object(react["useState"])(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      isActive = _useState2[0],
+      setIsActive = _useState2[1];
+
+  var links = props.links.map(function (link, index) {
     return /*#__PURE__*/react_default.a.createElement("a", {
-      key: link.uniqueId,
+      key: index,
       className: "navbar-item",
       href: link.url
     }, link.text);
@@ -857,22 +923,19 @@ function Header(props) {
     className: "navbar-start"
   }, links), /*#__PURE__*/react_default.a.createElement("div", {
     className: "navbar-end"
-  }, /*#__PURE__*/react_default.a.createElement("a", {
-    className: "navbar-item",
-    href: props.loginLink.url
-  }, props.loginLink.text), /*#__PURE__*/react_default.a.createElement("div", {
+  }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "navbar-item"
-  }, /*#__PURE__*/react_default.a.createElement(components_LanguageSwitcher, props.languageSwitcher))))));
+  }, /*#__PURE__*/react_default.a.createElement(LanguageSwitcher_LanguageSwitcher, props.languageSwitcher))))));
 }
 
 /* harmony default export */ var Header_Header = (Header);
-// CONCATENATED MODULE: ./src/project/AspNetCore/shared/components/Footer/Footer.js
+// CONCATENATED MODULE: ./src/shared/components/Footer/Footer.js
 
 
 function Footer(props) {
-  var links = props.links.map(function (link) {
+  var links = props.links.map(function (link, index) {
     return /*#__PURE__*/react_default.a.createElement("li", {
-      key: link.uniqueId
+      key: index
     }, /*#__PURE__*/react_default.a.createElement("a", {
       href: link.url
     }, link.text));

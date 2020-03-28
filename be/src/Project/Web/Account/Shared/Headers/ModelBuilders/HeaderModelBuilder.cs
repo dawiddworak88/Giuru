@@ -4,7 +4,6 @@ using Feature.Localization.ViewModels;
 using Feature.PageContent.Shared.Links.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
-using System;
 using System.Collections.Generic;
 
 namespace Account.Shared.Headers.ModelBuilders
@@ -31,8 +30,8 @@ namespace Account.Shared.Headers.ModelBuilders
         {
             var links = new List<LinkViewModel>
             {
-                new LinkViewModel { UniqueId = Guid.NewGuid(), Text = this.globalLocalizer["PrivacyPolicy"], Url = "#" },
-                new LinkViewModel { UniqueId = Guid.NewGuid(), Text = this.globalLocalizer["TermsAndConditions"], Url = "#" }
+                new LinkViewModel { Text = this.globalLocalizer["PrivacyPolicy"], Url = "#" },
+                new LinkViewModel { Text = this.globalLocalizer["TermsAndConditions"], Url = "#" }
             };
 
             return new HeaderViewModel

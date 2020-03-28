@@ -10,26 +10,21 @@ var header = {
   languageSwitcher: {
     availableLanguages: [
       {
-        uniqueId: 'EN',
         url: '#',
         text: 'EN'
       },
       {
-        uniqueId: 'DE',
         url: '#',
         text: 'DE'
       },
       {
-        uniqueId: 'PL',
         url: '#',
         text: 'PL'
       }
     ],
-    selectedLanguageUniqueId: 'PL'
+    selectedLanguageText: 'EN'
   },
   links: [
-    { uniqueId: "1", url: "#privacy-policy", text: "Price List" },
-    { uniqueId: "2", url: "#regulations", text: "Regulations" }
   ],
   loginLink: {
     url: "#", 
@@ -38,21 +33,26 @@ var header = {
 };
 
 var menuTiles = {
-  ordersText: "Zamówienia",
-  productsText: "Produkty",
-  clientsText: "Klienci",
-  settingsText: "Ustawienia"
+  tiles: [
+    { icon: 'ShoppingCart', title: 'Orders', url: '#' },
+    { icon: 'Package', title: 'Products', url: '#' },
+    { icon: 'Users', title: 'Clients', url: '#' },
+    { icon: 'Settings', title: 'Settings', url: '#' }
+  ],
+};
+
+var orderCatalog = {
+  title: 'Orders',
+  newText: 'New order'
 };
 
 var footer = {
   copyright: 'Copyright © 2021 Giuru',
   links: [
-    { uniqueId: "1", url: "#privacy-policy", text: "Price List" },
-    { uniqueId: "2", url: "#regulations", text: "Regulations" }
   ]
 };
 
-export const OrderPageStory = () => <OrderPage header={header} menuTiles={menuTiles} footer={footer} />
+export const OrderPageStory = () => <OrderPage header={header} menuTiles={menuTiles} catalog={orderCatalog} footer={footer} />
 
 OrderPageStory.story = {
   name: 'Orders Page',

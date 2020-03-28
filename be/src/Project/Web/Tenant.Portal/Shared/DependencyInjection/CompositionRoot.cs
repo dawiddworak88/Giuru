@@ -8,8 +8,8 @@ using Tenant.Portal.Shared.Footers.ViewModels;
 using Tenant.Portal.Shared.Footers.ModelBuilders;
 using Microsoft.Extensions.Configuration;
 using Tenant.Portal.Shared.Configurations;
-using Tenant.Portal.Shared.MenuTiles.ViewModels;
 using Tenant.Portal.Shared.MenuTiles.ModelBuilders;
+using Feature.PageContent.MenuTiles.ViewModels;
 
 namespace Tenant.Portal.Shared.DependencyInjection
 {

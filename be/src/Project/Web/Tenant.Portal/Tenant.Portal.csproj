@@ -20,6 +20,7 @@
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Localization\Foundation.Localization.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Prerendering\Foundation.Prerendering.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Presentation\Foundation.Presentation.csproj" />
   </ItemGroup>
 
   <ItemGroup>
