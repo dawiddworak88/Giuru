@@ -1,13 +1,12 @@
 ﻿using Foundation.Extensions.ModelBuilders;
-using AspNetCore.Shared.Headers.ViewModels;
-using Feature.Localization.ViewModels;
 using System.Collections.Generic;
-using Feature.PageContent.Shared.Links.ViewModels;
-using System;
-using Feature.Localization;
+using Feature.PageContent.Components.Links.ViewModels;
 using Microsoft.Extensions.Localization;
 using AspNetCore.Shared.Configurations;
 using Microsoft.Extensions.Options;
+using Foundation.Localization;
+using Feature.PageContent.Components.Headers.ViewModels;
+using Feature.PageContent.Components.LanguageSwitchers.ViewModels;
 
 namespace AspNetCore.Shared.Headers.ModelBuilders
 {
@@ -37,8 +36,8 @@ namespace AspNetCore.Shared.Headers.ModelBuilders
         {
             var links = new List<LinkViewModel>
             {
-                new LinkViewModel { UniqueId = Guid.NewGuid(), Text = this.globalLocalizer["PriceList"], Url = "#price-list" },
-                new LinkViewModel { UniqueId = Guid.NewGuid(), Text = this.globalLocalizer["Contact"], Url = "#contact" }
+                new LinkViewModel { Text = this.globalLocalizer["PriceList"], Url = "#price-list" },
+                new LinkViewModel { Text = this.globalLocalizer["Contact"], Url = "#contact" }
             };
 
             return new HeaderViewModel

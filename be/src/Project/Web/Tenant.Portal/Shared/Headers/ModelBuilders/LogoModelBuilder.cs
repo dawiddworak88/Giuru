@@ -1,5 +1,5 @@
-﻿using Foundation.Extensions.ModelBuilders;
-using Tenant.Portal.Shared.Headers.ViewModels;
+﻿using Feature.PageContent.Components.Headers.ViewModels;
+using Foundation.Extensions.ModelBuilders;
 
 namespace Tenant.Portal.Shared.Headers.ModelBuilders
 {

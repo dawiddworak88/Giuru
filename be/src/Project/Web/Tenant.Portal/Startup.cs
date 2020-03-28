@@ -4,12 +4,12 @@ using Tenant.Portal.Shared.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Feature.Localization.DependencyInjection;
 using Foundation.Database.Shared.DependencyInjection;
 using Feature.Account.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
+using Feature.PageContent.DependencyInjection;
 
 namespace Tenant.Portal
 {

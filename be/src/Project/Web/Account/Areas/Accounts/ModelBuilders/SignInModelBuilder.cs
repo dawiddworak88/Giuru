@@ -1,7 +1,7 @@
 ﻿using Account.Areas.Accounts.ViewModels;
-using Account.Shared.Footers.ViewModels;
-using Account.Shared.Headers.ViewModels;
 using Feature.Account.ViewModels.SignInForm;
+using Feature.PageContent.Components.Footers.ViewModels;
+using Feature.PageContent.Components.Headers.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 
 namespace Account.Areas.Accounts.ModelBuilders
