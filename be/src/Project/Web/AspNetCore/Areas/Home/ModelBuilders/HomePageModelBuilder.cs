@@ -1,7 +1,5 @@
 ﻿using AspNetCore.Areas.Home.ViewModel;
 using Foundation.Extensions.ModelBuilders;
-using Microsoft.Extensions.Localization;
-using Foundation.Localization;
 using Feature.PageContent.Components.Headers.ViewModels;
 using Feature.PageContent.Components.Footers.ViewModels;
 
@@ -13,16 +11,12 @@ namespace AspNetCore.Areas.Home.ModelBuilders
 
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-
         public HomePageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
-            IModelBuilder<FooterViewModel> footerModelBuilder,
-            IStringLocalizer<GlobalResources> globalLocalizer)
+            IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
-            this.globalLocalizer = globalLocalizer;
         }
 
         public HomePageViewModel BuildModel()
@@ -30,9 +24,7 @@ namespace AspNetCore.Areas.Home.ModelBuilders
             var viewModel = new HomePageViewModel
             {
                 Header = headerModelBuilder.BuildModel(),
-                Footer = footerModelBuilder.BuildModel(),
-                Welcome = this.globalLocalizer["Close"],
-                LearnMore = "Learn more"
+                Footer = footerModelBuilder.BuildModel()
             };
 
             return viewModel;
