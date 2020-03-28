@@ -48,7 +48,7 @@ namespace AspNetCore
         {
             app.UseForwardedHeaders();
 
-            env.UseGeneralException(app);
+            app.UseGeneralException();
 
             app.ConfigureDatabaseMigrations();
 
