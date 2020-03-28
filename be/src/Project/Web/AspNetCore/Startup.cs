@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Feature.Localization.DependencyInjection;
 using Foundation.Database.Shared.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
+using Feature.PageContent.DependencyInjection;
 
 namespace AspNetCore
 {

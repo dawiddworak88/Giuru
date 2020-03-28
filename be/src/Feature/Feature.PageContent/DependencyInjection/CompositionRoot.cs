@@ -3,7 +3,7 @@ using Feature.PageContent.Shared.LanguageSwitchers.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Feature.Localization.DependencyInjection
+namespace Feature.PageContent.DependencyInjection
 {
     public static class CompositionRoot
     {
