@@ -1,6 +1,6 @@
-﻿using Feature.PageContent.Shared.Headers.ViewModels;
-using Feature.PageContent.Shared.LanguageSwitchers.ViewModels;
-using Feature.PageContent.Shared.Links.ViewModels;
+﻿using Feature.PageContent.Components.Headers.ViewModels;
+using Feature.PageContent.Components.LanguageSwitchers.ViewModels;
+using Feature.PageContent.Components.Links.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Microsoft.Extensions.Localization;

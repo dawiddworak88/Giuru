@@ -1,8 +1,8 @@
-﻿using Feature.PageContent.Shared.LanguageSwitchers.ViewModels;
-using Feature.PageContent.Shared.Links.ViewModels;
+﻿using Feature.PageContent.Components.LanguageSwitchers.ViewModels;
+using Feature.PageContent.Components.Links.ViewModels;
 using System.Collections.Generic;
 
-namespace Feature.PageContent.Shared.Headers.ViewModels
+namespace Feature.PageContent.Components.Headers.ViewModels
 {
     public class HeaderViewModel
     {

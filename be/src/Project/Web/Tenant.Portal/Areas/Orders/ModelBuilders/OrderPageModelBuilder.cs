@@ -3,8 +3,8 @@ using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
 using Feature.PageContent.MenuTiles.ViewModels;
 using Foundation.Localization;
-using Feature.PageContent.Shared.Headers.ViewModels;
-using Feature.PageContent.Shared.Footers.ViewModels;
+using Feature.PageContent.Components.Headers.ViewModels;
+using Feature.PageContent.Components.Footers.ViewModels;
 
 namespace Tenant.Portal.Areas.Orders.ModelBuilders
 {

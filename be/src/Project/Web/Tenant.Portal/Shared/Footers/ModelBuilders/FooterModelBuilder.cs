@@ -1,11 +1,11 @@
-﻿using Feature.PageContent.Shared.Footers.Definitions;
-using Feature.PageContent.Shared.Links.ViewModels;
+﻿using Feature.PageContent.Components.Footers.Definitions;
+using Feature.PageContent.Components.Links.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using Foundation.Localization;
-using Feature.PageContent.Shared.Footers.ViewModels;
+using Feature.PageContent.Components.Footers.ViewModels;
 
 namespace Tenant.Portal.Shared.Footers.ModelBuilders
 {

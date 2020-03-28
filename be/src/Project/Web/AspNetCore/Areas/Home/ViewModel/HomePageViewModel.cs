@@ -1,5 +1,5 @@
-﻿using Feature.PageContent.Shared.Footers.ViewModels;
-using Feature.PageContent.Shared.Headers.ViewModels;
+﻿using Feature.PageContent.Components.Footers.ViewModels;
+using Feature.PageContent.Components.Headers.ViewModels;
 
 namespace AspNetCore.Areas.Home.ViewModel
 {

@@ -1,4 +1,4 @@
-﻿namespace Feature.PageContent.Shared.Headers.ViewModels
+﻿namespace Feature.PageContent.Components.Headers.ViewModels
 {
     public class LogoViewModel
     {

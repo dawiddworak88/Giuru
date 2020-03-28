@@ -1,12 +1,12 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using System.Collections.Generic;
-using Feature.PageContent.Shared.Links.ViewModels;
+using Feature.PageContent.Components.Links.ViewModels;
 using Microsoft.Extensions.Localization;
 using AspNetCore.Shared.Configurations;
 using Microsoft.Extensions.Options;
 using Foundation.Localization;
-using Feature.PageContent.Shared.Headers.ViewModels;
-using Feature.PageContent.Shared.LanguageSwitchers.ViewModels;
+using Feature.PageContent.Components.Headers.ViewModels;
+using Feature.PageContent.Components.LanguageSwitchers.ViewModels;
 
 namespace AspNetCore.Shared.Headers.ModelBuilders
 {

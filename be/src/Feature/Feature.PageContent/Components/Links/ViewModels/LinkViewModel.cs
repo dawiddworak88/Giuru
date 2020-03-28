@@ -1,4 +1,4 @@
-﻿namespace Feature.PageContent.Shared.Links.ViewModels
+﻿namespace Feature.PageContent.Components.Links.ViewModels
 {
     public class LinkViewModel
     {

@@ -6,8 +6,8 @@ using Foundation.Extensions.ModelBuilders;
 using AspNetCore.Shared.Footers.ModelBuilders;
 using Microsoft.Extensions.Configuration;
 using AspNetCore.Shared.Configurations;
-using Feature.PageContent.Shared.Headers.ViewModels;
-using Feature.PageContent.Shared.Footers.ViewModels;
+using Feature.PageContent.Components.Headers.ViewModels;
+using Feature.PageContent.Components.Footers.ViewModels;
 
 namespace AspNetCore.Shared.DependencyInjection
 {
