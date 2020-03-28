@@ -1,5 +1,5 @@
-﻿using Feature.Localization.ModelBuilders;
-using Feature.Localization.ViewModels;
+﻿using Feature.PageContent.Shared.LanguageSwitchers.ModelBuilders;
+using Feature.PageContent.Shared.LanguageSwitchers.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.DependencyInjection;
 

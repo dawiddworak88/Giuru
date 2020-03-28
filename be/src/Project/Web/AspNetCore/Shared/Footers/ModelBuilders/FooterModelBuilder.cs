@@ -1,5 +1,5 @@
-﻿using AspNetCore.Shared.Footers.ViewModels;
-using Feature.PageContent.Shared.Footers.Definitions;
+﻿using Feature.PageContent.Shared.Footers.Definitions;
+using Feature.PageContent.Shared.Footers.ViewModels;
 using Feature.PageContent.Shared.Links.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;

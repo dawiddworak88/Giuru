@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Feature\Feature.Account\Feature.Account.csproj" />
-    <ProjectReference Include="..\..\..\Feature\Feature.Localization\Feature.Localization.csproj" />
     <ProjectReference Include="..\..\..\Feature\Feature.PageContent\Feature.PageContent.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Extensions\Foundation.Extensions.csproj" />

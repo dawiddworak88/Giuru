@@ -1,6 +1,6 @@
 ﻿using Feature.PageContent.MenuTiles.ViewModels;
-using Tenant.Portal.Shared.Footers.ViewModels;
-using Tenant.Portal.Shared.Headers.ViewModels;
+using Feature.PageContent.Shared.Footers.ViewModels;
+using Feature.PageContent.Shared.Headers.ViewModels;
 
 namespace Tenant.Portal.Areas.Orders.ViewModel
 {

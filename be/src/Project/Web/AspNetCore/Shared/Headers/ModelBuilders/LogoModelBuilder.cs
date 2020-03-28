@@ -1,5 +1,5 @@
-﻿using Foundation.Extensions.ModelBuilders;
-using AspNetCore.Shared.Headers.ViewModels;
+﻿using Feature.PageContent.Shared.Headers.ViewModels;
+using Foundation.Extensions.ModelBuilders;
 
 namespace AspNetCore.Shared.Headers.ModelBuilders
 {

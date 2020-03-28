@@ -1,15 +1,15 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Tenant.Portal.Shared.Headers.ModelBuilders;
-using Tenant.Portal.Shared.Headers.ViewModels;
 using Tenant.Portal.Areas.Orders.ViewModel;
 using Tenant.Portal.Areas.Orders.ModelBuilders;
 using Foundation.Extensions.ModelBuilders;
-using Tenant.Portal.Shared.Footers.ViewModels;
 using Tenant.Portal.Shared.Footers.ModelBuilders;
 using Microsoft.Extensions.Configuration;
 using Tenant.Portal.Shared.Configurations;
 using Tenant.Portal.Shared.MenuTiles.ModelBuilders;
 using Feature.PageContent.MenuTiles.ViewModels;
+using Feature.PageContent.Shared.Headers.ViewModels;
+using Feature.PageContent.Shared.Footers.ViewModels;
 
 namespace Tenant.Portal.Shared.DependencyInjection
 {

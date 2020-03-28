@@ -1,5 +1,5 @@
-﻿using Account.Shared.Headers.ViewModels;
-using Feature.Localization.ViewModels;
+﻿using Feature.PageContent.Shared.Headers.ViewModels;
+using Feature.PageContent.Shared.LanguageSwitchers.ViewModels;
 using Feature.PageContent.Shared.Links.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;

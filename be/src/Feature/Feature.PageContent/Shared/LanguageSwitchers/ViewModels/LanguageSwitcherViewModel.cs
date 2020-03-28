@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Feature.Localization.ViewModels
+namespace Feature.PageContent.Shared.LanguageSwitchers.ViewModels
 {
     public class LanguageSwitcherViewModel
     {

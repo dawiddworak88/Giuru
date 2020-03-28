@@ -1,10 +1,10 @@
 ﻿using Tenant.Portal.Areas.Orders.ViewModel;
 using Foundation.Extensions.ModelBuilders;
-using Tenant.Portal.Shared.Headers.ViewModels;
 using Microsoft.Extensions.Localization;
-using Tenant.Portal.Shared.Footers.ViewModels;
 using Feature.PageContent.MenuTiles.ViewModels;
 using Foundation.Localization;
+using Feature.PageContent.Shared.Headers.ViewModels;
+using Feature.PageContent.Shared.Footers.ViewModels;
 
 namespace Tenant.Portal.Areas.Orders.ModelBuilders
 {

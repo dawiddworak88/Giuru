@@ -1,4 +1,4 @@
-﻿namespace Tenant.Portal.Shared.Headers.ViewModels
+﻿namespace Feature.PageContent.Shared.Headers.ViewModels
 {
     public class LogoViewModel
     {

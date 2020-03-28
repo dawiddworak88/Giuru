@@ -1,12 +1,12 @@
 ﻿using Foundation.Extensions.ModelBuilders;
-using Tenant.Portal.Shared.Headers.ViewModels;
-using Feature.Localization.ViewModels;
 using System.Collections.Generic;
 using Feature.PageContent.Shared.Links.ViewModels;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Routing;
 using System.Globalization;
 using Foundation.Localization;
+using Feature.PageContent.Shared.Headers.ViewModels;
+using Feature.PageContent.Shared.LanguageSwitchers.ViewModels;
 
 namespace Tenant.Portal.Shared.Headers.ModelBuilders
 {

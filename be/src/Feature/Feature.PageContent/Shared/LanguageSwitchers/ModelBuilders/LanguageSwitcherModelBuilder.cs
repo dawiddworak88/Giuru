@@ -1,4 +1,4 @@
-﻿using Feature.Localization.ViewModels;
+﻿using Feature.PageContent.Shared.LanguageSwitchers.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization.Definitions;
 using Microsoft.AspNetCore.Http;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Feature.Localization.ModelBuilders
+namespace Feature.PageContent.Shared.LanguageSwitchers.ModelBuilders
 {
     public class LanguageSwitcherModelBuilder : IModelBuilder<LanguageSwitcherViewModel>
     {

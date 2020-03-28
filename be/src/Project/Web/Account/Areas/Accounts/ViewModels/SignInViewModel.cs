@@ -1,6 +1,6 @@
-﻿using Account.Shared.Footers.ViewModels;
-using Account.Shared.Headers.ViewModels;
-using Feature.Account.ViewModels.SignInForm;
+﻿using Feature.Account.ViewModels.SignInForm;
+using Feature.PageContent.Shared.Footers.ViewModels;
+using Feature.PageContent.Shared.Headers.ViewModels;
 
 namespace Account.Areas.Accounts.ViewModels
 {

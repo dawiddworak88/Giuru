@@ -1,8 +1,8 @@
-﻿using Feature.Localization.ViewModels;
+﻿using Feature.PageContent.Shared.LanguageSwitchers.ViewModels;
 using Feature.PageContent.Shared.Links.ViewModels;
 using System.Collections.Generic;
 
-namespace Tenant.Portal.Shared.Headers.ViewModels
+namespace Feature.PageContent.Shared.Headers.ViewModels
 {
     public class HeaderViewModel
     {
