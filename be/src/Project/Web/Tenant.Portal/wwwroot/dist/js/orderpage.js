@@ -14672,8 +14672,8 @@ function Catalog(props) {
     className: "section catalog"
   }, /*#__PURE__*/react_default.a.createElement("h1", {
     className: "title is-4"
-  }, props.title), /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement("a", {
-    href: "/",
+  }, props.title), /*#__PURE__*/react_default.a.createElement("div", null, props.showNew && /*#__PURE__*/react_default.a.createElement("a", {
+    href: props.newUrl,
     class: "button is-primary"
   }, /*#__PURE__*/react_default.a.createElement("span", {
     className: "icon"

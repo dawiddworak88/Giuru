@@ -8,8 +8,7 @@ namespace Tenant.Portal.Areas.Orders.ViewModel
     {
         public HeaderViewModel Header { get; set; }
         public MenuTilesViewModel MenuTiles { get; set; }
+        public OrderCatalogViewModel Catalog { get; set; }
         public FooterViewModel Footer { get; set; }
-        public string Welcome { get; set; }
-        public string LearnMore { get; set; }
     }
 }

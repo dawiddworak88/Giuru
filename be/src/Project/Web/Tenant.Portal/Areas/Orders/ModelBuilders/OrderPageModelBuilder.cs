@@ -16,16 +16,20 @@ namespace Tenant.Portal.Areas.Orders.ModelBuilders
 
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
+        private readonly IModelBuilder<OrderCatalogViewModel> orderCatalogModelBuilder;
+
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
 
         public OrderPageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
+            IModelBuilder<OrderCatalogViewModel> orderCatalogModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
+            this.orderCatalogModelBuilder = orderCatalogModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
             this.globalLocalizer = globalLocalizer;
         }
@@ -36,9 +40,8 @@ namespace Tenant.Portal.Areas.Orders.ModelBuilders
             {
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
-                Footer = footerModelBuilder.BuildModel(),
-                Welcome = this.globalLocalizer["Close"],
-                LearnMore = "Learn more"
+                Catalog = orderCatalogModelBuilder.BuildModel(),
+                Footer = footerModelBuilder.BuildModel()
             };
 
             return viewModel;

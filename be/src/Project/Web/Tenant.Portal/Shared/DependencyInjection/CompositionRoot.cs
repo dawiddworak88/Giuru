@@ -22,6 +22,7 @@ namespace Tenant.Portal.Shared.DependencyInjection
             services.AddScoped<IModelBuilder<MenuTilesViewModel>, MenuTilesModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
+            services.AddScoped<IModelBuilder<OrderCatalogViewModel>, OrderCatalogModelBuilder>();
         }
 
         public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)

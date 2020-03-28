@@ -43,7 +43,9 @@ var menuTiles = {
 
 var orderCatalog = {
   title: 'Orders',
-  newText: 'New order'
+  showNew: true,
+  newText: 'New order',
+  newUrl: '#'
 };
 
 var footer = {

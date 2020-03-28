@@ -7,14 +7,16 @@ function Catalog(props) {
         <section className="section catalog">
             <h1 className="title is-4">{props.title}</h1>
             <div>
-                <a href="/" class="button is-primary">
-                    <span className="icon">
-                        <Plus />
-                    </span>
-                    <span>
-                        {props.newText}
-                    </span>
-                </a>
+                {props.showNew && 
+                    <a href={props.newUrl} class="button is-primary">
+                        <span className="icon">
+                            <Plus />
+                        </span>
+                        <span>
+                            {props.newText}
+                        </span>
+                    </a>
+                }
             </div>
         </section>
     );
@@ -22,7 +24,9 @@ function Catalog(props) {
 
 Catalog.propTypes = {
     title: PropTypes.string.isRequired,
-    newText: PropTypes.string
+    showNew: PropTypes.string.isRequired,
+    newText: PropTypes.string,
+    newUrl: PropTypes.string
 };
 
 export default Catalog;
