@@ -14695,11 +14695,7 @@ function Catalog(props) {
 /* eslint-enable no-unused-vars */
 
 function OrderPage(props) {
-  return /*#__PURE__*/react_default.a.createElement("div", {
-    className: "home-page"
-  }, /*#__PURE__*/react_default.a.createElement(Header_Header, props.header), /*#__PURE__*/react_default.a.createElement(MenuTiles_MenuTiles, props.menuTiles), /*#__PURE__*/react_default.a.createElement(Catalog_Catalog, props.catalog), /*#__PURE__*/react_default.a.createElement("section", {
-    className: "section"
-  }, /*#__PURE__*/react_default.a.createElement("p", null, props.welcome), /*#__PURE__*/react_default.a.createElement("p", null, props.learnMore)), /*#__PURE__*/react_default.a.createElement(Footer_Footer, props.footer));
+  return /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement(Header_Header, props.header), /*#__PURE__*/react_default.a.createElement(MenuTiles_MenuTiles, props.menuTiles), /*#__PURE__*/react_default.a.createElement(Catalog_Catalog, props.catalog), /*#__PURE__*/react_default.a.createElement(Footer_Footer, props.footer));
 }
 
 /* harmony default export */ var OrderPage_OrderPage = (OrderPage);

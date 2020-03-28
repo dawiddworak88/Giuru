@@ -10,18 +10,10 @@ import favicon from '../../../../../../shared/layouts/images/favicon.png';
 
 function OrderPage(props) {
   return (
-    <div className="home-page">
+    <div>
       <Header {...props.header}></Header>
       <MenuTiles {...props.menuTiles} />
       <Catalog {...props.catalog} />
-      <section className="section">
-        <p>
-          {props.welcome}
-        </p>
-        <p>
-          {props.learnMore}
-        </p>
-      </section>
       <Footer {...props.footer}></Footer>
     </div>
   );

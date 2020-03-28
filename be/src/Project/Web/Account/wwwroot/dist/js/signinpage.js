@@ -1252,9 +1252,7 @@ function SignInForm(props) {
 /* eslint-enable no-unused-vars */
 
 function SignInPage(props) {
-  return /*#__PURE__*/react_default.a.createElement("div", {
-    className: "sign-in-page"
-  }, /*#__PURE__*/react_default.a.createElement(Header_Header, props.header), /*#__PURE__*/react_default.a.createElement("section", {
+  return /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement(Header_Header, props.header), /*#__PURE__*/react_default.a.createElement("section", {
     className: "section is-flex-centered"
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "account-card"

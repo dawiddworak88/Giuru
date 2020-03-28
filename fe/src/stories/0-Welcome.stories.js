@@ -42,7 +42,7 @@ var footer = {
   ]
 };
 
-export const HomePageStory = () => <HomePage header={header} footer={footer} welcome="Welcome from Storybook" learnMore="Learn more!" />
+export const HomePageStory = () => <HomePage header={header} footer={footer} />
 
 HomePageStory.story = {
   name: 'Home Page',

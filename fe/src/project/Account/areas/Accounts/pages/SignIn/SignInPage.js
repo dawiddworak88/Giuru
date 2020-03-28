@@ -9,7 +9,7 @@ import favicon from '../../../../../../shared/layouts/images/favicon.png';
 
 function SignInPage(props) {
   return (
-    <div className="sign-in-page">
+    <div>
       <Header {...props.header}></Header>
       <section className="section is-flex-centered">
         <div className="account-card">
