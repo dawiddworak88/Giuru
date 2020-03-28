@@ -18,8 +18,6 @@ namespace Tenant.Portal.Areas.Orders.ModelBuilders
 
         private readonly IModelBuilder<OrderCatalogViewModel> orderCatalogModelBuilder;
 
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-
         public OrderPageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
