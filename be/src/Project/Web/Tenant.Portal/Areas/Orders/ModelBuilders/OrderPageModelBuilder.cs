@@ -1,8 +1,6 @@
 ﻿using Tenant.Portal.Areas.Orders.ViewModel;
 using Foundation.Extensions.ModelBuilders;
-using Microsoft.Extensions.Localization;
 using Feature.PageContent.MenuTiles.ViewModels;
-using Foundation.Localization;
 using Feature.PageContent.Components.Headers.ViewModels;
 using Feature.PageContent.Components.Footers.ViewModels;
 
@@ -22,14 +20,12 @@ namespace Tenant.Portal.Areas.Orders.ModelBuilders
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
             IModelBuilder<OrderCatalogViewModel> orderCatalogModelBuilder,
-            IModelBuilder<FooterViewModel> footerModelBuilder,
-            IStringLocalizer<GlobalResources> globalLocalizer)
+            IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
             this.orderCatalogModelBuilder = orderCatalogModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
-            this.globalLocalizer = globalLocalizer;
         }
 
         public OrderPageViewModel BuildModel()
