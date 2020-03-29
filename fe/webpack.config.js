@@ -184,7 +184,9 @@ var tenantPortalBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
-        orderpage: ["./src/project/Tenant.Portal/areas/Orders/pages/OrderPage/index.js", "./src/project/Tenant.Portal/areas/Orders/pages/OrderPage/OrderPage.scss"]
+        orderpage: ["./src/project/Tenant.Portal/areas/Orders/pages/OrderPage/index.js", "./src/project/Tenant.Portal/areas/Orders/pages/OrderPage/OrderPage.scss"],
+        clientpage: ["./src/project/Tenant.Portal/areas/Clients/pages/ClientPage/index.js", "./src/project/Tenant.Portal/areas/Clients/pages/ClientPage/ClientPage.scss"],
+        productpage: ["./src/project/Tenant.Portal/areas/Products/pages/ProductPage/index.js", "./src/project/Tenant.Portal/areas/Products/pages/ProductPage/ProductPage.scss"]
     },
     output: {
         publicPath: path.resolve(__dirname, "../be/src/Project/Web/Tenant.Portal/wwwroot/dist/js"),
