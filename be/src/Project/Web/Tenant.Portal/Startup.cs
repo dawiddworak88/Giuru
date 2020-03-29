@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Builder;
 using Feature.PageContent.DependencyInjection;
 using Feature.Security.DependencyInjection;
 using Tenant.Portal.Areas.Orders.DependencyInjection;
+using Tenant.Portal.Areas.Clients.DependencyInjection;
 
 namespace Tenant.Portal
 {
