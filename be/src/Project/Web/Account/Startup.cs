@@ -10,6 +10,7 @@ using Feature.Account.DependencyInjection;
 using Account.Shared.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
 using Feature.PageContent.DependencyInjection;
+using Feature.Security.DependencyInjection;
 
 namespace Account
 {
@@ -64,6 +65,8 @@ namespace Account
             app.UseAuthorization();
 
             app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
+
+            app.UseSecurityHeaders();
 
             app.UseEndpoints(endpoints =>
             {
