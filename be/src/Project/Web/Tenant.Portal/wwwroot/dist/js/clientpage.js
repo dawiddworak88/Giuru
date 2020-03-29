@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 17);
+/******/ 	return __webpack_require__(__webpack_require__.s = 19);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -14722,25 +14722,26 @@ module.exports = ReactPropTypesSecret;
 /* unused harmony default export */ var _unused_webpack_default_export = ("/dist/images/favicon.png");
 
 /***/ }),
-/* 17 */
+/* 17 */,
+/* 18 */,
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(23);
-module.exports = __webpack_require__(18);
+__webpack_require__(24);
+module.exports = __webpack_require__(20);
 
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 19 */,
-/* 20 */,
 /* 21 */,
 /* 22 */,
-/* 23 */
+/* 23 */,
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14770,7 +14771,7 @@ var Catalog = __webpack_require__(7);
 // EXTERNAL MODULE: ./src/shared/layouts/images/favicon.png
 var favicon = __webpack_require__(16);
 
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Orders/pages/OrderPage/OrderPage.js
+// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Clients/pages/ClientPage/ClientPage.js
 
 
 
@@ -14781,16 +14782,16 @@ var favicon = __webpack_require__(16);
 
 /* eslint-enable no-unused-vars */
 
-function OrderPage(props) {
+function ClientPage(props) {
   return /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement(Header["a" /* default */], props.header), /*#__PURE__*/react_default.a.createElement(MenuTiles["a" /* default */], props.menuTiles), /*#__PURE__*/react_default.a.createElement(Catalog["a" /* default */], props.catalog), /*#__PURE__*/react_default.a.createElement(Footer["a" /* default */], props.footer));
 }
 
-/* harmony default export */ var OrderPage_OrderPage = (OrderPage);
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Orders/pages/OrderPage/index.js
+/* harmony default export */ var ClientPage_ClientPage = (ClientPage);
+// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Clients/pages/ClientPage/index.js
 
 
 
-react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(OrderPage_OrderPage, window.data), document.getElementById('root'));
+react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(ClientPage_ClientPage, window.data), document.getElementById('root'));
 
 /***/ })
 /******/ ]);
