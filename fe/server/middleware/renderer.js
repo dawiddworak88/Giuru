@@ -9,11 +9,15 @@ import SignInPage from '../../src/project/Account/areas/Accounts/pages/SignIn/Si
 
 // Tenant Portal
 import OrderPage from '../../src/project/Tenant.Portal/areas/Orders/pages/OrderPage/OrderPage';
+import ClientPage from '../../src/project/Tenant.Portal/areas/Clients/pages/ClientPage/ClientPage';
+import ProductPage from '../../src/project/Tenant.Portal/areas/Products/pages/ProductPage/ProductPage';
 
 const Components = {
 	HomePage,
 	SignInPage,
-	OrderPage
+	OrderPage,
+	ClientPage,
+	ProductPage
   };
 
 export default (req, res, next) => {
