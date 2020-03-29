@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Feature\Feature.Account\Feature.Account.csproj" />
     <ProjectReference Include="..\..\..\Feature\Feature.PageContent\Feature.PageContent.csproj" />
+    <ProjectReference Include="..\..\..\Feature\Feature.Security\Feature.Security.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Localization\Foundation.Localization.csproj" />
   </ItemGroup>

@@ -10,6 +10,7 @@ using Foundation.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Feature.PageContent.DependencyInjection;
+using Feature.Security.DependencyInjection;
 
 namespace Tenant.Portal
 {
@@ -64,6 +65,8 @@ namespace Tenant.Portal
             app.UseAuthorization();
 
             app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
+
+            app.UseSecurityHeaders();
 
             app.UseEndpoints(endpoints =>
             {
