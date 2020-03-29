@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Feature.PageContent.DependencyInjection;
 using Feature.Security.DependencyInjection;
+using Tenant.Portal.Areas.Orders.DependencyInjection;
 
 namespace Tenant.Portal
 {
@@ -44,6 +45,10 @@ namespace Tenant.Portal
             services.RegisterGeneralDependencies();
 
             services.RegisterDependencies();
+
+            services.RegisterOrdersAreaDependencies();
+
+            services.RegisterClientsAreaDependencies();
 
             services.ConfigureOptions(this.Configuration);
         }
