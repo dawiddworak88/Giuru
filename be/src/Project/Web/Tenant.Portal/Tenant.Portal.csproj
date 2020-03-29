@@ -17,6 +17,7 @@
     <ProjectReference Include="..\..\..\Feature\Feature.Client\Feature.Client.csproj" />
     <ProjectReference Include="..\..\..\Feature\Feature.Order\Feature.Order.csproj" />
     <ProjectReference Include="..\..\..\Feature\Feature.PageContent\Feature.PageContent.csproj" />
+    <ProjectReference Include="..\..\..\Feature\Feature.Product\Feature.Product.csproj" />
     <ProjectReference Include="..\..\..\Feature\Feature.Security\Feature.Security.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Extensions\Foundation.Extensions.csproj" />
@@ -26,10 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Products\Controllers\" />
-    <Folder Include="Areas\Products\ModelBuilders\" />
-    <Folder Include="Areas\Products\Views\" />
-    <Folder Include="Areas\Products\ViewModels\" />
     <Folder Include="wwwroot\dist\" />
   </ItemGroup>
 
