@@ -21,7 +21,6 @@ namespace Foundation.Extensions.DependencyInjection
         public static void UseGeneralException(this IApplicationBuilder app)
         {
             app.UseExceptionHandler("/Home/Error");
-            app.UseHsts();
         }
     }
 }

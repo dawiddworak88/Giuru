@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Foundation.Database.Shared.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
 using Feature.PageContent.DependencyInjection;
+using Feature.Security.DependencyInjection;
 
 namespace AspNetCore
 {
@@ -59,6 +60,8 @@ namespace AspNetCore
             app.UseRouting();
 
             app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
+
+            app.UseSecurityHeaders();
 
             app.UseEndpoints(endpoints =>
             {
