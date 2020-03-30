@@ -2,10 +2,6 @@ version: '3'
 services:
   giuru-sql:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
-    volumes:
-      - c:/giuru/giurusql/data:/var/opt/mssql/data
-      - c:/giuru/giurusql/log:/var/opt/mssql/log
-      - c:/giuru/giurusql/secrets:/var/opt/mssql/secrets
     restart: always
     environment:
       ACCEPT_EULA: Y
@@ -14,10 +10,6 @@ services:
       - "9018:1433"
   tenant-sql:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
-    volumes:
-      - c:/giuru/tenantsql/data:/var/opt/mssql/data
-      - c:/giuru/tenantsql/log:/var/opt/mssql/log
-      - c:/giuru/tenantsql/secrets:/var/opt/mssql/secrets
     restart: always
     environment:
       ACCEPT_EULA: Y
@@ -26,13 +18,9 @@ services:
       - "9017:1433"
   tenant-rabbitmq:
     image: rabbitmq
-    volumes:
-      - c:/giuru/tenantrabbitmq:/var/lib/rabbitmq
     restart: always
   tenant-azurite:
     image: mcr.microsoft.com/azure-storage/azurite
-    volumes:
-      - c:/giuru/tenantazurite:/data
     restart: always
   react-ssr-web:
     build: 
