@@ -52,7 +52,7 @@ namespace Account
 
             app.UseGeneralException();
 
-            app.ConfigureDatabaseMigrations();
+            app.ConfigureDatabaseMigrations(this.Configuration);
 
             app.UseResponseCompression();
 

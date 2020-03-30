@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Foundation.Database.Areas.Tenants.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Foundation.Database.Areas.Accounts.Entities
 {
@@ -7,5 +8,7 @@ namespace Foundation.Database.Areas.Accounts.Entities
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public virtual Tenant Tenant { get; set; }
     }
 }

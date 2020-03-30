@@ -1,13 +1,14 @@
 ﻿using Foundation.Database.Shared.Contexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Foundation.Database.Shared.DependencyInjection
 {
     public static class ConfigurationRoot
     {
-        public static void ConfigureDatabaseMigrations(this IApplicationBuilder app)
+        public static void ConfigureDatabaseMigrations(this IApplicationBuilder app, IConfiguration configuration)
         {
             var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
 
@@ -18,7 +19,7 @@ namespace Foundation.Database.Shared.DependencyInjection
                 if (!dbContext.AllMigrationsApplied())
                 {
                     dbContext.Database.Migrate();
-                    dbContext.EnsureSeeded();
+                    dbContext.EnsureSeeded(configuration);
                 }
             }
         }
