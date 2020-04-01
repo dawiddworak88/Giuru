@@ -153,4 +153,7 @@
   <data name="TermsAndConditions" xml:space="preserve">
     <value>Terms and Conditions</value>
   </data>
+  <data name="Users" xml:space="preserve">
+    <value>Users</value>
+  </data>
 </root>
