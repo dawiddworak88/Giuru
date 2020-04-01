@@ -30,6 +30,15 @@
     <Folder Include="wwwroot\dist\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Properties\appsettings.Development.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Properties\appsettings.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 
 
 </Project>

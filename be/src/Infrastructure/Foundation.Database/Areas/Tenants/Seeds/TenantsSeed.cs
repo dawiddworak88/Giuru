@@ -1,5 +1,6 @@
 ﻿using Foundation.Database.Areas.Tenants.Entities;
 using Foundation.Database.Shared.Contexts;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
 
@@ -7,25 +8,33 @@ namespace Foundation.Database.Areas.Tenants.Seeds
 {
     public static class TenantsSeed
     {
-        public static void SeedTenants(DatabaseContext context)
+        public static void SeedTenants(DatabaseContext context, IConfiguration configuration)
         {
-            if (!context.Tenants.Any(x => x.Name == "eltap"))
+            var tenantsSeedConfiguration = configuration.GetSection("Seeds")?.GetSection("Tenant");
+
+            if (tenantsSeedConfiguration != null)
             {
-                var tenant = new Tenant
+                if (!context.Tenants.Any(x => x.Key == "eltap"))
                 {
-                    Name = "eltap",
-                    User = context.Accounts.FirstOrDefault(x => x.Email == "szymon.dworak@eltap.com"),
-                    IsActive = true,
-                    LastModifiedBy = context.Accounts.FirstOrDefault(x => x.Email == "dawid.dworak@giuru.com"),
-                    LastModifiedDate = DateTime.UtcNow,
-                    CreatedBy = context.Accounts.FirstOrDefault(x => x.Email == "dawid.dworak@giuru.com"),
-                    CreatedDate = DateTime.UtcNow
-                };
+                    var tenant = new Tenant
+                    {
+                        Key = "eltap",
+                        Host = "eltap.com",
+                        DatabaseConnectionString = tenantsSeedConfiguration.GetValue<string>("DatabaseConnectionString"),
+                        QueueConnectionString = tenantsSeedConfiguration.GetValue<string>("QueueConnectionString"),
+                        StorageConnectionString = tenantsSeedConfiguration.GetValue<string>("StorageConnectionString"),
+                        IsActive = true,
+                        LastModifiedBy = "dawid.dworak@giuru.com",
+                        LastModifiedDate = DateTime.UtcNow,
+                        CreatedBy = "dawid.dworak@giuru.com",
+                        CreatedDate = DateTime.UtcNow
+                    };
 
-                context.Tenants.Add(tenant);
+                    context.Tenants.Add(tenant);
+                }
+
+                context.SaveChanges();
             }
-
-            context.SaveChanges();
         }
     }
 }

@@ -51,7 +51,7 @@ namespace AspNetCore
 
             app.UseGeneralException();
 
-            app.ConfigureDatabaseMigrations();
+            app.ConfigureDatabaseMigrations(this.Configuration);
 
             app.UseResponseCompression();
 

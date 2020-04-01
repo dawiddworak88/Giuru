@@ -120,6 +120,9 @@
   <data name="NewOrder" xml:space="preserve">
     <value>Neue Bestellung</value>
   </data>
+  <data name="OrderCards" xml:space="preserve">
+    <value>Bestellungskarten</value>
+  </data>
   <data name="Orders" xml:space="preserve">
     <value>Bestellungen</value>
   </data>
