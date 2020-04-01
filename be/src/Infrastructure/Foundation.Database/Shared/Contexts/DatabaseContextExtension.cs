@@ -2,6 +2,7 @@
 using Foundation.Database.Areas.Tenants.Seeds;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.Configuration;
 using System.Linq;
 
 namespace Foundation.Database.Shared.Contexts
@@ -21,10 +22,11 @@ namespace Foundation.Database.Shared.Contexts
             return !total.Except(applied).Any();
         }
 
-        public static void EnsureSeeded(this DatabaseContext context)
+        public static void EnsureSeeded(this DatabaseContext context, IConfiguration configuration)
         {
-            AccountsSeed.SeedAccounts(context);
-            TenantsSeed.SeedTenants(context);
+            AccountsSeed.SeedAdminAccounts(context, configuration);
+            TenantsSeed.SeedTenants(context, configuration);
+            AccountsSeed.SeedTenantAccounts(context, configuration);
         }
     }
 }
