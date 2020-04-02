@@ -15,20 +15,16 @@ namespace Tenant.Portal.Shared.MenuTiles.ModelBuilders
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
 
-        private readonly IStringLocalizer<OrderResources> orderLocalizer;
-
         private readonly IStringLocalizer<ProductResources> productLocalizer;
 
         private readonly LinkGenerator linkGenerator;
 
         public MenuTilesModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IStringLocalizer<OrderResources> orderLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
-            this.orderLocalizer = orderLocalizer;
             this.productLocalizer = productLocalizer;
             this.linkGenerator = linkGenerator;
         }
