@@ -65,8 +65,8 @@ namespace Tenant.Portal.Shared.MenuTiles.ModelBuilders
                     },
                     new MenuTileViewModel
                     {
-                        Icon = IconsConstants.OrderCards,
-                        Title = this.orderLocalizer["OrderCards"],
+                        Icon = IconsConstants.Media,
+                        Title = this.globalLocalizer["Media"],
                         Url = "#",
                     },
                     new MenuTileViewModel
