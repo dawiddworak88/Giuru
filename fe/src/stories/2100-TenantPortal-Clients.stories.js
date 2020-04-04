@@ -56,7 +56,7 @@ var clientDetailForm = {
   enterEmailText: "Enter e-mail",
   enterPasswordText: "Enter password",
   languages: [
-    { value: "", text: "Communication language" },
+    { value: "", text: "Select language" },
     { value: "EN", text: "EN" },
     { value: "DE", text: "DE" },
     { value: "PL", text: "PL" }
