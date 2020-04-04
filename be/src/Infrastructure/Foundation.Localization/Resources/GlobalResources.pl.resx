@@ -117,11 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Cards" xml:space="preserve">
+    <value>Karty</value>
+  </data>
   <data name="Clients" xml:space="preserve">
     <value>Klienci</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Zamknij</value>
+  </data>
+  <data name="CommunicationLanguageLabel" xml:space="preserve">
+    <value>Język do komunikacji:</value>
   </data>
   <data name="Contact" xml:space="preserve">
     <value>Kontakt</value>
@@ -129,11 +135,44 @@
   <data name="Copyright" xml:space="preserve">
     <value>Copyright © [year] Giuru</value>
   </data>
+  <data name="EmailFormatErrorMessage" xml:space="preserve">
+    <value>Adres e-mail powinien mieć poprawny format, np. twoj@email.pl</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>E-mail:</value>
+  </data>
+  <data name="EmailRequiredErrorMessage" xml:space="preserve">
+    <value>Wprowadź e-mail</value>
+  </data>
+  <data name="EnterEmailText" xml:space="preserve">
+    <value>Wprowadź e-mail</value>
+  </data>
+  <data name="EnterNameText" xml:space="preserve">
+    <value>Wprowadź nazwę</value>
+  </data>
+  <data name="EnterPasswordText" xml:space="preserve">
+    <value>Wprowadź hasło</value>
+  </data>
+  <data name="LanguageRequiredErrorMessage" xml:space="preserve">
+    <value>Wybierz preferowany język komunikacji z klientem</value>
+  </data>
   <data name="Media" xml:space="preserve">
     <value>Media</value>
   </data>
+  <data name="NameLabel" xml:space="preserve">
+    <value>Nazwa:</value>
+  </data>
+  <data name="NameRequiredErrorMessage" xml:space="preserve">
+    <value>Wprowadź nazwę</value>
+  </data>
   <data name="Orders" xml:space="preserve">
     <value>Zamówienia</value>
+  </data>
+  <data name="PasswordFormatErrorMessage" xml:space="preserve">
+    <value>Hasło powinno mieć conajmniej 8 znaków, zawierać wielką i małą literę, cyfrę oraz znak specjalny, np. Wp1s2H@s1o</value>
+  </data>
+  <data name="PasswordRequiredErrorMessage" xml:space="preserve">
+    <value>Wprowadź hasło</value>
   </data>
   <data name="Portal" xml:space="preserve">
     <value>Portal</value>
@@ -146,6 +185,12 @@
   </data>
   <data name="Products" xml:space="preserve">
     <value>Produkty</value>
+  </data>
+  <data name="SaveText" xml:space="preserve">
+    <value>Zapisz</value>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Wybierz język</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Ustawienia</value>

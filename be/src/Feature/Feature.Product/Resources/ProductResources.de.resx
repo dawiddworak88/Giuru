@@ -120,9 +120,6 @@
   <data name="NewProduct" xml:space="preserve">
     <value>Neues Produkt</value>
   </data>
-  <data name="ProductCards" xml:space="preserve">
-    <value>Produktkarten</value>
-  </data>
   <data name="Products" xml:space="preserve">
     <value>Produkte</value>
   </data>

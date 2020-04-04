@@ -98,12 +98,11 @@ ClientDetailForm.propTypes = {
     emailRequiredErrorMessage: PropTypes.string.isRequired,
     languageRequiredErrorMessage: PropTypes.string.isRequired,
     emailFormatErrorMessage: PropTypes.string.isRequired,
-    passwordFormatErrorMessage: PropTypes.string.isRequired,
     clientDetailText: PropTypes.string.isRequired,
     enterNameText: PropTypes.string.isRequired,
     enterEmailText: PropTypes.string.isRequired,
-    enterPasswordText: PropTypes.string.isRequired,
-    saveText: PropTypes.string.isRequired
+    saveText: PropTypes.string.isRequired,
+    languages: PropTypes.array.isRequired
 };
 
 export default ClientDetailForm;

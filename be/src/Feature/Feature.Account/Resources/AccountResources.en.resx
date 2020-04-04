@@ -117,24 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EmailFormatErrorMessage" xml:space="preserve">
-    <value>Enter e-mail in a correct format, e.g. test@format.com</value>
-  </data>
-  <data name="EmailRequiredErrorMessage" xml:space="preserve">
-    <value>Enter e-mail address</value>
-  </data>
-  <data name="EnterEmailText" xml:space="preserve">
-    <value>Enter e-mail</value>
-  </data>
-  <data name="EnterPasswordText" xml:space="preserve">
-    <value>Enter password</value>
-  </data>
-  <data name="PasswordFormatErrorMessage" xml:space="preserve">
-    <value>Password must be at least 8 characters long, consist of at least one capital letter, one small letter, a digit and a special character, e.g. P@ssw0rd</value>
-  </data>
-  <data name="PasswordRequiredErrorMessage" xml:space="preserve">
-    <value>Enter password</value>
-  </data>
   <data name="SignInText" xml:space="preserve">
     <value>Sign in</value>
   </data>

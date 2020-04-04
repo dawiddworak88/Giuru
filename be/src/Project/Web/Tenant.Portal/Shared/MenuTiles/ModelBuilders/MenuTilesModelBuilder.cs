@@ -14,18 +14,13 @@ namespace Tenant.Portal.Shared.MenuTiles.ModelBuilders
     public class MenuTilesModelBuilder : IModelBuilder<MenuTilesViewModel>
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-
-        private readonly IStringLocalizer<ProductResources> productLocalizer;
-
         private readonly LinkGenerator linkGenerator;
 
         public MenuTilesModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IStringLocalizer<ProductResources> productLocalizer,
             LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
-            this.productLocalizer = productLocalizer;
             this.linkGenerator = linkGenerator;
         }
 
@@ -56,7 +51,7 @@ namespace Tenant.Portal.Shared.MenuTiles.ModelBuilders
                     new MenuTileViewModel
                     {
                         Icon = IconsConstants.ProductCards,
-                        Title = this.productLocalizer["ProductCards"],
+                        Title = this.globalLocalizer["Cards"],
                         Url = "#",
                     },
                     new MenuTileViewModel

@@ -50,11 +50,9 @@ var clientDetailForm = {
   emailRequiredErrorMessage: "Enter e-mail address",
   languageRequiredErrorMessage: "Select langauge",
   emailFormatErrorMessage: "Enter e-mail in a correct format, e.g. your@email.com",
-  passwordFormatErrorMessage: "Password must be at least 8 characters long, consist of at least one capital letter, one small letter, a digit and a special character, e.g. P@ssw0rd",
   clientDetailText: "Client",
   enterNameText: "Enter name",
   enterEmailText: "Enter e-mail",
-  enterPasswordText: "Enter password",
   languages: [
     { value: "", text: "Select language" },
     { value: "EN", text: "EN" },
