@@ -53,7 +53,7 @@ function SignInForm(props) {
     return (
         <form className="is-modern-form has-text-centered" onSubmit={handleOnSubmit} method="post">
             <div>
-                <h1 className="title is-1">{props.signInText}</h1>
+                <h1 className="subtitle is-4">{props.signInText}</h1>
             </div>
             <div className="field">
                 <input type="text" placeholder={props.enterEmailText} name="email" value={email} onChange={handleOnChange} />
