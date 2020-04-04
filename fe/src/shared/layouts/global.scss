@@ -4,17 +4,34 @@
 	justify-content: center;
 }
 
+.section-small-padding {
+    padding: 0.5rem 1.5rem 0.5rem 1.5rem;
+}
+
 .is-modern-form {
 
-    .title {
+    .title, .subtitle {
         margin-bottom: 2.5rem;
+    }
+
+    .field {
+
+        &:first-child {
+            margin-top: 0.5rem;
+        }
+
+        margin: 3rem 0 1.25rem 0;
+    }
+
+    .label {
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
     }
 
     input[type="text"], input[type="password"] {
         display: block;
         width: 100%;
         font-size: 1rem;
-        margin: 3rem 0 1.25rem 0;
         padding: 0 0 0.25rem 0;
         border: none;
         border-bottom: 1px solid $grey-lighter;
@@ -29,9 +46,29 @@
         }
     }
 
+    .select {
+
+        &:hover {
+            border-color: $grey;
+        }
+
+        &:active, &:focus {
+            border-color: $swamp;
+        }
+
+        select {
+            border: none;
+            border-bottom: 1px solid $grey-lighter;
+        }
+    }
+
+    .error-message {
+        margin-top: 0.5rem;
+    }
+
     .button {
 
-        margin: 2rem 0 2rem 0;
+        margin: 0rem 0 2rem 0;
     }
 
     input:focus,

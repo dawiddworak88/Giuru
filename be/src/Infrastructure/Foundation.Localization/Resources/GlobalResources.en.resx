@@ -117,11 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Cards" xml:space="preserve">
+    <value>Cards</value>
+  </data>
   <data name="Clients" xml:space="preserve">
     <value>Clients</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
+  </data>
+  <data name="CommunicationLanguageLabel" xml:space="preserve">
+    <value>Communication language:</value>
   </data>
   <data name="Contact" xml:space="preserve">
     <value>Contact</value>
@@ -129,8 +135,44 @@
   <data name="Copyright" xml:space="preserve">
     <value>Copyright © [year] Giuru</value>
   </data>
+  <data name="EmailFormatErrorMessage" xml:space="preserve">
+    <value>Enter e-mail in a correct format, e.g. test@format.com</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>E-mail:</value>
+  </data>
+  <data name="EmailRequiredErrorMessage" xml:space="preserve">
+    <value>Enter e-mail address</value>
+  </data>
+  <data name="EnterEmailText" xml:space="preserve">
+    <value>Enter e-mail</value>
+  </data>
+  <data name="EnterNameText" xml:space="preserve">
+    <value>Enter name</value>
+  </data>
+  <data name="EnterPasswordText" xml:space="preserve">
+    <value>Enter password</value>
+  </data>
+  <data name="LanguageRequiredErrorMessage" xml:space="preserve">
+    <value>Select language preferred for communication with the client</value>
+  </data>
+  <data name="Media" xml:space="preserve">
+    <value>Media</value>
+  </data>
+  <data name="NameLabel" xml:space="preserve">
+    <value>Name:</value>
+  </data>
+  <data name="NameRequiredErrorMessage" xml:space="preserve">
+    <value>Enter name</value>
+  </data>
   <data name="Orders" xml:space="preserve">
     <value>Orders</value>
+  </data>
+  <data name="PasswordFormatErrorMessage" xml:space="preserve">
+    <value>Password must be at least 8 characters long, consist of at least one capital letter, one small letter, a digit and a special character, e.g. P@ssw0rd</value>
+  </data>
+  <data name="PasswordRequiredErrorMessage" xml:space="preserve">
+    <value>Enter password</value>
   </data>
   <data name="Portal" xml:space="preserve">
     <value>Portal</value>
@@ -143,6 +185,12 @@
   </data>
   <data name="Products" xml:space="preserve">
     <value>Products</value>
+  </data>
+  <data name="SaveText" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Select language</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>

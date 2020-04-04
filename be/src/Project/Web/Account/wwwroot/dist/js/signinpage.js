@@ -1206,7 +1206,7 @@ function SignInForm(props) {
     onSubmit: handleOnSubmit,
     method: "post"
   }, /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement("h1", {
-    className: "title is-1"
+    className: "subtitle is-4"
   }, props.signInText)), /*#__PURE__*/react_default.a.createElement("div", {
     className: "field"
   }, /*#__PURE__*/react_default.a.createElement("input", {

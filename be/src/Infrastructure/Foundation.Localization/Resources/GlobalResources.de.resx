@@ -123,14 +123,56 @@
   <data name="Close" xml:space="preserve">
     <value>Schliessen</value>
   </data>
+  <data name="CommunicationLanguageLabel" xml:space="preserve">
+    <value>Kommunikationssprache:</value>
+  </data>
   <data name="Contact" xml:space="preserve">
     <value>Kontakt</value>
   </data>
   <data name="Copyright" xml:space="preserve">
     <value>Copyright © [year] Giuru</value>
   </data>
+  <data name="EmailFormatErrorMessage" xml:space="preserve">
+    <value>Bitte die E-mail-Adresse in einem richtigen Format eingeben, z.B. deine@adresse.de</value>
+  </data>
+  <data name="EmailLabel" xml:space="preserve">
+    <value>E-Mail:</value>
+  </data>
+  <data name="EmailRequiredErrorMessage" xml:space="preserve">
+    <value>E-mail ist erforderlich</value>
+  </data>
+  <data name="EnterEmailText" xml:space="preserve">
+    <value>Bitte E-Mail-Adresse eingeben</value>
+  </data>
+  <data name="EnterNameText" xml:space="preserve">
+    <value>Bitte Name eingaben</value>
+  </data>
+  <data name="EnterPasswordText" xml:space="preserve">
+    <value>Bitte Passwort eingeben</value>
+  </data>
+  <data name="Karten" xml:space="preserve">
+    <value>Karty</value>
+  </data>
+  <data name="LanguageRequiredErrorMessage" xml:space="preserve">
+    <value>Wählen Sie die Sprache aus, die für die Kommunikation mit dem Kunde bevorzugt wird</value>
+  </data>
+  <data name="Media" xml:space="preserve">
+    <value>Media</value>
+  </data>
+  <data name="NameLabel" xml:space="preserve">
+    <value>Name:</value>
+  </data>
+  <data name="NameRequiredErrorMessage" xml:space="preserve">
+    <value>Bitte Name eingeben</value>
+  </data>
   <data name="Orders" xml:space="preserve">
     <value>Bestellungen</value>
+  </data>
+  <data name="PasswordFormatErrorMessage" xml:space="preserve">
+    <value>Das Passwort muss mindestens 8 Zeichen lang sein und einen Groß- und einen Kleinbuchstaben sowie eine Ziffer und ein Sonderzeichen enthalten, z.B. Me1nP@ssw0rt</value>
+  </data>
+  <data name="PasswordRequiredErrorMessage" xml:space="preserve">
+    <value>Passwort ist erforderlich</value>
   </data>
   <data name="Portal" xml:space="preserve">
     <value>Portal</value>
@@ -143,6 +185,12 @@
   </data>
   <data name="Products" xml:space="preserve">
     <value>Produkte</value>
+  </data>
+  <data name="SaveText" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Sprache auswählen</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Einstellungen</value>

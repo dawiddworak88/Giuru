@@ -1,6 +1,4 @@
-﻿using Feature.Order;
-using Feature.PageContent.MenuTiles.ViewModels;
-using Feature.Product.Resources;
+﻿using Feature.PageContent.MenuTiles.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.Presentation.Definitions;
@@ -14,22 +12,13 @@ namespace Tenant.Portal.Shared.MenuTiles.ModelBuilders
     public class MenuTilesModelBuilder : IModelBuilder<MenuTilesViewModel>
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-
-        private readonly IStringLocalizer<OrderResources> orderLocalizer;
-
-        private readonly IStringLocalizer<ProductResources> productLocalizer;
-
         private readonly LinkGenerator linkGenerator;
 
         public MenuTilesModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IStringLocalizer<OrderResources> orderLocalizer,
-            IStringLocalizer<ProductResources> productLocalizer,
             LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
-            this.orderLocalizer = orderLocalizer;
-            this.productLocalizer = productLocalizer;
             this.linkGenerator = linkGenerator;
         }
 
@@ -60,13 +49,13 @@ namespace Tenant.Portal.Shared.MenuTiles.ModelBuilders
                     new MenuTileViewModel
                     {
                         Icon = IconsConstants.ProductCards,
-                        Title = this.productLocalizer["ProductCards"],
+                        Title = this.globalLocalizer["Cards"],
                         Url = "#",
                     },
                     new MenuTileViewModel
                     {
-                        Icon = IconsConstants.OrderCards,
-                        Title = this.orderLocalizer["OrderCards"],
+                        Icon = IconsConstants.Media,
+                        Title = this.globalLocalizer["Media"],
                         Url = "#",
                     },
                     new MenuTileViewModel
