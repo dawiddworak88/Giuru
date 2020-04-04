@@ -1,6 +1,4 @@
-﻿using Feature.Order;
-using Feature.PageContent.MenuTiles.ViewModels;
-using Feature.Product.Resources;
+﻿using Feature.PageContent.MenuTiles.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.Presentation.Definitions;
