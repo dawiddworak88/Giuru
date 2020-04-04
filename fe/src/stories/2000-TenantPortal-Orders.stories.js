@@ -61,6 +61,6 @@ OrderPageStory.story = {
 };
 
 export default {
-  title: 'TenantPortal.Pages',
+  title: 'TenantPortal.Orders',
   component: OrderPageStory,
 };
