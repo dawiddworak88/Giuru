@@ -34,7 +34,7 @@ namespace Foundation.ApiExtensions.Services
 
                 var apiResponse = new ApiResponse<T>
                 { 
-                    StatusCode = (int)response.StatusCode
+                    StatusCode = response.StatusCode
                 };
 
                 var result = await response.Content.ReadAsStringAsync();
