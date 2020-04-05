@@ -53,6 +53,7 @@ var clientDetailForm = {
   clientDetailText: "Client",
   enterNameText: "Enter name",
   enterEmailText: "Enter e-mail",
+  saveUrl: "#",
   languages: [
     { value: "", text: "Select language" },
     { value: "EN", text: "EN" },

@@ -15,6 +15,7 @@ namespace Tenant.Portal.Areas.Clients.ViewModels
         public string ClientDetailText { get; set; }
         public string EnterNameText { get; set; }
         public string EnterEmailText { get; set; }
+        public string SaveUrl { get; set; }
         public string SaveText { get; set; }
         public IEnumerable<LanguageViewModel> Languages { get; set; }
     }

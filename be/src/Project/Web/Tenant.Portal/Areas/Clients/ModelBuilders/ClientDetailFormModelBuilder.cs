@@ -3,9 +3,11 @@ using Feature.PageContent.Components.Languages.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.Localization.Definitions;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
+using System.Globalization;
 using Tenant.Portal.Areas.Clients.ViewModels;
 
 namespace Tenant.Portal.Areas.Clients.ModelBuilders
@@ -15,15 +17,18 @@ namespace Tenant.Portal.Areas.Clients.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
         private readonly IOptionsMonitor<LocalizationConfiguration> localizationOptions;
+        private readonly LinkGenerator linkGenerator;
 
         public ClientDetailFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer, 
             IStringLocalizer<ClientResources> clientLocalizer,
-            IOptionsMonitor<LocalizationConfiguration> localizationOptions)
+            IOptionsMonitor<LocalizationConfiguration> localizationOptions,
+            LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
             this.clientLocalizer = clientLocalizer;
             this.localizationOptions = localizationOptions;
+            this.linkGenerator = linkGenerator;
         }
 
         public ClientDetailFormViewModel BuildModel()
@@ -51,6 +56,7 @@ namespace Tenant.Portal.Areas.Clients.ModelBuilders
                 EnterNameText = this.globalLocalizer["EnterNameText"],
                 EnterEmailText = this.globalLocalizer["EnterEmailText"],
                 SaveText = this.globalLocalizer["SaveText"],
+                SaveUrl = this.linkGenerator.GetPathByAction("Create", "ClientApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 Languages = languages
             };
         }

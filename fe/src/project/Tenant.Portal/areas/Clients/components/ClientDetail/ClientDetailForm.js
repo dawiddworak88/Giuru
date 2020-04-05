@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import useForm from '../../../../../../shared/helpers/forms/useForm';
 import EmailValidator from '../../../../../../shared/helpers/validators/EmailValidator';
+import ClientDetailService from '../../services/ClientDetail/ClientDetailService';
 
 function ClientDetailForm(props) {
 
@@ -38,7 +39,7 @@ function ClientDetailForm(props) {
     };
 
     function onSubmitForm(state) {
-        alert(JSON.stringify(state));
+        ClientDetailService.Save(state);
     }
 
     const {
@@ -102,6 +103,7 @@ ClientDetailForm.propTypes = {
     enterNameText: PropTypes.string.isRequired,
     enterEmailText: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
+    saveUrl: PropTypes.string.isRequired,
     languages: PropTypes.array.isRequired
 };
 

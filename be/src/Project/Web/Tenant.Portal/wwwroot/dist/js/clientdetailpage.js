@@ -15079,7 +15079,42 @@ var EmailValidator_EmailValidator = /*#__PURE__*/function () {
 }();
 
 
+// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Clients/services/ClientDetail/ClientDetailService.js
+
+
+
+var ClientDetailService_ClientDetailService = /*#__PURE__*/function () {
+  function ClientDetailService() {
+    _classCallCheck(this, ClientDetailService);
+  }
+
+  _createClass(ClientDetailService, null, [{
+    key: "Save",
+    value: function Save(url, client) {
+      var requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(client)
+      };
+      return fetch(url, requestOptions).then(function (response) {
+        return response.json().then(function (res) {
+          console.log(response);
+          console.log(res);
+        });
+      }).catch(function (error) {
+        console.log(error);
+      });
+    }
+  }]);
+
+  return ClientDetailService;
+}();
+
+
 // CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Clients/components/ClientDetail/ClientDetailForm.js
+
 
 
 
@@ -15127,7 +15162,7 @@ function ClientDetailForm(props) {
   };
 
   function onSubmitForm(state) {
-    alert(JSON.stringify(state));
+    ClientDetailService_ClientDetailService.Save(state);
   }
 
   var _useForm = forms_useForm(stateSchema, stateValidatorSchema, onSubmitForm),

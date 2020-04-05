@@ -14,5 +14,11 @@ namespace Feature.Account.DependencyInjection
                 return next();
             });
         }
+
+        public static void UseClientAccountIdentityServer(this IApplicationBuilder app)
+        {
+            app.UseAuthentication();
+            app.UseAuthorization();
+        }
     }
 }

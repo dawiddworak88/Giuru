@@ -1,5 +1,5 @@
 ﻿using Client.Api.v1.RequestModels;
-using Foundation.Extensions.Controllers;
+using Foundation.ApiExtensions.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
