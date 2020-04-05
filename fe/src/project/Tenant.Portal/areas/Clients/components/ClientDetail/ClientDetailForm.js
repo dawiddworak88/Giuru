@@ -39,7 +39,7 @@ function ClientDetailForm(props) {
     };
 
     function onSubmitForm(state) {
-        ClientDetailService.Save(state);
+        ClientDetailService.Save(props.saveUrl, state);
     }
 
     const {

@@ -15162,7 +15162,7 @@ function ClientDetailForm(props) {
   };
 
   function onSubmitForm(state) {
-    ClientDetailService_ClientDetailService.Save(state);
+    ClientDetailService_ClientDetailService.Save(props.saveUrl, state);
   }
 
   var _useForm = forms_useForm(stateSchema, stateValidatorSchema, onSubmitForm),
