@@ -28,7 +28,7 @@ namespace Foundation.ApiExtensions.Services
 
                 var response = await client.PostAsync(
                     request.EndpointAddress,
-                    new StringContent(JsonConvert.SerializeObject(request, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }),
+                    new StringContent(JsonConvert.SerializeObject(request.Data, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }),
                     Encoding.UTF8,
                     "application/json"));
 
