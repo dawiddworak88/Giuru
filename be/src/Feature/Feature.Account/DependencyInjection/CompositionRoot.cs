@@ -1,6 +1,7 @@
 ﻿using Feature.Account.Configurations;
 using Feature.Account.ModelBuilders.SignInForm;
 using Feature.Account.ViewModels.SignInForm;
+using Foundation.ApiExtensions.Definitions;
 using Foundation.Database.Areas.Accounts.Entities;
 using Foundation.Database.Shared.Contexts;
 using Foundation.Extensions.ModelBuilders;
@@ -32,6 +33,7 @@ namespace Feature.Account.DependencyInjection
                 options.Events.RaiseSuccessEvents = true;
             })
             .AddInMemoryIdentityResources(IdentityServerConfig.Ids)
+            .AddInMemoryApiResources(IdentityServerConfig.Apis)
             .AddInMemoryClients(IdentityServerConfig.GetClients(configuration))
             .AddAspNetIdentity<ApplicationUser>();
 
@@ -71,7 +73,23 @@ namespace Feature.Account.DependencyInjection
                 options.ResponseType = authenticationConfiguration.GetValue<string>("ResponseType");
 
                 options.SaveTokens = true;
+
+                options.Scope.Add(ApiExtensionsConstants.AllScopes);
             });
+        }
+
+        public static void RegisterApiAccountDependencies(this IServiceCollection services, IConfiguration configuration)
+        {
+            var authenticationConfiguration = configuration.GetSection("Authentication");
+
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.Authority = authenticationConfiguration?.GetValue<string>("Authority");
+                    options.RequireHttpsMetadata = false;
+
+                    options.Audience = ApiExtensionsConstants.AllScopes;
+                });
         }
     }
 }

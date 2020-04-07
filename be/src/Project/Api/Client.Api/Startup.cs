@@ -1,3 +1,4 @@
+using Feature.Account.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +22,8 @@ namespace Client.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.RegisterApiAccountDependencies(this.Configuration);
 
             services.AddApiVersioning();
 
@@ -46,7 +49,7 @@ namespace Client.Api
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthenticationAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

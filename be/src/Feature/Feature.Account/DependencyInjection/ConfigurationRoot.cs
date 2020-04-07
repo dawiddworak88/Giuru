@@ -15,7 +15,7 @@ namespace Feature.Account.DependencyInjection
             });
         }
 
-        public static void UseClientAccountIdentityServer(this IApplicationBuilder app)
+        public static void UseAuthenticationAuthorization(this IApplicationBuilder app)
         {
             app.UseAuthentication();
             app.UseAuthorization();

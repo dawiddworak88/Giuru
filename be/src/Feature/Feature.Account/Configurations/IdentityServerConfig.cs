@@ -1,4 +1,5 @@
-﻿using IdentityServer4;
+﻿using Foundation.ApiExtensions.Definitions;
+using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
@@ -12,6 +13,12 @@ namespace Feature.Account.Configurations
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+            };
+
+        public static IEnumerable<ApiResource> Apis =>
+            new List<ApiResource>
+            {
+                new ApiResource(ApiExtensionsConstants.AllScopes, ApiExtensionsConstants.AllScopes)
             };
 
         public static IEnumerable<Client> GetClients(IConfiguration configuration)
@@ -40,7 +47,8 @@ namespace Feature.Account.Configurations
                         AllowedScopes = new List<string>
                         {
                             IdentityServerConstants.StandardScopes.OpenId,
-                            IdentityServerConstants.StandardScopes.Profile
+                            IdentityServerConstants.StandardScopes.Profile,
+                            ApiExtensionsConstants.AllScopes
                         },
                         AllowOfflineAccess = true
                     };

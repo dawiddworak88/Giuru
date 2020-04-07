@@ -74,7 +74,7 @@ namespace Tenant.Portal
 
             app.UseRouting();
 
-            app.UseClientAccountIdentityServer();
+            app.UseAuthenticationAuthorization();
 
             app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
 
