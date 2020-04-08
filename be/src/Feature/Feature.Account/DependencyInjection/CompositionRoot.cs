@@ -26,7 +26,6 @@ namespace Feature.Account.DependencyInjection
             var builder = services.AddIdentityServer(options => {
 
                 options.UserInteraction.LoginUrl = "/";
-
                 options.Events.RaiseErrorEvents = true;
                 options.Events.RaiseInformationEvents = true;
                 options.Events.RaiseFailureEvents = true;

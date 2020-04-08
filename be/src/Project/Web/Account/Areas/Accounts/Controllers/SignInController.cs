@@ -35,10 +35,9 @@ namespace Account.Areas.Accounts.Controllers
             this.eventsService = eventsService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index(string returnUrl)
         {
-            var context = await this.interactionService.GetAuthorizationContextAsync(returnUrl);
-
             var viewModel = this.signInModelBuilder.BuildModel();
 
             return this.View(viewModel);
