@@ -35,23 +35,19 @@ function SignInForm(props) {
         }
     };
 
-    function onSubmitForm(state) {
-        alert(JSON.stringify(state));
-    }
-
     const {
         values,
         errors,
         dirty,
         handleOnChange,
-        handleOnSubmit,
         disable,
-    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
+    } = useForm(stateSchema, stateValidatorSchema);
 
     const { email, password } = values;
 
     return (
-        <form className="is-modern-form has-text-centered" onSubmit={handleOnSubmit} method="post">
+        <form className="is-modern-form has-text-centered" action={props.submitUrl} method="post">
+            <input type="hidden" name="returnUrl" value={props.returnUrl} />
             <div>
                 <h1 className="subtitle is-4">{props.signInText}</h1>
             </div>
@@ -81,7 +77,9 @@ SignInForm.propTypes = {
     passwordFormatErrorMessage: PropTypes.string.isRequired,
     signInText: PropTypes.string.isRequired,
     enterEmailText: PropTypes.string.isRequired,
-    enterPasswordText: PropTypes.string.isRequired
+    enterPasswordText: PropTypes.string.isRequired,
+    submitUrl: PropTypes.string.isRequired,
+    returnUrl: PropTypes.string
 };
 
 export default SignInForm;

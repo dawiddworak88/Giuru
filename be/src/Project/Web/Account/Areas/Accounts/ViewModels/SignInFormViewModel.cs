@@ -1,7 +1,9 @@
-﻿namespace Feature.Account.ViewModels.SignInForm
+﻿namespace Account.ViewModels.SignInForm
 {
     public class SignInFormViewModel
     {
+        public string ReturnUrl { get; set; }
+        public string SubmitUrl { get; set; }
         public string EmailRequiredErrorMessage { get; set; }
         public string PasswordRequiredErrorMessage { get; set; }
         public string EmailFormatErrorMessage { get; set; }

@@ -1,4 +1,7 @@
-﻿using Account.Areas.Accounts.ViewModels;
+﻿using Account.Areas.Accounts.ComponentModels;
+using Account.Areas.Accounts.Models;
+using Account.Areas.Accounts.Validators;
+using Account.Areas.Accounts.ViewModels;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using IdentityServer4.Services;
@@ -18,10 +21,10 @@ namespace Account.Areas.Accounts.Controllers
         private readonly IClientStore clientStore;
         private readonly IAuthenticationSchemeProvider schemeProvider;
         private readonly IEventService eventsService;
-        private readonly IModelBuilder<SignInViewModel> signInModelBuilder;
+        private readonly IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder;
 
         public SignInController(
-            IModelBuilder<SignInViewModel> signInModelBuilder,
+            IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder,
             IIdentityServerInteractionService interactionService,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
@@ -36,9 +39,28 @@ namespace Account.Areas.Accounts.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string returnUrl)
+        public IActionResult Index(string returnUrl)
         {
-            var viewModel = this.signInModelBuilder.BuildModel();
+            var viewModel = this.signInModelBuilder.BuildModel(new SignInComponentModel { ReturnUrl = returnUrl });
+
+            return this.View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index(SignInModel model)
+        {
+            var validator = new SignInModelValidator();
+
+            var result = await validator.ValidateAsync(model);
+
+            if (result.IsValid)
+            {
+                var context = await this.interactionService.GetAuthorizationContextAsync(model.ReturnUrl);
+
+                return this.Redirect(model.ReturnUrl);
+            }
+
+            var viewModel = this.signInModelBuilder.BuildModel(new SignInComponentModel { ReturnUrl = model.ReturnUrl });
 
             return this.View(viewModel);
         }

@@ -1187,25 +1187,24 @@ function SignInForm(props) {
     }
   };
 
-  function onSubmitForm(state) {
-    alert(JSON.stringify(state));
-  }
-
-  var _useForm = forms_useForm(stateSchema, stateValidatorSchema, onSubmitForm),
+  var _useForm = forms_useForm(stateSchema, stateValidatorSchema),
       values = _useForm.values,
       errors = _useForm.errors,
       dirty = _useForm.dirty,
       handleOnChange = _useForm.handleOnChange,
-      handleOnSubmit = _useForm.handleOnSubmit,
       disable = _useForm.disable;
 
   var email = values.email,
       password = values.password;
   return /*#__PURE__*/react_default.a.createElement("form", {
     className: "is-modern-form has-text-centered",
-    onSubmit: handleOnSubmit,
+    action: props.submitUrl,
     method: "post"
-  }, /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement("h1", {
+  }, /*#__PURE__*/react_default.a.createElement("input", {
+    type: "hidden",
+    name: "returnUrl",
+    value: props.returnUrl
+  }), /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement("h1", {
     className: "subtitle is-4"
   }, props.signInText)), /*#__PURE__*/react_default.a.createElement("div", {
     className: "field"
