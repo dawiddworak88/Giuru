@@ -1,7 +1,10 @@
 ﻿using Feature.Account.Configurations;
+using Feature.Account.Services;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Database.Areas.Accounts.Entities;
 using Foundation.Database.Shared.Contexts;
+using IdentityServer4.Services;
+using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +33,9 @@ namespace Feature.Account.DependencyInjection
             .AddInMemoryApiResources(IdentityServerConfig.Apis)
             .AddInMemoryClients(IdentityServerConfig.GetClients(configuration))
             .AddAspNetIdentity<ApplicationUser>();
+
+            builder.Services.AddScoped<IResourceOwnerPasswordValidator, ResourceOwnerPasswordValidator>();
+            builder.Services.AddScoped<IProfileService, ProfileService>();
 
             builder.AddDeveloperSigningCredential();
 

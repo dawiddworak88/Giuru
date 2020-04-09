@@ -4,10 +4,12 @@ using Account.Areas.Accounts.Validators;
 using Account.Areas.Accounts.ViewModels;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
+using IdentityServer4.Events;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -57,7 +59,18 @@ namespace Account.Areas.Accounts.Controllers
             {
                 var context = await this.interactionService.GetAuthorizationContextAsync(model.ReturnUrl);
 
-                return this.Redirect(model.ReturnUrl);
+                if (context != null)
+                {
+                    var subjectId = "1";
+
+                    var username = "dawiddworak88@gmail.com";
+
+                    await this.eventsService.RaiseAsync(new UserLoginSuccessEvent(username, subjectId, username, clientId: context?.ClientId));
+
+                    await HttpContext.SignInAsync(subjectId, username, new AuthenticationProperties {  });
+
+                    return this.Redirect(model.ReturnUrl);
+                }
             }
 
             var viewModel = this.signInModelBuilder.BuildModel(new SignInComponentModel { ReturnUrl = model.ReturnUrl });

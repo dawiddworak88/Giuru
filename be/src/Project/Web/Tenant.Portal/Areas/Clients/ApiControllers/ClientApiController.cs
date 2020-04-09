@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System.Net;
 using System.Threading.Tasks;
 using Tenant.Portal.Areas.Clients.ApiRequestModels;
 using Tenant.Portal.Shared.Configurations;
@@ -44,7 +43,7 @@ namespace Tenant.Portal.Areas.Clients.ApiControllers
 
             var response = await this.apiClientService.PostAsync<ApiRequest<ClientRequestModel>, ClientRequestModel, object>(apiRequest);
 
-            if (response.StatusCode != HttpStatusCode.OK)
+            if (!response.IsSuccessStatusCode)
             {
                 return this.StatusCode((int)response.StatusCode);
             }

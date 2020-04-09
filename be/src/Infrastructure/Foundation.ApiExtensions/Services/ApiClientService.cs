@@ -34,6 +34,7 @@ namespace Foundation.ApiExtensions.Services
 
                 var apiResponse = new ApiResponse<T>
                 { 
+                    IsSuccessStatusCode = response.IsSuccessStatusCode,
                     StatusCode = response.StatusCode
                 };
 
