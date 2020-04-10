@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Foundation.TenantDatabase.Areas.Clients.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Foundation.TenantDatabase.Areas.Accounts.Entities
 {
     public class ApplicationUser : IdentityUser
     {
-        public string FirstName { get; set; }
-
-        public string LastName { get; set; }
+        public virtual Client Client { get; set; }
     }
 }
