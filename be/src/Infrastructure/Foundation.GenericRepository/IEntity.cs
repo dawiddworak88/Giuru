@@ -1,11 +1,11 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Foundation.GenericRepository
 {
     public interface IEntity
     {
-        [Required]
-        public Guid Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        Guid Id { get; set; }
     }
 }

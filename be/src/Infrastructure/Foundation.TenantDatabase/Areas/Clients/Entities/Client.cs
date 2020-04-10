@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Foundation.GenericRepository;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Foundation.TenantDatabase.Areas.Clients.Entities
 {
-    public class Client
+    public class Client : IEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }

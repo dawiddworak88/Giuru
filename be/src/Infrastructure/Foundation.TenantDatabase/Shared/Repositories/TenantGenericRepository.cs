@@ -1,17 +1,17 @@
-﻿using Foundation.Database.Shared.Contexts;
-using Foundation.GenericRepository;
+﻿using Foundation.GenericRepository;
+using Foundation.TenantDatabase.Shared.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Foundation.Database.Shared.Repositories
+namespace Foundation.TenantDatabase.Shared.Repositories
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class, IEntity
+    public class TenantGenericRepository<TEntity> : ITenantGenericRepository<TEntity> where TEntity: class, IEntity
     {
-        private readonly DatabaseContext context;
+        private readonly TenantDatabaseContext context;
 
-        public GenericRepository(DatabaseContext context)
+        public TenantGenericRepository(TenantDatabaseContext context)
         {
             this.context = context;
         }
@@ -54,7 +54,7 @@ namespace Foundation.Database.Shared.Repositories
             #pragma warning restore S1854 // Unused assignments should be removed
         }
 
-        public void SaveChanges() 
+        public void SaveChanges()
         {
             context.SaveChanges();
         }
