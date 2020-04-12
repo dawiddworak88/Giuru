@@ -2,9 +2,9 @@
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.ApiExtensions.Services;
+using Foundation.Database.Shared.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
@@ -17,16 +17,13 @@ namespace Tenant.Portal.Areas.Clients.ApiControllers
     [AllowAnonymous]
     public class ClientApiController : BaseApiController
     {
-        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IApiClientService apiClientService;
         private readonly IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration;
 
         public ClientApiController(
-            IHttpContextAccessor httpContextAccessor,
             IApiClientService apiClientService, 
             IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration)
         {
-            this.httpContextAccessor = httpContextAccessor;
             this.apiClientService = apiClientService;
             this.servicesEndpointsConfiguration = servicesEndpointsConfiguration;
         }

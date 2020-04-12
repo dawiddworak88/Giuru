@@ -9,11 +9,9 @@ namespace Foundation.TenantDatabase.Shared.Contexts
         {
             var optionsBuilder = new DbContextOptionsBuilder<TenantDatabaseContext>();
 
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.UseSqlServer(connectionString, opt => opt.MigrationsAssembly("Foundation.TenantDatabase")).UseLazyLoadingProxies();
 
             var context = new TenantDatabaseContext(optionsBuilder.Options);
-
-            await context.Database.EnsureCreatedAsync();
 
             await context.Database.MigrateAsync();
 

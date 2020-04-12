@@ -17,5 +17,7 @@ namespace Foundation.GenericRepository
         void Edit(TEntity entity);
 
         void Delete(Guid id);
+
+        void SaveChanges();
     }
 }

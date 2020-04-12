@@ -40,8 +40,8 @@ namespace Feature.Account.Configurations
                         RequirePkce = true,
                         RedirectUris = 
                         { 
-                            $"{Definitions.Constants.HttpsScheme}://{clientConfiguration.GetValue<string>("Host")}{clientConfiguration.GetValue<string>("SignInOidc")}",
-                            $"{Definitions.Constants.HttpScheme}://{clientConfiguration.GetValue<string>("Host")}{clientConfiguration.GetValue<string>("SignInOidc")}"
+                            $"{Definitions.AccountConstants.HttpsScheme}://{clientConfiguration.GetValue<string>("Host")}{clientConfiguration.GetValue<string>("SignInOidc")}",
+                            $"{Definitions.AccountConstants.HttpScheme}://{clientConfiguration.GetValue<string>("Host")}{clientConfiguration.GetValue<string>("SignInOidc")}"
                         },
                         PostLogoutRedirectUris = { $"{clientConfiguration.GetValue<string>("Host")}/{clientConfiguration.GetValue<string>("SignOutCallbackOidc")}" },
                         AllowedScopes = new List<string>

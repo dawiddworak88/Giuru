@@ -1,8 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>Library</OutputType>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Foundation.TenantDatabase\Foundation.TenantDatabase.csproj" />
+  </ItemGroup>
 
 </Project>

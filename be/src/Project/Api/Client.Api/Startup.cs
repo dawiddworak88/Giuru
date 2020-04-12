@@ -1,4 +1,6 @@
 using Feature.Account.DependencyInjection;
+using Foundation.Database.Shared.DependencyInjection;
+using Foundation.TenantDatabase.Shared.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +27,10 @@ namespace Client.Api
 
             services.RegisterApiAccountDependencies(this.Configuration);
 
+            services.RegisterDatabaseDependencies(this.Configuration);
+
+            services.RegisterTenantDatabaseDependencies(this.Configuration);
+
             services.AddApiVersioning();
 
             services.AddSwaggerGen(c =>
@@ -46,6 +52,8 @@ namespace Client.Api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Client API");
                 c.RoutePrefix = string.Empty;
             });
+
+            app.ConfigureDatabaseMigrations(this.Configuration);
 
             app.UseRouting();
 
