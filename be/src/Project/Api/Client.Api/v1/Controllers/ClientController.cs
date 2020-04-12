@@ -1,15 +1,15 @@
 ﻿using Client.Api.v1.RequestModels;
 using Client.Api.v1.ResponseModels;
-using Client.Api.v1.Validators;
 using Feature.Account.Definitions;
+using Feature.Client.Models;
+using Feature.Client.Services;
 using Foundation.ApiExtensions.Controllers;
-using Foundation.Database.Areas.Tenants.Entities;
-using Foundation.Database.Shared.Repositories;
-using Foundation.TenantDatabase.Shared.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Client.Api.v1.Controllers
@@ -21,69 +21,53 @@ namespace Client.Api.v1.Controllers
     [ApiController]
     public class ClientController : BaseApiController
     {
-        private readonly IGenericRepository<Tenant> tenantRepository;
-        private readonly TenantGenericRepositoryFactory genericRepositoryFactory;
+        private readonly IClientService clientService;
 
-        public ClientController(
-            IGenericRepository<Tenant> tenantRepository, 
-            TenantGenericRepositoryFactory genericRepositoryFactory)
+        private readonly ILogger logger;
+
+        public ClientController(IClientService clientService, ILogger<ClientController> logger)
         {
-            this.tenantRepository = tenantRepository;
-            this.genericRepositoryFactory = genericRepositoryFactory;
+            this.clientService = clientService;
+            this.logger = logger;
         }
 
         /// <summary>
         /// Creates a new client
         /// </summary>
         /// <param name="clientModel">Client to save.</param>
-        /// <returns>Account creation results.</returns>
+        /// <returns>Client creation results.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType(200)]
         public async Task<IActionResult> Create([FromBody] ClientRequestModel clientModel)
         {
-            var validator = new ClientRequestModelValidator();
-            var validationResult = await validator.ValidateAsync(clientModel);
-
-            if (validationResult.IsValid)
+            try
             {
-                var tenantIdClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.TenantIdClaim);
+                var tenantClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.TenantIdClaim);
 
-                if (tenantIdClaim != null)
+                var createClientModel = new CreateClientModel
                 {
-                    var tenant = this.tenantRepository.GetById(Guid.Parse(tenantIdClaim.Value));
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    TenantId = !string.IsNullOrWhiteSpace(tenantClaim?.Value) ? Guid.Parse(tenantClaim.Value) : Guid.Empty,
+                    Name = clientModel.Name,
+                    Email = clientModel.Email,
+                    Language = clientModel.Language
+                };
 
-                    if (tenant != null)
-                    {
-                        if (!clientModel.Id.HasValue)
-                        {
-                            var client = new Foundation.TenantDatabase.Areas.Clients.Entities.Client
-                            {
-                                Language = clientModel.Language,
-                                Name = clientModel.Name,
-                                IsActive = true,
-                                LastModifiedBy = this.User.Identity.Name,
-                                LastModifiedDate = DateTime.UtcNow,
-                                CreatedBy = this.User.Identity.Name,
-                                CreatedDate = DateTime.UtcNow
-                            };
+                var createClientResult = await this.clientService.CreateAsync(createClientModel);
 
-                            var clientRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Clients.Entities.Client>(tenant.DatabaseConnectionString);
-
-                            await clientRepository.CreateAsync(client);
-
-                            clientRepository.SaveChanges();
-
-                            var savedClient = clientRepository.GetById(client.Id);
-
-                            return this.CreatedAtAction("GetById", new { id = savedClient.Id }, new ClientResponseModel(savedClient));
-                        }
-                    }
+                if (createClientResult.ValidationResult.IsValid)
+                {
+                    return this.CreatedAtAction("GetById", new { id = createClientResult.Client.Id }, new ClientResponseModel(createClientResult.Client));
                 }
 
-                return this.BadRequest();
+                return this.BadRequest(createClientResult.ValidationResult.Errors.ToString());
+            }
+            catch (Exception exception)
+            {
+                this.logger.LogError(exception, nameof(Create));
             }
 
-            return this.BadRequest(validationResult.Errors.ToString());
+            return this.BadRequest();
         }
     }
 }

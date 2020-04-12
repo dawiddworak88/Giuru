@@ -1,4 +1,5 @@
 using Feature.Account.DependencyInjection;
+using Feature.Client.DependencyInjection;
 using Foundation.Database.Shared.DependencyInjection;
 using Foundation.TenantDatabase.Shared.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
@@ -26,6 +27,8 @@ namespace Client.Api
             services.AddControllers();
 
             services.RegisterApiAccountDependencies(this.Configuration);
+
+            services.RegisterClientDependencies();
 
             services.RegisterDatabaseDependencies(this.Configuration);
 

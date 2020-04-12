@@ -3,6 +3,7 @@ using Feature.Account.Services;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Database.Areas.Accounts.Entities;
 using Foundation.Database.Shared.Contexts;
+using IdentityServer4;
 using IdentityServer4.Services;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
@@ -72,8 +73,12 @@ namespace Feature.Account.DependencyInjection
                 options.ClientSecret = authenticationConfiguration.GetValue<string>("ClientSecret");
                 options.ResponseType = authenticationConfiguration.GetValue<string>("ResponseType");
 
+                options.TokenValidationParameters = new TokenValidationParameters { NameClaimType = "email" };
                 options.SaveTokens = true;
 
+                options.Scope.Add(IdentityServerConstants.StandardScopes.OpenId);
+                options.Scope.Add(IdentityServerConstants.StandardScopes.Profile);
+                options.Scope.Add(IdentityServerConstants.StandardScopes.Email);
                 options.Scope.Add(ApiExtensionsConstants.AllScopes);
             });
         }

@@ -13,6 +13,7 @@ namespace Feature.Account.Configurations
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResources.Email()
             };
 
         public static IEnumerable<ApiResource> Apis =>
@@ -48,6 +49,7 @@ namespace Feature.Account.Configurations
                         {
                             IdentityServerConstants.StandardScopes.OpenId,
                             IdentityServerConstants.StandardScopes.Profile,
+                            IdentityServerConstants.StandardScopes.Email,
                             ApiExtensionsConstants.AllScopes
                         },
                         AllowOfflineAccess = true
