@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
+    <UserSecretsId>63050834-3d10-4a37-99f9-934593099b7a</UserSecretsId>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="8.6.2" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
@@ -16,7 +16,6 @@
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.3.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\..\Feature\Feature.Account\Feature.Account.csproj" />
     <ProjectReference Include="..\..\..\Feature\Feature.Client\Feature.Client.csproj" />
@@ -25,6 +24,4 @@
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Mailing\Foundation.Mailing.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.TenantDatabase\Foundation.TenantDatabase.csproj" />
   </ItemGroup>
-
-
 </Project>

@@ -74,11 +74,13 @@ namespace Feature.Client.Services
 
                 if (tenant != null)
                 {
+                    var host = new MailAddress(model.Email).Host;
+
                     var client = new Foundation.TenantDatabase.Areas.Clients.Entities.Client
                     {
                         Language = model.Language,
                         Name = model.Name,
-                        Host = new MailAddress(model.Email).Host,
+                        Host = host,
                         IsActive = true,
                         LastModifiedBy = model.Username,
                         LastModifiedDate = DateTime.UtcNow,
@@ -88,45 +90,48 @@ namespace Feature.Client.Services
 
                     var clientRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Clients.Entities.Client>(tenant.DatabaseConnectionString);
 
-                    await clientRepository.CreateAsync(client);
-
-                    var context = await this.tenantDatabaseContextFactory.CreateDbContextAsync(tenant.DatabaseConnectionString);
-
-                    var userStore = this.userStoreFactory.CreateUserStore<ApplicationUser>(context);
-
-                    var password = this.passwordGenerationService.GeneratePassword(PasswordConstants.DefaultMinLength);
-
-                    var user = new ApplicationUser
+                    if (clientRepository.Get(x => x.Host == host) == null)
                     {
-                        Client = client,
-                        UserName = model.Email,
-                        Email = model.Email,
-                        NormalizedEmail = model.Email,
-                        NormalizedUserName = model.Email,
-                        EmailConfirmed = true
-                    };
+                        await clientRepository.CreateAsync(client);
 
-                    user.PasswordHash = this.passwordHasher.HashPassword(user, password);
+                        var context = await this.tenantDatabaseContextFactory.CreateDbContextAsync(tenant.DatabaseConnectionString);
 
-                    await userStore.CreateAsync(user, new CancellationToken());
+                        var userStore = this.userStoreFactory.CreateUserStore<ApplicationUser>(context);
 
-                    await this.mailingService.SendTemplateAsync(new TemplateEmail
-                    {
-                        SenderEmailAddress = this.mailingConfiguration.NoReplyFromEmail,
-                        RecipientEmailAddress = model.Email,
-                        TemplateId = this.mailingConfiguration.ActionSendGridTemplateId,
-                        DynamicTemplateData = new
+                        var password = this.passwordGenerationService.GeneratePassword(PasswordConstants.DefaultMinLength);
+
+                        var user = new ApplicationUser
                         {
-                            Subject = this.globalLocalizer["Welcome"],
-                            Header = this.globalLocalizer["Welcome"],
-                            Text = this.globalLocalizer["WelcomeText"] + password,
-                            ButtonText = this.globalLocalizer["Open"],
-                            ButtonLink = "#",
-                            Footer = this.globalLocalizer["Copyright"].Value.Replace(LocalizationConstants.YearToken, DateTime.UtcNow.Year.ToString())
-                        }
-                    });
+                            Client = client,
+                            UserName = model.Email,
+                            Email = model.Email,
+                            NormalizedEmail = model.Email,
+                            NormalizedUserName = model.Email,
+                            EmailConfirmed = true
+                        };
 
-                    createClientResultModel.Client = client;
+                        user.PasswordHash = this.passwordHasher.HashPassword(user, password);
+
+                        await userStore.CreateAsync(user, new CancellationToken());
+
+                        await this.mailingService.SendTemplateAsync(new TemplateEmail
+                        {
+                            SenderEmailAddress = this.mailingConfiguration.NoReplyFromEmail,
+                            RecipientEmailAddress = model.Email,
+                            TemplateId = this.mailingConfiguration.ActionSendGridTemplateId,
+                            DynamicTemplateData = new
+                            {
+                                Subject = this.globalLocalizer["Welcome"],
+                                Header = this.globalLocalizer["Welcome"],
+                                Text = this.globalLocalizer["WelcomeText"] + password,
+                                ButtonText = this.globalLocalizer["Open"],
+                                ButtonLink = "#",
+                                Footer = this.globalLocalizer["Copyright"].Value.Replace(LocalizationConstants.YearToken, DateTime.UtcNow.Year.ToString())
+                            }
+                        });
+
+                        createClientResultModel.Client = client;
+                    }
                 }
             }
 
