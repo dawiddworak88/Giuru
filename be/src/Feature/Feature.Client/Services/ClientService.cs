@@ -1,9 +1,17 @@
 ﻿using Feature.Client.Models;
 using Feature.Client.Validators;
+using Foundation.Account.Definitions;
+using Foundation.Account.Services;
+using Foundation.Account.UserStores;
 using Foundation.Database.Areas.Tenants.Entities;
 using Foundation.Database.Shared.Repositories;
+using Foundation.TenantDatabase.Areas.Accounts.Entities;
+using Foundation.TenantDatabase.Shared.Contexts;
 using Foundation.TenantDatabase.Shared.Repositories;
+using Microsoft.AspNetCore.Identity;
 using System;
+using System.Net.Mail;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Feature.Client.Services
@@ -12,13 +20,25 @@ namespace Feature.Client.Services
     {
         private readonly IGenericRepository<Tenant> tenantRepository;
         private readonly TenantGenericRepositoryFactory genericRepositoryFactory;
+        private readonly UserStoreFactory userStoreFactory;
+        private readonly TenantDatabaseContextFactory tenantDatabaseContextFactory;
+        private readonly IPasswordHasher<ApplicationUser> passwordHasher;
+        private readonly IPasswordGenerationService passwordGenerationService;
 
         public ClientService(
             IGenericRepository<Tenant> tenantRepository,
-            TenantGenericRepositoryFactory genericRepositoryFactory)
+            TenantGenericRepositoryFactory genericRepositoryFactory,
+            UserStoreFactory userStoreFactory,
+            TenantDatabaseContextFactory tenantDatabaseContextFactory,
+            IPasswordHasher<ApplicationUser> passwordHasher,
+            IPasswordGenerationService passwordGenerationService)
         {
             this.tenantRepository = tenantRepository;
             this.genericRepositoryFactory = genericRepositoryFactory;
+            this.userStoreFactory = userStoreFactory;
+            this.tenantDatabaseContextFactory = tenantDatabaseContextFactory;
+            this.passwordHasher = passwordHasher;
+            this.passwordGenerationService = passwordGenerationService;
         }
 
         public async Task<CreateClientResultModel> CreateAsync(CreateClientModel model)
@@ -42,6 +62,7 @@ namespace Feature.Client.Services
                     {
                         Language = model.Language,
                         Name = model.Name,
+                        Host = new MailAddress(model.Email).Host,
                         IsActive = true,
                         LastModifiedBy = model.Username,
                         LastModifiedDate = DateTime.UtcNow,
@@ -55,7 +76,27 @@ namespace Feature.Client.Services
 
                     clientRepository.SaveChanges();
 
-                    createClientResultModel.Client = clientRepository.GetById(client.Id);
+                    var context = await this.tenantDatabaseContextFactory.CreateDbContextAsync(tenant.DatabaseConnectionString);
+
+                    var userStore = this.userStoreFactory.CreateUserStore<ApplicationUser>(context);
+
+                    var password = this.passwordGenerationService.GeneratePassword(PasswordConstants.DefaultMinLength);
+
+                    var user = new ApplicationUser
+                    {
+                        Client = client,
+                        UserName = model.Email,
+                        Email = model.Email,
+                        NormalizedEmail = model.Email,
+                        NormalizedUserName = model.Email,
+                        EmailConfirmed = true
+                    };
+
+                    user.PasswordHash = this.passwordHasher.HashPassword(user, password);
+
+                    await userStore.CreateAsync(user, new CancellationToken());
+
+                    createClientResultModel.Client = client;
                 }
             }
 

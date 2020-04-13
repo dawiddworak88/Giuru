@@ -49,6 +49,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.ApiExtensions", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.GenericRepository", "Infrastructure\Foundation.GenericRepository\Foundation.GenericRepository.csproj", "{DE8CF77D-1554-4F22-B6C3-F54565FA6819}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.Account", "Infrastructure\Foundation.Account\Foundation.Account.csproj", "{B989C583-C876-4E10-B3D8-53D0CAFFD17C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -127,6 +129,10 @@ Global
 		{DE8CF77D-1554-4F22-B6C3-F54565FA6819}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE8CF77D-1554-4F22-B6C3-F54565FA6819}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE8CF77D-1554-4F22-B6C3-F54565FA6819}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B989C583-C876-4E10-B3D8-53D0CAFFD17C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B989C583-C876-4E10-B3D8-53D0CAFFD17C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B989C583-C876-4E10-B3D8-53D0CAFFD17C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B989C583-C876-4E10-B3D8-53D0CAFFD17C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -152,6 +158,7 @@ Global
 		{A22E61DD-88C7-4F7E-80FE-EB2E43E5C60C} = {AA76A57C-E6D8-4329-B285-C2922557FEC2}
 		{78ECD1A6-7CB7-4257-B5DA-41DC407B6F95} = {89A813A9-9007-46EC-8F17-F2816F9202CC}
 		{DE8CF77D-1554-4F22-B6C3-F54565FA6819} = {89A813A9-9007-46EC-8F17-F2816F9202CC}
+		{B989C583-C876-4E10-B3D8-53D0CAFFD17C} = {89A813A9-9007-46EC-8F17-F2816F9202CC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0F50684-572D-4B8F-8A02-B5C72CD028EE}
