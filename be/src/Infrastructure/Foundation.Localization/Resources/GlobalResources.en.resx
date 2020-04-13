@@ -165,6 +165,9 @@
   <data name="NameRequiredErrorMessage" xml:space="preserve">
     <value>Enter name</value>
   </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
   <data name="Orders" xml:space="preserve">
     <value>Orders</value>
   </data>
@@ -203,5 +206,11 @@
   </data>
   <data name="Users" xml:space="preserve">
     <value>Users</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
+  <data name="WelcomeText" xml:space="preserve">
+    <value>Thank you for joining. Feel free to change your password by using the forgot password functionality. Your current password is: </value>
   </data>
 </root>

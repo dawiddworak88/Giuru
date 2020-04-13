@@ -165,6 +165,12 @@
   <data name="NameRequiredErrorMessage" xml:space="preserve">
     <value>Bitte Name eingeben</value>
   </data>
+  <data name="Open" xml:space="preserve">
+    <value>Wyniki wyszukiwania
+Wyniki wyszukiwania w sieci
+
+Öffnen</value>
+  </data>
   <data name="Orders" xml:space="preserve">
     <value>Bestellungen</value>
   </data>
@@ -203,5 +209,11 @@
   </data>
   <data name="Users" xml:space="preserve">
     <value>Benutzer</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Herzlich Willkommen</value>
+  </data>
+  <data name="WelcomeText" xml:space="preserve">
+    <value>Vielen Dank, dass Sie sich einer wachsenden Community von Benutzern angeschlossen haben. Sie können das Passwort mit der Passwort vergessen-Funktion ändern. Ihr aktuelles Passwort lautet: </value>
   </data>
 </root>

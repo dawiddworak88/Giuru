@@ -2,6 +2,7 @@ using Feature.Account.DependencyInjection;
 using Feature.Client.DependencyInjection;
 using Foundation.Account.DependencyInjection;
 using Foundation.Database.Shared.DependencyInjection;
+using Foundation.Mailing.DependencyInjection;
 using Foundation.TenantDatabase.Shared.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +28,8 @@ namespace Client.Api
         {
             services.AddControllers();
 
+            services.AddLocalization();
+
             services.RegisterApiAccountDependencies(this.Configuration);
 
             services.RegisterBaseAccountDependencies();
@@ -36,6 +39,8 @@ namespace Client.Api
             services.RegisterDatabaseDependencies(this.Configuration);
 
             services.RegisterTenantDatabaseDependencies(this.Configuration);
+
+            services.RegisterMailingDependencies(this.Configuration);
 
             services.AddApiVersioning();
 

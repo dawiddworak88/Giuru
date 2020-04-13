@@ -5,10 +5,17 @@ using Foundation.Account.Services;
 using Foundation.Account.UserStores;
 using Foundation.Database.Areas.Tenants.Entities;
 using Foundation.Database.Shared.Repositories;
+using Foundation.Localization;
+using Foundation.Localization.Definitions;
+using Foundation.Mailing.Configurations;
+using Foundation.Mailing.Models;
+using Foundation.Mailing.Services;
 using Foundation.TenantDatabase.Areas.Accounts.Entities;
 using Foundation.TenantDatabase.Shared.Contexts;
 using Foundation.TenantDatabase.Shared.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using System;
 using System.Net.Mail;
 using System.Threading;
@@ -24,6 +31,9 @@ namespace Feature.Client.Services
         private readonly TenantDatabaseContextFactory tenantDatabaseContextFactory;
         private readonly IPasswordHasher<ApplicationUser> passwordHasher;
         private readonly IPasswordGenerationService passwordGenerationService;
+        private readonly IMailingService mailingService;
+        private readonly MailingConfiguration mailingConfiguration;
+        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
 
         public ClientService(
             IGenericRepository<Tenant> tenantRepository,
@@ -31,7 +41,10 @@ namespace Feature.Client.Services
             UserStoreFactory userStoreFactory,
             TenantDatabaseContextFactory tenantDatabaseContextFactory,
             IPasswordHasher<ApplicationUser> passwordHasher,
-            IPasswordGenerationService passwordGenerationService)
+            IPasswordGenerationService passwordGenerationService,
+            IMailingService mailingService, 
+            IOptionsMonitor<MailingConfiguration> mailingConfiguration,
+            IStringLocalizer<GlobalResources> globalLocalizer)
         {
             this.tenantRepository = tenantRepository;
             this.genericRepositoryFactory = genericRepositoryFactory;
@@ -39,6 +52,9 @@ namespace Feature.Client.Services
             this.tenantDatabaseContextFactory = tenantDatabaseContextFactory;
             this.passwordHasher = passwordHasher;
             this.passwordGenerationService = passwordGenerationService;
+            this.mailingService = mailingService;
+            this.mailingConfiguration = mailingConfiguration.CurrentValue;
+            this.globalLocalizer = globalLocalizer;
         }
 
         public async Task<CreateClientResultModel> CreateAsync(CreateClientModel model)
@@ -74,8 +90,6 @@ namespace Feature.Client.Services
 
                     await clientRepository.CreateAsync(client);
 
-                    clientRepository.SaveChanges();
-
                     var context = await this.tenantDatabaseContextFactory.CreateDbContextAsync(tenant.DatabaseConnectionString);
 
                     var userStore = this.userStoreFactory.CreateUserStore<ApplicationUser>(context);
@@ -95,6 +109,22 @@ namespace Feature.Client.Services
                     user.PasswordHash = this.passwordHasher.HashPassword(user, password);
 
                     await userStore.CreateAsync(user, new CancellationToken());
+
+                    await this.mailingService.SendTemplateAsync(new TemplateEmail
+                    {
+                        SenderEmailAddress = this.mailingConfiguration.NoReplyFromEmail,
+                        RecipientEmailAddress = model.Email,
+                        TemplateId = this.mailingConfiguration.ActionSendGridTemplateId,
+                        DynamicTemplateData = new
+                        {
+                            Subject = this.globalLocalizer["Welcome"],
+                            Header = this.globalLocalizer["Welcome"],
+                            Text = this.globalLocalizer["WelcomeText"] + password,
+                            ButtonText = this.globalLocalizer["Open"],
+                            ButtonLink = "#",
+                            Footer = this.globalLocalizer["Copyright"].Value.Replace(LocalizationConstants.YearToken, DateTime.UtcNow.Year.ToString())
+                        }
+                    });
 
                     createClientResultModel.Client = client;
                 }

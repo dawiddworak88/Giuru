@@ -165,6 +165,9 @@
   <data name="NameRequiredErrorMessage" xml:space="preserve">
     <value>Wprowadź nazwę</value>
   </data>
+  <data name="Open" xml:space="preserve">
+    <value>Otwórz</value>
+  </data>
   <data name="Orders" xml:space="preserve">
     <value>Zamówienia</value>
   </data>
@@ -203,5 +206,11 @@
   </data>
   <data name="Users" xml:space="preserve">
     <value>Użytkownicy</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Witaj</value>
+  </data>
+  <data name="WelcomeText" xml:space="preserve">
+    <value>Dołączyłeś właśnie do grona naszych użytkowników. Hasło możesz zawsze zmienić korzystając z funkcji przypominania hasła. Twoje obecne hasło to: </value>
   </data>
 </root>

@@ -22,6 +22,7 @@
     <ProjectReference Include="..\..\..\Feature\Feature.Client\Feature.Client.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Extensions\Foundation.Extensions.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Mailing\Foundation.Mailing.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.TenantDatabase\Foundation.TenantDatabase.csproj" />
   </ItemGroup>
 
