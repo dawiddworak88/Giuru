@@ -1,5 +1,6 @@
 ﻿using Feature.Client.Models;
 using Feature.Client.Validators;
+using FluentValidation.Results;
 using Foundation.Account.Definitions;
 using Foundation.Account.Services;
 using Foundation.Account.UserStores;
@@ -7,6 +8,7 @@ using Foundation.Database.Areas.Tenants.Entities;
 using Foundation.Database.Shared.Repositories;
 using Foundation.Localization;
 using Foundation.Localization.Definitions;
+using Foundation.Localization.Services;
 using Foundation.Mailing.Configurations;
 using Foundation.Mailing.Models;
 using Foundation.Mailing.Services;
@@ -17,6 +19,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
+using System.Linq;
 using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,6 +37,7 @@ namespace Feature.Client.Services
         private readonly IMailingService mailingService;
         private readonly MailingConfiguration mailingConfiguration;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly ICultureService cultureService;
 
         public ClientService(
             IGenericRepository<Tenant> tenantRepository,
@@ -44,7 +48,8 @@ namespace Feature.Client.Services
             IPasswordGenerationService passwordGenerationService,
             IMailingService mailingService, 
             IOptionsMonitor<MailingConfiguration> mailingConfiguration,
-            IStringLocalizer<GlobalResources> globalLocalizer)
+            IStringLocalizer<GlobalResources> globalLocalizer,
+            ICultureService cultureService)
         {
             this.tenantRepository = tenantRepository;
             this.genericRepositoryFactory = genericRepositoryFactory;
@@ -55,6 +60,7 @@ namespace Feature.Client.Services
             this.mailingService = mailingService;
             this.mailingConfiguration = mailingConfiguration.CurrentValue;
             this.globalLocalizer = globalLocalizer;
+            this.cultureService = cultureService;
         }
 
         public async Task<CreateClientResultModel> CreateAsync(CreateClientModel model)
@@ -90,7 +96,9 @@ namespace Feature.Client.Services
 
                     var clientRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Clients.Entities.Client>(tenant.DatabaseConnectionString);
 
-                    if (clientRepository.Get(x => x.Host == host) == null)
+                    this.cultureService.SetCulture(model.Language.ToLowerInvariant());
+
+                    if (!clientRepository.Get(x => x.Host == host).Any())
                     {
                         await clientRepository.CreateAsync(client);
 
@@ -121,16 +129,20 @@ namespace Feature.Client.Services
                             TemplateId = this.mailingConfiguration.ActionSendGridTemplateId,
                             DynamicTemplateData = new
                             {
-                                Subject = this.globalLocalizer["Welcome"],
-                                Header = this.globalLocalizer["Welcome"],
-                                Text = this.globalLocalizer["WelcomeText"] + password,
-                                ButtonText = this.globalLocalizer["Open"],
+                                Subject = this.globalLocalizer["Welcome"].Value,
+                                Header = this.globalLocalizer["Welcome"].Value,
+                                Text = this.globalLocalizer["WelcomeText"].Value + password,
+                                ButtonText = this.globalLocalizer["Open"].Value,
                                 ButtonLink = "#",
                                 Footer = this.globalLocalizer["Copyright"].Value.Replace(LocalizationConstants.YearToken, DateTime.UtcNow.Year.ToString())
                             }
                         });
 
                         createClientResultModel.Client = client;
+                    }
+                    else
+                    {
+                        createClientResultModel.ValidationResult.Errors.Add(new ValidationFailure(string.Empty, this.globalLocalizer["ClientHostExistsErrorMessage"].Value));
                     }
                 }
             }

@@ -38,6 +38,7 @@ namespace Client.Api.v1.Controllers
         /// <returns>Client creation results.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> Create([FromBody] ClientRequestModel clientModel)
         {
             try
@@ -57,7 +58,7 @@ namespace Client.Api.v1.Controllers
 
                 if (createClientResult.ValidationResult.IsValid)
                 {
-                    return this.CreatedAtAction("GetById", new { id = createClientResult.Client.Id }, new ClientResponseModel(createClientResult.Client));
+                    return this.Ok();
                 }
 
                 return this.BadRequest(createClientResult.ValidationResult.Errors.ToString());

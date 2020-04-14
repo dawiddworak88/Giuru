@@ -13,7 +13,7 @@ using Tenant.Portal.Shared.Configurations;
 namespace Tenant.Portal.Areas.Clients.ApiControllers
 {
     [Area("Clients")]
-    [AllowAnonymous]
+    [Authorize]
     public class ClientApiController : BaseApiController
     {
         private readonly IApiClientService apiClientService;
@@ -44,7 +44,7 @@ namespace Tenant.Portal.Areas.Clients.ApiControllers
                 return this.StatusCode((int)response.StatusCode);
             }
 
-            return this.Json(response);
+            return new OkObjectResult(response);
         }
     }
 }

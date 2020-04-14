@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 export default class ClientDetailService {
 
     static Save(url, client) {
@@ -11,11 +13,16 @@ export default class ClientDetailService {
         return fetch(url, requestOptions)
             .then(function (response) {
 
-                return response.json().then(res => {
+                console.log(response);
 
-                    console.log(response);
-                    console.log(res);
-                })
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                
+                    return response.json().then(res => {
+
+                        toast.success("Yes");
+                    })
+                }                
             }).catch(error => {
                 console.log(error);
             });

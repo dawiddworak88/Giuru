@@ -2,6 +2,7 @@ using Feature.Account.DependencyInjection;
 using Feature.Client.DependencyInjection;
 using Foundation.Account.DependencyInjection;
 using Foundation.Database.Shared.DependencyInjection;
+using Foundation.Localization.DependencyInjection;
 using Foundation.Mailing.DependencyInjection;
 using Foundation.TenantDatabase.Shared.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
@@ -29,6 +30,8 @@ namespace Client.Api
             services.AddControllers();
 
             services.AddLocalization();
+
+            services.RegisterBaseLocalizationDependencies();
 
             services.RegisterApiAccountDependencies(this.Configuration);
 

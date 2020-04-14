@@ -120,6 +120,9 @@
   <data name="Cards" xml:space="preserve">
     <value>Cards</value>
   </data>
+  <data name="ClientHostExistsErrorMessage" xml:space="preserve">
+    <value>Client has been already added</value>
+  </data>
   <data name="Clients" xml:space="preserve">
     <value>Clients</value>
   </data>
