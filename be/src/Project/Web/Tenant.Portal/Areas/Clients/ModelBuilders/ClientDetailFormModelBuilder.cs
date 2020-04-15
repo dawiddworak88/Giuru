@@ -45,6 +45,7 @@ namespace Tenant.Portal.Areas.Clients.ModelBuilders
 
             return new ClientDetailFormViewModel
             {
+                GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"],
                 ClientDetailText = this.clientLocalizer["Client"],
                 NameLabel = this.globalLocalizer["NameLabel"],
                 EmailLabel = this.globalLocalizer["EmailLabel"],

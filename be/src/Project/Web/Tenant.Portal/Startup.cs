@@ -15,6 +15,7 @@ using Tenant.Portal.Areas.Orders.DependencyInjection;
 using Tenant.Portal.Areas.Clients.DependencyInjection;
 using Tenant.Portal.Areas.Products.DependencyInjection;
 using Foundation.ApiExtensions.DependencyInjection;
+using Foundation.Localization.DependencyInjection;
 
 namespace Tenant.Portal
 {
@@ -30,6 +31,8 @@ namespace Tenant.Portal
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddLocalizationConfiguration(this.Configuration);
+
+            services.RegisterBaseLocalizationDependencies();
 
             services.AddLocalization();
 

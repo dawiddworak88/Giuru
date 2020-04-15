@@ -5,6 +5,7 @@ namespace Tenant.Portal.Areas.Clients.ViewModels
 {
     public class ClientDetailFormViewModel
     {
+        public string GeneralErrorMessage { get; set; }
         public string NameLabel { get; set; }
         public string EmailLabel { get; set; }
         public string LanguageLabel { get; set; }

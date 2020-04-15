@@ -123,6 +123,9 @@
   <data name="Clients" xml:space="preserve">
     <value>Clients</value>
   </data>
+  <data name="ClientSavedSuccessfully" xml:space="preserve">
+    <value>Client has been saved succcessfully.</value>
+  </data>
   <data name="NewClient" xml:space="preserve">
     <value>New client</value>
   </data>

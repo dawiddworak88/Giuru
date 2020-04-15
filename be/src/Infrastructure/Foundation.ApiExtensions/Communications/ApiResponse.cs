@@ -7,5 +7,6 @@ namespace Foundation.ApiExtensions.Communications
         public T Data { get; set; }
         public HttpStatusCode StatusCode { get; set; }
         public bool IsSuccessStatusCode { get; set; }
+        public string Message { get; set; }
     }
 }

@@ -17153,6 +17153,7 @@ eventManager.on(ACTION.DID_MOUNT, function (containerInstance) {
 
 
 
+react_toastify_toast.configure();
 
 var ClientDetailService_ClientDetailService = /*#__PURE__*/function () {
   function ClientDetailService() {
@@ -17161,7 +17162,7 @@ var ClientDetailService_ClientDetailService = /*#__PURE__*/function () {
 
   _createClass(ClientDetailService, null, [{
     key: "Save",
-    value: function Save(url, client) {
+    value: function Save(url, client, generalErrorMessage) {
       var requestOptions = {
         method: 'POST',
         headers: {
@@ -17170,17 +17171,20 @@ var ClientDetailService_ClientDetailService = /*#__PURE__*/function () {
         body: JSON.stringify(client)
       };
       return fetch(url, requestOptions).then(function (response) {
-        console.log(response);
-        var contentType = response.headers.get("content-type");
+        if (!response.ok) {
+          throw new Error(response.status);
+        } else {
+          var contentType = response.headers.get("content-type");
 
-        if (contentType && contentType.indexOf("application/json") !== -1) {
-          return response.json().then(function (res) {
-            console.log(res);
-            react_toastify_toast.success("Yes");
-          });
+          if (contentType && contentType.indexOf("application/json") !== -1) {
+            return response.json().then(function (jsonResponse) {
+              react_toastify_toast.success(jsonResponse.message);
+            });
+          }
         }
       }).catch(function (error) {
         console.log(error);
+        react_toastify_toast.error(generalErrorMessage);
       });
     }
   }]);
@@ -17238,7 +17242,7 @@ function ClientDetailForm(props) {
   };
 
   function onSubmitForm(state) {
-    ClientDetailService_ClientDetailService.Save(props.saveUrl, state);
+    ClientDetailService_ClientDetailService.Save(props.saveUrl, state, props.generalErrorMessage);
   }
 
   var _useForm = forms_useForm(stateSchema, stateValidatorSchema, onSubmitForm),

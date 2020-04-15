@@ -39,7 +39,7 @@ function ClientDetailForm(props) {
     };
 
     function onSubmitForm(state) {
-        ClientDetailService.Save(props.saveUrl, state);
+        ClientDetailService.Save(props.saveUrl, state, props.generalErrorMessage);
     }
 
     const {
@@ -92,6 +92,7 @@ function ClientDetailForm(props) {
 }
 
 ClientDetailForm.propTypes = {
+    generalErrorMessage: PropTypes.string.isRequired,
     nameLabel: PropTypes.string.isRequired,
     emailLabel: PropTypes.string.isRequired,
     languageLabel: PropTypes.string.isRequired,
