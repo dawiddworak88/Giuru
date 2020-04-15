@@ -1,5 +1,4 @@
 ﻿using Client.Api.v1.RequestModels;
-using Client.Api.v1.ResponseModels;
 using Feature.Account.Definitions;
 using Feature.Client.Models;
 using Feature.Client.Services;
