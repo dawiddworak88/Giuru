@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+import FetchErrorHandler from '../../../../../../shared/helpers/errorHandlers/FetchErrorHandler';
 
 toast.configure();
 
@@ -15,21 +16,12 @@ export default class ClientDetailService {
         return fetch(url, requestOptions)
             .then(function (response) {
 
-                if (!response.ok) {
-                    
-                    throw new Error(response.status);
-                }
-                else {
+                FetchErrorHandler.handleError(response);
 
-                    const contentType = response.headers.get("content-type");
-                    if (contentType && contentType.indexOf("application/json") !== -1) {
+                return response.json().then(jsonResponse => {
 
-                        return response.json().then(jsonResponse => {
-
-                            toast.success(jsonResponse.message);
-                        })
-                    }
-                }
+                    toast.success(jsonResponse.message);
+                })
             }).catch(error => {
 
                 console.log(error);

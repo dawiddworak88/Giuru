@@ -217,6 +217,6 @@
     <value>Witaj</value>
   </data>
   <data name="WelcomeText" xml:space="preserve">
-    <value>Dołączyłeś właśnie do grona naszych użytkowników. Hasło możesz zawsze zmienić korzystając z funkcji przypominania hasła. Twoje obecne hasło to: </value>
+    <value>Zostałeś właśnie dodany do grona naszych użytkowników. Hasło możesz zmienić korzystając z funkcji przypominania hasła. Twoje obecne hasło to: </value>
   </data>
 </root>

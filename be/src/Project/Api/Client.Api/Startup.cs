@@ -67,8 +67,6 @@ namespace Client.Api
                 c.RoutePrefix = string.Empty;
             });
 
-            app.ConfigureDatabaseMigrations(this.Configuration);
-
             app.UseRouting();
 
             app.UseAuthenticationAuthorization();

@@ -217,6 +217,6 @@
     <value>Welcome</value>
   </data>
   <data name="WelcomeText" xml:space="preserve">
-    <value>Thank you for joining. Feel free to change your password by using the forgot password functionality. Your current password is: </value>
+    <value>The account for you has been created. Feel free to change your password by using the forgot password functionality. Your current password is: </value>
   </data>
 </root>

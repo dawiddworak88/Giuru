@@ -17149,7 +17149,57 @@ eventManager.on(ACTION.DID_MOUNT, function (containerInstance) {
 
 
 
+// CONCATENATED MODULE: ./src/shared/constants/ResponseStatusConstants.js
+
+
+
+var ResponseStatusConstants_ResponseStatusConstants = /*#__PURE__*/function () {
+  function ResponseStatusConstants() {
+    _classCallCheck(this, ResponseStatusConstants);
+  }
+
+  _createClass(ResponseStatusConstants, null, [{
+    key: "Unauthorized",
+    value: function Unauthorized() {
+      return 401;
+    }
+  }]);
+
+  return ResponseStatusConstants;
+}();
+
+
+// CONCATENATED MODULE: ./src/shared/helpers/errorHandlers/FetchErrorHandler.js
+
+
+
+
+var FetchErrorHandler_FetchErrorHandler = /*#__PURE__*/function () {
+  function FetchErrorHandler() {
+    _classCallCheck(this, FetchErrorHandler);
+  }
+
+  _createClass(FetchErrorHandler, null, [{
+    key: "handleError",
+    value: function handleError(response) {
+      if (!response.ok) {
+        if (response.status == ResponseStatusConstants_ResponseStatusConstants.Unauthorized()) {
+          if (typeof window !== 'undefined') {
+            window.location.reload();
+          }
+        }
+
+        throw new Error(response.status);
+      }
+    }
+  }]);
+
+  return FetchErrorHandler;
+}();
+
+
 // CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Clients/services/ClientDetail/ClientDetailService.js
+
 
 
 
@@ -17171,17 +17221,10 @@ var ClientDetailService_ClientDetailService = /*#__PURE__*/function () {
         body: JSON.stringify(client)
       };
       return fetch(url, requestOptions).then(function (response) {
-        if (!response.ok) {
-          throw new Error(response.status);
-        } else {
-          var contentType = response.headers.get("content-type");
-
-          if (contentType && contentType.indexOf("application/json") !== -1) {
-            return response.json().then(function (jsonResponse) {
-              react_toastify_toast.success(jsonResponse.message);
-            });
-          }
-        }
+        FetchErrorHandler_FetchErrorHandler.handleError(response);
+        return response.json().then(function (jsonResponse) {
+          react_toastify_toast.success(jsonResponse.message);
+        });
       }).catch(function (error) {
         console.log(error);
         react_toastify_toast.error(generalErrorMessage);

@@ -10,23 +10,24 @@ namespace Foundation.Database.Areas.Tenants.Seeds
     {
         public static void SeedTenants(DatabaseContext context, IConfiguration configuration)
         {
-            var tenantsSeedConfiguration = configuration.GetSection("Seeds")?.GetSection("Tenant");
+            var adminSeedConfiguration = configuration.GetSection("Seeds")?.GetSection("Accounts")?.GetSection("Admin");
+            var tenantsSeedConfiguration = configuration.GetSection("Seeds")?.GetSection("Accounts")?.GetSection("Tenant");
 
-            if (tenantsSeedConfiguration != null)
+            if (adminSeedConfiguration != null && tenantsSeedConfiguration != null)
             {
-                if (!context.Tenants.Any(x => x.Key == "eltap"))
+                if (!context.Tenants.Any(x => x.Key == tenantsSeedConfiguration.GetValue<string>("Key")))
                 {
                     var tenant = new Tenant
                     {
-                        Key = "eltap",
-                        Host = "eltap.com",
+                        Key = tenantsSeedConfiguration.GetValue<string>("Key"),
+                        Host = tenantsSeedConfiguration.GetValue<string>("Host"),
                         DatabaseConnectionString = tenantsSeedConfiguration.GetValue<string>("DatabaseConnectionString"),
                         QueueConnectionString = tenantsSeedConfiguration.GetValue<string>("QueueConnectionString"),
                         StorageConnectionString = tenantsSeedConfiguration.GetValue<string>("StorageConnectionString"),
                         IsActive = true,
-                        LastModifiedBy = "dawid.dworak@giuru.com",
+                        LastModifiedBy = adminSeedConfiguration.GetValue<string>("Email"),
                         LastModifiedDate = DateTime.UtcNow,
-                        CreatedBy = "dawid.dworak@giuru.com",
+                        CreatedBy = adminSeedConfiguration.GetValue<string>("Email"),
                         CreatedDate = DateTime.UtcNow
                     };
 

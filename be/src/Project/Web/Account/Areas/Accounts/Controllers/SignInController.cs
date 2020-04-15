@@ -67,7 +67,7 @@ namespace Account.Areas.Accounts.Controllers
 
                     await this.eventsService.RaiseAsync(new UserLoginSuccessEvent(username, subjectId, username, clientId: context?.ClientId));
 
-                    await HttpContext.SignInAsync(subjectId, username, new AuthenticationProperties {  });
+                    await HttpContext.SignInAsync(subjectId, username, new AuthenticationProperties {   });
 
                     return this.Redirect(model.ReturnUrl);
                 }

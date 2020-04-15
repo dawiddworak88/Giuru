@@ -217,6 +217,6 @@
     <value>Herzlich Willkommen</value>
   </data>
   <data name="WelcomeText" xml:space="preserve">
-    <value>Vielen Dank, dass Sie sich einer wachsenden Community von Benutzern angeschlossen haben. Sie können das Passwort mit der Passwort vergessen-Funktion ändern. Ihr aktuelles Passwort lautet: </value>
+    <value>Das Konto für Sie wurde erfolgreich erstellt. Sie können das Passwort mit der Passwort vergessen-Funktion ändern. Ihr aktuelles Passwort lautet: </value>
   </data>
 </root>
