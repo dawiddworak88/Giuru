@@ -9,22 +9,23 @@ namespace Foundation.Database.Areas.Accounts.Seeds
     {
         public static void SeedAdminAccounts(DatabaseContext context, IConfiguration configuration)
         {
-            var accountsSeedConfiguration = configuration.GetSection("Seeds")?.GetSection("Accounts");
+            var adminSeedConfiguration = configuration.GetSection("Seeds")?.GetSection("Accounts")?.GetSection("Admin");
 
-            if (accountsSeedConfiguration != null)
+
+            if (adminSeedConfiguration != null)
             {
-                if (!context.Accounts.Any(x => x.Email == "dawid.dworak@giuru.com"))
+                if (!context.Accounts.Any(x => x.Email == adminSeedConfiguration.GetValue<string>("Email")))
                 {
                     var adminAccount = new ApplicationUser
                     {
-                        FirstName = "Dawid",
-                        LastName = "Dworak",
-                        UserName = "dawid.dworak@giuru.com",
-                        NormalizedUserName = "dawid.dworak@giuru.com",
-                        Email = "dawid.dworak@giuru.com",
-                        NormalizedEmail = "dawid.dworak@giuru.com",
-                        PasswordHash = accountsSeedConfiguration.GetValue<string>("AdminHash"),
-                        SecurityStamp = "d2a44f96-c29c-4f71-9de2-41219318d668",
+                        FirstName = adminSeedConfiguration.GetValue<string>("FirstName"),
+                        LastName = adminSeedConfiguration.GetValue<string>("LastName"),
+                        UserName = adminSeedConfiguration.GetValue<string>("Email"),
+                        NormalizedUserName = adminSeedConfiguration.GetValue<string>("Email"),
+                        Email = adminSeedConfiguration.GetValue<string>("Email"),
+                        NormalizedEmail = adminSeedConfiguration.GetValue<string>("Email"),
+                        PasswordHash = adminSeedConfiguration.GetValue<string>("PasswordHash"),
+                        SecurityStamp = adminSeedConfiguration.GetValue<string>("SecurityStamp"),
                         PhoneNumber = null,
                         PhoneNumberConfirmed = false,
                         TwoFactorEnabled = false,
@@ -41,23 +42,22 @@ namespace Foundation.Database.Areas.Accounts.Seeds
 
         public static void SeedTenantAccounts(DatabaseContext context, IConfiguration configuration)
         {
-            var accountsSeedConfiguration = configuration.GetSection("Seeds")?.GetSection("Accounts");
+            var tenantSeedConfiguration = configuration.GetSection("Seeds")?.GetSection("Accounts")?.GetSection("Tenant");
 
-            if (accountsSeedConfiguration != null)
+            if (tenantSeedConfiguration != null)
             {
-                if (!context.Accounts.Any(x => x.Email == "szymon.dworak@eltap.com"))
+                if (!context.Accounts.Any(x => x.Email == tenantSeedConfiguration.GetValue<string>("Email")))
                 {
                     var tenantAccount = new ApplicationUser
                     {
-                        FirstName = "Szymon",
-                        LastName = "Dworak",
-                        UserName = "szymon.dworak@eltap.com",
-                        NormalizedUserName = "szymon.dworak@eltap.com",
-                        Email = "szymon.dworak@eltap.com",
-                        NormalizedEmail = "szymon.dworak@eltap.com",
-                        PasswordHash = accountsSeedConfiguration.GetValue<string>("TenantHash"),
-                        Tenant = context.Tenants.FirstOrDefault(x => x.Key == "eltap"),
-                        SecurityStamp = "8d241f34-de16-40dc-b887-373f615b610f",
+                        FirstName = tenantSeedConfiguration.GetValue<string>("FirstName"),
+                        LastName = tenantSeedConfiguration.GetValue<string>("LastName"),
+                        UserName = tenantSeedConfiguration.GetValue<string>("Email"),
+                        NormalizedUserName = tenantSeedConfiguration.GetValue<string>("Email"),
+                        Email = tenantSeedConfiguration.GetValue<string>("Email"),
+                        NormalizedEmail = tenantSeedConfiguration.GetValue<string>("Email"),
+                        PasswordHash = tenantSeedConfiguration.GetValue<string>("PasswordHash"),
+                        SecurityStamp = tenantSeedConfiguration.GetValue<string>("SecurityStamp"),
                         PhoneNumber = null,
                         PhoneNumberConfirmed = false,
                         TwoFactorEnabled = false,

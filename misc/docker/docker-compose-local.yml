@@ -32,3 +32,23 @@ services:
       NODE_ENV: development
     ports:
       - "3000:3000"
+  client-api:
+    build: 
+      context: ../../be
+      dockerfile: Dockerfile-ClientApi
+    image: client-api:client
+    restart: always
+    depends_on: 
+      - react-ssr-web
+    ports:
+      - "44383:80"
+  account-web:
+    build: 
+      context: ../../be
+      dockerfile: Dockerfile-Account
+    image: account-web:account
+    restart: always
+    depends_on: 
+      - react-ssr-web
+    ports:
+      - "44325:80"

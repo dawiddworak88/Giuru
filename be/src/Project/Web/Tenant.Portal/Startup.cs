@@ -14,6 +14,8 @@ using Feature.Security.DependencyInjection;
 using Tenant.Portal.Areas.Orders.DependencyInjection;
 using Tenant.Portal.Areas.Clients.DependencyInjection;
 using Tenant.Portal.Areas.Products.DependencyInjection;
+using Foundation.ApiExtensions.DependencyInjection;
+using Foundation.Localization.DependencyInjection;
 
 namespace Tenant.Portal
 {
@@ -30,6 +32,8 @@ namespace Tenant.Portal
         {
             services.AddLocalizationConfiguration(this.Configuration);
 
+            services.RegisterBaseLocalizationDependencies();
+
             services.AddLocalization();
 
             services.AddCultureRouteConstraint();
@@ -39,6 +43,8 @@ namespace Tenant.Portal
             services.AddControllersWithViews();
 
             services.RegisterClientAccountDependencies(this.Configuration);
+
+            services.RegisterApiExtensionsDependencies();
 
             services.RegisterLocalizationDependencies();
 
@@ -71,7 +77,7 @@ namespace Tenant.Portal
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseAuthenticationAuthorization();
 
             app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
 

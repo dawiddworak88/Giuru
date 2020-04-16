@@ -1,4 +1,4 @@
-﻿using Feature.Account.ViewModels.SignInForm;
+﻿using Account.ViewModels.SignInForm;
 using Feature.PageContent.Components.Footers.ViewModels;
 using Feature.PageContent.Components.Headers.ViewModels;
 

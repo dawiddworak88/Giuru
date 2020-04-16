@@ -1,11 +1,11 @@
-﻿using Feature.PageContent.Components.Footers.Definitions;
-using Feature.PageContent.Components.Links.ViewModels;
+﻿using Feature.PageContent.Components.Links.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using Foundation.Localization;
 using Feature.PageContent.Components.Footers.ViewModels;
+using Foundation.Localization.Definitions;
 
 namespace Tenant.Portal.Shared.Footers.ModelBuilders
 {
@@ -22,7 +22,7 @@ namespace Tenant.Portal.Shared.Footers.ModelBuilders
         {
             var viewModel = new FooterViewModel 
             {
-                Copyright = this.globalLocalizer["Copyright"]?.Value.Replace(Constants.YearToken, DateTime.Now.Year.ToString()),
+                Copyright = this.globalLocalizer["Copyright"]?.Value.Replace(LocalizationConstants.YearToken, DateTime.Now.Year.ToString()),
                 Links = new List<LinkViewModel>()
             };
 

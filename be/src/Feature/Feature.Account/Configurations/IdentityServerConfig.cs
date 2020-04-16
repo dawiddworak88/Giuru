@@ -1,4 +1,5 @@
-﻿using IdentityServer4;
+﻿using Foundation.ApiExtensions.Definitions;
+using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
@@ -12,6 +13,13 @@ namespace Feature.Account.Configurations
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResources.Email()
+            };
+
+        public static IEnumerable<ApiResource> Apis =>
+            new List<ApiResource>
+            {
+                new ApiResource(ApiExtensionsConstants.AllScopes, ApiExtensionsConstants.AllScopes)
             };
 
         public static IEnumerable<Client> GetClients(IConfiguration configuration)
@@ -33,14 +41,16 @@ namespace Feature.Account.Configurations
                         RequirePkce = true,
                         RedirectUris = 
                         { 
-                            $"{Definitions.Constants.HttpsScheme}://{clientConfiguration.GetValue<string>("Host")}{clientConfiguration.GetValue<string>("SignInOidc")}",
-                            $"{Definitions.Constants.HttpScheme}://{clientConfiguration.GetValue<string>("Host")}{clientConfiguration.GetValue<string>("SignInOidc")}"
+                            $"{Definitions.AccountConstants.HttpsScheme}://{clientConfiguration.GetValue<string>("Host")}{clientConfiguration.GetValue<string>("SignInOidc")}",
+                            $"{Definitions.AccountConstants.HttpScheme}://{clientConfiguration.GetValue<string>("Host")}{clientConfiguration.GetValue<string>("SignInOidc")}"
                         },
                         PostLogoutRedirectUris = { $"{clientConfiguration.GetValue<string>("Host")}/{clientConfiguration.GetValue<string>("SignOutCallbackOidc")}" },
                         AllowedScopes = new List<string>
                         {
                             IdentityServerConstants.StandardScopes.OpenId,
-                            IdentityServerConstants.StandardScopes.Profile
+                            IdentityServerConstants.StandardScopes.Profile,
+                            IdentityServerConstants.StandardScopes.Email,
+                            ApiExtensionsConstants.AllScopes
                         },
                         AllowOfflineAccess = true
                     };

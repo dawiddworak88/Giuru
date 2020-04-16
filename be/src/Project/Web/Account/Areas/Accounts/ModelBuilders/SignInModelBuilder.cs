@@ -1,22 +1,23 @@
-﻿using Account.Areas.Accounts.ViewModels;
-using Feature.Account.ViewModels.SignInForm;
+﻿using Account.Areas.Accounts.ComponentModels;
+using Account.Areas.Accounts.ViewModels;
+using Account.ViewModels.SignInForm;
 using Feature.PageContent.Components.Footers.ViewModels;
 using Feature.PageContent.Components.Headers.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 
 namespace Account.Areas.Accounts.ModelBuilders
 {
-    public class SignInModelBuilder : IModelBuilder<SignInViewModel>
+    public class SignInModelBuilder : IComponentModelBuilder<SignInComponentModel, SignInViewModel>
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
 
-        private readonly IModelBuilder<SignInFormViewModel> signInFormModelBuilder;
+        private readonly IComponentModelBuilder<SignInFormComponentModel, SignInFormViewModel> signInFormModelBuilder;
 
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public SignInModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
-            IModelBuilder<SignInFormViewModel> signInFormModelBuilder,
+            IComponentModelBuilder<SignInFormComponentModel, SignInFormViewModel> signInFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
@@ -24,12 +25,12 @@ namespace Account.Areas.Accounts.ModelBuilders
             this.footerModelBuilder = footerModelBuilder;
         }
 
-        public SignInViewModel BuildModel()
+        public SignInViewModel BuildModel(SignInComponentModel componentModel)
         {
             var viewModel = new SignInViewModel
             {
                 Header = headerModelBuilder.BuildModel(),
-                SignInForm = signInFormModelBuilder.BuildModel(),
+                SignInForm = signInFormModelBuilder.BuildModel(new SignInFormComponentModel { ReturnUrl = componentModel.ReturnUrl }),
                 Footer = footerModelBuilder.BuildModel()
             };
 

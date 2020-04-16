@@ -1,8 +1,8 @@
-﻿using Feature.PageContent.Components.Footers.Definitions;
-using Feature.PageContent.Components.Footers.ViewModels;
+﻿using Feature.PageContent.Components.Footers.ViewModels;
 using Feature.PageContent.Components.Links.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
+using Foundation.Localization.Definitions;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
@@ -29,7 +29,7 @@ namespace AspNetCore.Shared.Footers.ModelBuilders
 
             var viewModel = new FooterViewModel 
             {
-                Copyright = this.globalLocalizer["Copyright"]?.Value.Replace(Constants.YearToken, DateTime.Now.Year.ToString()),
+                Copyright = this.globalLocalizer["Copyright"]?.Value.Replace(LocalizationConstants.YearToken, DateTime.Now.Year.ToString()),
                 Links = links
             };
 

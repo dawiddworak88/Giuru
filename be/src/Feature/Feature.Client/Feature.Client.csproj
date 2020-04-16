@@ -5,4 +5,16 @@
     <OutputType>Library</OutputType>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="8.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Foundation.Account\Foundation.Account.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Foundation.Localization\Foundation.Localization.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Foundation.Mailing\Foundation.Mailing.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Foundation.TenantDatabase\Foundation.TenantDatabase.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -7,7 +7,7 @@ using Tenant.Portal.Areas.Clients.ViewModels;
 namespace Tenant.Portal.Areas.Clients.Controllers
 {
     [Area("Clients")]
-    [AllowAnonymous]
+    [Authorize]
     public class ClientDetailController : BaseController
     {
         private readonly IModelBuilder<ClientDetailPageViewModel> clientDetailPageModelBuilder;

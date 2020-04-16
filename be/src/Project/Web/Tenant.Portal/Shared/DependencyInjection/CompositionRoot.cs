@@ -8,6 +8,7 @@ using Tenant.Portal.Shared.MenuTiles.ModelBuilders;
 using Feature.PageContent.MenuTiles.ViewModels;
 using Feature.PageContent.Components.Headers.ViewModels;
 using Feature.PageContent.Components.Footers.ViewModels;
+using Tenant.Portal.Areas.Clients.DependencyInjection;
 
 namespace Tenant.Portal.Shared.DependencyInjection
 {
@@ -24,6 +25,8 @@ namespace Tenant.Portal.Shared.DependencyInjection
         public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<ServicesEndpointsConfiguration>(configuration.GetSection("ServicesEndpoints"));
+
+            services.ConfigureClientsAreaOptions(configuration);
         }
     }
 }
