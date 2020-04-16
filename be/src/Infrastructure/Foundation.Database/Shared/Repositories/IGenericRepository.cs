@@ -1,8 +1,8 @@
-﻿using Foundation.GenericRepository;
+﻿using Foundation.GenericRepository.Entities;
 
 namespace Foundation.Database.Shared.Repositories
 {
-    public interface IGenericRepository<TEntity> : Foundation.GenericRepository.IGenericRepository<TEntity> where TEntity : class, IEntity
+    public interface IGenericRepository<TEntity> : Foundation.GenericRepository.Repositories.IGenericRepository<TEntity> where TEntity : class, IEntity
     {
     }
 }

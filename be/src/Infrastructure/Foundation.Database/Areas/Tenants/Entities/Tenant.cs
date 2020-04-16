@@ -1,4 +1,4 @@
-﻿using Foundation.GenericRepository;
+﻿using Foundation.GenericRepository.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

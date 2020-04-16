@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Foundation.GenericRepository
+namespace Foundation.GenericRepository.Entities
 {
     public interface IEntity
     {

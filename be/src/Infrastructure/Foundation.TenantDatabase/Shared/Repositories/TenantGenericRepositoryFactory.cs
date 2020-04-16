@@ -1,4 +1,4 @@
-﻿using Foundation.GenericRepository;
+﻿using Foundation.GenericRepository.Entities;
 using Foundation.TenantDatabase.Shared.Contexts;
 using System.Threading.Tasks;
 

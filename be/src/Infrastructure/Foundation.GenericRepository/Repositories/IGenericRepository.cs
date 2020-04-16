@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Foundation.GenericRepository.Entities;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Foundation.GenericRepository
+namespace Foundation.GenericRepository.Repositories
 {
     public interface IGenericRepository<TEntity> where TEntity: class, IEntity
     {
