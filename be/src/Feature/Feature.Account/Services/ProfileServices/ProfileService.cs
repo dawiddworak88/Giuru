@@ -2,7 +2,7 @@
 using IdentityServer4.Services;
 using System.Threading.Tasks;
 
-namespace Feature.Account.Services
+namespace Feature.Account.Services.ProfileServices
 {
     public class ProfileService : IProfileService
     {

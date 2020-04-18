@@ -11,6 +11,8 @@ using Account.Shared.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
 using Feature.PageContent.DependencyInjection;
 using Feature.Security.DependencyInjection;
+using Foundation.Account.DependencyInjection;
+using Foundation.GenericRepository.DependencyInjection;
 
 namespace Account
 {
@@ -39,11 +41,15 @@ namespace Account
 
             services.RegisterDatabaseDependencies(this.Configuration);
 
+            services.RegisterBaseAccountDependencies();
+
             services.RegisterAccountDependencies(this.Configuration);
 
             services.RegisterGeneralDependencies();
 
             services.RegisterDependencies();
+
+            services.ConfigureGenericRepositoryOptions(this.Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<LocalizationConfiguration> localizationOptions)

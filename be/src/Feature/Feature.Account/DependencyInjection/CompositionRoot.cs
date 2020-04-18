@@ -1,11 +1,11 @@
 ﻿using Feature.Account.Configurations;
-using Feature.Account.Services;
+using Feature.Account.Services.ProfileServices;
+using Feature.Account.Services.UserServices;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Database.Areas.Accounts.Entities;
 using Foundation.Database.Shared.Contexts;
 using IdentityServer4;
 using IdentityServer4.Services;
-using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +18,7 @@ namespace Feature.Account.DependencyInjection
     {
         public static void RegisterAccountDependencies(this IServiceCollection services, IConfiguration configuration)
         {
+            // Configure identity server 4
             services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<DatabaseContext>()
             .AddDefaultTokenProviders();
@@ -35,7 +36,6 @@ namespace Feature.Account.DependencyInjection
             .AddInMemoryClients(IdentityServerConfig.GetClients(configuration))
             .AddAspNetIdentity<ApplicationUser>();
 
-            builder.Services.AddScoped<IResourceOwnerPasswordValidator, ResourceOwnerPasswordValidator>();
             builder.Services.AddScoped<IProfileService, ProfileService>();
 
             builder.AddDeveloperSigningCredential();
@@ -50,6 +50,9 @@ namespace Feature.Account.DependencyInjection
                 options.ClientId = accountConfiguration?.GetValue<string>("ClientId");
                 options.CallbackPath = accountConfiguration.GetValue<string>("CallbackPath");
             });
+
+            // Register services
+            services.AddScoped<IUserService, UserService>();
         }
 
         public static void RegisterClientAccountDependencies(this IServiceCollection services, IConfiguration configuration)
