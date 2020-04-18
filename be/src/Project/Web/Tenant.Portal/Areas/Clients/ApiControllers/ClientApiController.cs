@@ -5,7 +5,6 @@ using Foundation.ApiExtensions.Definitions;
 using Foundation.ApiExtensions.Services;
 using Foundation.Localization.Services;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -16,7 +15,6 @@ using Tenant.Portal.Shared.Configurations;
 namespace Tenant.Portal.Areas.Clients.ApiControllers
 {
     [Area("Clients")]
-    [Authorize]
     public class ClientApiController : BaseApiController
     {
         private readonly IApiClientService apiClientService;
