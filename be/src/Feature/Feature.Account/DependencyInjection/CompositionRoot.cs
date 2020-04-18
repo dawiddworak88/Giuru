@@ -1,9 +1,11 @@
 ﻿using Feature.Account.Configurations;
-using Feature.Account.ModelBuilders.SignInForm;
-using Feature.Account.ViewModels.SignInForm;
+using Feature.Account.Services.ProfileServices;
+using Feature.Account.Services.UserServices;
+using Foundation.ApiExtensions.Definitions;
 using Foundation.Database.Areas.Accounts.Entities;
 using Foundation.Database.Shared.Contexts;
-using Foundation.Extensions.ModelBuilders;
+using IdentityServer4;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,8 +18,7 @@ namespace Feature.Account.DependencyInjection
     {
         public static void RegisterAccountDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IModelBuilder<SignInFormViewModel>, SignInFormModelBuilder>();
-
+            // Configure identity server 4
             services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<DatabaseContext>()
             .AddDefaultTokenProviders();
@@ -25,15 +26,17 @@ namespace Feature.Account.DependencyInjection
             var builder = services.AddIdentityServer(options => {
 
                 options.UserInteraction.LoginUrl = "/";
-
                 options.Events.RaiseErrorEvents = true;
                 options.Events.RaiseInformationEvents = true;
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
             })
             .AddInMemoryIdentityResources(IdentityServerConfig.Ids)
+            .AddInMemoryApiResources(IdentityServerConfig.Apis)
             .AddInMemoryClients(IdentityServerConfig.GetClients(configuration))
             .AddAspNetIdentity<ApplicationUser>();
+
+            builder.Services.AddScoped<IProfileService, ProfileService>();
 
             builder.AddDeveloperSigningCredential();
 
@@ -47,6 +50,9 @@ namespace Feature.Account.DependencyInjection
                 options.ClientId = accountConfiguration?.GetValue<string>("ClientId");
                 options.CallbackPath = accountConfiguration.GetValue<string>("CallbackPath");
             });
+
+            // Register services
+            services.AddScoped<IUserService, UserService>();
         }
 
         public static void RegisterClientAccountDependencies(this IServiceCollection services, IConfiguration configuration)
@@ -70,8 +76,28 @@ namespace Feature.Account.DependencyInjection
                 options.ClientSecret = authenticationConfiguration.GetValue<string>("ClientSecret");
                 options.ResponseType = authenticationConfiguration.GetValue<string>("ResponseType");
 
+                options.TokenValidationParameters = new TokenValidationParameters { NameClaimType = "email" };
                 options.SaveTokens = true;
+
+                options.Scope.Add(IdentityServerConstants.StandardScopes.OpenId);
+                options.Scope.Add(IdentityServerConstants.StandardScopes.Profile);
+                options.Scope.Add(IdentityServerConstants.StandardScopes.Email);
+                options.Scope.Add(ApiExtensionsConstants.AllScopes);
             });
+        }
+
+        public static void RegisterApiAccountDependencies(this IServiceCollection services, IConfiguration configuration)
+        {
+            var authenticationConfiguration = configuration.GetSection("Authentication");
+
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.Authority = authenticationConfiguration?.GetValue<string>("Authority");
+                    options.RequireHttpsMetadata = false;
+
+                    options.Audience = ApiExtensionsConstants.AllScopes;
+                });
         }
     }
 }

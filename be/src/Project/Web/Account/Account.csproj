@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>1eb8ba6b-af8f-4419-9b04-91e1dc190e3b</UserSecretsId>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\..\Feature\Feature.Account\Feature.Account.csproj" />
     <ProjectReference Include="..\..\..\Feature\Feature.PageContent\Feature.PageContent.csproj" />
@@ -11,9 +11,10 @@
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Localization\Foundation.Localization.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="wwwroot\dist\" />
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="8.6.2" />
+  </ItemGroup>
 </Project>

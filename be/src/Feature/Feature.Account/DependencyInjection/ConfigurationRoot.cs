@@ -10,9 +10,15 @@ namespace Feature.Account.DependencyInjection
 
             app.Use((context, next) =>
             {
-                context.Request.Scheme = Definitions.Constants.HttpsScheme;
+                context.Request.Scheme = Definitions.AccountConstants.HttpsScheme;
                 return next();
             });
+        }
+
+        public static void UseAuthenticationAuthorization(this IApplicationBuilder app)
+        {
+            app.UseAuthentication();
+            app.UseAuthorization();
         }
     }
 }

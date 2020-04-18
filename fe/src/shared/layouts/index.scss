@@ -15,4 +15,7 @@
 @import "~bulma/sass/layout/_all.sass";
 @import "~bulma/sass/grid/columns.sass";
 
+// Import react toastify
+@import "~react-toastify/dist/ReactToastify.css";
+
 @import "./global.scss";

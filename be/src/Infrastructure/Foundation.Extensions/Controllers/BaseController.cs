@@ -17,6 +17,12 @@ namespace Foundation.Extensions.Controllers
             if (routeValues != null && !routeValues.ContainsKey("culture"))
             {
                 routeValues.Add("culture", CurrentLanguage);
+
+                foreach (var queryItem in this.Request.Query)
+                {
+                    routeValues.Add(queryItem.Key, queryItem.Value);
+                }
+
                 context.Result = new RedirectToRouteResult(routeValues);
             }
         }
