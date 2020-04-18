@@ -1,6 +1,5 @@
 ﻿using Foundation.TenantDatabase.Shared.Contexts;
 using Foundation.TenantDatabase.Shared.Repositories;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Foundation.TenantDatabase.Shared.DependencyInjection

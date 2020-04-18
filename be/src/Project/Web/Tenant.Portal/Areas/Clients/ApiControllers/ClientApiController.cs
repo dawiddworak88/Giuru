@@ -3,7 +3,6 @@ using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.ApiExtensions.Services;
-using Foundation.Localization.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
