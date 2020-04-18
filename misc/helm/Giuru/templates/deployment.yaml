@@ -1,6 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: client-api-deployment
+  labels:
+    app: client-api
+spec:
+  selector:
+    matchLabels:
+      app: client-api
+  template:
+    metadata:
+      labels:
+        app: client-api
+    spec:
+      containers:
+      - name: client-api-container
+        image: {{ .Values.image.registry }}/client-api:{{ .Values.image.tag }}
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: react-ssr-web-deployment
   labels:
     app: react-ssr-web
