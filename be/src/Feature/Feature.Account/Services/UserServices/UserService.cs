@@ -62,5 +62,14 @@ namespace Feature.Account.Services.UserServices
 
             return false;
         }
+
+        public async Task<ApplicationUser> FindByIdAsync(string userId)
+        {
+            var databaseContext = this.databaseContextFactory.CreateDbContext(this.connectionStringsConfiguration.DatabaseContext);
+
+            var userStore = userStoreFactory.CreateUserStore<ApplicationUser>(databaseContext);
+
+            return await userStore.FindByIdAsync(userId, new System.Threading.CancellationToken());
+        }
     }
 }

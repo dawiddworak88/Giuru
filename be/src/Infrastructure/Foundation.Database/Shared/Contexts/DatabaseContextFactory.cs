@@ -8,7 +8,7 @@ namespace Foundation.Database.Shared.Contexts
         {
             var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
 
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.UseSqlServer(connectionString).UseLazyLoadingProxies();
 
             var context = new DatabaseContext(optionsBuilder.Options);
 

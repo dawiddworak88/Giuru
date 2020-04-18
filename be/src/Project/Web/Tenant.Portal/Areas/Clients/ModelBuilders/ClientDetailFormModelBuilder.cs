@@ -40,7 +40,7 @@ namespace Tenant.Portal.Areas.Clients.ModelBuilders
 
             foreach (var language in this.localizationOptions.CurrentValue.SupportedCultures)
             {
-                languages.Add(new LanguageViewModel { Text = language.ToUpperInvariant(), Value = language.ToUpperInvariant() });
+                languages.Add(new LanguageViewModel { Text = language.ToUpperInvariant(), Value = language.ToLowerInvariant() });
             }
 
             return new ClientDetailFormViewModel

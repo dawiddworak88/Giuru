@@ -1,6 +1,5 @@
 ﻿using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tenant.Portal.Areas.Products.ViewModels;
 
