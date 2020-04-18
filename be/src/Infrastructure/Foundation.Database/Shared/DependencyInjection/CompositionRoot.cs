@@ -11,6 +11,7 @@ namespace Foundation.Database.Shared.DependencyInjection
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<DatabaseContextFactory>();
 
             services.AddDbContext<DatabaseContext>(options =>
                 options.UseSqlServer(

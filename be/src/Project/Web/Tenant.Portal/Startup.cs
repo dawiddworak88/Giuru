@@ -87,11 +87,11 @@ namespace Tenant.Portal
             {
                 endpoints.MapControllerRoute(
                             name: "localizedAreaRoute",
-                            pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Orders}/{controller=Order}/{action=Index}/{id?}");
+                            pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Orders}/{controller=Order}/{action=Index}/{id?}").RequireAuthorization();
 
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{area:exists=Orders}/{controller=Order}/{action=Index}/{id?}");
+                    pattern: "{area:exists=Orders}/{controller=Order}/{action=Index}/{id?}").RequireAuthorization();
             });
         }
     }

@@ -58,6 +58,7 @@ namespace Foundation.Database.Areas.Accounts.Seeds
                         NormalizedEmail = tenantSeedConfiguration.GetValue<string>("Email"),
                         PasswordHash = tenantSeedConfiguration.GetValue<string>("PasswordHash"),
                         SecurityStamp = tenantSeedConfiguration.GetValue<string>("SecurityStamp"),
+                        Tenant = context.Tenants.FirstOrDefault(x => x.Key == tenantSeedConfiguration.GetValue<string>("Key")),
                         PhoneNumber = null,
                         PhoneNumberConfirmed = false,
                         TwoFactorEnabled = false,
