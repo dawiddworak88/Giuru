@@ -41,7 +41,7 @@ namespace Client.Api
 
             services.RegisterDatabaseDependencies(this.Configuration);
 
-            services.RegisterTenantDatabaseDependencies(this.Configuration);
+            services.RegisterTenantDatabaseDependencies();
 
             services.RegisterMailingDependencies(this.Configuration);
 

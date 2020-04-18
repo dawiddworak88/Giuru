@@ -19,18 +19,15 @@ namespace Tenant.Portal.Areas.Clients.ApiControllers
     {
         private readonly IApiClientService apiClientService;
         private readonly IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration;
-        private readonly ICultureService cultureService;
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
 
         public ClientApiController(
             IApiClientService apiClientService, 
             IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration,
-            ICultureService cultureService,
             IStringLocalizer<ClientResources> clientLocalizer)
         {
             this.apiClientService = apiClientService;
             this.servicesEndpointsConfiguration = servicesEndpointsConfiguration;
-            this.cultureService = cultureService;
             this.clientLocalizer = clientLocalizer;
         }
 
