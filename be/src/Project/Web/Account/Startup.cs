@@ -13,17 +13,21 @@ using Feature.PageContent.DependencyInjection;
 using Feature.Security.DependencyInjection;
 using Foundation.Account.DependencyInjection;
 using Foundation.GenericRepository.DependencyInjection;
+using Foundation.Extensions.Definitions;
 
 namespace Account
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment currentEnvironment)
         {
             Configuration = configuration;
+            CurrentEnvironment = currentEnvironment;
         }
 
         public IConfiguration Configuration { get; }
+
+        public IWebHostEnvironment CurrentEnvironment { get;  }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -43,7 +47,7 @@ namespace Account
 
             services.RegisterBaseAccountDependencies();
 
-            services.RegisterAccountDependencies(this.Configuration);
+            services.RegisterAccountDependencies(this.Configuration, this.CurrentEnvironment.EnvironmentName != EnvironmentConstants.DevelopmentEnvironmentName);
 
             services.RegisterGeneralDependencies();
 

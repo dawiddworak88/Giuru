@@ -7,16 +7,20 @@ using Foundation.Database.Shared.Contexts;
 using IdentityServer4;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Azure.KeyVault;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Feature.Account.DependencyInjection
 {
     public static class CompositionRoot
     {
-        public static void RegisterAccountDependencies(this IServiceCollection services, IConfiguration configuration)
+        public static void RegisterAccountDependencies(this IServiceCollection services, IConfiguration configuration, bool isProduction)
         {
             // Configure identity server 4
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -38,7 +42,24 @@ namespace Feature.Account.DependencyInjection
 
             builder.Services.AddScoped<IProfileService, ProfileService>();
 
-            builder.AddDeveloperSigningCredential();
+            if (isProduction)
+            {
+                var azureKeyVaultConfiguration = configuration.GetSection("AzureKeyVault");
+
+                var client = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(async (authority, resource, scope) =>
+                {
+                    var context = new AuthenticationContext(authority);
+                    var credentials = new ClientCredential(azureKeyVaultConfiguration.GetValue<string>("ClientId"), azureKeyVaultConfiguration.GetValue<string>("ClientSecret"));
+                    var authenticationResult = await context.AcquireTokenAsync(resource, credentials);
+                    return authenticationResult.AccessToken;
+                }));
+
+                builder.AddSigningCredential(new X509Certificate2(Convert.FromBase64String(client.GetSecretAsync(azureKeyVaultConfiguration.GetValue<string>("GiuruIdentityServer4Certificate")).Result.Value)));
+            }
+            else
+            {
+                builder.AddDeveloperSigningCredential();
+            }
 
             var accountConfiguration = configuration.GetSection("Account")?.GetSection("AzureAd");
 
