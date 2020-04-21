@@ -2538,7 +2538,9 @@ var GlobalHelper_GlobalHelper = /*#__PURE__*/function () {
     value: function initMuiTheme() {
       var theme = styles_createMuiTheme({
         palette: {
-          primary: '#BF202F'
+          primary: {
+            main: '#BF202F'
+          }
         }
       });
       return theme;
@@ -14080,8 +14082,7 @@ function SignInForm(props) {
       values = _useForm.values,
       errors = _useForm.errors,
       dirty = _useForm.dirty,
-      handleOnChange = _useForm.handleOnChange,
-      disable = _useForm.disable;
+      handleOnChange = _useForm.handleOnChange;
 
   var email = values.email,
       password = values.password;
@@ -14095,16 +14096,20 @@ function SignInForm(props) {
     value: props.returnUrl
   }), /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement("h1", {
     className: "subtitle is-4"
-  }, props.signInText)), /*#__PURE__*/react_default.a.createElement(esm_TextField_TextField, {
+  }, props.signInText)), /*#__PURE__*/react_default.a.createElement("div", {
+    className: "field"
+  }, /*#__PURE__*/react_default.a.createElement(esm_TextField_TextField, {
     id: "email",
     name: "email",
     label: props.enterEmailText,
     fullWidth: true,
     value: email,
     onChange: handleOnChange,
-    helperText: errors.email,
+    helperText: errors.email && dirty.email && errors.email,
     error: errors.email && dirty.email
-  }), /*#__PURE__*/react_default.a.createElement(esm_TextField_TextField, {
+  })), /*#__PURE__*/react_default.a.createElement("div", {
+    className: "field"
+  }, /*#__PURE__*/react_default.a.createElement(esm_TextField_TextField, {
     id: "password",
     name: "password",
     type: "password",
@@ -14112,14 +14117,16 @@ function SignInForm(props) {
     fullWidth: true,
     value: password,
     onChange: handleOnChange,
-    helperText: errors.password,
+    helperText: errors.password && dirty.password && errors.password,
     error: errors.password && dirty.password
-  }), /*#__PURE__*/react_default.a.createElement(esm_Button_Button, {
+  })), /*#__PURE__*/react_default.a.createElement("div", {
+    className: "field"
+  }, /*#__PURE__*/react_default.a.createElement(esm_Button_Button, {
+    type: "submit",
     variant: "contained",
     color: "primary",
-    disabled: disable,
     fullWidth: true
-  }, props.signInText));
+  }, props.signInText)));
 }
 
 /* harmony default export */ var SignIn_SignInForm = (SignInForm);

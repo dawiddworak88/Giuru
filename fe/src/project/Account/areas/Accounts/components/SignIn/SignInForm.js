@@ -60,7 +60,7 @@ function SignInForm(props) {
                     value={password} onChange={handleOnChange} helperText={errors.password && dirty.password && errors.password} error={errors.password && dirty.password} />
             </div>
             <div className="field">
-                <Button variant="contained" color="primary" fullWidth={true}>
+                <Button type="submit" variant="contained" color="primary" fullWidth={true}>
                     {props.signInText}
                 </Button>
             </div>
