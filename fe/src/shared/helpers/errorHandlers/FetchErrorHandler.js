@@ -6,7 +6,7 @@ export default class FetchErrorHandler {
 
         if (!response.ok) {
 
-            if (response.status == ResponseStatusConstants.Unauthorized())
+            if (response.status === ResponseStatusConstants.Unauthorized())
             {
                 if (typeof window !== 'undefined') {
 
