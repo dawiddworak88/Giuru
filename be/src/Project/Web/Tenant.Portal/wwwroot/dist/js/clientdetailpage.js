@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 23);
+/******/ 	return __webpack_require__(__webpack_require__.s = 27);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -98,7 +98,7 @@
 if (false) { var throwOnDirectAccess, ReactIs; } else {
   // By explicitly using `prop-types` you are opting into new production behavior.
   // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(15)();
+  module.exports = __webpack_require__(16)();
 }
 
 
@@ -110,7 +110,7 @@ if (false) { var throwOnDirectAccess, ReactIs; } else {
 
 
 if (true) {
-  module.exports = __webpack_require__(11);
+  module.exports = __webpack_require__(12);
 } else {}
 
 
@@ -189,6 +189,30 @@ function _slicedToArray(arr, i) {
 
 /***/ }),
 /* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _extends; });
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -217,12 +241,12 @@ if (true) {
   // DCE check should happen before ReactDOM bundle executes so that
   // DevTools can report bad minification during injection.
   checkDCE();
-  module.exports = __webpack_require__(12);
+  module.exports = __webpack_require__(13);
 } else {}
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -278,7 +302,7 @@ Plus.defaultProps = {
 /* harmony default export */ __webpack_exports__["a"] = (Plus);
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9449,7 +9473,7 @@ plus_square_PlusSquare.defaultProps = {
 };
 /* harmony default export */ var plus_square = (plus_square_PlusSquare);
 // EXTERNAL MODULE: ./node_modules/react-feather/dist/icons/plus.js
-var plus = __webpack_require__(4);
+var plus = __webpack_require__(5);
 
 // CONCATENATED MODULE: ./node_modules/react-feather/dist/icons/pocket.js
 function pocket_extends() { pocket_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return pocket_extends.apply(this, arguments); }
@@ -13968,7 +13992,7 @@ zoom_out_ZoomOut.defaultProps = {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14065,7 +14089,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14093,7 +14117,7 @@ function Footer(props) {
 /* harmony default export */ __webpack_exports__["a"] = (Footer);
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14190,7 +14214,7 @@ function Header(props) {
 /* harmony default export */ var Header_Header = __webpack_exports__["a"] = (Header);
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14200,7 +14224,7 @@ var react = __webpack_require__(1);
 var react_default = /*#__PURE__*/__webpack_require__.n(react);
 
 // EXTERNAL MODULE: ./node_modules/react-feather/dist/index.js + 279 modules
-var dist = __webpack_require__(5);
+var dist = __webpack_require__(6);
 
 // CONCATENATED MODULE: ./src/shared/components/MenuTiles/Tile.js
 
@@ -14241,8 +14265,8 @@ function MenuTiles(props) {
 /* harmony default export */ var MenuTiles_MenuTiles = __webpack_exports__["a"] = (MenuTiles);
 
 /***/ }),
-/* 10 */,
-/* 11 */
+/* 11 */,
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14255,7 +14279,7 @@ function MenuTiles(props) {
  * LICENSE file in the root directory of this source tree.
  */
 
-var l=__webpack_require__(6),n="function"===typeof Symbol&&Symbol.for,p=n?Symbol.for("react.element"):60103,q=n?Symbol.for("react.portal"):60106,r=n?Symbol.for("react.fragment"):60107,t=n?Symbol.for("react.strict_mode"):60108,u=n?Symbol.for("react.profiler"):60114,v=n?Symbol.for("react.provider"):60109,w=n?Symbol.for("react.context"):60110,x=n?Symbol.for("react.forward_ref"):60112,y=n?Symbol.for("react.suspense"):60113,z=n?Symbol.for("react.memo"):60115,A=n?Symbol.for("react.lazy"):
+var l=__webpack_require__(7),n="function"===typeof Symbol&&Symbol.for,p=n?Symbol.for("react.element"):60103,q=n?Symbol.for("react.portal"):60106,r=n?Symbol.for("react.fragment"):60107,t=n?Symbol.for("react.strict_mode"):60108,u=n?Symbol.for("react.profiler"):60114,v=n?Symbol.for("react.provider"):60109,w=n?Symbol.for("react.context"):60110,x=n?Symbol.for("react.forward_ref"):60112,y=n?Symbol.for("react.suspense"):60113,z=n?Symbol.for("react.memo"):60115,A=n?Symbol.for("react.lazy"):
 60116,B="function"===typeof Symbol&&Symbol.iterator;function C(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return"Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}
 var D={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}},E={};function F(a,b,c){this.props=a;this.context=b;this.refs=E;this.updater=c||D}F.prototype.isReactComponent={};F.prototype.setState=function(a,b){if("object"!==typeof a&&"function"!==typeof a&&null!=a)throw Error(C(85));this.updater.enqueueSetState(this,a,b,"setState")};F.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate")};
 function G(){}G.prototype=F.prototype;function H(a,b,c){this.props=a;this.context=b;this.refs=E;this.updater=c||D}var I=H.prototype=new G;I.constructor=H;l(I,F.prototype);I.isPureReactComponent=!0;var J={current:null},K=Object.prototype.hasOwnProperty,L={key:!0,ref:!0,__self:!0,__source:!0};
@@ -14274,7 +14298,7 @@ exports.useLayoutEffect=function(a,b){return Z().useLayoutEffect(a,b)};exports.u
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14290,7 +14314,7 @@ exports.useLayoutEffect=function(a,b){return Z().useLayoutEffect(a,b)};exports.u
 /*
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(1),n=__webpack_require__(6),r=__webpack_require__(13);function u(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return"Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}if(!aa)throw Error(u(227));
+var aa=__webpack_require__(1),n=__webpack_require__(7),r=__webpack_require__(14);function u(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return"Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}if(!aa)throw Error(u(227));
 function ba(a,b,c,d,e,f,g,h,k){var l=Array.prototype.slice.call(arguments,3);try{b.apply(c,l)}catch(m){this.onError(m)}}var da=!1,ea=null,fa=!1,ha=null,ia={onError:function(a){da=!0;ea=a}};function ja(a,b,c,d,e,f,g,h,k){da=!1;ea=null;ba.apply(ia,arguments)}function ka(a,b,c,d,e,f,g,h,k){ja.apply(this,arguments);if(da){if(da){var l=ea;da=!1;ea=null}else throw Error(u(198));fa||(fa=!0,ha=l)}}var la=null,ma=null,na=null;
 function oa(a,b,c){var d=a.type||"unknown-event";a.currentTarget=na(c);ka(d,b,void 0,a);a.currentTarget=null}var pa=null,qa={};
 function ra(){if(pa)for(var a in qa){var b=qa[a],c=pa.indexOf(a);if(!(-1<c))throw Error(u(96,a));if(!sa[c]){if(!b.extractEvents)throw Error(u(97,a));sa[c]=b;c=b.eventTypes;for(var d in c){var e=void 0;var f=c[d],g=b,h=d;if(ta.hasOwnProperty(h))throw Error(u(99,h));ta[h]=f;var k=f.phasedRegistrationNames;if(k){for(e in k)k.hasOwnProperty(e)&&ua(k[e],g,h);e=!0}else f.registrationName?(ua(f.registrationName,g,h),e=!0):e=!1;if(!e)throw Error(u(98,d,a));}}}}
@@ -14573,19 +14597,19 @@ exports.unstable_renderSubtreeIntoContainer=function(a,b,c,d){if(!gk(c))throw Er
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 if (true) {
-  module.exports = __webpack_require__(14);
+  module.exports = __webpack_require__(15);
 } else {}
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14613,7 +14637,7 @@ exports.unstable_shouldYield=function(){var a=exports.unstable_now();V(a);var b=
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14626,7 +14650,7 @@ exports.unstable_shouldYield=function(){var a=exports.unstable_now();V(a);var b=
 
 
 
-var ReactPropTypesSecret = __webpack_require__(16);
+var ReactPropTypesSecret = __webpack_require__(17);
 
 function emptyFunction() {}
 function emptyFunctionWithReset() {}
@@ -14684,7 +14708,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -14703,14 +14727,47 @@ module.exports = ReactPropTypesSecret;
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony default export */ var _unused_webpack_default_export = ("/dist/images/favicon.png");
 
 /***/ }),
-/* 18 */
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _objectWithoutPropertiesLoose; });
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+/***/ }),
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _inheritsLoose; });
+function _inheritsLoose(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+  subClass.__proto__ = superClass;
+}
+
+/***/ }),
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -14767,27 +14824,41 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _assertThisInitialized; });
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+/***/ }),
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(27);
-module.exports = __webpack_require__(24);
+__webpack_require__(31);
+module.exports = __webpack_require__(28);
 
 
 /***/ }),
-/* 24 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 25 */,
-/* 26 */,
-/* 27 */
+/* 29 */,
+/* 30 */,
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14799,17 +14870,17 @@ var react = __webpack_require__(1);
 var react_default = /*#__PURE__*/__webpack_require__.n(react);
 
 // EXTERNAL MODULE: ./node_modules/react-dom/index.js
-var react_dom = __webpack_require__(3);
+var react_dom = __webpack_require__(4);
 var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
 
 // EXTERNAL MODULE: ./src/shared/components/Header/Header.js + 2 modules
-var Header = __webpack_require__(8);
+var Header = __webpack_require__(9);
 
 // EXTERNAL MODULE: ./src/shared/components/Footer/Footer.js
-var Footer = __webpack_require__(7);
+var Footer = __webpack_require__(8);
 
 // EXTERNAL MODULE: ./src/shared/components/MenuTiles/MenuTiles.js + 1 modules
-var MenuTiles = __webpack_require__(9);
+var MenuTiles = __webpack_require__(10);
 
 // CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/defineProperty.js
 function _defineProperty(obj, key, value) {
@@ -15136,51 +15207,21 @@ var EmailValidator_EmailValidator = /*#__PURE__*/function () {
 }();
 
 
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
+var esm_extends = __webpack_require__(3);
 
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
+var objectWithoutPropertiesLoose = __webpack_require__(19);
 
-    return target;
-  };
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
+var inheritsLoose = __webpack_require__(20);
 
-  return _extends.apply(this, arguments);
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
-function _inheritsLoose(subClass, superClass) {
-  subClass.prototype = Object.create(superClass.prototype);
-  subClass.prototype.constructor = subClass;
-  subClass.__proto__ = superClass;
-}
 // EXTERNAL MODULE: ./node_modules/prop-types/index.js
 var prop_types = __webpack_require__(0);
 var prop_types_default = /*#__PURE__*/__webpack_require__.n(prop_types);
 
 // EXTERNAL MODULE: ./node_modules/classnames/index.js
-var classnames = __webpack_require__(18);
+var classnames = __webpack_require__(21);
 var classnames_default = /*#__PURE__*/__webpack_require__.n(classnames);
 
 // CONCATENATED MODULE: ./node_modules/react-transition-group/esm/config.js
@@ -15299,7 +15340,7 @@ var EXITING = 'exiting';
 var Transition_Transition =
 /*#__PURE__*/
 function (_React$Component) {
-  _inheritsLoose(Transition, _React$Component);
+  Object(inheritsLoose["a" /* default */])(Transition, _React$Component);
 
   function Transition(props, context) {
     var _this;
@@ -15559,7 +15600,7 @@ function (_React$Component) {
 
     var _this$props = this.props,
         children = _this$props.children,
-        childProps = _objectWithoutPropertiesLoose(_this$props, ["children"]); // filter props for Transtition
+        childProps = Object(objectWithoutPropertiesLoose["a" /* default */])(_this$props, ["children"]); // filter props for Transtition
 
 
     delete childProps.in;
@@ -15620,14 +15661,9 @@ Transition_Transition.ENTERING = 2;
 Transition_Transition.ENTERED = 3;
 Transition_Transition.EXITING = 4;
 /* harmony default export */ var esm_Transition = (Transition_Transition);
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
+var assertThisInitialized = __webpack_require__(22);
 
-  return self;
-}
 // CONCATENATED MODULE: ./node_modules/react-transition-group/esm/utils/ChildMapping.js
 
 /**
@@ -15810,14 +15846,14 @@ var defaultProps = {
 var TransitionGroup_TransitionGroup =
 /*#__PURE__*/
 function (_React$Component) {
-  _inheritsLoose(TransitionGroup, _React$Component);
+  Object(inheritsLoose["a" /* default */])(TransitionGroup, _React$Component);
 
   function TransitionGroup(props, context) {
     var _this;
 
     _this = _React$Component.call(this, props, context) || this;
 
-    var handleExited = _this.handleExited.bind(_assertThisInitialized(_assertThisInitialized(_this))); // Initial children should all be entering, dependent on appear
+    var handleExited = _this.handleExited.bind(Object(assertThisInitialized["a" /* default */])(Object(assertThisInitialized["a" /* default */])(_this))); // Initial children should all be entering, dependent on appear
 
 
     _this.state = {
@@ -15865,7 +15901,7 @@ function (_React$Component) {
 
     if (this.mounted) {
       this.setState(function (state) {
-        var children = _extends({}, state.children);
+        var children = Object(esm_extends["a" /* default */])({}, state.children);
 
         delete children[child.key];
         return {
@@ -15879,7 +15915,7 @@ function (_React$Component) {
     var _this$props = this.props,
         Component = _this$props.component,
         childFactory = _this$props.childFactory,
-        props = _objectWithoutPropertiesLoose(_this$props, ["component", "childFactory"]);
+        props = Object(objectWithoutPropertiesLoose["a" /* default */])(_this$props, ["component", "childFactory"]);
 
     var contextValue = this.state.contextValue;
     var children = TransitionGroup_values(this.state.children).map(childFactory);
@@ -16035,7 +16071,7 @@ function cssTransition(_ref) {
     var children = _ref2.children,
         position = _ref2.position,
         preventExitTransition = _ref2.preventExitTransition,
-        props = _objectWithoutPropertiesLoose(_ref2, ["children", "position", "preventExitTransition"]);
+        props = Object(objectWithoutPropertiesLoose["a" /* default */])(_ref2, ["children", "position", "preventExitTransition"]);
 
     var enterClassName = appendPosition ? enter + "--" + position : enter;
     var exitClassName = appendPosition ? exit + "--" + position : exit;
@@ -16065,7 +16101,7 @@ function cssTransition(_ref) {
       node.style.animationDuration = exitDuration * 0.001 + "s";
     };
 
-    return react_default.a.createElement(esm_Transition, _extends({}, props, {
+    return react_default.a.createElement(esm_Transition, Object(esm_extends["a" /* default */])({}, props, {
       timeout: preventExitTransition ? 0 : {
         enter: enterDuration,
         exit: exitDuration
@@ -16091,7 +16127,7 @@ function ProgressBar(_ref) {
       progress = _ref.progress,
       rtl = _ref.rtl;
 
-  var style = _extends({}, userStyle, {
+  var style = Object(esm_extends["a" /* default */])({}, userStyle, {
     animationDuration: delay + "ms",
     animationPlayState: isRunning ? 'running' : 'paused',
     opacity: hide ? 0 : 1,
@@ -16100,7 +16136,7 @@ function ProgressBar(_ref) {
 
   var classNames = classnames_default()(RT_NAMESPACE + "__progress-bar", controlledProgress ? RT_NAMESPACE + "__progress-bar--controlled" : RT_NAMESPACE + "__progress-bar--animated", RT_NAMESPACE + "__progress-bar--" + type, (_cx = {}, _cx[RT_NAMESPACE + "__progress-bar--rtl"] = rtl, _cx), className);
   var animationEvent = (_animationEvent = {}, _animationEvent[controlledProgress && progress >= 1 ? 'onTransitionEnd' : 'onAnimationEnd'] = controlledProgress && progress < 1 ? null : closeToast, _animationEvent);
-  return react_default.a.createElement("div", _extends({
+  return react_default.a.createElement("div", Object(esm_extends["a" /* default */])({
     className: classNames,
     style: style
   }, animationEvent));
@@ -16170,7 +16206,7 @@ var iLoveInternetExplorer = canUseDom && /(msie|trident)/i.test(navigator.userAg
 var react_toastify_Toast =
 /*#__PURE__*/
 function (_Component) {
-  _inheritsLoose(Toast, _Component);
+  Object(inheritsLoose["a" /* default */])(Toast, _Component);
 
   function Toast() {
     var _this;
@@ -16417,7 +16453,7 @@ function (_Component) {
       onExited: this.onExitTransitionEnd,
       position: position,
       preventExitTransition: this.state.preventExitTransition
-    }, react_default.a.createElement("div", _extends({
+    }, react_default.a.createElement("div", Object(esm_extends["a" /* default */])({
       onClick: onClick
     }, toastProps, {
       ref: function ref(_ref) {
@@ -16427,11 +16463,11 @@ function (_Component) {
       onTouchStart: this.onDragStart,
       onMouseUp: this.onDragTransitionEnd,
       onTouchEnd: this.onDragTransitionEnd
-    }), react_default.a.createElement("div", _extends({}, this.props.in && {
+    }), react_default.a.createElement("div", Object(esm_extends["a" /* default */])({}, this.props.in && {
       role: role
     }, {
       className: classnames_default()(RT_NAMESPACE + "__toast-body", bodyClassName)
-    }), children), closeButton && closeButton, (autoClose || controlledProgress) && react_default.a.createElement(ProgressBar, _extends({}, updateId && !controlledProgress ? {
+    }), children), closeButton && closeButton, (autoClose || controlledProgress) && react_default.a.createElement(ProgressBar, Object(esm_extends["a" /* default */])({}, updateId && !controlledProgress ? {
       key: "pb-" + updateId
     } : {}, {
       rtl: rtl,
@@ -16536,7 +16572,7 @@ var Flip = cssTransition({
 var react_toastify_ToastContainer =
 /*#__PURE__*/
 function (_Component) {
-  _inheritsLoose(ToastContainer, _Component);
+  Object(inheritsLoose["a" /* default */])(ToastContainer, _Component);
 
   function ToastContainer() {
     var _this;
@@ -16633,7 +16669,7 @@ function (_Component) {
     var _this4 = this;
 
     var delay = _ref2.delay,
-        options = _objectWithoutPropertiesLoose(_ref2, ["delay"]);
+        options = Object(objectWithoutPropertiesLoose["a" /* default */])(_ref2, ["delay"]);
 
     if (!this.canBeRendered(content)) {
       throw new Error("The element you provided cannot be rendered. You provided an element of type " + typeof content);
@@ -16704,7 +16740,7 @@ function (_Component) {
 
     var id = options.id,
         updateId = options.updateId;
-    this.collection = _extends({}, this.collection, (_extends2 = {}, _extends2[id] = {
+    this.collection = Object(esm_extends["a" /* default */])({}, this.collection, (_extends2 = {}, _extends2[id] = {
       options: options,
       content: content,
       position: options.position
@@ -16740,7 +16776,7 @@ function (_Component) {
       toastToRender[position] || (toastToRender[position] = []);
 
       if (_this5.state.toast.indexOf(options.id) !== -1) {
-        toastToRender[position].push(react_default.a.createElement(react_toastify_Toast, _extends({}, options, {
+        toastToRender[position].push(react_default.a.createElement(react_toastify_Toast, Object(esm_extends["a" /* default */])({}, options, {
           isDocumentHidden: _this5.state.isDocumentHidden,
           key: "toast-" + options.key
         }), content));
@@ -16755,11 +16791,11 @@ function (_Component) {
       var disablePointer = toastToRender[position].length === 1 && toastToRender[position][0] === null;
       var props = {
         className: classnames_default()(RT_NAMESPACE + "__toast-container", RT_NAMESPACE + "__toast-container--" + position, (_cx = {}, _cx[RT_NAMESPACE + "__toast-container--rtl"] = _this5.props.rtl, _cx), _this5.parseClassName(className)),
-        style: disablePointer ? _extends({}, style, {
+        style: disablePointer ? Object(esm_extends["a" /* default */])({}, style, {
           pointerEvents: 'none'
-        }) : _extends({}, style)
+        }) : Object(esm_extends["a" /* default */])({}, style)
       };
-      return react_default.a.createElement(esm_TransitionGroup, _extends({}, props, {
+      return react_default.a.createElement(esm_TransitionGroup, Object(esm_extends["a" /* default */])({}, props, {
         key: "container-" + position
       }), toastToRender[position]);
     });
@@ -16954,7 +16990,7 @@ function getToast(toastId, _ref) {
 
 
 function mergeOptions(options, type) {
-  return _extends({}, options, {
+  return Object(esm_extends["a" /* default */])({}, options, {
     type: type,
     toastId: getToastId(options)
   });
@@ -17075,7 +17111,7 @@ react_toastify_toast.update = function (toastId, options) {
       var oldOptions = toast.options,
           oldContent = toast.content;
 
-      var nextOptions = _extends({}, oldOptions, {}, options, {
+      var nextOptions = Object(esm_extends["a" /* default */])({}, oldOptions, {}, options, {
         toastId: options.toastId || toastId
       });
 
@@ -17183,7 +17219,7 @@ var FetchErrorHandler_FetchErrorHandler = /*#__PURE__*/function () {
     key: "handleError",
     value: function handleError(response) {
       if (!response.ok) {
-        if (response.status == ResponseStatusConstants_ResponseStatusConstants.Unauthorized()) {
+        if (response.status === ResponseStatusConstants_ResponseStatusConstants.Unauthorized()) {
           if (typeof window !== 'undefined') {
             window.location.reload();
           }
@@ -17237,6 +17273,7 @@ var ClientDetailService_ClientDetailService = /*#__PURE__*/function () {
 
 
 // CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Clients/components/ClientDetail/ClientDetailForm.js
+
 
 
 
@@ -17364,7 +17401,7 @@ function ClientDetailForm(props) {
 
 /* harmony default export */ var ClientDetail_ClientDetailForm = (ClientDetailForm);
 // EXTERNAL MODULE: ./src/shared/layouts/images/favicon.png
-var favicon = __webpack_require__(17);
+var favicon = __webpack_require__(18);
 
 // CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage.js
 

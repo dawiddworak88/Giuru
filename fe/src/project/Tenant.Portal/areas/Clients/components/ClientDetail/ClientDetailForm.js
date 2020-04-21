@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Button from '@material-ui/core/Button';
 import useForm from '../../../../../../shared/helpers/forms/useForm';
 import EmailValidator from '../../../../../../shared/helpers/validators/EmailValidator';
 import ClientDetailService from '../../services/ClientDetail/ClientDetailService';
