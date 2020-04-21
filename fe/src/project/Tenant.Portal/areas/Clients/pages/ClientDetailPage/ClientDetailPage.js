@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ThemeProvider } from '@material-ui/core/styles';
+import GlobalHelper from '../../../../../../shared/helpers/globals/GlobalHelper';
 import Header from '../../../../../../shared/components/Header/Header';
 import Footer from '../../../../../../shared/components/Footer/Footer';
 import MenuTiles from '../../../../../../shared/components/MenuTiles/MenuTiles';
@@ -11,19 +13,21 @@ import favicon from '../../../../../../shared/layouts/images/favicon.png';
 
 function ClientDetailPage(props) {
   return (
-    <div>
-      <Header {...props.header}></Header>
-      <MenuTiles {...props.menuTiles} />
-      <section className="section section-small-padding client-detail">
-        <h1 className="subtitle is-4">{props.title}</h1>
-        <div className="columns is-desktop">
-            <div className="column is-half">
-                <ClientDetailForm {...props.clientDetailForm} />
-            </div>
-        </div>
-      </section>
-      <Footer {...props.footer}></Footer>
-    </div>
+    <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
+      <div>
+        <Header {...props.header}></Header>
+        <MenuTiles {...props.menuTiles} />
+        <section className="section section-small-padding client-detail">
+          <h1 className="subtitle is-4">{props.title}</h1>
+          <div className="columns is-desktop">
+              <div className="column is-half">
+                  <ClientDetailForm {...props.clientDetailForm} />
+              </div>
+          </div>
+        </section>
+        <Footer {...props.footer}></Footer>
+      </div>
+    </ThemeProvider>
   );
 }
 

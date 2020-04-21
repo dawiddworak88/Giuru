@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText } from '@material-ui/core';
 import useForm from '../../../../../../shared/helpers/forms/useForm';
 import EmailValidator from '../../../../../../shared/helpers/validators/EmailValidator';
 import ClientDetailService from '../../services/ClientDetail/ClientDetailService';
@@ -47,8 +48,7 @@ function ClientDetailForm(props) {
         errors,
         dirty,
         handleOnChange,
-        handleOnSubmit,
-        disable,
+        handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
     const { name, email, language } = values;
@@ -56,36 +56,37 @@ function ClientDetailForm(props) {
     return (
         <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
             <div className="field">
-                <label for="name" className="label">{props.nameLabel}</label>
-                <input type="text" placeholder={props.enterNameText} id="name" name="name" value={name} onChange={handleOnChange} />
-                {errors.name && dirty.name && (
-                <div role="alert" className="error-message has-text-danger is-size-7 has-text-weight-bold">{errors.name}</div>
-                )}
+                <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
+                    value={name} onChange={handleOnChange} helperText={errors.name && dirty.name && errors.name} error={errors.name && dirty.name} />
             </div>
             <div className="field">
-                <label for="email" className="label">{props.emailLabel}</label>
-                <input type="text" placeholder={props.enterEmailText} id="email" name="email" value={email} onChange={handleOnChange} />
-                {errors.email && dirty.email && (
-                <div role="alert" className="error-message has-text-danger is-size-7 has-text-weight-bold">{errors.email}</div>
-                )}
+                <TextField id="email" name="email" label={props.emailLabel} fullWidth={true}
+                    value={email} onChange={handleOnChange} helperText={errors.email && dirty.email && errors.email} error={errors.email && dirty.email} />
             </div>
             <div className="field">
-                <label for="language" className="label">{props.languageLabel}</label>
-                <div className="select is-dark">
-                    <select id="language" name="language" value={language} onChange={handleOnChange}>
+                <FormControl fullWidth={true}>
+                    <InputLabel id="language-label">{props.languageLabel}</InputLabel>
+                    <Select
+                        labelId="language-label"
+                        id="language"
+                        name="language"
+                        value={language}
+                        onChange={handleOnChange}>
                         {props.languages.map(language => {
                             return (
-                                <option key={language.value} value={language.value}>{language.text}</option>
+                                <MenuItem key={language.value} value={language.value}>{language.text}</MenuItem>
                             )
                         })}
-                    </select>
-                </div>
-                {errors.language && dirty.language && (
-                <div role="alert" className="error-message has-text-danger is-size-7 has-text-weight-bold">{errors.language}</div>
-                )}
+                    </Select>
+                    {errors.language && dirty.language && (
+                        <FormHelperText>{errors.language}</FormHelperText>
+                    )}
+                </FormControl>
             </div>
             <div className="field">
-                <button className="button is-primary" type="submit" disabled={disable}>{props.saveText}</button>
+                <Button type="submit" variant="contained" color="primary">
+                    {props.saveText}
+                </Button>
             </div>
         </form>
     );

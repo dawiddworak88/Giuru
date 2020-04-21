@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { TextField, Button } from '@material-ui/core';
 import useForm from '../../../../../../shared/helpers/forms/useForm';
 import EmailValidator from '../../../../../../shared/helpers/validators/EmailValidator';
 import PasswordValidator from '../../../../../../shared/helpers/validators/PasswordValidator';
@@ -39,8 +40,7 @@ function SignInForm(props) {
         values,
         errors,
         dirty,
-        handleOnChange,
-        disable,
+        handleOnChange
     } = useForm(stateSchema, stateValidatorSchema);
 
     const { email, password } = values;
@@ -52,19 +52,17 @@ function SignInForm(props) {
                 <h1 className="subtitle is-4">{props.signInText}</h1>
             </div>
             <div className="field">
-                <input type="text" placeholder={props.enterEmailText} name="email" value={email} onChange={handleOnChange} />
-                {errors.email && dirty.email && (
-                <span role="alert" className="has-text-danger is-size-7 has-text-weight-bold">{errors.email}</span>
-                )}
+                <TextField id="email" name="email" label={props.enterEmailText} fullWidth={true} 
+                    value={email} onChange={handleOnChange} helperText={errors.email && dirty.email && errors.email} error={errors.email && dirty.email} />
             </div>
             <div className="field">
-                <input type="password" placeholder={props.enterPasswordText} name="password" value={password} onChange={handleOnChange} />
-                {errors.password && dirty.password && (
-                <span role="alert" className="has-text-danger is-size-7 has-text-weight-bold">{errors.password}</span>
-                )}
+                <TextField id="password" name="password" type="password" label={props.enterPasswordText} fullWidth={true} 
+                    value={password} onChange={handleOnChange} helperText={errors.password && dirty.password && errors.password} error={errors.password && dirty.password} />
             </div>
             <div className="field">
-                <button className="button is-primary is-fullwidth" type="submit" disabled={disable}>{props.signInText}</button>
+                <Button type="submit" variant="contained" color="primary" fullWidth={true}>
+                    {props.signInText}
+                </Button>
             </div>
         </form>
     );
