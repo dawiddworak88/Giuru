@@ -14,6 +14,6 @@ namespace Foundation.TenantDatabase.Shared.Entities
         public string UiSchema { get; set; }
 
         [Required]
-        public string Language { get; set; }
+        public int Version { get; set; }
     }
 }

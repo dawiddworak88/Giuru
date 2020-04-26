@@ -66,9 +66,9 @@ namespace Foundation.TenantDatabase.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
+                    FileName = table.Column<string>(nullable: false),
                     Url = table.Column<string>(nullable: false),
-                    DisplayName = table.Column<string>(nullable: true),
+                    DisplayName = table.Column<string>(nullable: false),
                     Size = table.Column<int>(nullable: false),
                     Width = table.Column<int>(nullable: false),
                     Height = table.Column<int>(nullable: false),
@@ -184,7 +184,7 @@ namespace Foundation.TenantDatabase.Migrations
                     ItemId = table.Column<Guid>(nullable: false),
                     JsonSchema = table.Column<string>(nullable: false),
                     UiSchema = table.Column<string>(nullable: true),
-                    Language = table.Column<string>(nullable: false)
+                    Version = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -208,13 +208,39 @@ namespace Foundation.TenantDatabase.Migrations
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     ItemId = table.Column<Guid>(nullable: false),
-                    Sku = table.Column<string>(nullable: true)
+                    Sku = table.Column<string>(nullable: true),
+                    Version = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Products_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Translations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    ItemId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Language = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Translations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Translations_Items_ItemId",
                         column: x => x.ItemId,
                         principalTable: "Items",
                         principalColumn: "Id",
@@ -362,38 +388,6 @@ namespace Foundation.TenantDatabase.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Translations",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    LastModifiedBy = table.Column<string>(nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    ItemId = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Language = table.Column<string>(nullable: false),
-                    ProductId = table.Column<Guid>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Translations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Translations_Items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Translations_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -482,11 +476,6 @@ namespace Foundation.TenantDatabase.Migrations
                 name: "IX_Translations_ItemId",
                 table: "Translations",
                 column: "ItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Translations_ProductId",
-                table: "Translations",
-                column: "ProductId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -516,6 +505,9 @@ namespace Foundation.TenantDatabase.Migrations
                 name: "MetadataFieldValues");
 
             migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
                 name: "Translations");
 
             migrationBuilder.DropTable(
@@ -529,9 +521,6 @@ namespace Foundation.TenantDatabase.Migrations
 
             migrationBuilder.DropTable(
                 name: "MetadataItems");
-
-            migrationBuilder.DropTable(
-                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "Clients");

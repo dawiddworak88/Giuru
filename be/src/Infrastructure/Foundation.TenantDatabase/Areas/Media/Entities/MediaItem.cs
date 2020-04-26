@@ -6,11 +6,12 @@ namespace Foundation.TenantDatabase.Areas.Media.Entities
     public class MediaItem : Entity
     {
         [Required]
-        public string Name { get; set; }
+        public string FileName { get; set; }
 
         [Required]
         public string Url { get; set; }
 
+        [Required]
         public string DisplayName { get; set; }
 
         [Required]

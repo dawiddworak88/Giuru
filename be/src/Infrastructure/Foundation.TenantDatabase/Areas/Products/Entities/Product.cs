@@ -1,6 +1,5 @@
 ﻿using Foundation.GenericRepository.Entities;
 using Foundation.TenantDatabase.Shared.Entities;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Foundation.TenantDatabase.Areas.Products.Entities
@@ -12,6 +11,7 @@ namespace Foundation.TenantDatabase.Areas.Products.Entities
 
         public string Sku { get; set; }
 
-        public virtual IEnumerable<Translation> Translations { get; set; }
+        [Required]
+        public int Version { get; set; }
     }
 }
