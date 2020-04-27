@@ -12,7 +12,7 @@ namespace Feature.Client.Validators
             RuleFor(x => x.TenantId).NotNull().NotEqual(Guid.Empty);
             RuleFor(x => x.Name).NotNull().NotEmpty();
             RuleFor(x => x.Email).EmailAddress();
-            RuleFor(x => x.Language).NotNull().NotEmpty();
+            RuleFor(x => x.ClientPreferredLanguage).NotNull().NotEmpty();
         }
     }
 }

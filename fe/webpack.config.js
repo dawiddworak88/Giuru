@@ -187,7 +187,8 @@ var tenantPortalBrowserConfig = {
         orderpage: ["./src/project/Tenant.Portal/areas/Orders/pages/OrderPage/index.js", "./src/project/Tenant.Portal/areas/Orders/pages/OrderPage/OrderPage.scss"],
         clientpage: ["./src/project/Tenant.Portal/areas/Clients/pages/ClientPage/index.js", "./src/project/Tenant.Portal/areas/Clients/pages/ClientPage/ClientPage.scss"],
         clientdetailpage: ["./src/project/Tenant.Portal/areas/Clients/pages/ClientDetailPage/index.js", "./src/project/Tenant.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage.scss"],
-        productpage: ["./src/project/Tenant.Portal/areas/Products/pages/ProductPage/index.js", "./src/project/Tenant.Portal/areas/Products/pages/ProductPage/ProductPage.scss"]
+        productpage: ["./src/project/Tenant.Portal/areas/Products/pages/ProductPage/index.js", "./src/project/Tenant.Portal/areas/Products/pages/ProductPage/ProductPage.scss"],
+        productdetailpage: ["./src/project/Tenant.Portal/areas/Products/pages/ProductDetailPage/index.js", "./src/project/Tenant.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage.scss"]
     },
     output: {
         publicPath: path.resolve(__dirname, "../be/src/Project/Web/Tenant.Portal/wwwroot/dist/js"),

@@ -84,7 +84,7 @@ namespace Feature.Client.Services
 
                     var client = new Foundation.TenantDatabase.Areas.Clients.Entities.Client
                     {
-                        Language = model.Language,
+                        Language = model.ClientPreferredLanguage,
                         Name = model.Name,
                         Host = host,
                         IsActive = true,
@@ -96,7 +96,7 @@ namespace Feature.Client.Services
 
                     var clientRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Clients.Entities.Client>(tenant.DatabaseConnectionString);
 
-                    this.cultureService.SetCulture(model.Language.ToLowerInvariant());
+                    this.cultureService.SetCulture(model.ClientPreferredLanguage.ToLowerInvariant());
 
                     if (!clientRepository.Get(x => x.Host == host).Any())
                     {

@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 40);
+/******/ 	return __webpack_require__(__webpack_require__.s = 47);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -14710,32 +14710,7 @@ module.exports = ReactPropTypesSecret;
 /* unused harmony default export */ var _unused_webpack_default_export = ("/dist/images/favicon.png");
 
 /***/ }),
-/* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_feather__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5);
-
-
-
-function Catalog(props) {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("section", {
-    className: "section section-small-padding catalog"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
-    className: "subtitle is-4"
-  }, props.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, props.showNew && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-    href: props.newUrl,
-    class: "button is-primary"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-    className: "icon"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_feather__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, props.newText))));
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (Catalog);
-
-/***/ }),
+/* 18 */,
 /* 19 */,
 /* 20 */,
 /* 21 */,
@@ -14757,30 +14732,32 @@ function Catalog(props) {
 /* 37 */,
 /* 38 */,
 /* 39 */,
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(51);
-module.exports = __webpack_require__(41);
-
-
-/***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
+/* 40 */,
+/* 41 */,
 /* 42 */,
 /* 43 */,
 /* 44 */,
 /* 45 */,
 /* 46 */,
-/* 47 */,
-/* 48 */,
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(53);
+module.exports = __webpack_require__(48);
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
 /* 49 */,
 /* 50 */,
-/* 51 */
+/* 51 */,
+/* 52 */,
+/* 53 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14804,14 +14781,10 @@ var Footer = __webpack_require__(8);
 // EXTERNAL MODULE: ./src/shared/components/MenuTiles/MenuTiles.js + 1 modules
 var MenuTiles = __webpack_require__(10);
 
-// EXTERNAL MODULE: ./src/shared/components/Catalog/Catalog.js
-var Catalog = __webpack_require__(18);
-
 // EXTERNAL MODULE: ./src/shared/layouts/images/favicon.png
 var favicon = __webpack_require__(17);
 
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Clients/pages/ClientPage/ClientPage.js
-
+// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage.js
 
 
 
@@ -14821,16 +14794,16 @@ var favicon = __webpack_require__(17);
 
 /* eslint-enable no-unused-vars */
 
-function ClientPage(props) {
-  return /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement(Header["a" /* default */], props.header), /*#__PURE__*/react_default.a.createElement(MenuTiles["a" /* default */], props.menuTiles), /*#__PURE__*/react_default.a.createElement(Catalog["a" /* default */], props.catalog), /*#__PURE__*/react_default.a.createElement(Footer["a" /* default */], props.footer));
+function ProductDetailPage(props) {
+  return /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement(Header["a" /* default */], props.header), /*#__PURE__*/react_default.a.createElement(MenuTiles["a" /* default */], props.menuTiles), /*#__PURE__*/react_default.a.createElement(Footer["a" /* default */], props.footer));
 }
 
-/* harmony default export */ var ClientPage_ClientPage = (ClientPage);
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Clients/pages/ClientPage/index.js
+/* harmony default export */ var ProductDetailPage_ProductDetailPage = (ProductDetailPage);
+// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Products/pages/ProductDetailPage/index.js
 
 
 
-react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(ClientPage_ClientPage, window.data), document.getElementById('root'));
+react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(ProductDetailPage_ProductDetailPage, window.data), document.getElementById('root'));
 
 /***/ })
 /******/ ]);
