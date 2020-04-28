@@ -10,8 +10,5 @@ namespace Foundation.TenantDatabase.Areas.Products.Entities
         public Item Item { get; set; }
 
         public string Sku { get; set; }
-
-        [Required]
-        public int Version { get; set; }
     }
 }

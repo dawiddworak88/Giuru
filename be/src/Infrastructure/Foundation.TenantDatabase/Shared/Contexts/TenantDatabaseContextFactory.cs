@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Foundation.TenantDatabase.Shared.Contexts
@@ -13,9 +14,12 @@ namespace Foundation.TenantDatabase.Shared.Contexts
 
             var context = new TenantDatabaseContext(optionsBuilder.Options);
 
-            await context.Database.MigrateAsync();
+            if ((await context.Database.GetPendingMigrationsAsync()).Any())
+            {
+                await context.Database.MigrateAsync();
 
-            context.EnsureSeeded();
+                context.EnsureSeeded();
+            }
 
             return context;
         }

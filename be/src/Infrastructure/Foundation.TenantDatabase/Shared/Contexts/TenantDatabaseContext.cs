@@ -21,8 +21,8 @@ namespace Foundation.TenantDatabase.Shared.Contexts
         public DbSet<LinkMediaItem> LinkMediaItems { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Translation> Translations { get; set; }
-        public DbSet<MetadataItem> MetadataItems { get; set; }
-        public DbSet<MetadataFieldValue> MetadataFieldValues { get; set; }
-        public DbSet<ListItemValue> ListItemValues { get; set; }
+        public DbSet<Schema> Schemas { get; set; }
+        public DbSet<SchemaFieldValue> SchemaFieldValues { get; set; }
+        public DbSet<Taxonomy> Taxonomy { get; set; }
     }
 }

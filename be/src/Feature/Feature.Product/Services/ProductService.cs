@@ -45,8 +45,7 @@ namespace Feature.Product.Services
                     var productRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Products.Entities.Product>(tenant.DatabaseConnectionString);
                     
                     var product = new Foundation.TenantDatabase.Areas.Products.Entities.Product
-                    { 
-                        Version = 1
+                    {
                     };
 
                     await productRepository.CreateAsync(product);

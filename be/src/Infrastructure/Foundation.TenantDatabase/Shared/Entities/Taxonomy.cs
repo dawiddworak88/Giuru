@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Foundation.TenantDatabase.Shared.Entities
 {
-    public class ListItemValue : Entity
+    public class Taxonomy : Entity
     {
-        public virtual Item ListItem { get; set; }
+        public virtual Item TaxonomyItem { get; set; }
 
         public virtual Item ValueItem { get; set; }
 
@@ -14,6 +14,6 @@ namespace Foundation.TenantDatabase.Shared.Entities
         public int Order { get; set; }
 
         [ForeignKey("ParentId")]
-        public virtual ListItemValue Parent { get; set; }
+        public virtual Taxonomy Parent { get; set; }
     }
 }

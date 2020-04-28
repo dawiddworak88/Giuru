@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Foundation.TenantDatabase.Shared.Entities
 {
-    public class MetadataFieldValue : Entity
+    public class SchemaFieldValue : Entity
     {
         [Required]
-        public MetadataItem MetadataItem { get; set; }
+        public Schema Schema { get; set; }
 
         [Required]
         public string FieldName { get; set; }

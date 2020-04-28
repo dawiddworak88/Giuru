@@ -9,7 +9,7 @@ namespace Foundation.TenantDatabase.Shared.Entities
         public virtual Item Item { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string Value { get; set; }
 
         [Required]
         public string Language { get; set; }

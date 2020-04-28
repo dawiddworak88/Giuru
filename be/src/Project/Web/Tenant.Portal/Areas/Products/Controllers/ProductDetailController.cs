@@ -35,7 +35,7 @@ namespace Tenant.Portal.Areas.Products.Controllers
         {
             var apiRequest = new ApiRequest<ProductRequestModel>
             {
-                Data = productRequestModel,
+                Data = null,
                 AccessToken = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 EndpointAddress = this.servicesEndpointsConfiguration.CurrentValue.ClientApi.Host + this.servicesEndpointsConfiguration.CurrentValue.ClientApi.Endpoints.Client
             };
@@ -44,7 +44,7 @@ namespace Tenant.Portal.Areas.Products.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                return this.RedirectToAction(nameof(Index), new { id = response.Product.Id  });
+                return this.RedirectToAction(nameof(Index), new {});
             }
 
             return this.BadRequest();
