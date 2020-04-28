@@ -404,7 +404,7 @@ namespace Foundation.TenantDatabase.Migrations
 
                     b.HasIndex("ValueItemId");
 
-                    b.ToTable("Taxonomy");
+                    b.ToTable("Taxonomies");
                 });
 
             modelBuilder.Entity("Foundation.TenantDatabase.Shared.Entities.Translation", b =>

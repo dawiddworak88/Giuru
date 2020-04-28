@@ -19,7 +19,7 @@ namespace Foundation.TenantDatabase.Shared.Contexts
 
                 var enTranslationProductEntityType = EntitySeedHelper.SeedEntity(new Translation { Item = productItemEntityType, Language = Languages.English, Value = "Product" });
                 var deTranslationProductEntityType = EntitySeedHelper.SeedEntity(new Translation { Item = productItemEntityType, Language = Languages.German, Value = "Produkt" });
-                var plTranslationProductEntityType = EntitySeedHelper.SeedEntity(new Translation { Item = productItemEntityType, Language = Languages.German, Value = "Produkt" });
+                var plTranslationProductEntityType = EntitySeedHelper.SeedEntity(new Translation { Item = productItemEntityType, Language = Languages.Polish, Value = "Produkt" });
 
                 context.Translations.Add(enTranslationProductEntityType);
                 context.Translations.Add(deTranslationProductEntityType);

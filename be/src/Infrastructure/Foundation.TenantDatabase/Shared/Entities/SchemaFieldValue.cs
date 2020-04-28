@@ -6,7 +6,7 @@ namespace Foundation.TenantDatabase.Shared.Entities
     public class SchemaFieldValue : Entity
     {
         [Required]
-        public Schema Schema { get; set; }
+        public virtual Schema Schema { get; set; }
 
         [Required]
         public string FieldName { get; set; }

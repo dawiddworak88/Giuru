@@ -190,7 +190,7 @@ namespace Foundation.TenantDatabase.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Taxonomy",
+                name: "Taxonomies",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -206,21 +206,21 @@ namespace Foundation.TenantDatabase.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Taxonomy", x => x.Id);
+                    table.PrimaryKey("PK_Taxonomies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Taxonomy_Taxonomy_ParentId",
+                        name: "FK_Taxonomies_Taxonomies_ParentId",
                         column: x => x.ParentId,
-                        principalTable: "Taxonomy",
+                        principalTable: "Taxonomies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Taxonomy_Items_TaxonomyItemId",
+                        name: "FK_Taxonomies_Items_TaxonomyItemId",
                         column: x => x.TaxonomyItemId,
                         principalTable: "Items",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Taxonomy_Items_ValueItemId",
+                        name: "FK_Taxonomies_Items_ValueItemId",
                         column: x => x.ValueItemId,
                         principalTable: "Items",
                         principalColumn: "Id",
@@ -468,18 +468,18 @@ namespace Foundation.TenantDatabase.Migrations
                 column: "ItemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Taxonomy_ParentId",
-                table: "Taxonomy",
+                name: "IX_Taxonomies_ParentId",
+                table: "Taxonomies",
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Taxonomy_TaxonomyItemId",
-                table: "Taxonomy",
+                name: "IX_Taxonomies_TaxonomyItemId",
+                table: "Taxonomies",
                 column: "TaxonomyItemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Taxonomy_ValueItemId",
-                table: "Taxonomy",
+                name: "IX_Taxonomies_ValueItemId",
+                table: "Taxonomies",
                 column: "ValueItemId");
 
             migrationBuilder.CreateIndex(
@@ -515,7 +515,7 @@ namespace Foundation.TenantDatabase.Migrations
                 name: "SchemaFieldValues");
 
             migrationBuilder.DropTable(
-                name: "Taxonomy");
+                name: "Taxonomies");
 
             migrationBuilder.DropTable(
                 name: "Translations");

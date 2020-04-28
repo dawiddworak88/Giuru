@@ -23,6 +23,6 @@ namespace Foundation.TenantDatabase.Shared.Contexts
         public DbSet<Translation> Translations { get; set; }
         public DbSet<Schema> Schemas { get; set; }
         public DbSet<SchemaFieldValue> SchemaFieldValues { get; set; }
-        public DbSet<Taxonomy> Taxonomy { get; set; }
+        public DbSet<Taxonomy> Taxonomies { get; set; }
     }
 }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foundation.TenantDatabase.Migrations
 {
     [DbContext(typeof(TenantDatabaseContext))]
-    [Migration("20200428190328_Initial")]
+    [Migration("20200428194510_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -406,7 +406,7 @@ namespace Foundation.TenantDatabase.Migrations
 
                     b.HasIndex("ValueItemId");
 
-                    b.ToTable("Taxonomy");
+                    b.ToTable("Taxonomies");
                 });
 
             modelBuilder.Entity("Foundation.TenantDatabase.Shared.Entities.Translation", b =>
