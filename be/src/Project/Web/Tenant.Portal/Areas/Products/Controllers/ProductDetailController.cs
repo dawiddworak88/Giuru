@@ -35,16 +35,16 @@ namespace Tenant.Portal.Areas.Products.Controllers
         {
             var apiRequest = new ApiRequest<ProductRequestModel>
             {
-                Data = null,
+                Data = new ProductRequestModel(),
                 AccessToken = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                EndpointAddress = this.servicesEndpointsConfiguration.CurrentValue.ClientApi.Host + this.servicesEndpointsConfiguration.CurrentValue.ClientApi.Endpoints.Client
+                EndpointAddress = this.servicesEndpointsConfiguration.CurrentValue.ProductApi.Host + this.servicesEndpointsConfiguration.CurrentValue.ProductApi.Endpoints.Product
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<ProductRequestModel>, ProductRequestModel, object>(apiRequest);
+            var response = await this.apiClientService.PostAsync<ApiRequest<ProductRequestModel>, ProductRequestModel, Guid>(apiRequest);
 
             if (response.IsSuccessStatusCode)
             {
-                return this.RedirectToAction(nameof(Index), new {});
+                return this.RedirectToAction(nameof(Index), new { id = response.Data });
             }
 
             return this.BadRequest();

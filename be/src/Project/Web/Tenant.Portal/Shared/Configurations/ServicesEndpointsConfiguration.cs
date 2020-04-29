@@ -1,4 +1,5 @@
 ﻿using Tenant.Portal.Areas.Clients.Controllers.Configurations;
+using Tenant.Portal.Areas.Products.Configurations;
 
 namespace Tenant.Portal.Shared.Configurations
 {
@@ -7,5 +8,7 @@ namespace Tenant.Portal.Shared.Configurations
         public string AccountEndpoint { get; set; }
 
         public ClientApiConfiguration ClientApi { get; set; }
+
+        public ProductApiConfiguration ProductApi { get; set; }
     }
 }
