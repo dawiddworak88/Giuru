@@ -9,6 +9,8 @@ namespace Foundation.TenantDatabase.Areas.Products.Entities
         [Required]
         public virtual Item Item { get; set; }
 
+        public virtual Schema Schema { get; set; }
+
         public string Sku { get; set; }
     }
 }

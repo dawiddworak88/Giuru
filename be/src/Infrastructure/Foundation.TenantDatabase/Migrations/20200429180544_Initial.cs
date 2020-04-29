@@ -134,7 +134,7 @@ namespace Foundation.TenantDatabase.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
+                name: "SchemaFieldValues",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -144,13 +144,14 @@ namespace Foundation.TenantDatabase.Migrations
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     ItemId = table.Column<Guid>(nullable: false),
-                    Sku = table.Column<string>(nullable: true)
+                    FieldName = table.Column<string>(nullable: false),
+                    Value = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.PrimaryKey("PK_SchemaFieldValues", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_Items_ItemId",
+                        name: "FK_SchemaFieldValues_Items_ItemId",
                         column: x => x.ItemId,
                         principalTable: "Items",
                         principalColumn: "Id",
@@ -368,7 +369,7 @@ namespace Foundation.TenantDatabase.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SchemaFieldValues",
+                name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -377,20 +378,25 @@ namespace Foundation.TenantDatabase.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    SchemaId = table.Column<Guid>(nullable: false),
-                    FieldName = table.Column<string>(nullable: false),
-                    Value = table.Column<string>(nullable: false),
-                    TextValue = table.Column<string>(nullable: false)
+                    ItemId = table.Column<Guid>(nullable: false),
+                    SchemaId = table.Column<Guid>(nullable: true),
+                    Sku = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SchemaFieldValues", x => x.Id);
+                    table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SchemaFieldValues_Schemas_SchemaId",
+                        name: "FK_Products_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Products_Schemas_SchemaId",
                         column: x => x.SchemaId,
                         principalTable: "Schemas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -453,9 +459,14 @@ namespace Foundation.TenantDatabase.Migrations
                 column: "ItemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SchemaFieldValues_SchemaId",
-                table: "SchemaFieldValues",
+                name: "IX_Products_SchemaId",
+                table: "Products",
                 column: "SchemaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SchemaFieldValues_ItemId",
+                table: "SchemaFieldValues",
+                column: "ItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Schemas_EntityTypeId",

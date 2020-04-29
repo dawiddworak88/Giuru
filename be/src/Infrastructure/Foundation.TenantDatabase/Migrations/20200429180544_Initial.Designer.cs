@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foundation.TenantDatabase.Migrations
 {
     [DbContext(typeof(TenantDatabaseContext))]
-    [Migration("20200428194510_Initial")]
+    [Migration("20200429180544_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -243,12 +243,17 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("SchemaId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Sku")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ItemId");
+
+                    b.HasIndex("SchemaId");
 
                     b.ToTable("Products");
                 });
@@ -341,18 +346,14 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("ItemId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid>("SchemaId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("TextValue")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -360,7 +361,7 @@ namespace Foundation.TenantDatabase.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SchemaId");
+                    b.HasIndex("ItemId");
 
                     b.ToTable("SchemaFieldValues");
                 });
@@ -604,6 +605,10 @@ namespace Foundation.TenantDatabase.Migrations
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Foundation.TenantDatabase.Shared.Entities.Schema", "Schema")
+                        .WithMany()
+                        .HasForeignKey("SchemaId");
                 });
 
             modelBuilder.Entity("Foundation.TenantDatabase.Shared.Entities.Schema", b =>
@@ -621,9 +626,9 @@ namespace Foundation.TenantDatabase.Migrations
 
             modelBuilder.Entity("Foundation.TenantDatabase.Shared.Entities.SchemaFieldValue", b =>
                 {
-                    b.HasOne("Foundation.TenantDatabase.Shared.Entities.Schema", "Schema")
+                    b.HasOne("Foundation.TenantDatabase.Shared.Entities.Item", "Item")
                         .WithMany()
-                        .HasForeignKey("SchemaId")
+                        .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
