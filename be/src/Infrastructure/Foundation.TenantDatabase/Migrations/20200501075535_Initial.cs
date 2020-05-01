@@ -116,7 +116,7 @@ namespace Foundation.TenantDatabase.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    EntityId = table.Column<Guid>(nullable: false),
+                    Key = table.Column<string>(nullable: false),
                     Value = table.Column<string>(nullable: false),
                     Language = table.Column<string>(nullable: false)
                 },

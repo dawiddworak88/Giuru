@@ -18,9 +18,9 @@ namespace Foundation.TenantDatabase.Shared.Contexts
 
                 context.EntityTypes.Add(productItemEntityType);
 
-                var enTranslationProductEntityType = EntitySeedHelper.SeedEntity(new Translation { EntityId = productItemEntityType.Id, Language = LanguageConstants.English, Value = "Product" });
-                var deTranslationProductEntityType = EntitySeedHelper.SeedEntity(new Translation { EntityId = productItemEntityType.Id, Language = LanguageConstants.German, Value = "Produkt" });
-                var plTranslationProductEntityType = EntitySeedHelper.SeedEntity(new Translation { EntityId = productItemEntityType.Id, Language = LanguageConstants.Polish, Value = "Produkt" });
+                var enTranslationProductEntityType = EntitySeedHelper.SeedEntity(new Translation { Key = productItemEntityType.Id.ToString(), Language = LanguageConstants.English, Value = "Product" });
+                var deTranslationProductEntityType = EntitySeedHelper.SeedEntity(new Translation { Key = productItemEntityType.Id.ToString(), Language = LanguageConstants.German, Value = "Produkt" });
+                var plTranslationProductEntityType = EntitySeedHelper.SeedEntity(new Translation { Key = productItemEntityType.Id.ToString(), Language = LanguageConstants.Polish, Value = "Produkt" });
 
                 context.Translations.Add(enTranslationProductEntityType);
                 context.Translations.Add(deTranslationProductEntityType);
