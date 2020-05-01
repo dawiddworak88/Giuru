@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 40);
+/******/ 	return __webpack_require__(__webpack_require__.s = 41);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -149,8 +149,7 @@ if (true) {
 
 
 /***/ }),
-/* 3 */,
-/* 4 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -223,6 +222,7 @@ function _slicedToArray(arr, i) {
 }
 
 /***/ }),
+/* 4 */,
 /* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -14100,7 +14100,7 @@ function Footer(props) {
 "use strict";
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 5 modules
-var slicedToArray = __webpack_require__(4);
+var slicedToArray = __webpack_require__(3);
 
 // EXTERNAL MODULE: ./node_modules/react/index.js
 var react = __webpack_require__(0);
@@ -14757,21 +14757,21 @@ function Catalog(props) {
 /* 37 */,
 /* 38 */,
 /* 39 */,
-/* 40 */
+/* 40 */,
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(51);
-module.exports = __webpack_require__(41);
+__webpack_require__(52);
+module.exports = __webpack_require__(42);
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 42 */,
 /* 43 */,
 /* 44 */,
 /* 45 */,
@@ -14780,7 +14780,8 @@ module.exports = __webpack_require__(41);
 /* 48 */,
 /* 49 */,
 /* 50 */,
-/* 51 */
+/* 51 */,
+/* 52 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 42);
+/******/ 	return __webpack_require__(__webpack_require__.s = 43);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -149,8 +149,7 @@ if (true) {
 
 
 /***/ }),
-/* 3 */,
-/* 4 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -223,6 +222,7 @@ function _slicedToArray(arr, i) {
 }
 
 /***/ }),
+/* 4 */,
 /* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -14100,7 +14100,7 @@ function Footer(props) {
 "use strict";
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 5 modules
-var slicedToArray = __webpack_require__(4);
+var slicedToArray = __webpack_require__(3);
 
 // EXTERNAL MODULE: ./node_modules/react/index.js
 var react = __webpack_require__(0);
@@ -14827,7 +14827,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 if (true) {
-  module.exports = __webpack_require__(43);
+  module.exports = __webpack_require__(44);
 } else {}
 
 
@@ -15002,15 +15002,16 @@ module.exports = hoistNonReactStatics;
 /* 39 */,
 /* 40 */,
 /* 41 */,
-/* 42 */
+/* 42 */,
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(49);
-module.exports = __webpack_require__(44);
+__webpack_require__(50);
+module.exports = __webpack_require__(45);
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15032,17 +15033,17 @@ exports.isValidElementType=function(a){return"string"===typeof a||"function"===t
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 45 */,
 /* 46 */,
 /* 47 */,
 /* 48 */,
-/* 49 */
+/* 49 */,
+/* 50 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16630,6 +16631,99 @@ var Footer = __webpack_require__(8);
 // EXTERNAL MODULE: ./src/shared/components/MenuTiles/MenuTiles.js + 1 modules
 var MenuTiles = __webpack_require__(10);
 
+// EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 5 modules
+var slicedToArray = __webpack_require__(3);
+
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/defineProperty.js
+function defineProperty_defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/objectSpread2.js
+
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        defineProperty_defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+// CONCATENATED MODULE: ./src/shared/reducers/Reducer.js
+
+
+var Reducer_Reducer = function Reducer(state, action) {
+  switch (action.type) {
+    case 'SET_IS_LOADING':
+      return _objectSpread2({}, state, {
+        isLoading: action.payload
+      });
+
+    default:
+      return state;
+  }
+};
+
+/* harmony default export */ var reducers_Reducer = (Reducer_Reducer);
+// CONCATENATED MODULE: ./src/shared/stores/Store.js
+
+
+
+var initialState = {
+  isLoading: false
+};
+
+var Store_Store = function Store(_ref) {
+  var children = _ref.children;
+
+  var _useReducer = Object(react["useReducer"])(reducers_Reducer, initialState),
+      _useReducer2 = Object(slicedToArray["a" /* default */])(_useReducer, 2),
+      state = _useReducer2[0],
+      dispatch = _useReducer2[1];
+
+  return /*#__PURE__*/react_default.a.createElement(Context.Provider, {
+    value: [state, dispatch]
+  }, children);
+};
+
+var Context = Object(react["createContext"])(initialState);
+/* harmony default export */ var stores_Store = (Store_Store);
 // CONCATENATED MODULE: ./node_modules/clsx/dist/clsx.m.js
 function toVal(mix) {
 	var k, y, str='';
@@ -16669,37 +16763,6 @@ function toVal(mix) {
 	return str;
 });
 
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/FormControl/formControlState.js
-function formControlState(_ref) {
-  var props = _ref.props,
-      states = _ref.states,
-      muiFormControl = _ref.muiFormControl;
-  return states.reduce(function (acc, state) {
-    acc[state] = props[state];
-
-    if (muiFormControl) {
-      if (typeof props[state] === 'undefined') {
-        acc[state] = muiFormControl[state];
-      }
-    }
-
-    return acc;
-  }, {});
-}
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/FormControl/FormControlContext.js
-
-/**
- * @ignore - internal component.
- */
-
-var FormControlContext = react["createContext"]();
-
-if (false) {}
-
-function useFormControl() {
-  return react["useContext"](FormControlContext);
-}
-/* harmony default export */ var FormControl_FormControlContext = (FormControlContext);
 // EXTERNAL MODULE: ./node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js
 var hoist_non_react_statics_cjs = __webpack_require__(33);
 var hoist_non_react_statics_cjs_default = /*#__PURE__*/__webpack_require__.n(hoist_non_react_statics_cjs);
@@ -20965,6 +21028,218 @@ function capitalize(string) {
 
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/CircularProgress/CircularProgress.js
+
+
+
+
+
+
+
+
+var SIZE = 44;
+
+function getRelativeValue(value, min, max) {
+  return (Math.min(Math.max(min, value), max) - min) / (max - min);
+}
+
+function easeOut(t) {
+  t = getRelativeValue(t, 0, 1); // https://gist.github.com/gre/1650294
+
+  t = (t -= 1) * t * t + 1;
+  return t;
+}
+
+function easeIn(t) {
+  return t * t;
+}
+
+var CircularProgress_styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      display: 'inline-block'
+    },
+
+    /* Styles applied to the root element if `variant="static"`. */
+    static: {
+      transition: theme.transitions.create('transform')
+    },
+
+    /* Styles applied to the root element if `variant="indeterminate"`. */
+    indeterminate: {
+      animation: '$circular-rotate 1.4s linear infinite'
+    },
+
+    /* Styles applied to the root element if `color="primary"`. */
+    colorPrimary: {
+      color: theme.palette.primary.main
+    },
+
+    /* Styles applied to the root element if `color="secondary"`. */
+    colorSecondary: {
+      color: theme.palette.secondary.main
+    },
+
+    /* Styles applied to the `svg` element. */
+    svg: {
+      display: 'block' // Keeps the progress centered
+
+    },
+
+    /* Styles applied to the `circle` svg path. */
+    circle: {
+      stroke: 'currentColor' // Use butt to follow the specification, by chance, it's already the default CSS value.
+      // strokeLinecap: 'butt',
+
+    },
+
+    /* Styles applied to the `circle` svg path if `variant="static"`. */
+    circleStatic: {
+      transition: theme.transitions.create('stroke-dashoffset')
+    },
+
+    /* Styles applied to the `circle` svg path if `variant="indeterminate"`. */
+    circleIndeterminate: {
+      animation: '$circular-dash 1.4s ease-in-out infinite',
+      // Some default value that looks fine waiting for the animation to kicks in.
+      strokeDasharray: '80px, 200px',
+      strokeDashoffset: '0px' // Add the unit to fix a Edge 16 and below bug.
+
+    },
+    '@keyframes circular-rotate': {
+      '100%': {
+        transform: 'rotate(360deg)'
+      }
+    },
+    '@keyframes circular-dash': {
+      '0%': {
+        strokeDasharray: '1px, 200px',
+        strokeDashoffset: '0px'
+      },
+      '50%': {
+        strokeDasharray: '100px, 200px',
+        strokeDashoffset: '-15px'
+      },
+      '100%': {
+        strokeDasharray: '100px, 200px',
+        strokeDashoffset: '-125px'
+      }
+    },
+
+    /* Styles applied to the `circle` svg path if `disableShrink={true}`. */
+    circleDisableShrink: {
+      animation: 'none'
+    }
+  };
+};
+/**
+ * ## ARIA
+ *
+ * If the progress bar is describing the loading progress of a particular region of a page,
+ * you should use `aria-describedby` to point to the progress bar, and set the `aria-busy`
+ * attribute to `true` on that region until it has finished loading.
+ */
+
+var CircularProgress_CircularProgress = react["forwardRef"](function CircularProgress(props, ref) {
+  var classes = props.classes,
+      className = props.className,
+      _props$color = props.color,
+      color = _props$color === void 0 ? 'primary' : _props$color,
+      _props$disableShrink = props.disableShrink,
+      disableShrink = _props$disableShrink === void 0 ? false : _props$disableShrink,
+      _props$size = props.size,
+      size = _props$size === void 0 ? 40 : _props$size,
+      style = props.style,
+      _props$thickness = props.thickness,
+      thickness = _props$thickness === void 0 ? 3.6 : _props$thickness,
+      _props$value = props.value,
+      value = _props$value === void 0 ? 0 : _props$value,
+      _props$variant = props.variant,
+      variant = _props$variant === void 0 ? 'indeterminate' : _props$variant,
+      other = _objectWithoutProperties(props, ["classes", "className", "color", "disableShrink", "size", "style", "thickness", "value", "variant"]);
+
+  var circleStyle = {};
+  var rootStyle = {};
+  var rootProps = {};
+
+  if (variant === 'determinate' || variant === 'static') {
+    var circumference = 2 * Math.PI * ((SIZE - thickness) / 2);
+    circleStyle.strokeDasharray = circumference.toFixed(3);
+    rootProps['aria-valuenow'] = Math.round(value);
+
+    if (variant === 'static') {
+      circleStyle.strokeDashoffset = "".concat(((100 - value) / 100 * circumference).toFixed(3), "px");
+      rootStyle.transform = 'rotate(-90deg)';
+    } else {
+      circleStyle.strokeDashoffset = "".concat((easeIn((100 - value) / 100) * circumference).toFixed(3), "px");
+      rootStyle.transform = "rotate(".concat((easeOut(value / 70) * 270).toFixed(3), "deg)");
+    }
+  }
+
+  return /*#__PURE__*/react["createElement"]("div", _extends({
+    className: clsx_m(classes.root, className, color !== 'inherit' && classes["color".concat(capitalize(color))], {
+      'indeterminate': classes.indeterminate,
+      'static': classes.static
+    }[variant]),
+    style: _extends({
+      width: size,
+      height: size
+    }, rootStyle, {}, style),
+    ref: ref,
+    role: "progressbar"
+  }, rootProps, other), /*#__PURE__*/react["createElement"]("svg", {
+    className: classes.svg,
+    viewBox: "".concat(SIZE / 2, " ").concat(SIZE / 2, " ").concat(SIZE, " ").concat(SIZE)
+  }, /*#__PURE__*/react["createElement"]("circle", {
+    className: clsx_m(classes.circle, disableShrink && classes.circleDisableShrink, {
+      'indeterminate': classes.circleIndeterminate,
+      'static': classes.circleStatic
+    }[variant]),
+    style: circleStyle,
+    cx: SIZE,
+    cy: SIZE,
+    r: (SIZE - thickness) / 2,
+    fill: "none",
+    strokeWidth: thickness
+  })));
+});
+ false ? undefined : void 0;
+/* harmony default export */ var esm_CircularProgress_CircularProgress = (styles_withStyles(CircularProgress_styles, {
+  name: 'MuiCircularProgress',
+  flip: false
+})(CircularProgress_CircularProgress));
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/FormControl/formControlState.js
+function formControlState(_ref) {
+  var props = _ref.props,
+      states = _ref.states,
+      muiFormControl = _ref.muiFormControl;
+  return states.reduce(function (acc, state) {
+    acc[state] = props[state];
+
+    if (muiFormControl) {
+      if (typeof props[state] === 'undefined') {
+        acc[state] = muiFormControl[state];
+      }
+    }
+
+    return acc;
+  }, {});
+}
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/FormControl/FormControlContext.js
+
+/**
+ * @ignore - internal component.
+ */
+
+var FormControlContext = react["createContext"]();
+
+if (false) {}
+
+function useFormControl() {
+  return react["useContext"](FormControlContext);
+}
+/* harmony default export */ var FormControl_FormControlContext = (FormControlContext);
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/utils/setRef.js
 // TODO v5: consider to make it private
 function setRef(ref, value) {
@@ -27892,60 +28167,6 @@ var Button_Button = react["forwardRef"](function Button(props, ref) {
 /* harmony default export */ var esm_Button_Button = (styles_withStyles(Button_styles, {
   name: 'MuiButton'
 })(Button_Button));
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/defineProperty.js
-function defineProperty_defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/objectSpread2.js
-
-
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
-    keys.push.apply(keys, symbols);
-  }
-
-  return keys;
-}
-
-function _objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      ownKeys(Object(source), true).forEach(function (key) {
-        defineProperty_defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
-  }
-
-  return target;
-}
-// EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 5 modules
-var slicedToArray = __webpack_require__(4);
-
 // CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/typeof.js
 function typeof_typeof(obj) {
   "@babel/helpers - typeof";
@@ -29498,7 +29719,6 @@ var FetchErrorHandler_FetchErrorHandler = /*#__PURE__*/function () {
 
 
 
-react_toastify_toast.configure();
 
 var ClientDetailService_ClientDetailService = /*#__PURE__*/function () {
   function ClientDetailService() {
@@ -29507,7 +29727,12 @@ var ClientDetailService_ClientDetailService = /*#__PURE__*/function () {
 
   _createClass(ClientDetailService, null, [{
     key: "Save",
-    value: function Save(url, client, generalErrorMessage) {
+    value: function Save(url, client, generalErrorMessage, dispatch) {
+      react_toastify_toast.configure();
+      dispatch({
+        type: 'SET_IS_LOADING',
+        payload: true
+      });
       var requestOptions = {
         method: 'POST',
         headers: {
@@ -29518,10 +29743,18 @@ var ClientDetailService_ClientDetailService = /*#__PURE__*/function () {
       return fetch(url, requestOptions).then(function (response) {
         FetchErrorHandler_FetchErrorHandler.handleError(response);
         return response.json().then(function (jsonResponse) {
+          dispatch({
+            type: 'SET_IS_LOADING',
+            payload: false
+          });
           react_toastify_toast.success(jsonResponse.message);
         });
       }).catch(function (error) {
         console.log(error);
+        dispatch({
+          type: 'SET_IS_LOADING',
+          payload: false
+        });
         react_toastify_toast.error(generalErrorMessage);
       });
     }
@@ -29538,7 +29771,15 @@ var ClientDetailService_ClientDetailService = /*#__PURE__*/function () {
 
 
 
+
+
+
 function ClientDetailForm(props) {
+  var _useContext = Object(react["useContext"])(Context),
+      _useContext2 = Object(slicedToArray["a" /* default */])(_useContext, 2),
+      state = _useContext2[0],
+      dispatch = _useContext2[1];
+
   var stateSchema = {
     name: {
       value: '',
@@ -29581,7 +29822,7 @@ function ClientDetailForm(props) {
   };
 
   function onSubmitForm(state) {
-    ClientDetailService_ClientDetailService.Save(props.saveUrl, state, props.generalErrorMessage);
+    ClientDetailService_ClientDetailService.Save(props.saveUrl, state, props.generalErrorMessage, dispatch);
   }
 
   var _useForm = forms_useForm(stateSchema, stateValidatorSchema, onSubmitForm),
@@ -29642,8 +29883,11 @@ function ClientDetailForm(props) {
   }, /*#__PURE__*/react_default.a.createElement(esm_Button_Button, {
     type: "submit",
     variant: "contained",
-    color: "primary"
-  }, props.saveText)));
+    color: "primary",
+    disabled: state.isLoading
+  }, props.saveText)), state.isLoading && /*#__PURE__*/react_default.a.createElement(esm_CircularProgress_CircularProgress, {
+    className: "progressBar"
+  }));
 }
 
 /* harmony default export */ var ClientDetail_ClientDetailForm = (ClientDetailForm);
@@ -29651,6 +29895,7 @@ function ClientDetailForm(props) {
 var favicon = __webpack_require__(17);
 
 // CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage.js
+
 
 
 
@@ -29666,7 +29911,7 @@ var favicon = __webpack_require__(17);
 function ClientDetailPage(props) {
   return /*#__PURE__*/react_default.a.createElement(ThemeProvider_ThemeProvider, {
     theme: GlobalHelper_GlobalHelper.initMuiTheme()
-  }, /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement(Header["a" /* default */], props.header), /*#__PURE__*/react_default.a.createElement(MenuTiles["a" /* default */], props.menuTiles), /*#__PURE__*/react_default.a.createElement("section", {
+  }, /*#__PURE__*/react_default.a.createElement(stores_Store, null, /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement(Header["a" /* default */], props.header), /*#__PURE__*/react_default.a.createElement(MenuTiles["a" /* default */], props.menuTiles), /*#__PURE__*/react_default.a.createElement("section", {
     className: "section section-small-padding client-detail"
   }, /*#__PURE__*/react_default.a.createElement("h1", {
     className: "subtitle is-4"
@@ -29674,7 +29919,7 @@ function ClientDetailPage(props) {
     className: "columns is-desktop"
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "column is-half"
-  }, /*#__PURE__*/react_default.a.createElement(ClientDetail_ClientDetailForm, props.clientDetailForm)))), /*#__PURE__*/react_default.a.createElement(Footer["a" /* default */], props.footer)));
+  }, /*#__PURE__*/react_default.a.createElement(ClientDetail_ClientDetailForm, props.clientDetailForm)))), /*#__PURE__*/react_default.a.createElement(Footer["a" /* default */], props.footer))));
 }
 
 /* harmony default export */ var ClientDetailPage_ClientDetailPage = (ClientDetailPage);

@@ -9,7 +9,7 @@ import ClientDetailService from '../../services/ClientDetail/ClientDetailService
 
 function ClientDetailForm(props) {
 
-    const [state] = useContext(Context);
+    const [state, dispatch] = useContext(Context);
 
     const stateSchema = {
         name: { value: '', error: '' },
@@ -44,7 +44,7 @@ function ClientDetailForm(props) {
     };
 
     function onSubmitForm(state) {
-        ClientDetailService.Save(props.saveUrl, state, props.generalErrorMessage);
+        ClientDetailService.Save(props.saveUrl, state, props.generalErrorMessage, dispatch);
     }
 
     const {
@@ -92,7 +92,7 @@ function ClientDetailForm(props) {
                     {props.saveText}
                 </Button>
             </div>
-            <CircularProgress className="progressBar" />
+            {state.isLoading && <CircularProgress className="progressBar" />}
         </form>
     );
 }

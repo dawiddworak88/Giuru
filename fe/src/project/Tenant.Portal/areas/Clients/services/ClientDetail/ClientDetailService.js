@@ -1,15 +1,11 @@
-import { useContext } from 'react';
 import { toast } from 'react-toastify';
-import { Context } from '../../../../../../shared/stores/Store';
 import FetchErrorHandler from '../../../../../../shared/helpers/errorHandlers/FetchErrorHandler';
 
 export default class ClientDetailService {
 
-    static Save(url, client, generalErrorMessage) {
+    static Save(url, client, generalErrorMessage, dispatch) {
 
         toast.configure();
-
-        const [dispatch] = useContext(Context);
 
         dispatch({type: 'SET_IS_LOADING', payload: true});
 
