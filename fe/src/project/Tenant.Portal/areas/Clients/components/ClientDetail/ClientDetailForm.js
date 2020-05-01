@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useContext }  from 'react';
 import PropTypes from 'prop-types';
+import { CircularProgress } from '@material-ui/core';
+import { Context } from '../../../../../../shared/stores/Store';
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText } from '@material-ui/core';
 import useForm from '../../../../../../shared/helpers/forms/useForm';
 import EmailValidator from '../../../../../../shared/helpers/validators/EmailValidator';
 import ClientDetailService from '../../services/ClientDetail/ClientDetailService';
 
 function ClientDetailForm(props) {
+
+    const [state] = useContext(Context);
 
     const stateSchema = {
         name: { value: '', error: '' },
@@ -84,10 +88,11 @@ function ClientDetailForm(props) {
                 </FormControl>
             </div>
             <div className="field">
-                <Button type="submit" variant="contained" color="primary">
+                <Button type="submit" variant="contained" color="primary" disabled={state.isLoading}>
                     {props.saveText}
                 </Button>
             </div>
+            <CircularProgress className="progressBar" />
         </form>
     );
 }
