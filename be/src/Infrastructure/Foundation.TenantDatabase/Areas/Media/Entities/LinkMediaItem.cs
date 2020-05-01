@@ -1,12 +1,15 @@
 ﻿using Foundation.GenericRepository.Entities;
-using Foundation.TenantDatabase.Shared.Entities;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Foundation.TenantDatabase.Areas.Media.Entities
 {
     public class LinkMediaItem : Entity
     {
-        public virtual Item Item { get; set; }
+        [Required]
+        public Guid EntityId { get; set; }
 
+        [Required]
         public virtual MediaItem MediaItem { get; set; }
     }
 }

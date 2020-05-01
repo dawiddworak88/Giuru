@@ -1,13 +1,11 @@
 ﻿using Foundation.GenericRepository.Entities;
-using Foundation.TenantDatabase.Shared.Entities;
-using System.ComponentModel.DataAnnotations;
+using Foundation.TenantDatabase.Areas.Schemas.Entities;
 
 namespace Foundation.TenantDatabase.Areas.Products.Entities
 {
     public class Product : Entity
     {
-        [Required]
-        public virtual Item Item { get; set; }
+        public string Name { get; set; }
 
         public virtual Schema Schema { get; set; }
 

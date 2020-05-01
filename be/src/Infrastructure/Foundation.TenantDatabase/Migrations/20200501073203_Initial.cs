@@ -41,7 +41,7 @@ namespace Foundation.TenantDatabase.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Items",
+                name: "EntityTypes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -49,11 +49,12 @@ namespace Foundation.TenantDatabase.Migrations
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false)
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Items", x => x.Id);
+                    table.PrimaryKey("PK_EntityTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -66,9 +67,9 @@ namespace Foundation.TenantDatabase.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     FileName = table.Column<string>(nullable: false),
                     Url = table.Column<string>(nullable: false),
-                    DisplayName = table.Column<string>(nullable: false),
                     Size = table.Column<int>(nullable: false),
                     Width = table.Column<int>(nullable: false),
                     Height = table.Column<int>(nullable: false),
@@ -78,6 +79,50 @@ namespace Foundation.TenantDatabase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MediaItems", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Taxonomies",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Order = table.Column<int>(nullable: false),
+                    ParentId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Taxonomies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Taxonomies_Taxonomies_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Taxonomies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Translations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    EntityId = table.Column<Guid>(nullable: false),
+                    Value = table.Column<string>(nullable: false),
+                    Language = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Translations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -134,31 +179,6 @@ namespace Foundation.TenantDatabase.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SchemaFieldValues",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    LastModifiedBy = table.Column<string>(nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    ItemId = table.Column<Guid>(nullable: false),
-                    FieldName = table.Column<string>(nullable: false),
-                    Value = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SchemaFieldValues", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SchemaFieldValues_Items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Schemas",
                 columns: table => new
                 {
@@ -168,89 +188,18 @@ namespace Foundation.TenantDatabase.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    ItemId = table.Column<Guid>(nullable: false),
-                    EntityTypeId = table.Column<Guid>(nullable: true),
-                    JsonSchema = table.Column<string>(nullable: false),
-                    UiSchema = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: false),
+                    EntityTypeId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Schemas", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Schemas_Items_EntityTypeId",
+                        name: "FK_Schemas_EntityTypes_EntityTypeId",
                         column: x => x.EntityTypeId,
-                        principalTable: "Items",
+                        principalTable: "EntityTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Schemas_Items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Taxonomies",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    LastModifiedBy = table.Column<string>(nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    TaxonomyItemId = table.Column<Guid>(nullable: true),
-                    ValueItemId = table.Column<Guid>(nullable: true),
-                    Order = table.Column<int>(nullable: false),
-                    ParentId = table.Column<Guid>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Taxonomies", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Taxonomies_Taxonomies_ParentId",
-                        column: x => x.ParentId,
-                        principalTable: "Taxonomies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Taxonomies_Items_TaxonomyItemId",
-                        column: x => x.TaxonomyItemId,
-                        principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Taxonomies_Items_ValueItemId",
-                        column: x => x.ValueItemId,
-                        principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Translations",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    LastModifiedBy = table.Column<string>(nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    ItemId = table.Column<Guid>(nullable: false),
-                    Value = table.Column<string>(nullable: false),
-                    Language = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Translations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Translations_Items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -263,24 +212,18 @@ namespace Foundation.TenantDatabase.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    ItemId = table.Column<Guid>(nullable: true),
-                    MediaItemId = table.Column<Guid>(nullable: true)
+                    EntityId = table.Column<Guid>(nullable: false),
+                    MediaItemId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LinkMediaItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LinkMediaItems_Items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_LinkMediaItems_MediaItems_MediaItemId",
                         column: x => x.MediaItemId,
                         principalTable: "MediaItems",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -378,7 +321,7 @@ namespace Foundation.TenantDatabase.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    ItemId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
                     SchemaId = table.Column<Guid>(nullable: true),
                     Sku = table.Column<string>(nullable: true)
                 },
@@ -386,17 +329,79 @@ namespace Foundation.TenantDatabase.Migrations
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_Items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Items",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Products_Schemas_SchemaId",
                         column: x => x.SchemaId,
                         principalTable: "Schemas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SchemaField",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    SchemaId = table.Column<Guid>(nullable: false),
+                    Title = table.Column<string>(nullable: false),
+                    Type = table.Column<string>(nullable: false),
+                    Order = table.Column<int>(nullable: false),
+                    IsRequired = table.Column<bool>(nullable: false),
+                    OptionsId = table.Column<Guid>(nullable: true),
+                    Default = table.Column<string>(nullable: true),
+                    Format = table.Column<string>(nullable: true),
+                    MaxItems = table.Column<int>(nullable: false),
+                    MinLength = table.Column<int>(nullable: true),
+                    MaxLength = table.Column<int>(nullable: true),
+                    Pattern = table.Column<string>(nullable: true),
+                    UiWidget = table.Column<string>(nullable: true),
+                    EmptyValue = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SchemaField", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SchemaField_Taxonomies_OptionsId",
+                        column: x => x.OptionsId,
+                        principalTable: "Taxonomies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SchemaField_Schemas_SchemaId",
+                        column: x => x.SchemaId,
+                        principalTable: "Schemas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SchemaFieldValues",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    SchemaFieldId = table.Column<Guid>(nullable: false),
+                    EntityId = table.Column<Guid>(nullable: false),
+                    Value = table.Column<string>(nullable: true),
+                    Version = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SchemaFieldValues", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SchemaFieldValues_SchemaField_SchemaFieldId",
+                        column: x => x.SchemaFieldId,
+                        principalTable: "SchemaField",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -444,19 +449,9 @@ namespace Foundation.TenantDatabase.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LinkMediaItems_ItemId",
-                table: "LinkMediaItems",
-                column: "ItemId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_LinkMediaItems_MediaItemId",
                 table: "LinkMediaItems",
                 column: "MediaItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_ItemId",
-                table: "Products",
-                column: "ItemId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_SchemaId",
@@ -464,9 +459,19 @@ namespace Foundation.TenantDatabase.Migrations
                 column: "SchemaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SchemaFieldValues_ItemId",
+                name: "IX_SchemaField_OptionsId",
+                table: "SchemaField",
+                column: "OptionsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SchemaField_SchemaId",
+                table: "SchemaField",
+                column: "SchemaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SchemaFieldValues_SchemaFieldId",
                 table: "SchemaFieldValues",
-                column: "ItemId");
+                column: "SchemaFieldId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Schemas_EntityTypeId",
@@ -474,29 +479,9 @@ namespace Foundation.TenantDatabase.Migrations
                 column: "EntityTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Schemas_ItemId",
-                table: "Schemas",
-                column: "ItemId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Taxonomies_ParentId",
                 table: "Taxonomies",
                 column: "ParentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Taxonomies_TaxonomyItemId",
-                table: "Taxonomies",
-                column: "TaxonomyItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Taxonomies_ValueItemId",
-                table: "Taxonomies",
-                column: "ValueItemId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Translations_ItemId",
-                table: "Translations",
-                column: "ItemId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -526,9 +511,6 @@ namespace Foundation.TenantDatabase.Migrations
                 name: "SchemaFieldValues");
 
             migrationBuilder.DropTable(
-                name: "Taxonomies");
-
-            migrationBuilder.DropTable(
                 name: "Translations");
 
             migrationBuilder.DropTable(
@@ -541,13 +523,19 @@ namespace Foundation.TenantDatabase.Migrations
                 name: "MediaItems");
 
             migrationBuilder.DropTable(
-                name: "Schemas");
+                name: "SchemaField");
 
             migrationBuilder.DropTable(
                 name: "Clients");
 
             migrationBuilder.DropTable(
-                name: "Items");
+                name: "Taxonomies");
+
+            migrationBuilder.DropTable(
+                name: "Schemas");
+
+            migrationBuilder.DropTable(
+                name: "EntityTypes");
         }
     }
 }

@@ -1,17 +1,19 @@
 ﻿using Foundation.GenericRepository.Entities;
+using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Foundation.TenantDatabase.Shared.Entities
+namespace Foundation.TenantDatabase.Areas.Schemas.Entities
 {
     public class SchemaFieldValue : Entity
     {
         [Required]
-        public virtual Item Item { get; set; }
+        public SchemaField SchemaField { get; set; }
 
         [Required]
-        public string FieldName { get; set; }
+        public Guid EntityId { get; set; }
 
-        [Required]
         public string Value { get; set; }
+
+        public int Version { get; set; }
     }
 }

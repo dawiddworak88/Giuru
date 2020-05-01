@@ -2,13 +2,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Foundation.TenantDatabase.Shared.Entities
+namespace Foundation.TenantDatabase.Areas.Taxonomies.Entities
 {
     public class Taxonomy : Entity
     {
-        public virtual Item TaxonomyItem { get; set; }
-
-        public virtual Item ValueItem { get; set; }
+        [Required]
+        public string Name { get; set; }
 
         [Required]
         public int Order { get; set; }

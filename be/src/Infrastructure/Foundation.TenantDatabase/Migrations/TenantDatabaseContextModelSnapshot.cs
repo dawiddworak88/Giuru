@@ -139,11 +139,11 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("EntityId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
-
-                    b.Property<Guid?>("ItemId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
@@ -151,12 +151,10 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("MediaItemId")
+                    b.Property<Guid>("MediaItemId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
 
                     b.HasIndex("MediaItemId");
 
@@ -178,10 +176,6 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Extension")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -201,6 +195,10 @@ namespace Foundation.TenantDatabase.Migrations
 
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Size")
                         .HasColumnType("int");
@@ -232,14 +230,14 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("SchemaId")
                         .HasColumnType("uniqueidentifier");
@@ -249,40 +247,12 @@ namespace Foundation.TenantDatabase.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ItemId");
-
                     b.HasIndex("SchemaId");
 
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Foundation.TenantDatabase.Shared.Entities.Item", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Items");
-                });
-
-            modelBuilder.Entity("Foundation.TenantDatabase.Shared.Entities.Schema", b =>
+            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.Schema", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -300,32 +270,24 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("JsonSchema")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UiSchema")
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EntityTypeId");
 
-                    b.HasIndex("ItemId");
-
                     b.ToTable("Schemas");
                 });
 
-            modelBuilder.Entity("Foundation.TenantDatabase.Shared.Entities.SchemaFieldValue", b =>
+            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.SchemaField", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -337,15 +299,20 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FieldName")
-                        .IsRequired()
+                    b.Property<string>("Default")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmptyValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Format")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<bool>("IsRequired")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
@@ -353,18 +320,88 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Value")
+                    b.Property<int>("MaxItems")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MaxLength")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MinLength")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("OptionsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Pattern")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("SchemaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UiWidget")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ItemId");
+                    b.HasIndex("OptionsId");
+
+                    b.HasIndex("SchemaId");
+
+                    b.ToTable("SchemaField");
+                });
+
+            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.SchemaFieldValue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EntityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("SchemaFieldId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SchemaFieldId");
 
                     b.ToTable("SchemaFieldValues");
                 });
 
-            modelBuilder.Entity("Foundation.TenantDatabase.Shared.Entities.Taxonomy", b =>
+            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Taxonomies.Entities.Taxonomy", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -384,6 +421,10 @@ namespace Foundation.TenantDatabase.Migrations
 
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Order")
                         .HasColumnType("int");
@@ -391,24 +432,14 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("TaxonomyItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ValueItemId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ParentId");
 
-                    b.HasIndex("TaxonomyItemId");
-
-                    b.HasIndex("ValueItemId");
-
                     b.ToTable("Taxonomies");
                 });
 
-            modelBuilder.Entity("Foundation.TenantDatabase.Shared.Entities.Translation", b =>
+            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Translations.Entities.Translation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -420,11 +451,11 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("EntityId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
-
-                    b.Property<Guid>("ItemId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Language")
                         .IsRequired()
@@ -442,9 +473,37 @@ namespace Foundation.TenantDatabase.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ItemId");
-
                     b.ToTable("Translations");
+                });
+
+            modelBuilder.Entity("Foundation.TenantDatabase.Shared.Entities.EntityType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EntityTypes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -587,72 +646,54 @@ namespace Foundation.TenantDatabase.Migrations
 
             modelBuilder.Entity("Foundation.TenantDatabase.Areas.Media.Entities.LinkMediaItem", b =>
                 {
-                    b.HasOne("Foundation.TenantDatabase.Shared.Entities.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId");
-
                     b.HasOne("Foundation.TenantDatabase.Areas.Media.Entities.MediaItem", "MediaItem")
                         .WithMany()
-                        .HasForeignKey("MediaItemId");
+                        .HasForeignKey("MediaItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Foundation.TenantDatabase.Areas.Products.Entities.Product", b =>
                 {
-                    b.HasOne("Foundation.TenantDatabase.Shared.Entities.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Foundation.TenantDatabase.Shared.Entities.Schema", "Schema")
+                    b.HasOne("Foundation.TenantDatabase.Areas.Schemas.Entities.Schema", "Schema")
                         .WithMany()
                         .HasForeignKey("SchemaId");
                 });
 
-            modelBuilder.Entity("Foundation.TenantDatabase.Shared.Entities.Schema", b =>
+            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.Schema", b =>
                 {
-                    b.HasOne("Foundation.TenantDatabase.Shared.Entities.Item", "EntityType")
+                    b.HasOne("Foundation.TenantDatabase.Shared.Entities.EntityType", "EntityType")
                         .WithMany()
                         .HasForeignKey("EntityTypeId");
+                });
 
-                    b.HasOne("Foundation.TenantDatabase.Shared.Entities.Item", "Item")
+            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.SchemaField", b =>
+                {
+                    b.HasOne("Foundation.TenantDatabase.Areas.Taxonomies.Entities.Taxonomy", "Options")
                         .WithMany()
-                        .HasForeignKey("ItemId")
+                        .HasForeignKey("OptionsId");
+
+                    b.HasOne("Foundation.TenantDatabase.Areas.Schemas.Entities.Schema", "Schema")
+                        .WithMany()
+                        .HasForeignKey("SchemaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Foundation.TenantDatabase.Shared.Entities.SchemaFieldValue", b =>
+            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.SchemaFieldValue", b =>
                 {
-                    b.HasOne("Foundation.TenantDatabase.Shared.Entities.Item", "Item")
+                    b.HasOne("Foundation.TenantDatabase.Areas.Schemas.Entities.SchemaField", "SchemaField")
                         .WithMany()
-                        .HasForeignKey("ItemId")
+                        .HasForeignKey("SchemaFieldId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Foundation.TenantDatabase.Shared.Entities.Taxonomy", b =>
+            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Taxonomies.Entities.Taxonomy", b =>
                 {
-                    b.HasOne("Foundation.TenantDatabase.Shared.Entities.Taxonomy", "Parent")
+                    b.HasOne("Foundation.TenantDatabase.Areas.Taxonomies.Entities.Taxonomy", "Parent")
                         .WithMany()
                         .HasForeignKey("ParentId");
-
-                    b.HasOne("Foundation.TenantDatabase.Shared.Entities.Item", "TaxonomyItem")
-                        .WithMany()
-                        .HasForeignKey("TaxonomyItemId");
-
-                    b.HasOne("Foundation.TenantDatabase.Shared.Entities.Item", "ValueItem")
-                        .WithMany()
-                        .HasForeignKey("ValueItemId");
-                });
-
-            modelBuilder.Entity("Foundation.TenantDatabase.Shared.Entities.Translation", b =>
-                {
-                    b.HasOne("Foundation.TenantDatabase.Shared.Entities.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

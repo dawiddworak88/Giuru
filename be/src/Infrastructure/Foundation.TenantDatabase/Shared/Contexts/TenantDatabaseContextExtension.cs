@@ -1,5 +1,6 @@
-﻿using Foundation.TenantDatabase.Shared.Definitions.EntityTypes;
-using Foundation.TenantDatabase.Shared.Definitions.Languages;
+﻿using Foundation.TenantDatabase.Areas.Translations.Definitions.Languages;
+using Foundation.TenantDatabase.Areas.Translations.Entities;
+using Foundation.TenantDatabase.Shared.Definitions.EntityTypes;
 using Foundation.TenantDatabase.Shared.Entities;
 using Foundation.TenantDatabase.Shared.Helpers;
 using System.Linq;
@@ -11,15 +12,15 @@ namespace Foundation.TenantDatabase.Shared.Contexts
         public static void EnsureSeeded(this TenantDatabaseContext context)
         {
             // Adds entity types
-            if (!context.Items.Any(x => x.Id == EntityType.Product))
+            if (!context.EntityTypes.Any(x => x.Name == EntityTypeConstants.Product))
             {
-                var productItemEntityType = EntitySeedHelper.SeedEntity(new Item { Id = EntityType.Product });
+                var productItemEntityType = EntitySeedHelper.SeedEntity(new EntityType { Name = EntityTypeConstants.Product });
 
-                context.Items.Add(productItemEntityType);
+                context.EntityTypes.Add(productItemEntityType);
 
-                var enTranslationProductEntityType = EntitySeedHelper.SeedEntity(new Translation { Item = productItemEntityType, Language = Languages.English, Value = "Product" });
-                var deTranslationProductEntityType = EntitySeedHelper.SeedEntity(new Translation { Item = productItemEntityType, Language = Languages.German, Value = "Produkt" });
-                var plTranslationProductEntityType = EntitySeedHelper.SeedEntity(new Translation { Item = productItemEntityType, Language = Languages.Polish, Value = "Produkt" });
+                var enTranslationProductEntityType = EntitySeedHelper.SeedEntity(new Translation { EntityId = productItemEntityType.Id, Language = LanguageConstants.English, Value = "Product" });
+                var deTranslationProductEntityType = EntitySeedHelper.SeedEntity(new Translation { EntityId = productItemEntityType.Id, Language = LanguageConstants.German, Value = "Produkt" });
+                var plTranslationProductEntityType = EntitySeedHelper.SeedEntity(new Translation { EntityId = productItemEntityType.Id, Language = LanguageConstants.Polish, Value = "Produkt" });
 
                 context.Translations.Add(enTranslationProductEntityType);
                 context.Translations.Add(deTranslationProductEntityType);

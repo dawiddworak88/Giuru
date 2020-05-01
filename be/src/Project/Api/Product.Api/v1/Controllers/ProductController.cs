@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using Product.Api.v1.RequestModels;
 using System;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Product.Api.v1.Controllers
@@ -33,7 +32,7 @@ namespace Product.Api.v1.Controllers
         /// <summary>
         /// Creates a new product
         /// </summary>
-        /// <param name="clientModel">Product to save.</param>
+        /// <param name="productModel">Product to save.</param>
         /// <returns>Product creation results.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType(200)]
@@ -51,14 +50,14 @@ namespace Product.Api.v1.Controllers
                     Language = productModel.Language
                 };
 
-                var createClientResult = await this.productService.CreateAsync(createProductModel);
+                var createProductResult = await this.productService.CreateAsync(createProductModel);
 
-                if (createClientResult.ValidationResult.IsValid)
+                if (createProductResult.ValidationResult.IsValid)
                 {
                     return this.Ok();
                 }
 
-                return this.BadRequest(createClientResult.ValidationResult.Errors.ToString());
+                return this.BadRequest(createProductResult.ValidationResult.Errors.ToString());
             }
             catch (Exception exception)
             {
