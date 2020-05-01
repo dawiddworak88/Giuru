@@ -7,7 +7,7 @@ namespace Foundation.TenantDatabase.Areas.Schemas.Entities
     public class SchemaField : Entity
     {
         [Required]
-        public Schema Schema { get; set; }
+        public virtual Schema Schema { get; set; }
 
         [Required]
         public string Title { get; set; }
@@ -21,7 +21,7 @@ namespace Foundation.TenantDatabase.Areas.Schemas.Entities
         [Required]
         public bool IsRequired { get; set; }
 
-        public Taxonomy Options { get; set; }
+        public virtual Taxonomy Options { get; set; }
 
         public string Default { get; set; }
 

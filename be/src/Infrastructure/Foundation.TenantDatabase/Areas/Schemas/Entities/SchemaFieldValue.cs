@@ -7,7 +7,7 @@ namespace Foundation.TenantDatabase.Areas.Schemas.Entities
     public class SchemaFieldValue : Entity
     {
         [Required]
-        public SchemaField SchemaField { get; set; }
+        public virtual SchemaField SchemaField { get; set; }
 
         [Required]
         public Guid EntityId { get; set; }
