@@ -6,6 +6,6 @@ namespace Foundation.Extensions.Models
     {
         public string Language { get; set; }
         public string Username { get; set; }
-        public Guid TenantId { get; set; }
+        public Guid? TenantId { get; set; }
     }
 }

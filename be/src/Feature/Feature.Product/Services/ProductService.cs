@@ -38,7 +38,7 @@ namespace Feature.Product.Services
 
             if (validationResult.IsValid)
             {
-                var tenant = this.tenantRepository.GetById(model.TenantId);
+                var tenant = this.tenantRepository.GetById(model.TenantId.Value);
 
                 if (tenant != null)
                 {

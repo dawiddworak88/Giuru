@@ -1,8 +1,11 @@
 ﻿using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.ApiExtensions.Models.Request;
+using Foundation.ApiExtensions.Models.Response;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -12,7 +15,17 @@ namespace Foundation.ApiExtensions.Services
 {
     public class ApiClientService : IApiClientService
     {
-        public async Task<ApiResponse<T>> PostAsync<S, W, T>(S request) where S: ApiRequest<W>
+        public T InitializeRequestModelContext<T>(T requestModel) where T: BaseRequestModel
+        {
+            requestModel.Context = new RequestContext
+            {
+                Language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName
+            };
+
+            return requestModel;
+        }
+
+        public async Task<ApiResponse<T>> PostAsync<S, W, T>(S request) where S: ApiRequest<W> where T: BaseResponseModel
         {
             using (var client = new HttpClient())
             {

@@ -1,13 +1,18 @@
 ﻿using Client.Api.v1.RequestModels;
+using Client.Api.v1.ResponseModels;
 using Feature.Account.Definitions;
+using Feature.Client.Definitions;
 using Feature.Client.Models;
 using Feature.Client.Services;
 using Foundation.ApiExtensions.Controllers;
+using Foundation.ApiExtensions.Helpers;
+using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -36,8 +41,9 @@ namespace Client.Api.v1.Controllers
         /// <param name="clientModel">Client to save.</param>
         /// <returns>Client creation results.</returns>
         [HttpPost, MapToApiVersion("1.0")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType(201)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(409)]
         public async Task<IActionResult> Create([FromBody] ClientRequestModel clientModel)
         {
             try
@@ -47,27 +53,35 @@ namespace Client.Api.v1.Controllers
                 var createClientModel = new CreateClientModel
                 {
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    TenantId = !string.IsNullOrWhiteSpace(tenantClaim?.Value) ? Guid.Parse(tenantClaim.Value) : Guid.Empty,
+                    TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
                     Name = clientModel.Name,
                     Email = clientModel.Email,
-                    ClientPreferredLanguage = clientModel.Language
+                    Language = clientModel.CommunicationLanguage,
+                    ClientPreferredLanguage = clientModel.CommunicationLanguage
                 };
 
                 var createClientResult = await this.clientService.CreateAsync(createClientModel);
 
-                if (createClientResult.ValidationResult.IsValid)
+                if (createClientResult.IsValid)
                 {
-                    return this.Ok();
+                    return this.StatusCode((int)HttpStatusCode.Created, new ClientResponseModel { Client = createClientResult.Client });
                 }
+                else
+                {
+                    if (createClientResult.Errors.Contains(ErrorConstants.DuplicateUser))
+                    {
+                        return this.StatusCode((int)HttpStatusCode.Conflict);
+                    }
 
-                return this.BadRequest(createClientResult.ValidationResult.Errors.ToString());
+                    return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+                }
             }
             catch (Exception exception)
             {
-                this.logger.LogError(exception, nameof(Create));
+                var error = ErrorHelper.GenerateErrorSignature();
+                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
+                return this.StatusCode((int)HttpStatusCode.BadRequest, new ClientResponseModel { Error = error });
             }
-
-            return this.BadRequest();
         }
     }
 }

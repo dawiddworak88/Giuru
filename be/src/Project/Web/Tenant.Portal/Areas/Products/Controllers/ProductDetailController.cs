@@ -1,14 +1,10 @@
-﻿using Foundation.ApiExtensions.Communications;
-using Foundation.ApiExtensions.Definitions;
-using Foundation.ApiExtensions.Services;
+﻿using Foundation.ApiExtensions.Services;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Products.ApiRequestModels;
 using Tenant.Portal.Areas.Products.ViewModels;
 using Tenant.Portal.Shared.Configurations;
 
@@ -33,20 +29,6 @@ namespace Tenant.Portal.Areas.Products.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var apiRequest = new ApiRequest<ProductRequestModel>
-            {
-                Data = new ProductRequestModel(),
-                AccessToken = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                EndpointAddress = this.servicesEndpointsConfiguration.CurrentValue.ProductApi.Host + this.servicesEndpointsConfiguration.CurrentValue.ProductApi.Endpoints.Product
-            };
-
-            var response = await this.apiClientService.PostAsync<ApiRequest<ProductRequestModel>, ProductRequestModel, Guid>(apiRequest);
-
-            if (response.IsSuccessStatusCode)
-            {
-                return this.RedirectToAction(nameof(Index), new { id = response.Data });
-            }
-
             return this.BadRequest();
         }
 

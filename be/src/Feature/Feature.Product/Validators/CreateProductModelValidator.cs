@@ -1,9 +1,9 @@
 ﻿using Feature.Product.Models;
-using FluentValidation;
+using Foundation.Extensions.Validators;
 
 namespace Feature.Product.Validators
 {
-    public class CreateProductModelValidator : AbstractValidator<CreateProductModel>
+    public class CreateProductModelValidator : BaseServiceModelValidator<CreateProductModel>
     {
     }
 }

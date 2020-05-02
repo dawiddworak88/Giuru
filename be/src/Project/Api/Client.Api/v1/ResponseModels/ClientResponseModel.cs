@@ -1,17 +1,9 @@
-﻿using System;
+﻿using Foundation.ApiExtensions.Models.Response;
 
 namespace Client.Api.v1.ResponseModels
 {
-    public class ClientResponseModel
+    public class ClientResponseModel : BaseResponseModel
     {
-        public Guid Id { get; set; }
-
-        public string Name { get; set; }
-
-        public ClientResponseModel(Foundation.TenantDatabase.Areas.Clients.Entities.Client client)
-        {
-            this.Id = client.Id;
-            this.Name = client.Name;
-        }
+        public Foundation.TenantDatabase.Areas.Clients.Entities.Client Client { get; set; }
     }
 }
