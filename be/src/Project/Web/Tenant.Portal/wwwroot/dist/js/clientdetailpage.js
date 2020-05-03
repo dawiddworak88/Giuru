@@ -28346,7 +28346,9 @@ function useForm() {
   // in every re-render in component
 
   var validateErrorState = Object(react["useCallback"])(function () {
-    return Object.values(errors).some(function (error) {
+    return Object.keys(errors).map(function (item) {
+      return errors[item];
+    }).some(function (error) {
       return error;
     });
   }, [errors]); // Use this callback function to safely submit the form
