@@ -110,6 +110,7 @@ namespace Feature.Client.Services
             if (!existingClients.Any())
             {
                 await clientRepository.CreateAsync(client);
+                await clientRepository.SaveChangesAsync();
             }
             else
             {
@@ -130,7 +131,7 @@ namespace Feature.Client.Services
 
             var user = new ApplicationUser
             {
-                Client = client,
+                ClientId = client.Id,
                 UserName = model.Email,
                 Email = model.Email,
                 NormalizedEmail = model.Email,

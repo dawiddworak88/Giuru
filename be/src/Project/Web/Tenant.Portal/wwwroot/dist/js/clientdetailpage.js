@@ -29696,17 +29696,22 @@ var FetchErrorHandler_FetchErrorHandler = /*#__PURE__*/function () {
   }
 
   _createClass(FetchErrorHandler, null, [{
-    key: "handleError",
-    value: function handleError(response) {
+    key: "handleUnauthorizedResponse",
+    value: function handleUnauthorizedResponse(response) {
       if (!response.ok) {
         if (response.status === ResponseStatusConstants_ResponseStatusConstants.Unauthorized()) {
           if (typeof window !== 'undefined') {
             window.location.reload();
           }
         }
-
-        throw new Error(response.status);
       }
+    }
+  }, {
+    key: "consoleLogResponseDetails",
+    value: function consoleLogResponseDetails(entity, response, jsonResponse) {
+      console.log(entity);
+      console.log(response);
+      console.log(jsonResponse);
     }
   }]);
 
@@ -29741,13 +29746,18 @@ var ClientDetailService_ClientDetailService = /*#__PURE__*/function () {
         body: JSON.stringify(client)
       };
       return fetch(url, requestOptions).then(function (response) {
-        FetchErrorHandler_FetchErrorHandler.handleError(response);
+        dispatch({
+          type: 'SET_IS_LOADING',
+          payload: false
+        });
+        FetchErrorHandler_FetchErrorHandler.handleUnauthorizedResponse(response);
         return response.json().then(function (jsonResponse) {
-          dispatch({
-            type: 'SET_IS_LOADING',
-            payload: false
-          });
-          react_toastify_toast.success(jsonResponse.message);
+          if (response.ok) {
+            react_toastify_toast.success(jsonResponse.message);
+          } else {
+            FetchErrorHandler_FetchErrorHandler.consoleLogResponseDetails(client, response, jsonResponse);
+            react_toastify_toast.error(jsonResponse.message);
+          }
         });
       }).catch(function (error) {
         console.log(error);
@@ -29789,7 +29799,7 @@ function ClientDetailForm(props) {
       value: '',
       error: ''
     },
-    language: {
+    communicationLanguage: {
       value: '',
       error: ''
     }
@@ -29813,7 +29823,7 @@ function ClientDetailForm(props) {
         error: props.emailFormatErrorMessage
       }
     },
-    language: {
+    communicationLanguage: {
       required: {
         isRequired: true,
         error: props.languageRequiredErrorMessage
@@ -29869,8 +29879,8 @@ function ClientDetailForm(props) {
     id: "language-label"
   }, props.languageLabel), /*#__PURE__*/react_default.a.createElement(esm_Select_Select, {
     labelId: "language-label",
-    id: "language",
-    name: "language",
+    id: "communicationLanguage",
+    name: "communicationLanguage",
     value: language,
     onChange: handleOnChange
   }, props.languages.map(function (language) {

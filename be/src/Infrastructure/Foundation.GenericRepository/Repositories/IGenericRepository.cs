@@ -19,6 +19,6 @@ namespace Foundation.GenericRepository.Repositories
 
         void Delete(Guid id);
 
-        void SaveChanges();
+        Task SaveChangesAsync();
     }
 }

@@ -7,7 +7,7 @@ export default class ClientDetailService {
 
         toast.configure();
 
-        dispatch({type: 'SET_IS_LOADING', payload: true});
+        dispatch({ type: 'SET_IS_LOADING', payload: true });
 
         const requestOptions = {
             method: 'POST',
@@ -18,17 +18,24 @@ export default class ClientDetailService {
         return fetch(url, requestOptions)
             .then(function (response) {
 
-                FetchErrorHandler.handleError(response);
+                dispatch({ type: 'SET_IS_LOADING', payload: false });
+                
+                FetchErrorHandler.handleUnauthorizedResponse(response);
 
                 return response.json().then(jsonResponse => {
 
-                    dispatch({type: 'SET_IS_LOADING', payload: false});
-                    toast.success(jsonResponse.message);
+                    if (response.ok) {
+                        toast.success(jsonResponse.message);
+                    }
+                    else {
+                        FetchErrorHandler.consoleLogResponseDetails(client, response, jsonResponse);
+                        toast.error(jsonResponse.message);
+                    }
                 })
             }).catch(error => {
 
                 console.log(error);
-                dispatch({type: 'SET_IS_LOADING', payload: false});
+                dispatch({ type: 'SET_IS_LOADING', payload: false });
                 toast.error(generalErrorMessage);
             });
     }

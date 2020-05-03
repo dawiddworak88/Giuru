@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -56,7 +57,7 @@ namespace Client.Api.v1.Controllers
                     TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
                     Name = clientModel.Name,
                     Email = clientModel.Email,
-                    Language = clientModel.CommunicationLanguage,
+                    Language = clientModel.Context.Language,
                     ClientPreferredLanguage = clientModel.CommunicationLanguage
                 };
 
@@ -78,7 +79,7 @@ namespace Client.Api.v1.Controllers
             }
             catch (Exception exception)
             {
-                var error = ErrorHelper.GenerateErrorSignature();
+                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
                 this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
                 return this.StatusCode((int)HttpStatusCode.BadRequest, new ClientResponseModel { Error = error });
             }

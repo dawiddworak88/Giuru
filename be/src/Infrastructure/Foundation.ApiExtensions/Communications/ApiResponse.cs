@@ -1,14 +1,13 @@
-﻿using Foundation.ApiExtensions.ErrorHandling;
+﻿using Foundation.ApiExtensions.Models.Response;
 using System.Net;
 
 namespace Foundation.ApiExtensions.Communications
 {
-    public class ApiResponse<T>
+    public class ApiResponse<T> where T: BaseResponseModel
     {
         public T Data { get; set; }
         public HttpStatusCode StatusCode { get; set; }
         public bool IsSuccessStatusCode { get; set; }
-        public Error Error { get; set; }
         public string Message { get; set; }
     }
 }

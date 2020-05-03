@@ -11,7 +11,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Foundation.ApiExtensions.Services
+namespace Foundation.ApiExtensions.Services.ApiClientServices
 {
     public class ApiClientService : IApiClientService
     {

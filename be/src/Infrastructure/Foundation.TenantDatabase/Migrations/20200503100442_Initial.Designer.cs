@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foundation.TenantDatabase.Migrations
 {
     [DbContext(typeof(TenantDatabaseContext))]
-    [Migration("20200501075535_Initial")]
+    [Migration("20200503100442_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,7 +29,7 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("ClientId")
+                    b.Property<Guid>("ClientId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -77,8 +77,6 @@ namespace Foundation.TenantDatabase.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClientId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -638,13 +636,6 @@ namespace Foundation.TenantDatabase.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Accounts.Entities.ApplicationUser", b =>
-                {
-                    b.HasOne("Foundation.TenantDatabase.Areas.Clients.Entities.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId");
                 });
 
             modelBuilder.Entity("Foundation.TenantDatabase.Areas.Media.Entities.LinkMediaItem", b =>

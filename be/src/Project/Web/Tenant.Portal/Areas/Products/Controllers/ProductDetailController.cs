@@ -1,10 +1,9 @@
-﻿using Foundation.ApiExtensions.Services;
+﻿using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
-using System.Threading.Tasks;
 using Tenant.Portal.Areas.Products.ViewModels;
 using Tenant.Portal.Shared.Configurations;
 
@@ -27,7 +26,7 @@ namespace Tenant.Portal.Areas.Products.Controllers
             this.servicesEndpointsConfiguration = servicesEndpointsConfiguration;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return this.BadRequest();
         }

@@ -14,7 +14,7 @@ function ClientDetailForm(props) {
     const stateSchema = {
         name: { value: '', error: '' },
         email: { value: '', error: '' },
-        language: { value: '', error: '' }
+        communicationLanguage: { value: '', error: '' }
     };
 
     const stateValidatorSchema = {
@@ -35,7 +35,7 @@ function ClientDetailForm(props) {
                 error: props.emailFormatErrorMessage,
             }
         },
-        language: {
+        communicationLanguage: {
             required: {
                 isRequired: true,
                 error: props.languageRequiredErrorMessage
@@ -72,8 +72,8 @@ function ClientDetailForm(props) {
                     <InputLabel id="language-label">{props.languageLabel}</InputLabel>
                     <Select
                         labelId="language-label"
-                        id="language"
-                        name="language"
+                        id="communicationLanguage"
+                        name="communicationLanguage"
                         value={language}
                         onChange={handleOnChange}>
                         {props.languages.map(language => {
