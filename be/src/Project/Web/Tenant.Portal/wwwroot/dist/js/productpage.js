@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 46);
+/******/ 	return __webpack_require__(__webpack_require__.s = 53);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -14763,26 +14763,33 @@ function Catalog(props) {
 /* 43 */,
 /* 44 */,
 /* 45 */,
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(53);
-module.exports = __webpack_require__(47);
-
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
+/* 46 */,
+/* 47 */,
 /* 48 */,
 /* 49 */,
 /* 50 */,
 /* 51 */,
 /* 52 */,
 /* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(60);
+module.exports = __webpack_require__(54);
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

@@ -19,7 +19,7 @@ export default class ClientDetailService {
             .then(function (response) {
 
                 dispatch({ type: 'SET_IS_LOADING', payload: false });
-                
+
                 FetchErrorHandler.handleUnauthorizedResponse(response);
 
                 return response.json().then(jsonResponse => {
