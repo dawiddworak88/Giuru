@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Client.Api.v1.RequestModels
+namespace Api.v1.Areas.Clients.RequestModels
 {
     public class GetClientRequestModel
     {

@@ -1,5 +1,5 @@
-﻿using Client.Api.v1.RequestModels;
-using Client.Api.v1.ResponseModels;
+﻿using Api.v1.Areas.Clients.RequestModels;
+using Api.v1.Areas.Clients.ResponseModels;
 using Feature.Account.Definitions;
 using Feature.Client.Definitions;
 using Feature.Client.Models;
@@ -17,7 +17,7 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Client.Api.v1.Controllers
+namespace Api.v1.Areas.Clients.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]

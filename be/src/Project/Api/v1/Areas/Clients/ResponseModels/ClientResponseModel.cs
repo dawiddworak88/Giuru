@@ -1,6 +1,6 @@
 ﻿using Foundation.ApiExtensions.Models.Response;
 
-namespace Client.Api.v1.ResponseModels
+namespace Api.v1.Areas.Clients.ResponseModels
 {
     public class ClientResponseModel : BaseResponseModel
     {

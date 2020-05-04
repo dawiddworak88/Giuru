@@ -14,7 +14,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace Client.Api
+namespace Api
 {
     public class Startup
     {
@@ -49,7 +49,7 @@ namespace Client.Api
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Client API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -63,7 +63,7 @@ namespace Client.Api
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Client API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API");
                 c.RoutePrefix = string.Empty;
             });
 

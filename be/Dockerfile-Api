@@ -5,8 +5,8 @@ WORKDIR /app
 
 COPY ./src/Infrastructure ./Infrastructure/
 COPY ./src/Feature ./Feature/
-COPY ./src/Project/Api/Client.Api ./Project/Api/Client.Api/
-RUN dotnet publish ./Project/Api/Client.Api/Client.Api.csproj -c Release -o out
+COPY ./src/Project/Api/Client.Api ./Project/Api/
+RUN dotnet publish ./Project/Api/Client.Api.csproj -c Release -o out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.2
