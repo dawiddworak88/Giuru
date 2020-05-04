@@ -9,6 +9,8 @@ using Feature.PageContent.MenuTiles.ViewModels;
 using Feature.PageContent.Components.Headers.ViewModels;
 using Feature.PageContent.Components.Footers.ViewModels;
 using Tenant.Portal.Areas.Clients.DependencyInjection;
+using Tenant.Portal.Areas.Clients.Configurations;
+using Tenant.Portal.Areas.Clients.Controllers.Configurations;
 
 namespace Tenant.Portal.Shared.DependencyInjection
 {
@@ -26,7 +28,8 @@ namespace Tenant.Portal.Shared.DependencyInjection
         {
             services.Configure<ServicesEndpointsConfiguration>(configuration.GetSection("ServicesEndpoints"));
 
-            services.ConfigureClientsAreaOptions(configuration);
+            services.Configure<ApiConfiguration>(configuration.GetSection("ServicesEndpoints").GetSection("Api"));
+            services.Configure<EndpointsConfiguration>(configuration.GetSection("ServicesEndpoints").GetSection("Api").GetSection("Endpoints"));
         }
     }
 }

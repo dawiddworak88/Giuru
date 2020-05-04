@@ -2,9 +2,9 @@
 
 namespace Tenant.Portal.Areas.Clients.Controllers.Configurations
 {
-    public class ClientApiConfiguration
+    public class ApiConfiguration
     {
         public string Host { get; set; }
-        public ClientEndpointsConfiguration Endpoints { get; set; }
+        public EndpointsConfiguration Endpoints { get; set; }
     }
 }

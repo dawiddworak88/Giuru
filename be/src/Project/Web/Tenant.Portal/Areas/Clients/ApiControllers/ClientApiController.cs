@@ -56,7 +56,7 @@ namespace Tenant.Portal.Areas.Clients.ApiControllers
                 {
                     Data = this.apiClientService.InitializeRequestModelContext(clientRequestModel),
                     AccessToken = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                    EndpointAddress = this.servicesEndpointsConfiguration.CurrentValue.ClientApi.Host + this.servicesEndpointsConfiguration.CurrentValue.ClientApi.Endpoints.Client
+                    EndpointAddress = this.servicesEndpointsConfiguration.CurrentValue.Api.Host + this.servicesEndpointsConfiguration.CurrentValue.Api.Endpoints.Client
                 };
 
                 var response = await this.apiClientService.PostAsync<ApiRequest<ClientRequestModel>, ClientRequestModel, ClientResponseModel>(apiRequest);
