@@ -8,7 +8,6 @@ using Tenant.Portal.Shared.MenuTiles.ModelBuilders;
 using Feature.PageContent.MenuTiles.ViewModels;
 using Feature.PageContent.Components.Headers.ViewModels;
 using Feature.PageContent.Components.Footers.ViewModels;
-using Tenant.Portal.Areas.Clients.DependencyInjection;
 using Tenant.Portal.Areas.Clients.Configurations;
 using Tenant.Portal.Areas.Clients.Controllers.Configurations;
 

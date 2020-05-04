@@ -1,8 +1,5 @@
 ﻿using Foundation.Extensions.ModelBuilders;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Tenant.Portal.Areas.Clients.Configurations;
-using Tenant.Portal.Areas.Clients.Controllers.Configurations;
 using Tenant.Portal.Areas.Clients.ModelBuilders;
 using Tenant.Portal.Areas.Clients.ViewModels;
 

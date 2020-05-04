@@ -331,7 +331,7 @@ namespace Foundation.TenantDatabase.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SchemaField",
+                name: "SchemaFields",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -367,15 +367,15 @@ namespace Foundation.TenantDatabase.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SchemaField", x => x.Id);
+                    table.PrimaryKey("PK_SchemaFields", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SchemaField_Taxonomies_OptionsId",
+                        name: "FK_SchemaFields_Taxonomies_OptionsId",
                         column: x => x.OptionsId,
                         principalTable: "Taxonomies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_SchemaField_Schemas_SchemaId",
+                        name: "FK_SchemaFields_Schemas_SchemaId",
                         column: x => x.SchemaId,
                         principalTable: "Schemas",
                         principalColumn: "Id",
@@ -401,9 +401,9 @@ namespace Foundation.TenantDatabase.Migrations
                 {
                     table.PrimaryKey("PK_SchemaFieldValues", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SchemaFieldValues_SchemaField_SchemaFieldId",
+                        name: "FK_SchemaFieldValues_SchemaFields_SchemaFieldId",
                         column: x => x.SchemaFieldId,
-                        principalTable: "SchemaField",
+                        principalTable: "SchemaFields",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -458,13 +458,13 @@ namespace Foundation.TenantDatabase.Migrations
                 column: "SchemaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SchemaField_OptionsId",
-                table: "SchemaField",
+                name: "IX_SchemaFields_OptionsId",
+                table: "SchemaFields",
                 column: "OptionsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SchemaField_SchemaId",
-                table: "SchemaField",
+                name: "IX_SchemaFields_SchemaId",
+                table: "SchemaFields",
                 column: "SchemaId");
 
             migrationBuilder.CreateIndex(
@@ -525,7 +525,7 @@ namespace Foundation.TenantDatabase.Migrations
                 name: "MediaItems");
 
             migrationBuilder.DropTable(
-                name: "SchemaField");
+                name: "SchemaFields");
 
             migrationBuilder.DropTable(
                 name: "Taxonomies");

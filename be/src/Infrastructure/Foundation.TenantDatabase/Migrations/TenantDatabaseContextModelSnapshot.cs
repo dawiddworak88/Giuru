@@ -386,7 +386,7 @@ namespace Foundation.TenantDatabase.Migrations
 
                     b.HasIndex("SchemaId");
 
-                    b.ToTable("SchemaField");
+                    b.ToTable("SchemaFields");
                 });
 
             modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.SchemaFieldValue", b =>
