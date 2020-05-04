@@ -309,8 +309,26 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsFacetable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFilterable")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsRequired")
                         .HasColumnType("bit");
+
+                    b.Property<string>("IsRequiredValidationMessageKey")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsSearchable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsSortable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LabelKey")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
@@ -318,14 +336,23 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("MaxItems")
+                    b.Property<int?>("MaxItems")
                         .HasColumnType("int");
+
+                    b.Property<string>("MaxItemsValidationMessageKey")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("MaxLength")
                         .HasColumnType("int");
 
+                    b.Property<string>("MaxLengthValidationMessageKey")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("MinLength")
                         .HasColumnType("int");
+
+                    b.Property<string>("MinLengthValidationMessageKey")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("OptionsId")
                         .HasColumnType("uniqueidentifier");
@@ -334,6 +361,9 @@ namespace Foundation.TenantDatabase.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Pattern")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PatternValidationMessageKey")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("SchemaId")
