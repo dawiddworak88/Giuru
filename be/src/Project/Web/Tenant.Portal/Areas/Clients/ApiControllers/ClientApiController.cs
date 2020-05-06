@@ -5,7 +5,6 @@ using Foundation.ApiExtensions.Definitions;
 using Foundation.ApiExtensions.Helpers;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Services.ApiResponseServices;
-using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
@@ -28,21 +27,18 @@ namespace Tenant.Portal.Areas.Clients.ApiControllers
         private readonly IApiResponseService apiResponseService;
         private readonly IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration;
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly ILogger<ClientApiController> logger;
 
         public ClientApiController(
             IApiClientService apiClientService,
             IApiResponseService apiResponseService,
             IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration,
-            IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
             ILogger<ClientApiController> logger)
         {
             this.apiClientService = apiClientService;
             this.apiResponseService = apiResponseService;
             this.servicesEndpointsConfiguration = servicesEndpointsConfiguration;
-            this.globalLocalizer = globalLocalizer;
             this.clientLocalizer = clientLocalizer;
             this.logger = logger;
         }
@@ -67,7 +63,7 @@ namespace Tenant.Portal.Areas.Clients.ApiControllers
                 }
                 else
                 {
-                    response = this.apiResponseService.HandleResponse(response, this.clientLocalizer["ClientSavedSuccessfully"]);
+                    response = this.apiResponseService.EnrichResponseMessage(response, this.clientLocalizer["ClientSavedSuccessfully"]);
                 }
 
                 return this.StatusCode((int)response.StatusCode, response);

@@ -15,7 +15,7 @@ namespace Foundation.ApiExtensions.Services.ApiResponseServices
             this.globalLocalizer = globalLocalizer;
         }
 
-        public ApiResponse<T> HandleResponse<T>(ApiResponse<T> response, string successMessage) where T: BaseResponseModel
+        public ApiResponse<T> EnrichResponseMessage<T>(ApiResponse<T> response, string successMessage) where T: BaseResponseModel
         {
             if (response.IsSuccessStatusCode)
             {

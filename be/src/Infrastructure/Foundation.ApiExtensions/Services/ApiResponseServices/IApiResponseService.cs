@@ -6,7 +6,7 @@ namespace Foundation.ApiExtensions.Services.ApiResponseServices
 {
     public interface IApiResponseService
     {
-        ApiResponse<T> HandleResponse<T>(ApiResponse<T> response, string successMessage) where T : BaseResponseModel;
+        ApiResponse<T> EnrichResponseMessage<T>(ApiResponse<T> response, string successMessage) where T : BaseResponseModel;
         ApiResponse<BaseResponseModel> GenerateErrorApiResponse(Error error);
     }
 }
