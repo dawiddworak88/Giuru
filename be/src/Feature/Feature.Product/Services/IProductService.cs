@@ -1,4 +1,5 @@
 ﻿using Feature.Product.Models;
+using Feature.Product.ResultModels;
 using System.Threading.Tasks;
 
 namespace Feature.Product.Services

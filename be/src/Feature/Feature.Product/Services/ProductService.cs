@@ -1,9 +1,13 @@
 ﻿using Feature.Product.Models;
+using Feature.Product.ResultModels;
 using Feature.Product.Validators;
 using Foundation.Database.Areas.Tenants.Entities;
 using Foundation.Database.Shared.Repositories;
-using Foundation.TenantDatabase.Shared.Contexts;
+using Foundation.Extensions.Definitions;
+using Foundation.GenericRepository.Services;
+using Foundation.TenantDatabase.Areas.Translations.Entities;
 using Foundation.TenantDatabase.Shared.Repositories;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Feature.Product.Services
@@ -12,17 +16,17 @@ namespace Feature.Product.Services
     {
         private readonly IGenericRepository<Tenant> tenantRepository;
         private readonly TenantGenericRepositoryFactory genericRepositoryFactory;
-        private readonly TenantDatabaseContextFactory tenantDatabaseContextFactory;
+        private readonly IEntityService entityService;
 
         public ProductService(
             IGenericRepository<Tenant> tenantRepository,
             TenantGenericRepositoryFactory genericRepositoryFactory,
-            TenantDatabaseContextFactory tenantDatabaseContextFactory
+            IEntityService entityService
             )
         {
             this.tenantRepository = tenantRepository;
             this.genericRepositoryFactory = genericRepositoryFactory;
-            this.tenantDatabaseContextFactory = tenantDatabaseContextFactory;
+            this.entityService = entityService;
         }
 
         public async Task<CreateProductResultModel> CreateAsync(CreateProductModel model)
@@ -31,30 +35,50 @@ namespace Feature.Product.Services
 
             var validationResult = await validator.ValidateAsync(model);
 
-            var createClientResultModel = new CreateProductResultModel
+            var createProductResultModel = new CreateProductResultModel();
+
+            if (!validationResult.IsValid)
             {
-                ValidationResult = validationResult
-            };
-
-            if (validationResult.IsValid)
-            {
-                var tenant = this.tenantRepository.GetById(model.TenantId.Value);
-
-                if (tenant != null)
-                {
-                    var productRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Products.Entities.Product>(tenant.DatabaseConnectionString);
-                    
-                    var product = new Foundation.TenantDatabase.Areas.Products.Entities.Product
-                    {
-                    };
-
-                    await productRepository.CreateAsync(product);
-
-                    createClientResultModel.Product = product;
-                }
+                createProductResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+                return createProductResultModel;
             }
 
-            return createClientResultModel;
+            var tenant = this.tenantRepository.GetById(model.TenantId.Value);
+
+            if (tenant == null)
+            {
+                createProductResultModel.Errors.Add(ErrorConstants.NoTenant);
+                return createProductResultModel;
+            }
+
+            var product = new Foundation.TenantDatabase.Areas.Products.Entities.Product
+            {
+                Name = model.Name,
+                Sku = model.Sku
+            };
+
+            var productRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Products.Entities.Product>(tenant.DatabaseConnectionString);
+            
+            var translationRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Translation>(tenant.DatabaseConnectionString);
+
+            await productRepository.CreateAsync(this.entityService.EnrichEntity(product, model.Username));
+
+            await productRepository.SaveChangesAsync();
+
+            var translation = new Translation
+            {
+                Key = product.Id.ToString(),
+                Value = product.Name,
+                Language = model.Language
+            };
+
+            await translationRepository.CreateAsync(this.entityService.EnrichEntity(translation, model.Username));
+
+            await translationRepository.SaveChangesAsync();
+
+            createProductResultModel.Product = product;
+
+            return createProductResultModel;
         }
     }
 }

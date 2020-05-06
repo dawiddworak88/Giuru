@@ -2,12 +2,12 @@
 using Feature.Client.Models;
 using Feature.Client.ResultModels;
 using Feature.Client.Validators;
-using FluentValidation.Results;
 using Foundation.Account.Definitions;
 using Foundation.Account.Services;
 using Foundation.Account.UserStores;
 using Foundation.Database.Areas.Tenants.Entities;
 using Foundation.Database.Shared.Repositories;
+using Foundation.GenericRepository.Services;
 using Foundation.Localization;
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Services;
@@ -40,6 +40,7 @@ namespace Feature.Client.Services
         private readonly MailingConfiguration mailingConfiguration;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly ICultureService cultureService;
+        private readonly IEntityService entityService;
 
         public ClientService(
             IGenericRepository<Tenant> tenantRepository,
@@ -51,7 +52,8 @@ namespace Feature.Client.Services
             IMailingService mailingService, 
             IOptionsMonitor<MailingConfiguration> mailingConfiguration,
             IStringLocalizer<GlobalResources> globalLocalizer,
-            ICultureService cultureService)
+            ICultureService cultureService,
+            IEntityService entityService)
         {
             this.tenantRepository = tenantRepository;
             this.genericRepositoryFactory = genericRepositoryFactory;
@@ -63,6 +65,7 @@ namespace Feature.Client.Services
             this.mailingConfiguration = mailingConfiguration.CurrentValue;
             this.globalLocalizer = globalLocalizer;
             this.cultureService = cultureService;
+            this.entityService = entityService;
         }
 
         public async Task<CreateClientResultModel> CreateAsync(CreateClientModel model)
@@ -83,7 +86,7 @@ namespace Feature.Client.Services
 
             if (tenant == null)
             {
-                createClientResultModel.Errors.Add(ErrorConstants.NoTenant);
+                createClientResultModel.Errors.Add(Foundation.Extensions.Definitions.ErrorConstants.NoTenant);
                 return createClientResultModel;
             }
 
@@ -93,12 +96,7 @@ namespace Feature.Client.Services
             {
                 Language = model.ClientPreferredLanguage,
                 Name = model.Name,
-                Host = host,
-                IsActive = true,
-                LastModifiedBy = model.Username,
-                LastModifiedDate = DateTime.UtcNow,
-                CreatedBy = model.Username,
-                CreatedDate = DateTime.UtcNow
+                Host = host
             };
 
             var clientRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Clients.Entities.Client>(tenant.DatabaseConnectionString);
@@ -109,7 +107,7 @@ namespace Feature.Client.Services
 
             if (!existingClients.Any())
             {
-                await clientRepository.CreateAsync(client);
+                await clientRepository.CreateAsync(this.entityService.EnrichEntity(client, model.Username));
                 await clientRepository.SaveChangesAsync();
             }
             else
