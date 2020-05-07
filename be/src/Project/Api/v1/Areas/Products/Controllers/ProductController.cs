@@ -36,9 +36,9 @@ namespace Api.v1.Areas.Products.Controllers
         }
 
         /// <summary>
-        /// Creates a new client
+        /// Creates a new product
         /// </summary>
-        /// <param name="clientModel">Client to save.</param>
+        /// <param name="productModel">Product to save.</param>
         /// <returns>Client creation results.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType(201)]
@@ -53,6 +53,7 @@ namespace Api.v1.Areas.Products.Controllers
                 var createProductModel = new CreateProductModel
                 {
                     Sku = productModel.Sku,
+                    Name = productModel.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
                     Language = productModel.Context.Language
@@ -62,7 +63,7 @@ namespace Api.v1.Areas.Products.Controllers
 
                 if (createProductResult.IsValid)
                 {
-                    return this.StatusCode((int)HttpStatusCode.Created, new ProductResponseModel { Product = createProductResult.Product });
+                    return this.StatusCode((int)HttpStatusCode.Created, new ProductResponseModel(createProductResult.Product));
                 }
                 else
                 {

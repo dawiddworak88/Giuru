@@ -31057,7 +31057,7 @@ function ClientDetailForm(props) {
     value: name,
     onChange: handleOnChange,
     helperText: errors.name && dirty.name && errors.name,
-    error: errors.name && dirty.name
+    error: dirty.name
   })), /*#__PURE__*/react_default.a.createElement("div", {
     className: "field"
   }, /*#__PURE__*/react_default.a.createElement(esm_TextField_TextField, {
@@ -31068,7 +31068,7 @@ function ClientDetailForm(props) {
     value: email,
     onChange: handleOnChange,
     helperText: errors.email && dirty.email && errors.email,
-    error: errors.email && dirty.email
+    error: dirty.email
   })), /*#__PURE__*/react_default.a.createElement("div", {
     className: "field"
   }, /*#__PURE__*/react_default.a.createElement(esm_FormControl_FormControl, {

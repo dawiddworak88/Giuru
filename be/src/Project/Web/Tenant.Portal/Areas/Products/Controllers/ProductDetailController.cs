@@ -58,7 +58,7 @@ namespace Tenant.Portal.Areas.Products.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return this.RedirectToAction(nameof(Index), new { id = response.Data.Id });
+                    return this.RedirectToAction(nameof(Edit), new { id = response.Data.Id });
                 }
 
                 return this.StatusCode((int)response.StatusCode);
@@ -73,11 +73,11 @@ namespace Tenant.Portal.Areas.Products.Controllers
             }
         }
 
-        public IActionResult Index(Guid id)
+        public IActionResult Edit(Guid id)
         {
             var viewModel = this.productDetailPageModelBuilder.BuildModel();
 
-            return this.View(viewModel);
+            return this.View("Index", viewModel);
         }
     }
 }

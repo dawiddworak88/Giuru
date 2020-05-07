@@ -65,16 +65,19 @@ namespace Feature.Product.Services
 
             await productRepository.SaveChangesAsync();
 
-            var translation = new Translation
+            if (!string.IsNullOrWhiteSpace(product.Name))
             {
-                Key = product.Id.ToString(),
-                Value = product.Name,
-                Language = model.Language
-            };
+                var translation = new Translation
+                {
+                    Key = product.Id.ToString(),
+                    Value = product.Name,
+                    Language = model.Language
+                };
 
-            await translationRepository.CreateAsync(this.entityService.EnrichEntity(translation, model.Username));
+                await translationRepository.CreateAsync(this.entityService.EnrichEntity(translation, model.Username));
 
-            await translationRepository.SaveChangesAsync();
+                await translationRepository.SaveChangesAsync();
+            }
 
             createProductResultModel.Product = product;
 

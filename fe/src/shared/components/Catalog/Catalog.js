@@ -8,7 +8,7 @@ function Catalog(props) {
             <h1 className="subtitle is-4">{props.title}</h1>
             <div>
                 {props.showNew && 
-                    <a href={props.newUrl} class="button is-primary">
+                    <a href={props.newUrl} className="button is-primary">
                         <span className="icon">
                             <Plus />
                         </span>
@@ -24,7 +24,7 @@ function Catalog(props) {
 
 Catalog.propTypes = {
     title: PropTypes.string.isRequired,
-    showNew: PropTypes.string.isRequired,
+    showNew: PropTypes.bool.isRequired,
     newText: PropTypes.string,
     newUrl: PropTypes.string
 };

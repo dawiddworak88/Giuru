@@ -1,7 +1,9 @@
 using Feature.Account.DependencyInjection;
 using Feature.Client.DependencyInjection;
+using Feature.Product.DependencyInjection;
 using Foundation.Account.DependencyInjection;
 using Foundation.Database.Shared.DependencyInjection;
+using Foundation.GenericRepository.DependencyInjection;
 using Foundation.Localization.DependencyInjection;
 using Foundation.Mailing.DependencyInjection;
 using Foundation.TenantDatabase.Shared.DependencyInjection;
@@ -39,11 +41,15 @@ namespace Api
 
             services.RegisterClientDependencies();
 
+            services.RegisterProductDependencies();
+
             services.RegisterDatabaseDependencies(this.Configuration);
 
             services.RegisterTenantDatabaseDependencies(this.Configuration);
 
             services.RegisterMailingDependencies(this.Configuration);
+
+            services.ConfigureGenericRepositoryOptions(this.Configuration);
 
             services.AddApiVersioning();
 

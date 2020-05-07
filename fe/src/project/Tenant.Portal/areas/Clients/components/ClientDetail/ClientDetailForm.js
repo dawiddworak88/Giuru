@@ -61,11 +61,11 @@ function ClientDetailForm(props) {
         <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
             <div className="field">
                 <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
-                    value={name} onChange={handleOnChange} helperText={errors.name && dirty.name && errors.name} error={errors.name && dirty.name} />
+                    value={name} onChange={handleOnChange} helperText={errors.name && dirty.name && errors.name} error={dirty.name} />
             </div>
             <div className="field">
                 <TextField id="email" name="email" label={props.emailLabel} fullWidth={true}
-                    value={email} onChange={handleOnChange} helperText={errors.email && dirty.email && errors.email} error={errors.email && dirty.email} />
+                    value={email} onChange={handleOnChange} helperText={errors.email && dirty.email && errors.email} error={dirty.email} />
             </div>
             <div className="field">
                 <FormControl fullWidth={true}>
