@@ -1,20 +1,61 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
+import { Context } from '../../../../../../shared/stores/Store';
+import useForm from '../../../../../../shared/helpers/forms/useForm';
 import { TextField, Button, CircularProgress } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 function ProductDetailForm(props) {
+    
+    const [state] = useContext(Context);
+
+    const stateSchema = {
+        name: { value: '', error: '' },
+        sku: { value: '', error: '' }
+    };
+
+    const stateValidatorSchema = {
+
+        name: {
+            required: {
+                isRequired: true,
+                error: props.nameRequiredErrorMessage
+            }
+        },
+        sku: {
+            required: {
+                isRequired: true,
+                error: props.skuRequiredErrorMessage
+            }
+        }
+    };
+
+    function onSubmitForm(state) {
+        console.log(state);
+    }
+
+    const {
+        values,
+        errors,
+        dirty,
+        handleOnChange,
+        handleOnSubmit
+    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
+
+    const { name, sku } = values;
 
     return (
         <div>
             <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                 <Autocomplete
                     id="select-schema"
-                    options={...props.schemas}
+                    options={props.schemas}
                     getOptionLabel={(option) => option.name}
-                    renderInput={() => <TextField label={props.selectSchemaLabel} variant="outlined" />} />
+                    renderInput={() => {
+                        return <TextField label={props.selectSchemaLabel} variant="outlined" />;
+                    }} />
                 <div className="field">
-                    <TextField id="sku" sku="sku" label={props.nameLabel} fullWidth={true}
+                    <TextField id="sku" name="sku" label={props.skuLabel} fullWidth={true}
                         value={sku} onChange={handleOnChange} helperText={errors.sku && dirty.sku && errors.sku} error={dirty.sku} />
                 </div>
                 <div className="field">
