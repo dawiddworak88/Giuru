@@ -9,6 +9,11 @@ namespace Foundation.TenantDatabase.Areas.Schemas.Entities
         [Required]
         public string Name { get; set; }
 
+        [Required]
+        public string JsonSchema { get; set; }
+
+        public string UiSchema { get; set; }
+
         public virtual EntityType EntityType { get; set; }
     }
 }

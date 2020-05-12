@@ -6,6 +6,7 @@ namespace Feature.Product.Services
 {
     public interface IProductService
     {
-        Task<CreateProductResultModel> CreateAsync(CreateProductModel model);
+        Task<ProductResultModel> CreateAsync(CreateProductModel model);
+        Task<ProductResultModel> GetByIdAsync(GetProductModel getProductModel);
     }
 }

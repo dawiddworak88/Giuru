@@ -5,6 +5,7 @@ using Feature.Product.Models;
 using Feature.Product.Services;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Helpers;
+using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -43,7 +44,7 @@ namespace Api.v1.Areas.Products.Controllers
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(409)]
+        [ProducesResponseType(422)]
         public async Task<IActionResult> Create([FromBody] ProductRequestModel productModel)
         {
             try
@@ -67,6 +68,53 @@ namespace Api.v1.Areas.Products.Controllers
                 }
                 else
                 {
+                    return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+                }
+            }
+            catch (Exception exception)
+            {
+                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
+                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
+                return this.StatusCode((int)HttpStatusCode.BadRequest, new ProductResponseModel { Error = error });
+            }
+        }
+
+        /// <summary>
+        /// Returns a product by id.
+        /// </summary>
+        /// <param name="productModel">Product to get.</param>
+        /// <returns>The product.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetById([FromBody] GetProductRequestModel productModel)
+        {
+            try
+            {
+                var tenantClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.TenantIdClaim);
+
+                var getProductModel = new GetProductModel
+                {
+                    Id = productModel.Id,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
+                    Language = productModel.Context.Language
+                };
+
+                var getProductResult = await this.productService.GetByIdAsync(getProductModel);
+
+                if (getProductResult.IsValid)
+                {
+                    return this.StatusCode((int)HttpStatusCode.OK, new ProductResponseModel(getProductResult.Product));
+                }
+                else
+                {
+                    if (getProductResult.Errors.Contains(ErrorConstants.NotFound))
+                    {
+                        return this.StatusCode((int)HttpStatusCode.NotFound);
+                    }
+
                     return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
                 }
             }

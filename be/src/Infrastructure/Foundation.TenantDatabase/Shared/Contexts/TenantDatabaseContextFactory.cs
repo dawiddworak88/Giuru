@@ -6,7 +6,7 @@ namespace Foundation.TenantDatabase.Shared.Contexts
 {
     public class TenantDatabaseContextFactory
     {
-        public async Task<TenantDatabaseContext> CreateDbContextAsync(string connectionString)
+        public virtual async Task<TenantDatabaseContext> CreateDbContextAsync(string connectionString)
         {
             var optionsBuilder = new DbContextOptionsBuilder<TenantDatabaseContext>();
 

@@ -6,6 +6,7 @@ using Foundation.Database.Shared.DependencyInjection;
 using Foundation.GenericRepository.DependencyInjection;
 using Foundation.Localization.DependencyInjection;
 using Foundation.Mailing.DependencyInjection;
+using Foundation.Schema.DependencyInjection;
 using Foundation.TenantDatabase.Shared.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,6 +39,8 @@ namespace Api
             services.RegisterApiAccountDependencies(this.Configuration);
 
             services.RegisterBaseAccountDependencies();
+
+            services.RegisteSchemaDependencies();
 
             services.RegisterClientDependencies();
 

@@ -52,14 +52,14 @@ namespace Foundation.TenantDatabase.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Host = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Language = table.Column<string>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false)
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    Host = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Language = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -105,6 +105,24 @@ namespace Foundation.TenantDatabase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MediaItems", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SchemaDatas",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    EntityId = table.Column<Guid>(nullable: false),
+                    FormData = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SchemaDatas", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -268,6 +286,8 @@ namespace Foundation.TenantDatabase.Migrations
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: false),
+                    JsonSchema = table.Column<string>(nullable: false),
+                    UiSchema = table.Column<string>(nullable: true),
                     EntityTypeId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
@@ -316,8 +336,8 @@ namespace Foundation.TenantDatabase.Migrations
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    SchemaId = table.Column<Guid>(nullable: true),
-                    Sku = table.Column<string>(nullable: true)
+                    Sku = table.Column<string>(nullable: true),
+                    SchemaId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -328,84 +348,6 @@ namespace Foundation.TenantDatabase.Migrations
                         principalTable: "Schemas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SchemaFields",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    LastModifiedBy = table.Column<string>(nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    SchemaId = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(nullable: false),
-                    LabelKey = table.Column<string>(nullable: true),
-                    Type = table.Column<string>(nullable: false),
-                    Order = table.Column<int>(nullable: false),
-                    IsRequired = table.Column<bool>(nullable: false),
-                    IsRequiredValidationMessageKey = table.Column<string>(nullable: true),
-                    OptionsId = table.Column<Guid>(nullable: true),
-                    Default = table.Column<string>(nullable: true),
-                    Format = table.Column<string>(nullable: true),
-                    MaxItems = table.Column<int>(nullable: true),
-                    MaxItemsValidationMessageKey = table.Column<string>(nullable: true),
-                    MinLength = table.Column<int>(nullable: true),
-                    MinLengthValidationMessageKey = table.Column<string>(nullable: true),
-                    MaxLength = table.Column<int>(nullable: true),
-                    MaxLengthValidationMessageKey = table.Column<string>(nullable: true),
-                    Pattern = table.Column<string>(nullable: true),
-                    PatternValidationMessageKey = table.Column<string>(nullable: true),
-                    UiWidget = table.Column<string>(nullable: true),
-                    EmptyValue = table.Column<string>(nullable: true),
-                    IsSearchable = table.Column<bool>(nullable: false),
-                    IsFilterable = table.Column<bool>(nullable: false),
-                    IsSortable = table.Column<bool>(nullable: false),
-                    IsFacetable = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SchemaFields", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SchemaFields_Taxonomies_OptionsId",
-                        column: x => x.OptionsId,
-                        principalTable: "Taxonomies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_SchemaFields_Schemas_SchemaId",
-                        column: x => x.SchemaId,
-                        principalTable: "Schemas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SchemaFieldValues",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    LastModifiedBy = table.Column<string>(nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    SchemaFieldId = table.Column<Guid>(nullable: false),
-                    EntityId = table.Column<Guid>(nullable: false),
-                    Value = table.Column<string>(nullable: true),
-                    Version = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SchemaFieldValues", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SchemaFieldValues_SchemaFields_SchemaFieldId",
-                        column: x => x.SchemaFieldId,
-                        principalTable: "SchemaFields",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -458,21 +400,6 @@ namespace Foundation.TenantDatabase.Migrations
                 column: "SchemaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SchemaFields_OptionsId",
-                table: "SchemaFields",
-                column: "OptionsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SchemaFields_SchemaId",
-                table: "SchemaFields",
-                column: "SchemaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SchemaFieldValues_SchemaFieldId",
-                table: "SchemaFieldValues",
-                column: "SchemaFieldId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Schemas_EntityTypeId",
                 table: "Schemas",
                 column: "EntityTypeId");
@@ -510,7 +437,10 @@ namespace Foundation.TenantDatabase.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "SchemaFieldValues");
+                name: "SchemaDatas");
+
+            migrationBuilder.DropTable(
+                name: "Taxonomies");
 
             migrationBuilder.DropTable(
                 name: "Translations");
@@ -523,12 +453,6 @@ namespace Foundation.TenantDatabase.Migrations
 
             migrationBuilder.DropTable(
                 name: "MediaItems");
-
-            migrationBuilder.DropTable(
-                name: "SchemaFields");
-
-            migrationBuilder.DropTable(
-                name: "Taxonomies");
 
             migrationBuilder.DropTable(
                 name: "Schemas");

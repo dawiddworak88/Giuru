@@ -1,8 +1,7 @@
 import React, { useContext }  from 'react';
 import PropTypes from 'prop-types';
-import { CircularProgress } from '@material-ui/core';
 import { Context } from '../../../../../../shared/stores/Store';
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText } from '@material-ui/core';
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from '@material-ui/core';
 import useForm from '../../../../../../shared/helpers/forms/useForm';
 import EmailValidator from '../../../../../../shared/helpers/validators/EmailValidator';
 import ClientDetailService from '../../services/ClientDetail/ClientDetailService';

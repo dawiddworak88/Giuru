@@ -45,6 +45,7 @@ namespace Api.v1.Areas.Clients.Controllers
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(409)]
+        [ProducesResponseType(422)]
         public async Task<IActionResult> Create([FromBody] ClientRequestModel clientModel)
         {
             try

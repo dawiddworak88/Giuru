@@ -5,6 +5,7 @@ using Foundation.Database.Areas.Tenants.Entities;
 using Foundation.Database.Shared.Repositories;
 using Foundation.Extensions.Definitions;
 using Foundation.GenericRepository.Services;
+using Foundation.Schema.Services.SchemaServices;
 using Foundation.TenantDatabase.Areas.Translations.Entities;
 using Foundation.TenantDatabase.Shared.Repositories;
 using System.Linq;
@@ -17,25 +18,28 @@ namespace Feature.Product.Services
         private readonly IGenericRepository<Tenant> tenantRepository;
         private readonly TenantGenericRepositoryFactory genericRepositoryFactory;
         private readonly IEntityService entityService;
+        private readonly SchemaServiceFactory schemaServiceFactory;
 
         public ProductService(
             IGenericRepository<Tenant> tenantRepository,
             TenantGenericRepositoryFactory genericRepositoryFactory,
-            IEntityService entityService
+            IEntityService entityService,
+            SchemaServiceFactory schemaServiceFactory
             )
         {
             this.tenantRepository = tenantRepository;
             this.genericRepositoryFactory = genericRepositoryFactory;
             this.entityService = entityService;
+            this.schemaServiceFactory = schemaServiceFactory;
         }
 
-        public async Task<CreateProductResultModel> CreateAsync(CreateProductModel model)
+        public async Task<ProductResultModel> CreateAsync(CreateProductModel model)
         {
             var validator = new CreateProductModelValidator();
 
             var validationResult = await validator.ValidateAsync(model);
 
-            var createProductResultModel = new CreateProductResultModel();
+            var createProductResultModel = new ProductResultModel();
 
             if (!validationResult.IsValid)
             {
@@ -82,6 +86,45 @@ namespace Feature.Product.Services
             createProductResultModel.Product = product;
 
             return createProductResultModel;
+        }
+
+        public async Task<ProductResultModel> GetByIdAsync(GetProductModel getProductModel)
+        {
+            var validator = new GetProductModelValidator();
+
+            var validationResult = await validator.ValidateAsync(getProductModel);
+
+            var getProductResultModel = new ProductResultModel();
+
+            if (!validationResult.IsValid)
+            {
+                getProductResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+                return getProductResultModel;
+            }
+
+            var tenant = this.tenantRepository.GetById(getProductModel.TenantId.Value);
+
+            if (tenant == null)
+            {
+                getProductResultModel.Errors.Add(ErrorConstants.NoTenant);
+                return getProductResultModel;
+            }
+
+            var productRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Products.Entities.Product>(tenant.DatabaseConnectionString);
+
+            var product = productRepository.GetById(getProductModel.Id.Value);
+
+            if (product == null)
+            {
+                getProductResultModel.Errors.Add(ErrorConstants.NotFound);
+                return getProductResultModel;
+            }
+
+            var schemaService = await schemaServiceFactory.CreateSchemaService(tenant.DatabaseConnectionString);
+
+            getProductResultModel.Product = product;
+
+            return getProductResultModel;
         }
     }
 }

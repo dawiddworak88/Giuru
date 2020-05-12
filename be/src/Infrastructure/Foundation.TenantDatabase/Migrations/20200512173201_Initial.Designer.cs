@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foundation.TenantDatabase.Migrations
 {
     [DbContext(typeof(TenantDatabaseContext))]
-    [Migration("20200504200820_Initial")]
+    [Migration("20200512173201_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -270,6 +270,10 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<string>("JsonSchema")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -280,6 +284,9 @@ namespace Foundation.TenantDatabase.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UiSchema")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EntityTypeId");
@@ -287,111 +294,7 @@ namespace Foundation.TenantDatabase.Migrations
                     b.ToTable("Schemas");
                 });
 
-            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.SchemaField", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Default")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmptyValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Format")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsFacetable")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsFilterable")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsRequired")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("IsRequiredValidationMessageKey")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsSearchable")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSortable")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LabelKey")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("MaxItems")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MaxItemsValidationMessageKey")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("MaxLength")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MaxLengthValidationMessageKey")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("MinLength")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MinLengthValidationMessageKey")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("OptionsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Pattern")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PatternValidationMessageKey")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("SchemaId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UiWidget")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OptionsId");
-
-                    b.HasIndex("SchemaId");
-
-                    b.ToTable("SchemaFields");
-                });
-
-            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.SchemaFieldValue", b =>
+            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.SchemaData", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -406,6 +309,10 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<Guid>("EntityId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("FormData")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -415,20 +322,9 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("SchemaFieldId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Version")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("SchemaFieldId");
-
-                    b.ToTable("SchemaFieldValues");
+                    b.ToTable("SchemaDatas");
                 });
 
             modelBuilder.Entity("Foundation.TenantDatabase.Areas.Taxonomies.Entities.Taxonomy", b =>
@@ -689,28 +585,6 @@ namespace Foundation.TenantDatabase.Migrations
                     b.HasOne("Foundation.TenantDatabase.Shared.Entities.EntityType", "EntityType")
                         .WithMany()
                         .HasForeignKey("EntityTypeId");
-                });
-
-            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.SchemaField", b =>
-                {
-                    b.HasOne("Foundation.TenantDatabase.Areas.Taxonomies.Entities.Taxonomy", "Options")
-                        .WithMany()
-                        .HasForeignKey("OptionsId");
-
-                    b.HasOne("Foundation.TenantDatabase.Areas.Schemas.Entities.Schema", "Schema")
-                        .WithMany()
-                        .HasForeignKey("SchemaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.SchemaFieldValue", b =>
-                {
-                    b.HasOne("Foundation.TenantDatabase.Areas.Schemas.Entities.SchemaField", "SchemaField")
-                        .WithMany()
-                        .HasForeignKey("SchemaFieldId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Foundation.TenantDatabase.Areas.Taxonomies.Entities.Taxonomy", b =>

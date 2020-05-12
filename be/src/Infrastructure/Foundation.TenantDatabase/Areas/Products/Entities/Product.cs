@@ -7,8 +7,8 @@ namespace Foundation.TenantDatabase.Areas.Products.Entities
     {
         public string Name { get; set; }
 
-        public virtual Schema Schema { get; set; }
-
         public string Sku { get; set; }
+
+        public virtual Schema Schema { get; set; }
     }
 }

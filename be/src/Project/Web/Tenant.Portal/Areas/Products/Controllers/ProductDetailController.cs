@@ -73,11 +73,36 @@ namespace Tenant.Portal.Areas.Products.Controllers
             }
         }
 
-        public IActionResult Edit(Guid id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            var viewModel = this.productDetailPageModelBuilder.BuildModel();
+            try
+            {
+                var apiRequest = new ApiRequest<ProductRequestModel>
+                {
+                    Data = this.apiClientService.InitializeRequestModelContext(new ProductRequestModel()),
+                    AccessToken = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                    EndpointAddress = this.servicesEndpointsConfiguration.CurrentValue.Api.Host + this.servicesEndpointsConfiguration.CurrentValue.Api.Endpoints.Product
+                };
 
-            return this.View("Index", viewModel);
+                var response = await this.apiClientService.PostAsync<ApiRequest<ProductRequestModel>, ProductRequestModel, ProductResponseModel>(apiRequest);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var viewModel = this.productDetailPageModelBuilder.BuildModel();
+
+                    return this.View("Index", viewModel);
+                }
+
+                return this.StatusCode((int)response.StatusCode);
+            }
+            catch (Exception exception)
+            {
+                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
+
+                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
+
+                return this.StatusCode((int)HttpStatusCode.BadRequest, this.apiResponseService.GenerateErrorApiResponse(error));
+            }
         }
     }
 }
