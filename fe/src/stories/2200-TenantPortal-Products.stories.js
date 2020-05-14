@@ -50,9 +50,32 @@ var productDetailForm = {
   skuLabel: "SKU:",
   skuRequiredErrorMessage: "Enter SKU",
   enterSkuText: "Enter SKU",
-  schemas: [],
   saveUrl: "#",
-  saveText: "Save"
+  saveText: "Save",
+  schema: {
+    id: "1",
+    jsonSchema: {
+      "title": "A registration form",
+      "description": "A simple form example.",
+      "type": "object",
+      "required": [
+        "firstName",
+        "lastName"
+      ],
+      "properties": {
+        "firstName": {
+          "type": "string",
+          "title": "First name"
+        },
+        "lastName": {
+          "type": "string",
+          "title": "Last name"
+        }
+      }
+    },
+    uiSchema: {},
+    formData: {}
+  }
 };
 
 var footer = {
