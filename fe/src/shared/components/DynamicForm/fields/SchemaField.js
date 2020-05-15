@@ -1,5 +1,4 @@
 // Source: https://github.com/rjsf-team/react-jsonschema-form/blob/master/packages/core/src/components/fields/SchemaField.js
-import { ADDITIONAL_PROPERTY_FLAG } from "../utils/utils";
 import * as types from "../types/types";
 import React from "react";
 import PropTypes from 'prop-types';
@@ -17,7 +16,6 @@ import {
   getSchemaType,
 } from "../utils/utils";
 
-const REQUIRED_FIELD_SYMBOL = "*";
 const COMPONENT_TYPES = {
   array: "ArrayField",
   boolean: "BooleanField",
@@ -61,32 +59,6 @@ function getFieldComponent(schema, uiSchema, idSchema, fields) {
       };
 }
 
-function Label(props) {
-  const { label, required, id } = props;
-  if (!label) {
-    return null;
-  }
-  return (
-    <label className="control-label" htmlFor={id}>
-      {label}
-      {required && <span className="required">{REQUIRED_FIELD_SYMBOL}</span>}
-    </label>
-  );
-}
-
-function LabelInput(props) {
-  const { id, label, onChange } = props;
-  return (
-    <input
-      className="form-control"
-      type="text"
-      id={id}
-      onBlur={event => onChange(event.target.value)}
-      defaultValue={label}
-    />
-  );
-}
-
 function Help(props) {
   const { help } = props;
   if (!help) {
@@ -123,15 +95,10 @@ function ErrorList(props) {
 
 function DefaultTemplate(props) {
   const {
-    id,
-    label,
     children,
     errors,
     help,
-    description,
-    hidden,
-    required,
-    displayLabel,
+    hidden
   } = props;
   if (hidden) {
     return <div className="hidden">{children}</div>;
@@ -139,8 +106,6 @@ function DefaultTemplate(props) {
 
   return (
     <WrapIfAdditional {...props}>
-      {displayLabel && <Label label={label} required={required} id={id} />}
-      {displayLabel && description ? description : null}
       {children}
       {errors}
       {help}
@@ -157,38 +122,12 @@ DefaultTemplate.defaultProps = {
 
 function WrapIfAdditional(props) {
   const {
-    id,
-    classNames,
-    label,
-    onKeyChange,
-    required,
-    schema,
+    classNames
   } = props;
-  const keyLabel = `${label} Key`; // i18n ?
-  const additional = schema.hasOwnProperty(ADDITIONAL_PROPERTY_FLAG);
-
-  if (!additional) {
-    return <div className={classNames}>{props.children}</div>;
-  }
 
   return (
     <div className={classNames}>
-      <div className="row">
-        <div className="col-xs-5 form-additional">
-          <div className="form-group">
-            <Label label={keyLabel} required={required} id={`${id}-key`} />
-            <LabelInput
-              label={label}
-              required={required}
-              id={`${id}-key`}
-              onChange={onKeyChange}
-            />
-          </div>
-        </div>
-        <div className="form-additional form-group col-xs-5">
-          {props.children}
-        </div>
-      </div>
+      {props.children}
     </div>
   );
 }
@@ -265,7 +204,6 @@ function SchemaFieldRender(props) {
     />
   );
 
-  const { type } = schema;
   const id = idSchema.$id;
 
   // If this schema has a title defined, but the user has set a new key/label, retain their input.
@@ -284,9 +222,6 @@ function SchemaFieldRender(props) {
   const help = uiSchema["ui:help"];
   const hidden = uiSchema["ui:widget"] === "hidden";
   const classNames = [
-    "form-group",
-    "field",
-    `field-${type}`,
     errors && errors.length > 0 ? "field-error has-error has-danger" : "",
     uiSchema.classNames,
   ]
@@ -400,7 +335,7 @@ SchemaField.propTypes = {
   idSchema: PropTypes.object,
   formData: PropTypes.any,
   errorSchema: PropTypes.object,
-  registry: types.registry.isRequired,
+  registry: types.registry
 };
 
 export default SchemaField;

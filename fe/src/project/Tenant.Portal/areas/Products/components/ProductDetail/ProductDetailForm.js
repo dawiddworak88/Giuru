@@ -78,7 +78,7 @@ function ProductDetailForm(props) {
 }
 
 ProductDetailForm.propTypes = {
-    selectLabel: PropTypes.string.isRequired
+    selectLabel: PropTypes.string
 };
 
 export default ProductDetailForm;

@@ -55,8 +55,6 @@ var productDetailForm = {
   schema: {
     id: "1",
     jsonSchema: {
-      "title": "A registration form",
-      "description": "A simple form example.",
       "type": "object",
       "required": [
         "firstName",

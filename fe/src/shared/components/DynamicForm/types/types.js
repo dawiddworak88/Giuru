@@ -21,11 +21,11 @@ export const fieldProps = {
   formData: PropTypes.any,
   idSchema: PropTypes.object,
   onBlur: PropTypes.func,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   onFocus: PropTypes.func,
   rawErrors: PropTypes.arrayOf(PropTypes.string),
   readonly: PropTypes.bool,
-  registry: registry.isRequired,
+  registry: registry,
   required: PropTypes.bool,
   schema: PropTypes.object.isRequired,
   uiSchema: PropTypes.shape({
