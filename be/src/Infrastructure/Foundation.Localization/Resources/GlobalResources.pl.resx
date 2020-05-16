@@ -204,6 +204,9 @@
   <data name="SelectLanguage" xml:space="preserve">
     <value>Wybierz język</value>
   </data>
+  <data name="SelectSchemaLabel" xml:space="preserve">
+    <value>Wybierz szablon</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Ustawienia</value>
   </data>
