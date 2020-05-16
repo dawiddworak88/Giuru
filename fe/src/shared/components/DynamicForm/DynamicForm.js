@@ -9,13 +9,15 @@ function DynamicForm(props) {
             <SchemaField 
               schema={props.schema.jsonSchema} 
               uiSchema={props.schema.uiSchema} 
-              formData={props.schema.formData} />
+              formData={props.formData}
+              onChange={props.onChange} />
         </div>
     );
 }
 
 DynamicForm.propTypes = {
-    schema: PropTypes.object.isRequired
+    schema: PropTypes.object.isRequired,
+    formData: PropTypes.object
 }
 
 export default DynamicForm;

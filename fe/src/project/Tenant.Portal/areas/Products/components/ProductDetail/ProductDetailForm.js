@@ -11,10 +11,12 @@ function ProductDetailForm(props) {
     const [state] = useContext(Context);
 
     const stateSchema = {
-        name: { value: '', error: '' },
-        sku: { value: '', error: '' }
-    };
 
+        name: { value: '', error: '' },
+        sku: { value: '', error: '' },
+        formData: {}
+    };
+    
     const stateValidatorSchema = {
 
         name: {
@@ -43,7 +45,7 @@ function ProductDetailForm(props) {
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
-    const { name, sku } = values;
+    const { name, sku, formData } = values;
 
     return (
         <div>
@@ -65,7 +67,7 @@ function ProductDetailForm(props) {
                     <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
                         value={name} onChange={handleOnChange} helperText={errors.name && dirty.name && errors.name} error={dirty.name} />
                 </div>
-                <DynamicForm schema={props.schema} />
+                <DynamicForm schema={props.schema} formData={formData} onChange={handleOnChange} />
                 <div className="field">
                     <Button type="submit" variant="contained" color="primary" disabled={state.isLoading}>
                         {props.saveText}
@@ -78,7 +80,8 @@ function ProductDetailForm(props) {
 }
 
 ProductDetailForm.propTypes = {
-    selectLabel: PropTypes.string
+    selectLabel: PropTypes.string,
+    schema: PropTypes.object.isRequired
 };
 
 export default ProductDetailForm;

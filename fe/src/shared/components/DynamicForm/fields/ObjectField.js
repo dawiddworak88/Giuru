@@ -93,7 +93,8 @@ class ObjectField extends Component {
         // set empty values to the empty string.
         value = "";
       }
-      const newFormData = { ...this.props.formData, [name]: value };
+      const newFormData = { formData: this.props.formData, name: name, target: value.target , isFormData: true };
+      
       this.props.onChange(
         newFormData,
         errorSchema &&

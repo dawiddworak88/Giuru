@@ -3,10 +3,16 @@ import PropTypes from "prop-types";
 import { TextField } from '@material-ui/core';
 
 function TextWidget(props) {
-    
+
   return (
     <div className="field">
-        <TextField id={props.id} name={props.id} label={props.label} fullWidth={true} />
+        <TextField 
+          id={props.id} 
+          name={props.id} 
+          onChange={props.onChange} 
+          label={props.label}
+          value={props.value ? props.value : ""}
+          fullWidth={true} />
     </div>
   );
 }

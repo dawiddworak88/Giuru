@@ -11,7 +11,6 @@ namespace Foundation.TenantDatabase.Shared.DependencyInjection
         {
             services.AddScoped<TenantGenericRepositoryFactory>();
             services.AddScoped<TenantDatabaseContextFactory>();
-
         }
     }
 }
