@@ -43,6 +43,7 @@ var menuTiles = {
 
 var clientDetailForm = {
 
+  generalErrorMessage: "An error has occurred",
   nameLabel: "Name:",
   emailLabel: "E-mail:",
   languageLabel: "Communication language:",
@@ -60,6 +61,7 @@ var clientDetailForm = {
     { value: "DE", text: "DE" },
     { value: "PL", text: "PL" }
   ],
+  communicationLanguage: "",
   saveText: "Save"
 };
 

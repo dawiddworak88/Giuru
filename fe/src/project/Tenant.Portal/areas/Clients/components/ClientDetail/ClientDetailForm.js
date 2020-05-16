@@ -42,38 +42,39 @@ function ClientDetailForm(props) {
         },
     };
 
-    function onSubmitForm(state) {
-        ClientDetailService.Save(props.saveUrl, state, props.generalErrorMessage, dispatch);
-    }
-
     const {
         values,
         errors,
         dirty,
+        disable,
         handleOnChange,
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
-    const { name, email, language } = values;
+    function onSubmitForm(state) {
+        ClientDetailService.Save(props.saveUrl, state, props.generalErrorMessage, dispatch);
+    }
+
+    const { name, email, communicationLanguage } = values;
 
     return (
         <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
             <div className="field">
                 <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
-                    value={name} onChange={handleOnChange} helperText={errors.name && dirty.name && errors.name} error={dirty.name} />
+                    value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ''} error={(errors.name.length > 0) && dirty.name} />
             </div>
             <div className="field">
                 <TextField id="email" name="email" label={props.emailLabel} fullWidth={true}
-                    value={email} onChange={handleOnChange} helperText={errors.email && dirty.email && errors.email} error={dirty.email} />
+                    value={email} onChange={handleOnChange} helperText={dirty.email ? errors.email : ''} error={(errors.email.length > 0) && dirty.email} />
             </div>
             <div className="field">
-                <FormControl fullWidth={true}>
+                <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage}>
                     <InputLabel id="language-label">{props.languageLabel}</InputLabel>
                     <Select
                         labelId="language-label"
                         id="communicationLanguage"
                         name="communicationLanguage"
-                        value={language}
+                        value={communicationLanguage}
                         onChange={handleOnChange}>
                         {props.languages.map(language => {
                             return (
@@ -81,13 +82,13 @@ function ClientDetailForm(props) {
                             )
                         })}
                     </Select>
-                    {errors.language && dirty.language && (
-                        <FormHelperText>{errors.language}</FormHelperText>
+                    {errors.communicationLanguage && dirty.communicationLanguage && (
+                        <FormHelperText>{errors.communicationLanguage}</FormHelperText>
                     )}
                 </FormControl>
             </div>
             <div className="field">
-                <Button type="submit" variant="contained" color="primary" disabled={state.isLoading}>
+                <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
                     {props.saveText}
                 </Button>
             </div>

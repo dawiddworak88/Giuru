@@ -41,6 +41,7 @@ function ProductDetailForm(props) {
         values,
         errors,
         dirty,
+        disable,
         handleOnChange,
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
@@ -61,15 +62,15 @@ function ProductDetailForm(props) {
                 }
                 <div className="field">
                     <TextField id="sku" name="sku" label={props.skuLabel} fullWidth={true}
-                        value={sku} onChange={handleOnChange} helperText={errors.sku && dirty.sku && errors.sku} error={dirty.sku} />
+                        value={sku} onChange={handleOnChange} helperText={dirty.sku ? errors.sku : ''} error={(errors.sku.length > 0) && dirty.sku} />
                 </div>
                 <div className="field">
                     <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
-                        value={name} onChange={handleOnChange} helperText={errors.name && dirty.name && errors.name} error={dirty.name} />
+                        value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ''} error={(errors.name.length > 0) && dirty.name} />
                 </div>
                 <DynamicForm schema={props.schema} formData={formData} onChange={handleOnChange} />
                 <div className="field">
-                    <Button type="submit" variant="contained" color="primary" disabled={state.isLoading}>
+                    <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
                         {props.saveText}
                     </Button>
                 </div>
