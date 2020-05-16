@@ -108,7 +108,7 @@ namespace Foundation.TenantDatabase.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SchemaDatas",
+                name: "SchemaFields",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -118,11 +118,12 @@ namespace Foundation.TenantDatabase.Migrations
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     EntityId = table.Column<Guid>(nullable: false),
-                    FormData = table.Column<string>(nullable: false)
+                    FieldName = table.Column<string>(nullable: false),
+                    FieldValue = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SchemaDatas", x => x.Id);
+                    table.PrimaryKey("PK_SchemaFields", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -437,7 +438,7 @@ namespace Foundation.TenantDatabase.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "SchemaDatas");
+                name: "SchemaFields");
 
             migrationBuilder.DropTable(
                 name: "Taxonomies");

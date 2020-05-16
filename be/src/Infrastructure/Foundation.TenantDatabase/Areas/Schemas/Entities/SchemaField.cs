@@ -4,12 +4,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Foundation.TenantDatabase.Areas.Schemas.Entities
 {
-    public class SchemaData : Entity
+    public class SchemaField : Entity
     {
         [Required]
         public Guid EntityId { get; set; }
 
         [Required]
-        public string FormData { get; set; }
+        public string FieldName { get; set; }
+
+        public string FieldValue { get; set; }
     }
 }

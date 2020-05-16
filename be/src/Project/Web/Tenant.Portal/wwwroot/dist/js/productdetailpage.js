@@ -52640,7 +52640,7 @@ function ProductDetailForm(props) {
     onChange: handleOnChange,
     helperText: dirty.name ? errors.name : '',
     error: errors.name.length > 0 && dirty.name
-  })), /*#__PURE__*/react_default.a.createElement(DynamicForm_DynamicForm, {
+  })), props.schema && /*#__PURE__*/react_default.a.createElement(DynamicForm_DynamicForm, {
     schema: props.schema,
     formData: formData,
     onChange: handleOnChange

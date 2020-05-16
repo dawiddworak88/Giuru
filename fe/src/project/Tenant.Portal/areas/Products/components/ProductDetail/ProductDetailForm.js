@@ -68,7 +68,9 @@ function ProductDetailForm(props) {
                     <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
                         value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ''} error={(errors.name.length > 0) && dirty.name} />
                 </div>
-                <DynamicForm schema={props.schema} formData={formData} onChange={handleOnChange} />
+                {props.schema &&
+                    <DynamicForm schema={props.schema} formData={formData} onChange={handleOnChange} />
+                }
                 <div className="field">
                     <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
                         {props.saveText}

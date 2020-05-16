@@ -8,7 +8,6 @@ namespace Foundation.Schema.DependencyInjection
         public static void RegisteSchemaDependencies(this IServiceCollection services)
         {
             services.AddScoped<SchemaServiceFactory>();
-            services.AddScoped<ISchemaService, SchemaService>();
         }
     }
 }

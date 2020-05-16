@@ -25,7 +25,7 @@ namespace Foundation.TenantDatabase.Shared.Contexts
         public DbSet<Product> Products { get; set; }
         public DbSet<Translation> Translations { get; set; }
         public DbSet<Schema> Schemas { get; set; }
-        public DbSet<SchemaData> SchemaDatas { get; set; }
+        public DbSet<SchemaField> SchemaFields { get; set; }
         public DbSet<Taxonomy> Taxonomies { get; set; }
     }
 }

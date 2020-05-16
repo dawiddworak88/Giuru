@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foundation.TenantDatabase.Migrations
 {
     [DbContext(typeof(TenantDatabaseContext))]
-    [Migration("20200512173201_Initial")]
+    [Migration("20200516190725_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -294,7 +294,7 @@ namespace Foundation.TenantDatabase.Migrations
                     b.ToTable("Schemas");
                 });
 
-            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.SchemaData", b =>
+            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.SchemaField", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -309,8 +309,11 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<Guid>("EntityId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("FormData")
+                    b.Property<string>("FieldName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FieldValue")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -324,7 +327,7 @@ namespace Foundation.TenantDatabase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SchemaDatas");
+                    b.ToTable("SchemaFields");
                 });
 
             modelBuilder.Entity("Foundation.TenantDatabase.Areas.Taxonomies.Entities.Taxonomy", b =>
