@@ -2627,13 +2627,13 @@ function LanguageSwitcher(props) {
   var languages = props.availableLanguages.map(function (language, index) {
     return /*#__PURE__*/react_default.a.createElement("option", {
       key: index,
-      value: language.url,
-      selected: language.text === props.selectedLanguageText
+      value: language.url
     }, language.text);
   });
   return /*#__PURE__*/react_default.a.createElement("div", {
     className: "select"
   }, /*#__PURE__*/react_default.a.createElement("select", {
+    value: props.selectedLanguageText,
     onChange: function onChange(e) {
       return handleLanguageChange(e);
     }
@@ -13794,7 +13794,12 @@ function is_object(value) {
 }
 function get_prop_values(stateSchema, prop) {
   return Object.keys(stateSchema).reduce(function (field, key) {
-    field[key] = is_bool(prop) ? prop : stateSchema[key][prop];
+    if (key === "formData") {
+      field[key] = stateSchema[key];
+    } else {
+      field[key] = is_bool(prop) ? prop : stateSchema[key][prop];
+    }
+
     return field;
   }, {});
 }
@@ -13956,17 +13961,25 @@ function useForm() {
 
   var handleOnChange = Object(react["useCallback"])(function (event) {
     setIsDirty(true);
-    var name = event.target.name;
-    var value = event.target.value;
-    var error = validateField(name, value);
-    setFieldValue({
-      name: name,
-      value: value
-    });
-    setFieldError({
-      name: name,
-      error: error
-    });
+
+    if (event.isFormData) {
+      setFieldValue({
+        name: "formData",
+        value: _objectSpread2({}, event.formData, defineProperty_defineProperty({}, event.name, event.target.value))
+      });
+    } else {
+      var name = event.target.name;
+      var value = event.target.value;
+      var error = validateField(name, value);
+      setFieldValue({
+        name: name,
+        value: value
+      });
+      setFieldError({
+        name: name,
+        error: error
+      });
+    }
   }, [validateField]);
   return {
     dirty: dirty,
@@ -14084,6 +14097,7 @@ function SignInForm(props) {
       values = _useForm.values,
       errors = _useForm.errors,
       dirty = _useForm.dirty,
+      disable = _useForm.disable,
       handleOnChange = _useForm.handleOnChange;
 
   var email = values.email,
@@ -14107,8 +14121,8 @@ function SignInForm(props) {
     fullWidth: true,
     value: email,
     onChange: handleOnChange,
-    helperText: errors.email && dirty.email && errors.email,
-    error: errors.email && dirty.email
+    helperText: dirty.email ? errors.email : '',
+    error: errors.email.length > 0 && dirty.email
   })), /*#__PURE__*/react_default.a.createElement("div", {
     className: "field"
   }, /*#__PURE__*/react_default.a.createElement(esm_TextField_TextField, {
@@ -14119,14 +14133,15 @@ function SignInForm(props) {
     fullWidth: true,
     value: password,
     onChange: handleOnChange,
-    helperText: errors.password && dirty.password && errors.password,
-    error: errors.password && dirty.password
+    helperText: dirty.password ? errors.password : '',
+    error: errors.password.length > 0 && dirty.password
   })), /*#__PURE__*/react_default.a.createElement("div", {
     className: "field"
   }, /*#__PURE__*/react_default.a.createElement(esm_Button_Button, {
     type: "submit",
     variant: "contained",
     color: "primary",
+    disabled: disable,
     fullWidth: true
   }, props.signInText)));
 }
