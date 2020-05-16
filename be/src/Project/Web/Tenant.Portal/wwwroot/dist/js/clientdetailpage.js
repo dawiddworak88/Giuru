@@ -19196,7 +19196,7 @@ function LanguageSwitcher(props) {
   return /*#__PURE__*/react_default.a.createElement("div", {
     className: "select"
   }, /*#__PURE__*/react_default.a.createElement("select", {
-    value: props.selectedLanguageText,
+    value: props.selectedLanguageUrl,
     onChange: function onChange(e) {
       return handleLanguageChange(e);
     }

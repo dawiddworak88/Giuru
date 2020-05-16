@@ -15,7 +15,7 @@ function LanguageSwitcher(props) {
 
     return (
         <div className="select">
-            <select value={props.selectedLanguageText} onChange={(e) => handleLanguageChange(e)}>
+            <select value={props.selectedLanguageUrl} onChange={(e) => handleLanguageChange(e)}>
                 {languages}
             </select>
         </div>
