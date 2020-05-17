@@ -52667,7 +52667,7 @@ function ProductDetailForm(props) {
     className: "is-modern-form",
     onSubmit: handleOnSubmit,
     method: "post"
-  }, props.schemas && /*#__PURE__*/react_default.a.createElement(esm_Autocomplete_Autocomplete, {
+  }, tempSchemas && /*#__PURE__*/react_default.a.createElement(esm_Autocomplete_Autocomplete, {
     id: "select-schema",
     options: tempSchemas,
     onChange: function onChange(event, schema) {
