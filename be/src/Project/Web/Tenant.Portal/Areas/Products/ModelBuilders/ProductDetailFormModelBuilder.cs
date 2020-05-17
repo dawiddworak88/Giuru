@@ -1,7 +1,6 @@
 ﻿using Feature.Product.Resources;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Tenant.Portal.Areas.Products.ViewModels;
 
@@ -11,16 +10,13 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
-        private readonly LinkGenerator linkGenerator;
 
         public ProductDetailFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IStringLocalizer<ProductResources> productLocalizer,
-            LinkGenerator linkGenerator)
+            IStringLocalizer<ProductResources> productLocalizer)
         {
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
-            this.linkGenerator = linkGenerator;
         }
 
         public ProductDetailFormViewModel BuildModel()
