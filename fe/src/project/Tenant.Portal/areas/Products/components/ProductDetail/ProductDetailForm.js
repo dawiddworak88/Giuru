@@ -106,7 +106,7 @@ function ProductDetailForm(props) {
     return (
         <div>
             <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
-                {props.schemas && 
+                {tempSchemas && 
                     <Autocomplete
                         id="select-schema"
                         options={tempSchemas}
