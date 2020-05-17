@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Context } from '../../../../../../shared/stores/Store';
 import useForm from '../../../../../../shared/helpers/forms/useForm';
@@ -48,17 +48,73 @@ function ProductDetailForm(props) {
 
     const { name, sku, formData } = values;
 
+    var tempSchemas = [
+      { name: "Narożniki bez strony", value: "1" },
+      { name: "Narożniki ze stroną", value: "2" },
+      { name: "Sofy", value: "3" },
+      { name: "Szafy", value: "4" }
+    ];
+
+    const [tempSchema, setTempSchema] = useState(null);
+
+    function changeSchema(schema) {
+        
+        if (schema.value === "1") {
+
+            var schema1 = {
+                id: "1",
+                jsonSchema: {
+                  "type": "object",
+                  "properties": {
+                    "threadColor": {
+                      "type": "string",
+                      "title": "Kolor nici:"
+                    },
+                    "primaryFabrics": {
+                      "type": "string",
+                      "title": "Główna tkanina:"
+                    }
+                  }
+                }
+            }
+
+            setTempSchema(schema1);
+        }
+
+        if (schema.value === "2") {
+            var schema2 = {
+                id: "2",
+                jsonSchema: {
+                  "type": "object",
+                  "properties": {
+                    "side": {
+                      "type": "string",
+                      "title": "Strona:"
+                    },
+                    "threadColor": {
+                      "type": "string",
+                      "title": "Kolor nici:"
+                    }
+                  }
+                }
+            }
+
+            setTempSchema(schema2);
+        }
+    }
+
     return (
         <div>
             <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                 {props.schemas && 
                     <Autocomplete
                         id="select-schema"
-                        options={props.schemas}
+                        options={tempSchemas}
+                        onChange={(event, schema) => {
+                            changeSchema(schema);
+                          }}
                         getOptionLabel={(option) => option.name}
-                        renderInput={() => {
-                            return <TextField label={props.selectSchemaLabel} variant="outlined" />;
-                    }} />
+                        renderInput={(params) => <TextField {...params} label={props.selectSchemaLabel} variant="outlined" />} />
                 }
                 <div className="field">
                     <TextField id="sku" name="sku" label={props.skuLabel} fullWidth={true}
@@ -68,8 +124,8 @@ function ProductDetailForm(props) {
                     <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
                         value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ''} error={(errors.name.length > 0) && dirty.name} />
                 </div>
-                {props.schema &&
-                    <DynamicForm schema={props.schema} formData={formData} onChange={handleOnChange} />
+                {tempSchema &&
+                    <DynamicForm schema={tempSchema} formData={formData} onChange={handleOnChange} />
                 }
                 <div className="field">
                     <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>

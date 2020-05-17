@@ -24,7 +24,7 @@ function LanguageSwitcher(props) {
 
 LanguageSwitcher.propTypes = {
     availableLanguages: PropTypes.array.isRequired,
-    selectedLanguageText: PropTypes.string.isRequired
+    selectedLanguageUrl: PropTypes.string.isRequired
 };
 
 export default LanguageSwitcher;

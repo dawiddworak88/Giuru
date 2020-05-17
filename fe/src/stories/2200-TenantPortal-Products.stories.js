@@ -52,6 +52,12 @@ var productDetailForm = {
   enterSkuText: "Enter SKU",
   saveUrl: "#",
   saveText: "Save",
+  schemas: [
+    { name: "Narożniki bez strony", value: "1" },
+    { name: "Narożniki ze stroną", value: "2" },
+    { name: "Sofy", value: "3" },
+    { name: "Szafy", value: "4" }
+  ],
   schema: {
     id: "1",
     jsonSchema: {

@@ -52602,21 +52602,85 @@ function ProductDetailForm(props) {
   var name = values.name,
       sku = values.sku,
       formData = values.formData;
+  var tempSchemas = [{
+    name: "Narożniki bez strony",
+    value: "1"
+  }, {
+    name: "Narożniki ze stroną",
+    value: "2"
+  }, {
+    name: "Sofy",
+    value: "3"
+  }, {
+    name: "Szafy",
+    value: "4"
+  }];
+
+  var _useState = Object(react["useState"])(null),
+      _useState2 = Object(slicedToArray["a" /* default */])(_useState, 2),
+      tempSchema = _useState2[0],
+      setTempSchema = _useState2[1];
+
+  function changeSchema(schema) {
+    if (schema.value === "1") {
+      var schema1 = {
+        id: "1",
+        jsonSchema: {
+          "type": "object",
+          "properties": {
+            "threadColor": {
+              "type": "string",
+              "title": "Kolor nici:"
+            },
+            "primaryFabrics": {
+              "type": "string",
+              "title": "Główna tkanina:"
+            }
+          }
+        }
+      };
+      setTempSchema(schema1);
+    }
+
+    if (schema.value === "2") {
+      var schema2 = {
+        id: "2",
+        jsonSchema: {
+          "type": "object",
+          "properties": {
+            "side": {
+              "type": "string",
+              "title": "Strona:"
+            },
+            "threadColor": {
+              "type": "string",
+              "title": "Kolor nici:"
+            }
+          }
+        }
+      };
+      setTempSchema(schema2);
+    }
+  }
+
   return /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement("form", {
     className: "is-modern-form",
     onSubmit: handleOnSubmit,
     method: "post"
   }, props.schemas && /*#__PURE__*/react_default.a.createElement(esm_Autocomplete_Autocomplete, {
     id: "select-schema",
-    options: props.schemas,
+    options: tempSchemas,
+    onChange: function onChange(event, schema) {
+      changeSchema(schema);
+    },
     getOptionLabel: function getOptionLabel(option) {
       return option.name;
     },
-    renderInput: function renderInput() {
-      return /*#__PURE__*/react_default.a.createElement(TextField["a" /* default */], {
+    renderInput: function renderInput(params) {
+      return /*#__PURE__*/react_default.a.createElement(TextField["a" /* default */], Object.assign({}, params, {
         label: props.selectSchemaLabel,
         variant: "outlined"
-      });
+      }));
     }
   }), /*#__PURE__*/react_default.a.createElement("div", {
     className: "field"
@@ -52640,8 +52704,8 @@ function ProductDetailForm(props) {
     onChange: handleOnChange,
     helperText: dirty.name ? errors.name : '',
     error: errors.name.length > 0 && dirty.name
-  })), props.schema && /*#__PURE__*/react_default.a.createElement(DynamicForm_DynamicForm, {
-    schema: props.schema,
+  })), tempSchema && /*#__PURE__*/react_default.a.createElement(DynamicForm_DynamicForm, {
+    schema: tempSchema,
     formData: formData,
     onChange: handleOnChange
   }), /*#__PURE__*/react_default.a.createElement("div", {
