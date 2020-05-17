@@ -5,12 +5,12 @@ WORKDIR /app
 
 COPY ./src/Infrastructure ./Infrastructure/
 COPY ./src/Feature ./Feature/
-COPY ./src/Project/Api/Client.Api ./Project/Api/
-RUN dotnet publish ./Project/Api/Client.Api.csproj -c Release -o out
+COPY ./src/Project/Api ./Project/Api/
+RUN dotnet publish ./Project/Api/Api.csproj -c Release -o out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.2
 WORKDIR /app
 COPY --from=build-env /app/out .
 
-ENTRYPOINT ["dotnet", "Client.Api.dll"]
+ENTRYPOINT ["dotnet", "Api.dll"]
