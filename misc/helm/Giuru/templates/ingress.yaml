@@ -8,17 +8,17 @@ metadata:
 spec:
   tls:
   - hosts:
-    - {{ .Values.ingress.clientapidomain }}
+    - {{ .Values.ingress.apidomain }}
     - {{ .Values.ingress.domain }}
     - {{ .Values.ingress.accountdomain }}
     - {{ .Values.ingress.tenantportaldomain }}
     secretName: wildcard
   rules:
-  - host: {{ .Values.ingress.clientapidomain }}
+  - host: {{ .Values.ingress.apidomain }}
     http:
       paths:
       - backend:
-          serviceName: client-api-service
+          serviceName: api-service
           servicePort: 80
         path: /
   - host: {{ .Values.ingress.domain }}
