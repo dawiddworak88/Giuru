@@ -13,4 +13,20 @@
     .title, .subtitle {
         margin-bottom: 2.5rem;
     }
+
+    .field {
+        margin-top: 2rem;
+    }
+
+    .field:last-child {
+        margin-top: 2.5rem;
+    }
+}
+
+.progressBar {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -12px;
+    margin-left: -12px;
 }

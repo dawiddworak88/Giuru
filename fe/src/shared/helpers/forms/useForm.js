@@ -109,7 +109,7 @@ function useForm(
   // Wrapped in useCallback to cached the function to avoid intensive memory leaked
   // in every re-render in component
   const validateErrorState = useCallback(
-    () => Object.values(errors).some(error => error),
+    () => Object.keys(errors).map(item => errors[item]).some(error => error),
     [errors]
   );
 
@@ -133,13 +133,18 @@ function useForm(
     event => {
       setIsDirty(true);
 
-      const name = event.target.name;
-      const value = event.target.value;
+      if (event.isFormData) {
+        setFieldValue({ name: "formData", value: { ...event.formData, [event.name]: event.target.value } });
+      }
+      else {
+        const name = event.target.name;
+        const value = event.target.value;
 
-      const error = validateField(name, value);
+        const error = validateField(name, value);
 
-      setFieldValue({ name, value });
-      setFieldError({ name, error });
+        setFieldValue({ name, value });
+        setFieldError({ name, error });
+      }
     },
     [validateField]
   );

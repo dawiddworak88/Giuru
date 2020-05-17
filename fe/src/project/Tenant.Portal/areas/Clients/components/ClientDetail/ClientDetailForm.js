@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useContext }  from 'react';
 import PropTypes from 'prop-types';
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText } from '@material-ui/core';
+import { Context } from '../../../../../../shared/stores/Store';
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from '@material-ui/core';
 import useForm from '../../../../../../shared/helpers/forms/useForm';
 import EmailValidator from '../../../../../../shared/helpers/validators/EmailValidator';
 import ClientDetailService from '../../services/ClientDetail/ClientDetailService';
 
 function ClientDetailForm(props) {
 
+    const [state, dispatch] = useContext(Context);
+
     const stateSchema = {
         name: { value: '', error: '' },
         email: { value: '', error: '' },
-        language: { value: '', error: '' }
+        communicationLanguage: { value: '', error: '' }
     };
 
     const stateValidatorSchema = {
@@ -31,7 +34,7 @@ function ClientDetailForm(props) {
                 error: props.emailFormatErrorMessage,
             }
         },
-        language: {
+        communicationLanguage: {
             required: {
                 isRequired: true,
                 error: props.languageRequiredErrorMessage
@@ -39,38 +42,39 @@ function ClientDetailForm(props) {
         },
     };
 
-    function onSubmitForm(state) {
-        ClientDetailService.Save(props.saveUrl, state, props.generalErrorMessage);
-    }
-
     const {
         values,
         errors,
         dirty,
+        disable,
         handleOnChange,
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
-    const { name, email, language } = values;
+    function onSubmitForm(state) {
+        ClientDetailService.Save(props.saveUrl, state, props.generalErrorMessage, dispatch);
+    }
+
+    const { name, email, communicationLanguage } = values;
 
     return (
         <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
             <div className="field">
                 <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
-                    value={name} onChange={handleOnChange} helperText={errors.name && dirty.name && errors.name} error={errors.name && dirty.name} />
+                    value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ''} error={(errors.name.length > 0) && dirty.name} />
             </div>
             <div className="field">
                 <TextField id="email" name="email" label={props.emailLabel} fullWidth={true}
-                    value={email} onChange={handleOnChange} helperText={errors.email && dirty.email && errors.email} error={errors.email && dirty.email} />
+                    value={email} onChange={handleOnChange} helperText={dirty.email ? errors.email : ''} error={(errors.email.length > 0) && dirty.email} />
             </div>
             <div className="field">
-                <FormControl fullWidth={true}>
+                <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage}>
                     <InputLabel id="language-label">{props.languageLabel}</InputLabel>
                     <Select
                         labelId="language-label"
-                        id="language"
-                        name="language"
-                        value={language}
+                        id="communicationLanguage"
+                        name="communicationLanguage"
+                        value={communicationLanguage}
                         onChange={handleOnChange}>
                         {props.languages.map(language => {
                             return (
@@ -78,16 +82,17 @@ function ClientDetailForm(props) {
                             )
                         })}
                     </Select>
-                    {errors.language && dirty.language && (
-                        <FormHelperText>{errors.language}</FormHelperText>
+                    {errors.communicationLanguage && dirty.communicationLanguage && (
+                        <FormHelperText>{errors.communicationLanguage}</FormHelperText>
                     )}
                 </FormControl>
             </div>
             <div className="field">
-                <Button type="submit" variant="contained" color="primary">
+                <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
                     {props.saveText}
                 </Button>
             </div>
+            {state.isLoading && <CircularProgress className="progressBar" />}
         </form>
     );
 }

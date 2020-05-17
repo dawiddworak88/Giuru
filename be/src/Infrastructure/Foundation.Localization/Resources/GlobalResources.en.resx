@@ -159,6 +159,9 @@
   <data name="EnterPasswordText" xml:space="preserve">
     <value>Enter password</value>
   </data>
+  <data name="ErrorContactAdmin" xml:space="preserve">
+    <value>An error has occurred. Please contact your administrators and give them this information:</value>
+  </data>
   <data name="LanguageRequiredErrorMessage" xml:space="preserve">
     <value>Select language preferred for communication with the client</value>
   </data>
@@ -200,6 +203,9 @@
   </data>
   <data name="SelectLanguage" xml:space="preserve">
     <value>Select language</value>
+  </data>
+  <data name="SelectSchemaLabel" xml:space="preserve">
+    <value>Select schema</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>

@@ -2,7 +2,7 @@ import ResponseStatusConstants from "../../constants/ResponseStatusConstants";
 
 export default class FetchErrorHandler {
 
-    static handleError(response) {
+    static handleUnauthorizedResponse(response) {
 
         if (!response.ok) {
 
@@ -13,8 +13,13 @@ export default class FetchErrorHandler {
                     window.location.reload();
                 }
             }
-
-            throw new Error(response.status);
         }
+    }
+
+    static consoleLogResponseDetails(entity, response, jsonResponse)
+    {
+        console.log(entity);
+        console.log(response);
+        console.log(jsonResponse);
     }
 }

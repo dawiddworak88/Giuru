@@ -10,19 +10,19 @@ var header = {
   languageSwitcher: {
     availableLanguages: [
       {
-        url: '#',
+        url: '/en',
         text: 'EN'
       },
       {
-        url: '#',
+        url: '/de',
         text: 'DE'
       },
       {
-        url: '#',
+        url: '/pl',
         text: 'PL'
       }
     ],
-    selectedLanguageText: 'EN'
+    selectedLanguageUrl: '/en'
   },
   links: [
     { url: "#privacy-policy", text: "Price List" },

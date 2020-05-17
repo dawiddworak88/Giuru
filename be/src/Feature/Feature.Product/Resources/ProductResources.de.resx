@@ -117,10 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="EnterSkuText" xml:space="preserve">
+    <value>Bitte SKU eingeben</value>
+  </data>
   <data name="NewProduct" xml:space="preserve">
     <value>Neues Produkt</value>
   </data>
+  <data name="Product" xml:space="preserve">
+    <value>Produkt</value>
+  </data>
+  <data name="ProductDetailText" xml:space="preserve">
+    <value>Produkt</value>
+  </data>
   <data name="Products" xml:space="preserve">
     <value>Produkte</value>
+  </data>
+  <data name="SkuLabel" xml:space="preserve">
+    <value>SKU:</value>
+  </data>
+  <data name="SkuRequiredErrorMessage" xml:space="preserve">
+    <value>Bitte SKU eingeben</value>
   </data>
 </root>

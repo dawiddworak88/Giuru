@@ -1,6 +1,8 @@
 ﻿using Feature.Product.Resources;
 using Foundation.Extensions.ModelBuilders;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using System.Globalization;
 using Tenant.Portal.Areas.Products.ViewModels;
 
 namespace Tenant.Portal.Areas.Products.ModelBuilders
@@ -9,9 +11,14 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
     {
         private readonly IStringLocalizer<ProductResources> orderLocalizer;
 
-        public ProductCatalogModelBuilder(IStringLocalizer<ProductResources> orderLocalizer)
+        private readonly LinkGenerator linkGenerator;
+
+        public ProductCatalogModelBuilder(
+            IStringLocalizer<ProductResources> orderLocalizer,
+            LinkGenerator linkGenerator)
         {
             this.orderLocalizer = orderLocalizer;
+            this.linkGenerator = linkGenerator;
         }
 
         public ProductCatalogViewModel BuildModel()
@@ -21,7 +28,7 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
                 Title = this.orderLocalizer["Products"],
                 ShowNew = true,
                 NewText = this.orderLocalizer["NewProduct"],
-                NewUrl = "#"
+                NewUrl = this.linkGenerator.GetPathByAction("Index", "ProductDetail", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
             };
         }
     }

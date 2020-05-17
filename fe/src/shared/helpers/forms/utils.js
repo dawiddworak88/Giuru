@@ -15,8 +15,15 @@ export function is_object(value) {
 }
 
 export function get_prop_values(stateSchema, prop) {
+    
     return Object.keys(stateSchema).reduce((field, key) => {
-        field[key] = is_bool(prop) ? prop : stateSchema[key][prop];
+
+        if (key === "formData") {
+            field[key] = stateSchema[key];
+        }
+        else {
+            field[key] = is_bool(prop) ? prop : stateSchema[key][prop];
+        }
 
         return field;
     }, {});

@@ -54,9 +54,9 @@ namespace Foundation.GenericRepository.Repositories
             #pragma warning restore S1854 // Unused assignments should be removed
         }
 
-        public void SaveChanges()
+        public async Task SaveChangesAsync()
         {
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }

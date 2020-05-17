@@ -11,6 +11,8 @@ namespace Tenant.Portal.Areas.Products.DependencyInjection
         {
             services.AddScoped<IModelBuilder<ProductPageViewModel>, ProductPageModelBuilder>();
             services.AddScoped<IModelBuilder<ProductCatalogViewModel>, ProductCatalogModelBuilder>();
+            services.AddScoped<IModelBuilder<ProductDetailFormViewModel>, ProductDetailFormModelBuilder>();
+            services.AddScoped<IModelBuilder<ProductDetailPageViewModel>, ProductDetailPageModelBuilder>();
         }
     }
 }

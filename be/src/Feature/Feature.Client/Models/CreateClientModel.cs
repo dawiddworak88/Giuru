@@ -1,13 +1,11 @@
-﻿using System;
+﻿using Foundation.Extensions.Models;
 
 namespace Feature.Client.Models
 {
-    public class CreateClientModel
+    public class CreateClientModel : BaseServiceModel
     {
-        public string Username { get; set; }
-        public Guid TenantId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public string Language { get; set; }
+        public string ClientPreferredLanguage { get; set; }
     }
 }

@@ -120,6 +120,9 @@
   <data name="Client" xml:space="preserve">
     <value>Kunde</value>
   </data>
+  <data name="ClientAlreadyExists" xml:space="preserve">
+    <value>Der Kunder mit dieser E-Mail-Adresse wurde schon erstellt.</value>
+  </data>
   <data name="Clients" xml:space="preserve">
     <value>Kunden</value>
   </data>

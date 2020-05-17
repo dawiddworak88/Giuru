@@ -6,6 +6,6 @@ namespace Tenant.Portal.Shared.Configurations
     {
         public string AccountEndpoint { get; set; }
 
-        public ClientApiConfiguration ClientApi { get; set; }
+        public ApiConfiguration Api { get; set; }
     }
 }
