@@ -704,13 +704,13 @@ function LanguageSwitcher(props) {
   var languages = props.availableLanguages.map(function (language, index) {
     return /*#__PURE__*/react_default.a.createElement("option", {
       key: index,
-      value: language.url,
-      selected: language.text === props.selectedLanguageText
+      value: language.url
     }, language.text);
   });
   return /*#__PURE__*/react_default.a.createElement("div", {
     className: "select"
   }, /*#__PURE__*/react_default.a.createElement("select", {
+    value: props.selectedLanguageUrl,
     onChange: function onChange(e) {
       return handleLanguageChange(e);
     }

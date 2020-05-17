@@ -48,18 +48,6 @@ namespace Tenant.Portal.Shared.MenuTiles.ModelBuilders
                     },
                     new MenuTileViewModel
                     {
-                        Icon = IconsConstants.ProductCards,
-                        Title = this.globalLocalizer["Cards"],
-                        Url = "#",
-                    },
-                    new MenuTileViewModel
-                    {
-                        Icon = IconsConstants.Media,
-                        Title = this.globalLocalizer["Media"],
-                        Url = "#",
-                    },
-                    new MenuTileViewModel
-                    {
                         Icon = IconsConstants.Settings,
                         Title = this.globalLocalizer["Settings"],
                         Url = "#"

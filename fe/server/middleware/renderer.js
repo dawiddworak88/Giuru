@@ -12,6 +12,7 @@ import OrderPage from '../../src/project/Tenant.Portal/areas/Orders/pages/OrderP
 import ClientPage from '../../src/project/Tenant.Portal/areas/Clients/pages/ClientPage/ClientPage';
 import ClientDetailPage from '../../src/project/Tenant.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage';
 import ProductPage from '../../src/project/Tenant.Portal/areas/Products/pages/ProductPage/ProductPage';
+import ProductDetailPage from '../../src/project/Tenant.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage';
 
 const Components = {
 	HomePage,
@@ -19,7 +20,8 @@ const Components = {
 	OrderPage,
 	ClientPage,
 	ClientDetailPage,
-	ProductPage
+	ProductPage,
+	ProductDetailPage
   };
 
 export default (req, res, next) => {

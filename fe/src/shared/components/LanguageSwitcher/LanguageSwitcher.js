@@ -11,11 +11,11 @@ function LanguageSwitcher(props) {
         }
     }
 
-    const languages = props.availableLanguages.map((language, index) => <option key={index} value={language.url} selected={language.text === props.selectedLanguageText}>{language.text}</option> );
+    const languages = props.availableLanguages.map((language, index) => <option key={index} value={language.url}>{language.text}</option> );
 
     return (
         <div className="select">
-            <select onChange={(e) => handleLanguageChange(e)}>
+            <select value={props.selectedLanguageUrl} onChange={(e) => handleLanguageChange(e)}>
                 {languages}
             </select>
         </div>
@@ -24,7 +24,7 @@ function LanguageSwitcher(props) {
 
 LanguageSwitcher.propTypes = {
     availableLanguages: PropTypes.array.isRequired,
-    selectedLanguageText: PropTypes.string.isRequired
+    selectedLanguageUrl: PropTypes.string.isRequired
 };
 
 export default LanguageSwitcher;

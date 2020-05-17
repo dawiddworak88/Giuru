@@ -156,6 +156,9 @@
   <data name="EnterPasswordText" xml:space="preserve">
     <value>Bitte Passwort eingeben</value>
   </data>
+  <data name="ErrorContactAdmin" xml:space="preserve">
+    <value>Ein Fehler ist aufgetreten. Bitte wenden Sie sich an den Administrator mit der folgenden Referenznummer:</value>
+  </data>
   <data name="Karten" xml:space="preserve">
     <value>Karty</value>
   </data>
@@ -200,6 +203,9 @@
   </data>
   <data name="SelectLanguage" xml:space="preserve">
     <value>Sprache auswählen</value>
+  </data>
+  <data name="SelectSchemaLabel" xml:space="preserve">
+    <value>Vorlage auswählen</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Einstellungen</value>

@@ -28,6 +28,8 @@ namespace Feature.PageContent.Components.LanguageSwitchers.ModelBuilders
         {
             var languages = new List<LanguageViewModel>();
 
+            var selectedLanguageUrl = string.Empty;
+
             foreach (var language in this.localizationOptions.CurrentValue.SupportedCultures)
             {
                 var url = this.linkGenerator.GetPathByAction(this.httpContextAccessor.HttpContext.GetRouteValue("action").ToString(), this.httpContextAccessor.HttpContext.GetRouteValue("controller").ToString(), new { area = this.httpContextAccessor.HttpContext.GetRouteValue("area").ToString(), culture = language, id = this.httpContextAccessor.HttpContext.GetRouteValue("id")?.ToString() });
@@ -37,13 +39,18 @@ namespace Feature.PageContent.Components.LanguageSwitchers.ModelBuilders
                     url += this.httpContextAccessor.HttpContext.Request.QueryString.Value;
                 }
 
+                if (language == CultureInfo.CurrentUICulture.Name)
+                {
+                    selectedLanguageUrl = url;
+                }
+
                 languages.Add(new LanguageViewModel { Text = language.ToUpperInvariant(), Url = url });
             }
 
             return new LanguageSwitcherViewModel
             {
                 AvailableLanguages = languages,
-                SelectedLanguageText = CultureInfo.CurrentUICulture.Name.ToUpperInvariant()
+                SelectedLanguageUrl = selectedLanguageUrl
             };
         }
     }

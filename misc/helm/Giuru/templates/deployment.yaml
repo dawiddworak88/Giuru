@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: client-api-deployment
+  name: api-deployment
   labels:
-    app: client-api
+    app: api
 spec:
   selector:
     matchLabels:
-      app: client-api
+      app: api
   template:
     metadata:
       labels:
-        app: client-api
+        app: api
     spec:
       containers:
-      - name: client-api-container
-        image: {{ .Values.image.registry }}/client-api:{{ .Values.image.tag }}
+      - name: api-container
+        image: {{ .Values.image.registry }}/api:{{ .Values.image.tag }}
         ports:
         - containerPort: 80
 ---
