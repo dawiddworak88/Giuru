@@ -1,5 +1,6 @@
 ﻿using Feature.Account.Configurations;
 using Feature.Account.Services.ProfileServices;
+using Feature.Account.Services.TokenServices;
 using Feature.Account.Services.UserServices;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Database.Areas.Accounts.Entities;
@@ -15,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography.X509Certificates;
+using ITokenService = Feature.Account.Services.TokenServices.ITokenService;
 
 namespace Feature.Account.DependencyInjection
 {
@@ -74,6 +76,7 @@ namespace Feature.Account.DependencyInjection
 
             // Register services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITokenService, TokenService>();
         }
 
         public static void RegisterClientAccountDependencies(this IServiceCollection services, IConfiguration configuration)
