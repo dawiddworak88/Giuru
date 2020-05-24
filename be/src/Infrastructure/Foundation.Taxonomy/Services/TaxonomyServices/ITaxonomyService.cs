@@ -7,5 +7,6 @@ namespace Foundation.Taxonomy.Services.TaxonomyServices
     public interface ITaxonomyService
     {
         Task<TaxonomyResultModel> CreateAsync(CreateTaxonomyModel model);
+        Task<TaxonomyResultModel> GetByName(GetTaxonomyModel model);
     }
 }

@@ -56,7 +56,7 @@ namespace Api.v1.Areas.Taxonomies.Controllers
                     ParentId = taxonomyModel.ParentId,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
-                    Language = taxonomyModel.Context.Language
+                    Language = taxonomyModel.Language
                 };
 
                 var createTaxonomyResult = await this.taxonomyService.CreateAsync(createTaxonomyModel);
@@ -68,6 +68,51 @@ namespace Api.v1.Areas.Taxonomies.Controllers
                 else
                 {
                     return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+                }
+            }
+            catch (Exception exception)
+            {
+                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
+                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
+                return this.StatusCode((int)HttpStatusCode.BadRequest, new TaxonomyResponseModel { Error = error });
+            }
+        }
+
+        /// <summary>
+        /// Gets the taxonomy. Leave the rootId empty to get the whole tree.
+        /// </summary>
+        /// <param name="name">The name of the taxonomy to get.</param>
+        /// <param name="rootId">The root id of the taxonomy.</param>
+        /// <param name="language">The language.</param>
+        /// <returns></returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(422)]
+        public async Task<IActionResult> Get(string name, Guid? rootId, string language)
+        {
+            try
+            {
+                var tenantClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.TenantIdClaim);
+
+                var getTaxonomyModel = new GetTaxonomyModel
+                {
+                    Name = name,
+                    RootId = rootId,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
+                    Language = language
+                };
+
+                var getTaxonomyResult = await this.taxonomyService.GetByName(getTaxonomyModel);
+
+                if (getTaxonomyResult.IsValid)
+                {
+                    return this.StatusCode((int)HttpStatusCode.OK, new TaxonomyResponseModel { Id = getTaxonomyResult.Taxonomy?.Id });
+                }
+                else
+                {
+                    return this.StatusCode((int)HttpStatusCode.NotFound);
                 }
             }
             catch (Exception exception)

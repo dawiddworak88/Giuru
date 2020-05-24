@@ -43,7 +43,7 @@ namespace Foundation.GenericRepository.Repositories
 
         public TEntity GetById(Guid id)
         {
-            return context.Set<TEntity>().FirstOrDefault(e => e.Id == id);
+            return context.Set<TEntity>().FirstOrDefault(e => e.Id == id && e.IsActive);
         }
 
         public void Edit(TEntity entity)
