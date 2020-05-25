@@ -5,7 +5,6 @@ using Foundation.Database.Areas.Tenants.Entities;
 using Foundation.Database.Shared.Repositories;
 using Foundation.Extensions.Definitions;
 using Foundation.GenericRepository.Services;
-using Foundation.Schema.Services.SchemaServices;
 using Foundation.TenantDatabase.Areas.Translations.Entities;
 using Foundation.TenantDatabase.Shared.Repositories;
 using System.Linq;
@@ -18,19 +17,15 @@ namespace Feature.Product.Services
         private readonly IGenericRepository<Tenant> tenantRepository;
         private readonly TenantGenericRepositoryFactory genericRepositoryFactory;
         private readonly IEntityService entityService;
-        private readonly SchemaServiceFactory schemaServiceFactory;
 
         public ProductService(
             IGenericRepository<Tenant> tenantRepository,
             TenantGenericRepositoryFactory genericRepositoryFactory,
-            IEntityService entityService,
-            SchemaServiceFactory schemaServiceFactory
-            )
+            IEntityService entityService)
         {
             this.tenantRepository = tenantRepository;
             this.genericRepositoryFactory = genericRepositoryFactory;
             this.entityService = entityService;
-            this.schemaServiceFactory = schemaServiceFactory;
         }
 
         public async Task<ProductResultModel> CreateAsync(CreateProductModel model)
@@ -119,8 +114,6 @@ namespace Feature.Product.Services
                 getProductResultModel.Errors.Add(ErrorConstants.NotFound);
                 return getProductResultModel;
             }
-
-            var schemaService = await schemaServiceFactory.CreateSchemaService(tenant.DatabaseConnectionString);
 
             getProductResultModel.Product = product;
 
