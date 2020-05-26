@@ -147,6 +147,7 @@ function ProductDetailForm(props) {
                             ]
                         }
                     },
+                    "type": "object",
                     "properties": {
                         "primaryColor": {
                             "type": "array",
