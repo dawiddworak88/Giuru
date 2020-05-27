@@ -38,10 +38,6 @@ const processValue = (schema, value) => {
     return value;
 };
 
-function getValue(event, multiple) {
-    return event.target.value;
-  }
-
 const SelectWidget = ({
     schema,
     id,
@@ -81,24 +77,19 @@ const SelectWidget = ({
                     onBlur={
                         onBlur &&
                         (event => {
-                        const newValue = getValue(event, multiple);
-                        onBlur(id, processValue(schema, newValue));
+                            onBlur(id, processValue(schema, event.target.value));
                         })
                     }
                     onFocus={
                         onFocus &&
                         (event => {
-                        const newValue = getValue(event, multiple);
-                        onFocus(id, processValue(schema, newValue));
+                            onFocus(id, processValue(schema, event.target.value));
                         })
                     }
                     onChange={event => {
-                        const newValue = getValue(event, multiple);
-                        var processedValue = processValue(schema, newValue);
-                        event.target.value = processedValue;
+                        event.target.value = processValue(schema, event.target.value);
                         onChange(event);
-                    }}
-                >
+                    }}>
                     {(enumOptions).map(({ value, label }, i) => {
                         const disabled =
                             enumDisabled && (enumDisabled).indexOf(value) !== -1;
