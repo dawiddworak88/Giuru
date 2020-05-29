@@ -90,6 +90,11 @@ const SelectWidget = ({
                         event.target.value = processValue(schema, event.target.value);
                         onChange(event);
                     }}>
+                     {!multiple && schema.default === undefined &&
+                        <MenuItem value="">
+                            &nbsp;
+                        </MenuItem>
+                    }
                     {(enumOptions).map(({ value, label }, i) => {
                         const disabled =
                             enumDisabled && (enumDisabled).indexOf(value) !== -1;
