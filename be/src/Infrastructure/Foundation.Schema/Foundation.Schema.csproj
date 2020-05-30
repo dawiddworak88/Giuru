@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Foundation.Database\Foundation.Database.csproj" />
     <ProjectReference Include="..\Foundation.Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\Foundation.TenantDatabase\Foundation.TenantDatabase.csproj" />

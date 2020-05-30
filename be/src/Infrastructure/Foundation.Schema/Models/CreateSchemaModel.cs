@@ -1,4 +1,5 @@
 ﻿using Foundation.Extensions.Models;
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace Foundation.Schema.Models
@@ -7,7 +8,7 @@ namespace Foundation.Schema.Models
     {
         public string Name { get; set; }
         public Guid? EntityTypeId { get; set; }
-        public string JsonSchema { get; set; }
-        public string UiSchema { get; set; }
+        public JObject JsonSchema { get; set; }
+        public JObject UiSchema { get; set; }
     }
 }

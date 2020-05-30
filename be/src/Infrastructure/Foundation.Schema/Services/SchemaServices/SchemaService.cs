@@ -55,8 +55,8 @@ namespace Foundation.Schema.Services.SchemaServices
             {
                 Name = model.Name,
                 EntityTypeId = model.EntityTypeId,
-                JsonSchema = model.JsonSchema,
-                UiSchema = model.UiSchema
+                JsonSchema = model.JsonSchema?.ToString(),
+                UiSchema = model.UiSchema?.ToString()
             };
 
             var schemaRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Schemas.Entities.Schema>(tenant.DatabaseConnectionString);

@@ -9,6 +9,7 @@ using Foundation.Schema.Services.SchemaServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Net;
@@ -54,8 +55,8 @@ namespace Api.v1.Areas.Schemas.Controllers
                 {
                     Name = schemaModel.Name,
                     EntityTypeId = schemaModel.EntityTypeId,
-                    JsonSchema = schemaModel.JsonSchema,
-                    UiSchema = schemaModel.UiSchema,
+                    JsonSchema = JObject.Parse(schemaModel.JsonSchema),
+                    UiSchema = JObject.Parse(schemaModel.UiSchema),
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
                     Language = schemaModel.Language
