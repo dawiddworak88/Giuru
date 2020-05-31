@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Foundation.TenantDatabase.Migrations
 {
     [DbContext(typeof(TenantDatabaseContext))]
-    [Migration("20200516190725_Initial")]
+    [Migration("20200531140656_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -127,40 +127,6 @@ namespace Foundation.TenantDatabase.Migrations
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Media.Entities.LinkMediaItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("EntityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("MediaItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MediaItemId");
-
-                    b.ToTable("LinkMediaItems");
-                });
-
             modelBuilder.Entity("Foundation.TenantDatabase.Areas.Media.Entities.MediaItem", b =>
                 {
                     b.Property<Guid>("Id")
@@ -227,6 +193,9 @@ namespace Foundation.TenantDatabase.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FormData")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -247,9 +216,39 @@ namespace Foundation.TenantDatabase.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SchemaId");
-
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Foundation.TenantDatabase.Areas.References.Entities.Reference", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EntityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("LinkedEntityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("References");
                 });
 
             modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.Schema", b =>
@@ -289,45 +288,7 @@ namespace Foundation.TenantDatabase.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EntityTypeId");
-
                     b.ToTable("Schemas");
-                });
-
-            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.SchemaField", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("EntityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("FieldName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FieldValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SchemaFields");
                 });
 
             modelBuilder.Entity("Foundation.TenantDatabase.Areas.Taxonomies.Entities.Taxonomy", b =>
@@ -362,8 +323,6 @@ namespace Foundation.TenantDatabase.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
 
                     b.ToTable("Taxonomies");
                 });
@@ -565,36 +524,6 @@ namespace Foundation.TenantDatabase.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Media.Entities.LinkMediaItem", b =>
-                {
-                    b.HasOne("Foundation.TenantDatabase.Areas.Media.Entities.MediaItem", "MediaItem")
-                        .WithMany()
-                        .HasForeignKey("MediaItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Products.Entities.Product", b =>
-                {
-                    b.HasOne("Foundation.TenantDatabase.Areas.Schemas.Entities.Schema", "Schema")
-                        .WithMany()
-                        .HasForeignKey("SchemaId");
-                });
-
-            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Schemas.Entities.Schema", b =>
-                {
-                    b.HasOne("Foundation.TenantDatabase.Shared.Entities.EntityType", "EntityType")
-                        .WithMany()
-                        .HasForeignKey("EntityTypeId");
-                });
-
-            modelBuilder.Entity("Foundation.TenantDatabase.Areas.Taxonomies.Entities.Taxonomy", b =>
-                {
-                    b.HasOne("Foundation.TenantDatabase.Areas.Taxonomies.Entities.Taxonomy", "Parent")
-                        .WithMany()
-                        .HasForeignKey("ParentId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -17,11 +17,7 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
     {
         public T InitializeRequestModelContext<T>(T requestModel) where T: BaseRequestModel
         {
-            requestModel.Context = new RequestContext
-            {
-                Language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName
-            };
-
+            requestModel.Language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             return requestModel;
         }
 

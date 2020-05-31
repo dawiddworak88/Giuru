@@ -2,14 +2,14 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Foundation.TenantDatabase.Areas.Media.Entities
+namespace Foundation.TenantDatabase.Areas.References.Entities
 {
-    public class LinkMediaItem : Entity
+    public class Reference : Entity
     {
         [Required]
         public Guid EntityId { get; set; }
 
         [Required]
-        public virtual MediaItem MediaItem { get; set; }
+        public Guid LinkedEntityId { get; set; }
     }
 }

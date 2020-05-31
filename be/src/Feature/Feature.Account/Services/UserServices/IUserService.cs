@@ -8,5 +8,6 @@ namespace Feature.Account.Services.UserServices
     {
         Task<bool> SignInAsync(HttpContext httpContext, string email, string password, string returnUrl);
         Task<ApplicationUser> FindByIdAsync(string userId);
+        Task<ApplicationUser> ValidateAsync(string email, string password);
     }
 }

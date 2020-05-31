@@ -1,5 +1,5 @@
 ﻿using Foundation.GenericRepository.Entities;
-using Foundation.TenantDatabase.Areas.Schemas.Entities;
+using System;
 
 namespace Foundation.TenantDatabase.Areas.Products.Entities
 {
@@ -9,6 +9,8 @@ namespace Foundation.TenantDatabase.Areas.Products.Entities
 
         public string Sku { get; set; }
 
-        public virtual Schema Schema { get; set; }
+        public Guid? SchemaId { get; set; }
+
+        public string FormData { get; set; }
     }
 }

@@ -58,7 +58,7 @@ namespace Api.v1.Areas.Clients.Controllers
                     TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
                     Name = clientModel.Name,
                     Email = clientModel.Email,
-                    Language = clientModel.Context.Language,
+                    Language = clientModel.Language,
                     ClientPreferredLanguage = clientModel.CommunicationLanguage
                 };
 

@@ -543,6 +543,7 @@ export function optionsList(schema) {
 }
 
 export function findSchemaDefinition($ref, rootSchema = {}) {
+    
     const origRef = $ref;
     if ($ref.startsWith("#")) {
         // Decode URI fragment representation.
@@ -656,6 +657,7 @@ export function retrieveSchema(schema, rootSchema = {}, formData = {}) {
     if (!isObject(schema)) {
         return {};
     }
+
     let resolvedSchema = resolveSchema(schema, rootSchema, formData);
     if ("allOf" in schema) {
         try {
