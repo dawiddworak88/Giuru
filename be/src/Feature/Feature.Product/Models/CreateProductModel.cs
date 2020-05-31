@@ -1,4 +1,5 @@
 ﻿using Foundation.Extensions.Models;
+using System;
 
 namespace Feature.Product.Models
 {
@@ -6,5 +7,7 @@ namespace Feature.Product.Models
     {
         public string Name { get; set; }
         public string Sku { get; set; }
+        public Guid? SchemaId { get; set; }
+        public string FormData { get; set; }
     }
 }

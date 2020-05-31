@@ -1,5 +1,4 @@
 ﻿using Foundation.GenericRepository.Entities;
-using Foundation.TenantDatabase.Shared.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -16,7 +15,5 @@ namespace Foundation.TenantDatabase.Areas.Schemas.Entities
         public string UiSchema { get; set; }
 
         public Guid? EntityTypeId { get; set; }
-
-        public virtual EntityType EntityType { get; set; }
     }
 }

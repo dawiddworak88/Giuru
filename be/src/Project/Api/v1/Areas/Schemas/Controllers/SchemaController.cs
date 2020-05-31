@@ -55,8 +55,8 @@ namespace Api.v1.Areas.Schemas.Controllers
                 {
                     Name = schemaModel.Name,
                     EntityTypeId = schemaModel.EntityTypeId,
-                    JsonSchema = JObject.Parse(schemaModel.JsonSchema),
-                    UiSchema = JObject.Parse(schemaModel.UiSchema),
+                    JsonSchema = !string.IsNullOrWhiteSpace(schemaModel.JsonSchema) ? JObject.Parse(schemaModel.JsonSchema) : null,
+                    UiSchema = !string.IsNullOrWhiteSpace(schemaModel.UiSchema) ? JObject.Parse(schemaModel.UiSchema) : null,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
                     Language = schemaModel.Language

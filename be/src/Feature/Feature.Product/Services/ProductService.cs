@@ -53,7 +53,9 @@ namespace Feature.Product.Services
             var product = new Foundation.TenantDatabase.Areas.Products.Entities.Product
             {
                 Name = model.Name,
-                Sku = model.Sku
+                Sku = model.Sku,
+                SchemaId = model.SchemaId,
+                FormData = model.FormData
             };
 
             var productRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Products.Entities.Product>(tenant.DatabaseConnectionString);

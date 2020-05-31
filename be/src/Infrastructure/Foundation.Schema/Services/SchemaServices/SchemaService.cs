@@ -7,6 +7,7 @@ using Foundation.Schema.ResultModels;
 using Foundation.Schema.Validators;
 using Foundation.TenantDatabase.Areas.Translations.Entities;
 using Foundation.TenantDatabase.Shared.Repositories;
+using Newtonsoft.Json.Linq;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -51,6 +52,27 @@ namespace Foundation.Schema.Services.SchemaServices
                 return createSchemaResultModel;
             }
 
+            var translationRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Translation>(tenant.DatabaseConnectionString);
+
+            foreach (var property in model.JsonSchema["properties"].OfType<JProperty>())
+            {
+                foreach (var propertyValue in property)
+                {
+                    var titleTranslation = new Translation
+                    {
+                        Key = $"Product Schema | {propertyValue.Value<string>("title").Replace(":", string.Empty)}",
+                        Value = propertyValue.Value<string>("title"),
+                        Language = model.Language
+                    };
+
+                    await translationRepository.CreateAsync(this.entityService.EnrichEntity(titleTranslation, model.Username));
+
+                    await translationRepository.SaveChangesAsync();
+
+                    propertyValue["title"] = titleTranslation.Id;
+                }
+            }
+
             var schema = new TenantDatabase.Areas.Schemas.Entities.Schema
             {
                 Name = model.Name,
@@ -59,9 +81,7 @@ namespace Foundation.Schema.Services.SchemaServices
                 UiSchema = model.UiSchema?.ToString()
             };
 
-            var schemaRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Schemas.Entities.Schema>(tenant.DatabaseConnectionString);
-
-            var translationRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Translation>(tenant.DatabaseConnectionString);
+            var schemaRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<TenantDatabase.Areas.Schemas.Entities.Schema>(tenant.DatabaseConnectionString);
 
             await schemaRepository.CreateAsync(this.entityService.EnrichEntity(schema, model.Username));
 
