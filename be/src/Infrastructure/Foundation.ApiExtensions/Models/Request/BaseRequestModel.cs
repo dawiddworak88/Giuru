@@ -2,6 +2,6 @@
 {
     public class BaseRequestModel
     {
-        public RequestContext Context { get; set; }
+        public string Language { get; set; }
     }
 }

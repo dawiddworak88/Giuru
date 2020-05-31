@@ -24,7 +24,6 @@ export function get_prop_values(stateSchema, prop) {
         else {
             field[key] = is_bool(prop) ? prop : stateSchema[key][prop];
         }
-
         return field;
     }, {});
 }

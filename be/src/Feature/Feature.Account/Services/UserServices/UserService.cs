@@ -7,6 +7,7 @@ using IdentityServer4.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Feature.Account.Services.UserServices
@@ -40,11 +41,11 @@ namespace Feature.Account.Services.UserServices
 
             var userStore = userStoreFactory.CreateUserStore<ApplicationUser>(databaseContext);
 
-            var user = await userStore.FindByNameAsync(email, new System.Threading.CancellationToken());
+            var user = await userStore.FindByNameAsync(email, CancellationToken.None);
 
             var passwordStore = userStore as IUserPasswordStore<ApplicationUser>;
 
-            var hashedPassword = await passwordStore.GetPasswordHashAsync(user, new System.Threading.CancellationToken());
+            var hashedPassword = await passwordStore.GetPasswordHashAsync(user, CancellationToken.None);
 
             if (passwordHasher.VerifyHashedPassword(user, hashedPassword, password) != PasswordVerificationResult.Failed)
             {
@@ -69,7 +70,29 @@ namespace Feature.Account.Services.UserServices
 
             var userStore = userStoreFactory.CreateUserStore<ApplicationUser>(databaseContext);
 
-            return await userStore.FindByIdAsync(userId, new System.Threading.CancellationToken());
+            return await userStore.FindByIdAsync(userId, CancellationToken.None);
+        }
+
+        public async Task<ApplicationUser> ValidateAsync(string email, string password)
+        {
+            var passwordHasher = new PasswordHasher<ApplicationUser>();
+
+            var databaseContext = this.databaseContextFactory.CreateDbContext(this.connectionStringsConfiguration.DatabaseContext);
+
+            var userStore = userStoreFactory.CreateUserStore<ApplicationUser>(databaseContext);
+
+            var user = await userStore.FindByNameAsync(email, CancellationToken.None);
+
+            var passwordStore = userStore as IUserPasswordStore<ApplicationUser>;
+
+            var hashedPassword = await passwordStore.GetPasswordHashAsync(user, CancellationToken.None);
+
+            if (passwordHasher.VerifyHashedPassword(user, hashedPassword, password) != PasswordVerificationResult.Failed)
+            {
+                return user;
+            }
+
+            return default;
         }
     }
 }

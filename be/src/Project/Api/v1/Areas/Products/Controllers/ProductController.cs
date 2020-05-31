@@ -55,9 +55,11 @@ namespace Api.v1.Areas.Products.Controllers
                 {
                     Sku = productModel.Sku,
                     Name = productModel.Name,
+                    SchemaId = productModel.SchemaId,
+                    FormData = productModel.FormData,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
-                    Language = productModel.Context.Language
+                    Language = productModel.Language
                 };
 
                 var createProductResult = await this.productService.CreateAsync(createProductModel);
@@ -99,7 +101,7 @@ namespace Api.v1.Areas.Products.Controllers
                     Id = productModel.Id,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
-                    Language = productModel.Context.Language
+                    Language = productModel.Language
                 };
 
                 var getProductResult = await this.productService.GetByIdAsync(getProductModel);

@@ -1,10 +1,11 @@
 ﻿using Foundation.Schema.Models;
-using System;
+using Foundation.Schema.ResultModels;
+using System.Threading.Tasks;
 
 namespace Foundation.Schema.Services.SchemaServices
 {
     public interface ISchemaService
     {
-        SchemaModel GetSchema(Guid schemaId);
+        Task<SchemaResultModel> CreateAsync(CreateSchemaModel model);
     }
 }
