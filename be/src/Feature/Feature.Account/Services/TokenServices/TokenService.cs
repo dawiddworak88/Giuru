@@ -31,7 +31,6 @@ namespace Feature.Account.Services.TokenServices
                     new Claim(AccountConstants.TenantIdClaim, user.Tenant.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email),
                     new Claim(ClaimTypes.Name, user.Tenant.Key),
-                    new Claim(JwtClaimTypes.Scope, ApiExtensionsConstants.AllScopes),
                     new Claim(JwtClaimTypes.Audience, ApiExtensionsConstants.AllScopes)
                 };
 
