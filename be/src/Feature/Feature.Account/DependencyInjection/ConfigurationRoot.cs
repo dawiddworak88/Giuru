@@ -6,13 +6,13 @@ namespace Feature.Account.DependencyInjection
     {
         public static void UseAccountIdentityServer(this IApplicationBuilder app)
         {
-            app.UseIdentityServer();
-
             app.Use((context, next) =>
             {
                 context.Request.Scheme = Definitions.AccountConstants.HttpsScheme;
                 return next();
             });
+
+            app.UseIdentityServer();
         }
 
         public static void UseAuthenticationAuthorization(this IApplicationBuilder app)
