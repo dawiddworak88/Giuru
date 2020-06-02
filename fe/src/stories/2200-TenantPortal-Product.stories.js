@@ -331,6 +331,6 @@ ProductDetailPageStory.story = {
 };
 
 export default {
-  title: 'TenantPortal.Products',
+  title: 'TenantPortal.Product',
   component: ProductDetailPageStory,
 };
