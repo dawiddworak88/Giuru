@@ -5,7 +5,6 @@
         margin: 3rem 0 3rem 0;
 
         button {
-
             margin-left: 1.5rem;
         }
     }
@@ -15,15 +14,17 @@
         th {
             font-weight: bold;
         }
+
+        button {
+            margin: 0.3rem;
+        }
     }
 
     &__search-field {
-
         width: 40%;
     }
 
     &__pagination {
-
         margin: 1rem 0 3rem 0;
     }
 }

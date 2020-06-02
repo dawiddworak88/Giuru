@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Fab from '@material-ui/core/Fab';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import { Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@material-ui/core';
 import { Plus } from 'react-feather';
 
@@ -57,7 +60,8 @@ function Catalog(props) {
                             <Table aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Dessert (100g serving)</TableCell>
+                                        <TableCell width="11%"></TableCell>
+                                        <TableCell align="left">Dessert (100g serving)</TableCell>
                                         <TableCell align="right">Calories</TableCell>
                                         <TableCell align="right">Fat&nbsp;(g)</TableCell>
                                         <TableCell align="right">Carbs&nbsp;(g)</TableCell>
@@ -67,6 +71,14 @@ function Catalog(props) {
                                 <TableBody>
                                     {rows.map((row) => (
                                         <TableRow key={row.name}>
+                                            <TableCell width="11%">
+                                                <Fab size="small" color="secondary" aria-label="Edit">
+                                                    <EditIcon />
+                                                </Fab>
+                                                <Fab size="small" color="primary" aria-label="Delete">
+                                                    <DeleteIcon />
+                                                </Fab>
+                                            </TableCell>
                                             <TableCell>{row.name}</TableCell>
                                             <TableCell align="right">{row.calories}</TableCell>
                                             <TableCell align="right">{row.fat}</TableCell>

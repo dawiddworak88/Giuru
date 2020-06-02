@@ -8,6 +8,9 @@ export default class GlobalHelper {
             palette: {
               primary: {
                   main: '#BF202F'
+              },
+              secondary: {
+                main: '#5E1916'
               }
             }
           });
