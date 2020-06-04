@@ -1,14 +1,8 @@
-﻿using Feature.PageContent.MenuTiles.ViewModels;
-using Feature.PageContent.Components.Footers.ViewModels;
-using Feature.PageContent.Components.Headers.ViewModels;
+﻿using Tenant.Portal.Shared.ViewModels;
 
 namespace Tenant.Portal.Areas.Orders.ViewModel
 {
-    public class OrderPageViewModel
+    public class OrderPageViewModel : CatalogBasePageViewModel
     {
-        public HeaderViewModel Header { get; set; }
-        public MenuTilesViewModel MenuTiles { get; set; }
-        public OrderCatalogViewModel Catalog { get; set; }
-        public FooterViewModel Footer { get; set; }
     }
 }

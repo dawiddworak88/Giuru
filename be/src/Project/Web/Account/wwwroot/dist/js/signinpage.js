@@ -2540,6 +2540,9 @@ var GlobalHelper_GlobalHelper = /*#__PURE__*/function () {
         palette: {
           primary: {
             main: '#BF202F'
+          },
+          secondary: {
+            main: '#5E1916'
           }
         }
       });

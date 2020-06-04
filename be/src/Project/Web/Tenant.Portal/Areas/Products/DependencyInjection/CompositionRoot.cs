@@ -10,7 +10,6 @@ namespace Tenant.Portal.Areas.Products.DependencyInjection
         public static void RegisterProductsAreaDependencies(this IServiceCollection services)
         {
             services.AddScoped<IModelBuilder<ProductPageViewModel>, ProductPageModelBuilder>();
-            services.AddScoped<IModelBuilder<ProductCatalogViewModel>, ProductCatalogModelBuilder>();
             services.AddScoped<IModelBuilder<ProductDetailFormViewModel>, ProductDetailFormModelBuilder>();
             services.AddScoped<IModelBuilder<ProductDetailPageViewModel>, ProductDetailPageModelBuilder>();
         }

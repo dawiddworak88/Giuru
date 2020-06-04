@@ -34,18 +34,21 @@ var header = {
 
 var menuTiles = {
   tiles: [
-    { icon: 'ShoppingCart', title: 'Products', url: '#' },
+    { icon: 'ShoppingCart', title: 'Orders', url: '#' },
     { icon: 'Package', title: 'Products', url: '#' },
     { icon: 'Users', title: 'Clients', url: '#' },
     { icon: 'Settings', title: 'Settings', url: '#' }
   ],
 };
 
-var productCatalog = {
+var props = {
   title: 'Products',
   showNew: true,
   newText: 'New product',
-  newUrl: '#'
+  newUrl: '#',
+  searchLabel: 'Search',
+  editUrl: '#',
+  deleteUrl: '#'
 };
 
 var footer = {
@@ -54,7 +57,7 @@ var footer = {
   ]
 };
 
-export const ProductPageStory = () => <ProductPage header={header} menuTiles={menuTiles} catalog={productCatalog} footer={footer} />
+export const ProductPageStory = () => <ProductPage header={header} menuTiles={menuTiles} {...props} footer={footer} />
 
 ProductPageStory.story = {
   name: 'Products Page',

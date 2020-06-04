@@ -10,7 +10,6 @@ namespace Tenant.Portal.Areas.Clients.DependencyInjection
         public static void RegisterClientsAreaDependencies(this IServiceCollection services)
         {
             services.AddScoped<IModelBuilder<ClientPageViewModel>, ClientPageModelBuilder>();
-            services.AddScoped<IModelBuilder<ClientCatalogViewModel>, ClientCatalogModelBuilder>();
             services.AddScoped<IModelBuilder<ClientDetailPageViewModel>, ClientDetailPageModelBuilder>();
             services.AddScoped<IModelBuilder<ClientDetailFormViewModel>, ClientDetailFormModelBuilder>();
         }

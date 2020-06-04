@@ -1,6 +1,6 @@
-﻿namespace Feature.PageContent.Components.Catalogs.ViewModels
+﻿namespace Tenant.Portal.Shared.ViewModels
 {
-    public class CatalogViewModel
+    public class CatalogBasePageViewModel : BasePageViewModel
     {
         public string Title { get; set; }
         public bool ShowNew { get; set; }

@@ -78,6 +78,6 @@ ClientDetailPageStory.story = {
 };
 
 export default {
-  title: 'TenantPortal.Clients',
+  title: 'TenantPortal.Client',
   component: ClientDetailPageStory,
 };
