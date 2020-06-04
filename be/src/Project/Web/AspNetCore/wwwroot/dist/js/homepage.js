@@ -813,10 +813,58 @@ function HomePage(props) {
 }
 
 /* harmony default export */ var HomePage_HomePage = (HomePage);
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck.js
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createClass.js
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+// CONCATENATED MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.jsx
+
+
+
+var CssSsrRemovalHelper_CssSsrRemovalHelper = /*#__PURE__*/function () {
+  function CssSsrRemovalHelper() {
+    _classCallCheck(this, CssSsrRemovalHelper);
+  }
+
+  _createClass(CssSsrRemovalHelper, null, [{
+    key: "Remove",
+    value: function Remove() {
+      var jssStyles = document.querySelector('#jss-server-side');
+
+      if (jssStyles) {
+        jssStyles.parentElement.removeChild(jssStyles);
+      }
+    }
+  }]);
+
+  return CssSsrRemovalHelper;
+}();
+
+
 // CONCATENATED MODULE: ./src/project/AspNetCore/areas/Home/pages/HomePage/index.js
 
 
 
+
+CssSsrRemovalHelper_CssSsrRemovalHelper.Remove();
 react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(HomePage_HomePage, window.data), document.getElementById('root'));
 
 /***/ })
