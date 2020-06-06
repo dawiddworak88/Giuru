@@ -10,7 +10,6 @@ namespace Tenant.Portal.Areas.Orders.DependencyInjection
         public static void RegisterOrdersAreaDependencies(this IServiceCollection services)
         {
             services.AddScoped<IModelBuilder<OrderPageViewModel>, OrderPageModelBuilder>();
-            services.AddScoped<IModelBuilder<OrderCatalogViewModel>, OrderCatalogModelBuilder>();
         }
     }
 }

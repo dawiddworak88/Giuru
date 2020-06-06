@@ -132,6 +132,9 @@
   <data name="Products" xml:space="preserve">
     <value>Produkty</value>
   </data>
+  <data name="Sku" xml:space="preserve">
+    <value>SKU</value>
+  </data>
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
   </data>

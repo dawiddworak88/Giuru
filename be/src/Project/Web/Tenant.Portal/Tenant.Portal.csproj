@@ -30,6 +30,7 @@
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Presentation\Foundation.Presentation.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Orders\Repositories\" />
     <Folder Include="wwwroot\dist\" />
   </ItemGroup>
   <ItemGroup>

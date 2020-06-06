@@ -1,14 +1,16 @@
-﻿using Feature.PageContent.Components.Footers.ViewModels;
-using Feature.PageContent.Components.Headers.ViewModels;
-using Feature.PageContent.MenuTiles.ViewModels;
+﻿using Foundation.GenericRepository.Paginations;
+using System.Collections.Generic;
+using Tenant.Portal.Areas.Products.DomainModels;
+using Tenant.Portal.Shared.ViewModels;
 
 namespace Tenant.Portal.Areas.Products.ViewModels
 {
-    public class ProductPageViewModel
+    public class ProductPageViewModel : CatalogBasePageViewModel
     {
-        public HeaderViewModel Header { get; set; }
-        public MenuTilesViewModel MenuTiles { get; set; }
-        public ProductCatalogViewModel Catalog { get; set; }
-        public FooterViewModel Footer { get; set; }
+        public string SkuLabel { get; set; }
+        public string NameLabel { get; set; }
+        public string LastModifiedDateLabel { get; set; }
+        public string CreatedDateLabel { get; set; }
+        public PagedResults<IEnumerable<Product>> PagedProducts { get; set; }
     }
 }

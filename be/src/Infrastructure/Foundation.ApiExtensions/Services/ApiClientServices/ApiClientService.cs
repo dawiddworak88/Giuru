@@ -6,10 +6,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Foundation.ApiExtensions.Services.ApiClientServices
 {
@@ -43,6 +45,45 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
 
                 var apiResponse = new ApiResponse<T>
                 { 
+                    IsSuccessStatusCode = response.IsSuccessStatusCode,
+                    StatusCode = response.StatusCode
+                };
+
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (!string.IsNullOrWhiteSpace(result))
+                {
+                    apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
+                }
+
+                return apiResponse;
+            }
+        }
+
+        public async Task<ApiResponse<T>> GetAsync<S, W, T>(S request) where S : ApiRequest<W> where T : BaseResponseModel
+        {
+            using (var client = new HttpClient())
+            {
+                if (ApiExtensionsConstants.TimeoutMilliseconds > 0)
+                {
+                    client.Timeout = TimeSpan.FromMilliseconds(ApiExtensionsConstants.TimeoutMilliseconds);
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.AccessToken))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AccessToken);
+                }
+
+                var properties = from p in request.Data.GetType().GetProperties()
+                                 where p.GetValue(request.Data, null) != null
+                                 select p.Name + "=" + HttpUtility.UrlEncode(p.GetValue(request.Data, null).ToString());
+
+                var queryString = string.Join("&", properties.ToArray());
+
+                var response = await client.GetAsync(request.EndpointAddress + "?" + queryString);
+
+                var apiResponse = new ApiResponse<T>
+                {
                     IsSuccessStatusCode = response.IsSuccessStatusCode,
                     StatusCode = response.StatusCode
                 };

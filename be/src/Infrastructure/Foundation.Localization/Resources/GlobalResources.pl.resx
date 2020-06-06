@@ -141,6 +141,12 @@
   <data name="Copyright" xml:space="preserve">
     <value>Copyright © [year] Giuru</value>
   </data>
+  <data name="CreatedDate" xml:space="preserve">
+    <value>Utworzono</value>
+  </data>
+  <data name="DisplayedRows" xml:space="preserve">
+    <value>[from] - [to] z [count]</value>
+  </data>
   <data name="EmailFormatErrorMessage" xml:space="preserve">
     <value>Adres e-mail powinien mieć poprawny format, np. twoj@email.pl</value>
   </data>
@@ -165,14 +171,23 @@
   <data name="LanguageRequiredErrorMessage" xml:space="preserve">
     <value>Wybierz preferowany język komunikacji z klientem</value>
   </data>
+  <data name="LastModifiedDate" xml:space="preserve">
+    <value>Zmodyfikowano</value>
+  </data>
   <data name="Media" xml:space="preserve">
     <value>Media</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nazwa</value>
   </data>
   <data name="NameLabel" xml:space="preserve">
     <value>Nazwa:</value>
   </data>
   <data name="NameRequiredErrorMessage" xml:space="preserve">
     <value>Wprowadź nazwę</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Dalej</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Otwórz</value>
@@ -189,6 +204,9 @@
   <data name="Portal" xml:space="preserve">
     <value>Portal</value>
   </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Wstecz</value>
+  </data>
   <data name="PriceList" xml:space="preserve">
     <value>Cennik</value>
   </data>
@@ -198,8 +216,14 @@
   <data name="Products" xml:space="preserve">
     <value>Produkty</value>
   </data>
+  <data name="RowsPerPage" xml:space="preserve">
+    <value>Wierszy na stronie</value>
+  </data>
   <data name="SaveText" xml:space="preserve">
     <value>Zapisz</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Wyszukaj</value>
   </data>
   <data name="SelectLanguage" xml:space="preserve">
     <value>Wybierz język</value>
