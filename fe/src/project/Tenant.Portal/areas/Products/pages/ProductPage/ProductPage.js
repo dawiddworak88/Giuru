@@ -83,8 +83,8 @@ function ProductPage(props) {
                             </TableCell>
                             <TableCell>{product.sku}</TableCell>
                             <TableCell>{product.name}</TableCell>
-                            <TableCell>{moment(product.lastModifiedDate).local().format('LT')}</TableCell>
-                            <TableCell>{moment(product.createdDate).local().format('LT')}</TableCell>
+                            <TableCell>{moment(product.lastModifiedDate).local().format('L LT')}</TableCell>
+                            <TableCell>{moment(product.createdDate).local().format('L LT')}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>

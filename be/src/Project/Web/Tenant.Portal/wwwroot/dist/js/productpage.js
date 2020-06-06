@@ -51033,7 +51033,7 @@ function ProductPage(props) {
       size: "small",
       color: "primary",
       "aria-label": "Delete"
-    }, /*#__PURE__*/react_default.a.createElement(Delete_default.a, null))), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, product.sku), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, product.name), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, moment_default()(product.lastModifiedDate).local().format('LT')), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, moment_default()(product.createdDate).local().format('LT')));
+    }, /*#__PURE__*/react_default.a.createElement(Delete_default.a, null))), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, product.sku), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, product.name), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, moment_default()(product.lastModifiedDate).local().format('L LT')), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, moment_default()(product.createdDate).local().format('L LT')));
   }))))), /*#__PURE__*/react_default.a.createElement("div", {
     className: "catalog__pagination is-flex-centered"
   }, /*#__PURE__*/react_default.a.createElement(esm_TablePagination_TablePagination, {
