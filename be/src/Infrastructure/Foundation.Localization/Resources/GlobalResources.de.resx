@@ -138,6 +138,12 @@
   <data name="Copyright" xml:space="preserve">
     <value>Copyright © [year] Giuru</value>
   </data>
+  <data name="CreatedDate" xml:space="preserve">
+    <value>Erstellungsdatum</value>
+  </data>
+  <data name="DisplayedRows" xml:space="preserve">
+    <value>[from] - [to] von [count]</value>
+  </data>
   <data name="EmailFormatErrorMessage" xml:space="preserve">
     <value>Bitte die E-mail-Adresse in einem richtigen Format eingeben, z.B. deine@adresse.de</value>
   </data>
@@ -165,8 +171,14 @@
   <data name="LanguageRequiredErrorMessage" xml:space="preserve">
     <value>Wählen Sie die Sprache aus, die für die Kommunikation mit dem Kunde bevorzugt wird</value>
   </data>
+  <data name="LastModifiedDate" xml:space="preserve">
+    <value>Zuletzt geändertes Datum</value>
+  </data>
   <data name="Media" xml:space="preserve">
     <value>Media</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
   </data>
   <data name="NameLabel" xml:space="preserve">
     <value>Name:</value>
@@ -198,8 +210,14 @@
   <data name="Products" xml:space="preserve">
     <value>Produkte</value>
   </data>
+  <data name="RowsPerPage" xml:space="preserve">
+    <value>Zeilen pro Seite</value>
+  </data>
   <data name="SaveText" xml:space="preserve">
     <value>Speichern</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Suche</value>
   </data>
   <data name="SelectLanguage" xml:space="preserve">
     <value>Sprache auswählen</value>

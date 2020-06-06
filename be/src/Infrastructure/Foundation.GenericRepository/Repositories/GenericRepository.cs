@@ -43,7 +43,7 @@ namespace Foundation.GenericRepository.Repositories
 
             if (orderByPredicate != null)
             {
-                entities = (isOrderByDescending.HasValue && isOrderByDescending.Value) ? entities.OrderBy(orderByPredicate) : entities.OrderByDescending(orderByPredicate);
+                entities = (isOrderByDescending.HasValue && isOrderByDescending.Value) ? entities.OrderByDescending(orderByPredicate) : entities.OrderBy(orderByPredicate);
             }
 
             var pagination = new Pagination(entities.Count(), itemsPerPage);

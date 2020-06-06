@@ -7,6 +7,10 @@ namespace Tenant.Portal.Areas.Products.ViewModels
 {
     public class ProductPageViewModel : CatalogBasePageViewModel
     {
-        public PagedResults<IEnumerable<Product>> Products { get; set; }
+        public string SkuLabel { get; set; }
+        public string NameLabel { get; set; }
+        public string LastModifiedDateLabel { get; set; }
+        public string CreatedDateLabel { get; set; }
+        public PagedResults<IEnumerable<Product>> PagedProducts { get; set; }
     }
 }

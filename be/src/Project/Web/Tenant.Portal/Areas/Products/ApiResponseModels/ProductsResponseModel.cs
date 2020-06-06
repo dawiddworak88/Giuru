@@ -6,6 +6,6 @@ namespace Tenant.Portal.Areas.Products.ApiResponseModels
 {
     public class ProductsResponseModel : BaseResponseModel
     {
-        public PagedResults<IEnumerable<ProductResponseModel>> Products { get; set; }
+        public PagedResults<IEnumerable<ProductResponseModel>> PagedProducts { get; set; }
     }
 }

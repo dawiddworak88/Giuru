@@ -43,7 +43,6 @@ var menuTiles = {
 
 var props = {
   title: 'Orders',
-  showNew: true,
   newText: 'New order',
   newUrl: '#'
 };

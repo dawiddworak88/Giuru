@@ -39,7 +39,6 @@ namespace Tenant.Portal.Areas.Clients.ModelBuilders
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
                 Title = this.clientLocalizer["Clients"],
-                ShowNew = true,
                 NewText = this.clientLocalizer["NewClient"],
                 NewUrl = this.linkGenerator.GetPathByAction("Index", "ClientDetail", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 Footer = footerModelBuilder.BuildModel()

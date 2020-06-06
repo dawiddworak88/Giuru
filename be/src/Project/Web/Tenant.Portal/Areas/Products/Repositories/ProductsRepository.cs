@@ -51,11 +51,11 @@ namespace Tenant.Portal.Areas.Products.Repositories
 
                 var response = await this.apiClientService.GetAsync<ApiRequest<ProductsRequestModel>, ProductsRequestModel, ProductsResponseModel>(apiRequest);
 
-                if (response.IsSuccessStatusCode && response.Data?.Products?.Data != null)
+                if (response.IsSuccessStatusCode && response.Data?.PagedProducts?.Data != null)
                 {
                     var products = new List<Product>();
 
-                    foreach (var productResponse in response.Data.Products.Data)
+                    foreach (var productResponse in response.Data.PagedProducts.Data)
                     {
                         var product = new Product
                         {
@@ -73,8 +73,8 @@ namespace Tenant.Portal.Areas.Products.Repositories
                     return new PagedResults<IEnumerable<Product>>
                     {
                         Data = products,
-                        PageCount = response.Data.Products.PageCount,
-                        Total = response.Data.Products.Total
+                        PageCount = response.Data.PagedProducts.PageCount,
+                        Total = response.Data.PagedProducts.Total
                     };
                 }
             }

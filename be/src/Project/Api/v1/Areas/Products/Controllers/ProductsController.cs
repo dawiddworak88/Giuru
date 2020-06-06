@@ -1,5 +1,4 @@
-﻿using Api.v1.Areas.Products.RequestModels;
-using Api.v1.Areas.Products.ResponseModels;
+﻿using Api.v1.Areas.Products.ResponseModels;
 using Feature.Account.Definitions;
 using Feature.Product.Models;
 using Feature.Product.Services;
@@ -36,14 +35,17 @@ namespace Api.v1.Areas.Products.Controllers
         }
 
         /// <summary>
-        /// Returns a product by id.
+        /// Returns products by search term. Returns all products (paginated) if search term is empty.
         /// </summary>
-        /// <param name="productModel">Products to get.</param>
-        /// <returns>The product.</returns>
+        /// <param name="language">The language.</param>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The number of items per page.</param>
+        /// <returns></returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Get([FromBody] GetProductsRequestModel productModel)
+        public async Task<IActionResult> Get(string language, string searchTerm, int pageIndex, int itemsPerPage)
         {
             try
             {
@@ -51,12 +53,12 @@ namespace Api.v1.Areas.Products.Controllers
 
                 var getProductsModel = new GetProductsModel
                 {
-                    PageIndex = productModel.PageIndex,
-                    ItemsPerPage = productModel.ItemsPerPage,
-                    SearchTerm = productModel.SearchTerm,
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    SearchTerm = searchTerm,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
-                    Language = productModel.Language
+                    Language = language
                 };
 
                 var getProductsResult = await this.productService.GetAsync(getProductsModel);

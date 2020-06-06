@@ -6,6 +6,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import { Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@material-ui/core';
 import { Plus } from 'react-feather';
 import GlobalHelper from '../../../../../../shared/helpers/globals/GlobalHelper';
+import PaginationConstants from '../../../../../../shared/constants/PaginationConstants';
 import Header from '../../../../../../shared/components/Header/Header';
 import Footer from '../../../../../../shared/components/Footer/Footer';
 import MenuTiles from '../../../../../../shared/components/MenuTiles/MenuTiles';
@@ -14,32 +15,19 @@ import MenuTiles from '../../../../../../shared/components/MenuTiles/MenuTiles';
 import favicon from '../../../../../../shared/layouts/images/favicon.png';
 /* eslint-enable no-unused-vars */
 
-
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
 function ProductPage(props) {
 
   const [page, setPage] = React.useState(2);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   return (
     <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
@@ -47,79 +35,79 @@ function ProductPage(props) {
         <Header {...props.header}></Header>
         <MenuTiles {...props.menuTiles} />
         <section className="section section-small-padding catalog">
-            <h1 className="subtitle is-4">{props.title}</h1>
-            <div>
-                {props.showNew &&
-                    <a href={props.newUrl} className="button is-primary">
-                        <span className="icon">
-                            <Plus />
-                        </span>
-                        <span>
-                            {props.newText}
-                        </span>
-                    </a>
-                }
+          <h1 className="subtitle is-4">{props.title}</h1>
+          <div>
+            {props.newUrl &&
+              <a href={props.newUrl} className="button is-primary">
+                <span className="icon">
+                  <Plus />
+                </span>
+                <span>
+                  {props.newText}
+                </span>
+              </a>
+            }
+          </div>
+          <div>
+            <div className="catalog__search is-flex-centered">
+              <TextField id="search" className="catalog__search-field" label={props.searchLabel} type="search" autoComplete="off" />
+              <Button type="button" variant="contained" color="primary">
+                {props.searchLabel}
+              </Button>
             </div>
-            <div>
-                <div className="catalog__search is-flex-centered">
-                    <TextField id="search" className="catalog__search-field" label={props.searchLabel} type="search" autoComplete="off" />
-                    <Button type="button" variant="contained" color="primary">
-                        {props.searchLabel}
-                    </Button>
+            {(props.pagedProducts && props.pagedProducts.data) ?
+              <div className="table-container">
+                <div className="catalog__table">
+                  <TableContainer component={Paper}>
+                    <Table aria-label={props.title}>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell width="11%"></TableCell>
+                          <TableCell>{props.skuLabel}</TableCell>
+                          <TableCell>{props.nameLabel}</TableCell>
+                          <TableCell>{props.lastModifiedDateLabel}</TableCell>
+                          <TableCell>{props.createdDateLabel}</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {props.pagedProducts.data.map((product) => (
+                          <TableRow key={product.name}>
+                            <TableCell width="11%">
+                              <Fab size="small" color="secondary" aria-label="Edit">
+                                <EditIcon />
+                              </Fab>
+                              <Fab size="small" color="primary" aria-label="Delete">
+                                <DeleteIcon />
+                              </Fab>
+                            </TableCell>
+                            <TableCell>{product.sku}</TableCell>
+                            <TableCell>{product.name}</TableCell>
+                            <TableCell>{product.lastModifiedDate}</TableCell>
+                            <TableCell>{product.createdDate}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                 </div>
-                <div className="table-container">
-                    <div className="catalog__table">
-                        <TableContainer component={Paper}>
-                            <Table aria-label={props.title}>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell width="11%"></TableCell>
-                                        <TableCell align="left">Dessert (100g serving)</TableCell>
-                                        <TableCell align="right">Calories</TableCell>
-                                        <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                                        <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                                        <TableCell align="right">Protein&nbsp;(g)</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {rows.map((row) => (
-                                        <TableRow key={row.name}>
-                                            <TableCell width="11%">
-                                                {props.editUrl &&
-                                                <Fab size="small" color="secondary" aria-label="Edit">
-                                                    <EditIcon />
-                                                </Fab>
-                                                }
-                                                {props.deleteUrl &&
-                                                <Fab size="small" color="primary" aria-label="Delete">
-                                                    <DeleteIcon />
-                                                </Fab>
-                                                }
-                                                
-                                            </TableCell>
-                                            <TableCell>{row.name}</TableCell>
-                                            <TableCell align="right">{row.calories}</TableCell>
-                                            <TableCell align="right">{row.fat}</TableCell>
-                                            <TableCell align="right">{row.carbs}</TableCell>
-                                            <TableCell align="right">{row.protein}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </div>
-                    <div className="catalog__pagination is-flex-centered">
-                        <TablePagination
-                            component="div"
-                            count={100}
-                            page={page}
-                            onChangePage={handleChangePage}
-                            rowsPerPage={rowsPerPage}
-                            onChangeRowsPerPage={handleChangeRowsPerPage}
-                        />
-                    </div>
+                <div className="catalog__pagination is-flex-centered">
+                  <TablePagination
+                    labelDisplayedRows={({ from, to, count }) => `Displaying pages ${from}-${to} of total ${count} pages`}
+                    labelRowsPerPage={props.rowsPerPageLabel}
+                    component="div"
+                    count={props.pagedProducts.total}
+                    page={props.pagedProducts.pageIndex}
+                    onChangePage={handleChangePage}
+                    rowsPerPage={PaginationConstants.DefaultRowsPerPage()}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                  />
                 </div>
-            </div>
+              </div> :
+              <div>
+                {props.noResultsLabel}
+              </div>
+            }
+          </div>
         </section>
         <Footer {...props.footer}></Footer>
       </div>

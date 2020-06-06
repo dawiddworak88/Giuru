@@ -34,7 +34,6 @@ namespace Tenant.Portal.Areas.Orders.ModelBuilders
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
                 Title = this.orderLocalizer["Orders"],
-                ShowNew = true,
                 NewText = this.orderLocalizer["NewOrder"],
                 NewUrl = "#",
                 Footer = footerModelBuilder.BuildModel()

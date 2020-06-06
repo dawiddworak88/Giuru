@@ -112,7 +112,7 @@ namespace Feature.Product.Services
 
             var productRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Products.Entities.Product>(tenant.DatabaseConnectionString);
 
-            var predicate = PredicateBuilder.False<Foundation.TenantDatabase.Areas.Products.Entities.Product>();
+            var predicate = PredicateBuilder.True<Foundation.TenantDatabase.Areas.Products.Entities.Product>();
 
             if (!string.IsNullOrWhiteSpace(getProductsModel.SearchTerm))
             {

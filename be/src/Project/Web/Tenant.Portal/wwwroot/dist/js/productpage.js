@@ -717,7 +717,7 @@ var FormControl = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function Form
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
-/* harmony import */ var _FormControl_formControlState__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(14);
+/* harmony import */ var _FormControl_formControlState__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(16);
 /* harmony import */ var _FormControl_useFormControl__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(17);
 /* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5);
 
@@ -3127,7 +3127,7 @@ var SelectInput_SelectInput = react["forwardRef"](function SelectInput(props, re
  false ? undefined : void 0;
 /* harmony default export */ var Select_SelectInput = (SelectInput_SelectInput);
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/formControlState.js
-var formControlState = __webpack_require__(14);
+var formControlState = __webpack_require__(16);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/useFormControl.js
 var useFormControl = __webpack_require__(17);
@@ -4669,7 +4669,7 @@ var prop_types = __webpack_require__(1);
 var clsx_m = __webpack_require__(4);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/formControlState.js
-var formControlState = __webpack_require__(14);
+var formControlState = __webpack_require__(16);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/useFormControl.js
 var useFormControl = __webpack_require__(17);
@@ -5277,22 +5277,11 @@ function _slicedToArray(arr, i) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return formControlState; });
-function formControlState(_ref) {
-  var props = _ref.props,
-      states = _ref.states,
-      muiFormControl = _ref.muiFormControl;
-  return states.reduce(function (acc, state) {
-    acc[state] = props[state];
-
-    if (muiFormControl) {
-      if (typeof props[state] === 'undefined') {
-        acc[state] = muiFormControl[state];
-      }
-    }
-
-    return acc;
-  }, {});
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _classCallCheck; });
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
 }
 
 /***/ }),
@@ -5314,19 +5303,6 @@ module.exports = _interopRequireDefault;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _classCallCheck; });
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-/***/ }),
-
-/***/ 16:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _createClass; });
 function _defineProperties(target, props) {
   for (var i = 0; i < props.length; i++) {
@@ -5342,6 +5318,30 @@ function _createClass(Constructor, protoProps, staticProps) {
   if (protoProps) _defineProperties(Constructor.prototype, protoProps);
   if (staticProps) _defineProperties(Constructor, staticProps);
   return Constructor;
+}
+
+/***/ }),
+
+/***/ 16:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return formControlState; });
+function formControlState(_ref) {
+  var props = _ref.props,
+      states = _ref.states,
+      muiFormControl = _ref.muiFormControl;
+  return states.reduce(function (acc, state) {
+    acc[state] = props[state];
+
+    if (muiFormControl) {
+      if (typeof props[state] === 'undefined') {
+        acc[state] = muiFormControl[state];
+      }
+    }
+
+    return acc;
+  }, {});
 }
 
 /***/ }),
@@ -23066,6 +23066,32 @@ var plus = __webpack_require__(42);
 // EXTERNAL MODULE: ./src/shared/helpers/globals/GlobalHelper.jsx
 var GlobalHelper = __webpack_require__(77);
 
+// EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck.js
+var classCallCheck = __webpack_require__(14);
+
+// EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createClass.js
+var createClass = __webpack_require__(15);
+
+// CONCATENATED MODULE: ./src/shared/constants/PaginationConstants.js
+
+
+
+var PaginationConstants_PaginationConstants = /*#__PURE__*/function () {
+  function PaginationConstants() {
+    Object(classCallCheck["a" /* default */])(this, PaginationConstants);
+  }
+
+  Object(createClass["a" /* default */])(PaginationConstants, null, [{
+    key: "DefaultRowsPerPage",
+    value: function DefaultRowsPerPage() {
+      return 50;
+    }
+  }]);
+
+  return PaginationConstants;
+}();
+
+
 // EXTERNAL MODULE: ./src/shared/components/Header/Header.js + 2 modules
 var Header = __webpack_require__(45);
 
@@ -23079,6 +23105,7 @@ var MenuTiles = __webpack_require__(46);
 var favicon = __webpack_require__(70);
 
 // CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Products/pages/ProductPage/ProductPage.js
+
 
 
 
@@ -23109,6 +23136,8 @@ function createData(name, calories, fat, carbs, protein) {
 var rows = [createData('Frozen yoghurt', 159, 6.0, 24, 4.0), createData('Ice cream sandwich', 237, 9.0, 37, 4.3), createData('Eclair', 262, 16.0, 24, 6.0), createData('Cupcake', 305, 3.7, 67, 4.3), createData('Gingerbread', 356, 16.0, 49, 3.9)];
 
 function ProductPage(props) {
+  console.log(props);
+
   var _React$useState = react_default.a.useState(2),
       _React$useState2 = Object(slicedToArray["a" /* default */])(_React$useState, 2),
       page = _React$useState2[0],
@@ -23134,7 +23163,7 @@ function ProductPage(props) {
     className: "section section-small-padding catalog"
   }, /*#__PURE__*/react_default.a.createElement("h1", {
     className: "subtitle is-4"
-  }, props.title), /*#__PURE__*/react_default.a.createElement("div", null, props.showNew && /*#__PURE__*/react_default.a.createElement("a", {
+  }, props.title), /*#__PURE__*/react_default.a.createElement("div", null, props.newUrl && /*#__PURE__*/react_default.a.createElement("a", {
     href: props.newUrl,
     className: "button is-primary"
   }, /*#__PURE__*/react_default.a.createElement("span", {
@@ -23151,7 +23180,7 @@ function ProductPage(props) {
     type: "button",
     variant: "contained",
     color: "primary"
-  }, props.searchLabel)), /*#__PURE__*/react_default.a.createElement("div", {
+  }, props.searchLabel)), props.pagedProducts && props.pagedProducts.data ? /*#__PURE__*/react_default.a.createElement("div", {
     className: "table-container"
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "catalog__table"
@@ -23161,48 +23190,37 @@ function ProductPage(props) {
     "aria-label": props.title
   }, /*#__PURE__*/react_default.a.createElement(esm_TableHead_TableHead, null, /*#__PURE__*/react_default.a.createElement(esm_TableRow_TableRow, null, /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, {
     width: "11%"
-  }), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, {
-    align: "left"
-  }, "Dessert (100g serving)"), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, {
-    align: "right"
-  }, "Calories"), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, {
-    align: "right"
-  }, "Fat\xA0(g)"), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, {
-    align: "right"
-  }, "Carbs\xA0(g)"), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, {
-    align: "right"
-  }, "Protein\xA0(g)"))), /*#__PURE__*/react_default.a.createElement(esm_TableBody_TableBody, null, rows.map(function (row) {
+  }), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, props.skuLabel), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, props.nameLabel), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, props.lastModifiedDateLabel), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, props.createdDateLabel))), /*#__PURE__*/react_default.a.createElement(esm_TableBody_TableBody, null, props.pagedProducts.data.map(function (product) {
     return /*#__PURE__*/react_default.a.createElement(esm_TableRow_TableRow, {
-      key: row.name
+      key: product.name
     }, /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, {
       width: "11%"
-    }, props.editUrl && /*#__PURE__*/react_default.a.createElement(esm_Fab_Fab, {
+    }, /*#__PURE__*/react_default.a.createElement(esm_Fab_Fab, {
       size: "small",
       color: "secondary",
       "aria-label": "Edit"
-    }, /*#__PURE__*/react_default.a.createElement(Edit_default.a, null)), props.deleteUrl && /*#__PURE__*/react_default.a.createElement(esm_Fab_Fab, {
+    }, /*#__PURE__*/react_default.a.createElement(Edit_default.a, null)), /*#__PURE__*/react_default.a.createElement(esm_Fab_Fab, {
       size: "small",
       color: "primary",
       "aria-label": "Delete"
-    }, /*#__PURE__*/react_default.a.createElement(Delete_default.a, null))), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, row.name), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, {
-      align: "right"
-    }, row.calories), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, {
-      align: "right"
-    }, row.fat), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, {
-      align: "right"
-    }, row.carbs), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, {
-      align: "right"
-    }, row.protein));
+    }, /*#__PURE__*/react_default.a.createElement(Delete_default.a, null))), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, product.sku), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, product.name), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, product.lastModifiedDate), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, product.createdDate));
   }))))), /*#__PURE__*/react_default.a.createElement("div", {
     className: "catalog__pagination is-flex-centered"
   }, /*#__PURE__*/react_default.a.createElement(esm_TablePagination_TablePagination, {
+    labelDisplayedRows: function labelDisplayedRows(_ref) {
+      var from = _ref.from,
+          to = _ref.to,
+          count = _ref.count;
+      return "Displaying pages ".concat(from, "-").concat(to, " of total ").concat(count, " pages");
+    },
+    labelRowsPerPage: props.rowsPerPageLabel,
     component: "div",
-    count: 100,
-    page: page,
+    count: props.pagedProducts.total,
+    page: props.pagedProducts.pageIndex,
     onChangePage: handleChangePage,
-    rowsPerPage: rowsPerPage,
+    rowsPerPage: PaginationConstants_PaginationConstants.DefaultRowsPerPage(),
     onChangeRowsPerPage: handleChangeRowsPerPage
-  }))))), /*#__PURE__*/react_default.a.createElement(Footer["a" /* default */], props.footer)));
+  }))) : /*#__PURE__*/react_default.a.createElement("div", null, props.noResultsLabel))), /*#__PURE__*/react_default.a.createElement(Footer["a" /* default */], props.footer)));
 }
 
 /* harmony default export */ var ProductPage_ProductPage = (ProductPage);
@@ -23224,8 +23242,8 @@ react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(ProductP
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CssSsrRemovalHelper; });
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 
 
 
@@ -29493,8 +29511,8 @@ if (true) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GlobalHelper; });
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
 /* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(58);
 
 
@@ -29746,7 +29764,7 @@ var prop_types = __webpack_require__(1);
 var clsx_m = __webpack_require__(4);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/formControlState.js
-var formControlState = __webpack_require__(14);
+var formControlState = __webpack_require__(16);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/FormControlContext.js
 var FormControlContext = __webpack_require__(27);

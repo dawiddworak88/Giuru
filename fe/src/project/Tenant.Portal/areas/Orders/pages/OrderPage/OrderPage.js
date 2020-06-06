@@ -16,7 +16,7 @@ function OrderPage(props) {
       <section className="section section-small-padding catalog">
         <h1 className="subtitle is-4">{props.title}</h1>
         <div>
-            {props.showNew &&
+            {props.newUrl &&
                 <a href={props.newUrl} className="button is-primary">
                     <span className="icon">
                         <Plus />
