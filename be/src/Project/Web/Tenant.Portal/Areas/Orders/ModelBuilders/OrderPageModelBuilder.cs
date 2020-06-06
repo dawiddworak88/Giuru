@@ -3,28 +3,27 @@ using Foundation.Extensions.ModelBuilders;
 using Feature.PageContent.MenuTiles.ViewModels;
 using Feature.PageContent.Components.Headers.ViewModels;
 using Feature.PageContent.Components.Footers.ViewModels;
+using Microsoft.Extensions.Localization;
+using Feature.Order;
 
 namespace Tenant.Portal.Areas.Orders.ModelBuilders
 {
     public class OrderPageModelBuilder : IModelBuilder<OrderPageViewModel>
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
-
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
-
-        private readonly IModelBuilder<OrderCatalogViewModel> orderCatalogModelBuilder;
+        private readonly IStringLocalizer<OrderResources> orderLocalizer;
 
         public OrderPageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IModelBuilder<OrderCatalogViewModel> orderCatalogModelBuilder,
-            IModelBuilder<FooterViewModel> footerModelBuilder)
+            IModelBuilder<FooterViewModel> footerModelBuilder,
+            IStringLocalizer<OrderResources> orderLocalizer)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
-            this.orderCatalogModelBuilder = orderCatalogModelBuilder;
+            this.orderLocalizer = orderLocalizer;
             this.footerModelBuilder = footerModelBuilder;
         }
 
@@ -34,7 +33,9 @@ namespace Tenant.Portal.Areas.Orders.ModelBuilders
             {
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
-                Catalog = orderCatalogModelBuilder.BuildModel(),
+                Title = this.orderLocalizer["Orders"],
+                NewText = this.orderLocalizer["NewOrder"],
+                NewUrl = "#",
                 Footer = footerModelBuilder.BuildModel()
             };
 

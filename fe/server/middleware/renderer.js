@@ -1,5 +1,6 @@
-import React from 'react'
-import ReactDOMServer from 'react-dom/server'
+import React from 'react';
+import ReactDOMServer from 'react-dom/server';
+import { ServerStyleSheets } from '@material-ui/core/styles';
 
 // AspNetCore
 import HomePage from '../../src/project/AspNetCore/areas/Home/pages/HomePage/HomePage';
@@ -29,7 +30,28 @@ export default (req, res, next) => {
     let Component = Components[req.body.moduleName];
 	
 	if (Component) {
-		return res.send(ReactDOMServer.renderToString(<Component {...req.body.parameters} />));
+
+		const sheets = new ServerStyleSheets();
+
+		ReactDOMServer.renderToString(
+			sheets.collect(
+				<Component {...req.body.parameters} />
+			)
+		  );
+		
+		const css = sheets.toString();
+		
+		return res.send(
+			ReactDOMServer.renderToString(
+				<React.Fragment>
+					{css &&
+						<style id="jss-server-side">
+							{css}
+						</style>
+					}					
+					<Component {...req.body.parameters} />
+				</React.Fragment>
+			  ));
 	}
 	
 	res.status(400).end();

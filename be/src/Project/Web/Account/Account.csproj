@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\..\Feature\Feature.Security\Feature.Security.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Localization\Foundation.Localization.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Prerendering\Foundation.Prerendering.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\dist\" />

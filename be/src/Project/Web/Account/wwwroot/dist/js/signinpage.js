@@ -2540,6 +2540,9 @@ var GlobalHelper_GlobalHelper = /*#__PURE__*/function () {
         palette: {
           primary: {
             main: '#BF202F'
+          },
+          secondary: {
+            main: '#5E1916'
           }
         }
       });
@@ -14172,10 +14175,36 @@ function SignInPage(props) {
 }
 
 /* harmony default export */ var SignIn_SignInPage = (SignInPage);
+// CONCATENATED MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.jsx
+
+
+
+var CssSsrRemovalHelper_CssSsrRemovalHelper = /*#__PURE__*/function () {
+  function CssSsrRemovalHelper() {
+    _classCallCheck(this, CssSsrRemovalHelper);
+  }
+
+  _createClass(CssSsrRemovalHelper, null, [{
+    key: "Remove",
+    value: function Remove() {
+      var jssStyles = document.querySelector('#jss-server-side');
+
+      if (jssStyles) {
+        jssStyles.parentElement.removeChild(jssStyles);
+      }
+    }
+  }]);
+
+  return CssSsrRemovalHelper;
+}();
+
+
 // CONCATENATED MODULE: ./src/project/Account/areas/Accounts/pages/SignIn/index.js
 
 
 
+
+CssSsrRemovalHelper_CssSsrRemovalHelper.Remove();
 react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(SignIn_SignInPage, window.data), document.getElementById('root'));
 
 /***/ })

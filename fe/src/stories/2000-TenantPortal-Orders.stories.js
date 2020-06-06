@@ -41,9 +41,8 @@ var menuTiles = {
   ],
 };
 
-var orderCatalog = {
+var props = {
   title: 'Orders',
-  showNew: true,
   newText: 'New order',
   newUrl: '#'
 };
@@ -54,7 +53,7 @@ var footer = {
   ]
 };
 
-export const OrderPageStory = () => <OrderPage header={header} menuTiles={menuTiles} catalog={orderCatalog} footer={footer} />
+export const OrderPageStory = () => <OrderPage header={header} menuTiles={menuTiles} {...props} footer={footer} />
 
 OrderPageStory.story = {
   name: 'Orders Page',
