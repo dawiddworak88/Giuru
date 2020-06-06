@@ -4,10 +4,13 @@ using Feature.Product.Validators;
 using Foundation.Database.Areas.Tenants.Entities;
 using Foundation.Database.Shared.Repositories;
 using Foundation.Extensions.Definitions;
+using Foundation.GenericRepository.Predicates;
 using Foundation.GenericRepository.Services;
 using Foundation.TenantDatabase.Areas.Translations.Entities;
 using Foundation.TenantDatabase.Shared.Repositories;
+using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Feature.Product.Services
@@ -83,6 +86,46 @@ namespace Feature.Product.Services
             createProductResultModel.Product = product;
 
             return createProductResultModel;
+        }
+
+        public async Task<ProductsResultModel> GetAsync(GetProductsModel getProductsModel)
+        {
+            var validator = new GetProductsModelValidator();
+
+            var validationResult = await validator.ValidateAsync(getProductsModel);
+
+            var getProductsResultModel = new ProductsResultModel();
+
+            if (!validationResult.IsValid)
+            {
+                getProductsResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+                return getProductsResultModel;
+            }
+
+            var tenant = this.tenantRepository.GetById(getProductsModel.TenantId.Value);
+
+            if (tenant == null)
+            {
+                getProductsResultModel.Errors.Add(ErrorConstants.NoTenant);
+                return getProductsResultModel;
+            }
+
+            var productRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Products.Entities.Product>(tenant.DatabaseConnectionString);
+
+            var predicate = PredicateBuilder.False<Foundation.TenantDatabase.Areas.Products.Entities.Product>();
+
+            if (!string.IsNullOrWhiteSpace(getProductsModel.SearchTerm))
+            {
+                predicate = predicate.And(x => x.Sku.StartsWith(getProductsModel.SearchTerm) || x.Name.Contains(getProductsModel.SearchTerm));
+            }
+
+            predicate = predicate.And(x => x.IsActive);
+
+            var products = productRepository.GetPaged(getProductsModel.PageIndex, getProductsModel.ItemsPerPage, predicate.Compile(), x=> x.CreatedDate, true);
+
+            getProductsResultModel.Products = products;
+
+            return getProductsResultModel;
         }
 
         public async Task<ProductResultModel> GetByIdAsync(GetProductModel getProductModel)

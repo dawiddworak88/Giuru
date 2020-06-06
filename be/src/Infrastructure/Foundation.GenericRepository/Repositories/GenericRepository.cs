@@ -1,4 +1,5 @@
 ﻿using Foundation.GenericRepository.Entities;
+using Foundation.GenericRepository.Paginations;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,20 @@ namespace Foundation.GenericRepository.Repositories
         public IEnumerable<TEntity> Get(Func<TEntity, bool> predicate)
         {
             return context.Set<TEntity>().Where(predicate);
+        }
+
+        public PagedResults<IEnumerable<TEntity>> GetPaged(int pageIndex, int itemsPerPage, Func<TEntity, bool> predicate, Func<TEntity, object> orderByPredicate = null, bool? isOrderByDescending = null)
+        {
+            var entities = context.Set<TEntity>().Where(predicate);
+
+            if (orderByPredicate != null)
+            {
+                entities = (isOrderByDescending.HasValue && isOrderByDescending.Value) ? entities.OrderBy(orderByPredicate) : entities.OrderByDescending(orderByPredicate);
+            }
+
+            var pagination = new Pagination(entities.Count(), itemsPerPage);
+
+            return entities.PagedIndex(pagination, pageIndex);
         }
 
         public IEnumerable<TEntity> GetAll()

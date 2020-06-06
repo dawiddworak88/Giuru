@@ -1,9 +1,8 @@
-﻿using Foundation.ApiExtensions.Models.Response;
-using System;
+﻿using System;
 
-namespace Tenant.Portal.Areas.Products.ApiResponseModels
+namespace Tenant.Portal.Areas.Products.DomainModels
 {
-    public class ProductResponseModel : BaseResponseModel
+    public class Product
     {
         public Guid Id { get; set; }
         public string Sku { get; set; }

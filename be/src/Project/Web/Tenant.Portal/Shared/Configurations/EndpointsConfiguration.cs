@@ -4,5 +4,6 @@
     {
         public string Client { get; set; }
         public string Product { get; set; }
+        public string Products { get; set; }
     }
 }
