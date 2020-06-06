@@ -8,5 +8,7 @@
         public string SearchLabel { get; set; }
         public string DisplayedRowsLabel { get; set; }
         public string RowsPerPageLabel { get; set; }
+        public string BackIconButtonText { get; set; }
+        public string NextIconButtonText { get; set; }
     }
 }

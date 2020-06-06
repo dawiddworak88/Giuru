@@ -58,6 +58,8 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
                 CreatedDateLabel = this.globalLocalizer["CreatedDate"],
                 DisplayedRowsLabel = this.globalLocalizer["DisplayedRows"],
                 RowsPerPageLabel = this.globalLocalizer["RowsPerPage"],
+                BackIconButtonText = this.globalLocalizer["Previous"],
+                NextIconButtonText = this.globalLocalizer["Next"],
                 PagedProducts = await this.productsRepository.GetProductsAsync(componentModel.Token, CultureInfo.CurrentUICulture.Name, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage),
                 Footer = footerModelBuilder.BuildModel()
             };

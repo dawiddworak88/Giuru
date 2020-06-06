@@ -186,6 +186,9 @@
   <data name="NameRequiredErrorMessage" xml:space="preserve">
     <value>Bitte Name eingeben</value>
   </data>
+  <data name="Next" xml:space="preserve">
+    <value>Weiter</value>
+  </data>
   <data name="Open" xml:space="preserve">
     <value>Öffnen</value>
   </data>
@@ -200,6 +203,9 @@
   </data>
   <data name="Portal" xml:space="preserve">
     <value>Portal</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Zurück</value>
   </data>
   <data name="PriceList" xml:space="preserve">
     <value>Preisliste</value>

@@ -5,6 +5,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@material-ui/core';
 import { Plus } from 'react-feather';
+import moment from 'moment';
 import GlobalHelper from '../../../../../../shared/helpers/globals/GlobalHelper';
 import PaginationConstants from '../../../../../../shared/constants/PaginationConstants';
 import Header from '../../../../../../shared/components/Header/Header';
@@ -82,8 +83,8 @@ function ProductPage(props) {
                             </TableCell>
                             <TableCell>{product.sku}</TableCell>
                             <TableCell>{product.name}</TableCell>
-                            <TableCell>{product.lastModifiedDate}</TableCell>
-                            <TableCell>{product.createdDate}</TableCell>
+                            <TableCell>{moment(product.lastModifiedDate).local().format('LT')}</TableCell>
+                            <TableCell>{moment(product.createdDate).local().format('LT')}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -92,8 +93,11 @@ function ProductPage(props) {
                 </div>
                 <div className="catalog__pagination is-flex-centered">
                   <TablePagination
-                    labelDisplayedRows={({ from, to, count }) => `Displaying pages ${from}-${to} of total ${count} pages`}
+                    labelDisplayedRows={({ count }) => `Total: ${count}`}
                     labelRowsPerPage={props.rowsPerPageLabel}
+                    backIconButtonText={props.backIconButtonText}
+                    nextIconButtonText={props.nextIconButtonText}
+                    rowsPerPageOptions={PaginationConstants.DefaultRowsPerPage()}
                     component="div"
                     count={props.pagedProducts.total}
                     page={props.pagedProducts.pageIndex}
