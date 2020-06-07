@@ -46,12 +46,15 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
         {
             var viewModel = new ProductPageViewModel
             {
+                Locale = CultureInfo.CurrentUICulture.Name,
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
                 Title = this.productLocalizer["Products"],
                 NewText = this.productLocalizer["NewProduct"],
                 NewUrl = this.linkGenerator.GetPathByAction("Index", "ProductDetail", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 SearchLabel = this.globalLocalizer["Search"],
+                EditLabel = this.globalLocalizer["Edit"],
+                DeleteLabel = this.globalLocalizer["Delete"],
                 NameLabel = this.globalLocalizer["Name"],
                 SkuLabel = this.productLocalizer["Sku"],
                 LastModifiedDateLabel = this.globalLocalizer["LastModifiedDate"],
@@ -60,6 +63,7 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
                 RowsPerPageLabel = this.globalLocalizer["RowsPerPage"],
                 BackIconButtonText = this.globalLocalizer["Previous"],
                 NextIconButtonText = this.globalLocalizer["Next"],
+                NoResultsLabel = this.globalLocalizer["NoResultsLabel"],
                 PagedProducts = await this.productsRepository.GetProductsAsync(componentModel.Token, CultureInfo.CurrentUICulture.Name, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage),
                 Footer = footerModelBuilder.BuildModel()
             };

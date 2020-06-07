@@ -2523,7 +2523,7 @@ function createMuiTheme() {
 }
 
 /* harmony default export */ var styles_createMuiTheme = (createMuiTheme);
-// CONCATENATED MODULE: ./src/shared/helpers/globals/GlobalHelper.jsx
+// CONCATENATED MODULE: ./src/shared/helpers/globals/GlobalHelper.js
 
 
 
@@ -14175,7 +14175,7 @@ function SignInPage(props) {
 }
 
 /* harmony default export */ var SignIn_SignInPage = (SignInPage);
-// CONCATENATED MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.jsx
+// CONCATENATED MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.js
 
 
 

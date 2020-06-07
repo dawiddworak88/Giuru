@@ -1,5 +1,5 @@
 export default class PaginationConstants {
     static DefaultRowsPerPage() {
-        return 50;
+        return 25;
     }
 }

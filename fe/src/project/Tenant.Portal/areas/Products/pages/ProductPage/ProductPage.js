@@ -7,6 +7,7 @@ import { Button, TextField, Table, TableBody, TableCell, TableContainer, TableHe
 import { Plus } from 'react-feather';
 import moment from 'moment';
 import GlobalHelper from '../../../../../../shared/helpers/globals/GlobalHelper';
+import LocaleHelper from '../../../../../../shared/helpers/globals/LocaleHelper';
 import PaginationConstants from '../../../../../../shared/constants/PaginationConstants';
 import Header from '../../../../../../shared/components/Header/Header';
 import Footer from '../../../../../../shared/components/Footer/Footer';
@@ -18,16 +19,12 @@ import favicon from '../../../../../../shared/layouts/images/favicon.png';
 
 function ProductPage(props) {
 
-  const [page, setPage] = React.useState(2);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  LocaleHelper.setMomentLocale(props.locale);
+
+  const [page, setPage] = React.useState(0);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
   };
 
   return (
@@ -57,7 +54,7 @@ function ProductPage(props) {
               </Button>
             </div>
             {(props.pagedProducts && props.pagedProducts.data) ?
-              <div className="table-container">
+              (<div className="table-container">
                 <div className="catalog__table">
                   <TableContainer component={Paper}>
                     <Table aria-label={props.title}>
@@ -74,10 +71,10 @@ function ProductPage(props) {
                         {props.pagedProducts.data.map((product) => (
                           <TableRow key={product.name}>
                             <TableCell width="11%">
-                              <Fab size="small" color="secondary" aria-label="Edit">
+                              <Fab size="small" color="secondary" aria-label={props.editLabel}>
                                 <EditIcon />
                               </Fab>
-                              <Fab size="small" color="primary" aria-label="Delete">
+                              <Fab size="small" color="primary" aria-label={props.deleteLabel}>
                                 <DeleteIcon />
                               </Fab>
                             </TableCell>
@@ -93,23 +90,22 @@ function ProductPage(props) {
                 </div>
                 <div className="catalog__pagination is-flex-centered">
                   <TablePagination
-                    labelDisplayedRows={({ count }) => `Total: ${count}`}
+                    labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
                     labelRowsPerPage={props.rowsPerPageLabel}
                     backIconButtonText={props.backIconButtonText}
                     nextIconButtonText={props.nextIconButtonText}
                     rowsPerPageOptions={PaginationConstants.DefaultRowsPerPage()}
                     component="div"
                     count={props.pagedProducts.total}
-                    page={props.pagedProducts.pageIndex}
+                    page={page}
                     onChangePage={handleChangePage}
                     rowsPerPage={PaginationConstants.DefaultRowsPerPage()}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
                   />
                 </div>
-              </div> :
-              <div>
-                {props.noResultsLabel}
-              </div>
+              </div>) :
+              (<section className="section is-flex-centered">
+                <span className="is-title is-5">{props.noResultsLabel}</span>
+              </section>)
             }
           </div>
         </section>
