@@ -144,8 +144,14 @@
   <data name="CreatedDate" xml:space="preserve">
     <value>Created Date</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
   <data name="DisplayedRows" xml:space="preserve">
-    <value>[from] - [to] of [count]</value>
+    <value>of</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
   </data>
   <data name="EmailFormatErrorMessage" xml:space="preserve">
     <value>Enter e-mail in a correct format, e.g. test@format.com</value>
@@ -188,6 +194,9 @@
   </data>
   <data name="Next" xml:space="preserve">
     <value>Next</value>
+  </data>
+  <data name="NoResultsLabel" xml:space="preserve">
+    <value>No results have been found.</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Open</value>

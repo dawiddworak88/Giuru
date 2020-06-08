@@ -835,7 +835,7 @@ function _createClass(Constructor, protoProps, staticProps) {
   if (staticProps) _defineProperties(Constructor, staticProps);
   return Constructor;
 }
-// CONCATENATED MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.jsx
+// CONCATENATED MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.js
 
 
 

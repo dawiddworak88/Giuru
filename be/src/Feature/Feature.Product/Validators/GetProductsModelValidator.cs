@@ -9,7 +9,7 @@ namespace Feature.Product.Validators
         public GetProductsModelValidator()
         {
             RuleFor(x => x.PageIndex).GreaterThanOrEqualTo(1);
-            RuleFor(x => x.ItemsPerPage).GreaterThanOrEqualTo(10).LessThanOrEqualTo(100);
+            RuleFor(x => x.ItemsPerPage).GreaterThanOrEqualTo(1).LessThanOrEqualTo(100);
         }
     }
 }

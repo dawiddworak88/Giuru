@@ -2,7 +2,10 @@
 
 namespace Tenant.Portal.Areas.Clients.ViewModels
 {
-    public class ClientPageViewModel : CatalogBasePageViewModel
+    public class ClientPageViewModel : BasePageViewModel
     {
+        public string Title { get; set; }
+        public string NewText { get; set; }
+        public string NewUrl { get; set; }
     }
 }
