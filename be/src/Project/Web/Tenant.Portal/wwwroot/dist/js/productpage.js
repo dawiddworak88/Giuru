@@ -52783,10 +52783,15 @@ function ProductCatalog(props) {
       searchTerm = _React$useState6[0],
       setSearchTerm = _React$useState6[1];
 
-  var _React$useState7 = react_default.a.useState(props.pagedProducts),
+  var _React$useState7 = react_default.a.useState(props.pagedProducts.data),
       _React$useState8 = Object(slicedToArray["a" /* default */])(_React$useState7, 2),
-      pagedProducts = _React$useState8[0],
-      setPagedProducts = _React$useState8[1];
+      products = _React$useState8[0],
+      setProducts = _React$useState8[1];
+
+  var _React$useState9 = react_default.a.useState(props.pagedProducts.total),
+      _React$useState10 = Object(slicedToArray["a" /* default */])(_React$useState9, 2),
+      total = _React$useState10[0],
+      setTotal = _React$useState10[1];
 
   var handleSearchTermKeyPress = function handleSearchTermKeyPress(event) {
     if (event.key == KeyConstants_KeyConstants.Enter()) {
@@ -52824,7 +52829,9 @@ function ProductCatalog(props) {
       FetchErrorHandler["a" /* default */].handleUnauthorizedResponse(response);
       return response.json().then(function (jsonResponse) {
         if (response.ok) {
-          setPagedProducts(jsonResponse.data.pagedProducts);
+          setProducts([]);
+          setProducts(jsonResponse.data.pagedProducts.data);
+          setTotal(jsonResponse.data.pagedProducts.total);
         } else {
           FetchErrorHandler["a" /* default */].consoleLogResponseDetails(searchParameters, response, jsonResponse);
           react_toastify["a" /* toast */].error(props.generalErrorMessage);
@@ -52866,7 +52873,9 @@ function ProductCatalog(props) {
       return response.json().then(function (jsonResponse) {
         if (response.ok) {
           setPage(0);
-          setPagedProducts(jsonResponse.data.pagedProducts);
+          setProducts([]);
+          setProducts(jsonResponse.data.pagedProducts.data);
+          setTotal(jsonResponse.data.pagedProducts.total);
         } else {
           FetchErrorHandler["a" /* default */].consoleLogResponseDetails(searchParameters, response, jsonResponse);
           react_toastify["a" /* toast */].error(props.generalErrorMessage);
@@ -52899,7 +52908,7 @@ function ProductCatalog(props) {
     type: "button",
     variant: "contained",
     color: "primary"
-  }, props.searchLabel)), pagedProducts && pagedProducts.data && pagedProducts.data.length > 0 ? /*#__PURE__*/react_default.a.createElement("div", {
+  }, props.searchLabel)), products && products.length > 0 ? /*#__PURE__*/react_default.a.createElement("div", {
     className: "table-container"
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "catalog__table"
@@ -52909,7 +52918,7 @@ function ProductCatalog(props) {
     "aria-label": props.title
   }, /*#__PURE__*/react_default.a.createElement(esm_TableHead_TableHead, null, /*#__PURE__*/react_default.a.createElement(esm_TableRow_TableRow, null, /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, {
     width: "11%"
-  }), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, props.skuLabel), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, props.nameLabel), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, props.lastModifiedDateLabel), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, props.createdDateLabel))), /*#__PURE__*/react_default.a.createElement(esm_TableBody_TableBody, null, pagedProducts.data.map(function (product) {
+  }), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, props.skuLabel), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, props.nameLabel), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, props.lastModifiedDateLabel), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, props.createdDateLabel))), /*#__PURE__*/react_default.a.createElement(esm_TableBody_TableBody, null, products.map(function (product) {
     return /*#__PURE__*/react_default.a.createElement(esm_TableRow_TableRow, {
       key: product.name
     }, /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, {
@@ -52937,14 +52946,14 @@ function ProductCatalog(props) {
     nextIconButtonText: props.nextIconButtonText,
     rowsPerPageOptions: PaginationConstants_PaginationConstants.DefaultRowsPerPage(),
     component: "div",
-    count: pagedProducts.total,
+    count: total,
     page: page,
     onChangePage: handleChangePage,
     rowsPerPage: PaginationConstants_PaginationConstants.DefaultRowsPerPage()
   }))) : /*#__PURE__*/react_default.a.createElement("section", {
     className: "section is-flex-centered"
   }, /*#__PURE__*/react_default.a.createElement("span", {
-    className: "is-title is-5 is-bold"
+    className: "is-title is-5"
   }, props.noResultsLabel)), state.isLoading && /*#__PURE__*/react_default.a.createElement(CircularProgress["a" /* default */], {
     className: "progressBar"
   }));

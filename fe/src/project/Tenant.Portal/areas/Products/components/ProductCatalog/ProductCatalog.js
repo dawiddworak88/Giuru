@@ -13,12 +13,13 @@ import QueryStringSerializer from '../../../../../../shared/helpers/serializers/
 import PaginationConstants from '../../../../../../shared/constants/PaginationConstants';
 
 function ProductCatalog(props) {
-    
+
     const [state, dispatch] = useContext(Context);
     const [page, setPage] = React.useState(0);
     const [itemsPerPage, setItemsPerPage] = React.useState(PaginationConstants.DefaultRowsPerPage());
     const [searchTerm, setSearchTerm] = React.useState('');
-    const [pagedProducts, setPagedProducts] = React.useState(props.pagedProducts);
+    const [products, setProducts] = React.useState(props.pagedProducts.data);
+    const [total, setTotal] = React.useState(props.pagedProducts.total);
 
     const handleSearchTermKeyPress = (event) => {
 
@@ -49,7 +50,7 @@ function ProductCatalog(props) {
             headers: { 'Content-Type': 'application/json' }
         };
 
-        const url = props.searchApiUrl + '?' + QueryStringSerializer.serialize(searchParameters);   
+        const url = props.searchApiUrl + '?' + QueryStringSerializer.serialize(searchParameters);
 
         return fetch(url, requestOptions)
             .then(function (response) {
@@ -62,7 +63,9 @@ function ProductCatalog(props) {
 
                     if (response.ok) {
 
-                        setPagedProducts(jsonResponse.data.pagedProducts);
+                        setProducts([]);
+                        setProducts(jsonResponse.data.pagedProducts.data);
+                        setTotal(jsonResponse.data.pagedProducts.total);
                     }
                     else {
                         FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
@@ -92,7 +95,7 @@ function ProductCatalog(props) {
             headers: { 'Content-Type': 'application/json' }
         };
 
-        const url = props.searchApiUrl + '?' + QueryStringSerializer.serialize(searchParameters);   
+        const url = props.searchApiUrl + '?' + QueryStringSerializer.serialize(searchParameters);
 
         return fetch(url, requestOptions)
             .then(function (response) {
@@ -105,8 +108,11 @@ function ProductCatalog(props) {
 
                     if (response.ok) {
 
-                        setPage(0);                        
-                        setPagedProducts(jsonResponse.data.pagedProducts);
+                        setPage(0);
+
+                        setProducts([]);
+                        setProducts(jsonResponse.data.pagedProducts.data);
+                        setTotal(jsonResponse.data.pagedProducts.total);
                     }
                     else {
                         FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
@@ -128,7 +134,7 @@ function ProductCatalog(props) {
                     {props.searchLabel}
                 </Button>
             </div>
-            {(pagedProducts && pagedProducts.data && pagedProducts.data.length > 0) ?
+            {(products && products.length > 0) ?
                 (<div className="table-container">
                     <div className="catalog__table">
                         <TableContainer component={Paper}>
@@ -143,7 +149,7 @@ function ProductCatalog(props) {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {pagedProducts.data.map((product) => (
+                                    {products.map((product) => (
                                         <TableRow key={product.name}>
                                             <TableCell width="11%">
                                                 <Fab size="small" color="secondary" aria-label={props.editLabel}>
@@ -171,7 +177,7 @@ function ProductCatalog(props) {
                             nextIconButtonText={props.nextIconButtonText}
                             rowsPerPageOptions={PaginationConstants.DefaultRowsPerPage()}
                             component="div"
-                            count={pagedProducts.total}
+                            count={total}
                             page={page}
                             onChangePage={handleChangePage}
                             rowsPerPage={PaginationConstants.DefaultRowsPerPage()}
@@ -179,7 +185,7 @@ function ProductCatalog(props) {
                     </div>
                 </div>) :
                 (<section className="section is-flex-centered">
-                    <span className="is-title is-5 is-bold">{props.noResultsLabel}</span>
+                    <span className="is-title is-5">{props.noResultsLabel}</span>
                 </section>)
             }
             {state.isLoading && <CircularProgress className="progressBar" />}
