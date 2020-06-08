@@ -169,7 +169,7 @@ function ProductCatalog(props) {
                             labelRowsPerPage={props.rowsPerPageLabel}
                             backIconButtonText={props.backIconButtonText}
                             nextIconButtonText={props.nextIconButtonText}
-                            rowsPerPageOptions={PaginationCons}
+                            rowsPerPageOptions={PaginationConstants.DefaultRowsPerPage()}
                             component="div"
                             count={pagedProducts.total}
                             page={page}
