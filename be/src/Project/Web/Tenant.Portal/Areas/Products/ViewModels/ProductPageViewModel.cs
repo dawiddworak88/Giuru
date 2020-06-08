@@ -1,16 +1,13 @@
-﻿using Foundation.GenericRepository.Paginations;
-using System.Collections.Generic;
-using Tenant.Portal.Areas.Products.DomainModels;
-using Tenant.Portal.Shared.ViewModels;
+﻿using Tenant.Portal.Shared.ViewModels;
 
 namespace Tenant.Portal.Areas.Products.ViewModels
 {
-    public class ProductPageViewModel : CatalogBasePageViewModel
+    public class ProductPageViewModel : BasePageViewModel
     {
-        public string SkuLabel { get; set; }
-        public string NameLabel { get; set; }
-        public string LastModifiedDateLabel { get; set; }
-        public string CreatedDateLabel { get; set; }
-        public PagedResults<IEnumerable<Product>> PagedProducts { get; set; }
+        public string Locale { get; set; }
+        public string Title { get; set; }
+        public string NewText { get; set; }
+        public string NewUrl { get; set; }
+        public ProductPageCatalogViewModel Catalog { get; set; }
     }
 }
