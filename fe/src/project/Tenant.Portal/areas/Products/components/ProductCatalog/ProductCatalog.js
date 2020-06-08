@@ -5,83 +5,120 @@ import moment from 'moment';
 import Fab from '@material-ui/core/Fab';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import { Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@material-ui/core';
+import { Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, CircularProgress } from '@material-ui/core';
 import FetchErrorHandler from '../../../../../../shared/helpers/errorHandlers/FetchErrorHandler';
 import KeyConstants from '../../../../../../shared/constants/KeyConstants';
 import { Context } from '../../../../../../shared/stores/Store';
-import PaginationConstants from '../../../../../../shared/constants/PaginationConstants';
 import QueryStringSerializer from '../../../../../../shared/helpers/serializers/QueryStringSerializer';
+import PaginationConstants from '../../../../../../shared/constants/PaginationConstants';
 
 function ProductCatalog(props) {
-  
-  const [state, dispatch] = useContext(Context);
-  const [page, setPage] = React.useState(0);
-  const [searchTerm, setSearchTerm] = React.useState('');
-  const [pagedProducts, setPagedProducts] = React.useState(props.pagedProducts);
+    
+    const [state, dispatch] = useContext(Context);
+    const [page, setPage] = React.useState(0);
+    const [itemsPerPage, setItemsPerPage] = React.useState(PaginationConstants.DefaultRowsPerPage());
+    const [searchTerm, setSearchTerm] = React.useState('');
+    const [pagedProducts, setPagedProducts] = React.useState(props.pagedProducts);
 
-  const handleSearchTermKeyPress = (event) => {
+    const handleSearchTermKeyPress = (event) => {
 
-    if (event.key == KeyConstants.Enter()) {
-      search();
-    }
-  }
-
-  const handleOnChange = (event) => {
-    setSearchTerm(event.target.value);
-  }
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  }
-
-  const search = () => {
-
-    dispatch({ type: 'SET_IS_LOADING', payload: true });
-
-    const searchParameters = {
-
-      searchTerm: searchTerm,
-      pageIndex: page + 1,
-      itemsPerPage: PaginationConstants.DefaultRowsPerPage()       
-    };
-
-    const queryStringSearchParameters = QueryStringSerializer.serialize(searchParameters);
-
-    const requestOptions = {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    };
-
-    var url = props.searchApiUrl;
-
-    if (queryStringSearchParameters) {
-      url += '?' + queryStringSearchParameters;
+        if (event.key == KeyConstants.Enter()) {
+            search();
+        }
     }
 
-    return fetch(url, requestOptions)
-      .then(function (response) {
+    const handleOnChange = (event) => {
+        setSearchTerm(event.target.value);
+    }
 
-        dispatch({ type: 'SET_IS_LOADING', payload: false });
+    const handleChangePage = (event, newPage) => {
 
-        FetchErrorHandler.handleUnauthorizedResponse(response);
+        dispatch({ type: 'SET_IS_LOADING', payload: true });
 
-        return response.json().then(jsonResponse => {
+        setPage(newPage);
 
-          if (response.ok) {
-            setPage(0);
-            setPagedProducts(jsonResponse.data.pagedProducts);
-          }
-          else {
-            FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
-            toast.error(jsonResponse.message);
-          }
-        })
-      }).catch(error => {
-        console.log(error);
-        dispatch({ type: 'SET_IS_LOADING', payload: false });
-        toast.error(generalErrorMessage);
-      });
-  }
+        const searchParameters = {
+
+            searchTerm: searchTerm,
+            pageIndex: newPage + 1,
+            itemsPerPage: itemsPerPage
+        };
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        };
+
+        const url = props.searchApiUrl + '?' + QueryStringSerializer.serialize(searchParameters);   
+
+        return fetch(url, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: 'SET_IS_LOADING', payload: false });
+
+                FetchErrorHandler.handleUnauthorizedResponse(response);
+
+                return response.json().then(jsonResponse => {
+
+                    if (response.ok) {
+
+                        setPagedProducts(jsonResponse.data.pagedProducts);
+                    }
+                    else {
+                        FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
+                        toast.error(props.generalErrorMessage);
+                    }
+                })
+            }).catch(error => {
+                console.log(error);
+                dispatch({ type: 'SET_IS_LOADING', payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    }
+
+    const search = () => {
+
+        dispatch({ type: 'SET_IS_LOADING', payload: true });
+
+        const searchParameters = {
+
+            searchTerm: searchTerm,
+            pageIndex: 1,
+            itemsPerPage: itemsPerPage
+        };
+
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        };
+
+        const url = props.searchApiUrl + '?' + QueryStringSerializer.serialize(searchParameters);   
+
+        return fetch(url, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: 'SET_IS_LOADING', payload: false });
+
+                FetchErrorHandler.handleUnauthorizedResponse(response);
+
+                return response.json().then(jsonResponse => {
+
+                    if (response.ok) {
+
+                        setPage(0);                        
+                        setPagedProducts(jsonResponse.data.pagedProducts);
+                    }
+                    else {
+                        FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
+                        toast.error(props.generalErrorMessage);
+                    }
+                })
+            }).catch(error => {
+                console.log(error);
+                dispatch({ type: 'SET_IS_LOADING', payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    }
 
     return (
         <div>
@@ -132,7 +169,7 @@ function ProductCatalog(props) {
                             labelRowsPerPage={props.rowsPerPageLabel}
                             backIconButtonText={props.backIconButtonText}
                             nextIconButtonText={props.nextIconButtonText}
-                            rowsPerPageOptions={PaginationConstants.DefaultRowsPerPage()}
+                            rowsPerPageOptions={PaginationCons}
                             component="div"
                             count={pagedProducts.total}
                             page={page}
@@ -145,6 +182,7 @@ function ProductCatalog(props) {
                     <span className="is-title is-5 is-bold">{props.noResultsLabel}</span>
                 </section>)
             }
+            {state.isLoading && <CircularProgress className="progressBar" />}
         </div>
     )
 }

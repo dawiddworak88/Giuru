@@ -17,6 +17,7 @@ import favicon from '../../../../../../shared/layouts/images/favicon.png';
 function ProductPage(props) {
 
   toast.configure();
+
   LocaleHelper.setMomentLocale(props.locale);
 
   return (

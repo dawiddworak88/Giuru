@@ -18,6 +18,7 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
         {
             var viewModel = new T
             {
+                GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"],
                 SearchLabel = this.globalLocalizer["Search"],
                 EditLabel = this.globalLocalizer["Edit"],
                 DeleteLabel = this.globalLocalizer["Delete"],
