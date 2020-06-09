@@ -9,5 +9,6 @@ namespace Feature.Product.Services
         Task<ProductResultModel> CreateAsync(CreateProductModel model);
         Task<ProductResultModel> GetByIdAsync(GetProductModel getProductModel);
         Task<ProductsResultModel> GetAsync(GetProductsModel getProductsModel);
+        Task<DeleteProductResultModel> DeleteAsync(DeleteProductModel deleteProductModel);
     }
 }

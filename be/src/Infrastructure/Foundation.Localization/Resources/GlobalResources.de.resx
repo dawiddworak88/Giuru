@@ -120,6 +120,9 @@
   <data name="AnErrorOccurred" xml:space="preserve">
     <value>Ein Fehler ist aufgetreten. Bitte wenden Sie sich an den Administrator.</value>
   </data>
+  <data name="AreYouSureLabel" xml:space="preserve">
+    <value>Sind Sie sicher, dass Sie löschen möchten</value>
+  </data>
   <data name="ClientHostExistsErrorMessage" xml:space="preserve">
     <value>Der Kunde wurde schon erstellt</value>
   </data>
@@ -143,6 +146,9 @@
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Löschen</value>
+  </data>
+  <data name="DeleteConfirmationLabel" xml:space="preserve">
+    <value>Löschen bestätigen</value>
   </data>
   <data name="DisplayedRows" xml:space="preserve">
     <value>von</value>
@@ -194,6 +200,9 @@
   </data>
   <data name="Next" xml:space="preserve">
     <value>Weiter</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nein</value>
   </data>
   <data name="NoResultsLabel" xml:space="preserve">
     <value>Keine Ergebnisse.</value>
@@ -257,5 +266,8 @@
   </data>
   <data name="WelcomeText" xml:space="preserve">
     <value>Das Konto für Sie wurde erfolgreich erstellt. Sie können das Passwort mit der Passwort vergessen-Funktion ändern. Ihr aktuelles Passwort lautet: </value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ja</value>
   </data>
 </root>

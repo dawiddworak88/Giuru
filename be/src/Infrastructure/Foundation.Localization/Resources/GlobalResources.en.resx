@@ -120,6 +120,9 @@
   <data name="AnErrorOccurred" xml:space="preserve">
     <value>An error has occurred. Please contact the administrator.</value>
   </data>
+  <data name="AreYouSureLabel" xml:space="preserve">
+    <value>Are you sure you want to delete</value>
+  </data>
   <data name="Cards" xml:space="preserve">
     <value>Cards</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
+  </data>
+  <data name="DeleteConfirmationLabel" xml:space="preserve">
+    <value>Confirm to delete</value>
   </data>
   <data name="DisplayedRows" xml:space="preserve">
     <value>of</value>
@@ -194,6 +200,9 @@
   </data>
   <data name="Next" xml:space="preserve">
     <value>Next</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
   </data>
   <data name="NoResultsLabel" xml:space="preserve">
     <value>No results have been found.</value>
@@ -257,5 +266,8 @@
   </data>
   <data name="WelcomeText" xml:space="preserve">
     <value>The account for you has been created. Feel free to change your password by using the forgot password functionality. Your current password is: </value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

@@ -127,5 +127,47 @@ namespace Api.v1.Areas.Products.Controllers
                 return this.StatusCode((int)HttpStatusCode.BadRequest, new ProductResponseModel { Error = error });
             }
         }
+
+        /// <summary>
+        /// Deletes the product by id.
+        /// </summary>
+        /// <param name="language">The language.</param>
+        /// <param name="id">The id of a product to delete.</param>
+        /// <returns>The deletion process result.</returns>
+        [HttpDelete, MapToApiVersion("1.0")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(422)]
+        public async Task<IActionResult> Delete(string language, Guid? id)
+        {
+            try
+            {
+                var tenantClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.TenantIdClaim);
+
+                var deleteProductModel = new DeleteProductModel
+                {   
+                    Language = language,
+                    Id = id,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    TenantId = GuidHelper.ParseNullable(tenantClaim?.Value)
+                };
+
+                var deleteProductResult = await this.productService.DeleteAsync(deleteProductModel);
+
+                if (deleteProductResult.IsValid)
+                {
+                    return this.StatusCode((int)HttpStatusCode.OK);
+                }
+                else
+                {
+                    return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+                }
+            }
+            catch (Exception exception)
+            {
+                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
+                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
+                return this.StatusCode((int)HttpStatusCode.BadRequest, new ProductResponseModel { Error = error });
+            }
+        }
     }
 }

@@ -5,7 +5,11 @@ import moment from 'moment';
 import Fab from '@material-ui/core/Fab';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import { Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination, CircularProgress } from '@material-ui/core';
+import {
+    Button, TextField, Table, TableBody, TableCell, TableContainer,
+    TableHead, TableRow, Paper, TablePagination, CircularProgress,
+    Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
+} from '@material-ui/core';
 import FetchErrorHandler from '../../../../../../shared/helpers/errorHandlers/FetchErrorHandler';
 import KeyConstants from '../../../../../../shared/constants/KeyConstants';
 import { Context } from '../../../../../../shared/stores/Store';
@@ -20,6 +24,8 @@ function ProductCatalog(props) {
     const [searchTerm, setSearchTerm] = React.useState('');
     const [products, setProducts] = React.useState(props.pagedProducts.data);
     const [total, setTotal] = React.useState(props.pagedProducts.total);
+    const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+    const [entityToDelete, setEntityToDelete] = React.useState(null);
 
     const handleSearchTermKeyPress = (event) => {
 
@@ -36,7 +42,7 @@ function ProductCatalog(props) {
 
         dispatch({ type: 'SET_IS_LOADING', payload: true });
 
-        setPage(newPage);
+        setPage(() => newPage);
 
         const searchParameters = {
 
@@ -63,9 +69,9 @@ function ProductCatalog(props) {
 
                     if (response.ok) {
 
-                        setProducts([]);
-                        setProducts(jsonResponse.data.pagedProducts.data);
-                        setTotal(jsonResponse.data.pagedProducts.total);
+                        setProducts(() => []);
+                        setProducts(() => jsonResponse.data.pagedProducts.data);
+                        setTotal(() => jsonResponse.data.pagedProducts.total);
                     }
                     else {
                         FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
@@ -108,11 +114,11 @@ function ProductCatalog(props) {
 
                     if (response.ok) {
 
-                        setPage(0);
+                        setPage(() => 0);
 
-                        setProducts([]);
-                        setProducts(jsonResponse.data.pagedProducts.data);
-                        setTotal(jsonResponse.data.pagedProducts.total);
+                        setProducts(() => []);
+                        setProducts(() => jsonResponse.data.pagedProducts.data);
+                        setTotal(() => jsonResponse.data.pagedProducts.total);
                     }
                     else {
                         FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
@@ -125,6 +131,61 @@ function ProductCatalog(props) {
                 toast.error(props.generalErrorMessage);
             });
     }
+
+    const handleDeleteClick = (product) => {
+        setEntityToDelete(() => product);
+        setOpenDeleteDialog(() => true);
+    };
+
+    const handleDeleteDialogClose = () => {
+        setOpenDeleteDialog(() => false);
+        setEntityToDelete(() => null);
+    };
+
+    const handleDeleteEntity = () => {
+
+        dispatch({ type: 'SET_IS_LOADING', payload: true });
+
+        const deleteParameters = {
+
+            id: entityToDelete.id
+        };
+
+        const requestOptions = {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        };
+
+        const url = props.deleteApiUrl + '?' + QueryStringSerializer.serialize(deleteParameters);
+
+        return fetch(url, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: 'SET_IS_LOADING', payload: false });
+
+                FetchErrorHandler.handleUnauthorizedResponse(response);
+
+                return response.json().then(jsonResponse => {
+
+                    if (response.ok) {
+
+                        toast.success(jsonResponse.message);
+                        setProducts(() => products.filter(item => item.id !== entityToDelete.id));
+                        setTotal(() => total - 1);
+                        setOpenDeleteDialog(() => false);
+                        setEntityToDelete(() => null);
+                    }
+                    else {
+                        FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
+                        toast.error(props.generalErrorMessage);
+                    }
+                })
+            }).catch(error => {
+                console.log(error);
+                dispatch({ type: 'SET_IS_LOADING', payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    };
 
     return (
         <div>
@@ -155,7 +216,7 @@ function ProductCatalog(props) {
                                                 <Fab size="small" color="secondary" aria-label={props.editLabel}>
                                                     <EditIcon />
                                                 </Fab>
-                                                <Fab size="small" color="primary" aria-label={props.deleteLabel}>
+                                                <Fab onClick={() => handleDeleteClick(product)} size="small" color="primary" aria-label={props.deleteLabel}>
                                                     <DeleteIcon />
                                                 </Fab>
                                             </TableCell>
@@ -188,6 +249,26 @@ function ProductCatalog(props) {
                     <span className="is-title is-5">{props.noResultsLabel}</span>
                 </section>)
             }
+            <Dialog
+                open={openDeleteDialog}
+                onClose={handleDeleteDialogClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description">
+                <DialogTitle id="alert-dialog-title">{props.deleteConfirmationLabel}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        {props.areYouSureLabel}: {entityToDelete ? entityToDelete.name : ''}?
+                </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDeleteDialogClose} color="primary">
+                        {props.noLabel}
+                    </Button>
+                    <Button onClick={handleDeleteEntity} color="primary" autoFocus>
+                        {props.yesLabel}
+                    </Button>
+                </DialogActions>
+            </Dialog>
             {state.isLoading && <CircularProgress className="progressBar" />}
         </div>
     )
