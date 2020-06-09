@@ -10,7 +10,6 @@ using Foundation.TenantDatabase.Areas.Translations.Entities;
 using Foundation.TenantDatabase.Shared.Repositories;
 using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Feature.Product.Services
@@ -86,6 +85,48 @@ namespace Feature.Product.Services
             createProductResultModel.Product = product;
 
             return createProductResultModel;
+        }
+
+        public async Task<DeleteProductResultModel> DeleteAsync(DeleteProductModel deleteProductModel)
+        {
+            var validator = new DeleteProductModelValidator();
+
+            var validationResult = await validator.ValidateAsync(deleteProductModel);
+
+            var deleteProductResultModel = new DeleteProductResultModel();
+
+            if (!validationResult.IsValid)
+            {
+                deleteProductResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+                return deleteProductResultModel;
+            }
+
+            var tenant = this.tenantRepository.GetById(deleteProductModel.TenantId.Value);
+
+            if (tenant == null)
+            {
+                deleteProductResultModel.Errors.Add(ErrorConstants.NoTenant);
+                return deleteProductResultModel;
+            }
+
+            var translationRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Translations.Entities.Translation>(tenant.DatabaseConnectionString);
+
+            var translations = translationRepository.Get(x => x.Key == deleteProductModel.Id.ToString() && x.IsActive).ToList();
+
+            foreach (var translation in translations)
+            {
+                translationRepository.Delete(translation.Id);
+
+                await translationRepository.SaveChangesAsync();
+            }
+
+            var productRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Products.Entities.Product>(tenant.DatabaseConnectionString);
+
+            productRepository.Delete(deleteProductModel.Id.Value);
+
+            await productRepository.SaveChangesAsync();
+
+            return deleteProductResultModel;
         }
 
         public async Task<ProductsResultModel> GetAsync(GetProductsModel getProductsModel)

@@ -18,6 +18,10 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
         {
             var viewModel = new T
             {
+                NoLabel = this.globalLocalizer["No"],
+                YesLabel = this.globalLocalizer["Yes"],
+                DeleteConfirmationLabel = this.globalLocalizer["DeleteConfirmationLabel"],
+                AreYouSureLabel = this.globalLocalizer["AreYouSureLabel"],
                 GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"],
                 SearchLabel = this.globalLocalizer["Search"],
                 EditLabel = this.globalLocalizer["Edit"],

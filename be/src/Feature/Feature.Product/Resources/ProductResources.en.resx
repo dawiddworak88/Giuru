@@ -126,6 +126,9 @@
   <data name="Product" xml:space="preserve">
     <value>Product</value>
   </data>
+  <data name="ProductDeletedSuccessfully" xml:space="preserve">
+    <value>Product has been deleted successfully</value>
+  </data>
   <data name="ProductDetailText" xml:space="preserve">
     <value>Product</value>
   </data>

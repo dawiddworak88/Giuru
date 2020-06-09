@@ -28,7 +28,7 @@ namespace Foundation.GenericRepository.Repositories
 
             if (entityToDelete != null)
             {
-                context.Set<TEntity>().Remove(entityToDelete);
+                entityToDelete.IsActive = false;
             }
         }
 

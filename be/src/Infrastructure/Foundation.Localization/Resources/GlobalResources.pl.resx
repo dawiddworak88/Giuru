@@ -120,6 +120,9 @@
   <data name="AnErrorOccurred" xml:space="preserve">
     <value>Wystąpił błąd. Proszę skontaktuj się z administratorem.</value>
   </data>
+  <data name="AreYouSureLabel" xml:space="preserve">
+    <value>Czy napewno chcesz usunąć</value>
+  </data>
   <data name="Cards" xml:space="preserve">
     <value>Karty</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Usuń</value>
+  </data>
+  <data name="DeleteConfirmationLabel" xml:space="preserve">
+    <value>Potwierdź usunięcie</value>
   </data>
   <data name="DisplayedRows" xml:space="preserve">
     <value>z</value>
@@ -194,6 +200,9 @@
   </data>
   <data name="Next" xml:space="preserve">
     <value>Dalej</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nie</value>
   </data>
   <data name="NoResultsLabel" xml:space="preserve">
     <value>Brak wyników.</value>
@@ -257,5 +266,8 @@
   </data>
   <data name="WelcomeText" xml:space="preserve">
     <value>Zostałeś właśnie dodany do grona naszych użytkowników. Hasło możesz zmienić korzystając z funkcji przypominania hasła. Twoje obecne hasło to: </value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Tak</value>
   </data>
 </root>
