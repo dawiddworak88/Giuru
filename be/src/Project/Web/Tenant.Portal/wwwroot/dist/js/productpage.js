@@ -53703,11 +53703,13 @@ function ProductCatalog(props) {
       key: product.name
     }, /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, {
       width: "11%"
+    }, /*#__PURE__*/react_default.a.createElement("a", {
+      href: props.editUrl + '/' + product.id
     }, /*#__PURE__*/react_default.a.createElement(esm_Fab_Fab, {
       size: "small",
       color: "secondary",
       "aria-label": props.editLabel
-    }, /*#__PURE__*/react_default.a.createElement(Edit_default.a, null)), /*#__PURE__*/react_default.a.createElement(esm_Fab_Fab, {
+    }, /*#__PURE__*/react_default.a.createElement(Edit_default.a, null))), /*#__PURE__*/react_default.a.createElement(esm_Fab_Fab, {
       onClick: function onClick() {
         return handleDeleteClick(product);
       },
@@ -53750,6 +53752,7 @@ function ProductCatalog(props) {
     onClick: handleDeleteDialogClose,
     color: "primary"
   }, props.noLabel), /*#__PURE__*/react_default.a.createElement(Button["a" /* default */], {
+    disabled: state.isLoading,
     onClick: handleDeleteEntity,
     color: "primary",
     autoFocus: true

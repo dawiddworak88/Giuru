@@ -16,6 +16,7 @@
         public string DeleteConfirmationLabel { get; set; }
         public string AreYouSureLabel { get; set; }
         public string DeleteApiUrl { get; set; }
+        public string EditUrl { get; set; }
         public string GeneralErrorMessage { get; set; }
     }
 }
