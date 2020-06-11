@@ -1,7 +1,11 @@
-﻿namespace Tenant.Portal.Areas.Products.ViewModels
+﻿using Tenant.Portal.Areas.Products.DomainModels;
+
+namespace Tenant.Portal.Areas.Products.ViewModels
 {
     public class ProductDetailFormViewModel
     {
+        public Product Product { get; set; }
+        public string Schema { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string NameLabel { get; set; }
         public string NameRequiredErrorMessage { get; set; }

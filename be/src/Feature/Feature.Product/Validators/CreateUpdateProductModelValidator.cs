@@ -3,7 +3,7 @@ using Foundation.Extensions.Validators;
 
 namespace Feature.Product.Validators
 {
-    public class CreateProductModelValidator : BaseServiceModelValidator<CreateProductModel>
+    public class CreateUpdateProductModelValidator : BaseServiceModelValidator<CreateUpdateProductModel>
     {
     }
 }

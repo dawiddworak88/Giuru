@@ -11,9 +11,9 @@ function ProductDetailForm(props) {
 
     const stateSchema = {
 
-        name: { value: '', error: '' },
-        sku: { value: '', error: '' },
-        formData: {}
+        name: { value: props.product ? props.product.name : '', error: '' },
+        sku: { value: props.product ? props.product.sku : '', error: '' },
+        formData: props.product ? props.product.formData: {}
     };
 
     const stateValidatorSchema = {

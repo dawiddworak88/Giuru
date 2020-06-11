@@ -14,7 +14,7 @@ namespace Foundation.TenantDatabase.Shared.Contexts
             // Adds entity types
             if (!context.EntityTypes.Any(x => x.Name == EntityTypeConstants.Product))
             {
-                var productItemEntityType = EntitySeedHelper.SeedEntity(new EntityType { Name = EntityTypeConstants.Product });
+                var productItemEntityType = EntitySeedHelper.SeedEntity(new EntityType { Id = EntityTypeConstants.ProductId, Name = EntityTypeConstants.Product });
 
                 context.EntityTypes.Add(productItemEntityType);
 
