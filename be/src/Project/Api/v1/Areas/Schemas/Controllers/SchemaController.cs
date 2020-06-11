@@ -3,6 +3,7 @@ using Api.v1.Areas.Schemas.ResponseModels;
 using Feature.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Helpers;
+using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Helpers;
 using Foundation.Schema.Models;
 using Foundation.Schema.Services.SchemaServices;
@@ -70,6 +71,54 @@ namespace Api.v1.Areas.Schemas.Controllers
                 }
                 else
                 {
+                    return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+                }
+            }
+            catch (Exception exception)
+            {
+                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
+                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
+                return this.StatusCode((int)HttpStatusCode.BadRequest, new SchemaResponseModel { Error = error });
+            }
+        }
+
+        /// <summary>
+        /// Gets a schema by id.
+        /// </summary>
+        /// <param name="language">The language.</param>
+        /// <param name="id">The id.</param>
+        /// <returns>The schema.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetById(string language, Guid? id)
+        {
+            try
+            {
+                var tenantClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.TenantIdClaim);
+
+                var getSchemaModel = new GetSchemaModel
+                {
+                    Id = id,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
+                    Language = language
+                };
+
+                var getSchemaResult = await this.schemaService.GetByIdAsync(getSchemaModel);
+
+                if (getSchemaResult.IsValid)
+                {
+                    return this.StatusCode((int)HttpStatusCode.OK, new SchemaResponseModel(getSchemaResult.Schema));
+                }
+                else
+                {
+                    if (getSchemaResult.Errors.Contains(ErrorConstants.NotFound))
+                    {
+                        return this.StatusCode((int)HttpStatusCode.NotFound);
+                    }
+
                     return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
                 }
             }

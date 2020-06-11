@@ -1,7 +1,6 @@
 ﻿using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Helpers;
 using Foundation.ApiExtensions.Services.ApiClientServices;
-using Foundation.TenantDatabase.Shared.Definitions.EntityTypes;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -9,7 +8,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Tenant.Portal.Areas.Products.ApiRequestModels;
 using Tenant.Portal.Areas.Products.ApiResponseModels;
-using Tenant.Portal.Areas.Products.DomainModels;
+using Tenant.Portal.Areas.Products.Definitions;
 using Tenant.Portal.Shared.Configurations;
 
 namespace Tenant.Portal.Areas.Products.Repositories
@@ -35,7 +34,7 @@ namespace Tenant.Portal.Areas.Products.Repositories
             {
                 var productSchemaRequestModel = new ProductSchemaRequestModel
                 {
-                    Id = EntityTypeConstants.ProductId,
+                    Id = ProductSchemaConstants.Id,
                     Language = language
                 };
 

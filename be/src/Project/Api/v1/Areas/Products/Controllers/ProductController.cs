@@ -2,7 +2,6 @@
 using Api.v1.Areas.Products.ResponseModels;
 using Feature.Account.Definitions;
 using Feature.Product.Models;
-using Feature.Product.ResultModels;
 using Feature.Product.Services;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Helpers;
@@ -86,13 +85,14 @@ namespace Api.v1.Areas.Products.Controllers
         /// <summary>
         /// Returns a product by id.
         /// </summary>
-        /// <param name="productModel">Product to get.</param>
+        /// <param name="language">The language.</param>
+        /// <param name="id">The product id.</param>
         /// <returns>The product.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetById([FromBody] GetProductRequestModel productModel)
+        public async Task<IActionResult> GetById(string language, Guid? id)
         {
             try
             {
@@ -100,10 +100,10 @@ namespace Api.v1.Areas.Products.Controllers
 
                 var getProductModel = new GetProductModel
                 {
-                    Id = productModel.Id,
+                    Id = id,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
-                    Language = productModel.Language
+                    Language = language
                 };
 
                 var getProductResult = await this.productService.GetByIdAsync(getProductModel);

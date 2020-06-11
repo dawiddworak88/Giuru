@@ -50742,14 +50742,14 @@ function ProductDetailForm(props) {
 
   var stateSchema = {
     name: {
-      value: '',
+      value: props.product ? props.product.name : '',
       error: ''
     },
     sku: {
-      value: '',
+      value: props.product ? props.product.sku : '',
       error: ''
     },
-    formData: {}
+    formData: props.product ? props.product.formData : {}
   };
   var stateValidatorSchema = {
     name: {

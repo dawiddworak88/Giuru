@@ -7,5 +7,6 @@ namespace Foundation.Schema.Services.SchemaServices
     public interface ISchemaService
     {
         Task<SchemaResultModel> CreateAsync(CreateSchemaModel model);
+        Task<SchemaResultModel> GetByIdAsync(GetSchemaModel getSchemaModel);
     }
 }
