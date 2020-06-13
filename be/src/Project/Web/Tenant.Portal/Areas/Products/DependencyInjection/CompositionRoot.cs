@@ -12,10 +12,12 @@ namespace Tenant.Portal.Areas.Products.DependencyInjection
         public static void RegisterProductsAreaDependencies(this IServiceCollection services)
         {
             services.AddScoped<IProductsRepository, ProductsRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductSchemaRepository, ProductSchemaRepository>();
             services.AddScoped<IAsyncComponentModelBuilder<ProductsComponentModel, ProductPageViewModel>, ProductPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ProductsCatalogComponentModel, ProductPageCatalogViewModel>, ProductPageCatalogModelBuilder>();
-            services.AddScoped<IModelBuilder<ProductDetailFormViewModel>, ProductDetailFormModelBuilder>();
-            services.AddScoped<IModelBuilder<ProductDetailPageViewModel>, ProductDetailPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ProductDetailFormComponentModel, ProductDetailFormViewModel>, ProductDetailFormModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ProductDetailComponentModel, ProductDetailPageViewModel>, ProductDetailPageModelBuilder>();
         }
     }
 }

@@ -213,9 +213,11 @@ function ProductCatalog(props) {
                                     {products.map((product) => (
                                         <TableRow key={product.name}>
                                             <TableCell width="11%">
-                                                <Fab size="small" color="secondary" aria-label={props.editLabel}>
-                                                    <EditIcon />
-                                                </Fab>
+                                                <a href={props.editUrl + '/' + product.id}>
+                                                    <Fab size="small" color="secondary" aria-label={props.editLabel}>
+                                                        <EditIcon />
+                                                    </Fab>
+                                                </a>
                                                 <Fab onClick={() => handleDeleteClick(product)} size="small" color="primary" aria-label={props.deleteLabel}>
                                                     <DeleteIcon />
                                                 </Fab>
@@ -264,7 +266,7 @@ function ProductCatalog(props) {
                     <Button onClick={handleDeleteDialogClose} color="primary">
                         {props.noLabel}
                     </Button>
-                    <Button onClick={handleDeleteEntity} color="primary" autoFocus>
+                    <Button disabled={state.isLoading} onClick={handleDeleteEntity} color="primary" autoFocus>
                         {props.yesLabel}
                     </Button>
                 </DialogActions>

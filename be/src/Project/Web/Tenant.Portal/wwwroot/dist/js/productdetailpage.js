@@ -25076,9 +25076,8 @@ function useForm() {
 
   Object(react["useEffect"])(function () {
     setStateSchema(stateSchema);
-    setDisable(true); // Disable button in initial render.
-
     setInitialErrorState();
+    setDisable(errors && errors.length); // Disable button in initial render.
   }, []); // eslint-disable-line
   // Set a brand new field values and errors 
   // If stateSchema changes
@@ -50711,15 +50710,15 @@ function DynamicForm(props) {
     return {
       fields: Object(objectSpread2["a" /* default */])({}, fields),
       widgets: Object(objectSpread2["a" /* default */])({}, widgets),
-      definitions: props.schema.jsonSchema.definitions || {},
-      rootSchema: props.schema.jsonSchema,
+      definitions: props.jsonSchema.definitions || {},
+      rootSchema: props.jsonSchema,
       formContext: props.formContext || {}
     };
   }
 
-  return /*#__PURE__*/react_default.a.createElement("div", null, props.schema.jsonSchema && /*#__PURE__*/react_default.a.createElement(SchemaField["a" /* default */], {
-    schema: props.schema.jsonSchema,
-    uiSchema: props.schema.uiSchema,
+  return /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement(SchemaField["a" /* default */], {
+    schema: props.jsonSchema,
+    uiSchema: props.uiSchema,
     formData: props.formData,
     onChange: props.onChange,
     registry: getRegistry()
@@ -50740,16 +50739,18 @@ function ProductDetailForm(props) {
       _useContext2 = Object(slicedToArray["a" /* default */])(_useContext, 1),
       state = _useContext2[0];
 
+  var jsonSchema = props.schema && props.schema.jsonSchema ? JSON.parse(props.schema.jsonSchema) : {};
+  var uiSchema = props.schema && props.schema.uiSchema ? JSON.parse(props.schema.uiSchema) : {};
   var stateSchema = {
     name: {
-      value: '',
+      value: props.product ? props.product.name : '',
       error: ''
     },
     sku: {
-      value: '',
+      value: props.product ? props.product.sku : '',
       error: ''
     },
-    formData: {}
+    formData: props.product && props.product.formData ? JSON.parse(props.product.formData) : {}
   };
   var stateValidatorSchema = {
     name: {
@@ -50807,8 +50808,9 @@ function ProductDetailForm(props) {
     onChange: handleOnChange,
     helperText: dirty.name ? errors.name : '',
     error: errors.name.length > 0 && dirty.name
-  })), props.schema && /*#__PURE__*/react_default.a.createElement(DynamicForm_DynamicForm, {
-    schema: props.schema,
+  })), jsonSchema && /*#__PURE__*/react_default.a.createElement(DynamicForm_DynamicForm, {
+    jsonSchema: jsonSchema,
+    uiSchema: uiSchema,
     formData: formData,
     onChange: handleOnChange
   }), /*#__PURE__*/react_default.a.createElement("div", {

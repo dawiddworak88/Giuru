@@ -9,11 +9,15 @@ function ProductDetailForm(props) {
 
     const [state] = useContext(Context);
 
+    const jsonSchema = props.schema && props.schema.jsonSchema ? JSON.parse(props.schema.jsonSchema) : {};
+    const uiSchema = props.schema && props.schema.uiSchema ? JSON.parse(props.schema.uiSchema) : {};
+
     const stateSchema = {
 
-        name: { value: '', error: '' },
-        sku: { value: '', error: '' },
-        formData: {}
+        id: { value: props.product ? props.product.id : null, error: '' },
+        name: { value: props.product ? props.product.name : '', error: '' },
+        sku: { value: props.product ? props.product.sku : '', error: '' },
+        formData: props.product && props.product.formData ? JSON.parse(props.product.formData) : {}
     };
 
     const stateValidatorSchema = {
@@ -58,8 +62,8 @@ function ProductDetailForm(props) {
                     <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
                         value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ''} error={(errors.name.length > 0) && dirty.name} />
                 </div>
-                {props.schema &&
-                    <DynamicForm schema={props.schema} formData={formData} onChange={handleOnChange} />
+                {jsonSchema &&
+                    <DynamicForm jsonSchema={jsonSchema} uiSchema={uiSchema} formData={formData} onChange={handleOnChange} />
                 }
                 <div className="field">
                     <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>

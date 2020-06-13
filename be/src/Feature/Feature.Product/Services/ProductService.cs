@@ -30,9 +30,9 @@ namespace Feature.Product.Services
             this.entityService = entityService;
         }
 
-        public async Task<ProductResultModel> CreateAsync(CreateProductModel model)
+        public async Task<ProductResultModel> CreateAsync(CreateUpdateProductModel model)
         {
-            var validator = new CreateProductModelValidator();
+            var validator = new CreateUpdateProductModelValidator();
 
             var validationResult = await validator.ValidateAsync(model);
 
@@ -56,7 +56,6 @@ namespace Feature.Product.Services
             {
                 Name = model.Name,
                 Sku = model.Sku,
-                SchemaId = model.SchemaId,
                 FormData = model.FormData
             };
 
@@ -85,6 +84,56 @@ namespace Feature.Product.Services
             createProductResultModel.Product = product;
 
             return createProductResultModel;
+        }
+
+        public async Task<ProductResultModel> UpdateAsync(CreateUpdateProductModel model)
+        {
+            var validator = new CreateUpdateProductModelValidator();
+
+            var validationResult = await validator.ValidateAsync(model);
+
+            var productResultModel = new ProductResultModel();
+
+            if (!validationResult.IsValid)
+            {
+                productResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+                return productResultModel;
+            }
+
+            var tenant = this.tenantRepository.GetById(model.TenantId.Value);
+
+            if (tenant == null)
+            {
+                productResultModel.Errors.Add(ErrorConstants.NoTenant);
+                return productResultModel;
+            }
+
+            var productRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Products.Entities.Product>(tenant.DatabaseConnectionString);
+
+            var product = productRepository.GetById(model.Id.Value);
+
+            product.Name = model.Name;
+            product.Sku = model.Sku;
+            product.FormData = model.FormData;
+            product.LastModifiedDate = DateTime.UtcNow;
+
+            await productRepository.SaveChangesAsync();
+
+            var translationRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Translations.Entities.Translation>(tenant.DatabaseConnectionString);
+
+            var translation = translationRepository.Get(x => x.Key == product.Id.ToString() && x.Language == model.Language && x.IsActive).FirstOrDefault();
+
+            if (translation != null)
+            {
+                translation.Value = model.Name;
+                translation.LastModifiedDate = DateTime.UtcNow;
+
+                await translationRepository.SaveChangesAsync();
+            }
+
+            productResultModel.Product = product;
+
+            return productResultModel;
         }
 
         public async Task<DeleteProductResultModel> DeleteAsync(DeleteProductModel deleteProductModel)

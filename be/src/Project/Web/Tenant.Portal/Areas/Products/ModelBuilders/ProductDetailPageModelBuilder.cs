@@ -4,24 +4,26 @@ using Feature.PageContent.MenuTiles.ViewModels;
 using Feature.Product.Resources;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
+using System.Threading.Tasks;
+using Tenant.Portal.Areas.Products.ComponentModels;
 using Tenant.Portal.Areas.Products.ViewModels;
 
 namespace Tenant.Portal.Areas.Products.ModelBuilders
 {
-    public class ProductDetailPageModelBuilder : IModelBuilder<ProductDetailPageViewModel>
+    public class ProductDetailPageModelBuilder : IAsyncComponentModelBuilder<ProductDetailComponentModel, ProductDetailPageViewModel>
     {
         private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
-        private readonly IModelBuilder<ProductDetailFormViewModel> productDetailFormModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ProductDetailFormComponentModel, ProductDetailFormViewModel> productDetailFormModelBuilder;
 
         public ProductDetailPageModelBuilder(
             IStringLocalizer<ProductResources> productLocalizer,
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder,
-            IModelBuilder<ProductDetailFormViewModel> productDetailFormModelBuilder)
+            IAsyncComponentModelBuilder<ProductDetailFormComponentModel, ProductDetailFormViewModel> productDetailFormModelBuilder)
         {
             this.productLocalizer = productLocalizer;
             this.headerModelBuilder = headerModelBuilder;
@@ -30,15 +32,22 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
             this.productDetailFormModelBuilder = productDetailFormModelBuilder;
         }
 
-        public ProductDetailPageViewModel BuildModel()
+        public async Task<ProductDetailPageViewModel> BuildModelAsync(ProductDetailComponentModel componentModel)
         {
+            var productDetailFormComponentModel = new ProductDetailFormComponentModel
+            { 
+                Id = componentModel.Id,
+                Token = componentModel.Token,
+                Language = componentModel.Language
+            };
+
             var viewModel = new ProductDetailPageViewModel
             {
                 Title = this.productLocalizer["Product"],
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
                 Footer = footerModelBuilder.BuildModel(),
-                ProductDetailForm = productDetailFormModelBuilder.BuildModel()
+                ProductDetailForm = await productDetailFormModelBuilder.BuildModelAsync(productDetailFormComponentModel)
             };
 
             return viewModel;

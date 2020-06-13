@@ -1,9 +1,9 @@
 ﻿using Foundation.ApiExtensions.Models.Request;
 using System;
 
-namespace Api.v1.Areas.Products.RequestModels
+namespace Tenant.Portal.Areas.Products.ApiRequestModels
 {
-    public class GetProductRequestModel : BaseRequestModel
+    public class ProductSchemaRequestModel : BaseRequestModel
     {
         public Guid? Id { get; set; }
     }

@@ -5,9 +5,14 @@ using Foundation.GenericRepository.Services;
 using Foundation.Schema.Models;
 using Foundation.Schema.ResultModels;
 using Foundation.Schema.Validators;
+using Foundation.TenantDatabase.Areas.Taxonomies.Entities;
 using Foundation.TenantDatabase.Areas.Translations.Entities;
+using Foundation.TenantDatabase.Shared.Helpers;
 using Foundation.TenantDatabase.Shared.Repositories;
+using Microsoft.Data.SqlClient;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -101,6 +106,215 @@ namespace Foundation.Schema.Services.SchemaServices
             createSchemaResultModel.Schema = schema;
 
             return createSchemaResultModel;
+        }
+
+
+        public async Task<SchemaResultModel> GetByIdAsync(GetSchemaModel getSchemaModel)
+        {
+            var validator = new GetSchemaModelValidator();
+
+            var validationResult = await validator.ValidateAsync(getSchemaModel);
+
+            var getSchemaResultModel = new SchemaResultModel();
+
+            if (!validationResult.IsValid)
+            {
+                getSchemaResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+                return getSchemaResultModel;
+            }
+
+            var tenant = this.tenantRepository.GetById(getSchemaModel.TenantId.Value);
+
+            if (tenant == null)
+            {
+                getSchemaResultModel.Errors.Add(ErrorConstants.NoTenant);
+                return getSchemaResultModel;
+            }
+
+            var schemaRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Schemas.Entities.Schema>(tenant.DatabaseConnectionString);
+
+            var schema = schemaRepository.GetById(getSchemaModel.Id.Value);
+
+            if (schema == null)
+            {
+                getSchemaResultModel.Errors.Add(ErrorConstants.NotFound);
+                return getSchemaResultModel;
+            }
+
+            getSchemaResultModel.Schema = new TenantDatabase.Areas.Schemas.Entities.Schema
+            { 
+                Id = schema.Id,
+                Name = schema.Name,
+                JsonSchema = await this.GetJsonSchemaAsync(schema.JsonSchema, getSchemaModel.Language, tenant.DatabaseConnectionString),
+                UiSchema = schema.UiSchema,
+                EntityTypeId = schema.EntityTypeId,
+                LastModifiedDate = schema.LastModifiedDate,
+                LastModifiedBy = schema.LastModifiedBy,
+                CreatedDate = schema.CreatedDate,
+                CreatedBy = schema.CreatedBy
+            };
+
+            return getSchemaResultModel;
+        }
+
+        public async Task<SchemaResultModel> GetByEntityTypeIdAsync(GetSchemaByEntityTypeModel getSchemaModel)
+        {
+            var validator = new GetSchemaByEntityTypeModelValidator();
+
+            var validationResult = await validator.ValidateAsync(getSchemaModel);
+
+            var getSchemaResultModel = new SchemaResultModel();
+
+            if (!validationResult.IsValid)
+            {
+                getSchemaResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+                return getSchemaResultModel;
+            }
+
+            var tenant = this.tenantRepository.GetById(getSchemaModel.TenantId.Value);
+
+            if (tenant == null)
+            {
+                getSchemaResultModel.Errors.Add(ErrorConstants.NoTenant);
+                return getSchemaResultModel;
+            }
+
+            var schemaRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Schemas.Entities.Schema>(tenant.DatabaseConnectionString);
+
+            var schema = schemaRepository.Get(x => x.EntityTypeId == getSchemaModel.EntityTypeId && x.IsActive).FirstOrDefault();
+
+            if (schema == null)
+            {
+                getSchemaResultModel.Errors.Add(ErrorConstants.NotFound);
+                return getSchemaResultModel;
+            }
+
+            getSchemaResultModel.Schema = new TenantDatabase.Areas.Schemas.Entities.Schema
+            {
+                Id = schema.Id,
+                Name = schema.Name,
+                JsonSchema = await this.GetJsonSchemaAsync(schema.JsonSchema, getSchemaModel.Language, tenant.DatabaseConnectionString),
+                UiSchema = schema.UiSchema,
+                EntityTypeId = schema.EntityTypeId,
+                LastModifiedDate = schema.LastModifiedDate,
+                LastModifiedBy = schema.LastModifiedBy,
+                CreatedDate = schema.CreatedDate,
+                CreatedBy = schema.CreatedBy
+            };
+
+            return getSchemaResultModel;
+        }
+
+        private async Task<string> GetJsonSchemaAsync(string jsonSchemaSerialized, string language, string connectionString)
+        {
+            var translationRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Translations.Entities.Translation>(connectionString);
+
+            var taxonomyRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Taxonomies.Entities.Taxonomy>(connectionString);
+
+            var jsonSchema = JObject.Parse(jsonSchemaSerialized);
+
+            var properties = (JObject)jsonSchema["properties"];
+
+            foreach (var property in properties)
+            {
+                var propertyDetails = (JObject)property.Value;
+
+                var propertyTitle = (string)propertyDetails["title"];
+
+                Guid propertyTitleGuid;
+
+                var isPropertyTitleGuid = Guid.TryParse(propertyTitle, out propertyTitleGuid);
+
+                if (!string.IsNullOrWhiteSpace(propertyTitle) && isPropertyTitleGuid)
+                {
+                    propertyDetails["title"] = TranslationHelper.Text(translationRepository, propertyTitleGuid, language);
+                }
+            }
+
+            var definitons = (JObject)jsonSchema["definitions"];
+
+            if (definitons != null && definitons.Children().Any())
+            {
+                foreach (var definition in definitons)
+                {
+                    Guid definitionKeyId;
+
+                    var isDefinitionKeyGuid = Guid.TryParse(definition.Key, out definitionKeyId);
+
+                    if (isDefinitionKeyGuid)
+                    {
+                        var taxonomy = taxonomyRepository.Get(x => x.Id == definitionKeyId && x.IsActive).FirstOrDefault();
+
+                        if (taxonomy != null)
+                        {
+                            var definitionValue = (JObject)definition.Value;
+
+                            definitionValue.Add("type", "string");
+                            definitionValue.Add("title", taxonomy.Name);
+
+                            var flattenedTaxonomies = this.GetFlatTaxonomyDescendants(connectionString, taxonomy.Id);
+
+                            var definitionItems = new JArray();
+
+                            foreach (var flattenedTaxonomy in flattenedTaxonomies)
+                            {
+                                var flattenedTaxonomyTitle = TranslationHelper.Text(translationRepository, flattenedTaxonomy.Id.ToString(), language);
+
+                                definitionItems.Add(new JObject(
+                                        new JProperty("type", "string"),
+                                        new JProperty("title", flattenedTaxonomyTitle),
+                                        new JProperty("enum", new JArray(flattenedTaxonomy.Id))
+                                    ));
+                            }
+
+                            definitionValue.Add("anyOf", definitionItems);
+                        }
+                    }
+                }
+            }
+
+            return jsonSchema.ToString();
+        }
+
+        private IEnumerable<Taxonomy> GetFlatTaxonomyDescendants(string connectionString, Guid rootId)
+        {
+            var taxonomiesList = new List<Taxonomy>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                var queryString = "DECLARE @Id uniqueidentifier = @rootid ; WITH cte AS ( SELECT a.Id, a.ParentId, a.Name, a.IsActive, a.[Order], a.LastModifiedDate, a.LastModifiedBy, a.CreatedDate, a.CreatedBy FROM Taxonomies a WHERE Id = @Id UNION ALL SELECT a.Id, a.Parentid, a.Name, a.IsActive, a.[Order], a.LastModifiedDate, a.LastModifiedBy, a.CreatedDate, a.CreatedBy FROM Taxonomies a JOIN cte c ON a.ParentId = c.Id ) SELECT ParentId, Id, Name, IsActive, [Order], LastModifiedDate, LastModifiedBy, CreatedDate, CreatedBy FROM cte WHERE ParentId is not null";
+
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Parameters.AddWithValue("@rootId", rootId);
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+                try
+                {
+                    while (reader.Read())
+                    {
+                        var taxonomyItem = new Taxonomy
+                        {
+                            Id = (Guid)reader["Id"],
+                            ParentId = (Guid)reader["ParentId"],
+                            Name = (string)reader["Name"],
+                            Order = (int)reader["Order"],
+                            IsActive = (bool)reader["IsActive"],
+                            LastModifiedDate = (DateTime)reader["LastModifiedDate"],
+                            LastModifiedBy = (string)reader["LastModifiedBy"],
+                            CreatedDate = (DateTime)reader["CreatedDate"],
+                            CreatedBy = (string)reader["CreatedBy"]
+                        };
+
+                        taxonomiesList.Add(taxonomyItem);
+                    }
+                }
+                finally
+                {
+                    reader.Close();
+                }
+            }
+
+            return taxonomiesList;
         }
     }
 }

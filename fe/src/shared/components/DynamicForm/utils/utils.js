@@ -654,10 +654,11 @@ function resolveReference(schema, rootSchema, formData) {
 }
 
 export function retrieveSchema(schema, rootSchema = {}, formData = {}) {
+
     if (!isObject(schema)) {
         return {};
     }
-
+    
     let resolvedSchema = resolveSchema(schema, rootSchema, formData);
     if ("allOf" in schema) {
         try {
@@ -681,6 +682,7 @@ export function retrieveSchema(schema, rootSchema = {}, formData = {}) {
             formData
         );
     }
+
     return resolvedSchema;
 }
 

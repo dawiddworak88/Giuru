@@ -1,28 +1,44 @@
 ﻿using Feature.Product.Resources;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using System.Globalization;
+using System.Threading.Tasks;
+using Tenant.Portal.Areas.Products.ComponentModels;
+using Tenant.Portal.Areas.Products.Repositories;
 using Tenant.Portal.Areas.Products.ViewModels;
 
 namespace Tenant.Portal.Areas.Products.ModelBuilders
 {
-    public class ProductDetailFormModelBuilder : IModelBuilder<ProductDetailFormViewModel>
+    public class ProductDetailFormModelBuilder : IAsyncComponentModelBuilder<ProductDetailFormComponentModel, ProductDetailFormViewModel>
     {
+        private readonly IProductRepository productRepository;
+        private readonly IProductSchemaRepository productSchemaRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
+        private readonly LinkGenerator linkGenerator;
 
         public ProductDetailFormModelBuilder(
+            IProductRepository productRepository,
+            IProductSchemaRepository productSchemaRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IStringLocalizer<ProductResources> productLocalizer)
+            IStringLocalizer<ProductResources> productLocalizer,
+            LinkGenerator linkGenerator)
         {
+            this.productRepository = productRepository;
+            this.productSchemaRepository = productSchemaRepository;
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
+            this.linkGenerator = linkGenerator;
         }
 
-        public ProductDetailFormViewModel BuildModel()
+        public async Task<ProductDetailFormViewModel> BuildModelAsync(ProductDetailFormComponentModel componentModel)
         {
             return new ProductDetailFormViewModel
             {
+                Schema = await this.productSchemaRepository.GetProductSchemaByEntityTypeIdAsync(componentModel.Token, componentModel.Language, Definitons.Constants.ProductEntityTypeId),
+                Product = await this.productRepository.GetProductAsync(componentModel.Token, componentModel.Language, componentModel.Id),
                 GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"],
                 NameLabel = this.globalLocalizer["NameLabel"],
                 NameRequiredErrorMessage = this.globalLocalizer["NameRequiredErrorMessage"],
@@ -33,8 +49,8 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
                 SkuRequiredErrorMessage = this.productLocalizer["SkuRequiredErrorMessage"],
                 SkuLabel = this.productLocalizer["SkuLabel"],
                 SaveText = this.globalLocalizer["SaveText"],
-                SaveUrl = "#"
-            };
+                SaveUrl = this.linkGenerator.GetPathByAction("Save", "ProductApi", new { Area = "Product", culture = CultureInfo.CurrentUICulture.Name })
+        };
         }
     }
 }
