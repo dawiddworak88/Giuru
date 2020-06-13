@@ -53,7 +53,7 @@ namespace Tenant.Portal.Areas.Products.Repositories
                     { 
                         Id = response.Data.Id,
                         Name = response.Data.Name,
-                        JsonSchema = response.Data.JsonSchema.Replace("\r\n", string.Empty),
+                        JsonSchema = response.Data.JsonSchema,
                         UiSchema = response.Data.UiSchema
                     };
                 }
@@ -93,7 +93,7 @@ namespace Tenant.Portal.Areas.Products.Repositories
                     {
                         Id = response.Data.Id,
                         Name = response.Data.Name,
-                        JsonSchema = response.Data.JsonSchema.Replace("\r\n", string.Empty),
+                        JsonSchema = response.Data.JsonSchema,
                         UiSchema = response.Data.UiSchema
                     };
                 }

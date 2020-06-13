@@ -55,7 +55,7 @@ namespace Tenant.Portal.Areas.Products.Repositories
                         Id = response.Data.Id,
                         Sku = response.Data.Sku,
                         Name = response.Data.Name,
-                        FormData = response.Data.FormData.Replace("\r\n", string.Empty),
+                        FormData = response.Data.FormData,
                         LastModifiedDate = response.Data.LastModifiedDate,
                         CreatedDate = response.Data.CreatedDate
                     };

@@ -14,6 +14,7 @@ function ProductDetailForm(props) {
 
     const stateSchema = {
 
+        id: { value: props.product ? props.product.id : null, error: '' },
         name: { value: props.product ? props.product.name : '', error: '' },
         sku: { value: props.product ? props.product.sku : '', error: '' },
         formData: props.product && props.product.formData ? JSON.parse(props.product.formData) : {}
