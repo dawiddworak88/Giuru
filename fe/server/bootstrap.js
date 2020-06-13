@@ -4,6 +4,7 @@ require('@babel/register')({
     root:"./middleware",
     presets: ['@babel/preset-env','@babel/preset-react'],
     plugins: [
+        ["@babel/plugin-proposal-class-properties"],
         [
             "file-loader",
             {

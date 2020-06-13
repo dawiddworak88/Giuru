@@ -242,9 +242,8 @@ function useForm() {
 
   Object(react["useEffect"])(function () {
     setStateSchema(stateSchema);
-    setDisable(true); // Disable button in initial render.
-
     setInitialErrorState();
+    setDisable(errors && errors.length); // Disable button in initial render.
   }, []); // eslint-disable-line
   // Set a brand new field values and errors 
   // If stateSchema changes

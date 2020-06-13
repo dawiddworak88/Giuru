@@ -129,5 +129,54 @@ namespace Api.v1.Areas.Schemas.Controllers
                 return this.StatusCode((int)HttpStatusCode.BadRequest, new SchemaResponseModel { Error = error });
             }
         }
+
+        /// <summary>
+        /// Gets the schema by entity type id.
+        /// </summary>
+        /// <param name="language">The language.</param>
+        /// <param name="id">The entity type id.</param>
+        /// <returns>The schema.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("EntityType")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetByEntityTypeId(string language, Guid? id)
+        {
+            try
+            {
+                var tenantClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.TenantIdClaim);
+
+                var getSchemaModel = new GetSchemaByEntityTypeModel
+                {
+                    EntityTypeId = id,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
+                    Language = language
+                };
+
+                var getSchemaResult = await this.schemaService.GetByEntityTypeIdAsync(getSchemaModel);
+
+                if (getSchemaResult.IsValid)
+                {
+                    return this.StatusCode((int)HttpStatusCode.OK, new SchemaResponseModel(getSchemaResult.Schema));
+                }
+                else
+                {
+                    if (getSchemaResult.Errors.Contains(ErrorConstants.NotFound))
+                    {
+                        return this.StatusCode((int)HttpStatusCode.NotFound);
+                    }
+
+                    return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+                }
+            }
+            catch (Exception exception)
+            {
+                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
+                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
+                return this.StatusCode((int)HttpStatusCode.BadRequest, new SchemaResponseModel { Error = error });
+            }
+        }
     }
 }

@@ -8,5 +8,6 @@ namespace Foundation.Schema.Services.SchemaServices
     {
         Task<SchemaResultModel> CreateAsync(CreateSchemaModel model);
         Task<SchemaResultModel> GetByIdAsync(GetSchemaModel getSchemaModel);
+        Task<SchemaResultModel> GetByEntityTypeIdAsync(GetSchemaByEntityTypeModel getSchemaModel);
     }
 }

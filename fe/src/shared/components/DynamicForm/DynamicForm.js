@@ -13,22 +13,20 @@ function DynamicForm(props) {
         return {
             fields: { ...fields },
             widgets: { ...widgets },
-            definitions: props.schema.jsonSchema.definitions || {},
-            rootSchema: props.schema.jsonSchema,
+            definitions: props.jsonSchema.definitions || {},
+            rootSchema: props.jsonSchema,
             formContext: props.formContext || {},
         };
     }
 
     return (
         <div>
-            {props.schema.jsonSchema &&
-                <SchemaField
-                schema={props.schema.jsonSchema}
-                uiSchema={props.schema.uiSchema}
+            <SchemaField
+                schema={props.jsonSchema}
+                uiSchema={props.uiSchema}
                 formData={props.formData}
                 onChange={props.onChange}
                 registry={getRegistry()} />
-            }
         </div>
     );
 }

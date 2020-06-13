@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Tenant.Portal.Areas.Products.ApiRequestModels;
 using Tenant.Portal.Areas.Products.ApiResponseModels;
-using Tenant.Portal.Areas.Products.Definitions;
 using Tenant.Portal.Areas.Products.DomainModels;
 using Tenant.Portal.Shared.Configurations;
 
@@ -29,13 +28,13 @@ namespace Tenant.Portal.Areas.Products.Repositories
             this.logger = logger;
         }
 
-        public async Task<Schema> GetProductSchemaAsync(string token, string language)
+        public async Task<Schema> GetProductSchemaByIdAsync(string token, string language, Guid? id)
         {
             try
             {
                 var productSchemaRequestModel = new ProductSchemaRequestModel
                 {
-                    Id = ProductSchemaConstants.Id,
+                    Id = id,
                     Language = language
                 };
 
@@ -54,7 +53,47 @@ namespace Tenant.Portal.Areas.Products.Repositories
                     { 
                         Id = response.Data.Id,
                         Name = response.Data.Name,
-                        JsonSchema = response.Data.JsonSchema,
+                        JsonSchema = response.Data.JsonSchema.Replace("\r\n", string.Empty),
+                        UiSchema = response.Data.UiSchema
+                    };
+                }
+            }
+            catch (Exception exception)
+            {
+                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
+
+                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
+            }
+
+            return default;
+        }
+
+        public async Task<Schema> GetProductSchemaByEntityTypeIdAsync(string token, string language, Guid? id)
+        {
+            try
+            {
+                var productSchemaRequestModel = new ProductSchemaRequestModel
+                {
+                    Id = id,
+                    Language = language
+                };
+
+                var apiRequest = new ApiRequest<ProductSchemaRequestModel>
+                {
+                    Data = this.apiClientService.InitializeRequestModelContext(productSchemaRequestModel),
+                    AccessToken = token,
+                    EndpointAddress = this.servicesEndpointsConfiguration.Api.Host + this.servicesEndpointsConfiguration.Api.Endpoints.SchemaByEntityType
+                };
+
+                var response = await this.apiClientService.GetAsync<ApiRequest<ProductSchemaRequestModel>, ProductSchemaRequestModel, ProductSchemaResponseModel>(apiRequest);
+
+                if (response.IsSuccessStatusCode && response.Data != null)
+                {
+                    return new Schema
+                    {
+                        Id = response.Data.Id,
+                        Name = response.Data.Name,
+                        JsonSchema = response.Data.JsonSchema.Replace("\r\n", string.Empty),
                         UiSchema = response.Data.UiSchema
                     };
                 }

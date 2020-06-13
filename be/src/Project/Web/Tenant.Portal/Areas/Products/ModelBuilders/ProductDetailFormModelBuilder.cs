@@ -37,7 +37,7 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
         {
             return new ProductDetailFormViewModel
             {
-                Schema = await this.productSchemaRepository.GetProductSchemaAsync(componentModel.Token, componentModel.Language),
+                Schema = await this.productSchemaRepository.GetProductSchemaByEntityTypeIdAsync(componentModel.Token, componentModel.Language, Definitons.Constants.ProductEntityTypeId),
                 Product = await this.productRepository.GetProductAsync(componentModel.Token, componentModel.Language, componentModel.Id),
                 GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"],
                 NameLabel = this.globalLocalizer["NameLabel"],

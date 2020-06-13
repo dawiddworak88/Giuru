@@ -141,11 +141,77 @@ namespace Foundation.Schema.Services.SchemaServices
                 return getSchemaResultModel;
             }
 
-            var translationRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Translations.Entities.Translation>(tenant.DatabaseConnectionString);
+            getSchemaResultModel.Schema = new TenantDatabase.Areas.Schemas.Entities.Schema
+            { 
+                Id = schema.Id,
+                Name = schema.Name,
+                JsonSchema = await this.GetJsonSchemaAsync(schema.JsonSchema, getSchemaModel.Language, tenant.DatabaseConnectionString),
+                UiSchema = schema.UiSchema,
+                EntityTypeId = schema.EntityTypeId,
+                LastModifiedDate = schema.LastModifiedDate,
+                LastModifiedBy = schema.LastModifiedBy,
+                CreatedDate = schema.CreatedDate,
+                CreatedBy = schema.CreatedBy
+            };
 
-            var taxonomyRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Taxonomies.Entities.Taxonomy>(tenant.DatabaseConnectionString); 
+            return getSchemaResultModel;
+        }
 
-            var jsonSchema = JObject.Parse(schema.JsonSchema);
+        public async Task<SchemaResultModel> GetByEntityTypeIdAsync(GetSchemaByEntityTypeModel getSchemaModel)
+        {
+            var validator = new GetSchemaByEntityTypeModelValidator();
+
+            var validationResult = await validator.ValidateAsync(getSchemaModel);
+
+            var getSchemaResultModel = new SchemaResultModel();
+
+            if (!validationResult.IsValid)
+            {
+                getSchemaResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+                return getSchemaResultModel;
+            }
+
+            var tenant = this.tenantRepository.GetById(getSchemaModel.TenantId.Value);
+
+            if (tenant == null)
+            {
+                getSchemaResultModel.Errors.Add(ErrorConstants.NoTenant);
+                return getSchemaResultModel;
+            }
+
+            var schemaRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Schemas.Entities.Schema>(tenant.DatabaseConnectionString);
+
+            var schema = schemaRepository.Get(x => x.EntityTypeId == getSchemaModel.EntityTypeId && x.IsActive).FirstOrDefault();
+
+            if (schema == null)
+            {
+                getSchemaResultModel.Errors.Add(ErrorConstants.NotFound);
+                return getSchemaResultModel;
+            }
+
+            getSchemaResultModel.Schema = new TenantDatabase.Areas.Schemas.Entities.Schema
+            {
+                Id = schema.Id,
+                Name = schema.Name,
+                JsonSchema = await this.GetJsonSchemaAsync(schema.JsonSchema, getSchemaModel.Language, tenant.DatabaseConnectionString),
+                UiSchema = schema.UiSchema,
+                EntityTypeId = schema.EntityTypeId,
+                LastModifiedDate = schema.LastModifiedDate,
+                LastModifiedBy = schema.LastModifiedBy,
+                CreatedDate = schema.CreatedDate,
+                CreatedBy = schema.CreatedBy
+            };
+
+            return getSchemaResultModel;
+        }
+
+        private async Task<string> GetJsonSchemaAsync(string jsonSchemaSerialized, string language, string connectionString)
+        {
+            var translationRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Translations.Entities.Translation>(connectionString);
+
+            var taxonomyRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Taxonomies.Entities.Taxonomy>(connectionString);
+
+            var jsonSchema = JObject.Parse(jsonSchemaSerialized);
 
             var properties = (JObject)jsonSchema["properties"];
 
@@ -161,7 +227,7 @@ namespace Foundation.Schema.Services.SchemaServices
 
                 if (!string.IsNullOrWhiteSpace(propertyTitle) && isPropertyTitleGuid)
                 {
-                    propertyDetails["title"] = TranslationHelper.Text(translationRepository, propertyTitleGuid, getSchemaModel.Language);
+                    propertyDetails["title"] = TranslationHelper.Text(translationRepository, propertyTitleGuid, language);
                 }
             }
 
@@ -186,13 +252,13 @@ namespace Foundation.Schema.Services.SchemaServices
                             definitionValue.Add("type", "string");
                             definitionValue.Add("title", taxonomy.Name);
 
-                            var flattenedTaxonomies = this.GetFlatTaxonomyDescendants(tenant.DatabaseConnectionString, taxonomy.Id);
+                            var flattenedTaxonomies = this.GetFlatTaxonomyDescendants(connectionString, taxonomy.Id);
 
                             var definitionItems = new JArray();
 
                             foreach (var flattenedTaxonomy in flattenedTaxonomies)
                             {
-                                var flattenedTaxonomyTitle = TranslationHelper.Text(translationRepository, flattenedTaxonomy.Id.ToString(), getSchemaModel.Language);
+                                var flattenedTaxonomyTitle = TranslationHelper.Text(translationRepository, flattenedTaxonomy.Id.ToString(), language);
 
                                 definitionItems.Add(new JObject(
                                         new JProperty("type", "string"),
@@ -207,20 +273,7 @@ namespace Foundation.Schema.Services.SchemaServices
                 }
             }
 
-            getSchemaResultModel.Schema = new TenantDatabase.Areas.Schemas.Entities.Schema
-            { 
-                Id = schema.Id,
-                Name = schema.Name,
-                JsonSchema = jsonSchema.ToString(),
-                UiSchema = schema.UiSchema,
-                EntityTypeId = schema.EntityTypeId,
-                LastModifiedDate = schema.LastModifiedDate,
-                LastModifiedBy = schema.LastModifiedBy,
-                CreatedDate = schema.CreatedDate,
-                CreatedBy = schema.CreatedBy
-            };
-
-            return getSchemaResultModel;
+            return jsonSchema.ToString();
         }
 
         private IEnumerable<Taxonomy> GetFlatTaxonomyDescendants(string connectionString, Guid rootId)
