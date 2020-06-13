@@ -7,6 +7,8 @@ import DynamicForm from '../../../../../../shared/components/DynamicForm/Dynamic
 
 function ProductDetailForm(props) {
 
+    console.log(props);
+
     const [state] = useContext(Context);
 
     const stateSchema = {

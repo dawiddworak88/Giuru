@@ -14,13 +14,13 @@ namespace Api.v1.Areas.Schemas.ResponseModels
         {
             this.Id = schema.Id;
             this.Name = schema.Name;
-            this.Schema = schema.JsonSchema;
+            this.JsonSchema = schema.JsonSchema;
             this.UiSchema = schema.UiSchema;
         }
 
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Schema { get; set; }
+        public string JsonSchema { get; set; }
         public string UiSchema { get; set; }
     }
 }

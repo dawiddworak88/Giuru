@@ -50736,6 +50736,8 @@ function DynamicForm(props) {
 
 
 function ProductDetailForm(props) {
+  console.log(props);
+
   var _useContext = Object(react["useContext"])(Store["a" /* Context */]),
       _useContext2 = Object(slicedToArray["a" /* default */])(_useContext, 1),
       state = _useContext2[0];

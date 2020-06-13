@@ -21,7 +21,7 @@ namespace Tenant.Portal.Areas.Products.Controllers
             this.productDetailPageModelBuilder = productDetailPageModelBuilder;
         }
 
-        public async Task<IActionResult> Index(Guid? id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             var componentModel = new ProductDetailComponentModel
             {

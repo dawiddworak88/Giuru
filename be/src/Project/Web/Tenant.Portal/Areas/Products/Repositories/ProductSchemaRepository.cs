@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Tenant.Portal.Areas.Products.ApiRequestModels;
 using Tenant.Portal.Areas.Products.ApiResponseModels;
 using Tenant.Portal.Areas.Products.Definitions;
+using Tenant.Portal.Areas.Products.DomainModels;
 using Tenant.Portal.Shared.Configurations;
 
 namespace Tenant.Portal.Areas.Products.Repositories
@@ -28,7 +29,7 @@ namespace Tenant.Portal.Areas.Products.Repositories
             this.logger = logger;
         }
 
-        public async Task<string> GetProductSchemaAsync(string token, string language)
+        public async Task<Schema> GetProductSchemaAsync(string token, string language)
         {
             try
             {
@@ -49,7 +50,13 @@ namespace Tenant.Portal.Areas.Products.Repositories
 
                 if (response.IsSuccessStatusCode && response.Data != null)
                 {
-                    return response.Data.Schema;
+                    return new Schema
+                    { 
+                        Id = response.Data.Id,
+                        Name = response.Data.Name,
+                        JsonSchema = response.Data.JsonSchema,
+                        UiSchema = response.Data.UiSchema
+                    };
                 }
             }
             catch (Exception exception)

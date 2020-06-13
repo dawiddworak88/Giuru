@@ -7,6 +7,7 @@ using Foundation.Schema.ResultModels;
 using Foundation.Schema.Validators;
 using Foundation.TenantDatabase.Areas.Taxonomies.Entities;
 using Foundation.TenantDatabase.Areas.Translations.Entities;
+using Foundation.TenantDatabase.Shared.Helpers;
 using Foundation.TenantDatabase.Shared.Repositories;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json.Linq;
@@ -64,7 +65,7 @@ namespace Foundation.Schema.Services.SchemaServices
                 {
                     var titleTranslation = new Translation
                     {
-                        Key = $"Productt Schema | {propertyValue.Value<string>("title").Replace(":", string.Empty)}",
+                        Key = $"Product Schema | {propertyValue.Value<string>("title").Replace(":", string.Empty)}",
                         Value = propertyValue.Value<string>("title"),
                         Language = model.Language
                     };
@@ -160,7 +161,7 @@ namespace Foundation.Schema.Services.SchemaServices
 
                 if (!string.IsNullOrWhiteSpace(propertyTitle) && isPropertyTitleGuid)
                 {
-                    propertyDetails["title"] = translationRepository.Get(x => x.Key == propertyTitleGuid.ToString() && x.Language == getSchemaModel.Language && x.IsActive).Select(x => x.Value).FirstOrDefault();
+                    propertyDetails["title"] = TranslationHelper.Text(translationRepository, propertyTitleGuid, getSchemaModel.Language);
                 }
             }
 
@@ -191,7 +192,7 @@ namespace Foundation.Schema.Services.SchemaServices
 
                             foreach (var flattenedTaxonomy in flattenedTaxonomies)
                             {
-                                var flattenedTaxonomyTitle = translationRepository.Get(x => x.Key == flattenedTaxonomy.Id.ToString() && x.Language == getSchemaModel.Language && x.IsActive).FirstOrDefault();
+                                var flattenedTaxonomyTitle = TranslationHelper.Text(translationRepository, flattenedTaxonomy.Id.ToString(), getSchemaModel.Language);
 
                                 definitionItems.Add(new JObject(
                                         new JProperty("type", "string"),
@@ -228,7 +229,7 @@ namespace Foundation.Schema.Services.SchemaServices
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                var queryString = "DECLARE @Id int = @rootId ;WITH cte AS ( SELECT a.Id, a.ParentId, a.Name, a.IsActive, a.Order, a.LastModifiedDate, a.LastModifiedBy, a.CreatedDate, a.CreatedBy FROM Taxonomy a WHERE Id = @Id UNION ALL SELECT a.Id, a.Parentid, a.Name, a.IsActive, a.Order, a.LastModifiedDate, a.LastModifiedBy, a.CreatedDate, a.CreatedBy FROM Taxonomy a JOIN cte c ON a.parentId = c.id ) SELECT ParentId, Id, Name, IsActive, Order, LastModifiedDate, LastModifiedBy, CreatedDate, CreatedBy FROM cte";
+                var queryString = "DECLARE @Id uniqueidentifier = @rootid ; WITH cte AS ( SELECT a.Id, a.ParentId, a.Name, a.IsActive, a.[Order], a.LastModifiedDate, a.LastModifiedBy, a.CreatedDate, a.CreatedBy FROM Taxonomies a WHERE Id = @Id UNION ALL SELECT a.Id, a.Parentid, a.Name, a.IsActive, a.[Order], a.LastModifiedDate, a.LastModifiedBy, a.CreatedDate, a.CreatedBy FROM Taxonomies a JOIN cte c ON a.ParentId = c.Id ) SELECT ParentId, Id, Name, IsActive, [Order], LastModifiedDate, LastModifiedBy, CreatedDate, CreatedBy FROM cte WHERE ParentId is not null";
 
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Parameters.AddWithValue("@rootId", rootId);
