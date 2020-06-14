@@ -126,6 +126,9 @@
   <data name="Product" xml:space="preserve">
     <value>Product</value>
   </data>
+  <data name="ProductAlreadyExists" xml:space="preserve">
+    <value>Product has been already created.</value>
+  </data>
   <data name="ProductDeletedSuccessfully" xml:space="preserve">
     <value>Product has been deleted successfully</value>
   </data>
@@ -134,6 +137,9 @@
   </data>
   <data name="Products" xml:space="preserve">
     <value>Products</value>
+  </data>
+  <data name="ProductSavedSuccessfully" xml:space="preserve">
+    <value>Product has been saved succcessfully.</value>
   </data>
   <data name="Sku" xml:space="preserve">
     <value>SKU</value>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { toast } from 'react-toastify';
 import { ThemeProvider } from '@material-ui/core/styles';
 import GlobalHelper from '../../../../../../shared/helpers/globals/GlobalHelper';
 import Header from '../../../../../../shared/components/Header/Header';
@@ -12,6 +13,9 @@ import favicon from '../../../../../../shared/layouts/images/favicon.png';
 /* eslint-enable no-unused-vars */
 
 function ProductDetailPage(props) {
+
+  toast.configure();
+
   return (
     <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
       <Store>

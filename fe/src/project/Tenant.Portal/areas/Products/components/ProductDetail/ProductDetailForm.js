@@ -1,13 +1,15 @@
 import React, { useContext } from 'react';
+import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { Context } from '../../../../../../shared/stores/Store';
 import useForm from '../../../../../../shared/helpers/forms/useForm';
 import { TextField, Button, CircularProgress } from '@material-ui/core';
 import DynamicForm from '../../../../../../shared/components/DynamicForm/DynamicForm';
+import FetchErrorHandler from '../../../../../../shared/helpers/errorHandlers/FetchErrorHandler';
 
 function ProductDetailForm(props) {
 
-    const [state] = useContext(Context);
+    const [state, dispatch] = useContext(Context);
 
     const jsonSchema = props.schema && props.schema.jsonSchema ? JSON.parse(props.schema.jsonSchema) : {};
     const uiSchema = props.schema && props.schema.uiSchema ? JSON.parse(props.schema.uiSchema) : {};
@@ -37,7 +39,40 @@ function ProductDetailForm(props) {
     };
 
     function onSubmitForm(state) {
-        console.log(state);
+
+        dispatch({ type: 'SET_IS_LOADING', payload: true });
+
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(state)
+        };
+
+        return fetch(props.saveUrl, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: 'SET_IS_LOADING', payload: false });
+
+                FetchErrorHandler.handleUnauthorizedResponse(response);
+
+                return response.json().then(jsonResponse => {
+
+                    if (response.ok) {
+
+                        setFieldValue({ name: "id", value: jsonResponse.data.id })
+                        toast.success(jsonResponse.message);
+                    }
+                    else {
+                        FetchErrorHandler.consoleLogResponseDetails(state, response, jsonResponse);
+                        toast.error(props.generalErrorMessage);
+                    }
+                })
+            }).catch(error => {
+
+                console.log(error);
+                dispatch({ type: 'SET_IS_LOADING', payload: false });
+                toast.error(props.generalErrorMessage);
+            });
     }
 
     const {
@@ -45,6 +80,7 @@ function ProductDetailForm(props) {
         errors,
         dirty,
         disable,
+        setFieldValue,
         handleOnChange,
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
@@ -80,7 +116,8 @@ ProductDetailForm.propTypes = {
     skuLabel: PropTypes.string.isRequired,
     nameLabel: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
-    schema: PropTypes.object
+    schema: PropTypes.object,
+    generalErrorMessage: PropTypes.string.isRequired
 };
 
 export default ProductDetailForm;
