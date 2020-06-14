@@ -77,10 +77,18 @@ namespace Tenant.Portal.Areas.Clients.ApiControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Save([FromBody] ProductRequestModel productRequestModel)
+        public async Task<IActionResult> Save([FromBody] SaveProductRequestModel requestModel)
         {
             try
             {
+                var productRequestModel = new ProductRequestModel
+                { 
+                    Id = requestModel.Id,
+                    Sku = requestModel.Sku,
+                    Name = requestModel.Name,
+                    FormData = requestModel.FormData.ToString()
+                };
+
                 var apiRequest = new ApiRequest<ProductRequestModel>
                 {
                     Data = this.apiClientService.InitializeRequestModelContext(productRequestModel),

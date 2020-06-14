@@ -32,7 +32,7 @@ namespace Tenant.Portal.Areas.Products.Controllers
 
             var viewModel = await this.productDetailPageModelBuilder.BuildModelAsync(componentModel);
 
-            return this.View("Index", viewModel);
+            return this.View(viewModel);
         }
     }
 }

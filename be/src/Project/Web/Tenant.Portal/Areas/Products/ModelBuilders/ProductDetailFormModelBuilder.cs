@@ -35,10 +35,9 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
 
         public async Task<ProductDetailFormViewModel> BuildModelAsync(ProductDetailFormComponentModel componentModel)
         {
-            return new ProductDetailFormViewModel
+            var viewModel = new ProductDetailFormViewModel
             {
                 Schema = await this.productSchemaRepository.GetProductSchemaByEntityTypeIdAsync(componentModel.Token, componentModel.Language, Definitons.Constants.ProductEntityTypeId),
-                Product = await this.productRepository.GetProductAsync(componentModel.Token, componentModel.Language, componentModel.Id),
                 GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"],
                 NameLabel = this.globalLocalizer["NameLabel"],
                 NameRequiredErrorMessage = this.globalLocalizer["NameRequiredErrorMessage"],
@@ -49,8 +48,15 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
                 SkuRequiredErrorMessage = this.productLocalizer["SkuRequiredErrorMessage"],
                 SkuLabel = this.productLocalizer["SkuLabel"],
                 SaveText = this.globalLocalizer["SaveText"],
-                SaveUrl = this.linkGenerator.GetPathByAction("Save", "ProductApi", new { Area = "Product", culture = CultureInfo.CurrentUICulture.Name })
-        };
+                SaveUrl = this.linkGenerator.GetPathByAction("Save", "ProductApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+            };
+
+            if (componentModel.Id.HasValue)
+            {
+                viewModel.Product = await this.productRepository.GetProductAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+            }
+
+            return viewModel;
         }
     }
 }

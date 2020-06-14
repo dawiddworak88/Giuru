@@ -33,7 +33,6 @@ namespace Tenant.Portal.Areas.Clients.ApiControllers
             IApiClientService apiClientService,
             IApiResponseService apiResponseService,
             IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration,
-            IStringLocalizer<ClientResources> clientLocalizer,
             ILogger<ClientApiController> logger)
         {
             this.apiClientService = apiClientService;

@@ -46,7 +46,7 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
                 Title = this.productLocalizer["Products"],
                 NewText = this.productLocalizer["NewProduct"],
-                NewUrl = this.linkGenerator.GetPathByAction("Index", "ProductDetail", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                NewUrl = this.linkGenerator.GetPathByAction("Edit", "ProductDetail", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 Catalog = await this.productCatalogModelBuilder.BuildModelAsync(new ProductsCatalogComponentModel { Token = componentModel.Token }),
                 Footer = footerModelBuilder.BuildModel()
             };
