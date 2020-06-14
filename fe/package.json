@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.9.0",
-    "@babel/plugin-proposal-class-properties": "7.9.0",
+    "@babel/plugin-proposal-class-properties": "7.10.1",
     "@babel/preset-env": "7.9.0",
     "@babel/register": "7.9.0",
     "@storybook/addon-actions": "5.3.17",
