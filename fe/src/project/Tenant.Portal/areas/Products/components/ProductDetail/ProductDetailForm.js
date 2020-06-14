@@ -81,6 +81,7 @@ function ProductDetailForm(props) {
         dirty,
         disable,
         setFieldValue,
+        validateErrorState,
         handleOnChange,
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);

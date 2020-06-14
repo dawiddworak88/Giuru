@@ -19,14 +19,14 @@ function useForm(
   const [errors, setErrors] = useState(get_prop_values(state, ERROR));
   const [dirty, setDirty] = useState(get_prop_values(state, false));
 
-  const [disable, setDisable] = useState(true);
+  const [disable, setDisable] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
 
   // Get a local copy of stateSchema
   useEffect(() => {
     setStateSchema(stateSchema);
+    setDisable(false);
     setInitialErrorState();
-    setDisable(errors && errors.length); // Disable button in initial render.
   }, []); // eslint-disable-line
 
   // Set a brand new field values and errors 
@@ -158,8 +158,7 @@ function useForm(
     setFieldValue,
     setFieldError,
     handleOnChange,
-    handleOnSubmit,
-    validateErrorState,
+    handleOnSubmit
   };
 }
 

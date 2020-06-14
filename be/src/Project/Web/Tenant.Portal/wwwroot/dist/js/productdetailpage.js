@@ -26459,7 +26459,7 @@ function useForm() {
       dirty = _useState8[0],
       setDirty = _useState8[1];
 
-  var _useState9 = Object(react["useState"])(true),
+  var _useState9 = Object(react["useState"])(false),
       _useState10 = Object(slicedToArray["a" /* default */])(_useState9, 2),
       disable = _useState10[0],
       setDisable = _useState10[1];
@@ -26472,8 +26472,8 @@ function useForm() {
 
   Object(react["useEffect"])(function () {
     setStateSchema(stateSchema);
+    setDisable(false);
     setInitialErrorState();
-    setDisable(errors && errors.length); // Disable button in initial render.
   }, []); // eslint-disable-line
   // Set a brand new field values and errors 
   // If stateSchema changes
@@ -26606,8 +26606,7 @@ function useForm() {
     setFieldValue: setFieldValue,
     setFieldError: setFieldError,
     handleOnChange: handleOnChange,
-    handleOnSubmit: handleOnSubmit,
-    validateErrorState: validateErrorState
+    handleOnSubmit: handleOnSubmit
   };
 }
 
@@ -52181,7 +52180,6 @@ function ProductDetailForm(props) {
       type: 'SET_IS_LOADING',
       payload: true
     });
-    console.log(state);
     var requestOptions = {
       method: 'POST',
       headers: {
@@ -52189,7 +52187,6 @@ function ProductDetailForm(props) {
       },
       body: JSON.stringify(state)
     };
-    console.log(requestOptions);
     return fetch(props.saveUrl, requestOptions).then(function (response) {
       dispatch({
         type: 'SET_IS_LOADING',
@@ -52198,7 +52195,6 @@ function ProductDetailForm(props) {
       FetchErrorHandler["a" /* default */].handleUnauthorizedResponse(response);
       return response.json().then(function (jsonResponse) {
         if (response.ok) {
-          console.log(jsonResponse);
           setFieldValue({
             name: "id",
             value: jsonResponse.data.id
@@ -52206,7 +52202,7 @@ function ProductDetailForm(props) {
           react_toastify["a" /* toast */].success(jsonResponse.message);
         } else {
           FetchErrorHandler["a" /* default */].consoleLogResponseDetails(state, response, jsonResponse);
-          react_toastify["a" /* toast */].error(generalErrorMessage);
+          react_toastify["a" /* toast */].error(props.generalErrorMessage);
         }
       });
     }).catch(function (error) {
@@ -52215,7 +52211,7 @@ function ProductDetailForm(props) {
         type: 'SET_IS_LOADING',
         payload: false
       });
-      react_toastify["a" /* toast */].error(generalErrorMessage);
+      react_toastify["a" /* toast */].error(props.generalErrorMessage);
     });
   }
 
@@ -52225,6 +52221,7 @@ function ProductDetailForm(props) {
       dirty = _useForm.dirty,
       disable = _useForm.disable,
       setFieldValue = _useForm.setFieldValue,
+      validateErrorState = _useForm.validateErrorState,
       handleOnChange = _useForm.handleOnChange,
       handleOnSubmit = _useForm.handleOnSubmit;
 

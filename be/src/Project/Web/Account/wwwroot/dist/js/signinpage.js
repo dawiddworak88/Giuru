@@ -13845,7 +13845,7 @@ function useForm() {
       dirty = _useState8[0],
       setDirty = _useState8[1];
 
-  var _useState9 = Object(react["useState"])(true),
+  var _useState9 = Object(react["useState"])(false),
       _useState10 = slicedToArray_slicedToArray(_useState9, 2),
       disable = _useState10[0],
       setDisable = _useState10[1];
@@ -13858,8 +13858,8 @@ function useForm() {
 
   Object(react["useEffect"])(function () {
     setStateSchema(stateSchema);
+    setDisable(false);
     setInitialErrorState();
-    setDisable(errors && errors.length); // Disable button in initial render.
   }, []); // eslint-disable-line
   // Set a brand new field values and errors 
   // If stateSchema changes
@@ -13992,8 +13992,7 @@ function useForm() {
     setFieldValue: setFieldValue,
     setFieldError: setFieldError,
     handleOnChange: handleOnChange,
-    handleOnSubmit: handleOnSubmit,
-    validateErrorState: validateErrorState
+    handleOnSubmit: handleOnSubmit
   };
 }
 
