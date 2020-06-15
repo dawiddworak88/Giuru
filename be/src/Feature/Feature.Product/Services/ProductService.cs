@@ -206,7 +206,7 @@ namespace Feature.Product.Services
 
             if (!string.IsNullOrWhiteSpace(getProductsModel.SearchTerm))
             {
-                predicate = predicate.And(x => x.Sku.StartsWith(getProductsModel.SearchTerm) || x.Name.Contains(getProductsModel.SearchTerm));
+                predicate = predicate.And(x => (!string.IsNullOrWhiteSpace(x.Sku) && x.Sku.StartsWith(getProductsModel.SearchTerm)) || (!string.IsNullOrWhiteSpace(x.Name) && x.Name.Contains(getProductsModel.SearchTerm)));
             }
 
             predicate = predicate.And(x => x.IsActive);
