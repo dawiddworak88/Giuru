@@ -118,10 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ImportOrder" xml:space="preserve">
-    <value>Importuj zamówienie</value>
+    <value>Import zamówienia</value>
   </data>
   <data name="NewOrder" xml:space="preserve">
     <value>Nowe zamówienie</value>
+  </data>
+  <data name="Order" xml:space="preserve">
+    <value>Zamówienie</value>
   </data>
   <data name="Orders" xml:space="preserve">
     <value>Zamówienia</value>

@@ -1,14 +1,25 @@
 ﻿using Foundation.Extensions.Controllers;
+using Foundation.Extensions.ModelBuilders;
 using Microsoft.AspNetCore.Mvc;
+using Tenant.Portal.Areas.Orders.ViewModel;
 
 namespace Tenant.Portal.Areas.Orders.Controllers
 {
     [Area("Orders")]
     public class OrderDetailController : BaseController
     {
+        private readonly IModelBuilder<OrderDetailPageViewModel> orderDetailPageModelBuilder;
+
+        public OrderDetailController(IModelBuilder<OrderDetailPageViewModel> orderDetailPageModelBuilder)
+        {
+            this.orderDetailPageModelBuilder = orderDetailPageModelBuilder;
+        }
+
         public IActionResult Index()
         {
-            return this.View();
+            var viewModel = this.orderDetailPageModelBuilder.BuildModel();
+
+            return this.View(viewModel);
         }
     }
 }

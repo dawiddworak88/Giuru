@@ -21,6 +21,9 @@ function OrderDetailPage(props) {
         <div>
           <Header {...props.header}></Header>
           <MenuTiles {...props.menuTiles} />
+          <section className="section section-small-padding catalog">
+            <h1 className="subtitle is-4">{props.title}</h1>
+          </section>
           <Footer {...props.footer}></Footer>
         </div>
       </Store>

@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 411);
+/******/ 	return __webpack_require__(__webpack_require__.s = 409);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -14047,6 +14047,15 @@ Plus.defaultProps = {
 
 /***/ }),
 
+/***/ 409:
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(591);
+module.exports = __webpack_require__(410);
+
+
+/***/ }),
+
 /***/ 41:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -14105,16 +14114,7 @@ UploadCloud.defaultProps = {
 
 /***/ }),
 
-/***/ 411:
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(592);
-module.exports = __webpack_require__(412);
-
-
-/***/ }),
-
-/***/ 412:
+/***/ 410:
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
@@ -14333,7 +14333,7 @@ function MenuTiles(props) {
 
 /***/ }),
 
-/***/ 592:
+/***/ 591:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14348,9 +14348,6 @@ var react_default = /*#__PURE__*/__webpack_require__.n(react);
 var react_dom = __webpack_require__(7);
 var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
 
-// EXTERNAL MODULE: ./node_modules/react-feather/dist/icons/plus.js
-var plus = __webpack_require__(40);
-
 // EXTERNAL MODULE: ./src/shared/components/Header/Header.js + 2 modules
 var Header = __webpack_require__(44);
 
@@ -14363,7 +14360,7 @@ var MenuTiles = __webpack_require__(45);
 // EXTERNAL MODULE: ./src/shared/layouts/images/favicon.png
 var favicon = __webpack_require__(72);
 
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Clients/pages/ClientPage/ClientPage.js
+// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Orders/pages/ImportOrderPage/ImportOrderPage.js
 
 
 
@@ -14374,30 +14371,25 @@ var favicon = __webpack_require__(72);
 
 /* eslint-enable no-unused-vars */
 
-function ClientPage(props) {
+function ImportOrderPage(props) {
   return /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement(Header["a" /* default */], props.header), /*#__PURE__*/react_default.a.createElement(MenuTiles["a" /* default */], props.menuTiles), /*#__PURE__*/react_default.a.createElement("section", {
     className: "section section-small-padding catalog"
   }, /*#__PURE__*/react_default.a.createElement("h1", {
     className: "subtitle is-4"
-  }, props.title), /*#__PURE__*/react_default.a.createElement("div", null, props.newUrl && /*#__PURE__*/react_default.a.createElement("a", {
-    href: props.newUrl,
-    className: "button is-primary"
-  }, /*#__PURE__*/react_default.a.createElement("span", {
-    className: "icon"
-  }, /*#__PURE__*/react_default.a.createElement(plus["a" /* default */], null)), /*#__PURE__*/react_default.a.createElement("span", null, props.newText)))), /*#__PURE__*/react_default.a.createElement(Footer["a" /* default */], props.footer));
+  }, props.title)), /*#__PURE__*/react_default.a.createElement(Footer["a" /* default */], props.footer));
 }
 
-/* harmony default export */ var ClientPage_ClientPage = (ClientPage);
+/* harmony default export */ var ImportOrderPage_ImportOrderPage = (ImportOrderPage);
 // EXTERNAL MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.js
 var CssSsrRemovalHelper = __webpack_require__(43);
 
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Clients/pages/ClientPage/index.js
+// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Orders/pages/ImportOrderPage/index.js
 
 
 
 
 CssSsrRemovalHelper["a" /* default */].Remove();
-react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(ClientPage_ClientPage, window.data), document.getElementById('root'));
+react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(ImportOrderPage_ImportOrderPage, window.data), document.getElementById('root'));
 
 /***/ }),
 
