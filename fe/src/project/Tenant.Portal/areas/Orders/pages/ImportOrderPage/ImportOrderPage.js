@@ -8,7 +8,7 @@ import MenuTiles from '../../../../../../shared/components/MenuTiles/MenuTiles';
 import favicon from '../../../../../../shared/layouts/images/favicon.png';
 /* eslint-enable no-unused-vars */
 
-function OrderPage(props) {
+function ImportOrderPage(props) {
   return (
     <div>
       <Header {...props.header}></Header>
@@ -43,4 +43,4 @@ function OrderPage(props) {
   );
 }
 
-export default OrderPage;
+export default ImportOrderPage;

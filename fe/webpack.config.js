@@ -185,6 +185,8 @@ var tenantPortalBrowserConfig = {
     },
     entry: {
         orderpage: ["./src/project/Tenant.Portal/areas/Orders/pages/OrderPage/index.js", "./src/project/Tenant.Portal/areas/Orders/pages/OrderPage/OrderPage.scss"],
+        orderdetailpage: ["./src/project/Tenant.Portal/areas/Orders/pages/OrderDetailPage/index.js", "./src/project/Tenant.Portal/areas/Orders/pages/OrderDetailPage/OrderDetailPage.scss"],
+        importorderpage: ["./src/project/Tenant.Portal/areas/Orders/pages/ImportOrderPage/index.js", "./src/project/Tenant.Portal/areas/Orders/pages/ImportOrderPage/ImportOrderPage.scss"],
         clientpage: ["./src/project/Tenant.Portal/areas/Clients/pages/ClientPage/index.js", "./src/project/Tenant.Portal/areas/Clients/pages/ClientPage/ClientPage.scss"],
         clientdetailpage: ["./src/project/Tenant.Portal/areas/Clients/pages/ClientDetailPage/index.js", "./src/project/Tenant.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage.scss"],
         productpage: ["./src/project/Tenant.Portal/areas/Products/pages/ProductPage/index.js", "./src/project/Tenant.Portal/areas/Products/pages/ProductPage/ProductPage.scss"],

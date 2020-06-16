@@ -10,6 +10,8 @@ import SignInPage from '../../src/project/Account/areas/Accounts/pages/SignIn/Si
 
 // Tenant Portal
 import OrderPage from '../../src/project/Tenant.Portal/areas/Orders/pages/OrderPage/OrderPage';
+import OrderDetailPage from '../../src/project/Tenant.Portal/areas/Orders/pages/OrderDetailPage/OrderDetailPage';
+import ImportOrderPage from '../../src/project/Tenant.Portal/areas/Orders/pages/ImportOrderPage/ImportOrderPage';
 import ClientPage from '../../src/project/Tenant.Portal/areas/Clients/pages/ClientPage/ClientPage';
 import ClientDetailPage from '../../src/project/Tenant.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage';
 import ProductPage from '../../src/project/Tenant.Portal/areas/Products/pages/ProductPage/ProductPage';
@@ -19,6 +21,8 @@ const Components = {
 	HomePage,
 	SignInPage,
 	OrderPage,
+	OrderDetailPage,
+	ImportOrderPage,
 	ClientPage,
 	ClientDetailPage,
 	ProductPage,
