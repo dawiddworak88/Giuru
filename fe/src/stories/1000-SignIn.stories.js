@@ -1,38 +1,7 @@
 import React from 'react';
 import '../project/Account/areas/Accounts/pages/SignIn/SignInPage.scss';
 import SignInPage from '../project/Account/areas/Accounts/pages/SignIn/SignInPage';
-
-var header = {
-  logo: {
-    targetUrl: '/',
-    logoAltLabel: 'Logo'
-  },
-  languageSwitcher: {
-    availableLanguages: [
-      {
-        url: '/en',
-        text: 'EN'
-      },
-      {
-        url: '/de',
-        text: 'DE'
-      },
-      {
-        url: '/pl',
-        text: 'PL'
-      }
-    ],
-    selectedLanguageUrl: '/en'
-  },
-  links: [
-    { url: "#privacy-policy", text: "Price List" },
-    { url: "#regulations", text: "Regulations" }
-  ],
-  loginLink: {
-    url: "#", 
-    text: "Sign in"
-  }
-};
+import { header, footer } from './Shared/Props';
 
 var signInForm = {
   emailRequiredErrorMessage: "Enter e-mail address",
@@ -42,14 +11,6 @@ var signInForm = {
   signInText: "Sign in",
   enterEmailText: "Enter e-mail",
   enterPasswordText: "Enter password"
-};
-
-var footer = {
-  copyright: 'Copyright © 2021 Giuru',
-  links: [
-    { url: "#privacy-policy", text: "Price List" },
-    { url: "#regulations", text: "Regulations" }
-  ]
 };
 
 export const SignInPageStory = () => <SignInPage header={header} signInForm={signInForm} footer={footer} />

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Plus, UploadCloud } from 'react-feather';
 import Header from '../../../../../../shared/components/Header/Header';
 import Footer from '../../../../../../shared/components/Footer/Footer';
 import MenuTiles from '../../../../../../shared/components/MenuTiles/MenuTiles';
