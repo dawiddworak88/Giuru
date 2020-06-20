@@ -1,7 +1,7 @@
 ﻿using Feature.PageContent.Components.Footers.ViewModels;
 using Feature.PageContent.Components.Headers.ViewModels;
 using Feature.PageContent.MenuTiles.ViewModels;
-using Feature.Product.Resources;
+using Feature.Product;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
 using System.Threading.Tasks;

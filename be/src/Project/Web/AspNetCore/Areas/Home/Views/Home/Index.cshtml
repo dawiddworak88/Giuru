@@ -6,8 +6,11 @@
 </script>
 
 @section MetaTags {
-    <title>AspNetCore</title>
-    <meta name="description" content="AspNetCore Description" />
+    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("MakeTheFuture"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("MakeTheFuture")))
+    {
+        <meta name="description" content="@this.Localizer.GetString("MakeTheFuture")" />
+    }
 }
 
 @section HeadStyles {

@@ -1,4 +1,4 @@
-﻿namespace Feature.Product.Resources
+﻿namespace Feature.Product
 {
     public class ProductResources
     {

@@ -6,8 +6,11 @@
 </script>
 
 @section MetaTags {
-    <title>Tenant.Portal</title>
-    <meta name="description" content="Tenant.Portal Description" />
+    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("Products"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("Products")))
+    {
+        <meta name="description" content="@this.Localizer.GetString("Products")" />
+    }
 }
 
 @section HeadStyles {

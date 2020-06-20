@@ -1,5 +1,6 @@
 ﻿using Feature.PageContent.Components.LanguageSwitchers.ModelBuilders;
 using Feature.PageContent.Components.LanguageSwitchers.ViewModels;
+using Feature.PageContent.Services.MetaTags;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,7 @@ namespace Feature.PageContent.DependencyInjection
         public static void RegisterLocalizationDependencies(this IServiceCollection services)
         {
             services.AddScoped<IModelBuilder<LanguageSwitcherViewModel>, LanguageSwitcherModelBuilder>();
+            services.AddScoped<IMetaTagsService, MetaTagsService>();
         }
     }
 }
