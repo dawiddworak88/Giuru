@@ -1,5 +1,4 @@
-﻿using Foundation.GenericRepository.Entities;
-using Foundation.TenantDatabase.Shared.Contexts;
+﻿using Foundation.TenantDatabase.Shared.Contexts;
 using System.Threading.Tasks;
 
 namespace Foundation.TenantDatabase.Shared.Repositories

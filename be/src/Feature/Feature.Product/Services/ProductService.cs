@@ -156,7 +156,7 @@ namespace Feature.Product.Services
 
             var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
 
-            var translations = context.Translations.Where(x => x.Key == deleteProductModel.Id.ToString() && x.IsActive);
+            var translations = context.Translations.Where(x => x.Key == deleteProductModel.Id.ToString() && x.IsActive).ToList();
 
             foreach (var translation in translations)
             {

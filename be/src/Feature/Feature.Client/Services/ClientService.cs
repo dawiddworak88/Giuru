@@ -15,7 +15,6 @@ using Foundation.Mailing.Configurations;
 using Foundation.Mailing.Models;
 using Foundation.Mailing.Services;
 using Foundation.TenantDatabase.Areas.Accounts.Entities;
-using Foundation.TenantDatabase.Shared.Contexts;
 using Foundation.TenantDatabase.Shared.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
@@ -33,7 +32,6 @@ namespace Feature.Client.Services
         private readonly IGenericRepository<Tenant> tenantRepository;
         private readonly TenantGenericRepositoryFactory genericRepositoryFactory;
         private readonly UserStoreFactory userStoreFactory;
-        private readonly TenantDatabaseContextFactory tenantDatabaseContextFactory;
         private readonly IPasswordHasher<ApplicationUser> passwordHasher;
         private readonly IPasswordGenerationService passwordGenerationService;
         private readonly IMailingService mailingService;
@@ -46,7 +44,6 @@ namespace Feature.Client.Services
             IGenericRepository<Tenant> tenantRepository,
             TenantGenericRepositoryFactory genericRepositoryFactory,
             UserStoreFactory userStoreFactory,
-            TenantDatabaseContextFactory tenantDatabaseContextFactory,
             IPasswordHasher<ApplicationUser> passwordHasher,
             IPasswordGenerationService passwordGenerationService,
             IMailingService mailingService, 
@@ -58,7 +55,6 @@ namespace Feature.Client.Services
             this.tenantRepository = tenantRepository;
             this.genericRepositoryFactory = genericRepositoryFactory;
             this.userStoreFactory = userStoreFactory;
-            this.tenantDatabaseContextFactory = tenantDatabaseContextFactory;
             this.passwordHasher = passwordHasher;
             this.passwordGenerationService = passwordGenerationService;
             this.mailingService = mailingService;
