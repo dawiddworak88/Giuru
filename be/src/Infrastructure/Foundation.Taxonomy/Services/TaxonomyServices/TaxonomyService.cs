@@ -58,13 +58,11 @@ namespace Foundation.Taxonomy.Services.TaxonomyServices
                 ParentId = model.ParentId
             };
 
-            var taxonomyRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Taxonomies.Entities.Taxonomy>(tenant.DatabaseConnectionString);
+            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
 
-            var translationRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Translation>(tenant.DatabaseConnectionString);
+            await context.Taxonomies.AddAsync(this.entityService.EnrichEntity(taxonomy, model.Username));
 
-            await taxonomyRepository.CreateAsync(this.entityService.EnrichEntity(taxonomy, model.Username));
-
-            await taxonomyRepository.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             var translation = new Translation
             {
@@ -73,9 +71,9 @@ namespace Foundation.Taxonomy.Services.TaxonomyServices
                 Language = model.Language
             };
 
-            await translationRepository.CreateAsync(this.entityService.EnrichEntity(translation, model.Username));
+            await context.Translations.AddAsync(this.entityService.EnrichEntity(translation, model.Username));
 
-            await translationRepository.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             createTaxonomyResultModel.Taxonomy = taxonomy;
 
@@ -104,11 +102,11 @@ namespace Foundation.Taxonomy.Services.TaxonomyServices
                 return getTaxonomyResultModel;
             }
 
-            var taxonomyRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Taxonomies.Entities.Taxonomy>(tenant.DatabaseConnectionString);
+            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
 
             if (model.RootId.HasValue)
             {
-                var taxonomies = taxonomyRepository.Get(x => x.Name == model.Name && x.IsActive).ToList();
+                var taxonomies = context.Taxonomies.Where(x => x.Name == model.Name && x.IsActive);
 
                 foreach (var taxonomy in taxonomies)
                 {
@@ -117,7 +115,7 @@ namespace Foundation.Taxonomy.Services.TaxonomyServices
 
                     while (rootId.HasValue)
                     {
-                        rootTaxonomy = taxonomyRepository.GetById(rootId.Value);
+                        rootTaxonomy = context.Taxonomies.FirstOrDefault(x => x.Id == rootId.Value && x.IsActive);
                         rootId = rootTaxonomy.ParentId;
                     }
 
@@ -133,7 +131,7 @@ namespace Foundation.Taxonomy.Services.TaxonomyServices
 
             return new TaxonomyResultModel
             {
-                Taxonomy = taxonomyRepository.Get(x => x.Name == model.Name && x.ParentId == null && x.IsActive).FirstOrDefault()
+                Taxonomy = context.Taxonomies.FirstOrDefault(x => x.Name == model.Name && x.ParentId == null && x.IsActive)
             };
         }
     }

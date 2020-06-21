@@ -1,4 +1,4 @@
-﻿using Feature.Product.Resources;
+﻿using Feature.Product;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Routing;

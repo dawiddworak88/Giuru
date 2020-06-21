@@ -1,3 +1,8 @@
-﻿@using Account
+﻿@using Microsoft.Extensions.Localization
+@using Account
+@using Feature.Account
+@using Feature.PageContent.Services.MetaTags
+@inject IStringLocalizer<AccountResources> Localizer
+@inject IMetaTagsService MetaTagsService
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Foundation.Prerendering

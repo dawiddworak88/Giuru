@@ -1,45 +1,7 @@
 import React from 'react';
 import '../project/Tenant.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage.scss';
 import ProductDetailPage from '../project/Tenant.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage';
-
-var header = {
-  logo: {
-    targetUrl: '/',
-    logoAltLabel: 'Logo'
-  },
-  languageSwitcher: {
-    availableLanguages: [
-      {
-        url: '/en',
-        text: 'EN'
-      },
-      {
-        url: '/de',
-        text: 'DE'
-      },
-      {
-        url: '/pl',
-        text: 'PL'
-      }
-    ],
-    selectedLanguageUrl: '/en'
-  },
-  links: [
-  ],
-  loginLink: {
-    url: "#",
-    text: "Sign in"
-  }
-};
-
-var menuTiles = {
-  tiles: [
-    { icon: 'ShoppingCart', title: 'Orders', url: '#' },
-    { icon: 'Package', title: 'Products', url: '#' },
-    { icon: 'Users', title: 'Clients', url: '#' },
-    { icon: 'Settings', title: 'Settings', url: '#' }
-  ],
-};
+import { header, menuTiles, footer } from './Shared/Props';
 
 var productDetailForm = {
 
@@ -52,8 +14,9 @@ var productDetailForm = {
   enterSkuText: "Enter SKU",
   saveUrl: "#",
   saveText: "Save",
+  generalErrorMessage: "An error has occurred.",
   schema: {
-    jsonSchema: {
+    jsonSchema: JSON.stringify({
       "definitions": {
         "Color": {
           "title": "Color",
@@ -312,16 +275,9 @@ var productDetailForm = {
           "title": "Intrastat:"
         }
       }
-    },
-    uiSchema: {
-    }
+    }),
+    uiSchema: null
   }
-};
-
-var footer = {
-  copyright: 'Copyright © 2021 Giuru',
-  links: [
-  ]
 };
 
 export const ProductDetailPageStory = () => <ProductDetailPage header={header} menuTiles={menuTiles} title="Product" productDetailForm={productDetailForm} footer={footer} />

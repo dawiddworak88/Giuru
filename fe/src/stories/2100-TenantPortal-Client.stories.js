@@ -1,45 +1,7 @@
 import React from 'react';
 import '../project/Tenant.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage.scss';
 import ClientDetailPage from '../project/Tenant.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage';
-
-var header = {
-  logo: {
-    targetUrl: '/',
-    logoAltLabel: 'Logo'
-  },
-  languageSwitcher: {
-    availableLanguages: [
-      {
-        url: '/en',
-        text: 'EN'
-      },
-      {
-        url: '/de',
-        text: 'DE'
-      },
-      {
-        url: '/pl',
-        text: 'PL'
-      }
-    ],
-    selectedLanguageUrl: '/en'
-  },
-  links: [
-  ],
-  loginLink: {
-    url: "#", 
-    text: "Sign in"
-  }
-};
-
-var menuTiles = {
-  tiles: [
-    { icon: 'ShoppingCart', title: 'Orders', url: '#' },
-    { icon: 'Package', title: 'Products', url: '#' },
-    { icon: 'Users', title: 'Clients', url: '#' },
-    { icon: 'Settings', title: 'Settings', url: '#' }
-  ],
-};
+import { header, menuTiles, footer } from './Shared/Props';
 
 var clientDetailForm = {
 
@@ -63,12 +25,6 @@ var clientDetailForm = {
   ],
   communicationLanguage: "",
   saveText: "Save"
-};
-
-var footer = {
-  copyright: 'Copyright © 2021 Giuru',
-  links: [
-  ]
 };
 
 export const ClientDetailPageStory = () => <ClientDetailPage header={header} menuTiles={menuTiles} title="Client" clientDetailForm={clientDetailForm} footer={footer} />

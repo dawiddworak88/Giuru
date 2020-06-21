@@ -176,20 +176,6 @@ function _typeof(obj) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _assertThisInitialized; });
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return self;
-}
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _arrayLikeToArray; });
 function _arrayLikeToArray(arr, len) {
   if (len == null || len > arr.length) len = arr.length;
@@ -199,6 +185,20 @@ function _arrayLikeToArray(arr, len) {
   }
 
   return arr2;
+}
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _assertThisInitialized; });
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
 }
 
 /***/ }),
@@ -219,14 +219,14 @@ if (true) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _unsupportedIterableToArray; });
-/* harmony import */ var _arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
+/* harmony import */ var _arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
 
 function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;
   if (typeof o === "string") return Object(_arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(o, minLen);
   var n = Object.prototype.toString.call(o).slice(8, -1);
   if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(n);
+  if (n === "Map" || n === "Set") return Array.from(o);
   if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return Object(_arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(o, minLen);
 }
 
@@ -1047,7 +1047,7 @@ function mergeOuterLocalTheme(outerTheme, localTheme) {
     return mergedTheme;
   }
 
-  return _extends({}, outerTheme, {}, localTheme);
+  return _extends(_extends({}, outerTheme), localTheme);
 }
 /**
  * This component takes a `theme` prop.
@@ -2074,7 +2074,7 @@ function _slicedToArray(arr, i) {
   return Object(arrayWithHoles["a" /* default */])(arr) || _iterableToArrayLimit(arr, i) || Object(unsupportedIterableToArray["a" /* default */])(arr, i) || Object(nonIterableRest["a" /* default */])();
 }
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
-var arrayLikeToArray = __webpack_require__(6);
+var arrayLikeToArray = __webpack_require__(5);
 
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
 
@@ -2724,37 +2724,40 @@ function Footer(props) {
 // CONCATENATED MODULE: ./node_modules/clsx/dist/clsx.m.js
 function toVal(mix) {
 	var k, y, str='';
-	if (mix) {
-		if (typeof mix === 'object') {
-			if (Array.isArray(mix)) {
-				for (k=0; k < mix.length; k++) {
-					if (mix[k] && (y = toVal(mix[k]))) {
-						str && (str += ' ');
-						str += y;
-					}
-				}
-			} else {
-				for (k in mix) {
-					if (mix[k] && (y = toVal(k))) {
+
+	if (typeof mix === 'string' || typeof mix === 'number') {
+		str += mix;
+	} else if (typeof mix === 'object') {
+		if (Array.isArray(mix)) {
+			for (k=0; k < mix.length; k++) {
+				if (mix[k]) {
+					if (y = toVal(mix[k])) {
 						str && (str += ' ');
 						str += y;
 					}
 				}
 			}
-		} else if (typeof mix !== 'boolean' && !mix.call) {
-			str && (str += ' ');
-			str += mix;
+		} else {
+			for (k in mix) {
+				if (mix[k]) {
+					str && (str += ' ');
+					str += k;
+				}
+			}
 		}
 	}
+
 	return str;
 }
 
 /* harmony default export */ var clsx_m = (function () {
-	var i=0, x, str='';
+	var i=0, tmp, x, str='';
 	while (i < arguments.length) {
-		if (x = toVal(arguments[i++])) {
-			str && (str += ' ');
-			str += x
+		if (tmp = arguments[i++]) {
+			if (x = toVal(tmp)) {
+				str && (str += ' ');
+				str += x
+			}
 		}
 	}
 	return str;
@@ -2847,7 +2850,7 @@ function _inheritsLoose(subClass, superClass) {
   subClass.__proto__ = superClass;
 }
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
-var assertThisInitialized = __webpack_require__(5);
+var assertThisInitialized = __webpack_require__(6);
 
 // CONCATENATED MODULE: ./node_modules/jss/dist/jss.esm.js
 
@@ -3726,10 +3729,10 @@ function () {
   ;
 
   _proto.process = function process() {
-    var plugins$$1 = this.options.jss.plugins; // We need to clone array because if we modify the index somewhere else during a loop
+    var plugins = this.options.jss.plugins; // We need to clone array because if we modify the index somewhere else during a loop
     // we end up with very hard-to-track-down side effects.
 
-    this.index.slice(0).forEach(plugins$$1.onProcessRule, plugins$$1);
+    this.index.slice(0).forEach(plugins.onProcessRule, plugins);
   }
   /**
    * Register a rule in `.map`, `.classes` and `.keyframes` maps.
@@ -3803,7 +3806,7 @@ function () {
     }
 
     var _this$options2 = this.options,
-        plugins$$1 = _this$options2.jss.plugins,
+        plugins = _this$options2.jss.plugins,
         sheet = _this$options2.sheet; // It is a rules container like for e.g. ConditionalRule.
 
     if (rule.rules instanceof RuleList) {
@@ -3813,11 +3816,11 @@ function () {
 
     var styleRule = rule;
     var style = styleRule.style;
-    plugins$$1.onUpdate(data, rule, sheet, options); // We rely on a new `style` ref in case it was mutated during onUpdate hook.
+    plugins.onUpdate(data, rule, sheet, options); // We rely on a new `style` ref in case it was mutated during onUpdate hook.
 
     if (options.process && style && style !== styleRule.style) {
       // We need to run the plugins in case new `style` relies on syntax plugins.
-      plugins$$1.onProcessStyle(styleRule.style, styleRule, sheet); // Update and add props.
+      plugins.onProcessStyle(styleRule.style, styleRule, sheet); // Update and add props.
 
       for (var prop in styleRule.style) {
         var nextValue = styleRule.style[prop];
@@ -4799,7 +4802,7 @@ var jss_esm_Jss =
 function () {
   function Jss(options) {
     this.id = instanceCounter++;
-    this.version = "10.1.1";
+    this.version = "10.3.0";
     this.plugins = new PluginsRegistry();
     this.options = {
       id: {
@@ -4900,7 +4903,7 @@ function () {
    */
   ;
 
-  _proto.createRule = function createRule$$1(name, style, options) {
+  _proto.createRule = function createRule$1(name, style, options) {
     if (style === void 0) {
       style = {};
     }
@@ -4937,11 +4940,11 @@ function () {
   _proto.use = function use() {
     var _this = this;
 
-    for (var _len = arguments.length, plugins$$1 = new Array(_len), _key = 0; _key < _len; _key++) {
-      plugins$$1[_key] = arguments[_key];
+    for (var _len = arguments.length, plugins = new Array(_len), _key = 0; _key < _len; _key++) {
+      plugins[_key] = arguments[_key];
     }
 
-    plugins$$1.forEach(function (plugin) {
+    plugins.forEach(function (plugin) {
       _this.plugins.use(plugin);
     });
     return this;
@@ -5150,11 +5153,16 @@ function createGenerateClassName() {
       seed = _options$seed === void 0 ? '' : _options$seed;
   var seedPrefix = seed === '' ? '' : "".concat(seed, "-");
   var ruleCounter = 0;
-  return function (rule, styleSheet) {
+
+  var getNextCounterId = function getNextCounterId() {
     ruleCounter += 1;
 
     if (false) {}
 
+    return ruleCounter;
+  };
+
+  return function (rule, styleSheet) {
     var name = styleSheet.options.name; // Is a global static MUI style?
 
     if (name && name.indexOf('Mui') === 0 && !styleSheet.options.link && !disableGlobal) {
@@ -5169,14 +5177,14 @@ function createGenerateClassName() {
         return prefix;
       }
 
-      return "".concat(prefix, "-").concat(ruleCounter);
+      return "".concat(prefix, "-").concat(getNextCounterId());
     }
 
     if (true) {
-      return "".concat(seedPrefix).concat(productionPrefix).concat(ruleCounter);
+      return "".concat(seedPrefix).concat(productionPrefix).concat(getNextCounterId());
     }
 
-    var suffix = "".concat(rule.key, "-").concat(ruleCounter); // Help with debuggability.
+    var suffix = "".concat(rule.key, "-").concat(getNextCounterId()); // Help with debuggability.
 
     if (styleSheet.options.classNamePrefix) {
       return "".concat(seedPrefix).concat(styleSheet.options.classNamePrefix, "-").concat(suffix);
@@ -6453,12 +6461,12 @@ function jssVendorPrefixer() {
       var supportedProp = supportedProperty(prop);
       if (supportedProp && supportedProp !== prop) changeProp = true;
       var changeValue = false;
-      var supportedValue$$1 = supportedValue(supportedProp, toCssValue(value));
-      if (supportedValue$$1 && supportedValue$$1 !== value) changeValue = true;
+      var supportedValue$1 = supportedValue(supportedProp, toCssValue(value));
+      if (supportedValue$1 && supportedValue$1 !== value) changeValue = true;
 
       if (changeProp || changeValue) {
         if (changeProp) delete style[prop];
-        style[supportedProp || prop] = supportedValue$$1 || value;
+        style[supportedProp || prop] = supportedValue$1 || value;
       }
     }
 
@@ -6571,7 +6579,7 @@ function StylesProvider(props) {
 
   var outerOptions = react_default.a.useContext(StylesContext);
 
-  var context = _extends({}, outerOptions, {
+  var context = _extends(_extends({}, outerOptions), {}, {
     disableGeneration: disableGeneration
   }, localOptions);
 
@@ -6604,7 +6612,7 @@ if (false) {}
 // CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/makeStyles/indexCounter.js
 /* eslint-disable import/prefer-default-export */
 // Global index counter to preserve source order.
-// We create the style sheet during at the creation of the component,
+// We create the style sheet during the creation of the component,
 // children are handled after the parents, so the order of style elements would be parent->child.
 // It is a problem though when a parent passes a className
 // which needs to override any child's styles.
@@ -6742,7 +6750,7 @@ function attach(_ref2, props) {
     makeStyles_multiKeyStore.set(stylesOptions.sheetsManager, stylesCreator, theme, sheetManager);
   }
 
-  var options = _extends({}, stylesCreator.options, {}, stylesOptions, {
+  var options = _extends(_extends(_extends({}, stylesCreator.options), stylesOptions), {}, {
     theme: theme,
     flip: typeof stylesOptions.flip === 'boolean' ? stylesOptions.flip : theme.direction === 'rtl'
   });
@@ -6887,7 +6895,7 @@ function makeStyles(stylesOrCreator) {
     var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     var theme = useTheme() || defaultTheme;
 
-    var stylesOptions = _extends({}, react_default.a.useContext(StylesContext), {}, stylesOptions2);
+    var stylesOptions = _extends(_extends({}, react_default.a.useContext(StylesContext)), stylesOptions2);
 
     var instance = react_default.a.useRef();
     var shouldUpdate = react_default.a.useRef();
@@ -6988,7 +6996,7 @@ var withStyles_withStyles = function withStyles(stylesOrCreator) {
       // So copying it here would give us the same result in the wrapper as well.
 
 
-      var classes = useStyles(_extends({}, Component.defaultProps, {}, props));
+      var classes = useStyles(_extends(_extends({}, Component.defaultProps), props));
       var theme;
       var more = other;
 
@@ -9916,9 +9924,7 @@ var EXITING = 'exiting';
  * `'exiting'` to `'exited'`.
  */
 
-var Transition_Transition =
-/*#__PURE__*/
-function (_React$Component) {
+var Transition_Transition = /*#__PURE__*/function (_React$Component) {
   _inheritsLoose(Transition, _React$Component);
 
   function Transition(props, context) {
@@ -9963,7 +9969,7 @@ function (_React$Component) {
     }
 
     return null;
-  }; // getSnapshotBeforeUpdate(prevProps) {
+  } // getSnapshotBeforeUpdate(prevProps) {
   //   let nextStatus = null
   //   if (prevProps !== this.props) {
   //     const { status } = this.state
@@ -9979,7 +9985,7 @@ function (_React$Component) {
   //   }
   //   return { nextStatus }
   // }
-
+  ;
 
   var _proto = Transition.prototype;
 
@@ -10038,12 +10044,11 @@ function (_React$Component) {
     if (nextStatus !== null) {
       // nextStatus will always be ENTERING or EXITING.
       this.cancelNextCallback();
-      var node = react_dom_default.a.findDOMNode(this);
 
       if (nextStatus === ENTERING) {
-        this.performEnter(node, mounting);
+        this.performEnter(mounting);
       } else {
-        this.performExit(node);
+        this.performExit();
       }
     } else if (this.props.unmountOnExit && this.state.status === EXITED) {
       this.setState({
@@ -10052,11 +10057,16 @@ function (_React$Component) {
     }
   };
 
-  _proto.performEnter = function performEnter(node, mounting) {
+  _proto.performEnter = function performEnter(mounting) {
     var _this2 = this;
 
     var enter = this.props.enter;
     var appearing = this.context ? this.context.isMounting : mounting;
+
+    var _ref2 = this.props.nodeRef ? [appearing] : [react_dom_default.a.findDOMNode(this), appearing],
+        maybeNode = _ref2[0],
+        maybeAppearing = _ref2[1];
+
     var timeouts = this.getTimeouts();
     var enterTimeout = appearing ? timeouts.appear : timeouts.enter; // no enter animation skip right to ENTERED
     // if we are mounting and running this it means appear _must_ be set
@@ -10065,53 +10075,54 @@ function (_React$Component) {
       this.safeSetState({
         status: ENTERED
       }, function () {
-        _this2.props.onEntered(node);
+        _this2.props.onEntered(maybeNode);
       });
       return;
     }
 
-    this.props.onEnter(node, appearing);
+    this.props.onEnter(maybeNode, maybeAppearing);
     this.safeSetState({
       status: ENTERING
     }, function () {
-      _this2.props.onEntering(node, appearing);
+      _this2.props.onEntering(maybeNode, maybeAppearing);
 
-      _this2.onTransitionEnd(node, enterTimeout, function () {
+      _this2.onTransitionEnd(enterTimeout, function () {
         _this2.safeSetState({
           status: ENTERED
         }, function () {
-          _this2.props.onEntered(node, appearing);
+          _this2.props.onEntered(maybeNode, maybeAppearing);
         });
       });
     });
   };
 
-  _proto.performExit = function performExit(node) {
+  _proto.performExit = function performExit() {
     var _this3 = this;
 
     var exit = this.props.exit;
-    var timeouts = this.getTimeouts(); // no exit animation skip right to EXITED
+    var timeouts = this.getTimeouts();
+    var maybeNode = this.props.nodeRef ? undefined : react_dom_default.a.findDOMNode(this); // no exit animation skip right to EXITED
 
     if (!exit || config.disabled) {
       this.safeSetState({
         status: EXITED
       }, function () {
-        _this3.props.onExited(node);
+        _this3.props.onExited(maybeNode);
       });
       return;
     }
 
-    this.props.onExit(node);
+    this.props.onExit(maybeNode);
     this.safeSetState({
       status: EXITING
     }, function () {
-      _this3.props.onExiting(node);
+      _this3.props.onExiting(maybeNode);
 
-      _this3.onTransitionEnd(node, timeouts.exit, function () {
+      _this3.onTransitionEnd(timeouts.exit, function () {
         _this3.safeSetState({
           status: EXITED
         }, function () {
-          _this3.props.onExited(node);
+          _this3.props.onExited(maybeNode);
         });
       });
     });
@@ -10152,8 +10163,9 @@ function (_React$Component) {
     return this.nextCallback;
   };
 
-  _proto.onTransitionEnd = function onTransitionEnd(node, timeout, handler) {
+  _proto.onTransitionEnd = function onTransitionEnd(timeout, handler) {
     this.setNextCallback(handler);
+    var node = this.props.nodeRef ? this.props.nodeRef.current : react_dom_default.a.findDOMNode(this);
     var doesNotHaveTimeoutOrListener = timeout == null && !this.props.addEndListener;
 
     if (!node || doesNotHaveTimeoutOrListener) {
@@ -10162,7 +10174,11 @@ function (_React$Component) {
     }
 
     if (this.props.addEndListener) {
-      this.props.addEndListener(node, this.nextCallback);
+      var _ref3 = this.props.nodeRef ? [this.nextCallback] : [node, this.nextCallback],
+          maybeNode = _ref3[0],
+          maybeNextCallback = _ref3[1];
+
+      this.props.addEndListener(maybeNode, maybeNextCallback);
     }
 
     if (timeout != null) {
@@ -10179,36 +10195,29 @@ function (_React$Component) {
 
     var _this$props = this.props,
         children = _this$props.children,
-        childProps = _objectWithoutPropertiesLoose(_this$props, ["children"]); // filter props for Transtition
+        _in = _this$props.in,
+        _mountOnEnter = _this$props.mountOnEnter,
+        _unmountOnExit = _this$props.unmountOnExit,
+        _appear = _this$props.appear,
+        _enter = _this$props.enter,
+        _exit = _this$props.exit,
+        _timeout = _this$props.timeout,
+        _addEndListener = _this$props.addEndListener,
+        _onEnter = _this$props.onEnter,
+        _onEntering = _this$props.onEntering,
+        _onEntered = _this$props.onEntered,
+        _onExit = _this$props.onExit,
+        _onExiting = _this$props.onExiting,
+        _onExited = _this$props.onExited,
+        _nodeRef = _this$props.nodeRef,
+        childProps = _objectWithoutPropertiesLoose(_this$props, ["children", "in", "mountOnEnter", "unmountOnExit", "appear", "enter", "exit", "timeout", "addEndListener", "onEnter", "onEntering", "onEntered", "onExit", "onExiting", "onExited", "nodeRef"]);
 
-
-    delete childProps.in;
-    delete childProps.mountOnEnter;
-    delete childProps.unmountOnExit;
-    delete childProps.appear;
-    delete childProps.enter;
-    delete childProps.exit;
-    delete childProps.timeout;
-    delete childProps.addEndListener;
-    delete childProps.onEnter;
-    delete childProps.onEntering;
-    delete childProps.onEntered;
-    delete childProps.onExit;
-    delete childProps.onExiting;
-    delete childProps.onExited;
-
-    if (typeof children === 'function') {
+    return (
+      /*#__PURE__*/
       // allows for nested Transitions
-      return react_default.a.createElement(TransitionGroupContext.Provider, {
-        value: null
-      }, children(status, childProps));
-    }
-
-    var child = react_default.a.Children.only(children);
-    return (// allows for nested Transitions
       react_default.a.createElement(TransitionGroupContext.Provider, {
         value: null
-      }, react_default.a.cloneElement(child, childProps))
+      }, typeof children === 'function' ? children(status, childProps) : react_default.a.cloneElement(react_default.a.Children.only(children), childProps))
     );
   };
 
@@ -10216,7 +10225,7 @@ function (_React$Component) {
 }(react_default.a.Component);
 
 Transition_Transition.contextType = TransitionGroupContext;
-Transition_Transition.propTypes =  false ? undefined : {};
+Transition_Transition.propTypes =  false ? undefined : {}; // Name the function so it is clearer in the documentation
 
 function noop() {}
 
@@ -10234,11 +10243,11 @@ Transition_Transition.defaultProps = {
   onExiting: noop,
   onExited: noop
 };
-Transition_Transition.UNMOUNTED = 0;
-Transition_Transition.EXITED = 1;
-Transition_Transition.ENTERING = 2;
-Transition_Transition.ENTERED = 3;
-Transition_Transition.EXITING = 4;
+Transition_Transition.UNMOUNTED = UNMOUNTED;
+Transition_Transition.EXITED = EXITED;
+Transition_Transition.ENTERING = ENTERING;
+Transition_Transition.ENTERED = ENTERED;
+Transition_Transition.EXITING = EXITING;
 /* harmony default export */ var esm_Transition = (Transition_Transition);
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/transitions/utils.js
 var reflow = function reflow(node) {
@@ -12529,8 +12538,8 @@ function getNextChildMapping(nextProps, prevChildMapping, onExited) {
   Object.keys(children).forEach(function (key) {
     var child = children[key];
     if (!Object(react["isValidElement"])(child)) return;
-    var hasPrev = key in prevChildMapping;
-    var hasNext = key in nextChildMapping;
+    var hasPrev = (key in prevChildMapping);
+    var hasNext = (key in nextChildMapping);
     var prevChild = prevChildMapping[key];
     var isLeaving = Object(react["isValidElement"])(prevChild) && !prevChild.props.in; // item is new (entering)
 
@@ -12583,26 +12592,23 @@ var defaultProps = {
   childFactory: function childFactory(child) {
     return child;
   }
-  /**
-   * The `<TransitionGroup>` component manages a set of transition components
-   * (`<Transition>` and `<CSSTransition>`) in a list. Like with the transition
-   * components, `<TransitionGroup>` is a state machine for managing the mounting
-   * and unmounting of components over time.
-   *
-   * Consider the example below. As items are removed or added to the TodoList the
-   * `in` prop is toggled automatically by the `<TransitionGroup>`.
-   *
-   * Note that `<TransitionGroup>`  does not define any animation behavior!
-   * Exactly _how_ a list item animates is up to the individual transition
-   * component. This means you can mix and match animations across different list
-   * items.
-   */
-
 };
+/**
+ * The `<TransitionGroup>` component manages a set of transition components
+ * (`<Transition>` and `<CSSTransition>`) in a list. Like with the transition
+ * components, `<TransitionGroup>` is a state machine for managing the mounting
+ * and unmounting of components over time.
+ *
+ * Consider the example below. As items are removed or added to the TodoList the
+ * `in` prop is toggled automatically by the `<TransitionGroup>`.
+ *
+ * Note that `<TransitionGroup>`  does not define any animation behavior!
+ * Exactly _how_ a list item animates is up to the individual transition
+ * component. This means you can mix and match animations across different list
+ * items.
+ */
 
-var TransitionGroup_TransitionGroup =
-/*#__PURE__*/
-function (_React$Component) {
+var TransitionGroup_TransitionGroup = /*#__PURE__*/function (_React$Component) {
   _inheritsLoose(TransitionGroup, _React$Component);
 
   function TransitionGroup(props, context) {
@@ -12610,7 +12616,7 @@ function (_React$Component) {
 
     _this = _React$Component.call(this, props, context) || this;
 
-    var handleExited = _this.handleExited.bind(Object(assertThisInitialized["a" /* default */])(Object(assertThisInitialized["a" /* default */])(_this))); // Initial children should all be entering, dependent on appear
+    var handleExited = _this.handleExited.bind(Object(assertThisInitialized["a" /* default */])(_this)); // Initial children should all be entering, dependent on appear
 
 
     _this.state = {
@@ -12646,7 +12652,8 @@ function (_React$Component) {
       children: firstRender ? getInitialChildMapping(nextProps, handleExited) : getNextChildMapping(nextProps, prevChildMapping, handleExited),
       firstRender: false
     };
-  };
+  } // node is `undefined` when user provided `nodeRef` prop
+  ;
 
   _proto.handleExited = function handleExited(child, node) {
     var currentChildMapping = getChildMapping(this.props.children);
@@ -12681,14 +12688,14 @@ function (_React$Component) {
     delete props.exit;
 
     if (Component === null) {
-      return react_default.a.createElement(TransitionGroupContext.Provider, {
+      return /*#__PURE__*/react_default.a.createElement(TransitionGroupContext.Provider, {
         value: contextValue
       }, children);
     }
 
-    return react_default.a.createElement(TransitionGroupContext.Provider, {
+    return /*#__PURE__*/react_default.a.createElement(TransitionGroupContext.Provider, {
       value: contextValue
-    }, react_default.a.createElement(Component, props, children));
+    }, /*#__PURE__*/react_default.a.createElement(Component, props, children));
   };
 
   return TransitionGroup;
@@ -13886,10 +13893,10 @@ function useForm() {
     var name = _ref.name,
         value = _ref.value;
     setValues(function (prevState) {
-      return _objectSpread2({}, prevState, defineProperty_defineProperty({}, name, value));
+      return _objectSpread2(_objectSpread2({}, prevState), {}, defineProperty_defineProperty({}, name, value));
     });
     setDirty(function (prevState) {
-      return _objectSpread2({}, prevState, defineProperty_defineProperty({}, name, true));
+      return _objectSpread2(_objectSpread2({}, prevState), {}, defineProperty_defineProperty({}, name, true));
     });
   }; // Set an error of a specific field
 
@@ -13898,7 +13905,7 @@ function useForm() {
     var name = _ref2.name,
         error = _ref2.error;
     return setErrors(function (prevState) {
-      return _objectSpread2({}, prevState, defineProperty_defineProperty({}, name, error));
+      return _objectSpread2(_objectSpread2({}, prevState), {}, defineProperty_defineProperty({}, name, error));
     });
   }; // Validate fields in forms
 
@@ -13967,7 +13974,7 @@ function useForm() {
     if (event.isFormData) {
       setFieldValue({
         name: "formData",
-        value: _objectSpread2({}, event.formData, defineProperty_defineProperty({}, event.name, event.target.value))
+        value: _objectSpread2(_objectSpread2({}, event.formData), {}, defineProperty_defineProperty({}, event.name, event.target.value))
       });
     } else {
       var name = event.target.name;

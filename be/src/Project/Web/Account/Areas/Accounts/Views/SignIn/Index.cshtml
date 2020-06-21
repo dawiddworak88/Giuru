@@ -6,8 +6,11 @@
 </script>
 
 @section MetaTags {
-    <title>Sign in</title>
-    <meta name="description" content="Sign in" />
+    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("SignIn"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("SignIn")))
+    {
+        <meta name="description" content="@this.Localizer.GetString("SignIn")" />
+    }
 }
 
 @section HeadStyles {

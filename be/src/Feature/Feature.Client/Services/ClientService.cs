@@ -15,7 +15,6 @@ using Foundation.Mailing.Configurations;
 using Foundation.Mailing.Models;
 using Foundation.Mailing.Services;
 using Foundation.TenantDatabase.Areas.Accounts.Entities;
-using Foundation.TenantDatabase.Shared.Contexts;
 using Foundation.TenantDatabase.Shared.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
@@ -33,7 +32,6 @@ namespace Feature.Client.Services
         private readonly IGenericRepository<Tenant> tenantRepository;
         private readonly TenantGenericRepositoryFactory genericRepositoryFactory;
         private readonly UserStoreFactory userStoreFactory;
-        private readonly TenantDatabaseContextFactory tenantDatabaseContextFactory;
         private readonly IPasswordHasher<ApplicationUser> passwordHasher;
         private readonly IPasswordGenerationService passwordGenerationService;
         private readonly IMailingService mailingService;
@@ -46,7 +44,6 @@ namespace Feature.Client.Services
             IGenericRepository<Tenant> tenantRepository,
             TenantGenericRepositoryFactory genericRepositoryFactory,
             UserStoreFactory userStoreFactory,
-            TenantDatabaseContextFactory tenantDatabaseContextFactory,
             IPasswordHasher<ApplicationUser> passwordHasher,
             IPasswordGenerationService passwordGenerationService,
             IMailingService mailingService, 
@@ -58,7 +55,6 @@ namespace Feature.Client.Services
             this.tenantRepository = tenantRepository;
             this.genericRepositoryFactory = genericRepositoryFactory;
             this.userStoreFactory = userStoreFactory;
-            this.tenantDatabaseContextFactory = tenantDatabaseContextFactory;
             this.passwordHasher = passwordHasher;
             this.passwordGenerationService = passwordGenerationService;
             this.mailingService = mailingService;
@@ -99,23 +95,17 @@ namespace Feature.Client.Services
                 Host = host
             };
 
-            var clientRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Clients.Entities.Client>(tenant.DatabaseConnectionString);
+            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
 
             this.cultureService.SetCulture(model.ClientPreferredLanguage.ToLowerInvariant());
 
-            var existingClients = clientRepository.Get(x => x.Host == host);
+            var existingClient = context.Clients.FirstOrDefault(x => x.Host == host);
 
-            if (!existingClients.Any())
+            if (existingClient == null)
             {
-                await clientRepository.CreateAsync(this.entityService.EnrichEntity(client, model.Username));
-                await clientRepository.SaveChangesAsync();
+                await context.Clients.AddAsync(this.entityService.EnrichEntity(client, model.Username));
+                await context.SaveChangesAsync();
             }
-            else
-            {
-                client = existingClients.FirstOrDefault();
-            }
-
-            var context = await this.tenantDatabaseContextFactory.CreateDbContextAsync(tenant.DatabaseConnectionString);
 
             var userStore = this.userStoreFactory.CreateUserStore<ApplicationUser>(context);
 

@@ -1,4 +1,4 @@
-﻿using Feature.Product.Resources;
+﻿using Feature.Product;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;

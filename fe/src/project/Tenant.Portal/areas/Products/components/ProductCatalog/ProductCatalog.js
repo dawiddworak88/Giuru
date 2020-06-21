@@ -20,7 +20,7 @@ function ProductCatalog(props) {
 
     const [state, dispatch] = useContext(Context);
     const [page, setPage] = React.useState(0);
-    const [itemsPerPage, setItemsPerPage] = React.useState(PaginationConstants.DefaultRowsPerPage());
+    const [itemsPerPage,] = React.useState(PaginationConstants.DefaultRowsPerPage());
     const [searchTerm, setSearchTerm] = React.useState('');
     const [products, setProducts] = React.useState(props.pagedProducts.data);
     const [total, setTotal] = React.useState(props.pagedProducts.total);
@@ -29,7 +29,7 @@ function ProductCatalog(props) {
 
     const handleSearchTermKeyPress = (event) => {
 
-        if (event.key == KeyConstants.Enter()) {
+        if (event.key === KeyConstants.Enter()) {
             search();
         }
     }
@@ -176,7 +176,7 @@ function ProductCatalog(props) {
                         setEntityToDelete(() => null);
                     }
                     else {
-                        FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
+                        FetchErrorHandler.consoleLogResponseDetails(url, response, jsonResponse);
                         toast.error(props.generalErrorMessage);
                     }
                 })
@@ -238,7 +238,7 @@ function ProductCatalog(props) {
                             labelRowsPerPage={props.rowsPerPageLabel}
                             backIconButtonText={props.backIconButtonText}
                             nextIconButtonText={props.nextIconButtonText}
-                            rowsPerPageOptions={PaginationConstants.DefaultRowsPerPage()}
+                            rowsPerPageOptions={[ PaginationConstants.DefaultRowsPerPage() ]}
                             component="div"
                             count={total}
                             page={page}
