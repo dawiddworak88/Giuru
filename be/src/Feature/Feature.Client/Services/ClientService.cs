@@ -99,23 +99,17 @@ namespace Feature.Client.Services
                 Host = host
             };
 
-            var clientRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Clients.Entities.Client>(tenant.DatabaseConnectionString);
+            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
 
             this.cultureService.SetCulture(model.ClientPreferredLanguage.ToLowerInvariant());
 
-            var existingClients = clientRepository.Get(x => x.Host == host);
+            var existingClient = context.Clients.FirstOrDefault(x => x.Host == host);
 
-            if (!existingClients.Any())
+            if (existingClient == null)
             {
-                await clientRepository.CreateAsync(this.entityService.EnrichEntity(client, model.Username));
-                await clientRepository.SaveChangesAsync();
+                await context.Clients.AddAsync(this.entityService.EnrichEntity(client, model.Username));
+                await context.SaveChangesAsync();
             }
-            else
-            {
-                client = existingClients.FirstOrDefault();
-            }
-
-            var context = await this.tenantDatabaseContextFactory.CreateDbContextAsync(tenant.DatabaseConnectionString);
 
             var userStore = this.userStoreFactory.CreateUserStore<ApplicationUser>(context);
 

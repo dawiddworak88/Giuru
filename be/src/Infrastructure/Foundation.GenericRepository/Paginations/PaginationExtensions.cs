@@ -6,7 +6,7 @@
 
     public static class PaginationExtensions
     {
-        public static PagedResults<IEnumerable<T>> PagedIndex<T>(this IEnumerable<T> query,
+        public static PagedResults<IEnumerable<T>> PagedIndex<T>(this IQueryable<T> query,
             Pagination pagination, int pageIndex)
         {
             if (pagination.TotalItems == 0)

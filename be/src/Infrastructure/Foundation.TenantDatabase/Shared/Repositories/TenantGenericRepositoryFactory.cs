@@ -13,11 +13,9 @@ namespace Foundation.TenantDatabase.Shared.Repositories
             this.tenantDatabaseContextFactory = tenantDatabaseContextFactory;
         }
 
-        public virtual async Task<ITenantGenericRepository<TEntity>> CreateTenantGenericRepository<TEntity>(string connectionString) where TEntity : class, IEntity
+        public virtual async Task<TenantDatabaseContext> CreateTenantDatabaseContext(string connectionString)
         {
-            var context = await this.tenantDatabaseContextFactory.CreateDbContextAsync(connectionString);
-
-            return new TenantGenericRepository<TEntity>(context);
+            return await this.tenantDatabaseContextFactory.CreateDbContextAsync(connectionString);
         }
     }
 }

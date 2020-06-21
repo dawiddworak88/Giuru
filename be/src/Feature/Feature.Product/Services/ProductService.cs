@@ -4,7 +4,7 @@ using Feature.Product.Validators;
 using Foundation.Database.Areas.Tenants.Entities;
 using Foundation.Database.Shared.Repositories;
 using Foundation.Extensions.Definitions;
-using Foundation.GenericRepository.Predicates;
+using Foundation.GenericRepository.Paginations;
 using Foundation.GenericRepository.Services;
 using Foundation.TenantDatabase.Areas.Translations.Entities;
 using Foundation.TenantDatabase.Shared.Repositories;
@@ -59,13 +59,11 @@ namespace Feature.Product.Services
                 FormData = model.FormData
             };
 
-            var productRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Products.Entities.Product>(tenant.DatabaseConnectionString);
-            
-            var translationRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Translation>(tenant.DatabaseConnectionString);
+            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
 
-            await productRepository.CreateAsync(this.entityService.EnrichEntity(product, model.Username));
+            await context.Products.AddAsync(this.entityService.EnrichEntity(product, model.Username));
 
-            await productRepository.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
             if (!string.IsNullOrWhiteSpace(product.Name))
             {
@@ -76,9 +74,9 @@ namespace Feature.Product.Services
                     Language = model.Language
                 };
 
-                await translationRepository.CreateAsync(this.entityService.EnrichEntity(translation, model.Username));
+                await context.Translations.AddAsync(this.entityService.EnrichEntity(translation, model.Username));
 
-                await translationRepository.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
 
             createProductResultModel.Product = product;
@@ -108,27 +106,25 @@ namespace Feature.Product.Services
                 return productResultModel;
             }
 
-            var productRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Products.Entities.Product>(tenant.DatabaseConnectionString);
+            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
 
-            var product = productRepository.GetById(model.Id.Value);
+            var product = context.Products.FirstOrDefault(x => x.Id == model.Id.Value && x.IsActive);
 
             product.Name = model.Name;
             product.Sku = model.Sku;
             product.FormData = model.FormData;
             product.LastModifiedDate = DateTime.UtcNow;
 
-            await productRepository.SaveChangesAsync();
+            await context.SaveChangesAsync();
 
-            var translationRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Translations.Entities.Translation>(tenant.DatabaseConnectionString);
-
-            var translation = translationRepository.Get(x => x.Key == product.Id.ToString() && x.Language == model.Language && x.IsActive).FirstOrDefault();
+            var translation = context.Translations.FirstOrDefault(x => x.Key == product.Id.ToString() && x.Language == model.Language && x.IsActive);
 
             if (translation != null)
             {
                 translation.Value = model.Name;
                 translation.LastModifiedDate = DateTime.UtcNow;
 
-                await translationRepository.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
 
             productResultModel.Product = product;
@@ -158,22 +154,25 @@ namespace Feature.Product.Services
                 return deleteProductResultModel;
             }
 
-            var translationRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Translations.Entities.Translation>(tenant.DatabaseConnectionString);
+            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
 
-            var translations = translationRepository.Get(x => x.Key == deleteProductModel.Id.ToString() && x.IsActive).ToList();
+            var translations = context.Translations.Where(x => x.Key == deleteProductModel.Id.ToString() && x.IsActive);
 
             foreach (var translation in translations)
             {
-                translationRepository.Delete(translation.Id);
+                translation.IsActive = false;
 
-                await translationRepository.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
 
-            var productRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Products.Entities.Product>(tenant.DatabaseConnectionString);
+            var product = context.Products.FirstOrDefault(x => x.Id == deleteProductModel.Id.Value && x.IsActive);
 
-            productRepository.Delete(deleteProductModel.Id.Value);
+            if (product != null)
+            {
+                product.IsActive = false;
 
-            await productRepository.SaveChangesAsync();
+                await context.SaveChangesAsync();
+            }
 
             return deleteProductResultModel;
         }
@@ -200,20 +199,20 @@ namespace Feature.Product.Services
                 return getProductsResultModel;
             }
 
-            var productRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Products.Entities.Product>(tenant.DatabaseConnectionString);
+            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
 
-            var predicate = PredicateBuilder.True<Foundation.TenantDatabase.Areas.Products.Entities.Product>();
+            var entities = context.Products.Where(x => x.IsActive);
 
             if (!string.IsNullOrWhiteSpace(getProductsModel.SearchTerm))
             {
-                predicate = predicate.And(x => (!string.IsNullOrWhiteSpace(x.Sku) && x.Sku.StartsWith(getProductsModel.SearchTerm)) || (!string.IsNullOrWhiteSpace(x.Name) && x.Name.Contains(getProductsModel.SearchTerm)));
+                entities = entities.Where(x => (!string.IsNullOrWhiteSpace(x.Sku) && x.Sku.StartsWith(getProductsModel.SearchTerm)) || (!string.IsNullOrWhiteSpace(x.Name) && x.Name.Contains(getProductsModel.SearchTerm)));
             }
 
-            predicate = predicate.And(x => x.IsActive);
+            entities = entities.OrderByDescending(x => x.CreatedDate);            
 
-            var products = productRepository.GetPaged(getProductsModel.PageIndex, getProductsModel.ItemsPerPage, predicate.Compile(), x=> x.CreatedDate, true);
+            var pagination = new Pagination(entities.Count(), getProductsModel.ItemsPerPage);
 
-            getProductsResultModel.Products = products;
+            getProductsResultModel.Products = entities.PagedIndex(pagination, getProductsModel.PageIndex);
 
             return getProductsResultModel;
         }
@@ -240,9 +239,9 @@ namespace Feature.Product.Services
                 return getProductResultModel;
             }
 
-            var productRepository = await this.genericRepositoryFactory.CreateTenantGenericRepository<Foundation.TenantDatabase.Areas.Products.Entities.Product>(tenant.DatabaseConnectionString);
+            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
 
-            var product = productRepository.GetById(getProductModel.Id.Value);
+            var product = context.Products.FirstOrDefault(x => x.Id == getProductModel.Id.Value && x.IsActive);
 
             if (product == null)
             {
