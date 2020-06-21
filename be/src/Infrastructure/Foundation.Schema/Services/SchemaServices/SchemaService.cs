@@ -211,6 +211,8 @@ namespace Foundation.Schema.Services.SchemaServices
 
             var properties = (JObject)jsonSchema["properties"];
 
+            var translations = context.Translations.Where(x => x.IsActive).ToList();
+
             foreach (var property in properties)
             {
                 var propertyDetails = (JObject)property.Value;
@@ -223,7 +225,7 @@ namespace Foundation.Schema.Services.SchemaServices
 
                 if (!string.IsNullOrWhiteSpace(propertyTitle) && isPropertyTitleGuid)
                 {
-                    propertyDetails["title"] = TranslationHelper.Text(context, propertyTitleGuid, language);
+                    propertyDetails["title"] = TranslationHelper.Text(translations, propertyTitleGuid, language);
                 }
             }
 
@@ -254,7 +256,7 @@ namespace Foundation.Schema.Services.SchemaServices
 
                             foreach (var flattenedTaxonomy in flattenedTaxonomies)
                             {
-                                var flattenedTaxonomyTitle = TranslationHelper.Text(context, flattenedTaxonomy.Id.ToString(), language);
+                                var flattenedTaxonomyTitle = TranslationHelper.Text(translations, flattenedTaxonomy.Id.ToString(), language);
 
                                 definitionItems.Add(new JObject(
                                         new JProperty("type", "string"),
