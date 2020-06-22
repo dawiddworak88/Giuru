@@ -7,6 +7,7 @@ namespace Foundation.TenantDatabase.Shared.Contexts
         public static void EnsureSeeded(this TenantDatabaseContext context)
         {
             context.EnsureEntityTypesSeeded();
+            context.EnsureTaxonomiesSeeded();
         }
     }
 }

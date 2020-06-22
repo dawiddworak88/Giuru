@@ -3,8 +3,6 @@ using Foundation.TenantDatabase.Areas.Taxonomies.Entities;
 using Foundation.TenantDatabase.Areas.Translations.Definitions.Languages;
 using Foundation.TenantDatabase.Areas.Translations.Entities;
 using Foundation.TenantDatabase.Shared.Contexts;
-using Foundation.TenantDatabase.Shared.Definitions.EntityTypes;
-using Foundation.TenantDatabase.Shared.Entities;
 using Foundation.TenantDatabase.Shared.Helpers;
 using System.Linq;
 
@@ -14,8 +12,8 @@ namespace Foundation.TenantDatabase.Shared.Seeds
     {
         public static void EnsureTaxonomiesSeeded(this TenantDatabaseContext context)
         {
-            // Adds taxonomies
-            if (!context.Taxonomies.Any(x => x.Name == EntityTypeConstants.Product))
+            // Adds order statuses
+            if (!context.Taxonomies.Any(x => x.Name == OrderStatusConstants.OrderStatusTaxonomyName))
             {
                 // Order statuses
                 var orderStatusesTaxonomy = EntitySeedHelper.SeedEntity(new Taxonomy { Id = OrderStatusConstants.OrderStatusesTaxonomyId, Name = OrderStatusConstants.OrderStatusTaxonomyName });
