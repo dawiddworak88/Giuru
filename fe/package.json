@@ -19,6 +19,7 @@
     "moment": "2.26.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "react-dropzone": "11.0.1",
     "react-feather": "2.0.3",
     "react-scripts": "3.4.1",
     "react-toastify": "5.5.0",

@@ -4,7 +4,18 @@ import ImportOrderPage from '../project/Tenant.Portal/areas/Orders/pages/ImportO
 import { header, menuTiles, footer } from './Shared/Props';
 
 var props = {
-  title: 'Import Order'
+  title: 'Import Order',
+  importOrderForm: {
+
+    saveText: 'Save',
+    generalErrorMessage: 'An error has occurred',
+    dropFilesLabel: 'Drop the files here ...',
+    dropOrSelectFilesLabel: 'Drag and drop some files here, or click to select files',
+    clients: [
+      { name: 'Hencel' },
+      { name: 'Pigu' }
+    ]
+  }
 };
 
 export const ImportOrderPageStory = () => <ImportOrderPage header={header} menuTiles={menuTiles} {...props} footer={footer} />
