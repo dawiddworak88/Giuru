@@ -21,6 +21,22 @@
     .field:last-child {
         margin-top: 2.5rem;
     }
+
+    .dropzone {
+        display: flex;
+	    align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        flex-direction: column;
+        cursor: pointer;
+        height: 11rem;
+        border: 1px solid lightgrey;
+        background-color: lightgrey;
+
+        &--active {
+            background-color: white;
+        }
+    }
 }
 
 .progressBar {

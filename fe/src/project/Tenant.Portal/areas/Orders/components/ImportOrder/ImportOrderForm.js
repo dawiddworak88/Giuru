@@ -1,5 +1,7 @@
 import React, { useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { UploadCloud } from 'react-feather';
+import IconConstants from '../../../../../../shared/constants/IconConstants';
 import { Context } from '../../../../../../shared/stores/Store';
 import useForm from '../../../../../../shared/helpers/forms/useForm';
 import { TextField, Button, CircularProgress } from '@material-ui/core';
@@ -57,8 +59,22 @@ function ImportOrderForm(props) {
                         <input {...getInputProps()} />
                         {
                             isDragActive ?
-                                <p>{props.dropFilesLabel}</p> :
-                                <p>{props.dropOrSelectFilesLabel}</p>
+                            (
+                                <div className="dropzone dropzone--active">
+                                    <p>
+                                        <UploadCloud size={IconConstants.DefaultSize()} />
+                                    </p>
+                                    <p>{props.dropFilesLabel}</p>
+                                </div>
+                            ) :
+                            (
+                                <div className="dropzone">
+                                    <p>
+                                        <UploadCloud size={IconConstants.DefaultSize()} />
+                                    </p>
+                                    <p>{props.dropOrSelectFilesLabel}</p>
+                                </div>
+                            )
                         }
                     </div>
                 </div>
