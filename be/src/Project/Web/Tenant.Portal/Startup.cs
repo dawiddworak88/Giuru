@@ -16,6 +16,7 @@ using Tenant.Portal.Areas.Clients.DependencyInjection;
 using Tenant.Portal.Areas.Products.DependencyInjection;
 using Foundation.ApiExtensions.DependencyInjection;
 using Foundation.Localization.DependencyInjection;
+using Feature.Order.DependencyInjection;
 
 namespace Tenant.Portal
 {
@@ -59,6 +60,8 @@ namespace Tenant.Portal
             services.RegisterClientsAreaDependencies();
 
             services.RegisterProductsAreaDependencies();
+
+            services.RegisterOrderDependencies();
 
             services.ConfigureOptions(this.Configuration);
         }

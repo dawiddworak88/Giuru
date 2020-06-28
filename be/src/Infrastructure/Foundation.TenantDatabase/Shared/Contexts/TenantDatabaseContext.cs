@@ -1,6 +1,8 @@
 ﻿using Foundation.TenantDatabase.Areas.Accounts.Entities;
+using Foundation.TenantDatabase.Areas.Analysis.Entities;
 using Foundation.TenantDatabase.Areas.Clients.Entities;
 using Foundation.TenantDatabase.Areas.Media.Entities;
+using Foundation.TenantDatabase.Areas.Orders.Entitites;
 using Foundation.TenantDatabase.Areas.Products.Entities;
 using Foundation.TenantDatabase.Areas.References.Entities;
 using Foundation.TenantDatabase.Areas.Schemas.Entities;
@@ -27,5 +29,9 @@ namespace Foundation.TenantDatabase.Shared.Contexts
         public DbSet<Schema> Schemas { get; set; }
         public DbSet<Reference> References { get; set; }
         public DbSet<Taxonomy> Taxonomies { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Statistics> Statistics { get; set; }
+        public DbSet<ActionType> ActionTypes { get; set; }
     }
 }
