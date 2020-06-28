@@ -7,7 +7,7 @@ var props = {
   title: 'Import Order',
   importOrderForm: {
 
-    saveText: 'Save',
+    saveText: 'Import',
     generalErrorMessage: 'An error has occurred',
     dropFilesLabel: 'Drop the files here ...',
     dropOrSelectFilesLabel: 'Drag and drop some files here, or click to select files',

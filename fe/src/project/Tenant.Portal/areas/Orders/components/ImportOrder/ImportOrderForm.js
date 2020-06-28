@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react';
+import React, { useContext, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { UploadCloud } from 'react-feather';
 import IconConstants from '../../../../../../shared/constants/IconConstants';
@@ -17,7 +17,10 @@ function ImportOrderForm(props) {
 
     const [state, dispatch] = useContext(Context);
 
+    const [isClientSelected, setClientSelected] = useState(false);
+
     const stateSchema = {
+        clientId: ''
     };
 
     const stateValidatorSchema = {
@@ -37,9 +40,13 @@ function ImportOrderForm(props) {
     }
 
     const {
+        values,
+        handleOnChange,
         disable,
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
+
+    const { clientId } = values;
 
     return (
         <div>
@@ -48,33 +55,46 @@ function ImportOrderForm(props) {
                     <Autocomplete
                         {...defaultProps}
                         id="client"
+                        name="client"
                         fullWidth={true}
+                        value={clientId}
+                        onChange={(event, newValue) => {
+                            
+                            handleOnChange(event);
+
+                            if (newValue) {
+                                setClientSelected(true);
+                            }
+                            else {
+                                setClientSelected(false);
+                            }
+                          }}
                         autoComplete
                         includeInputInList
                         renderInput={(params) => <TextField {...params} label="Select a client" margin="normal" />}
                     />
                 </div>
-                <div className="field">
+                <div className={isClientSelected ? "field" : "is-hidden" }>
                     <div {...getRootProps()}>
-                        <input {...getInputProps()} />
+                        <input id="order" name="order" {...getInputProps()} />
                         {
                             isDragActive ?
-                            (
-                                <div className="dropzone dropzone--active">
-                                    <p>
-                                        <UploadCloud size={IconConstants.DefaultSize()} />
-                                    </p>
-                                    <p>{props.dropFilesLabel}</p>
-                                </div>
-                            ) :
-                            (
-                                <div className="dropzone">
-                                    <p>
-                                        <UploadCloud size={IconConstants.DefaultSize()} />
-                                    </p>
-                                    <p>{props.dropOrSelectFilesLabel}</p>
-                                </div>
-                            )
+                                (
+                                    <div className="dropzone dropzone--active">
+                                        <p>
+                                            <UploadCloud size={IconConstants.DefaultSize()} />
+                                        </p>
+                                        <p>{props.dropFilesLabel}</p>
+                                    </div>
+                                ) :
+                                (
+                                    <div className="dropzone">
+                                        <p>
+                                            <UploadCloud size={IconConstants.DefaultSize()} />
+                                        </p>
+                                        <p>{props.dropOrSelectFilesLabel}</p>
+                                    </div>
+                                )
                         }
                     </div>
                 </div>
