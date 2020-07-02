@@ -27,7 +27,9 @@ function ImportOrderForm(props) {
     };
 
     const onDrop = useCallback(acceptedFiles => {
-        console.log(acceptedFiles);
+        dispatch({ type: 'SET_IS_LOADING', payload: true });
+        console.log(state);
+        dispatch({ type: 'SET_IS_LOADING', payload: false });
     }, []);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
@@ -71,7 +73,7 @@ function ImportOrderForm(props) {
                           }}
                         autoComplete
                         includeInputInList
-                        renderInput={(params) => <TextField {...params} label="Select a client" margin="normal" />}
+                        renderInput={(params) => <TextField {...params} label={props.selectClientLabel} margin="normal" />}
                     />
                 </div>
                 <div className={isClientSelected ? "field" : "is-hidden" }>
@@ -111,6 +113,8 @@ function ImportOrderForm(props) {
 
 ImportOrderForm.propTypes = {
     saveText: PropTypes.string.isRequired,
+    dropFilesLabel: PropTypes.string.isRequired,
+    dropOrSelectFilesLabel: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired
 };
 

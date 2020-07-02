@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -7,6 +7,13 @@
 
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.95.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Foundation.Extensions\Foundation.Extensions.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Foundation.TenantDatabase\Foundation.TenantDatabase.csproj" />
   </ItemGroup>
 
 </Project>

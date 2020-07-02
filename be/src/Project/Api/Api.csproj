@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Feature\Feature.Account\Feature.Account.csproj" />
     <ProjectReference Include="..\..\Feature\Feature.Client\Feature.Client.csproj" />
+    <ProjectReference Include="..\..\Feature\Feature.Order\Feature.Order.csproj" />
     <ProjectReference Include="..\..\Feature\Feature.Product\Feature.Product.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Foundation.Extensions\Foundation.Extensions.csproj" />

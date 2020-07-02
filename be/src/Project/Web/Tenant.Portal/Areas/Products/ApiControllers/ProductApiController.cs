@@ -86,6 +86,7 @@ namespace Tenant.Portal.Areas.Clients.ApiControllers
                     Id = requestModel.Id,
                     Sku = requestModel.Sku,
                     Name = requestModel.Name,
+                    SchemaId = requestModel.SchemaId,
                     FormData = requestModel.FormData.ToString()
                 };
 

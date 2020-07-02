@@ -56,6 +56,7 @@ namespace Feature.Product.Services
             {
                 Name = model.Name,
                 Sku = model.Sku,
+                SchemaId = model.SchemaId,
                 FormData = model.FormData
             };
 
@@ -112,6 +113,7 @@ namespace Feature.Product.Services
 
             product.Name = model.Name;
             product.Sku = model.Sku;
+            product.SchemaId = model.SchemaId;
             product.FormData = model.FormData;
             product.LastModifiedDate = DateTime.UtcNow;
 

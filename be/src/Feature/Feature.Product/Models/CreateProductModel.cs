@@ -8,6 +8,7 @@ namespace Feature.Product.Models
         public Guid? Id { get; set; }
         public string Name { get; set; }
         public string Sku { get; set; }
+        public Guid? SchemaId { get; set; }
         public string FormData { get; set; }
     }
 }

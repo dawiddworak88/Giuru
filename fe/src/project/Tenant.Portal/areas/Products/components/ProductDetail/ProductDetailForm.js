@@ -19,6 +19,7 @@ function ProductDetailForm(props) {
         id: { value: props.product ? props.product.id : null, error: '' },
         name: { value: props.product ? props.product.name : '', error: '' },
         sku: { value: props.product ? props.product.sku : '', error: '' },
+        schemaId: { value: props.schema ? props.schema.id : null, error: '' },
         formData: props.product && props.product.formData ? JSON.parse(props.product.formData) : {}
     };
 
@@ -85,11 +86,12 @@ function ProductDetailForm(props) {
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
-    const { name, sku, formData } = values;
+    const { name, sku, schemaId, formData } = values;
 
     return (
         <div>
             <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
+                <input type="hidden" value={schemaId} />
                 <div className="field">
                     <TextField id="sku" name="sku" label={props.skuLabel} fullWidth={true}
                         value={sku} onChange={handleOnChange} helperText={dirty.sku ? errors.sku : ''} error={(errors.sku.length > 0) && dirty.sku} />

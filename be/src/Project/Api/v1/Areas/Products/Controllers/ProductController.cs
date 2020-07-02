@@ -57,6 +57,7 @@ namespace Api.v1.Areas.Products.Controllers
                     Id = request.Id,
                     Sku = request.Sku,
                     Name = request.Name,
+                    SchemaId = request.SchemaId,
                     FormData = request.FormData,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
