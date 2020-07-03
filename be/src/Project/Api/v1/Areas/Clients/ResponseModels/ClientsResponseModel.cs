@@ -19,7 +19,7 @@ namespace Api.v1.Areas.Clients.ResponseModels
 
             foreach (var client in pagedClients.Data)
             {
-                clientsList.Add(new ClientResponseModel { Client = client });
+                clientsList.Add(new ClientResponseModel(client));
             }
 
             this.PagedClients = new PagedResults<IEnumerable<ClientResponseModel>>

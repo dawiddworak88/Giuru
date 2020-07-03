@@ -1,23 +1,34 @@
-﻿using Foundation.Extensions.Controllers;
+﻿using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
+using System.Threading.Tasks;
 using Tenant.Portal.Areas.Orders.ViewModel;
+using Tenant.Portal.Shared.ComponentModels;
 
 namespace Tenant.Portal.Areas.Orders.Controllers
 {
     [Area("Orders")]
     public class ImportOrderController : BaseController
     {
-        private readonly IModelBuilder<ImportOrderPageViewModel> importOrderPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ImportOrderPageViewModel> importOrderPageModelBuilder;
 
-        public ImportOrderController(IModelBuilder<ImportOrderPageViewModel> importOrderPageModelBuilder)
+        public ImportOrderController(IAsyncComponentModelBuilder<ComponentModelBase, ImportOrderPageViewModel> importOrderPageModelBuilder)
         {
             this.importOrderPageModelBuilder = importOrderPageModelBuilder;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var viewModel = this.importOrderPageModelBuilder.BuildModel();
+            var componentModel = new ComponentModelBase
+            {
+                Language = CultureInfo.CurrentUICulture.Name,
+                Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName)
+            };
+
+            var viewModel = await this.importOrderPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);
         }

@@ -39,11 +39,13 @@ namespace Tenant.Portal.Areas.Clients.Repositories
                 var clients = new List<Client>();
                 clients.AddRange(initialPagedClients.Data);
 
-                for (int i = 1; i <= initialPagedClients.PageCount; i++)
+                for (int i = 1; i < initialPagedClients.PageCount; i++)
                 { 
                     var pagedClients = await this.GetPagedClientsAsync(token, language, null, i, 100);
                     clients.AddRange(pagedClients.Data);
                 }
+
+                return clients;
             }
             catch (Exception exception)
             {
@@ -52,7 +54,7 @@ namespace Tenant.Portal.Areas.Clients.Repositories
                 this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
             }
 
-            return default;
+            return new List<Client>();
         }
 
         public async Task<PagedResults<IEnumerable<Client>>> GetPagedClientsAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage)

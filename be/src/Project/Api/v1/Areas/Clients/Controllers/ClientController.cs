@@ -66,7 +66,7 @@ namespace Api.v1.Areas.Clients.Controllers
 
                 if (createClientResult.IsValid)
                 {
-                    return this.StatusCode((int)HttpStatusCode.Created, new ClientResponseModel { Client = createClientResult.Client });
+                    return this.StatusCode((int)HttpStatusCode.Created, new ClientResponseModel(createClientResult.Client));
                 }
                 else
                 {

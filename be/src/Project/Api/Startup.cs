@@ -1,5 +1,6 @@
 using Feature.Account.DependencyInjection;
 using Feature.Client.DependencyInjection;
+using Feature.Order.DependencyInjection;
 using Feature.Product.DependencyInjection;
 using Foundation.Account.DependencyInjection;
 using Foundation.Database.Shared.DependencyInjection;
@@ -49,6 +50,8 @@ namespace Api
             services.RegisterClientDependencies();
 
             services.RegisterProductDependencies();
+
+            services.RegisterOrderDependencies();
 
             services.RegisterDatabaseDependencies(this.Configuration);
 
