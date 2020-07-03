@@ -40,20 +40,10 @@ namespace Tenant.Portal.Areas.Clients.ApiControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Save([FromBody] ImportOrderRequestModel requestModel)
+        public async Task<IActionResult> Validate([FromBody] ImportOrderRequestModel requestModel)
         {
             try
             {
-                //var apiRequest = new ApiRequest<ProductRequestModel>
-                //{
-                //    Data = this.apiClientService.InitializeRequestModelContext(productRequestModel),
-                //    AccessToken = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                //    EndpointAddress = this.servicesEndpointsConfiguration.Api.Host + this.servicesEndpointsConfiguration.Api.Endpoints.Product
-                //};
-
-                //var response = await this.apiClientService.PostAsync<ApiRequest<ProductRequestModel>, ProductRequestModel, ProductResponseModel>(apiRequest);
-
-                //return this.StatusCode((int)response.StatusCode, response);
                 return this.Ok();
             }
             catch (Exception exception)

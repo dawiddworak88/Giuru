@@ -1,10 +1,14 @@
 ﻿using Foundation.GenericRepository.Entities;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Foundation.TenantDatabase.Areas.Clients.Entities
 {
     public class Client : Entity
     {
+        [Required]
+        public Guid ClientSecret { get; set; }
+
         [Required]
         public string Host { get; set; }
 

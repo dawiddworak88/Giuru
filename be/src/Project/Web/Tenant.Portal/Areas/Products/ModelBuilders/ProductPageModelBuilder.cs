@@ -7,14 +7,14 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Products.ComponentModels;
 using Tenant.Portal.Areas.Products.ViewModels;
+using Tenant.Portal.Shared.ComponentModels;
 
 namespace Tenant.Portal.Areas.Products.ModelBuilders
 {
-    public class ProductPageModelBuilder : IAsyncComponentModelBuilder<ProductsComponentModel, ProductPageViewModel>
+    public class ProductPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<ProductsCatalogComponentModel, ProductPageCatalogViewModel> productCatalogModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductPageCatalogViewModel> productCatalogModelBuilder;
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
@@ -22,7 +22,7 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
         private readonly LinkGenerator linkGenerator;
 
         public ProductPageModelBuilder(
-            IAsyncComponentModelBuilder<ProductsCatalogComponentModel, ProductPageCatalogViewModel> productCatalogModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, ProductPageCatalogViewModel> productCatalogModelBuilder,
             IStringLocalizer<ProductResources> productLocalizer,
             LinkGenerator linkGenerator,
             IModelBuilder<HeaderViewModel> headerModelBuilder,
@@ -37,7 +37,7 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
             this.footerModelBuilder = footerModelBuilder;
         }
 
-        public async Task<ProductPageViewModel> BuildModelAsync(ProductsComponentModel componentModel)
+        public async Task<ProductPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new ProductPageViewModel
             {
@@ -47,7 +47,7 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
                 Title = this.productLocalizer["Products"],
                 NewText = this.productLocalizer["NewProduct"],
                 NewUrl = this.linkGenerator.GetPathByAction("Edit", "ProductDetail", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                Catalog = await this.productCatalogModelBuilder.BuildModelAsync(new ProductsCatalogComponentModel { Token = componentModel.Token }),
+                Catalog = await this.productCatalogModelBuilder.BuildModelAsync(new ComponentModelBase { Token = componentModel.Token }),
                 Footer = footerModelBuilder.BuildModel()
             };
 

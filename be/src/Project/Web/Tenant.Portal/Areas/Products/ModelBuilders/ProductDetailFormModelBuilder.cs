@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Products.ComponentModels;
 using Tenant.Portal.Areas.Products.Repositories;
 using Tenant.Portal.Areas.Products.ViewModels;
+using Tenant.Portal.Shared.ComponentModels;
 
 namespace Tenant.Portal.Areas.Products.ModelBuilders
 {
-    public class ProductDetailFormModelBuilder : IAsyncComponentModelBuilder<ProductDetailFormComponentModel, ProductDetailFormViewModel>
+    public class ProductDetailFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailFormViewModel>
     {
         private readonly IProductRepository productRepository;
         private readonly IProductSchemaRepository productSchemaRepository;
@@ -33,7 +33,7 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
             this.linkGenerator = linkGenerator;
         }
 
-        public async Task<ProductDetailFormViewModel> BuildModelAsync(ProductDetailFormComponentModel componentModel)
+        public async Task<ProductDetailFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new ProductDetailFormViewModel
             {

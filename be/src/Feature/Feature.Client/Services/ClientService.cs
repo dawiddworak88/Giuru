@@ -7,6 +7,7 @@ using Foundation.Account.Services;
 using Foundation.Account.UserStores;
 using Foundation.Database.Areas.Tenants.Entities;
 using Foundation.Database.Shared.Repositories;
+using Foundation.GenericRepository.Paginations;
 using Foundation.GenericRepository.Services;
 using Foundation.Localization;
 using Foundation.Localization.Definitions;
@@ -150,6 +151,46 @@ namespace Feature.Client.Services
             createClientResultModel.Client = client;
 
             return createClientResultModel;
+        }
+
+        public async Task<ClientsResultModel> GetAsync(GetClientsModel getClientsModel)
+        {
+            var validator = new GetClientsModelValidator();
+
+            var validationResult = await validator.ValidateAsync(getClientsModel);
+
+            var getClientsResultModel = new ClientsResultModel();
+
+            if (!validationResult.IsValid)
+            {
+                getClientsResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+                return getClientsResultModel;
+            }
+
+            var tenant = this.tenantRepository.GetById(getClientsModel.TenantId.Value);
+
+            if (tenant == null)
+            {
+                getClientsResultModel.Errors.Add(Foundation.Extensions.Definitions.ErrorConstants.NoTenant);
+                return getClientsResultModel;
+            }
+
+            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
+
+            var entities = context.Clients.Where(x => x.IsActive);
+
+            if (!string.IsNullOrWhiteSpace(getClientsModel.SearchTerm))
+            {
+                entities = entities.Where(x => (!string.IsNullOrWhiteSpace(x.Name) && x.Name.Contains(getClientsModel.SearchTerm)));
+            }
+
+            entities = entities.OrderByDescending(x => x.CreatedDate);
+
+            var pagination = new Pagination(entities.Count(), getClientsModel.ItemsPerPage);
+
+            getClientsResultModel.Clients = entities.PagedIndex(pagination, getClientsModel.PageIndex);
+
+            return getClientsResultModel;
         }
     }
 }

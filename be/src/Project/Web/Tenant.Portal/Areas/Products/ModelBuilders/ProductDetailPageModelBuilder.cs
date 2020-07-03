@@ -5,25 +5,25 @@ using Feature.Product;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Products.ComponentModels;
 using Tenant.Portal.Areas.Products.ViewModels;
+using Tenant.Portal.Shared.ComponentModels;
 
 namespace Tenant.Portal.Areas.Products.ModelBuilders
 {
-    public class ProductDetailPageModelBuilder : IAsyncComponentModelBuilder<ProductDetailComponentModel, ProductDetailPageViewModel>
+    public class ProductDetailPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailPageViewModel>
     {
         private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ProductDetailFormComponentModel, ProductDetailFormViewModel> productDetailFormModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailFormViewModel> productDetailFormModelBuilder;
 
         public ProductDetailPageModelBuilder(
             IStringLocalizer<ProductResources> productLocalizer,
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder,
-            IAsyncComponentModelBuilder<ProductDetailFormComponentModel, ProductDetailFormViewModel> productDetailFormModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailFormViewModel> productDetailFormModelBuilder)
         {
             this.productLocalizer = productLocalizer;
             this.headerModelBuilder = headerModelBuilder;
@@ -32,9 +32,9 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
             this.productDetailFormModelBuilder = productDetailFormModelBuilder;
         }
 
-        public async Task<ProductDetailPageViewModel> BuildModelAsync(ProductDetailComponentModel componentModel)
+        public async Task<ProductDetailPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var productDetailFormComponentModel = new ProductDetailFormComponentModel
+            var productDetailFormComponentModel = new ComponentModelBase
             { 
                 Id = componentModel.Id,
                 Token = componentModel.Token,

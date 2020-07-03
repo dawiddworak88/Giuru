@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Products.ComponentModels;
 using Tenant.Portal.Areas.Products.Repositories;
 using Tenant.Portal.Areas.Products.ViewModels;
 using Tenant.Portal.Shared.Catalogs.ModelBuilders;
+using Tenant.Portal.Shared.ComponentModels;
 
 namespace Tenant.Portal.Areas.Products.ModelBuilders
 {
-    public class ProductPageCatalogModelBuilder : IAsyncComponentModelBuilder<ProductsCatalogComponentModel, ProductPageCatalogViewModel>
+    public class ProductPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductPageCatalogViewModel>
     {
         private readonly ICatalogModelBuilder catalogModelBuilder;
         private readonly IProductsRepository productsRepository;
@@ -34,7 +34,7 @@ namespace Tenant.Portal.Areas.Products.ModelBuilders
             this.linkGenerator = linkGenerator;
         }
 
-        public async Task<ProductPageCatalogViewModel> BuildModelAsync(ProductsCatalogComponentModel componentModel)
+        public async Task<ProductPageCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = this.catalogModelBuilder.BuildModel<ProductPageCatalogViewModel>();
 

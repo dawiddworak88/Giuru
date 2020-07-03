@@ -6,6 +6,6 @@ namespace Feature.Order.Services
 {
     public interface IOrderService
     {
-        Task<OrderValidationResultModel> ValidateOrderAsync(OrderValidationModel validateOrderModel);
+        Task<OrderValidationResultModel> ValidateOrderAsync(OrderValidationModel model);
     }
 }

@@ -6,24 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Products.ComponentModels;
 using Tenant.Portal.Areas.Products.ViewModels;
+using Tenant.Portal.Shared.ComponentModels;
 
 namespace Tenant.Portal.Areas.Products.Controllers
 {
     [Area("Products")]
     public class ProductDetailController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ProductDetailComponentModel, ProductDetailPageViewModel> productDetailPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailPageViewModel> productDetailPageModelBuilder;
 
-        public ProductDetailController(IAsyncComponentModelBuilder<ProductDetailComponentModel, ProductDetailPageViewModel> productDetailPageModelBuilder)
+        public ProductDetailController(IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailPageViewModel> productDetailPageModelBuilder)
         {
             this.productDetailPageModelBuilder = productDetailPageModelBuilder;
         }
 
         public async Task<IActionResult> Edit(Guid? id)
         {
-            var componentModel = new ProductDetailComponentModel
+            var componentModel = new ComponentModelBase
             {
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),

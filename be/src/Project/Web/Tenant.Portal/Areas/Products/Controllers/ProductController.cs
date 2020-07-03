@@ -4,24 +4,24 @@ using Foundation.Extensions.ModelBuilders;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Products.ComponentModels;
 using Tenant.Portal.Areas.Products.ViewModels;
+using Tenant.Portal.Shared.ComponentModels;
 
 namespace Tenant.Portal.Areas.Products.Controllers
 {
     [Area("Products")]
     public class ProductController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ProductsComponentModel, ProductPageViewModel> productPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel> productPageModelBuilder;
 
-        public ProductController(IAsyncComponentModelBuilder<ProductsComponentModel, ProductPageViewModel> productPageModelBuilder)
+        public ProductController(IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel> productPageModelBuilder)
         {
             this.productPageModelBuilder = productPageModelBuilder;
         }
 
         public async Task<IActionResult> Index()
         {
-            var componentModel = new ProductsComponentModel
+            var componentModel = new ComponentModelBase
             { 
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName)
             };

@@ -5,21 +5,23 @@ using Feature.PageContent.Components.Headers.ViewModels;
 using Feature.PageContent.Components.Footers.ViewModels;
 using Microsoft.Extensions.Localization;
 using Feature.Order;
+using System.Threading.Tasks;
+using Tenant.Portal.Shared.ComponentModels;
 
 namespace Tenant.Portal.Areas.Orders.ModelBuilders
 {
-    public class ImportOrderPageModelBuilder : IModelBuilder<ImportOrderPageViewModel>
+    public class ImportOrderPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ImportOrderPageViewModel>
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-        private readonly IModelBuilder<ImportOrderFormViewModel> importOrderFormModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ImportOrderFormViewModel> importOrderFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
 
         public ImportOrderPageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IModelBuilder<ImportOrderFormViewModel> importOrderFormModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, ImportOrderFormViewModel> importOrderFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder,
             IStringLocalizer<OrderResources> orderLocalizer)
         {
@@ -30,13 +32,13 @@ namespace Tenant.Portal.Areas.Orders.ModelBuilders
             this.footerModelBuilder = footerModelBuilder;
         }
 
-        public ImportOrderPageViewModel BuildModel()
+        public async Task<ImportOrderPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new ImportOrderPageViewModel
             {
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
-                ImportOrderForm = importOrderFormModelBuilder.BuildModel(),
+                ImportOrderForm = await importOrderFormModelBuilder.BuildModelAsync(new ComponentModelBase { Token = componentModel.Token }),
                 Title = this.orderLocalizer["ImportOrder"],
                 Footer = footerModelBuilder.BuildModel()
             };
