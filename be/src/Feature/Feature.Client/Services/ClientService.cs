@@ -91,6 +91,7 @@ namespace Feature.Client.Services
 
             var client = new Foundation.TenantDatabase.Areas.Clients.Entities.Client
             {
+                ClientSecret = Guid.NewGuid(),
                 Language = model.ClientPreferredLanguage,
                 Name = model.Name,
                 Host = host
