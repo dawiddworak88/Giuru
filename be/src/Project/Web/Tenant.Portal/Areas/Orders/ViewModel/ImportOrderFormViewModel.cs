@@ -11,5 +11,6 @@ namespace Tenant.Portal.Areas.Orders.ViewModel
         public string SelectClientLabel { get; set; }
         public string DropFilesLabel { get; set; }
         public string DropOrSelectFilesLabel { get; set; }
+        public string ValidateOrderUrl { get; set; }
     }
 }

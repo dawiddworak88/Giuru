@@ -28,16 +28,55 @@ function ImportOrderForm(props) {
 
     const onDrop = useCallback(acceptedFiles => {
         dispatch({ type: 'SET_IS_LOADING', payload: true });
-        console.log(state);
-        dispatch({ type: 'SET_IS_LOADING', payload: false });
+
+        acceptedFiles.forEach((file) => {
+
+            const formData = new FormData();
+
+            formData.append('clientId', clientId);
+            formData.append('orderFile', file);
+
+            const requestOptions = {
+                method: 'POST',
+                body: formData
+            };
+
+            fetch(props.validateOrderUrl, requestOptions)
+                .then(function (response) {
+
+                    dispatch({ type: 'SET_IS_LOADING', payload: false });
+
+                    FetchErrorHandler.handleUnauthorizedResponse(response);
+
+                    return response.json().then(jsonResponse => {
+
+                        if (response.ok) {
+                            dispatch({ type: 'SET_IS_LOADING', payload: false });
+                        }
+                        else {
+                            FetchErrorHandler.consoleLogResponseDetails(state, response, jsonResponse);
+                            toast.error(props.generalErrorMessage);
+                        }
+                    })
+                }).catch(error => {
+
+                    console.log(error);
+                    dispatch({ type: 'SET_IS_LOADING', payload: false });
+                    toast.error(props.generalErrorMessage);
+                })
+        })
     }, []);
 
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop,
+        accept: '.xls, .xlsx',
+        multiple: false
+    });
 
     function onSubmitForm(state) {
 
         dispatch({ type: 'SET_IS_LOADING', payload: true });
-        console.log(state);
+
         dispatch({ type: 'SET_IS_LOADING', payload: false });
     }
 
@@ -61,7 +100,7 @@ function ImportOrderForm(props) {
                         fullWidth={true}
                         value={clientId}
                         onChange={(event, newValue) => {
-                            
+
                             handleOnChange(event);
 
                             if (newValue) {
@@ -70,13 +109,13 @@ function ImportOrderForm(props) {
                             else {
                                 setClientSelected(false);
                             }
-                          }}
+                        }}
                         autoComplete
                         includeInputInList
                         renderInput={(params) => <TextField {...params} label={props.selectClientLabel} margin="normal" />}
                     />
                 </div>
-                <div className={isClientSelected ? "field" : "is-hidden" }>
+                <div className={isClientSelected ? "field" : "is-hidden"}>
                     <div {...getRootProps()}>
                         <input id="order" name="order" {...getInputProps()} />
                         {
@@ -113,6 +152,7 @@ function ImportOrderForm(props) {
 
 ImportOrderForm.propTypes = {
     saveText: PropTypes.string.isRequired,
+    validateOrderUrl: PropTypes.string.isRequired,
     dropFilesLabel: PropTypes.string.isRequired,
     dropOrSelectFilesLabel: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired

@@ -6,6 +6,8 @@ using Foundation.Localization;
 using Tenant.Portal.Areas.Clients.Repositories;
 using System.Threading.Tasks;
 using Tenant.Portal.Shared.ComponentModels;
+using Microsoft.AspNetCore.Routing;
+using System.Globalization;
 
 namespace Tenant.Portal.Areas.Orders.ModelBuilders
 {
@@ -14,15 +16,17 @@ namespace Tenant.Portal.Areas.Orders.ModelBuilders
         private readonly IClientsRepository clientsRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
-
+        private readonly LinkGenerator linkGenerator;
         public ImportOrderFormModelBuilder(
             IClientsRepository clientsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IStringLocalizer<OrderResources> orderLocalizer)
+            IStringLocalizer<OrderResources> orderLocalizer,
+            LinkGenerator linkGenerator)
         {
             this.clientsRepository = clientsRepository;
             this.globalLocalizer = globalLocalizer;
             this.orderLocalizer = orderLocalizer;
+            this.linkGenerator = linkGenerator;
         }
 
         public async Task<ImportOrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -30,6 +34,7 @@ namespace Tenant.Portal.Areas.Orders.ModelBuilders
             var viewModel = new ImportOrderFormViewModel
             {
                 Clients = await this.clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language),
+                ValidateOrderUrl = this.linkGenerator.GetPathByAction("Validate", "ImportOrderApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 DropFilesLabel = this.orderLocalizer["DropFile"],
                 DropOrSelectFilesLabel = this.orderLocalizer["DropOrSelectFile"],
                 SelectClientLabel = this.orderLocalizer["SelectClient"],

@@ -8,6 +8,7 @@ var props = {
   importOrderForm: {
 
     saveText: 'Import',
+    validateOrderUrl: '#',
     generalErrorMessage: 'An error has occurred',
     selectClientLabel: 'Select a client',
     dropFilesLabel: 'Drop the files here ...',

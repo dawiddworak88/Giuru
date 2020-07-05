@@ -33696,15 +33696,46 @@ function ImportOrderForm(props) {
       type: 'SET_IS_LOADING',
       payload: true
     });
-    console.log(state);
-    dispatch({
-      type: 'SET_IS_LOADING',
-      payload: false
+    acceptedFiles.forEach(function (file) {
+      var formData = new FormData();
+      formData.append('clientId', clientId);
+      formData.append('orderFile', file);
+      var requestOptions = {
+        method: 'POST',
+        body: formData
+      };
+      fetch(props.validateOrderUrl, requestOptions).then(function (response) {
+        dispatch({
+          type: 'SET_IS_LOADING',
+          payload: false
+        });
+        FetchErrorHandler.handleUnauthorizedResponse(response);
+        return response.json().then(function (jsonResponse) {
+          if (response.ok) {
+            dispatch({
+              type: 'SET_IS_LOADING',
+              payload: false
+            });
+          } else {
+            FetchErrorHandler.consoleLogResponseDetails(state, response, jsonResponse);
+            toast.error(props.generalErrorMessage);
+          }
+        });
+      }).catch(function (error) {
+        console.log(error);
+        dispatch({
+          type: 'SET_IS_LOADING',
+          payload: false
+        });
+        toast.error(props.generalErrorMessage);
+      });
     });
   }, []);
 
   var _useDropzone = useDropzone({
-    onDrop: onDrop
+    onDrop: onDrop,
+    accept: '.xls, .xlsx',
+    multiple: false
   }),
       getRootProps = _useDropzone.getRootProps,
       getInputProps = _useDropzone.getInputProps,
@@ -33715,7 +33746,6 @@ function ImportOrderForm(props) {
       type: 'SET_IS_LOADING',
       payload: true
     });
-    console.log(state);
     dispatch({
       type: 'SET_IS_LOADING',
       payload: false

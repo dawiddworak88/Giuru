@@ -52276,7 +52276,7 @@ function ProductDetailForm(props) {
       },
       body: JSON.stringify(state)
     };
-    return fetch(props.saveUrl, requestOptions).then(function (response) {
+    fetch(props.saveUrl, requestOptions).then(function (response) {
       dispatch({
         type: 'SET_IS_LOADING',
         payload: false

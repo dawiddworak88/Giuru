@@ -40,7 +40,7 @@ namespace Tenant.Portal.Areas.Clients.ApiControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Validate([FromBody] ImportOrderRequestModel requestModel)
+        public async Task<IActionResult> Validate(ImportOrderRequestModel requestModel)
         {
             try
             {
