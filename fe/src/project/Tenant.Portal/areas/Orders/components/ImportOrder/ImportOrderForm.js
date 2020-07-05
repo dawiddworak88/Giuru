@@ -20,7 +20,7 @@ function ImportOrderForm(props) {
     const [isClientSelected, setClientSelected] = useState(false);
 
     const stateSchema = {
-        clientId: ''
+        clientId: null
     };
 
     const stateValidatorSchema = {

@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Feature\Feature.Account\Feature.Account.csproj" />
     <ProjectReference Include="..\..\..\Feature\Feature.Client\Feature.Client.csproj" />
+    <ProjectReference Include="..\..\..\Feature\Feature.ImportOrder\Feature.ImportOrder.csproj" />
     <ProjectReference Include="..\..\..\Feature\Feature.Order\Feature.Order.csproj" />
     <ProjectReference Include="..\..\..\Feature\Feature.PageContent\Feature.PageContent.csproj" />
     <ProjectReference Include="..\..\..\Feature\Feature.Product\Feature.Product.csproj" />
