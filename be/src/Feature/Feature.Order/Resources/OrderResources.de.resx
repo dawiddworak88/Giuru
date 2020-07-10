@@ -132,6 +132,9 @@
   <data name="Order" xml:space="preserve">
     <value>Bestellung</value>
   </data>
+  <data name="OrderFileError" xml:space="preserve">
+    <value>Die Bestelldatei ist falsch. Laden Sie die richtige Bestelldatei hoch.</value>
+  </data>
   <data name="Orders" xml:space="preserve">
     <value>Bestellungen</value>
   </data>

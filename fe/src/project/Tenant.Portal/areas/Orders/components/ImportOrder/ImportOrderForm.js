@@ -1,39 +1,41 @@
 import React, { useContext, useCallback, useState } from 'react';
+import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { UploadCloud } from 'react-feather';
 import IconConstants from '../../../../../../shared/constants/IconConstants';
 import { Context } from '../../../../../../shared/stores/Store';
-import useForm from '../../../../../../shared/helpers/forms/useForm';
 import { TextField, Button, CircularProgress } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useDropzone } from 'react-dropzone';
+import FetchErrorHandler from '../../../../../../shared/helpers/errorHandlers/FetchErrorHandler';
 
 function ImportOrderForm(props) {
 
     const defaultProps = {
         options: props.clients,
-        getOptionLabel: (option) => option.name,
+        getOptionLabel: (option) => option.name
     };
 
     const [state, dispatch] = useContext(Context);
 
     const [isClientSelected, setClientSelected] = useState(false);
 
-    const stateSchema = {
-        clientId: null
-    };
-
-    const stateValidatorSchema = {
-    };
+    const [client, setClient] = useState(null);
 
     const onDrop = useCallback(acceptedFiles => {
+
         dispatch({ type: 'SET_IS_LOADING', payload: true });
 
         acceptedFiles.forEach((file) => {
 
             const formData = new FormData();
 
-            formData.append('clientId', clientId);
+            console.log(client);
+
+            if (client) {
+                formData.append('clientId', client.id);
+            }
+            
             formData.append('orderFile', file);
 
             const requestOptions = {
@@ -65,7 +67,7 @@ function ImportOrderForm(props) {
                     toast.error(props.generalErrorMessage);
                 })
         })
-    }, []);
+    }, [client]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
@@ -76,42 +78,31 @@ function ImportOrderForm(props) {
     function onSubmitForm(state) {
 
         dispatch({ type: 'SET_IS_LOADING', payload: true });
-
         dispatch({ type: 'SET_IS_LOADING', payload: false });
     }
 
-    const {
-        values,
-        handleOnChange,
-        disable,
-        handleOnSubmit
-    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
-
-    const { clientId } = values;
-
     return (
         <div>
-            <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
+            <form className="is-modern-form" method="post">
                 <div className="field">
                     <Autocomplete
                         {...defaultProps}
                         id="client"
                         name="client"
                         fullWidth={true}
-                        value={clientId}
+                        value={client}
                         onChange={(event, newValue) => {
-
-                            handleOnChange(event);
 
                             if (newValue) {
                                 setClientSelected(true);
+                                setClient(newValue);
                             }
                             else {
                                 setClientSelected(false);
+                                setClient(null);
                             }
                         }}
                         autoComplete
-                        includeInputInList
                         renderInput={(params) => <TextField {...params} label={props.selectClientLabel} margin="normal" />}
                     />
                 </div>
@@ -140,7 +131,7 @@ function ImportOrderForm(props) {
                     </div>
                 </div>
                 <div className="field">
-                    <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
+                    <Button type="submit" variant="contained" color="primary" disabled={state.isLoading}>
                         {props.saveText}
                     </Button>
                 </div>

@@ -60,7 +60,7 @@ function ProductDetailForm(props) {
 
                     if (response.ok) {
 
-                        setFieldValue({ name: "id", value: jsonResponse.data.id })
+                        setFieldValue({ name: "id", value: jsonResponse.data.id });
                         toast.success(jsonResponse.message);
                     }
                     else {

@@ -13969,6 +13969,7 @@ function useForm() {
   }, [validateErrorState, submitFormCallback, values]); // Event handler for handling changes in input.
 
   var handleOnChange = Object(react["useCallback"])(function (event) {
+    console.log(event);
     setIsDirty(true);
 
     if (event.isFormData) {

@@ -31,7 +31,6 @@
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Presentation\Foundation.Presentation.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Orders\ApiResponseModels\" />
     <Folder Include="wwwroot\dist\" />
   </ItemGroup>
   <ItemGroup>

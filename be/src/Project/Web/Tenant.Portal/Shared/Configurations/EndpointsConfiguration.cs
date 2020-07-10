@@ -8,5 +8,6 @@
         public string Clients { get; set; }
         public string Product { get; set; }
         public string Products { get; set; }
+        public string OrderValidation { get; set; }
     }
 }
