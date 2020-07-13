@@ -14,22 +14,23 @@ namespace Feature.Account.Services.UserServices
 {
     public class UserService : IUserService
     {
+        private readonly DatabaseContext context;
         private readonly IIdentityServerInteractionService interactionService;
         private readonly IEventService eventsService;
-        private readonly DatabaseContextFactory databaseContextFactory;
         private readonly ConnectionStringsConfiguration connectionStringsConfiguration;
         private readonly UserStoreFactory userStoreFactory;
 
-        public UserService(IIdentityServerInteractionService interactionService,
+        public UserService(
+            DatabaseContext context,
+            IIdentityServerInteractionService interactionService,
             IEventService eventsService,
             UserStoreFactory userStoreFactory,
-            DatabaseContextFactory databaseContextFactory,
             IOptionsMonitor<ConnectionStringsConfiguration> connectionStringsConfigurationFactory)
         {
+            this.context = context;
             this.userStoreFactory = userStoreFactory;
             this.interactionService = interactionService;
             this.eventsService = eventsService;
-            this.databaseContextFactory = databaseContextFactory;
             this.connectionStringsConfiguration = connectionStringsConfigurationFactory.CurrentValue;
         }
 
@@ -37,9 +38,7 @@ namespace Feature.Account.Services.UserServices
         {
             var passwordHasher = new PasswordHasher<ApplicationUser>();
 
-            var databaseContext = this.databaseContextFactory.CreateDbContext(this.connectionStringsConfiguration.DatabaseContext);
-
-            var userStore = userStoreFactory.CreateUserStore<ApplicationUser>(databaseContext);
+            var userStore = userStoreFactory.CreateUserStore<ApplicationUser>(this.context);
 
             var user = await userStore.FindByNameAsync(email, CancellationToken.None);
 
@@ -49,11 +48,11 @@ namespace Feature.Account.Services.UserServices
 
             if (passwordHasher.VerifyHashedPassword(user, hashedPassword, password) != PasswordVerificationResult.Failed)
             {
-                var context = await this.interactionService.GetAuthorizationContextAsync(returnUrl);
+                var authorizationContext = await this.interactionService.GetAuthorizationContextAsync(returnUrl);
 
-                if (context != null)
+                if (authorizationContext != null)
                 {
-                    await this.eventsService.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.ClientId));
+                    await this.eventsService.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: authorizationContext?.ClientId));
 
                     await httpContext.SignInAsync(user.Id, user.UserName);
 
@@ -66,9 +65,7 @@ namespace Feature.Account.Services.UserServices
 
         public async Task<ApplicationUser> FindByIdAsync(string userId)
         {
-            var databaseContext = this.databaseContextFactory.CreateDbContext(this.connectionStringsConfiguration.DatabaseContext);
-
-            var userStore = userStoreFactory.CreateUserStore<ApplicationUser>(databaseContext);
+            var userStore = userStoreFactory.CreateUserStore<ApplicationUser>(this.context);
 
             return await userStore.FindByIdAsync(userId, CancellationToken.None);
         }
@@ -77,9 +74,7 @@ namespace Feature.Account.Services.UserServices
         {
             var passwordHasher = new PasswordHasher<ApplicationUser>();
 
-            var databaseContext = this.databaseContextFactory.CreateDbContext(this.connectionStringsConfiguration.DatabaseContext);
-
-            var userStore = userStoreFactory.CreateUserStore<ApplicationUser>(databaseContext);
+            var userStore = userStoreFactory.CreateUserStore<ApplicationUser>(this.context);
 
             var user = await userStore.FindByNameAsync(email, CancellationToken.None);
 

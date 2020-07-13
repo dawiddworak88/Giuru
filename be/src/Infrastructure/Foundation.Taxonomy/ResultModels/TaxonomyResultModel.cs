@@ -4,6 +4,6 @@ namespace Foundation.Taxonomy.ResultModels
 {
     public class TaxonomyResultModel : BaseServiceResultModel
     {
-        public TenantDatabase.Areas.Taxonomies.Entities.Taxonomy Taxonomy { get; set; }
+        public Database.Areas.Taxonomies.Entities.Taxonomy Taxonomy { get; set; }
     }
 }

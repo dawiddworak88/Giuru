@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Foundation.Database.Shared.DependencyInjection;
 using Feature.Account.DependencyInjection;
 using Account.Shared.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
@@ -14,6 +13,7 @@ using Feature.Security.DependencyInjection;
 using Foundation.Account.DependencyInjection;
 using Foundation.GenericRepository.DependencyInjection;
 using Foundation.Extensions.Definitions;
+using Foundation.Database.Shared.DependencyInjection;
 
 namespace Account
 {

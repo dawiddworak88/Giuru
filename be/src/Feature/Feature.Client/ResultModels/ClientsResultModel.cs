@@ -6,6 +6,6 @@ namespace Feature.Client.ResultModels
 {
     public class ClientsResultModel : BaseServiceResultModel
     {
-        public PagedResults<IEnumerable<Foundation.TenantDatabase.Areas.Clients.Entities.Client>> Clients { get; set; }
+        public PagedResults<IEnumerable<Foundation.Database.Areas.Clients.Entities.Client>> Clients { get; set; }
     }
 }

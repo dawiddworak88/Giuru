@@ -1,5 +1,4 @@
-﻿using Feature.Client;
-using Foundation.ApiExtensions.Communications;
+﻿using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.ApiExtensions.Helpers;
@@ -7,7 +6,6 @@ using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Services.ApiResponseServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;

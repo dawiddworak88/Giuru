@@ -6,27 +6,27 @@ using Foundation.Database.Shared.Repositories;
 using Foundation.Extensions.Definitions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.GenericRepository.Services;
-using Foundation.TenantDatabase.Areas.Translations.Entities;
-using Foundation.TenantDatabase.Shared.Repositories;
+using Foundation.Database.Areas.Translations.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Foundation.Database.Shared.Contexts;
 
 namespace Feature.Product.Services
 {
     public class ProductService : IProductService
     {
+        private readonly DatabaseContext context;
         private readonly IGenericRepository<Tenant> tenantRepository;
-        private readonly TenantGenericRepositoryFactory genericRepositoryFactory;
         private readonly IEntityService entityService;
 
         public ProductService(
+            DatabaseContext context,
             IGenericRepository<Tenant> tenantRepository,
-            TenantGenericRepositoryFactory genericRepositoryFactory,
             IEntityService entityService)
         {
+            this.context = context;
             this.tenantRepository = tenantRepository;
-            this.genericRepositoryFactory = genericRepositoryFactory;
             this.entityService = entityService;
         }
 
@@ -52,7 +52,7 @@ namespace Feature.Product.Services
                 return createProductResultModel;
             }
 
-            var product = new Foundation.TenantDatabase.Areas.Products.Entities.Product
+            var product = new Foundation.Database.Areas.Products.Entities.Product
             {
                 Name = model.Name,
                 Sku = model.Sku,
@@ -60,11 +60,9 @@ namespace Feature.Product.Services
                 FormData = model.FormData
             };
 
-            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
+            await this.context.Products.AddAsync(this.entityService.EnrichEntity(product, model.Username));
 
-            await context.Products.AddAsync(this.entityService.EnrichEntity(product, model.Username));
-
-            await context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
 
             if (!string.IsNullOrWhiteSpace(product.Name))
             {
@@ -75,9 +73,9 @@ namespace Feature.Product.Services
                     Language = model.Language
                 };
 
-                await context.Translations.AddAsync(this.entityService.EnrichEntity(translation, model.Username));
+                await this.context.Translations.AddAsync(this.entityService.EnrichEntity(translation, model.Username));
 
-                await context.SaveChangesAsync();
+                await this.context.SaveChangesAsync();
             }
 
             createProductResultModel.Product = product;
@@ -107,9 +105,7 @@ namespace Feature.Product.Services
                 return productResultModel;
             }
 
-            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
-
-            var product = context.Products.FirstOrDefault(x => x.Id == model.Id.Value && x.IsActive);
+            var product = this.context.Products.FirstOrDefault(x => x.Id == model.Id.Value && x.IsActive);
 
             product.Name = model.Name;
             product.Sku = model.Sku;
@@ -117,16 +113,16 @@ namespace Feature.Product.Services
             product.FormData = model.FormData;
             product.LastModifiedDate = DateTime.UtcNow;
 
-            await context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
 
-            var translation = context.Translations.FirstOrDefault(x => x.Key == product.Id.ToString() && x.Language == model.Language && x.IsActive);
+            var translation = this.context.Translations.FirstOrDefault(x => x.Key == product.Id.ToString() && x.Language == model.Language && x.IsActive);
 
             if (translation != null)
             {
                 translation.Value = model.Name;
                 translation.LastModifiedDate = DateTime.UtcNow;
 
-                await context.SaveChangesAsync();
+                await this.context.SaveChangesAsync();
             }
 
             productResultModel.Product = product;
@@ -156,24 +152,22 @@ namespace Feature.Product.Services
                 return deleteProductResultModel;
             }
 
-            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
-
-            var translations = context.Translations.Where(x => x.Key == deleteProductModel.Id.ToString() && x.IsActive).ToList();
+            var translations = this.context.Translations.Where(x => x.Key == deleteProductModel.Id.ToString() && x.IsActive).ToList();
 
             foreach (var translation in translations)
             {
                 translation.IsActive = false;
 
-                await context.SaveChangesAsync();
+                await this.context.SaveChangesAsync();
             }
 
-            var product = context.Products.FirstOrDefault(x => x.Id == deleteProductModel.Id.Value && x.IsActive);
+            var product = this.context.Products.FirstOrDefault(x => x.Id == deleteProductModel.Id.Value && x.IsActive);
 
             if (product != null)
             {
                 product.IsActive = false;
 
-                await context.SaveChangesAsync();
+                await this.context.SaveChangesAsync();
             }
 
             return deleteProductResultModel;
@@ -201,9 +195,7 @@ namespace Feature.Product.Services
                 return getProductsResultModel;
             }
 
-            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
-
-            var entities = context.Products.Where(x => x.IsActive);
+            var entities = this.context.Products.Where(x => x.IsActive);
 
             if (!string.IsNullOrWhiteSpace(getProductsModel.SearchTerm))
             {
@@ -241,9 +233,7 @@ namespace Feature.Product.Services
                 return getProductResultModel;
             }
 
-            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
-
-            var product = context.Products.FirstOrDefault(x => x.Id == getProductModel.Id.Value && x.IsActive);
+            var product = this.context.Products.FirstOrDefault(x => x.Id == getProductModel.Id.Value && x.IsActive);
 
             if (product == null)
             {

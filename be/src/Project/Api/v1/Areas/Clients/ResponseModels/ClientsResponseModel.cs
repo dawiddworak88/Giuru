@@ -1,6 +1,6 @@
 ﻿using Foundation.ApiExtensions.Models.Response;
 using Foundation.GenericRepository.Paginations;
-using Foundation.TenantDatabase.Areas.Clients.Entities;
+using Foundation.Database.Areas.Clients.Entities;
 using System.Collections.Generic;
 
 namespace Api.v1.Areas.Clients.ResponseModels

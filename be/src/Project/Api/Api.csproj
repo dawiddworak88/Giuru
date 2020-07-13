@@ -10,7 +10,7 @@
     <PackageReference Include="FluentValidation" Version="8.6.2" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="4.1.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -30,6 +30,5 @@
     <ProjectReference Include="..\..\Infrastructure\Foundation.Mailing\Foundation.Mailing.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Foundation.Schema\Foundation.Schema.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Foundation.Taxonomy\Foundation.Taxonomy.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Foundation.TenantDatabase\Foundation.TenantDatabase.csproj" />
   </ItemGroup>
 </Project>

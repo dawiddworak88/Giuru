@@ -6,6 +6,6 @@ namespace Feature.Product.ResultModels
 {
     public class ProductsResultModel : BaseServiceResultModel
     {
-        public PagedResults<IEnumerable<Foundation.TenantDatabase.Areas.Products.Entities.Product>> Products { get; set; }
+        public PagedResults<IEnumerable<Foundation.Database.Areas.Products.Entities.Product>> Products { get; set; }
     }
 }

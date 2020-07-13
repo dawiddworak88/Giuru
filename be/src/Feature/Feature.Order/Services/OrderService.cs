@@ -1,10 +1,10 @@
 ﻿using Feature.Order.Models;
 using Feature.Order.ResultModels;
 using Foundation.Database.Areas.Tenants.Entities;
+using Foundation.Database.Shared.Contexts;
 using Foundation.Database.Shared.Repositories;
 using Foundation.Extensions.Definitions;
 using Foundation.GenericRepository.Services;
-using Foundation.TenantDatabase.Shared.Repositories;
 using Microsoft.Extensions.Localization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,20 +13,20 @@ namespace Feature.Order.Services
 {
     public class OrderService : IOrderService
     {
+        private readonly DatabaseContext context;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly IGenericRepository<Tenant> tenantRepository;
-        private readonly TenantGenericRepositoryFactory genericRepositoryFactory;
         private readonly IEntityService entityService;
 
         public OrderService(
+            DatabaseContext context,
             IStringLocalizer<OrderResources> orderLocalizer,
             IGenericRepository<Tenant> tenantRepository,
-            TenantGenericRepositoryFactory genericRepositoryFactory,
             IEntityService entityService)
         {
+            this.context = context;
             this.orderLocalizer = orderLocalizer;
             this.tenantRepository = tenantRepository;
-            this.genericRepositoryFactory = genericRepositoryFactory;
             this.entityService = entityService;
         }
 
@@ -42,15 +42,13 @@ namespace Feature.Order.Services
                 return orderValidationResultModel;
             }
 
-            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
-
             if (!model.ClientId.HasValue)
             {
                 orderValidationResultModel.ValidationMessages.Add(this.orderLocalizer["NoClientId"]);
             }
             else
             {
-                var client = context.Clients.FirstOrDefault(x => x.Id == model.ClientId && x.IsActive);
+                var client = this.context.Clients.FirstOrDefault(x => x.Id == model.ClientId && x.IsActive);
 
                 if (client == null)
                 {
@@ -74,7 +72,7 @@ namespace Feature.Order.Services
                     }
                     else
                     {
-                        var product = context.Products.FirstOrDefault(x => x.Sku == orderItem.Sku && x.IsActive);
+                        var product = this.context.Products.FirstOrDefault(x => x.Sku == orderItem.Sku && x.IsActive);
 
                         if (product == null)
                         {

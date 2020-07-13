@@ -9,7 +9,6 @@ using Foundation.Localization.DependencyInjection;
 using Foundation.Mailing.DependencyInjection;
 using Foundation.Schema.DependencyInjection;
 using Foundation.Taxonomy.DependencyInjection;
-using Foundation.TenantDatabase.Shared.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -54,8 +53,6 @@ namespace Api
             services.RegisterOrderDependencies();
 
             services.RegisterDatabaseDependencies(this.Configuration);
-
-            services.RegisterTenantDatabaseDependencies(this.Configuration);
 
             services.RegisterMailingDependencies(this.Configuration);
 

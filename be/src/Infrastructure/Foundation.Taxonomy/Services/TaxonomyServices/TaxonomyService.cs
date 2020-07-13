@@ -5,28 +5,28 @@ using Foundation.GenericRepository.Services;
 using Foundation.Taxonomy.Models;
 using Foundation.Taxonomy.ResultModels;
 using Foundation.Taxonomy.Validators;
-using Foundation.TenantDatabase.Areas.Translations.Entities;
-using Foundation.TenantDatabase.Shared.Repositories;
+using Foundation.Database.Areas.Translations.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Foundation.Database.Shared.Contexts;
 
 namespace Foundation.Taxonomy.Services.TaxonomyServices
 {
     public class TaxonomyService : ITaxonomyService
     {
+        private readonly DatabaseContext context;
         private readonly IGenericRepository<Tenant> tenantRepository;
-        private readonly TenantGenericRepositoryFactory genericRepositoryFactory;
         private readonly IEntityService entityService;
 
         public TaxonomyService(
+            DatabaseContext context,
             IGenericRepository<Tenant> tenantRepository,
-            TenantGenericRepositoryFactory genericRepositoryFactory,
             IEntityService entityService
             )
         {
+            this.context = context;
             this.tenantRepository = tenantRepository;
-            this.genericRepositoryFactory = genericRepositoryFactory;
             this.entityService = entityService;
         }
 
@@ -52,17 +52,15 @@ namespace Foundation.Taxonomy.Services.TaxonomyServices
                 return createTaxonomyResultModel;
             }
 
-            var taxonomy = new TenantDatabase.Areas.Taxonomies.Entities.Taxonomy
+            var taxonomy = new Database.Areas.Taxonomies.Entities.Taxonomy
             {
                 Name = model.Name,
                 ParentId = model.ParentId
             };
 
-            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
+            await this.context.Taxonomies.AddAsync(this.entityService.EnrichEntity(taxonomy, model.Username));
 
-            await context.Taxonomies.AddAsync(this.entityService.EnrichEntity(taxonomy, model.Username));
-
-            await context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
 
             var translation = new Translation
             {
@@ -71,9 +69,9 @@ namespace Foundation.Taxonomy.Services.TaxonomyServices
                 Language = model.Language
             };
 
-            await context.Translations.AddAsync(this.entityService.EnrichEntity(translation, model.Username));
+            await this.context.Translations.AddAsync(this.entityService.EnrichEntity(translation, model.Username));
 
-            await context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
 
             createTaxonomyResultModel.Taxonomy = taxonomy;
 
@@ -102,11 +100,9 @@ namespace Foundation.Taxonomy.Services.TaxonomyServices
                 return getTaxonomyResultModel;
             }
 
-            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
-
             if (model.RootId.HasValue)
             {
-                var taxonomies = context.Taxonomies.Where(x => x.Name == model.Name && x.IsActive);
+                var taxonomies = this.context.Taxonomies.Where(x => x.Name == model.Name && x.IsActive);
 
                 foreach (var taxonomy in taxonomies)
                 {
@@ -115,7 +111,7 @@ namespace Foundation.Taxonomy.Services.TaxonomyServices
 
                     while (rootId.HasValue)
                     {
-                        rootTaxonomy = context.Taxonomies.FirstOrDefault(x => x.Id == rootId.Value && x.IsActive);
+                        rootTaxonomy = this.context.Taxonomies.FirstOrDefault(x => x.Id == rootId.Value && x.IsActive);
                         rootId = rootTaxonomy.ParentId;
                     }
 
@@ -131,7 +127,7 @@ namespace Foundation.Taxonomy.Services.TaxonomyServices
 
             return new TaxonomyResultModel
             {
-                Taxonomy = context.Taxonomies.FirstOrDefault(x => x.Name == model.Name && x.ParentId == null && x.IsActive)
+                Taxonomy = this.context.Taxonomies.FirstOrDefault(x => x.Name == model.Name && x.ParentId == null && x.IsActive)
             };
         }
     }

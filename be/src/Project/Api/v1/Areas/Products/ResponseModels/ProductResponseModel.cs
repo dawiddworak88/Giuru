@@ -1,5 +1,5 @@
 ﻿using Foundation.ApiExtensions.Models.Response;
-using Foundation.TenantDatabase.Areas.Products.Entities;
+using Foundation.Database.Areas.Products.Entities;
 using System;
 
 namespace Api.v1.Areas.Products.ResponseModels

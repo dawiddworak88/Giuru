@@ -4,6 +4,6 @@ namespace Feature.Product.ResultModels
 {
     public class ProductResultModel : BaseServiceResultModel
     {
-        public Foundation.TenantDatabase.Areas.Products.Entities.Product Product { get; set; }
+        public Foundation.Database.Areas.Products.Entities.Product Product { get; set; }
     }
 }

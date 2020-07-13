@@ -5,7 +5,9 @@ using Feature.Client.Validators;
 using Foundation.Account.Definitions;
 using Foundation.Account.Services;
 using Foundation.Account.UserStores;
+using Foundation.Database.Areas.Accounts.Entities;
 using Foundation.Database.Areas.Tenants.Entities;
+using Foundation.Database.Shared.Contexts;
 using Foundation.Database.Shared.Repositories;
 using Foundation.GenericRepository.Paginations;
 using Foundation.GenericRepository.Services;
@@ -15,8 +17,6 @@ using Foundation.Localization.Services;
 using Foundation.Mailing.Configurations;
 using Foundation.Mailing.Models;
 using Foundation.Mailing.Services;
-using Foundation.TenantDatabase.Areas.Accounts.Entities;
-using Foundation.TenantDatabase.Shared.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -30,8 +30,8 @@ namespace Feature.Client.Services
 {
     public class ClientService : IClientService
     {
+        private readonly DatabaseContext context;
         private readonly IGenericRepository<Tenant> tenantRepository;
-        private readonly TenantGenericRepositoryFactory genericRepositoryFactory;
         private readonly UserStoreFactory userStoreFactory;
         private readonly IPasswordHasher<ApplicationUser> passwordHasher;
         private readonly IPasswordGenerationService passwordGenerationService;
@@ -42,8 +42,8 @@ namespace Feature.Client.Services
         private readonly IEntityService entityService;
 
         public ClientService(
+            DatabaseContext context,
             IGenericRepository<Tenant> tenantRepository,
-            TenantGenericRepositoryFactory genericRepositoryFactory,
             UserStoreFactory userStoreFactory,
             IPasswordHasher<ApplicationUser> passwordHasher,
             IPasswordGenerationService passwordGenerationService,
@@ -53,8 +53,8 @@ namespace Feature.Client.Services
             ICultureService cultureService,
             IEntityService entityService)
         {
+            this.context = context;
             this.tenantRepository = tenantRepository;
-            this.genericRepositoryFactory = genericRepositoryFactory;
             this.userStoreFactory = userStoreFactory;
             this.passwordHasher = passwordHasher;
             this.passwordGenerationService = passwordGenerationService;
@@ -89,15 +89,13 @@ namespace Feature.Client.Services
 
             var host = new MailAddress(model.Email).Host;
 
-            var client = new Foundation.TenantDatabase.Areas.Clients.Entities.Client
+            var client = new Foundation.Database.Areas.Clients.Entities.Client
             {
                 ClientSecret = Guid.NewGuid(),
                 Language = model.ClientPreferredLanguage,
                 Name = model.Name,
                 Host = host
             };
-
-            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
 
             this.cultureService.SetCulture(model.ClientPreferredLanguage.ToLowerInvariant());
 
@@ -121,7 +119,7 @@ namespace Feature.Client.Services
 
             var user = new ApplicationUser
             {
-                ClientId = client.Id,
+                Client = client,
                 UserName = model.Email,
                 Email = model.Email,
                 NormalizedEmail = model.Email,
@@ -175,8 +173,6 @@ namespace Feature.Client.Services
                 getClientsResultModel.Errors.Add(Foundation.Extensions.Definitions.ErrorConstants.NoTenant);
                 return getClientsResultModel;
             }
-
-            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
 
             var entities = context.Clients.Where(x => x.IsActive);
 

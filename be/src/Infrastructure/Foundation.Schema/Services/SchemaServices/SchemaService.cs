@@ -5,33 +5,33 @@ using Foundation.GenericRepository.Services;
 using Foundation.Schema.Models;
 using Foundation.Schema.ResultModels;
 using Foundation.Schema.Validators;
-using Foundation.TenantDatabase.Areas.Taxonomies.Entities;
-using Foundation.TenantDatabase.Areas.Translations.Entities;
-using Foundation.TenantDatabase.Shared.Helpers;
-using Foundation.TenantDatabase.Shared.Repositories;
+using Foundation.Database.Areas.Taxonomies.Entities;
+using Foundation.Database.Areas.Translations.Entities;
 using Microsoft.Data.SqlClient;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Foundation.Database.Shared.Helpers;
+using Foundation.Database.Shared.Contexts;
 
 namespace Foundation.Schema.Services.SchemaServices
 {
     public class SchemaService : ISchemaService
     {
+        private readonly DatabaseContext context;
         private readonly IGenericRepository<Tenant> tenantRepository;
-        private readonly TenantGenericRepositoryFactory genericRepositoryFactory;
         private readonly IEntityService entityService;
 
         public SchemaService(
+            DatabaseContext context,
             IGenericRepository<Tenant> tenantRepository,
-            TenantGenericRepositoryFactory genericRepositoryFactory,
             IEntityService entityService
             )
         {
+            this.context = context;
             this.tenantRepository = tenantRepository;
-            this.genericRepositoryFactory = genericRepositoryFactory;
             this.entityService = entityService;
         }
 
@@ -57,8 +57,6 @@ namespace Foundation.Schema.Services.SchemaServices
                 return createSchemaResultModel;
             }
 
-            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
-
             foreach (var property in model.JsonSchema["properties"].OfType<JProperty>())
             {
                 foreach (var propertyValue in property)
@@ -70,15 +68,15 @@ namespace Foundation.Schema.Services.SchemaServices
                         Language = model.Language
                     };
 
-                    await context.Translations.AddAsync(this.entityService.EnrichEntity(titleTranslation, model.Username));
+                    await this.context.Translations.AddAsync(this.entityService.EnrichEntity(titleTranslation, model.Username));
 
-                    await context.SaveChangesAsync();
+                    await this.context.SaveChangesAsync();
 
                     propertyValue["title"] = titleTranslation.Id;
                 }
             }
 
-            var schema = new TenantDatabase.Areas.Schemas.Entities.Schema
+            var schema = new Database.Areas.Schemas.Entities.Schema
             {
                 Name = model.Name,
                 EntityTypeId = model.EntityTypeId,
@@ -86,9 +84,9 @@ namespace Foundation.Schema.Services.SchemaServices
                 UiSchema = model.UiSchema?.ToString()
             };
 
-            await context.Schemas.AddAsync(this.entityService.EnrichEntity(schema, model.Username));
+            await this.context.Schemas.AddAsync(this.entityService.EnrichEntity(schema, model.Username));
 
-            await context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
 
             var translation = new Translation
             {
@@ -97,9 +95,9 @@ namespace Foundation.Schema.Services.SchemaServices
                 Language = model.Language
             };
 
-            await context.Translations.AddAsync(this.entityService.EnrichEntity(translation, model.Username));
+            await this.context.Translations.AddAsync(this.entityService.EnrichEntity(translation, model.Username));
 
-            await context.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
 
             createSchemaResultModel.Schema = schema;
 
@@ -129,9 +127,7 @@ namespace Foundation.Schema.Services.SchemaServices
                 return getSchemaResultModel;
             }
 
-            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
-
-            var schema = context.Schemas.FirstOrDefault(x => x.Id == getSchemaModel.Id.Value && x.IsActive);
+            var schema = this.context.Schemas.FirstOrDefault(x => x.Id == getSchemaModel.Id.Value && x.IsActive);
 
             if (schema == null)
             {
@@ -139,7 +135,7 @@ namespace Foundation.Schema.Services.SchemaServices
                 return getSchemaResultModel;
             }
 
-            getSchemaResultModel.Schema = new TenantDatabase.Areas.Schemas.Entities.Schema
+            getSchemaResultModel.Schema = new Database.Areas.Schemas.Entities.Schema
             { 
                 Id = schema.Id,
                 Name = schema.Name,
@@ -177,9 +173,7 @@ namespace Foundation.Schema.Services.SchemaServices
                 return getSchemaResultModel;
             }
 
-            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(tenant.DatabaseConnectionString);
-
-            var schema = context.Schemas.FirstOrDefault(x => x.EntityTypeId == getSchemaModel.EntityTypeId && x.IsActive);
+            var schema = this.context.Schemas.FirstOrDefault(x => x.EntityTypeId == getSchemaModel.EntityTypeId && x.IsActive);
 
             if (schema == null)
             {
@@ -187,7 +181,7 @@ namespace Foundation.Schema.Services.SchemaServices
                 return getSchemaResultModel;
             }
 
-            getSchemaResultModel.Schema = new TenantDatabase.Areas.Schemas.Entities.Schema
+            getSchemaResultModel.Schema = new Database.Areas.Schemas.Entities.Schema
             {
                 Id = schema.Id,
                 Name = schema.Name,
@@ -205,13 +199,11 @@ namespace Foundation.Schema.Services.SchemaServices
 
         private async Task<string> GetJsonSchemaAsync(string jsonSchemaSerialized, string language, string connectionString)
         {
-            var context = await this.genericRepositoryFactory.CreateTenantDatabaseContext(connectionString);
-
             var jsonSchema = JObject.Parse(jsonSchemaSerialized);
 
             var properties = (JObject)jsonSchema["properties"];
 
-            var translations = context.Translations.Where(x => x.IsActive).ToList();
+            var translations = this.context.Translations.Where(x => x.IsActive).ToList();
 
             foreach (var property in properties)
             {
@@ -241,7 +233,7 @@ namespace Foundation.Schema.Services.SchemaServices
 
                     if (isDefinitionKeyGuid)
                     {
-                        var taxonomy = context.Taxonomies.FirstOrDefault(x => x.Id == definitionKeyId && x.IsActive);
+                        var taxonomy = this.context.Taxonomies.FirstOrDefault(x => x.Id == definitionKeyId && x.IsActive);
 
                         if (taxonomy != null)
                         {

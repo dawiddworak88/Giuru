@@ -1,5 +1,5 @@
 ﻿using Foundation.GenericRepository.Paginations;
-using Foundation.TenantDatabase.Areas.Products.Entities;
+using Foundation.Database.Areas.Products.Entities;
 using System.Collections.Generic;
 
 namespace Api.v1.Areas.Products.ResponseModels
