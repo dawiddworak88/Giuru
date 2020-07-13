@@ -5,10 +5,10 @@ using Feature.Product;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Products.ViewModels;
-using Tenant.Portal.Shared.ComponentModels;
+using Seller.Portal.Areas.Products.ViewModels;
+using Seller.Portal.Shared.ComponentModels;
 
-namespace Tenant.Portal.Areas.Products.ModelBuilders
+namespace Seller.Portal.Areas.Products.ModelBuilders
 {
     public class ProductDetailPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailPageViewModel>
     {

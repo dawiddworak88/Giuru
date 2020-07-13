@@ -6,9 +6,9 @@ using Foundation.Extensions.ModelBuilders;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
-using Tenant.Portal.Areas.Clients.ViewModels;
+using Seller.Portal.Areas.Clients.ViewModels;
 
-namespace Tenant.Portal.Areas.Clients.ModelBuilders
+namespace Seller.Portal.Areas.Clients.ModelBuilders
 {
     public class ClientPageModelBuilder : IModelBuilder<ClientPageViewModel>
     {

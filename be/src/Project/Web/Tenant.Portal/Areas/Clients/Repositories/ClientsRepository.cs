@@ -8,12 +8,12 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Clients.ApiRequestModels;
-using Tenant.Portal.Areas.Clients.ApiResponseModels;
-using Tenant.Portal.Areas.Clients.DomainModels;
-using Tenant.Portal.Shared.Configurations;
+using Seller.Portal.Areas.Clients.ApiRequestModels;
+using Seller.Portal.Areas.Clients.ApiResponseModels;
+using Seller.Portal.Areas.Clients.DomainModels;
+using Seller.Portal.Shared.Configurations;
 
-namespace Tenant.Portal.Areas.Clients.Repositories
+namespace Seller.Portal.Areas.Clients.Repositories
 {
     public class ClientsRepository : IClientsRepository
     {

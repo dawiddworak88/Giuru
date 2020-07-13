@@ -1,6 +1,6 @@
-﻿using Tenant.Portal.Shared.ViewModels;
+﻿using Seller.Portal.Shared.ViewModels;
 
-namespace Tenant.Portal.Areas.Products.ViewModels
+namespace Seller.Portal.Areas.Products.ViewModels
 {
     public class ProductDetailPageViewModel : BasePageViewModel
     {

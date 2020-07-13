@@ -1,4 +1,4 @@
-﻿using Foundation.Database.Areas.Tenants.Entities;
+﻿using Foundation.Database.Areas.Sellers.Entities;
 using Foundation.Database.Shared.Repositories;
 using Foundation.Extensions.Definitions;
 using Foundation.GenericRepository.Services;
@@ -21,17 +21,17 @@ namespace Foundation.Schema.Services.SchemaServices
     public class SchemaService : ISchemaService
     {
         private readonly DatabaseContext context;
-        private readonly IGenericRepository<Tenant> tenantRepository;
+        private readonly IGenericRepository<Seller> sellerRepository;
         private readonly IEntityService entityService;
 
         public SchemaService(
             DatabaseContext context,
-            IGenericRepository<Tenant> tenantRepository,
+            IGenericRepository<Seller> sellerRepository,
             IEntityService entityService
             )
         {
             this.context = context;
-            this.tenantRepository = tenantRepository;
+            this.sellerRepository = sellerRepository;
             this.entityService = entityService;
         }
 
@@ -49,11 +49,11 @@ namespace Foundation.Schema.Services.SchemaServices
                 return createSchemaResultModel;
             }
 
-            var tenant = this.tenantRepository.GetById(model.TenantId.Value);
+            var seller = this.sellerRepository.GetById(model.SellerId.Value);
 
-            if (tenant == null)
+            if (seller == null)
             {
-                createSchemaResultModel.Errors.Add(ErrorConstants.NoTenant);
+                createSchemaResultModel.Errors.Add(ErrorConstants.NoSeller);
                 return createSchemaResultModel;
             }
 
@@ -119,11 +119,11 @@ namespace Foundation.Schema.Services.SchemaServices
                 return getSchemaResultModel;
             }
 
-            var tenant = this.tenantRepository.GetById(getSchemaModel.TenantId.Value);
+            var seller = this.sellerRepository.GetById(getSchemaModel.SellerId.Value);
 
-            if (tenant == null)
+            if (seller == null)
             {
-                getSchemaResultModel.Errors.Add(ErrorConstants.NoTenant);
+                getSchemaResultModel.Errors.Add(ErrorConstants.NoSeller);
                 return getSchemaResultModel;
             }
 
@@ -139,7 +139,7 @@ namespace Foundation.Schema.Services.SchemaServices
             { 
                 Id = schema.Id,
                 Name = schema.Name,
-                JsonSchema = await this.GetJsonSchemaAsync(schema.JsonSchema, getSchemaModel.Language, tenant.DatabaseConnectionString),
+                JsonSchema = await this.GetJsonSchemaAsync(schema.JsonSchema, getSchemaModel.Language, seller.DatabaseConnectionString),
                 UiSchema = schema.UiSchema,
                 EntityTypeId = schema.EntityTypeId,
                 LastModifiedDate = schema.LastModifiedDate,
@@ -165,11 +165,11 @@ namespace Foundation.Schema.Services.SchemaServices
                 return getSchemaResultModel;
             }
 
-            var tenant = this.tenantRepository.GetById(getSchemaModel.TenantId.Value);
+            var seller = this.sellerRepository.GetById(getSchemaModel.SellerId.Value);
 
-            if (tenant == null)
+            if (seller == null)
             {
-                getSchemaResultModel.Errors.Add(ErrorConstants.NoTenant);
+                getSchemaResultModel.Errors.Add(ErrorConstants.NoSeller);
                 return getSchemaResultModel;
             }
 
@@ -185,7 +185,7 @@ namespace Foundation.Schema.Services.SchemaServices
             {
                 Id = schema.Id,
                 Name = schema.Name,
-                JsonSchema = await this.GetJsonSchemaAsync(schema.JsonSchema, getSchemaModel.Language, tenant.DatabaseConnectionString),
+                JsonSchema = await this.GetJsonSchemaAsync(schema.JsonSchema, getSchemaModel.Language, seller.DatabaseConnectionString),
                 UiSchema = schema.UiSchema,
                 EntityTypeId = schema.EntityTypeId,
                 LastModifiedDate = schema.LastModifiedDate,

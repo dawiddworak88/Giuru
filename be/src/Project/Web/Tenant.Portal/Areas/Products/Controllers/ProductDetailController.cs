@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Products.ViewModels;
-using Tenant.Portal.Shared.ComponentModels;
+using Seller.Portal.Areas.Products.ViewModels;
+using Seller.Portal.Shared.ComponentModels;
 
-namespace Tenant.Portal.Areas.Products.Controllers
+namespace Seller.Portal.Areas.Products.Controllers
 {
     [Area("Products")]
     public class ProductDetailController : BaseController

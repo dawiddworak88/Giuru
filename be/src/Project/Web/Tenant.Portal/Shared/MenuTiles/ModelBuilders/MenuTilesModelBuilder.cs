@@ -7,7 +7,7 @@ using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Tenant.Portal.Shared.MenuTiles.ModelBuilders
+namespace Seller.Portal.Shared.MenuTiles.ModelBuilders
 {
     public class MenuTilesModelBuilder : IModelBuilder<MenuTilesViewModel>
     {

@@ -1,4 +1,4 @@
-﻿using Tenant.Portal.Areas.Orders.ViewModel;
+﻿using Seller.Portal.Areas.Orders.ViewModel;
 using Foundation.Extensions.ModelBuilders;
 using Feature.PageContent.MenuTiles.ViewModels;
 using Feature.PageContent.Components.Headers.ViewModels;
@@ -8,7 +8,7 @@ using Feature.Order;
 using Microsoft.AspNetCore.Routing;
 using System.Globalization;
 
-namespace Tenant.Portal.Areas.Orders.ModelBuilders
+namespace Seller.Portal.Areas.Orders.ModelBuilders
 {
     public class OrderPageModelBuilder : IModelBuilder<OrderPageViewModel>
     {

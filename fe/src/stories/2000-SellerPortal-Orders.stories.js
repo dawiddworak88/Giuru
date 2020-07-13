@@ -1,6 +1,6 @@
 import React from 'react';
-import '../project/Tenant.Portal/areas/Orders/pages/OrderPage/OrderPage.scss';
-import OrderPage from '../project/Tenant.Portal/areas/Orders/pages/OrderPage/OrderPage';
+import '../project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage.scss';
+import OrderPage from '../project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage';
 import { header, menuTiles, footer } from './Shared/Props';
 
 var props = {
@@ -16,6 +16,6 @@ OrderPageStory.story = {
 };
 
 export default {
-  title: 'TenantPortal.Orders',
+  title: 'SellerPortal.Orders',
   component: OrderPageStory,
 };

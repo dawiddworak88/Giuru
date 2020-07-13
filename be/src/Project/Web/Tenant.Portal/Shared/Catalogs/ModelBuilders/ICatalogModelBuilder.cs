@@ -1,6 +1,6 @@
-﻿using Tenant.Portal.Shared.ViewModels;
+﻿using Seller.Portal.Shared.ViewModels;
 
-namespace Tenant.Portal.Shared.Catalogs.ModelBuilders
+namespace Seller.Portal.Shared.Catalogs.ModelBuilders
 {
     public interface ICatalogModelBuilder
     {

@@ -1,6 +1,6 @@
 ﻿using Foundation.ApiExtensions.Models.Request;
 
-namespace Tenant.Portal.Areas.Clients.ApiRequestModels
+namespace Seller.Portal.Areas.Clients.ApiRequestModels
 {
     public class ClientsRequestModel : BaseRequestModel
     {

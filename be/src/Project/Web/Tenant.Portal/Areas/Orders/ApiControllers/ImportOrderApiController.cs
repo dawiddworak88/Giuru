@@ -18,11 +18,11 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Orders.ApiRequestModels;
-using Tenant.Portal.Areas.Orders.ApiResponseModels;
-using Tenant.Portal.Shared.Configurations;
+using Seller.Portal.Areas.Orders.ApiRequestModels;
+using Seller.Portal.Areas.Orders.ApiResponseModels;
+using Seller.Portal.Shared.Configurations;
 
-namespace Tenant.Portal.Areas.Clients.ApiControllers
+namespace Seller.Portal.Areas.Clients.ApiControllers
 {
     [Area("Orders")]
     public class ImportOrderApiController : BaseApiController

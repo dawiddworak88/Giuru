@@ -1,9 +1,9 @@
 ﻿using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.AspNetCore.Mvc;
-using Tenant.Portal.Areas.Orders.ViewModel;
+using Seller.Portal.Areas.Orders.ViewModel;
 
-namespace Tenant.Portal.Areas.Orders.Controllers
+namespace Seller.Portal.Areas.Orders.Controllers
 {
     [Area("Orders")]
     public class OrderDetailController : BaseController

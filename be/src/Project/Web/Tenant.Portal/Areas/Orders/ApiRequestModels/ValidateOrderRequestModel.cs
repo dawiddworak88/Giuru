@@ -2,7 +2,7 @@
 using Foundation.ApiExtensions.Models.Request;
 using System;
 
-namespace Tenant.Portal.Areas.Orders.ApiRequestModels
+namespace Seller.Portal.Areas.Orders.ApiRequestModels
 {
     public class ValidateOrderRequestModel : BaseRequestModel
     {

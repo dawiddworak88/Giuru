@@ -4,7 +4,7 @@
     {
         public const string HttpsScheme = "https";
         public const string HttpScheme = "http";
-        public const string TenantIdClaim = "TenantId";
+        public const string SellerIdClaim = "SellerId";
         public const int DefaultTokenLifetimeInSeconds = 86400;
     }
 }

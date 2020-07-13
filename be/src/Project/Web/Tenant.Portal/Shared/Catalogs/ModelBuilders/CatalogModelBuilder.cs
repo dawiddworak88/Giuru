@@ -1,9 +1,9 @@
 ﻿using Foundation.Localization;
 using Microsoft.Extensions.Localization;
-using Tenant.Portal.Shared.Catalogs.ModelBuilders;
-using Tenant.Portal.Shared.ViewModels;
+using Seller.Portal.Shared.Catalogs.ModelBuilders;
+using Seller.Portal.Shared.ViewModels;
 
-namespace Tenant.Portal.Areas.Products.ModelBuilders
+namespace Seller.Portal.Areas.Products.ModelBuilders
 {
     public class CatalogModelBuilder : ICatalogModelBuilder
     {

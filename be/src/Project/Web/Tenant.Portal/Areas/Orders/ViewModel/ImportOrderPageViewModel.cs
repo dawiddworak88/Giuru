@@ -1,6 +1,6 @@
-﻿using Tenant.Portal.Shared.ViewModels;
+﻿using Seller.Portal.Shared.ViewModels;
 
-namespace Tenant.Portal.Areas.Orders.ViewModel
+namespace Seller.Portal.Areas.Orders.ViewModel
 {
     public class ImportOrderPageViewModel : BasePageViewModel
     {

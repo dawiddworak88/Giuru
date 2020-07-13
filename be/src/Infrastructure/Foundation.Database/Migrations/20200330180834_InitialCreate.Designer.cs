@@ -72,7 +72,7 @@ namespace Foundation.Database.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<Guid?>("SellerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -92,12 +92,12 @@ namespace Foundation.Database.Migrations
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("TenantId");
+                    b.HasIndex("SellerId");
 
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Foundation.Database.Areas.Tenants.Entities.Tenant", b =>
+            modelBuilder.Entity("Foundation.Database.Areas.Sellers.Entities.Seller", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -140,7 +140,7 @@ namespace Foundation.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tenants");
+                    b.ToTable("Sellers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -276,9 +276,9 @@ namespace Foundation.Database.Migrations
 
             modelBuilder.Entity("Foundation.Database.Areas.Accounts.Entities.ApplicationUser", b =>
                 {
-                    b.HasOne("Foundation.Database.Areas.Tenants.Entities.Tenant", "Tenant")
+                    b.HasOne("Foundation.Database.Areas.Sellers.Entities.Seller", "Seller")
                         .WithMany()
-                        .HasForeignKey("TenantId");
+                        .HasForeignKey("SellerId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

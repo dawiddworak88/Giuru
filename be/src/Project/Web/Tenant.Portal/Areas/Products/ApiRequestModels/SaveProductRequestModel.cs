@@ -2,7 +2,7 @@
 using System;
 using System.Text.Json;
 
-namespace Tenant.Portal.Areas.Products.ApiRequestModels
+namespace Seller.Portal.Areas.Products.ApiRequestModels
 {
     public class SaveProductRequestModel : BaseRequestModel
     {

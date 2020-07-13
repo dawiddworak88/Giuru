@@ -8,7 +8,7 @@ using Foundation.Localization;
 using Feature.PageContent.Components.Headers.ViewModels;
 using Feature.PageContent.Components.LanguageSwitchers.ViewModels;
 
-namespace Tenant.Portal.Shared.Headers.ModelBuilders
+namespace Seller.Portal.Shared.Headers.ModelBuilders
 {
     public class HeaderModelBuilder : IModelBuilder<HeaderViewModel>
     {

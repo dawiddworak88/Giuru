@@ -14,11 +14,11 @@ using System;
 using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Clients.ApiRequestModels;
-using Tenant.Portal.Areas.Clients.ApiResponseModels;
-using Tenant.Portal.Shared.Configurations;
+using Seller.Portal.Areas.Clients.ApiRequestModels;
+using Seller.Portal.Areas.Clients.ApiResponseModels;
+using Seller.Portal.Shared.Configurations;
 
-namespace Tenant.Portal.Areas.Clients.ApiControllers
+namespace Seller.Portal.Areas.Clients.ApiControllers
 {
     [Area("Clients")]
     public class ClientApiController : BaseApiController

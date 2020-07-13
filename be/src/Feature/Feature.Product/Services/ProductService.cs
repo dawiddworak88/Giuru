@@ -1,7 +1,7 @@
 ﻿using Feature.Product.Models;
 using Feature.Product.ResultModels;
 using Feature.Product.Validators;
-using Foundation.Database.Areas.Tenants.Entities;
+using Foundation.Database.Areas.Sellers.Entities;
 using Foundation.Database.Shared.Repositories;
 using Foundation.Extensions.Definitions;
 using Foundation.GenericRepository.Paginations;
@@ -17,16 +17,16 @@ namespace Feature.Product.Services
     public class ProductService : IProductService
     {
         private readonly DatabaseContext context;
-        private readonly IGenericRepository<Tenant> tenantRepository;
+        private readonly IGenericRepository<Seller> sellerRepository;
         private readonly IEntityService entityService;
 
         public ProductService(
             DatabaseContext context,
-            IGenericRepository<Tenant> tenantRepository,
+            IGenericRepository<Seller> sellerRepository,
             IEntityService entityService)
         {
             this.context = context;
-            this.tenantRepository = tenantRepository;
+            this.sellerRepository = sellerRepository;
             this.entityService = entityService;
         }
 
@@ -44,11 +44,11 @@ namespace Feature.Product.Services
                 return createProductResultModel;
             }
 
-            var tenant = this.tenantRepository.GetById(model.TenantId.Value);
+            var seller = this.sellerRepository.GetById(model.SellerId.Value);
 
-            if (tenant == null)
+            if (seller == null)
             {
-                createProductResultModel.Errors.Add(ErrorConstants.NoTenant);
+                createProductResultModel.Errors.Add(ErrorConstants.NoSeller);
                 return createProductResultModel;
             }
 
@@ -97,11 +97,11 @@ namespace Feature.Product.Services
                 return productResultModel;
             }
 
-            var tenant = this.tenantRepository.GetById(model.TenantId.Value);
+            var seller = this.sellerRepository.GetById(model.SellerId.Value);
 
-            if (tenant == null)
+            if (seller == null)
             {
-                productResultModel.Errors.Add(ErrorConstants.NoTenant);
+                productResultModel.Errors.Add(ErrorConstants.NoSeller);
                 return productResultModel;
             }
 
@@ -144,11 +144,11 @@ namespace Feature.Product.Services
                 return deleteProductResultModel;
             }
 
-            var tenant = this.tenantRepository.GetById(deleteProductModel.TenantId.Value);
+            var seller = this.sellerRepository.GetById(deleteProductModel.SellerId.Value);
 
-            if (tenant == null)
+            if (seller == null)
             {
-                deleteProductResultModel.Errors.Add(ErrorConstants.NoTenant);
+                deleteProductResultModel.Errors.Add(ErrorConstants.NoSeller);
                 return deleteProductResultModel;
             }
 
@@ -187,11 +187,11 @@ namespace Feature.Product.Services
                 return getProductsResultModel;
             }
 
-            var tenant = this.tenantRepository.GetById(getProductsModel.TenantId.Value);
+            var seller = this.sellerRepository.GetById(getProductsModel.SellerId.Value);
 
-            if (tenant == null)
+            if (seller == null)
             {
-                getProductsResultModel.Errors.Add(ErrorConstants.NoTenant);
+                getProductsResultModel.Errors.Add(ErrorConstants.NoSeller);
                 return getProductsResultModel;
             }
 
@@ -225,11 +225,11 @@ namespace Feature.Product.Services
                 return getProductResultModel;
             }
 
-            var tenant = this.tenantRepository.GetById(getProductModel.TenantId.Value);
+            var seller = this.sellerRepository.GetById(getProductModel.SellerId.Value);
 
-            if (tenant == null)
+            if (seller == null)
             {
-                getProductResultModel.Errors.Add(ErrorConstants.NoTenant);
+                getProductResultModel.Errors.Add(ErrorConstants.NoSeller);
                 return getProductResultModel;
             }
 

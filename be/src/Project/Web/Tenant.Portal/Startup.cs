@@ -1,6 +1,6 @@
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
-using Tenant.Portal.Shared.DependencyInjection;
+using Seller.Portal.Shared.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -11,14 +11,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Feature.PageContent.DependencyInjection;
 using Feature.Security.DependencyInjection;
-using Tenant.Portal.Areas.Orders.DependencyInjection;
-using Tenant.Portal.Areas.Clients.DependencyInjection;
-using Tenant.Portal.Areas.Products.DependencyInjection;
+using Seller.Portal.Areas.Orders.DependencyInjection;
+using Seller.Portal.Areas.Clients.DependencyInjection;
+using Seller.Portal.Areas.Products.DependencyInjection;
 using Foundation.ApiExtensions.DependencyInjection;
 using Foundation.Localization.DependencyInjection;
 using Feature.ImportOrder.DependencyInjection;
 
-namespace Tenant.Portal
+namespace Seller.Portal
 {
     public class Startup
     {

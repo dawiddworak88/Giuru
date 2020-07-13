@@ -77,7 +77,7 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "C:\\Projects\\Giuru\\be\\src\\Project\\Web\\Tenant.Portal\\wwwroot\\dist\\js";
+/******/ 	__webpack_require__.p = "C:\\Projects\\Giuru\\be\\src\\Project\\Web\\Seller.Portal\\wwwroot\\dist\\js";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
@@ -28749,7 +28749,7 @@ var react_toastify = __webpack_require__(30);
 // EXTERNAL MODULE: ./src/shared/helpers/errorHandlers/FetchErrorHandler.js + 1 modules
 var FetchErrorHandler = __webpack_require__(65);
 
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Clients/services/ClientDetail/ClientDetailService.js
+// CONCATENATED MODULE: ./src/project/Seller.Portal/areas/Clients/services/ClientDetail/ClientDetailService.js
 
 
 
@@ -28804,7 +28804,7 @@ var ClientDetailService_ClientDetailService = /*#__PURE__*/function () {
 }();
 
 
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Clients/components/ClientDetail/ClientDetailForm.js
+// CONCATENATED MODULE: ./src/project/Seller.Portal/areas/Clients/components/ClientDetail/ClientDetailForm.js
 
 
 
@@ -28935,7 +28935,7 @@ function ClientDetailForm(props) {
 // EXTERNAL MODULE: ./src/shared/layouts/images/favicon.png
 var favicon = __webpack_require__(82);
 
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage.js
+// CONCATENATED MODULE: ./src/project/Seller.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage.js
 
 
 
@@ -28967,7 +28967,7 @@ function ClientDetailPage(props) {
 // EXTERNAL MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.js
 var CssSsrRemovalHelper = __webpack_require__(58);
 
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Clients/pages/ClientDetailPage/index.js
+// CONCATENATED MODULE: ./src/project/Seller.Portal/areas/Clients/pages/ClientDetailPage/index.js
 
 
 

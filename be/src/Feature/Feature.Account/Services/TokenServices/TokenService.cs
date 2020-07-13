@@ -28,9 +28,9 @@ namespace Feature.Account.Services.TokenServices
             {
                 var claims = new HashSet<Claim>(new ClaimComparer())
                 {
-                    new Claim(AccountConstants.TenantIdClaim, user.Tenant.Id.ToString()),
+                    new Claim(AccountConstants.SellerIdClaim, user.Seller.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Name, user.Tenant.Key),
+                    new Claim(ClaimTypes.Name, user.Seller.Key),
                     new Claim(JwtClaimTypes.Audience, ApiExtensionsConstants.AllScopes)
                 };
 

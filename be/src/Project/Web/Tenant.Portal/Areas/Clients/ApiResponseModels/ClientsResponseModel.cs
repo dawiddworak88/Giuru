@@ -2,7 +2,7 @@
 using Foundation.GenericRepository.Paginations;
 using System.Collections.Generic;
 
-namespace Tenant.Portal.Areas.Clients.ApiResponseModels
+namespace Seller.Portal.Areas.Clients.ApiResponseModels
 {
     public class ClientsResponseModel : BaseResponseModel
     {

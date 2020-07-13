@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tenant.Portal.Areas.Products.DomainModels
+namespace Seller.Portal.Areas.Products.DomainModels
 {
     public class Schema
     {

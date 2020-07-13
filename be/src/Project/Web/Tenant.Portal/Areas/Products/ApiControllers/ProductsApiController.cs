@@ -13,11 +13,11 @@ using System.Globalization;
 using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Products.ApiRequestModels;
-using Tenant.Portal.Areas.Products.ApiResponseModels;
-using Tenant.Portal.Shared.Configurations;
+using Seller.Portal.Areas.Products.ApiRequestModels;
+using Seller.Portal.Areas.Products.ApiResponseModels;
+using Seller.Portal.Shared.Configurations;
 
-namespace Tenant.Portal.Areas.Clients.ApiControllers
+namespace Seller.Portal.Areas.Clients.ApiControllers
 {
     [Area("Products")]
     public class ProductsApiController : BaseApiController

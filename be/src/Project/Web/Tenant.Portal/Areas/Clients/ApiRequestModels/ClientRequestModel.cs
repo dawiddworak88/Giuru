@@ -1,7 +1,7 @@
 ﻿using Foundation.ApiExtensions.Models.Request;
 using System;
 
-namespace Tenant.Portal.Areas.Clients.ApiRequestModels
+namespace Seller.Portal.Areas.Clients.ApiRequestModels
 {
     public class ClientRequestModel : BaseRequestModel
     {

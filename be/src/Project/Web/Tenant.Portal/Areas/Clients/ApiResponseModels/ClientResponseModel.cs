@@ -1,7 +1,7 @@
 ﻿using Foundation.ApiExtensions.Models.Response;
 using System;
 
-namespace Tenant.Portal.Areas.Clients.ApiResponseModels
+namespace Seller.Portal.Areas.Clients.ApiResponseModels
 {
     public class ClientResponseModel : BaseResponseModel
     {

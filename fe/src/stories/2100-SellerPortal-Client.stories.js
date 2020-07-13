@@ -1,6 +1,6 @@
 import React from 'react';
-import '../project/Tenant.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage.scss';
-import ClientDetailPage from '../project/Tenant.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage';
+import '../project/Seller.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage.scss';
+import ClientDetailPage from '../project/Seller.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage';
 import { header, menuTiles, footer } from './Shared/Props';
 
 var clientDetailForm = {
@@ -34,6 +34,6 @@ ClientDetailPageStory.story = {
 };
 
 export default {
-  title: 'TenantPortal.Client',
+  title: 'SellerPortal.Client',
   component: ClientDetailPageStory,
 };

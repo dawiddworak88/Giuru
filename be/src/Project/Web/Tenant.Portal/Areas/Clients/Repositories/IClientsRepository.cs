@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Clients.DomainModels;
+using Seller.Portal.Areas.Clients.DomainModels;
 
-namespace Tenant.Portal.Areas.Clients.Repositories
+namespace Seller.Portal.Areas.Clients.Repositories
 {
     public interface IClientsRepository
     {

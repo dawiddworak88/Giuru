@@ -6,12 +6,12 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Products.ApiRequestModels;
-using Tenant.Portal.Areas.Products.ApiResponseModels;
-using Tenant.Portal.Areas.Products.DomainModels;
-using Tenant.Portal.Shared.Configurations;
+using Seller.Portal.Areas.Products.ApiRequestModels;
+using Seller.Portal.Areas.Products.ApiResponseModels;
+using Seller.Portal.Areas.Products.DomainModels;
+using Seller.Portal.Shared.Configurations;
 
-namespace Tenant.Portal.Areas.Products.Repositories
+namespace Seller.Portal.Areas.Products.Repositories
 {
     public class ProductSchemaRepository : IProductSchemaRepository
     {

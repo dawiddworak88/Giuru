@@ -130,7 +130,7 @@ var accountBrowserConfig = {
     }
 };
 
-var tenantPortalBrowserConfig = {
+var sellerPortalBrowserConfig = {
     module: {
         rules: [
             {
@@ -184,19 +184,19 @@ var tenantPortalBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
-        orderpage: ["./src/project/Tenant.Portal/areas/Orders/pages/OrderPage/index.js", "./src/project/Tenant.Portal/areas/Orders/pages/OrderPage/OrderPage.scss"],
-        orderdetailpage: ["./src/project/Tenant.Portal/areas/Orders/pages/OrderDetailPage/index.js", "./src/project/Tenant.Portal/areas/Orders/pages/OrderDetailPage/OrderDetailPage.scss"],
-        importorderpage: ["./src/project/Tenant.Portal/areas/Orders/pages/ImportOrderPage/index.js", "./src/project/Tenant.Portal/areas/Orders/pages/ImportOrderPage/ImportOrderPage.scss"],
-        clientpage: ["./src/project/Tenant.Portal/areas/Clients/pages/ClientPage/index.js", "./src/project/Tenant.Portal/areas/Clients/pages/ClientPage/ClientPage.scss"],
-        clientdetailpage: ["./src/project/Tenant.Portal/areas/Clients/pages/ClientDetailPage/index.js", "./src/project/Tenant.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage.scss"],
-        productpage: ["./src/project/Tenant.Portal/areas/Products/pages/ProductPage/index.js", "./src/project/Tenant.Portal/areas/Products/pages/ProductPage/ProductPage.scss"],
-        productdetailpage: ["./src/project/Tenant.Portal/areas/Products/pages/ProductDetailPage/index.js", "./src/project/Tenant.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage.scss"]
+        orderpage: ["./src/project/Seller.Portal/areas/Orders/pages/OrderPage/index.js", "./src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage.scss"],
+        orderdetailpage: ["./src/project/Seller.Portal/areas/Orders/pages/OrderDetailPage/index.js", "./src/project/Seller.Portal/areas/Orders/pages/OrderDetailPage/OrderDetailPage.scss"],
+        importorderpage: ["./src/project/Seller.Portal/areas/Orders/pages/ImportOrderPage/index.js", "./src/project/Seller.Portal/areas/Orders/pages/ImportOrderPage/ImportOrderPage.scss"],
+        clientpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage.scss"],
+        clientdetailpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientDetailPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage.scss"],
+        productpage: ["./src/project/Seller.Portal/areas/Products/pages/ProductPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage.scss"],
+        productdetailpage: ["./src/project/Seller.Portal/areas/Products/pages/ProductDetailPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage.scss"]
     },
     output: {
-        publicPath: path.resolve(__dirname, "../be/src/Project/Web/Tenant.Portal/wwwroot/dist/js"),
-        path: path.resolve(__dirname, "../be/src/Project/Web/Tenant.Portal/wwwroot/dist/js"),
+        publicPath: path.resolve(__dirname, "../be/src/Project/Web/Seller.Portal/wwwroot/dist/js"),
+        path: path.resolve(__dirname, "../be/src/Project/Web/Seller.Portal/wwwroot/dist/js"),
         filename: "[name].js"
     }
 };
 
-module.exports = [browserConfig, accountBrowserConfig, tenantPortalBrowserConfig];
+module.exports = [browserConfig, accountBrowserConfig, sellerPortalBrowserConfig];

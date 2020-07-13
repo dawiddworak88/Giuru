@@ -1,17 +1,17 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Tenant.Portal.Shared.Headers.ModelBuilders;
+using Seller.Portal.Shared.Headers.ModelBuilders;
 using Foundation.Extensions.ModelBuilders;
-using Tenant.Portal.Shared.Footers.ModelBuilders;
+using Seller.Portal.Shared.Footers.ModelBuilders;
 using Microsoft.Extensions.Configuration;
-using Tenant.Portal.Shared.Configurations;
-using Tenant.Portal.Shared.MenuTiles.ModelBuilders;
+using Seller.Portal.Shared.Configurations;
+using Seller.Portal.Shared.MenuTiles.ModelBuilders;
 using Feature.PageContent.MenuTiles.ViewModels;
 using Feature.PageContent.Components.Headers.ViewModels;
 using Feature.PageContent.Components.Footers.ViewModels;
-using Tenant.Portal.Areas.Clients.Configurations;
-using Tenant.Portal.Areas.Clients.Controllers.Configurations;
+using Seller.Portal.Areas.Clients.Configurations;
+using Seller.Portal.Areas.Clients.Controllers.Configurations;
 
-namespace Tenant.Portal.Shared.DependencyInjection
+namespace Seller.Portal.Shared.DependencyInjection
 {
     public static class CompositionRoot
     {

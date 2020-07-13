@@ -50,12 +50,12 @@ namespace Api.v1.Areas.Clients.Controllers
         {
             try
             {
-                var tenantClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.TenantIdClaim);
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.SellerIdClaim);
 
                 var createClientModel = new CreateClientModel
                 {
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
+                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Name = clientModel.Name,
                     Email = clientModel.Email,
                     Language = clientModel.Language,

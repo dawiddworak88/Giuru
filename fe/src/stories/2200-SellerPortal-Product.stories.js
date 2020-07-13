@@ -1,6 +1,6 @@
 import React from 'react';
-import '../project/Tenant.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage.scss';
-import ProductDetailPage from '../project/Tenant.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage';
+import '../project/Seller.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage.scss';
+import ProductDetailPage from '../project/Seller.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage';
 import { header, menuTiles, footer } from './Shared/Props';
 
 var productDetailForm = {
@@ -287,6 +287,6 @@ ProductDetailPageStory.story = {
 };
 
 export default {
-  title: 'TenantPortal.Product',
+  title: 'SellerPortal.Product',
   component: ProductDetailPageStory,
 };

@@ -1,6 +1,6 @@
 ﻿using Foundation.ApiExtensions.Models.Request;
 
-namespace Tenant.Portal.Areas.Products.ApiRequestModels
+namespace Seller.Portal.Areas.Products.ApiRequestModels
 {
     public class ProductsRequestModel : BaseRequestModel
     {

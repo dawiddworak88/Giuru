@@ -1,4 +1,4 @@
-﻿using Foundation.Database.Areas.Tenants.Entities;
+﻿using Foundation.Database.Areas.Sellers.Entities;
 using Foundation.Database.Shared.Repositories;
 using Foundation.Extensions.Definitions;
 using Foundation.GenericRepository.Services;
@@ -16,17 +16,17 @@ namespace Foundation.Taxonomy.Services.TaxonomyServices
     public class TaxonomyService : ITaxonomyService
     {
         private readonly DatabaseContext context;
-        private readonly IGenericRepository<Tenant> tenantRepository;
+        private readonly IGenericRepository<Seller> sellerRepository;
         private readonly IEntityService entityService;
 
         public TaxonomyService(
             DatabaseContext context,
-            IGenericRepository<Tenant> tenantRepository,
+            IGenericRepository<Seller> sellerRepository,
             IEntityService entityService
             )
         {
             this.context = context;
-            this.tenantRepository = tenantRepository;
+            this.sellerRepository = sellerRepository;
             this.entityService = entityService;
         }
 
@@ -44,11 +44,11 @@ namespace Foundation.Taxonomy.Services.TaxonomyServices
                 return createTaxonomyResultModel;
             }
 
-            var tenant = this.tenantRepository.GetById(model.TenantId.Value);
+            var seller = this.sellerRepository.GetById(model.SellerId.Value);
 
-            if (tenant == null)
+            if (seller == null)
             {
-                createTaxonomyResultModel.Errors.Add(ErrorConstants.NoTenant);
+                createTaxonomyResultModel.Errors.Add(ErrorConstants.NoSeller);
                 return createTaxonomyResultModel;
             }
 
@@ -92,11 +92,11 @@ namespace Foundation.Taxonomy.Services.TaxonomyServices
                 return getTaxonomyResultModel;
             }
 
-            var tenant = this.tenantRepository.GetById(model.TenantId.Value);
+            var seller = this.sellerRepository.GetById(model.SellerId.Value);
 
-            if (tenant == null)
+            if (seller == null)
             {
-                getTaxonomyResultModel.Errors.Add(ErrorConstants.NoTenant);
+                getTaxonomyResultModel.Errors.Add(ErrorConstants.NoSeller);
                 return getTaxonomyResultModel;
             }
 

@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Products.Repositories;
-using Tenant.Portal.Areas.Products.ViewModels;
-using Tenant.Portal.Shared.Catalogs.ModelBuilders;
-using Tenant.Portal.Shared.ComponentModels;
+using Seller.Portal.Areas.Products.Repositories;
+using Seller.Portal.Areas.Products.ViewModels;
+using Seller.Portal.Shared.Catalogs.ModelBuilders;
+using Seller.Portal.Shared.ComponentModels;
 
-namespace Tenant.Portal.Areas.Products.ModelBuilders
+namespace Seller.Portal.Areas.Products.ModelBuilders
 {
     public class ProductPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductPageCatalogViewModel>
     {

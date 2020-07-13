@@ -1,4 +1,4 @@
-﻿using Tenant.Portal.Areas.Orders.ViewModel;
+﻿using Seller.Portal.Areas.Orders.ViewModel;
 using Foundation.Extensions.ModelBuilders;
 using Feature.PageContent.MenuTiles.ViewModels;
 using Feature.PageContent.Components.Headers.ViewModels;
@@ -6,9 +6,9 @@ using Feature.PageContent.Components.Footers.ViewModels;
 using Microsoft.Extensions.Localization;
 using Feature.Order;
 using System.Threading.Tasks;
-using Tenant.Portal.Shared.ComponentModels;
+using Seller.Portal.Shared.ComponentModels;
 
-namespace Tenant.Portal.Areas.Orders.ModelBuilders
+namespace Seller.Portal.Areas.Orders.ModelBuilders
 {
     public class ImportOrderPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ImportOrderPageViewModel>
     {

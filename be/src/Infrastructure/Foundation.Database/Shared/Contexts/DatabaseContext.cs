@@ -8,7 +8,7 @@ using Foundation.Database.Areas.Schemas.Entities;
 using Foundation.Database.Areas.Taxonomies.Entities;
 using Foundation.Database.Areas.Translations.Entities;
 using Foundation.Database.Areas.Accounts.Entities;
-using Foundation.Database.Areas.Tenants.Entities;
+using Foundation.Database.Areas.Sellers.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Foundation.Database.Shared.Entities;
@@ -27,7 +27,7 @@ namespace Foundation.Database.Shared.Contexts
         }
 
         public DbSet<ApplicationUser> Accounts { get; set; }
-        public DbSet<Tenant> Tenants { get; set; }
+        public DbSet<Seller> Sellers { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<EntityType> EntityTypes { get; set; }
         public DbSet<MediaItem> MediaItems { get; set; }

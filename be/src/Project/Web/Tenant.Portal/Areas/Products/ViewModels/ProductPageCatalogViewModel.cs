@@ -1,9 +1,9 @@
 ﻿using Foundation.GenericRepository.Paginations;
 using System.Collections.Generic;
-using Tenant.Portal.Areas.Products.DomainModels;
-using Tenant.Portal.Shared.ViewModels;
+using Seller.Portal.Areas.Products.DomainModels;
+using Seller.Portal.Shared.ViewModels;
 
-namespace Tenant.Portal.Areas.Products.ViewModels
+namespace Seller.Portal.Areas.Products.ViewModels
 {
     public class ProductPageCatalogViewModel : CatalogBaseViewModel
     {

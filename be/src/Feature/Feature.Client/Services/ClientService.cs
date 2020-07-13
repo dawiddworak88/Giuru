@@ -6,7 +6,7 @@ using Foundation.Account.Definitions;
 using Foundation.Account.Services;
 using Foundation.Account.UserStores;
 using Foundation.Database.Areas.Accounts.Entities;
-using Foundation.Database.Areas.Tenants.Entities;
+using Foundation.Database.Areas.Sellers.Entities;
 using Foundation.Database.Shared.Contexts;
 using Foundation.Database.Shared.Repositories;
 using Foundation.GenericRepository.Paginations;
@@ -31,7 +31,7 @@ namespace Feature.Client.Services
     public class ClientService : IClientService
     {
         private readonly DatabaseContext context;
-        private readonly IGenericRepository<Tenant> tenantRepository;
+        private readonly IGenericRepository<Seller> sellerRepository;
         private readonly UserStoreFactory userStoreFactory;
         private readonly IPasswordHasher<ApplicationUser> passwordHasher;
         private readonly IPasswordGenerationService passwordGenerationService;
@@ -43,7 +43,7 @@ namespace Feature.Client.Services
 
         public ClientService(
             DatabaseContext context,
-            IGenericRepository<Tenant> tenantRepository,
+            IGenericRepository<Seller> sellerRepository,
             UserStoreFactory userStoreFactory,
             IPasswordHasher<ApplicationUser> passwordHasher,
             IPasswordGenerationService passwordGenerationService,
@@ -54,7 +54,7 @@ namespace Feature.Client.Services
             IEntityService entityService)
         {
             this.context = context;
-            this.tenantRepository = tenantRepository;
+            this.sellerRepository = sellerRepository;
             this.userStoreFactory = userStoreFactory;
             this.passwordHasher = passwordHasher;
             this.passwordGenerationService = passwordGenerationService;
@@ -79,11 +79,11 @@ namespace Feature.Client.Services
                 return createClientResultModel;
             }
 
-            var tenant = this.tenantRepository.GetById(model.TenantId.Value);
+            var seller = this.sellerRepository.GetById(model.SellerId.Value);
 
-            if (tenant == null)
+            if (seller == null)
             {
-                createClientResultModel.Errors.Add(Foundation.Extensions.Definitions.ErrorConstants.NoTenant);
+                createClientResultModel.Errors.Add(Foundation.Extensions.Definitions.ErrorConstants.NoSeller);
                 return createClientResultModel;
             }
 
@@ -166,11 +166,11 @@ namespace Feature.Client.Services
                 return getClientsResultModel;
             }
 
-            var tenant = this.tenantRepository.GetById(getClientsModel.TenantId.Value);
+            var seller = this.sellerRepository.GetById(getClientsModel.SellerId.Value);
 
-            if (tenant == null)
+            if (seller == null)
             {
-                getClientsResultModel.Errors.Add(Foundation.Extensions.Definitions.ErrorConstants.NoTenant);
+                getClientsResultModel.Errors.Add(Foundation.Extensions.Definitions.ErrorConstants.NoSeller);
                 return getClientsResultModel;
             }
 

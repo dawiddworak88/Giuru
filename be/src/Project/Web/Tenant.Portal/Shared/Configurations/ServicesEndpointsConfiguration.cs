@@ -1,6 +1,6 @@
-﻿using Tenant.Portal.Areas.Clients.Controllers.Configurations;
+﻿using Seller.Portal.Areas.Clients.Controllers.Configurations;
 
-namespace Tenant.Portal.Shared.Configurations
+namespace Seller.Portal.Shared.Configurations
 {
     public class ServicesEndpointsConfiguration
     {

@@ -22,7 +22,7 @@ namespace Foundation.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tenants",
+                name: "Sellers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -39,7 +39,7 @@ namespace Foundation.Database.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tenants", x => x.Id);
+                    table.PrimaryKey("PK_Sellers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -84,15 +84,15 @@ namespace Foundation.Database.Migrations
                     AccessFailedCount = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
-                    TenantId = table.Column<Guid>(nullable: true)
+                    SellerId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Tenants_TenantId",
-                        column: x => x.TenantId,
-                        principalTable: "Tenants",
+                        name: "FK_AspNetUsers_Sellers_SellerId",
+                        column: x => x.SellerId,
+                        principalTable: "Sellers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -222,9 +222,9 @@ namespace Foundation.Database.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_TenantId",
+                name: "IX_AspNetUsers_SellerId",
                 table: "AspNetUsers",
-                column: "TenantId");
+                column: "SellerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -251,7 +251,7 @@ namespace Foundation.Database.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Tenants");
+                name: "Sellers");
         }
     }
 }

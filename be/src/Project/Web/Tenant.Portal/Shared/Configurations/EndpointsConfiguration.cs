@@ -1,4 +1,4 @@
-﻿namespace Tenant.Portal.Areas.Clients.Configurations
+﻿namespace Seller.Portal.Areas.Clients.Configurations
 {
     public class EndpointsConfiguration
     {

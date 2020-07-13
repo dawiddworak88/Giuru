@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Tenant.Portal.Areas.Clients.DomainModels;
+using Seller.Portal.Areas.Clients.DomainModels;
 
-namespace Tenant.Portal.Areas.Orders.ViewModel
+namespace Seller.Portal.Areas.Orders.ViewModel
 {
     public class ImportOrderFormViewModel
     {

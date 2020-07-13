@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System;
 
-namespace Tenant.Portal.Areas.Orders.ApiRequestModels
+namespace Seller.Portal.Areas.Orders.ApiRequestModels
 {
     public class ImportOrderRequestModel : BaseRequestModel
     {

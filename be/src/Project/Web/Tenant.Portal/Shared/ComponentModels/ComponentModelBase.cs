@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tenant.Portal.Shared.ComponentModels
+namespace Seller.Portal.Shared.ComponentModels
 {
     public class ComponentModelBase
     {

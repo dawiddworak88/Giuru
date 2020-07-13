@@ -2,7 +2,7 @@
 using Feature.PageContent.Components.Headers.ViewModels;
 using Feature.PageContent.MenuTiles.ViewModels;
 
-namespace Tenant.Portal.Shared.ViewModels
+namespace Seller.Portal.Shared.ViewModels
 {
     public class BasePageViewModel
     {

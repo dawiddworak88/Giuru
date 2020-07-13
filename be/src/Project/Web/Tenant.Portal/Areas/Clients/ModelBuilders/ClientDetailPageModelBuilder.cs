@@ -4,9 +4,9 @@ using Feature.PageContent.Components.Headers.ViewModels;
 using Feature.PageContent.MenuTiles.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
-using Tenant.Portal.Areas.Clients.ViewModels;
+using Seller.Portal.Areas.Clients.ViewModels;
 
-namespace Tenant.Portal.Areas.Clients.ModelBuilders
+namespace Seller.Portal.Areas.Clients.ModelBuilders
 {
     public class ClientDetailPageModelBuilder : IModelBuilder<ClientDetailPageViewModel>
     {

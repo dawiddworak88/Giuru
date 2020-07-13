@@ -1,12 +1,12 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.DependencyInjection;
-using Tenant.Portal.Areas.Clients.ModelBuilders;
-using Tenant.Portal.Areas.Clients.Repositories;
-using Tenant.Portal.Areas.Clients.ViewModels;
-using Tenant.Portal.Areas.Products.ModelBuilders;
-using Tenant.Portal.Shared.Catalogs.ModelBuilders;
+using Seller.Portal.Areas.Clients.ModelBuilders;
+using Seller.Portal.Areas.Clients.Repositories;
+using Seller.Portal.Areas.Clients.ViewModels;
+using Seller.Portal.Areas.Products.ModelBuilders;
+using Seller.Portal.Shared.Catalogs.ModelBuilders;
 
-namespace Tenant.Portal.Areas.Clients.DependencyInjection
+namespace Seller.Portal.Areas.Clients.DependencyInjection
 {
     public static class CompositionRoot
     {

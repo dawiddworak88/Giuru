@@ -50,7 +50,7 @@ namespace Api.v1.Areas.Products.Controllers
         {
             try
             {
-                var tenantClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.TenantIdClaim);
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.SellerIdClaim);
 
                 var createUpdateModel = new CreateUpdateProductModel
                 {
@@ -60,7 +60,7 @@ namespace Api.v1.Areas.Products.Controllers
                     SchemaId = request.SchemaId,
                     FormData = request.FormData,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
+                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = request.Language
                 };
 
@@ -97,13 +97,13 @@ namespace Api.v1.Areas.Products.Controllers
         {
             try
             {
-                var tenantClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.TenantIdClaim);
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.SellerIdClaim);
 
                 var getProductModel = new GetProductModel
                 {
                     Id = id,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
+                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = language
                 };
 
@@ -144,14 +144,14 @@ namespace Api.v1.Areas.Products.Controllers
         {
             try
             {
-                var tenantClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.TenantIdClaim);
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.SellerIdClaim);
 
                 var deleteProductModel = new DeleteProductModel
                 {   
                     Language = language,
                     Id = id,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    TenantId = GuidHelper.ParseNullable(tenantClaim?.Value)
+                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
                 var deleteProductResult = await this.productService.DeleteAsync(deleteProductModel);

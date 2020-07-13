@@ -1,6 +1,6 @@
-﻿using Tenant.Portal.Areas.Clients.Configurations;
+﻿using Seller.Portal.Areas.Clients.Configurations;
 
-namespace Tenant.Portal.Areas.Clients.Controllers.Configurations
+namespace Seller.Portal.Areas.Clients.Controllers.Configurations
 {
     public class ApiConfiguration
     {

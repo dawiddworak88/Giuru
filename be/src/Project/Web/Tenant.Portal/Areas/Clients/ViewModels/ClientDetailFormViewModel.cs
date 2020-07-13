@@ -1,7 +1,7 @@
 ﻿using Feature.PageContent.Components.Languages.ViewModels;
 using System.Collections.Generic;
 
-namespace Tenant.Portal.Areas.Clients.ViewModels
+namespace Seller.Portal.Areas.Clients.ViewModels
 {
     public class ClientDetailFormViewModel
     {

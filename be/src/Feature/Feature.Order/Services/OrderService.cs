@@ -1,6 +1,6 @@
 ﻿using Feature.Order.Models;
 using Feature.Order.ResultModels;
-using Foundation.Database.Areas.Tenants.Entities;
+using Foundation.Database.Areas.Sellers.Entities;
 using Foundation.Database.Shared.Contexts;
 using Foundation.Database.Shared.Repositories;
 using Foundation.Extensions.Definitions;
@@ -15,18 +15,18 @@ namespace Feature.Order.Services
     {
         private readonly DatabaseContext context;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
-        private readonly IGenericRepository<Tenant> tenantRepository;
+        private readonly IGenericRepository<Seller> sellerRepository;
         private readonly IEntityService entityService;
 
         public OrderService(
             DatabaseContext context,
             IStringLocalizer<OrderResources> orderLocalizer,
-            IGenericRepository<Tenant> tenantRepository,
+            IGenericRepository<Seller> sellerRepository,
             IEntityService entityService)
         {
             this.context = context;
             this.orderLocalizer = orderLocalizer;
-            this.tenantRepository = tenantRepository;
+            this.sellerRepository = sellerRepository;
             this.entityService = entityService;
         }
 
@@ -34,11 +34,11 @@ namespace Feature.Order.Services
         {
             var orderValidationResultModel = new OrderValidationResultModel();
 
-            var tenant = this.tenantRepository.GetById(model.TenantId.Value);
+            var seller = this.sellerRepository.GetById(model.SellerId.Value);
 
-            if (tenant == null)
+            if (seller == null)
             {
-                orderValidationResultModel.Errors.Add(ErrorConstants.NoTenant);
+                orderValidationResultModel.Errors.Add(ErrorConstants.NoSeller);
                 return orderValidationResultModel;
             }
 

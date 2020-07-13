@@ -40,25 +40,25 @@ namespace Foundation.Database.Areas.Accounts.Seeds
             }
         }
 
-        public static void SeedTenantAccounts(DatabaseContext context, IConfiguration configuration)
+        public static void SeedSellerAccounts(DatabaseContext context, IConfiguration configuration)
         {
-            var tenantSeedConfiguration = configuration.GetSection("Seeds")?.GetSection("Accounts")?.GetSection("Tenant");
+            var sellerSeedConfiguration = configuration.GetSection("Seeds")?.GetSection("Accounts")?.GetSection("Seller");
 
-            if (tenantSeedConfiguration != null)
+            if (sellerSeedConfiguration != null)
             {
-                if (!context.Accounts.Any(x => x.Email == tenantSeedConfiguration.GetValue<string>("Email")))
+                if (!context.Accounts.Any(x => x.Email == sellerSeedConfiguration.GetValue<string>("Email")))
                 {
-                    var tenantAccount = new ApplicationUser
+                    var sellerAccount = new ApplicationUser
                     {
-                        FirstName = tenantSeedConfiguration.GetValue<string>("FirstName"),
-                        LastName = tenantSeedConfiguration.GetValue<string>("LastName"),
-                        UserName = tenantSeedConfiguration.GetValue<string>("Email"),
-                        NormalizedUserName = tenantSeedConfiguration.GetValue<string>("Email"),
-                        Email = tenantSeedConfiguration.GetValue<string>("Email"),
-                        NormalizedEmail = tenantSeedConfiguration.GetValue<string>("Email"),
-                        PasswordHash = tenantSeedConfiguration.GetValue<string>("PasswordHash"),
-                        SecurityStamp = tenantSeedConfiguration.GetValue<string>("SecurityStamp"),
-                        Tenant = context.Tenants.FirstOrDefault(x => x.Key == tenantSeedConfiguration.GetValue<string>("Key")),
+                        FirstName = sellerSeedConfiguration.GetValue<string>("FirstName"),
+                        LastName = sellerSeedConfiguration.GetValue<string>("LastName"),
+                        UserName = sellerSeedConfiguration.GetValue<string>("Email"),
+                        NormalizedUserName = sellerSeedConfiguration.GetValue<string>("Email"),
+                        Email = sellerSeedConfiguration.GetValue<string>("Email"),
+                        NormalizedEmail = sellerSeedConfiguration.GetValue<string>("Email"),
+                        PasswordHash = sellerSeedConfiguration.GetValue<string>("PasswordHash"),
+                        SecurityStamp = sellerSeedConfiguration.GetValue<string>("SecurityStamp"),
+                        Seller = context.Sellers.FirstOrDefault(x => x.Key == sellerSeedConfiguration.GetValue<string>("Key")),
                         PhoneNumber = null,
                         PhoneNumberConfirmed = false,
                         TwoFactorEnabled = false,
@@ -66,7 +66,7 @@ namespace Foundation.Database.Areas.Accounts.Seeds
                         AccessFailedCount = 0
                     };
 
-                    context.Accounts.Add(tenantAccount);
+                    context.Accounts.Add(sellerAccount);
                 }
 
                 context.SaveChanges();

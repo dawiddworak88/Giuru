@@ -1,4 +1,4 @@
-﻿namespace Tenant.Portal.Shared.ViewModels
+﻿namespace Seller.Portal.Shared.ViewModels
 {
     public class CatalogBaseViewModel
     {

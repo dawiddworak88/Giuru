@@ -48,14 +48,14 @@ namespace Api.v1.Areas.Schemas.Controllers
         {
             try
             {
-                var tenantClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.TenantIdClaim);
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.SellerIdClaim);
 
                 var validateOrderModel = new OrderValidationModel
                 {
                     ClientId = model.ClientId,
                     OrderItems = model.OrderItems != null ? model.OrderItems.Select(x => new OrderItemModel { Sku = x.Sku, Quantity = x.Quantity, SchemaId = x.SchemaId, FormData = x.FormData }) : null,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
+                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = model.Language
                 };
 

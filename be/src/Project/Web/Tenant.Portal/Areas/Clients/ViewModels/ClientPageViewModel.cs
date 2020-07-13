@@ -1,6 +1,6 @@
-﻿using Tenant.Portal.Shared.ViewModels;
+﻿using Seller.Portal.Shared.ViewModels;
 
-namespace Tenant.Portal.Areas.Clients.ViewModels
+namespace Seller.Portal.Areas.Clients.ViewModels
 {
     public class ClientPageViewModel : BasePageViewModel
     {

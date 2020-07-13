@@ -1,6 +1,6 @@
-﻿using Tenant.Portal.Areas.Products.DomainModels;
+﻿using Seller.Portal.Areas.Products.DomainModels;
 
-namespace Tenant.Portal.Areas.Products.ViewModels
+namespace Seller.Portal.Areas.Products.ViewModels
 {
     public class ProductDetailFormViewModel
     {

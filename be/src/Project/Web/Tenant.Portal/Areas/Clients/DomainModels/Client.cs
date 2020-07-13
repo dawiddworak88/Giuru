@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tenant.Portal.Areas.Clients.DomainModels
+namespace Seller.Portal.Areas.Clients.DomainModels
 {
     public class Client
     {

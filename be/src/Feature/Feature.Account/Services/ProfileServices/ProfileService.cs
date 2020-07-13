@@ -26,13 +26,13 @@ namespace Feature.Account.Services.ProfileServices
             {
                 var user = await this.userService.FindByIdAsync(sub);
 
-                if (user != null && user.Tenant != null && user.EmailConfirmed && user.Tenant.IsActive)
+                if (user != null && user.Seller != null && user.EmailConfirmed && user.Seller.IsActive)
                 {
                     var claims = new List<Claim>
                     {
-                        new Claim(AccountConstants.TenantIdClaim, user.Tenant.Id.ToString()),
+                        new Claim(AccountConstants.SellerIdClaim, user.Seller.Id.ToString()),
                         new Claim(ClaimTypes.Email, user.Email),
-                        new Claim(ClaimTypes.Name, user.Tenant.Key)
+                        new Claim(ClaimTypes.Name, user.Seller.Key)
                     };
 
                     context.IssuedClaims.AddRange(claims);
@@ -48,7 +48,7 @@ namespace Feature.Account.Services.ProfileServices
             {
                 var user = await this.userService.FindByIdAsync(sub);
 
-                if (user != null && user.Tenant != null && user.EmailConfirmed && user.Tenant.IsActive)
+                if (user != null && user.Seller != null && user.EmailConfirmed && user.Seller.IsActive)
                 {
                     context.IsActive = true;
                     return;

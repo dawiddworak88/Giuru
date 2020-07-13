@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
-namespace Tenant.Portal
+namespace Seller.Portal
 {
     public static class Program
     {

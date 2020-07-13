@@ -8,9 +8,9 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
-using Tenant.Portal.Areas.Clients.ViewModels;
+using Seller.Portal.Areas.Clients.ViewModels;
 
-namespace Tenant.Portal.Areas.Clients.ModelBuilders
+namespace Seller.Portal.Areas.Clients.ModelBuilders
 {
     public class ClientDetailFormModelBuilder : IModelBuilder<ClientDetailFormViewModel>
     {

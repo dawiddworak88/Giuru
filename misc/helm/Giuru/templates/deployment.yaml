@@ -85,20 +85,20 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tenant-portal-web-deployment
+  name: seller-portal-web-deployment
   labels:
-    app: tenant-portal-web
+    app: seller-portal-web
 spec:
   selector:
     matchLabels:
-      app: tenant-portal-web
+      app: seller-portal-web
   template:
     metadata:
       labels:
-        app: tenant-portal-web
+        app: seller-portal-web
     spec:
       containers:
-      - name: tenant-portal-web-container
-        image: {{ .Values.image.registry }}/tenant-portal-web:{{ .Values.image.tag }}
+      - name: seller-portal-web-container
+        image: {{ .Values.image.registry }}/seller-portal-web:{{ .Values.image.tag }}
         ports:
         - containerPort: 80

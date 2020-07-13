@@ -7,7 +7,7 @@ using Foundation.Localization;
 using Feature.PageContent.Components.Footers.ViewModels;
 using Foundation.Localization.Definitions;
 
-namespace Tenant.Portal.Shared.Footers.ModelBuilders
+namespace Seller.Portal.Shared.Footers.ModelBuilders
 {
     public class FooterModelBuilder : IModelBuilder<FooterViewModel>
     {

@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{AA76A57C-E6D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{2DFADACD-8C6C-44F2-B19E-5A5F506CE285}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tenant.Portal", "Project\Web\Tenant.Portal\Tenant.Portal.csproj", "{63AF11BC-ECEC-41EA-87ED-A1049530A59C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Seller.Portal", "Project\Web\Seller.Portal\Seller.Portal.csproj", "{63AF11BC-ECEC-41EA-87ED-A1049530A59C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Presentation", "Infrastructure\Foundation.Presentation\Foundation.Presentation.csproj", "{F06B0BC2-3C8A-489E-B7D5-B5145DB50839}"
 EndProject

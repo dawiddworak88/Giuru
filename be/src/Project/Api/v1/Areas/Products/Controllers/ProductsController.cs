@@ -49,7 +49,7 @@ namespace Api.v1.Areas.Products.Controllers
         {
             try
             {
-                var tenantClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.TenantIdClaim);
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.SellerIdClaim);
 
                 var getProductsModel = new GetProductsModel
                 {
@@ -57,7 +57,7 @@ namespace Api.v1.Areas.Products.Controllers
                     ItemsPerPage = itemsPerPage,
                     SearchTerm = searchTerm,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
+                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = language
                 };
 

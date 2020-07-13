@@ -1,6 +1,6 @@
 import React from 'react';
-import '../project/Tenant.Portal/areas/Products/pages/ProductPage/ProductPage.scss';
-import ProductPage from '../project/Tenant.Portal/areas/Products/pages/ProductPage/ProductPage';
+import '../project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage.scss';
+import ProductPage from '../project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage';
 import { header, menuTiles, footer } from './Shared/Props';
 
 var props = {
@@ -52,6 +52,6 @@ ProductPageStory.story = {
 };
 
 export default {
-  title: 'TenantPortal.Products',
+  title: 'SellerPortal.Products',
   component: ProductPageStory,
 };

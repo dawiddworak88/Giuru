@@ -1,9 +1,9 @@
 ﻿using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.AspNetCore.Mvc;
-using Tenant.Portal.Areas.Clients.ViewModels;
+using Seller.Portal.Areas.Clients.ViewModels;
 
-namespace Tenant.Portal.Areas.Clients.Controllers
+namespace Seller.Portal.Areas.Clients.Controllers
 {
     [Area("Clients")]
     public class ClientController : BaseController

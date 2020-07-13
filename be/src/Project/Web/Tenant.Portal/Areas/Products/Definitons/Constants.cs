@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tenant.Portal.Areas.Products.Definitons
+namespace Seller.Portal.Areas.Products.Definitons
 {
     public static class Constants
     {

@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Threading.Tasks;
-using Tenant.Portal.Areas.Orders.ViewModel;
-using Tenant.Portal.Shared.ComponentModels;
+using Seller.Portal.Areas.Orders.ViewModel;
+using Seller.Portal.Shared.ComponentModels;
 
-namespace Tenant.Portal.Areas.Orders.Controllers
+namespace Seller.Portal.Areas.Orders.Controllers
 {
     [Area("Orders")]
     public class ImportOrderController : BaseController

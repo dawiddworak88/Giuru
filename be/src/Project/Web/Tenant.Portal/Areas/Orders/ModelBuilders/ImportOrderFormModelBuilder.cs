@@ -1,15 +1,15 @@
-﻿using Tenant.Portal.Areas.Orders.ViewModel;
+﻿using Seller.Portal.Areas.Orders.ViewModel;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
 using Feature.Order;
 using Foundation.Localization;
-using Tenant.Portal.Areas.Clients.Repositories;
+using Seller.Portal.Areas.Clients.Repositories;
 using System.Threading.Tasks;
-using Tenant.Portal.Shared.ComponentModels;
+using Seller.Portal.Shared.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using System.Globalization;
 
-namespace Tenant.Portal.Areas.Orders.ModelBuilders
+namespace Seller.Portal.Areas.Orders.ModelBuilders
 {
     public class ImportOrderFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ImportOrderFormViewModel>
     {

@@ -50,7 +50,7 @@ namespace Api.v1.Areas.Schemas.Controllers
         {
             try
             {
-                var tenantClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.TenantIdClaim);
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.SellerIdClaim);
 
                 var createSchemaModel = new CreateSchemaModel
                 {
@@ -59,7 +59,7 @@ namespace Api.v1.Areas.Schemas.Controllers
                     JsonSchema = !string.IsNullOrWhiteSpace(schemaModel.JsonSchema) ? JObject.Parse(schemaModel.JsonSchema) : null,
                     UiSchema = !string.IsNullOrWhiteSpace(schemaModel.UiSchema) ? JObject.Parse(schemaModel.UiSchema) : null,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
+                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = schemaModel.Language
                 };
 
@@ -96,13 +96,13 @@ namespace Api.v1.Areas.Schemas.Controllers
         {
             try
             {
-                var tenantClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.TenantIdClaim);
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.SellerIdClaim);
 
                 var getSchemaModel = new GetSchemaModel
                 {
                     Id = id,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
+                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = language
                 };
 
@@ -145,13 +145,13 @@ namespace Api.v1.Areas.Schemas.Controllers
         {
             try
             {
-                var tenantClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.TenantIdClaim);
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.SellerIdClaim);
 
                 var getSchemaModel = new GetSchemaByEntityTypeModel
                 {
                     EntityTypeId = id,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    TenantId = GuidHelper.ParseNullable(tenantClaim?.Value),
+                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = language
                 };
 

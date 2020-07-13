@@ -77,7 +77,7 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "C:\\Projects\\Giuru\\be\\src\\Project\\Web\\Tenant.Portal\\wwwroot\\dist\\js";
+/******/ 	__webpack_require__.p = "C:\\Projects\\Giuru\\be\\src\\Project\\Web\\Seller.Portal\\wwwroot\\dist\\js";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
@@ -52213,7 +52213,7 @@ function DynamicForm(props) {
 // EXTERNAL MODULE: ./src/shared/helpers/errorHandlers/FetchErrorHandler.js + 1 modules
 var FetchErrorHandler = __webpack_require__(65);
 
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Products/components/ProductDetail/ProductDetailForm.js
+// CONCATENATED MODULE: ./src/project/Seller.Portal/areas/Products/components/ProductDetail/ProductDetailForm.js
 
 
 
@@ -52368,7 +52368,7 @@ function ProductDetailForm(props) {
 // EXTERNAL MODULE: ./src/shared/layouts/images/favicon.png
 var favicon = __webpack_require__(82);
 
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage.js
+// CONCATENATED MODULE: ./src/project/Seller.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage.js
 
 
 
@@ -52402,7 +52402,7 @@ function ProductDetailPage(props) {
 // EXTERNAL MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.js
 var CssSsrRemovalHelper = __webpack_require__(58);
 
-// CONCATENATED MODULE: ./src/project/Tenant.Portal/areas/Products/pages/ProductDetailPage/index.js
+// CONCATENATED MODULE: ./src/project/Seller.Portal/areas/Products/pages/ProductDetailPage/index.js
 
 
 

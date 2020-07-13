@@ -8,7 +8,7 @@ services:
       SA_PASSWORD: Gre@tPassw0rd
     ports:
       - "9018:1433"
-  tenant-sql:
+  seller-sql:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
     restart: always
     environment:
@@ -16,10 +16,10 @@ services:
       SA_PASSWORD: Gre@tPassw0rd
     ports:
       - "9017:1433"
-  tenant-rabbitmq:
+  seller-rabbitmq:
     image: rabbitmq
     restart: always
-  tenant-azurite:
+  seller-azurite:
     image: mcr.microsoft.com/azure-storage/azurite
     restart: always
   react-ssr-web:

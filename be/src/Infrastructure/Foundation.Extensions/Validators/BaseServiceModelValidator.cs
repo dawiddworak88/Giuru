@@ -9,7 +9,7 @@ namespace Foundation.Extensions.Validators
         {
             RuleFor(x => x.Username).NotNull().NotEmpty();
             RuleFor(x => x.Language).NotNull().NotEmpty();
-            RuleFor(x => x.TenantId).NotNull();
+            RuleFor(x => x.SellerId).NotNull();
         }
     }
 }

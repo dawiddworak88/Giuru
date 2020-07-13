@@ -3,9 +3,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Foundation.Database.Areas.Tenants.Entities
+namespace Foundation.Database.Areas.Sellers.Entities
 {
-    public class Tenant : IEntity
+    public class Seller : IEntity
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
