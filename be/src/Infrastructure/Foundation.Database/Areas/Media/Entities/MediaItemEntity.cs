@@ -1,4 +1,5 @@
-﻿using Foundation.GenericRepository.Entities;
+﻿using Foundation.Database.Areas.Media.Enums;
+using Foundation.GenericRepository.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
 

@@ -4,15 +4,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Foundation.Database.Areas.Clients.Entities
 {
-    public class AddressClient : Entity
+    public class AppSecretClient : Entity
     {
         [Required]
-        public Guid AddressId { get; set; }
+        public Guid AppSecretId { get; set; }
 
         [Required]
         public Guid ClientId { get; set; }
-
-        [Required]
-        public int Order { get; set; }
     }
 }

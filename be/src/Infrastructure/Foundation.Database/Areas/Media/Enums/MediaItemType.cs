@@ -1,4 +1,4 @@
-﻿namespace Foundation.Database.Areas.Media.Entities
+﻿namespace Foundation.Database.Areas.Media.Enums
 {
     public enum MediaItemType
     {
