@@ -1,6 +1,5 @@
 ﻿using Foundation.Database.Areas.Accounts.Seeds;
 using Foundation.Database.Areas.Sellers.Seeds;
-using Foundation.Database.Shared.Seeds;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -28,9 +27,6 @@ namespace Foundation.Database.Shared.Contexts
             AccountsSeed.SeedAdminAccounts(context, configuration);
             SellersSeed.SeedSellers(context, configuration);
             AccountsSeed.SeedSellerAccounts(context, configuration);
-            EntityTypeSeed.EnsureEntityTypesSeeded(context);
-            ActionTypeSeed.EnsureActionTypesSeeded(context);
-            TaxonomySeed.EnsureTaxonomiesSeeded(context);
         }
     }
 }

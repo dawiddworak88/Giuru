@@ -30,7 +30,7 @@ namespace Feature.Account.Services.TokenServices
                 {
                     new Claim(AccountConstants.SellerIdClaim, user.Seller.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Name, user.Seller.Key),
+                    new Claim(ClaimTypes.Name, user.Seller.Name),
                     new Claim(JwtClaimTypes.Audience, ApiExtensionsConstants.AllScopes)
                 };
 

@@ -5,6 +5,7 @@ namespace Foundation.Schema.Models
 {
     public class GetSchemaByEntityTypeModel : BaseServiceModel
     {
+        public Guid Id { get; set; }
         public Guid? EntityTypeId { get; set; }
     }
 }

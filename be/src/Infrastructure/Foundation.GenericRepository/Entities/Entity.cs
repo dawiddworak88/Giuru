@@ -12,12 +12,8 @@ namespace Foundation.GenericRepository.Entities
         [Required]
         public bool IsActive { get; set; }
 
-        public string LastModifiedBy { get; set; }
-
         [Required]
         public DateTime LastModifiedDate { get; set; }
-
-        public string CreatedBy { get; set; }
 
         [Required]
         public DateTime CreatedDate { get; set; }

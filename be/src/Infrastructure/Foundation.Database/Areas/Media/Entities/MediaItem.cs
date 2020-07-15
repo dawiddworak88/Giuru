@@ -1,4 +1,5 @@
 ﻿using Foundation.GenericRepository.Entities;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Foundation.Database.Areas.Media.Entities
@@ -15,15 +16,21 @@ namespace Foundation.Database.Areas.Media.Entities
         public string Url { get; set; }
 
         [Required]
-        public int Size { get; set; }
+        public int SizeInBytes { get; set; }
 
-        public int Width { get; set; }
+        public int WidthInPixels { get; set; }
 
-        public int Height { get; set; }
+        public int HeightInPixels { get; set; }
+
+        public int LengthInSeconds { get; set; }
 
         [Required]
         public string Extension { get; set; }
 
         public string ContentType { get; set; }
+
+        public Guid? SchemaId { get; set; }
+
+        public string FormData { get; set; }
     }
 }

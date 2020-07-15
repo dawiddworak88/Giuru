@@ -1,9 +1,7 @@
-﻿using Foundation.Database.Areas.Analysis.Entities;
-using Foundation.Database.Areas.Clients.Entities;
+﻿using Foundation.Database.Areas.Clients.Entities;
 using Foundation.Database.Areas.Media.Entities;
 using Foundation.Database.Areas.Orders.Entitites;
 using Foundation.Database.Areas.Products.Entities;
-using Foundation.Database.Areas.References.Entities;
 using Foundation.Database.Areas.Schemas.Entities;
 using Foundation.Database.Areas.Taxonomies.Entities;
 using Foundation.Database.Areas.Translations.Entities;
@@ -11,7 +9,6 @@ using Foundation.Database.Areas.Accounts.Entities;
 using Foundation.Database.Areas.Sellers.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Foundation.Database.Shared.Entities;
 
 namespace Foundation.Database.Shared.Contexts
 {
@@ -29,16 +26,12 @@ namespace Foundation.Database.Shared.Contexts
         public DbSet<ApplicationUser> Accounts { get; set; }
         public DbSet<Seller> Sellers { get; set; }
         public DbSet<Client> Clients { get; set; }
-        public DbSet<EntityType> EntityTypes { get; set; }
         public DbSet<MediaItem> MediaItems { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Translation> Translations { get; set; }
         public DbSet<Schema> Schemas { get; set; }
-        public DbSet<Reference> References { get; set; }
         public DbSet<Taxonomy> Taxonomies { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-        public DbSet<Statistics> Statistics { get; set; }
-        public DbSet<ActionType> ActionTypes { get; set; }
     }
 }

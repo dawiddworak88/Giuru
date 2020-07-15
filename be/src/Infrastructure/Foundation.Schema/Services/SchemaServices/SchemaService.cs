@@ -78,8 +78,6 @@ namespace Foundation.Schema.Services.SchemaServices
 
             var schema = new Database.Areas.Schemas.Entities.Schema
             {
-                Name = model.Name,
-                EntityTypeId = model.EntityTypeId,
                 JsonSchema = model.JsonSchema?.ToString(),
                 UiSchema = model.UiSchema?.ToString()
             };
@@ -91,7 +89,6 @@ namespace Foundation.Schema.Services.SchemaServices
             var translation = new Translation
             {
                 Key = schema.Id.ToString(),
-                Value = schema.Name,
                 Language = model.Language
             };
 
@@ -138,14 +135,10 @@ namespace Foundation.Schema.Services.SchemaServices
             getSchemaResultModel.Schema = new Database.Areas.Schemas.Entities.Schema
             { 
                 Id = schema.Id,
-                Name = schema.Name,
-                JsonSchema = await this.GetJsonSchemaAsync(schema.JsonSchema, getSchemaModel.Language, seller.DatabaseConnectionString),
+                JsonSchema = await this.GetJsonSchemaAsync(schema.JsonSchema, getSchemaModel.Language),
                 UiSchema = schema.UiSchema,
-                EntityTypeId = schema.EntityTypeId,
                 LastModifiedDate = schema.LastModifiedDate,
-                LastModifiedBy = schema.LastModifiedBy,
-                CreatedDate = schema.CreatedDate,
-                CreatedBy = schema.CreatedBy
+                CreatedDate = schema.CreatedDate
             };
 
             return getSchemaResultModel;
@@ -173,7 +166,7 @@ namespace Foundation.Schema.Services.SchemaServices
                 return getSchemaResultModel;
             }
 
-            var schema = this.context.Schemas.FirstOrDefault(x => x.EntityTypeId == getSchemaModel.EntityTypeId && x.IsActive);
+            var schema = this.context.Schemas.FirstOrDefault(x => x.Id == getSchemaModel.Id && x.IsActive);
 
             if (schema == null)
             {
@@ -184,20 +177,16 @@ namespace Foundation.Schema.Services.SchemaServices
             getSchemaResultModel.Schema = new Database.Areas.Schemas.Entities.Schema
             {
                 Id = schema.Id,
-                Name = schema.Name,
-                JsonSchema = await this.GetJsonSchemaAsync(schema.JsonSchema, getSchemaModel.Language, seller.DatabaseConnectionString),
+                JsonSchema = await this.GetJsonSchemaAsync(schema.JsonSchema, getSchemaModel.Language),
                 UiSchema = schema.UiSchema,
-                EntityTypeId = schema.EntityTypeId,
                 LastModifiedDate = schema.LastModifiedDate,
-                LastModifiedBy = schema.LastModifiedBy,
-                CreatedDate = schema.CreatedDate,
-                CreatedBy = schema.CreatedBy
+                CreatedDate = schema.CreatedDate
             };
 
             return getSchemaResultModel;
         }
 
-        private async Task<string> GetJsonSchemaAsync(string jsonSchemaSerialized, string language, string connectionString)
+        private async Task<string> GetJsonSchemaAsync(string jsonSchemaSerialized, string language, string connectionString = null)
         {
             var jsonSchema = JObject.Parse(jsonSchemaSerialized);
 
@@ -290,9 +279,7 @@ namespace Foundation.Schema.Services.SchemaServices
                             Order = (int)reader["Order"],
                             IsActive = (bool)reader["IsActive"],
                             LastModifiedDate = (DateTime)reader["LastModifiedDate"],
-                            LastModifiedBy = (string)reader["LastModifiedBy"],
-                            CreatedDate = (DateTime)reader["CreatedDate"],
-                            CreatedBy = (string)reader["CreatedBy"]
+                            CreatedDate = (DateTime)reader["CreatedDate"]
                         };
 
                         taxonomiesList.Add(taxonomyItem);

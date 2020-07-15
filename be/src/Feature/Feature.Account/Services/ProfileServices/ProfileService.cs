@@ -32,7 +32,7 @@ namespace Feature.Account.Services.ProfileServices
                     {
                         new Claim(AccountConstants.SellerIdClaim, user.Seller.Id.ToString()),
                         new Claim(ClaimTypes.Email, user.Email),
-                        new Claim(ClaimTypes.Name, user.Seller.Key)
+                        new Claim(ClaimTypes.Name, user.Seller.Name)
                     };
 
                     context.IssuedClaims.AddRange(claims);

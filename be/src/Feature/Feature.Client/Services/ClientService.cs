@@ -22,7 +22,6 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
-using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -87,25 +86,16 @@ namespace Feature.Client.Services
                 return createClientResultModel;
             }
 
-            var host = new MailAddress(model.Email).Host;
-
             var client = new Foundation.Database.Areas.Clients.Entities.Client
             {
-                ClientSecret = Guid.NewGuid(),
                 Language = model.ClientPreferredLanguage,
                 Name = model.Name,
-                Host = host
             };
 
             this.cultureService.SetCulture(model.ClientPreferredLanguage.ToLowerInvariant());
 
-            var existingClient = context.Clients.FirstOrDefault(x => x.Host == host);
-
-            if (existingClient == null)
-            {
-                await context.Clients.AddAsync(this.entityService.EnrichEntity(client, model.Username));
-                await context.SaveChangesAsync();
-            }
+            await context.Clients.AddAsync(this.entityService.EnrichEntity(client, model.Username));
+            await context.SaveChangesAsync();
 
             var userStore = this.userStoreFactory.CreateUserStore<ApplicationUser>(context);
 

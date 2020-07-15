@@ -16,7 +16,6 @@ namespace Api.v1.Areas.Clients.ResponseModels
         public ClientResponseModel(Client client)
         {
             this.Id = client.Id;
-            this.Host = client.Host;
             this.Name = client.Name;
             this.Language = client.Language;
             this.LastModifiedDate = client.LastModifiedDate;

@@ -1,5 +1,4 @@
 ﻿using Foundation.GenericRepository.Entities;
-using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Foundation.Database.Areas.Schemas.Entities
@@ -13,7 +12,5 @@ namespace Foundation.Database.Areas.Schemas.Entities
         public string JsonSchema { get; set; }
 
         public string UiSchema { get; set; }
-
-        public Guid? EntityTypeId { get; set; }
     }
 }

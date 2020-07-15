@@ -54,9 +54,8 @@ namespace Feature.Product.Services
 
             var product = new Foundation.Database.Areas.Products.Entities.Product
             {
-                Name = model.Name,
                 Sku = model.Sku,
-                SchemaId = model.SchemaId,
+                SchemaId = model.SchemaId.Value,
                 FormData = model.FormData
             };
 
@@ -109,7 +108,7 @@ namespace Feature.Product.Services
 
             product.Name = model.Name;
             product.Sku = model.Sku;
-            product.SchemaId = model.SchemaId;
+            product.SchemaId = model.SchemaId.Value;
             product.FormData = model.FormData;
             product.LastModifiedDate = DateTime.UtcNow;
 

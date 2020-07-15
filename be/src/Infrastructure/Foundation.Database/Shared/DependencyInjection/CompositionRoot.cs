@@ -16,7 +16,7 @@ namespace Foundation.Database.Shared.DependencyInjection
             services.AddDbContext<DatabaseContext>(options =>
                 options.UseSqlServer(
                     configuration.GetConnectionString("DatabaseContext"),
-                    opt => opt.MigrationsAssembly("Foundation.Database")));
+                    opt => opt.MigrationsAssembly("Foundation.Database").UseNetTopologySuite()));
         }
     }
 }

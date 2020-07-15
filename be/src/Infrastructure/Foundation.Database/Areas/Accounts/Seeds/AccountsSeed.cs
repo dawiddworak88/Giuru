@@ -58,7 +58,7 @@ namespace Foundation.Database.Areas.Accounts.Seeds
                         NormalizedEmail = sellerSeedConfiguration.GetValue<string>("Email"),
                         PasswordHash = sellerSeedConfiguration.GetValue<string>("PasswordHash"),
                         SecurityStamp = sellerSeedConfiguration.GetValue<string>("SecurityStamp"),
-                        Seller = context.Sellers.FirstOrDefault(x => x.Key == sellerSeedConfiguration.GetValue<string>("Key")),
+                        Seller = context.Sellers.FirstOrDefault(x => x.Name == sellerSeedConfiguration.GetValue<string>("Name")),
                         PhoneNumber = null,
                         PhoneNumberConfirmed = false,
                         TwoFactorEnabled = false,
