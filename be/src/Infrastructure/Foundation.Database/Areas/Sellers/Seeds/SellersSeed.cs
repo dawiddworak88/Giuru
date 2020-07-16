@@ -21,6 +21,7 @@ namespace Foundation.Database.Areas.Sellers.Seeds
                     var seller = new Seller
                     {
                         IsActive = true,
+                        Name = sellersSeedConfiguration.GetValue<string>("Name"),
                         LastModifiedDate = DateTime.UtcNow,
                         CreatedDate = DateTime.UtcNow
                     };
