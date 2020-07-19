@@ -1,3 +1,19 @@
 .content-grid {
-    
+
+    background-color: #F5F5F5;
+
+    &__item {
+        background-color: white;
+        margin-top: 2rem;
+        padding: 2rem;
+    }
+
+    .card {
+        max-width: 270px;
+        margin: 2rem;
+    }
+
+    &-card__title {
+        padding: 2rem;
+    }
 }

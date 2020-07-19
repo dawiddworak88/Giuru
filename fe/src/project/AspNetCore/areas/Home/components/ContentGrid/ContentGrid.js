@@ -7,11 +7,11 @@ function ContentGrid(props) {
     const responsive = {
         superLargeDesktop: {
           breakpoint: { max: 4000, min: 3000 },
-          items: 5
+          items: 7
         },
         desktop: {
           breakpoint: { max: 3000, min: 1024 },
-          items: 3
+          items: 4
         },
         tablet: {
           breakpoint: { max: 1024, min: 464 },
@@ -26,19 +26,33 @@ function ContentGrid(props) {
     return (
 
         <section className="section content-grid">
-
-            <Carousel responsive={responsive}>
-                <div>1</div>
-                <div>2</div>
-                <div>3</div>
-            </Carousel>
-
+            {props.items.map((item) => 
+                <div key={item.id} className="content-grid__item">
+                    <p className="title is-4">{item.title}</p>
+                    <Carousel responsive={responsive}>
+                        {item.carouselItems.map((carouselItem) => 
+                        <a key={carouselItem.id} href={carouselItem.url}>
+                            <div className="card">
+                                <div className="card-image">
+                                    <figure className="image is-4by3">
+                                        <img src={carouselItem.imageUrl} alt={carouselItem.imageAlt} />
+                                    </figure>
+                                </div>
+                                <div className="media-content">
+                                    <p className="content-grid-card__title title is-5 has-text-centered">{carouselItem.title}</p>
+                                </div>
+                            </div>
+                        </a>
+                        )}
+                    </Carousel>
+                </div>
+            )}
         </section>
     );
 }
 
 ContentGrid.propTypes = {
-    links: PropTypes.array
+    items: PropTypes.array
 }
 
 export default ContentGrid;
