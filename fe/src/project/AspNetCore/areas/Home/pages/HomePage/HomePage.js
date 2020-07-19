@@ -10,6 +10,7 @@ import Footer from '../../../../../../shared/components/Footer/Footer';
 
 /* eslint-disable no-unused-vars */
 import favicon from '../../../../../../shared/layouts/images/favicon.png';
+import ContentGrid from '../../components/ContentGrid/ContentGrid';
 /* eslint-enable no-unused-vars */
 
 function HomePage(props) {
@@ -23,6 +24,7 @@ function HomePage(props) {
           <Header {...props.header}></Header>
           <MainNavigation {...props.mainNavigation}></MainNavigation>
           <HeroSlider {...props.heroSlider}></HeroSlider>
+          <ContentGrid {...props.contentGrid}></ContentGrid>
           <Footer {...props.footer}></Footer>
         </div>
       </Store>
