@@ -24,15 +24,28 @@ var header = {
     ],
     selectedLanguageUrl: '/en'
   },
-  links: [
-    { url: "#price-list", text: "Price List" },
-    { url: "#contact", text: "Contact" }
-  ],
+  searchUrl: '#',
+  searchLabel: 'Search',
+  searchPlaceholderLabel: 'Search',
   loginLink: {
     url: "#", 
     text: "Sign in"
   }
 };
+
+var mainNavigation = {
+  links: [
+    { url: '#', text: 'Categories' },
+    { url: '#', text: 'Sell' }
+  ]
+}
+
+var heroSlider = {
+  items: [
+    { imageSrc: 'https://eltap.pl/upload/gallery/55/marinosavana05soft11okajpg6870.jpg', imageAlt: 'Best sectionals', imageTitle: 'Best sectionals', teaserTitle: 'Shop sectionals', teaserText: 'Best sectionals in the industry', ctaUrl: '#', ctaText: 'Shop now!' },
+    { imageSrc: 'https://eltap.pl/upload/gallery/83/sofa-neva01197rgbjpg8615.jpg', imageAlt: 'Best sectionals', imageTitle: 'Best sectionals' }
+  ]
+}
 
 var footer = {
   copyright: 'Copyright © 2021 Giuru',
@@ -42,7 +55,7 @@ var footer = {
   ]
 };
 
-export const HomePageStory = () => <HomePage header={header} footer={footer} />
+export const HomePageStory = () => <HomePage header={header} mainNavigation={mainNavigation} heroSlider={heroSlider} footer={footer} />
 
 HomePageStory.story = {
   name: 'Home Page',

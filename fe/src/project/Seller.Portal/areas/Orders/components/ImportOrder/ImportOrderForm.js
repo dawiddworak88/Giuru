@@ -67,19 +67,13 @@ function ImportOrderForm(props) {
                     toast.error(props.generalErrorMessage);
                 })
         })
-    }, [client]);
+    }, [client, dispatch, state, props.generalErrorMessage, props.validateOrderUrl]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         accept: '.xls, .xlsx',
         multiple: false
     });
-
-    function onSubmitForm(state) {
-
-        dispatch({ type: 'SET_IS_LOADING', payload: true });
-        dispatch({ type: 'SET_IS_LOADING', payload: false });
-    }
 
     return (
         <div>
