@@ -331,8 +331,8 @@ var contentGrid = {
 var footer = {
   copyright: 'Copyright © 2021 Giuru',
   links: [
-    { text: 'Price List', url: '#price-list' },
-    { text: 'Contact', url: '#contact' }
+    { text: 'Privacy Policy', url: '#privacy-policy' },
+    { text: 'Terms & Conditions', url: '#terms-conditions' }
   ]
 };
 

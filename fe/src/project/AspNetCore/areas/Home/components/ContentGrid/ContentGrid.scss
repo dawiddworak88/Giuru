@@ -2,6 +2,10 @@
 
     background-color: #F5F5F5;
 
+    &__item:first-child {
+        margin-top: 0rem;
+    }
+
     &__item {
         background-color: white;
         margin-top: 2rem;
