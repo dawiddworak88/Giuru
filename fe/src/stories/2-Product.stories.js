@@ -3,9 +3,37 @@ import '../project/AspNetCore/areas/Products/pages/ProductPage/ProductPage.scss'
 import ProductPage from '../project/AspNetCore/areas/Products/pages/ProductPage/ProductPage';
 import { header, mainNavigation, footer } from './Shared/AspNetCoreProps';
 
+const images = [
+  {
+    original: 'https://eltap.pl/upload/gallery/172/eridano-104080rgbjpg7311.jpg',
+    thumbnail: 'https://eltap.pl/upload/gallery/172/eridano-104080rgbjpg7311.jpg',
+  },
+  {
+    original: 'https://eltap.pl/upload/gallery/65/zamowienie4berlin01soft11200000jpg3793.jpg',
+    thumbnail: 'https://eltap.pl/upload/gallery/65/zamowienie4berlin01soft11200000jpg3793.jpg',
+  },
+  {
+    original: 'https://eltap.pl/upload/gallery/66/beg-04jpg9238.jpg',
+    thumbnail: 'https://eltap.pl/upload/gallery/66/beg-04jpg9238.jpg',
+  }
+];
+
 var productDetail = {
 
-    title: 'Mounting Dream Tilt TV Wall Mount Bracket for Most 37-70 Inches TVs, TV Mount with VESA up to 600x400mm, Fits 16'
+    title: 'Mounting Dream Tilt TV Wall Mount Bracket for Most 37-70 Inches TVs, TV Mount with VESA up to 600x400mm, Fits 16',
+    isAuthenticated: false,
+    images: images,
+    signInUrl: '#',
+    skuLabel: 'SKU:',
+    sku: '23829',
+    byLabel: 'by',
+    brandName: 'eltap',
+    brandUrl: '#',
+    pricesLabel: 'Prices:',
+    productInformationLabel: 'Product and Packagig Information:',
+    signInToSeePricesLabel: 'Log in to see prices',
+    inStock: true,
+    inStockLabel: 'In Stock'
 }
 
 export const ProductPageStory = () => <ProductPage header={header} mainNavigation={mainNavigation} productDetail={productDetail} footer={footer} />

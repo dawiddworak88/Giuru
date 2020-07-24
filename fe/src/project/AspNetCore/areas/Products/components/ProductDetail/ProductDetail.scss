@@ -1,2 +1,39 @@
 .product-detail {
+
+    &__sku {
+        font-size: 0.9rem;
+    }
+
+    &__brand {
+        a:hover {
+            color: $primary;
+        }
+    }
+
+    &__in-stock {
+        margin-top: 1rem;
+        color: darkgreen;
+        font-size: 1.1rem;
+    }
+
+    &__price {
+
+        margin-top: 1rem;
+
+        a {
+            color: $primary;
+        }
+    }
+
+    &__price-information {
+        font-weight: 1.1rem;
+        margin-top: 1rem;
+        font-weight: bold;
+    }
+
+    &__product-information {
+        font-weight: 1.1rem;
+        margin-top: 1.5rem;
+        font-weight: bold;
+    }
 }
