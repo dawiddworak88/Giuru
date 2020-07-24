@@ -67,7 +67,7 @@ Catalog.propTypes = {
     skuLabel: PropTypes.string.isRequired,
     byLabel: PropTypes.string.isRequired,
     inStockLabel: PropTypes.string.isRequired,
-    isAuthenticated: PropTypes.string.isRequired,
+    isAuthenticated: PropTypes.bool.isRequired,
     signInUrl: PropTypes.string.isRequired,
     signInToSeePricesLabel: PropTypes.string.isRequired,
     items: PropTypes.array
