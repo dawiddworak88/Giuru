@@ -31,17 +31,20 @@ function ContentGrid(props) {
                     <p className="title is-4">{item.title}</p>
                     <Carousel responsive={responsive}>
                         {item.carouselItems.map((carouselItem) => 
-                            <div className="card">
-                                <a key={carouselItem.id} href={carouselItem.url}>
-                                <div className="card-image">
-                                    <figure className="image is-4by3">
-                                        <img src={carouselItem.imageUrl} alt={carouselItem.imageAlt} />
-                                    </figure>
-                                </div>
-                                <div className="media-content">
-                                    <p className="content-grid-card__title title is-5 has-text-centered">{carouselItem.title}</p>
-                                </div>
+                            <div key={carouselItem.id} className="card">
+                                <a href={carouselItem.url}>
+                                    <div className="card-image">
+                                        <figure className="image is-4by3">
+                                            <img src={carouselItem.imageUrl} alt={carouselItem.imageAlt} />
+                                        </figure>
+                                    </div>
                                 </a>
+                                <div className="media-content">
+                                    <a href={carouselItem.url}>
+                                        <p className="content-grid-card__title title is-5 has-text-centered">{carouselItem.title}</p>
+                                    </a>
+                                </div>
+                                
                             </div>
                         )}
                     </Carousel>

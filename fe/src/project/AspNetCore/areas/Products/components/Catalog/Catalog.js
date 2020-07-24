@@ -5,7 +5,7 @@ function Catalog(props) {
 
     return (
 
-        <section className="section">
+        <section className="catalog section">
             <h1 className="title is-3">{props.title}</h1>
             {props.resultsCount &&
                 <p className="subtitle is-6">{props.resultsCount} {props.resultsLabel}</p>
@@ -14,18 +14,36 @@ function Catalog(props) {
             (
                 <div className="columns is-tablet is-multiline">
                     {props.items.map((item, index) => 
-                        <div className="column is-3">
-                            <div className="card">
-                                <a key={item.id} href={item.url}>
+                        <div key={item.id} className="column is-3">
+                            <div className="catalog-item card">
+                                <a href={item.url}>
                                     <div className="card-image">
                                         <figure className="image is-4by3">
                                             <img src={item.imageUrl} alt={item.imageAlt} />
                                         </figure>
                                     </div>
-                                    <div className="media-content">
-                                        <p className="content-grid-card__title title is-5 has-text-centered">{item.title}</p>
-                                    </div>
                                 </a>
+                                <div className="media-content">
+                                    <p className="catalog-item__sku">{props.skuLabel} {item.sku}</p>
+                                    <h2 className="catalog-item__title"><a href={item.url}>{item.title}</a></h2>
+                                    {item.brand &&
+                                        <div className="catalog-item__brand">
+                                            <h3>{props.byLabel} <a href={item.brand.url}>{item.brand.name}</a></h3>                                            
+                                        </div>
+                                    }
+                                    {item.inStock &&
+                                        <div className="catalog-item__in-stock">
+                                            {props.inStockLabel}
+                                        </div>
+                                    }
+                                    <div className="catalog-item__price">
+                                        {!props.isAuthenticated &&
+                                            <a href={props.signInUrl}>
+                                                {props.signInToSeePricesLabel}
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -46,6 +64,12 @@ Catalog.propTypes = {
     noResultsLabel: PropTypes.string.isRequired,
     resultsCount: PropTypes.number.isRequired,
     resultsLabel: PropTypes.string.isRequired,
+    skuLabel: PropTypes.string.isRequired,
+    byLabel: PropTypes.string.isRequired,
+    inStockLabel: PropTypes.string.isRequired,
+    isAuthenticated: PropTypes.string.isRequired,
+    signInUrl: PropTypes.string.isRequired,
+    signInToSeePricesLabel: PropTypes.string.isRequired,
     items: PropTypes.array
 }
 
