@@ -18,6 +18,24 @@ const images = [
   }
 ];
 
+function getFeatures(count) {
+
+  var features = [];
+
+  for (var i = 0; i < count; i++) {
+
+    var feature = {
+      key: 'Term',
+      value: 'Value'
+    };
+
+    features.push(feature);
+  }
+
+  return features;
+
+}
+
 var productDetail = {
 
     title: 'Mounting Dream Tilt TV Wall Mount Bracket for Most 37-70 Inches TVs, TV Mount with VESA up to 600x400mm, Fits 16',
@@ -33,7 +51,14 @@ var productDetail = {
     productInformationLabel: 'Product and Packagig Information:',
     signInToSeePricesLabel: 'Log in to see prices',
     inStock: true,
-    inStockLabel: 'In Stock'
+    descriptionLabel: 'Description:',
+    downloadLabel: 'Download',
+    description: 'With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families. With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families. With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families.',
+    inStockLabel: 'In Stock',
+    features: getFeatures(11),
+    files: [
+      { filename: 'pricelist_EUR.xlsx', name: '', description: '', size: '.2 MB' }
+    ]
 }
 
 export const ProductPageStory = () => <ProductPage header={header} mainNavigation={mainNavigation} productDetail={productDetail} footer={footer} />
