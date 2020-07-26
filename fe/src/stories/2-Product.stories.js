@@ -55,9 +55,14 @@ var productDetail = {
     downloadLabel: 'Download',
     description: 'With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families. With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families. With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families.',
     inStockLabel: 'In Stock',
+    filenameLabel: 'Filename',
+    nameLabel: 'Name',
+    sizeLabel: 'Size',
+    lastModifiedDateLabel: 'Last Modified Date',
+    createdDateLabel: 'Created Date',
     features: getFeatures(11),
     files: [
-      { filename: 'pricelist_EUR.xlsx', name: '', description: '', size: '.2 MB' }
+      { filename: 'pricelist_EUR.xlsx', name: 'Price List 2020', description: 'Price List for year 2020 in Excel format', isProtected: true, size: '.2 MB' }
     ]
 }
 
