@@ -1,20 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import ImageGallery from 'react-image-gallery';
-import {
-    Fab, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, Button
-} from '@material-ui/core';
-import { GetApp, Link, LockOutlined } from '@material-ui/icons';
-import moment from 'moment';
+import Files from '../../../../shared/components/Files/Files';
 
 function ProductDetail(props) {
-
-    const handleDownloadClick = (file) => {
-    }
-
-    const handleCopyClick = (file) => {
-    }
 
     return (
 
@@ -65,57 +54,7 @@ function ProductDetail(props) {
                     }
                 </div>
             </div>
-            {props.files &&
-                <div className="product-detail__download">
-                    <h3 className="product-detail__download-title">{props.downloadLabel}</h3>
-                    <div className="table-container">
-                        <div className="catalog__table">
-                            <TableContainer component={Paper}>
-                                <Table aria-label={props.downloadLabel}>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell width="11%"></TableCell>
-                                            <TableCell>{props.filenameLabel}</TableCell>
-                                            <TableCell>{props.nameLabel}</TableCell>
-                                            <TableCell>{props.descriptionLabel}</TableCell>
-                                            <TableCell>{props.sizeLabel}</TableCell>
-                                            <TableCell>{props.lastModifiedDateLabel}</TableCell>
-                                            <TableCell>{props.createdDateLabel}</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {props.files.map((file) => (
-                                            <TableRow key={file.id}>
-                                                <TableCell width="11%">
-                                                    <Fab onClick={() => handleDownloadClick(file)} size="small" color="primary" aria-label={props.deleteLabel}>
-                                                        <GetApp />
-                                                    </Fab>
-                                                    <Fab onClick={() => handleCopyClick(file)} size="small" color="secondary" aria-label={props.copyLinkLabel}>
-                                                        <Link />
-                                                    </Fab>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Button variant="text" onClick={() => handleDownloadClick(file)}>
-                                                        {file.filename}
-                                                        {(file.isProtected && !props.isAuthenticated) &&
-                                                            <LockOutlined color="primary" />
-                                                        }
-                                                    </Button>
-                                                </TableCell>
-                                                <TableCell>{file.name}</TableCell>
-                                                <TableCell>{file.description}</TableCell>
-                                                <TableCell>{file.size}</TableCell>
-                                                <TableCell>{moment(file.lastModifiedDate).local().format('L LT')}</TableCell>
-                                                <TableCell>{moment(file.createdDate).local().format('L LT')}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </div>
-                    </div>
-                </div>
-            }
+            <Files {...props.files} />
         </section>
     );
 }
@@ -131,13 +70,8 @@ ProductDetail.propTypes = {
     productInformationLabel: PropTypes.string.isRequired,
     inStockLabel: PropTypes.string.isRequired,
     descriptionLabel: PropTypes.string.isRequired,
-    downloadLabel: PropTypes.string.isRequired,
-    filenameLabel: PropTypes.string.isRequired,
-    sizeLabel: PropTypes.string.isRequired,
-    nameLabel: PropTypes.string.isRequired,
-    lastModifiedDateLabel: PropTypes.string.isRequired,
-    createdDateLabel: PropTypes.string.isRequired,
-    productDescription: PropTypes.string
+    productDescription: PropTypes.string,
+    files: PropTypes.object.isRequired
 }
 
 export default ProductDetail;

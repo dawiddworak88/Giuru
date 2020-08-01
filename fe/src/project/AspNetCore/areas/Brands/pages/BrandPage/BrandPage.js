@@ -5,6 +5,7 @@ import GlobalHelper from '../../../../../../shared/helpers/globals/GlobalHelper'
 import Store from '../../../../../../shared/stores/Store';
 import Header from '../../../../shared/components/Header/Header';
 import MainNavigation from '../../../../shared/components/MainNavigation/MainNavigation';
+import BrandDetail from '../../components/BrandDetail/BrandDetail';
 import Catalog from '../../../../shared/components/Catalog/Catalog';
 import Footer from '../../../../../../shared/components/Footer/Footer';
 
@@ -12,16 +13,17 @@ import Footer from '../../../../../../shared/components/Footer/Footer';
 import favicon from '../../../../../../shared/layouts/images/favicon.png';
 /* eslint-enable no-unused-vars */
 
-function CategoryPage(props) {
+function BrandPage(props) {
 
   toast.configure();
 
   return (
     <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
       <Store>
-        <div className="category-page">
+        <div className="brand-page">
           <Header {...props.header}></Header>
           <MainNavigation {...props.mainNavigation}></MainNavigation>
+          <BrandDetail {...props.brandDetail}></BrandDetail>
           <Catalog {...props.catalog}></Catalog>
           <Footer {...props.footer}></Footer>
         </div>
@@ -30,4 +32,4 @@ function CategoryPage(props) {
   );
 }
 
-export default CategoryPage;
+export default BrandPage;
