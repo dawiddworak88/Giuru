@@ -30302,6 +30302,11 @@ var GlobalHelper = /*#__PURE__*/function () {
     key: "initMuiTheme",
     value: function initMuiTheme() {
       var theme = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])({
+        typography: {
+          button: {
+            textTransform: 'none'
+          }
+        },
         palette: {
           primary: {
             main: '#BF202F'

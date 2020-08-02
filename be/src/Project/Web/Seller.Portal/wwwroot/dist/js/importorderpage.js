@@ -33471,7 +33471,7 @@ function ImportOrderForm(props) {
         react_toastify["a" /* toast */].error(props.generalErrorMessage);
       });
     });
-  }, [client]);
+  }, [client, dispatch, state, props.generalErrorMessage, props.validateOrderUrl]);
 
   var _useDropzone = useDropzone({
     onDrop: onDrop,
@@ -33481,17 +33481,6 @@ function ImportOrderForm(props) {
       getRootProps = _useDropzone.getRootProps,
       getInputProps = _useDropzone.getInputProps,
       isDragActive = _useDropzone.isDragActive;
-
-  function onSubmitForm(state) {
-    dispatch({
-      type: 'SET_IS_LOADING',
-      payload: true
-    });
-    dispatch({
-      type: 'SET_IS_LOADING',
-      payload: false
-    });
-  }
 
   return /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement("form", {
     className: "is-modern-form",
@@ -34916,6 +34905,11 @@ var GlobalHelper = /*#__PURE__*/function () {
     key: "initMuiTheme",
     value: function initMuiTheme() {
       var theme = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])({
+        typography: {
+          button: {
+            textTransform: 'none'
+          }
+        },
         palette: {
           primary: {
             main: '#BF202F'

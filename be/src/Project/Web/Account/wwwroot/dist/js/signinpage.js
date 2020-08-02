@@ -2537,6 +2537,11 @@ var GlobalHelper_GlobalHelper = /*#__PURE__*/function () {
     key: "initMuiTheme",
     value: function initMuiTheme() {
       var theme = styles_createMuiTheme({
+        typography: {
+          button: {
+            textTransform: 'none'
+          }
+        },
         palette: {
           primary: {
             main: '#BF202F'

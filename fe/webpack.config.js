@@ -17,7 +17,7 @@ var browserConfig = {
                 ]
             },
             {
-                test: /\.(png|svg|jpg|gif)$/,
+                test: /\.(png|svg|jpg|gif|woff(2)?|ttf|eot)$/,
                 use: [{
                     loader: "file-loader",
                     options: {
@@ -58,7 +58,10 @@ var browserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
-        homepage: ["./src/project/AspNetCore/areas/Home/pages/HomePage/index.js", "./src/project/AspNetCore/areas/Home/pages/HomePage/HomePage.scss"]
+        homepage: ["./src/project/AspNetCore/areas/Home/pages/HomePage/index.js", "./src/project/AspNetCore/areas/Home/pages/HomePage/HomePage.scss"],
+        categorypage: ["./src/project/AspNetCore/areas/Products/pages/CategoryPage/index.js", "./src/project/AspNetCore/areas/Products/pages/CategoryPage/CategoryPage.scss"],
+        productpage: ["./src/project/AspNetCore/areas/Products/pages/ProductPage/index.js", "./src/project/AspNetCore/areas/Products/pages/ProductPage/ProductPage.scss"],
+        brandpage: ["./src/project/AspNetCore/areas/Brands/pages/BrandPage/index.js", "./src/project/AspNetCore/areas/Brands/pages/BrandPage/BrandPage.scss"]
     },
     output: {
         publicPath: path.resolve(__dirname, "../be/src/Project/Web/AspNetCore/wwwroot/dist/js"),
@@ -80,7 +83,7 @@ var accountBrowserConfig = {
                 ]
             },
             {
-                test: /\.(png|svg|jpg|gif)$/,
+                test: /\.(png|svg|jpg|gif|woff(2)?|ttf|eot)$/,
                 use: [{
                     loader: "file-loader",
                     options: {
@@ -143,7 +146,7 @@ var sellerPortalBrowserConfig = {
                 ]
             },
             {
-                test: /\.(png|svg|jpg|gif)$/,
+                test: /\.(png|svg|jpg|gif|woff(2)?|ttf|eot)$/,
                 use: [{
                     loader: "file-loader",
                     options: {
