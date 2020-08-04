@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Foundation.Database.Shared.DependencyInjection;
-using Feature.Account.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
@@ -16,6 +15,7 @@ using Seller.Web.Areas.Clients.DependencyInjection;
 using Seller.Web.Areas.Products.DependencyInjection;
 using Foundation.ApiExtensions.DependencyInjection;
 using Foundation.Localization.DependencyInjection;
+using Foundation.Account.DependencyInjection;
 
 namespace Seller.Portal
 {

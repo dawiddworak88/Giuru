@@ -1,10 +1,10 @@
-﻿using Feature.Client;
-using Foundation.PageContent.Components.Footers.ViewModels;
+﻿using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.ViewModels;
+using Foundation.Localization;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {

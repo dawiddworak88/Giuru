@@ -1,7 +1,6 @@
 ﻿using Catalog.Api.v1.Areas.Products.ResponseModels;
-using Feature.Account.Definitions;
-using Feature.Product.Models;
-using Feature.Product.Services;
+using Catalog.Api.v1.Areas.Products.Models;
+using Catalog.Api.v1.Areas.Products.Services;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Helpers;
 using Foundation.Extensions.Helpers;
@@ -14,6 +13,7 @@ using System.Net;
 using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Foundation.Account.Definitions;
 
 namespace Catalog.Api.v1.Areas.Products.Controllers
 {

@@ -1,12 +1,12 @@
 ﻿using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
-using Feature.Product;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Products.ViewModels;
 using Seller.Web.Shared.ComponentModels;
+using Foundation.Localization;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {

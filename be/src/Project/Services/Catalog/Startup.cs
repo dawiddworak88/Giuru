@@ -1,8 +1,6 @@
-using Feature.Account.DependencyInjection;
-using Feature.Client.DependencyInjection;
-using Feature.Order.DependencyInjection;
-using Feature.Product.DependencyInjection;
-using Foundation.Account.DependencyInjection;
+using Catalog.Api.v1.Areas.Clients.DependencyInjection;
+using Catalog.Api.v1.Areas.Schemas.DependencyInjection;
+using Catalog.Api.v1.Areas.Products.DependencyInjection;
 using Foundation.Database.Shared.DependencyInjection;
 using Foundation.GenericRepository.DependencyInjection;
 using Foundation.Localization.DependencyInjection;
@@ -18,6 +16,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Reflection;
+using Foundation.Account.DependencyInjection;
 
 namespace Api
 {

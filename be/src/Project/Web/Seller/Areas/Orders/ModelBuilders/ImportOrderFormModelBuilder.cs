@@ -1,7 +1,6 @@
 ﻿using Seller.Web.Areas.Orders.ViewModel;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
-using Feature.Order;
 using Foundation.Localization;
 using Seller.Web.Areas.Clients.Repositories;
 using System.Threading.Tasks;

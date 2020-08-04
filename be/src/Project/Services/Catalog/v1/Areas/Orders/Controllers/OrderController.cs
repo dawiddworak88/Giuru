@@ -1,8 +1,8 @@
 ﻿using Catalog.Api.v1.Areas.Orders.RequestModels;
 using Catalog.Api.v1.Areas.Orders.ResponseModels;
-using Feature.Account.Definitions;
-using Feature.Order.Models;
-using Feature.Order.Services;
+using Catalog.Api.v1.Areas.Schemas.Models;
+using Catalog.Api.v1.Areas.Schemas.Services;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Helpers;
 using Foundation.Extensions.Helpers;

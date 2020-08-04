@@ -1,5 +1,4 @@
-﻿using Feature.Product;
-using Foundation.ApiExtensions.Communications;
+﻿using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.ApiExtensions.Helpers;
@@ -18,6 +17,7 @@ using System.Threading.Tasks;
 using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.ApiResponseModels;
 using Seller.Web.Shared.Configurations;
+using Foundation.Localization;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {

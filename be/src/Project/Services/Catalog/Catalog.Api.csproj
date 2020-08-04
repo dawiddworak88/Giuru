@@ -21,10 +21,7 @@
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Feature\Feature.Account\Feature.Account.csproj" />
-    <ProjectReference Include="..\..\..\Feature\Feature.Client\Feature.Client.csproj" />
-    <ProjectReference Include="..\..\..\Feature\Feature.Order\Feature.Order.csproj" />
-    <ProjectReference Include="..\..\..\Feature\Feature.Product\Feature.Product.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Account\Foundation.Account.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\ApiExtensions\Foundation.ApiExtensions.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Mailing\Foundation.Mailing.csproj" />

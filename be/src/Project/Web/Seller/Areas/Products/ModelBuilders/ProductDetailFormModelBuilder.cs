@@ -1,5 +1,4 @@
-﻿using Feature.Product;
-using Foundation.Extensions.ModelBuilders;
+﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;

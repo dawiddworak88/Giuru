@@ -1,5 +1,5 @@
 ﻿using Identity.Api.Areas.Accounts.Models;
-using Feature.Account.Services.TokenServices;
+using Identity.Api.Areas.Accounts.Services.TokenServices;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Helpers;
 using Microsoft.AspNetCore.Authorization;

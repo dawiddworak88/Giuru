@@ -1,6 +1,6 @@
 ﻿using Catalog.Api.v1.Areas.Schemas.RequestModels;
 using Catalog.Api.v1.Areas.Schemas.ResponseModels;
-using Feature.Account.Definitions;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Helpers;
 using Foundation.Extensions.Definitions;

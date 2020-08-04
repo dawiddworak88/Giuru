@@ -2,7 +2,7 @@
 using Identity.Api.Areas.Accounts.Models;
 using Identity.Api.Areas.Accounts.Validators;
 using Identity.Api.Areas.Accounts.ViewModels;
-using Feature.Account.Services.UserServices;
+using Identity.Api.Areas.Accounts.Services.UserServices;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.AspNetCore.Authorization;

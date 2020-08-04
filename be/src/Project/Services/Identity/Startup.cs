@@ -13,7 +13,7 @@ using Foundation.Account.DependencyInjection;
 using Foundation.GenericRepository.DependencyInjection;
 using Foundation.Extensions.Definitions;
 using Foundation.Database.Shared.DependencyInjection;
-using Feature.Account.DependencyInjection;
+using Identity.Api.Areas.Accounts.DependencyInjection;
 
 namespace Account
 {

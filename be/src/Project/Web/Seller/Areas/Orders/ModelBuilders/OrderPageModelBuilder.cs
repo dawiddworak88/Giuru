@@ -4,9 +4,9 @@ using Foundation.PageContent.MenuTiles.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Microsoft.Extensions.Localization;
-using Feature.Order;
 using Microsoft.AspNetCore.Routing;
 using System.Globalization;
+using Foundation.Localization;
 
 namespace Seller.Web.Areas.Orders.ModelBuilders
 {
