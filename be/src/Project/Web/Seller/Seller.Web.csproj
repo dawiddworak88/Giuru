@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>db5a4961-8bbb-41fa-97cc-df7a4f12d1d0</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Feature\Feature.Account\Feature.Account.csproj" />
+    <ProjectReference Include="..\..\..\Feature\Feature.Client\Feature.Client.csproj" />
+    <ProjectReference Include="..\..\..\Feature\Feature.Order\Feature.Order.csproj" />
+    <ProjectReference Include="..\..\..\Feature\Feature.PageContent\Feature.PageContent.csproj" />
+    <ProjectReference Include="..\..\..\Feature\Feature.Product\Feature.Product.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Extensions\Foundation.Extensions.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Localization\Foundation.Localization.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Prerendering\Foundation.Prerendering.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Presentation\Foundation.Presentation.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Security\Foundation.Security.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\dist\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="Properties\appsettings.Development.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="Properties\appsettings.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+</Project>
