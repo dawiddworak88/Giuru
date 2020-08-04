@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Context } from '../../../../../../shared/stores/Store';
 import useForm from '../../../../../../shared/helpers/forms/useForm';
 import { TextField, Button, CircularProgress } from '@material-ui/core';
@@ -9,7 +10,14 @@ import FetchErrorHandler from '../../../../../../shared/helpers/errorHandlers/Fe
 
 function ProductDetailForm(props) {
 
+    const defaultProps = {
+        options: props.categories,
+        getOptionLabel: (option) => option.name
+    };
+
     const [state, dispatch] = useContext(Context);
+
+    const [category, setCategory] = useState(null);
 
     const jsonSchema = props.schema && props.schema.jsonSchema ? JSON.parse(props.schema.jsonSchema) : {};
     const uiSchema = props.schema && props.schema.uiSchema ? JSON.parse(props.schema.uiSchema) : {};
@@ -93,6 +101,19 @@ function ProductDetailForm(props) {
             <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                 <input type="hidden" value={schemaId} />
                 <div className="field">
+                    <Autocomplete
+                        {...defaultProps}
+                        id="category"
+                        name="category"
+                        fullWidth={true}
+                        value={category}
+                        onChange={(event, newValue) => {
+                        }}
+                        autoComplete
+                        renderInput={(params) => <TextField {...params} label={props.selectCategoryLabel} margin="normal" />}
+                    />
+                </div>
+                <div className="field">
                     <TextField id="sku" name="sku" label={props.skuLabel} fullWidth={true}
                         value={sku} onChange={handleOnChange} helperText={dirty.sku ? errors.sku : ''} error={(errors.sku.length > 0) && dirty.sku} />
                 </div>
@@ -118,7 +139,7 @@ ProductDetailForm.propTypes = {
     skuLabel: PropTypes.string.isRequired,
     nameLabel: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
-    schema: PropTypes.object,
+    categories: PropTypes.array.isRequired,
     generalErrorMessage: PropTypes.string.isRequired
 };
 
