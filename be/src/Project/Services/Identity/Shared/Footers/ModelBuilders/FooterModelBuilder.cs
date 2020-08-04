@@ -1,5 +1,5 @@
-﻿using Feature.PageContent.Components.Footers.ViewModels;
-using Feature.PageContent.Components.Links.ViewModels;
+﻿using Foundation.PageContent.Components.Footers.ViewModels;
+using Foundation.PageContent.Components.Links.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.Localization.Definitions;

@@ -1,10 +1,10 @@
-﻿using Feature.PageContent.Components.Links.ViewModels;
+﻿using Foundation.PageContent.Components.Links.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using Foundation.Localization;
-using Feature.PageContent.Components.Footers.ViewModels;
+using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.Localization.Definitions;
 
 namespace Seller.Web.Shared.Footers.ModelBuilders

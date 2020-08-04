@@ -5,9 +5,9 @@ using Seller.Web.Shared.Footers.ModelBuilders;
 using Microsoft.Extensions.Configuration;
 using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.MenuTiles.ModelBuilders;
-using Feature.PageContent.MenuTiles.ViewModels;
-using Feature.PageContent.Components.Headers.ViewModels;
-using Feature.PageContent.Components.Footers.ViewModels;
+using Foundation.PageContent.MenuTiles.ViewModels;
+using Foundation.PageContent.Components.Headers.ViewModels;
+using Foundation.PageContent.Components.Footers.ViewModels;
 using Seller.Web.Areas.Clients.Configurations;
 using Seller.Web.Areas.Clients.Controllers.Configurations;
 

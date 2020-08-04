@@ -16,10 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructure\Foundation.Account\Foundation.Account.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Account\Foundation.Account.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\ApiExtensions\Foundation.ApiExtensions.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Foundation.Extensions\Foundation.Extensions.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Extensions\Foundation.Extensions.csproj" />
   </ItemGroup>
 
 </Project>

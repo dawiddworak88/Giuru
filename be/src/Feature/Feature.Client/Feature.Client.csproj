@@ -10,11 +10,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Infrastructure\Foundation.Account\Foundation.Account.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Account\Foundation.Account.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Foundation.Extensions\Foundation.Extensions.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Foundation.Localization\Foundation.Localization.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Foundation.Mailing\Foundation.Mailing.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Extensions\Foundation.Extensions.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Localization\Foundation.Localization.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Mailing\Foundation.Mailing.csproj" />
   </ItemGroup>
 
 </Project>

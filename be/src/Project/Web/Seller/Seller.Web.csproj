@@ -19,15 +19,15 @@
     <ProjectReference Include="..\..\..\Feature\Feature.Account\Feature.Account.csproj" />
     <ProjectReference Include="..\..\..\Feature\Feature.Client\Feature.Client.csproj" />
     <ProjectReference Include="..\..\..\Feature\Feature.Order\Feature.Order.csproj" />
-    <ProjectReference Include="..\..\..\Feature\Feature.PageContent\Feature.PageContent.csproj" />
     <ProjectReference Include="..\..\..\Feature\Feature.Product\Feature.Product.csproj" />
-    <ProjectReference Include="..\..\..\Infrastructure\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\ApiExtensions\Foundation.ApiExtensions.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
-    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Extensions\Foundation.Extensions.csproj" />
-    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Localization\Foundation.Localization.csproj" />
-    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Prerendering\Foundation.Prerendering.csproj" />
-    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Presentation\Foundation.Presentation.csproj" />
-    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Security\Foundation.Security.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Extensions\Foundation.Extensions.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Localization\Foundation.Localization.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Prerendering\Foundation.Prerendering.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Presentation\Foundation.Presentation.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Security\Foundation.Security.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\PageContent\Foundation.PageContent.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\dist\" />

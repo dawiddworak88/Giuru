@@ -1,5 +1,5 @@
 ﻿using Feature.Client;
-using Feature.PageContent.Components.Languages.ViewModels;
+using Foundation.PageContent.Components.Languages.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.Localization.Definitions;

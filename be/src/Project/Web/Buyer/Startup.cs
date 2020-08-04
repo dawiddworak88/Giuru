@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Foundation.Database.Shared.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
-using Feature.PageContent.DependencyInjection;
+using Foundation.PageContent.DependencyInjection;
 using Foundation.Security.DependencyInjection;
 
 namespace AspNetCore

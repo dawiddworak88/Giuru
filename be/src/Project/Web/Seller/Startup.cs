@@ -9,7 +9,7 @@ using Feature.Account.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
-using Feature.PageContent.DependencyInjection;
+using Foundation.PageContent.DependencyInjection;
 using Foundation.Security.DependencyInjection;
 using Seller.Web.Areas.Orders.DependencyInjection;
 using Seller.Web.Areas.Clients.DependencyInjection;

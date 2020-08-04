@@ -1,4 +1,4 @@
-﻿using Feature.PageContent.Components.Headers.ViewModels;
+﻿using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 
 namespace Identity.Api.Shared.Headers.ModelBuilders

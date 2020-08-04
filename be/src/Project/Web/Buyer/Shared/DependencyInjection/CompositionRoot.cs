@@ -6,8 +6,8 @@ using Foundation.Extensions.ModelBuilders;
 using Buyer.Web.Shared.Footers.ModelBuilders;
 using Microsoft.Extensions.Configuration;
 using Buyer.Web.Shared.Configurations;
-using Feature.PageContent.Components.Headers.ViewModels;
-using Feature.PageContent.Components.Footers.ViewModels;
+using Foundation.PageContent.Components.Headers.ViewModels;
+using Foundation.PageContent.Components.Footers.ViewModels;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {

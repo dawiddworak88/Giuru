@@ -1,4 +1,4 @@
-﻿using Feature.PageContent.Components.Languages.ViewModels;
+﻿using Foundation.PageContent.Components.Languages.ViewModels;
 using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Clients.ViewModels

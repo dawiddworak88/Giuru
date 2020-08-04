@@ -7,8 +7,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Foundation.Extensions\Foundation.Extensions.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Extensions\Foundation.Extensions.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\GenericRepository\Foundation.GenericRepository.csproj" />
   </ItemGroup>
 
 </Project>

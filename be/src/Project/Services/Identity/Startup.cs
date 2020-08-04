@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Identity.Api.Shared.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
-using Feature.PageContent.DependencyInjection;
+using Foundation.PageContent.DependencyInjection;
 using Foundation.Security.DependencyInjection;
 using Foundation.Account.DependencyInjection;
 using Foundation.GenericRepository.DependencyInjection;

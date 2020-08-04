@@ -25,9 +25,9 @@
     <ProjectReference Include="..\..\..\Feature\Feature.Client\Feature.Client.csproj" />
     <ProjectReference Include="..\..\..\Feature\Feature.Order\Feature.Order.csproj" />
     <ProjectReference Include="..\..\..\Feature\Feature.Product\Feature.Product.csproj" />
-    <ProjectReference Include="..\..\..\Infrastructure\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
-    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Extensions\Foundation.Extensions.csproj" />
-    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Mailing\Foundation.Mailing.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\ApiExtensions\Foundation.ApiExtensions.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Extensions\Foundation.Extensions.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Mailing\Foundation.Mailing.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Schema\Foundation.Schema.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Foundation.Taxonomy\Foundation.Taxonomy.csproj" />
   </ItemGroup>

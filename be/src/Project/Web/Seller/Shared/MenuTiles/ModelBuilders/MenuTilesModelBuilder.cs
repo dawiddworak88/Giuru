@@ -1,4 +1,4 @@
-﻿using Feature.PageContent.MenuTiles.ViewModels;
+﻿using Foundation.PageContent.MenuTiles.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.Presentation.Definitions;

@@ -1,12 +1,12 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using System.Collections.Generic;
-using Feature.PageContent.Components.Links.ViewModels;
+using Foundation.PageContent.Components.Links.ViewModels;
 using Microsoft.Extensions.Localization;
 using Buyer.Web.Shared.Configurations;
 using Microsoft.Extensions.Options;
 using Foundation.Localization;
-using Feature.PageContent.Components.Headers.ViewModels;
-using Feature.PageContent.Components.LanguageSwitchers.ViewModels;
+using Foundation.PageContent.Components.Headers.ViewModels;
+using Foundation.PageContent.Components.LanguageSwitchers.ViewModels;
 
 namespace Buyer.Web.Shared.Headers.ModelBuilders
 {
