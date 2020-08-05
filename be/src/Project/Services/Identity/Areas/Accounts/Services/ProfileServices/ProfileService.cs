@@ -1,21 +1,16 @@
 ﻿using Foundation.Account.Definitions;
-using Identity.Api.Areas.Accounts.Services.UserServices;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Identity.Api.Areas.Accounts.Services.ProfileServices
 {
     public class ProfileService : IProfileService
     {
-        private readonly IUserService userService;
-
-        public ProfileService(IUserService userService)
+        public ProfileService()
         {
-            this.userService = userService;
         }
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)

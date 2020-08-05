@@ -1,32 +1,28 @@
 ﻿using Catalog.Api.v1.Areas.Products.Models;
 using Catalog.Api.v1.Areas.Products.ResultModels;
 using Catalog.Api.v1.Areas.Products.Validators;
-using Foundation.Database.Areas.Sellers.Entities;
-using Foundation.Database.Shared.Repositories;
+using Catalog.Api.Infrastructure.Sellers.Entities;
 using Foundation.Extensions.Definitions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.GenericRepository.Services;
-using Foundation.Database.Areas.Translations.Entities;
+using Catalog.Api.Infrastructure.Translations.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Foundation.Database.Shared.Contexts;
+using Catalog.Api.Infrastructure;
 
 namespace Catalog.Api.v1.Areas.Products.Services
 {
     public class ProductService : IProductService
     {
-        private readonly DatabaseContext context;
-        private readonly IGenericRepository<Seller> sellerRepository;
+        private readonly CatalogContext context;
         private readonly IEntityService entityService;
 
         public ProductService(
-            DatabaseContext context,
-            IGenericRepository<Seller> sellerRepository,
+            CatalogContext context,
             IEntityService entityService)
         {
             this.context = context;
-            this.sellerRepository = sellerRepository;
             this.entityService = entityService;
         }
 
@@ -52,7 +48,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
                 return createProductResultModel;
             }
 
-            var product = new Foundation.Database.Areas.Products.Entities.Product
+            var product = new Catalog.Api.Infrastructure.Products.Entities.Product
             {
                 Sku = model.Sku,
                 SchemaId = model.SchemaId.Value,

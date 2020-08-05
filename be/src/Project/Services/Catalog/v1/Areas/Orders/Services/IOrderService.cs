@@ -1,8 +1,8 @@
-﻿using Catalog.Api.v1.Areas.Schemas.Models;
-using Catalog.Api.v1.Areas.Schemas.ResultModels;
+﻿using Catalog.Api.v1.Areas.Orders.Models;
+using Catalog.Api.v1.Areas.Orders.ResultModels;
 using System.Threading.Tasks;
 
-namespace Catalog.Api.v1.Areas.Schemas.Services
+namespace Catalog.Api.v1.Areas.Orders.Services
 {
     public interface IOrderService
     {

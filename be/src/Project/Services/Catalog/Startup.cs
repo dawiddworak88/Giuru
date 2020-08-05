@@ -1,12 +1,9 @@
-using Catalog.Api.v1.Areas.Clients.DependencyInjection;
 using Catalog.Api.v1.Areas.Schemas.DependencyInjection;
 using Catalog.Api.v1.Areas.Products.DependencyInjection;
-using Foundation.Database.Shared.DependencyInjection;
 using Foundation.GenericRepository.DependencyInjection;
 using Foundation.Localization.DependencyInjection;
 using Foundation.Mailing.DependencyInjection;
-using Foundation.Schema.DependencyInjection;
-using Foundation.Taxonomy.DependencyInjection;
+using Catalog.Api.v1.Areas.Taxonomies.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +14,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using Foundation.Account.DependencyInjection;
+using Catalog.Api.v1.Areas.Orders.DependencyInjection;
 
 namespace Api
 {

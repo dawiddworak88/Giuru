@@ -1,7 +1,7 @@
 ﻿using Foundation.Extensions.Models;
 using System.Collections.Generic;
 
-namespace Catalog.Api.v1.Areas.Schemas.ResultModels
+namespace Catalog.Api.v1.Areas.Orders.ResultModels
 {
     public class OrderValidationResultModel : BaseServiceResultModel
     {

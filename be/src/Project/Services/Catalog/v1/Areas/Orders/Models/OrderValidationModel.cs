@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Catalog.Api.v1.Areas.Schemas.Models
+namespace Catalog.Api.v1.Areas.Orders.Models
 {
     public class OrderValidationModel : BaseServiceModel
     {

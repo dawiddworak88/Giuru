@@ -6,6 +6,6 @@ namespace Catalog.Api.v1.Areas.Products.ResultModels
 {
     public class ProductsResultModel : BaseServiceResultModel
     {
-        public PagedResults<IEnumerable<Foundation.Database.Areas.Products.Entities.Product>> Products { get; set; }
+        public PagedResults<IEnumerable<Catalog.Api.Infrastructure.Products.Entities.Product>> Products { get; set; }
     }
 }

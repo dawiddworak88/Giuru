@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Catalog.Api.v1.Areas.Schemas.Models
+namespace Catalog.Api.v1.Areas.Orders.Models
 {
     public class OrderItemModel
     {

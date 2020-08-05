@@ -1,33 +1,28 @@
-﻿using Catalog.Api.v1.Areas.Schemas.Models;
-using Catalog.Api.v1.Areas.Schemas.ResultModels;
-using Foundation.Database.Areas.Sellers.Entities;
-using Foundation.Database.Shared.Contexts;
-using Foundation.Database.Shared.Repositories;
+﻿using Catalog.Api.v1.Areas.Orders.Models;
+using Catalog.Api.v1.Areas.Orders.ResultModels;
 using Foundation.Extensions.Definitions;
 using Foundation.GenericRepository.Services;
 using Foundation.Localization;
 using Microsoft.Extensions.Localization;
 using System.Linq;
 using System.Threading.Tasks;
+using Catalog.Api.Infrastructure;
 
-namespace Catalog.Api.v1.Areas.Schemas.Services
+namespace Catalog.Api.v1.Areas.Orders.Services
 {
     public class OrderService : IOrderService
     {
-        private readonly DatabaseContext context;
+        private readonly CatalogContext context;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
-        private readonly IGenericRepository<Seller> sellerRepository;
         private readonly IEntityService entityService;
 
         public OrderService(
-            DatabaseContext context,
+            CatalogContext context,
             IStringLocalizer<OrderResources> orderLocalizer,
-            IGenericRepository<Seller> sellerRepository,
             IEntityService entityService)
         {
             this.context = context;
             this.orderLocalizer = orderLocalizer;
-            this.sellerRepository = sellerRepository;
             this.entityService = entityService;
         }
 

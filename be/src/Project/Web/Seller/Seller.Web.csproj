@@ -18,8 +18,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Infrastructure\Account\Foundation.Account.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\ApiExtensions\Foundation.ApiExtensions.csproj" />
-    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Extensions\Foundation.Extensions.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Localization\Foundation.Localization.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Prerendering\Foundation.Prerendering.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Presentation\Foundation.Presentation.csproj" />

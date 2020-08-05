@@ -1,5 +1,4 @@
-﻿using Identity.Api.Areas.Accounts.Services.UserServices;
-using Foundation.ApiExtensions.Definitions;
+﻿using Foundation.ApiExtensions.Definitions;
 using IdentityModel;
 using IdentityServer4;
 using System.Collections.Generic;
@@ -11,13 +10,11 @@ namespace Identity.Api.Areas.Accounts.Services.TokenServices
 {
     public class TokenService : ITokenService
     {
-        private readonly IUserService userService;
         private readonly IdentityServerTools tools;
 
-        public TokenService(IdentityServerTools tools, IUserService userService)
+        public TokenService(IdentityServerTools tools)
         {
             this.tools = tools;
-            this.userService = userService;
         }
 
         public async Task<string> GetTokenAsync(string email, string password)

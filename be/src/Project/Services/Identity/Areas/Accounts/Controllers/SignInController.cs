@@ -2,7 +2,6 @@
 using Identity.Api.Areas.Accounts.Models;
 using Identity.Api.Areas.Accounts.Validators;
 using Identity.Api.Areas.Accounts.ViewModels;
-using Identity.Api.Areas.Accounts.Services.UserServices;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.AspNetCore.Authorization;
@@ -15,16 +14,13 @@ namespace Identity.Api.Areas.Accounts.Controllers
     [AllowAnonymous]
     public class SignInController : BaseController
     {
-        private readonly IUserService userService;
         private readonly IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder;
 
         public SignInController(
-            IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder,
-            IUserService userService
+            IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder
             )
         {
             this.signInModelBuilder = signInModelBuilder;
-            this.userService = userService;
         }
 
         [HttpGet]
@@ -44,7 +40,7 @@ namespace Identity.Api.Areas.Accounts.Controllers
 
             if (result.IsValid)
             {
-                await this.userService.SignInAsync(this.HttpContext, model.Email, model.Password, model.ReturnUrl);
+                // await this.userService.SignInAsync(this.HttpContext, model.Email, model.Password, model.ReturnUrl);
 
                 return this.Redirect(model.ReturnUrl);
             }

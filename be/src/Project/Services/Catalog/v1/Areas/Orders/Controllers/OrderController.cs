@@ -1,7 +1,7 @@
 ﻿using Catalog.Api.v1.Areas.Orders.RequestModels;
 using Catalog.Api.v1.Areas.Orders.ResponseModels;
-using Catalog.Api.v1.Areas.Schemas.Models;
-using Catalog.Api.v1.Areas.Schemas.Services;
+using Catalog.Api.v1.Areas.Orders.Models;
+using Catalog.Api.v1.Areas.Orders.Services;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Helpers;
@@ -16,7 +16,7 @@ using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Catalog.Api.v1.Areas.Schemas.Controllers
+namespace Catalog.Api.v1.Areas.Orders.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -29,7 +29,7 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
 
         private readonly ILogger logger;
 
-        public OrderController(IOrderService orderService, ILogger<SchemaController> logger)
+        public OrderController(IOrderService orderService, ILogger<OrderController> logger)
         {
             this.orderService = orderService;
             this.logger = logger;

@@ -1,7 +1,7 @@
-﻿using Catalog.Api.v1.Areas.Schemas.Services;
+﻿using Catalog.Api.v1.Areas.Orders.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Catalog.Api.v1.Areas.Schemas.DependencyInjection
+namespace Catalog.Api.v1.Areas.Orders.DependencyInjection
 {
     public static class CompositionRoot
     {

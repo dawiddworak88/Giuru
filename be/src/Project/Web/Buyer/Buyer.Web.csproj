@@ -16,7 +16,6 @@
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Infrastructure\Foundation.Database\Foundation.Database.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Localization\Foundation.Localization.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Prerendering\Foundation.Prerendering.csproj" />

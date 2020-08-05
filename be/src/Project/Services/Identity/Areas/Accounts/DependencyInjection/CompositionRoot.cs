@@ -1,9 +1,7 @@
 ﻿using Identity.Api.Areas.Accounts.Configurations;
 using Identity.Api.Areas.Accounts.Services.ProfileServices;
 using Identity.Api.Areas.Accounts.Services.TokenServices;
-using Identity.Api.Areas.Accounts.Services.UserServices;
-using Foundation.Database.Areas.Accounts.Entities;
-using Foundation.Database.Shared.Contexts;
+using Identity.Api.Infrastructure.Accounts.Entities;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.KeyVault;
@@ -14,6 +12,7 @@ using System;
 using System.Security.Cryptography.X509Certificates;
 using ITokenService = Identity.Api.Areas.Accounts.Services.TokenServices.ITokenService;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Identity.Api.Infrastructure;
 
 namespace Identity.Api.Areas.Accounts.DependencyInjection
 {
@@ -23,7 +22,7 @@ namespace Identity.Api.Areas.Accounts.DependencyInjection
         {
             // Configure identity server 4
             services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<DatabaseContext>()
+            .AddEntityFrameworkStores<IdentityContext>()
             .AddDefaultTokenProviders();
 
             var builder = services.AddIdentityServer(options => {
@@ -72,7 +71,6 @@ namespace Identity.Api.Areas.Accounts.DependencyInjection
             });
 
             // Register services
-            services.AddScoped<IUserService, UserService>();
             services.AddScoped<ITokenService, TokenService>();
         }
     }
