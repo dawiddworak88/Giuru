@@ -3,8 +3,8 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1.302 AS build-env
 WORKDIR /app
 
-COPY ./src/Infrastructure ./Infrastructure/
-COPY ./src/Project/Services/Identity ./Project/Services/Identity/
+COPY ./Infrastructure ./Infrastructure/
+COPY ./Project/Services/Identity ./Project/Services/Identity/
 RUN dotnet publish ./Project/Services/Identity/Identity.Api.csproj -c Release -o out
 
 # Build runtime image

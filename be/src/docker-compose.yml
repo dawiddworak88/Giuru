@@ -80,15 +80,16 @@ services:
       - catalog-api
       - rabbitmq
 
-  webshoppingapigw:
+  apigw:
     image: envoyproxy/envoy:v1.15.0
 
   webshoppingagg:
     image: ${REGISTRY:-eshop}/webshoppingagg:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Dockerfile-Webshoppingagg
+      dockerfile: Dockerfile-WebShoppingAgg
     depends_on:
+      - apigw
       - identity-api
       - rabbitmq
       - ordering-api
@@ -99,7 +100,7 @@ services:
     image: ${REGISTRY:-eshop}/ordering-signalrhub:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Dockerfile-SignalrHub
+      dockerfile: Dockerfile-OrderingSignalrHub
     depends_on:
       - identity-api
       - rabbitmq

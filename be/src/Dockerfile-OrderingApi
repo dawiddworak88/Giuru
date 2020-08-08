@@ -3,9 +3,9 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1.302 AS build-env
 WORKDIR /app
 
-COPY ./src/Infrastructure ./Infrastructure/
-COPY ./src/Project/Services/Ordering ./Project/Services/Ordering/
-RUN dotnet publish ./Project/Services/Ordering/Ordering.Api.csproj -c Release -o out
+COPY ./Infrastructure ./Infrastructure/
+COPY ./Project/Services/Ordering/Ordering.Api ./Project/Services/Ordering/Ordering.Api/
+RUN dotnet publish ./Project/Services/Ordering/Ordering.Api/Ordering.Api.csproj -c Release -o out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.6

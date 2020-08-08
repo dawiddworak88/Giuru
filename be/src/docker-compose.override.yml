@@ -67,9 +67,9 @@ services:
     ports:
       - "5111:80"
 
-  webshoppingapigw:
+  apigw:
     volumes:
-      - ./ApiGateways/Envoy/config/webshopping:/etc/envoy
+      - ./Project/ApiGateways/Envoy/config:/etc/envoy
     ports:
     - "5202:80"
     - "15202:8001"

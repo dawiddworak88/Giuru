@@ -3,8 +3,8 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1.302 AS build-env
 WORKDIR /app
 
-COPY ./src/Infrastructure ./Infrastructure/
-COPY ./src/Project/Web/Seller ./Project/Web/Seller/
+COPY ./Infrastructure ./Infrastructure/
+COPY ./Project/Web/Seller ./Project/Web/Seller/
 RUN dotnet publish ./Project/Web/Seller/Seller.Web.csproj -c Release -o out
 
 # Build runtime image
