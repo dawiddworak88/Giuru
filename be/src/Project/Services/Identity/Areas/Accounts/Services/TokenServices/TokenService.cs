@@ -19,22 +19,22 @@ namespace Identity.Api.Areas.Accounts.Services.TokenServices
 
         public async Task<string> GetTokenAsync(string email, string password)
         {
-            var user = await this.userService.ValidateAsync(email, password);
+            //var user = await this.userService.ValidateAsync(email, password);
 
-            if (user != null)
-            {
-                var claims = new HashSet<Claim>(new ClaimComparer())
-                {
-                    new Claim(AccountConstants.SellerIdClaim, user.Seller.Id.ToString()),
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Name, user.Seller.Name),
-                    new Claim(JwtClaimTypes.Audience, ApiExtensionsConstants.AllScopes)
-                };
+            //if (user != null)
+            //{
+            //    var claims = new HashSet<Claim>(new ClaimComparer())
+            //    {
+            //        new Claim(AccountConstants.SellerIdClaim, user.Seller.Id.ToString()),
+            //        new Claim(ClaimTypes.Email, user.Email),
+            //        new Claim(ClaimTypes.Name, user.Seller.Name),
+            //        new Claim(JwtClaimTypes.Audience, ApiExtensionsConstants.AllScopes)
+            //    };
 
-                var token = await this.tools.IssueJwtAsync(AccountConstants.DefaultTokenLifetimeInSeconds, claims);
+            //    var token = await this.tools.IssueJwtAsync(AccountConstants.DefaultTokenLifetimeInSeconds, claims);
 
-                return token;
-            }
+            //    return token;
+            //}
 
             return default;
         }

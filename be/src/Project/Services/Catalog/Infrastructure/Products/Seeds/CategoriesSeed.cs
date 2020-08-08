@@ -2,6 +2,7 @@
 using Catalog.Api.Infrastructure.Products.Entities;
 using Catalog.Api.Infrastructure.Translations.Definitions.Languages;
 using Catalog.Api.Infrastructure.Translations.Entities;
+using Foundation.GenericRepository.Helpers;
 using System;
 using System.Linq;
 

@@ -4,13 +4,12 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1.302 AS build-env
 WORKDIR /app
 
 COPY ./src/Infrastructure ./Infrastructure/
-COPY ./src/Feature ./Feature/
-COPY ./src/Project/Web/Seller.Portal ./Project/Web/Seller.Portal/
-RUN dotnet publish ./Project/Web/Seller.Portal/Seller.Portal.csproj -c Release -o out
+COPY ./src/Project/Web/Seller ./Project/Web/Seller/
+RUN dotnet publish ./Project/Web/Seller/Seller.Web.csproj -c Release -o out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.6
 WORKDIR /app
 COPY --from=build-env /app/out .
 
-ENTRYPOINT ["dotnet", "Seller.Portal.dll"]
+ENTRYPOINT ["dotnet", "Seller.Web.dll"]

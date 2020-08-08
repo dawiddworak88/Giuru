@@ -2,6 +2,7 @@
 using Identity.Api.Infrastructure.Addresses.Entities;
 using Identity.Api.Infrastructure.Clients.Entities;
 using Identity.Api.Infrastructure.Secrets.Entities;
+using Identity.Api.Infrastructure.Sellers.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,7 @@ namespace Identity.Api.Infrastructure
         public DbSet<AddressClient> LinkAddressesClients { get; set; }
         public DbSet<AppSecretClient> LinkAppSecretsClients { get; set; }
         public DbSet<Client> Clients { get; set; }
+        public DbSet<Seller> Sellers { get; set; }
         public DbSet<SellerClient> LinkSellersClients { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<AppSecret> AppSecrets { get; set; }

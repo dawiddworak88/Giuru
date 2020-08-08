@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Catalog.Api.Infrastructure.Sellers.Entities
+namespace Identity.Api.Infrastructure.Sellers.Entities
 {
     public class AddressSeller : Entity
     {

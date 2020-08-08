@@ -1,13 +1,6 @@
 ﻿using Catalog.Api.v1.Areas.Products.Models;
 using Catalog.Api.v1.Areas.Products.ResultModels;
-using Catalog.Api.v1.Areas.Products.Validators;
-using Catalog.Api.Infrastructure.Sellers.Entities;
-using Foundation.Extensions.Definitions;
-using Foundation.GenericRepository.Paginations;
 using Foundation.GenericRepository.Services;
-using Catalog.Api.Infrastructure.Translations.Entities;
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Catalog.Api.Infrastructure;
 
@@ -28,217 +21,227 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
         public async Task<ProductResultModel> CreateAsync(CreateUpdateProductModel model)
         {
-            var validator = new CreateUpdateProductModelValidator();
+            //var validator = new CreateUpdateProductModelValidator();
 
-            var validationResult = await validator.ValidateAsync(model);
+            //var validationResult = await validator.ValidateAsync(model);
 
-            var createProductResultModel = new ProductResultModel();
+            //var createProductResultModel = new ProductResultModel();
 
-            if (!validationResult.IsValid)
-            {
-                createProductResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
-                return createProductResultModel;
-            }
+            //if (!validationResult.IsValid)
+            //{
+            //    createProductResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+            //    return createProductResultModel;
+            //}
 
-            var seller = this.sellerRepository.GetById(model.SellerId.Value);
+            //var seller = this.sellerRepository.GetById(model.SellerId.Value);
 
-            if (seller == null)
-            {
-                createProductResultModel.Errors.Add(ErrorConstants.NoSeller);
-                return createProductResultModel;
-            }
+            //if (seller == null)
+            //{
+            //    createProductResultModel.Errors.Add(ErrorConstants.NoSeller);
+            //    return createProductResultModel;
+            //}
 
-            var product = new Catalog.Api.Infrastructure.Products.Entities.Product
-            {
-                Sku = model.Sku,
-                SchemaId = model.SchemaId.Value,
-                FormData = model.FormData
-            };
+            //var product = new Catalog.Api.Infrastructure.Products.Entities.Product
+            //{
+            //    Sku = model.Sku,
+            //    SchemaId = model.SchemaId.Value,
+            //    FormData = model.FormData
+            //};
 
-            await this.context.Products.AddAsync(this.entityService.EnrichEntity(product, model.Username));
+            //await this.context.Products.AddAsync(this.entityService.EnrichEntity(product, model.Username));
 
-            await this.context.SaveChangesAsync();
+            //await this.context.SaveChangesAsync();
 
-            if (!string.IsNullOrWhiteSpace(product.Name))
-            {
-                var translation = new Translation
-                {
-                    Key = product.Id.ToString(),
-                    Value = product.Name,
-                    Language = model.Language
-                };
+            //if (!string.IsNullOrWhiteSpace(product.Name))
+            //{
+            //    var translation = new Translation
+            //    {
+            //        Key = product.Id.ToString(),
+            //        Value = product.Name,
+            //        Language = model.Language
+            //    };
 
-                await this.context.Translations.AddAsync(this.entityService.EnrichEntity(translation, model.Username));
+            //    await this.context.Translations.AddAsync(this.entityService.EnrichEntity(translation, model.Username));
 
-                await this.context.SaveChangesAsync();
-            }
+            //    await this.context.SaveChangesAsync();
+            //}
 
-            createProductResultModel.Product = product;
+            //createProductResultModel.Product = product;
 
-            return createProductResultModel;
+            //return createProductResultModel;
+
+            return default;
         }
 
         public async Task<ProductResultModel> UpdateAsync(CreateUpdateProductModel model)
         {
-            var validator = new CreateUpdateProductModelValidator();
+            //var validator = new CreateUpdateProductModelValidator();
 
-            var validationResult = await validator.ValidateAsync(model);
+            //var validationResult = await validator.ValidateAsync(model);
 
-            var productResultModel = new ProductResultModel();
+            //var productResultModel = new ProductResultModel();
 
-            if (!validationResult.IsValid)
-            {
-                productResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
-                return productResultModel;
-            }
+            //if (!validationResult.IsValid)
+            //{
+            //    productResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+            //    return productResultModel;
+            //}
 
-            var seller = this.sellerRepository.GetById(model.SellerId.Value);
+            //var seller = this.sellerRepository.GetById(model.SellerId.Value);
 
-            if (seller == null)
-            {
-                productResultModel.Errors.Add(ErrorConstants.NoSeller);
-                return productResultModel;
-            }
+            //if (seller == null)
+            //{
+            //    productResultModel.Errors.Add(ErrorConstants.NoSeller);
+            //    return productResultModel;
+            //}
 
-            var product = this.context.Products.FirstOrDefault(x => x.Id == model.Id.Value && x.IsActive);
+            //var product = this.context.Products.FirstOrDefault(x => x.Id == model.Id.Value && x.IsActive);
 
-            product.Name = model.Name;
-            product.Sku = model.Sku;
-            product.SchemaId = model.SchemaId.Value;
-            product.FormData = model.FormData;
-            product.LastModifiedDate = DateTime.UtcNow;
+            //product.Name = model.Name;
+            //product.Sku = model.Sku;
+            //product.SchemaId = model.SchemaId.Value;
+            //product.FormData = model.FormData;
+            //product.LastModifiedDate = DateTime.UtcNow;
 
-            await this.context.SaveChangesAsync();
+            //await this.context.SaveChangesAsync();
 
-            var translation = this.context.Translations.FirstOrDefault(x => x.Key == product.Id.ToString() && x.Language == model.Language && x.IsActive);
+            //var translation = this.context.Translations.FirstOrDefault(x => x.Key == product.Id.ToString() && x.Language == model.Language && x.IsActive);
 
-            if (translation != null)
-            {
-                translation.Value = model.Name;
-                translation.LastModifiedDate = DateTime.UtcNow;
+            //if (translation != null)
+            //{
+            //    translation.Value = model.Name;
+            //    translation.LastModifiedDate = DateTime.UtcNow;
 
-                await this.context.SaveChangesAsync();
-            }
+            //    await this.context.SaveChangesAsync();
+            //}
 
-            productResultModel.Product = product;
+            //productResultModel.Product = product;
 
-            return productResultModel;
+            //return productResultModel;
+
+            return default;
         }
 
         public async Task<DeleteProductResultModel> DeleteAsync(DeleteProductModel deleteProductModel)
         {
-            var validator = new DeleteProductModelValidator();
+            //var validator = new DeleteProductModelValidator();
 
-            var validationResult = await validator.ValidateAsync(deleteProductModel);
+            //var validationResult = await validator.ValidateAsync(deleteProductModel);
 
-            var deleteProductResultModel = new DeleteProductResultModel();
+            //var deleteProductResultModel = new DeleteProductResultModel();
 
-            if (!validationResult.IsValid)
-            {
-                deleteProductResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
-                return deleteProductResultModel;
-            }
+            //if (!validationResult.IsValid)
+            //{
+            //    deleteProductResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+            //    return deleteProductResultModel;
+            //}
 
-            var seller = this.sellerRepository.GetById(deleteProductModel.SellerId.Value);
+            //var seller = this.sellerRepository.GetById(deleteProductModel.SellerId.Value);
 
-            if (seller == null)
-            {
-                deleteProductResultModel.Errors.Add(ErrorConstants.NoSeller);
-                return deleteProductResultModel;
-            }
+            //if (seller == null)
+            //{
+            //    deleteProductResultModel.Errors.Add(ErrorConstants.NoSeller);
+            //    return deleteProductResultModel;
+            //}
 
-            var translations = this.context.Translations.Where(x => x.Key == deleteProductModel.Id.ToString() && x.IsActive).ToList();
+            //var translations = this.context.Translations.Where(x => x.Key == deleteProductModel.Id.ToString() && x.IsActive).ToList();
 
-            foreach (var translation in translations)
-            {
-                translation.IsActive = false;
+            //foreach (var translation in translations)
+            //{
+            //    translation.IsActive = false;
 
-                await this.context.SaveChangesAsync();
-            }
+            //    await this.context.SaveChangesAsync();
+            //}
 
-            var product = this.context.Products.FirstOrDefault(x => x.Id == deleteProductModel.Id.Value && x.IsActive);
+            //var product = this.context.Products.FirstOrDefault(x => x.Id == deleteProductModel.Id.Value && x.IsActive);
 
-            if (product != null)
-            {
-                product.IsActive = false;
+            //if (product != null)
+            //{
+            //    product.IsActive = false;
 
-                await this.context.SaveChangesAsync();
-            }
+            //    await this.context.SaveChangesAsync();
+            //}
 
-            return deleteProductResultModel;
+            //return deleteProductResultModel;
+
+            return default;
         }
 
         public async Task<ProductsResultModel> GetAsync(GetProductsModel getProductsModel)
         {
-            var validator = new GetProductsModelValidator();
+            //var validator = new GetProductsModelValidator();
 
-            var validationResult = await validator.ValidateAsync(getProductsModel);
+            //var validationResult = await validator.ValidateAsync(getProductsModel);
 
-            var getProductsResultModel = new ProductsResultModel();
+            //var getProductsResultModel = new ProductsResultModel();
 
-            if (!validationResult.IsValid)
-            {
-                getProductsResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
-                return getProductsResultModel;
-            }
+            //if (!validationResult.IsValid)
+            //{
+            //    getProductsResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+            //    return getProductsResultModel;
+            //}
 
-            var seller = this.sellerRepository.GetById(getProductsModel.SellerId.Value);
+            //var seller = this.sellerRepository.GetById(getProductsModel.SellerId.Value);
 
-            if (seller == null)
-            {
-                getProductsResultModel.Errors.Add(ErrorConstants.NoSeller);
-                return getProductsResultModel;
-            }
+            //if (seller == null)
+            //{
+            //    getProductsResultModel.Errors.Add(ErrorConstants.NoSeller);
+            //    return getProductsResultModel;
+            //}
 
-            var entities = this.context.Products.Where(x => x.IsActive);
+            //var entities = this.context.Products.Where(x => x.IsActive);
 
-            if (!string.IsNullOrWhiteSpace(getProductsModel.SearchTerm))
-            {
-                entities = entities.Where(x => (!string.IsNullOrWhiteSpace(x.Sku) && x.Sku.StartsWith(getProductsModel.SearchTerm)) || (!string.IsNullOrWhiteSpace(x.Name) && x.Name.Contains(getProductsModel.SearchTerm)));
-            }
+            //if (!string.IsNullOrWhiteSpace(getProductsModel.SearchTerm))
+            //{
+            //    entities = entities.Where(x => (!string.IsNullOrWhiteSpace(x.Sku) && x.Sku.StartsWith(getProductsModel.SearchTerm)) || (!string.IsNullOrWhiteSpace(x.Name) && x.Name.Contains(getProductsModel.SearchTerm)));
+            //}
 
-            entities = entities.OrderByDescending(x => x.CreatedDate);            
+            //entities = entities.OrderByDescending(x => x.CreatedDate);            
 
-            var pagination = new Pagination(entities.Count(), getProductsModel.ItemsPerPage);
+            //var pagination = new Pagination(entities.Count(), getProductsModel.ItemsPerPage);
 
-            getProductsResultModel.Products = entities.PagedIndex(pagination, getProductsModel.PageIndex);
+            //getProductsResultModel.Products = entities.PagedIndex(pagination, getProductsModel.PageIndex);
 
-            return getProductsResultModel;
+            //return getProductsResultModel;
+
+            return default;
         }
 
         public async Task<ProductResultModel> GetByIdAsync(GetProductModel getProductModel)
         {
-            var validator = new GetProductModelValidator();
+            //var validator = new GetProductModelValidator();
 
-            var validationResult = await validator.ValidateAsync(getProductModel);
+            //var validationResult = await validator.ValidateAsync(getProductModel);
 
-            var getProductResultModel = new ProductResultModel();
+            //var getProductResultModel = new ProductResultModel();
 
-            if (!validationResult.IsValid)
-            {
-                getProductResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
-                return getProductResultModel;
-            }
+            //if (!validationResult.IsValid)
+            //{
+            //    getProductResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
+            //    return getProductResultModel;
+            //}
 
-            var seller = this.sellerRepository.GetById(getProductModel.SellerId.Value);
+            //var seller = this.sellerRepository.GetById(getProductModel.SellerId.Value);
 
-            if (seller == null)
-            {
-                getProductResultModel.Errors.Add(ErrorConstants.NoSeller);
-                return getProductResultModel;
-            }
+            //if (seller == null)
+            //{
+            //    getProductResultModel.Errors.Add(ErrorConstants.NoSeller);
+            //    return getProductResultModel;
+            //}
 
-            var product = this.context.Products.FirstOrDefault(x => x.Id == getProductModel.Id.Value && x.IsActive);
+            //var product = this.context.Products.FirstOrDefault(x => x.Id == getProductModel.Id.Value && x.IsActive);
 
-            if (product == null)
-            {
-                getProductResultModel.Errors.Add(ErrorConstants.NotFound);
-                return getProductResultModel;
-            }
+            //if (product == null)
+            //{
+            //    getProductResultModel.Errors.Add(ErrorConstants.NotFound);
+            //    return getProductResultModel;
+            //}
 
-            getProductResultModel.Product = product;
+            //getProductResultModel.Product = product;
 
-            return getProductResultModel;
+            //return getProductResultModel;
+
+            return default;
         }
     }
 }

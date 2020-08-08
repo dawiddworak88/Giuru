@@ -1,5 +1,4 @@
-﻿using Identity.Api.Infrastructure.Contexts;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +13,7 @@ namespace Identity.Api.Infrastructure.DependencyInjection
 
             using (var scope = scopeFactory.CreateScope())
             {
-                var dbContext = scope.ServiceProvider.GetService<DatabaseContext>();
+                var dbContext = scope.ServiceProvider.GetService<IdentityContext>();
 
                 if (!dbContext.AllMigrationsApplied())
                 {

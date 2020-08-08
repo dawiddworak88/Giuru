@@ -19,38 +19,38 @@ namespace Identity.Api.Areas.Accounts.Services.ProfileServices
 
             if (!string.IsNullOrWhiteSpace(sub))
             {
-                var user = await this.userService.FindByIdAsync(sub);
+                //var user = await this.userService.FindByIdAsync(sub);
 
-                if (user != null && user.Seller != null && user.EmailConfirmed && user.Seller.IsActive)
-                {
-                    var claims = new List<Claim>
-                    {
-                        new Claim(AccountConstants.SellerIdClaim, user.Seller.Id.ToString()),
-                        new Claim(ClaimTypes.Email, user.Email),
-                        new Claim(ClaimTypes.Name, user.Seller.Name)
-                    };
+                //if (user != null && user.Seller != null && user.EmailConfirmed && user.Seller.IsActive)
+                //{
+                //    var claims = new List<Claim>
+                //    {
+                //        new Claim(AccountConstants.SellerIdClaim, user.Seller.Id.ToString()),
+                //        new Claim(ClaimTypes.Email, user.Email),
+                //        new Claim(ClaimTypes.Name, user.Seller.Name)
+                //    };
 
-                    context.IssuedClaims.AddRange(claims);
-                }
+                //    context.IssuedClaims.AddRange(claims);
+                //}
             }
         }
 
         public async Task IsActiveAsync(IsActiveContext context)
         {
-            var sub = context.Subject?.GetSubjectId();
+            //var sub = context.Subject?.GetSubjectId();
 
-            if (!string.IsNullOrWhiteSpace(sub))
-            {
-                var user = await this.userService.FindByIdAsync(sub);
+            //if (!string.IsNullOrWhiteSpace(sub))
+            //{
+            //    var user = await this.userService.FindByIdAsync(sub);
 
-                if (user != null && user.Seller != null && user.EmailConfirmed && user.Seller.IsActive)
-                {
-                    context.IsActive = true;
-                    return;
-                }
-            }
+            //    if (user != null && user.Seller != null && user.EmailConfirmed && user.Seller.IsActive)
+            //    {
+            //        context.IsActive = true;
+            //        return;
+            //    }
+            //}
 
-            context.IsActive = false;
+            //context.IsActive = false;
         }
     }
 }

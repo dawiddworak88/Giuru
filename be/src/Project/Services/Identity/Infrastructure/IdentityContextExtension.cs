@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
 
-namespace Identity.Api.Infrastructure.Contexts
+namespace Identity.Api.Infrastructure
 {
-    public static class DatabaseContextExtension
+    public static class IdentityContextExtension
     {
         public static bool AllMigrationsApplied(this IdentityContext context)
         {
@@ -22,9 +22,9 @@ namespace Identity.Api.Infrastructure.Contexts
 
         public static void EnsureSeeded(this IdentityContext context, IConfiguration configuration)
         {
-            AccountsSeed.SeedAdminAccounts(context, configuration);
-            SellersSeed.SeedSellers(context, configuration);
-            AccountsSeed.SeedSellerAccounts(context, configuration);
+            //AccountsSeed.SeedAdminAccounts(context, configuration);
+            //SellersSeed.SeedSellers(context, configuration);
+            //AccountsSeed.SeedSellerAccounts(context, configuration);
         }
     }
 }

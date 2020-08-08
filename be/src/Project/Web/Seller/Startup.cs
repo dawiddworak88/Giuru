@@ -4,7 +4,6 @@ using Seller.Web.Shared.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Foundation.Database.Shared.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
@@ -48,7 +47,7 @@ namespace Seller.Portal
 
             services.RegisterLocalizationDependencies();
 
-            services.RegisterDatabaseDependencies(this.Configuration);
+            // services.RegisterDatabaseDependencies(this.Configuration);
 
             services.RegisterGeneralDependencies();
 
@@ -69,7 +68,7 @@ namespace Seller.Portal
 
             app.UseGeneralException();
 
-            app.ConfigureDatabaseMigrations(this.Configuration);
+            // app.ConfigureDatabaseMigrations(this.Configuration);
 
             app.UseResponseCompression();
 

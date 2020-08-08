@@ -43,13 +43,13 @@ namespace Api
 
             services.RegisterTaxonomyDependencies();
 
-            services.RegisterClientDependencies();
+            // services.RegisterClientDependencies();
 
             services.RegisterProductDependencies();
 
             services.RegisterOrderDependencies();
 
-            services.RegisterDatabaseDependencies(this.Configuration);
+            // services.RegisterDatabaseDependencies(this.Configuration);
 
             services.RegisterMailingDependencies(this.Configuration);
 

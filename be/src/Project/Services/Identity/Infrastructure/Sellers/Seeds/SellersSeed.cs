@@ -1,13 +1,13 @@
-﻿using Catalog.Api.Infrastructure.Sellers.Entities;
+﻿using Identity.Api.Infrastructure.Sellers.Entities;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
 
-namespace Catalog.Api.Infrastructure.Sellers.Seeds
+namespace Identity.Api.Infrastructure.Sellers.Seeds
 {
     public static class SellersSeed
     {
-        public static void SeedSellers(CatalogContext context, IConfiguration configuration)
+        public static void SeedSellers(IdentityContext context, IConfiguration configuration)
         {
             var adminSeedConfiguration = configuration.GetSection("Seeds")?.GetSection("Accounts")?.GetSection("Admin");
 

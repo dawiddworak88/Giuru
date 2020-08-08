@@ -1,7 +1,7 @@
 ﻿using Foundation.GenericRepository.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace Catalog.Api.Infrastructure.Sellers.Entities
+namespace Identity.Api.Infrastructure.Sellers.Entities
 {
     public class Seller : Entity
     {

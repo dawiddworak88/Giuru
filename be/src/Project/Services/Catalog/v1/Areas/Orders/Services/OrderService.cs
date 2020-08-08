@@ -28,71 +28,73 @@ namespace Catalog.Api.v1.Areas.Orders.Services
 
         public async Task<OrderValidationResultModel> ValidateOrderAsync(OrderValidationModel model)
         {
-            var orderValidationResultModel = new OrderValidationResultModel();
+            //var orderValidationResultModel = new OrderValidationResultModel();
 
-            var seller = this.sellerRepository.GetById(model.SellerId.Value);
+            //var seller = this.sellerRepository.GetById(model.SellerId.Value);
 
-            if (seller == null)
-            {
-                orderValidationResultModel.Errors.Add(ErrorConstants.NoSeller);
-                return orderValidationResultModel;
-            }
+            //if (seller == null)
+            //{
+            //    orderValidationResultModel.Errors.Add(ErrorConstants.NoSeller);
+            //    return orderValidationResultModel;
+            //}
 
-            if (!model.ClientId.HasValue)
-            {
-                orderValidationResultModel.ValidationMessages.Add(this.orderLocalizer["NoClientId"]);
-            }
-            else
-            {
-                var client = this.context.Clients.FirstOrDefault(x => x.Id == model.ClientId && x.IsActive);
+            //if (!model.ClientId.HasValue)
+            //{
+            //    orderValidationResultModel.ValidationMessages.Add(this.orderLocalizer["NoClientId"]);
+            //}
+            //else
+            //{
+            //    var client = this.context.Clients.FirstOrDefault(x => x.Id == model.ClientId && x.IsActive);
 
-                if (client == null)
-                {
-                    orderValidationResultModel.ValidationMessages.Add(this.orderLocalizer["NoClient"]);
-                }
-            }
+            //    if (client == null)
+            //    {
+            //        orderValidationResultModel.ValidationMessages.Add(this.orderLocalizer["NoClient"]);
+            //    }
+            //}
 
-            if (model.OrderItems == null || !model.OrderItems.Any())
-            {
-                orderValidationResultModel.ValidationMessages.Add(this.orderLocalizer["NoOrderItems"]);
-            }
-            else
-            {
-                int orderItemIndex = 1;
+            //if (model.OrderItems == null || !model.OrderItems.Any())
+            //{
+            //    orderValidationResultModel.ValidationMessages.Add(this.orderLocalizer["NoOrderItems"]);
+            //}
+            //else
+            //{
+            //    int orderItemIndex = 1;
 
-                foreach (var orderItem in model.OrderItems)
-                {
-                    if (string.IsNullOrWhiteSpace(orderItem.Sku))
-                    {
-                        orderValidationResultModel.ValidationMessages.Add($"{this.orderLocalizer["EmptySkuForOrderItemIndex"]}: {orderItemIndex}");
-                    }
-                    else
-                    {
-                        var product = this.context.Products.FirstOrDefault(x => x.Sku == orderItem.Sku && x.IsActive);
+            //    foreach (var orderItem in model.OrderItems)
+            //    {
+            //        if (string.IsNullOrWhiteSpace(orderItem.Sku))
+            //        {
+            //            orderValidationResultModel.ValidationMessages.Add($"{this.orderLocalizer["EmptySkuForOrderItemIndex"]}: {orderItemIndex}");
+            //        }
+            //        else
+            //        {
+            //            var product = this.context.Products.FirstOrDefault(x => x.Sku == orderItem.Sku && x.IsActive);
 
-                        if (product == null)
-                        {
-                            orderValidationResultModel.ValidationMessages.Add($"{this.orderLocalizer["NoProductBySku"]}: {orderItem.Sku}");
-                        }
-                    }
+            //            if (product == null)
+            //            {
+            //                orderValidationResultModel.ValidationMessages.Add($"{this.orderLocalizer["NoProductBySku"]}: {orderItem.Sku}");
+            //            }
+            //        }
 
-                    if (!orderItem.Quantity.HasValue || orderItem.Quantity < 1)
-                    {
-                        if (!string.IsNullOrWhiteSpace(orderItem.Sku))
-                        {
-                            orderValidationResultModel.ValidationMessages.Add($"{this.orderLocalizer["IncorrectQuantityForSku"]}: {orderItemIndex}");
-                        }
-                        else
-                        {
-                            orderValidationResultModel.ValidationMessages.Add($"{this.orderLocalizer["IncorrectQuantityForOrderItemIndex"]}: {orderItemIndex}");
-                        }
-                    }
+            //        if (!orderItem.Quantity.HasValue || orderItem.Quantity < 1)
+            //        {
+            //            if (!string.IsNullOrWhiteSpace(orderItem.Sku))
+            //            {
+            //                orderValidationResultModel.ValidationMessages.Add($"{this.orderLocalizer["IncorrectQuantityForSku"]}: {orderItemIndex}");
+            //            }
+            //            else
+            //            {
+            //                orderValidationResultModel.ValidationMessages.Add($"{this.orderLocalizer["IncorrectQuantityForOrderItemIndex"]}: {orderItemIndex}");
+            //            }
+            //        }
 
-                    orderItemIndex++;
-                }
-            }
+            //        orderItemIndex++;
+            //    }
+            //}
 
-            return orderValidationResultModel;
+            //return orderValidationResultModel;
+
+            return default;
         }
     }
 }

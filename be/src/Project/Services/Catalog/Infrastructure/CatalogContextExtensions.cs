@@ -22,9 +22,9 @@ namespace Catalog.Api.Infrastructure
 
         public static void EnsureSeeded(this CatalogContext context, IConfiguration configuration)
         {
-            AccountsSeed.SeedAdminAccounts(context, configuration);
-            SellersSeed.SeedSellers(context, configuration);
-            AccountsSeed.SeedSellerAccounts(context, configuration);
+            //AccountsSeed.SeedAdminAccounts(context, configuration);
+            //SellersSeed.SeedSellers(context, configuration);
+            //AccountsSeed.SeedSellerAccounts(context, configuration);
         }
     }
 }

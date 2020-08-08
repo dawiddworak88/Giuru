@@ -4,13 +4,12 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1.302 AS build-env
 WORKDIR /app
 
 COPY ./src/Infrastructure ./Infrastructure/
-COPY ./src/Feature ./Feature/
-COPY ./src/Project/Api ./Project/Api/
-RUN dotnet publish ./Project/Api/Api.csproj -c Release -o out
+COPY ./src/Project/Services/Catalog ./Project/Services/Catalog/
+RUN dotnet publish ./Project/Services/Catalog/Catalog.Api.csproj -c Release -o out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.6
 WORKDIR /app
 COPY --from=build-env /app/out .
 
-ENTRYPOINT ["dotnet", "Api.dll"]
+ENTRYPOINT ["dotnet", "Catalog.Api.dll"]
