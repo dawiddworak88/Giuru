@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+
+  seq:
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5340:80"
+
+  rabbitmq:
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  seller-azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    restart: always
+
+  react-ssr:
+    environment: 
+      NODE_ENV: development
+    ports:
+      - "3000:3000"
+
+  catalog-sql:
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: Gre@tPassw0rd
+    ports:
+      - "9018:1433"
+
+  catalog-api:
+    ports:
+      - "5101:80"
+      - "9101:81"
+
+  identity-sql:
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: Gre@tPassw0rd
+    ports:
+      - "9017:1433"
+
+  identity-api:
+    ports:
+      - "5105:80"
+
+  basketdata:
+    ports:
+      - "6379:6379"
+    volumes:
+      - basketdata:/data
+
+  basket-api:
+     ports:
+      - "5103:80"
+      - "9103:81"
+
+  ordering-api:
+    ports:
+      - "5102:80"
+      - "9102:81"
+
+  ordering-backgroundtasks:
+    ports:
+      - "5111:80"
+
+  webshoppingapigw:
+    volumes:
+      - ./ApiGateways/Envoy/config/webshopping:/etc/envoy
+    ports:
+    - "5202:80"
+    - "15202:8001"
+
+  webshoppingagg:
+    ports:
+    - "5203:80"
+    - "15203:8001"
+
+  ordering-signalrhub:
+    ports:
+      - "5112:80"
+
+  seller-web:
+    ports:
+      - "5104:80"
+
+  buyer-web:
+    ports:
+      - "5107:80"
+
+volumes:
+  basketdata:
+    external: false

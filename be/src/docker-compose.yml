@@ -1,0 +1,128 @@
+version: '3.8'
+
+services:
+
+  seq:
+    image: datalust/seq:latest
+    restart: always
+
+  rabbitmq:
+    image: rabbitmq
+    restart: always
+
+  seller-azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    restart: always
+
+  react-ssr:
+    image: ${REGISTRY:-eshop}/react-ssr:${PLATFORM:-linux}-${TAG:-latest}
+    build: 
+      context: ../../fe
+      dockerfile: Dockerfile-ssr-local
+    restart: always
+
+  catalog-sql:
+    image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+    restart: always
+
+  catalog-api:
+    image: ${REGISTRY:-eshop}/catalog-api:${PLATFORM:-linux}-${TAG:-latest}
+    build: 
+      context: .
+      dockerfile: Dockerfile-CatalogApi
+    restart: always
+    depends_on: 
+      - catalog-sql
+      - rabbitmq
+
+  identity-sql:
+    image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+    restart: always
+
+  identity-api:
+    image: ${REGISTRY:-eshop}/identity-api:${PLATFORM:-linux}-${TAG:-latest}
+    build: 
+      context: .
+      dockerfile: Dockerfile-IdentityApi
+    restart: always
+    depends_on: 
+      - identity-sql
+      - react-ssr
+
+  basketdata:
+    image: redis:alpine
+
+  basket-api:
+    image: ${REGISTRY:-eshop}/basket-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Dockerfile-BasketApi
+    depends_on:
+      - basketdata
+      - identity-api
+      - rabbitmq
+
+  ordering-api:
+    image: ${REGISTRY:-eshop}/ordering-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Dockerfile-OrderingApi
+    depends_on:
+      - catalog-api
+      - rabbitmq
+
+  ordering-backgroundtasks:
+    image: ${REGISTRY:-eshop}/ordering-backgroundtasks:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Dockerfile-OrderingBackgroundTasks
+    depends_on:
+      - catalog-api
+      - rabbitmq
+
+  webshoppingapigw:
+    image: envoyproxy/envoy:v1.15.0
+
+  webshoppingagg:
+    image: ${REGISTRY:-eshop}/webshoppingagg:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Dockerfile-Webshoppingagg
+    depends_on:
+      - identity-api
+      - rabbitmq
+      - ordering-api
+      - catalog-api
+      - basket-api
+
+  ordering-signalrhub:
+    image: ${REGISTRY:-eshop}/ordering-signalrhub:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Dockerfile-SignalrHub
+    depends_on:
+      - identity-api
+      - rabbitmq
+      - ordering-api
+      - catalog-api
+      - basket-api
+
+  seller-web:
+    image: ${REGISTRY:-eshop}/seller-web:${PLATFORM:-linux}-${TAG:-latest}
+    build: 
+      context: .
+      dockerfile: Dockerfile-SellerWeb
+    restart: always
+    depends_on: 
+      - react-ssr
+      - webshoppingagg
+
+  buyer-web:
+    image: ${REGISTRY:-eshop}/buyer-web:${PLATFORM:-linux}-${TAG:-latest}
+    build: 
+      context: .
+      dockerfile: Dockerfile-BuyerWeb
+    restart: always
+    depends_on: 
+      - react-ssr
+      - webshoppingagg
