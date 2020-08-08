@@ -13,9 +13,10 @@ services:
       - "15672:15672"
       - "5672:5672"
 
-  seller-azurite:
-    image: mcr.microsoft.com/azure-storage/azurite
-    restart: always
+  azurite:
+    ports:
+      - "10000:10000"
+      - "10001:10001"
 
   react-ssr:
     environment: 
