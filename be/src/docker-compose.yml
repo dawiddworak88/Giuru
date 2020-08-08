@@ -15,7 +15,7 @@ services:
     restart: always
 
   react-ssr:
-    image: ${REGISTRY:-eshop}/react-ssr:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${REGISTRY:-giuru}/react-ssr:${PLATFORM:-linux}-${TAG:-latest}
     build: 
       context: ../../fe
       dockerfile: Dockerfile-ssr-local
@@ -26,7 +26,7 @@ services:
     restart: always
 
   catalog-api:
-    image: ${REGISTRY:-eshop}/catalog-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${REGISTRY:-giuru}/catalog-api:${PLATFORM:-linux}-${TAG:-latest}
     build: 
       context: .
       dockerfile: Dockerfile-CatalogApi
@@ -40,7 +40,7 @@ services:
     restart: always
 
   identity-api:
-    image: ${REGISTRY:-eshop}/identity-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${REGISTRY:-giuru}/identity-api:${PLATFORM:-linux}-${TAG:-latest}
     build: 
       context: .
       dockerfile: Dockerfile-IdentityApi
@@ -53,7 +53,7 @@ services:
     image: redis:alpine
 
   basket-api:
-    image: ${REGISTRY:-eshop}/basket-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${REGISTRY:-giuru}/basket-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Dockerfile-BasketApi
@@ -63,7 +63,7 @@ services:
       - rabbitmq
 
   ordering-api:
-    image: ${REGISTRY:-eshop}/ordering-api:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${REGISTRY:-giuru}/ordering-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Dockerfile-OrderingApi
@@ -72,7 +72,7 @@ services:
       - rabbitmq
 
   ordering-backgroundtasks:
-    image: ${REGISTRY:-eshop}/ordering-backgroundtasks:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${REGISTRY:-giuru}/ordering-backgroundtasks:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Dockerfile-OrderingBackgroundTasks
@@ -84,7 +84,7 @@ services:
     image: envoyproxy/envoy:v1.15.0
 
   webshoppingagg:
-    image: ${REGISTRY:-eshop}/webshoppingagg:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${REGISTRY:-giuru}/webshoppingagg:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Dockerfile-WebShoppingAgg
@@ -97,7 +97,7 @@ services:
       - basket-api
 
   ordering-signalrhub:
-    image: ${REGISTRY:-eshop}/ordering-signalrhub:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${REGISTRY:-giuru}/ordering-signalrhub:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Dockerfile-OrderingSignalrHub
@@ -109,7 +109,7 @@ services:
       - basket-api
 
   seller-web:
-    image: ${REGISTRY:-eshop}/seller-web:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${REGISTRY:-giuru}/seller-web:${PLATFORM:-linux}-${TAG:-latest}
     build: 
       context: .
       dockerfile: Dockerfile-SellerWeb
@@ -119,7 +119,7 @@ services:
       - webshoppingagg
 
   buyer-web:
-    image: ${REGISTRY:-eshop}/buyer-web:${PLATFORM:-linux}-${TAG:-latest}
+    image: ${REGISTRY:-giuru}/buyer-web:${PLATFORM:-linux}-${TAG:-latest}
     build: 
       context: .
       dockerfile: Dockerfile-BuyerWeb
