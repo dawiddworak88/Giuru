@@ -4,8 +4,8 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1.302 AS build-env
 WORKDIR /app
 
 COPY ./Infrastructure ./Infrastructure/
-COPY ./Project/Services/Catalog ./Project/Services/Catalog/
-RUN dotnet publish ./Project/Services/Catalog/Catalog.Api.csproj -c Release -o out
+COPY ./Project/Services/Catalog/Catalog.Api ./Project/Services/Catalog/Catalog.Api/
+RUN dotnet publish ./Project/Services/Catalog/Catalog.Api/Catalog.Api.csproj -c Release -o out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.6

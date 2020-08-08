@@ -22,13 +22,13 @@
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Infrastructure\Account\Foundation.Account.csproj" />
-    <ProjectReference Include="..\..\..\Infrastructure\ApiExtensions\Foundation.ApiExtensions.csproj" />
-    <ProjectReference Include="..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository.csproj" />
-    <ProjectReference Include="..\..\..\Infrastructure\Localization\Foundation.Localization.csproj" />
-    <ProjectReference Include="..\..\..\Infrastructure\Prerendering\Foundation.Prerendering.csproj" />
-    <ProjectReference Include="..\..\..\Infrastructure\Security\Foundation.Security.csproj" />
-    <ProjectReference Include="..\..\..\Infrastructure\PageContent\Foundation.PageContent.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\Account\Foundation.Account\Foundation.Account.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\ApiExtensions\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\Localization\Foundation.Localization\Foundation.Localization.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\Prerendering\Foundation.Prerendering\Foundation.Prerendering.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\Security\Foundation.Security\Foundation.Security.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\PageContent\Foundation.PageContent\Foundation.PageContent.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Accounts\Definitions\" />

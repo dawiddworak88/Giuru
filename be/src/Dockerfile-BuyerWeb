@@ -4,8 +4,8 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1.302 AS build-env
 WORKDIR /app
 
 COPY ./Infrastructure ./Infrastructure/
-COPY ./Project/Web/Buyer ./Project/Web/Buyer/
-RUN dotnet publish ./Project/Web/Buyer/Buyer.Web.csproj -c Release -o out
+COPY ./Project/Web/Buyer/Buyer.Web ./Project/Web/Buyer/Buyer.Web/
+RUN dotnet publish ./Project/Web/Buyer/Buyer.Web/Buyer.Web.csproj -c Release -o out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1.6
