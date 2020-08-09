@@ -1,16 +1,12 @@
-﻿using Foundation.Extensions.Definitions;
-using Foundation.GenericRepository.Services;
+﻿using Foundation.GenericRepository.Services;
 using Catalog.Api.v1.Areas.Schemas.Models;
 using Catalog.Api.v1.Areas.Schemas.ResultModels;
-using Catalog.Api.v1.Areas.Schemas.Validators;
 using Catalog.Api.Infrastructure.Taxonomies.Entities;
-using Catalog.Api.Infrastructure.Translations.Entities;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Catalog.Api.Infrastructure.Schemas.Entities;
 using Catalog.Api.Infrastructure;
 using System.Data.SqlClient;
 

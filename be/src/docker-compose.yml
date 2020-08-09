@@ -21,7 +21,7 @@ services:
       dockerfile: Dockerfile-ssr-local
     restart: always
 
-  catalog-sql:
+  sqldata:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
     restart: always
 
@@ -32,12 +32,8 @@ services:
       dockerfile: Dockerfile-CatalogApi
     restart: always
     depends_on: 
-      - catalog-sql
+      - sqldata
       - rabbitmq
-
-  identity-sql:
-    image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
-    restart: always
 
   identity-api:
     image: ${REGISTRY:-giuru}/identity-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -46,7 +42,7 @@ services:
       dockerfile: Dockerfile-IdentityApi
     restart: always
     depends_on: 
-      - identity-sql
+      - sqldata
       - react-ssr
 
   basketdata:
@@ -80,7 +76,7 @@ services:
       - catalog-api
       - rabbitmq
 
-  apigw:
+  webshoppingapigw:
     image: envoyproxy/envoy:v1.15.0
 
   webshoppingagg:
@@ -89,7 +85,7 @@ services:
       context: .
       dockerfile: Dockerfile-WebShoppingAgg
     depends_on:
-      - apigw
+      - webshoppingapigw
       - identity-api
       - rabbitmq
       - ordering-api

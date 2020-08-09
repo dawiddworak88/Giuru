@@ -21,29 +21,33 @@ services:
   react-ssr:
     environment: 
       NODE_ENV: development
-    ports:
-      - "3000:3000"
 
-  catalog-sql:
+  sqldata:
     environment:
       ACCEPT_EULA: Y
       SA_PASSWORD: Gre@tPassw0rd
     ports:
-      - "9018:1433"
+      - "5433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql
 
   catalog-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Password=Gre@tPassw0rd
+      - EventBusConnection=http://rabbitmq
+      - PORT=80
+      - PATH_BASE=/catalog-api
     ports:
       - "5101:80"
-      - "9101:81"
-
-  identity-sql:
-    environment:
-      ACCEPT_EULA: Y
-      SA_PASSWORD: Gre@tPassw0rd
-    ports:
-      - "9017:1433"
 
   identity-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ConnectionString=Server=sqldata;Database=IdentityDb;User Id=sa;Password=Gre@tPassw0rd
+      - BasketApiClient=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5103
+      - OrderingApiClient=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5102
     ports:
       - "5105:80"
 
@@ -54,20 +58,46 @@ services:
       - basketdata:/data
 
   basket-api:
-     ports:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ConnectionString=http://basketdata
+      - identityUrl=http://identity-api
+      - IdentityUrlExternal=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventBusConnection=http://rabbitmq
+      - PATH_BASE=/basket-api
+      - PORT=80
+    ports:
       - "5103:80"
-      - "9103:81"
 
   ordering-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Password=Gre@tPassw0rd
+      - identityUrl=http://identity-api
+      - IdentityUrlExternal=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventBusConnection=http://rabbitmq
+      - CheckUpdateTime=30000
+      - PATH_BASE=/ordering-api
+      - PORT=80
     ports:
       - "5102:80"
-      - "9102:81"
 
   ordering-backgroundtasks:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - ConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Password=Gre@tPassw0rd
+      - EventBusConnection=http://rabbitmq
+      - CheckUpdateTime=30000
+      - GracePeriodTime=1
     ports:
       - "5111:80"
 
-  apigw:
+  webshoppingapigw:
+    environment:
+      - "ENVOY_UID=0"
     volumes:
       - ./Project/ApiGateways/Envoy/config:/etc/envoy
     ports:
@@ -75,22 +105,50 @@ services:
     - "15202:8001"
 
   webshoppingagg:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - urls__basket=http://basket-api
+      - urls__catalog=http://catalog-api
+      - urls__orders=http://ordering-api
+      - urls__identity=http://identity-api
+      - urls__grpcBasket=http://basket-api:81
+      - urls__grpcCatalog=http://catalog-api:81
+      - urls__grpcOrdering=http://ordering-api:81
     ports:
     - "5203:80"
     - "15203:8001"
 
   ordering-signalrhub:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - EventBusConnection=http://rabbitmq
+      - identityUrl=http://identity-api
     ports:
       - "5112:80"
 
   seller-web:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - PurchaseUrl=http://webshoppingapigw
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - SignalrHubUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5202
     ports:
       - "5104:80"
 
   buyer-web:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://0.0.0.0:80
+      - PurchaseUrl=http://webshoppingapigw
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - SignalrHubUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5202
     ports:
       - "5107:80"
 
 volumes:
+  sqldata:
+    external: false
   basketdata:
     external: false

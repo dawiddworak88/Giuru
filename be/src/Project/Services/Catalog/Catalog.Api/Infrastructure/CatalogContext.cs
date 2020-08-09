@@ -9,7 +9,7 @@ namespace Catalog.Api.Infrastructure
 {
     public class CatalogContext : DbContext
     {
-        public CatalogContext(DbContextOptions<DbContext> options)
+        public CatalogContext(DbContextOptions<CatalogContext> options)
             : base(options)
         { }
 

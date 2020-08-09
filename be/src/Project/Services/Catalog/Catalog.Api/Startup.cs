@@ -15,6 +15,7 @@ using System.IO;
 using System.Reflection;
 using Foundation.Account.DependencyInjection;
 using Catalog.Api.v1.Areas.Orders.DependencyInjection;
+using Catalog.Api.DependencyInjection;
 
 namespace Api
 {
@@ -39,17 +40,15 @@ namespace Api
 
             services.RegisterBaseAccountDependencies();
 
+            services.RegisterDatabaseDependencies(this.Configuration);
+
             services.RegisteSchemaDependencies();
 
             services.RegisterTaxonomyDependencies();
 
-            // services.RegisterClientDependencies();
-
             services.RegisterProductDependencies();
 
             services.RegisterOrderDependencies();
-
-            // services.RegisterDatabaseDependencies(this.Configuration);
 
             services.RegisterMailingDependencies(this.Configuration);
 

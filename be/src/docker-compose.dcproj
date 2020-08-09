@@ -6,7 +6,7 @@
     <ProjectGuid>b0d2569c-4f52-48cc-93c5-f214e2ce767b</ProjectGuid>
     <DockerLaunchAction>None</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
-    <DockerServiceName>Giuru</DockerServiceName>
+    <DockerServiceName>buyer-web</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">
