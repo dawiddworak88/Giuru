@@ -7,7 +7,7 @@ function HeroSlider(props) {
     return (
 
         <Carousel showArrows={true} showThumbs={false} dynamicHeight={false} showStatus={false} swipeable={true}>
-            {props.items.map((item, index) => 
+            {props.items && props.items.map((item, index) => 
                 <div className="hero-slider__item" key={index}>
                     <img src={item.imageSrc} alt={item.imageAlt} title={item.imageTitle} />
                     {item.teaserTitle &&

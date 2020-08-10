@@ -64,8 +64,8 @@ var browserConfig = {
         brandpage: ["./src/project/AspNetCore/areas/Brands/pages/BrandPage/index.js", "./src/project/AspNetCore/areas/Brands/pages/BrandPage/BrandPage.scss"]
     },
     output: {
-        publicPath: path.resolve(__dirname, "../be/src/Project/Web/AspNetCore/wwwroot/dist/js"),
-        path: path.resolve(__dirname, "../be/src/Project/Web/AspNetCore/wwwroot/dist/js"),
+        publicPath: path.resolve(__dirname, "../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),
+        path: path.resolve(__dirname, "../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),
         filename: "[name].js"
     }
 };
@@ -127,8 +127,8 @@ var accountBrowserConfig = {
         signinpage: ["./src/project/Account/areas/Accounts/pages/SignIn/index.js", "./src/project/Account/areas/Accounts/pages/SignIn/SignInPage.scss"]
     },
     output: {
-        publicPath: path.resolve(__dirname, "../be/src/Project/Web/Account/wwwroot/dist/js"),
-        path: path.resolve(__dirname, "../be/src/Project/Web/Account/wwwroot/dist/js"),
+        publicPath: path.resolve(__dirname, "../be/src/Project/Services/Identity/Identity.Api/wwwroot/dist/js"),
+        path: path.resolve(__dirname, "../be/src/Project/Services/Identity/Identity.Api/wwwroot/dist/js"),
         filename: "[name].js"
     }
 };
@@ -196,8 +196,8 @@ var sellerPortalBrowserConfig = {
         productdetailpage: ["./src/project/Seller.Portal/areas/Products/pages/ProductDetailPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage.scss"]
     },
     output: {
-        publicPath: path.resolve(__dirname, "../be/src/Project/Web/Seller.Portal/wwwroot/dist/js"),
-        path: path.resolve(__dirname, "../be/src/Project/Web/Seller.Portal/wwwroot/dist/js"),
+        publicPath: path.resolve(__dirname, "../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),
+        path: path.resolve(__dirname, "../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),
         filename: "[name].js"
     }
 };

@@ -77,11 +77,11 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "C:\\Projects\\Giuru\\be\\src\\Project\\Web\\Seller.Portal\\wwwroot\\dist\\js";
+/******/ 	__webpack_require__.p = "C:\\Projects\\Giuru\\be\\src\\Project\\Web\\Seller\\Seller.Web\\wwwroot\\dist\\js";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 416);
+/******/ 	return __webpack_require__(__webpack_require__.s = 423);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -118,555 +118,467 @@ if (false) { var throwOnDirectAccess, ReactIs; } else {
 
 /***/ }),
 
+/***/ 10:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export hexToRgb */
+/* unused harmony export rgbToHex */
+/* unused harmony export hslToRgb */
+/* unused harmony export decomposeColor */
+/* unused harmony export recomposeColor */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getContrastRatio; });
+/* unused harmony export getLuminance */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return emphasize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return fade; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return darken; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return lighten; });
+/* eslint-disable no-use-before-define */
+
+/**
+ * Returns a number whose value is limited to the given range.
+ *
+ * @param {number} value The value to be clamped
+ * @param {number} min The lower boundary of the output range
+ * @param {number} max The upper boundary of the output range
+ * @returns {number} A number in the range [min, max]
+ */
+function clamp(value) {
+  var min = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+  var max = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
+
+  if (false) {}
+
+  return Math.min(Math.max(min, value), max);
+}
+/**
+ * Converts a color from CSS hex format to CSS rgb format.
+ *
+ * @param {string} color - Hex color, i.e. #nnn or #nnnnnn
+ * @returns {string} A CSS rgb color string
+ */
+
+
+function hexToRgb(color) {
+  color = color.substr(1);
+  var re = new RegExp(".{1,".concat(color.length / 3, "}"), 'g');
+  var colors = color.match(re);
+
+  if (colors && colors[0].length === 1) {
+    colors = colors.map(function (n) {
+      return n + n;
+    });
+  }
+
+  return colors ? "rgb(".concat(colors.map(function (n) {
+    return parseInt(n, 16);
+  }).join(', '), ")") : '';
+}
+
+function intToHex(int) {
+  var hex = int.toString(16);
+  return hex.length === 1 ? "0".concat(hex) : hex;
+}
+/**
+ * Converts a color from CSS rgb format to CSS hex format.
+ *
+ * @param {string} color - RGB color, i.e. rgb(n, n, n)
+ * @returns {string} A CSS rgb color string, i.e. #nnnnnn
+ */
+
+
+function rgbToHex(color) {
+  // Idempotent
+  if (color.indexOf('#') === 0) {
+    return color;
+  }
+
+  var _decomposeColor = decomposeColor(color),
+      values = _decomposeColor.values;
+
+  return "#".concat(values.map(function (n) {
+    return intToHex(n);
+  }).join(''));
+}
+/**
+ * Converts a color from hsl format to rgb format.
+ *
+ * @param {string} color - HSL color values
+ * @returns {string} rgb color values
+ */
+
+function hslToRgb(color) {
+  color = decomposeColor(color);
+  var _color = color,
+      values = _color.values;
+  var h = values[0];
+  var s = values[1] / 100;
+  var l = values[2] / 100;
+  var a = s * Math.min(l, 1 - l);
+
+  var f = function f(n) {
+    var k = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (n + h / 30) % 12;
+    return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+  };
+
+  var type = 'rgb';
+  var rgb = [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)];
+
+  if (color.type === 'hsla') {
+    type += 'a';
+    rgb.push(values[3]);
+  }
+
+  return recomposeColor({
+    type: type,
+    values: rgb
+  });
+}
+/**
+ * Returns an object with the type and values of a color.
+ *
+ * Note: Does not support rgb % values.
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @returns {object} - A MUI color object: {type: string, values: number[]}
+ */
+
+function decomposeColor(color) {
+  // Idempotent
+  if (color.type) {
+    return color;
+  }
+
+  if (color.charAt(0) === '#') {
+    return decomposeColor(hexToRgb(color));
+  }
+
+  var marker = color.indexOf('(');
+  var type = color.substring(0, marker);
+
+  if (['rgb', 'rgba', 'hsl', 'hsla'].indexOf(type) === -1) {
+    throw new Error(["Material-UI: unsupported `".concat(color, "` color."), 'We support the following formats: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla().'].join('\n'));
+  }
+
+  var values = color.substring(marker + 1, color.length - 1).split(',');
+  values = values.map(function (value) {
+    return parseFloat(value);
+  });
+  return {
+    type: type,
+    values: values
+  };
+}
+/**
+ * Converts a color object with type and values to a string.
+ *
+ * @param {object} color - Decomposed color
+ * @param {string} color.type - One of: 'rgb', 'rgba', 'hsl', 'hsla'
+ * @param {array} color.values - [n,n,n] or [n,n,n,n]
+ * @returns {string} A CSS color string
+ */
+
+function recomposeColor(color) {
+  var type = color.type;
+  var values = color.values;
+
+  if (type.indexOf('rgb') !== -1) {
+    // Only convert the first 3 values to int (i.e. not alpha)
+    values = values.map(function (n, i) {
+      return i < 3 ? parseInt(n, 10) : n;
+    });
+  } else if (type.indexOf('hsl') !== -1) {
+    values[1] = "".concat(values[1], "%");
+    values[2] = "".concat(values[2], "%");
+  }
+
+  return "".concat(type, "(").concat(values.join(', '), ")");
+}
+/**
+ * Calculates the contrast ratio between two colors.
+ *
+ * Formula: https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
+ *
+ * @param {string} foreground - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @param {string} background - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @returns {number} A contrast ratio value in the range 0 - 21.
+ */
+
+function getContrastRatio(foreground, background) {
+  var lumA = getLuminance(foreground);
+  var lumB = getLuminance(background);
+  return (Math.max(lumA, lumB) + 0.05) / (Math.min(lumA, lumB) + 0.05);
+}
+/**
+ * The relative brightness of any point in a color space,
+ * normalized to 0 for darkest black and 1 for lightest white.
+ *
+ * Formula: https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @returns {number} The relative brightness of the color in the range 0 - 1
+ */
+
+function getLuminance(color) {
+  color = decomposeColor(color);
+  var rgb = color.type === 'hsl' ? decomposeColor(hslToRgb(color)).values : color.values;
+  rgb = rgb.map(function (val) {
+    val /= 255; // normalized
+
+    return val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
+  }); // Truncate at 3 digits
+
+  return Number((0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]).toFixed(3));
+}
+/**
+ * Darken or lighten a color, depending on its luminance.
+ * Light colors are darkened, dark colors are lightened.
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @param {number} coefficient=0.15 - multiplier in the range 0 - 1
+ * @returns {string} A CSS color string. Hex input values are returned as rgb
+ */
+
+function emphasize(color) {
+  var coefficient = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.15;
+  return getLuminance(color) > 0.5 ? darken(color, coefficient) : lighten(color, coefficient);
+}
+/**
+ * Set the absolute transparency of a color.
+ * Any existing alpha values are overwritten.
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @param {number} value - value to set the alpha channel to in the range 0 -1
+ * @returns {string} A CSS color string. Hex input values are returned as rgb
+ */
+
+function fade(color, value) {
+  color = decomposeColor(color);
+  value = clamp(value);
+
+  if (color.type === 'rgb' || color.type === 'hsl') {
+    color.type += 'a';
+  }
+
+  color.values[3] = value;
+  return recomposeColor(color);
+}
+/**
+ * Darkens a color.
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @param {number} coefficient - multiplier in the range 0 - 1
+ * @returns {string} A CSS color string. Hex input values are returned as rgb
+ */
+
+function darken(color, coefficient) {
+  color = decomposeColor(color);
+  coefficient = clamp(coefficient);
+
+  if (color.type.indexOf('hsl') !== -1) {
+    color.values[2] *= 1 - coefficient;
+  } else if (color.type.indexOf('rgb') !== -1) {
+    for (var i = 0; i < 3; i += 1) {
+      color.values[i] *= 1 - coefficient;
+    }
+  }
+
+  return recomposeColor(color);
+}
+/**
+ * Lightens a color.
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @param {number} coefficient - multiplier in the range 0 - 1
+ * @returns {string} A CSS color string. Hex input values are returned as rgb
+ */
+
+function lighten(color, coefficient) {
+  color = decomposeColor(color);
+  coefficient = clamp(coefficient);
+
+  if (color.type.indexOf('hsl') !== -1) {
+    color.values[2] += (100 - color.values[2]) * coefficient;
+  } else if (color.type.indexOf('rgb') !== -1) {
+    for (var i = 0; i < 3; i += 1) {
+      color.values[i] += (255 - color.values[i]) * coefficient;
+    }
+  }
+
+  return recomposeColor(color);
+}
+
+/***/ }),
+
 /***/ 100:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
-// UNUSED EXPORTS: styles
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
+var objectWithoutPropertiesLoose = __webpack_require__(19);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
 var esm_extends = __webpack_require__(2);
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
-var objectWithoutProperties = __webpack_require__(3);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
+var assertThisInitialized = __webpack_require__(40);
 
-// EXTERNAL MODULE: ./node_modules/react/index.js
-var react = __webpack_require__(0);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
+var inheritsLoose = __webpack_require__(22);
 
 // EXTERNAL MODULE: ./node_modules/prop-types/index.js
 var prop_types = __webpack_require__(1);
 
-// EXTERNAL MODULE: ./node_modules/react-dom/index.js
-var react_dom = __webpack_require__(8);
+// EXTERNAL MODULE: ./node_modules/react/index.js
+var react = __webpack_require__(0);
+var react_default = /*#__PURE__*/__webpack_require__.n(react);
 
-// EXTERNAL MODULE: ./node_modules/clsx/dist/clsx.m.js
-var clsx_m = __webpack_require__(4);
+// EXTERNAL MODULE: ./node_modules/react-transition-group/esm/TransitionGroupContext.js
+var TransitionGroupContext = __webpack_require__(29);
 
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useForkRef.js
-var useForkRef = __webpack_require__(9);
+// CONCATENATED MODULE: ./node_modules/react-transition-group/esm/utils/ChildMapping.js
 
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useEventCallback.js
-var useEventCallback = __webpack_require__(24);
-
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/withStyles.js + 21 modules
-var withStyles = __webpack_require__(5);
-
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/utils/useIsFocusVisible.js
-// based on https://github.com/WICG/focus-visible/blob/v4.1.5/src/focus-visible.js
-
-
-var hadKeyboardEvent = true;
-var hadFocusVisibleRecently = false;
-var hadFocusVisibleRecentlyTimeout = null;
-var inputTypesWhitelist = {
-  text: true,
-  search: true,
-  url: true,
-  tel: true,
-  email: true,
-  password: true,
-  number: true,
-  date: true,
-  month: true,
-  week: true,
-  time: true,
-  datetime: true,
-  'datetime-local': true
-};
 /**
- * Computes whether the given element should automatically trigger the
- * `focus-visible` class being added, i.e. whether it should always match
- * `:focus-visible` when focused.
- * @param {Element} node
- * @return {boolean}
- */
-
-function focusTriggersKeyboardModality(node) {
-  var type = node.type,
-      tagName = node.tagName;
-
-  if (tagName === 'INPUT' && inputTypesWhitelist[type] && !node.readOnly) {
-    return true;
-  }
-
-  if (tagName === 'TEXTAREA' && !node.readOnly) {
-    return true;
-  }
-
-  if (node.isContentEditable) {
-    return true;
-  }
-
-  return false;
-}
-/**
- * Keep track of our keyboard modality state with `hadKeyboardEvent`.
- * If the most recent user interaction was via the keyboard;
- * and the key press did not include a meta, alt/option, or control key;
- * then the modality is keyboard. Otherwise, the modality is not keyboard.
- * @param {KeyboardEvent} event
- */
-
-
-function useIsFocusVisible_handleKeyDown(event) {
-  if (event.metaKey || event.altKey || event.ctrlKey) {
-    return;
-  }
-
-  hadKeyboardEvent = true;
-}
-/**
- * If at any point a user clicks with a pointing device, ensure that we change
- * the modality away from keyboard.
- * This avoids the situation where a user presses a key on an already focused
- * element, and then clicks on a different element, focusing it with a
- * pointing device, while we still think we're in keyboard modality.
- */
-
-
-function handlePointerDown() {
-  hadKeyboardEvent = false;
-}
-
-function handleVisibilityChange() {
-  if (this.visibilityState === 'hidden') {
-    // If the tab becomes active again, the browser will handle calling focus
-    // on the element (Safari actually calls it twice).
-    // If this tab change caused a blur on an element with focus-visible,
-    // re-apply the class when the user switches back to the tab.
-    if (hadFocusVisibleRecently) {
-      hadKeyboardEvent = true;
-    }
-  }
-}
-
-function prepare(doc) {
-  doc.addEventListener('keydown', useIsFocusVisible_handleKeyDown, true);
-  doc.addEventListener('mousedown', handlePointerDown, true);
-  doc.addEventListener('pointerdown', handlePointerDown, true);
-  doc.addEventListener('touchstart', handlePointerDown, true);
-  doc.addEventListener('visibilitychange', handleVisibilityChange, true);
-}
-
-function teardown(doc) {
-  doc.removeEventListener('keydown', useIsFocusVisible_handleKeyDown, true);
-  doc.removeEventListener('mousedown', handlePointerDown, true);
-  doc.removeEventListener('pointerdown', handlePointerDown, true);
-  doc.removeEventListener('touchstart', handlePointerDown, true);
-  doc.removeEventListener('visibilitychange', handleVisibilityChange, true);
-}
-
-function useIsFocusVisible_isFocusVisible(event) {
-  var target = event.target;
-
-  try {
-    return target.matches(':focus-visible');
-  } catch (error) {} // browsers not implementing :focus-visible will throw a SyntaxError
-  // we use our own heuristic for those browsers
-  // rethrow might be better if it's not the expected error but do we really
-  // want to crash if focus-visible malfunctioned?
-  // no need for validFocusTarget check. the user does that by attaching it to
-  // focusable events only
-
-
-  return hadKeyboardEvent || focusTriggersKeyboardModality(target);
-}
-/**
- * Should be called if a blur event is fired on a focus-visible element
- */
-
-
-function handleBlurVisible() {
-  // To detect a tab/window switch, we look for a blur event followed
-  // rapidly by a visibility change.
-  // If we don't see a visibility change within 100ms, it's probably a
-  // regular focus change.
-  hadFocusVisibleRecently = true;
-  window.clearTimeout(hadFocusVisibleRecentlyTimeout);
-  hadFocusVisibleRecentlyTimeout = window.setTimeout(function () {
-    hadFocusVisibleRecently = false;
-  }, 100);
-}
-
-function useIsFocusVisible() {
-  var ref = react["useCallback"](function (instance) {
-    var node = react_dom["findDOMNode"](instance);
-
-    if (node != null) {
-      prepare(node.ownerDocument);
-    }
-  }, []);
-
-  if (false) {}
-
-  return {
-    isFocusVisible: useIsFocusVisible_isFocusVisible,
-    onBlurVisible: handleBlurVisible,
-    ref: ref
-  };
-}
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 2 modules
-var toConsumableArray = __webpack_require__(22);
-
-// EXTERNAL MODULE: ./node_modules/react-transition-group/esm/TransitionGroup.js + 1 modules
-var TransitionGroup = __webpack_require__(99);
-
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/ButtonBase/Ripple.js
-
-
-
-
-var useEnhancedEffect = typeof window === 'undefined' ? react["useEffect"] : react["useLayoutEffect"];
-/**
- * @ignore - internal component.
- */
-
-function Ripple(props) {
-  var classes = props.classes,
-      _props$pulsate = props.pulsate,
-      pulsate = _props$pulsate === void 0 ? false : _props$pulsate,
-      rippleX = props.rippleX,
-      rippleY = props.rippleY,
-      rippleSize = props.rippleSize,
-      inProp = props.in,
-      _props$onExited = props.onExited,
-      onExited = _props$onExited === void 0 ? function () {} : _props$onExited,
-      timeout = props.timeout;
-
-  var _React$useState = react["useState"](false),
-      leaving = _React$useState[0],
-      setLeaving = _React$useState[1];
-
-  var rippleClassName = Object(clsx_m["a" /* default */])(classes.ripple, classes.rippleVisible, pulsate && classes.ripplePulsate);
-  var rippleStyles = {
-    width: rippleSize,
-    height: rippleSize,
-    top: -(rippleSize / 2) + rippleY,
-    left: -(rippleSize / 2) + rippleX
-  };
-  var childClassName = Object(clsx_m["a" /* default */])(classes.child, leaving && classes.childLeaving, pulsate && classes.childPulsate);
-  var handleExited = Object(useEventCallback["a" /* default */])(onExited); // Ripple is used for user feedback (e.g. click or press) so we want to apply styles with the highest priority
-
-  useEnhancedEffect(function () {
-    if (!inProp) {
-      // react-transition-group#onExit
-      setLeaving(true); // react-transition-group#onExited
-
-      var timeoutId = setTimeout(handleExited, timeout);
-      return function () {
-        clearTimeout(timeoutId);
-      };
-    }
-
-    return undefined;
-  }, [handleExited, inProp, timeout]);
-  return /*#__PURE__*/react["createElement"]("span", {
-    className: rippleClassName,
-    style: rippleStyles
-  }, /*#__PURE__*/react["createElement"]("span", {
-    className: childClassName
-  }));
-}
-
- false ? undefined : void 0;
-/* harmony default export */ var ButtonBase_Ripple = (Ripple);
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/ButtonBase/TouchRipple.js
-
-
-
-
-
-
-
-
-
-var DURATION = 550;
-var DELAY_RIPPLE = 80;
-var styles = function styles(theme) {
-  return {
-    /* Styles applied to the root element. */
-    root: {
-      overflow: 'hidden',
-      pointerEvents: 'none',
-      position: 'absolute',
-      zIndex: 0,
-      top: 0,
-      right: 0,
-      bottom: 0,
-      left: 0,
-      borderRadius: 'inherit'
-    },
-
-    /* Styles applied to the internal `Ripple` components `ripple` class. */
-    ripple: {
-      opacity: 0,
-      position: 'absolute'
-    },
-
-    /* Styles applied to the internal `Ripple` components `rippleVisible` class. */
-    rippleVisible: {
-      opacity: 0.3,
-      transform: 'scale(1)',
-      animation: "$enter ".concat(DURATION, "ms ").concat(theme.transitions.easing.easeInOut)
-    },
-
-    /* Styles applied to the internal `Ripple` components `ripplePulsate` class. */
-    ripplePulsate: {
-      animationDuration: "".concat(theme.transitions.duration.shorter, "ms")
-    },
-
-    /* Styles applied to the internal `Ripple` components `child` class. */
-    child: {
-      opacity: 1,
-      display: 'block',
-      width: '100%',
-      height: '100%',
-      borderRadius: '50%',
-      backgroundColor: 'currentColor'
-    },
-
-    /* Styles applied to the internal `Ripple` components `childLeaving` class. */
-    childLeaving: {
-      opacity: 0,
-      animation: "$exit ".concat(DURATION, "ms ").concat(theme.transitions.easing.easeInOut)
-    },
-
-    /* Styles applied to the internal `Ripple` components `childPulsate` class. */
-    childPulsate: {
-      position: 'absolute',
-      left: 0,
-      top: 0,
-      animation: "$pulsate 2500ms ".concat(theme.transitions.easing.easeInOut, " 200ms infinite")
-    },
-    '@keyframes enter': {
-      '0%': {
-        transform: 'scale(0)',
-        opacity: 0.1
-      },
-      '100%': {
-        transform: 'scale(1)',
-        opacity: 0.3
-      }
-    },
-    '@keyframes exit': {
-      '0%': {
-        opacity: 1
-      },
-      '100%': {
-        opacity: 0
-      }
-    },
-    '@keyframes pulsate': {
-      '0%': {
-        transform: 'scale(1)'
-      },
-      '50%': {
-        transform: 'scale(0.92)'
-      },
-      '100%': {
-        transform: 'scale(1)'
-      }
-    }
-  };
-};
-/**
- * @ignore - internal component.
+ * Given `this.props.children`, return an object mapping key to child.
  *
- * TODO v5: Make private
+ * @param {*} children `this.props.children`
+ * @return {object} Mapping of key to child
  */
 
-var TouchRipple_TouchRipple = react["forwardRef"](function TouchRipple(props, ref) {
-  var _props$center = props.center,
-      centerProp = _props$center === void 0 ? false : _props$center,
-      classes = props.classes,
-      className = props.className,
-      other = Object(objectWithoutProperties["a" /* default */])(props, ["center", "classes", "className"]);
+function getChildMapping(children, mapFn) {
+  var mapper = function mapper(child) {
+    return mapFn && Object(react["isValidElement"])(child) ? mapFn(child) : child;
+  };
 
-  var _React$useState = react["useState"]([]),
-      ripples = _React$useState[0],
-      setRipples = _React$useState[1];
+  var result = Object.create(null);
+  if (children) react["Children"].map(children, function (c) {
+    return c;
+  }).forEach(function (child) {
+    // run the map function here instead so that the key is the computed one
+    result[child.key] = mapper(child);
+  });
+  return result;
+}
+/**
+ * When you're adding or removing children some may be added or removed in the
+ * same render pass. We want to show *both* since we want to simultaneously
+ * animate elements in and out. This function takes a previous set of keys
+ * and a new set of keys and merges them with its best guess of the correct
+ * ordering. In the future we may expose some of the utilities in
+ * ReactMultiChild to make this easy, but for now React itself does not
+ * directly have this concept of the union of prevChildren and nextChildren
+ * so we implement it here.
+ *
+ * @param {object} prev prev children as returned from
+ * `ReactTransitionChildMapping.getChildMapping()`.
+ * @param {object} next next children as returned from
+ * `ReactTransitionChildMapping.getChildMapping()`.
+ * @return {object} a key set that contains all keys in `prev` and all keys
+ * in `next` in a reasonable order.
+ */
 
-  var nextKey = react["useRef"](0);
-  var rippleCallback = react["useRef"](null);
-  react["useEffect"](function () {
-    if (rippleCallback.current) {
-      rippleCallback.current();
-      rippleCallback.current = null;
+function mergeChildMappings(prev, next) {
+  prev = prev || {};
+  next = next || {};
+
+  function getValueForKey(key) {
+    return key in next ? next[key] : prev[key];
+  } // For each key of `next`, the list of keys to insert before that key in
+  // the combined list
+
+
+  var nextKeysPending = Object.create(null);
+  var pendingKeys = [];
+
+  for (var prevKey in prev) {
+    if (prevKey in next) {
+      if (pendingKeys.length) {
+        nextKeysPending[prevKey] = pendingKeys;
+        pendingKeys = [];
+      }
+    } else {
+      pendingKeys.push(prevKey);
     }
-  }, [ripples]); // Used to filter out mouse emulated events on mobile.
+  }
 
-  var ignoringMouseDown = react["useRef"](false); // We use a timer in order to only show the ripples for touch "click" like events.
-  // We don't want to display the ripple for touch scroll events.
+  var i;
+  var childMapping = {};
 
-  var startTimer = react["useRef"](null); // This is the hook called once the previous timeout is ready.
+  for (var nextKey in next) {
+    if (nextKeysPending[nextKey]) {
+      for (i = 0; i < nextKeysPending[nextKey].length; i++) {
+        var pendingNextKey = nextKeysPending[nextKey][i];
+        childMapping[nextKeysPending[nextKey][i]] = getValueForKey(pendingNextKey);
+      }
+    }
 
-  var startTimerCommit = react["useRef"](null);
-  var container = react["useRef"](null);
-  react["useEffect"](function () {
-    return function () {
-      clearTimeout(startTimer.current);
-    };
-  }, []);
-  var startCommit = react["useCallback"](function (params) {
-    var pulsate = params.pulsate,
-        rippleX = params.rippleX,
-        rippleY = params.rippleY,
-        rippleSize = params.rippleSize,
-        cb = params.cb;
-    setRipples(function (oldRipples) {
-      return [].concat(Object(toConsumableArray["a" /* default */])(oldRipples), [/*#__PURE__*/react["createElement"](ButtonBase_Ripple, {
-        key: nextKey.current,
-        classes: classes,
-        timeout: DURATION,
-        pulsate: pulsate,
-        rippleX: rippleX,
-        rippleY: rippleY,
-        rippleSize: rippleSize
-      })]);
+    childMapping[nextKey] = getValueForKey(nextKey);
+  } // Finally, add the keys which didn't appear before any key in `next`
+
+
+  for (i = 0; i < pendingKeys.length; i++) {
+    childMapping[pendingKeys[i]] = getValueForKey(pendingKeys[i]);
+  }
+
+  return childMapping;
+}
+
+function getProp(child, prop, props) {
+  return props[prop] != null ? props[prop] : child.props[prop];
+}
+
+function getInitialChildMapping(props, onExited) {
+  return getChildMapping(props.children, function (child) {
+    return Object(react["cloneElement"])(child, {
+      onExited: onExited.bind(null, child),
+      in: true,
+      appear: getProp(child, 'appear', props),
+      enter: getProp(child, 'enter', props),
+      exit: getProp(child, 'exit', props)
     });
-    nextKey.current += 1;
-    rippleCallback.current = cb;
-  }, [classes]);
-  var start = react["useCallback"](function () {
-    var event = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var cb = arguments.length > 2 ? arguments[2] : undefined;
-    var _options$pulsate = options.pulsate,
-        pulsate = _options$pulsate === void 0 ? false : _options$pulsate,
-        _options$center = options.center,
-        center = _options$center === void 0 ? centerProp || options.pulsate : _options$center,
-        _options$fakeElement = options.fakeElement,
-        fakeElement = _options$fakeElement === void 0 ? false : _options$fakeElement;
+  });
+}
+function getNextChildMapping(nextProps, prevChildMapping, onExited) {
+  var nextChildMapping = getChildMapping(nextProps.children);
+  var children = mergeChildMappings(prevChildMapping, nextChildMapping);
+  Object.keys(children).forEach(function (key) {
+    var child = children[key];
+    if (!Object(react["isValidElement"])(child)) return;
+    var hasPrev = (key in prevChildMapping);
+    var hasNext = (key in nextChildMapping);
+    var prevChild = prevChildMapping[key];
+    var isLeaving = Object(react["isValidElement"])(prevChild) && !prevChild.props.in; // item is new (entering)
 
-    if (event.type === 'mousedown' && ignoringMouseDown.current) {
-      ignoringMouseDown.current = false;
-      return;
-    }
-
-    if (event.type === 'touchstart') {
-      ignoringMouseDown.current = true;
-    }
-
-    var element = fakeElement ? null : container.current;
-    var rect = element ? element.getBoundingClientRect() : {
-      width: 0,
-      height: 0,
-      left: 0,
-      top: 0
-    }; // Get the size of the ripple
-
-    var rippleX;
-    var rippleY;
-    var rippleSize;
-
-    if (center || event.clientX === 0 && event.clientY === 0 || !event.clientX && !event.touches) {
-      rippleX = Math.round(rect.width / 2);
-      rippleY = Math.round(rect.height / 2);
-    } else {
-      var clientX = event.clientX ? event.clientX : event.touches[0].clientX;
-      var clientY = event.clientY ? event.clientY : event.touches[0].clientY;
-      rippleX = Math.round(clientX - rect.left);
-      rippleY = Math.round(clientY - rect.top);
-    }
-
-    if (center) {
-      rippleSize = Math.sqrt((2 * Math.pow(rect.width, 2) + Math.pow(rect.height, 2)) / 3); // For some reason the animation is broken on Mobile Chrome if the size if even.
-
-      if (rippleSize % 2 === 0) {
-        rippleSize += 1;
-      }
-    } else {
-      var sizeX = Math.max(Math.abs((element ? element.clientWidth : 0) - rippleX), rippleX) * 2 + 2;
-      var sizeY = Math.max(Math.abs((element ? element.clientHeight : 0) - rippleY), rippleY) * 2 + 2;
-      rippleSize = Math.sqrt(Math.pow(sizeX, 2) + Math.pow(sizeY, 2));
-    } // Touche devices
-
-
-    if (event.touches) {
-      // check that this isn't another touchstart due to multitouch
-      // otherwise we will only clear a single timer when unmounting while two
-      // are running
-      if (startTimerCommit.current === null) {
-        // Prepare the ripple effect.
-        startTimerCommit.current = function () {
-          startCommit({
-            pulsate: pulsate,
-            rippleX: rippleX,
-            rippleY: rippleY,
-            rippleSize: rippleSize,
-            cb: cb
-          });
-        }; // Delay the execution of the ripple effect.
-
-
-        startTimer.current = setTimeout(function () {
-          if (startTimerCommit.current) {
-            startTimerCommit.current();
-            startTimerCommit.current = null;
-          }
-        }, DELAY_RIPPLE); // We have to make a tradeoff with this value.
-      }
-    } else {
-      startCommit({
-        pulsate: pulsate,
-        rippleX: rippleX,
-        rippleY: rippleY,
-        rippleSize: rippleSize,
-        cb: cb
+    if (hasNext && (!hasPrev || isLeaving)) {
+      // console.log('entering', key)
+      children[key] = Object(react["cloneElement"])(child, {
+        onExited: onExited.bind(null, child),
+        in: true,
+        exit: getProp(child, 'exit', nextProps),
+        enter: getProp(child, 'enter', nextProps)
+      });
+    } else if (!hasNext && hasPrev && !isLeaving) {
+      // item is old (exiting)
+      // console.log('leaving', key)
+      children[key] = Object(react["cloneElement"])(child, {
+        in: false
+      });
+    } else if (hasNext && hasPrev && Object(react["isValidElement"])(prevChild)) {
+      // item hasn't changed transition states
+      // copy over the last transition props;
+      // console.log('unchanged', key)
+      children[key] = Object(react["cloneElement"])(child, {
+        onExited: onExited.bind(null, child),
+        in: prevChild.props.in,
+        exit: getProp(child, 'exit', nextProps),
+        enter: getProp(child, 'enter', nextProps)
       });
     }
-  }, [centerProp, startCommit]);
-  var pulsate = react["useCallback"](function () {
-    start({}, {
-      pulsate: true
-    });
-  }, [start]);
-  var stop = react["useCallback"](function (event, cb) {
-    clearTimeout(startTimer.current); // The touch interaction occurs too quickly.
-    // We still want to show ripple effect.
-
-    if (event.type === 'touchend' && startTimerCommit.current) {
-      event.persist();
-      startTimerCommit.current();
-      startTimerCommit.current = null;
-      startTimer.current = setTimeout(function () {
-        stop(event, cb);
-      });
-      return;
-    }
-
-    startTimerCommit.current = null;
-    setRipples(function (oldRipples) {
-      if (oldRipples.length > 0) {
-        return oldRipples.slice(1);
-      }
-
-      return oldRipples;
-    });
-    rippleCallback.current = cb;
-  }, []);
-  react["useImperativeHandle"](ref, function () {
-    return {
-      pulsate: pulsate,
-      start: start,
-      stop: stop
-    };
-  }, [pulsate, start, stop]);
-  return /*#__PURE__*/react["createElement"]("span", Object(esm_extends["a" /* default */])({
-    className: Object(clsx_m["a" /* default */])(classes.root, className),
-    ref: container
-  }, other), /*#__PURE__*/react["createElement"](TransitionGroup["a" /* default */], {
-    component: null,
-    exit: true
-  }, ripples));
-});
- false ? undefined : void 0;
-/* harmony default export */ var ButtonBase_TouchRipple = (Object(withStyles["a" /* default */])(styles, {
-  flip: false,
-  name: 'MuiTouchRipple'
-})(react["memo"](TouchRipple_TouchRipple)));
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/ButtonBase/ButtonBase.js
+  });
+  return children;
+}
+// CONCATENATED MODULE: ./node_modules/react-transition-group/esm/TransitionGroup.js
 
 
 
@@ -676,316 +588,129 @@ var TouchRipple_TouchRipple = react["forwardRef"](function TouchRipple(props, re
 
 
 
+var values = Object.values || function (obj) {
+  return Object.keys(obj).map(function (k) {
+    return obj[k];
+  });
+};
 
-
-
-var ButtonBase_styles = {
-  /* Styles applied to the root element. */
-  root: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-    WebkitTapHighlightColor: 'transparent',
-    backgroundColor: 'transparent',
-    // Reset default value
-    // We disable the focus ring for mouse, touch and keyboard users.
-    outline: 0,
-    border: 0,
-    margin: 0,
-    // Remove the margin in Safari
-    borderRadius: 0,
-    padding: 0,
-    // Remove the padding in Firefox
-    cursor: 'pointer',
-    userSelect: 'none',
-    verticalAlign: 'middle',
-    '-moz-appearance': 'none',
-    // Reset
-    '-webkit-appearance': 'none',
-    // Reset
-    textDecoration: 'none',
-    // So we take precedent over the style of a native <a /> element.
-    color: 'inherit',
-    '&::-moz-focus-inner': {
-      borderStyle: 'none' // Remove Firefox dotted outline.
-
-    },
-    '&$disabled': {
-      pointerEvents: 'none',
-      // Disable link interactions
-      cursor: 'default'
-    }
-  },
-
-  /* Pseudo-class applied to the root element if `disabled={true}`. */
-  disabled: {},
-
-  /* Pseudo-class applied to the root element if keyboard focused. */
-  focusVisible: {}
+var defaultProps = {
+  component: 'div',
+  childFactory: function childFactory(child) {
+    return child;
+  }
 };
 /**
- * `ButtonBase` contains as few styles as possible.
- * It aims to be a simple building block for creating a button.
- * It contains a load of style reset and some focus/ripple logic.
+ * The `<TransitionGroup>` component manages a set of transition components
+ * (`<Transition>` and `<CSSTransition>`) in a list. Like with the transition
+ * components, `<TransitionGroup>` is a state machine for managing the mounting
+ * and unmounting of components over time.
+ *
+ * Consider the example below. As items are removed or added to the TodoList the
+ * `in` prop is toggled automatically by the `<TransitionGroup>`.
+ *
+ * Note that `<TransitionGroup>`  does not define any animation behavior!
+ * Exactly _how_ a list item animates is up to the individual transition
+ * component. This means you can mix and match animations across different list
+ * items.
  */
 
-var ButtonBase_ButtonBase = react["forwardRef"](function ButtonBase(props, ref) {
-  var action = props.action,
-      buttonRefProp = props.buttonRef,
-      _props$centerRipple = props.centerRipple,
-      centerRipple = _props$centerRipple === void 0 ? false : _props$centerRipple,
-      children = props.children,
-      classes = props.classes,
-      className = props.className,
-      _props$component = props.component,
-      component = _props$component === void 0 ? 'button' : _props$component,
-      _props$disabled = props.disabled,
-      disabled = _props$disabled === void 0 ? false : _props$disabled,
-      _props$disableRipple = props.disableRipple,
-      disableRipple = _props$disableRipple === void 0 ? false : _props$disableRipple,
-      _props$disableTouchRi = props.disableTouchRipple,
-      disableTouchRipple = _props$disableTouchRi === void 0 ? false : _props$disableTouchRi,
-      _props$focusRipple = props.focusRipple,
-      focusRipple = _props$focusRipple === void 0 ? false : _props$focusRipple,
-      focusVisibleClassName = props.focusVisibleClassName,
-      onBlur = props.onBlur,
-      onClick = props.onClick,
-      onFocus = props.onFocus,
-      onFocusVisible = props.onFocusVisible,
-      onKeyDown = props.onKeyDown,
-      onKeyUp = props.onKeyUp,
-      onMouseDown = props.onMouseDown,
-      onMouseLeave = props.onMouseLeave,
-      onMouseUp = props.onMouseUp,
-      onTouchEnd = props.onTouchEnd,
-      onTouchMove = props.onTouchMove,
-      onTouchStart = props.onTouchStart,
-      onDragLeave = props.onDragLeave,
-      _props$tabIndex = props.tabIndex,
-      tabIndex = _props$tabIndex === void 0 ? 0 : _props$tabIndex,
-      TouchRippleProps = props.TouchRippleProps,
-      _props$type = props.type,
-      type = _props$type === void 0 ? 'button' : _props$type,
-      other = Object(objectWithoutProperties["a" /* default */])(props, ["action", "buttonRef", "centerRipple", "children", "classes", "className", "component", "disabled", "disableRipple", "disableTouchRipple", "focusRipple", "focusVisibleClassName", "onBlur", "onClick", "onFocus", "onFocusVisible", "onKeyDown", "onKeyUp", "onMouseDown", "onMouseLeave", "onMouseUp", "onTouchEnd", "onTouchMove", "onTouchStart", "onDragLeave", "tabIndex", "TouchRippleProps", "type"]);
+var TransitionGroup_TransitionGroup = /*#__PURE__*/function (_React$Component) {
+  Object(inheritsLoose["a" /* default */])(TransitionGroup, _React$Component);
 
-  var buttonRef = react["useRef"](null);
+  function TransitionGroup(props, context) {
+    var _this;
 
-  function getButtonNode() {
-    // #StrictMode ready
-    return react_dom["findDOMNode"](buttonRef.current);
-  }
+    _this = _React$Component.call(this, props, context) || this;
 
-  var rippleRef = react["useRef"](null);
+    var handleExited = _this.handleExited.bind(Object(assertThisInitialized["a" /* default */])(_this)); // Initial children should all be entering, dependent on appear
 
-  var _React$useState = react["useState"](false),
-      focusVisible = _React$useState[0],
-      setFocusVisible = _React$useState[1];
 
-  if (disabled && focusVisible) {
-    setFocusVisible(false);
-  }
-
-  var _useIsFocusVisible = useIsFocusVisible(),
-      isFocusVisible = _useIsFocusVisible.isFocusVisible,
-      onBlurVisible = _useIsFocusVisible.onBlurVisible,
-      focusVisibleRef = _useIsFocusVisible.ref;
-
-  react["useImperativeHandle"](action, function () {
-    return {
-      focusVisible: function focusVisible() {
-        setFocusVisible(true);
-        buttonRef.current.focus();
-      }
+    _this.state = {
+      contextValue: {
+        isMounting: true
+      },
+      handleExited: handleExited,
+      firstRender: true
     };
-  }, []);
-  react["useEffect"](function () {
-    if (focusVisible && focusRipple && !disableRipple) {
-      rippleRef.current.pulsate();
-    }
-  }, [disableRipple, focusRipple, focusVisible]);
+    return _this;
+  }
 
-  function useRippleHandler(rippleAction, eventCallback) {
-    var skipRippleAction = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : disableTouchRipple;
-    return Object(useEventCallback["a" /* default */])(function (event) {
-      if (eventCallback) {
-        eventCallback(event);
+  var _proto = TransitionGroup.prototype;
+
+  _proto.componentDidMount = function componentDidMount() {
+    this.mounted = true;
+    this.setState({
+      contextValue: {
+        isMounting: false
       }
-
-      var ignore = skipRippleAction;
-
-      if (!ignore && rippleRef.current) {
-        rippleRef.current[rippleAction](event);
-      }
-
-      return true;
     });
-  }
-
-  var handleMouseDown = useRippleHandler('start', onMouseDown);
-  var handleDragLeave = useRippleHandler('stop', onDragLeave);
-  var handleMouseUp = useRippleHandler('stop', onMouseUp);
-  var handleMouseLeave = useRippleHandler('stop', function (event) {
-    if (focusVisible) {
-      event.preventDefault();
-    }
-
-    if (onMouseLeave) {
-      onMouseLeave(event);
-    }
-  });
-  var handleTouchStart = useRippleHandler('start', onTouchStart);
-  var handleTouchEnd = useRippleHandler('stop', onTouchEnd);
-  var handleTouchMove = useRippleHandler('stop', onTouchMove);
-  var handleBlur = useRippleHandler('stop', function (event) {
-    if (focusVisible) {
-      onBlurVisible(event);
-      setFocusVisible(false);
-    }
-
-    if (onBlur) {
-      onBlur(event);
-    }
-  }, false);
-  var handleFocus = Object(useEventCallback["a" /* default */])(function (event) {
-    // Fix for https://github.com/facebook/react/issues/7769
-    if (!buttonRef.current) {
-      buttonRef.current = event.currentTarget;
-    }
-
-    if (isFocusVisible(event)) {
-      setFocusVisible(true);
-
-      if (onFocusVisible) {
-        onFocusVisible(event);
-      }
-    }
-
-    if (onFocus) {
-      onFocus(event);
-    }
-  });
-
-  var isNonNativeButton = function isNonNativeButton() {
-    var button = getButtonNode();
-    return component && component !== 'button' && !(button.tagName === 'A' && button.href);
   };
-  /**
-   * IE 11 shim for https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/repeat
-   */
 
+  _proto.componentWillUnmount = function componentWillUnmount() {
+    this.mounted = false;
+  };
 
-  var keydownRef = react["useRef"](false);
-  var handleKeyDown = Object(useEventCallback["a" /* default */])(function (event) {
-    // Check if key is already down to avoid repeats being counted as multiple activations
-    if (focusRipple && !keydownRef.current && focusVisible && rippleRef.current && event.key === ' ') {
-      keydownRef.current = true;
-      event.persist();
-      rippleRef.current.stop(event, function () {
-        rippleRef.current.start(event);
+  TransitionGroup.getDerivedStateFromProps = function getDerivedStateFromProps(nextProps, _ref) {
+    var prevChildMapping = _ref.children,
+        handleExited = _ref.handleExited,
+        firstRender = _ref.firstRender;
+    return {
+      children: firstRender ? getInitialChildMapping(nextProps, handleExited) : getNextChildMapping(nextProps, prevChildMapping, handleExited),
+      firstRender: false
+    };
+  } // node is `undefined` when user provided `nodeRef` prop
+  ;
+
+  _proto.handleExited = function handleExited(child, node) {
+    var currentChildMapping = getChildMapping(this.props.children);
+    if (child.key in currentChildMapping) return;
+
+    if (child.props.onExited) {
+      child.props.onExited(node);
+    }
+
+    if (this.mounted) {
+      this.setState(function (state) {
+        var children = Object(esm_extends["a" /* default */])({}, state.children);
+
+        delete children[child.key];
+        return {
+          children: children
+        };
       });
     }
+  };
 
-    if (event.target === event.currentTarget && isNonNativeButton() && event.key === ' ') {
-      event.preventDefault();
+  _proto.render = function render() {
+    var _this$props = this.props,
+        Component = _this$props.component,
+        childFactory = _this$props.childFactory,
+        props = Object(objectWithoutPropertiesLoose["a" /* default */])(_this$props, ["component", "childFactory"]);
+
+    var contextValue = this.state.contextValue;
+    var children = values(this.state.children).map(childFactory);
+    delete props.appear;
+    delete props.enter;
+    delete props.exit;
+
+    if (Component === null) {
+      return /*#__PURE__*/react_default.a.createElement(TransitionGroupContext["a" /* default */].Provider, {
+        value: contextValue
+      }, children);
     }
 
-    if (onKeyDown) {
-      onKeyDown(event);
-    } // Keyboard accessibility for non interactive elements
+    return /*#__PURE__*/react_default.a.createElement(TransitionGroupContext["a" /* default */].Provider, {
+      value: contextValue
+    }, /*#__PURE__*/react_default.a.createElement(Component, props, children));
+  };
 
+  return TransitionGroup;
+}(react_default.a.Component);
 
-    if (event.target === event.currentTarget && isNonNativeButton() && event.key === 'Enter' && !disabled) {
-      event.preventDefault();
-
-      if (onClick) {
-        onClick(event);
-      }
-    }
-  });
-  var handleKeyUp = Object(useEventCallback["a" /* default */])(function (event) {
-    // calling preventDefault in keyUp on a <button> will not dispatch a click event if Space is pressed
-    // https://codesandbox.io/s/button-keyup-preventdefault-dn7f0
-    if (focusRipple && event.key === ' ' && rippleRef.current && focusVisible && !event.defaultPrevented) {
-      keydownRef.current = false;
-      event.persist();
-      rippleRef.current.stop(event, function () {
-        rippleRef.current.pulsate(event);
-      });
-    }
-
-    if (onKeyUp) {
-      onKeyUp(event);
-    } // Keyboard accessibility for non interactive elements
-
-
-    if (onClick && event.target === event.currentTarget && isNonNativeButton() && event.key === ' ' && !event.defaultPrevented) {
-      onClick(event);
-    }
-  });
-  var ComponentProp = component;
-
-  if (ComponentProp === 'button' && other.href) {
-    ComponentProp = 'a';
-  }
-
-  var buttonProps = {};
-
-  if (ComponentProp === 'button') {
-    buttonProps.type = type;
-    buttonProps.disabled = disabled;
-  } else {
-    if (ComponentProp !== 'a' || !other.href) {
-      buttonProps.role = 'button';
-    }
-
-    buttonProps['aria-disabled'] = disabled;
-  }
-
-  var handleUserRef = Object(useForkRef["a" /* default */])(buttonRefProp, ref);
-  var handleOwnRef = Object(useForkRef["a" /* default */])(focusVisibleRef, buttonRef);
-  var handleRef = Object(useForkRef["a" /* default */])(handleUserRef, handleOwnRef);
-
-  var _React$useState2 = react["useState"](false),
-      mountedState = _React$useState2[0],
-      setMountedState = _React$useState2[1];
-
-  react["useEffect"](function () {
-    setMountedState(true);
-  }, []);
-  var enableTouchRipple = mountedState && !disableRipple && !disabled;
-
-  if (false) {}
-
-  return /*#__PURE__*/react["createElement"](ComponentProp, Object(esm_extends["a" /* default */])({
-    className: Object(clsx_m["a" /* default */])(classes.root, className, focusVisible && [classes.focusVisible, focusVisibleClassName], disabled && classes.disabled),
-    onBlur: handleBlur,
-    onClick: onClick,
-    onFocus: handleFocus,
-    onKeyDown: handleKeyDown,
-    onKeyUp: handleKeyUp,
-    onMouseDown: handleMouseDown,
-    onMouseLeave: handleMouseLeave,
-    onMouseUp: handleMouseUp,
-    onDragLeave: handleDragLeave,
-    onTouchEnd: handleTouchEnd,
-    onTouchMove: handleTouchMove,
-    onTouchStart: handleTouchStart,
-    ref: handleRef,
-    tabIndex: disabled ? -1 : tabIndex
-  }, buttonProps, other), children, enableTouchRipple ?
-  /*#__PURE__*/
-
-  /* TouchRipple is only needed client-side, x2 boost on the server. */
-  react["createElement"](ButtonBase_TouchRipple, Object(esm_extends["a" /* default */])({
-    ref: rippleRef,
-    center: centerRipple
-  }, TouchRippleProps)) : null);
-});
- false ? undefined : void 0;
-/* harmony default export */ var esm_ButtonBase_ButtonBase = __webpack_exports__["a"] = (Object(withStyles["a" /* default */])(ButtonBase_styles, {
-  name: 'MuiButtonBase'
-})(ButtonBase_ButtonBase));
+TransitionGroup_TransitionGroup.propTypes =  false ? undefined : {};
+TransitionGroup_TransitionGroup.defaultProps = defaultProps;
+/* harmony default export */ var esm_TransitionGroup = __webpack_exports__["a"] = (TransitionGroup_TransitionGroup);
 
 /***/ }),
 
@@ -1012,50 +737,6 @@ exports.isValidElementType=function(a){return"string"===typeof a||"function"===t
 
 /***/ }),
 
-/***/ 11:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _objectSpread2; });
-/* harmony import */ var _defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(25);
-
-
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
-    keys.push.apply(keys, symbols);
-  }
-
-  return keys;
-}
-
-function _objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      ownKeys(Object(source), true).forEach(function (key) {
-        Object(_defineProperty__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
-  }
-
-  return target;
-}
-
-/***/ }),
-
 /***/ 111:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1068,7 +749,7 @@ function _objectSpread2(target) {
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
-/* harmony import */ var _InputBase__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(92);
+/* harmony import */ var _InputBase__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(94);
 /* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
 
 
@@ -1229,7 +910,7 @@ Input.muiName = 'Input';
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
-/* harmony import */ var _InputBase__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(92);
+/* harmony import */ var _InputBase__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(94);
 /* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
 
 
@@ -1445,8 +1126,8 @@ FilledInput.muiName = 'Input';
 /* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
 /* harmony import */ var _InputBase_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(33);
 /* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(5);
-/* harmony import */ var _utils_capitalize__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(7);
-/* harmony import */ var _utils_isMuiElement__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(41);
+/* harmony import */ var _utils_capitalize__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(6);
+/* harmony import */ var _utils_isMuiElement__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(42);
 /* harmony import */ var _FormControlContext__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(32);
 
 
@@ -1655,7 +1336,7 @@ var FormControl = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function Form
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
-/* harmony import */ var _FormControl_formControlState__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(20);
+/* harmony import */ var _FormControl_formControlState__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(21);
 /* harmony import */ var _FormControl_useFormControl__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(23);
 /* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5);
 
@@ -1770,16 +1451,16 @@ var react = __webpack_require__(0);
 var prop_types = __webpack_require__(1);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/mergeClasses/mergeClasses.js
-var mergeClasses = __webpack_require__(182);
+var mergeClasses = __webpack_require__(184);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 2 modules
-var toConsumableArray = __webpack_require__(22);
+var toConsumableArray = __webpack_require__(20);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 1 modules
-var slicedToArray = __webpack_require__(38);
+var slicedToArray = __webpack_require__(34);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
-var esm_typeof = __webpack_require__(26);
+var esm_typeof = __webpack_require__(27);
 
 // EXTERNAL MODULE: ./node_modules/react-is/index.js
 var react_is = __webpack_require__(50);
@@ -1788,7 +1469,7 @@ var react_is = __webpack_require__(50);
 var clsx_m = __webpack_require__(4);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/capitalize.js
-var capitalize = __webpack_require__(7);
+var capitalize = __webpack_require__(6);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/withStyles.js + 21 modules
 var withStyles = __webpack_require__(5);
@@ -1797,22 +1478,22 @@ var withStyles = __webpack_require__(5);
 var react_dom = __webpack_require__(8);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/debounce.js
-var debounce = __webpack_require__(63);
+var debounce = __webpack_require__(64);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/ownerDocument.js
-var ownerDocument = __webpack_require__(17);
+var ownerDocument = __webpack_require__(18);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/ownerWindow.js
-var ownerWindow = __webpack_require__(46);
+var ownerWindow = __webpack_require__(41);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/createChainedFunction.js
-var createChainedFunction = __webpack_require__(40);
+var createChainedFunction = __webpack_require__(37);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Modal/Modal.js + 4 modules
-var Modal = __webpack_require__(216);
+var Modal = __webpack_require__(218);
 
 // EXTERNAL MODULE: ./node_modules/react-transition-group/esm/Transition.js + 1 modules
-var Transition = __webpack_require__(98);
+var Transition = __webpack_require__(99);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/useTheme.js
 var useTheme = __webpack_require__(31);
@@ -1971,7 +1652,7 @@ var Grow_Grow = react["forwardRef"](function Grow(props, ref) {
 Grow_Grow.muiSupportAuto = true;
 /* harmony default export */ var esm_Grow_Grow = (Grow_Grow);
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Paper/Paper.js
-var Paper = __webpack_require__(184);
+var Paper = __webpack_require__(186);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Popover/Popover.js
 
@@ -2376,7 +2057,7 @@ var List_List = react["forwardRef"](function List(props, ref) {
   name: 'MuiList'
 })(List_List));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/getScrollbarSize.js
-var getScrollbarSize = __webpack_require__(64);
+var getScrollbarSize = __webpack_require__(65);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/MenuList/MenuList.js
 
@@ -2636,7 +2317,7 @@ var MenuList_MenuList = react["forwardRef"](function MenuList(props, ref) {
  false ? undefined : void 0;
 /* harmony default export */ var esm_MenuList_MenuList = (MenuList_MenuList);
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/setRef.js
-var setRef = __webpack_require__(27);
+var setRef = __webpack_require__(25);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Menu/Menu.js
 
@@ -2797,7 +2478,7 @@ var Menu_Menu = react["forwardRef"](function Menu(props, ref) {
 var InputBase_utils = __webpack_require__(33);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useControlled.js
-var useControlled = __webpack_require__(91);
+var useControlled = __webpack_require__(93);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Select/SelectInput.js
 
@@ -3165,13 +2846,13 @@ var SelectInput_SelectInput = react["forwardRef"](function SelectInput(props, re
  false ? undefined : void 0;
 /* harmony default export */ var Select_SelectInput = (SelectInput_SelectInput);
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/formControlState.js
-var formControlState = __webpack_require__(20);
+var formControlState = __webpack_require__(21);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/useFormControl.js
 var useFormControl = __webpack_require__(23);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/createSvgIcon.js
-var createSvgIcon = __webpack_require__(67);
+var createSvgIcon = __webpack_require__(62);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/internal/svg-icons/ArrowDropDown.js
 
@@ -3513,10 +3194,10 @@ var prop_types = __webpack_require__(1);
 var clsx_m = __webpack_require__(4);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/InputBase/InputBase.js + 1 modules
-var InputBase = __webpack_require__(92);
+var InputBase = __webpack_require__(94);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(19);
+var defineProperty = __webpack_require__(16);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/withStyles.js + 21 modules
 var withStyles = __webpack_require__(5);
@@ -3525,7 +3206,7 @@ var withStyles = __webpack_require__(5);
 var useTheme = __webpack_require__(31);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/capitalize.js
-var capitalize = __webpack_require__(7);
+var capitalize = __webpack_require__(6);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/OutlinedInput/NotchedOutline.js
 
@@ -3836,7 +3517,7 @@ var prop_types = __webpack_require__(1);
 var clsx_m = __webpack_require__(4);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/formControlState.js
-var formControlState = __webpack_require__(20);
+var formControlState = __webpack_require__(21);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/useFormControl.js
 var useFormControl = __webpack_require__(23);
@@ -3845,7 +3526,7 @@ var useFormControl = __webpack_require__(23);
 var withStyles = __webpack_require__(5);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/capitalize.js
-var capitalize = __webpack_require__(7);
+var capitalize = __webpack_require__(6);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/FormLabel/FormLabel.js
 
@@ -4083,290 +3764,42 @@ var InputLabel_InputLabel = react["forwardRef"](function InputLabel(props, ref) 
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony export hexToRgb */
-/* unused harmony export rgbToHex */
-/* unused harmony export hslToRgb */
-/* unused harmony export decomposeColor */
-/* unused harmony export recomposeColor */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getContrastRatio; });
-/* unused harmony export getLuminance */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return emphasize; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return fade; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return darken; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return lighten; });
-/* eslint-disable no-use-before-define */
-
-/**
- * Returns a number whose value is limited to the given range.
- *
- * @param {number} value The value to be clamped
- * @param {number} min The lower boundary of the output range
- * @param {number} max The upper boundary of the output range
- * @returns {number} A number in the range [min, max]
- */
-function clamp(value) {
-  var min = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-  var max = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
-
-  if (false) {}
-
-  return Math.min(Math.max(min, value), max);
-}
-/**
- * Converts a color from CSS hex format to CSS rgb format.
- *
- * @param {string} color - Hex color, i.e. #nnn or #nnnnnn
- * @returns {string} A CSS rgb color string
- */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _objectSpread2; });
+/* harmony import */ var _defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(26);
 
 
-function hexToRgb(color) {
-  color = color.substr(1);
-  var re = new RegExp(".{1,".concat(color.length / 3, "}"), 'g');
-  var colors = color.match(re);
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
 
-  if (colors && colors[0].length === 1) {
-    colors = colors.map(function (n) {
-      return n + n;
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
     });
+    keys.push.apply(keys, symbols);
   }
 
-  return colors ? "rgb(".concat(colors.map(function (n) {
-    return parseInt(n, 16);
-  }).join(', '), ")") : '';
+  return keys;
 }
 
-function intToHex(int) {
-  var hex = int.toString(16);
-  return hex.length === 1 ? "0".concat(hex) : hex;
-}
-/**
- * Converts a color from CSS rgb format to CSS hex format.
- *
- * @param {string} color - RGB color, i.e. rgb(n, n, n)
- * @returns {string} A CSS rgb color string, i.e. #nnnnnn
- */
+function _objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
 
-
-function rgbToHex(color) {
-  // Idempotent
-  if (color.indexOf('#') === 0) {
-    return color;
-  }
-
-  var _decomposeColor = decomposeColor(color),
-      values = _decomposeColor.values;
-
-  return "#".concat(values.map(function (n) {
-    return intToHex(n);
-  }).join(''));
-}
-/**
- * Converts a color from hsl format to rgb format.
- *
- * @param {string} color - HSL color values
- * @returns {string} rgb color values
- */
-
-function hslToRgb(color) {
-  color = decomposeColor(color);
-  var _color = color,
-      values = _color.values;
-  var h = values[0];
-  var s = values[1] / 100;
-  var l = values[2] / 100;
-  var a = s * Math.min(l, 1 - l);
-
-  var f = function f(n) {
-    var k = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (n + h / 30) % 12;
-    return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-  };
-
-  var type = 'rgb';
-  var rgb = [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)];
-
-  if (color.type === 'hsla') {
-    type += 'a';
-    rgb.push(values[3]);
-  }
-
-  return recomposeColor({
-    type: type,
-    values: rgb
-  });
-}
-/**
- * Returns an object with the type and values of a color.
- *
- * Note: Does not support rgb % values.
- *
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @returns {object} - A MUI color object: {type: string, values: number[]}
- */
-
-function decomposeColor(color) {
-  // Idempotent
-  if (color.type) {
-    return color;
-  }
-
-  if (color.charAt(0) === '#') {
-    return decomposeColor(hexToRgb(color));
-  }
-
-  var marker = color.indexOf('(');
-  var type = color.substring(0, marker);
-
-  if (['rgb', 'rgba', 'hsl', 'hsla'].indexOf(type) === -1) {
-    throw new Error(["Material-UI: unsupported `".concat(color, "` color."), 'We support the following formats: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla().'].join('\n'));
-  }
-
-  var values = color.substring(marker + 1, color.length - 1).split(',');
-  values = values.map(function (value) {
-    return parseFloat(value);
-  });
-  return {
-    type: type,
-    values: values
-  };
-}
-/**
- * Converts a color object with type and values to a string.
- *
- * @param {object} color - Decomposed color
- * @param {string} color.type - One of: 'rgb', 'rgba', 'hsl', 'hsla'
- * @param {array} color.values - [n,n,n] or [n,n,n,n]
- * @returns {string} A CSS color string
- */
-
-function recomposeColor(color) {
-  var type = color.type;
-  var values = color.values;
-
-  if (type.indexOf('rgb') !== -1) {
-    // Only convert the first 3 values to int (i.e. not alpha)
-    values = values.map(function (n, i) {
-      return i < 3 ? parseInt(n, 10) : n;
-    });
-  } else if (type.indexOf('hsl') !== -1) {
-    values[1] = "".concat(values[1], "%");
-    values[2] = "".concat(values[2], "%");
-  }
-
-  return "".concat(type, "(").concat(values.join(', '), ")");
-}
-/**
- * Calculates the contrast ratio between two colors.
- *
- * Formula: https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- *
- * @param {string} foreground - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @param {string} background - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @returns {number} A contrast ratio value in the range 0 - 21.
- */
-
-function getContrastRatio(foreground, background) {
-  var lumA = getLuminance(foreground);
-  var lumB = getLuminance(background);
-  return (Math.max(lumA, lumB) + 0.05) / (Math.min(lumA, lumB) + 0.05);
-}
-/**
- * The relative brightness of any point in a color space,
- * normalized to 0 for darkest black and 1 for lightest white.
- *
- * Formula: https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- *
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @returns {number} The relative brightness of the color in the range 0 - 1
- */
-
-function getLuminance(color) {
-  color = decomposeColor(color);
-  var rgb = color.type === 'hsl' ? decomposeColor(hslToRgb(color)).values : color.values;
-  rgb = rgb.map(function (val) {
-    val /= 255; // normalized
-
-    return val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
-  }); // Truncate at 3 digits
-
-  return Number((0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]).toFixed(3));
-}
-/**
- * Darken or lighten a color, depending on its luminance.
- * Light colors are darkened, dark colors are lightened.
- *
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @param {number} coefficient=0.15 - multiplier in the range 0 - 1
- * @returns {string} A CSS color string. Hex input values are returned as rgb
- */
-
-function emphasize(color) {
-  var coefficient = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.15;
-  return getLuminance(color) > 0.5 ? darken(color, coefficient) : lighten(color, coefficient);
-}
-/**
- * Set the absolute transparency of a color.
- * Any existing alpha values are overwritten.
- *
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @param {number} value - value to set the alpha channel to in the range 0 -1
- * @returns {string} A CSS color string. Hex input values are returned as rgb
- */
-
-function fade(color, value) {
-  color = decomposeColor(color);
-  value = clamp(value);
-
-  if (color.type === 'rgb' || color.type === 'hsl') {
-    color.type += 'a';
-  }
-
-  color.values[3] = value;
-  return recomposeColor(color);
-}
-/**
- * Darkens a color.
- *
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @param {number} coefficient - multiplier in the range 0 - 1
- * @returns {string} A CSS color string. Hex input values are returned as rgb
- */
-
-function darken(color, coefficient) {
-  color = decomposeColor(color);
-  coefficient = clamp(coefficient);
-
-  if (color.type.indexOf('hsl') !== -1) {
-    color.values[2] *= 1 - coefficient;
-  } else if (color.type.indexOf('rgb') !== -1) {
-    for (var i = 0; i < 3; i += 1) {
-      color.values[i] *= 1 - coefficient;
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        Object(_defineProperty__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
     }
   }
 
-  return recomposeColor(color);
-}
-/**
- * Lightens a color.
- *
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @param {number} coefficient - multiplier in the range 0 - 1
- * @returns {string} A CSS color string. Hex input values are returned as rgb
- */
-
-function lighten(color, coefficient) {
-  color = decomposeColor(color);
-  coefficient = clamp(coefficient);
-
-  if (color.type.indexOf('hsl') !== -1) {
-    color.values[2] += (100 - color.values[2]) * coefficient;
-  } else if (color.type.indexOf('rgb') !== -1) {
-    for (var i = 0; i < 3; i += 1) {
-      color.values[i] += (255 - color.values[i]) * coefficient;
-    }
-  }
-
-  return recomposeColor(color);
+  return target;
 }
 
 /***/ }),
@@ -4407,3873 +3840,7 @@ function _createClass(Constructor, protoProps, staticProps) {
 
 /***/ }),
 
-/***/ 150:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export isPlainObject */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return deepmerge; });
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _babel_runtime_helpers_esm_typeof__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(26);
-
-
-function isPlainObject(item) {
-  return item && Object(_babel_runtime_helpers_esm_typeof__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(item) === 'object' && item.constructor === Object;
-}
-function deepmerge(target, source) {
-  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {
-    clone: true
-  };
-  var output = options.clone ? Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, target) : target;
-
-  if (isPlainObject(target) && isPlainObject(source)) {
-    Object.keys(source).forEach(function (key) {
-      // Avoid prototype pollution
-      if (key === '__proto__') {
-        return;
-      }
-
-      if (isPlainObject(source[key]) && key in target) {
-        output[key] = deepmerge(target[key], source[key], options);
-      } else {
-        output[key] = source[key];
-      }
-    });
-  }
-
-  return output;
-}
-
-/***/ }),
-
-/***/ 151:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _useTheme_ThemeContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(45);
-/* harmony import */ var _useTheme__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(85);
-/* harmony import */ var _nested__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(52);
-
-
-
-
-
-
- // To support composition of theme.
-
-function mergeOuterLocalTheme(outerTheme, localTheme) {
-  if (typeof localTheme === 'function') {
-    var mergedTheme = localTheme(outerTheme);
-
-    if (false) {}
-
-    return mergedTheme;
-  }
-
-  return Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, outerTheme), localTheme);
-}
-/**
- * This component takes a `theme` prop.
- * It makes the `theme` available down the React tree thanks to React context.
- * This component should preferably be used at **the root of your component tree**.
- */
-
-
-function ThemeProvider(props) {
-  var children = props.children,
-      localTheme = props.theme;
-  var outerTheme = Object(_useTheme__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])();
-
-  if (false) {}
-
-  var theme = react__WEBPACK_IMPORTED_MODULE_1___default.a.useMemo(function () {
-    var output = outerTheme === null ? localTheme : mergeOuterLocalTheme(outerTheme, localTheme);
-
-    if (output != null) {
-      output[_nested__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"]] = outerTheme !== null;
-    }
-
-    return output;
-  }, [localTheme, outerTheme]);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_useTheme_ThemeContext__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].Provider, {
-    value: theme
-  }, children);
-}
-
- false ? undefined : void 0;
-
-if (false) {}
-
-/* harmony default export */ __webpack_exports__["a"] = (ThemeProvider);
-
-/***/ }),
-
-/***/ 16:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _slicedToArray; });
-
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
-function _iterableToArrayLimit(arr, i) {
-  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
-
-  try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
-    }
-  }
-
-  return _arr;
-}
-// EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-var unsupportedIterableToArray = __webpack_require__(43);
-
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js
-
-
-
-
-function _slicedToArray(arr, i) {
-  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || Object(unsupportedIterableToArray["a" /* default */])(arr, i) || _nonIterableRest();
-}
-
-/***/ }),
-
-/***/ 17:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ownerDocument; });
-function ownerDocument(node) {
-  return node && node.ownerDocument || document;
-}
-
-/***/ }),
-
-/***/ 18:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _objectWithoutPropertiesLoose; });
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
-/***/ }),
-
-/***/ 182:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return mergeClasses; });
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-
-
-function mergeClasses() {
-  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var baseClasses = options.baseClasses,
-      newClasses = options.newClasses,
-      Component = options.Component;
-
-  if (!newClasses) {
-    return baseClasses;
-  }
-
-  var nextClasses = Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, baseClasses);
-
-  if (false) {}
-
-  Object.keys(newClasses).forEach(function (key) {
-    if (false) {}
-
-    if (newClasses[key]) {
-      nextClasses[key] = "".concat(baseClasses[key], " ").concat(newClasses[key]);
-    }
-  });
-  return nextClasses;
-}
-
-/***/ }),
-
-/***/ 183:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getThemeProps; });
-/* eslint-disable no-restricted-syntax */
-function getThemeProps(params) {
-  var theme = params.theme,
-      name = params.name,
-      props = params.props;
-
-  if (!theme || !theme.props || !theme.props[name]) {
-    return props;
-  } // Resolve default props, code borrow from React source.
-  // https://github.com/facebook/react/blob/15a8f031838a553e41c0b66eb1bcf1da8448104d/packages/react/src/ReactElement.js#L221
-
-
-  var defaultProps = theme.props[name];
-  var propName;
-
-  for (propName in defaultProps) {
-    if (props[propName] === undefined) {
-      props[propName] = defaultProps[propName];
-    }
-  }
-
-  return props;
-}
-
-/***/ }),
-
-/***/ 184:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export styles */
-/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
-/* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5);
-
-
-
-
-
-
-
-var styles = function styles(theme) {
-  var elevations = {};
-  theme.shadows.forEach(function (shadow, index) {
-    elevations["elevation".concat(index)] = {
-      boxShadow: shadow
-    };
-  });
-  return Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])({
-    /* Styles applied to the root element. */
-    root: {
-      backgroundColor: theme.palette.background.paper,
-      color: theme.palette.text.primary,
-      transition: theme.transitions.create('box-shadow')
-    },
-
-    /* Styles applied to the root element if `square={false}`. */
-    rounded: {
-      borderRadius: theme.shape.borderRadius
-    },
-
-    /* Styles applied to the root element if `variant="outlined"` */
-    outlined: {
-      border: "1px solid ".concat(theme.palette.divider)
-    }
-  }, elevations);
-};
-var Paper = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function Paper(props, ref) {
-  var classes = props.classes,
-      className = props.className,
-      _props$component = props.component,
-      Component = _props$component === void 0 ? 'div' : _props$component,
-      _props$square = props.square,
-      square = _props$square === void 0 ? false : _props$square,
-      _props$elevation = props.elevation,
-      elevation = _props$elevation === void 0 ? 1 : _props$elevation,
-      _props$variant = props.variant,
-      variant = _props$variant === void 0 ? 'elevation' : _props$variant,
-      other = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(props, ["classes", "className", "component", "square", "elevation", "variant"]);
-
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"](Component, Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])({
-    className: Object(clsx__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(classes.root, className, variant === 'outlined' ? classes.outlined : classes["elevation".concat(elevation)], !square && classes.rounded),
-    ref: ref
-  }, other));
-});
- false ? undefined : void 0;
-/* harmony default export */ __webpack_exports__["a"] = (Object(_styles_withStyles__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(styles, {
-  name: 'MuiPaper'
-})(Paper));
-
-/***/ }),
-
-/***/ 185:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _utils_setRef__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(27);
-/* harmony import */ var _utils_useForkRef__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
-
-
-
-
-
-
-
-function getContainer(container) {
-  container = typeof container === 'function' ? container() : container; // #StrictMode ready
-
-  return react_dom__WEBPACK_IMPORTED_MODULE_1__["findDOMNode"](container);
-}
-
-var useEnhancedEffect = typeof window !== 'undefined' ? react__WEBPACK_IMPORTED_MODULE_0__["useLayoutEffect"] : react__WEBPACK_IMPORTED_MODULE_0__["useEffect"];
-/**
- * Portals provide a first-class way to render children into a DOM node
- * that exists outside the DOM hierarchy of the parent component.
- */
-
-var Portal = react__WEBPACK_IMPORTED_MODULE_0__["forwardRef"](function Portal(props, ref) {
-  var children = props.children,
-      container = props.container,
-      _props$disablePortal = props.disablePortal,
-      disablePortal = _props$disablePortal === void 0 ? false : _props$disablePortal,
-      onRendered = props.onRendered;
-
-  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__["useState"](null),
-      mountNode = _React$useState[0],
-      setMountNode = _React$useState[1];
-
-  var handleRef = Object(_utils_useForkRef__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(react__WEBPACK_IMPORTED_MODULE_0__["isValidElement"](children) ? children.ref : null, ref);
-  useEnhancedEffect(function () {
-    if (!disablePortal) {
-      setMountNode(getContainer(container) || document.body);
-    }
-  }, [container, disablePortal]);
-  useEnhancedEffect(function () {
-    if (mountNode && !disablePortal) {
-      Object(_utils_setRef__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(ref, mountNode);
-      return function () {
-        Object(_utils_setRef__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(ref, null);
-      };
-    }
-
-    return undefined;
-  }, [ref, mountNode, disablePortal]);
-  useEnhancedEffect(function () {
-    if (onRendered && (mountNode || disablePortal)) {
-      onRendered();
-    }
-  }, [onRendered, mountNode, disablePortal]);
-
-  if (disablePortal) {
-    if (react__WEBPACK_IMPORTED_MODULE_0__["isValidElement"](children)) {
-      return react__WEBPACK_IMPORTED_MODULE_0__["cloneElement"](children, {
-        ref: handleRef
-      });
-    }
-
-    return children;
-  }
-
-  return mountNode ? react_dom__WEBPACK_IMPORTED_MODULE_1__["createPortal"](children, mountNode) : mountNode;
-});
- false ? undefined : void 0;
-
-if (false) {}
-
-/* harmony default export */ __webpack_exports__["a"] = (Portal);
-
-/***/ }),
-
-/***/ 186:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export styles */
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
-/* harmony import */ var _Input__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(111);
-/* harmony import */ var _FilledInput__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(112);
-/* harmony import */ var _OutlinedInput__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(116);
-/* harmony import */ var _InputLabel__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(117);
-/* harmony import */ var _FormControl__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(113);
-/* harmony import */ var _FormHelperText__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(114);
-/* harmony import */ var _Select__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(115);
-/* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var variantComponent = {
-  standard: _Input__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"],
-  filled: _FilledInput__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"],
-  outlined: _OutlinedInput__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"]
-};
-var styles = {
-  /* Styles applied to the root element. */
-  root: {}
-};
-/**
- * The `TextField` is a convenience wrapper for the most common cases (80%).
- * It cannot be all things to all people, otherwise the API would grow out of control.
- *
- * ## Advanced Configuration
- *
- * It's important to understand that the text field is a simple abstraction
- * on top of the following components:
- *
- * - [FormControl](/api/form-control/)
- * - [InputLabel](/api/input-label/)
- * - [FilledInput](/api/filled-input/)
- * - [OutlinedInput](/api/outlined-input/)
- * - [Input](/api/input/)
- * - [FormHelperText](/api/form-helper-text/)
- *
- * If you wish to alter the props applied to the `input` element, you can do so as follows:
- *
- * ```jsx
- * const inputProps = {
- *   step: 300,
- * };
- *
- * return <TextField id="time" type="time" inputProps={inputProps} />;
- * ```
- *
- * For advanced cases, please look at the source of TextField by clicking on the
- * "Edit this page" button above. Consider either:
- *
- * - using the upper case props for passing values directly to the components
- * - using the underlying components directly as shown in the demos
- */
-
-var TextField = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function TextField(props, ref) {
-  var autoComplete = props.autoComplete,
-      _props$autoFocus = props.autoFocus,
-      autoFocus = _props$autoFocus === void 0 ? false : _props$autoFocus,
-      children = props.children,
-      classes = props.classes,
-      className = props.className,
-      _props$color = props.color,
-      color = _props$color === void 0 ? 'primary' : _props$color,
-      defaultValue = props.defaultValue,
-      _props$disabled = props.disabled,
-      disabled = _props$disabled === void 0 ? false : _props$disabled,
-      _props$error = props.error,
-      error = _props$error === void 0 ? false : _props$error,
-      FormHelperTextProps = props.FormHelperTextProps,
-      _props$fullWidth = props.fullWidth,
-      fullWidth = _props$fullWidth === void 0 ? false : _props$fullWidth,
-      helperText = props.helperText,
-      hiddenLabel = props.hiddenLabel,
-      id = props.id,
-      InputLabelProps = props.InputLabelProps,
-      inputProps = props.inputProps,
-      InputProps = props.InputProps,
-      inputRef = props.inputRef,
-      label = props.label,
-      _props$multiline = props.multiline,
-      multiline = _props$multiline === void 0 ? false : _props$multiline,
-      name = props.name,
-      onBlur = props.onBlur,
-      onChange = props.onChange,
-      onFocus = props.onFocus,
-      placeholder = props.placeholder,
-      _props$required = props.required,
-      required = _props$required === void 0 ? false : _props$required,
-      rows = props.rows,
-      rowsMax = props.rowsMax,
-      _props$select = props.select,
-      select = _props$select === void 0 ? false : _props$select,
-      SelectProps = props.SelectProps,
-      type = props.type,
-      value = props.value,
-      _props$variant = props.variant,
-      variant = _props$variant === void 0 ? 'standard' : _props$variant,
-      other = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(props, ["autoComplete", "autoFocus", "children", "classes", "className", "color", "defaultValue", "disabled", "error", "FormHelperTextProps", "fullWidth", "helperText", "hiddenLabel", "id", "InputLabelProps", "inputProps", "InputProps", "inputRef", "label", "multiline", "name", "onBlur", "onChange", "onFocus", "placeholder", "required", "rows", "rowsMax", "select", "SelectProps", "type", "value", "variant"]);
-
-  if (false) {}
-
-  var InputMore = {};
-
-  if (variant === 'outlined') {
-    if (InputLabelProps && typeof InputLabelProps.shrink !== 'undefined') {
-      InputMore.notched = InputLabelProps.shrink;
-    }
-
-    if (label) {
-      InputMore.label = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"](react__WEBPACK_IMPORTED_MODULE_2__["Fragment"], null, label, required && "\xA0*");
-    }
-  }
-
-  if (select) {
-    // unset defaults from textbox inputs
-    if (!SelectProps || !SelectProps.native) {
-      InputMore.id = undefined;
-    }
-
-    InputMore['aria-describedby'] = undefined;
-  }
-
-  var helperTextId = helperText && id ? "".concat(id, "-helper-text") : undefined;
-  var inputLabelId = label && id ? "".concat(id, "-label") : undefined;
-  var InputComponent = variantComponent[variant];
-  var InputElement = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"](InputComponent, Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
-    "aria-describedby": helperTextId,
-    autoComplete: autoComplete,
-    autoFocus: autoFocus,
-    defaultValue: defaultValue,
-    fullWidth: fullWidth,
-    multiline: multiline,
-    name: name,
-    rows: rows,
-    rowsMax: rowsMax,
-    type: type,
-    value: value,
-    id: id,
-    inputRef: inputRef,
-    onBlur: onBlur,
-    onChange: onChange,
-    onFocus: onFocus,
-    placeholder: placeholder,
-    inputProps: inputProps
-  }, InputMore, InputProps));
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"](_FormControl__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
-    className: Object(clsx__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(classes.root, className),
-    disabled: disabled,
-    error: error,
-    fullWidth: fullWidth,
-    hiddenLabel: hiddenLabel,
-    ref: ref,
-    required: required,
-    color: color,
-    variant: variant
-  }, other), label && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"](_InputLabel__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
-    htmlFor: id,
-    id: inputLabelId
-  }, InputLabelProps), label), select ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"](_Select__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
-    "aria-describedby": helperTextId,
-    id: id,
-    labelId: inputLabelId,
-    value: value,
-    input: InputElement
-  }, SelectProps), children) : InputElement, helperText && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"](_FormHelperText__WEBPACK_IMPORTED_MODULE_10__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
-    id: helperTextId
-  }, FormHelperTextProps), helperText));
-});
- false ? undefined : void 0;
-/* harmony default export */ __webpack_exports__["a"] = (Object(_styles_withStyles__WEBPACK_IMPORTED_MODULE_12__[/* default */ "a"])(styles, {
-  name: 'MuiTextField'
-})(TextField));
-
-/***/ }),
-
-/***/ 187:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export styles */
-/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
-/* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5);
-/* harmony import */ var _styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(12);
-/* harmony import */ var _ButtonBase__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(100);
-/* harmony import */ var _utils_capitalize__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(7);
-
-
-
-
-
-
-
-
-
-var styles = function styles(theme) {
-  return {
-    /* Styles applied to the root element. */
-    root: Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])({}, theme.typography.button, {
-      boxSizing: 'border-box',
-      minWidth: 64,
-      padding: '6px 16px',
-      borderRadius: theme.shape.borderRadius,
-      color: theme.palette.text.primary,
-      transition: theme.transitions.create(['background-color', 'box-shadow', 'border'], {
-        duration: theme.transitions.duration.short
-      }),
-      '&:hover': {
-        textDecoration: 'none',
-        backgroundColor: Object(_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__[/* fade */ "c"])(theme.palette.text.primary, theme.palette.action.hoverOpacity),
-        // Reset on touch devices, it doesn't add specificity
-        '@media (hover: none)': {
-          backgroundColor: 'transparent'
-        },
-        '&$disabled': {
-          backgroundColor: 'transparent'
-        }
-      },
-      '&$disabled': {
-        color: theme.palette.action.disabled
-      }
-    }),
-
-    /* Styles applied to the span element that wraps the children. */
-    label: {
-      width: '100%',
-      // Ensure the correct width for iOS Safari
-      display: 'inherit',
-      alignItems: 'inherit',
-      justifyContent: 'inherit'
-    },
-
-    /* Styles applied to the root element if `variant="text"`. */
-    text: {
-      padding: '6px 8px'
-    },
-
-    /* Styles applied to the root element if `variant="text"` and `color="primary"`. */
-    textPrimary: {
-      color: theme.palette.primary.main,
-      '&:hover': {
-        backgroundColor: Object(_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__[/* fade */ "c"])(theme.palette.primary.main, theme.palette.action.hoverOpacity),
-        // Reset on touch devices, it doesn't add specificity
-        '@media (hover: none)': {
-          backgroundColor: 'transparent'
-        }
-      }
-    },
-
-    /* Styles applied to the root element if `variant="text"` and `color="secondary"`. */
-    textSecondary: {
-      color: theme.palette.secondary.main,
-      '&:hover': {
-        backgroundColor: Object(_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__[/* fade */ "c"])(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
-        // Reset on touch devices, it doesn't add specificity
-        '@media (hover: none)': {
-          backgroundColor: 'transparent'
-        }
-      }
-    },
-
-    /* Styles applied to the root element if `variant="outlined"`. */
-    outlined: {
-      padding: '5px 15px',
-      border: "1px solid ".concat(theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'),
-      '&$disabled': {
-        border: "1px solid ".concat(theme.palette.action.disabledBackground)
-      }
-    },
-
-    /* Styles applied to the root element if `variant="outlined"` and `color="primary"`. */
-    outlinedPrimary: {
-      color: theme.palette.primary.main,
-      border: "1px solid ".concat(Object(_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__[/* fade */ "c"])(theme.palette.primary.main, 0.5)),
-      '&:hover': {
-        border: "1px solid ".concat(theme.palette.primary.main),
-        backgroundColor: Object(_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__[/* fade */ "c"])(theme.palette.primary.main, theme.palette.action.hoverOpacity),
-        // Reset on touch devices, it doesn't add specificity
-        '@media (hover: none)': {
-          backgroundColor: 'transparent'
-        }
-      }
-    },
-
-    /* Styles applied to the root element if `variant="outlined"` and `color="secondary"`. */
-    outlinedSecondary: {
-      color: theme.palette.secondary.main,
-      border: "1px solid ".concat(Object(_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__[/* fade */ "c"])(theme.palette.secondary.main, 0.5)),
-      '&:hover': {
-        border: "1px solid ".concat(theme.palette.secondary.main),
-        backgroundColor: Object(_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__[/* fade */ "c"])(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
-        // Reset on touch devices, it doesn't add specificity
-        '@media (hover: none)': {
-          backgroundColor: 'transparent'
-        }
-      },
-      '&$disabled': {
-        border: "1px solid ".concat(theme.palette.action.disabled)
-      }
-    },
-
-    /* Styles applied to the root element if `variant="contained"`. */
-    contained: {
-      color: theme.palette.getContrastText(theme.palette.grey[300]),
-      backgroundColor: theme.palette.grey[300],
-      boxShadow: theme.shadows[2],
-      '&:hover': {
-        backgroundColor: theme.palette.grey.A100,
-        boxShadow: theme.shadows[4],
-        // Reset on touch devices, it doesn't add specificity
-        '@media (hover: none)': {
-          boxShadow: theme.shadows[2],
-          backgroundColor: theme.palette.grey[300]
-        },
-        '&$disabled': {
-          backgroundColor: theme.palette.action.disabledBackground
-        }
-      },
-      '&$focusVisible': {
-        boxShadow: theme.shadows[6]
-      },
-      '&:active': {
-        boxShadow: theme.shadows[8]
-      },
-      '&$disabled': {
-        color: theme.palette.action.disabled,
-        boxShadow: theme.shadows[0],
-        backgroundColor: theme.palette.action.disabledBackground
-      }
-    },
-
-    /* Styles applied to the root element if `variant="contained"` and `color="primary"`. */
-    containedPrimary: {
-      color: theme.palette.primary.contrastText,
-      backgroundColor: theme.palette.primary.main,
-      '&:hover': {
-        backgroundColor: theme.palette.primary.dark,
-        // Reset on touch devices, it doesn't add specificity
-        '@media (hover: none)': {
-          backgroundColor: theme.palette.primary.main
-        }
-      }
-    },
-
-    /* Styles applied to the root element if `variant="contained"` and `color="secondary"`. */
-    containedSecondary: {
-      color: theme.palette.secondary.contrastText,
-      backgroundColor: theme.palette.secondary.main,
-      '&:hover': {
-        backgroundColor: theme.palette.secondary.dark,
-        // Reset on touch devices, it doesn't add specificity
-        '@media (hover: none)': {
-          backgroundColor: theme.palette.secondary.main
-        }
-      }
-    },
-
-    /* Styles applied to the root element if `disableElevation={true}`. */
-    disableElevation: {
-      boxShadow: 'none',
-      '&:hover': {
-        boxShadow: 'none'
-      },
-      '&$focusVisible': {
-        boxShadow: 'none'
-      },
-      '&:active': {
-        boxShadow: 'none'
-      },
-      '&$disabled': {
-        boxShadow: 'none'
-      }
-    },
-
-    /* Pseudo-class applied to the ButtonBase root element if the button is keyboard focused. */
-    focusVisible: {},
-
-    /* Pseudo-class applied to the root element if `disabled={true}`. */
-    disabled: {},
-
-    /* Styles applied to the root element if `color="inherit"`. */
-    colorInherit: {
-      color: 'inherit',
-      borderColor: 'currentColor'
-    },
-
-    /* Styles applied to the root element if `size="small"` and `variant="text"`. */
-    textSizeSmall: {
-      padding: '4px 5px',
-      fontSize: theme.typography.pxToRem(13)
-    },
-
-    /* Styles applied to the root element if `size="large"` and `variant="text"`. */
-    textSizeLarge: {
-      padding: '8px 11px',
-      fontSize: theme.typography.pxToRem(15)
-    },
-
-    /* Styles applied to the root element if `size="small"` and `variant="outlined"`. */
-    outlinedSizeSmall: {
-      padding: '3px 9px',
-      fontSize: theme.typography.pxToRem(13)
-    },
-
-    /* Styles applied to the root element if `size="large"` and `variant="outlined"`. */
-    outlinedSizeLarge: {
-      padding: '7px 21px',
-      fontSize: theme.typography.pxToRem(15)
-    },
-
-    /* Styles applied to the root element if `size="small"` and `variant="contained"`. */
-    containedSizeSmall: {
-      padding: '4px 10px',
-      fontSize: theme.typography.pxToRem(13)
-    },
-
-    /* Styles applied to the root element if `size="large"` and `variant="contained"`. */
-    containedSizeLarge: {
-      padding: '8px 22px',
-      fontSize: theme.typography.pxToRem(15)
-    },
-
-    /* Styles applied to the root element if `size="small"`. */
-    sizeSmall: {},
-
-    /* Styles applied to the root element if `size="large"`. */
-    sizeLarge: {},
-
-    /* Styles applied to the root element if `fullWidth={true}`. */
-    fullWidth: {
-      width: '100%'
-    },
-
-    /* Styles applied to the startIcon element if supplied. */
-    startIcon: {
-      display: 'inherit',
-      marginRight: 8,
-      marginLeft: -4,
-      '&$iconSizeSmall': {
-        marginLeft: -2
-      }
-    },
-
-    /* Styles applied to the endIcon element if supplied. */
-    endIcon: {
-      display: 'inherit',
-      marginRight: -4,
-      marginLeft: 8,
-      '&$iconSizeSmall': {
-        marginRight: -2
-      }
-    },
-
-    /* Styles applied to the icon element if supplied and `size="small"`. */
-    iconSizeSmall: {
-      '& > *:first-child': {
-        fontSize: 18
-      }
-    },
-
-    /* Styles applied to the icon element if supplied and `size="medium"`. */
-    iconSizeMedium: {
-      '& > *:first-child': {
-        fontSize: 20
-      }
-    },
-
-    /* Styles applied to the icon element if supplied and `size="large"`. */
-    iconSizeLarge: {
-      '& > *:first-child': {
-        fontSize: 22
-      }
-    }
-  };
-};
-var Button = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function Button(props, ref) {
-  var children = props.children,
-      classes = props.classes,
-      className = props.className,
-      _props$color = props.color,
-      color = _props$color === void 0 ? 'default' : _props$color,
-      _props$component = props.component,
-      component = _props$component === void 0 ? 'button' : _props$component,
-      _props$disabled = props.disabled,
-      disabled = _props$disabled === void 0 ? false : _props$disabled,
-      _props$disableElevati = props.disableElevation,
-      disableElevation = _props$disableElevati === void 0 ? false : _props$disableElevati,
-      _props$disableFocusRi = props.disableFocusRipple,
-      disableFocusRipple = _props$disableFocusRi === void 0 ? false : _props$disableFocusRi,
-      endIconProp = props.endIcon,
-      focusVisibleClassName = props.focusVisibleClassName,
-      _props$fullWidth = props.fullWidth,
-      fullWidth = _props$fullWidth === void 0 ? false : _props$fullWidth,
-      _props$size = props.size,
-      size = _props$size === void 0 ? 'medium' : _props$size,
-      startIconProp = props.startIcon,
-      _props$type = props.type,
-      type = _props$type === void 0 ? 'button' : _props$type,
-      _props$variant = props.variant,
-      variant = _props$variant === void 0 ? 'text' : _props$variant,
-      other = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(props, ["children", "classes", "className", "color", "component", "disabled", "disableElevation", "disableFocusRipple", "endIcon", "focusVisibleClassName", "fullWidth", "size", "startIcon", "type", "variant"]);
-
-  var startIcon = startIconProp && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"]("span", {
-    className: Object(clsx__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(classes.startIcon, classes["iconSize".concat(Object(_utils_capitalize__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"])(size))])
-  }, startIconProp);
-  var endIcon = endIconProp && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"]("span", {
-    className: Object(clsx__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(classes.endIcon, classes["iconSize".concat(Object(_utils_capitalize__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"])(size))])
-  }, endIconProp);
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"](_ButtonBase__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])({
-    className: Object(clsx__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(classes.root, classes[variant], className, color === 'inherit' ? classes.colorInherit : color !== 'default' && classes["".concat(variant).concat(Object(_utils_capitalize__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"])(color))], size !== 'medium' && [classes["".concat(variant, "Size").concat(Object(_utils_capitalize__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"])(size))], classes["size".concat(Object(_utils_capitalize__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"])(size))]], disableElevation && classes.disableElevation, disabled && classes.disabled, fullWidth && classes.fullWidth),
-    component: component,
-    disabled: disabled,
-    focusRipple: !disableFocusRipple,
-    focusVisibleClassName: Object(clsx__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(classes.focusVisible, focusVisibleClassName),
-    ref: ref,
-    type: type
-  }, other), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"]("span", {
-    className: classes.label
-  }, startIcon, children, endIcon));
-});
- false ? undefined : void 0;
-/* harmony default export */ __webpack_exports__["a"] = (Object(_styles_withStyles__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(styles, {
-  name: 'MuiButton'
-})(Button));
-
-/***/ }),
-
-/***/ 188:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export styles */
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
-/* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5);
-/* harmony import */ var _utils_capitalize__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(7);
-
-
-
-
-
-
-
-
-var SIZE = 44;
-
-function getRelativeValue(value, min, max) {
-  return (Math.min(Math.max(min, value), max) - min) / (max - min);
-}
-
-function easeOut(t) {
-  t = getRelativeValue(t, 0, 1); // https://gist.github.com/gre/1650294
-
-  t = (t -= 1) * t * t + 1;
-  return t;
-}
-
-function easeIn(t) {
-  return t * t;
-}
-
-var styles = function styles(theme) {
-  return {
-    /* Styles applied to the root element. */
-    root: {
-      display: 'inline-block'
-    },
-
-    /* Styles applied to the root element if `variant="static"`. */
-    static: {
-      transition: theme.transitions.create('transform')
-    },
-
-    /* Styles applied to the root element if `variant="indeterminate"`. */
-    indeterminate: {
-      animation: '$circular-rotate 1.4s linear infinite'
-    },
-
-    /* Styles applied to the root element if `color="primary"`. */
-    colorPrimary: {
-      color: theme.palette.primary.main
-    },
-
-    /* Styles applied to the root element if `color="secondary"`. */
-    colorSecondary: {
-      color: theme.palette.secondary.main
-    },
-
-    /* Styles applied to the `svg` element. */
-    svg: {
-      display: 'block' // Keeps the progress centered
-
-    },
-
-    /* Styles applied to the `circle` svg path. */
-    circle: {
-      stroke: 'currentColor' // Use butt to follow the specification, by chance, it's already the default CSS value.
-      // strokeLinecap: 'butt',
-
-    },
-
-    /* Styles applied to the `circle` svg path if `variant="static"`. */
-    circleStatic: {
-      transition: theme.transitions.create('stroke-dashoffset')
-    },
-
-    /* Styles applied to the `circle` svg path if `variant="indeterminate"`. */
-    circleIndeterminate: {
-      animation: '$circular-dash 1.4s ease-in-out infinite',
-      // Some default value that looks fine waiting for the animation to kicks in.
-      strokeDasharray: '80px, 200px',
-      strokeDashoffset: '0px' // Add the unit to fix a Edge 16 and below bug.
-
-    },
-    '@keyframes circular-rotate': {
-      '100%': {
-        transform: 'rotate(360deg)'
-      }
-    },
-    '@keyframes circular-dash': {
-      '0%': {
-        strokeDasharray: '1px, 200px',
-        strokeDashoffset: '0px'
-      },
-      '50%': {
-        strokeDasharray: '100px, 200px',
-        strokeDashoffset: '-15px'
-      },
-      '100%': {
-        strokeDasharray: '100px, 200px',
-        strokeDashoffset: '-125px'
-      }
-    },
-
-    /* Styles applied to the `circle` svg path if `disableShrink={true}`. */
-    circleDisableShrink: {
-      animation: 'none'
-    }
-  };
-};
-/**
- * ## ARIA
- *
- * If the progress bar is describing the loading progress of a particular region of a page,
- * you should use `aria-describedby` to point to the progress bar, and set the `aria-busy`
- * attribute to `true` on that region until it has finished loading.
- */
-
-var CircularProgress = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function CircularProgress(props, ref) {
-  var classes = props.classes,
-      className = props.className,
-      _props$color = props.color,
-      color = _props$color === void 0 ? 'primary' : _props$color,
-      _props$disableShrink = props.disableShrink,
-      disableShrink = _props$disableShrink === void 0 ? false : _props$disableShrink,
-      _props$size = props.size,
-      size = _props$size === void 0 ? 40 : _props$size,
-      style = props.style,
-      _props$thickness = props.thickness,
-      thickness = _props$thickness === void 0 ? 3.6 : _props$thickness,
-      _props$value = props.value,
-      value = _props$value === void 0 ? 0 : _props$value,
-      _props$variant = props.variant,
-      variant = _props$variant === void 0 ? 'indeterminate' : _props$variant,
-      other = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(props, ["classes", "className", "color", "disableShrink", "size", "style", "thickness", "value", "variant"]);
-
-  var circleStyle = {};
-  var rootStyle = {};
-  var rootProps = {};
-
-  if (variant === 'determinate' || variant === 'static') {
-    var circumference = 2 * Math.PI * ((SIZE - thickness) / 2);
-    circleStyle.strokeDasharray = circumference.toFixed(3);
-    rootProps['aria-valuenow'] = Math.round(value);
-
-    if (variant === 'static') {
-      circleStyle.strokeDashoffset = "".concat(((100 - value) / 100 * circumference).toFixed(3), "px");
-      rootStyle.transform = 'rotate(-90deg)';
-    } else {
-      circleStyle.strokeDashoffset = "".concat((easeIn((100 - value) / 100) * circumference).toFixed(3), "px");
-      rootStyle.transform = "rotate(".concat((easeOut(value / 70) * 270).toFixed(3), "deg)");
-    }
-  }
-
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"]("div", Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
-    className: Object(clsx__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(classes.root, className, color !== 'inherit' && classes["color".concat(Object(_utils_capitalize__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"])(color))], {
-      'indeterminate': classes.indeterminate,
-      'static': classes.static
-    }[variant]),
-    style: Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
-      width: size,
-      height: size
-    }, rootStyle, {}, style),
-    ref: ref,
-    role: "progressbar"
-  }, rootProps, other), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"]("svg", {
-    className: classes.svg,
-    viewBox: "".concat(SIZE / 2, " ").concat(SIZE / 2, " ").concat(SIZE, " ").concat(SIZE)
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"]("circle", {
-    className: Object(clsx__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(classes.circle, disableShrink && classes.circleDisableShrink, {
-      'indeterminate': classes.circleIndeterminate,
-      'static': classes.circleStatic
-    }[variant]),
-    style: circleStyle,
-    cx: SIZE,
-    cy: SIZE,
-    r: (SIZE - thickness) / 2,
-    fill: "none",
-    strokeWidth: thickness
-  })));
-});
- false ? undefined : void 0;
-/* harmony default export */ __webpack_exports__["a"] = (Object(_styles_withStyles__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(styles, {
-  name: 'MuiCircularProgress',
-  flip: false
-})(CircularProgress));
-
-/***/ }),
-
-/***/ 19:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _defineProperty; });
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-/***/ }),
-
-/***/ 2:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _extends; });
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-/***/ }),
-
-/***/ 20:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return formControlState; });
-function formControlState(_ref) {
-  var props = _ref.props,
-      states = _ref.states,
-      muiFormControl = _ref.muiFormControl;
-  return states.reduce(function (acc, state) {
-    acc[state] = props[state];
-
-    if (muiFormControl) {
-      if (typeof props[state] === 'undefined') {
-        acc[state] = muiFormControl[state];
-      }
-    }
-
-    return acc;
-  }, {});
-}
-
-/***/ }),
-
-/***/ 21:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _inheritsLoose; });
-function _inheritsLoose(subClass, superClass) {
-  subClass.prototype = Object.create(superClass.prototype);
-  subClass.prototype.constructor = subClass;
-  subClass.__proto__ = superClass;
-}
-
-/***/ }),
-
-/***/ 216:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// UNUSED EXPORTS: styles
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
-var objectWithoutProperties = __webpack_require__(3);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
-var esm_extends = __webpack_require__(2);
-
-// EXTERNAL MODULE: ./node_modules/react/index.js
-var react = __webpack_require__(0);
-
-// EXTERNAL MODULE: ./node_modules/react-dom/index.js
-var react_dom = __webpack_require__(8);
-
-// EXTERNAL MODULE: ./node_modules/prop-types/index.js
-var prop_types = __webpack_require__(1);
-
-// EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/useTheme/useTheme.js
-var useTheme = __webpack_require__(85);
-
-// EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/getThemeProps/getThemeProps.js
-var getThemeProps = __webpack_require__(183);
-
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/ownerDocument.js
-var ownerDocument = __webpack_require__(17);
-
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Portal/Portal.js
-var Portal = __webpack_require__(185);
-
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/createChainedFunction.js
-var createChainedFunction = __webpack_require__(40);
-
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useForkRef.js
-var useForkRef = __webpack_require__(9);
-
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useEventCallback.js
-var useEventCallback = __webpack_require__(24);
-
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/zIndex.js
-var zIndex = __webpack_require__(51);
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
-var createClass = __webpack_require__(37);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 2 modules
-var toConsumableArray = __webpack_require__(22);
-
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/getScrollbarSize.js
-var getScrollbarSize = __webpack_require__(64);
-
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/ownerWindow.js
-var ownerWindow = __webpack_require__(46);
-
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Modal/ModalManager.js
-
-
-
-
-
- // Is a vertical scrollbar displayed?
-
-function isOverflowing(container) {
-  var doc = Object(ownerDocument["a" /* default */])(container);
-
-  if (doc.body === container) {
-    return Object(ownerWindow["a" /* default */])(doc).innerWidth > doc.documentElement.clientWidth;
-  }
-
-  return container.scrollHeight > container.clientHeight;
-}
-
-function ariaHidden(node, show) {
-  if (show) {
-    node.setAttribute('aria-hidden', 'true');
-  } else {
-    node.removeAttribute('aria-hidden');
-  }
-}
-
-function getPaddingRight(node) {
-  return parseInt(window.getComputedStyle(node)['padding-right'], 10) || 0;
-}
-
-function ariaHiddenSiblings(container, mountNode, currentNode) {
-  var nodesToExclude = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
-  var show = arguments.length > 4 ? arguments[4] : undefined;
-  var blacklist = [mountNode, currentNode].concat(Object(toConsumableArray["a" /* default */])(nodesToExclude));
-  var blacklistTagNames = ['TEMPLATE', 'SCRIPT', 'STYLE'];
-  [].forEach.call(container.children, function (node) {
-    if (node.nodeType === 1 && blacklist.indexOf(node) === -1 && blacklistTagNames.indexOf(node.tagName) === -1) {
-      ariaHidden(node, show);
-    }
-  });
-}
-
-function findIndexOf(containerInfo, callback) {
-  var idx = -1;
-  containerInfo.some(function (item, index) {
-    if (callback(item)) {
-      idx = index;
-      return true;
-    }
-
-    return false;
-  });
-  return idx;
-}
-
-function handleContainer(containerInfo, props) {
-  var restoreStyle = [];
-  var restorePaddings = [];
-  var container = containerInfo.container;
-  var fixedNodes;
-
-  if (!props.disableScrollLock) {
-    if (isOverflowing(container)) {
-      // Compute the size before applying overflow hidden to avoid any scroll jumps.
-      var scrollbarSize = Object(getScrollbarSize["a" /* default */])();
-      restoreStyle.push({
-        value: container.style.paddingRight,
-        key: 'padding-right',
-        el: container
-      }); // Use computed style, here to get the real padding to add our scrollbar width.
-
-      container.style['padding-right'] = "".concat(getPaddingRight(container) + scrollbarSize, "px"); // .mui-fixed is a global helper.
-
-      fixedNodes = Object(ownerDocument["a" /* default */])(container).querySelectorAll('.mui-fixed');
-      [].forEach.call(fixedNodes, function (node) {
-        restorePaddings.push(node.style.paddingRight);
-        node.style.paddingRight = "".concat(getPaddingRight(node) + scrollbarSize, "px");
-      });
-    } // Improve Gatsby support
-    // https://css-tricks.com/snippets/css/force-vertical-scrollbar/
-
-
-    var parent = container.parentElement;
-    var scrollContainer = parent.nodeName === 'HTML' && window.getComputedStyle(parent)['overflow-y'] === 'scroll' ? parent : container; // Block the scroll even if no scrollbar is visible to account for mobile keyboard
-    // screensize shrink.
-
-    restoreStyle.push({
-      value: scrollContainer.style.overflow,
-      key: 'overflow',
-      el: scrollContainer
-    });
-    scrollContainer.style.overflow = 'hidden';
-  }
-
-  var restore = function restore() {
-    if (fixedNodes) {
-      [].forEach.call(fixedNodes, function (node, i) {
-        if (restorePaddings[i]) {
-          node.style.paddingRight = restorePaddings[i];
-        } else {
-          node.style.removeProperty('padding-right');
-        }
-      });
-    }
-
-    restoreStyle.forEach(function (_ref) {
-      var value = _ref.value,
-          el = _ref.el,
-          key = _ref.key;
-
-      if (value) {
-        el.style.setProperty(key, value);
-      } else {
-        el.style.removeProperty(key);
-      }
-    });
-  };
-
-  return restore;
-}
-
-function getHiddenSiblings(container) {
-  var hiddenSiblings = [];
-  [].forEach.call(container.children, function (node) {
-    if (node.getAttribute && node.getAttribute('aria-hidden') === 'true') {
-      hiddenSiblings.push(node);
-    }
-  });
-  return hiddenSiblings;
-}
-/**
- * @ignore - do not document.
- *
- * Proper state management for containers and the modals in those containers.
- * Simplified, but inspired by react-overlay's ModalManager class.
- * Used by the Modal to ensure proper styling of containers.
- */
-
-
-var ModalManager_ModalManager = /*#__PURE__*/function () {
-  function ModalManager() {
-    _classCallCheck(this, ModalManager);
-
-    // this.modals[modalIndex] = modal
-    this.modals = []; // this.containers[containerIndex] = {
-    //   modals: [],
-    //   container,
-    //   restore: null,
-    // }
-
-    this.containers = [];
-  }
-
-  Object(createClass["a" /* default */])(ModalManager, [{
-    key: "add",
-    value: function add(modal, container) {
-      var modalIndex = this.modals.indexOf(modal);
-
-      if (modalIndex !== -1) {
-        return modalIndex;
-      }
-
-      modalIndex = this.modals.length;
-      this.modals.push(modal); // If the modal we are adding is already in the DOM.
-
-      if (modal.modalRef) {
-        ariaHidden(modal.modalRef, false);
-      }
-
-      var hiddenSiblingNodes = getHiddenSiblings(container);
-      ariaHiddenSiblings(container, modal.mountNode, modal.modalRef, hiddenSiblingNodes, true);
-      var containerIndex = findIndexOf(this.containers, function (item) {
-        return item.container === container;
-      });
-
-      if (containerIndex !== -1) {
-        this.containers[containerIndex].modals.push(modal);
-        return modalIndex;
-      }
-
-      this.containers.push({
-        modals: [modal],
-        container: container,
-        restore: null,
-        hiddenSiblingNodes: hiddenSiblingNodes
-      });
-      return modalIndex;
-    }
-  }, {
-    key: "mount",
-    value: function mount(modal, props) {
-      var containerIndex = findIndexOf(this.containers, function (item) {
-        return item.modals.indexOf(modal) !== -1;
-      });
-      var containerInfo = this.containers[containerIndex];
-
-      if (!containerInfo.restore) {
-        containerInfo.restore = handleContainer(containerInfo, props);
-      }
-    }
-  }, {
-    key: "remove",
-    value: function remove(modal) {
-      var modalIndex = this.modals.indexOf(modal);
-
-      if (modalIndex === -1) {
-        return modalIndex;
-      }
-
-      var containerIndex = findIndexOf(this.containers, function (item) {
-        return item.modals.indexOf(modal) !== -1;
-      });
-      var containerInfo = this.containers[containerIndex];
-      containerInfo.modals.splice(containerInfo.modals.indexOf(modal), 1);
-      this.modals.splice(modalIndex, 1); // If that was the last modal in a container, clean up the container.
-
-      if (containerInfo.modals.length === 0) {
-        // The modal might be closed before it had the chance to be mounted in the DOM.
-        if (containerInfo.restore) {
-          containerInfo.restore();
-        }
-
-        if (modal.modalRef) {
-          // In case the modal wasn't in the DOM yet.
-          ariaHidden(modal.modalRef, true);
-        }
-
-        ariaHiddenSiblings(containerInfo.container, modal.mountNode, modal.modalRef, containerInfo.hiddenSiblingNodes, false);
-        this.containers.splice(containerIndex, 1);
-      } else {
-        // Otherwise make sure the next top modal is visible to a screen reader.
-        var nextTop = containerInfo.modals[containerInfo.modals.length - 1]; // as soon as a modal is adding its modalRef is undefined. it can't set
-        // aria-hidden because the dom element doesn't exist either
-        // when modal was unmounted before modalRef gets null
-
-        if (nextTop.modalRef) {
-          ariaHidden(nextTop.modalRef, false);
-        }
-      }
-
-      return modalIndex;
-    }
-  }, {
-    key: "isTopModal",
-    value: function isTopModal(modal) {
-      return this.modals.length > 0 && this.modals[this.modals.length - 1] === modal;
-    }
-  }]);
-
-  return ModalManager;
-}();
-
-
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Modal/TrapFocus.js
-/* eslint-disable consistent-return, jsx-a11y/no-noninteractive-tabindex */
-
-
-
-
-
-/**
- * @ignore - internal component.
- */
-
-function TrapFocus(props) {
-  var children = props.children,
-      _props$disableAutoFoc = props.disableAutoFocus,
-      disableAutoFocus = _props$disableAutoFoc === void 0 ? false : _props$disableAutoFoc,
-      _props$disableEnforce = props.disableEnforceFocus,
-      disableEnforceFocus = _props$disableEnforce === void 0 ? false : _props$disableEnforce,
-      _props$disableRestore = props.disableRestoreFocus,
-      disableRestoreFocus = _props$disableRestore === void 0 ? false : _props$disableRestore,
-      getDoc = props.getDoc,
-      isEnabled = props.isEnabled,
-      open = props.open;
-  var ignoreNextEnforceFocus = react["useRef"]();
-  var sentinelStart = react["useRef"](null);
-  var sentinelEnd = react["useRef"](null);
-  var nodeToRestore = react["useRef"]();
-  var rootRef = react["useRef"](null); // can be removed once we drop support for non ref forwarding class components
-
-  var handleOwnRef = react["useCallback"](function (instance) {
-    // #StrictMode ready
-    rootRef.current = react_dom["findDOMNode"](instance);
-  }, []);
-  var handleRef = Object(useForkRef["a" /* default */])(children.ref, handleOwnRef); // ⚠️ You may rely on React.useMemo as a performance optimization, not as a semantic guarantee.
-  // https://reactjs.org/docs/hooks-reference.html#usememo
-
-  react["useMemo"](function () {
-    if (!open || typeof window === 'undefined') {
-      return;
-    }
-
-    nodeToRestore.current = getDoc().activeElement;
-  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  react["useEffect"](function () {
-    if (!open) {
-      return;
-    }
-
-    var doc = Object(ownerDocument["a" /* default */])(rootRef.current); // We might render an empty child.
-
-    if (!disableAutoFocus && rootRef.current && !rootRef.current.contains(doc.activeElement)) {
-      if (!rootRef.current.hasAttribute('tabIndex')) {
-        if (false) {}
-
-        rootRef.current.setAttribute('tabIndex', -1);
-      }
-
-      rootRef.current.focus();
-    }
-
-    var contain = function contain() {
-      if (disableEnforceFocus || !isEnabled() || ignoreNextEnforceFocus.current) {
-        ignoreNextEnforceFocus.current = false;
-        return;
-      }
-
-      if (rootRef.current && !rootRef.current.contains(doc.activeElement)) {
-        rootRef.current.focus();
-      }
-    };
-
-    var loopFocus = function loopFocus(event) {
-      // 9 = Tab
-      if (disableEnforceFocus || !isEnabled() || event.keyCode !== 9) {
-        return;
-      } // Make sure the next tab starts from the right place.
-
-
-      if (doc.activeElement === rootRef.current) {
-        // We need to ignore the next contain as
-        // it will try to move the focus back to the rootRef element.
-        ignoreNextEnforceFocus.current = true;
-
-        if (event.shiftKey) {
-          sentinelEnd.current.focus();
-        } else {
-          sentinelStart.current.focus();
-        }
-      }
-    };
-
-    doc.addEventListener('focus', contain, true);
-    doc.addEventListener('keydown', loopFocus, true); // With Edge, Safari and Firefox, no focus related events are fired when the focused area stops being a focused area
-    // e.g. https://bugzilla.mozilla.org/show_bug.cgi?id=559561.
-    //
-    // The whatwg spec defines how the browser should behave but does not explicitly mention any events:
-    // https://html.spec.whatwg.org/multipage/interaction.html#focus-fixup-rule.
-
-    var interval = setInterval(function () {
-      contain();
-    }, 50);
-    return function () {
-      clearInterval(interval);
-      doc.removeEventListener('focus', contain, true);
-      doc.removeEventListener('keydown', loopFocus, true); // restoreLastFocus()
-
-      if (!disableRestoreFocus) {
-        // In IE 11 it is possible for document.activeElement to be null resulting
-        // in nodeToRestore.current being null.
-        // Not all elements in IE 11 have a focus method.
-        // Once IE 11 support is dropped the focus() call can be unconditional.
-        if (nodeToRestore.current && nodeToRestore.current.focus) {
-          nodeToRestore.current.focus();
-        }
-
-        nodeToRestore.current = null;
-      }
-    };
-  }, [disableAutoFocus, disableEnforceFocus, disableRestoreFocus, isEnabled, open]);
-  return /*#__PURE__*/react["createElement"](react["Fragment"], null, /*#__PURE__*/react["createElement"]("div", {
-    tabIndex: 0,
-    ref: sentinelStart,
-    "data-test": "sentinelStart"
-  }), react["cloneElement"](children, {
-    ref: handleRef
-  }), /*#__PURE__*/react["createElement"]("div", {
-    tabIndex: 0,
-    ref: sentinelEnd,
-    "data-test": "sentinelEnd"
-  }));
-}
-
- false ? undefined : void 0;
-/*
-
-In the future, we should be able to replace TrapFocus with:
-https://github.com/facebook/react/blob/master/packages/react-events/docs/FocusScope.md
-
-```jsx
-import FocusScope from 'react-dom/FocusScope';
-
-function TrapFocus(props) {
-  const {
-    children
-    disableAutoFocus = false,
-    disableEnforceFocus = false,
-    disableRestoreFocus = false,
-    open,
-  } = props;
-
-  if (!open) {
-    return children;
-  }
-
-  return (
-    <FocusScope
-      autoFocus={!disableAutoFocus}
-      contain={!disableEnforceFocus}
-      restoreFocus={!disableRestoreFocus}
-    >
-      {children}
-    </FocusScope>
-  );
-}
-```
-
-*/
-
-/* harmony default export */ var Modal_TrapFocus = (TrapFocus);
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Modal/SimpleBackdrop.js
-
-
-
-
-var styles = {
-  /* Styles applied to the root element. */
-  root: {
-    zIndex: -1,
-    position: 'fixed',
-    right: 0,
-    bottom: 0,
-    top: 0,
-    left: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    WebkitTapHighlightColor: 'transparent'
-  },
-
-  /* Styles applied to the root element if `invisible={true}`. */
-  invisible: {
-    backgroundColor: 'transparent'
-  }
-};
-/**
- * @ignore - internal component.
- */
-
-var SimpleBackdrop_SimpleBackdrop = react["forwardRef"](function SimpleBackdrop(props, ref) {
-  var _props$invisible = props.invisible,
-      invisible = _props$invisible === void 0 ? false : _props$invisible,
-      open = props.open,
-      other = Object(objectWithoutProperties["a" /* default */])(props, ["invisible", "open"]);
-
-  return open ? /*#__PURE__*/react["createElement"]("div", Object(esm_extends["a" /* default */])({
-    "aria-hidden": true,
-    ref: ref
-  }, other, {
-    style: Object(esm_extends["a" /* default */])({}, styles.root, {}, invisible ? styles.invisible : {}, {}, other.style)
-  })) : null;
-});
- false ? undefined : void 0;
-/* harmony default export */ var Modal_SimpleBackdrop = (SimpleBackdrop_SimpleBackdrop);
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Modal/Modal.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function getContainer(container) {
-  container = typeof container === 'function' ? container() : container;
-  return react_dom["findDOMNode"](container);
-}
-
-function getHasTransition(props) {
-  return props.children ? props.children.props.hasOwnProperty('in') : false;
-} // A modal manager used to track and manage the state of open Modals.
-// Modals don't open on the server so this won't conflict with concurrent requests.
-
-
-var defaultManager = new ModalManager_ModalManager();
-var Modal_styles = function styles(theme) {
-  return {
-    /* Styles applied to the root element. */
-    root: {
-      position: 'fixed',
-      zIndex: theme.zIndex.modal,
-      right: 0,
-      bottom: 0,
-      top: 0,
-      left: 0
-    },
-
-    /* Styles applied to the root element if the `Modal` has exited. */
-    hidden: {
-      visibility: 'hidden'
-    }
-  };
-};
-/**
- * Modal is a lower-level construct that is leveraged by the following components:
- *
- * - [Dialog](/api/dialog/)
- * - [Drawer](/api/drawer/)
- * - [Menu](/api/menu/)
- * - [Popover](/api/popover/)
- *
- * If you are creating a modal dialog, you probably want to use the [Dialog](/api/dialog/) component
- * rather than directly using Modal.
- *
- * This component shares many concepts with [react-overlays](https://react-bootstrap.github.io/react-overlays/#modals).
- */
-
-var Modal_Modal = react["forwardRef"](function Modal(inProps, ref) {
-  var theme = Object(useTheme["a" /* default */])();
-  var props = Object(getThemeProps["a" /* default */])({
-    name: 'MuiModal',
-    props: Object(esm_extends["a" /* default */])({}, inProps),
-    theme: theme
-  });
-
-  var _props$BackdropCompon = props.BackdropComponent,
-      BackdropComponent = _props$BackdropCompon === void 0 ? Modal_SimpleBackdrop : _props$BackdropCompon,
-      BackdropProps = props.BackdropProps,
-      children = props.children,
-      _props$closeAfterTran = props.closeAfterTransition,
-      closeAfterTransition = _props$closeAfterTran === void 0 ? false : _props$closeAfterTran,
-      container = props.container,
-      _props$disableAutoFoc = props.disableAutoFocus,
-      disableAutoFocus = _props$disableAutoFoc === void 0 ? false : _props$disableAutoFoc,
-      _props$disableBackdro = props.disableBackdropClick,
-      disableBackdropClick = _props$disableBackdro === void 0 ? false : _props$disableBackdro,
-      _props$disableEnforce = props.disableEnforceFocus,
-      disableEnforceFocus = _props$disableEnforce === void 0 ? false : _props$disableEnforce,
-      _props$disableEscapeK = props.disableEscapeKeyDown,
-      disableEscapeKeyDown = _props$disableEscapeK === void 0 ? false : _props$disableEscapeK,
-      _props$disablePortal = props.disablePortal,
-      disablePortal = _props$disablePortal === void 0 ? false : _props$disablePortal,
-      _props$disableRestore = props.disableRestoreFocus,
-      disableRestoreFocus = _props$disableRestore === void 0 ? false : _props$disableRestore,
-      _props$disableScrollL = props.disableScrollLock,
-      disableScrollLock = _props$disableScrollL === void 0 ? false : _props$disableScrollL,
-      _props$hideBackdrop = props.hideBackdrop,
-      hideBackdrop = _props$hideBackdrop === void 0 ? false : _props$hideBackdrop,
-      _props$keepMounted = props.keepMounted,
-      keepMounted = _props$keepMounted === void 0 ? false : _props$keepMounted,
-      _props$manager = props.manager,
-      manager = _props$manager === void 0 ? defaultManager : _props$manager,
-      onBackdropClick = props.onBackdropClick,
-      onClose = props.onClose,
-      onEscapeKeyDown = props.onEscapeKeyDown,
-      onRendered = props.onRendered,
-      open = props.open,
-      other = Object(objectWithoutProperties["a" /* default */])(props, ["BackdropComponent", "BackdropProps", "children", "closeAfterTransition", "container", "disableAutoFocus", "disableBackdropClick", "disableEnforceFocus", "disableEscapeKeyDown", "disablePortal", "disableRestoreFocus", "disableScrollLock", "hideBackdrop", "keepMounted", "manager", "onBackdropClick", "onClose", "onEscapeKeyDown", "onRendered", "open"]);
-
-  var _React$useState = react["useState"](true),
-      exited = _React$useState[0],
-      setExited = _React$useState[1];
-
-  var modal = react["useRef"]({});
-  var mountNodeRef = react["useRef"](null);
-  var modalRef = react["useRef"](null);
-  var handleRef = Object(useForkRef["a" /* default */])(modalRef, ref);
-  var hasTransition = getHasTransition(props);
-
-  var getDoc = function getDoc() {
-    return Object(ownerDocument["a" /* default */])(mountNodeRef.current);
-  };
-
-  var getModal = function getModal() {
-    modal.current.modalRef = modalRef.current;
-    modal.current.mountNode = mountNodeRef.current;
-    return modal.current;
-  };
-
-  var handleMounted = function handleMounted() {
-    manager.mount(getModal(), {
-      disableScrollLock: disableScrollLock
-    }); // Fix a bug on Chrome where the scroll isn't initially 0.
-
-    modalRef.current.scrollTop = 0;
-  };
-
-  var handleOpen = Object(useEventCallback["a" /* default */])(function () {
-    var resolvedContainer = getContainer(container) || getDoc().body;
-    manager.add(getModal(), resolvedContainer); // The element was already mounted.
-
-    if (modalRef.current) {
-      handleMounted();
-    }
-  });
-  var isTopModal = react["useCallback"](function () {
-    return manager.isTopModal(getModal());
-  }, [manager]);
-  var handlePortalRef = Object(useEventCallback["a" /* default */])(function (node) {
-    mountNodeRef.current = node;
-
-    if (!node) {
-      return;
-    }
-
-    if (onRendered) {
-      onRendered();
-    }
-
-    if (open && isTopModal()) {
-      handleMounted();
-    } else {
-      ariaHidden(modalRef.current, true);
-    }
-  });
-  var handleClose = react["useCallback"](function () {
-    manager.remove(getModal());
-  }, [manager]);
-  react["useEffect"](function () {
-    return function () {
-      handleClose();
-    };
-  }, [handleClose]);
-  react["useEffect"](function () {
-    if (open) {
-      handleOpen();
-    } else if (!hasTransition || !closeAfterTransition) {
-      handleClose();
-    }
-  }, [open, handleClose, hasTransition, closeAfterTransition, handleOpen]);
-
-  if (!keepMounted && !open && (!hasTransition || exited)) {
-    return null;
-  }
-
-  var handleEnter = function handleEnter() {
-    setExited(false);
-  };
-
-  var handleExited = function handleExited() {
-    setExited(true);
-
-    if (closeAfterTransition) {
-      handleClose();
-    }
-  };
-
-  var handleBackdropClick = function handleBackdropClick(event) {
-    if (event.target !== event.currentTarget) {
-      return;
-    }
-
-    if (onBackdropClick) {
-      onBackdropClick(event);
-    }
-
-    if (!disableBackdropClick && onClose) {
-      onClose(event, 'backdropClick');
-    }
-  };
-
-  var handleKeyDown = function handleKeyDown(event) {
-    // The handler doesn't take event.defaultPrevented into account:
-    //
-    // event.preventDefault() is meant to stop default behaviours like
-    // clicking a checkbox to check it, hitting a button to submit a form,
-    // and hitting left arrow to move the cursor in a text input etc.
-    // Only special HTML elements have these default behaviors.
-    if (event.key !== 'Escape' || !isTopModal()) {
-      return;
-    } // Swallow the event, in case someone is listening for the escape key on the body.
-
-
-    event.stopPropagation();
-
-    if (onEscapeKeyDown) {
-      onEscapeKeyDown(event);
-    }
-
-    if (!disableEscapeKeyDown && onClose) {
-      onClose(event, 'escapeKeyDown');
-    }
-  };
-
-  var inlineStyle = Modal_styles(theme || {
-    zIndex: zIndex["a" /* default */]
-  });
-  var childProps = {};
-
-  if (children.props.tabIndex === undefined) {
-    childProps.tabIndex = children.props.tabIndex || '-1';
-  } // It's a Transition like component
-
-
-  if (hasTransition) {
-    childProps.onEnter = Object(createChainedFunction["a" /* default */])(handleEnter, children.props.onEnter);
-    childProps.onExited = Object(createChainedFunction["a" /* default */])(handleExited, children.props.onExited);
-  }
-
-  return /*#__PURE__*/react["createElement"](Portal["a" /* default */], {
-    ref: handlePortalRef,
-    container: container,
-    disablePortal: disablePortal
-  }, /*#__PURE__*/react["createElement"]("div", Object(esm_extends["a" /* default */])({
-    ref: handleRef,
-    onKeyDown: handleKeyDown,
-    role: "presentation"
-  }, other, {
-    style: Object(esm_extends["a" /* default */])({}, inlineStyle.root, {}, !open && exited ? inlineStyle.hidden : {}, {}, other.style)
-  }), hideBackdrop ? null : /*#__PURE__*/react["createElement"](BackdropComponent, Object(esm_extends["a" /* default */])({
-    open: open,
-    onClick: handleBackdropClick
-  }, BackdropProps)), /*#__PURE__*/react["createElement"](Modal_TrapFocus, {
-    disableEnforceFocus: disableEnforceFocus,
-    disableAutoFocus: disableAutoFocus,
-    disableRestoreFocus: disableRestoreFocus,
-    getDoc: getDoc,
-    isEnabled: isTopModal,
-    open: open
-  }, react["cloneElement"](children, childProps))));
-});
- false ? undefined : void 0;
-/* harmony default export */ var esm_Modal_Modal = __webpack_exports__["a"] = (Modal_Modal);
-
-/***/ }),
-
-/***/ 22:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _toConsumableArray; });
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
-var arrayLikeToArray = __webpack_require__(35);
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) return Object(arrayLikeToArray["a" /* default */])(arr);
-}
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArray.js
-var iterableToArray = __webpack_require__(74);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-var unsupportedIterableToArray = __webpack_require__(44);
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js
-
-
-
-
-function _toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || Object(iterableToArray["a" /* default */])(arr) || Object(unsupportedIterableToArray["a" /* default */])(arr) || _nonIterableSpread();
-}
-
-/***/ }),
-
-/***/ 23:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useFormControl; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _FormControlContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(32);
-
-
-function useFormControl() {
-  return react__WEBPACK_IMPORTED_MODULE_0__["useContext"](_FormControlContext__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"]);
-}
-
-/***/ }),
-
-/***/ 24:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useEventCallback; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-
-var useEnhancedEffect = typeof window !== 'undefined' ? react__WEBPACK_IMPORTED_MODULE_0__["useLayoutEffect"] : react__WEBPACK_IMPORTED_MODULE_0__["useEffect"];
-/**
- * https://github.com/facebook/react/issues/14099#issuecomment-440013892
- *
- * @param {function} fn
- */
-
-function useEventCallback(fn) {
-  var ref = react__WEBPACK_IMPORTED_MODULE_0__["useRef"](fn);
-  useEnhancedEffect(function () {
-    ref.current = fn;
-  });
-  return react__WEBPACK_IMPORTED_MODULE_0__["useCallback"](function () {
-    return (0, ref.current).apply(void 0, arguments);
-  }, []);
-}
-
-/***/ }),
-
-/***/ 25:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _defineProperty; });
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-/***/ }),
-
-/***/ 26:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _typeof; });
-function _typeof(obj) {
-  "@babel/helpers - typeof";
-
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof = function _typeof(obj) {
-      return typeof obj;
-    };
-  } else {
-    _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    };
-  }
-
-  return _typeof(obj);
-}
-
-/***/ }),
-
-/***/ 27:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return setRef; });
-// TODO v5: consider to make it private
-function setRef(ref, value) {
-  if (typeof ref === 'function') {
-    ref(value);
-  } else if (ref) {
-    ref.current = value;
-  }
-}
-
-/***/ }),
-
-/***/ 29:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-
-/* harmony default export */ __webpack_exports__["a"] = (react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext(null));
-
-/***/ }),
-
-/***/ 3:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _objectWithoutProperties; });
-/* harmony import */ var _objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
-
-function _objectWithoutProperties(source, excluded) {
-  if (source == null) return {};
-  var target = Object(_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(source, excluded);
-  var key, i;
-
-  if (Object.getOwnPropertySymbols) {
-    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-
-    for (i = 0; i < sourceSymbolKeys.length; i++) {
-      key = sourceSymbolKeys[i];
-      if (excluded.indexOf(key) >= 0) continue;
-      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
-      target[key] = source[key];
-    }
-  }
-
-  return target;
-}
-
-/***/ }),
-
-/***/ 30:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export Bounce */
-/* unused harmony export Flip */
-/* unused harmony export Slide */
-/* unused harmony export ToastContainer */
-/* unused harmony export ToastPosition */
-/* unused harmony export ToastType */
-/* unused harmony export Zoom */
-/* unused harmony export cssTransition */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return toast; });
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(18);
-/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(36);
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(98);
-/* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(99);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(8);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_8__);
-
-
-
-
-
-
-
-
-
-var POSITION = {
-  TOP_LEFT: 'top-left',
-  TOP_RIGHT: 'top-right',
-  TOP_CENTER: 'top-center',
-  BOTTOM_LEFT: 'bottom-left',
-  BOTTOM_RIGHT: 'bottom-right',
-  BOTTOM_CENTER: 'bottom-center'
-};
-var TYPE = {
-  INFO: 'info',
-  SUCCESS: 'success',
-  WARNING: 'warning',
-  ERROR: 'error',
-  DEFAULT: 'default'
-};
-var ACTION = {
-  SHOW: 0,
-  CLEAR: 1,
-  DID_MOUNT: 2,
-  WILL_UNMOUNT: 3,
-  ON_CHANGE: 4
-};
-var NOOP = function NOOP() {};
-var RT_NAMESPACE = 'Toastify';
-
-function isValidDelay(val) {
-  return typeof val === 'number' && !isNaN(val) && val > 0;
-}
-function objectValues(obj) {
-  return Object.keys(obj).map(function (key) {
-    return obj[key];
-  });
-}
-var canUseDom = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
-
-function withRequired(fn) {
-  fn.isRequired = function (props, propName, componentName) {
-    var prop = props[propName];
-
-    if (typeof prop === 'undefined') {
-      return new Error("The prop " + propName + " is marked as required in \n      " + componentName + ", but its value is undefined.");
-    }
-
-    fn(props, propName, componentName);
-  };
-
-  return fn;
-}
-
-var falseOrDelay = withRequired(function (props, propName, componentName) {
-  var prop = props[propName];
-
-  if (prop !== false && !isValidDelay(prop)) {
-    return new Error(componentName + " expect " + propName + " \n      to be a valid Number > 0 or equal to false. " + prop + " given.");
-  }
-
-  return null;
-});
-
-var eventManager = {
-  list: new Map(),
-  emitQueue: new Map(),
-  on: function on(event, callback) {
-    this.list.has(event) || this.list.set(event, []);
-    this.list.get(event).push(callback);
-    return this;
-  },
-  off: function off(event) {
-    this.list.delete(event);
-    return this;
-  },
-  cancelEmit: function cancelEmit(event) {
-    var timers = this.emitQueue.get(event);
-
-    if (timers) {
-      timers.forEach(function (timer) {
-        return clearTimeout(timer);
-      });
-      this.emitQueue.delete(event);
-    }
-
-    return this;
-  },
-
-  /**
-   * Enqueue the event at the end of the call stack
-   * Doing so let the user call toast as follow:
-   * toast('1')
-   * toast('2')
-   * toast('3')
-   * Without setTimemout the code above will not work
-   */
-  emit: function emit(event) {
-    var _this = this;
-
-    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      args[_key - 1] = arguments[_key];
-    }
-
-    this.list.has(event) && this.list.get(event).forEach(function (callback) {
-      var timer = setTimeout(function () {
-        callback.apply(void 0, args);
-      }, 0);
-      _this.emitQueue.has(event) || _this.emitQueue.set(event, []);
-
-      _this.emitQueue.get(event).push(timer);
-    });
-  }
-};
-
-function cssTransition(_ref) {
-  var enter = _ref.enter,
-      exit = _ref.exit,
-      _ref$duration = _ref.duration,
-      duration = _ref$duration === void 0 ? 750 : _ref$duration,
-      _ref$appendPosition = _ref.appendPosition,
-      appendPosition = _ref$appendPosition === void 0 ? false : _ref$appendPosition;
-  return function Animation(_ref2) {
-    var children = _ref2.children,
-        position = _ref2.position,
-        preventExitTransition = _ref2.preventExitTransition,
-        props = Object(_babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(_ref2, ["children", "position", "preventExitTransition"]);
-
-    var enterClassName = appendPosition ? enter + "--" + position : enter;
-    var exitClassName = appendPosition ? exit + "--" + position : exit;
-    var enterDuration, exitDuration;
-
-    if (Array.isArray(duration) && duration.length === 2) {
-      enterDuration = duration[0];
-      exitDuration = duration[1];
-    } else {
-      enterDuration = exitDuration = duration;
-    }
-
-    var onEnter = function onEnter(node) {
-      node.classList.add(enterClassName);
-      node.style.animationFillMode = 'forwards';
-      node.style.animationDuration = enterDuration * 0.001 + "s";
-    };
-
-    var onEntered = function onEntered(node) {
-      node.classList.remove(enterClassName);
-      node.style.cssText = '';
-    };
-
-    var onExit = function onExit(node) {
-      node.classList.add(exitClassName);
-      node.style.animationFillMode = 'forwards';
-      node.style.animationDuration = exitDuration * 0.001 + "s";
-    };
-
-    return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react_transition_group__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, props, {
-      timeout: preventExitTransition ? 0 : {
-        enter: enterDuration,
-        exit: exitDuration
-      },
-      onEnter: onEnter,
-      onEntered: onEntered,
-      onExit: preventExitTransition ? NOOP : onExit
-    }), children);
-  };
-}
-
-function ProgressBar(_ref) {
-  var _cx, _animationEvent;
-
-  var delay = _ref.delay,
-      isRunning = _ref.isRunning,
-      closeToast = _ref.closeToast,
-      type = _ref.type,
-      hide = _ref.hide,
-      className = _ref.className,
-      userStyle = _ref.style,
-      controlledProgress = _ref.controlledProgress,
-      progress = _ref.progress,
-      rtl = _ref.rtl;
-
-  var style = Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, userStyle, {
-    animationDuration: delay + "ms",
-    animationPlayState: isRunning ? 'running' : 'paused',
-    opacity: hide ? 0 : 1,
-    transform: controlledProgress ? "scaleX(" + progress + ")" : null
-  });
-
-  var classNames = classnames__WEBPACK_IMPORTED_MODULE_5___default()(RT_NAMESPACE + "__progress-bar", controlledProgress ? RT_NAMESPACE + "__progress-bar--controlled" : RT_NAMESPACE + "__progress-bar--animated", RT_NAMESPACE + "__progress-bar--" + type, (_cx = {}, _cx[RT_NAMESPACE + "__progress-bar--rtl"] = rtl, _cx), className);
-  var animationEvent = (_animationEvent = {}, _animationEvent[controlledProgress && progress >= 1 ? 'onTransitionEnd' : 'onAnimationEnd'] = controlledProgress && progress < 1 ? null : closeToast, _animationEvent);
-  return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
-    className: classNames,
-    style: style
-  }, animationEvent));
-}
-
-ProgressBar.propTypes = {
-  /**
-   * The animation delay which determine when to close the toast
-   */
-  delay: falseOrDelay.isRequired,
-
-  /**
-   * Whether or not the animation is running or paused
-   */
-  isRunning: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool.isRequired,
-
-  /**
-   * Func to close the current toast
-   */
-  closeToast: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func.isRequired,
-
-  /**
-   * Support rtl content
-   */
-  rtl: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool.isRequired,
-
-  /**
-   * Optional type : info, success ...
-   */
-  type: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string,
-
-  /**
-   * Hide or not the progress bar
-   */
-  hide: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
-
-  /**
-   * Optionnal className
-   */
-  className: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object]),
-
-  /**
-   * Controlled progress value
-   */
-  progress: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.number,
-
-  /**
-   * Tell wether or not controlled progress bar is used
-   */
-  controlledProgress: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool
-};
-ProgressBar.defaultProps = {
-  type: TYPE.DEFAULT,
-  hide: false
-};
-
-function getX(e) {
-  return e.targetTouches && e.targetTouches.length >= 1 ? e.targetTouches[0].clientX : e.clientX;
-}
-
-function getY(e) {
-  return e.targetTouches && e.targetTouches.length >= 1 ? e.targetTouches[0].clientY : e.clientY;
-}
-
-var iLoveInternetExplorer = canUseDom && /(msie|trident)/i.test(navigator.userAgent);
-
-var Toast =
-/*#__PURE__*/
-function (_Component) {
-  Object(_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(Toast, _Component);
-
-  function Toast() {
-    var _this;
-
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-    _this.state = {
-      isRunning: true,
-      preventExitTransition: false
-    };
-    _this.flag = {
-      canCloseOnClick: true,
-      canDrag: false
-    };
-    _this.drag = {
-      start: 0,
-      x: 0,
-      y: 0,
-      deltaX: 0,
-      removalDistance: 0
-    };
-    _this.boundingRect = null;
-    _this.ref = null;
-
-    _this.pauseToast = function () {
-      if (_this.props.autoClose) {
-        _this.setState({
-          isRunning: false
-        });
-      }
-    };
-
-    _this.playToast = function () {
-      if (_this.props.autoClose) {
-        _this.setState({
-          isRunning: true
-        });
-      }
-    };
-
-    _this.onDragStart = function (e) {
-      _this.flag.canCloseOnClick = true;
-      _this.flag.canDrag = true;
-      _this.boundingRect = _this.ref.getBoundingClientRect();
-      _this.ref.style.transition = '';
-      _this.drag.start = _this.drag.x = getX(e.nativeEvent);
-      _this.drag.removalDistance = _this.ref.offsetWidth * (_this.props.draggablePercent / 100);
-    };
-
-    _this.onDragMove = function (e) {
-      if (_this.flag.canDrag) {
-        if (_this.state.isRunning) {
-          _this.pauseToast();
-        }
-
-        _this.drag.x = getX(e);
-        _this.drag.deltaX = _this.drag.x - _this.drag.start;
-        _this.drag.y = getY(e); // prevent false positif during a toast click
-
-        _this.drag.start !== _this.drag.x && (_this.flag.canCloseOnClick = false);
-        _this.ref.style.transform = "translateX(" + _this.drag.deltaX + "px)";
-        _this.ref.style.opacity = 1 - Math.abs(_this.drag.deltaX / _this.drag.removalDistance);
-      }
-    };
-
-    _this.onDragEnd = function (e) {
-      if (_this.flag.canDrag) {
-        _this.flag.canDrag = false;
-
-        if (Math.abs(_this.drag.deltaX) > _this.drag.removalDistance) {
-          _this.setState({
-            preventExitTransition: true
-          }, _this.props.closeToast);
-
-          return;
-        }
-
-        _this.ref.style.transition = 'transform 0.2s, opacity 0.2s';
-        _this.ref.style.transform = 'translateX(0)';
-        _this.ref.style.opacity = 1;
-      }
-    };
-
-    _this.onDragTransitionEnd = function () {
-      if (_this.boundingRect) {
-        var _this$boundingRect = _this.boundingRect,
-            top = _this$boundingRect.top,
-            bottom = _this$boundingRect.bottom,
-            left = _this$boundingRect.left,
-            right = _this$boundingRect.right;
-
-        if (_this.props.pauseOnHover && _this.drag.x >= left && _this.drag.x <= right && _this.drag.y >= top && _this.drag.y <= bottom) {
-          _this.pauseToast();
-        } else {
-          _this.playToast();
-        }
-      }
-    };
-
-    _this.onExitTransitionEnd = function () {
-      if (iLoveInternetExplorer) {
-        _this.props.onExited();
-
-        return;
-      }
-
-      var height = _this.ref.scrollHeight;
-      var style = _this.ref.style;
-      requestAnimationFrame(function () {
-        style.minHeight = 'initial';
-        style.height = height + 'px';
-        style.transition = 'all 0.4s ';
-        requestAnimationFrame(function () {
-          style.height = 0;
-          style.padding = 0;
-          style.margin = 0;
-        });
-        setTimeout(function () {
-          return _this.props.onExited();
-        }, 400);
-      });
-    };
-
-    return _this;
-  }
-
-  var _proto = Toast.prototype;
-
-  _proto.componentDidMount = function componentDidMount() {
-    this.props.onOpen(this.props.children.props);
-
-    if (this.props.draggable) {
-      this.bindDragEvents();
-    } // Maybe I could bind the event in the ToastContainer and rely on delegation
-
-
-    if (this.props.pauseOnFocusLoss) {
-      this.bindFocusEvents();
-    }
-  };
-
-  _proto.componentDidUpdate = function componentDidUpdate(prevProps) {
-    if (prevProps.draggable !== this.props.draggable) {
-      if (this.props.draggable) {
-        this.bindDragEvents();
-      } else {
-        this.unbindDragEvents();
-      }
-    }
-
-    if (prevProps.pauseOnFocusLoss !== this.props.pauseOnFocusLoss) {
-      if (this.props.pauseOnFocusLoss) {
-        this.bindFocusEvents();
-      } else {
-        this.unbindFocusEvents();
-      }
-    }
-  };
-
-  _proto.componentWillUnmount = function componentWillUnmount() {
-    this.props.onClose(this.props.children.props);
-
-    if (this.props.draggable) {
-      this.unbindDragEvents();
-    }
-
-    if (this.props.pauseOnFocusLoss) {
-      this.unbindFocusEvents();
-    }
-  };
-
-  _proto.bindFocusEvents = function bindFocusEvents() {
-    window.addEventListener('focus', this.playToast);
-    window.addEventListener('blur', this.pauseToast);
-  };
-
-  _proto.unbindFocusEvents = function unbindFocusEvents() {
-    window.removeEventListener('focus', this.playToast);
-    window.removeEventListener('blur', this.pauseToast);
-  };
-
-  _proto.bindDragEvents = function bindDragEvents() {
-    document.addEventListener('mousemove', this.onDragMove);
-    document.addEventListener('mouseup', this.onDragEnd);
-    document.addEventListener('touchmove', this.onDragMove);
-    document.addEventListener('touchend', this.onDragEnd);
-  };
-
-  _proto.unbindDragEvents = function unbindDragEvents() {
-    document.removeEventListener('mousemove', this.onDragMove);
-    document.removeEventListener('mouseup', this.onDragEnd);
-    document.removeEventListener('touchmove', this.onDragMove);
-    document.removeEventListener('touchend', this.onDragEnd);
-  };
-
-  _proto.render = function render() {
-    var _cx,
-        _this2 = this;
-
-    var _this$props = this.props,
-        closeButton = _this$props.closeButton,
-        children = _this$props.children,
-        autoClose = _this$props.autoClose,
-        pauseOnHover = _this$props.pauseOnHover,
-        onClick = _this$props.onClick,
-        closeOnClick = _this$props.closeOnClick,
-        type = _this$props.type,
-        hideProgressBar = _this$props.hideProgressBar,
-        closeToast = _this$props.closeToast,
-        Transition = _this$props.transition,
-        position = _this$props.position,
-        className = _this$props.className,
-        bodyClassName = _this$props.bodyClassName,
-        progressClassName = _this$props.progressClassName,
-        progressStyle = _this$props.progressStyle,
-        updateId = _this$props.updateId,
-        role = _this$props.role,
-        progress = _this$props.progress,
-        rtl = _this$props.rtl;
-    var toastProps = {
-      className: classnames__WEBPACK_IMPORTED_MODULE_5___default()(RT_NAMESPACE + "__toast", RT_NAMESPACE + "__toast--" + type, (_cx = {}, _cx[RT_NAMESPACE + "__toast--rtl"] = rtl, _cx), className)
-    };
-
-    if (autoClose && pauseOnHover) {
-      toastProps.onMouseEnter = this.pauseToast;
-      toastProps.onMouseLeave = this.playToast;
-    } // prevent toast from closing when user drags the toast
-
-
-    if (closeOnClick) {
-      toastProps.onClick = function (e) {
-        onClick && onClick(e);
-        _this2.flag.canCloseOnClick && closeToast();
-      };
-    }
-
-    var controlledProgress = parseFloat(progress) === progress;
-    return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(Transition, {
-      in: this.props.in,
-      appear: true,
-      onExited: this.onExitTransitionEnd,
-      position: position,
-      preventExitTransition: this.state.preventExitTransition
-    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
-      onClick: onClick
-    }, toastProps, {
-      ref: function ref(_ref) {
-        return _this2.ref = _ref;
-      },
-      onMouseDown: this.onDragStart,
-      onTouchStart: this.onDragStart,
-      onMouseUp: this.onDragTransitionEnd,
-      onTouchEnd: this.onDragTransitionEnd
-    }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, this.props.in && {
-      role: role
-    }, {
-      className: classnames__WEBPACK_IMPORTED_MODULE_5___default()(RT_NAMESPACE + "__toast-body", bodyClassName)
-    }), children), closeButton && closeButton, (autoClose || controlledProgress) && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(ProgressBar, Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, updateId && !controlledProgress ? {
-      key: "pb-" + updateId
-    } : {}, {
-      rtl: rtl,
-      delay: autoClose,
-      isRunning: this.state.isRunning,
-      closeToast: closeToast,
-      hide: hideProgressBar,
-      type: type,
-      style: progressStyle,
-      className: progressClassName,
-      controlledProgress: controlledProgress,
-      progress: progress
-    }))));
-  };
-
-  return Toast;
-}(react__WEBPACK_IMPORTED_MODULE_3__["Component"]);
-
-Toast.propTypes = {
-  closeButton: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.node, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool]).isRequired,
-  autoClose: falseOrDelay.isRequired,
-  children: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.node.isRequired,
-  closeToast: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func.isRequired,
-  position: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOf(objectValues(POSITION)).isRequired,
-  pauseOnHover: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool.isRequired,
-  pauseOnFocusLoss: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool.isRequired,
-  closeOnClick: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool.isRequired,
-  transition: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func.isRequired,
-  rtl: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool.isRequired,
-  hideProgressBar: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool.isRequired,
-  draggable: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool.isRequired,
-  draggablePercent: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.number.isRequired,
-  in: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
-  onExited: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func,
-  onOpen: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func,
-  onClose: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func,
-  type: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOf(objectValues(TYPE)),
-  className: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object]),
-  bodyClassName: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object]),
-  progressClassName: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object]),
-  progressStyle: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object,
-  progress: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.number,
-  updateId: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.number]),
-  ariaLabel: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string,
-  containerId: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.number]),
-  role: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string
-};
-Toast.defaultProps = {
-  type: TYPE.DEFAULT,
-  in: true,
-  onOpen: NOOP,
-  onClose: NOOP,
-  className: null,
-  bodyClassName: null,
-  progressClassName: null,
-  updateId: null
-};
-
-function CloseButton(_ref) {
-  var closeToast = _ref.closeToast,
-      type = _ref.type,
-      ariaLabel = _ref.ariaLabel;
-  return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("button", {
-    className: RT_NAMESPACE + "__close-button " + RT_NAMESPACE + "__close-button--" + type,
-    type: "button",
-    onClick: function onClick(e) {
-      e.stopPropagation();
-      closeToast(e);
-    },
-    "aria-label": ariaLabel
-  }, "\u2716\uFE0E");
-}
-
-CloseButton.propTypes = {
-  closeToast: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func,
-  arialLabel: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string
-};
-CloseButton.defaultProps = {
-  ariaLabel: 'close'
-};
-
-var Bounce = cssTransition({
-  enter: RT_NAMESPACE + "__bounce-enter",
-  exit: RT_NAMESPACE + "__bounce-exit",
-  appendPosition: true
-});
-var Slide = cssTransition({
-  enter: RT_NAMESPACE + "__slide-enter",
-  exit: RT_NAMESPACE + "__slide-exit",
-  duration: [450, 750],
-  appendPosition: true
-});
-var Zoom = cssTransition({
-  enter: RT_NAMESPACE + "__zoom-enter",
-  exit: RT_NAMESPACE + "__zoom-exit"
-});
-var Flip = cssTransition({
-  enter: RT_NAMESPACE + "__flip-enter",
-  exit: RT_NAMESPACE + "__flip-exit"
-});
-
-var ToastContainer =
-/*#__PURE__*/
-function (_Component) {
-  Object(_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(ToastContainer, _Component);
-
-  function ToastContainer() {
-    var _this;
-
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-    _this.state = {
-      toast: []
-    };
-    _this.toastKey = 1;
-    _this.collection = {};
-
-    _this.isToastActive = function (id) {
-      return _this.state.toast.indexOf(id) !== -1;
-    };
-
-    return _this;
-  }
-
-  var _proto = ToastContainer.prototype;
-
-  _proto.componentDidMount = function componentDidMount() {
-    var _this2 = this;
-
-    eventManager.cancelEmit(ACTION.WILL_UNMOUNT).on(ACTION.SHOW, function (content, options) {
-      return _this2.ref ? _this2.buildToast(content, options) : null;
-    }).on(ACTION.CLEAR, function (id) {
-      return !_this2.ref ? null : id == null ? _this2.clear() : _this2.removeToast(id);
-    }).emit(ACTION.DID_MOUNT, this);
-  };
-
-  _proto.componentWillUnmount = function componentWillUnmount() {
-    eventManager.emit(ACTION.WILL_UNMOUNT, this);
-  };
-
-  _proto.removeToast = function removeToast(id) {
-    this.setState({
-      toast: this.state.toast.filter(function (v) {
-        return v !== id;
-      })
-    }, this.dispatchChange);
-  };
-
-  _proto.dispatchChange = function dispatchChange() {
-    eventManager.emit(ACTION.ON_CHANGE, this.state.toast.length, this.props.containerId);
-  };
-
-  _proto.makeCloseButton = function makeCloseButton(toastClose, toastId, type) {
-    var _this3 = this;
-
-    var closeButton = this.props.closeButton;
-
-    if (Object(react__WEBPACK_IMPORTED_MODULE_3__["isValidElement"])(toastClose) || toastClose === false) {
-      closeButton = toastClose;
-    } else if (toastClose === true) {
-      closeButton = this.props.closeButton && typeof this.props.closeButton !== 'boolean' ? this.props.closeButton : react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(CloseButton, null);
-    }
-
-    return closeButton === false ? false : Object(react__WEBPACK_IMPORTED_MODULE_3__["cloneElement"])(closeButton, {
-      closeToast: function closeToast() {
-        return _this3.removeToast(toastId);
-      },
-      type: type
-    });
-  };
-
-  _proto.getAutoCloseDelay = function getAutoCloseDelay(toastAutoClose) {
-    return toastAutoClose === false || isValidDelay(toastAutoClose) ? toastAutoClose : this.props.autoClose;
-  };
-
-  _proto.canBeRendered = function canBeRendered(content) {
-    return Object(react__WEBPACK_IMPORTED_MODULE_3__["isValidElement"])(content) || typeof content === 'string' || typeof content === 'number' || typeof content === 'function';
-  };
-
-  _proto.parseClassName = function parseClassName(prop) {
-    if (typeof prop === 'string') {
-      return prop;
-    } else if (prop !== null && typeof prop === 'object' && 'toString' in prop) {
-      return prop.toString();
-    }
-
-    return null;
-  };
-
-  _proto.belongToContainer = function belongToContainer(_ref) {
-    var containerId = _ref.containerId;
-    return containerId === this.props.containerId;
-  };
-
-  _proto.buildToast = function buildToast(content, _ref2) {
-    var _this4 = this;
-
-    var delay = _ref2.delay,
-        options = Object(_babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(_ref2, ["delay"]);
-
-    if (!this.canBeRendered(content)) {
-      throw new Error("The element you provided cannot be rendered. You provided an element of type " + typeof content);
-    }
-
-    var toastId = options.toastId,
-        updateId = options.updateId; // Check for multi-container and also for duplicate toastId
-    // Maybe it would be better to extract it
-
-    if (this.props.enableMultiContainer && !this.belongToContainer(options) || this.isToastActive(toastId) && updateId == null) {
-      return;
-    }
-
-    var closeToast = function closeToast() {
-      return _this4.removeToast(toastId);
-    };
-
-    var toastOptions = {
-      id: toastId,
-      // ⚠️ if no options.key, this.toastKey - 1 is assigned
-      key: options.key || this.toastKey++,
-      type: options.type,
-      closeToast: closeToast,
-      updateId: options.updateId,
-      rtl: this.props.rtl,
-      position: options.position || this.props.position,
-      transition: options.transition || this.props.transition,
-      className: this.parseClassName(options.className || this.props.toastClassName),
-      bodyClassName: this.parseClassName(options.bodyClassName || this.props.bodyClassName),
-      onClick: options.onClick || this.props.onClick,
-      closeButton: this.makeCloseButton(options.closeButton, toastId, options.type),
-      pauseOnHover: typeof options.pauseOnHover === 'boolean' ? options.pauseOnHover : this.props.pauseOnHover,
-      pauseOnFocusLoss: typeof options.pauseOnFocusLoss === 'boolean' ? options.pauseOnFocusLoss : this.props.pauseOnFocusLoss,
-      draggable: typeof options.draggable === 'boolean' ? options.draggable : this.props.draggable,
-      draggablePercent: typeof options.draggablePercent === 'number' && !isNaN(options.draggablePercent) ? options.draggablePercent : this.props.draggablePercent,
-      closeOnClick: typeof options.closeOnClick === 'boolean' ? options.closeOnClick : this.props.closeOnClick,
-      progressClassName: this.parseClassName(options.progressClassName || this.props.progressClassName),
-      progressStyle: this.props.progressStyle,
-      autoClose: this.getAutoCloseDelay(options.autoClose),
-      hideProgressBar: typeof options.hideProgressBar === 'boolean' ? options.hideProgressBar : this.props.hideProgressBar,
-      progress: parseFloat(options.progress),
-      role: typeof options.role === 'string' ? options.role : this.props.role
-    };
-    typeof options.onOpen === 'function' && (toastOptions.onOpen = options.onOpen);
-    typeof options.onClose === 'function' && (toastOptions.onClose = options.onClose); // add closeToast function to react component only
-
-    if (Object(react__WEBPACK_IMPORTED_MODULE_3__["isValidElement"])(content) && typeof content.type !== 'string' && typeof content.type !== 'number') {
-      content = Object(react__WEBPACK_IMPORTED_MODULE_3__["cloneElement"])(content, {
-        closeToast: closeToast
-      });
-    } else if (typeof content === 'function') {
-      content = content({
-        closeToast: closeToast
-      });
-    }
-
-    if (isValidDelay(delay)) {
-      setTimeout(function () {
-        _this4.appendToast(toastOptions, content, options.staleToastId);
-      }, delay);
-    } else {
-      this.appendToast(toastOptions, content, options.staleToastId);
-    }
-  };
-
-  _proto.appendToast = function appendToast(options, content, staleToastId) {
-    var _extends2;
-
-    var id = options.id,
-        updateId = options.updateId;
-    this.collection = Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, this.collection, (_extends2 = {}, _extends2[id] = {
-      options: options,
-      content: content,
-      position: options.position
-    }, _extends2));
-    this.setState({
-      toast: (updateId ? [].concat(this.state.toast) : [].concat(this.state.toast, [id])).filter(function (id) {
-        return id !== staleToastId;
-      })
-    }, this.dispatchChange);
-  };
-
-  _proto.clear = function clear() {
-    this.setState({
-      toast: []
-    });
-  };
-
-  _proto.renderToast = function renderToast() {
-    var _this5 = this;
-
-    var toastToRender = {};
-    var _this$props = this.props,
-        className = _this$props.className,
-        style = _this$props.style,
-        newestOnTop = _this$props.newestOnTop;
-    var collection = newestOnTop ? Object.keys(this.collection).reverse() : Object.keys(this.collection); // group toast by position
-
-    collection.forEach(function (toastId) {
-      var _this5$collection$toa = _this5.collection[toastId],
-          position = _this5$collection$toa.position,
-          options = _this5$collection$toa.options,
-          content = _this5$collection$toa.content;
-      toastToRender[position] || (toastToRender[position] = []);
-
-      if (_this5.state.toast.indexOf(options.id) !== -1) {
-        toastToRender[position].push(react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(Toast, Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, options, {
-          isDocumentHidden: _this5.state.isDocumentHidden,
-          key: "toast-" + options.key
-        }), content));
-      } else {
-        toastToRender[position].push(null);
-        delete _this5.collection[toastId];
-      }
-    });
-    return Object.keys(toastToRender).map(function (position) {
-      var _cx;
-
-      var disablePointer = toastToRender[position].length === 1 && toastToRender[position][0] === null;
-      var props = {
-        className: classnames__WEBPACK_IMPORTED_MODULE_5___default()(RT_NAMESPACE + "__toast-container", RT_NAMESPACE + "__toast-container--" + position, (_cx = {}, _cx[RT_NAMESPACE + "__toast-container--rtl"] = _this5.props.rtl, _cx), _this5.parseClassName(className)),
-        style: disablePointer ? Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, style, {
-          pointerEvents: 'none'
-        }) : Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, style)
-      };
-      return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react_transition_group__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, props, {
-        key: "container-" + position
-      }), toastToRender[position]);
-    });
-  };
-
-  _proto.render = function render() {
-    var _this6 = this;
-
-    return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
-      ref: function ref(node) {
-        return _this6.ref = node;
-      },
-      className: "" + RT_NAMESPACE
-    }, this.renderToast());
-  };
-
-  return ToastContainer;
-}(react__WEBPACK_IMPORTED_MODULE_3__["Component"]);
-
-ToastContainer.propTypes = {
-  /**
-   * Set toast position
-   */
-  position: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOf(objectValues(POSITION)),
-
-  /**
-   * Disable or set autoClose delay
-   */
-  autoClose: falseOrDelay,
-
-  /**
-   * Disable or set a custom react element for the close button
-   */
-  closeButton: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.node, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool]),
-
-  /**
-   * Hide or not progress bar when autoClose is enabled
-   */
-  hideProgressBar: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
-
-  /**
-   * Pause toast duration on hover
-   */
-  pauseOnHover: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
-
-  /**
-   * Dismiss toast on click
-   */
-  closeOnClick: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
-
-  /**
-   * Newest on top
-   */
-  newestOnTop: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
-
-  /**
-   * An optional className
-   */
-  className: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object]),
-
-  /**
-   * An optional style
-   */
-  style: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object,
-
-  /**
-   * An optional className for the toast
-   */
-  toastClassName: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object]),
-
-  /**
-   * An optional className for the toast body
-   */
-  bodyClassName: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object]),
-
-  /**
-   * An optional className for the toast progress bar
-   */
-  progressClassName: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object]),
-
-  /**
-   * An optional style for the toast progress bar
-   */
-  progressStyle: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object,
-
-  /**
-   * Define enter and exit transition using react-transition-group
-   */
-  transition: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func,
-
-  /**
-   * Support rtl display
-   */
-  rtl: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
-
-  /**
-   * Allow toast to be draggable
-   */
-  draggable: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
-
-  /**
-   * The percentage of the toast's width it takes for a drag to dismiss a toast
-   */
-  draggablePercent: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.number,
-
-  /**
-   * Pause the toast on focus loss
-   */
-  pauseOnFocusLoss: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
-
-  /**
-   * Show the toast only if it includes containerId and it's the same as containerId
-   */
-  enableMultiContainer: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
-
-  /**
-   * Set id to handle multiple container
-   */
-  containerId: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.number]),
-
-  /**
-   * Set role attribute for the toast body
-   */
-  role: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string,
-
-  /**
-   * Fired when clicking inside toaster
-   */
-  onClick: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func
-};
-ToastContainer.defaultProps = {
-  position: POSITION.TOP_RIGHT,
-  transition: Bounce,
-  rtl: false,
-  autoClose: 5000,
-  hideProgressBar: false,
-  closeButton: react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(CloseButton, null),
-  pauseOnHover: true,
-  pauseOnFocusLoss: true,
-  closeOnClick: true,
-  newestOnTop: false,
-  draggable: true,
-  draggablePercent: 80,
-  className: null,
-  style: null,
-  toastClassName: null,
-  bodyClassName: null,
-  progressClassName: null,
-  progressStyle: null,
-  role: 'alert'
-};
-
-var containers = new Map();
-var latestInstance = null;
-var containerDomNode = null;
-var containerConfig = {};
-var queue = [];
-var lazy = false;
-/**
- * Check whether any container is currently mounted in the DOM
- */
-
-function isAnyContainerMounted() {
-  return containers.size > 0;
-}
-/**
- * Get the container by id. Returns the last container declared when no id is given.
- */
-
-
-function getContainer(containerId) {
-  if (!isAnyContainerMounted()) return null;
-  if (!containerId) return containers.get(latestInstance);
-  return containers.get(containerId);
-}
-/**
- * Get the toast by id, given it's in the DOM, otherwise returns null
- */
-
-
-function getToast(toastId, _ref) {
-  var containerId = _ref.containerId;
-  var container = getContainer(containerId);
-  if (!container) return null;
-  var toast = container.collection[toastId];
-  if (typeof toast === 'undefined') return null;
-  return toast;
-}
-/**
- * Merge provided options with the defaults settings and generate the toastId
- */
-
-
-function mergeOptions(options, type) {
-  return Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, options, {
-    type: type,
-    toastId: getToastId(options)
-  });
-}
-/**
- * Generate a random toastId
- */
-
-
-function generateToastId() {
-  return (Math.random().toString(36) + Date.now().toString(36)).substr(2, 10);
-}
-/**
- * Generate a toastId or use the one provided
- */
-
-
-function getToastId(options) {
-  if (options && (typeof options.toastId === 'string' || typeof options.toastId === 'number' && !isNaN(options.toastId))) {
-    return options.toastId;
-  }
-
-  return generateToastId();
-}
-/**
- * If the container is not mounted, the toast is enqueued and
- * the container lazy mounted
- */
-
-
-function dispatchToast(content, options) {
-  if (isAnyContainerMounted()) {
-    eventManager.emit(ACTION.SHOW, content, options);
-  } else {
-    queue.push({
-      action: ACTION.SHOW,
-      content: content,
-      options: options
-    });
-
-    if (lazy && canUseDom) {
-      lazy = false;
-      containerDomNode = document.createElement('div');
-      document.body.appendChild(containerDomNode);
-      Object(react_dom__WEBPACK_IMPORTED_MODULE_8__["render"])(react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(ToastContainer, containerConfig), containerDomNode);
-    }
-  }
-
-  return options.toastId;
-}
-
-var toast = function toast(content, options) {
-  return dispatchToast(content, mergeOptions(options, options && options.type || TYPE.DEFAULT));
-};
-/**
- * For each available type create a shortcut
- */
-
-
-var _loop = function _loop(t) {
-  if (TYPE[t] !== TYPE.DEFAULT) {
-    toast[TYPE[t].toLowerCase()] = function (content, options) {
-      return dispatchToast(content, mergeOptions(options, options && options.type || TYPE[t]));
-    };
-  }
-};
-
-for (var t in TYPE) {
-  _loop(t);
-}
-/**
- * Maybe I should remove warning in favor of warn, I don't know
- */
-
-
-toast.warn = toast.warning;
-/**
- * Remove toast programmaticaly
- */
-
-toast.dismiss = function (id) {
-  if (id === void 0) {
-    id = null;
-  }
-
-  return isAnyContainerMounted() && eventManager.emit(ACTION.CLEAR, id);
-};
-/**
- * return true if one container is displaying the toast
- */
-
-
-toast.isActive = function (id) {
-  var isToastActive = false;
-
-  if (containers.size > 0) {
-    containers.forEach(function (container) {
-      if (container.isToastActive(id)) {
-        isToastActive = true;
-      }
-    });
-  }
-
-  return isToastActive;
-};
-
-toast.update = function (toastId, options) {
-  if (options === void 0) {
-    options = {};
-  }
-
-  // if you call toast and toast.update directly nothing will be displayed
-  // this is why I defered the update
-  setTimeout(function () {
-    var toast = getToast(toastId, options);
-
-    if (toast) {
-      var oldOptions = toast.options,
-          oldContent = toast.content;
-
-      var nextOptions = Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, oldOptions, {}, options, {
-        toastId: options.toastId || toastId
-      });
-
-      if (!options.toastId || options.toastId === toastId) {
-        nextOptions.updateId = generateToastId();
-      } else {
-        nextOptions.staleToastId = toastId;
-      }
-
-      var content = typeof nextOptions.render !== 'undefined' ? nextOptions.render : oldContent;
-      delete nextOptions.render;
-      dispatchToast(content, nextOptions);
-    }
-  }, 0);
-};
-/**
- * Used for controlled progress bar.
- */
-
-
-toast.done = function (id) {
-  toast.update(id, {
-    progress: 1
-  });
-};
-/**
- * Track changes. The callback get the number of toast displayed
- */
-
-
-toast.onChange = function (callback) {
-  if (typeof callback === 'function') {
-    eventManager.on(ACTION.ON_CHANGE, callback);
-  }
-};
-/**
- * Configure the ToastContainer when lazy mounted
- */
-
-
-toast.configure = function (config) {
-  lazy = true;
-  containerConfig = config;
-};
-
-toast.POSITION = POSITION;
-toast.TYPE = TYPE;
-/**
- * Wait until the ToastContainer is mounted to dispatch the toast
- * and attach isActive method
- */
-
-eventManager.on(ACTION.DID_MOUNT, function (containerInstance) {
-  latestInstance = containerInstance.props.containerId || containerInstance;
-  containers.set(latestInstance, containerInstance);
-  queue.forEach(function (item) {
-    eventManager.emit(item.action, item.content, item.options);
-  });
-  queue = [];
-}).on(ACTION.WILL_UNMOUNT, function (containerInstance) {
-  if (containerInstance) containers.delete(containerInstance.props.containerId || containerInstance);else containers.clear();
-
-  if (containers.size === 0) {
-    eventManager.off(ACTION.SHOW).off(ACTION.CLEAR);
-  }
-
-  if (canUseDom && containerDomNode) {
-    document.body.removeChild(containerDomNode);
-  }
-});
-
-
-
-
-/***/ }),
-
-/***/ 31:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useTheme; });
-/* harmony import */ var _material_ui_styles__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(85);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _defaultTheme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(62);
-
-
-
-function useTheme() {
-  var theme = Object(_material_ui_styles__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])() || _defaultTheme__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"];
-
-  if (false) {}
-
-  return theme;
-}
-
-/***/ }),
-
-/***/ 32:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return useFormControl; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-
-/**
- * @ignore - internal component.
- */
-
-var FormControlContext = react__WEBPACK_IMPORTED_MODULE_0__["createContext"]();
-
-if (false) {}
-
-function useFormControl() {
-  return react__WEBPACK_IMPORTED_MODULE_0__["useContext"](FormControlContext);
-}
-/* harmony default export */ __webpack_exports__["a"] = (FormControlContext);
-
-/***/ }),
-
-/***/ 33:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export hasValue */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return isFilled; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return isAdornedStart; });
-// Supports determination of isControlled().
-// Controlled input accepts its current value as a prop.
-//
-// @see https://facebook.github.io/react/docs/forms.html#controlled-components
-// @param value
-// @returns {boolean} true if string (including '') or number (including zero)
-function hasValue(value) {
-  return value != null && !(Array.isArray(value) && value.length === 0);
-} // Determine if field is empty or filled.
-// Response determines if label is presented above field or as placeholder.
-//
-// @param obj
-// @param SSR
-// @returns {boolean} False when not present or empty string.
-//                    True when any number or string with length.
-
-function isFilled(obj) {
-  var SSR = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-  return obj && (hasValue(obj.value) && obj.value !== '' || SSR && hasValue(obj.defaultValue) && obj.defaultValue !== '');
-} // Determine if an Input is adorned on start.
-// It's corresponding to the left with LTR.
-//
-// @param obj
-// @returns {boolean} False when no adornments.
-//                    True when adorned at the start.
-
-function isAdornedStart(obj) {
-  return obj.startAdornment;
-}
-
-/***/ }),
-
-/***/ 34:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _arrayLikeToArray; });
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
-  }
-
-  return arr2;
-}
-
-/***/ }),
-
-/***/ 35:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _arrayLikeToArray; });
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
-  }
-
-  return arr2;
-}
-
-/***/ }),
-
-/***/ 36:
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-  Copyright (c) 2017 Jed Watson.
-  Licensed under the MIT License (MIT), see
-  http://jedwatson.github.io/classnames
-*/
-/* global define */
-
-(function () {
-	'use strict';
-
-	var hasOwn = {}.hasOwnProperty;
-
-	function classNames () {
-		var classes = [];
-
-		for (var i = 0; i < arguments.length; i++) {
-			var arg = arguments[i];
-			if (!arg) continue;
-
-			var argType = typeof arg;
-
-			if (argType === 'string' || argType === 'number') {
-				classes.push(arg);
-			} else if (Array.isArray(arg) && arg.length) {
-				var inner = classNames.apply(null, arg);
-				if (inner) {
-					classes.push(inner);
-				}
-			} else if (argType === 'object') {
-				for (var key in arg) {
-					if (hasOwn.call(arg, key) && arg[key]) {
-						classes.push(key);
-					}
-				}
-			}
-		}
-
-		return classes.join(' ');
-	}
-
-	if ( true && module.exports) {
-		classNames.default = classNames;
-		module.exports = classNames;
-	} else if (true) {
-		// register as 'classnames', consistent with npm package name
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
-			return classNames;
-		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else {}
-}());
-
-
-/***/ }),
-
-/***/ 37:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _createClass; });
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
-  }
-}
-
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
-}
-
-/***/ }),
-
-/***/ 38:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _slicedToArray; });
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
-var arrayWithHoles = __webpack_require__(72);
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
-function _iterableToArrayLimit(arr, i) {
-  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
-
-  try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
-    }
-  }
-
-  return _arr;
-}
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-var unsupportedIterableToArray = __webpack_require__(44);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
-var nonIterableRest = __webpack_require__(73);
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js
-
-
-
-
-function _slicedToArray(arr, i) {
-  return Object(arrayWithHoles["a" /* default */])(arr) || _iterableToArrayLimit(arr, i) || Object(unsupportedIterableToArray["a" /* default */])(arr, i) || Object(nonIterableRest["a" /* default */])();
-}
-
-/***/ }),
-
-/***/ 39:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _assertThisInitialized; });
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return self;
-}
-
-/***/ }),
-
-/***/ 399:
-/***/ (function(module, exports) {
-
-module.exports=function(e){function r(n){if(t[n])return t[n].exports;var o=t[n]={i:n,l:!1,exports:{}};return e[n].call(o.exports,o,o.exports,r),o.l=!0,o.exports}var t={};return r.m=e,r.c=t,r.d=function(e,t,n){r.o(e,t)||Object.defineProperty(e,t,{configurable:!1,enumerable:!0,get:n})},r.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return r.d(t,"a",t),t},r.o=function(e,r){return Object.prototype.hasOwnProperty.call(e,r)},r.p="",r(r.s=0)}([function(e,r,t){"use strict";r.__esModule=!0,r.default=function(e,r){if(e&&r){var t=Array.isArray(r)?r:r.split(","),n=e.name||"",o=e.type||"",u=o.replace(/\/.*$/,"");return t.some(function(e){var r=e.trim();return"."===r.charAt(0)?n.toLowerCase().endsWith(r.toLowerCase()):r.endsWith("/*")?u===r.replace(/\/.*$/,""):o===r})}return!0}}]);
-
-/***/ }),
-
-/***/ 4:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function toVal(mix) {
-	var k, y, str='';
-
-	if (typeof mix === 'string' || typeof mix === 'number') {
-		str += mix;
-	} else if (typeof mix === 'object') {
-		if (Array.isArray(mix)) {
-			for (k=0; k < mix.length; k++) {
-				if (mix[k]) {
-					if (y = toVal(mix[k])) {
-						str && (str += ' ');
-						str += y;
-					}
-				}
-			}
-		} else {
-			for (k in mix) {
-				if (mix[k]) {
-					str && (str += ' ');
-					str += k;
-				}
-			}
-		}
-	}
-
-	return str;
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (function () {
-	var i=0, tmp, x, str='';
-	while (i < arguments.length) {
-		if (tmp = arguments[i++]) {
-			if (x = toVal(tmp)) {
-				str && (str += ' ');
-				str += x
-			}
-		}
-	}
-	return str;
-});
-
-
-/***/ }),
-
-/***/ 40:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createChainedFunction; });
-/**
- * Safe chained function
- *
- * Will only create a new function if needed,
- * otherwise will pass back existing functions or null.
- *
- * @param {function} functions to chain
- * @returns {function|null}
- */
-function createChainedFunction() {
-  for (var _len = arguments.length, funcs = new Array(_len), _key = 0; _key < _len; _key++) {
-    funcs[_key] = arguments[_key];
-  }
-
-  return funcs.reduce(function (acc, func) {
-    if (func == null) {
-      return acc;
-    }
-
-    if (false) {}
-
-    return function chainedFunction() {
-      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
-      }
-
-      acc.apply(this, args);
-      func.apply(this, args);
-    };
-  }, function () {});
-}
-
-/***/ }),
-
-/***/ 400:
+/***/ 143:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10898,30 +6465,999 @@ Popper.Defaults = Defaults;
 
 /***/ }),
 
-/***/ 41:
+/***/ 152:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return isMuiElement; });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony export isPlainObject */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return deepmerge; });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _babel_runtime_helpers_esm_typeof__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(27);
 
-function isMuiElement(element, muiNames) {
-  return react__WEBPACK_IMPORTED_MODULE_0__["isValidElement"](element) && muiNames.indexOf(element.type.muiName) !== -1;
+
+function isPlainObject(item) {
+  return item && Object(_babel_runtime_helpers_esm_typeof__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(item) === 'object' && item.constructor === Object;
+}
+function deepmerge(target, source) {
+  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {
+    clone: true
+  };
+  var output = options.clone ? Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, target) : target;
+
+  if (isPlainObject(target) && isPlainObject(source)) {
+    Object.keys(source).forEach(function (key) {
+      // Avoid prototype pollution
+      if (key === '__proto__') {
+        return;
+      }
+
+      if (isPlainObject(source[key]) && key in target) {
+        output[key] = deepmerge(target[key], source[key], options);
+      } else {
+        output[key] = source[key];
+      }
+    });
+  }
+
+  return output;
 }
 
 /***/ }),
 
-/***/ 416:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ 153:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-__webpack_require__(593);
-module.exports = __webpack_require__(418);
+"use strict";
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _useTheme_ThemeContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(46);
+/* harmony import */ var _useTheme__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(85);
+/* harmony import */ var _nested__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(52);
 
+
+
+
+
+
+ // To support composition of theme.
+
+function mergeOuterLocalTheme(outerTheme, localTheme) {
+  if (typeof localTheme === 'function') {
+    var mergedTheme = localTheme(outerTheme);
+
+    if (false) {}
+
+    return mergedTheme;
+  }
+
+  return Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, outerTheme), localTheme);
+}
+/**
+ * This component takes a `theme` prop.
+ * It makes the `theme` available down the React tree thanks to React context.
+ * This component should preferably be used at **the root of your component tree**.
+ */
+
+
+function ThemeProvider(props) {
+  var children = props.children,
+      localTheme = props.theme;
+  var outerTheme = Object(_useTheme__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])();
+
+  if (false) {}
+
+  var theme = react__WEBPACK_IMPORTED_MODULE_1___default.a.useMemo(function () {
+    var output = outerTheme === null ? localTheme : mergeOuterLocalTheme(outerTheme, localTheme);
+
+    if (output != null) {
+      output[_nested__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"]] = outerTheme !== null;
+    }
+
+    return output;
+  }, [localTheme, outerTheme]);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_useTheme_ThemeContext__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].Provider, {
+    value: theme
+  }, children);
+}
+
+ false ? undefined : void 0;
+
+if (false) {}
+
+/* harmony default export */ __webpack_exports__["a"] = (ThemeProvider);
 
 /***/ }),
 
-/***/ 417:
+/***/ 16:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _defineProperty; });
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+/***/ }),
+
+/***/ 17:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _slicedToArray; });
+
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
+function _iterableToArrayLimit(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+// EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
+var unsupportedIterableToArray = __webpack_require__(44);
+
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js
+
+
+
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || Object(unsupportedIterableToArray["a" /* default */])(arr, i) || _nonIterableRest();
+}
+
+/***/ }),
+
+/***/ 18:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ownerDocument; });
+function ownerDocument(node) {
+  return node && node.ownerDocument || document;
+}
+
+/***/ }),
+
+/***/ 184:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return mergeClasses; });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+
+
+function mergeClasses() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var baseClasses = options.baseClasses,
+      newClasses = options.newClasses,
+      Component = options.Component;
+
+  if (!newClasses) {
+    return baseClasses;
+  }
+
+  var nextClasses = Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, baseClasses);
+
+  if (false) {}
+
+  Object.keys(newClasses).forEach(function (key) {
+    if (false) {}
+
+    if (newClasses[key]) {
+      nextClasses[key] = "".concat(baseClasses[key], " ").concat(newClasses[key]);
+    }
+  });
+  return nextClasses;
+}
+
+/***/ }),
+
+/***/ 185:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getThemeProps; });
+/* eslint-disable no-restricted-syntax */
+function getThemeProps(params) {
+  var theme = params.theme,
+      name = params.name,
+      props = params.props;
+
+  if (!theme || !theme.props || !theme.props[name]) {
+    return props;
+  } // Resolve default props, code borrow from React source.
+  // https://github.com/facebook/react/blob/15a8f031838a553e41c0b66eb1bcf1da8448104d/packages/react/src/ReactElement.js#L221
+
+
+  var defaultProps = theme.props[name];
+  var propName;
+
+  for (propName in defaultProps) {
+    if (props[propName] === undefined) {
+      props[propName] = defaultProps[propName];
+    }
+  }
+
+  return props;
+}
+
+/***/ }),
+
+/***/ 186:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export styles */
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
+/* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5);
+
+
+
+
+
+
+
+var styles = function styles(theme) {
+  var elevations = {};
+  theme.shadows.forEach(function (shadow, index) {
+    elevations["elevation".concat(index)] = {
+      boxShadow: shadow
+    };
+  });
+  return Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])({
+    /* Styles applied to the root element. */
+    root: {
+      backgroundColor: theme.palette.background.paper,
+      color: theme.palette.text.primary,
+      transition: theme.transitions.create('box-shadow')
+    },
+
+    /* Styles applied to the root element if `square={false}`. */
+    rounded: {
+      borderRadius: theme.shape.borderRadius
+    },
+
+    /* Styles applied to the root element if `variant="outlined"` */
+    outlined: {
+      border: "1px solid ".concat(theme.palette.divider)
+    }
+  }, elevations);
+};
+var Paper = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function Paper(props, ref) {
+  var classes = props.classes,
+      className = props.className,
+      _props$component = props.component,
+      Component = _props$component === void 0 ? 'div' : _props$component,
+      _props$square = props.square,
+      square = _props$square === void 0 ? false : _props$square,
+      _props$elevation = props.elevation,
+      elevation = _props$elevation === void 0 ? 1 : _props$elevation,
+      _props$variant = props.variant,
+      variant = _props$variant === void 0 ? 'elevation' : _props$variant,
+      other = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(props, ["classes", "className", "component", "square", "elevation", "variant"]);
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"](Component, Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])({
+    className: Object(clsx__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(classes.root, className, variant === 'outlined' ? classes.outlined : classes["elevation".concat(elevation)], !square && classes.rounded),
+    ref: ref
+  }, other));
+});
+ false ? undefined : void 0;
+/* harmony default export */ __webpack_exports__["a"] = (Object(_styles_withStyles__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(styles, {
+  name: 'MuiPaper'
+})(Paper));
+
+/***/ }),
+
+/***/ 187:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _utils_setRef__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(25);
+/* harmony import */ var _utils_useForkRef__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
+
+
+
+
+
+
+
+function getContainer(container) {
+  container = typeof container === 'function' ? container() : container; // #StrictMode ready
+
+  return react_dom__WEBPACK_IMPORTED_MODULE_1__["findDOMNode"](container);
+}
+
+var useEnhancedEffect = typeof window !== 'undefined' ? react__WEBPACK_IMPORTED_MODULE_0__["useLayoutEffect"] : react__WEBPACK_IMPORTED_MODULE_0__["useEffect"];
+/**
+ * Portals provide a first-class way to render children into a DOM node
+ * that exists outside the DOM hierarchy of the parent component.
+ */
+
+var Portal = react__WEBPACK_IMPORTED_MODULE_0__["forwardRef"](function Portal(props, ref) {
+  var children = props.children,
+      container = props.container,
+      _props$disablePortal = props.disablePortal,
+      disablePortal = _props$disablePortal === void 0 ? false : _props$disablePortal,
+      onRendered = props.onRendered;
+
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__["useState"](null),
+      mountNode = _React$useState[0],
+      setMountNode = _React$useState[1];
+
+  var handleRef = Object(_utils_useForkRef__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(react__WEBPACK_IMPORTED_MODULE_0__["isValidElement"](children) ? children.ref : null, ref);
+  useEnhancedEffect(function () {
+    if (!disablePortal) {
+      setMountNode(getContainer(container) || document.body);
+    }
+  }, [container, disablePortal]);
+  useEnhancedEffect(function () {
+    if (mountNode && !disablePortal) {
+      Object(_utils_setRef__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(ref, mountNode);
+      return function () {
+        Object(_utils_setRef__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(ref, null);
+      };
+    }
+
+    return undefined;
+  }, [ref, mountNode, disablePortal]);
+  useEnhancedEffect(function () {
+    if (onRendered && (mountNode || disablePortal)) {
+      onRendered();
+    }
+  }, [onRendered, mountNode, disablePortal]);
+
+  if (disablePortal) {
+    if (react__WEBPACK_IMPORTED_MODULE_0__["isValidElement"](children)) {
+      return react__WEBPACK_IMPORTED_MODULE_0__["cloneElement"](children, {
+        ref: handleRef
+      });
+    }
+
+    return children;
+  }
+
+  return mountNode ? react_dom__WEBPACK_IMPORTED_MODULE_1__["createPortal"](children, mountNode) : mountNode;
+});
+ false ? undefined : void 0;
+
+if (false) {}
+
+/* harmony default export */ __webpack_exports__["a"] = (Portal);
+
+/***/ }),
+
+/***/ 188:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export styles */
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
+/* harmony import */ var _Input__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(111);
+/* harmony import */ var _FilledInput__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(112);
+/* harmony import */ var _OutlinedInput__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(116);
+/* harmony import */ var _InputLabel__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(117);
+/* harmony import */ var _FormControl__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(113);
+/* harmony import */ var _FormHelperText__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(114);
+/* harmony import */ var _Select__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(115);
+/* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(5);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var variantComponent = {
+  standard: _Input__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"],
+  filled: _FilledInput__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"],
+  outlined: _OutlinedInput__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"]
+};
+var styles = {
+  /* Styles applied to the root element. */
+  root: {}
+};
+/**
+ * The `TextField` is a convenience wrapper for the most common cases (80%).
+ * It cannot be all things to all people, otherwise the API would grow out of control.
+ *
+ * ## Advanced Configuration
+ *
+ * It's important to understand that the text field is a simple abstraction
+ * on top of the following components:
+ *
+ * - [FormControl](/api/form-control/)
+ * - [InputLabel](/api/input-label/)
+ * - [FilledInput](/api/filled-input/)
+ * - [OutlinedInput](/api/outlined-input/)
+ * - [Input](/api/input/)
+ * - [FormHelperText](/api/form-helper-text/)
+ *
+ * If you wish to alter the props applied to the `input` element, you can do so as follows:
+ *
+ * ```jsx
+ * const inputProps = {
+ *   step: 300,
+ * };
+ *
+ * return <TextField id="time" type="time" inputProps={inputProps} />;
+ * ```
+ *
+ * For advanced cases, please look at the source of TextField by clicking on the
+ * "Edit this page" button above. Consider either:
+ *
+ * - using the upper case props for passing values directly to the components
+ * - using the underlying components directly as shown in the demos
+ */
+
+var TextField = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function TextField(props, ref) {
+  var autoComplete = props.autoComplete,
+      _props$autoFocus = props.autoFocus,
+      autoFocus = _props$autoFocus === void 0 ? false : _props$autoFocus,
+      children = props.children,
+      classes = props.classes,
+      className = props.className,
+      _props$color = props.color,
+      color = _props$color === void 0 ? 'primary' : _props$color,
+      defaultValue = props.defaultValue,
+      _props$disabled = props.disabled,
+      disabled = _props$disabled === void 0 ? false : _props$disabled,
+      _props$error = props.error,
+      error = _props$error === void 0 ? false : _props$error,
+      FormHelperTextProps = props.FormHelperTextProps,
+      _props$fullWidth = props.fullWidth,
+      fullWidth = _props$fullWidth === void 0 ? false : _props$fullWidth,
+      helperText = props.helperText,
+      hiddenLabel = props.hiddenLabel,
+      id = props.id,
+      InputLabelProps = props.InputLabelProps,
+      inputProps = props.inputProps,
+      InputProps = props.InputProps,
+      inputRef = props.inputRef,
+      label = props.label,
+      _props$multiline = props.multiline,
+      multiline = _props$multiline === void 0 ? false : _props$multiline,
+      name = props.name,
+      onBlur = props.onBlur,
+      onChange = props.onChange,
+      onFocus = props.onFocus,
+      placeholder = props.placeholder,
+      _props$required = props.required,
+      required = _props$required === void 0 ? false : _props$required,
+      rows = props.rows,
+      rowsMax = props.rowsMax,
+      _props$select = props.select,
+      select = _props$select === void 0 ? false : _props$select,
+      SelectProps = props.SelectProps,
+      type = props.type,
+      value = props.value,
+      _props$variant = props.variant,
+      variant = _props$variant === void 0 ? 'standard' : _props$variant,
+      other = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(props, ["autoComplete", "autoFocus", "children", "classes", "className", "color", "defaultValue", "disabled", "error", "FormHelperTextProps", "fullWidth", "helperText", "hiddenLabel", "id", "InputLabelProps", "inputProps", "InputProps", "inputRef", "label", "multiline", "name", "onBlur", "onChange", "onFocus", "placeholder", "required", "rows", "rowsMax", "select", "SelectProps", "type", "value", "variant"]);
+
+  if (false) {}
+
+  var InputMore = {};
+
+  if (variant === 'outlined') {
+    if (InputLabelProps && typeof InputLabelProps.shrink !== 'undefined') {
+      InputMore.notched = InputLabelProps.shrink;
+    }
+
+    if (label) {
+      InputMore.label = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"](react__WEBPACK_IMPORTED_MODULE_2__["Fragment"], null, label, required && "\xA0*");
+    }
+  }
+
+  if (select) {
+    // unset defaults from textbox inputs
+    if (!SelectProps || !SelectProps.native) {
+      InputMore.id = undefined;
+    }
+
+    InputMore['aria-describedby'] = undefined;
+  }
+
+  var helperTextId = helperText && id ? "".concat(id, "-helper-text") : undefined;
+  var inputLabelId = label && id ? "".concat(id, "-label") : undefined;
+  var InputComponent = variantComponent[variant];
+  var InputElement = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"](InputComponent, Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
+    "aria-describedby": helperTextId,
+    autoComplete: autoComplete,
+    autoFocus: autoFocus,
+    defaultValue: defaultValue,
+    fullWidth: fullWidth,
+    multiline: multiline,
+    name: name,
+    rows: rows,
+    rowsMax: rowsMax,
+    type: type,
+    value: value,
+    id: id,
+    inputRef: inputRef,
+    onBlur: onBlur,
+    onChange: onChange,
+    onFocus: onFocus,
+    placeholder: placeholder,
+    inputProps: inputProps
+  }, InputMore, InputProps));
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"](_FormControl__WEBPACK_IMPORTED_MODULE_9__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
+    className: Object(clsx__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(classes.root, className),
+    disabled: disabled,
+    error: error,
+    fullWidth: fullWidth,
+    hiddenLabel: hiddenLabel,
+    ref: ref,
+    required: required,
+    color: color,
+    variant: variant
+  }, other), label && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"](_InputLabel__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
+    htmlFor: id,
+    id: inputLabelId
+  }, InputLabelProps), label), select ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"](_Select__WEBPACK_IMPORTED_MODULE_11__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
+    "aria-describedby": helperTextId,
+    id: id,
+    labelId: inputLabelId,
+    value: value,
+    input: InputElement
+  }, SelectProps), children) : InputElement, helperText && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"](_FormHelperText__WEBPACK_IMPORTED_MODULE_10__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
+    id: helperTextId
+  }, FormHelperTextProps), helperText));
+});
+ false ? undefined : void 0;
+/* harmony default export */ __webpack_exports__["a"] = (Object(_styles_withStyles__WEBPACK_IMPORTED_MODULE_12__[/* default */ "a"])(styles, {
+  name: 'MuiTextField'
+})(TextField));
+
+/***/ }),
+
+/***/ 189:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export styles */
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
+/* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5);
+/* harmony import */ var _styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(10);
+/* harmony import */ var _ButtonBase__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(98);
+/* harmony import */ var _utils_capitalize__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6);
+
+
+
+
+
+
+
+
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])({}, theme.typography.button, {
+      boxSizing: 'border-box',
+      minWidth: 64,
+      padding: '6px 16px',
+      borderRadius: theme.shape.borderRadius,
+      color: theme.palette.text.primary,
+      transition: theme.transitions.create(['background-color', 'box-shadow', 'border'], {
+        duration: theme.transitions.duration.short
+      }),
+      '&:hover': {
+        textDecoration: 'none',
+        backgroundColor: Object(_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__[/* fade */ "c"])(theme.palette.text.primary, theme.palette.action.hoverOpacity),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: 'transparent'
+        },
+        '&$disabled': {
+          backgroundColor: 'transparent'
+        }
+      },
+      '&$disabled': {
+        color: theme.palette.action.disabled
+      }
+    }),
+
+    /* Styles applied to the span element that wraps the children. */
+    label: {
+      width: '100%',
+      // Ensure the correct width for iOS Safari
+      display: 'inherit',
+      alignItems: 'inherit',
+      justifyContent: 'inherit'
+    },
+
+    /* Styles applied to the root element if `variant="text"`. */
+    text: {
+      padding: '6px 8px'
+    },
+
+    /* Styles applied to the root element if `variant="text"` and `color="primary"`. */
+    textPrimary: {
+      color: theme.palette.primary.main,
+      '&:hover': {
+        backgroundColor: Object(_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__[/* fade */ "c"])(theme.palette.primary.main, theme.palette.action.hoverOpacity),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: 'transparent'
+        }
+      }
+    },
+
+    /* Styles applied to the root element if `variant="text"` and `color="secondary"`. */
+    textSecondary: {
+      color: theme.palette.secondary.main,
+      '&:hover': {
+        backgroundColor: Object(_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__[/* fade */ "c"])(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: 'transparent'
+        }
+      }
+    },
+
+    /* Styles applied to the root element if `variant="outlined"`. */
+    outlined: {
+      padding: '5px 15px',
+      border: "1px solid ".concat(theme.palette.type === 'light' ? 'rgba(0, 0, 0, 0.23)' : 'rgba(255, 255, 255, 0.23)'),
+      '&$disabled': {
+        border: "1px solid ".concat(theme.palette.action.disabledBackground)
+      }
+    },
+
+    /* Styles applied to the root element if `variant="outlined"` and `color="primary"`. */
+    outlinedPrimary: {
+      color: theme.palette.primary.main,
+      border: "1px solid ".concat(Object(_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__[/* fade */ "c"])(theme.palette.primary.main, 0.5)),
+      '&:hover': {
+        border: "1px solid ".concat(theme.palette.primary.main),
+        backgroundColor: Object(_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__[/* fade */ "c"])(theme.palette.primary.main, theme.palette.action.hoverOpacity),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: 'transparent'
+        }
+      }
+    },
+
+    /* Styles applied to the root element if `variant="outlined"` and `color="secondary"`. */
+    outlinedSecondary: {
+      color: theme.palette.secondary.main,
+      border: "1px solid ".concat(Object(_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__[/* fade */ "c"])(theme.palette.secondary.main, 0.5)),
+      '&:hover': {
+        border: "1px solid ".concat(theme.palette.secondary.main),
+        backgroundColor: Object(_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__[/* fade */ "c"])(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: 'transparent'
+        }
+      },
+      '&$disabled': {
+        border: "1px solid ".concat(theme.palette.action.disabled)
+      }
+    },
+
+    /* Styles applied to the root element if `variant="contained"`. */
+    contained: {
+      color: theme.palette.getContrastText(theme.palette.grey[300]),
+      backgroundColor: theme.palette.grey[300],
+      boxShadow: theme.shadows[2],
+      '&:hover': {
+        backgroundColor: theme.palette.grey.A100,
+        boxShadow: theme.shadows[4],
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          boxShadow: theme.shadows[2],
+          backgroundColor: theme.palette.grey[300]
+        },
+        '&$disabled': {
+          backgroundColor: theme.palette.action.disabledBackground
+        }
+      },
+      '&$focusVisible': {
+        boxShadow: theme.shadows[6]
+      },
+      '&:active': {
+        boxShadow: theme.shadows[8]
+      },
+      '&$disabled': {
+        color: theme.palette.action.disabled,
+        boxShadow: theme.shadows[0],
+        backgroundColor: theme.palette.action.disabledBackground
+      }
+    },
+
+    /* Styles applied to the root element if `variant="contained"` and `color="primary"`. */
+    containedPrimary: {
+      color: theme.palette.primary.contrastText,
+      backgroundColor: theme.palette.primary.main,
+      '&:hover': {
+        backgroundColor: theme.palette.primary.dark,
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: theme.palette.primary.main
+        }
+      }
+    },
+
+    /* Styles applied to the root element if `variant="contained"` and `color="secondary"`. */
+    containedSecondary: {
+      color: theme.palette.secondary.contrastText,
+      backgroundColor: theme.palette.secondary.main,
+      '&:hover': {
+        backgroundColor: theme.palette.secondary.dark,
+        // Reset on touch devices, it doesn't add specificity
+        '@media (hover: none)': {
+          backgroundColor: theme.palette.secondary.main
+        }
+      }
+    },
+
+    /* Styles applied to the root element if `disableElevation={true}`. */
+    disableElevation: {
+      boxShadow: 'none',
+      '&:hover': {
+        boxShadow: 'none'
+      },
+      '&$focusVisible': {
+        boxShadow: 'none'
+      },
+      '&:active': {
+        boxShadow: 'none'
+      },
+      '&$disabled': {
+        boxShadow: 'none'
+      }
+    },
+
+    /* Pseudo-class applied to the ButtonBase root element if the button is keyboard focused. */
+    focusVisible: {},
+
+    /* Pseudo-class applied to the root element if `disabled={true}`. */
+    disabled: {},
+
+    /* Styles applied to the root element if `color="inherit"`. */
+    colorInherit: {
+      color: 'inherit',
+      borderColor: 'currentColor'
+    },
+
+    /* Styles applied to the root element if `size="small"` and `variant="text"`. */
+    textSizeSmall: {
+      padding: '4px 5px',
+      fontSize: theme.typography.pxToRem(13)
+    },
+
+    /* Styles applied to the root element if `size="large"` and `variant="text"`. */
+    textSizeLarge: {
+      padding: '8px 11px',
+      fontSize: theme.typography.pxToRem(15)
+    },
+
+    /* Styles applied to the root element if `size="small"` and `variant="outlined"`. */
+    outlinedSizeSmall: {
+      padding: '3px 9px',
+      fontSize: theme.typography.pxToRem(13)
+    },
+
+    /* Styles applied to the root element if `size="large"` and `variant="outlined"`. */
+    outlinedSizeLarge: {
+      padding: '7px 21px',
+      fontSize: theme.typography.pxToRem(15)
+    },
+
+    /* Styles applied to the root element if `size="small"` and `variant="contained"`. */
+    containedSizeSmall: {
+      padding: '4px 10px',
+      fontSize: theme.typography.pxToRem(13)
+    },
+
+    /* Styles applied to the root element if `size="large"` and `variant="contained"`. */
+    containedSizeLarge: {
+      padding: '8px 22px',
+      fontSize: theme.typography.pxToRem(15)
+    },
+
+    /* Styles applied to the root element if `size="small"`. */
+    sizeSmall: {},
+
+    /* Styles applied to the root element if `size="large"`. */
+    sizeLarge: {},
+
+    /* Styles applied to the root element if `fullWidth={true}`. */
+    fullWidth: {
+      width: '100%'
+    },
+
+    /* Styles applied to the startIcon element if supplied. */
+    startIcon: {
+      display: 'inherit',
+      marginRight: 8,
+      marginLeft: -4,
+      '&$iconSizeSmall': {
+        marginLeft: -2
+      }
+    },
+
+    /* Styles applied to the endIcon element if supplied. */
+    endIcon: {
+      display: 'inherit',
+      marginRight: -4,
+      marginLeft: 8,
+      '&$iconSizeSmall': {
+        marginRight: -2
+      }
+    },
+
+    /* Styles applied to the icon element if supplied and `size="small"`. */
+    iconSizeSmall: {
+      '& > *:first-child': {
+        fontSize: 18
+      }
+    },
+
+    /* Styles applied to the icon element if supplied and `size="medium"`. */
+    iconSizeMedium: {
+      '& > *:first-child': {
+        fontSize: 20
+      }
+    },
+
+    /* Styles applied to the icon element if supplied and `size="large"`. */
+    iconSizeLarge: {
+      '& > *:first-child': {
+        fontSize: 22
+      }
+    }
+  };
+};
+var Button = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function Button(props, ref) {
+  var children = props.children,
+      classes = props.classes,
+      className = props.className,
+      _props$color = props.color,
+      color = _props$color === void 0 ? 'default' : _props$color,
+      _props$component = props.component,
+      component = _props$component === void 0 ? 'button' : _props$component,
+      _props$disabled = props.disabled,
+      disabled = _props$disabled === void 0 ? false : _props$disabled,
+      _props$disableElevati = props.disableElevation,
+      disableElevation = _props$disableElevati === void 0 ? false : _props$disableElevati,
+      _props$disableFocusRi = props.disableFocusRipple,
+      disableFocusRipple = _props$disableFocusRi === void 0 ? false : _props$disableFocusRi,
+      endIconProp = props.endIcon,
+      focusVisibleClassName = props.focusVisibleClassName,
+      _props$fullWidth = props.fullWidth,
+      fullWidth = _props$fullWidth === void 0 ? false : _props$fullWidth,
+      _props$size = props.size,
+      size = _props$size === void 0 ? 'medium' : _props$size,
+      startIconProp = props.startIcon,
+      _props$type = props.type,
+      type = _props$type === void 0 ? 'button' : _props$type,
+      _props$variant = props.variant,
+      variant = _props$variant === void 0 ? 'text' : _props$variant,
+      other = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(props, ["children", "classes", "className", "color", "component", "disabled", "disableElevation", "disableFocusRipple", "endIcon", "focusVisibleClassName", "fullWidth", "size", "startIcon", "type", "variant"]);
+
+  var startIcon = startIconProp && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"]("span", {
+    className: Object(clsx__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(classes.startIcon, classes["iconSize".concat(Object(_utils_capitalize__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"])(size))])
+  }, startIconProp);
+  var endIcon = endIconProp && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"]("span", {
+    className: Object(clsx__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(classes.endIcon, classes["iconSize".concat(Object(_utils_capitalize__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"])(size))])
+  }, endIconProp);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"](_ButtonBase__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])({
+    className: Object(clsx__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(classes.root, classes[variant], className, color === 'inherit' ? classes.colorInherit : color !== 'default' && classes["".concat(variant).concat(Object(_utils_capitalize__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"])(color))], size !== 'medium' && [classes["".concat(variant, "Size").concat(Object(_utils_capitalize__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"])(size))], classes["size".concat(Object(_utils_capitalize__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"])(size))]], disableElevation && classes.disableElevation, disabled && classes.disabled, fullWidth && classes.fullWidth),
+    component: component,
+    disabled: disabled,
+    focusRipple: !disableFocusRipple,
+    focusVisibleClassName: Object(clsx__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(classes.focusVisible, focusVisibleClassName),
+    ref: ref,
+    type: type
+  }, other), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"]("span", {
+    className: classes.label
+  }, startIcon, children, endIcon));
+});
+ false ? undefined : void 0;
+/* harmony default export */ __webpack_exports__["a"] = (Object(_styles_withStyles__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(styles, {
+  name: 'MuiButton'
+})(Button));
+
+/***/ }),
+
+/***/ 19:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _objectWithoutPropertiesLoose; });
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+/***/ }),
+
+/***/ 190:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10934,9 +7470,1104 @@ module.exports = __webpack_require__(418);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
 /* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5);
-/* harmony import */ var _styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(12);
-/* harmony import */ var _ButtonBase__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(100);
-/* harmony import */ var _utils_capitalize__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(7);
+/* harmony import */ var _utils_capitalize__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
+
+
+
+
+
+
+
+
+var SIZE = 44;
+
+function getRelativeValue(value, min, max) {
+  return (Math.min(Math.max(min, value), max) - min) / (max - min);
+}
+
+function easeOut(t) {
+  t = getRelativeValue(t, 0, 1); // https://gist.github.com/gre/1650294
+
+  t = (t -= 1) * t * t + 1;
+  return t;
+}
+
+function easeIn(t) {
+  return t * t;
+}
+
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      display: 'inline-block'
+    },
+
+    /* Styles applied to the root element if `variant="static"`. */
+    static: {
+      transition: theme.transitions.create('transform')
+    },
+
+    /* Styles applied to the root element if `variant="indeterminate"`. */
+    indeterminate: {
+      animation: '$circular-rotate 1.4s linear infinite'
+    },
+
+    /* Styles applied to the root element if `color="primary"`. */
+    colorPrimary: {
+      color: theme.palette.primary.main
+    },
+
+    /* Styles applied to the root element if `color="secondary"`. */
+    colorSecondary: {
+      color: theme.palette.secondary.main
+    },
+
+    /* Styles applied to the `svg` element. */
+    svg: {
+      display: 'block' // Keeps the progress centered
+
+    },
+
+    /* Styles applied to the `circle` svg path. */
+    circle: {
+      stroke: 'currentColor' // Use butt to follow the specification, by chance, it's already the default CSS value.
+      // strokeLinecap: 'butt',
+
+    },
+
+    /* Styles applied to the `circle` svg path if `variant="static"`. */
+    circleStatic: {
+      transition: theme.transitions.create('stroke-dashoffset')
+    },
+
+    /* Styles applied to the `circle` svg path if `variant="indeterminate"`. */
+    circleIndeterminate: {
+      animation: '$circular-dash 1.4s ease-in-out infinite',
+      // Some default value that looks fine waiting for the animation to kicks in.
+      strokeDasharray: '80px, 200px',
+      strokeDashoffset: '0px' // Add the unit to fix a Edge 16 and below bug.
+
+    },
+    '@keyframes circular-rotate': {
+      '100%': {
+        transform: 'rotate(360deg)'
+      }
+    },
+    '@keyframes circular-dash': {
+      '0%': {
+        strokeDasharray: '1px, 200px',
+        strokeDashoffset: '0px'
+      },
+      '50%': {
+        strokeDasharray: '100px, 200px',
+        strokeDashoffset: '-15px'
+      },
+      '100%': {
+        strokeDasharray: '100px, 200px',
+        strokeDashoffset: '-125px'
+      }
+    },
+
+    /* Styles applied to the `circle` svg path if `disableShrink={true}`. */
+    circleDisableShrink: {
+      animation: 'none'
+    }
+  };
+};
+/**
+ * ## ARIA
+ *
+ * If the progress bar is describing the loading progress of a particular region of a page,
+ * you should use `aria-describedby` to point to the progress bar, and set the `aria-busy`
+ * attribute to `true` on that region until it has finished loading.
+ */
+
+var CircularProgress = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function CircularProgress(props, ref) {
+  var classes = props.classes,
+      className = props.className,
+      _props$color = props.color,
+      color = _props$color === void 0 ? 'primary' : _props$color,
+      _props$disableShrink = props.disableShrink,
+      disableShrink = _props$disableShrink === void 0 ? false : _props$disableShrink,
+      _props$size = props.size,
+      size = _props$size === void 0 ? 40 : _props$size,
+      style = props.style,
+      _props$thickness = props.thickness,
+      thickness = _props$thickness === void 0 ? 3.6 : _props$thickness,
+      _props$value = props.value,
+      value = _props$value === void 0 ? 0 : _props$value,
+      _props$variant = props.variant,
+      variant = _props$variant === void 0 ? 'indeterminate' : _props$variant,
+      other = Object(_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(props, ["classes", "className", "color", "disableShrink", "size", "style", "thickness", "value", "variant"]);
+
+  var circleStyle = {};
+  var rootStyle = {};
+  var rootProps = {};
+
+  if (variant === 'determinate' || variant === 'static') {
+    var circumference = 2 * Math.PI * ((SIZE - thickness) / 2);
+    circleStyle.strokeDasharray = circumference.toFixed(3);
+    rootProps['aria-valuenow'] = Math.round(value);
+
+    if (variant === 'static') {
+      circleStyle.strokeDashoffset = "".concat(((100 - value) / 100 * circumference).toFixed(3), "px");
+      rootStyle.transform = 'rotate(-90deg)';
+    } else {
+      circleStyle.strokeDashoffset = "".concat((easeIn((100 - value) / 100) * circumference).toFixed(3), "px");
+      rootStyle.transform = "rotate(".concat((easeOut(value / 70) * 270).toFixed(3), "deg)");
+    }
+  }
+
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"]("div", Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
+    className: Object(clsx__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(classes.root, className, color !== 'inherit' && classes["color".concat(Object(_utils_capitalize__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"])(color))], {
+      'indeterminate': classes.indeterminate,
+      'static': classes.static
+    }[variant]),
+    style: Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
+      width: size,
+      height: size
+    }, rootStyle, {}, style),
+    ref: ref,
+    role: "progressbar"
+  }, rootProps, other), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"]("svg", {
+    className: classes.svg,
+    viewBox: "".concat(SIZE / 2, " ").concat(SIZE / 2, " ").concat(SIZE, " ").concat(SIZE)
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2__["createElement"]("circle", {
+    className: Object(clsx__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(classes.circle, disableShrink && classes.circleDisableShrink, {
+      'indeterminate': classes.circleIndeterminate,
+      'static': classes.circleStatic
+    }[variant]),
+    style: circleStyle,
+    cx: SIZE,
+    cy: SIZE,
+    r: (SIZE - thickness) / 2,
+    fill: "none",
+    strokeWidth: thickness
+  })));
+});
+ false ? undefined : void 0;
+/* harmony default export */ __webpack_exports__["a"] = (Object(_styles_withStyles__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(styles, {
+  name: 'MuiCircularProgress',
+  flip: false
+})(CircularProgress));
+
+/***/ }),
+
+/***/ 2:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _extends; });
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+/***/ }),
+
+/***/ 20:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _toConsumableArray; });
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
+var arrayLikeToArray = __webpack_require__(36);
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return Object(arrayLikeToArray["a" /* default */])(arr);
+}
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArray.js
+var iterableToArray = __webpack_require__(74);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
+var unsupportedIterableToArray = __webpack_require__(45);
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js
+
+
+
+
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || Object(iterableToArray["a" /* default */])(arr) || Object(unsupportedIterableToArray["a" /* default */])(arr) || _nonIterableSpread();
+}
+
+/***/ }),
+
+/***/ 21:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return formControlState; });
+function formControlState(_ref) {
+  var props = _ref.props,
+      states = _ref.states,
+      muiFormControl = _ref.muiFormControl;
+  return states.reduce(function (acc, state) {
+    acc[state] = props[state];
+
+    if (muiFormControl) {
+      if (typeof props[state] === 'undefined') {
+        acc[state] = muiFormControl[state];
+      }
+    }
+
+    return acc;
+  }, {});
+}
+
+/***/ }),
+
+/***/ 218:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// UNUSED EXPORTS: styles
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
+var objectWithoutProperties = __webpack_require__(3);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
+var esm_extends = __webpack_require__(2);
+
+// EXTERNAL MODULE: ./node_modules/react/index.js
+var react = __webpack_require__(0);
+
+// EXTERNAL MODULE: ./node_modules/react-dom/index.js
+var react_dom = __webpack_require__(8);
+
+// EXTERNAL MODULE: ./node_modules/prop-types/index.js
+var prop_types = __webpack_require__(1);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/useTheme/useTheme.js
+var useTheme = __webpack_require__(85);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/getThemeProps/getThemeProps.js
+var getThemeProps = __webpack_require__(185);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/ownerDocument.js
+var ownerDocument = __webpack_require__(18);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Portal/Portal.js
+var Portal = __webpack_require__(187);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/createChainedFunction.js
+var createChainedFunction = __webpack_require__(37);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useForkRef.js
+var useForkRef = __webpack_require__(9);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useEventCallback.js
+var useEventCallback = __webpack_require__(24);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/zIndex.js
+var zIndex = __webpack_require__(51);
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
+var createClass = __webpack_require__(39);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 2 modules
+var toConsumableArray = __webpack_require__(20);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/getScrollbarSize.js
+var getScrollbarSize = __webpack_require__(65);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/ownerWindow.js
+var ownerWindow = __webpack_require__(41);
+
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Modal/ModalManager.js
+
+
+
+
+
+ // Is a vertical scrollbar displayed?
+
+function isOverflowing(container) {
+  var doc = Object(ownerDocument["a" /* default */])(container);
+
+  if (doc.body === container) {
+    return Object(ownerWindow["a" /* default */])(doc).innerWidth > doc.documentElement.clientWidth;
+  }
+
+  return container.scrollHeight > container.clientHeight;
+}
+
+function ariaHidden(node, show) {
+  if (show) {
+    node.setAttribute('aria-hidden', 'true');
+  } else {
+    node.removeAttribute('aria-hidden');
+  }
+}
+
+function getPaddingRight(node) {
+  return parseInt(window.getComputedStyle(node)['padding-right'], 10) || 0;
+}
+
+function ariaHiddenSiblings(container, mountNode, currentNode) {
+  var nodesToExclude = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
+  var show = arguments.length > 4 ? arguments[4] : undefined;
+  var blacklist = [mountNode, currentNode].concat(Object(toConsumableArray["a" /* default */])(nodesToExclude));
+  var blacklistTagNames = ['TEMPLATE', 'SCRIPT', 'STYLE'];
+  [].forEach.call(container.children, function (node) {
+    if (node.nodeType === 1 && blacklist.indexOf(node) === -1 && blacklistTagNames.indexOf(node.tagName) === -1) {
+      ariaHidden(node, show);
+    }
+  });
+}
+
+function findIndexOf(containerInfo, callback) {
+  var idx = -1;
+  containerInfo.some(function (item, index) {
+    if (callback(item)) {
+      idx = index;
+      return true;
+    }
+
+    return false;
+  });
+  return idx;
+}
+
+function handleContainer(containerInfo, props) {
+  var restoreStyle = [];
+  var restorePaddings = [];
+  var container = containerInfo.container;
+  var fixedNodes;
+
+  if (!props.disableScrollLock) {
+    if (isOverflowing(container)) {
+      // Compute the size before applying overflow hidden to avoid any scroll jumps.
+      var scrollbarSize = Object(getScrollbarSize["a" /* default */])();
+      restoreStyle.push({
+        value: container.style.paddingRight,
+        key: 'padding-right',
+        el: container
+      }); // Use computed style, here to get the real padding to add our scrollbar width.
+
+      container.style['padding-right'] = "".concat(getPaddingRight(container) + scrollbarSize, "px"); // .mui-fixed is a global helper.
+
+      fixedNodes = Object(ownerDocument["a" /* default */])(container).querySelectorAll('.mui-fixed');
+      [].forEach.call(fixedNodes, function (node) {
+        restorePaddings.push(node.style.paddingRight);
+        node.style.paddingRight = "".concat(getPaddingRight(node) + scrollbarSize, "px");
+      });
+    } // Improve Gatsby support
+    // https://css-tricks.com/snippets/css/force-vertical-scrollbar/
+
+
+    var parent = container.parentElement;
+    var scrollContainer = parent.nodeName === 'HTML' && window.getComputedStyle(parent)['overflow-y'] === 'scroll' ? parent : container; // Block the scroll even if no scrollbar is visible to account for mobile keyboard
+    // screensize shrink.
+
+    restoreStyle.push({
+      value: scrollContainer.style.overflow,
+      key: 'overflow',
+      el: scrollContainer
+    });
+    scrollContainer.style.overflow = 'hidden';
+  }
+
+  var restore = function restore() {
+    if (fixedNodes) {
+      [].forEach.call(fixedNodes, function (node, i) {
+        if (restorePaddings[i]) {
+          node.style.paddingRight = restorePaddings[i];
+        } else {
+          node.style.removeProperty('padding-right');
+        }
+      });
+    }
+
+    restoreStyle.forEach(function (_ref) {
+      var value = _ref.value,
+          el = _ref.el,
+          key = _ref.key;
+
+      if (value) {
+        el.style.setProperty(key, value);
+      } else {
+        el.style.removeProperty(key);
+      }
+    });
+  };
+
+  return restore;
+}
+
+function getHiddenSiblings(container) {
+  var hiddenSiblings = [];
+  [].forEach.call(container.children, function (node) {
+    if (node.getAttribute && node.getAttribute('aria-hidden') === 'true') {
+      hiddenSiblings.push(node);
+    }
+  });
+  return hiddenSiblings;
+}
+/**
+ * @ignore - do not document.
+ *
+ * Proper state management for containers and the modals in those containers.
+ * Simplified, but inspired by react-overlay's ModalManager class.
+ * Used by the Modal to ensure proper styling of containers.
+ */
+
+
+var ModalManager_ModalManager = /*#__PURE__*/function () {
+  function ModalManager() {
+    _classCallCheck(this, ModalManager);
+
+    // this.modals[modalIndex] = modal
+    this.modals = []; // this.containers[containerIndex] = {
+    //   modals: [],
+    //   container,
+    //   restore: null,
+    // }
+
+    this.containers = [];
+  }
+
+  Object(createClass["a" /* default */])(ModalManager, [{
+    key: "add",
+    value: function add(modal, container) {
+      var modalIndex = this.modals.indexOf(modal);
+
+      if (modalIndex !== -1) {
+        return modalIndex;
+      }
+
+      modalIndex = this.modals.length;
+      this.modals.push(modal); // If the modal we are adding is already in the DOM.
+
+      if (modal.modalRef) {
+        ariaHidden(modal.modalRef, false);
+      }
+
+      var hiddenSiblingNodes = getHiddenSiblings(container);
+      ariaHiddenSiblings(container, modal.mountNode, modal.modalRef, hiddenSiblingNodes, true);
+      var containerIndex = findIndexOf(this.containers, function (item) {
+        return item.container === container;
+      });
+
+      if (containerIndex !== -1) {
+        this.containers[containerIndex].modals.push(modal);
+        return modalIndex;
+      }
+
+      this.containers.push({
+        modals: [modal],
+        container: container,
+        restore: null,
+        hiddenSiblingNodes: hiddenSiblingNodes
+      });
+      return modalIndex;
+    }
+  }, {
+    key: "mount",
+    value: function mount(modal, props) {
+      var containerIndex = findIndexOf(this.containers, function (item) {
+        return item.modals.indexOf(modal) !== -1;
+      });
+      var containerInfo = this.containers[containerIndex];
+
+      if (!containerInfo.restore) {
+        containerInfo.restore = handleContainer(containerInfo, props);
+      }
+    }
+  }, {
+    key: "remove",
+    value: function remove(modal) {
+      var modalIndex = this.modals.indexOf(modal);
+
+      if (modalIndex === -1) {
+        return modalIndex;
+      }
+
+      var containerIndex = findIndexOf(this.containers, function (item) {
+        return item.modals.indexOf(modal) !== -1;
+      });
+      var containerInfo = this.containers[containerIndex];
+      containerInfo.modals.splice(containerInfo.modals.indexOf(modal), 1);
+      this.modals.splice(modalIndex, 1); // If that was the last modal in a container, clean up the container.
+
+      if (containerInfo.modals.length === 0) {
+        // The modal might be closed before it had the chance to be mounted in the DOM.
+        if (containerInfo.restore) {
+          containerInfo.restore();
+        }
+
+        if (modal.modalRef) {
+          // In case the modal wasn't in the DOM yet.
+          ariaHidden(modal.modalRef, true);
+        }
+
+        ariaHiddenSiblings(containerInfo.container, modal.mountNode, modal.modalRef, containerInfo.hiddenSiblingNodes, false);
+        this.containers.splice(containerIndex, 1);
+      } else {
+        // Otherwise make sure the next top modal is visible to a screen reader.
+        var nextTop = containerInfo.modals[containerInfo.modals.length - 1]; // as soon as a modal is adding its modalRef is undefined. it can't set
+        // aria-hidden because the dom element doesn't exist either
+        // when modal was unmounted before modalRef gets null
+
+        if (nextTop.modalRef) {
+          ariaHidden(nextTop.modalRef, false);
+        }
+      }
+
+      return modalIndex;
+    }
+  }, {
+    key: "isTopModal",
+    value: function isTopModal(modal) {
+      return this.modals.length > 0 && this.modals[this.modals.length - 1] === modal;
+    }
+  }]);
+
+  return ModalManager;
+}();
+
+
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Modal/TrapFocus.js
+/* eslint-disable consistent-return, jsx-a11y/no-noninteractive-tabindex */
+
+
+
+
+
+/**
+ * @ignore - internal component.
+ */
+
+function TrapFocus(props) {
+  var children = props.children,
+      _props$disableAutoFoc = props.disableAutoFocus,
+      disableAutoFocus = _props$disableAutoFoc === void 0 ? false : _props$disableAutoFoc,
+      _props$disableEnforce = props.disableEnforceFocus,
+      disableEnforceFocus = _props$disableEnforce === void 0 ? false : _props$disableEnforce,
+      _props$disableRestore = props.disableRestoreFocus,
+      disableRestoreFocus = _props$disableRestore === void 0 ? false : _props$disableRestore,
+      getDoc = props.getDoc,
+      isEnabled = props.isEnabled,
+      open = props.open;
+  var ignoreNextEnforceFocus = react["useRef"]();
+  var sentinelStart = react["useRef"](null);
+  var sentinelEnd = react["useRef"](null);
+  var nodeToRestore = react["useRef"]();
+  var rootRef = react["useRef"](null); // can be removed once we drop support for non ref forwarding class components
+
+  var handleOwnRef = react["useCallback"](function (instance) {
+    // #StrictMode ready
+    rootRef.current = react_dom["findDOMNode"](instance);
+  }, []);
+  var handleRef = Object(useForkRef["a" /* default */])(children.ref, handleOwnRef); // ⚠️ You may rely on React.useMemo as a performance optimization, not as a semantic guarantee.
+  // https://reactjs.org/docs/hooks-reference.html#usememo
+
+  react["useMemo"](function () {
+    if (!open || typeof window === 'undefined') {
+      return;
+    }
+
+    nodeToRestore.current = getDoc().activeElement;
+  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  react["useEffect"](function () {
+    if (!open) {
+      return;
+    }
+
+    var doc = Object(ownerDocument["a" /* default */])(rootRef.current); // We might render an empty child.
+
+    if (!disableAutoFocus && rootRef.current && !rootRef.current.contains(doc.activeElement)) {
+      if (!rootRef.current.hasAttribute('tabIndex')) {
+        if (false) {}
+
+        rootRef.current.setAttribute('tabIndex', -1);
+      }
+
+      rootRef.current.focus();
+    }
+
+    var contain = function contain() {
+      if (disableEnforceFocus || !isEnabled() || ignoreNextEnforceFocus.current) {
+        ignoreNextEnforceFocus.current = false;
+        return;
+      }
+
+      if (rootRef.current && !rootRef.current.contains(doc.activeElement)) {
+        rootRef.current.focus();
+      }
+    };
+
+    var loopFocus = function loopFocus(event) {
+      // 9 = Tab
+      if (disableEnforceFocus || !isEnabled() || event.keyCode !== 9) {
+        return;
+      } // Make sure the next tab starts from the right place.
+
+
+      if (doc.activeElement === rootRef.current) {
+        // We need to ignore the next contain as
+        // it will try to move the focus back to the rootRef element.
+        ignoreNextEnforceFocus.current = true;
+
+        if (event.shiftKey) {
+          sentinelEnd.current.focus();
+        } else {
+          sentinelStart.current.focus();
+        }
+      }
+    };
+
+    doc.addEventListener('focus', contain, true);
+    doc.addEventListener('keydown', loopFocus, true); // With Edge, Safari and Firefox, no focus related events are fired when the focused area stops being a focused area
+    // e.g. https://bugzilla.mozilla.org/show_bug.cgi?id=559561.
+    //
+    // The whatwg spec defines how the browser should behave but does not explicitly mention any events:
+    // https://html.spec.whatwg.org/multipage/interaction.html#focus-fixup-rule.
+
+    var interval = setInterval(function () {
+      contain();
+    }, 50);
+    return function () {
+      clearInterval(interval);
+      doc.removeEventListener('focus', contain, true);
+      doc.removeEventListener('keydown', loopFocus, true); // restoreLastFocus()
+
+      if (!disableRestoreFocus) {
+        // In IE 11 it is possible for document.activeElement to be null resulting
+        // in nodeToRestore.current being null.
+        // Not all elements in IE 11 have a focus method.
+        // Once IE 11 support is dropped the focus() call can be unconditional.
+        if (nodeToRestore.current && nodeToRestore.current.focus) {
+          nodeToRestore.current.focus();
+        }
+
+        nodeToRestore.current = null;
+      }
+    };
+  }, [disableAutoFocus, disableEnforceFocus, disableRestoreFocus, isEnabled, open]);
+  return /*#__PURE__*/react["createElement"](react["Fragment"], null, /*#__PURE__*/react["createElement"]("div", {
+    tabIndex: 0,
+    ref: sentinelStart,
+    "data-test": "sentinelStart"
+  }), react["cloneElement"](children, {
+    ref: handleRef
+  }), /*#__PURE__*/react["createElement"]("div", {
+    tabIndex: 0,
+    ref: sentinelEnd,
+    "data-test": "sentinelEnd"
+  }));
+}
+
+ false ? undefined : void 0;
+/*
+
+In the future, we should be able to replace TrapFocus with:
+https://github.com/facebook/react/blob/master/packages/react-events/docs/FocusScope.md
+
+```jsx
+import FocusScope from 'react-dom/FocusScope';
+
+function TrapFocus(props) {
+  const {
+    children
+    disableAutoFocus = false,
+    disableEnforceFocus = false,
+    disableRestoreFocus = false,
+    open,
+  } = props;
+
+  if (!open) {
+    return children;
+  }
+
+  return (
+    <FocusScope
+      autoFocus={!disableAutoFocus}
+      contain={!disableEnforceFocus}
+      restoreFocus={!disableRestoreFocus}
+    >
+      {children}
+    </FocusScope>
+  );
+}
+```
+
+*/
+
+/* harmony default export */ var Modal_TrapFocus = (TrapFocus);
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Modal/SimpleBackdrop.js
+
+
+
+
+var styles = {
+  /* Styles applied to the root element. */
+  root: {
+    zIndex: -1,
+    position: 'fixed',
+    right: 0,
+    bottom: 0,
+    top: 0,
+    left: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    WebkitTapHighlightColor: 'transparent'
+  },
+
+  /* Styles applied to the root element if `invisible={true}`. */
+  invisible: {
+    backgroundColor: 'transparent'
+  }
+};
+/**
+ * @ignore - internal component.
+ */
+
+var SimpleBackdrop_SimpleBackdrop = react["forwardRef"](function SimpleBackdrop(props, ref) {
+  var _props$invisible = props.invisible,
+      invisible = _props$invisible === void 0 ? false : _props$invisible,
+      open = props.open,
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["invisible", "open"]);
+
+  return open ? /*#__PURE__*/react["createElement"]("div", Object(esm_extends["a" /* default */])({
+    "aria-hidden": true,
+    ref: ref
+  }, other, {
+    style: Object(esm_extends["a" /* default */])({}, styles.root, {}, invisible ? styles.invisible : {}, {}, other.style)
+  })) : null;
+});
+ false ? undefined : void 0;
+/* harmony default export */ var Modal_SimpleBackdrop = (SimpleBackdrop_SimpleBackdrop);
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Modal/Modal.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getContainer(container) {
+  container = typeof container === 'function' ? container() : container;
+  return react_dom["findDOMNode"](container);
+}
+
+function getHasTransition(props) {
+  return props.children ? props.children.props.hasOwnProperty('in') : false;
+} // A modal manager used to track and manage the state of open Modals.
+// Modals don't open on the server so this won't conflict with concurrent requests.
+
+
+var defaultManager = new ModalManager_ModalManager();
+var Modal_styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      position: 'fixed',
+      zIndex: theme.zIndex.modal,
+      right: 0,
+      bottom: 0,
+      top: 0,
+      left: 0
+    },
+
+    /* Styles applied to the root element if the `Modal` has exited. */
+    hidden: {
+      visibility: 'hidden'
+    }
+  };
+};
+/**
+ * Modal is a lower-level construct that is leveraged by the following components:
+ *
+ * - [Dialog](/api/dialog/)
+ * - [Drawer](/api/drawer/)
+ * - [Menu](/api/menu/)
+ * - [Popover](/api/popover/)
+ *
+ * If you are creating a modal dialog, you probably want to use the [Dialog](/api/dialog/) component
+ * rather than directly using Modal.
+ *
+ * This component shares many concepts with [react-overlays](https://react-bootstrap.github.io/react-overlays/#modals).
+ */
+
+var Modal_Modal = react["forwardRef"](function Modal(inProps, ref) {
+  var theme = Object(useTheme["a" /* default */])();
+  var props = Object(getThemeProps["a" /* default */])({
+    name: 'MuiModal',
+    props: Object(esm_extends["a" /* default */])({}, inProps),
+    theme: theme
+  });
+
+  var _props$BackdropCompon = props.BackdropComponent,
+      BackdropComponent = _props$BackdropCompon === void 0 ? Modal_SimpleBackdrop : _props$BackdropCompon,
+      BackdropProps = props.BackdropProps,
+      children = props.children,
+      _props$closeAfterTran = props.closeAfterTransition,
+      closeAfterTransition = _props$closeAfterTran === void 0 ? false : _props$closeAfterTran,
+      container = props.container,
+      _props$disableAutoFoc = props.disableAutoFocus,
+      disableAutoFocus = _props$disableAutoFoc === void 0 ? false : _props$disableAutoFoc,
+      _props$disableBackdro = props.disableBackdropClick,
+      disableBackdropClick = _props$disableBackdro === void 0 ? false : _props$disableBackdro,
+      _props$disableEnforce = props.disableEnforceFocus,
+      disableEnforceFocus = _props$disableEnforce === void 0 ? false : _props$disableEnforce,
+      _props$disableEscapeK = props.disableEscapeKeyDown,
+      disableEscapeKeyDown = _props$disableEscapeK === void 0 ? false : _props$disableEscapeK,
+      _props$disablePortal = props.disablePortal,
+      disablePortal = _props$disablePortal === void 0 ? false : _props$disablePortal,
+      _props$disableRestore = props.disableRestoreFocus,
+      disableRestoreFocus = _props$disableRestore === void 0 ? false : _props$disableRestore,
+      _props$disableScrollL = props.disableScrollLock,
+      disableScrollLock = _props$disableScrollL === void 0 ? false : _props$disableScrollL,
+      _props$hideBackdrop = props.hideBackdrop,
+      hideBackdrop = _props$hideBackdrop === void 0 ? false : _props$hideBackdrop,
+      _props$keepMounted = props.keepMounted,
+      keepMounted = _props$keepMounted === void 0 ? false : _props$keepMounted,
+      _props$manager = props.manager,
+      manager = _props$manager === void 0 ? defaultManager : _props$manager,
+      onBackdropClick = props.onBackdropClick,
+      onClose = props.onClose,
+      onEscapeKeyDown = props.onEscapeKeyDown,
+      onRendered = props.onRendered,
+      open = props.open,
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["BackdropComponent", "BackdropProps", "children", "closeAfterTransition", "container", "disableAutoFocus", "disableBackdropClick", "disableEnforceFocus", "disableEscapeKeyDown", "disablePortal", "disableRestoreFocus", "disableScrollLock", "hideBackdrop", "keepMounted", "manager", "onBackdropClick", "onClose", "onEscapeKeyDown", "onRendered", "open"]);
+
+  var _React$useState = react["useState"](true),
+      exited = _React$useState[0],
+      setExited = _React$useState[1];
+
+  var modal = react["useRef"]({});
+  var mountNodeRef = react["useRef"](null);
+  var modalRef = react["useRef"](null);
+  var handleRef = Object(useForkRef["a" /* default */])(modalRef, ref);
+  var hasTransition = getHasTransition(props);
+
+  var getDoc = function getDoc() {
+    return Object(ownerDocument["a" /* default */])(mountNodeRef.current);
+  };
+
+  var getModal = function getModal() {
+    modal.current.modalRef = modalRef.current;
+    modal.current.mountNode = mountNodeRef.current;
+    return modal.current;
+  };
+
+  var handleMounted = function handleMounted() {
+    manager.mount(getModal(), {
+      disableScrollLock: disableScrollLock
+    }); // Fix a bug on Chrome where the scroll isn't initially 0.
+
+    modalRef.current.scrollTop = 0;
+  };
+
+  var handleOpen = Object(useEventCallback["a" /* default */])(function () {
+    var resolvedContainer = getContainer(container) || getDoc().body;
+    manager.add(getModal(), resolvedContainer); // The element was already mounted.
+
+    if (modalRef.current) {
+      handleMounted();
+    }
+  });
+  var isTopModal = react["useCallback"](function () {
+    return manager.isTopModal(getModal());
+  }, [manager]);
+  var handlePortalRef = Object(useEventCallback["a" /* default */])(function (node) {
+    mountNodeRef.current = node;
+
+    if (!node) {
+      return;
+    }
+
+    if (onRendered) {
+      onRendered();
+    }
+
+    if (open && isTopModal()) {
+      handleMounted();
+    } else {
+      ariaHidden(modalRef.current, true);
+    }
+  });
+  var handleClose = react["useCallback"](function () {
+    manager.remove(getModal());
+  }, [manager]);
+  react["useEffect"](function () {
+    return function () {
+      handleClose();
+    };
+  }, [handleClose]);
+  react["useEffect"](function () {
+    if (open) {
+      handleOpen();
+    } else if (!hasTransition || !closeAfterTransition) {
+      handleClose();
+    }
+  }, [open, handleClose, hasTransition, closeAfterTransition, handleOpen]);
+
+  if (!keepMounted && !open && (!hasTransition || exited)) {
+    return null;
+  }
+
+  var handleEnter = function handleEnter() {
+    setExited(false);
+  };
+
+  var handleExited = function handleExited() {
+    setExited(true);
+
+    if (closeAfterTransition) {
+      handleClose();
+    }
+  };
+
+  var handleBackdropClick = function handleBackdropClick(event) {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+
+    if (onBackdropClick) {
+      onBackdropClick(event);
+    }
+
+    if (!disableBackdropClick && onClose) {
+      onClose(event, 'backdropClick');
+    }
+  };
+
+  var handleKeyDown = function handleKeyDown(event) {
+    // The handler doesn't take event.defaultPrevented into account:
+    //
+    // event.preventDefault() is meant to stop default behaviours like
+    // clicking a checkbox to check it, hitting a button to submit a form,
+    // and hitting left arrow to move the cursor in a text input etc.
+    // Only special HTML elements have these default behaviors.
+    if (event.key !== 'Escape' || !isTopModal()) {
+      return;
+    } // Swallow the event, in case someone is listening for the escape key on the body.
+
+
+    event.stopPropagation();
+
+    if (onEscapeKeyDown) {
+      onEscapeKeyDown(event);
+    }
+
+    if (!disableEscapeKeyDown && onClose) {
+      onClose(event, 'escapeKeyDown');
+    }
+  };
+
+  var inlineStyle = Modal_styles(theme || {
+    zIndex: zIndex["a" /* default */]
+  });
+  var childProps = {};
+
+  if (children.props.tabIndex === undefined) {
+    childProps.tabIndex = children.props.tabIndex || '-1';
+  } // It's a Transition like component
+
+
+  if (hasTransition) {
+    childProps.onEnter = Object(createChainedFunction["a" /* default */])(handleEnter, children.props.onEnter);
+    childProps.onExited = Object(createChainedFunction["a" /* default */])(handleExited, children.props.onExited);
+  }
+
+  return /*#__PURE__*/react["createElement"](Portal["a" /* default */], {
+    ref: handlePortalRef,
+    container: container,
+    disablePortal: disablePortal
+  }, /*#__PURE__*/react["createElement"]("div", Object(esm_extends["a" /* default */])({
+    ref: handleRef,
+    onKeyDown: handleKeyDown,
+    role: "presentation"
+  }, other, {
+    style: Object(esm_extends["a" /* default */])({}, inlineStyle.root, {}, !open && exited ? inlineStyle.hidden : {}, {}, other.style)
+  }), hideBackdrop ? null : /*#__PURE__*/react["createElement"](BackdropComponent, Object(esm_extends["a" /* default */])({
+    open: open,
+    onClick: handleBackdropClick
+  }, BackdropProps)), /*#__PURE__*/react["createElement"](Modal_TrapFocus, {
+    disableEnforceFocus: disableEnforceFocus,
+    disableAutoFocus: disableAutoFocus,
+    disableRestoreFocus: disableRestoreFocus,
+    getDoc: getDoc,
+    isEnabled: isTopModal,
+    open: open
+  }, react["cloneElement"](children, childProps))));
+});
+ false ? undefined : void 0;
+/* harmony default export */ var esm_Modal_Modal = __webpack_exports__["a"] = (Modal_Modal);
+
+/***/ }),
+
+/***/ 22:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _inheritsLoose; });
+function _inheritsLoose(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+  subClass.__proto__ = superClass;
+}
+
+/***/ }),
+
+/***/ 222:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export styles */
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
+/* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5);
+/* harmony import */ var _styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(10);
+/* harmony import */ var _ButtonBase__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(98);
+/* harmony import */ var _utils_capitalize__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6);
 
 
 
@@ -11079,14 +8710,1830 @@ var IconButton = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function IconB
 
 /***/ }),
 
-/***/ 418:
+/***/ 23:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useFormControl; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _FormControlContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(32);
+
+
+function useFormControl() {
+  return react__WEBPACK_IMPORTED_MODULE_0__["useContext"](_FormControlContext__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"]);
+}
+
+/***/ }),
+
+/***/ 24:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useEventCallback; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var useEnhancedEffect = typeof window !== 'undefined' ? react__WEBPACK_IMPORTED_MODULE_0__["useLayoutEffect"] : react__WEBPACK_IMPORTED_MODULE_0__["useEffect"];
+/**
+ * https://github.com/facebook/react/issues/14099#issuecomment-440013892
+ *
+ * @param {function} fn
+ */
+
+function useEventCallback(fn) {
+  var ref = react__WEBPACK_IMPORTED_MODULE_0__["useRef"](fn);
+  useEnhancedEffect(function () {
+    ref.current = fn;
+  });
+  return react__WEBPACK_IMPORTED_MODULE_0__["useCallback"](function () {
+    return (0, ref.current).apply(void 0, arguments);
+  }, []);
+}
+
+/***/ }),
+
+/***/ 25:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return setRef; });
+// TODO v5: consider to make it private
+function setRef(ref, value) {
+  if (typeof ref === 'function') {
+    ref(value);
+  } else if (ref) {
+    ref.current = value;
+  }
+}
+
+/***/ }),
+
+/***/ 26:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _defineProperty; });
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+/***/ }),
+
+/***/ 27:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _typeof; });
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof = function _typeof(obj) {
+      return typeof obj;
+    };
+  } else {
+    _typeof = function _typeof(obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
+
+  return _typeof(obj);
+}
+
+/***/ }),
+
+/***/ 29:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ __webpack_exports__["a"] = (react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext(null));
+
+/***/ }),
+
+/***/ 3:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _objectWithoutProperties; });
+/* harmony import */ var _objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(19);
+
+function _objectWithoutProperties(source, excluded) {
+  if (source == null) return {};
+  var target = Object(_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(source, excluded);
+  var key, i;
+
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      target[key] = source[key];
+    }
+  }
+
+  return target;
+}
+
+/***/ }),
+
+/***/ 30:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export Bounce */
+/* unused harmony export Flip */
+/* unused harmony export Slide */
+/* unused harmony export ToastContainer */
+/* unused harmony export ToastPosition */
+/* unused harmony export ToastType */
+/* unused harmony export Zoom */
+/* unused harmony export cssTransition */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return toast; });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
+/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(38);
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(99);
+/* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(100);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(8);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_8__);
+
+
+
+
+
+
+
+
+
+var POSITION = {
+  TOP_LEFT: 'top-left',
+  TOP_RIGHT: 'top-right',
+  TOP_CENTER: 'top-center',
+  BOTTOM_LEFT: 'bottom-left',
+  BOTTOM_RIGHT: 'bottom-right',
+  BOTTOM_CENTER: 'bottom-center'
+};
+var TYPE = {
+  INFO: 'info',
+  SUCCESS: 'success',
+  WARNING: 'warning',
+  ERROR: 'error',
+  DEFAULT: 'default'
+};
+var ACTION = {
+  SHOW: 0,
+  CLEAR: 1,
+  DID_MOUNT: 2,
+  WILL_UNMOUNT: 3,
+  ON_CHANGE: 4
+};
+var NOOP = function NOOP() {};
+var RT_NAMESPACE = 'Toastify';
+
+function isValidDelay(val) {
+  return typeof val === 'number' && !isNaN(val) && val > 0;
+}
+function objectValues(obj) {
+  return Object.keys(obj).map(function (key) {
+    return obj[key];
+  });
+}
+var canUseDom = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
+
+function withRequired(fn) {
+  fn.isRequired = function (props, propName, componentName) {
+    var prop = props[propName];
+
+    if (typeof prop === 'undefined') {
+      return new Error("The prop " + propName + " is marked as required in \n      " + componentName + ", but its value is undefined.");
+    }
+
+    fn(props, propName, componentName);
+  };
+
+  return fn;
+}
+
+var falseOrDelay = withRequired(function (props, propName, componentName) {
+  var prop = props[propName];
+
+  if (prop !== false && !isValidDelay(prop)) {
+    return new Error(componentName + " expect " + propName + " \n      to be a valid Number > 0 or equal to false. " + prop + " given.");
+  }
+
+  return null;
+});
+
+var eventManager = {
+  list: new Map(),
+  emitQueue: new Map(),
+  on: function on(event, callback) {
+    this.list.has(event) || this.list.set(event, []);
+    this.list.get(event).push(callback);
+    return this;
+  },
+  off: function off(event) {
+    this.list.delete(event);
+    return this;
+  },
+  cancelEmit: function cancelEmit(event) {
+    var timers = this.emitQueue.get(event);
+
+    if (timers) {
+      timers.forEach(function (timer) {
+        return clearTimeout(timer);
+      });
+      this.emitQueue.delete(event);
+    }
+
+    return this;
+  },
+
+  /**
+   * Enqueue the event at the end of the call stack
+   * Doing so let the user call toast as follow:
+   * toast('1')
+   * toast('2')
+   * toast('3')
+   * Without setTimemout the code above will not work
+   */
+  emit: function emit(event) {
+    var _this = this;
+
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    this.list.has(event) && this.list.get(event).forEach(function (callback) {
+      var timer = setTimeout(function () {
+        callback.apply(void 0, args);
+      }, 0);
+      _this.emitQueue.has(event) || _this.emitQueue.set(event, []);
+
+      _this.emitQueue.get(event).push(timer);
+    });
+  }
+};
+
+function cssTransition(_ref) {
+  var enter = _ref.enter,
+      exit = _ref.exit,
+      _ref$duration = _ref.duration,
+      duration = _ref$duration === void 0 ? 750 : _ref$duration,
+      _ref$appendPosition = _ref.appendPosition,
+      appendPosition = _ref$appendPosition === void 0 ? false : _ref$appendPosition;
+  return function Animation(_ref2) {
+    var children = _ref2.children,
+        position = _ref2.position,
+        preventExitTransition = _ref2.preventExitTransition,
+        props = Object(_babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(_ref2, ["children", "position", "preventExitTransition"]);
+
+    var enterClassName = appendPosition ? enter + "--" + position : enter;
+    var exitClassName = appendPosition ? exit + "--" + position : exit;
+    var enterDuration, exitDuration;
+
+    if (Array.isArray(duration) && duration.length === 2) {
+      enterDuration = duration[0];
+      exitDuration = duration[1];
+    } else {
+      enterDuration = exitDuration = duration;
+    }
+
+    var onEnter = function onEnter(node) {
+      node.classList.add(enterClassName);
+      node.style.animationFillMode = 'forwards';
+      node.style.animationDuration = enterDuration * 0.001 + "s";
+    };
+
+    var onEntered = function onEntered(node) {
+      node.classList.remove(enterClassName);
+      node.style.cssText = '';
+    };
+
+    var onExit = function onExit(node) {
+      node.classList.add(exitClassName);
+      node.style.animationFillMode = 'forwards';
+      node.style.animationDuration = exitDuration * 0.001 + "s";
+    };
+
+    return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react_transition_group__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, props, {
+      timeout: preventExitTransition ? 0 : {
+        enter: enterDuration,
+        exit: exitDuration
+      },
+      onEnter: onEnter,
+      onEntered: onEntered,
+      onExit: preventExitTransition ? NOOP : onExit
+    }), children);
+  };
+}
+
+function ProgressBar(_ref) {
+  var _cx, _animationEvent;
+
+  var delay = _ref.delay,
+      isRunning = _ref.isRunning,
+      closeToast = _ref.closeToast,
+      type = _ref.type,
+      hide = _ref.hide,
+      className = _ref.className,
+      userStyle = _ref.style,
+      controlledProgress = _ref.controlledProgress,
+      progress = _ref.progress,
+      rtl = _ref.rtl;
+
+  var style = Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, userStyle, {
+    animationDuration: delay + "ms",
+    animationPlayState: isRunning ? 'running' : 'paused',
+    opacity: hide ? 0 : 1,
+    transform: controlledProgress ? "scaleX(" + progress + ")" : null
+  });
+
+  var classNames = classnames__WEBPACK_IMPORTED_MODULE_5___default()(RT_NAMESPACE + "__progress-bar", controlledProgress ? RT_NAMESPACE + "__progress-bar--controlled" : RT_NAMESPACE + "__progress-bar--animated", RT_NAMESPACE + "__progress-bar--" + type, (_cx = {}, _cx[RT_NAMESPACE + "__progress-bar--rtl"] = rtl, _cx), className);
+  var animationEvent = (_animationEvent = {}, _animationEvent[controlledProgress && progress >= 1 ? 'onTransitionEnd' : 'onAnimationEnd'] = controlledProgress && progress < 1 ? null : closeToast, _animationEvent);
+  return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
+    className: classNames,
+    style: style
+  }, animationEvent));
+}
+
+ProgressBar.propTypes = {
+  /**
+   * The animation delay which determine when to close the toast
+   */
+  delay: falseOrDelay.isRequired,
+
+  /**
+   * Whether or not the animation is running or paused
+   */
+  isRunning: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool.isRequired,
+
+  /**
+   * Func to close the current toast
+   */
+  closeToast: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func.isRequired,
+
+  /**
+   * Support rtl content
+   */
+  rtl: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool.isRequired,
+
+  /**
+   * Optional type : info, success ...
+   */
+  type: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string,
+
+  /**
+   * Hide or not the progress bar
+   */
+  hide: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
+
+  /**
+   * Optionnal className
+   */
+  className: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object]),
+
+  /**
+   * Controlled progress value
+   */
+  progress: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.number,
+
+  /**
+   * Tell wether or not controlled progress bar is used
+   */
+  controlledProgress: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool
+};
+ProgressBar.defaultProps = {
+  type: TYPE.DEFAULT,
+  hide: false
+};
+
+function getX(e) {
+  return e.targetTouches && e.targetTouches.length >= 1 ? e.targetTouches[0].clientX : e.clientX;
+}
+
+function getY(e) {
+  return e.targetTouches && e.targetTouches.length >= 1 ? e.targetTouches[0].clientY : e.clientY;
+}
+
+var iLoveInternetExplorer = canUseDom && /(msie|trident)/i.test(navigator.userAgent);
+
+var Toast =
+/*#__PURE__*/
+function (_Component) {
+  Object(_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(Toast, _Component);
+
+  function Toast() {
+    var _this;
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _Component.call.apply(_Component, [this].concat(args)) || this;
+    _this.state = {
+      isRunning: true,
+      preventExitTransition: false
+    };
+    _this.flag = {
+      canCloseOnClick: true,
+      canDrag: false
+    };
+    _this.drag = {
+      start: 0,
+      x: 0,
+      y: 0,
+      deltaX: 0,
+      removalDistance: 0
+    };
+    _this.boundingRect = null;
+    _this.ref = null;
+
+    _this.pauseToast = function () {
+      if (_this.props.autoClose) {
+        _this.setState({
+          isRunning: false
+        });
+      }
+    };
+
+    _this.playToast = function () {
+      if (_this.props.autoClose) {
+        _this.setState({
+          isRunning: true
+        });
+      }
+    };
+
+    _this.onDragStart = function (e) {
+      _this.flag.canCloseOnClick = true;
+      _this.flag.canDrag = true;
+      _this.boundingRect = _this.ref.getBoundingClientRect();
+      _this.ref.style.transition = '';
+      _this.drag.start = _this.drag.x = getX(e.nativeEvent);
+      _this.drag.removalDistance = _this.ref.offsetWidth * (_this.props.draggablePercent / 100);
+    };
+
+    _this.onDragMove = function (e) {
+      if (_this.flag.canDrag) {
+        if (_this.state.isRunning) {
+          _this.pauseToast();
+        }
+
+        _this.drag.x = getX(e);
+        _this.drag.deltaX = _this.drag.x - _this.drag.start;
+        _this.drag.y = getY(e); // prevent false positif during a toast click
+
+        _this.drag.start !== _this.drag.x && (_this.flag.canCloseOnClick = false);
+        _this.ref.style.transform = "translateX(" + _this.drag.deltaX + "px)";
+        _this.ref.style.opacity = 1 - Math.abs(_this.drag.deltaX / _this.drag.removalDistance);
+      }
+    };
+
+    _this.onDragEnd = function (e) {
+      if (_this.flag.canDrag) {
+        _this.flag.canDrag = false;
+
+        if (Math.abs(_this.drag.deltaX) > _this.drag.removalDistance) {
+          _this.setState({
+            preventExitTransition: true
+          }, _this.props.closeToast);
+
+          return;
+        }
+
+        _this.ref.style.transition = 'transform 0.2s, opacity 0.2s';
+        _this.ref.style.transform = 'translateX(0)';
+        _this.ref.style.opacity = 1;
+      }
+    };
+
+    _this.onDragTransitionEnd = function () {
+      if (_this.boundingRect) {
+        var _this$boundingRect = _this.boundingRect,
+            top = _this$boundingRect.top,
+            bottom = _this$boundingRect.bottom,
+            left = _this$boundingRect.left,
+            right = _this$boundingRect.right;
+
+        if (_this.props.pauseOnHover && _this.drag.x >= left && _this.drag.x <= right && _this.drag.y >= top && _this.drag.y <= bottom) {
+          _this.pauseToast();
+        } else {
+          _this.playToast();
+        }
+      }
+    };
+
+    _this.onExitTransitionEnd = function () {
+      if (iLoveInternetExplorer) {
+        _this.props.onExited();
+
+        return;
+      }
+
+      var height = _this.ref.scrollHeight;
+      var style = _this.ref.style;
+      requestAnimationFrame(function () {
+        style.minHeight = 'initial';
+        style.height = height + 'px';
+        style.transition = 'all 0.4s ';
+        requestAnimationFrame(function () {
+          style.height = 0;
+          style.padding = 0;
+          style.margin = 0;
+        });
+        setTimeout(function () {
+          return _this.props.onExited();
+        }, 400);
+      });
+    };
+
+    return _this;
+  }
+
+  var _proto = Toast.prototype;
+
+  _proto.componentDidMount = function componentDidMount() {
+    this.props.onOpen(this.props.children.props);
+
+    if (this.props.draggable) {
+      this.bindDragEvents();
+    } // Maybe I could bind the event in the ToastContainer and rely on delegation
+
+
+    if (this.props.pauseOnFocusLoss) {
+      this.bindFocusEvents();
+    }
+  };
+
+  _proto.componentDidUpdate = function componentDidUpdate(prevProps) {
+    if (prevProps.draggable !== this.props.draggable) {
+      if (this.props.draggable) {
+        this.bindDragEvents();
+      } else {
+        this.unbindDragEvents();
+      }
+    }
+
+    if (prevProps.pauseOnFocusLoss !== this.props.pauseOnFocusLoss) {
+      if (this.props.pauseOnFocusLoss) {
+        this.bindFocusEvents();
+      } else {
+        this.unbindFocusEvents();
+      }
+    }
+  };
+
+  _proto.componentWillUnmount = function componentWillUnmount() {
+    this.props.onClose(this.props.children.props);
+
+    if (this.props.draggable) {
+      this.unbindDragEvents();
+    }
+
+    if (this.props.pauseOnFocusLoss) {
+      this.unbindFocusEvents();
+    }
+  };
+
+  _proto.bindFocusEvents = function bindFocusEvents() {
+    window.addEventListener('focus', this.playToast);
+    window.addEventListener('blur', this.pauseToast);
+  };
+
+  _proto.unbindFocusEvents = function unbindFocusEvents() {
+    window.removeEventListener('focus', this.playToast);
+    window.removeEventListener('blur', this.pauseToast);
+  };
+
+  _proto.bindDragEvents = function bindDragEvents() {
+    document.addEventListener('mousemove', this.onDragMove);
+    document.addEventListener('mouseup', this.onDragEnd);
+    document.addEventListener('touchmove', this.onDragMove);
+    document.addEventListener('touchend', this.onDragEnd);
+  };
+
+  _proto.unbindDragEvents = function unbindDragEvents() {
+    document.removeEventListener('mousemove', this.onDragMove);
+    document.removeEventListener('mouseup', this.onDragEnd);
+    document.removeEventListener('touchmove', this.onDragMove);
+    document.removeEventListener('touchend', this.onDragEnd);
+  };
+
+  _proto.render = function render() {
+    var _cx,
+        _this2 = this;
+
+    var _this$props = this.props,
+        closeButton = _this$props.closeButton,
+        children = _this$props.children,
+        autoClose = _this$props.autoClose,
+        pauseOnHover = _this$props.pauseOnHover,
+        onClick = _this$props.onClick,
+        closeOnClick = _this$props.closeOnClick,
+        type = _this$props.type,
+        hideProgressBar = _this$props.hideProgressBar,
+        closeToast = _this$props.closeToast,
+        Transition = _this$props.transition,
+        position = _this$props.position,
+        className = _this$props.className,
+        bodyClassName = _this$props.bodyClassName,
+        progressClassName = _this$props.progressClassName,
+        progressStyle = _this$props.progressStyle,
+        updateId = _this$props.updateId,
+        role = _this$props.role,
+        progress = _this$props.progress,
+        rtl = _this$props.rtl;
+    var toastProps = {
+      className: classnames__WEBPACK_IMPORTED_MODULE_5___default()(RT_NAMESPACE + "__toast", RT_NAMESPACE + "__toast--" + type, (_cx = {}, _cx[RT_NAMESPACE + "__toast--rtl"] = rtl, _cx), className)
+    };
+
+    if (autoClose && pauseOnHover) {
+      toastProps.onMouseEnter = this.pauseToast;
+      toastProps.onMouseLeave = this.playToast;
+    } // prevent toast from closing when user drags the toast
+
+
+    if (closeOnClick) {
+      toastProps.onClick = function (e) {
+        onClick && onClick(e);
+        _this2.flag.canCloseOnClick && closeToast();
+      };
+    }
+
+    var controlledProgress = parseFloat(progress) === progress;
+    return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(Transition, {
+      in: this.props.in,
+      appear: true,
+      onExited: this.onExitTransitionEnd,
+      position: position,
+      preventExitTransition: this.state.preventExitTransition
+    }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
+      onClick: onClick
+    }, toastProps, {
+      ref: function ref(_ref) {
+        return _this2.ref = _ref;
+      },
+      onMouseDown: this.onDragStart,
+      onTouchStart: this.onDragStart,
+      onMouseUp: this.onDragTransitionEnd,
+      onTouchEnd: this.onDragTransitionEnd
+    }), react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, this.props.in && {
+      role: role
+    }, {
+      className: classnames__WEBPACK_IMPORTED_MODULE_5___default()(RT_NAMESPACE + "__toast-body", bodyClassName)
+    }), children), closeButton && closeButton, (autoClose || controlledProgress) && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(ProgressBar, Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, updateId && !controlledProgress ? {
+      key: "pb-" + updateId
+    } : {}, {
+      rtl: rtl,
+      delay: autoClose,
+      isRunning: this.state.isRunning,
+      closeToast: closeToast,
+      hide: hideProgressBar,
+      type: type,
+      style: progressStyle,
+      className: progressClassName,
+      controlledProgress: controlledProgress,
+      progress: progress
+    }))));
+  };
+
+  return Toast;
+}(react__WEBPACK_IMPORTED_MODULE_3__["Component"]);
+
+Toast.propTypes = {
+  closeButton: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.node, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool]).isRequired,
+  autoClose: falseOrDelay.isRequired,
+  children: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.node.isRequired,
+  closeToast: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func.isRequired,
+  position: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOf(objectValues(POSITION)).isRequired,
+  pauseOnHover: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool.isRequired,
+  pauseOnFocusLoss: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool.isRequired,
+  closeOnClick: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool.isRequired,
+  transition: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func.isRequired,
+  rtl: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool.isRequired,
+  hideProgressBar: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool.isRequired,
+  draggable: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool.isRequired,
+  draggablePercent: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.number.isRequired,
+  in: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
+  onExited: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func,
+  onOpen: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func,
+  onClose: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func,
+  type: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOf(objectValues(TYPE)),
+  className: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object]),
+  bodyClassName: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object]),
+  progressClassName: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object]),
+  progressStyle: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object,
+  progress: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.number,
+  updateId: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.number]),
+  ariaLabel: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string,
+  containerId: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.number]),
+  role: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string
+};
+Toast.defaultProps = {
+  type: TYPE.DEFAULT,
+  in: true,
+  onOpen: NOOP,
+  onClose: NOOP,
+  className: null,
+  bodyClassName: null,
+  progressClassName: null,
+  updateId: null
+};
+
+function CloseButton(_ref) {
+  var closeToast = _ref.closeToast,
+      type = _ref.type,
+      ariaLabel = _ref.ariaLabel;
+  return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("button", {
+    className: RT_NAMESPACE + "__close-button " + RT_NAMESPACE + "__close-button--" + type,
+    type: "button",
+    onClick: function onClick(e) {
+      e.stopPropagation();
+      closeToast(e);
+    },
+    "aria-label": ariaLabel
+  }, "\u2716\uFE0E");
+}
+
+CloseButton.propTypes = {
+  closeToast: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func,
+  arialLabel: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string
+};
+CloseButton.defaultProps = {
+  ariaLabel: 'close'
+};
+
+var Bounce = cssTransition({
+  enter: RT_NAMESPACE + "__bounce-enter",
+  exit: RT_NAMESPACE + "__bounce-exit",
+  appendPosition: true
+});
+var Slide = cssTransition({
+  enter: RT_NAMESPACE + "__slide-enter",
+  exit: RT_NAMESPACE + "__slide-exit",
+  duration: [450, 750],
+  appendPosition: true
+});
+var Zoom = cssTransition({
+  enter: RT_NAMESPACE + "__zoom-enter",
+  exit: RT_NAMESPACE + "__zoom-exit"
+});
+var Flip = cssTransition({
+  enter: RT_NAMESPACE + "__flip-enter",
+  exit: RT_NAMESPACE + "__flip-exit"
+});
+
+var ToastContainer =
+/*#__PURE__*/
+function (_Component) {
+  Object(_babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])(ToastContainer, _Component);
+
+  function ToastContainer() {
+    var _this;
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _Component.call.apply(_Component, [this].concat(args)) || this;
+    _this.state = {
+      toast: []
+    };
+    _this.toastKey = 1;
+    _this.collection = {};
+
+    _this.isToastActive = function (id) {
+      return _this.state.toast.indexOf(id) !== -1;
+    };
+
+    return _this;
+  }
+
+  var _proto = ToastContainer.prototype;
+
+  _proto.componentDidMount = function componentDidMount() {
+    var _this2 = this;
+
+    eventManager.cancelEmit(ACTION.WILL_UNMOUNT).on(ACTION.SHOW, function (content, options) {
+      return _this2.ref ? _this2.buildToast(content, options) : null;
+    }).on(ACTION.CLEAR, function (id) {
+      return !_this2.ref ? null : id == null ? _this2.clear() : _this2.removeToast(id);
+    }).emit(ACTION.DID_MOUNT, this);
+  };
+
+  _proto.componentWillUnmount = function componentWillUnmount() {
+    eventManager.emit(ACTION.WILL_UNMOUNT, this);
+  };
+
+  _proto.removeToast = function removeToast(id) {
+    this.setState({
+      toast: this.state.toast.filter(function (v) {
+        return v !== id;
+      })
+    }, this.dispatchChange);
+  };
+
+  _proto.dispatchChange = function dispatchChange() {
+    eventManager.emit(ACTION.ON_CHANGE, this.state.toast.length, this.props.containerId);
+  };
+
+  _proto.makeCloseButton = function makeCloseButton(toastClose, toastId, type) {
+    var _this3 = this;
+
+    var closeButton = this.props.closeButton;
+
+    if (Object(react__WEBPACK_IMPORTED_MODULE_3__["isValidElement"])(toastClose) || toastClose === false) {
+      closeButton = toastClose;
+    } else if (toastClose === true) {
+      closeButton = this.props.closeButton && typeof this.props.closeButton !== 'boolean' ? this.props.closeButton : react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(CloseButton, null);
+    }
+
+    return closeButton === false ? false : Object(react__WEBPACK_IMPORTED_MODULE_3__["cloneElement"])(closeButton, {
+      closeToast: function closeToast() {
+        return _this3.removeToast(toastId);
+      },
+      type: type
+    });
+  };
+
+  _proto.getAutoCloseDelay = function getAutoCloseDelay(toastAutoClose) {
+    return toastAutoClose === false || isValidDelay(toastAutoClose) ? toastAutoClose : this.props.autoClose;
+  };
+
+  _proto.canBeRendered = function canBeRendered(content) {
+    return Object(react__WEBPACK_IMPORTED_MODULE_3__["isValidElement"])(content) || typeof content === 'string' || typeof content === 'number' || typeof content === 'function';
+  };
+
+  _proto.parseClassName = function parseClassName(prop) {
+    if (typeof prop === 'string') {
+      return prop;
+    } else if (prop !== null && typeof prop === 'object' && 'toString' in prop) {
+      return prop.toString();
+    }
+
+    return null;
+  };
+
+  _proto.belongToContainer = function belongToContainer(_ref) {
+    var containerId = _ref.containerId;
+    return containerId === this.props.containerId;
+  };
+
+  _proto.buildToast = function buildToast(content, _ref2) {
+    var _this4 = this;
+
+    var delay = _ref2.delay,
+        options = Object(_babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(_ref2, ["delay"]);
+
+    if (!this.canBeRendered(content)) {
+      throw new Error("The element you provided cannot be rendered. You provided an element of type " + typeof content);
+    }
+
+    var toastId = options.toastId,
+        updateId = options.updateId; // Check for multi-container and also for duplicate toastId
+    // Maybe it would be better to extract it
+
+    if (this.props.enableMultiContainer && !this.belongToContainer(options) || this.isToastActive(toastId) && updateId == null) {
+      return;
+    }
+
+    var closeToast = function closeToast() {
+      return _this4.removeToast(toastId);
+    };
+
+    var toastOptions = {
+      id: toastId,
+      // ⚠️ if no options.key, this.toastKey - 1 is assigned
+      key: options.key || this.toastKey++,
+      type: options.type,
+      closeToast: closeToast,
+      updateId: options.updateId,
+      rtl: this.props.rtl,
+      position: options.position || this.props.position,
+      transition: options.transition || this.props.transition,
+      className: this.parseClassName(options.className || this.props.toastClassName),
+      bodyClassName: this.parseClassName(options.bodyClassName || this.props.bodyClassName),
+      onClick: options.onClick || this.props.onClick,
+      closeButton: this.makeCloseButton(options.closeButton, toastId, options.type),
+      pauseOnHover: typeof options.pauseOnHover === 'boolean' ? options.pauseOnHover : this.props.pauseOnHover,
+      pauseOnFocusLoss: typeof options.pauseOnFocusLoss === 'boolean' ? options.pauseOnFocusLoss : this.props.pauseOnFocusLoss,
+      draggable: typeof options.draggable === 'boolean' ? options.draggable : this.props.draggable,
+      draggablePercent: typeof options.draggablePercent === 'number' && !isNaN(options.draggablePercent) ? options.draggablePercent : this.props.draggablePercent,
+      closeOnClick: typeof options.closeOnClick === 'boolean' ? options.closeOnClick : this.props.closeOnClick,
+      progressClassName: this.parseClassName(options.progressClassName || this.props.progressClassName),
+      progressStyle: this.props.progressStyle,
+      autoClose: this.getAutoCloseDelay(options.autoClose),
+      hideProgressBar: typeof options.hideProgressBar === 'boolean' ? options.hideProgressBar : this.props.hideProgressBar,
+      progress: parseFloat(options.progress),
+      role: typeof options.role === 'string' ? options.role : this.props.role
+    };
+    typeof options.onOpen === 'function' && (toastOptions.onOpen = options.onOpen);
+    typeof options.onClose === 'function' && (toastOptions.onClose = options.onClose); // add closeToast function to react component only
+
+    if (Object(react__WEBPACK_IMPORTED_MODULE_3__["isValidElement"])(content) && typeof content.type !== 'string' && typeof content.type !== 'number') {
+      content = Object(react__WEBPACK_IMPORTED_MODULE_3__["cloneElement"])(content, {
+        closeToast: closeToast
+      });
+    } else if (typeof content === 'function') {
+      content = content({
+        closeToast: closeToast
+      });
+    }
+
+    if (isValidDelay(delay)) {
+      setTimeout(function () {
+        _this4.appendToast(toastOptions, content, options.staleToastId);
+      }, delay);
+    } else {
+      this.appendToast(toastOptions, content, options.staleToastId);
+    }
+  };
+
+  _proto.appendToast = function appendToast(options, content, staleToastId) {
+    var _extends2;
+
+    var id = options.id,
+        updateId = options.updateId;
+    this.collection = Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, this.collection, (_extends2 = {}, _extends2[id] = {
+      options: options,
+      content: content,
+      position: options.position
+    }, _extends2));
+    this.setState({
+      toast: (updateId ? [].concat(this.state.toast) : [].concat(this.state.toast, [id])).filter(function (id) {
+        return id !== staleToastId;
+      })
+    }, this.dispatchChange);
+  };
+
+  _proto.clear = function clear() {
+    this.setState({
+      toast: []
+    });
+  };
+
+  _proto.renderToast = function renderToast() {
+    var _this5 = this;
+
+    var toastToRender = {};
+    var _this$props = this.props,
+        className = _this$props.className,
+        style = _this$props.style,
+        newestOnTop = _this$props.newestOnTop;
+    var collection = newestOnTop ? Object.keys(this.collection).reverse() : Object.keys(this.collection); // group toast by position
+
+    collection.forEach(function (toastId) {
+      var _this5$collection$toa = _this5.collection[toastId],
+          position = _this5$collection$toa.position,
+          options = _this5$collection$toa.options,
+          content = _this5$collection$toa.content;
+      toastToRender[position] || (toastToRender[position] = []);
+
+      if (_this5.state.toast.indexOf(options.id) !== -1) {
+        toastToRender[position].push(react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(Toast, Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, options, {
+          isDocumentHidden: _this5.state.isDocumentHidden,
+          key: "toast-" + options.key
+        }), content));
+      } else {
+        toastToRender[position].push(null);
+        delete _this5.collection[toastId];
+      }
+    });
+    return Object.keys(toastToRender).map(function (position) {
+      var _cx;
+
+      var disablePointer = toastToRender[position].length === 1 && toastToRender[position][0] === null;
+      var props = {
+        className: classnames__WEBPACK_IMPORTED_MODULE_5___default()(RT_NAMESPACE + "__toast-container", RT_NAMESPACE + "__toast-container--" + position, (_cx = {}, _cx[RT_NAMESPACE + "__toast-container--rtl"] = _this5.props.rtl, _cx), _this5.parseClassName(className)),
+        style: disablePointer ? Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, style, {
+          pointerEvents: 'none'
+        }) : Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, style)
+      };
+      return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react_transition_group__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, props, {
+        key: "container-" + position
+      }), toastToRender[position]);
+    });
+  };
+
+  _proto.render = function render() {
+    var _this6 = this;
+
+    return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+      ref: function ref(node) {
+        return _this6.ref = node;
+      },
+      className: "" + RT_NAMESPACE
+    }, this.renderToast());
+  };
+
+  return ToastContainer;
+}(react__WEBPACK_IMPORTED_MODULE_3__["Component"]);
+
+ToastContainer.propTypes = {
+  /**
+   * Set toast position
+   */
+  position: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOf(objectValues(POSITION)),
+
+  /**
+   * Disable or set autoClose delay
+   */
+  autoClose: falseOrDelay,
+
+  /**
+   * Disable or set a custom react element for the close button
+   */
+  closeButton: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.node, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool]),
+
+  /**
+   * Hide or not progress bar when autoClose is enabled
+   */
+  hideProgressBar: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
+
+  /**
+   * Pause toast duration on hover
+   */
+  pauseOnHover: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
+
+  /**
+   * Dismiss toast on click
+   */
+  closeOnClick: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
+
+  /**
+   * Newest on top
+   */
+  newestOnTop: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
+
+  /**
+   * An optional className
+   */
+  className: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object]),
+
+  /**
+   * An optional style
+   */
+  style: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object,
+
+  /**
+   * An optional className for the toast
+   */
+  toastClassName: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object]),
+
+  /**
+   * An optional className for the toast body
+   */
+  bodyClassName: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object]),
+
+  /**
+   * An optional className for the toast progress bar
+   */
+  progressClassName: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object]),
+
+  /**
+   * An optional style for the toast progress bar
+   */
+  progressStyle: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.object,
+
+  /**
+   * Define enter and exit transition using react-transition-group
+   */
+  transition: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func,
+
+  /**
+   * Support rtl display
+   */
+  rtl: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
+
+  /**
+   * Allow toast to be draggable
+   */
+  draggable: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
+
+  /**
+   * The percentage of the toast's width it takes for a drag to dismiss a toast
+   */
+  draggablePercent: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.number,
+
+  /**
+   * Pause the toast on focus loss
+   */
+  pauseOnFocusLoss: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
+
+  /**
+   * Show the toast only if it includes containerId and it's the same as containerId
+   */
+  enableMultiContainer: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.bool,
+
+  /**
+   * Set id to handle multiple container
+   */
+  containerId: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string, prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.number]),
+
+  /**
+   * Set role attribute for the toast body
+   */
+  role: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.string,
+
+  /**
+   * Fired when clicking inside toaster
+   */
+  onClick: prop_types__WEBPACK_IMPORTED_MODULE_4___default.a.func
+};
+ToastContainer.defaultProps = {
+  position: POSITION.TOP_RIGHT,
+  transition: Bounce,
+  rtl: false,
+  autoClose: 5000,
+  hideProgressBar: false,
+  closeButton: react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(CloseButton, null),
+  pauseOnHover: true,
+  pauseOnFocusLoss: true,
+  closeOnClick: true,
+  newestOnTop: false,
+  draggable: true,
+  draggablePercent: 80,
+  className: null,
+  style: null,
+  toastClassName: null,
+  bodyClassName: null,
+  progressClassName: null,
+  progressStyle: null,
+  role: 'alert'
+};
+
+var containers = new Map();
+var latestInstance = null;
+var containerDomNode = null;
+var containerConfig = {};
+var queue = [];
+var lazy = false;
+/**
+ * Check whether any container is currently mounted in the DOM
+ */
+
+function isAnyContainerMounted() {
+  return containers.size > 0;
+}
+/**
+ * Get the container by id. Returns the last container declared when no id is given.
+ */
+
+
+function getContainer(containerId) {
+  if (!isAnyContainerMounted()) return null;
+  if (!containerId) return containers.get(latestInstance);
+  return containers.get(containerId);
+}
+/**
+ * Get the toast by id, given it's in the DOM, otherwise returns null
+ */
+
+
+function getToast(toastId, _ref) {
+  var containerId = _ref.containerId;
+  var container = getContainer(containerId);
+  if (!container) return null;
+  var toast = container.collection[toastId];
+  if (typeof toast === 'undefined') return null;
+  return toast;
+}
+/**
+ * Merge provided options with the defaults settings and generate the toastId
+ */
+
+
+function mergeOptions(options, type) {
+  return Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, options, {
+    type: type,
+    toastId: getToastId(options)
+  });
+}
+/**
+ * Generate a random toastId
+ */
+
+
+function generateToastId() {
+  return (Math.random().toString(36) + Date.now().toString(36)).substr(2, 10);
+}
+/**
+ * Generate a toastId or use the one provided
+ */
+
+
+function getToastId(options) {
+  if (options && (typeof options.toastId === 'string' || typeof options.toastId === 'number' && !isNaN(options.toastId))) {
+    return options.toastId;
+  }
+
+  return generateToastId();
+}
+/**
+ * If the container is not mounted, the toast is enqueued and
+ * the container lazy mounted
+ */
+
+
+function dispatchToast(content, options) {
+  if (isAnyContainerMounted()) {
+    eventManager.emit(ACTION.SHOW, content, options);
+  } else {
+    queue.push({
+      action: ACTION.SHOW,
+      content: content,
+      options: options
+    });
+
+    if (lazy && canUseDom) {
+      lazy = false;
+      containerDomNode = document.createElement('div');
+      document.body.appendChild(containerDomNode);
+      Object(react_dom__WEBPACK_IMPORTED_MODULE_8__["render"])(react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(ToastContainer, containerConfig), containerDomNode);
+    }
+  }
+
+  return options.toastId;
+}
+
+var toast = function toast(content, options) {
+  return dispatchToast(content, mergeOptions(options, options && options.type || TYPE.DEFAULT));
+};
+/**
+ * For each available type create a shortcut
+ */
+
+
+var _loop = function _loop(t) {
+  if (TYPE[t] !== TYPE.DEFAULT) {
+    toast[TYPE[t].toLowerCase()] = function (content, options) {
+      return dispatchToast(content, mergeOptions(options, options && options.type || TYPE[t]));
+    };
+  }
+};
+
+for (var t in TYPE) {
+  _loop(t);
+}
+/**
+ * Maybe I should remove warning in favor of warn, I don't know
+ */
+
+
+toast.warn = toast.warning;
+/**
+ * Remove toast programmaticaly
+ */
+
+toast.dismiss = function (id) {
+  if (id === void 0) {
+    id = null;
+  }
+
+  return isAnyContainerMounted() && eventManager.emit(ACTION.CLEAR, id);
+};
+/**
+ * return true if one container is displaying the toast
+ */
+
+
+toast.isActive = function (id) {
+  var isToastActive = false;
+
+  if (containers.size > 0) {
+    containers.forEach(function (container) {
+      if (container.isToastActive(id)) {
+        isToastActive = true;
+      }
+    });
+  }
+
+  return isToastActive;
+};
+
+toast.update = function (toastId, options) {
+  if (options === void 0) {
+    options = {};
+  }
+
+  // if you call toast and toast.update directly nothing will be displayed
+  // this is why I defered the update
+  setTimeout(function () {
+    var toast = getToast(toastId, options);
+
+    if (toast) {
+      var oldOptions = toast.options,
+          oldContent = toast.content;
+
+      var nextOptions = Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, oldOptions, {}, options, {
+        toastId: options.toastId || toastId
+      });
+
+      if (!options.toastId || options.toastId === toastId) {
+        nextOptions.updateId = generateToastId();
+      } else {
+        nextOptions.staleToastId = toastId;
+      }
+
+      var content = typeof nextOptions.render !== 'undefined' ? nextOptions.render : oldContent;
+      delete nextOptions.render;
+      dispatchToast(content, nextOptions);
+    }
+  }, 0);
+};
+/**
+ * Used for controlled progress bar.
+ */
+
+
+toast.done = function (id) {
+  toast.update(id, {
+    progress: 1
+  });
+};
+/**
+ * Track changes. The callback get the number of toast displayed
+ */
+
+
+toast.onChange = function (callback) {
+  if (typeof callback === 'function') {
+    eventManager.on(ACTION.ON_CHANGE, callback);
+  }
+};
+/**
+ * Configure the ToastContainer when lazy mounted
+ */
+
+
+toast.configure = function (config) {
+  lazy = true;
+  containerConfig = config;
+};
+
+toast.POSITION = POSITION;
+toast.TYPE = TYPE;
+/**
+ * Wait until the ToastContainer is mounted to dispatch the toast
+ * and attach isActive method
+ */
+
+eventManager.on(ACTION.DID_MOUNT, function (containerInstance) {
+  latestInstance = containerInstance.props.containerId || containerInstance;
+  containers.set(latestInstance, containerInstance);
+  queue.forEach(function (item) {
+    eventManager.emit(item.action, item.content, item.options);
+  });
+  queue = [];
+}).on(ACTION.WILL_UNMOUNT, function (containerInstance) {
+  if (containerInstance) containers.delete(containerInstance.props.containerId || containerInstance);else containers.clear();
+
+  if (containers.size === 0) {
+    eventManager.off(ACTION.SHOW).off(ACTION.CLEAR);
+  }
+
+  if (canUseDom && containerDomNode) {
+    document.body.removeChild(containerDomNode);
+  }
+});
+
+
+
+
+/***/ }),
+
+/***/ 31:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useTheme; });
+/* harmony import */ var _material_ui_styles__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(85);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _defaultTheme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(63);
+
+
+
+function useTheme() {
+  var theme = Object(_material_ui_styles__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])() || _defaultTheme__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"];
+
+  if (false) {}
+
+  return theme;
+}
+
+/***/ }),
+
+/***/ 32:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return useFormControl; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+/**
+ * @ignore - internal component.
+ */
+
+var FormControlContext = react__WEBPACK_IMPORTED_MODULE_0__["createContext"]();
+
+if (false) {}
+
+function useFormControl() {
+  return react__WEBPACK_IMPORTED_MODULE_0__["useContext"](FormControlContext);
+}
+/* harmony default export */ __webpack_exports__["a"] = (FormControlContext);
+
+/***/ }),
+
+/***/ 33:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export hasValue */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return isFilled; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return isAdornedStart; });
+// Supports determination of isControlled().
+// Controlled input accepts its current value as a prop.
+//
+// @see https://facebook.github.io/react/docs/forms.html#controlled-components
+// @param value
+// @returns {boolean} true if string (including '') or number (including zero)
+function hasValue(value) {
+  return value != null && !(Array.isArray(value) && value.length === 0);
+} // Determine if field is empty or filled.
+// Response determines if label is presented above field or as placeholder.
+//
+// @param obj
+// @param SSR
+// @returns {boolean} False when not present or empty string.
+//                    True when any number or string with length.
+
+function isFilled(obj) {
+  var SSR = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  return obj && (hasValue(obj.value) && obj.value !== '' || SSR && hasValue(obj.defaultValue) && obj.defaultValue !== '');
+} // Determine if an Input is adorned on start.
+// It's corresponding to the left with LTR.
+//
+// @param obj
+// @returns {boolean} False when no adornments.
+//                    True when adorned at the start.
+
+function isAdornedStart(obj) {
+  return obj.startAdornment;
+}
+
+/***/ }),
+
+/***/ 34:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _slicedToArray; });
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
+var arrayWithHoles = __webpack_require__(72);
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
+function _iterableToArrayLimit(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
+var unsupportedIterableToArray = __webpack_require__(45);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
+var nonIterableRest = __webpack_require__(73);
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js
+
+
+
+
+function _slicedToArray(arr, i) {
+  return Object(arrayWithHoles["a" /* default */])(arr) || _iterableToArrayLimit(arr, i) || Object(unsupportedIterableToArray["a" /* default */])(arr, i) || Object(nonIterableRest["a" /* default */])();
+}
+
+/***/ }),
+
+/***/ 35:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _arrayLikeToArray; });
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+
+  return arr2;
+}
+
+/***/ }),
+
+/***/ 36:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _arrayLikeToArray; });
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+
+  return arr2;
+}
+
+/***/ }),
+
+/***/ 37:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createChainedFunction; });
+/**
+ * Safe chained function
+ *
+ * Will only create a new function if needed,
+ * otherwise will pass back existing functions or null.
+ *
+ * @param {function} functions to chain
+ * @returns {function|null}
+ */
+function createChainedFunction() {
+  for (var _len = arguments.length, funcs = new Array(_len), _key = 0; _key < _len; _key++) {
+    funcs[_key] = arguments[_key];
+  }
+
+  return funcs.reduce(function (acc, func) {
+    if (func == null) {
+      return acc;
+    }
+
+    if (false) {}
+
+    return function chainedFunction() {
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      acc.apply(this, args);
+      func.apply(this, args);
+    };
+  }, function () {});
+}
+
+/***/ }),
+
+/***/ 38:
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+  Copyright (c) 2017 Jed Watson.
+  Licensed under the MIT License (MIT), see
+  http://jedwatson.github.io/classnames
+*/
+/* global define */
+
+(function () {
+	'use strict';
+
+	var hasOwn = {}.hasOwnProperty;
+
+	function classNames () {
+		var classes = [];
+
+		for (var i = 0; i < arguments.length; i++) {
+			var arg = arguments[i];
+			if (!arg) continue;
+
+			var argType = typeof arg;
+
+			if (argType === 'string' || argType === 'number') {
+				classes.push(arg);
+			} else if (Array.isArray(arg) && arg.length) {
+				var inner = classNames.apply(null, arg);
+				if (inner) {
+					classes.push(inner);
+				}
+			} else if (argType === 'object') {
+				for (var key in arg) {
+					if (hasOwn.call(arg, key) && arg[key]) {
+						classes.push(key);
+					}
+				}
+			}
+		}
+
+		return classes.join(' ');
+	}
+
+	if ( true && module.exports) {
+		classNames.default = classNames;
+		module.exports = classNames;
+	} else if (true) {
+		// register as 'classnames', consistent with npm package name
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+			return classNames;
+		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {}
+}());
+
+
+/***/ }),
+
+/***/ 39:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _createClass; });
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+/***/ }),
+
+/***/ 4:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function toVal(mix) {
+	var k, y, str='';
+
+	if (typeof mix === 'string' || typeof mix === 'number') {
+		str += mix;
+	} else if (typeof mix === 'object') {
+		if (Array.isArray(mix)) {
+			for (k=0; k < mix.length; k++) {
+				if (mix[k]) {
+					if (y = toVal(mix[k])) {
+						str && (str += ' ');
+						str += y;
+					}
+				}
+			}
+		} else {
+			for (k in mix) {
+				if (mix[k]) {
+					str && (str += ' ');
+					str += k;
+				}
+			}
+		}
+	}
+
+	return str;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (function () {
+	var i=0, tmp, x, str='';
+	while (i < arguments.length) {
+		if (tmp = arguments[i++]) {
+			if (x = toVal(tmp)) {
+				str && (str += ' ');
+				str += x
+			}
+		}
+	}
+	return str;
+});
+
+
+/***/ }),
+
+/***/ 40:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _assertThisInitialized; });
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+/***/ }),
+
+/***/ 402:
+/***/ (function(module, exports) {
+
+module.exports=function(e){function r(n){if(t[n])return t[n].exports;var o=t[n]={i:n,l:!1,exports:{}};return e[n].call(o.exports,o,o.exports,r),o.l=!0,o.exports}var t={};return r.m=e,r.c=t,r.d=function(e,t,n){r.o(e,t)||Object.defineProperty(e,t,{configurable:!1,enumerable:!0,get:n})},r.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return r.d(t,"a",t),t},r.o=function(e,r){return Object.prototype.hasOwnProperty.call(e,r)},r.p="",r(r.s=0)}([function(e,r,t){"use strict";r.__esModule=!0,r.default=function(e,r){if(e&&r){var t=Array.isArray(r)?r:r.split(","),n=e.name||"",o=e.type||"",u=o.replace(/\/.*$/,"");return t.some(function(e){var r=e.trim();return"."===r.charAt(0)?n.toLowerCase().endsWith(r.toLowerCase()):r.endsWith("/*")?u===r.replace(/\/.*$/,""):o===r})}return!0}}]);
+
+/***/ }),
+
+/***/ 41:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ownerWindow; });
+/* harmony import */ var _ownerDocument__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
+
+function ownerWindow(node) {
+  var doc = Object(_ownerDocument__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(node);
+  return doc.defaultView || window;
+}
+
+/***/ }),
+
+/***/ 42:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return isMuiElement; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function isMuiElement(element, muiNames) {
+  return react__WEBPACK_IMPORTED_MODULE_0__["isValidElement"](element) && muiNames.indexOf(element.type.muiName) !== -1;
+}
+
+/***/ }),
+
+/***/ 423:
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(600);
+module.exports = __webpack_require__(424);
+
+
+/***/ }),
+
+/***/ 424:
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
 
-/***/ 42:
+/***/ 43:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -24732,24 +24179,6 @@ zoom_out_ZoomOut.defaultProps = {
 
 /***/ }),
 
-/***/ 43:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _unsupportedIterableToArray; });
-/* harmony import */ var _arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(34);
-
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return Object(_arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(n);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return Object(_arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(o, minLen);
-}
-
-/***/ }),
-
 /***/ 44:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -24762,13 +24191,31 @@ function _unsupportedIterableToArray(o, minLen) {
   if (typeof o === "string") return Object(_arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(o, minLen);
   var n = Object.prototype.toString.call(o).slice(8, -1);
   if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Map" || n === "Set") return Array.from(n);
   if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return Object(_arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(o, minLen);
 }
 
 /***/ }),
 
 /***/ 45:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _unsupportedIterableToArray; });
+/* harmony import */ var _arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(36);
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return Object(_arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return Object(_arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(o, minLen);
+}
+
+/***/ }),
+
+/***/ 46:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -24780,20 +24227,6 @@ var ThemeContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext(nu
 if (false) {}
 
 /* harmony default export */ __webpack_exports__["a"] = (ThemeContext);
-
-/***/ }),
-
-/***/ 46:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ownerWindow; });
-/* harmony import */ var _ownerDocument__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(17);
-
-function ownerWindow(node) {
-  var doc = Object(_ownerDocument__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(node);
-  return doc.defaultView || window;
-}
 
 /***/ }),
 
@@ -24885,7 +24318,7 @@ var react_default = /*#__PURE__*/__webpack_require__.n(react);
 var prop_types = __webpack_require__(1);
 
 // EXTERNAL MODULE: ./node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js
-var hoist_non_react_statics_cjs = __webpack_require__(90);
+var hoist_non_react_statics_cjs = __webpack_require__(92);
 var hoist_non_react_statics_cjs_default = /*#__PURE__*/__webpack_require__.n(hoist_non_react_statics_cjs);
 
 // CONCATENATED MODULE: ./node_modules/is-in-browser/dist/module.js
@@ -24918,16 +24351,16 @@ function warning(condition, message) {
 /* harmony default export */ var tiny_warning_esm = (warning);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
-var createClass = __webpack_require__(37);
+var createClass = __webpack_require__(39);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
-var inheritsLoose = __webpack_require__(21);
+var inheritsLoose = __webpack_require__(22);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
-var assertThisInitialized = __webpack_require__(39);
+var assertThisInitialized = __webpack_require__(40);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
-var objectWithoutPropertiesLoose = __webpack_require__(18);
+var objectWithoutPropertiesLoose = __webpack_require__(19);
 
 // CONCATENATED MODULE: ./node_modules/jss/dist/jss.esm.js
 
@@ -27153,7 +26586,7 @@ var jss_esm_index = jss_esm_create();
 
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/mergeClasses/mergeClasses.js
-var mergeClasses = __webpack_require__(182);
+var mergeClasses = __webpack_require__(184);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/makeStyles/multiKeyStore.js
 // Used https://github.com/thinkloop/multi-key-cache as inspiration
@@ -27916,7 +27349,7 @@ function defaultUnit(options) {
 /* harmony default export */ var jss_plugin_default_unit_esm = (defaultUnit);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 2 modules
-var toConsumableArray = __webpack_require__(22);
+var toConsumableArray = __webpack_require__(20);
 
 // CONCATENATED MODULE: ./node_modules/css-vendor/dist/css-vendor.esm.js
 
@@ -28691,10 +28124,10 @@ function increment() {
   return indexCounter;
 }
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
-var esm_typeof = __webpack_require__(26);
+var esm_typeof = __webpack_require__(27);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/utils/esm/deepmerge.js
-var deepmerge = __webpack_require__(150);
+var deepmerge = __webpack_require__(152);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/getStylesCreator/getStylesCreator.js
 
@@ -29000,7 +28433,7 @@ function makeStyles(stylesOrCreator) {
   return useStyles;
 }
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/getThemeProps/getThemeProps.js
-var getThemeProps = __webpack_require__(183);
+var getThemeProps = __webpack_require__(185);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/withStyles/withStyles.js
 
@@ -29087,7 +28520,7 @@ var withStyles_withStyles = function withStyles(stylesOrCreator) {
 
 /* harmony default export */ var esm_withStyles_withStyles = (withStyles_withStyles);
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/defaultTheme.js
-var styles_defaultTheme = __webpack_require__(62);
+var styles_defaultTheme = __webpack_require__(63);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/withStyles.js
 
@@ -29154,14 +28587,14 @@ var hasSymbol = typeof Symbol === 'function' && Symbol.for;
 __webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ Context; });
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 3 modules
-var slicedToArray = __webpack_require__(16);
+var slicedToArray = __webpack_require__(17);
 
 // EXTERNAL MODULE: ./node_modules/react/index.js
 var react = __webpack_require__(0);
 var react_default = /*#__PURE__*/__webpack_require__.n(react);
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/objectSpread2.js
-var objectSpread2 = __webpack_require__(11);
+var objectSpread2 = __webpack_require__(12);
 
 // CONCATENATED MODULE: ./src/shared/reducers/Reducer.js
 
@@ -29486,7 +28919,7 @@ var CssSsrRemovalHelper = /*#__PURE__*/function () {
 "use strict";
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 3 modules
-var slicedToArray = __webpack_require__(16);
+var slicedToArray = __webpack_require__(17);
 
 // EXTERNAL MODULE: ./node_modules/react/index.js
 var react = __webpack_require__(0);
@@ -29578,7 +29011,80 @@ function Header(props) {
 
 /***/ }),
 
-/***/ 593:
+/***/ 6:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return capitalize; });
+// It should to be noted that this function isn't equivalent to `text-transform: capitalize`.
+//
+// A strict capitalization should uppercase the first letter of each word a the sentence.
+// We only handle the first word.
+function capitalize(string) {
+  if (false) {}
+
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+/***/ }),
+
+/***/ 60:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXTERNAL MODULE: ./node_modules/react/index.js
+var react = __webpack_require__(0);
+var react_default = /*#__PURE__*/__webpack_require__.n(react);
+
+// EXTERNAL MODULE: ./src/shared/constants/IconConstants.js
+var IconConstants = __webpack_require__(47);
+
+// EXTERNAL MODULE: ./node_modules/react-feather/dist/index.js + 278 modules
+var dist = __webpack_require__(43);
+
+// CONCATENATED MODULE: ./src/shared/components/MenuTiles/Tile.js
+
+
+
+
+function Tile(props) {
+  var IconTag = dist[props.icon];
+  return /*#__PURE__*/react_default.a.createElement("a", {
+    href: props.url,
+    className: "tile"
+  }, /*#__PURE__*/react_default.a.createElement("div", {
+    className: "tile__icon"
+  }, /*#__PURE__*/react_default.a.createElement(IconTag, {
+    size: IconConstants["a" /* default */].DefaultSize()
+  })), /*#__PURE__*/react_default.a.createElement("div", {
+    className: "tile__title"
+  }, props.title));
+}
+
+/* harmony default export */ var MenuTiles_Tile = (Tile);
+// CONCATENATED MODULE: ./src/shared/components/MenuTiles/MenuTiles.js
+
+
+
+function MenuTiles(props) {
+  return /*#__PURE__*/react_default.a.createElement("nav", {
+    className: "section menu-tiles"
+  }, props.tiles.map(function (tile, index) {
+    return /*#__PURE__*/react_default.a.createElement(MenuTiles_Tile, {
+      key: index,
+      icon: tile.icon,
+      title: tile.title,
+      url: tile.url
+    });
+  }));
+}
+
+/* harmony default export */ var MenuTiles_MenuTiles = __webpack_exports__["a"] = (MenuTiles);
+
+/***/ }),
+
+/***/ 600:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -29597,7 +29103,7 @@ var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
 var react_toastify = __webpack_require__(30);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/ThemeProvider/ThemeProvider.js
-var ThemeProvider = __webpack_require__(151);
+var ThemeProvider = __webpack_require__(153);
 
 // EXTERNAL MODULE: ./src/shared/helpers/globals/GlobalHelper.js
 var GlobalHelper = __webpack_require__(71);
@@ -29615,7 +29121,7 @@ var Footer = __webpack_require__(57);
 var MenuTiles = __webpack_require__(60);
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 3 modules
-var slicedToArray = __webpack_require__(16);
+var slicedToArray = __webpack_require__(17);
 
 // EXTERNAL MODULE: ./node_modules/react-feather/dist/icons/upload-cloud.js
 var upload_cloud = __webpack_require__(56);
@@ -29624,26 +29130,1658 @@ var upload_cloud = __webpack_require__(56);
 var IconConstants = __webpack_require__(47);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/TextField/TextField.js
-var TextField = __webpack_require__(186);
+var TextField = __webpack_require__(188);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Button/Button.js
-var Button = __webpack_require__(187);
+var Button = __webpack_require__(189);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/CircularProgress/CircularProgress.js
-var CircularProgress = __webpack_require__(188);
+var CircularProgress = __webpack_require__(190);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/lab/esm/Autocomplete/Autocomplete.js + 8 modules
+var Autocomplete = __webpack_require__(601);
+
+// EXTERNAL MODULE: ./node_modules/prop-types/index.js
+var prop_types = __webpack_require__(1);
+var prop_types_default = /*#__PURE__*/__webpack_require__.n(prop_types);
+
+// CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.js
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
+
+function __extends(d, b) {
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+var __assign = function() {
+    __assign = Object.assign || function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+        }
+        return t;
+    }
+    return __assign.apply(this, arguments);
+}
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
+
+function __decorate(decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+}
+
+function __param(paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+}
+
+function __metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+}
+
+function __awaiter(thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+}
+
+function __generator(thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+}
+
+function __createBinding(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}
+
+function __exportStar(m, exports) {
+    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+
+function __values(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+}
+
+function __read(o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+}
+
+function __spread() {
+    for (var ar = [], i = 0; i < arguments.length; i++)
+        ar = ar.concat(__read(arguments[i]));
+    return ar;
+}
+
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
+
+function __await(v) {
+    return this instanceof __await ? (this.v = v, this) : new __await(v);
+}
+
+function __asyncGenerator(thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+}
+
+function __asyncDelegator(o) {
+    var i, p;
+    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+}
+
+function __asyncValues(o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+}
+
+function __makeTemplateObject(cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+
+function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result.default = mod;
+    return result;
+}
+
+function __importDefault(mod) {
+    return (mod && mod.__esModule) ? mod : { default: mod };
+}
+
+function __classPrivateFieldGet(receiver, privateMap) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to get private field on non-instance");
+    }
+    return privateMap.get(receiver);
+}
+
+function __classPrivateFieldSet(receiver, privateMap, value) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to set private field on non-instance");
+    }
+    privateMap.set(receiver, value);
+    return value;
+}
+
+// CONCATENATED MODULE: ./node_modules/file-selector/dist/es5/file.js
+var COMMON_MIME_TYPES = new Map([
+    ['avi', 'video/avi'],
+    ['gif', 'image/gif'],
+    ['ico', 'image/x-icon'],
+    ['jpeg', 'image/jpeg'],
+    ['jpg', 'image/jpeg'],
+    ['mkv', 'video/x-matroska'],
+    ['mov', 'video/quicktime'],
+    ['mp4', 'video/mp4'],
+    ['pdf', 'application/pdf'],
+    ['png', 'image/png'],
+    ['zip', 'application/zip'],
+    ['doc', 'application/msword'],
+    ['docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+]);
+function toFileWithPath(file, path) {
+    var f = withMimeType(file);
+    if (typeof f.path !== 'string') { // on electron, path is already set to the absolute path
+        var webkitRelativePath = file.webkitRelativePath;
+        Object.defineProperty(f, 'path', {
+            value: typeof path === 'string'
+                ? path
+                // If <input webkitdirectory> is set,
+                // the File will have a {webkitRelativePath} property
+                // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/webkitdirectory
+                : typeof webkitRelativePath === 'string' && webkitRelativePath.length > 0
+                    ? webkitRelativePath
+                    : file.name,
+            writable: false,
+            configurable: false,
+            enumerable: true
+        });
+    }
+    return f;
+}
+function withMimeType(file) {
+    var name = file.name;
+    var hasExtension = name && name.lastIndexOf('.') !== -1;
+    if (hasExtension && !file.type) {
+        var ext = name.split('.')
+            .pop().toLowerCase();
+        var type = COMMON_MIME_TYPES.get(ext);
+        if (type) {
+            Object.defineProperty(file, 'type', {
+                value: type,
+                writable: false,
+                configurable: false,
+                enumerable: true
+            });
+        }
+    }
+    return file;
+}
+//# sourceMappingURL=file.js.map
+// CONCATENATED MODULE: ./node_modules/file-selector/dist/es5/file-selector.js
+
+
+var FILES_TO_IGNORE = [
+    // Thumbnail cache files for macOS and Windows
+    '.DS_Store',
+    'Thumbs.db' // Windows
+];
+/**
+ * Convert a DragEvent's DataTrasfer object to a list of File objects
+ * NOTE: If some of the items are folders,
+ * everything will be flattened and placed in the same list but the paths will be kept as a {path} property.
+ * @param evt
+ */
+function fromEvent(evt) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/, isDragEvt(evt) && evt.dataTransfer
+                    ? getDataTransferFiles(evt.dataTransfer, evt.type)
+                    : getInputFiles(evt)];
+        });
+    });
+}
+function isDragEvt(value) {
+    return !!value.dataTransfer;
+}
+function getInputFiles(evt) {
+    var files = isInput(evt.target)
+        ? evt.target.files
+            ? fromList(evt.target.files)
+            : []
+        : [];
+    return files.map(function (file) { return toFileWithPath(file); });
+}
+function isInput(value) {
+    return value !== null;
+}
+function getDataTransferFiles(dt, type) {
+    return __awaiter(this, void 0, void 0, function () {
+        var items, files;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!dt.items) return [3 /*break*/, 2];
+                    items = fromList(dt.items)
+                        .filter(function (item) { return item.kind === 'file'; });
+                    // According to https://html.spec.whatwg.org/multipage/dnd.html#dndevents,
+                    // only 'dragstart' and 'drop' has access to the data (source node)
+                    if (type !== 'drop') {
+                        return [2 /*return*/, items];
+                    }
+                    return [4 /*yield*/, Promise.all(items.map(toFilePromises))];
+                case 1:
+                    files = _a.sent();
+                    return [2 /*return*/, noIgnoredFiles(flatten(files))];
+                case 2: return [2 /*return*/, noIgnoredFiles(fromList(dt.files)
+                        .map(function (file) { return toFileWithPath(file); }))];
+            }
+        });
+    });
+}
+function noIgnoredFiles(files) {
+    return files.filter(function (file) { return FILES_TO_IGNORE.indexOf(file.name) === -1; });
+}
+// IE11 does not support Array.from()
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from#Browser_compatibility
+// https://developer.mozilla.org/en-US/docs/Web/API/FileList
+// https://developer.mozilla.org/en-US/docs/Web/API/DataTransferItemList
+function fromList(items) {
+    var files = [];
+    // tslint:disable: prefer-for-of
+    for (var i = 0; i < items.length; i++) {
+        var file = items[i];
+        files.push(file);
+    }
+    return files;
+}
+// https://developer.mozilla.org/en-US/docs/Web/API/DataTransferItem
+function toFilePromises(item) {
+    if (typeof item.webkitGetAsEntry !== 'function') {
+        return fromDataTransferItem(item);
+    }
+    var entry = item.webkitGetAsEntry();
+    // Safari supports dropping an image node from a different window and can be retrieved using
+    // the DataTransferItem.getAsFile() API
+    // NOTE: FileSystemEntry.file() throws if trying to get the file
+    if (entry && entry.isDirectory) {
+        return fromDirEntry(entry);
+    }
+    return fromDataTransferItem(item);
+}
+function flatten(items) {
+    return items.reduce(function (acc, files) { return __spread(acc, (Array.isArray(files) ? flatten(files) : [files])); }, []);
+}
+function fromDataTransferItem(item) {
+    var file = item.getAsFile();
+    if (!file) {
+        return Promise.reject(item + " is not a File");
+    }
+    var fwp = toFileWithPath(file);
+    return Promise.resolve(fwp);
+}
+// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemEntry
+function fromEntry(entry) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/, entry.isDirectory ? fromDirEntry(entry) : fromFileEntry(entry)];
+        });
+    });
+}
+// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryEntry
+function fromDirEntry(entry) {
+    var reader = entry.createReader();
+    return new Promise(function (resolve, reject) {
+        var entries = [];
+        function readEntries() {
+            var _this = this;
+            // https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryEntry/createReader
+            // https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryReader/readEntries
+            reader.readEntries(function (batch) { return __awaiter(_this, void 0, void 0, function () {
+                var files, err_1, items;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!!batch.length) return [3 /*break*/, 5];
+                            _a.label = 1;
+                        case 1:
+                            _a.trys.push([1, 3, , 4]);
+                            return [4 /*yield*/, Promise.all(entries)];
+                        case 2:
+                            files = _a.sent();
+                            resolve(files);
+                            return [3 /*break*/, 4];
+                        case 3:
+                            err_1 = _a.sent();
+                            reject(err_1);
+                            return [3 /*break*/, 4];
+                        case 4: return [3 /*break*/, 6];
+                        case 5:
+                            items = Promise.all(batch.map(fromEntry));
+                            entries.push(items);
+                            // Continue reading
+                            readEntries();
+                            _a.label = 6;
+                        case 6: return [2 /*return*/];
+                    }
+                });
+            }); }, function (err) {
+                reject(err);
+            });
+        }
+        readEntries();
+    });
+}
+// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemFileEntry
+function fromFileEntry(entry) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/, new Promise(function (resolve, reject) {
+                    entry.file(function (file) {
+                        var fwp = toFileWithPath(file, entry.fullPath);
+                        resolve(fwp);
+                    }, function (err) {
+                        reject(err);
+                    });
+                })];
+        });
+    });
+}
+//# sourceMappingURL=file-selector.js.map
+// CONCATENATED MODULE: ./node_modules/file-selector/dist/es5/index.js
+
+//# sourceMappingURL=index.js.map
+// EXTERNAL MODULE: ./node_modules/attr-accept/dist/index.js
+var dist = __webpack_require__(402);
+var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
+
+// CONCATENATED MODULE: ./node_modules/react-dropzone/dist/es/utils/index.js
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+ // Error codes
+
+var FILE_INVALID_TYPE = 'file-invalid-type';
+var FILE_TOO_LARGE = 'file-too-large';
+var FILE_TOO_SMALL = 'file-too-small';
+var TOO_MANY_FILES = 'too-many-files'; // File Errors
+
+var getInvalidTypeRejectionErr = function getInvalidTypeRejectionErr(accept) {
+  accept = Array.isArray(accept) && accept.length === 1 ? accept[0] : accept;
+  var messageSuffix = Array.isArray(accept) ? "one of ".concat(accept.join(', ')) : accept;
+  return {
+    code: FILE_INVALID_TYPE,
+    message: "File type must be ".concat(messageSuffix)
+  };
+};
+var getTooLargeRejectionErr = function getTooLargeRejectionErr(maxSize) {
+  return {
+    code: FILE_TOO_LARGE,
+    message: "File is larger than ".concat(maxSize, " bytes")
+  };
+};
+var getTooSmallRejectionErr = function getTooSmallRejectionErr(minSize) {
+  return {
+    code: FILE_TOO_SMALL,
+    message: "File is smaller than ".concat(minSize, " bytes")
+  };
+};
+var TOO_MANY_FILES_REJECTION = {
+  code: TOO_MANY_FILES,
+  message: 'Too many files'
+}; // Firefox versions prior to 53 return a bogus MIME type for every file drag, so dragovers with
+// that MIME type will always be accepted
+
+function fileAccepted(file, accept) {
+  var isAcceptable = file.type === 'application/x-moz-file' || dist_default()(file, accept);
+  return [isAcceptable, isAcceptable ? null : getInvalidTypeRejectionErr(accept)];
+}
+function fileMatchSize(file, minSize, maxSize) {
+  if (isDefined(file.size)) {
+    if (isDefined(minSize) && isDefined(maxSize)) {
+      if (file.size > maxSize) return [false, getTooLargeRejectionErr(maxSize)];
+      if (file.size < minSize) return [false, getTooSmallRejectionErr(minSize)];
+    } else if (isDefined(minSize) && file.size < minSize) return [false, getTooSmallRejectionErr(minSize)];else if (isDefined(maxSize) && file.size > maxSize) return [false, getTooLargeRejectionErr(maxSize)];
+  }
+
+  return [true, null];
+}
+
+function isDefined(value) {
+  return value !== undefined && value !== null;
+}
+
+function allFilesAccepted(_ref) {
+  var files = _ref.files,
+      accept = _ref.accept,
+      minSize = _ref.minSize,
+      maxSize = _ref.maxSize,
+      multiple = _ref.multiple;
+
+  if (!multiple && files.length > 1) {
+    return false;
+  }
+
+  return files.every(function (file) {
+    var _fileAccepted = fileAccepted(file, accept),
+        _fileAccepted2 = _slicedToArray(_fileAccepted, 1),
+        accepted = _fileAccepted2[0];
+
+    var _fileMatchSize = fileMatchSize(file, minSize, maxSize),
+        _fileMatchSize2 = _slicedToArray(_fileMatchSize, 1),
+        sizeMatch = _fileMatchSize2[0];
+
+    return accepted && sizeMatch;
+  });
+} // React's synthetic events has event.isPropagationStopped,
+// but to remain compatibility with other libs (Preact) fall back
+// to check event.cancelBubble
+
+function isPropagationStopped(event) {
+  if (typeof event.isPropagationStopped === 'function') {
+    return event.isPropagationStopped();
+  } else if (typeof event.cancelBubble !== 'undefined') {
+    return event.cancelBubble;
+  }
+
+  return false;
+}
+function isEvtWithFiles(event) {
+  if (!event.dataTransfer) {
+    return !!event.target && !!event.target.files;
+  } // https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer/types
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Recommended_drag_types#file
+
+
+  return Array.prototype.some.call(event.dataTransfer.types, function (type) {
+    return type === 'Files' || type === 'application/x-moz-file';
+  });
+}
+function isKindFile(item) {
+  return _typeof(item) === 'object' && item !== null && item.kind === 'file';
+} // allow the entire document to be a drag target
+
+function onDocumentDragOver(event) {
+  event.preventDefault();
+}
+
+function isIe(userAgent) {
+  return userAgent.indexOf('MSIE') !== -1 || userAgent.indexOf('Trident/') !== -1;
+}
+
+function isEdge(userAgent) {
+  return userAgent.indexOf('Edge/') !== -1;
+}
+
+function isIeOrEdge() {
+  var userAgent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window.navigator.userAgent;
+  return isIe(userAgent) || isEdge(userAgent);
+}
+/**
+ * This is intended to be used to compose event handlers
+ * They are executed in order until one of them calls `event.isPropagationStopped()`.
+ * Note that the check is done on the first invoke too,
+ * meaning that if propagation was stopped before invoking the fns,
+ * no handlers will be executed.
+ *
+ * @param {Function} fns the event hanlder functions
+ * @return {Function} the event handler to add to an element
+ */
+
+function composeEventHandlers() {
+  for (var _len = arguments.length, fns = new Array(_len), _key = 0; _key < _len; _key++) {
+    fns[_key] = arguments[_key];
+  }
+
+  return function (event) {
+    for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+      args[_key2 - 1] = arguments[_key2];
+    }
+
+    return fns.some(function (fn) {
+      if (!isPropagationStopped(event) && fn) {
+        fn.apply(void 0, [event].concat(args));
+      }
+
+      return isPropagationStopped(event);
+    });
+  };
+}
+// CONCATENATED MODULE: ./node_modules/react-dropzone/dist/es/index.js
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function es_slicedToArray(arr, i) { return es_arrayWithHoles(arr) || es_iterableToArrayLimit(arr, i) || es_nonIterableRest(); }
+
+function es_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function es_iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function es_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+/* eslint prefer-template: 0 */
+
+
+
+
+/**
+ * Convenience wrapper component for the `useDropzone` hook
+ *
+ * ```jsx
+ * <Dropzone>
+ *   {({getRootProps, getInputProps}) => (
+ *     <div {...getRootProps()}>
+ *       <input {...getInputProps()} />
+ *       <p>Drag 'n' drop some files here, or click to select files</p>
+ *     </div>
+ *   )}
+ * </Dropzone>
+ * ```
+ */
+
+var Dropzone = Object(react["forwardRef"])(function (_ref, ref) {
+  var children = _ref.children,
+      params = _objectWithoutProperties(_ref, ["children"]);
+
+  var _useDropzone = useDropzone(params),
+      open = _useDropzone.open,
+      props = _objectWithoutProperties(_useDropzone, ["open"]);
+
+  Object(react["useImperativeHandle"])(ref, function () {
+    return {
+      open: open
+    };
+  }, [open]); // TODO: Figure out why react-styleguidist cannot create docs if we don't return a jsx element
+
+  return react_default.a.createElement(react["Fragment"], null, children(_objectSpread({}, props, {
+    open: open
+  })));
+});
+Dropzone.displayName = 'Dropzone';
+Dropzone.propTypes = {
+  /**
+   * Render function that exposes the dropzone state and prop getter fns
+   *
+   * @param {object} params
+   * @param {Function} params.getRootProps Returns the props you should apply to the root drop container you render
+   * @param {Function} params.getInputProps Returns the props you should apply to hidden file input you render
+   * @param {Function} params.open Open the native file selection dialog
+   * @param {boolean} params.isFocused Dropzone area is in focus
+   * @param {boolean} params.isFileDialogActive File dialog is opened
+   * @param {boolean} params.isDragActive Active drag is in progress
+   * @param {boolean} params.isDragAccept Dragged files are accepted
+   * @param {boolean} params.isDragReject Some dragged files are rejected
+   * @param {File[]} params.draggedFiles Files in active drag
+   * @param {File[]} params.acceptedFiles Accepted files
+   * @param {FileRejection[]} params.fileRejections Rejected files and why they were rejected
+   */
+  children: prop_types_default.a.func,
+
+  /**
+   * Set accepted file types.
+   * See https://github.com/okonet/attr-accept for more information.
+   * Keep in mind that mime type determination is not reliable across platforms. CSV files,
+   * for example, are reported as text/plain under macOS but as application/vnd.ms-excel under
+   * Windows. In some cases there might not be a mime type set at all.
+   * See: https://github.com/react-dropzone/react-dropzone/issues/276
+   */
+  accept: prop_types_default.a.oneOfType([prop_types_default.a.string, prop_types_default.a.arrayOf(prop_types_default.a.string)]),
+
+  /**
+   * Allow drag 'n' drop (or selection from the file dialog) of multiple files
+   */
+  multiple: prop_types_default.a.bool,
+
+  /**
+   * If false, allow dropped items to take over the current browser window
+   */
+  preventDropOnDocument: prop_types_default.a.bool,
+
+  /**
+   * If true, disables click to open the native file selection dialog
+   */
+  noClick: prop_types_default.a.bool,
+
+  /**
+   * If true, disables SPACE/ENTER to open the native file selection dialog.
+   * Note that it also stops tracking the focus state.
+   */
+  noKeyboard: prop_types_default.a.bool,
+
+  /**
+   * If true, disables drag 'n' drop
+   */
+  noDrag: prop_types_default.a.bool,
+
+  /**
+   * If true, stops drag event propagation to parents
+   */
+  noDragEventsBubbling: prop_types_default.a.bool,
+
+  /**
+   * Minimum file size (in bytes)
+   */
+  minSize: prop_types_default.a.number,
+
+  /**
+   * Maximum file size (in bytes)
+   */
+  maxSize: prop_types_default.a.number,
+
+  /**
+   * Enable/disable the dropzone
+   */
+  disabled: prop_types_default.a.bool,
+
+  /**
+   * Use this to provide a custom file aggregator
+   *
+   * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
+   */
+  getFilesFromEvent: prop_types_default.a.func,
+
+  /**
+   * Cb for when closing the file dialog with no selection
+   */
+  onFileDialogCancel: prop_types_default.a.func,
+
+  /**
+   * Cb for when the `dragenter` event occurs.
+   *
+   * @param {DragEvent} event
+   */
+  onDragEnter: prop_types_default.a.func,
+
+  /**
+   * Cb for when the `dragleave` event occurs
+   *
+   * @param {DragEvent} event
+   */
+  onDragLeave: prop_types_default.a.func,
+
+  /**
+   * Cb for when the `dragover` event occurs
+   *
+   * @param {DragEvent} event
+   */
+  onDragOver: prop_types_default.a.func,
+
+  /**
+   * Cb for when the `drop` event occurs.
+   * Note that this callback is invoked after the `getFilesFromEvent` callback is done.
+   *
+   * Files are accepted or rejected based on the `accept`, `multiple`, `minSize` and `maxSize` props.
+   * `accept` must be a valid [MIME type](http://www.iana.org/assignments/media-types/media-types.xhtml) according to [input element specification](https://www.w3.org/wiki/HTML/Elements/input/file) or a valid file extension.
+   * If `multiple` is set to false and additional files are droppped,
+   * all files besides the first will be rejected.
+   * Any file which does not have a size in the [`minSize`, `maxSize`] range, will be rejected as well.
+   *
+   * Note that the `onDrop` callback will always be invoked regardless if the dropped files were accepted or rejected.
+   * If you'd like to react to a specific scenario, use the `onDropAccepted`/`onDropRejected` props.
+   *
+   * `onDrop` will provide you with an array of [File](https://developer.mozilla.org/en-US/docs/Web/API/File) objects which you can then process and send to a server.
+   * For example, with [SuperAgent](https://github.com/visionmedia/superagent) as a http/ajax library:
+   *
+   * ```js
+   * function onDrop(acceptedFiles) {
+   *   const req = request.post('/upload')
+   *   acceptedFiles.forEach(file => {
+   *     req.attach(file.name, file)
+   *   })
+   *   req.end(callback)
+   * }
+   * ```
+   *
+   * @param {File[]} acceptedFiles
+   * @param {FileRejection[]} fileRejections
+   * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
+   */
+  onDrop: prop_types_default.a.func,
+
+  /**
+   * Cb for when the `drop` event occurs.
+   * Note that if no files are accepted, this callback is not invoked.
+   *
+   * @param {File[]} files
+   * @param {(DragEvent|Event)} event
+   */
+  onDropAccepted: prop_types_default.a.func,
+
+  /**
+   * Cb for when the `drop` event occurs.
+   * Note that if no files are rejected, this callback is not invoked.
+   *
+   * @param {FileRejection[]} fileRejections
+   * @param {(DragEvent|Event)} event
+   */
+  onDropRejected: prop_types_default.a.func
+};
+/* harmony default export */ var es = (Dropzone);
+/**
+ * A function that is invoked for the `dragenter`,
+ * `dragover` and `dragleave` events.
+ * It is not invoked if the items are not files (such as link, text, etc.).
+ *
+ * @callback dragCb
+ * @param {DragEvent} event
+ */
+
+/**
+ * A function that is invoked for the `drop` or input change event.
+ * It is not invoked if the items are not files (such as link, text, etc.).
+ *
+ * @callback dropCb
+ * @param {File[]} acceptedFiles List of accepted files
+ * @param {FileRejection[]} fileRejections List of rejected files and why they were rejected
+ * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
+ */
+
+/**
+ * A function that is invoked for the `drop` or input change event.
+ * It is not invoked if the items are files (such as link, text, etc.).
+ *
+ * @callback dropAcceptedCb
+ * @param {File[]} files List of accepted files that meet the given criteria
+ * (`accept`, `multiple`, `minSize`, `maxSize`)
+ * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
+ */
+
+/**
+ * A function that is invoked for the `drop` or input change event.
+ *
+ * @callback dropRejectedCb
+ * @param {File[]} files List of rejected files that do not meet the given criteria
+ * (`accept`, `multiple`, `minSize`, `maxSize`)
+ * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
+ */
+
+/**
+ * A function that is used aggregate files,
+ * in a asynchronous fashion, from drag or input change events.
+ *
+ * @callback getFilesFromEvent
+ * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
+ * @returns {(File[]|Promise<File[]>)}
+ */
+
+/**
+ * An object with the current dropzone state and some helper functions.
+ *
+ * @typedef {object} DropzoneState
+ * @property {Function} getRootProps Returns the props you should apply to the root drop container you render
+ * @property {Function} getInputProps Returns the props you should apply to hidden file input you render
+ * @property {Function} open Open the native file selection dialog
+ * @property {boolean} isFocused Dropzone area is in focus
+ * @property {boolean} isFileDialogActive File dialog is opened
+ * @property {boolean} isDragActive Active drag is in progress
+ * @property {boolean} isDragAccept Dragged files are accepted
+ * @property {boolean} isDragReject Some dragged files are rejected
+ * @property {File[]} draggedFiles Files in active drag
+ * @property {File[]} acceptedFiles Accepted files
+ * @property {FileRejection[]} fileRejections Rejected files and why they were rejected
+ */
+
+var initialState = {
+  isFocused: false,
+  isFileDialogActive: false,
+  isDragActive: false,
+  isDragAccept: false,
+  isDragReject: false,
+  draggedFiles: [],
+  acceptedFiles: [],
+  fileRejections: []
+};
+/**
+ * A React hook that creates a drag 'n' drop area.
+ *
+ * ```jsx
+ * function MyDropzone(props) {
+ *   const {getRootProps, getInputProps} = useDropzone({
+ *     onDrop: acceptedFiles => {
+ *       // do something with the File objects, e.g. upload to some server
+ *     }
+ *   });
+ *   return (
+ *     <div {...getRootProps()}>
+ *       <input {...getInputProps()} />
+ *       <p>Drag and drop some files here, or click to select files</p>
+ *     </div>
+ *   )
+ * }
+ * ```
+ *
+ * @function useDropzone
+ *
+ * @param {object} props
+ * @param {string|string[]} [props.accept] Set accepted file types.
+ * See https://github.com/okonet/attr-accept for more information.
+ * Keep in mind that mime type determination is not reliable across platforms. CSV files,
+ * for example, are reported as text/plain under macOS but as application/vnd.ms-excel under
+ * Windows. In some cases there might not be a mime type set at all.
+ * See: https://github.com/react-dropzone/react-dropzone/issues/276
+ * @param {boolean} [props.multiple=true] Allow drag 'n' drop (or selection from the file dialog) of multiple files
+ * @param {boolean} [props.preventDropOnDocument=true] If false, allow dropped items to take over the current browser window
+ * @param {boolean} [props.noClick=false] If true, disables click to open the native file selection dialog
+ * @param {boolean} [props.noKeyboard=false] If true, disables SPACE/ENTER to open the native file selection dialog.
+ * Note that it also stops tracking the focus state.
+ * @param {boolean} [props.noDrag=false] If true, disables drag 'n' drop
+ * @param {boolean} [props.noDragEventsBubbling=false] If true, stops drag event propagation to parents
+ * @param {number} [props.minSize=0] Minimum file size (in bytes)
+ * @param {number} [props.maxSize=Infinity] Maximum file size (in bytes)
+ * @param {boolean} [props.disabled=false] Enable/disable the dropzone
+ * @param {getFilesFromEvent} [props.getFilesFromEvent] Use this to provide a custom file aggregator
+ * @param {Function} [props.onFileDialogCancel] Cb for when closing the file dialog with no selection
+ * @param {dragCb} [props.onDragEnter] Cb for when the `dragenter` event occurs.
+ * @param {dragCb} [props.onDragLeave] Cb for when the `dragleave` event occurs
+ * @param {dragCb} [props.onDragOver] Cb for when the `dragover` event occurs
+ * @param {dropCb} [props.onDrop] Cb for when the `drop` event occurs.
+ * Note that this callback is invoked after the `getFilesFromEvent` callback is done.
+ *
+ * Files are accepted or rejected based on the `accept`, `multiple`, `minSize` and `maxSize` props.
+ * `accept` must be a valid [MIME type](http://www.iana.org/assignments/media-types/media-types.xhtml) according to [input element specification](https://www.w3.org/wiki/HTML/Elements/input/file) or a valid file extension.
+ * If `multiple` is set to false and additional files are droppped,
+ * all files besides the first will be rejected.
+ * Any file which does not have a size in the [`minSize`, `maxSize`] range, will be rejected as well.
+ *
+ * Note that the `onDrop` callback will always be invoked regardless if the dropped files were accepted or rejected.
+ * If you'd like to react to a specific scenario, use the `onDropAccepted`/`onDropRejected` props.
+ *
+ * `onDrop` will provide you with an array of [File](https://developer.mozilla.org/en-US/docs/Web/API/File) objects which you can then process and send to a server.
+ * For example, with [SuperAgent](https://github.com/visionmedia/superagent) as a http/ajax library:
+ *
+ * ```js
+ * function onDrop(acceptedFiles) {
+ *   const req = request.post('/upload')
+ *   acceptedFiles.forEach(file => {
+ *     req.attach(file.name, file)
+ *   })
+ *   req.end(callback)
+ * }
+ * ```
+ * @param {dropAcceptedCb} [props.onDropAccepted]
+ * @param {dropRejectedCb} [props.onDropRejected]
+ *
+ * @returns {DropzoneState}
+ */
+
+function useDropzone() {
+  var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      accept = _ref2.accept,
+      _ref2$disabled = _ref2.disabled,
+      disabled = _ref2$disabled === void 0 ? false : _ref2$disabled,
+      _ref2$getFilesFromEve = _ref2.getFilesFromEvent,
+      getFilesFromEvent = _ref2$getFilesFromEve === void 0 ? fromEvent : _ref2$getFilesFromEve,
+      _ref2$maxSize = _ref2.maxSize,
+      maxSize = _ref2$maxSize === void 0 ? Infinity : _ref2$maxSize,
+      _ref2$minSize = _ref2.minSize,
+      minSize = _ref2$minSize === void 0 ? 0 : _ref2$minSize,
+      _ref2$multiple = _ref2.multiple,
+      multiple = _ref2$multiple === void 0 ? true : _ref2$multiple,
+      onDragEnter = _ref2.onDragEnter,
+      onDragLeave = _ref2.onDragLeave,
+      onDragOver = _ref2.onDragOver,
+      onDrop = _ref2.onDrop,
+      onDropAccepted = _ref2.onDropAccepted,
+      onDropRejected = _ref2.onDropRejected,
+      onFileDialogCancel = _ref2.onFileDialogCancel,
+      _ref2$preventDropOnDo = _ref2.preventDropOnDocument,
+      preventDropOnDocument = _ref2$preventDropOnDo === void 0 ? true : _ref2$preventDropOnDo,
+      _ref2$noClick = _ref2.noClick,
+      noClick = _ref2$noClick === void 0 ? false : _ref2$noClick,
+      _ref2$noKeyboard = _ref2.noKeyboard,
+      noKeyboard = _ref2$noKeyboard === void 0 ? false : _ref2$noKeyboard,
+      _ref2$noDrag = _ref2.noDrag,
+      noDrag = _ref2$noDrag === void 0 ? false : _ref2$noDrag,
+      _ref2$noDragEventsBub = _ref2.noDragEventsBubbling,
+      noDragEventsBubbling = _ref2$noDragEventsBub === void 0 ? false : _ref2$noDragEventsBub;
+
+  var rootRef = Object(react["useRef"])(null);
+  var inputRef = Object(react["useRef"])(null);
+
+  var _useReducer = Object(react["useReducer"])(reducer, initialState),
+      _useReducer2 = es_slicedToArray(_useReducer, 2),
+      state = _useReducer2[0],
+      dispatch = _useReducer2[1];
+
+  var isFocused = state.isFocused,
+      isFileDialogActive = state.isFileDialogActive,
+      draggedFiles = state.draggedFiles; // Fn for opening the file dialog programmatically
+
+  var openFileDialog = Object(react["useCallback"])(function () {
+    if (inputRef.current) {
+      dispatch({
+        type: 'openDialog'
+      });
+      inputRef.current.value = null;
+      inputRef.current.click();
+    }
+  }, [dispatch]); // Update file dialog active state when the window is focused on
+
+  var onWindowFocus = function onWindowFocus() {
+    // Execute the timeout only if the file dialog is opened in the browser
+    if (isFileDialogActive) {
+      setTimeout(function () {
+        if (inputRef.current) {
+          var files = inputRef.current.files;
+
+          if (!files.length) {
+            dispatch({
+              type: 'closeDialog'
+            });
+
+            if (typeof onFileDialogCancel === 'function') {
+              onFileDialogCancel();
+            }
+          }
+        }
+      }, 300);
+    }
+  };
+
+  Object(react["useEffect"])(function () {
+    window.addEventListener('focus', onWindowFocus, false);
+    return function () {
+      window.removeEventListener('focus', onWindowFocus, false);
+    };
+  }, [inputRef, isFileDialogActive, onFileDialogCancel]); // Cb to open the file dialog when SPACE/ENTER occurs on the dropzone
+
+  var onKeyDownCb = Object(react["useCallback"])(function (event) {
+    // Ignore keyboard events bubbling up the DOM tree
+    if (!rootRef.current || !rootRef.current.isEqualNode(event.target)) {
+      return;
+    }
+
+    if (event.keyCode === 32 || event.keyCode === 13) {
+      event.preventDefault();
+      openFileDialog();
+    }
+  }, [rootRef, inputRef]); // Update focus state for the dropzone
+
+  var onFocusCb = Object(react["useCallback"])(function () {
+    dispatch({
+      type: 'focus'
+    });
+  }, []);
+  var onBlurCb = Object(react["useCallback"])(function () {
+    dispatch({
+      type: 'blur'
+    });
+  }, []); // Cb to open the file dialog when click occurs on the dropzone
+
+  var onClickCb = Object(react["useCallback"])(function () {
+    if (noClick) {
+      return;
+    } // In IE11/Edge the file-browser dialog is blocking, therefore, use setTimeout()
+    // to ensure React can handle state changes
+    // See: https://github.com/react-dropzone/react-dropzone/issues/450
+
+
+    if (isIeOrEdge()) {
+      setTimeout(openFileDialog, 0);
+    } else {
+      openFileDialog();
+    }
+  }, [inputRef, noClick]);
+  var dragTargetsRef = Object(react["useRef"])([]);
+
+  var onDocumentDrop = function onDocumentDrop(event) {
+    if (rootRef.current && rootRef.current.contains(event.target)) {
+      // If we intercepted an event for our instance, let it propagate down to the instance's onDrop handler
+      return;
+    }
+
+    event.preventDefault();
+    dragTargetsRef.current = [];
+  };
+
+  Object(react["useEffect"])(function () {
+    if (preventDropOnDocument) {
+      document.addEventListener('dragover', onDocumentDragOver, false);
+      document.addEventListener('drop', onDocumentDrop, false);
+    }
+
+    return function () {
+      if (preventDropOnDocument) {
+        document.removeEventListener('dragover', onDocumentDragOver);
+        document.removeEventListener('drop', onDocumentDrop);
+      }
+    };
+  }, [rootRef, preventDropOnDocument]);
+  var onDragEnterCb = Object(react["useCallback"])(function (event) {
+    event.preventDefault(); // Persist here because we need the event later after getFilesFromEvent() is done
+
+    event.persist();
+    stopPropagation(event);
+    dragTargetsRef.current = [].concat(_toConsumableArray(dragTargetsRef.current), [event.target]);
+
+    if (isEvtWithFiles(event)) {
+      Promise.resolve(getFilesFromEvent(event)).then(function (draggedFiles) {
+        if (isPropagationStopped(event) && !noDragEventsBubbling) {
+          return;
+        }
+
+        dispatch({
+          draggedFiles: draggedFiles,
+          isDragActive: true,
+          type: 'setDraggedFiles'
+        });
+
+        if (onDragEnter) {
+          onDragEnter(event);
+        }
+      });
+    }
+  }, [getFilesFromEvent, onDragEnter, noDragEventsBubbling]);
+  var onDragOverCb = Object(react["useCallback"])(function (event) {
+    event.preventDefault();
+    event.persist();
+    stopPropagation(event);
+
+    if (event.dataTransfer) {
+      try {
+        event.dataTransfer.dropEffect = 'copy';
+      } catch (_unused) {}
+      /* eslint-disable-line no-empty */
+
+    }
+
+    if (isEvtWithFiles(event) && onDragOver) {
+      onDragOver(event);
+    }
+
+    return false;
+  }, [onDragOver, noDragEventsBubbling]);
+  var onDragLeaveCb = Object(react["useCallback"])(function (event) {
+    event.preventDefault();
+    event.persist();
+    stopPropagation(event); // Only deactivate once the dropzone and all children have been left
+
+    var targets = dragTargetsRef.current.filter(function (target) {
+      return rootRef.current && rootRef.current.contains(target);
+    }); // Make sure to remove a target present multiple times only once
+    // (Firefox may fire dragenter/dragleave multiple times on the same element)
+
+    var targetIdx = targets.indexOf(event.target);
+
+    if (targetIdx !== -1) {
+      targets.splice(targetIdx, 1);
+    }
+
+    dragTargetsRef.current = targets;
+
+    if (targets.length > 0) {
+      return;
+    }
+
+    dispatch({
+      isDragActive: false,
+      type: 'setDraggedFiles',
+      draggedFiles: []
+    });
+
+    if (isEvtWithFiles(event) && onDragLeave) {
+      onDragLeave(event);
+    }
+  }, [rootRef, onDragLeave, noDragEventsBubbling]);
+  var onDropCb = Object(react["useCallback"])(function (event) {
+    event.preventDefault(); // Persist here because we need the event later after getFilesFromEvent() is done
+
+    event.persist();
+    stopPropagation(event);
+    dragTargetsRef.current = [];
+
+    if (isEvtWithFiles(event)) {
+      Promise.resolve(getFilesFromEvent(event)).then(function (files) {
+        if (isPropagationStopped(event) && !noDragEventsBubbling) {
+          return;
+        }
+
+        var acceptedFiles = [];
+        var fileRejections = [];
+        files.forEach(function (file) {
+          var _fileAccepted = fileAccepted(file, accept),
+              _fileAccepted2 = es_slicedToArray(_fileAccepted, 2),
+              accepted = _fileAccepted2[0],
+              acceptError = _fileAccepted2[1];
+
+          var _fileMatchSize = fileMatchSize(file, minSize, maxSize),
+              _fileMatchSize2 = es_slicedToArray(_fileMatchSize, 2),
+              sizeMatch = _fileMatchSize2[0],
+              sizeError = _fileMatchSize2[1];
+
+          if (accepted && sizeMatch) {
+            acceptedFiles.push(file);
+          } else {
+            var errors = [acceptError, sizeError].filter(function (e) {
+              return e;
+            });
+            fileRejections.push({
+              file: file,
+              errors: errors
+            });
+          }
+        });
+
+        if (!multiple && acceptedFiles.length > 1) {
+          // Reject everything and empty accepted files
+          acceptedFiles.forEach(function (file) {
+            fileRejections.push({
+              file: file,
+              errors: [TOO_MANY_FILES_REJECTION]
+            });
+          });
+          acceptedFiles.splice(0);
+        }
+
+        dispatch({
+          acceptedFiles: acceptedFiles,
+          fileRejections: fileRejections,
+          type: 'setFiles'
+        });
+
+        if (onDrop) {
+          onDrop(acceptedFiles, fileRejections, event);
+        }
+
+        if (fileRejections.length > 0 && onDropRejected) {
+          onDropRejected(fileRejections, event);
+        }
+
+        if (acceptedFiles.length > 0 && onDropAccepted) {
+          onDropAccepted(acceptedFiles, event);
+        }
+      });
+    }
+
+    dispatch({
+      type: 'reset'
+    });
+  }, [multiple, accept, minSize, maxSize, getFilesFromEvent, onDrop, onDropAccepted, onDropRejected, noDragEventsBubbling]);
+
+  var composeHandler = function composeHandler(fn) {
+    return disabled ? null : fn;
+  };
+
+  var composeKeyboardHandler = function composeKeyboardHandler(fn) {
+    return noKeyboard ? null : composeHandler(fn);
+  };
+
+  var composeDragHandler = function composeDragHandler(fn) {
+    return noDrag ? null : composeHandler(fn);
+  };
+
+  var stopPropagation = function stopPropagation(event) {
+    if (noDragEventsBubbling) {
+      event.stopPropagation();
+    }
+  };
+
+  var getRootProps = Object(react["useMemo"])(function () {
+    return function () {
+      var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref3$refKey = _ref3.refKey,
+          refKey = _ref3$refKey === void 0 ? 'ref' : _ref3$refKey,
+          onKeyDown = _ref3.onKeyDown,
+          onFocus = _ref3.onFocus,
+          onBlur = _ref3.onBlur,
+          onClick = _ref3.onClick,
+          onDragEnter = _ref3.onDragEnter,
+          onDragOver = _ref3.onDragOver,
+          onDragLeave = _ref3.onDragLeave,
+          onDrop = _ref3.onDrop,
+          rest = _objectWithoutProperties(_ref3, ["refKey", "onKeyDown", "onFocus", "onBlur", "onClick", "onDragEnter", "onDragOver", "onDragLeave", "onDrop"]);
+
+      return _objectSpread(_defineProperty({
+        onKeyDown: composeKeyboardHandler(composeEventHandlers(onKeyDown, onKeyDownCb)),
+        onFocus: composeKeyboardHandler(composeEventHandlers(onFocus, onFocusCb)),
+        onBlur: composeKeyboardHandler(composeEventHandlers(onBlur, onBlurCb)),
+        onClick: composeHandler(composeEventHandlers(onClick, onClickCb)),
+        onDragEnter: composeDragHandler(composeEventHandlers(onDragEnter, onDragEnterCb)),
+        onDragOver: composeDragHandler(composeEventHandlers(onDragOver, onDragOverCb)),
+        onDragLeave: composeDragHandler(composeEventHandlers(onDragLeave, onDragLeaveCb)),
+        onDrop: composeDragHandler(composeEventHandlers(onDrop, onDropCb))
+      }, refKey, rootRef), !disabled && !noKeyboard ? {
+        tabIndex: 0
+      } : {}, {}, rest);
+    };
+  }, [rootRef, onKeyDownCb, onFocusCb, onBlurCb, onClickCb, onDragEnterCb, onDragOverCb, onDragLeaveCb, onDropCb, noKeyboard, noDrag, disabled]);
+  var onInputElementClick = Object(react["useCallback"])(function (event) {
+    event.stopPropagation();
+  }, []);
+  var getInputProps = Object(react["useMemo"])(function () {
+    return function () {
+      var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref4$refKey = _ref4.refKey,
+          refKey = _ref4$refKey === void 0 ? 'ref' : _ref4$refKey,
+          onChange = _ref4.onChange,
+          onClick = _ref4.onClick,
+          rest = _objectWithoutProperties(_ref4, ["refKey", "onChange", "onClick"]);
+
+      var inputProps = _defineProperty({
+        accept: accept,
+        multiple: multiple,
+        type: 'file',
+        style: {
+          display: 'none'
+        },
+        onChange: composeHandler(composeEventHandlers(onChange, onDropCb)),
+        onClick: composeHandler(composeEventHandlers(onClick, onInputElementClick)),
+        autoComplete: 'off',
+        tabIndex: -1
+      }, refKey, inputRef);
+
+      return _objectSpread({}, inputProps, {}, rest);
+    };
+  }, [inputRef, accept, multiple, onDropCb, disabled]);
+  var fileCount = draggedFiles.length;
+  var isDragAccept = fileCount > 0 && allFilesAccepted({
+    files: draggedFiles,
+    accept: accept,
+    minSize: minSize,
+    maxSize: maxSize,
+    multiple: multiple
+  });
+  var isDragReject = fileCount > 0 && !isDragAccept;
+  return _objectSpread({}, state, {
+    isDragAccept: isDragAccept,
+    isDragReject: isDragReject,
+    isFocused: isFocused && !disabled,
+    getRootProps: getRootProps,
+    getInputProps: getInputProps,
+    rootRef: rootRef,
+    inputRef: inputRef,
+    open: composeHandler(openFileDialog)
+  });
+}
+
+function reducer(state, action) {
+  /* istanbul ignore next */
+  switch (action.type) {
+    case 'focus':
+      return _objectSpread({}, state, {
+        isFocused: true
+      });
+
+    case 'blur':
+      return _objectSpread({}, state, {
+        isFocused: false
+      });
+
+    case 'openDialog':
+      return _objectSpread({}, state, {
+        isFileDialogActive: true
+      });
+
+    case 'closeDialog':
+      return _objectSpread({}, state, {
+        isFileDialogActive: false
+      });
+
+    case 'setDraggedFiles':
+      /* eslint no-case-declarations: 0 */
+      var isDragActive = action.isDragActive,
+          draggedFiles = action.draggedFiles;
+      return _objectSpread({}, state, {
+        draggedFiles: draggedFiles,
+        isDragActive: isDragActive
+      });
+
+    case 'setFiles':
+      return _objectSpread({}, state, {
+        acceptedFiles: action.acceptedFiles,
+        fileRejections: action.fileRejections
+      });
+
+    case 'reset':
+      return _objectSpread({}, state, {
+        isFileDialogActive: false,
+        isDragActive: false,
+        draggedFiles: [],
+        acceptedFiles: [],
+        fileRejections: []
+      });
+
+    default:
+      return state;
+  }
+}
+// EXTERNAL MODULE: ./src/shared/helpers/errorHandlers/FetchErrorHandler.js + 1 modules
+var FetchErrorHandler = __webpack_require__(66);
+
+// CONCATENATED MODULE: ./src/project/Seller.Portal/areas/Orders/components/ImportOrder/ImportOrderForm.js
+
+
+
+
+
+
+
+
+
+
+
+function ImportOrderForm(props) {
+  var defaultProps = {
+    options: props.clients,
+    getOptionLabel: function getOptionLabel(option) {
+      return option.name;
+    }
+  };
+
+  var _useContext = Object(react["useContext"])(Store["a" /* Context */]),
+      _useContext2 = Object(slicedToArray["a" /* default */])(_useContext, 2),
+      state = _useContext2[0],
+      dispatch = _useContext2[1];
+
+  var _useState = Object(react["useState"])(false),
+      _useState2 = Object(slicedToArray["a" /* default */])(_useState, 2),
+      isClientSelected = _useState2[0],
+      setClientSelected = _useState2[1];
+
+  var _useState3 = Object(react["useState"])(null),
+      _useState4 = Object(slicedToArray["a" /* default */])(_useState3, 2),
+      client = _useState4[0],
+      setClient = _useState4[1];
+
+  var onDrop = Object(react["useCallback"])(function (acceptedFiles) {
+    dispatch({
+      type: 'SET_IS_LOADING',
+      payload: true
+    });
+    acceptedFiles.forEach(function (file) {
+      var formData = new FormData();
+      console.log(client);
+
+      if (client) {
+        formData.append('clientId', client.id);
+      }
+
+      formData.append('orderFile', file);
+      var requestOptions = {
+        method: 'POST',
+        body: formData
+      };
+      fetch(props.validateOrderUrl, requestOptions).then(function (response) {
+        dispatch({
+          type: 'SET_IS_LOADING',
+          payload: false
+        });
+        FetchErrorHandler["a" /* default */].handleUnauthorizedResponse(response);
+        return response.json().then(function (jsonResponse) {
+          if (response.ok) {
+            dispatch({
+              type: 'SET_IS_LOADING',
+              payload: false
+            });
+          } else {
+            FetchErrorHandler["a" /* default */].consoleLogResponseDetails(state, response, jsonResponse);
+            react_toastify["a" /* toast */].error(props.generalErrorMessage);
+          }
+        });
+      }).catch(function (error) {
+        console.log(error);
+        dispatch({
+          type: 'SET_IS_LOADING',
+          payload: false
+        });
+        react_toastify["a" /* toast */].error(props.generalErrorMessage);
+      });
+    });
+  }, [client, dispatch, state, props.generalErrorMessage, props.validateOrderUrl]);
+
+  var _useDropzone = useDropzone({
+    onDrop: onDrop,
+    accept: '.xls, .xlsx',
+    multiple: false
+  }),
+      getRootProps = _useDropzone.getRootProps,
+      getInputProps = _useDropzone.getInputProps,
+      isDragActive = _useDropzone.isDragActive;
+
+  return /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement("form", {
+    className: "is-modern-form",
+    method: "post"
+  }, /*#__PURE__*/react_default.a.createElement("div", {
+    className: "field"
+  }, /*#__PURE__*/react_default.a.createElement(Autocomplete["a" /* default */], Object.assign({}, defaultProps, {
+    id: "client",
+    name: "client",
+    fullWidth: true,
+    value: client,
+    onChange: function onChange(event, newValue) {
+      if (newValue) {
+        setClientSelected(true);
+        setClient(newValue);
+      } else {
+        setClientSelected(false);
+        setClient(null);
+      }
+    },
+    autoComplete: true,
+    renderInput: function renderInput(params) {
+      return /*#__PURE__*/react_default.a.createElement(TextField["a" /* default */], Object.assign({}, params, {
+        label: props.selectClientLabel,
+        margin: "normal"
+      }));
+    }
+  }))), /*#__PURE__*/react_default.a.createElement("div", {
+    className: isClientSelected ? "field" : "is-hidden"
+  }, /*#__PURE__*/react_default.a.createElement("div", getRootProps(), /*#__PURE__*/react_default.a.createElement("input", Object.assign({
+    id: "order",
+    name: "order"
+  }, getInputProps())), isDragActive ? /*#__PURE__*/react_default.a.createElement("div", {
+    className: "dropzone dropzone--active"
+  }, /*#__PURE__*/react_default.a.createElement("p", null, /*#__PURE__*/react_default.a.createElement(upload_cloud["a" /* default */], {
+    size: IconConstants["a" /* default */].DefaultSize()
+  })), /*#__PURE__*/react_default.a.createElement("p", null, props.dropFilesLabel)) : /*#__PURE__*/react_default.a.createElement("div", {
+    className: "dropzone"
+  }, /*#__PURE__*/react_default.a.createElement("p", null, /*#__PURE__*/react_default.a.createElement(upload_cloud["a" /* default */], {
+    size: IconConstants["a" /* default */].DefaultSize()
+  })), /*#__PURE__*/react_default.a.createElement("p", null, props.dropOrSelectFilesLabel)))), /*#__PURE__*/react_default.a.createElement("div", {
+    className: "field"
+  }, /*#__PURE__*/react_default.a.createElement(Button["a" /* default */], {
+    type: "submit",
+    variant: "contained",
+    color: "primary",
+    disabled: state.isLoading
+  }, props.saveText))), state.isLoading && /*#__PURE__*/react_default.a.createElement(CircularProgress["a" /* default */], {
+    className: "progressBar"
+  }));
+}
+
+/* harmony default export */ var ImportOrder_ImportOrderForm = (ImportOrderForm);
+// EXTERNAL MODULE: ./src/shared/layouts/images/favicon.png
+var favicon = __webpack_require__(82);
+
+// CONCATENATED MODULE: ./src/project/Seller.Portal/areas/Orders/pages/ImportOrderPage/ImportOrderPage.js
+
+
+
+
+
+
+
+
+
+/* eslint-disable no-unused-vars */
+
+
+/* eslint-enable no-unused-vars */
+
+function ImportOrderPage(props) {
+  react_toastify["a" /* toast */].configure();
+  return /*#__PURE__*/react_default.a.createElement(ThemeProvider["a" /* default */], {
+    theme: GlobalHelper["a" /* default */].initMuiTheme()
+  }, /*#__PURE__*/react_default.a.createElement(Store["b" /* default */], null, /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement(Header["a" /* default */], props.header), /*#__PURE__*/react_default.a.createElement(MenuTiles["a" /* default */], props.menuTiles), /*#__PURE__*/react_default.a.createElement("section", {
+    className: "section section-small-padding catalog"
+  }, /*#__PURE__*/react_default.a.createElement("h1", {
+    className: "subtitle is-4"
+  }, props.title), /*#__PURE__*/react_default.a.createElement("div", {
+    className: "columns is-desktop"
+  }, /*#__PURE__*/react_default.a.createElement("div", {
+    className: "column is-half"
+  }, /*#__PURE__*/react_default.a.createElement(ImportOrder_ImportOrderForm, props.importOrderForm)))), /*#__PURE__*/react_default.a.createElement(Footer["a" /* default */], props.footer))));
+}
+
+/* harmony default export */ var ImportOrderPage_ImportOrderPage = (ImportOrderPage);
+// EXTERNAL MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.js
+var CssSsrRemovalHelper = __webpack_require__(58);
+
+// CONCATENATED MODULE: ./src/project/Seller.Portal/areas/Orders/pages/ImportOrderPage/index.js
+
+
+
+
+CssSsrRemovalHelper["a" /* default */].Remove();
+react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(ImportOrderPage_ImportOrderPage, window.data), document.getElementById('root'));
+
+/***/ }),
+
+/***/ 601:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// UNUSED EXPORTS: createFilterOptions, styles
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
 var objectWithoutProperties = __webpack_require__(3);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(19);
+var defineProperty = __webpack_require__(16);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
 var esm_extends = __webpack_require__(2);
 
+// EXTERNAL MODULE: ./node_modules/react/index.js
+var react = __webpack_require__(0);
+
 // EXTERNAL MODULE: ./node_modules/prop-types/index.js
 var prop_types = __webpack_require__(1);
-var prop_types_default = /*#__PURE__*/__webpack_require__.n(prop_types);
 
 // EXTERNAL MODULE: ./node_modules/clsx/dist/clsx.m.js
 var clsx_m = __webpack_require__(4);
@@ -29652,19 +30790,19 @@ var clsx_m = __webpack_require__(4);
 var withStyles = __webpack_require__(5);
 
 // EXTERNAL MODULE: ./node_modules/popper.js/dist/esm/popper.js
-var esm_popper = __webpack_require__(400);
+var esm_popper = __webpack_require__(143);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/useTheme/useTheme.js
 var useTheme = __webpack_require__(85);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Portal/Portal.js
-var Portal = __webpack_require__(185);
+var Portal = __webpack_require__(187);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/createChainedFunction.js
-var createChainedFunction = __webpack_require__(40);
+var createChainedFunction = __webpack_require__(37);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/setRef.js
-var setRef = __webpack_require__(27);
+var setRef = __webpack_require__(25);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useForkRef.js
 var useForkRef = __webpack_require__(9);
@@ -29878,7 +31016,7 @@ var Popper_Popper = react["forwardRef"](function Popper(props, ref) {
  false ? undefined : void 0;
 /* harmony default export */ var esm_Popper_Popper = (Popper_Popper);
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/capitalize.js
-var capitalize = __webpack_require__(7);
+var capitalize = __webpack_require__(6);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/ListSubheader/ListSubheader.js
 
@@ -29956,13 +31094,13 @@ var ListSubheader_ListSubheader = react["forwardRef"](function ListSubheader(pro
   name: 'MuiListSubheader'
 })(ListSubheader_ListSubheader));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Paper/Paper.js
-var Paper = __webpack_require__(184);
+var Paper = __webpack_require__(186);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/IconButton/IconButton.js
-var IconButton = __webpack_require__(417);
+var IconButton = __webpack_require__(222);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/createSvgIcon.js
-var createSvgIcon = __webpack_require__(67);
+var createSvgIcon = __webpack_require__(62);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/internal/svg-icons/Cancel.js
 
@@ -29975,10 +31113,10 @@ var createSvgIcon = __webpack_require__(67);
   d: "M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"
 }), 'Cancel'));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/colorManipulator.js
-var colorManipulator = __webpack_require__(12);
+var colorManipulator = __webpack_require__(10);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/ButtonBase/ButtonBase.js + 3 modules
-var ButtonBase = __webpack_require__(100);
+var ButtonBase = __webpack_require__(98);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Chip/Chip.js
 
@@ -30420,13 +31558,13 @@ var Chip_Chip = react["forwardRef"](function Chip(props, ref) {
   d: "M7 10l5 5 5-5z"
 }), 'ArrowDropDown'));
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 2 modules
-var toConsumableArray = __webpack_require__(22);
+var toConsumableArray = __webpack_require__(20);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
-var esm_typeof = __webpack_require__(26);
+var esm_typeof = __webpack_require__(27);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 1 modules
-var esm_slicedToArray = __webpack_require__(38);
+var slicedToArray = __webpack_require__(34);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/utils/unstable_useId.js
 
@@ -30451,7 +31589,7 @@ function useId(idOverride) {
   return id;
 }
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useControlled.js
-var useControlled = __webpack_require__(91);
+var useControlled = __webpack_require__(93);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useEventCallback.js
 var useEventCallback = __webpack_require__(24);
@@ -30611,7 +31749,7 @@ function useAutocomplete(props) {
     default: defaultValue,
     name: componentName
   }),
-      _useControlled2 = Object(esm_slicedToArray["a" /* default */])(_useControlled, 2),
+      _useControlled2 = Object(slicedToArray["a" /* default */])(_useControlled, 2),
       value = _useControlled2[0],
       setValue = _useControlled2[1];
 
@@ -30621,7 +31759,7 @@ function useAutocomplete(props) {
     name: componentName,
     state: 'inputValue'
   }),
-      _useControlled4 = Object(esm_slicedToArray["a" /* default */])(_useControlled3, 2),
+      _useControlled4 = Object(slicedToArray["a" /* default */])(_useControlled3, 2),
       inputValue = _useControlled4[0],
       setInputValue = _useControlled4[1];
 
@@ -30664,7 +31802,7 @@ function useAutocomplete(props) {
     name: componentName,
     state: 'open'
   }),
-      _useControlled6 = Object(esm_slicedToArray["a" /* default */])(_useControlled5, 2),
+      _useControlled6 = Object(slicedToArray["a" /* default */])(_useControlled5, 2),
       open = _useControlled6[0],
       setOpenState = _useControlled6[1];
 
@@ -31698,11 +32836,11 @@ function DisablePortal(props) {
   return /*#__PURE__*/react["createElement"]("div", other);
 }
 
-var Autocomplete_ref = /*#__PURE__*/react["createElement"](Close, {
+var _ref = /*#__PURE__*/react["createElement"](Close, {
   fontSize: "small"
 });
 
-var Autocomplete_ref2 = /*#__PURE__*/react["createElement"](ArrowDropDown, null);
+var _ref2 = /*#__PURE__*/react["createElement"](ArrowDropDown, null);
 
 var Autocomplete_Autocomplete = react["forwardRef"](function Autocomplete(props, ref) {
   /* eslint-disable no-unused-vars */
@@ -31724,7 +32862,7 @@ var Autocomplete_Autocomplete = react["forwardRef"](function Autocomplete(props,
       _props$clearText = props.clearText,
       clearText = _props$clearText === void 0 ? 'Clear' : _props$clearText,
       _props$closeIcon = props.closeIcon,
-      closeIcon = _props$closeIcon === void 0 ? Autocomplete_ref : _props$closeIcon,
+      closeIcon = _props$closeIcon === void 0 ? _ref : _props$closeIcon,
       _props$closeText = props.closeText,
       closeText = _props$closeText === void 0 ? 'Close' : _props$closeText,
       _props$debug = props.debug,
@@ -31798,7 +32936,7 @@ var Autocomplete_Autocomplete = react["forwardRef"](function Autocomplete(props,
       _props$PopperComponen = props.PopperComponent,
       PopperComponentProp = _props$PopperComponen === void 0 ? esm_Popper_Popper : _props$PopperComponen,
       _props$popupIcon = props.popupIcon,
-      popupIcon = _props$popupIcon === void 0 ? Autocomplete_ref2 : _props$popupIcon,
+      popupIcon = _props$popupIcon === void 0 ? _ref2 : _props$popupIcon,
       renderGroupProp = props.renderGroup,
       renderInput = props.renderInput,
       renderOptionProp = props.renderOption,
@@ -31962,1678 +33100,9 @@ var Autocomplete_Autocomplete = react["forwardRef"](function Autocomplete(props,
   })) : null)) : null);
 });
  false ? undefined : void 0;
-/* harmony default export */ var esm_Autocomplete_Autocomplete = (Object(withStyles["a" /* default */])(Autocomplete_styles, {
+/* harmony default export */ var esm_Autocomplete_Autocomplete = __webpack_exports__["a"] = (Object(withStyles["a" /* default */])(Autocomplete_styles, {
   name: 'MuiAutocomplete'
 })(Autocomplete_Autocomplete));
-// CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.js
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-***************************************************************************** */
-/* global Reflect, Promise */
-
-var extendStatics = function(d, b) {
-    extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return extendStatics(d, b);
-};
-
-function __extends(d, b) {
-    extendStatics(d, b);
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-}
-
-var __assign = function() {
-    __assign = Object.assign || function __assign(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-        }
-        return t;
-    }
-    return __assign.apply(this, arguments);
-}
-
-function __rest(s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-}
-
-function __decorate(decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-}
-
-function __param(paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-}
-
-function __metadata(metadataKey, metadataValue) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
-}
-
-function __awaiter(thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-}
-
-function __generator(thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-}
-
-function __createBinding(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}
-
-function __exportStar(m, exports) {
-    for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-
-function __values(o) {
-    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-    if (m) return m.call(o);
-    if (o && typeof o.length === "number") return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-}
-
-function __read(o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-}
-
-function __spread() {
-    for (var ar = [], i = 0; i < arguments.length; i++)
-        ar = ar.concat(__read(arguments[i]));
-    return ar;
-}
-
-function __spreadArrays() {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-};
-
-function __await(v) {
-    return this instanceof __await ? (this.v = v, this) : new __await(v);
-}
-
-function __asyncGenerator(thisArg, _arguments, generator) {
-    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-    var g = generator.apply(thisArg, _arguments || []), i, q = [];
-    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
-    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
-    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
-    function fulfill(value) { resume("next", value); }
-    function reject(value) { resume("throw", value); }
-    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
-}
-
-function __asyncDelegator(o) {
-    var i, p;
-    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
-    function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
-}
-
-function __asyncValues(o) {
-    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-    var m = o[Symbol.asyncIterator], i;
-    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
-    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
-    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
-}
-
-function __makeTemplateObject(cooked, raw) {
-    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-    return cooked;
-};
-
-function __importStar(mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result.default = mod;
-    return result;
-}
-
-function __importDefault(mod) {
-    return (mod && mod.__esModule) ? mod : { default: mod };
-}
-
-function __classPrivateFieldGet(receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
-}
-
-function __classPrivateFieldSet(receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to set private field on non-instance");
-    }
-    privateMap.set(receiver, value);
-    return value;
-}
-
-// CONCATENATED MODULE: ./node_modules/file-selector/dist/es5/file.js
-var COMMON_MIME_TYPES = new Map([
-    ['avi', 'video/avi'],
-    ['gif', 'image/gif'],
-    ['ico', 'image/x-icon'],
-    ['jpeg', 'image/jpeg'],
-    ['jpg', 'image/jpeg'],
-    ['mkv', 'video/x-matroska'],
-    ['mov', 'video/quicktime'],
-    ['mp4', 'video/mp4'],
-    ['pdf', 'application/pdf'],
-    ['png', 'image/png'],
-    ['zip', 'application/zip'],
-    ['doc', 'application/msword'],
-    ['docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
-]);
-function toFileWithPath(file, path) {
-    var f = withMimeType(file);
-    if (typeof f.path !== 'string') { // on electron, path is already set to the absolute path
-        var webkitRelativePath = file.webkitRelativePath;
-        Object.defineProperty(f, 'path', {
-            value: typeof path === 'string'
-                ? path
-                // If <input webkitdirectory> is set,
-                // the File will have a {webkitRelativePath} property
-                // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/webkitdirectory
-                : typeof webkitRelativePath === 'string' && webkitRelativePath.length > 0
-                    ? webkitRelativePath
-                    : file.name,
-            writable: false,
-            configurable: false,
-            enumerable: true
-        });
-    }
-    return f;
-}
-function withMimeType(file) {
-    var name = file.name;
-    var hasExtension = name && name.lastIndexOf('.') !== -1;
-    if (hasExtension && !file.type) {
-        var ext = name.split('.')
-            .pop().toLowerCase();
-        var type = COMMON_MIME_TYPES.get(ext);
-        if (type) {
-            Object.defineProperty(file, 'type', {
-                value: type,
-                writable: false,
-                configurable: false,
-                enumerable: true
-            });
-        }
-    }
-    return file;
-}
-//# sourceMappingURL=file.js.map
-// CONCATENATED MODULE: ./node_modules/file-selector/dist/es5/file-selector.js
-
-
-var FILES_TO_IGNORE = [
-    // Thumbnail cache files for macOS and Windows
-    '.DS_Store',
-    'Thumbs.db' // Windows
-];
-/**
- * Convert a DragEvent's DataTrasfer object to a list of File objects
- * NOTE: If some of the items are folders,
- * everything will be flattened and placed in the same list but the paths will be kept as a {path} property.
- * @param evt
- */
-function fromEvent(evt) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            return [2 /*return*/, isDragEvt(evt) && evt.dataTransfer
-                    ? getDataTransferFiles(evt.dataTransfer, evt.type)
-                    : getInputFiles(evt)];
-        });
-    });
-}
-function isDragEvt(value) {
-    return !!value.dataTransfer;
-}
-function getInputFiles(evt) {
-    var files = isInput(evt.target)
-        ? evt.target.files
-            ? fromList(evt.target.files)
-            : []
-        : [];
-    return files.map(function (file) { return toFileWithPath(file); });
-}
-function isInput(value) {
-    return value !== null;
-}
-function getDataTransferFiles(dt, type) {
-    return __awaiter(this, void 0, void 0, function () {
-        var items, files;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (!dt.items) return [3 /*break*/, 2];
-                    items = fromList(dt.items)
-                        .filter(function (item) { return item.kind === 'file'; });
-                    // According to https://html.spec.whatwg.org/multipage/dnd.html#dndevents,
-                    // only 'dragstart' and 'drop' has access to the data (source node)
-                    if (type !== 'drop') {
-                        return [2 /*return*/, items];
-                    }
-                    return [4 /*yield*/, Promise.all(items.map(toFilePromises))];
-                case 1:
-                    files = _a.sent();
-                    return [2 /*return*/, noIgnoredFiles(flatten(files))];
-                case 2: return [2 /*return*/, noIgnoredFiles(fromList(dt.files)
-                        .map(function (file) { return toFileWithPath(file); }))];
-            }
-        });
-    });
-}
-function noIgnoredFiles(files) {
-    return files.filter(function (file) { return FILES_TO_IGNORE.indexOf(file.name) === -1; });
-}
-// IE11 does not support Array.from()
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from#Browser_compatibility
-// https://developer.mozilla.org/en-US/docs/Web/API/FileList
-// https://developer.mozilla.org/en-US/docs/Web/API/DataTransferItemList
-function fromList(items) {
-    var files = [];
-    // tslint:disable: prefer-for-of
-    for (var i = 0; i < items.length; i++) {
-        var file = items[i];
-        files.push(file);
-    }
-    return files;
-}
-// https://developer.mozilla.org/en-US/docs/Web/API/DataTransferItem
-function toFilePromises(item) {
-    if (typeof item.webkitGetAsEntry !== 'function') {
-        return fromDataTransferItem(item);
-    }
-    var entry = item.webkitGetAsEntry();
-    // Safari supports dropping an image node from a different window and can be retrieved using
-    // the DataTransferItem.getAsFile() API
-    // NOTE: FileSystemEntry.file() throws if trying to get the file
-    if (entry && entry.isDirectory) {
-        return fromDirEntry(entry);
-    }
-    return fromDataTransferItem(item);
-}
-function flatten(items) {
-    return items.reduce(function (acc, files) { return __spread(acc, (Array.isArray(files) ? flatten(files) : [files])); }, []);
-}
-function fromDataTransferItem(item) {
-    var file = item.getAsFile();
-    if (!file) {
-        return Promise.reject(item + " is not a File");
-    }
-    var fwp = toFileWithPath(file);
-    return Promise.resolve(fwp);
-}
-// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemEntry
-function fromEntry(entry) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            return [2 /*return*/, entry.isDirectory ? fromDirEntry(entry) : fromFileEntry(entry)];
-        });
-    });
-}
-// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryEntry
-function fromDirEntry(entry) {
-    var reader = entry.createReader();
-    return new Promise(function (resolve, reject) {
-        var entries = [];
-        function readEntries() {
-            var _this = this;
-            // https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryEntry/createReader
-            // https://developer.mozilla.org/en-US/docs/Web/API/FileSystemDirectoryReader/readEntries
-            reader.readEntries(function (batch) { return __awaiter(_this, void 0, void 0, function () {
-                var files, err_1, items;
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0:
-                            if (!!batch.length) return [3 /*break*/, 5];
-                            _a.label = 1;
-                        case 1:
-                            _a.trys.push([1, 3, , 4]);
-                            return [4 /*yield*/, Promise.all(entries)];
-                        case 2:
-                            files = _a.sent();
-                            resolve(files);
-                            return [3 /*break*/, 4];
-                        case 3:
-                            err_1 = _a.sent();
-                            reject(err_1);
-                            return [3 /*break*/, 4];
-                        case 4: return [3 /*break*/, 6];
-                        case 5:
-                            items = Promise.all(batch.map(fromEntry));
-                            entries.push(items);
-                            // Continue reading
-                            readEntries();
-                            _a.label = 6;
-                        case 6: return [2 /*return*/];
-                    }
-                });
-            }); }, function (err) {
-                reject(err);
-            });
-        }
-        readEntries();
-    });
-}
-// https://developer.mozilla.org/en-US/docs/Web/API/FileSystemFileEntry
-function fromFileEntry(entry) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            return [2 /*return*/, new Promise(function (resolve, reject) {
-                    entry.file(function (file) {
-                        var fwp = toFileWithPath(file, entry.fullPath);
-                        resolve(fwp);
-                    }, function (err) {
-                        reject(err);
-                    });
-                })];
-        });
-    });
-}
-//# sourceMappingURL=file-selector.js.map
-// CONCATENATED MODULE: ./node_modules/file-selector/dist/es5/index.js
-
-//# sourceMappingURL=index.js.map
-// EXTERNAL MODULE: ./node_modules/attr-accept/dist/index.js
-var dist = __webpack_require__(399);
-var dist_default = /*#__PURE__*/__webpack_require__.n(dist);
-
-// CONCATENATED MODULE: ./node_modules/react-dropzone/dist/es/utils/index.js
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
- // Error codes
-
-var FILE_INVALID_TYPE = 'file-invalid-type';
-var FILE_TOO_LARGE = 'file-too-large';
-var FILE_TOO_SMALL = 'file-too-small';
-var TOO_MANY_FILES = 'too-many-files'; // File Errors
-
-var getInvalidTypeRejectionErr = function getInvalidTypeRejectionErr(accept) {
-  accept = Array.isArray(accept) && accept.length === 1 ? accept[0] : accept;
-  var messageSuffix = Array.isArray(accept) ? "one of ".concat(accept.join(', ')) : accept;
-  return {
-    code: FILE_INVALID_TYPE,
-    message: "File type must be ".concat(messageSuffix)
-  };
-};
-var getTooLargeRejectionErr = function getTooLargeRejectionErr(maxSize) {
-  return {
-    code: FILE_TOO_LARGE,
-    message: "File is larger than ".concat(maxSize, " bytes")
-  };
-};
-var getTooSmallRejectionErr = function getTooSmallRejectionErr(minSize) {
-  return {
-    code: FILE_TOO_SMALL,
-    message: "File is smaller than ".concat(minSize, " bytes")
-  };
-};
-var TOO_MANY_FILES_REJECTION = {
-  code: TOO_MANY_FILES,
-  message: 'Too many files'
-}; // Firefox versions prior to 53 return a bogus MIME type for every file drag, so dragovers with
-// that MIME type will always be accepted
-
-function fileAccepted(file, accept) {
-  var isAcceptable = file.type === 'application/x-moz-file' || dist_default()(file, accept);
-  return [isAcceptable, isAcceptable ? null : getInvalidTypeRejectionErr(accept)];
-}
-function fileMatchSize(file, minSize, maxSize) {
-  if (isDefined(file.size)) {
-    if (isDefined(minSize) && isDefined(maxSize)) {
-      if (file.size > maxSize) return [false, getTooLargeRejectionErr(maxSize)];
-      if (file.size < minSize) return [false, getTooSmallRejectionErr(minSize)];
-    } else if (isDefined(minSize) && file.size < minSize) return [false, getTooSmallRejectionErr(minSize)];else if (isDefined(maxSize) && file.size > maxSize) return [false, getTooLargeRejectionErr(maxSize)];
-  }
-
-  return [true, null];
-}
-
-function isDefined(value) {
-  return value !== undefined && value !== null;
-}
-
-function allFilesAccepted(_ref) {
-  var files = _ref.files,
-      accept = _ref.accept,
-      minSize = _ref.minSize,
-      maxSize = _ref.maxSize,
-      multiple = _ref.multiple;
-
-  if (!multiple && files.length > 1) {
-    return false;
-  }
-
-  return files.every(function (file) {
-    var _fileAccepted = fileAccepted(file, accept),
-        _fileAccepted2 = _slicedToArray(_fileAccepted, 1),
-        accepted = _fileAccepted2[0];
-
-    var _fileMatchSize = fileMatchSize(file, minSize, maxSize),
-        _fileMatchSize2 = _slicedToArray(_fileMatchSize, 1),
-        sizeMatch = _fileMatchSize2[0];
-
-    return accepted && sizeMatch;
-  });
-} // React's synthetic events has event.isPropagationStopped,
-// but to remain compatibility with other libs (Preact) fall back
-// to check event.cancelBubble
-
-function isPropagationStopped(event) {
-  if (typeof event.isPropagationStopped === 'function') {
-    return event.isPropagationStopped();
-  } else if (typeof event.cancelBubble !== 'undefined') {
-    return event.cancelBubble;
-  }
-
-  return false;
-}
-function isEvtWithFiles(event) {
-  if (!event.dataTransfer) {
-    return !!event.target && !!event.target.files;
-  } // https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer/types
-  // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Recommended_drag_types#file
-
-
-  return Array.prototype.some.call(event.dataTransfer.types, function (type) {
-    return type === 'Files' || type === 'application/x-moz-file';
-  });
-}
-function isKindFile(item) {
-  return _typeof(item) === 'object' && item !== null && item.kind === 'file';
-} // allow the entire document to be a drag target
-
-function onDocumentDragOver(event) {
-  event.preventDefault();
-}
-
-function isIe(userAgent) {
-  return userAgent.indexOf('MSIE') !== -1 || userAgent.indexOf('Trident/') !== -1;
-}
-
-function isEdge(userAgent) {
-  return userAgent.indexOf('Edge/') !== -1;
-}
-
-function isIeOrEdge() {
-  var userAgent = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : window.navigator.userAgent;
-  return isIe(userAgent) || isEdge(userAgent);
-}
-/**
- * This is intended to be used to compose event handlers
- * They are executed in order until one of them calls `event.isPropagationStopped()`.
- * Note that the check is done on the first invoke too,
- * meaning that if propagation was stopped before invoking the fns,
- * no handlers will be executed.
- *
- * @param {Function} fns the event hanlder functions
- * @return {Function} the event handler to add to an element
- */
-
-function composeEventHandlers() {
-  for (var _len = arguments.length, fns = new Array(_len), _key = 0; _key < _len; _key++) {
-    fns[_key] = arguments[_key];
-  }
-
-  return function (event) {
-    for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-      args[_key2 - 1] = arguments[_key2];
-    }
-
-    return fns.some(function (fn) {
-      if (!isPropagationStopped(event) && fn) {
-        fn.apply(void 0, [event].concat(args));
-      }
-
-      return isPropagationStopped(event);
-    });
-  };
-}
-// CONCATENATED MODULE: ./node_modules/react-dropzone/dist/es/index.js
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
-function es_slicedToArray(arr, i) { return es_arrayWithHoles(arr) || es_iterableToArrayLimit(arr, i) || es_nonIterableRest(); }
-
-function es_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
-
-function es_iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function es_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
-
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
-
-/* eslint prefer-template: 0 */
-
-
-
-
-/**
- * Convenience wrapper component for the `useDropzone` hook
- *
- * ```jsx
- * <Dropzone>
- *   {({getRootProps, getInputProps}) => (
- *     <div {...getRootProps()}>
- *       <input {...getInputProps()} />
- *       <p>Drag 'n' drop some files here, or click to select files</p>
- *     </div>
- *   )}
- * </Dropzone>
- * ```
- */
-
-var Dropzone = Object(react["forwardRef"])(function (_ref, ref) {
-  var children = _ref.children,
-      params = _objectWithoutProperties(_ref, ["children"]);
-
-  var _useDropzone = useDropzone(params),
-      open = _useDropzone.open,
-      props = _objectWithoutProperties(_useDropzone, ["open"]);
-
-  Object(react["useImperativeHandle"])(ref, function () {
-    return {
-      open: open
-    };
-  }, [open]); // TODO: Figure out why react-styleguidist cannot create docs if we don't return a jsx element
-
-  return react_default.a.createElement(react["Fragment"], null, children(_objectSpread({}, props, {
-    open: open
-  })));
-});
-Dropzone.displayName = 'Dropzone';
-Dropzone.propTypes = {
-  /**
-   * Render function that exposes the dropzone state and prop getter fns
-   *
-   * @param {object} params
-   * @param {Function} params.getRootProps Returns the props you should apply to the root drop container you render
-   * @param {Function} params.getInputProps Returns the props you should apply to hidden file input you render
-   * @param {Function} params.open Open the native file selection dialog
-   * @param {boolean} params.isFocused Dropzone area is in focus
-   * @param {boolean} params.isFileDialogActive File dialog is opened
-   * @param {boolean} params.isDragActive Active drag is in progress
-   * @param {boolean} params.isDragAccept Dragged files are accepted
-   * @param {boolean} params.isDragReject Some dragged files are rejected
-   * @param {File[]} params.draggedFiles Files in active drag
-   * @param {File[]} params.acceptedFiles Accepted files
-   * @param {FileRejection[]} params.fileRejections Rejected files and why they were rejected
-   */
-  children: prop_types_default.a.func,
-
-  /**
-   * Set accepted file types.
-   * See https://github.com/okonet/attr-accept for more information.
-   * Keep in mind that mime type determination is not reliable across platforms. CSV files,
-   * for example, are reported as text/plain under macOS but as application/vnd.ms-excel under
-   * Windows. In some cases there might not be a mime type set at all.
-   * See: https://github.com/react-dropzone/react-dropzone/issues/276
-   */
-  accept: prop_types_default.a.oneOfType([prop_types_default.a.string, prop_types_default.a.arrayOf(prop_types_default.a.string)]),
-
-  /**
-   * Allow drag 'n' drop (or selection from the file dialog) of multiple files
-   */
-  multiple: prop_types_default.a.bool,
-
-  /**
-   * If false, allow dropped items to take over the current browser window
-   */
-  preventDropOnDocument: prop_types_default.a.bool,
-
-  /**
-   * If true, disables click to open the native file selection dialog
-   */
-  noClick: prop_types_default.a.bool,
-
-  /**
-   * If true, disables SPACE/ENTER to open the native file selection dialog.
-   * Note that it also stops tracking the focus state.
-   */
-  noKeyboard: prop_types_default.a.bool,
-
-  /**
-   * If true, disables drag 'n' drop
-   */
-  noDrag: prop_types_default.a.bool,
-
-  /**
-   * If true, stops drag event propagation to parents
-   */
-  noDragEventsBubbling: prop_types_default.a.bool,
-
-  /**
-   * Minimum file size (in bytes)
-   */
-  minSize: prop_types_default.a.number,
-
-  /**
-   * Maximum file size (in bytes)
-   */
-  maxSize: prop_types_default.a.number,
-
-  /**
-   * Enable/disable the dropzone
-   */
-  disabled: prop_types_default.a.bool,
-
-  /**
-   * Use this to provide a custom file aggregator
-   *
-   * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
-   */
-  getFilesFromEvent: prop_types_default.a.func,
-
-  /**
-   * Cb for when closing the file dialog with no selection
-   */
-  onFileDialogCancel: prop_types_default.a.func,
-
-  /**
-   * Cb for when the `dragenter` event occurs.
-   *
-   * @param {DragEvent} event
-   */
-  onDragEnter: prop_types_default.a.func,
-
-  /**
-   * Cb for when the `dragleave` event occurs
-   *
-   * @param {DragEvent} event
-   */
-  onDragLeave: prop_types_default.a.func,
-
-  /**
-   * Cb for when the `dragover` event occurs
-   *
-   * @param {DragEvent} event
-   */
-  onDragOver: prop_types_default.a.func,
-
-  /**
-   * Cb for when the `drop` event occurs.
-   * Note that this callback is invoked after the `getFilesFromEvent` callback is done.
-   *
-   * Files are accepted or rejected based on the `accept`, `multiple`, `minSize` and `maxSize` props.
-   * `accept` must be a valid [MIME type](http://www.iana.org/assignments/media-types/media-types.xhtml) according to [input element specification](https://www.w3.org/wiki/HTML/Elements/input/file) or a valid file extension.
-   * If `multiple` is set to false and additional files are droppped,
-   * all files besides the first will be rejected.
-   * Any file which does not have a size in the [`minSize`, `maxSize`] range, will be rejected as well.
-   *
-   * Note that the `onDrop` callback will always be invoked regardless if the dropped files were accepted or rejected.
-   * If you'd like to react to a specific scenario, use the `onDropAccepted`/`onDropRejected` props.
-   *
-   * `onDrop` will provide you with an array of [File](https://developer.mozilla.org/en-US/docs/Web/API/File) objects which you can then process and send to a server.
-   * For example, with [SuperAgent](https://github.com/visionmedia/superagent) as a http/ajax library:
-   *
-   * ```js
-   * function onDrop(acceptedFiles) {
-   *   const req = request.post('/upload')
-   *   acceptedFiles.forEach(file => {
-   *     req.attach(file.name, file)
-   *   })
-   *   req.end(callback)
-   * }
-   * ```
-   *
-   * @param {File[]} acceptedFiles
-   * @param {FileRejection[]} fileRejections
-   * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
-   */
-  onDrop: prop_types_default.a.func,
-
-  /**
-   * Cb for when the `drop` event occurs.
-   * Note that if no files are accepted, this callback is not invoked.
-   *
-   * @param {File[]} files
-   * @param {(DragEvent|Event)} event
-   */
-  onDropAccepted: prop_types_default.a.func,
-
-  /**
-   * Cb for when the `drop` event occurs.
-   * Note that if no files are rejected, this callback is not invoked.
-   *
-   * @param {FileRejection[]} fileRejections
-   * @param {(DragEvent|Event)} event
-   */
-  onDropRejected: prop_types_default.a.func
-};
-/* harmony default export */ var es = (Dropzone);
-/**
- * A function that is invoked for the `dragenter`,
- * `dragover` and `dragleave` events.
- * It is not invoked if the items are not files (such as link, text, etc.).
- *
- * @callback dragCb
- * @param {DragEvent} event
- */
-
-/**
- * A function that is invoked for the `drop` or input change event.
- * It is not invoked if the items are not files (such as link, text, etc.).
- *
- * @callback dropCb
- * @param {File[]} acceptedFiles List of accepted files
- * @param {FileRejection[]} fileRejections List of rejected files and why they were rejected
- * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
- */
-
-/**
- * A function that is invoked for the `drop` or input change event.
- * It is not invoked if the items are files (such as link, text, etc.).
- *
- * @callback dropAcceptedCb
- * @param {File[]} files List of accepted files that meet the given criteria
- * (`accept`, `multiple`, `minSize`, `maxSize`)
- * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
- */
-
-/**
- * A function that is invoked for the `drop` or input change event.
- *
- * @callback dropRejectedCb
- * @param {File[]} files List of rejected files that do not meet the given criteria
- * (`accept`, `multiple`, `minSize`, `maxSize`)
- * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
- */
-
-/**
- * A function that is used aggregate files,
- * in a asynchronous fashion, from drag or input change events.
- *
- * @callback getFilesFromEvent
- * @param {(DragEvent|Event)} event A drag event or input change event (if files were selected via the file dialog)
- * @returns {(File[]|Promise<File[]>)}
- */
-
-/**
- * An object with the current dropzone state and some helper functions.
- *
- * @typedef {object} DropzoneState
- * @property {Function} getRootProps Returns the props you should apply to the root drop container you render
- * @property {Function} getInputProps Returns the props you should apply to hidden file input you render
- * @property {Function} open Open the native file selection dialog
- * @property {boolean} isFocused Dropzone area is in focus
- * @property {boolean} isFileDialogActive File dialog is opened
- * @property {boolean} isDragActive Active drag is in progress
- * @property {boolean} isDragAccept Dragged files are accepted
- * @property {boolean} isDragReject Some dragged files are rejected
- * @property {File[]} draggedFiles Files in active drag
- * @property {File[]} acceptedFiles Accepted files
- * @property {FileRejection[]} fileRejections Rejected files and why they were rejected
- */
-
-var initialState = {
-  isFocused: false,
-  isFileDialogActive: false,
-  isDragActive: false,
-  isDragAccept: false,
-  isDragReject: false,
-  draggedFiles: [],
-  acceptedFiles: [],
-  fileRejections: []
-};
-/**
- * A React hook that creates a drag 'n' drop area.
- *
- * ```jsx
- * function MyDropzone(props) {
- *   const {getRootProps, getInputProps} = useDropzone({
- *     onDrop: acceptedFiles => {
- *       // do something with the File objects, e.g. upload to some server
- *     }
- *   });
- *   return (
- *     <div {...getRootProps()}>
- *       <input {...getInputProps()} />
- *       <p>Drag and drop some files here, or click to select files</p>
- *     </div>
- *   )
- * }
- * ```
- *
- * @function useDropzone
- *
- * @param {object} props
- * @param {string|string[]} [props.accept] Set accepted file types.
- * See https://github.com/okonet/attr-accept for more information.
- * Keep in mind that mime type determination is not reliable across platforms. CSV files,
- * for example, are reported as text/plain under macOS but as application/vnd.ms-excel under
- * Windows. In some cases there might not be a mime type set at all.
- * See: https://github.com/react-dropzone/react-dropzone/issues/276
- * @param {boolean} [props.multiple=true] Allow drag 'n' drop (or selection from the file dialog) of multiple files
- * @param {boolean} [props.preventDropOnDocument=true] If false, allow dropped items to take over the current browser window
- * @param {boolean} [props.noClick=false] If true, disables click to open the native file selection dialog
- * @param {boolean} [props.noKeyboard=false] If true, disables SPACE/ENTER to open the native file selection dialog.
- * Note that it also stops tracking the focus state.
- * @param {boolean} [props.noDrag=false] If true, disables drag 'n' drop
- * @param {boolean} [props.noDragEventsBubbling=false] If true, stops drag event propagation to parents
- * @param {number} [props.minSize=0] Minimum file size (in bytes)
- * @param {number} [props.maxSize=Infinity] Maximum file size (in bytes)
- * @param {boolean} [props.disabled=false] Enable/disable the dropzone
- * @param {getFilesFromEvent} [props.getFilesFromEvent] Use this to provide a custom file aggregator
- * @param {Function} [props.onFileDialogCancel] Cb for when closing the file dialog with no selection
- * @param {dragCb} [props.onDragEnter] Cb for when the `dragenter` event occurs.
- * @param {dragCb} [props.onDragLeave] Cb for when the `dragleave` event occurs
- * @param {dragCb} [props.onDragOver] Cb for when the `dragover` event occurs
- * @param {dropCb} [props.onDrop] Cb for when the `drop` event occurs.
- * Note that this callback is invoked after the `getFilesFromEvent` callback is done.
- *
- * Files are accepted or rejected based on the `accept`, `multiple`, `minSize` and `maxSize` props.
- * `accept` must be a valid [MIME type](http://www.iana.org/assignments/media-types/media-types.xhtml) according to [input element specification](https://www.w3.org/wiki/HTML/Elements/input/file) or a valid file extension.
- * If `multiple` is set to false and additional files are droppped,
- * all files besides the first will be rejected.
- * Any file which does not have a size in the [`minSize`, `maxSize`] range, will be rejected as well.
- *
- * Note that the `onDrop` callback will always be invoked regardless if the dropped files were accepted or rejected.
- * If you'd like to react to a specific scenario, use the `onDropAccepted`/`onDropRejected` props.
- *
- * `onDrop` will provide you with an array of [File](https://developer.mozilla.org/en-US/docs/Web/API/File) objects which you can then process and send to a server.
- * For example, with [SuperAgent](https://github.com/visionmedia/superagent) as a http/ajax library:
- *
- * ```js
- * function onDrop(acceptedFiles) {
- *   const req = request.post('/upload')
- *   acceptedFiles.forEach(file => {
- *     req.attach(file.name, file)
- *   })
- *   req.end(callback)
- * }
- * ```
- * @param {dropAcceptedCb} [props.onDropAccepted]
- * @param {dropRejectedCb} [props.onDropRejected]
- *
- * @returns {DropzoneState}
- */
-
-function useDropzone() {
-  var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      accept = _ref2.accept,
-      _ref2$disabled = _ref2.disabled,
-      disabled = _ref2$disabled === void 0 ? false : _ref2$disabled,
-      _ref2$getFilesFromEve = _ref2.getFilesFromEvent,
-      getFilesFromEvent = _ref2$getFilesFromEve === void 0 ? fromEvent : _ref2$getFilesFromEve,
-      _ref2$maxSize = _ref2.maxSize,
-      maxSize = _ref2$maxSize === void 0 ? Infinity : _ref2$maxSize,
-      _ref2$minSize = _ref2.minSize,
-      minSize = _ref2$minSize === void 0 ? 0 : _ref2$minSize,
-      _ref2$multiple = _ref2.multiple,
-      multiple = _ref2$multiple === void 0 ? true : _ref2$multiple,
-      onDragEnter = _ref2.onDragEnter,
-      onDragLeave = _ref2.onDragLeave,
-      onDragOver = _ref2.onDragOver,
-      onDrop = _ref2.onDrop,
-      onDropAccepted = _ref2.onDropAccepted,
-      onDropRejected = _ref2.onDropRejected,
-      onFileDialogCancel = _ref2.onFileDialogCancel,
-      _ref2$preventDropOnDo = _ref2.preventDropOnDocument,
-      preventDropOnDocument = _ref2$preventDropOnDo === void 0 ? true : _ref2$preventDropOnDo,
-      _ref2$noClick = _ref2.noClick,
-      noClick = _ref2$noClick === void 0 ? false : _ref2$noClick,
-      _ref2$noKeyboard = _ref2.noKeyboard,
-      noKeyboard = _ref2$noKeyboard === void 0 ? false : _ref2$noKeyboard,
-      _ref2$noDrag = _ref2.noDrag,
-      noDrag = _ref2$noDrag === void 0 ? false : _ref2$noDrag,
-      _ref2$noDragEventsBub = _ref2.noDragEventsBubbling,
-      noDragEventsBubbling = _ref2$noDragEventsBub === void 0 ? false : _ref2$noDragEventsBub;
-
-  var rootRef = Object(react["useRef"])(null);
-  var inputRef = Object(react["useRef"])(null);
-
-  var _useReducer = Object(react["useReducer"])(reducer, initialState),
-      _useReducer2 = es_slicedToArray(_useReducer, 2),
-      state = _useReducer2[0],
-      dispatch = _useReducer2[1];
-
-  var isFocused = state.isFocused,
-      isFileDialogActive = state.isFileDialogActive,
-      draggedFiles = state.draggedFiles; // Fn for opening the file dialog programmatically
-
-  var openFileDialog = Object(react["useCallback"])(function () {
-    if (inputRef.current) {
-      dispatch({
-        type: 'openDialog'
-      });
-      inputRef.current.value = null;
-      inputRef.current.click();
-    }
-  }, [dispatch]); // Update file dialog active state when the window is focused on
-
-  var onWindowFocus = function onWindowFocus() {
-    // Execute the timeout only if the file dialog is opened in the browser
-    if (isFileDialogActive) {
-      setTimeout(function () {
-        if (inputRef.current) {
-          var files = inputRef.current.files;
-
-          if (!files.length) {
-            dispatch({
-              type: 'closeDialog'
-            });
-
-            if (typeof onFileDialogCancel === 'function') {
-              onFileDialogCancel();
-            }
-          }
-        }
-      }, 300);
-    }
-  };
-
-  Object(react["useEffect"])(function () {
-    window.addEventListener('focus', onWindowFocus, false);
-    return function () {
-      window.removeEventListener('focus', onWindowFocus, false);
-    };
-  }, [inputRef, isFileDialogActive, onFileDialogCancel]); // Cb to open the file dialog when SPACE/ENTER occurs on the dropzone
-
-  var onKeyDownCb = Object(react["useCallback"])(function (event) {
-    // Ignore keyboard events bubbling up the DOM tree
-    if (!rootRef.current || !rootRef.current.isEqualNode(event.target)) {
-      return;
-    }
-
-    if (event.keyCode === 32 || event.keyCode === 13) {
-      event.preventDefault();
-      openFileDialog();
-    }
-  }, [rootRef, inputRef]); // Update focus state for the dropzone
-
-  var onFocusCb = Object(react["useCallback"])(function () {
-    dispatch({
-      type: 'focus'
-    });
-  }, []);
-  var onBlurCb = Object(react["useCallback"])(function () {
-    dispatch({
-      type: 'blur'
-    });
-  }, []); // Cb to open the file dialog when click occurs on the dropzone
-
-  var onClickCb = Object(react["useCallback"])(function () {
-    if (noClick) {
-      return;
-    } // In IE11/Edge the file-browser dialog is blocking, therefore, use setTimeout()
-    // to ensure React can handle state changes
-    // See: https://github.com/react-dropzone/react-dropzone/issues/450
-
-
-    if (isIeOrEdge()) {
-      setTimeout(openFileDialog, 0);
-    } else {
-      openFileDialog();
-    }
-  }, [inputRef, noClick]);
-  var dragTargetsRef = Object(react["useRef"])([]);
-
-  var onDocumentDrop = function onDocumentDrop(event) {
-    if (rootRef.current && rootRef.current.contains(event.target)) {
-      // If we intercepted an event for our instance, let it propagate down to the instance's onDrop handler
-      return;
-    }
-
-    event.preventDefault();
-    dragTargetsRef.current = [];
-  };
-
-  Object(react["useEffect"])(function () {
-    if (preventDropOnDocument) {
-      document.addEventListener('dragover', onDocumentDragOver, false);
-      document.addEventListener('drop', onDocumentDrop, false);
-    }
-
-    return function () {
-      if (preventDropOnDocument) {
-        document.removeEventListener('dragover', onDocumentDragOver);
-        document.removeEventListener('drop', onDocumentDrop);
-      }
-    };
-  }, [rootRef, preventDropOnDocument]);
-  var onDragEnterCb = Object(react["useCallback"])(function (event) {
-    event.preventDefault(); // Persist here because we need the event later after getFilesFromEvent() is done
-
-    event.persist();
-    stopPropagation(event);
-    dragTargetsRef.current = [].concat(_toConsumableArray(dragTargetsRef.current), [event.target]);
-
-    if (isEvtWithFiles(event)) {
-      Promise.resolve(getFilesFromEvent(event)).then(function (draggedFiles) {
-        if (isPropagationStopped(event) && !noDragEventsBubbling) {
-          return;
-        }
-
-        dispatch({
-          draggedFiles: draggedFiles,
-          isDragActive: true,
-          type: 'setDraggedFiles'
-        });
-
-        if (onDragEnter) {
-          onDragEnter(event);
-        }
-      });
-    }
-  }, [getFilesFromEvent, onDragEnter, noDragEventsBubbling]);
-  var onDragOverCb = Object(react["useCallback"])(function (event) {
-    event.preventDefault();
-    event.persist();
-    stopPropagation(event);
-
-    if (event.dataTransfer) {
-      try {
-        event.dataTransfer.dropEffect = 'copy';
-      } catch (_unused) {}
-      /* eslint-disable-line no-empty */
-
-    }
-
-    if (isEvtWithFiles(event) && onDragOver) {
-      onDragOver(event);
-    }
-
-    return false;
-  }, [onDragOver, noDragEventsBubbling]);
-  var onDragLeaveCb = Object(react["useCallback"])(function (event) {
-    event.preventDefault();
-    event.persist();
-    stopPropagation(event); // Only deactivate once the dropzone and all children have been left
-
-    var targets = dragTargetsRef.current.filter(function (target) {
-      return rootRef.current && rootRef.current.contains(target);
-    }); // Make sure to remove a target present multiple times only once
-    // (Firefox may fire dragenter/dragleave multiple times on the same element)
-
-    var targetIdx = targets.indexOf(event.target);
-
-    if (targetIdx !== -1) {
-      targets.splice(targetIdx, 1);
-    }
-
-    dragTargetsRef.current = targets;
-
-    if (targets.length > 0) {
-      return;
-    }
-
-    dispatch({
-      isDragActive: false,
-      type: 'setDraggedFiles',
-      draggedFiles: []
-    });
-
-    if (isEvtWithFiles(event) && onDragLeave) {
-      onDragLeave(event);
-    }
-  }, [rootRef, onDragLeave, noDragEventsBubbling]);
-  var onDropCb = Object(react["useCallback"])(function (event) {
-    event.preventDefault(); // Persist here because we need the event later after getFilesFromEvent() is done
-
-    event.persist();
-    stopPropagation(event);
-    dragTargetsRef.current = [];
-
-    if (isEvtWithFiles(event)) {
-      Promise.resolve(getFilesFromEvent(event)).then(function (files) {
-        if (isPropagationStopped(event) && !noDragEventsBubbling) {
-          return;
-        }
-
-        var acceptedFiles = [];
-        var fileRejections = [];
-        files.forEach(function (file) {
-          var _fileAccepted = fileAccepted(file, accept),
-              _fileAccepted2 = es_slicedToArray(_fileAccepted, 2),
-              accepted = _fileAccepted2[0],
-              acceptError = _fileAccepted2[1];
-
-          var _fileMatchSize = fileMatchSize(file, minSize, maxSize),
-              _fileMatchSize2 = es_slicedToArray(_fileMatchSize, 2),
-              sizeMatch = _fileMatchSize2[0],
-              sizeError = _fileMatchSize2[1];
-
-          if (accepted && sizeMatch) {
-            acceptedFiles.push(file);
-          } else {
-            var errors = [acceptError, sizeError].filter(function (e) {
-              return e;
-            });
-            fileRejections.push({
-              file: file,
-              errors: errors
-            });
-          }
-        });
-
-        if (!multiple && acceptedFiles.length > 1) {
-          // Reject everything and empty accepted files
-          acceptedFiles.forEach(function (file) {
-            fileRejections.push({
-              file: file,
-              errors: [TOO_MANY_FILES_REJECTION]
-            });
-          });
-          acceptedFiles.splice(0);
-        }
-
-        dispatch({
-          acceptedFiles: acceptedFiles,
-          fileRejections: fileRejections,
-          type: 'setFiles'
-        });
-
-        if (onDrop) {
-          onDrop(acceptedFiles, fileRejections, event);
-        }
-
-        if (fileRejections.length > 0 && onDropRejected) {
-          onDropRejected(fileRejections, event);
-        }
-
-        if (acceptedFiles.length > 0 && onDropAccepted) {
-          onDropAccepted(acceptedFiles, event);
-        }
-      });
-    }
-
-    dispatch({
-      type: 'reset'
-    });
-  }, [multiple, accept, minSize, maxSize, getFilesFromEvent, onDrop, onDropAccepted, onDropRejected, noDragEventsBubbling]);
-
-  var composeHandler = function composeHandler(fn) {
-    return disabled ? null : fn;
-  };
-
-  var composeKeyboardHandler = function composeKeyboardHandler(fn) {
-    return noKeyboard ? null : composeHandler(fn);
-  };
-
-  var composeDragHandler = function composeDragHandler(fn) {
-    return noDrag ? null : composeHandler(fn);
-  };
-
-  var stopPropagation = function stopPropagation(event) {
-    if (noDragEventsBubbling) {
-      event.stopPropagation();
-    }
-  };
-
-  var getRootProps = Object(react["useMemo"])(function () {
-    return function () {
-      var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref3$refKey = _ref3.refKey,
-          refKey = _ref3$refKey === void 0 ? 'ref' : _ref3$refKey,
-          onKeyDown = _ref3.onKeyDown,
-          onFocus = _ref3.onFocus,
-          onBlur = _ref3.onBlur,
-          onClick = _ref3.onClick,
-          onDragEnter = _ref3.onDragEnter,
-          onDragOver = _ref3.onDragOver,
-          onDragLeave = _ref3.onDragLeave,
-          onDrop = _ref3.onDrop,
-          rest = _objectWithoutProperties(_ref3, ["refKey", "onKeyDown", "onFocus", "onBlur", "onClick", "onDragEnter", "onDragOver", "onDragLeave", "onDrop"]);
-
-      return _objectSpread(_defineProperty({
-        onKeyDown: composeKeyboardHandler(composeEventHandlers(onKeyDown, onKeyDownCb)),
-        onFocus: composeKeyboardHandler(composeEventHandlers(onFocus, onFocusCb)),
-        onBlur: composeKeyboardHandler(composeEventHandlers(onBlur, onBlurCb)),
-        onClick: composeHandler(composeEventHandlers(onClick, onClickCb)),
-        onDragEnter: composeDragHandler(composeEventHandlers(onDragEnter, onDragEnterCb)),
-        onDragOver: composeDragHandler(composeEventHandlers(onDragOver, onDragOverCb)),
-        onDragLeave: composeDragHandler(composeEventHandlers(onDragLeave, onDragLeaveCb)),
-        onDrop: composeDragHandler(composeEventHandlers(onDrop, onDropCb))
-      }, refKey, rootRef), !disabled && !noKeyboard ? {
-        tabIndex: 0
-      } : {}, {}, rest);
-    };
-  }, [rootRef, onKeyDownCb, onFocusCb, onBlurCb, onClickCb, onDragEnterCb, onDragOverCb, onDragLeaveCb, onDropCb, noKeyboard, noDrag, disabled]);
-  var onInputElementClick = Object(react["useCallback"])(function (event) {
-    event.stopPropagation();
-  }, []);
-  var getInputProps = Object(react["useMemo"])(function () {
-    return function () {
-      var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref4$refKey = _ref4.refKey,
-          refKey = _ref4$refKey === void 0 ? 'ref' : _ref4$refKey,
-          onChange = _ref4.onChange,
-          onClick = _ref4.onClick,
-          rest = _objectWithoutProperties(_ref4, ["refKey", "onChange", "onClick"]);
-
-      var inputProps = _defineProperty({
-        accept: accept,
-        multiple: multiple,
-        type: 'file',
-        style: {
-          display: 'none'
-        },
-        onChange: composeHandler(composeEventHandlers(onChange, onDropCb)),
-        onClick: composeHandler(composeEventHandlers(onClick, onInputElementClick)),
-        autoComplete: 'off',
-        tabIndex: -1
-      }, refKey, inputRef);
-
-      return _objectSpread({}, inputProps, {}, rest);
-    };
-  }, [inputRef, accept, multiple, onDropCb, disabled]);
-  var fileCount = draggedFiles.length;
-  var isDragAccept = fileCount > 0 && allFilesAccepted({
-    files: draggedFiles,
-    accept: accept,
-    minSize: minSize,
-    maxSize: maxSize,
-    multiple: multiple
-  });
-  var isDragReject = fileCount > 0 && !isDragAccept;
-  return _objectSpread({}, state, {
-    isDragAccept: isDragAccept,
-    isDragReject: isDragReject,
-    isFocused: isFocused && !disabled,
-    getRootProps: getRootProps,
-    getInputProps: getInputProps,
-    rootRef: rootRef,
-    inputRef: inputRef,
-    open: composeHandler(openFileDialog)
-  });
-}
-
-function reducer(state, action) {
-  /* istanbul ignore next */
-  switch (action.type) {
-    case 'focus':
-      return _objectSpread({}, state, {
-        isFocused: true
-      });
-
-    case 'blur':
-      return _objectSpread({}, state, {
-        isFocused: false
-      });
-
-    case 'openDialog':
-      return _objectSpread({}, state, {
-        isFileDialogActive: true
-      });
-
-    case 'closeDialog':
-      return _objectSpread({}, state, {
-        isFileDialogActive: false
-      });
-
-    case 'setDraggedFiles':
-      /* eslint no-case-declarations: 0 */
-      var isDragActive = action.isDragActive,
-          draggedFiles = action.draggedFiles;
-      return _objectSpread({}, state, {
-        draggedFiles: draggedFiles,
-        isDragActive: isDragActive
-      });
-
-    case 'setFiles':
-      return _objectSpread({}, state, {
-        acceptedFiles: action.acceptedFiles,
-        fileRejections: action.fileRejections
-      });
-
-    case 'reset':
-      return _objectSpread({}, state, {
-        isFileDialogActive: false,
-        isDragActive: false,
-        draggedFiles: [],
-        acceptedFiles: [],
-        fileRejections: []
-      });
-
-    default:
-      return state;
-  }
-}
-// EXTERNAL MODULE: ./src/shared/helpers/errorHandlers/FetchErrorHandler.js + 1 modules
-var FetchErrorHandler = __webpack_require__(65);
-
-// CONCATENATED MODULE: ./src/project/Seller.Portal/areas/Orders/components/ImportOrder/ImportOrderForm.js
-
-
-
-
-
-
-
-
-
-
-
-function ImportOrderForm(props) {
-  var defaultProps = {
-    options: props.clients,
-    getOptionLabel: function getOptionLabel(option) {
-      return option.name;
-    }
-  };
-
-  var _useContext = Object(react["useContext"])(Store["a" /* Context */]),
-      _useContext2 = Object(slicedToArray["a" /* default */])(_useContext, 2),
-      state = _useContext2[0],
-      dispatch = _useContext2[1];
-
-  var _useState = Object(react["useState"])(false),
-      _useState2 = Object(slicedToArray["a" /* default */])(_useState, 2),
-      isClientSelected = _useState2[0],
-      setClientSelected = _useState2[1];
-
-  var _useState3 = Object(react["useState"])(null),
-      _useState4 = Object(slicedToArray["a" /* default */])(_useState3, 2),
-      client = _useState4[0],
-      setClient = _useState4[1];
-
-  var onDrop = Object(react["useCallback"])(function (acceptedFiles) {
-    dispatch({
-      type: 'SET_IS_LOADING',
-      payload: true
-    });
-    acceptedFiles.forEach(function (file) {
-      var formData = new FormData();
-      console.log(client);
-
-      if (client) {
-        formData.append('clientId', client.id);
-      }
-
-      formData.append('orderFile', file);
-      var requestOptions = {
-        method: 'POST',
-        body: formData
-      };
-      fetch(props.validateOrderUrl, requestOptions).then(function (response) {
-        dispatch({
-          type: 'SET_IS_LOADING',
-          payload: false
-        });
-        FetchErrorHandler["a" /* default */].handleUnauthorizedResponse(response);
-        return response.json().then(function (jsonResponse) {
-          if (response.ok) {
-            dispatch({
-              type: 'SET_IS_LOADING',
-              payload: false
-            });
-          } else {
-            FetchErrorHandler["a" /* default */].consoleLogResponseDetails(state, response, jsonResponse);
-            react_toastify["a" /* toast */].error(props.generalErrorMessage);
-          }
-        });
-      }).catch(function (error) {
-        console.log(error);
-        dispatch({
-          type: 'SET_IS_LOADING',
-          payload: false
-        });
-        react_toastify["a" /* toast */].error(props.generalErrorMessage);
-      });
-    });
-  }, [client, dispatch, state, props.generalErrorMessage, props.validateOrderUrl]);
-
-  var _useDropzone = useDropzone({
-    onDrop: onDrop,
-    accept: '.xls, .xlsx',
-    multiple: false
-  }),
-      getRootProps = _useDropzone.getRootProps,
-      getInputProps = _useDropzone.getInputProps,
-      isDragActive = _useDropzone.isDragActive;
-
-  return /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement("form", {
-    className: "is-modern-form",
-    method: "post"
-  }, /*#__PURE__*/react_default.a.createElement("div", {
-    className: "field"
-  }, /*#__PURE__*/react_default.a.createElement(esm_Autocomplete_Autocomplete, Object.assign({}, defaultProps, {
-    id: "client",
-    name: "client",
-    fullWidth: true,
-    value: client,
-    onChange: function onChange(event, newValue) {
-      if (newValue) {
-        setClientSelected(true);
-        setClient(newValue);
-      } else {
-        setClientSelected(false);
-        setClient(null);
-      }
-    },
-    autoComplete: true,
-    renderInput: function renderInput(params) {
-      return /*#__PURE__*/react_default.a.createElement(TextField["a" /* default */], Object.assign({}, params, {
-        label: props.selectClientLabel,
-        margin: "normal"
-      }));
-    }
-  }))), /*#__PURE__*/react_default.a.createElement("div", {
-    className: isClientSelected ? "field" : "is-hidden"
-  }, /*#__PURE__*/react_default.a.createElement("div", getRootProps(), /*#__PURE__*/react_default.a.createElement("input", Object.assign({
-    id: "order",
-    name: "order"
-  }, getInputProps())), isDragActive ? /*#__PURE__*/react_default.a.createElement("div", {
-    className: "dropzone dropzone--active"
-  }, /*#__PURE__*/react_default.a.createElement("p", null, /*#__PURE__*/react_default.a.createElement(upload_cloud["a" /* default */], {
-    size: IconConstants["a" /* default */].DefaultSize()
-  })), /*#__PURE__*/react_default.a.createElement("p", null, props.dropFilesLabel)) : /*#__PURE__*/react_default.a.createElement("div", {
-    className: "dropzone"
-  }, /*#__PURE__*/react_default.a.createElement("p", null, /*#__PURE__*/react_default.a.createElement(upload_cloud["a" /* default */], {
-    size: IconConstants["a" /* default */].DefaultSize()
-  })), /*#__PURE__*/react_default.a.createElement("p", null, props.dropOrSelectFilesLabel)))), /*#__PURE__*/react_default.a.createElement("div", {
-    className: "field"
-  }, /*#__PURE__*/react_default.a.createElement(Button["a" /* default */], {
-    type: "submit",
-    variant: "contained",
-    color: "primary",
-    disabled: state.isLoading
-  }, props.saveText))), state.isLoading && /*#__PURE__*/react_default.a.createElement(CircularProgress["a" /* default */], {
-    className: "progressBar"
-  }));
-}
-
-/* harmony default export */ var ImportOrder_ImportOrderForm = (ImportOrderForm);
-// EXTERNAL MODULE: ./src/shared/layouts/images/favicon.png
-var favicon = __webpack_require__(82);
-
-// CONCATENATED MODULE: ./src/project/Seller.Portal/areas/Orders/pages/ImportOrderPage/ImportOrderPage.js
-
-
-
-
-
-
-
-
-
-/* eslint-disable no-unused-vars */
-
-
-/* eslint-enable no-unused-vars */
-
-function ImportOrderPage(props) {
-  react_toastify["a" /* toast */].configure();
-  return /*#__PURE__*/react_default.a.createElement(ThemeProvider["a" /* default */], {
-    theme: GlobalHelper["a" /* default */].initMuiTheme()
-  }, /*#__PURE__*/react_default.a.createElement(Store["b" /* default */], null, /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement(Header["a" /* default */], props.header), /*#__PURE__*/react_default.a.createElement(MenuTiles["a" /* default */], props.menuTiles), /*#__PURE__*/react_default.a.createElement("section", {
-    className: "section section-small-padding catalog"
-  }, /*#__PURE__*/react_default.a.createElement("h1", {
-    className: "subtitle is-4"
-  }, props.title), /*#__PURE__*/react_default.a.createElement("div", {
-    className: "columns is-desktop"
-  }, /*#__PURE__*/react_default.a.createElement("div", {
-    className: "column is-half"
-  }, /*#__PURE__*/react_default.a.createElement(ImportOrder_ImportOrderForm, props.importOrderForm)))), /*#__PURE__*/react_default.a.createElement(Footer["a" /* default */], props.footer))));
-}
-
-/* harmony default export */ var ImportOrderPage_ImportOrderPage = (ImportOrderPage);
-// EXTERNAL MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.js
-var CssSsrRemovalHelper = __webpack_require__(58);
-
-// CONCATENATED MODULE: ./src/project/Seller.Portal/areas/Orders/pages/ImportOrderPage/index.js
-
-
-
-
-CssSsrRemovalHelper["a" /* default */].Remove();
-react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(ImportOrderPage_ImportOrderPage, window.data), document.getElementById('root'));
-
-/***/ }),
-
-/***/ 60:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// EXTERNAL MODULE: ./node_modules/react/index.js
-var react = __webpack_require__(0);
-var react_default = /*#__PURE__*/__webpack_require__.n(react);
-
-// EXTERNAL MODULE: ./src/shared/constants/IconConstants.js
-var IconConstants = __webpack_require__(47);
-
-// EXTERNAL MODULE: ./node_modules/react-feather/dist/index.js + 278 modules
-var dist = __webpack_require__(42);
-
-// CONCATENATED MODULE: ./src/shared/components/MenuTiles/Tile.js
-
-
-
-
-function Tile(props) {
-  var IconTag = dist[props.icon];
-  return /*#__PURE__*/react_default.a.createElement("a", {
-    href: props.url,
-    className: "tile"
-  }, /*#__PURE__*/react_default.a.createElement("div", {
-    className: "tile__icon"
-  }, /*#__PURE__*/react_default.a.createElement(IconTag, {
-    size: IconConstants["a" /* default */].DefaultSize()
-  })), /*#__PURE__*/react_default.a.createElement("div", {
-    className: "tile__title"
-  }, props.title));
-}
-
-/* harmony default export */ var MenuTiles_Tile = (Tile);
-// CONCATENATED MODULE: ./src/shared/components/MenuTiles/MenuTiles.js
-
-
-
-function MenuTiles(props) {
-  return /*#__PURE__*/react_default.a.createElement("nav", {
-    className: "section menu-tiles"
-  }, props.tiles.map(function (tile, index) {
-    return /*#__PURE__*/react_default.a.createElement(MenuTiles_Tile, {
-      key: index,
-      icon: tile.icon,
-      title: tile.title,
-      url: tile.url
-    });
-  }));
-}
-
-/* harmony default export */ var MenuTiles_MenuTiles = __webpack_exports__["a"] = (MenuTiles);
 
 /***/ }),
 
@@ -33725,14 +33194,45 @@ function formatMs(milliseconds) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _createMuiTheme__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(68);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createSvgIcon; });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _SvgIcon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(84);
+
+
+
+/**
+ * Private module reserved for @material-ui/x packages.
+ */
+
+function createSvgIcon(path, displayName) {
+  var Component = react__WEBPACK_IMPORTED_MODULE_1___default.a.memo(react__WEBPACK_IMPORTED_MODULE_1___default.a.forwardRef(function (props, ref) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_SvgIcon__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
+      ref: ref
+    }, props), path);
+  }));
+
+  if (false) {}
+
+  Component.muiName = _SvgIcon__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].muiName;
+  return Component;
+}
+
+/***/ }),
+
+/***/ 63:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _createMuiTheme__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(69);
 
 var defaultTheme = Object(_createMuiTheme__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])();
 /* harmony default export */ __webpack_exports__["a"] = (defaultTheme);
 
 /***/ }),
 
-/***/ 63:
+/***/ 64:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33768,7 +33268,7 @@ function debounce(func) {
 
 /***/ }),
 
-/***/ 64:
+/***/ 65:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33790,7 +33290,7 @@ function getScrollbarSize() {
 
 /***/ }),
 
-/***/ 65:
+/***/ 66:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33861,50 +33361,19 @@ var FetchErrorHandler_FetchErrorHandler = /*#__PURE__*/function () {
 
 /***/ }),
 
-/***/ 67:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createSvgIcon; });
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _SvgIcon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(84);
-
-
-
-/**
- * Private module reserved for @material-ui/x packages.
- */
-
-function createSvgIcon(path, displayName) {
-  var Component = react__WEBPACK_IMPORTED_MODULE_1___default.a.memo(react__WEBPACK_IMPORTED_MODULE_1___default.a.forwardRef(function (props, ref) {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_SvgIcon__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"], Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({
-      ref: ref
-    }, props), path);
-  }));
-
-  if (false) {}
-
-  Component.muiName = _SvgIcon__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"].muiName;
-  return Component;
-}
-
-/***/ }),
-
-/***/ 68:
+/***/ 69:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(19);
+var defineProperty = __webpack_require__(16);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
 var objectWithoutProperties = __webpack_require__(3);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/utils/esm/deepmerge.js
-var deepmerge = __webpack_require__(150);
+var deepmerge = __webpack_require__(152);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
 var esm_extends = __webpack_require__(2);
@@ -34152,7 +33621,7 @@ var green = {
 };
 /* harmony default export */ var colors_green = (green);
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/colorManipulator.js
-var colorManipulator = __webpack_require__(12);
+var colorManipulator = __webpack_require__(10);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/createPalette.js
 
@@ -34481,13 +33950,13 @@ var shape = {
 };
 /* harmony default export */ var styles_shape = (shape);
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 1 modules
-var slicedToArray = __webpack_require__(38);
+var slicedToArray = __webpack_require__(34);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 2 modules
-var toConsumableArray = __webpack_require__(22);
+var toConsumableArray = __webpack_require__(20);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
-var esm_typeof = __webpack_require__(26);
+var esm_typeof = __webpack_require__(27);
 
 // EXTERNAL MODULE: ./node_modules/prop-types/index.js
 var prop_types = __webpack_require__(1);
@@ -34840,23 +34309,6 @@ function createMuiTheme() {
 
 /***/ }),
 
-/***/ 7:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return capitalize; });
-// It should to be noted that this function isn't equivalent to `text-transform: capitalize`.
-//
-// A strict capitalization should uppercase the first letter of each word a the sentence.
-// We only handle the first word.
-function capitalize(string) {
-  if (false) {}
-
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-/***/ }),
-
 /***/ 70:
 /***/ (function(module, exports) {
 
@@ -34891,7 +34343,7 @@ module.exports = g;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GlobalHelper; });
 /* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
 /* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(14);
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(68);
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(69);
 
 
 
@@ -35486,7 +34938,7 @@ module.exports = ReactPropTypesSecret;
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
 /* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5);
-/* harmony import */ var _utils_capitalize__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(7);
+/* harmony import */ var _utils_capitalize__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
 
 
 
@@ -35592,7 +35044,7 @@ SvgIcon.muiName = 'SvgIcon';
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useTheme; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _ThemeContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(45);
+/* harmony import */ var _ThemeContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(46);
 
 
 function useTheme() {
@@ -35612,7 +35064,7 @@ function useTheme() {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useForkRef; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _setRef__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(27);
+/* harmony import */ var _setRef__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(25);
 
 
 function useForkRef(refA, refB) {
@@ -35635,7 +35087,7 @@ function useForkRef(refA, refB) {
 
 /***/ }),
 
-/***/ 90:
+/***/ 92:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35746,7 +35198,7 @@ module.exports = hoistNonReactStatics;
 
 /***/ }),
 
-/***/ 91:
+/***/ 93:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -35783,7 +35235,7 @@ function useControlled(_ref) {
 
 /***/ }),
 
-/***/ 92:
+/***/ 94:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -35806,7 +35258,7 @@ var prop_types = __webpack_require__(1);
 var clsx_m = __webpack_require__(4);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/formControlState.js
-var formControlState = __webpack_require__(20);
+var formControlState = __webpack_require__(21);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/FormControlContext.js
 var FormControlContext = __webpack_require__(32);
@@ -35815,13 +35267,13 @@ var FormControlContext = __webpack_require__(32);
 var withStyles = __webpack_require__(5);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/capitalize.js
-var capitalize = __webpack_require__(7);
+var capitalize = __webpack_require__(6);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useForkRef.js
 var useForkRef = __webpack_require__(9);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/debounce.js
-var debounce = __webpack_require__(63);
+var debounce = __webpack_require__(64);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/TextareaAutosize/TextareaAutosize.js
 
@@ -36447,13 +35899,884 @@ var InputBase_InputBase = react["forwardRef"](function InputBase(props, ref) {
 
 "use strict";
 
+// UNUSED EXPORTS: styles
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
+var esm_extends = __webpack_require__(2);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
+var objectWithoutProperties = __webpack_require__(3);
+
+// EXTERNAL MODULE: ./node_modules/react/index.js
+var react = __webpack_require__(0);
+
+// EXTERNAL MODULE: ./node_modules/prop-types/index.js
+var prop_types = __webpack_require__(1);
+
+// EXTERNAL MODULE: ./node_modules/react-dom/index.js
+var react_dom = __webpack_require__(8);
+
+// EXTERNAL MODULE: ./node_modules/clsx/dist/clsx.m.js
+var clsx_m = __webpack_require__(4);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useForkRef.js
+var useForkRef = __webpack_require__(9);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useEventCallback.js
+var useEventCallback = __webpack_require__(24);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/withStyles.js + 21 modules
+var withStyles = __webpack_require__(5);
+
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/utils/useIsFocusVisible.js
+// based on https://github.com/WICG/focus-visible/blob/v4.1.5/src/focus-visible.js
+
+
+var hadKeyboardEvent = true;
+var hadFocusVisibleRecently = false;
+var hadFocusVisibleRecentlyTimeout = null;
+var inputTypesWhitelist = {
+  text: true,
+  search: true,
+  url: true,
+  tel: true,
+  email: true,
+  password: true,
+  number: true,
+  date: true,
+  month: true,
+  week: true,
+  time: true,
+  datetime: true,
+  'datetime-local': true
+};
+/**
+ * Computes whether the given element should automatically trigger the
+ * `focus-visible` class being added, i.e. whether it should always match
+ * `:focus-visible` when focused.
+ * @param {Element} node
+ * @return {boolean}
+ */
+
+function focusTriggersKeyboardModality(node) {
+  var type = node.type,
+      tagName = node.tagName;
+
+  if (tagName === 'INPUT' && inputTypesWhitelist[type] && !node.readOnly) {
+    return true;
+  }
+
+  if (tagName === 'TEXTAREA' && !node.readOnly) {
+    return true;
+  }
+
+  if (node.isContentEditable) {
+    return true;
+  }
+
+  return false;
+}
+/**
+ * Keep track of our keyboard modality state with `hadKeyboardEvent`.
+ * If the most recent user interaction was via the keyboard;
+ * and the key press did not include a meta, alt/option, or control key;
+ * then the modality is keyboard. Otherwise, the modality is not keyboard.
+ * @param {KeyboardEvent} event
+ */
+
+
+function useIsFocusVisible_handleKeyDown(event) {
+  if (event.metaKey || event.altKey || event.ctrlKey) {
+    return;
+  }
+
+  hadKeyboardEvent = true;
+}
+/**
+ * If at any point a user clicks with a pointing device, ensure that we change
+ * the modality away from keyboard.
+ * This avoids the situation where a user presses a key on an already focused
+ * element, and then clicks on a different element, focusing it with a
+ * pointing device, while we still think we're in keyboard modality.
+ */
+
+
+function handlePointerDown() {
+  hadKeyboardEvent = false;
+}
+
+function handleVisibilityChange() {
+  if (this.visibilityState === 'hidden') {
+    // If the tab becomes active again, the browser will handle calling focus
+    // on the element (Safari actually calls it twice).
+    // If this tab change caused a blur on an element with focus-visible,
+    // re-apply the class when the user switches back to the tab.
+    if (hadFocusVisibleRecently) {
+      hadKeyboardEvent = true;
+    }
+  }
+}
+
+function prepare(doc) {
+  doc.addEventListener('keydown', useIsFocusVisible_handleKeyDown, true);
+  doc.addEventListener('mousedown', handlePointerDown, true);
+  doc.addEventListener('pointerdown', handlePointerDown, true);
+  doc.addEventListener('touchstart', handlePointerDown, true);
+  doc.addEventListener('visibilitychange', handleVisibilityChange, true);
+}
+
+function teardown(doc) {
+  doc.removeEventListener('keydown', useIsFocusVisible_handleKeyDown, true);
+  doc.removeEventListener('mousedown', handlePointerDown, true);
+  doc.removeEventListener('pointerdown', handlePointerDown, true);
+  doc.removeEventListener('touchstart', handlePointerDown, true);
+  doc.removeEventListener('visibilitychange', handleVisibilityChange, true);
+}
+
+function useIsFocusVisible_isFocusVisible(event) {
+  var target = event.target;
+
+  try {
+    return target.matches(':focus-visible');
+  } catch (error) {} // browsers not implementing :focus-visible will throw a SyntaxError
+  // we use our own heuristic for those browsers
+  // rethrow might be better if it's not the expected error but do we really
+  // want to crash if focus-visible malfunctioned?
+  // no need for validFocusTarget check. the user does that by attaching it to
+  // focusable events only
+
+
+  return hadKeyboardEvent || focusTriggersKeyboardModality(target);
+}
+/**
+ * Should be called if a blur event is fired on a focus-visible element
+ */
+
+
+function handleBlurVisible() {
+  // To detect a tab/window switch, we look for a blur event followed
+  // rapidly by a visibility change.
+  // If we don't see a visibility change within 100ms, it's probably a
+  // regular focus change.
+  hadFocusVisibleRecently = true;
+  window.clearTimeout(hadFocusVisibleRecentlyTimeout);
+  hadFocusVisibleRecentlyTimeout = window.setTimeout(function () {
+    hadFocusVisibleRecently = false;
+  }, 100);
+}
+
+function useIsFocusVisible() {
+  var ref = react["useCallback"](function (instance) {
+    var node = react_dom["findDOMNode"](instance);
+
+    if (node != null) {
+      prepare(node.ownerDocument);
+    }
+  }, []);
+
+  if (false) {}
+
+  return {
+    isFocusVisible: useIsFocusVisible_isFocusVisible,
+    onBlurVisible: handleBlurVisible,
+    ref: ref
+  };
+}
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 2 modules
+var toConsumableArray = __webpack_require__(20);
+
+// EXTERNAL MODULE: ./node_modules/react-transition-group/esm/TransitionGroup.js + 1 modules
+var TransitionGroup = __webpack_require__(100);
+
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/ButtonBase/Ripple.js
+
+
+
+
+var useEnhancedEffect = typeof window === 'undefined' ? react["useEffect"] : react["useLayoutEffect"];
+/**
+ * @ignore - internal component.
+ */
+
+function Ripple(props) {
+  var classes = props.classes,
+      _props$pulsate = props.pulsate,
+      pulsate = _props$pulsate === void 0 ? false : _props$pulsate,
+      rippleX = props.rippleX,
+      rippleY = props.rippleY,
+      rippleSize = props.rippleSize,
+      inProp = props.in,
+      _props$onExited = props.onExited,
+      onExited = _props$onExited === void 0 ? function () {} : _props$onExited,
+      timeout = props.timeout;
+
+  var _React$useState = react["useState"](false),
+      leaving = _React$useState[0],
+      setLeaving = _React$useState[1];
+
+  var rippleClassName = Object(clsx_m["a" /* default */])(classes.ripple, classes.rippleVisible, pulsate && classes.ripplePulsate);
+  var rippleStyles = {
+    width: rippleSize,
+    height: rippleSize,
+    top: -(rippleSize / 2) + rippleY,
+    left: -(rippleSize / 2) + rippleX
+  };
+  var childClassName = Object(clsx_m["a" /* default */])(classes.child, leaving && classes.childLeaving, pulsate && classes.childPulsate);
+  var handleExited = Object(useEventCallback["a" /* default */])(onExited); // Ripple is used for user feedback (e.g. click or press) so we want to apply styles with the highest priority
+
+  useEnhancedEffect(function () {
+    if (!inProp) {
+      // react-transition-group#onExit
+      setLeaving(true); // react-transition-group#onExited
+
+      var timeoutId = setTimeout(handleExited, timeout);
+      return function () {
+        clearTimeout(timeoutId);
+      };
+    }
+
+    return undefined;
+  }, [handleExited, inProp, timeout]);
+  return /*#__PURE__*/react["createElement"]("span", {
+    className: rippleClassName,
+    style: rippleStyles
+  }, /*#__PURE__*/react["createElement"]("span", {
+    className: childClassName
+  }));
+}
+
+ false ? undefined : void 0;
+/* harmony default export */ var ButtonBase_Ripple = (Ripple);
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/ButtonBase/TouchRipple.js
+
+
+
+
+
+
+
+
+
+var DURATION = 550;
+var DELAY_RIPPLE = 80;
+var styles = function styles(theme) {
+  return {
+    /* Styles applied to the root element. */
+    root: {
+      overflow: 'hidden',
+      pointerEvents: 'none',
+      position: 'absolute',
+      zIndex: 0,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      borderRadius: 'inherit'
+    },
+
+    /* Styles applied to the internal `Ripple` components `ripple` class. */
+    ripple: {
+      opacity: 0,
+      position: 'absolute'
+    },
+
+    /* Styles applied to the internal `Ripple` components `rippleVisible` class. */
+    rippleVisible: {
+      opacity: 0.3,
+      transform: 'scale(1)',
+      animation: "$enter ".concat(DURATION, "ms ").concat(theme.transitions.easing.easeInOut)
+    },
+
+    /* Styles applied to the internal `Ripple` components `ripplePulsate` class. */
+    ripplePulsate: {
+      animationDuration: "".concat(theme.transitions.duration.shorter, "ms")
+    },
+
+    /* Styles applied to the internal `Ripple` components `child` class. */
+    child: {
+      opacity: 1,
+      display: 'block',
+      width: '100%',
+      height: '100%',
+      borderRadius: '50%',
+      backgroundColor: 'currentColor'
+    },
+
+    /* Styles applied to the internal `Ripple` components `childLeaving` class. */
+    childLeaving: {
+      opacity: 0,
+      animation: "$exit ".concat(DURATION, "ms ").concat(theme.transitions.easing.easeInOut)
+    },
+
+    /* Styles applied to the internal `Ripple` components `childPulsate` class. */
+    childPulsate: {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      animation: "$pulsate 2500ms ".concat(theme.transitions.easing.easeInOut, " 200ms infinite")
+    },
+    '@keyframes enter': {
+      '0%': {
+        transform: 'scale(0)',
+        opacity: 0.1
+      },
+      '100%': {
+        transform: 'scale(1)',
+        opacity: 0.3
+      }
+    },
+    '@keyframes exit': {
+      '0%': {
+        opacity: 1
+      },
+      '100%': {
+        opacity: 0
+      }
+    },
+    '@keyframes pulsate': {
+      '0%': {
+        transform: 'scale(1)'
+      },
+      '50%': {
+        transform: 'scale(0.92)'
+      },
+      '100%': {
+        transform: 'scale(1)'
+      }
+    }
+  };
+};
+/**
+ * @ignore - internal component.
+ *
+ * TODO v5: Make private
+ */
+
+var TouchRipple_TouchRipple = react["forwardRef"](function TouchRipple(props, ref) {
+  var _props$center = props.center,
+      centerProp = _props$center === void 0 ? false : _props$center,
+      classes = props.classes,
+      className = props.className,
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["center", "classes", "className"]);
+
+  var _React$useState = react["useState"]([]),
+      ripples = _React$useState[0],
+      setRipples = _React$useState[1];
+
+  var nextKey = react["useRef"](0);
+  var rippleCallback = react["useRef"](null);
+  react["useEffect"](function () {
+    if (rippleCallback.current) {
+      rippleCallback.current();
+      rippleCallback.current = null;
+    }
+  }, [ripples]); // Used to filter out mouse emulated events on mobile.
+
+  var ignoringMouseDown = react["useRef"](false); // We use a timer in order to only show the ripples for touch "click" like events.
+  // We don't want to display the ripple for touch scroll events.
+
+  var startTimer = react["useRef"](null); // This is the hook called once the previous timeout is ready.
+
+  var startTimerCommit = react["useRef"](null);
+  var container = react["useRef"](null);
+  react["useEffect"](function () {
+    return function () {
+      clearTimeout(startTimer.current);
+    };
+  }, []);
+  var startCommit = react["useCallback"](function (params) {
+    var pulsate = params.pulsate,
+        rippleX = params.rippleX,
+        rippleY = params.rippleY,
+        rippleSize = params.rippleSize,
+        cb = params.cb;
+    setRipples(function (oldRipples) {
+      return [].concat(Object(toConsumableArray["a" /* default */])(oldRipples), [/*#__PURE__*/react["createElement"](ButtonBase_Ripple, {
+        key: nextKey.current,
+        classes: classes,
+        timeout: DURATION,
+        pulsate: pulsate,
+        rippleX: rippleX,
+        rippleY: rippleY,
+        rippleSize: rippleSize
+      })]);
+    });
+    nextKey.current += 1;
+    rippleCallback.current = cb;
+  }, [classes]);
+  var start = react["useCallback"](function () {
+    var event = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var cb = arguments.length > 2 ? arguments[2] : undefined;
+    var _options$pulsate = options.pulsate,
+        pulsate = _options$pulsate === void 0 ? false : _options$pulsate,
+        _options$center = options.center,
+        center = _options$center === void 0 ? centerProp || options.pulsate : _options$center,
+        _options$fakeElement = options.fakeElement,
+        fakeElement = _options$fakeElement === void 0 ? false : _options$fakeElement;
+
+    if (event.type === 'mousedown' && ignoringMouseDown.current) {
+      ignoringMouseDown.current = false;
+      return;
+    }
+
+    if (event.type === 'touchstart') {
+      ignoringMouseDown.current = true;
+    }
+
+    var element = fakeElement ? null : container.current;
+    var rect = element ? element.getBoundingClientRect() : {
+      width: 0,
+      height: 0,
+      left: 0,
+      top: 0
+    }; // Get the size of the ripple
+
+    var rippleX;
+    var rippleY;
+    var rippleSize;
+
+    if (center || event.clientX === 0 && event.clientY === 0 || !event.clientX && !event.touches) {
+      rippleX = Math.round(rect.width / 2);
+      rippleY = Math.round(rect.height / 2);
+    } else {
+      var clientX = event.clientX ? event.clientX : event.touches[0].clientX;
+      var clientY = event.clientY ? event.clientY : event.touches[0].clientY;
+      rippleX = Math.round(clientX - rect.left);
+      rippleY = Math.round(clientY - rect.top);
+    }
+
+    if (center) {
+      rippleSize = Math.sqrt((2 * Math.pow(rect.width, 2) + Math.pow(rect.height, 2)) / 3); // For some reason the animation is broken on Mobile Chrome if the size if even.
+
+      if (rippleSize % 2 === 0) {
+        rippleSize += 1;
+      }
+    } else {
+      var sizeX = Math.max(Math.abs((element ? element.clientWidth : 0) - rippleX), rippleX) * 2 + 2;
+      var sizeY = Math.max(Math.abs((element ? element.clientHeight : 0) - rippleY), rippleY) * 2 + 2;
+      rippleSize = Math.sqrt(Math.pow(sizeX, 2) + Math.pow(sizeY, 2));
+    } // Touche devices
+
+
+    if (event.touches) {
+      // check that this isn't another touchstart due to multitouch
+      // otherwise we will only clear a single timer when unmounting while two
+      // are running
+      if (startTimerCommit.current === null) {
+        // Prepare the ripple effect.
+        startTimerCommit.current = function () {
+          startCommit({
+            pulsate: pulsate,
+            rippleX: rippleX,
+            rippleY: rippleY,
+            rippleSize: rippleSize,
+            cb: cb
+          });
+        }; // Delay the execution of the ripple effect.
+
+
+        startTimer.current = setTimeout(function () {
+          if (startTimerCommit.current) {
+            startTimerCommit.current();
+            startTimerCommit.current = null;
+          }
+        }, DELAY_RIPPLE); // We have to make a tradeoff with this value.
+      }
+    } else {
+      startCommit({
+        pulsate: pulsate,
+        rippleX: rippleX,
+        rippleY: rippleY,
+        rippleSize: rippleSize,
+        cb: cb
+      });
+    }
+  }, [centerProp, startCommit]);
+  var pulsate = react["useCallback"](function () {
+    start({}, {
+      pulsate: true
+    });
+  }, [start]);
+  var stop = react["useCallback"](function (event, cb) {
+    clearTimeout(startTimer.current); // The touch interaction occurs too quickly.
+    // We still want to show ripple effect.
+
+    if (event.type === 'touchend' && startTimerCommit.current) {
+      event.persist();
+      startTimerCommit.current();
+      startTimerCommit.current = null;
+      startTimer.current = setTimeout(function () {
+        stop(event, cb);
+      });
+      return;
+    }
+
+    startTimerCommit.current = null;
+    setRipples(function (oldRipples) {
+      if (oldRipples.length > 0) {
+        return oldRipples.slice(1);
+      }
+
+      return oldRipples;
+    });
+    rippleCallback.current = cb;
+  }, []);
+  react["useImperativeHandle"](ref, function () {
+    return {
+      pulsate: pulsate,
+      start: start,
+      stop: stop
+    };
+  }, [pulsate, start, stop]);
+  return /*#__PURE__*/react["createElement"]("span", Object(esm_extends["a" /* default */])({
+    className: Object(clsx_m["a" /* default */])(classes.root, className),
+    ref: container
+  }, other), /*#__PURE__*/react["createElement"](TransitionGroup["a" /* default */], {
+    component: null,
+    exit: true
+  }, ripples));
+});
+ false ? undefined : void 0;
+/* harmony default export */ var ButtonBase_TouchRipple = (Object(withStyles["a" /* default */])(styles, {
+  flip: false,
+  name: 'MuiTouchRipple'
+})(react["memo"](TouchRipple_TouchRipple)));
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/ButtonBase/ButtonBase.js
+
+
+
+
+
+
+
+
+
+
+
+
+var ButtonBase_styles = {
+  /* Styles applied to the root element. */
+  root: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    WebkitTapHighlightColor: 'transparent',
+    backgroundColor: 'transparent',
+    // Reset default value
+    // We disable the focus ring for mouse, touch and keyboard users.
+    outline: 0,
+    border: 0,
+    margin: 0,
+    // Remove the margin in Safari
+    borderRadius: 0,
+    padding: 0,
+    // Remove the padding in Firefox
+    cursor: 'pointer',
+    userSelect: 'none',
+    verticalAlign: 'middle',
+    '-moz-appearance': 'none',
+    // Reset
+    '-webkit-appearance': 'none',
+    // Reset
+    textDecoration: 'none',
+    // So we take precedent over the style of a native <a /> element.
+    color: 'inherit',
+    '&::-moz-focus-inner': {
+      borderStyle: 'none' // Remove Firefox dotted outline.
+
+    },
+    '&$disabled': {
+      pointerEvents: 'none',
+      // Disable link interactions
+      cursor: 'default'
+    }
+  },
+
+  /* Pseudo-class applied to the root element if `disabled={true}`. */
+  disabled: {},
+
+  /* Pseudo-class applied to the root element if keyboard focused. */
+  focusVisible: {}
+};
+/**
+ * `ButtonBase` contains as few styles as possible.
+ * It aims to be a simple building block for creating a button.
+ * It contains a load of style reset and some focus/ripple logic.
+ */
+
+var ButtonBase_ButtonBase = react["forwardRef"](function ButtonBase(props, ref) {
+  var action = props.action,
+      buttonRefProp = props.buttonRef,
+      _props$centerRipple = props.centerRipple,
+      centerRipple = _props$centerRipple === void 0 ? false : _props$centerRipple,
+      children = props.children,
+      classes = props.classes,
+      className = props.className,
+      _props$component = props.component,
+      component = _props$component === void 0 ? 'button' : _props$component,
+      _props$disabled = props.disabled,
+      disabled = _props$disabled === void 0 ? false : _props$disabled,
+      _props$disableRipple = props.disableRipple,
+      disableRipple = _props$disableRipple === void 0 ? false : _props$disableRipple,
+      _props$disableTouchRi = props.disableTouchRipple,
+      disableTouchRipple = _props$disableTouchRi === void 0 ? false : _props$disableTouchRi,
+      _props$focusRipple = props.focusRipple,
+      focusRipple = _props$focusRipple === void 0 ? false : _props$focusRipple,
+      focusVisibleClassName = props.focusVisibleClassName,
+      onBlur = props.onBlur,
+      onClick = props.onClick,
+      onFocus = props.onFocus,
+      onFocusVisible = props.onFocusVisible,
+      onKeyDown = props.onKeyDown,
+      onKeyUp = props.onKeyUp,
+      onMouseDown = props.onMouseDown,
+      onMouseLeave = props.onMouseLeave,
+      onMouseUp = props.onMouseUp,
+      onTouchEnd = props.onTouchEnd,
+      onTouchMove = props.onTouchMove,
+      onTouchStart = props.onTouchStart,
+      onDragLeave = props.onDragLeave,
+      _props$tabIndex = props.tabIndex,
+      tabIndex = _props$tabIndex === void 0 ? 0 : _props$tabIndex,
+      TouchRippleProps = props.TouchRippleProps,
+      _props$type = props.type,
+      type = _props$type === void 0 ? 'button' : _props$type,
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["action", "buttonRef", "centerRipple", "children", "classes", "className", "component", "disabled", "disableRipple", "disableTouchRipple", "focusRipple", "focusVisibleClassName", "onBlur", "onClick", "onFocus", "onFocusVisible", "onKeyDown", "onKeyUp", "onMouseDown", "onMouseLeave", "onMouseUp", "onTouchEnd", "onTouchMove", "onTouchStart", "onDragLeave", "tabIndex", "TouchRippleProps", "type"]);
+
+  var buttonRef = react["useRef"](null);
+
+  function getButtonNode() {
+    // #StrictMode ready
+    return react_dom["findDOMNode"](buttonRef.current);
+  }
+
+  var rippleRef = react["useRef"](null);
+
+  var _React$useState = react["useState"](false),
+      focusVisible = _React$useState[0],
+      setFocusVisible = _React$useState[1];
+
+  if (disabled && focusVisible) {
+    setFocusVisible(false);
+  }
+
+  var _useIsFocusVisible = useIsFocusVisible(),
+      isFocusVisible = _useIsFocusVisible.isFocusVisible,
+      onBlurVisible = _useIsFocusVisible.onBlurVisible,
+      focusVisibleRef = _useIsFocusVisible.ref;
+
+  react["useImperativeHandle"](action, function () {
+    return {
+      focusVisible: function focusVisible() {
+        setFocusVisible(true);
+        buttonRef.current.focus();
+      }
+    };
+  }, []);
+  react["useEffect"](function () {
+    if (focusVisible && focusRipple && !disableRipple) {
+      rippleRef.current.pulsate();
+    }
+  }, [disableRipple, focusRipple, focusVisible]);
+
+  function useRippleHandler(rippleAction, eventCallback) {
+    var skipRippleAction = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : disableTouchRipple;
+    return Object(useEventCallback["a" /* default */])(function (event) {
+      if (eventCallback) {
+        eventCallback(event);
+      }
+
+      var ignore = skipRippleAction;
+
+      if (!ignore && rippleRef.current) {
+        rippleRef.current[rippleAction](event);
+      }
+
+      return true;
+    });
+  }
+
+  var handleMouseDown = useRippleHandler('start', onMouseDown);
+  var handleDragLeave = useRippleHandler('stop', onDragLeave);
+  var handleMouseUp = useRippleHandler('stop', onMouseUp);
+  var handleMouseLeave = useRippleHandler('stop', function (event) {
+    if (focusVisible) {
+      event.preventDefault();
+    }
+
+    if (onMouseLeave) {
+      onMouseLeave(event);
+    }
+  });
+  var handleTouchStart = useRippleHandler('start', onTouchStart);
+  var handleTouchEnd = useRippleHandler('stop', onTouchEnd);
+  var handleTouchMove = useRippleHandler('stop', onTouchMove);
+  var handleBlur = useRippleHandler('stop', function (event) {
+    if (focusVisible) {
+      onBlurVisible(event);
+      setFocusVisible(false);
+    }
+
+    if (onBlur) {
+      onBlur(event);
+    }
+  }, false);
+  var handleFocus = Object(useEventCallback["a" /* default */])(function (event) {
+    // Fix for https://github.com/facebook/react/issues/7769
+    if (!buttonRef.current) {
+      buttonRef.current = event.currentTarget;
+    }
+
+    if (isFocusVisible(event)) {
+      setFocusVisible(true);
+
+      if (onFocusVisible) {
+        onFocusVisible(event);
+      }
+    }
+
+    if (onFocus) {
+      onFocus(event);
+    }
+  });
+
+  var isNonNativeButton = function isNonNativeButton() {
+    var button = getButtonNode();
+    return component && component !== 'button' && !(button.tagName === 'A' && button.href);
+  };
+  /**
+   * IE 11 shim for https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/repeat
+   */
+
+
+  var keydownRef = react["useRef"](false);
+  var handleKeyDown = Object(useEventCallback["a" /* default */])(function (event) {
+    // Check if key is already down to avoid repeats being counted as multiple activations
+    if (focusRipple && !keydownRef.current && focusVisible && rippleRef.current && event.key === ' ') {
+      keydownRef.current = true;
+      event.persist();
+      rippleRef.current.stop(event, function () {
+        rippleRef.current.start(event);
+      });
+    }
+
+    if (event.target === event.currentTarget && isNonNativeButton() && event.key === ' ') {
+      event.preventDefault();
+    }
+
+    if (onKeyDown) {
+      onKeyDown(event);
+    } // Keyboard accessibility for non interactive elements
+
+
+    if (event.target === event.currentTarget && isNonNativeButton() && event.key === 'Enter' && !disabled) {
+      event.preventDefault();
+
+      if (onClick) {
+        onClick(event);
+      }
+    }
+  });
+  var handleKeyUp = Object(useEventCallback["a" /* default */])(function (event) {
+    // calling preventDefault in keyUp on a <button> will not dispatch a click event if Space is pressed
+    // https://codesandbox.io/s/button-keyup-preventdefault-dn7f0
+    if (focusRipple && event.key === ' ' && rippleRef.current && focusVisible && !event.defaultPrevented) {
+      keydownRef.current = false;
+      event.persist();
+      rippleRef.current.stop(event, function () {
+        rippleRef.current.pulsate(event);
+      });
+    }
+
+    if (onKeyUp) {
+      onKeyUp(event);
+    } // Keyboard accessibility for non interactive elements
+
+
+    if (onClick && event.target === event.currentTarget && isNonNativeButton() && event.key === ' ' && !event.defaultPrevented) {
+      onClick(event);
+    }
+  });
+  var ComponentProp = component;
+
+  if (ComponentProp === 'button' && other.href) {
+    ComponentProp = 'a';
+  }
+
+  var buttonProps = {};
+
+  if (ComponentProp === 'button') {
+    buttonProps.type = type;
+    buttonProps.disabled = disabled;
+  } else {
+    if (ComponentProp !== 'a' || !other.href) {
+      buttonProps.role = 'button';
+    }
+
+    buttonProps['aria-disabled'] = disabled;
+  }
+
+  var handleUserRef = Object(useForkRef["a" /* default */])(buttonRefProp, ref);
+  var handleOwnRef = Object(useForkRef["a" /* default */])(focusVisibleRef, buttonRef);
+  var handleRef = Object(useForkRef["a" /* default */])(handleUserRef, handleOwnRef);
+
+  var _React$useState2 = react["useState"](false),
+      mountedState = _React$useState2[0],
+      setMountedState = _React$useState2[1];
+
+  react["useEffect"](function () {
+    setMountedState(true);
+  }, []);
+  var enableTouchRipple = mountedState && !disableRipple && !disabled;
+
+  if (false) {}
+
+  return /*#__PURE__*/react["createElement"](ComponentProp, Object(esm_extends["a" /* default */])({
+    className: Object(clsx_m["a" /* default */])(classes.root, className, focusVisible && [classes.focusVisible, focusVisibleClassName], disabled && classes.disabled),
+    onBlur: handleBlur,
+    onClick: onClick,
+    onFocus: handleFocus,
+    onKeyDown: handleKeyDown,
+    onKeyUp: handleKeyUp,
+    onMouseDown: handleMouseDown,
+    onMouseLeave: handleMouseLeave,
+    onMouseUp: handleMouseUp,
+    onDragLeave: handleDragLeave,
+    onTouchEnd: handleTouchEnd,
+    onTouchMove: handleTouchMove,
+    onTouchStart: handleTouchStart,
+    ref: handleRef,
+    tabIndex: disabled ? -1 : tabIndex
+  }, buttonProps, other), children, enableTouchRipple ?
+  /*#__PURE__*/
+
+  /* TouchRipple is only needed client-side, x2 boost on the server. */
+  react["createElement"](ButtonBase_TouchRipple, Object(esm_extends["a" /* default */])({
+    ref: rippleRef,
+    center: centerRipple
+  }, TouchRippleProps)) : null);
+});
+ false ? undefined : void 0;
+/* harmony default export */ var esm_ButtonBase_ButtonBase = __webpack_exports__["a"] = (Object(withStyles["a" /* default */])(ButtonBase_styles, {
+  name: 'MuiButtonBase'
+})(ButtonBase_ButtonBase));
+
+/***/ }),
+
+/***/ 99:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
 // UNUSED EXPORTS: UNMOUNTED, EXITED, ENTERING, ENTERED, EXITING
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
-var objectWithoutPropertiesLoose = __webpack_require__(18);
+var objectWithoutPropertiesLoose = __webpack_require__(19);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
-var inheritsLoose = __webpack_require__(21);
+var inheritsLoose = __webpack_require__(22);
 
 // EXTERNAL MODULE: ./node_modules/prop-types/index.js
 var prop_types = __webpack_require__(1);
@@ -36904,310 +37227,6 @@ Transition_Transition.ENTERING = ENTERING;
 Transition_Transition.ENTERED = ENTERED;
 Transition_Transition.EXITING = EXITING;
 /* harmony default export */ var esm_Transition = __webpack_exports__["a"] = (Transition_Transition);
-
-/***/ }),
-
-/***/ 99:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
-var objectWithoutPropertiesLoose = __webpack_require__(18);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
-var esm_extends = __webpack_require__(2);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
-var assertThisInitialized = __webpack_require__(39);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
-var inheritsLoose = __webpack_require__(21);
-
-// EXTERNAL MODULE: ./node_modules/prop-types/index.js
-var prop_types = __webpack_require__(1);
-
-// EXTERNAL MODULE: ./node_modules/react/index.js
-var react = __webpack_require__(0);
-var react_default = /*#__PURE__*/__webpack_require__.n(react);
-
-// EXTERNAL MODULE: ./node_modules/react-transition-group/esm/TransitionGroupContext.js
-var TransitionGroupContext = __webpack_require__(29);
-
-// CONCATENATED MODULE: ./node_modules/react-transition-group/esm/utils/ChildMapping.js
-
-/**
- * Given `this.props.children`, return an object mapping key to child.
- *
- * @param {*} children `this.props.children`
- * @return {object} Mapping of key to child
- */
-
-function getChildMapping(children, mapFn) {
-  var mapper = function mapper(child) {
-    return mapFn && Object(react["isValidElement"])(child) ? mapFn(child) : child;
-  };
-
-  var result = Object.create(null);
-  if (children) react["Children"].map(children, function (c) {
-    return c;
-  }).forEach(function (child) {
-    // run the map function here instead so that the key is the computed one
-    result[child.key] = mapper(child);
-  });
-  return result;
-}
-/**
- * When you're adding or removing children some may be added or removed in the
- * same render pass. We want to show *both* since we want to simultaneously
- * animate elements in and out. This function takes a previous set of keys
- * and a new set of keys and merges them with its best guess of the correct
- * ordering. In the future we may expose some of the utilities in
- * ReactMultiChild to make this easy, but for now React itself does not
- * directly have this concept of the union of prevChildren and nextChildren
- * so we implement it here.
- *
- * @param {object} prev prev children as returned from
- * `ReactTransitionChildMapping.getChildMapping()`.
- * @param {object} next next children as returned from
- * `ReactTransitionChildMapping.getChildMapping()`.
- * @return {object} a key set that contains all keys in `prev` and all keys
- * in `next` in a reasonable order.
- */
-
-function mergeChildMappings(prev, next) {
-  prev = prev || {};
-  next = next || {};
-
-  function getValueForKey(key) {
-    return key in next ? next[key] : prev[key];
-  } // For each key of `next`, the list of keys to insert before that key in
-  // the combined list
-
-
-  var nextKeysPending = Object.create(null);
-  var pendingKeys = [];
-
-  for (var prevKey in prev) {
-    if (prevKey in next) {
-      if (pendingKeys.length) {
-        nextKeysPending[prevKey] = pendingKeys;
-        pendingKeys = [];
-      }
-    } else {
-      pendingKeys.push(prevKey);
-    }
-  }
-
-  var i;
-  var childMapping = {};
-
-  for (var nextKey in next) {
-    if (nextKeysPending[nextKey]) {
-      for (i = 0; i < nextKeysPending[nextKey].length; i++) {
-        var pendingNextKey = nextKeysPending[nextKey][i];
-        childMapping[nextKeysPending[nextKey][i]] = getValueForKey(pendingNextKey);
-      }
-    }
-
-    childMapping[nextKey] = getValueForKey(nextKey);
-  } // Finally, add the keys which didn't appear before any key in `next`
-
-
-  for (i = 0; i < pendingKeys.length; i++) {
-    childMapping[pendingKeys[i]] = getValueForKey(pendingKeys[i]);
-  }
-
-  return childMapping;
-}
-
-function getProp(child, prop, props) {
-  return props[prop] != null ? props[prop] : child.props[prop];
-}
-
-function getInitialChildMapping(props, onExited) {
-  return getChildMapping(props.children, function (child) {
-    return Object(react["cloneElement"])(child, {
-      onExited: onExited.bind(null, child),
-      in: true,
-      appear: getProp(child, 'appear', props),
-      enter: getProp(child, 'enter', props),
-      exit: getProp(child, 'exit', props)
-    });
-  });
-}
-function getNextChildMapping(nextProps, prevChildMapping, onExited) {
-  var nextChildMapping = getChildMapping(nextProps.children);
-  var children = mergeChildMappings(prevChildMapping, nextChildMapping);
-  Object.keys(children).forEach(function (key) {
-    var child = children[key];
-    if (!Object(react["isValidElement"])(child)) return;
-    var hasPrev = (key in prevChildMapping);
-    var hasNext = (key in nextChildMapping);
-    var prevChild = prevChildMapping[key];
-    var isLeaving = Object(react["isValidElement"])(prevChild) && !prevChild.props.in; // item is new (entering)
-
-    if (hasNext && (!hasPrev || isLeaving)) {
-      // console.log('entering', key)
-      children[key] = Object(react["cloneElement"])(child, {
-        onExited: onExited.bind(null, child),
-        in: true,
-        exit: getProp(child, 'exit', nextProps),
-        enter: getProp(child, 'enter', nextProps)
-      });
-    } else if (!hasNext && hasPrev && !isLeaving) {
-      // item is old (exiting)
-      // console.log('leaving', key)
-      children[key] = Object(react["cloneElement"])(child, {
-        in: false
-      });
-    } else if (hasNext && hasPrev && Object(react["isValidElement"])(prevChild)) {
-      // item hasn't changed transition states
-      // copy over the last transition props;
-      // console.log('unchanged', key)
-      children[key] = Object(react["cloneElement"])(child, {
-        onExited: onExited.bind(null, child),
-        in: prevChild.props.in,
-        exit: getProp(child, 'exit', nextProps),
-        enter: getProp(child, 'enter', nextProps)
-      });
-    }
-  });
-  return children;
-}
-// CONCATENATED MODULE: ./node_modules/react-transition-group/esm/TransitionGroup.js
-
-
-
-
-
-
-
-
-
-var values = Object.values || function (obj) {
-  return Object.keys(obj).map(function (k) {
-    return obj[k];
-  });
-};
-
-var defaultProps = {
-  component: 'div',
-  childFactory: function childFactory(child) {
-    return child;
-  }
-};
-/**
- * The `<TransitionGroup>` component manages a set of transition components
- * (`<Transition>` and `<CSSTransition>`) in a list. Like with the transition
- * components, `<TransitionGroup>` is a state machine for managing the mounting
- * and unmounting of components over time.
- *
- * Consider the example below. As items are removed or added to the TodoList the
- * `in` prop is toggled automatically by the `<TransitionGroup>`.
- *
- * Note that `<TransitionGroup>`  does not define any animation behavior!
- * Exactly _how_ a list item animates is up to the individual transition
- * component. This means you can mix and match animations across different list
- * items.
- */
-
-var TransitionGroup_TransitionGroup = /*#__PURE__*/function (_React$Component) {
-  Object(inheritsLoose["a" /* default */])(TransitionGroup, _React$Component);
-
-  function TransitionGroup(props, context) {
-    var _this;
-
-    _this = _React$Component.call(this, props, context) || this;
-
-    var handleExited = _this.handleExited.bind(Object(assertThisInitialized["a" /* default */])(_this)); // Initial children should all be entering, dependent on appear
-
-
-    _this.state = {
-      contextValue: {
-        isMounting: true
-      },
-      handleExited: handleExited,
-      firstRender: true
-    };
-    return _this;
-  }
-
-  var _proto = TransitionGroup.prototype;
-
-  _proto.componentDidMount = function componentDidMount() {
-    this.mounted = true;
-    this.setState({
-      contextValue: {
-        isMounting: false
-      }
-    });
-  };
-
-  _proto.componentWillUnmount = function componentWillUnmount() {
-    this.mounted = false;
-  };
-
-  TransitionGroup.getDerivedStateFromProps = function getDerivedStateFromProps(nextProps, _ref) {
-    var prevChildMapping = _ref.children,
-        handleExited = _ref.handleExited,
-        firstRender = _ref.firstRender;
-    return {
-      children: firstRender ? getInitialChildMapping(nextProps, handleExited) : getNextChildMapping(nextProps, prevChildMapping, handleExited),
-      firstRender: false
-    };
-  } // node is `undefined` when user provided `nodeRef` prop
-  ;
-
-  _proto.handleExited = function handleExited(child, node) {
-    var currentChildMapping = getChildMapping(this.props.children);
-    if (child.key in currentChildMapping) return;
-
-    if (child.props.onExited) {
-      child.props.onExited(node);
-    }
-
-    if (this.mounted) {
-      this.setState(function (state) {
-        var children = Object(esm_extends["a" /* default */])({}, state.children);
-
-        delete children[child.key];
-        return {
-          children: children
-        };
-      });
-    }
-  };
-
-  _proto.render = function render() {
-    var _this$props = this.props,
-        Component = _this$props.component,
-        childFactory = _this$props.childFactory,
-        props = Object(objectWithoutPropertiesLoose["a" /* default */])(_this$props, ["component", "childFactory"]);
-
-    var contextValue = this.state.contextValue;
-    var children = values(this.state.children).map(childFactory);
-    delete props.appear;
-    delete props.enter;
-    delete props.exit;
-
-    if (Component === null) {
-      return /*#__PURE__*/react_default.a.createElement(TransitionGroupContext["a" /* default */].Provider, {
-        value: contextValue
-      }, children);
-    }
-
-    return /*#__PURE__*/react_default.a.createElement(TransitionGroupContext["a" /* default */].Provider, {
-      value: contextValue
-    }, /*#__PURE__*/react_default.a.createElement(Component, props, children));
-  };
-
-  return TransitionGroup;
-}(react_default.a.Component);
-
-TransitionGroup_TransitionGroup.propTypes =  false ? undefined : {};
-TransitionGroup_TransitionGroup.defaultProps = defaultProps;
-/* harmony default export */ var esm_TransitionGroup = __webpack_exports__["a"] = (TransitionGroup_TransitionGroup);
 
 /***/ })
 

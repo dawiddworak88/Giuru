@@ -7,7 +7,7 @@ function MainNavigation(props) {
 
         <nav className="main-nav">
             <div className="main-nav__links-container is-flex is-flex-centered has-text-centered">
-                {props.links.map((link, index) => 
+                {props.links && props.links.map((link, index) => 
                     <a key={index} href={link.url}>{link.text}</a>
                 )}
             </div>

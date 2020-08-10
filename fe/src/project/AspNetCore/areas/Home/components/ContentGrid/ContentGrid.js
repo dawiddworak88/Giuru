@@ -26,7 +26,7 @@ function ContentGrid(props) {
     return (
 
         <section className="section content-grid">
-            {props.items.map((item) => 
+            {props.items && props.items.map((item) => 
                 <div key={item.id} className="content-grid__item">
                     <p className="title is-4">{item.title}</p>
                     <Carousel responsive={responsive}>

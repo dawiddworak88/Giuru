@@ -77,11 +77,11 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "C:\\Projects\\Giuru\\be\\src\\Project\\Web\\Seller.Portal\\wwwroot\\dist\\js";
+/******/ 	__webpack_require__.p = "C:\\Projects\\Giuru\\be\\src\\Project\\Web\\Seller\\Seller.Web\\wwwroot\\dist\\js";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 412);
+/******/ 	return __webpack_require__(__webpack_require__.s = 419);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -154,7 +154,7 @@ function _createClass(Constructor, protoProps, staticProps) {
 
 /***/ }),
 
-/***/ 16:
+/***/ 17:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -194,7 +194,7 @@ function _iterableToArrayLimit(arr, i) {
   return _arr;
 }
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-var unsupportedIterableToArray = __webpack_require__(43);
+var unsupportedIterableToArray = __webpack_require__(44);
 
 // CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
 function _nonIterableRest() {
@@ -211,7 +211,7 @@ function _slicedToArray(arr, i) {
 
 /***/ }),
 
-/***/ 34:
+/***/ 35:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -228,23 +228,23 @@ function _arrayLikeToArray(arr, len) {
 
 /***/ }),
 
-/***/ 412:
+/***/ 419:
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(598);
-module.exports = __webpack_require__(413);
+__webpack_require__(605);
+module.exports = __webpack_require__(420);
 
 
 /***/ }),
 
-/***/ 413:
+/***/ 420:
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
 
-/***/ 42:
+/***/ 43:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13890,12 +13890,12 @@ zoom_out_ZoomOut.defaultProps = {
 
 /***/ }),
 
-/***/ 43:
+/***/ 44:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _unsupportedIterableToArray; });
-/* harmony import */ var _arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(34);
+/* harmony import */ var _arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35);
 
 function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;
@@ -14218,7 +14218,7 @@ var CssSsrRemovalHelper = /*#__PURE__*/function () {
 "use strict";
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 3 modules
-var slicedToArray = __webpack_require__(16);
+var slicedToArray = __webpack_require__(17);
 
 // EXTERNAL MODULE: ./node_modules/react/index.js
 var react = __webpack_require__(0);
@@ -14310,7 +14310,63 @@ function Header(props) {
 
 /***/ }),
 
-/***/ 598:
+/***/ 60:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXTERNAL MODULE: ./node_modules/react/index.js
+var react = __webpack_require__(0);
+var react_default = /*#__PURE__*/__webpack_require__.n(react);
+
+// EXTERNAL MODULE: ./src/shared/constants/IconConstants.js
+var IconConstants = __webpack_require__(47);
+
+// EXTERNAL MODULE: ./node_modules/react-feather/dist/index.js + 278 modules
+var dist = __webpack_require__(43);
+
+// CONCATENATED MODULE: ./src/shared/components/MenuTiles/Tile.js
+
+
+
+
+function Tile(props) {
+  var IconTag = dist[props.icon];
+  return /*#__PURE__*/react_default.a.createElement("a", {
+    href: props.url,
+    className: "tile"
+  }, /*#__PURE__*/react_default.a.createElement("div", {
+    className: "tile__icon"
+  }, /*#__PURE__*/react_default.a.createElement(IconTag, {
+    size: IconConstants["a" /* default */].DefaultSize()
+  })), /*#__PURE__*/react_default.a.createElement("div", {
+    className: "tile__title"
+  }, props.title));
+}
+
+/* harmony default export */ var MenuTiles_Tile = (Tile);
+// CONCATENATED MODULE: ./src/shared/components/MenuTiles/MenuTiles.js
+
+
+
+function MenuTiles(props) {
+  return /*#__PURE__*/react_default.a.createElement("nav", {
+    className: "section menu-tiles"
+  }, props.tiles.map(function (tile, index) {
+    return /*#__PURE__*/react_default.a.createElement(MenuTiles_Tile, {
+      key: index,
+      icon: tile.icon,
+      title: tile.title,
+      url: tile.url
+    });
+  }));
+}
+
+/* harmony default export */ var MenuTiles_MenuTiles = __webpack_exports__["a"] = (MenuTiles);
+
+/***/ }),
+
+/***/ 605:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14385,62 +14441,6 @@ var CssSsrRemovalHelper = __webpack_require__(58);
 
 CssSsrRemovalHelper["a" /* default */].Remove();
 react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(OrderPage_OrderPage, window.data), document.getElementById('root'));
-
-/***/ }),
-
-/***/ 60:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// EXTERNAL MODULE: ./node_modules/react/index.js
-var react = __webpack_require__(0);
-var react_default = /*#__PURE__*/__webpack_require__.n(react);
-
-// EXTERNAL MODULE: ./src/shared/constants/IconConstants.js
-var IconConstants = __webpack_require__(47);
-
-// EXTERNAL MODULE: ./node_modules/react-feather/dist/index.js + 278 modules
-var dist = __webpack_require__(42);
-
-// CONCATENATED MODULE: ./src/shared/components/MenuTiles/Tile.js
-
-
-
-
-function Tile(props) {
-  var IconTag = dist[props.icon];
-  return /*#__PURE__*/react_default.a.createElement("a", {
-    href: props.url,
-    className: "tile"
-  }, /*#__PURE__*/react_default.a.createElement("div", {
-    className: "tile__icon"
-  }, /*#__PURE__*/react_default.a.createElement(IconTag, {
-    size: IconConstants["a" /* default */].DefaultSize()
-  })), /*#__PURE__*/react_default.a.createElement("div", {
-    className: "tile__title"
-  }, props.title));
-}
-
-/* harmony default export */ var MenuTiles_Tile = (Tile);
-// CONCATENATED MODULE: ./src/shared/components/MenuTiles/MenuTiles.js
-
-
-
-function MenuTiles(props) {
-  return /*#__PURE__*/react_default.a.createElement("nav", {
-    className: "section menu-tiles"
-  }, props.tiles.map(function (tile, index) {
-    return /*#__PURE__*/react_default.a.createElement(MenuTiles_Tile, {
-      key: index,
-      icon: tile.icon,
-      title: tile.title,
-      url: tile.url
-    });
-  }));
-}
-
-/* harmony default export */ var MenuTiles_MenuTiles = __webpack_exports__["a"] = (MenuTiles);
 
 /***/ }),
 

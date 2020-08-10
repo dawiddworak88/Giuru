@@ -35,8 +35,6 @@ namespace AspNetCore
 
             services.RegisterLocalizationDependencies();
 
-            // services.RegisterDatabaseDependencies(this.Configuration);
-
             services.RegisterGeneralDependencies();
 
             services.RegisterDependencies();

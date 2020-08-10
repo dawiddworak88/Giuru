@@ -77,11 +77,11 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "C:\\Projects\\Giuru\\be\\src\\Project\\Web\\Seller.Portal\\wwwroot\\dist\\js";
+/******/ 	__webpack_require__.p = "C:\\Projects\\Giuru\\be\\src\\Project\\Web\\Seller\\Seller.Web\\wwwroot\\dist\\js";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 419);
+/******/ 	return __webpack_require__(__webpack_require__.s = 425);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -154,7 +154,7 @@ function _createClass(Constructor, protoProps, staticProps) {
 
 /***/ }),
 
-/***/ 16:
+/***/ 17:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -194,7 +194,7 @@ function _iterableToArrayLimit(arr, i) {
   return _arr;
 }
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-var unsupportedIterableToArray = __webpack_require__(43);
+var unsupportedIterableToArray = __webpack_require__(44);
 
 // CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
 function _nonIterableRest() {
@@ -211,7 +211,7 @@ function _slicedToArray(arr, i) {
 
 /***/ }),
 
-/***/ 34:
+/***/ 35:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -228,16 +228,23 @@ function _arrayLikeToArray(arr, len) {
 
 /***/ }),
 
-/***/ 419:
+/***/ 425:
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(600);
-module.exports = __webpack_require__(420);
+__webpack_require__(607);
+module.exports = __webpack_require__(426);
 
 
 /***/ }),
 
-/***/ 42:
+/***/ 426:
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ 43:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13883,19 +13890,12 @@ zoom_out_ZoomOut.defaultProps = {
 
 /***/ }),
 
-/***/ 420:
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ 43:
+/***/ 44:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _unsupportedIterableToArray; });
-/* harmony import */ var _arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(34);
+/* harmony import */ var _arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35);
 
 function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;
@@ -14218,7 +14218,7 @@ var CssSsrRemovalHelper = /*#__PURE__*/function () {
 "use strict";
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 3 modules
-var slicedToArray = __webpack_require__(16);
+var slicedToArray = __webpack_require__(17);
 
 // EXTERNAL MODULE: ./node_modules/react/index.js
 var react = __webpack_require__(0);
@@ -14323,7 +14323,7 @@ var react_default = /*#__PURE__*/__webpack_require__.n(react);
 var IconConstants = __webpack_require__(47);
 
 // EXTERNAL MODULE: ./node_modules/react-feather/dist/index.js + 278 modules
-var dist = __webpack_require__(42);
+var dist = __webpack_require__(43);
 
 // CONCATENATED MODULE: ./src/shared/components/MenuTiles/Tile.js
 
@@ -14366,7 +14366,7 @@ function MenuTiles(props) {
 
 /***/ }),
 
-/***/ 600:
+/***/ 607:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

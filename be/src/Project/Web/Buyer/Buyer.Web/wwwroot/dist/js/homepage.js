@@ -77,7 +77,7 @@
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "C:\\Projects\\Giuru\\be\\src\\Project\\Web\\AspNetCore\\wwwroot\\dist\\js";
+/******/ 	__webpack_require__.p = "C:\\Projects\\Giuru\\be\\src\\Project\\Web\\Buyer\\Buyer.Web\\wwwroot\\dist\\js";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
@@ -6654,7 +6654,7 @@ function MainNavigation(props) {
     className: "main-nav"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "main-nav__links-container is-flex is-flex-centered has-text-centered"
-  }, props.links.map(function (link, index) {
+  }, props.links && props.links.map(function (link, index) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
       key: index,
       href: link.url
@@ -17948,7 +17948,7 @@ function HeroSlider(props) {
     dynamicHeight: false,
     showStatus: false,
     swipeable: true
-  }, props.items.map(function (item, index) {
+  }, props.items && props.items.map(function (item, index) {
     return /*#__PURE__*/react_default.a.createElement("div", {
       className: "hero-slider__item",
       key: index
@@ -18015,7 +18015,7 @@ function ContentGrid(props) {
   };
   return /*#__PURE__*/react_default.a.createElement("section", {
     className: "section content-grid"
-  }, props.items.map(function (item) {
+  }, props.items && props.items.map(function (item) {
     return /*#__PURE__*/react_default.a.createElement("div", {
       key: item.id,
       className: "content-grid__item"
