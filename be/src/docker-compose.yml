@@ -27,9 +27,9 @@ services:
 
   catalog-api:
     image: ${REGISTRY:-giuru}/catalog-api:${PLATFORM:-linux}-${TAG:-latest}
-    build: 
+    build:
       context: .
-      dockerfile: Dockerfile-CatalogApi
+      dockerfile: Project/Services/Catalog/Catalog.Api/Dockerfile
     restart: always
     depends_on: 
       - sqldata
@@ -52,7 +52,7 @@ services:
     image: ${REGISTRY:-giuru}/basket-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Dockerfile-BasketApi
+      dockerfile: Project/Services/Basket/Basket.Api/Dockerfile
     depends_on:
       - basketdata
       - identity-api
@@ -106,9 +106,9 @@ services:
 
   seller-web:
     image: ${REGISTRY:-giuru}/seller-web:${PLATFORM:-linux}-${TAG:-latest}
-    build: 
+    build:
       context: .
-      dockerfile: Dockerfile-SellerWeb
+      dockerfile: Project/Web/Seller/Seller.Web/Dockerfile
     restart: always
     depends_on: 
       - react-ssr
@@ -116,10 +116,11 @@ services:
 
   buyer-web:
     image: ${REGISTRY:-giuru}/buyer-web:${PLATFORM:-linux}-${TAG:-latest}
-    build: 
+    build:
       context: .
-      dockerfile: Dockerfile-BuyerWeb
+      dockerfile: Project/Web/Buyer/Buyer.Web/Dockerfile
     restart: always
     depends_on: 
       - react-ssr
       - webshoppingagg
+
