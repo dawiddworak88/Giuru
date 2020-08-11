@@ -2,17 +2,18 @@
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
+using Buyer.Web.Shared.Headers.ViewModels;
 
 namespace Buyer.Web.Areas.Home.ModelBuilders
 {
     public class HomePageModelBuilder : IModelBuilder<HomePageViewModel>
     {
-        private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
+        private readonly IModelBuilder<BuyerHeaderViewModel> headerModelBuilder;
 
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public HomePageModelBuilder(
-            IModelBuilder<HeaderViewModel> headerModelBuilder,
+            IModelBuilder<BuyerHeaderViewModel> headerModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;

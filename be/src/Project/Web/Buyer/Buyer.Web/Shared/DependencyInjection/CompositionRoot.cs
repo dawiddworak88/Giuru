@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Buyer.Web.Shared.Configurations;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
+using Buyer.Web.Shared.Headers.ViewModels;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -16,7 +17,7 @@ namespace Buyer.Web.Shared.DependencyInjection
         public static void RegisterDependencies(this IServiceCollection services)
         {
             services.AddScoped<IModelBuilder<HomePageViewModel>, HomePageModelBuilder>();
-            services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
+            services.AddScoped<IModelBuilder<BuyerHeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
         }

@@ -5,12 +5,13 @@ using Microsoft.Extensions.Localization;
 using Buyer.Web.Shared.Configurations;
 using Microsoft.Extensions.Options;
 using Foundation.Localization;
-using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.LanguageSwitchers.ViewModels;
+using Foundation.PageContent.Components.Headers.ViewModels;
+using Buyer.Web.Shared.Headers.ViewModels;
 
 namespace Buyer.Web.Shared.Headers.ModelBuilders
 {
-    public class HeaderModelBuilder : IModelBuilder<HeaderViewModel>
+    public class HeaderModelBuilder : IModelBuilder<BuyerHeaderViewModel>
     {
         private readonly IModelBuilder<LogoViewModel> logoModelBuilder;
 
@@ -32,7 +33,7 @@ namespace Buyer.Web.Shared.Headers.ModelBuilders
             this.globalLocalizer = globalLocalizer;
         }
 
-        public HeaderViewModel BuildModel()
+        public BuyerHeaderViewModel BuildModel()
         {
             var links = new List<LinkViewModel>
             {
@@ -40,7 +41,7 @@ namespace Buyer.Web.Shared.Headers.ModelBuilders
                 new LinkViewModel { Text = this.globalLocalizer["Contact"], Url = "#contact" }
             };
 
-            return new HeaderViewModel
+            return new BuyerHeaderViewModel
             {
                 Logo = this.logoModelBuilder.BuildModel(),
                 LanguageSwitcher = this.languageSwitcherViewModel.BuildModel(),
@@ -49,6 +50,9 @@ namespace Buyer.Web.Shared.Headers.ModelBuilders
                     Url = this.servicesEndpointsConfiguration.Value.PortalEndpoint,
                     Text = this.globalLocalizer["Portal"]
                 },
+                SearchLabel = this.globalLocalizer["Search"],
+                SearchPlaceholderLabel = this.globalLocalizer["Search"],
+                SearchUrl = "#",
                 Links = links
             };
         }
