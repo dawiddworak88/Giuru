@@ -37,9 +37,9 @@ services:
 
   identity-api:
     image: ${REGISTRY:-giuru}/identity-api:${PLATFORM:-linux}-${TAG:-latest}
-    build: 
+    build:
       context: .
-      dockerfile: Dockerfile-IdentityApi
+      dockerfile: Project/Services/Identity/Identity.Api/Dockerfile
     restart: always
     depends_on: 
       - sqldata
@@ -62,7 +62,7 @@ services:
     image: ${REGISTRY:-giuru}/ordering-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Dockerfile-OrderingApi
+      dockerfile: Project/Services/Ordering/Ordering.Api/Dockerfile
     depends_on:
       - catalog-api
       - rabbitmq
@@ -71,7 +71,7 @@ services:
     image: ${REGISTRY:-giuru}/ordering-backgroundtasks:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Dockerfile-OrderingBackgroundTasks
+      dockerfile: Project/Services/Ordering/Ordering.BackgroundTasks/Dockerfile
     depends_on:
       - catalog-api
       - rabbitmq
@@ -83,7 +83,7 @@ services:
     image: ${REGISTRY:-giuru}/webshoppingagg:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Dockerfile-WebShoppingAgg
+      dockerfile: Project/ApiGateways/WebShoppingAggregator/WebShoppingAggregator.ApiGateway/Dockerfile
     depends_on:
       - webshoppingapigw
       - identity-api
@@ -96,7 +96,7 @@ services:
     image: ${REGISTRY:-giuru}/ordering-signalrhub:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Dockerfile-OrderingSignalrHub
+      dockerfile: Project/Services/Ordering/Ordering.SignalrHub/Dockerfile
     depends_on:
       - identity-api
       - rabbitmq
