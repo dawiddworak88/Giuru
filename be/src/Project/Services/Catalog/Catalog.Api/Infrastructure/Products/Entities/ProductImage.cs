@@ -1,0 +1,11 @@
+﻿using Foundation.GenericRepository.Entities;
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace Catalog.Api.Infrastructure.Products.Entities
+{
+    public class ProductImage : EntityMedia
+    {
+        public Guid ProductId { get; set; }
+    }
+}

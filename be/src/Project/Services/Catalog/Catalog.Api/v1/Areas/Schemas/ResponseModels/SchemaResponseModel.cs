@@ -13,9 +13,6 @@ namespace Catalog.Api.v1.Areas.Schemas.ResponseModels
         public SchemaResponseModel(Schema schema)
         {
             this.Id = schema.Id;
-            this.Name = schema.Name;
-            this.JsonSchema = schema.JsonSchema;
-            this.UiSchema = schema.UiSchema;
         }
 
         public Guid Id { get; set; }

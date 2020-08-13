@@ -1,8 +1,9 @@
-﻿using Catalog.Api.Infrastructure.Media.Entities;
+﻿using Catalog.Api.Infrastructure.Brands.Entities;
+using Catalog.Api.Infrastructure.Categories.Entites;
+using Catalog.Api.Infrastructure.Categories.Entities;
 using Catalog.Api.Infrastructure.Products.Entities;
 using Catalog.Api.Infrastructure.Schemas.Entities;
 using Catalog.Api.Infrastructure.Taxonomies.Entities;
-using Catalog.Api.Infrastructure.Translations.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Api.Infrastructure
@@ -18,13 +19,24 @@ namespace Catalog.Api.Infrastructure
             optionsBuilder.UseLazyLoadingProxies();
         }
 
-        public DbSet<MediaItemEntity> LinkMediaItemsEntities { get; set; }
-        public DbSet<MediaItem> MediaItems { get; set; }
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<BrandTranslation> BrandTranslations { get; set; }
+        public DbSet<BrandImage> BrandImages { get; set; }
+        public DbSet<BrandVideo> BrandVideos { get; set; }
+        public DbSet<BrandFile> BrandFiles { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<CategoryProduct> LinkCategoriesProducts { get; set; }
+        public DbSet<CategoryTranslation> CategoryTranslations { get; set; }
+        public DbSet<CategoryImage> CategoryImages { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<ProductTranslation> ProductTranslations { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<ProductVideo> ProductVideos { get; set; }
+        public DbSet<ProductFile> ProductFiles { get; set; }
         public DbSet<Schema> Schemas { get; set; }
+        public DbSet<SchemaTranslation> SchemaTranslations { get; set; }
         public DbSet<Taxonomy> Taxonomies { get; set; }
-        public DbSet<Translation> Translations { get; set; }
+        public DbSet<TaxonomyTranslation> TaxonomyTranslations { get; set; }
+        public DbSet<TaxonomyImage> TaxonomyImages { get; set; }
     }
 }

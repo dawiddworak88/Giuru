@@ -189,23 +189,23 @@ namespace Catalog.Api.v1.Areas.Schemas.Services.SchemaServices
 
             var properties = (JObject)jsonSchema["properties"];
 
-            var translations = this.context.Translations.Where(x => x.IsActive).ToList();
+            //var translations = this.context.Translations.Where(x => x.IsActive).ToList();
 
-            foreach (var property in properties)
-            {
-                var propertyDetails = (JObject)property.Value;
+            //foreach (var property in properties)
+            //{
+            //    var propertyDetails = (JObject)property.Value;
 
-                var propertyTitle = (string)propertyDetails["title"];
+            //    var propertyTitle = (string)propertyDetails["title"];
 
-                Guid propertyTitleGuid;
+            //    Guid propertyTitleGuid;
 
-                var isPropertyTitleGuid = Guid.TryParse(propertyTitle, out propertyTitleGuid);
+            //    var isPropertyTitleGuid = Guid.TryParse(propertyTitle, out propertyTitleGuid);
 
-                if (!string.IsNullOrWhiteSpace(propertyTitle) && isPropertyTitleGuid)
-                {
-                    // propertyDetails["title"] = TranslationHelper.Text(translations, propertyTitleGuid, language);
-                }
-            }
+            //    if (!string.IsNullOrWhiteSpace(propertyTitle) && isPropertyTitleGuid)
+            //    {
+            //        // propertyDetails["title"] = TranslationHelper.Text(translations, propertyTitleGuid, language);
+            //    }
+            //}
 
             var definitons = (JObject)jsonSchema["definitions"];
 
@@ -226,7 +226,7 @@ namespace Catalog.Api.v1.Areas.Schemas.Services.SchemaServices
                             var definitionValue = (JObject)definition.Value;
 
                             definitionValue.Add("type", "string");
-                            definitionValue.Add("title", taxonomy.Name);
+                            // definitionValue.Add("title", taxonomy.Name);
 
                             var flattenedTaxonomies = this.GetFlatTaxonomyDescendants(connectionString, taxonomy.Id);
 
@@ -271,8 +271,6 @@ namespace Catalog.Api.v1.Areas.Schemas.Services.SchemaServices
                         var taxonomyItem = new Taxonomy
                         {
                             Id = (Guid)reader["Id"],
-                            ParentId = (Guid)reader["ParentId"],
-                            Name = (string)reader["Name"],
                             Order = (int)reader["Order"],
                             IsActive = (bool)reader["IsActive"],
                             LastModifiedDate = (DateTime)reader["LastModifiedDate"],

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Foundation.GenericRepository.Repositories
 {
-    public interface IGenericRepository<TEntity> where TEntity: class, IEntity
+    public interface IGenericRepository<TEntity> where TEntity: Entity
     {
         IEnumerable<TEntity> GetAll();
 

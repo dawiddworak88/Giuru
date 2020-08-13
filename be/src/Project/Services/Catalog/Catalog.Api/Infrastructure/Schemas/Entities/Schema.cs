@@ -1,16 +1,10 @@
 ﻿using Foundation.GenericRepository.Entities;
-using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace Catalog.Api.Infrastructure.Schemas.Entities
 {
     public class Schema : Entity
     {
-        [Required]
-        public string Name { get; set; }
-
-        [Required]
-        public string JsonSchema { get; set; }
-
-        public string UiSchema { get; set; }
+        public virtual IEnumerable<SchemaTranslation> Translations { get; set; }
     }
 }

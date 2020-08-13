@@ -3,7 +3,6 @@ using Foundation.GenericRepository.Services;
 using Catalog.Api.v1.Areas.Taxonomies.Models;
 using Catalog.Api.v1.Areas.Taxonomies.ResultModels;
 using Catalog.Api.v1.Areas.Taxonomies.Validators;
-using Catalog.Api.Infrastructure.Translations.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

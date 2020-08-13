@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Foundation.GenericRepository.Repositories
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class, IEntity
+    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : Entity
     {
         protected readonly DbContext context;
 

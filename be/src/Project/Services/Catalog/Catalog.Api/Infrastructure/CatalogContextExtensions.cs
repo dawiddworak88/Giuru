@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Catalog.Api.Infrastructure.Categories.Seeds;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
@@ -22,9 +23,7 @@ namespace Catalog.Api.Infrastructure
 
         public static void EnsureSeeded(this CatalogContext context, IConfiguration configuration)
         {
-            //AccountsSeed.SeedAdminAccounts(context, configuration);
-            //SellersSeed.SeedSellers(context, configuration);
-            //AccountsSeed.SeedSellerAccounts(context, configuration);
+            CategoriesSeed.SeedCategories(context);
         }
     }
 }

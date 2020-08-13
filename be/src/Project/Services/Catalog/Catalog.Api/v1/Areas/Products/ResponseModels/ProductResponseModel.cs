@@ -21,8 +21,6 @@ namespace Catalog.Api.v1.Areas.Products.ResponseModels
         {
             this.Id = product.Id;
             this.Sku = product.Sku;
-            this.Name = product.Name;
-            this.FormData = product.FormData;
             this.LastModifiedDate = product.LastModifiedDate;
             this.CreatedDate = product.CreatedDate;
         }
