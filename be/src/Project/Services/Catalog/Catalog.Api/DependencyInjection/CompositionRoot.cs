@@ -11,10 +11,7 @@ namespace Catalog.Api.DependencyInjection
         {
             services.AddScoped<CatalogContext>();
 
-            services.AddDbContext<CatalogContext>(options =>
-                options.UseSqlServer(
-                    configuration.GetConnectionString("CatalogContext"),
-                    opt => opt.MigrationsAssembly("Foundation.Database").UseNetTopologySuite()));
+            services.AddDbContext<CatalogContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
         }
     }
 }

@@ -69,6 +69,8 @@ namespace Api
 
             app.UseSwagger();
 
+            app.ConfigureDatabaseMigrations(this.Configuration);
+
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog API");

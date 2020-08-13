@@ -68,8 +68,6 @@ namespace Seller.Portal
 
             app.UseGeneralException();
 
-            // app.ConfigureDatabaseMigrations(this.Configuration);
-
             app.UseResponseCompression();
 
             app.UseGeneralStaticFiles();
