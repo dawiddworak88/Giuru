@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Foundation.Extensions.DependencyInjection;
 using Foundation.PageContent.DependencyInjection;
 using Foundation.Security.DependencyInjection;
+using Foundation.ApiExtensions.DependencyInjection;
 
 namespace AspNetCore
 {
@@ -38,6 +39,8 @@ namespace AspNetCore
             services.RegisterGeneralDependencies();
 
             services.RegisterDependencies();
+
+            services.RegisterApiExtensionsDependencies();
 
             services.ConfigureOptions(this.Configuration);
         }
