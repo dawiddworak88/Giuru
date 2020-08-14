@@ -23,7 +23,7 @@ namespace Catalog.Api.v1.Areas.Categories.Services
                              join t in this.context.CategoryTranslations on c.Id equals t.CategoryId into ct
                              from x in ct.DefaultIfEmpty()
                              where x.Language == model.Language && c.IsActive
-                             orderby x.Name
+                             orderby c.Order
                              select new CategoryResultModel 
                              { 
                                 Id = c.Id,

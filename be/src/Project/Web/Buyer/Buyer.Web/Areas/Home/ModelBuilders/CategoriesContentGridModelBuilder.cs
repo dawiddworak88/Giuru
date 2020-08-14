@@ -29,7 +29,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             {
                 var contentGridCarouselItems = new List<ContentGridCarouselItemViewModel>();
 
-                foreach (var subCategory in categories.Where(x => x.Level == CategoriesConstants.SecondLevel))
+                foreach (var subCategory in categories.Where(x => x.Level == CategoriesConstants.SecondLevel && x.ParentId == category.Id))
                 {
                     var carouselItem = new ContentGridCarouselItemViewModel
                     { 
