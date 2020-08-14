@@ -1,7 +1,6 @@
 ﻿using Buyer.Web.Areas.Home.ViewModel;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
-using Foundation.PageContent.Components.ContentGrids.ViewModels;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Home.ModelBuilders

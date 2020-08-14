@@ -8,6 +8,8 @@ using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Buyer.Web.Shared.Headers.ViewModels;
 using Buyer.Web.Areas.Home.DependencyInjection;
+using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Components.MainNavigations.ViewModels;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -18,6 +20,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.RegisterHomeDependencies();
 
             services.AddScoped<IModelBuilder<BuyerHeaderViewModel>, HeaderModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>, MainNavigationModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
         }
