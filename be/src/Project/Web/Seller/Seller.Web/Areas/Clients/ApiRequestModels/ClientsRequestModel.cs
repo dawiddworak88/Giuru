@@ -2,7 +2,7 @@
 
 namespace Seller.Web.Areas.Clients.ApiRequestModels
 {
-    public class ClientsRequestModel : BaseRequestModel
+    public class ClientsRequestModel : RequestModelBase
     {
         public string SearchTerm { get; set; }
         public int PageIndex { get; set; }

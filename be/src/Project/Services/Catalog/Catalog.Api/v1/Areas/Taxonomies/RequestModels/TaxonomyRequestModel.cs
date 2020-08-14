@@ -3,7 +3,7 @@ using System;
 
 namespace Catalog.Api.v1.Areas.Taxonomies.RequestModels
 {
-    public class TaxonomyRequestModel : BaseRequestModel
+    public class TaxonomyRequestModel : RequestModelBase
     {
         public string Name { get; set; }
         public Guid? ParentId { get; set; }

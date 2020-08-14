@@ -3,7 +3,7 @@ using System;
 
 namespace Seller.Web.Areas.Products.ApiRequestModels
 {
-    public class ProductRequestModel : BaseRequestModel
+    public class ProductRequestModel : RequestModelBase
     {
         public Guid? Id { get; set; }
         public string Sku { get; set; }

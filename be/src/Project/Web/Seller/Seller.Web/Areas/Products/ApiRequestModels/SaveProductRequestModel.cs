@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace Seller.Web.Areas.Products.ApiRequestModels
 {
-    public class SaveProductRequestModel : BaseRequestModel
+    public class SaveProductRequestModel : RequestModelBase
     {
         public Guid? Id { get; set; }
         public string Sku { get; set; }

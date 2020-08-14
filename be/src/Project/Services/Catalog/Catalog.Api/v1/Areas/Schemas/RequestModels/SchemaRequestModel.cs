@@ -3,7 +3,7 @@ using System;
 
 namespace Catalog.Api.v1.Areas.Schemas.RequestModels
 {
-    public class SchemaRequestModel : BaseRequestModel
+    public class SchemaRequestModel : RequestModelBase
     {
         public string Name { get; set; }
         public Guid? EntityTypeId { get; set; }

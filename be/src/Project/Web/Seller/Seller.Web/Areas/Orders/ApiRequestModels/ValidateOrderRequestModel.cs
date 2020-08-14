@@ -3,7 +3,7 @@ using System;
 
 namespace Seller.Web.Areas.Orders.ApiRequestModels
 {
-    public class ValidateOrderRequestModel : BaseRequestModel
+    public class ValidateOrderRequestModel : RequestModelBase
     {
         public Guid? ClientId { get; set; }
     }

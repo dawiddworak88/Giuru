@@ -3,7 +3,7 @@ using System;
 
 namespace Seller.Web.Areas.Products.ApiRequestModels
 {
-    public class DeleteProductRequestModel : BaseRequestModel
+    public class DeleteProductRequestModel : RequestModelBase
     {
         public Guid? Id { get; set; }
     }

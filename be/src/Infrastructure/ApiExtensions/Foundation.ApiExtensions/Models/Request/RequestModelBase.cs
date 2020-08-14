@@ -1,6 +1,6 @@
 ﻿namespace Foundation.ApiExtensions.Models.Request
 {
-    public class BaseRequestModel
+    public class RequestModelBase
     {
         public string Language { get; set; }
     }

@@ -7,9 +7,9 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
 {
     public interface IApiClientService
     {
-        T InitializeRequestModelContext<T>(T requestModel) where T : BaseRequestModel;
+        T InitializeRequestModelContext<T>(T requestModel) where T : RequestModelBase;
         Task<ApiResponse<T>> PostAsync<S, W, T>(S request) where S : ApiRequest<W> where T : BaseResponseModel;
-        Task<ApiResponse<T>> GetAsync<S, W, T>(S request) where S : ApiRequest<W> where T : BaseResponseModel;
+        Task<ApiResponse<T>> GetAsync<S, W, T>(S request) where S : ApiRequest<W> where T : class;
         Task<ApiResponse<T>> DeleteAsync<S, W, T>(S request) where S : ApiRequest<W> where T : BaseResponseModel;
     }
 }

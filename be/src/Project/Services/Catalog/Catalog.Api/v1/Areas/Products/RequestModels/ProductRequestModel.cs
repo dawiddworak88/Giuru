@@ -3,7 +3,7 @@ using System;
 
 namespace Catalog.Api.v1.Areas.Products.RequestModels
 {
-    public class ProductRequestModel : BaseRequestModel
+    public class ProductRequestModel : RequestModelBase
     {
         public Guid? Id { get; set; }
         public string Sku { get; set; }

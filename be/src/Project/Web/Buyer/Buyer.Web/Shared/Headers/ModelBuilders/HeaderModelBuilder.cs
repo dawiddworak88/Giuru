@@ -17,14 +17,14 @@ namespace Buyer.Web.Shared.Headers.ModelBuilders
 
         private readonly IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel;
 
-        private readonly IOptions<ServicesEndpointsConfiguration> servicesEndpointsConfiguration;
+        private readonly IOptions<AppSettings> servicesEndpointsConfiguration;
 
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
 
         public HeaderModelBuilder(
             IModelBuilder<LogoViewModel> logoModelBuilder,
             IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel,
-            IOptions<ServicesEndpointsConfiguration> servicesEndpointsConfiguration,
+            IOptions<AppSettings> servicesEndpointsConfiguration,
             IStringLocalizer<GlobalResources> globalLocalizer)
         {
             this.logoModelBuilder = logoModelBuilder;
@@ -47,7 +47,7 @@ namespace Buyer.Web.Shared.Headers.ModelBuilders
                 LanguageSwitcher = this.languageSwitcherViewModel.BuildModel(),
                 LoginLink = new LinkViewModel
                 {
-                    Url = this.servicesEndpointsConfiguration.Value.PortalEndpoint,
+                    Url = "/",
                     Text = this.globalLocalizer["Portal"]
                 },
                 SearchLabel = this.globalLocalizer["Search"],

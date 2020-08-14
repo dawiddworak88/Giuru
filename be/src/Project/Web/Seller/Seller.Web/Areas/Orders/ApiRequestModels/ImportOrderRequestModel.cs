@@ -4,7 +4,7 @@ using System;
 
 namespace Seller.Web.Areas.Orders.ApiRequestModels
 {
-    public class ImportOrderRequestModel : BaseRequestModel
+    public class ImportOrderRequestModel : RequestModelBase
     {
         public Guid? ClientId { get; set; }
         public IFormFile OrderFile { get; set; }

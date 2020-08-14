@@ -17,7 +17,7 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
 {
     public class ApiClientService : IApiClientService
     {
-        public T InitializeRequestModelContext<T>(T requestModel) where T : BaseRequestModel
+        public T InitializeRequestModelContext<T>(T requestModel) where T : RequestModelBase
         {
             requestModel.Language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             return requestModel;
@@ -60,7 +60,7 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
             }
         }
 
-        public async Task<ApiResponse<T>> GetAsync<S, W, T>(S request) where S : ApiRequest<W> where T : BaseResponseModel
+        public async Task<ApiResponse<T>> GetAsync<S, W, T>(S request) where S : ApiRequest<W> where T : class
         {
             using (var client = new HttpClient())
             {
