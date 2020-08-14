@@ -4,7 +4,7 @@
     {
         public struct Catalog
         {
-            public const string Categories = "/c/api/v1/categories";
+            public const string Categories = "/api/v1/categories";
         }
     }
 }

@@ -25,6 +25,7 @@ namespace Buyer.Web.Areas.Home.Controllers
                 Language = CultureInfo.CurrentUICulture.Name
             };
 
+            
             var viewModel = await this.homePageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);

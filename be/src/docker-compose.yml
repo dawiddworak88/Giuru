@@ -76,16 +76,12 @@ services:
       - catalog-api
       - rabbitmq
 
-  webshoppingapigw:
-    image: envoyproxy/envoy:v1.15.0
-
   webshoppingagg:
     image: ${REGISTRY:-giuru}/webshoppingagg:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
       dockerfile: Project/ApiGateways/WebShoppingAggregator/WebShoppingAggregator.ApiGateway/Dockerfile
     depends_on:
-      - webshoppingapigw
       - identity-api
       - rabbitmq
       - ordering-api

@@ -95,15 +95,6 @@ services:
     ports:
       - "5111:80"
 
-  webshoppingapigw:
-    environment:
-      - "ENVOY_UID=0"
-    volumes:
-      - ./Project/ApiGateways/Envoy/config:/etc/envoy
-    ports:
-    - "5202:80"
-    - "15202:8001"
-
   webshoppingagg:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -131,7 +122,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
-      - PurchaseUrl=http://webshoppingapigw
+      - CatalogUrl=http://catalog-api
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - SignalrHubUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5202
     ports:
@@ -142,7 +133,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ServerSideRenderingEndpoint=http://react-ssr:3000
-      - PurchaseUrl=http://webshoppingapigw
+      - CatalogUrl=http://catalog-api
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - SignalrHubUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5202
     ports:
@@ -153,11 +144,3 @@ volumes:
     external: false
   basketdata:
     external: false
-
-
-
-
-
-
-
-

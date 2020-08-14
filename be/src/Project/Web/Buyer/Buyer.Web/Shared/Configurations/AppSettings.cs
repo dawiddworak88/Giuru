@@ -2,6 +2,6 @@
 {
     public class AppSettings
     {
-        public string PurchaseUrl { get; set; }
+        public string CatalogUrl { get; set; }
     }
 }
