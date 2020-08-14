@@ -4,7 +4,7 @@ using Microsoft.Extensions.Localization;
 using Foundation.Localization;
 using Seller.Web.Areas.Clients.Repositories;
 using System.Threading.Tasks;
-using Seller.Web.Shared.ComponentModels;
+using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using System.Globalization;
 

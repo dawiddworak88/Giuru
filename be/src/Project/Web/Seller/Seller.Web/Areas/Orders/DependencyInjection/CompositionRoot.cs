@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Seller.Web.Areas.Orders.ModelBuilders;
 using Seller.Web.Areas.Orders.ViewModel;
-using Seller.Web.Shared.ComponentModels;
+using Foundation.PageContent.ComponentModels;
 
 namespace Seller.Web.Areas.Orders.DependencyInjection
 {

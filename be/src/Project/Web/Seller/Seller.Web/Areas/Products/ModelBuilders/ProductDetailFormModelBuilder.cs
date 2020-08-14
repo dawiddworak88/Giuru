@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Areas.Products.ViewModels;
-using Seller.Web.Shared.ComponentModels;
+using Foundation.PageContent.ComponentModels;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {

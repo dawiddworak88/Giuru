@@ -5,7 +5,7 @@ using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.Localization;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Products.ViewModels;
-using Seller.Web.Shared.ComponentModels;
+using Foundation.PageContent.ComponentModels;
 using Foundation.Localization;
 
 namespace Seller.Web.Areas.Products.ModelBuilders

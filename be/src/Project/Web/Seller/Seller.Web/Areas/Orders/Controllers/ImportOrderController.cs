@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Orders.ViewModel;
-using Seller.Web.Shared.ComponentModels;
+using Foundation.PageContent.ComponentModels;
 
 namespace Seller.Web.Areas.Orders.Controllers
 {

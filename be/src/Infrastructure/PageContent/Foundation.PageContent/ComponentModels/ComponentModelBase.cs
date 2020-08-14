@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Seller.Web.Shared.ComponentModels
+namespace Foundation.PageContent.ComponentModels
 {
     public class ComponentModelBase
     {
