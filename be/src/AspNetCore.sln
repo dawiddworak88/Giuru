@@ -92,6 +92,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Api", "Project\Ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.BackgroundTasks", "Project\Services\Ordering\Ordering.BackgroundTasks\Ordering.BackgroundTasks.csproj", "{C3054156-2DC6-4E0A-ABEF-5DF05AFECE96}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Media", "Media", "{8C37E84E-0D22-47FE-8672-581F22C59DCB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Media.Api", "Project\Services\Media\Media.Api\Media.Api.csproj", "{934964F0-AB6C-4B17-9658-28124E55CFBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -178,6 +182,10 @@ Global
 		{C3054156-2DC6-4E0A-ABEF-5DF05AFECE96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3054156-2DC6-4E0A-ABEF-5DF05AFECE96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3054156-2DC6-4E0A-ABEF-5DF05AFECE96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{934964F0-AB6C-4B17-9658-28124E55CFBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{934964F0-AB6C-4B17-9658-28124E55CFBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{934964F0-AB6C-4B17-9658-28124E55CFBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{934964F0-AB6C-4B17-9658-28124E55CFBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -222,6 +230,8 @@ Global
 		{9D19C200-8058-45A5-B9FB-D9BC2BD9B08C} = {A7DB17C9-B90C-4A22-8B07-B5D5D34F31B7}
 		{F20FBC2E-6EFE-418A-BADC-2E61EA9D9FCE} = {A7DB17C9-B90C-4A22-8B07-B5D5D34F31B7}
 		{C3054156-2DC6-4E0A-ABEF-5DF05AFECE96} = {A7DB17C9-B90C-4A22-8B07-B5D5D34F31B7}
+		{8C37E84E-0D22-47FE-8672-581F22C59DCB} = {AA76A57C-E6D8-4329-B285-C2922557FEC2}
+		{934964F0-AB6C-4B17-9658-28124E55CFBF} = {8C37E84E-0D22-47FE-8672-581F22C59DCB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0F50684-572D-4B8F-8A02-B5C72CD028EE}

@@ -1,5 +1,4 @@
-﻿using Foundation.GenericRepository.Configurations;
-using Foundation.GenericRepository.Services;
+﻿using Foundation.GenericRepository.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,8 +9,6 @@ namespace Foundation.GenericRepository.DependencyInjection
         public static void ConfigureGenericRepositoryOptions(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IEntityService, EntityService>();
-
-            services.Configure<ConnectionStringsConfiguration>(configuration.GetSection("ConnectionStrings"));
         }
     }
 }

@@ -25,6 +25,15 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
     restart: always
 
+  media-api:
+    image: ${REGISTRY:-giuru}/media-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Media/Media.Api/Dockerfile
+    restart: always
+    depends_on: 
+      - sqldata
+
   catalog-api:
     image: ${REGISTRY:-giuru}/catalog-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
@@ -34,6 +43,7 @@ services:
     depends_on: 
       - sqldata
       - rabbitmq
+      - media-api
 
   identity-api:
     image: ${REGISTRY:-giuru}/identity-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -119,4 +129,3 @@ services:
     depends_on: 
       - react-ssr
       - webshoppingagg
-
