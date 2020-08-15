@@ -1,4 +1,5 @@
-﻿using Media.Api.Infrastructure;
+﻿using Media.Api.Configurations;
+using Media.Api.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,11 @@ namespace Media.Api.DependencyInjection
             services.AddScoped<MediaContext>();
 
             services.AddDbContext<MediaContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
+        }
+
+        public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<AppSettings>(configuration);
         }
     }
 }

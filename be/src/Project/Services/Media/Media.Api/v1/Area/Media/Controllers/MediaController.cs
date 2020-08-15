@@ -1,4 +1,5 @@
 ﻿using Foundation.ApiExtensions.Controllers;
+using Media.Api.v1.Area.Media.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,13 +14,22 @@ namespace Media.Api.v1.Area.Media.Controllers
     [ApiController]
     public class MediaController : BaseApiController
     {
+        private readonly IMediaService mediaService;
+
+        public MediaController(IMediaService mediaService)
+        {
+            this.mediaService = mediaService;
+        }
+
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Get(Guid mediaId)
+        public async Task<IActionResult> Get(Guid? mediaId)
         {
-            return this.Ok(); // this.File(, );
+            var mediaFile = await this.mediaService.GetMediaItemAsync(mediaId);
+
+            return this.File(mediaFile.File, mediaFile.ContentType, mediaFile.Filename);
         }
     }
 }

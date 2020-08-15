@@ -7,5 +7,6 @@ namespace Catalog.Api.Infrastructure.Brands.Entities
     public class Brand : Entity
     {
         public virtual IEnumerable<Product> Products { get; set; }
+        public virtual IEnumerable<BrandTranslation> Translations { get; set; }
     }
 }

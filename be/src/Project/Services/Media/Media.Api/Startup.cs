@@ -5,6 +5,7 @@ using Foundation.Account.DependencyInjection;
 using Foundation.GenericRepository.DependencyInjection;
 using Foundation.Localization.DependencyInjection;
 using Media.Api.DependencyInjection;
+using Media.Api.v1.Area.Media.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -37,7 +38,11 @@ namespace Media.Api
 
             services.RegisterDatabaseDependencies(this.Configuration);
 
+            services.RegisterMediaDependencies(this.Configuration);
+
             services.ConfigureGenericRepositoryOptions(this.Configuration);
+
+            services.ConfigureOptions(this.Configuration);
 
             services.AddApiVersioning();
 

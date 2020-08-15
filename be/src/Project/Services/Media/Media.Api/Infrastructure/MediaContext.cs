@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Media.Api.Infrastructure.Media;
+using Microsoft.EntityFrameworkCore;
 
 namespace Media.Api.Infrastructure
 {
@@ -6,11 +7,16 @@ namespace Media.Api.Infrastructure
     {
         public MediaContext(DbContextOptions<MediaContext> options)
             : base(options)
-        { }
+        {
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseLazyLoadingProxies();
         }
+
+        public DbSet<MediaItem> MediaItems { get; set; }
+        public DbSet<MediaItemTranslation> MediaItemTranslations { get; set; }
+        public DbSet<MediaItemVersion> MediaItemVersions { get; set; }
     }
 }
