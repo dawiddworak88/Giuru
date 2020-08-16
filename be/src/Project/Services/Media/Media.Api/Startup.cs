@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using Foundation.Account.DependencyInjection;
+using Foundation.Extensions.DependencyInjection;
 using Foundation.GenericRepository.DependencyInjection;
 using Foundation.Localization.DependencyInjection;
 using Media.Api.DependencyInjection;
@@ -46,6 +47,8 @@ namespace Media.Api
 
             services.AddApiVersioning();
 
+            services.RegisterGeneralDependencies();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Media API", Version = "v1" });
@@ -70,6 +73,10 @@ namespace Media.Api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Media API");
                 c.RoutePrefix = string.Empty;
             });
+
+            app.UseResponseCompression();
+
+            app.UseGeneralStaticFiles();
 
             app.UseRouting();
 

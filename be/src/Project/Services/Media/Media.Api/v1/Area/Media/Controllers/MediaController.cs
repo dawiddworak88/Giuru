@@ -1,7 +1,9 @@
 ﻿using Foundation.ApiExtensions.Controllers;
+using Foundation.Extensions.Definitions;
 using Media.Api.v1.Area.Media.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Threading.Tasks;
 
@@ -30,7 +32,14 @@ namespace Media.Api.v1.Area.Media.Controllers
         {
             var mediaFile = await this.mediaService.GetMediaItemAsync(mediaId);
 
-            return this.File(mediaFile.File, mediaFile.ContentType, mediaFile.Filename);
+            if (mediaFile != null)
+            {
+                this.Response.Headers[HeaderNames.CacheControl] = "public,max-age=" + CacheControlConstants.CacheControlMaxAgeSeconds;
+
+                return this.File(mediaFile.File, mediaFile.ContentType, mediaFile.Filename);
+            }
+
+            return this.BadRequest();
         }
     }
 }
