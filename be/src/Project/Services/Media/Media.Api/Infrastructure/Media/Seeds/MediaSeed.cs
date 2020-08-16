@@ -1,6 +1,8 @@
 ﻿using Azure.Storage.Blobs;
+using Foundation.GenericRepository.Helpers;
 using Media.Api.Definitions;
 using Media.Api.Infrastructure.Media.Entities;
+using MimeMapping;
 using System;
 using System.IO;
 using System.Linq;
@@ -29,7 +31,10 @@ namespace Media.Api.Infrastructure.Media.Seeds
 
                 var blob = container.GetBlobClient($"{mediaVersionId}{Path.GetExtension(mediaUrl)}");
 
-                blob.Upload(inputStream);
+                if (!blob.Exists())
+                {
+                    blob.Upload(inputStream);
+                }
 
                 var mediaItem = new MediaItem
                 {
@@ -37,7 +42,7 @@ namespace Media.Api.Infrastructure.Media.Seeds
                     IsProtected = false
                 };
 
-                context.MediaItems.Add(mediaItem);
+                context.MediaItems.Add(EntitySeedHelper.SeedEntity(mediaItem));
 
                 var mediaItemVersion = new MediaItemVersion
                 { 
@@ -46,12 +51,12 @@ namespace Media.Api.Infrastructure.Media.Seeds
                     Filename = Path.GetFileNameWithoutExtension(mediaUrl),
                     Extension = Path.GetExtension(mediaUrl),
                     Folder = MediaConstants.General.ContainerName,
-                    MimeType = MimeTypes.GetMimeType(Path.GetFileName(mediaUrl)),
-                    Size = inputStream.Length,
+                    MimeType = MimeUtility.GetMimeMapping(Path.GetExtension(mediaUrl)),
+                    Size = blob.GetProperties().Value.ContentLength,
                     Version = 1
                 };
 
-                context.MediaItemVersions.Add(mediaItemVersion);
+                context.MediaItemVersions.Add(EntitySeedHelper.SeedEntity(mediaItemVersion));
 
                 context.SaveChanges();
             }
