@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Media.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(MediaContext))]
-    [Migration("20200816071254_Initial")]
+    [Migration("20200816083448_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace Media.Api.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Media.Api.Infrastructure.Media.MediaItem", b =>
+            modelBuilder.Entity("Media.Api.Infrastructure.Media.Entities.MediaItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -44,7 +44,7 @@ namespace Media.Api.Infrastructure.Migrations
                     b.ToTable("MediaItems");
                 });
 
-            modelBuilder.Entity("Media.Api.Infrastructure.Media.MediaItemTranslation", b =>
+            modelBuilder.Entity("Media.Api.Infrastructure.Media.Entities.MediaItemTranslation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -84,7 +84,7 @@ namespace Media.Api.Infrastructure.Migrations
                     b.ToTable("MediaItemTranslations");
                 });
 
-            modelBuilder.Entity("Media.Api.Infrastructure.Media.MediaItemVersion", b =>
+            modelBuilder.Entity("Media.Api.Infrastructure.Media.Entities.MediaItemVersion", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -114,8 +114,8 @@ namespace Media.Api.Infrastructure.Migrations
                     b.Property<string>("MimeType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Size")
-                        .HasColumnType("int");
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Version")
                         .HasColumnType("int");
@@ -127,18 +127,18 @@ namespace Media.Api.Infrastructure.Migrations
                     b.ToTable("MediaItemVersions");
                 });
 
-            modelBuilder.Entity("Media.Api.Infrastructure.Media.MediaItemTranslation", b =>
+            modelBuilder.Entity("Media.Api.Infrastructure.Media.Entities.MediaItemTranslation", b =>
                 {
-                    b.HasOne("Media.Api.Infrastructure.Media.MediaItemVersion", null)
+                    b.HasOne("Media.Api.Infrastructure.Media.Entities.MediaItemVersion", null)
                         .WithMany("Translations")
                         .HasForeignKey("MediaItemVersionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Media.Api.Infrastructure.Media.MediaItemVersion", b =>
+            modelBuilder.Entity("Media.Api.Infrastructure.Media.Entities.MediaItemVersion", b =>
                 {
-                    b.HasOne("Media.Api.Infrastructure.Media.MediaItem", null)
+                    b.HasOne("Media.Api.Infrastructure.Media.Entities.MediaItem", null)
                         .WithMany("Versions")
                         .HasForeignKey("MediaItemId")
                         .OnDelete(DeleteBehavior.Cascade)

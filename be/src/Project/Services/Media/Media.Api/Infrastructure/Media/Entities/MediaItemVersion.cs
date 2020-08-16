@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 
-namespace Media.Api.Infrastructure.Media
+namespace Media.Api.Infrastructure.Media.Entities
 {
     public class MediaItemVersion : Entity
     {
-        public int Size { get; set; }
+        public long Size { get; set; }
         public string Folder { get; set; }
         public string Filename { get; set; }
         public string Extension { get; set; }

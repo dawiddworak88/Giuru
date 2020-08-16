@@ -1,7 +1,7 @@
 ﻿using Foundation.GenericRepository.Entities;
 using System.Collections.Generic;
 
-namespace Media.Api.Infrastructure.Media
+namespace Media.Api.Infrastructure.Media.Entities
 {
     public class MediaItem : Entity
     {

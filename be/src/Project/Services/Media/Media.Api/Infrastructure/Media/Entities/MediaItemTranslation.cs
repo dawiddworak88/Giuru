@@ -1,7 +1,7 @@
 ﻿using Foundation.GenericRepository.Entities;
 using System;
 
-namespace Media.Api.Infrastructure.Media
+namespace Media.Api.Infrastructure.Media.Entities
 {
     public class MediaItemTranslation : EntityTranslation
     {

@@ -30,7 +30,7 @@ namespace Media.Api.Infrastructure.Migrations
                     IsActive = table.Column<bool>(nullable: false),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    Size = table.Column<int>(nullable: false),
+                    Size = table.Column<long>(nullable: false),
                     Folder = table.Column<string>(nullable: true),
                     Filename = table.Column<string>(nullable: true),
                     Extension = table.Column<string>(nullable: true),

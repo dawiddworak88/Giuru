@@ -1,4 +1,4 @@
-﻿using Media.Api.Infrastructure.Media;
+﻿using Media.Api.Infrastructure.Media.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Media.Api.Infrastructure
