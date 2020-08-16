@@ -22,6 +22,8 @@ namespace Catalog.Api.v1.Areas.Categories.Services
             var categories = from c in this.context.Categories
                              join t in this.context.CategoryTranslations on c.Id equals t.CategoryId into ct
                              from x in ct.DefaultIfEmpty()
+                             join m in this.context.CategoryImages on c.Id equals m.CategoryId into cm
+                             from y in cm.DefaultIfEmpty()
                              where x.Language == model.Language && c.IsActive
                              orderby c.Order
                              select new CategoryResultModel 
@@ -32,7 +34,8 @@ namespace Catalog.Api.v1.Areas.Categories.Services
                                 IsLeaf = c.IsLeaf,
                                 Parentid = c.Parentid,
                                 SchemaId = c.SchemaId,
-                                Name = x.Name
+                                Name = x.Name,
+                                ThumbnailMediaId = y.MediaId
                              };
 
 

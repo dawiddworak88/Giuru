@@ -1,11 +1,13 @@
 ﻿using Foundation.Security.Definitions;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using System.Runtime.CompilerServices;
 
 namespace Foundation.Security.DependencyInjection
 {
     public static class ConfigurationRoot
     {
-        public static void UseSecurityHeaders(this IApplicationBuilder app)
+        public static void UseSecurityHeaders(this IApplicationBuilder app, IConfiguration configuration)
         {
             app.UseHsts(options => options.MaxAge(days: SecurityConstants.HstsMaxAgeInDays));
             app.UseXContentTypeOptions();
@@ -16,7 +18,8 @@ namespace Foundation.Security.DependencyInjection
             app.UseCsp(options => options
                 .DefaultSources(s => s.Self()
                     .CustomSources("data:")
-                    .CustomSources("https:"))
+                    .CustomSources("https:")
+                    .CustomSources("http:"))
                 .StyleSources(s => s.Self()
                     .CustomSources("www.google.com", "fonts.googleapis.com")
                     .UnsafeInline()
@@ -26,7 +29,9 @@ namespace Foundation.Security.DependencyInjection
                     .UnsafeInline()
                     .UnsafeEval()
                 )
-            );
+                .ImageSources(s => s.Self()
+                       .CustomSources($"{configuration["MediaUrl"]}")
+            ));
 
             app.Use(async (context, next) =>
             {

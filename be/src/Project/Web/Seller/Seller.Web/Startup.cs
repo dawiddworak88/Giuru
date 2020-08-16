@@ -78,7 +78,7 @@ namespace Seller.Portal
 
             app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
 
-            app.UseSecurityHeaders();
+            app.UseSecurityHeaders(this.Configuration);
 
             app.UseEndpoints(endpoints =>
             {

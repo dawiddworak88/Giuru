@@ -31,7 +31,7 @@ namespace Buyer.Web.Shared.Services.Catalogs
             var apiRequest = new ApiRequest<RequestModelBase>
             {
                 Data = requestModel,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.Categories}"
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, IEnumerable<Category>>(apiRequest);

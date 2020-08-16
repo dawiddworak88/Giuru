@@ -8,5 +8,6 @@ namespace Buyer.Web.Shared.Models.Catalogs
         public string Name { get; set; }
         public Guid? ParentId { get; set; }
         public int Level { get; set; }
+        public Guid? ThumbnailMediaId { get; set; }
     }
 }

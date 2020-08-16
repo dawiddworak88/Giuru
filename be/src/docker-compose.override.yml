@@ -35,7 +35,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=MediaDb;User Id=sa;Password=Gre@tPassw0rd
-      - StorageConnectionString=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;
+      - StorageConnectionString=DefaultEndpointsProtocol=https;AccountName=giurudev;AccountKey=KgLO4r158fuR1T6Wi73Apzx3nFtIJtgIzHhFTMkcpaLTaoqQ5eNhku+xCPdl3NsbIZnTnQVxaH/htF37QD9WbA==;EndpointSuffix=core.windows.net
+    depends_on:
+      - azurite
     ports:
       - "5131:80"
 
@@ -54,6 +56,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
+      - MediaUrl=${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - ConnectionString=Server=sqldata;Database=IdentityDb;User Id=sa;Password=Gre@tPassw0rd
       - BasketApiClient=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5103
       - OrderingApiClient=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5102
@@ -132,6 +135,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - CatalogUrl=http://catalog-api
+      - MediaUrl=${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - SignalrHubUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5202
     ports:
@@ -143,6 +147,7 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ServerSideRenderingEndpoint=http://react-ssr:3000
       - CatalogUrl=http://catalog-api
+      - MediaUrl=${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - SignalrHubUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5202
     ports:

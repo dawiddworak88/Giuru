@@ -23,6 +23,7 @@ namespace Media.Api.v1.Area.Media.Controllers
 
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
+        [Route("{mediaId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> Get(Guid? mediaId)

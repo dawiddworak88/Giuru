@@ -11,5 +11,6 @@ namespace Catalog.Api.v1.Areas.Categories.ResultModels
         public int Order { get; set; }
         public Guid? Parentid { get; set; }
         public bool IsLeaf { get; set; }
+        public Guid? ThumbnailMediaId { get; set; }
     }
 }

@@ -1,9 +1,13 @@
 ﻿using Buyer.Web.Areas.Home.Definitions;
 using Buyer.Web.Areas.Home.ViewModel;
+using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Definitions;
 using Buyer.Web.Shared.Services.Catalogs;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ContentGrids.ViewModels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,10 +17,14 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
     public class CategoriesContentGridModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CategoriesContentGridViewModel>
     {
         private readonly ICatalogService catalogService;
+        private readonly IOptions<AppSettings> options;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public CategoriesContentGridModelBuilder(ICatalogService catalogService)
+        public CategoriesContentGridModelBuilder(ICatalogService catalogService, IOptions<AppSettings> options, IHttpContextAccessor httpContextAccessor)
         {
             this.catalogService = catalogService;
+            this.options = options;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<CategoriesContentGridViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -36,9 +44,13 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                         Id = subCategory.Id,
                         Title = subCategory.Name,
                         ImageAlt = subCategory.Name,
-                        ImageUrl = "#",
                         Url = "#"
                     };
+
+                    if (subCategory.ThumbnailMediaId.HasValue)
+                    {
+                        carouselItem.ImageUrl = $"{this.httpContextAccessor.HttpContext.Request.Scheme}://{this.options.Value.MediaUrl}{ApiConstants.Media.MediaApiEndpoint}/{subCategory.ThumbnailMediaId.Value}";
+                    }
 
                     contentGridCarouselItems.Add(carouselItem);
                 }

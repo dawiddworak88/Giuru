@@ -24,6 +24,7 @@ namespace Catalog.Api.Infrastructure
         public static void EnsureSeeded(this CatalogContext context, IConfiguration configuration)
         {
             CategoriesSeed.SeedCategories(context);
+            CategoryImagesSeed.SeedCategoryImages(context);
         }
     }
 }

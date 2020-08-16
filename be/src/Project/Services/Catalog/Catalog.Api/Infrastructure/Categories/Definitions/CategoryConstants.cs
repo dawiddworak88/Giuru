@@ -2,7 +2,7 @@
 
 namespace Catalog.Api.Infrastructure.Categories.Definitions
 {
-    public static class Constants
+    public static class CategoryConstants
     {
         public static class CategoryGuids
         {

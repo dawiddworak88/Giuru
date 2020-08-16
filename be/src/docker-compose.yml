@@ -31,7 +31,7 @@ services:
       context: .
       dockerfile: Project/Services/Media/Media.Api/Dockerfile
     restart: always
-    depends_on: 
+    depends_on:
       - sqldata
 
   catalog-api:
