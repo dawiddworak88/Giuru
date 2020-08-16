@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Media.Api.Infrastructure
 {
@@ -24,7 +23,7 @@ namespace Media.Api.Infrastructure
 
         public static void EnsureSeeded(this MediaContext context, IConfiguration configuration)
         {
-            MediaSeed.SeedCategories(context, configuration["StorageConnectionString"]);
+            MediaSeed.SeedCategories(context, configuration["StorageConnectionString"], configuration["FtpServerUrl"]);
         }
     }
 }

@@ -12,19 +12,16 @@ namespace Media.Api.Infrastructure.Media.Seeds
 {
     public static class MediaSeed
     {
-        public static void SeedCategories(MediaContext context, string storageConnectionString)
+        public static void SeedCategories(MediaContext context, string storageConnectionString, string ftpUrl)
         {
-            SeedMedia(context, storageConnectionString, MediaConstants.Categories.SectionalsMediaId, MediaConstants.Categories.SectionalsMediaVersionId, MediaConstants.Categories.SectionalsMediaUrl);
+            SeedMedia(context, storageConnectionString, ftpUrl, MediaConstants.Categories.CouchesMediaId, MediaConstants.Categories.CouchesMediaVersionId, MediaConstants.Categories.CouchesMediaUrl);
+            SeedMedia(context, storageConnectionString, ftpUrl, MediaConstants.Categories.SectionalsMediaId, MediaConstants.Categories.SectionalsMediaVersionId, MediaConstants.Categories.SectionalsMediaUrl);
         }
 
-        private static void SeedMedia(MediaContext context, string storageConnectionString, Guid mediaId, Guid mediaVersionId, string mediaUrl)
+        private static void SeedMedia(MediaContext context, string storageConnectionString, string ftpUrl, Guid mediaId, Guid mediaVersionId, string mediaUrl)
         {
             if (!context.MediaItems.Any(x => x.Id == mediaId))
             {
-                var request = (HttpWebRequest)WebRequest.Create(mediaUrl);
-                var response = (HttpWebResponse)request.GetResponse();
-                var inputStream = response.GetResponseStream();
-
                 var container = new BlobContainerClient(storageConnectionString, MediaConstants.General.ContainerName);
 
                 container.CreateIfNotExists();
@@ -33,7 +30,11 @@ namespace Media.Api.Infrastructure.Media.Seeds
 
                 if (!blob.Exists())
                 {
-                    blob.Upload(inputStream);
+                    using (var client = new WebClient())
+                    using (var stream = new MemoryStream(client.DownloadData($"{ftpUrl}{mediaUrl}")))
+                    {
+                        blob.Upload(stream);
+                    }
                 }
 
                 var mediaItem = new MediaItem
@@ -45,7 +46,7 @@ namespace Media.Api.Infrastructure.Media.Seeds
                 context.MediaItems.Add(EntitySeedHelper.SeedEntity(mediaItem));
 
                 var mediaItemVersion = new MediaItemVersion
-                { 
+                {
                     Id = mediaVersionId,
                     MediaItemId = mediaId,
                     Filename = Path.GetFileNameWithoutExtension(mediaUrl),

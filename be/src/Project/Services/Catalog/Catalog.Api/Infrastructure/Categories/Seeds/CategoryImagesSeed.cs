@@ -9,17 +9,18 @@ namespace Catalog.Api.Infrastructure.Categories.Seeds
     {
         public static void SeedCategoryImages(CatalogContext context)
         {
+            SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.LivingRoom.SofasId, CategoryImageConstants.SofasImageMediaId);
             SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.LivingRoom.SectionalsId, CategoryImageConstants.SectionalsImageMediaId);
         }
 
-        private static void SeedCategoryImage(CatalogContext context, Guid categoryId, Guid imageId)
+        private static void SeedCategoryImage(CatalogContext context, Guid categoryId, Guid mediaId)
         {
             if (!context.CategoryImages.Any(x => x.CategoryId == categoryId))
             {
                 var categoryImage = new CategoryImage
                 {
-                    CategoryId = CategoryConstants.CategoryGuids.Furniture.LivingRoom.SectionalsId,
-                    MediaId = CategoryImageConstants.SectionalsImageMediaId,
+                    CategoryId = categoryId,
+                    MediaId = mediaId,
                     Order = 0
                 };
 

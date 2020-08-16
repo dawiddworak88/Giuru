@@ -36,6 +36,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=MediaDb;User Id=sa;Password=Gre@tPassw0rd
       - StorageConnectionString=DefaultEndpointsProtocol=https;AccountName=giurudev;AccountKey=KgLO4r158fuR1T6Wi73Apzx3nFtIJtgIzHhFTMkcpaLTaoqQ5eNhku+xCPdl3NsbIZnTnQVxaH/htF37QD9WbA==;EndpointSuffix=core.windows.net
+      - FtpServerUrl=ftp://dawiddworak88-giuru:GreatPassw0rd@194.88.154.138
     depends_on:
       - azurite
     ports:
