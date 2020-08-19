@@ -33,7 +33,6 @@ namespace Catalog.Api.Infrastructure.Categories.Seeds
             SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.LivingRoom.WallUnitsId, 2, CategoryConstants.CategoryGuids.Furniture.LivingRoomFurnitureId, 40, true, "Wall Units", "Meblościanki", "Wohnwände");
             SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.LivingRoom.ChairsId, 2, CategoryConstants.CategoryGuids.Furniture.LivingRoomFurnitureId, 50, true, "Chairs & Recliners", "Krzesła i fotele", "Sessel & Stühle");
             SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.LivingRoom.PoufsId, 2, CategoryConstants.CategoryGuids.Furniture.LivingRoomFurnitureId, 60, true, "Poufs", "Pufy", "Fußhocker");
-            SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.LivingRoom.PoufsId, 2, CategoryConstants.CategoryGuids.Furniture.LivingRoomFurnitureId, 60, true, "Living room Sets", "Zestawy do salonu", "Möbelset");
 
             // Level 2 Bedroom
             SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.Bedroom.BedsId, 2, CategoryConstants.CategoryGuids.Furniture.BedroomFurnitureId, 0, true, "Beds", "Łóżka", "Betten");
@@ -43,8 +42,6 @@ namespace Catalog.Api.Infrastructure.Categories.Seeds
 
             // Level 2 Kitchen and Dining Room
             SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.KitchenDiningRoom.DiningTablesSeatingId, 2, CategoryConstants.CategoryGuids.Furniture.KichtenDiningFurnitureId, 0, true, "Dining Tables & Seating", "Stoły i krzesła kuchenne", "Esstische & Esszimmerstühle");
-            SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.KitchenDiningRoom.KitchenCabinetsId, 2, CategoryConstants.CategoryGuids.Furniture.KichtenDiningFurnitureId, 10, true, "Kitchen Cabinets", "Szafki kuchenne", "Küchenschränke");
-            SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.KitchenDiningRoom.ChinaCabinetsId, 2, CategoryConstants.CategoryGuids.Furniture.KichtenDiningFurnitureId, 20, true, "Display & China Cabinets", "Szafki na porcelanę", "Geschirrschränke");
 
             // Level 2 Bathroom
             SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.Bathroom.BathroomVanitiesCabinetsId, 2, CategoryConstants.CategoryGuids.Furniture.BathroomFurnitureId, 0, true, "Bathroom Vanities & Cabinets", "Szafki i komody łazienkowe", "Badezimmerschränke & Badregale");
@@ -52,8 +49,6 @@ namespace Catalog.Api.Infrastructure.Categories.Seeds
             // Level 2 Kids Room
             SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.KidsFurniture.KidsBedsId, 2, CategoryConstants.CategoryGuids.Furniture.KidsFurnitureId, 0, true, "Children Beds", "Łóżka dziecięce", "Kinderbetten");
             SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.KidsFurniture.KidsBunkBedsId, 2, CategoryConstants.CategoryGuids.Furniture.KidsFurnitureId, 10, true, "Children Bunk Beds", "Łóżka piętrowe dla dzieci", "Hoch- & Etagenbetten");
-            SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.KidsFurniture.KidsTablesId, 2, CategoryConstants.CategoryGuids.Furniture.KidsFurnitureId, 20, true, "Children's Wardrobes & Kids' Cupboards", "Szafy do pokoju dziecka", "Kleiderschränke für Kinder");
-            SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.KidsFurniture.KidsTablesId, 2, CategoryConstants.CategoryGuids.Furniture.KidsFurnitureId, 30, true, "Children Tables & Sets", "Stoły i zestawy do pokoju dziecka", "Kindertische & Sets");
             SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.KidsFurniture.KidsDesksId, 2, CategoryConstants.CategoryGuids.Furniture.KidsFurnitureId, 40, true, "Children Desks", "Biurka dziecięce", "Kinderschreibtische");
         }
 
