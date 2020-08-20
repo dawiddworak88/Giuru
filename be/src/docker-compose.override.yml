@@ -35,7 +35,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=MediaDb;User Id=sa;Password=Gre@tPassw0rd
-      - StorageConnectionString=DefaultEndpointsProtocol=https;AccountName=giurudev;AccountKey=KgLO4r158fuR1T6Wi73Apzx3nFtIJtgIzHhFTMkcpaLTaoqQ5eNhku+xCPdl3NsbIZnTnQVxaH/htF37QD9WbA==;EndpointSuffix=core.windows.net
+      - StorageConnectionString=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;QueueEndpoint=http://azurite:10001/devstoreaccount1;
       - FtpServerUrl=ftp://dawiddworak88-giuru:GreatPassw0rd@194.88.154.138
     depends_on:
       - azurite
