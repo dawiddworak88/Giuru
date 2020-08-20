@@ -10,6 +10,80 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\Armchairs.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\BathroomCabinets.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\Beds.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\BoxSprings.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\BunkBeds.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\Chests.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\CoffeeTables.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\Couches.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\KidsBeds.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\KidsDesks.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\KitchenTables.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\Poufs.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\Sectionals.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\Tables.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\TvTables.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\WallUnits.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\Wardrobes.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\Armchairs.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\BathroomCabinets.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\Beds.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\BoxSprings.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\BunkBeds.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\Chests.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\CoffeeTables.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\Couches.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\KidsBeds.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\KidsDesks.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\KitchenTables.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\Poufs.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\Sectionals.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\Tables.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\TvTables.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\WallUnits.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\Wardrobes.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.5.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.7" />

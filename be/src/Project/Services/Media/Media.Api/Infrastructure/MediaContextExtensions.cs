@@ -23,7 +23,7 @@ namespace Media.Api.Infrastructure
 
         public static void EnsureSeeded(this MediaContext context, IConfiguration configuration)
         {
-            MediaSeed.SeedCategories(context, configuration["StorageConnectionString"], configuration["FtpServerUrl"]);
+            MediaSeed.SeedCategories(context, configuration["StorageConnectionString"]);
         }
     }
 }
