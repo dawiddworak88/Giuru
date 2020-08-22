@@ -53,6 +53,8 @@ function ContentGrid(props) {
                         </div>
                     )
                 }
+
+                return [];
             })}
         </section>
     );

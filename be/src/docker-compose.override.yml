@@ -17,6 +17,8 @@ services:
     ports:
       - "10000:10000"
       - "10001:10001"
+    volumes:
+      - azuritedata:/data
 
   react-ssr:
     environment: 
@@ -157,4 +159,6 @@ volumes:
   sqldata:
     external: false
   basketdata:
+    external: false
+  azuritedata:
     external: false

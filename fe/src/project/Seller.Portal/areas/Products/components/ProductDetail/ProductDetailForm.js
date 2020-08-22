@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -17,7 +17,7 @@ function ProductDetailForm(props) {
 
     const [state, dispatch] = useContext(Context);
 
-    const [category, setCategory] = useState(null);
+    const [category,] = useState(null);
 
     const jsonSchema = props.schema && props.schema.jsonSchema ? JSON.parse(props.schema.jsonSchema) : {};
     const uiSchema = props.schema && props.schema.uiSchema ? JSON.parse(props.schema.uiSchema) : {};

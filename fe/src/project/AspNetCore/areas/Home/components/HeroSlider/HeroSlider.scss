@@ -1,7 +1,10 @@
 .hero-slider {
 
+    background-color: $grey;
+    width: 950px;
+
     &__item {
-        height: 350px;
+        height: 370px;
         position: relative;
     }
 

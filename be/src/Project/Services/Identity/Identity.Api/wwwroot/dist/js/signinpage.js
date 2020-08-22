@@ -1008,6 +1008,7 @@ function _extends() {
 }
 // EXTERNAL MODULE: ./node_modules/prop-types/index.js
 var prop_types = __webpack_require__(1);
+var prop_types_default = /*#__PURE__*/__webpack_require__.n(prop_types);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/useTheme/ThemeContext.js
 
@@ -1082,28 +1083,6 @@ function ThemeProvider(props) {
 if (false) {}
 
 /* harmony default export */ var ThemeProvider_ThemeProvider = (ThemeProvider);
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck.js
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createClass.js
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
-  }
-}
-
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
-}
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
 function _defineProperty(obj, key, value) {
   if (key in obj) {
@@ -2525,104 +2504,30 @@ function createMuiTheme() {
 /* harmony default export */ var styles_createMuiTheme = (createMuiTheme);
 // CONCATENATED MODULE: ./src/shared/helpers/globals/GlobalHelper.js
 
-
-
-
-var GlobalHelper_GlobalHelper = /*#__PURE__*/function () {
-  function GlobalHelper() {
-    _classCallCheck(this, GlobalHelper);
-  }
-
-  _createClass(GlobalHelper, null, [{
-    key: "initMuiTheme",
-    value: function initMuiTheme() {
-      var theme = styles_createMuiTheme({
-        typography: {
-          button: {
-            textTransform: 'none'
-          }
-        },
-        palette: {
-          primary: {
-            main: '#BF202F'
-          },
-          secondary: {
-            main: '#5E1916'
-          }
+class GlobalHelper_GlobalHelper {
+  static initMuiTheme() {
+    const theme = styles_createMuiTheme({
+      typography: {
+        button: {
+          textTransform: 'none'
         }
-      });
-      return theme;
-    }
-  }]);
-
-  return GlobalHelper;
-}();
-
-
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
-function iterableToArrayLimit_iterableToArrayLimit(arr, i) {
-  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
-
-  try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
-    }
+      },
+      palette: {
+        primary: {
+          main: '#BF202F'
+        },
+        secondary: {
+          main: '#5E1916'
+        }
+      }
+    });
+    return theme;
   }
 
-  return _arr;
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
-  }
-
-  return arr2;
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(n);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js
-
-
-
-
-function slicedToArray_slicedToArray(arr, i) {
-  return _arrayWithHoles(arr) || iterableToArrayLimit_iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
 }
 // CONCATENATED MODULE: ./src/shared/components/LanguageSwitcher/LanguageSwitcher.js
+var _jsxFileName = "C:\\Projects\\Giuru\\fe\\src\\shared\\components\\LanguageSwitcher\\LanguageSwitcher.js";
+
 
 
 function LanguageSwitcher(props) {
@@ -2632,99 +2537,247 @@ function LanguageSwitcher(props) {
     }
   }
 
-  var languages = props.availableLanguages.map(function (language, index) {
-    return /*#__PURE__*/react_default.a.createElement("option", {
-      key: index,
-      value: language.url
-    }, language.text);
-  });
+  const languages = props.availableLanguages.map((language, index) => /*#__PURE__*/react_default.a.createElement("option", {
+    key: index,
+    value: language.url,
+    __self: this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 14,
+      columnNumber: 73
+    }
+  }, language.text));
   return /*#__PURE__*/react_default.a.createElement("div", {
-    className: "select"
+    className: "select",
+    __self: this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 17,
+      columnNumber: 9
+    }
   }, /*#__PURE__*/react_default.a.createElement("select", {
     value: props.selectedLanguageUrl,
-    onChange: function onChange(e) {
-      return handleLanguageChange(e);
+    onChange: e => handleLanguageChange(e),
+    __self: this,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 18,
+      columnNumber: 13
     }
   }, languages));
 }
 
+LanguageSwitcher.propTypes = {
+  availableLanguages: prop_types_default.a.array.isRequired,
+  selectedLanguageUrl: prop_types_default.a.string.isRequired
+};
 /* harmony default export */ var LanguageSwitcher_LanguageSwitcher = (LanguageSwitcher);
 // CONCATENATED MODULE: ./src/shared/layouts/images/logo.png
 /* harmony default export */ var logo = ("/dist/images/logo.png");
 // CONCATENATED MODULE: ./src/shared/components/Header/Header.js
+var Header_jsxFileName = "C:\\Projects\\Giuru\\fe\\src\\shared\\components\\Header\\Header.js";
 
 
 
 
 
 function Header(props) {
-  var _useState = Object(react["useState"])(false),
-      _useState2 = slicedToArray_slicedToArray(_useState, 2),
-      isActive = _useState2[0],
-      setIsActive = _useState2[1];
-
-  var links = props.links.map(function (link, index) {
-    return /*#__PURE__*/react_default.a.createElement("a", {
-      key: index,
-      className: "navbar-item",
-      href: link.url
-    }, link.text);
-  });
-  return /*#__PURE__*/react_default.a.createElement("header", null, /*#__PURE__*/react_default.a.createElement("nav", {
-    className: "navbar is-spaced"
+  const [isActive, setIsActive] = Object(react["useState"])(false);
+  const links = props.links.map((link, index) => /*#__PURE__*/react_default.a.createElement("a", {
+    key: index,
+    className: "navbar-item",
+    href: link.url,
+    __self: this,
+    __source: {
+      fileName: Header_jsxFileName,
+      lineNumber: 11,
+      columnNumber: 52
+    }
+  }, link.text));
+  return /*#__PURE__*/react_default.a.createElement("header", {
+    __self: this,
+    __source: {
+      fileName: Header_jsxFileName,
+      lineNumber: 14,
+      columnNumber: 9
+    }
+  }, /*#__PURE__*/react_default.a.createElement("nav", {
+    className: "navbar is-spaced",
+    __self: this,
+    __source: {
+      fileName: Header_jsxFileName,
+      lineNumber: 15,
+      columnNumber: 13
+    }
   }, /*#__PURE__*/react_default.a.createElement("div", {
-    className: "navbar-brand"
+    className: "navbar-brand",
+    __self: this,
+    __source: {
+      fileName: Header_jsxFileName,
+      lineNumber: 16,
+      columnNumber: 17
+    }
   }, /*#__PURE__*/react_default.a.createElement("a", {
-    href: props.logo.targetUrl
+    href: props.logo.targetUrl,
+    __self: this,
+    __source: {
+      fileName: Header_jsxFileName,
+      lineNumber: 17,
+      columnNumber: 21
+    }
   }, /*#__PURE__*/react_default.a.createElement("img", {
     src: logo,
-    alt: props.logo.logoAltLabel
+    alt: props.logo.logoAltLabel,
+    __self: this,
+    __source: {
+      fileName: Header_jsxFileName,
+      lineNumber: 18,
+      columnNumber: 25
+    }
   })), /*#__PURE__*/react_default.a.createElement("div", {
     role: "button",
-    onClick: function onClick() {
-      return setIsActive(!isActive);
-    },
+    onClick: () => setIsActive(!isActive),
     className: isActive ? 'navbar-burger is-active' : 'navbar-burger',
     "aria-label": "menu",
-    "aria-expanded": "false"
+    "aria-expanded": "false",
+    __self: this,
+    __source: {
+      fileName: Header_jsxFileName,
+      lineNumber: 20,
+      columnNumber: 21
+    }
   }, /*#__PURE__*/react_default.a.createElement("span", {
-    "aria-hidden": "true"
+    "aria-hidden": "true",
+    __self: this,
+    __source: {
+      fileName: Header_jsxFileName,
+      lineNumber: 21,
+      columnNumber: 25
+    }
   }), /*#__PURE__*/react_default.a.createElement("span", {
-    "aria-hidden": "true"
+    "aria-hidden": "true",
+    __self: this,
+    __source: {
+      fileName: Header_jsxFileName,
+      lineNumber: 22,
+      columnNumber: 25
+    }
   }), /*#__PURE__*/react_default.a.createElement("span", {
-    "aria-hidden": "true"
+    "aria-hidden": "true",
+    __self: this,
+    __source: {
+      fileName: Header_jsxFileName,
+      lineNumber: 23,
+      columnNumber: 25
+    }
   }))), /*#__PURE__*/react_default.a.createElement("div", {
-    className: isActive ? 'navbar-menu is-active' : 'navbar-menu'
+    className: isActive ? 'navbar-menu is-active' : 'navbar-menu',
+    __self: this,
+    __source: {
+      fileName: Header_jsxFileName,
+      lineNumber: 26,
+      columnNumber: 17
+    }
   }, /*#__PURE__*/react_default.a.createElement("div", {
-    className: "navbar-start"
+    className: "navbar-start",
+    __self: this,
+    __source: {
+      fileName: Header_jsxFileName,
+      lineNumber: 27,
+      columnNumber: 21
+    }
   }, links), /*#__PURE__*/react_default.a.createElement("div", {
-    className: "navbar-end"
+    className: "navbar-end",
+    __self: this,
+    __source: {
+      fileName: Header_jsxFileName,
+      lineNumber: 30,
+      columnNumber: 21
+    }
   }, /*#__PURE__*/react_default.a.createElement("div", {
-    className: "navbar-item"
-  }, /*#__PURE__*/react_default.a.createElement(LanguageSwitcher_LanguageSwitcher, props.languageSwitcher))))));
+    className: "navbar-item",
+    __self: this,
+    __source: {
+      fileName: Header_jsxFileName,
+      lineNumber: 31,
+      columnNumber: 25
+    }
+  }, /*#__PURE__*/react_default.a.createElement(LanguageSwitcher_LanguageSwitcher, Object.assign({}, props.languageSwitcher, {
+    __self: this,
+    __source: {
+      fileName: Header_jsxFileName,
+      lineNumber: 32,
+      columnNumber: 29
+    }
+  })))))));
 }
 
+Header.propTypes = {
+  logo: prop_types_default.a.object.isRequired,
+  links: prop_types_default.a.array.isRequired
+};
 /* harmony default export */ var Header_Header = (Header);
 // CONCATENATED MODULE: ./src/shared/components/Footer/Footer.js
+var Footer_jsxFileName = "C:\\Projects\\Giuru\\fe\\src\\shared\\components\\Footer\\Footer.js";
+
 
 
 function Footer(props) {
-  var links = props.links.map(function (link, index) {
-    return /*#__PURE__*/react_default.a.createElement("li", {
-      key: index
-    }, /*#__PURE__*/react_default.a.createElement("a", {
-      href: link.url
-    }, link.text));
-  });
+  const links = props.links.map((link, index) => /*#__PURE__*/react_default.a.createElement("li", {
+    key: index,
+    __self: this,
+    __source: {
+      fileName: Footer_jsxFileName,
+      lineNumber: 6,
+      columnNumber: 52
+    }
+  }, /*#__PURE__*/react_default.a.createElement("a", {
+    href: link.url,
+    __self: this,
+    __source: {
+      fileName: Footer_jsxFileName,
+      lineNumber: 6,
+      columnNumber: 68
+    }
+  }, link.text)));
   return /*#__PURE__*/react_default.a.createElement("footer", {
-    className: "footer"
+    className: "footer",
+    __self: this,
+    __source: {
+      fileName: Footer_jsxFileName,
+      lineNumber: 9,
+      columnNumber: 9
+    }
   }, /*#__PURE__*/react_default.a.createElement("div", {
-    className: "content"
-  }, /*#__PURE__*/react_default.a.createElement("ul", null, links)), /*#__PURE__*/react_default.a.createElement("div", {
-    className: "content has-text-centered has-text-white"
+    className: "content",
+    __self: this,
+    __source: {
+      fileName: Footer_jsxFileName,
+      lineNumber: 10,
+      columnNumber: 13
+    }
+  }, /*#__PURE__*/react_default.a.createElement("ul", {
+    __self: this,
+    __source: {
+      fileName: Footer_jsxFileName,
+      lineNumber: 11,
+      columnNumber: 17
+    }
+  }, links)), /*#__PURE__*/react_default.a.createElement("div", {
+    className: "content has-text-centered has-text-white",
+    __self: this,
+    __source: {
+      fileName: Footer_jsxFileName,
+      lineNumber: 15,
+      columnNumber: 13
+    }
   }, props.copyright));
 }
 
+Footer.propTypes = {
+  links: prop_types_default.a.array.isRequired,
+  copyright: prop_types_default.a.string.isRequired
+};
 /* harmony default export */ var Footer_Footer = (Footer);
 // CONCATENATED MODULE: ./node_modules/clsx/dist/clsx.m.js
 function toVal(mix) {
@@ -2833,7 +2886,7 @@ function tiny_warning_esm_warning(condition, message) {
 /* harmony default export */ var tiny_warning_esm = (tiny_warning_esm_warning);
 
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
-function createClass_defineProperties(target, props) {
+function _defineProperties(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
     descriptor.enumerable = descriptor.enumerable || false;
@@ -2843,9 +2896,9 @@ function createClass_defineProperties(target, props) {
   }
 }
 
-function createClass_createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) createClass_defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) createClass_defineProperties(Constructor, staticProps);
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
   return Constructor;
 }
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
@@ -3173,7 +3226,7 @@ function (_BaseStyleRule) {
     return toCss(this.selectorText, this.style, opts);
   };
 
-  createClass_createClass(StyleRule, [{
+  _createClass(StyleRule, [{
     key: "selector",
     set: function set(selector) {
       if (selector === this.selectorText) return;
@@ -4276,7 +4329,7 @@ function () {
     return css;
   };
 
-  createClass_createClass(SheetsRegistry, [{
+  _createClass(SheetsRegistry, [{
     key: "index",
 
     /**
@@ -5041,7 +5094,7 @@ function () {
     }
   };
 
-  createClass_createClass(SheetsManager, [{
+  _createClass(SheetsManager, [{
     key: "size",
     get: function get() {
       return this.length;
@@ -9064,7 +9117,7 @@ function useEventCallback(fn) {
   }, []);
 }
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
-function classCallCheck_classCallCheck(instance, Constructor) {
+function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
   }
@@ -9225,7 +9278,7 @@ function getHiddenSiblings(container) {
 
 var ModalManager_ModalManager = /*#__PURE__*/function () {
   function ModalManager() {
-    classCallCheck_classCallCheck(this, ModalManager);
+    _classCallCheck(this, ModalManager);
 
     // this.modals[modalIndex] = modal
     this.modals = []; // this.containers[containerIndex] = {
@@ -9237,7 +9290,7 @@ var ModalManager_ModalManager = /*#__PURE__*/function () {
     this.containers = [];
   }
 
-  createClass_createClass(ModalManager, [{
+  _createClass(ModalManager, [{
     key: "add",
     value: function add(modal, container) {
       var modalIndex = this.modals.indexOf(modal);
@@ -13722,77 +13775,9 @@ var Button_Button = react["forwardRef"](function Button(props, ref) {
 /* harmony default export */ var esm_Button_Button = (styles_withStyles(Button_styles, {
   name: 'MuiButton'
 })(Button_Button));
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/defineProperty.js
-function defineProperty_defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/objectSpread2.js
-
-
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
-    keys.push.apply(keys, symbols);
-  }
-
-  return keys;
-}
-
-function _objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      ownKeys(Object(source), true).forEach(function (key) {
-        defineProperty_defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
-  }
-
-  return target;
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/typeof.js
-function typeof_typeof(obj) {
-  "@babel/helpers - typeof";
-
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    typeof_typeof = function _typeof(obj) {
-      return typeof obj;
-    };
-  } else {
-    typeof_typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    };
-  }
-
-  return typeof_typeof(obj);
-}
 // CONCATENATED MODULE: ./src/shared/helpers/forms/utils.js
-
-var VALUE = 'value';
-var ERROR = 'error';
+const VALUE = 'value';
+const ERROR = 'error';
 
 function is_bool(value) {
   return typeof value === 'boolean';
@@ -13805,10 +13790,10 @@ function is_bool(value) {
 
 
 function is_object(value) {
-  return typeof_typeof(value) === 'object' && value !== null;
+  return typeof value === 'object' && value !== null;
 }
 function get_prop_values(stateSchema, prop) {
-  return Object.keys(stateSchema).reduce(function (field, key) {
+  return Object.keys(stateSchema).reduce((field, key) => {
     if (key === "formData") {
       field[key] = stateSchema[key];
     } else {
@@ -13821,9 +13806,6 @@ function get_prop_values(stateSchema, prop) {
 // CONCATENATED MODULE: ./src/shared/helpers/forms/useForm.js
 
 
-
-
-
 /**
  * useForm hooks to handle your validation in your forms
  *
@@ -13832,43 +13814,15 @@ function get_prop_values(stateSchema, prop) {
  * @param {function} submitFormCallback function to be execute during form submission.
  */
 
-function useForm() {
-  var stateSchema = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var stateValidatorSchema = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  var submitFormCallback = arguments.length > 2 ? arguments[2] : undefined;
+function useForm(stateSchema = {}, stateValidatorSchema = {}, submitFormCallback) {
+  const [state, setStateSchema] = Object(react["useState"])(stateSchema);
+  const [values, setValues] = Object(react["useState"])(get_prop_values(state, VALUE));
+  const [errors, setErrors] = Object(react["useState"])(get_prop_values(state, ERROR));
+  const [dirty, setDirty] = Object(react["useState"])(get_prop_values(state, false));
+  const [disable, setDisable] = Object(react["useState"])(false);
+  const [isDirty, setIsDirty] = Object(react["useState"])(false); // Get a local copy of stateSchema
 
-  var _useState = Object(react["useState"])(stateSchema),
-      _useState2 = slicedToArray_slicedToArray(_useState, 2),
-      state = _useState2[0],
-      setStateSchema = _useState2[1];
-
-  var _useState3 = Object(react["useState"])(get_prop_values(state, VALUE)),
-      _useState4 = slicedToArray_slicedToArray(_useState3, 2),
-      values = _useState4[0],
-      setValues = _useState4[1];
-
-  var _useState5 = Object(react["useState"])(get_prop_values(state, ERROR)),
-      _useState6 = slicedToArray_slicedToArray(_useState5, 2),
-      errors = _useState6[0],
-      setErrors = _useState6[1];
-
-  var _useState7 = Object(react["useState"])(get_prop_values(state, false)),
-      _useState8 = slicedToArray_slicedToArray(_useState7, 2),
-      dirty = _useState8[0],
-      setDirty = _useState8[1];
-
-  var _useState9 = Object(react["useState"])(false),
-      _useState10 = slicedToArray_slicedToArray(_useState9, 2),
-      disable = _useState10[0],
-      setDisable = _useState10[1];
-
-  var _useState11 = Object(react["useState"])(false),
-      _useState12 = slicedToArray_slicedToArray(_useState11, 2),
-      isDirty = _useState12[0],
-      setIsDirty = _useState12[1]; // Get a local copy of stateSchema
-
-
-  Object(react["useEffect"])(function () {
+  Object(react["useEffect"])(() => {
     setStateSchema(stateSchema);
     setDisable(false);
     setInitialErrorState();
@@ -13876,10 +13830,10 @@ function useForm() {
   // Set a brand new field values and errors 
   // If stateSchema changes
 
-  Object(react["useEffect"])(function () {
-    var values = get_prop_values(state, VALUE);
+  Object(react["useEffect"])(() => {
+    const values = get_prop_values(state, VALUE);
     setValues(values);
-    setErrors(Object.keys(values).reduce(function (accu, curr) {
+    setErrors(Object.keys(values).reduce((accu, curr) => {
       accu[curr] = validateField(curr, values[curr]);
       return accu;
     }, {}));
@@ -13887,44 +13841,44 @@ function useForm() {
   // For every changed in our state this will be fired
   // To be able to disable the button
 
-  Object(react["useEffect"])(function () {
+  Object(react["useEffect"])(() => {
     if (isDirty) {
       setDisable(validateErrorState());
     }
   }, [errors, isDirty]); // eslint-disable-line
   // Set a value of a specific field
 
-  var setFieldValue = function setFieldValue(_ref) {
-    var name = _ref.name,
-        value = _ref.value;
-    setValues(function (prevState) {
-      return _objectSpread2(_objectSpread2({}, prevState), {}, defineProperty_defineProperty({}, name, value));
-    });
-    setDirty(function (prevState) {
-      return _objectSpread2(_objectSpread2({}, prevState), {}, defineProperty_defineProperty({}, name, true));
-    });
+  const setFieldValue = ({
+    name,
+    value
+  }) => {
+    setValues(prevState => ({ ...prevState,
+      [name]: value
+    }));
+    setDirty(prevState => ({ ...prevState,
+      [name]: true
+    }));
   }; // Set an error of a specific field
 
 
-  var setFieldError = function setFieldError(_ref2) {
-    var name = _ref2.name,
-        error = _ref2.error;
-    return setErrors(function (prevState) {
-      return _objectSpread2(_objectSpread2({}, prevState), {}, defineProperty_defineProperty({}, name, error));
-    });
-  }; // Validate fields in forms
+  const setFieldError = ({
+    name,
+    error
+  }) => setErrors(prevState => ({ ...prevState,
+    [name]: error
+  })); // Validate fields in forms
 
 
-  var validateField = Object(react["useCallback"])(function (name, value) {
-    var validator = stateValidatorSchema; // Making sure that stateValidatorSchema name is same in
+  const validateField = Object(react["useCallback"])((name, value) => {
+    const validator = stateValidatorSchema; // Making sure that stateValidatorSchema name is same in
     // stateSchema
 
     if (!validator[name]) return;
-    var field = validator[name];
-    var error = '';
+    const field = validator[name];
+    let error = '';
 
     if (is_object(field['required']) && error === '') {
-      var required = field['required'];
+      const required = field['required'];
 
       if (required['isRequired'] && !value) {
         error = required['error'];
@@ -13932,7 +13886,7 @@ function useForm() {
     }
 
     if (is_object(field['validator']) && error === '') {
-      var validateFieldByCallback = field['validator']; // Test the function callback if the value is meet the criteria
+      const validateFieldByCallback = field['validator']; // Test the function callback if the value is meet the criteria
 
       if (!validateFieldByCallback['func'](value, values)) {
         error = validateFieldByCallback['error'];
@@ -13943,28 +13897,20 @@ function useForm() {
   }, [stateValidatorSchema, values]); // Set Initial Error State
   // When hooks was first rendered...
 
-  var setInitialErrorState = Object(react["useCallback"])(function () {
-    Object.keys(errors).map(function (name) {
-      return setFieldError({
-        name: name,
-        error: validateField(name, values[name])
-      });
-    });
+  const setInitialErrorState = Object(react["useCallback"])(() => {
+    Object.keys(errors).map(name => setFieldError({
+      name,
+      error: validateField(name, values[name])
+    }));
   }, [errors, values, validateField]); // Used to disable submit button if there's a value in errors
   // or the required field in state has no value.
   // Wrapped in useCallback to cached the function to avoid intensive memory leaked
   // in every re-render in component
 
-  var validateErrorState = Object(react["useCallback"])(function () {
-    return Object.keys(errors).map(function (item) {
-      return errors[item];
-    }).some(function (error) {
-      return error;
-    });
-  }, [errors]); // Use this callback function to safely submit the form
+  const validateErrorState = Object(react["useCallback"])(() => Object.keys(errors).map(item => errors[item]).some(error => error), [errors]); // Use this callback function to safely submit the form
   // without any errors in state...
 
-  var handleOnSubmit = Object(react["useCallback"])(function (event) {
+  const handleOnSubmit = Object(react["useCallback"])(event => {
     event.preventDefault(); // Making sure that there's no error in the state
     // before calling the submit callback function
 
@@ -13973,96 +13919,74 @@ function useForm() {
     }
   }, [validateErrorState, submitFormCallback, values]); // Event handler for handling changes in input.
 
-  var handleOnChange = Object(react["useCallback"])(function (event) {
+  const handleOnChange = Object(react["useCallback"])(event => {
     console.log(event);
     setIsDirty(true);
 
     if (event.isFormData) {
       setFieldValue({
         name: "formData",
-        value: _objectSpread2(_objectSpread2({}, event.formData), {}, defineProperty_defineProperty({}, event.name, event.target.value))
+        value: { ...event.formData,
+          [event.name]: event.target.value
+        }
       });
     } else {
-      var name = event.target.name;
-      var value = event.target.value;
-      var error = validateField(name, value);
+      const name = event.target.name;
+      const value = event.target.value;
+      const error = validateField(name, value);
       setFieldValue({
-        name: name,
-        value: value
+        name,
+        value
       });
       setFieldError({
-        name: name,
-        error: error
+        name,
+        error
       });
     }
   }, [validateField]);
   return {
-    dirty: dirty,
-    values: values,
-    errors: errors,
-    disable: disable,
-    setStateSchema: setStateSchema,
-    setFieldValue: setFieldValue,
-    setFieldError: setFieldError,
-    handleOnChange: handleOnChange,
-    handleOnSubmit: handleOnSubmit
+    dirty,
+    values,
+    errors,
+    disable,
+    setStateSchema,
+    setFieldValue,
+    setFieldError,
+    handleOnChange,
+    handleOnSubmit
   };
 }
 
 /* harmony default export */ var forms_useForm = (useForm);
 // CONCATENATED MODULE: ./src/shared/helpers/validators/EmailValidator.js
+class EmailValidator {
+  static validateFormat(email) {
+    var format = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/); // eslint-disable-line
 
+    if (format.test(String(email).toLowerCase())) {
+      return true;
+    }
 
-
-var EmailValidator_EmailValidator = /*#__PURE__*/function () {
-  function EmailValidator() {
-    _classCallCheck(this, EmailValidator);
+    return false;
   }
 
-  _createClass(EmailValidator, null, [{
-    key: "validateFormat",
-    value: function validateFormat(email) {
-      var format = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/); // eslint-disable-line
-
-      if (format.test(String(email).toLowerCase())) {
-        return true;
-      }
-
-      return false;
-    }
-  }]);
-
-  return EmailValidator;
-}();
-
-
+}
 // CONCATENATED MODULE: ./src/shared/helpers/validators/PasswordValidator.js
+class PasswordValidator {
+  static validateFormat(password) {
+    var format = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
 
+    if (format.test(password)) {
+      return true;
+    }
 
-
-var PasswordValidator_PasswordValidator = /*#__PURE__*/function () {
-  function PasswordValidator() {
-    _classCallCheck(this, PasswordValidator);
+    return false;
   }
 
-  _createClass(PasswordValidator, null, [{
-    key: "validateFormat",
-    value: function validateFormat(password) {
-      var format = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
-
-      if (format.test(password)) {
-        return true;
-      }
-
-      return false;
-    }
-  }]);
-
-  return PasswordValidator;
-}();
-
-
+}
 // CONCATENATED MODULE: ./src/project/Account/areas/Accounts/components/SignIn/SignInForm.js
+var SignInForm_jsxFileName = "C:\\Projects\\Giuru\\fe\\src\\project\\Account\\areas\\Accounts\\components\\SignIn\\SignInForm.js";
+
 
 
 
@@ -14070,7 +13994,7 @@ var PasswordValidator_PasswordValidator = /*#__PURE__*/function () {
 
 
 function SignInForm(props) {
-  var stateSchema = {
+  const stateSchema = {
     email: {
       value: '',
       error: ''
@@ -14080,16 +14004,14 @@ function SignInForm(props) {
       error: ''
     }
   };
-  var stateValidatorSchema = {
+  const stateValidatorSchema = {
     email: {
       required: {
         isRequired: true,
         error: props.emailRequiredErrorMessage
       },
       validator: {
-        func: function func(value) {
-          return EmailValidator_EmailValidator.validateFormat(value);
-        },
+        func: value => EmailValidator.validateFormat(value),
         error: props.emailFormatErrorMessage
       }
     },
@@ -14099,35 +14021,65 @@ function SignInForm(props) {
         error: props.passwordRequiredErrorMessage
       },
       validator: {
-        func: function func(value) {
-          return PasswordValidator_PasswordValidator.validateFormat(value);
-        },
+        func: value => PasswordValidator.validateFormat(value),
         error: props.passwordFormatErrorMessage
       }
     }
   };
-
-  var _useForm = forms_useForm(stateSchema, stateValidatorSchema),
-      values = _useForm.values,
-      errors = _useForm.errors,
-      dirty = _useForm.dirty,
-      disable = _useForm.disable,
-      handleOnChange = _useForm.handleOnChange;
-
-  var email = values.email,
-      password = values.password;
+  const {
+    values,
+    errors,
+    dirty,
+    disable,
+    handleOnChange
+  } = forms_useForm(stateSchema, stateValidatorSchema);
+  const {
+    email,
+    password
+  } = values;
   return /*#__PURE__*/react_default.a.createElement("form", {
     className: "is-modern-form has-text-centered",
     action: props.submitUrl,
-    method: "post"
+    method: "post",
+    __self: this,
+    __source: {
+      fileName: SignInForm_jsxFileName,
+      lineNumber: 50,
+      columnNumber: 9
+    }
   }, /*#__PURE__*/react_default.a.createElement("input", {
     type: "hidden",
     name: "returnUrl",
-    value: props.returnUrl
-  }), /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement("h1", {
-    className: "subtitle is-4"
+    value: props.returnUrl,
+    __self: this,
+    __source: {
+      fileName: SignInForm_jsxFileName,
+      lineNumber: 51,
+      columnNumber: 13
+    }
+  }), /*#__PURE__*/react_default.a.createElement("div", {
+    __self: this,
+    __source: {
+      fileName: SignInForm_jsxFileName,
+      lineNumber: 52,
+      columnNumber: 13
+    }
+  }, /*#__PURE__*/react_default.a.createElement("h1", {
+    className: "subtitle is-4",
+    __self: this,
+    __source: {
+      fileName: SignInForm_jsxFileName,
+      lineNumber: 53,
+      columnNumber: 17
+    }
   }, props.signInText)), /*#__PURE__*/react_default.a.createElement("div", {
-    className: "field"
+    className: "field",
+    __self: this,
+    __source: {
+      fileName: SignInForm_jsxFileName,
+      lineNumber: 55,
+      columnNumber: 13
+    }
   }, /*#__PURE__*/react_default.a.createElement(esm_TextField_TextField, {
     id: "email",
     name: "email",
@@ -14136,9 +14088,21 @@ function SignInForm(props) {
     value: email,
     onChange: handleOnChange,
     helperText: dirty.email ? errors.email : '',
-    error: errors.email.length > 0 && dirty.email
+    error: errors.email.length > 0 && dirty.email,
+    __self: this,
+    __source: {
+      fileName: SignInForm_jsxFileName,
+      lineNumber: 56,
+      columnNumber: 17
+    }
   })), /*#__PURE__*/react_default.a.createElement("div", {
-    className: "field"
+    className: "field",
+    __self: this,
+    __source: {
+      fileName: SignInForm_jsxFileName,
+      lineNumber: 59,
+      columnNumber: 13
+    }
   }, /*#__PURE__*/react_default.a.createElement(esm_TextField_TextField, {
     id: "password",
     name: "password",
@@ -14148,22 +14112,52 @@ function SignInForm(props) {
     value: password,
     onChange: handleOnChange,
     helperText: dirty.password ? errors.password : '',
-    error: errors.password.length > 0 && dirty.password
+    error: errors.password.length > 0 && dirty.password,
+    __self: this,
+    __source: {
+      fileName: SignInForm_jsxFileName,
+      lineNumber: 60,
+      columnNumber: 17
+    }
   })), /*#__PURE__*/react_default.a.createElement("div", {
-    className: "field"
+    className: "field",
+    __self: this,
+    __source: {
+      fileName: SignInForm_jsxFileName,
+      lineNumber: 63,
+      columnNumber: 13
+    }
   }, /*#__PURE__*/react_default.a.createElement(esm_Button_Button, {
     type: "submit",
     variant: "contained",
     color: "primary",
     disabled: disable,
-    fullWidth: true
+    fullWidth: true,
+    __self: this,
+    __source: {
+      fileName: SignInForm_jsxFileName,
+      lineNumber: 64,
+      columnNumber: 17
+    }
   }, props.signInText)));
 }
 
+SignInForm.propTypes = {
+  emailRequiredErrorMessage: prop_types_default.a.string.isRequired,
+  passwordRequiredErrorMessage: prop_types_default.a.string.isRequired,
+  emailFormatErrorMessage: prop_types_default.a.string.isRequired,
+  passwordFormatErrorMessage: prop_types_default.a.string.isRequired,
+  signInText: prop_types_default.a.string.isRequired,
+  enterEmailText: prop_types_default.a.string.isRequired,
+  enterPasswordText: prop_types_default.a.string.isRequired,
+  submitUrl: prop_types_default.a.string.isRequired,
+  returnUrl: prop_types_default.a.string
+};
 /* harmony default export */ var SignIn_SignInForm = (SignInForm);
 // CONCATENATED MODULE: ./src/shared/layouts/images/favicon.png
 /* harmony default export */ var favicon = ("/dist/images/favicon.png");
 // CONCATENATED MODULE: ./src/project/Account/areas/Accounts/pages/SignIn/SignInPage.js
+var SignInPage_jsxFileName = "C:\\Projects\\Giuru\\fe\\src\\project\\Account\\areas\\Accounts\\pages\\SignIn\\SignInPage.js";
 
 
 
@@ -14177,46 +14171,87 @@ function SignInForm(props) {
 
 function SignInPage(props) {
   return /*#__PURE__*/react_default.a.createElement(ThemeProvider_ThemeProvider, {
-    theme: GlobalHelper_GlobalHelper.initMuiTheme()
-  }, /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement(Header_Header, props.header), /*#__PURE__*/react_default.a.createElement("section", {
-    className: "section is-flex-centered"
+    theme: GlobalHelper_GlobalHelper.initMuiTheme(),
+    __self: this,
+    __source: {
+      fileName: SignInPage_jsxFileName,
+      lineNumber: 14,
+      columnNumber: 5
+    }
   }, /*#__PURE__*/react_default.a.createElement("div", {
-    className: "account-card"
-  }, /*#__PURE__*/react_default.a.createElement(SignIn_SignInForm, props.signInForm))), /*#__PURE__*/react_default.a.createElement(Footer_Footer, props.footer)));
+    __self: this,
+    __source: {
+      fileName: SignInPage_jsxFileName,
+      lineNumber: 15,
+      columnNumber: 7
+    }
+  }, /*#__PURE__*/react_default.a.createElement(Header_Header, Object.assign({}, props.header, {
+    __self: this,
+    __source: {
+      fileName: SignInPage_jsxFileName,
+      lineNumber: 16,
+      columnNumber: 9
+    }
+  })), /*#__PURE__*/react_default.a.createElement("section", {
+    className: "section is-flex-centered",
+    __self: this,
+    __source: {
+      fileName: SignInPage_jsxFileName,
+      lineNumber: 17,
+      columnNumber: 9
+    }
+  }, /*#__PURE__*/react_default.a.createElement("div", {
+    className: "account-card",
+    __self: this,
+    __source: {
+      fileName: SignInPage_jsxFileName,
+      lineNumber: 18,
+      columnNumber: 11
+    }
+  }, /*#__PURE__*/react_default.a.createElement(SignIn_SignInForm, Object.assign({}, props.signInForm, {
+    __self: this,
+    __source: {
+      fileName: SignInPage_jsxFileName,
+      lineNumber: 19,
+      columnNumber: 13
+    }
+  })))), /*#__PURE__*/react_default.a.createElement(Footer_Footer, Object.assign({}, props.footer, {
+    __self: this,
+    __source: {
+      fileName: SignInPage_jsxFileName,
+      lineNumber: 22,
+      columnNumber: 9
+    }
+  }))));
 }
 
 /* harmony default export */ var SignIn_SignInPage = (SignInPage);
 // CONCATENATED MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.js
+class CssSsrRemovalHelper {
+  static Remove() {
+    const jssStyles = document.querySelector('#jss-server-side');
 
-
-
-var CssSsrRemovalHelper_CssSsrRemovalHelper = /*#__PURE__*/function () {
-  function CssSsrRemovalHelper() {
-    _classCallCheck(this, CssSsrRemovalHelper);
+    if (jssStyles) {
+      jssStyles.parentElement.removeChild(jssStyles);
+    }
   }
 
-  _createClass(CssSsrRemovalHelper, null, [{
-    key: "Remove",
-    value: function Remove() {
-      var jssStyles = document.querySelector('#jss-server-side');
-
-      if (jssStyles) {
-        jssStyles.parentElement.removeChild(jssStyles);
-      }
-    }
-  }]);
-
-  return CssSsrRemovalHelper;
-}();
-
-
+}
 // CONCATENATED MODULE: ./src/project/Account/areas/Accounts/pages/SignIn/index.js
+var SignIn_jsxFileName = "C:\\Projects\\Giuru\\fe\\src\\project\\Account\\areas\\Accounts\\pages\\SignIn\\index.js";
 
 
 
 
-CssSsrRemovalHelper_CssSsrRemovalHelper.Remove();
-react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(SignIn_SignInPage, window.data), document.getElementById('root'));
+CssSsrRemovalHelper.Remove();
+react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(SignIn_SignInPage, Object.assign({}, window.data, {
+  __self: undefined,
+  __source: {
+    fileName: SignIn_jsxFileName,
+    lineNumber: 8,
+    columnNumber: 18
+  }
+})), document.getElementById('root'));
 
 /***/ })
 /******/ ]);
