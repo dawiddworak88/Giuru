@@ -12,6 +12,13 @@ namespace Media.Api.Infrastructure.Media.Seeds
 {
     public static class MediaSeed
     {
+        public static void SeedHeroSliderItems(MediaContext context, string storageConnectionString)
+        {
+            SeedMedia(context, storageConnectionString, MediaConstants.HeroSliderItems.LivingRoomMediaId, MediaConstants.HeroSliderItems.LivingRoomMediaVersionId, MediaConstants.HeroSliderItems.LivingRoomMediaUrl);
+            SeedMedia(context, storageConnectionString, MediaConstants.HeroSliderItems.BedroomMediaId, MediaConstants.HeroSliderItems.BedroomMediaVersionId, MediaConstants.HeroSliderItems.BedroomMediaUrl);
+            SeedMedia(context, storageConnectionString, MediaConstants.HeroSliderItems.KidsRoomMediaId, MediaConstants.HeroSliderItems.KidsRoomMediaVersionId, MediaConstants.HeroSliderItems.KidsRoomMediaUrl);
+        }
+
         public static void SeedCategories(MediaContext context, string storageConnectionString)
         {
             SeedMedia(context, storageConnectionString, MediaConstants.Categories.CouchesMediaId, MediaConstants.Categories.CouchesMediaVersionId, MediaConstants.Categories.CouchesMediaUrl);

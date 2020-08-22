@@ -37,8 +37,6 @@ namespace Seller.Portal
 
             services.AddCultureRouteConstraint();
 
-            services.AddHttpContextAccessor();
-
             services.AddControllersWithViews();
 
             services.RegisterClientAccountDependencies(this.Configuration);

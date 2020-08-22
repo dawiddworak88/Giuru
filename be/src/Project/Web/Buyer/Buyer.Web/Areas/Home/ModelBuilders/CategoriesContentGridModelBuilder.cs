@@ -1,12 +1,11 @@
 ﻿using Buyer.Web.Areas.Home.Definitions;
 using Buyer.Web.Areas.Home.ViewModel;
 using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Definitions;
 using Buyer.Web.Shared.Services.Catalogs;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.Extensions.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ContentGrids.ViewModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +17,13 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
     {
         private readonly ICatalogService catalogService;
         private readonly IOptions<AppSettings> options;
-        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IMediaService mediaService;
 
-        public CategoriesContentGridModelBuilder(ICatalogService catalogService, IOptions<AppSettings> options, IHttpContextAccessor httpContextAccessor)
+        public CategoriesContentGridModelBuilder(ICatalogService catalogService, IOptions<AppSettings> options, IMediaService mediaService)
         {
             this.catalogService = catalogService;
             this.options = options;
-            this.httpContextAccessor = httpContextAccessor;
+            this.mediaService = mediaService;
         }
 
         public async Task<CategoriesContentGridViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -49,7 +48,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
 
                     if (subCategory.ThumbnailMediaId.HasValue)
                     {
-                        carouselItem.ImageUrl = $"{this.httpContextAccessor.HttpContext.Request.Scheme}://{this.options.Value.MediaUrl}{ApiConstants.Media.MediaApiEndpoint}/{subCategory.ThumbnailMediaId.Value}";
+                        carouselItem.ImageUrl = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, subCategory.ThumbnailMediaId.Value);
                     }
 
                     contentGridCarouselItems.Add(carouselItem);

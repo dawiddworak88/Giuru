@@ -30,8 +30,6 @@ namespace AspNetCore
 
             services.AddCultureRouteConstraint();
 
-            services.AddHttpContextAccessor();
-
             services.AddControllersWithViews();
 
             services.RegisterLocalizationDependencies();

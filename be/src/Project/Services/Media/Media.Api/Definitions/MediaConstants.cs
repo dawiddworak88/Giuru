@@ -9,6 +9,21 @@ namespace Media.Api.Definitions
             public const string ContainerName = "giuru";
         }
 
+        public struct HeroSliderItems
+        {
+            public static Guid LivingRoomMediaId = Guid.Parse("c6c96ab8-a81f-446f-adc2-d375479ece98");
+            public static Guid LivingRoomMediaVersionId = Guid.Parse("c5fb5a7c-6cc0-4cde-8998-ff1d397f1874");
+            public const string LivingRoomMediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/LivingRoom.jpg";
+
+            public static Guid BedroomMediaId = Guid.Parse("01bfe732-cfca-4cdf-a740-9f8e1ba0a537");
+            public static Guid BedroomMediaVersionId = Guid.Parse("f6030dbf-3eaf-4e2a-b2dd-6ee3c53b67ff");
+            public const string BedroomMediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Bedroom.jpg";
+
+            public static Guid KidsRoomMediaId = Guid.Parse("3c57aa8e-c54a-4571-8112-936d75331657");
+            public static Guid KidsRoomMediaVersionId = Guid.Parse("f3dc4359-96b4-46f6-aa66-d8f3c3d1c808");
+            public const string KidsRoomMediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/KidsRoom.jpg";
+        }
+
         public struct Categories
         {
             public static Guid CouchesMediaId = Guid.Parse("bdd7240c-e05f-42f0-9310-ddd4ed37ca18");
