@@ -20,21 +20,10 @@ namespace Foundation.Prerendering
         private const string PrerenderDataAttributeName = "asp-prerender-data";
         private const string PrerenderTimeoutAttributeName = "asp-prerender-timeout";
 
-        public PrerenderTagHelper(IServiceProvider serviceProvider)
+        public PrerenderTagHelper()
         {
-            var hostEnv = (IWebHostEnvironment)serviceProvider.GetService(typeof(IWebHostEnvironment));
-
             var builder = new ConfigurationBuilder()
-            .SetBasePath(hostEnv.ContentRootPath);
-
-            if (hostEnv.IsDevelopment())
-            {
-                builder = builder.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
-            }
-            else
-            {
-                builder = builder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            }
+                .AddEnvironmentVariables();
 
             Configuration = builder.Build();
         }
@@ -56,7 +45,7 @@ namespace Foundation.Prerendering
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var endpointAddress = this.Configuration.GetSection("ServerSideRenderingEndpoint")?.Value;
+            var endpointAddress = this.Configuration["ServerSideRenderingEndpoint"];
 
             if (!string.IsNullOrWhiteSpace(endpointAddress))
             {

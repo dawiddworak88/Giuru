@@ -117,13 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DiscoverBedroomFurniture" xml:space="preserve">
-    <value>Discover bedroom furniture</value>
+  <data name="Browse" xml:space="preserve">
+    <value>Browse</value>
   </data>
-  <data name="FurnishLivingRoom" xml:space="preserve">
-    <value>Furnish your living room</value>
+  <data name="Discover" xml:space="preserve">
+    <value>Discover</value>
   </data>
-  <data name="ShopNow" xml:space="preserve">
+  <data name="EasyRepurchase" xml:space="preserve">
+    <value>Easy repurchases 24/7</value>
+  </data>
+  <data name="LowPrices" xml:space="preserve">
+    <value>Low prices and amazing deals every day</value>
+  </data>
+  <data name="Shop" xml:space="preserve">
     <value>Shop now</value>
+  </data>
+  <data name="TrackOrders" xml:space="preserve">
+    <value>Track orders online and save time on the phone</value>
   </data>
 </root>

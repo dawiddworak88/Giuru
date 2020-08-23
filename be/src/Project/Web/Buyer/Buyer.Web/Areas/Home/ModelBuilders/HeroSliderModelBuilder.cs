@@ -2,6 +2,7 @@
 using Buyer.Web.Shared.Configurations;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Extensions.Services.MediaServices;
+using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.HeroSliders.ViewModels;
 using Microsoft.Extensions.Localization;
@@ -33,27 +34,27 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             var heroSliderItems = new List<HeroSliderItemViewModel>();
 
             var furnishLivingRoomHeroSliderItem = GetHeroSliderItem(this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.LivingRoomMediaId),
-                this.heroSliderLocalizer["FurnishLivingRoom"],
-                this.heroSliderLocalizer["FurnishLivingRoom"],
-                this.heroSliderLocalizer["FurnishLivingRoom"],
-                this.heroSliderLocalizer["FurnishLivingRoom"],
-                this.heroSliderLocalizer["FurnishLivingRoom"],
+                this.heroSliderLocalizer["LowPrices"],
+                this.heroSliderLocalizer["LowPrices"],
+                this.heroSliderLocalizer["LowPrices"],
+                string.Empty,
+                this.heroSliderLocalizer["Discover"],
                 "#"
                 );
             var furnishBedroomHeroSliderItem = GetHeroSliderItem(this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.BedroomMediaId),
-                this.heroSliderLocalizer["DiscoverBedroom"],
-                this.heroSliderLocalizer["DiscoverBedroom"],
-                this.heroSliderLocalizer["DiscoverBedroom"],
-                this.heroSliderLocalizer["DiscoverBedroom"],
-                this.heroSliderLocalizer["DiscoverBedroomFurniture"],
+                this.heroSliderLocalizer["TrackOrders"],
+                this.heroSliderLocalizer["TrackOrders"],
+                this.heroSliderLocalizer["TrackOrders"],
+                string.Empty,
+                this.heroSliderLocalizer["Browse"],
                 "#"
                 );
             var furnishKidsRoomHeroSliderItem = GetHeroSliderItem(this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.KidsRoomMediaId),
-                this.heroSliderLocalizer["ShopKidsRoom"],
-                this.heroSliderLocalizer["ShopKidsRoom"],
-                this.heroSliderLocalizer["ShopKidsRoom"],
-                this.heroSliderLocalizer["ShopKidsRoom"],
-                this.heroSliderLocalizer["ShopNow"],
+                this.heroSliderLocalizer["EasyRepurchase"],
+                this.heroSliderLocalizer["EasyRepurchase"],
+                this.heroSliderLocalizer["EasyRepurchase"],
+                string.Empty,
+                this.heroSliderLocalizer["Shop"],
                 "#"
                 );
 

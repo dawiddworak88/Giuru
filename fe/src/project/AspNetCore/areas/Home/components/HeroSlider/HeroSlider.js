@@ -8,7 +8,7 @@ function HeroSlider(props) {
 
         return (
             <section className="section pb-0 is-flex is-flex-centered is-desktop is-grey-background is-hidden-touch">
-                <Carousel className="hero-slider" showArrows={true} showThumbs={false} useKeyboardArrows={true} dynamicHeight={false} showStatus={false} swipeable={true}>
+                <Carousel className="hero-slider" autoPlay={true} showArrows={true} showThumbs={false} useKeyboardArrows={false} dynamicHeight={false} showStatus={false} swipeable={true}>
                     {props.items.map((item, index) =>
                         <div className="hero-slider__item" key={index}>
                             <img src={item.imageSrc} alt={item.imageAlt} title={item.imageTitle} />
