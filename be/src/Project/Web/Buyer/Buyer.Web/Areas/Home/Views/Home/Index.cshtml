@@ -6,7 +6,7 @@
 </script>
 
 @section MetaTags {
-    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("MakeTheFuture"))</title>
+    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("MakeTheFuture"), false)</title>
     @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("MakeTheFuture")))
     {
         <meta name="description" content="@this.Localizer.GetString("MakeTheFuture")" />

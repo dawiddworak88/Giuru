@@ -126,6 +126,9 @@
   <data name="Cards" xml:space="preserve">
     <value>Karty</value>
   </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Kategorie</value>
+  </data>
   <data name="ClientHostExistsErrorMessage" xml:space="preserve">
     <value>Klient o podanym hoście został już wcześniej dodany</value>
   </data>
@@ -187,7 +190,7 @@
     <value>Zmodyfikowano</value>
   </data>
   <data name="MakeTheFuture" xml:space="preserve">
-    <value>Giuru - twórz przyszłość</value>
+    <value>Twórz przyszłość z Giuru</value>
   </data>
   <data name="Media" xml:space="preserve">
     <value>Media</value>
@@ -252,6 +255,9 @@
   <data name="SelectSchemaLabel" xml:space="preserve">
     <value>Wybierz szablon</value>
   </data>
+  <data name="Sell" xml:space="preserve">
+    <value>Zostań sprzedawcą</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Ustawienia</value>
   </data>
@@ -259,6 +265,9 @@
     <value>Zaloguj się</value>
   </data>
   <data name="TermsAndConditions" xml:space="preserve">
+    <value>Regulamin</value>
+  </data>
+  <data name="TermsConditions" xml:space="preserve">
     <value>Regulamin</value>
   </data>
   <data name="Users" xml:space="preserve">

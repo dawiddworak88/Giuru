@@ -123,6 +123,9 @@
   <data name="AreYouSureLabel" xml:space="preserve">
     <value>Sind Sie sicher, dass Sie löschen möchten</value>
   </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Kategorien</value>
+  </data>
   <data name="ClientHostExistsErrorMessage" xml:space="preserve">
     <value>Der Kunde wurde schon erstellt</value>
   </data>
@@ -187,7 +190,7 @@
     <value>Zuletzt geändertes Datum</value>
   </data>
   <data name="MakeTheFuture" xml:space="preserve">
-    <value>Giuru - Machen Sie die Zukunft</value>
+    <value>Machen Sie die Zukunft mit Giuru</value>
   </data>
   <data name="Media" xml:space="preserve">
     <value>Media</value>
@@ -252,6 +255,9 @@
   <data name="SelectSchemaLabel" xml:space="preserve">
     <value>Vorlage auswählen</value>
   </data>
+  <data name="Sell" xml:space="preserve">
+    <value>Verkaufen</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Einstellungen</value>
   </data>
@@ -259,6 +265,9 @@
     <value>Einloggen</value>
   </data>
   <data name="TermsAndConditions" xml:space="preserve">
+    <value>Geschäftsbedingungen</value>
+  </data>
+  <data name="TermsConditions" xml:space="preserve">
     <value>Geschäftsbedingungen</value>
   </data>
   <data name="Users" xml:space="preserve">

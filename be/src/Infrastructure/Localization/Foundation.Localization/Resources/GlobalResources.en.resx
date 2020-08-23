@@ -126,6 +126,9 @@
   <data name="Cards" xml:space="preserve">
     <value>Cards</value>
   </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Categories</value>
+  </data>
   <data name="ClientHostExistsErrorMessage" xml:space="preserve">
     <value>Client has been already added</value>
   </data>
@@ -187,7 +190,7 @@
     <value>Last Modified Date</value>
   </data>
   <data name="MakeTheFuture" xml:space="preserve">
-    <value>Giuru - make the future</value>
+    <value>Make the future with Giuru</value>
   </data>
   <data name="Media" xml:space="preserve">
     <value>Media</value>
@@ -252,6 +255,9 @@
   <data name="SelectSchemaLabel" xml:space="preserve">
     <value>Select schema</value>
   </data>
+  <data name="Sell" xml:space="preserve">
+    <value>Sell</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
@@ -260,6 +266,9 @@
   </data>
   <data name="TermsAndConditions" xml:space="preserve">
     <value>Terms and Conditions</value>
+  </data>
+  <data name="TermsConditions" xml:space="preserve">
+    <value>Terms &amp; Conditions</value>
   </data>
   <data name="Users" xml:space="preserve">
     <value>Users</value>

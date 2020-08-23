@@ -22,9 +22,9 @@ namespace Buyer.Web.Shared.Footers.ModelBuilders
         {
             var links = new List<LinkViewModel>
             {
-                new LinkViewModel { Text = this.globalLocalizer["PriceList"], Url = "#price-list" },
-                new LinkViewModel { Text = this.globalLocalizer["Contact"], Url = "#contact" }
-                
+                new LinkViewModel { Text = this.globalLocalizer["TermsConditions"], Url = "#" },
+                new LinkViewModel { Text = this.globalLocalizer["PrivacyPolicy"], Url = "#" },
+                new LinkViewModel { Text = this.globalLocalizer["Contact"], Url = "#" },
             };
 
             var viewModel = new FooterViewModel 
