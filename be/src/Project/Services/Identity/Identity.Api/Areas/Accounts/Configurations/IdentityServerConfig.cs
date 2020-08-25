@@ -27,25 +27,27 @@ namespace Identity.Api.Areas.Accounts.Configurations
         {
             var clientsList = new List<Client>();
 
-            var clientsConfiguration = configuration.GetSection("Account")?.GetSection("Clients")?.GetChildren();
+            var clientsConfiguration = configuration["Clients"]?.Split(";");
 
             if (clientsConfiguration != null)
             {
                 foreach (var clientConfiguration in clientsConfiguration)
                 {
+                    var clientParameters = clientConfiguration.Split("&");
+
                     var client = new Client
                     {
-                        ClientId = clientConfiguration.GetValue<string>("ClientId"),
-                        ClientSecrets = { new Secret(clientConfiguration.GetValue<string>("ClientSecret").Sha256()) },
+                        ClientId = clientParameters[0],
+                        ClientSecrets = { new Secret(clientParameters[1].Sha256()) },
                         AllowedGrantTypes = GrantTypes.Code,
                         RequireConsent = false,
                         RequirePkce = true,
                         RedirectUris = 
                         { 
-                            $"{AccountConstants.HttpsScheme}://{clientConfiguration.GetValue<string>("Host")}{clientConfiguration.GetValue<string>("SignInOidc")}",
-                            $"{AccountConstants.HttpScheme}://{clientConfiguration.GetValue<string>("Host")}{clientConfiguration.GetValue<string>("SignInOidc")}"
+                            $"{AccountConstants.HttpsScheme}://{clientParameters[2]}/signin-oidc",
+                            $"{AccountConstants.HttpScheme}://{clientParameters[2]}/signin-oidc"
                         },
-                        PostLogoutRedirectUris = { $"{clientConfiguration.GetValue<string>("Host")}/{clientConfiguration.GetValue<string>("SignOutCallbackOidc")}" },
+                        PostLogoutRedirectUris = { $"{clientParameters[2]}//signout-callback-oidc" },
                         AllowedScopes = new List<string>
                         {
                             IdentityServerConstants.StandardScopes.OpenId,

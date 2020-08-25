@@ -64,6 +64,8 @@ namespace Account
 
             app.UseGeneralStaticFiles();
 
+            app.ConfigureDatabaseMigrations(this.Configuration);
+
             app.UseRouting();
 
             app.UseIdentityServer();

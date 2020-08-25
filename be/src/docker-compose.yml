@@ -119,6 +119,7 @@ services:
     depends_on: 
       - react-ssr
       - webshoppingagg
+      - identity-api
 
   buyer-web:
     image: ${REGISTRY:-giuru}/buyer-web:${PLATFORM:-linux}-${TAG:-latest}
@@ -129,3 +130,4 @@ services:
     depends_on: 
       - react-ssr
       - webshoppingagg
+      - identity-api

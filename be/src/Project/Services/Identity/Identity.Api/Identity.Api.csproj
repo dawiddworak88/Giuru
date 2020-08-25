@@ -8,8 +8,15 @@
     <DockerfileContext>..\..\..\..</DockerfileContext>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Areas\Accounts\Definitions\**" />
+    <Content Remove="Areas\Accounts\Definitions\**" />
+    <EmbeddedResource Remove="Areas\Accounts\Definitions\**" />
+    <None Remove="Areas\Accounts\Definitions\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.7" />
     <PackageReference Include="IdentityServer4" Version="3.1.2" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
@@ -35,7 +42,6 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\PageContent\Foundation.PageContent\Foundation.PageContent.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Accounts\Definitions\" />
     <Folder Include="wwwroot\dist\" />
   </ItemGroup>
   <ItemGroup>

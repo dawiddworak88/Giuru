@@ -10,10 +10,7 @@ namespace Identity.Api.Infrastructure.DependencyInjection
         {
             services.AddScoped<IdentityContext>();
 
-            services.AddDbContext<IdentityContext>(options =>
-                options.UseSqlServer(
-                    configuration.GetConnectionString("DatabaseContext"),
-                    opt => opt.MigrationsAssembly("Foundation.Database").UseNetTopologySuite()));
+            services.AddDbContext<IdentityContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
         }
     }
 }

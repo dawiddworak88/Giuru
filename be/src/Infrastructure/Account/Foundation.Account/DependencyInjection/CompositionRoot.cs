@@ -5,6 +5,7 @@ using IdentityServer4;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -35,24 +36,24 @@ namespace Foundation.Account.DependencyInjection
 
         public static void RegisterClientAccountDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-            var authenticationConfiguration = configuration.GetSection("Authentication");
+            IdentityModelEventSource.ShowPII = true;
 
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = authenticationConfiguration.GetValue<string>("AuthenticationScheme");
-                options.DefaultChallengeScheme = authenticationConfiguration.GetValue<string>("ChallengeScheme");
+                options.DefaultScheme = "Cookies";
+                options.DefaultChallengeScheme = "oidc";
             })
-            .AddCookie(authenticationConfiguration.GetValue<string>("AuthenticationScheme"))
-            .AddOpenIdConnect(authenticationConfiguration.GetValue<string>("ChallengeScheme"), options =>
+            .AddCookie("Cookies")
+            .AddOpenIdConnect("oidc", options =>
             {
-                options.Authority = authenticationConfiguration.GetValue<string>("Authority");
+                options.Authority = configuration["IdentityUrl"];
                 options.RequireHttpsMetadata = false;
 
-                options.ClientId = authenticationConfiguration.GetValue<string>("ClientId");
-                options.ClientSecret = authenticationConfiguration.GetValue<string>("ClientSecret");
-                options.ResponseType = authenticationConfiguration.GetValue<string>("ResponseType");
+                options.ClientId = configuration["ClientId"];
+                options.ClientSecret = configuration["ClientSecret"];
+                options.ResponseType = "code";
 
                 options.TokenValidationParameters = new TokenValidationParameters { NameClaimType = "email" };
                 options.SaveTokens = true;

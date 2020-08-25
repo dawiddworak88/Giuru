@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.KeyVault;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Security.Cryptography.X509Certificates;
 using ITokenService = Identity.Api.Areas.Accounts.Services.TokenServices.ITokenService;
@@ -27,6 +26,7 @@ namespace Identity.Api.Areas.Accounts.DependencyInjection
 
             var builder = services.AddIdentityServer(options => {
 
+                options.IssuerUri = "null";
                 options.UserInteraction.LoginUrl = "/";
                 options.Events.RaiseErrorEvents = true;
                 options.Events.RaiseInformationEvents = true;
@@ -59,16 +59,7 @@ namespace Identity.Api.Areas.Accounts.DependencyInjection
                 builder.AddDeveloperSigningCredential();
             }
 
-            var accountConfiguration = configuration.GetSection("Account")?.GetSection("AzureAd");
-
-            services.AddAuthentication()
-            .AddOpenIdConnect("AAD", "Azure AD", options =>
-            {
-                options.Authority = accountConfiguration?.GetValue<string>("Authority");
-                options.TokenValidationParameters = new TokenValidationParameters { ValidateIssuer = false };
-                options.ClientId = accountConfiguration?.GetValue<string>("ClientId");
-                options.CallbackPath = accountConfiguration.GetValue<string>("CallbackPath");
-            });
+            services.AddAuthentication();
 
             // Register services
             services.AddScoped<ITokenService, TokenService>();
