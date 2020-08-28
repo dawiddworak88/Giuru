@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using NetTopologySuite.Geometries;
 
-namespace Identity.Api.Infrastructure
+namespace Identity.Api.Infrastructure.Migrations
 {
     public partial class Initial : Migration
     {
@@ -82,7 +82,8 @@ namespace Identity.Api.Infrastructure
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true)
+                    LastName = table.Column<string>(nullable: true),
+                    ClientId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -98,8 +99,9 @@ namespace Identity.Api.Infrastructure
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    Language = table.Column<string>(nullable: false),
-                    IsWorkflowEnabled = table.Column<bool>(nullable: false)
+                    Domain = table.Column<string>(nullable: true),
+                    Key = table.Column<string>(nullable: true),
+                    Language = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -137,38 +139,6 @@ namespace Identity.Api.Infrastructure
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LinkAppSecretsClients", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "LinkSellersClients",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    ClientId = table.Column<Guid>(nullable: false),
-                    SellerId = table.Column<Guid>(nullable: false),
-                    Order = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LinkSellersClients", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Sellers",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Sellers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -348,12 +318,6 @@ namespace Identity.Api.Infrastructure
 
             migrationBuilder.DropTable(
                 name: "LinkAppSecretsClients");
-
-            migrationBuilder.DropTable(
-                name: "LinkSellersClients");
-
-            migrationBuilder.DropTable(
-                name: "Sellers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

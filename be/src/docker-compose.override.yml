@@ -63,6 +63,7 @@ services:
       - MediaUrl=${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - ConnectionString=Server=sqldata;Database=IdentityDb;User Id=sa;Password=Gre@tPassw0rd
       - Clients=663bba90-0036-4a58-8516-39faa8baba87&c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9&${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5104
+      - Accounts=test@user.com&Test&User&d2a44f96-c29c-4f71-9de2-41219318d668&AHhb6UTPYPHtRPgBrYozbr+82Cn/QrOz8KlyLcsoHtkUu5Ht7HX2XkfAQUAR6WTudw==
     ports:
       - "5105:80"
 

@@ -8,10 +8,11 @@ namespace Identity.Api.Infrastructure.Clients.Entities
         [Required]
         public string Name { get; set; }
 
-        [Required]
-        public string Language { get; set; }
+        public string Domain { get; set; }
+
+        public string Key { get; set; }
 
         [Required]
-        public bool IsWorkflowEnabled { get; set; }
+        public string Language { get; set; }
     }
 }

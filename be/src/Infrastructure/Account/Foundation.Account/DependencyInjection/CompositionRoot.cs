@@ -22,12 +22,10 @@ namespace Foundation.Account.DependencyInjection
 
         public static void RegisterApiAccountDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-            var authenticationConfiguration = configuration.GetSection("Authentication");
-
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
-                    options.Authority = authenticationConfiguration?.GetValue<string>("Authority");
+                    options.Authority = configuration.GetValue<string>("IdentityUrl");
                     options.RequireHttpsMetadata = false;
 
                     options.Audience = ApiExtensionsConstants.AllScopes;
