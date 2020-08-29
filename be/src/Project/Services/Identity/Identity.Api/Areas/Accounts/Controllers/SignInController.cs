@@ -7,6 +7,8 @@ using Foundation.Extensions.ModelBuilders;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Identity.Api.Areas.Accounts.Services.UserServices;
+using IdentityServer4.Services;
 
 namespace Identity.Api.Areas.Accounts.Controllers
 {
@@ -14,12 +16,18 @@ namespace Identity.Api.Areas.Accounts.Controllers
     [AllowAnonymous]
     public class SignInController : BaseController
     {
+        private readonly IIdentityServerInteractionService interactionService;
+        private readonly IUserService userService;
         private readonly IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder;
 
         public SignInController(
+            IIdentityServerInteractionService interactionService,
+            IUserService userService,
             IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder
             )
         {
+            this.interactionService = interactionService;
+            this.userService = userService;
             this.signInModelBuilder = signInModelBuilder;
         }
 
@@ -40,9 +48,15 @@ namespace Identity.Api.Areas.Accounts.Controllers
 
             if (result.IsValid)
             {
-                // await this.userService.SignInAsync(this.HttpContext, model.Email, model.Password, model.ReturnUrl);
+                var context = await interactionService.GetAuthorizationContextAsync(model.ReturnUrl);
 
-                return this.Redirect(model.ReturnUrl);
+                if (context != null)
+                {
+                    if (await this.userService.SignInAsync(model.Email, model.Password, model.ReturnUrl))
+                    {
+                        return this.Redirect(model.ReturnUrl);
+                    }
+                }                
             }
 
             var viewModel = this.signInModelBuilder.BuildModel(new SignInComponentModel { ReturnUrl = model.ReturnUrl });

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Identity.Api.Areas.Accounts.Services.UserServices;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +8,7 @@ namespace Identity.Api.Infrastructure.DependencyInjection
 {
     public static class ConfigurationRoot
     {
-        public static void ConfigureDatabaseMigrations(this IApplicationBuilder app, IConfiguration configuration)
+        public static void ConfigureDatabaseMigrations(this IApplicationBuilder app, IConfiguration configuration, IUserService userService)
         {
             var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
 
@@ -18,7 +19,7 @@ namespace Identity.Api.Infrastructure.DependencyInjection
                 if (!dbContext.AllMigrationsApplied())
                 {
                     dbContext.Database.Migrate();
-                    dbContext.EnsureSeeded(configuration);
+                    dbContext.EnsureSeeded(configuration, userService);
                 }
             }
         }

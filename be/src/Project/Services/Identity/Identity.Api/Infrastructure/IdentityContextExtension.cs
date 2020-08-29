@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Identity.Api.Areas.Accounts.Services.UserServices;
+using Identity.Api.Infrastructure.Accounts.Seeds;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
@@ -20,11 +22,9 @@ namespace Identity.Api.Infrastructure
             return !total.Except(applied).Any();
         }
 
-        public static void EnsureSeeded(this IdentityContext context, IConfiguration configuration)
+        public static void EnsureSeeded(this IdentityContext context, IConfiguration configuration, IUserService userService)
         {
-            //AccountsSeed.SeedAdminAccounts(context, configuration);
-            //SellersSeed.SeedSellers(context, configuration);
-            //AccountsSeed.SeedSellerAccounts(context, configuration);
+            AccountsSeed.SeedAccounts(context, configuration, userService);
         }
     }
 }

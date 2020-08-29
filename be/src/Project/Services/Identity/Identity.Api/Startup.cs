@@ -14,6 +14,8 @@ using Foundation.GenericRepository.DependencyInjection;
 using Foundation.Extensions.Definitions;
 using Identity.Api.Infrastructure.DependencyInjection;
 using Identity.Api.Areas.Accounts.DependencyInjection;
+using Identity.Api.Areas.Accounts.Services.UserServices;
+using Microsoft.AspNetCore.Http;
 
 namespace Account
 {
@@ -54,7 +56,7 @@ namespace Account
             services.ConfigureGenericRepositoryOptions(this.Configuration);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<LocalizationConfiguration> localizationOptions)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<LocalizationConfiguration> localizationOptions, IUserService userService)
         {
             app.UseForwardedHeaders();
 
@@ -64,11 +66,13 @@ namespace Account
 
             app.UseGeneralStaticFiles();
 
-            app.ConfigureDatabaseMigrations(this.Configuration);
+            app.ConfigureDatabaseMigrations(this.Configuration, userService);
 
             app.UseRouting();
 
             app.UseIdentityServer();
+
+            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax,  });
 
             app.UseAuthorization();
 

@@ -12,6 +12,7 @@ using System.Security.Cryptography.X509Certificates;
 using ITokenService = Identity.Api.Areas.Accounts.Services.TokenServices.ITokenService;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Identity.Api.Infrastructure;
+using Identity.Api.Areas.Accounts.Services.UserServices;
 
 namespace Identity.Api.Areas.Accounts.DependencyInjection
 {
@@ -63,6 +64,7 @@ namespace Identity.Api.Areas.Accounts.DependencyInjection
 
             // Register services
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }

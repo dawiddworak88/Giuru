@@ -1,5 +1,4 @@
 ﻿using Foundation.Account.Services;
-using Foundation.Account.UserStores;
 using Foundation.ApiExtensions.Definitions;
 using IdentityServer4;
 using Microsoft.AspNetCore.Identity;
@@ -15,7 +14,6 @@ namespace Foundation.Account.DependencyInjection
     {
         public static void RegisterBaseAccountDependencies(this IServiceCollection services)
         {
-            services.AddScoped<UserStoreFactory>();
             services.AddScoped<IPasswordGenerationService, PasswordGenerationService>();
             services.AddScoped(typeof(IPasswordHasher<>), typeof(PasswordHasher<>));
         }
@@ -46,6 +44,9 @@ namespace Foundation.Account.DependencyInjection
             .AddCookie("Cookies")
             .AddOpenIdConnect("oidc", options =>
             {
+                options.NonceCookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
+                options.CorrelationCookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
+
                 options.Authority = configuration["IdentityUrl"];
                 options.RequireHttpsMetadata = false;
 
