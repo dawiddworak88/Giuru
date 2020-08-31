@@ -1,7 +1,7 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import ImageGallery from 'react-image-gallery';
-import Files from '../../../../shared/components/Files/Files';
+import React, { Fragment } from "react";
+import PropTypes from "prop-types";
+import ImageGallery from "react-image-gallery";
+import Files from "../../../../shared/components/Files/Files";
 
 function ProductDetail(props) {
 

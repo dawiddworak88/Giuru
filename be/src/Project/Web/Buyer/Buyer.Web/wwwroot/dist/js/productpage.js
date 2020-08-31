@@ -12152,15 +12152,15 @@ var GlobalHelper = /*#__PURE__*/function () {
       var theme = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])({
         typography: {
           button: {
-            textTransform: 'none'
+            textTransform: "none"
           }
         },
         palette: {
           primary: {
-            main: '#BF202F'
+            main: "#BF202F"
           },
           secondary: {
-            main: '#5E1916'
+            main: "#5E1916"
           }
         }
       });
@@ -13656,7 +13656,7 @@ var CssSsrRemovalHelper = /*#__PURE__*/function () {
   Object(C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(CssSsrRemovalHelper, null, [{
     key: "Remove",
     value: function Remove() {
-      var jssStyles = document.querySelector('#jss-server-side');
+      var jssStyles = document.querySelector("#jss-server-side");
 
       if (jssStyles) {
         jssStyles.parentElement.removeChild(jssStyles);
@@ -18365,7 +18365,7 @@ var Button = __webpack_require__(235);
 
 function LanguageSwitcher(props) {
   function handleLanguageChange(e) {
-    if (typeof window !== 'undefined' && e && e.target) {
+    if (typeof window !== "undefined" && e && e.target) {
       window.location.href = e.target.value;
     }
   }
@@ -18397,7 +18397,7 @@ function LanguageSwitcher(props) {
 
 
 function Header(props) {
-  var _useState = Object(react["useState"])(''),
+  var _useState = Object(react["useState"])(""),
       _useState2 = Object(slicedToArray["a" /* default */])(_useState, 2),
       search = _useState2[0],
       setSearch = _useState2[1];
@@ -18516,7 +18516,7 @@ function _objectSpread2(target) {
 
 var Reducer_Reducer = function Reducer(state, action) {
   switch (action.type) {
-    case 'SET_IS_LOADING':
+    case "SET_IS_LOADING":
       return _objectSpread2(_objectSpread2({}, state), {}, {
         isLoading: action.payload
       });
@@ -35850,7 +35850,7 @@ function Files(props) {
       }
     }, file.filename, file.isProtected && !props.isAuthenticated && /*#__PURE__*/react_default.a.createElement(LockOutlined, {
       color: "primary"
-    }))), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, file.name), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, file.description), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, file.size), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, moment_default()(file.lastModifiedDate).local().format('L LT')), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, moment_default()(file.createdDate).local().format('L LT')));
+    }))), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, file.name), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, file.description), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, file.size), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, moment_default()(file.lastModifiedDate).local().format("L LT")), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, moment_default()(file.createdDate).local().format("L LT")));
   }))))))));
 }
 
@@ -42875,7 +42875,7 @@ var CssSsrRemovalHelper = __webpack_require__(49);
 
 
 CssSsrRemovalHelper["a" /* default */].Remove();
-react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(ProductPage_ProductPage, window.data), document.getElementById('root'));
+react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(ProductPage_ProductPage, window.data), document.getElementById("root"));
 
 /***/ })
 /******/ ]);

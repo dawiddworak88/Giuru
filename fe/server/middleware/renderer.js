@@ -1,21 +1,21 @@
-import React from 'react';
-import ReactDOMServer from 'react-dom/server';
-import { ServerStyleSheets } from '@material-ui/core/styles';
+import React from "react";
+import ReactDOMServer from "react-dom/server";
+import { ServerStyleSheets } from "@material-ui/core/styles";
 
 // AspNetCore
-import HomePage from '../../src/project/AspNetCore/areas/Home/pages/HomePage/HomePage';
+import HomePage from "../../src/project/AspNetCore/areas/Home/pages/HomePage/HomePage";
 
 // Account
-import SignInPage from '../../src/project/Account/areas/Accounts/pages/SignIn/SignInPage';
+import SignInPage from "../../src/project/Account/areas/Accounts/pages/SignIn/SignInPage";
 
 // Seller Portal
-import OrderPage from '../../src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage';
-import OrderDetailPage from '../../src/project/Seller.Portal/areas/Orders/pages/OrderDetailPage/OrderDetailPage';
-import ImportOrderPage from '../../src/project/Seller.Portal/areas/Orders/pages/ImportOrderPage/ImportOrderPage';
-import ClientPage from '../../src/project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage';
-import ClientDetailPage from '../../src/project/Seller.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage';
-import ProductPage from '../../src/project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage';
-import ProductDetailPage from '../../src/project/Seller.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage';
+import OrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage";
+import OrderDetailPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderDetailPage/OrderDetailPage";
+import ImportOrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/ImportOrderPage/ImportOrderPage";
+import ClientPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage";
+import ClientDetailPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage";
+import ProductPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage";
+import ProductDetailPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage";
 
 const Components = {
 	HomePage,

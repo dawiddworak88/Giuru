@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
+import React, { Fragment } from "react";
+import PropTypes from "prop-types";
 import {
     Fab, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Button
-} from '@material-ui/core';
-import { GetApp, Link, LockOutlined } from '@material-ui/icons';
-import moment from 'moment';
+} from "@material-ui/core";
+import { GetApp, Link, LockOutlined } from "@material-ui/icons";
+import moment from "moment";
 
 function Files(props) {
 
@@ -58,8 +58,8 @@ function Files(props) {
                                                 <TableCell>{file.name}</TableCell>
                                                 <TableCell>{file.description}</TableCell>
                                                 <TableCell>{file.size}</TableCell>
-                                                <TableCell>{moment(file.lastModifiedDate).local().format('L LT')}</TableCell>
-                                                <TableCell>{moment(file.createdDate).local().format('L LT')}</TableCell>
+                                                <TableCell>{moment(file.lastModifiedDate).local().format("L LT")}</TableCell>
+                                                <TableCell>{moment(file.createdDate).local().format("L LT")}</TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>

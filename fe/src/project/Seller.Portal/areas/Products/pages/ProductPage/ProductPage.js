@@ -1,17 +1,17 @@
-import React from 'react';
-import { toast } from 'react-toastify';
-import { ThemeProvider } from '@material-ui/core/styles';
-import { Plus } from 'react-feather';
-import Store from '../../../../../../shared/stores/Store';
-import GlobalHelper from '../../../../../../shared/helpers/globals/GlobalHelper';
-import LocaleHelper from '../../../../../../shared/helpers/globals/LocaleHelper';
-import Header from '../../../../../../shared/components/Header/Header';
-import Footer from '../../../../../../shared/components/Footer/Footer';
-import MenuTiles from '../../../../../../shared/components/MenuTiles/MenuTiles';
-import ProductCatalog from '../../components/ProductCatalog/ProductCatalog';
+import React from "react";
+import { toast } from "react-toastify";
+import { ThemeProvider } from "@material-ui/core/styles";
+import { Plus } from "react-feather";
+import Store from "../../../../../../shared/stores/Store";
+import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
+import LocaleHelper from "../../../../../../shared/helpers/globals/LocaleHelper";
+import Header from "../../../../../../shared/components/Header/Header";
+import Footer from "../../../../../../shared/components/Footer/Footer";
+import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
+import ProductCatalog from "../../components/ProductCatalog/ProductCatalog";
 
 /* eslint-disable no-unused-vars */
-import favicon from '../../../../../../shared/layouts/images/favicon.png';
+import favicon from "../../../../../../shared/layouts/images/favicon.png";
 /* eslint-enable no-unused-vars */
 
 function ProductPage(props) {

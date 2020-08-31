@@ -1,13 +1,13 @@
-import React, { useContext, useCallback, useState } from 'react';
-import { toast } from 'react-toastify';
-import PropTypes from 'prop-types';
-import { UploadCloud } from 'react-feather';
-import IconConstants from '../../../../../../shared/constants/IconConstants';
-import { Context } from '../../../../../../shared/stores/Store';
-import { TextField, Button, CircularProgress } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { useDropzone } from 'react-dropzone';
-import FetchErrorHandler from '../../../../../../shared/helpers/errorHandlers/FetchErrorHandler';
+import React, { useContext, useCallback, useState } from "react";
+import { toast } from "react-toastify";
+import PropTypes from "prop-types";
+import { UploadCloud } from "react-feather";
+import IconConstants from "../../../../../../shared/constants/IconConstants";
+import { Context } from "../../../../../../shared/stores/Store";
+import { TextField, Button, CircularProgress } from "@material-ui/core";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import { useDropzone } from "react-dropzone";
+import FetchErrorHandler from "../../../../../../shared/helpers/errorHandlers/FetchErrorHandler";
 
 function ImportOrderForm(props) {
 
@@ -24,7 +24,7 @@ function ImportOrderForm(props) {
 
     const onDrop = useCallback(acceptedFiles => {
 
-        dispatch({ type: 'SET_IS_LOADING', payload: true });
+        dispatch({ type: "SET_IS_LOADING", payload: true });
 
         acceptedFiles.forEach((file) => {
 
@@ -33,27 +33,27 @@ function ImportOrderForm(props) {
             console.log(client);
 
             if (client) {
-                formData.append('clientId', client.id);
+                formData.append("clientId", client.id);
             }
             
-            formData.append('orderFile', file);
+            formData.append("orderFile", file);
 
             const requestOptions = {
-                method: 'POST',
+                method: "POST",
                 body: formData
             };
 
             fetch(props.validateOrderUrl, requestOptions)
                 .then(function (response) {
 
-                    dispatch({ type: 'SET_IS_LOADING', payload: false });
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
 
                     FetchErrorHandler.handleUnauthorizedResponse(response);
 
                     return response.json().then(jsonResponse => {
 
                         if (response.ok) {
-                            dispatch({ type: 'SET_IS_LOADING', payload: false });
+                            dispatch({ type: "SET_IS_LOADING", payload: false });
                         }
                         else {
                             FetchErrorHandler.consoleLogResponseDetails(state, response, jsonResponse);
@@ -63,7 +63,7 @@ function ImportOrderForm(props) {
                 }).catch(error => {
 
                     console.log(error);
-                    dispatch({ type: 'SET_IS_LOADING', payload: false });
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
                     toast.error(props.generalErrorMessage);
                 })
         })
@@ -71,7 +71,7 @@ function ImportOrderForm(props) {
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
-        accept: '.xls, .xlsx',
+        accept: ".xls, .xlsx",
         multiple: false
     });
 

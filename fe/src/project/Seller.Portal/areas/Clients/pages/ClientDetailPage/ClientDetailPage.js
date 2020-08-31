@@ -1,15 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { ThemeProvider } from '@material-ui/core/styles';
-import GlobalHelper from '../../../../../../shared/helpers/globals/GlobalHelper';
-import Header from '../../../../../../shared/components/Header/Header';
-import Footer from '../../../../../../shared/components/Footer/Footer';
-import MenuTiles from '../../../../../../shared/components/MenuTiles/MenuTiles';
-import Store from '../../../../../../shared/stores/Store';
-import ClientDetailForm from '../../components/ClientDetail/ClientDetailForm';
+import React from "react";
+import PropTypes from "prop-types";
+import { ThemeProvider } from "@material-ui/core/styles";
+import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
+import Header from "../../../../../../shared/components/Header/Header";
+import Footer from "../../../../../../shared/components/Footer/Footer";
+import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
+import Store from "../../../../../../shared/stores/Store";
+import ClientDetailForm from "../../components/ClientDetail/ClientDetailForm";
 
 /* eslint-disable no-unused-vars */
-import favicon from '../../../../../../shared/layouts/images/favicon.png';
+import favicon from "../../../../../../shared/layouts/images/favicon.png";
 /* eslint-enable no-unused-vars */
 
 function ClientDetailPage(props) {

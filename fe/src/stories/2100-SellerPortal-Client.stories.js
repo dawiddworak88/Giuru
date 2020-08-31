@@ -1,7 +1,7 @@
-import React from 'react';
-import '../project/Seller.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage.scss';
-import ClientDetailPage from '../project/Seller.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage';
-import { header, menuTiles, footer } from './Shared/Props';
+import React from "react";
+import "../project/Seller.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage.scss";
+import ClientDetailPage from "../project/Seller.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage";
+import { header, menuTiles, footer } from "./Shared/Props";
 
 var clientDetailForm = {
 
@@ -30,10 +30,10 @@ var clientDetailForm = {
 export const ClientDetailPageStory = () => <ClientDetailPage header={header} menuTiles={menuTiles} title="Client" clientDetailForm={clientDetailForm} footer={footer} />
 
 ClientDetailPageStory.story = {
-  name: 'Client Detail Page',
+  name: "Client Detail Page",
 };
 
 export default {
-  title: 'SellerPortal.Client',
+  title: "SellerPortal.Client",
   component: ClientDetailPageStory,
 };

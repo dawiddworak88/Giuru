@@ -218,7 +218,7 @@ class ArrayField extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    // Don't call getDerivedStateFromProps if keyed formdata was just updated.
+    // Don"t call getDerivedStateFromProps if keyed formdata was just updated.
     if (prevState.updatedKeyedFormData) {
       return {
         updatedKeyedFormData: false,
@@ -247,7 +247,7 @@ class ArrayField extends Component {
 
   isItemRequired(itemSchema) {
     if (Array.isArray(itemSchema.type)) {
-      // While we don't yet support composite/nullable jsonschema types, it's
+      // While we don"t yet support composite/nullable jsonschema types, it"s
       // future-proof to check for requirement against these.
       return !itemSchema.type.includes("null");
     }

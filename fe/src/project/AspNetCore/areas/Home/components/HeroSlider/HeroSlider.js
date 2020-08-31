@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Carousel } from 'react-responsive-carousel';
+import React from "react";
+import PropTypes from "prop-types";
+import { Carousel } from "react-responsive-carousel";
 
 function HeroSlider(props) {
 

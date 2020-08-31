@@ -1,5 +1,5 @@
-import { toast } from 'react-toastify';
-import FetchErrorHandler from '../../../../../../shared/helpers/errorHandlers/FetchErrorHandler';
+import { toast } from "react-toastify";
+import FetchErrorHandler from "../../../../../../shared/helpers/errorHandlers/FetchErrorHandler";
 
 export default class ClientDetailService {
 
@@ -7,18 +7,18 @@ export default class ClientDetailService {
 
         toast.configure();
 
-        dispatch({ type: 'SET_IS_LOADING', payload: true });
+        dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(client)
         };
 
         return fetch(url, requestOptions)
             .then(function (response) {
 
-                dispatch({ type: 'SET_IS_LOADING', payload: false });
+                dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 FetchErrorHandler.handleUnauthorizedResponse(response);
 
@@ -35,7 +35,7 @@ export default class ClientDetailService {
             }).catch(error => {
 
                 console.log(error);
-                dispatch({ type: 'SET_IS_LOADING', payload: false });
+                dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(generalErrorMessage);
             });
     }

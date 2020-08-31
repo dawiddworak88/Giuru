@@ -1,5 +1,5 @@
 import React, {createContext, useReducer} from "react";
-import Reducer from '../reducers/Reducer';
+import Reducer from "../reducers/Reducer";
 
 const initialState = {
     isLoading: false

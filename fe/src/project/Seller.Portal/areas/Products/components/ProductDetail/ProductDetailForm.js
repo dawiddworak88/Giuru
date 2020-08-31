@@ -1,12 +1,12 @@
-import React, { useContext, useState } from 'react';
-import { toast } from 'react-toastify';
-import PropTypes from 'prop-types';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import { Context } from '../../../../../../shared/stores/Store';
-import useForm from '../../../../../../shared/helpers/forms/useForm';
-import { TextField, Button, CircularProgress } from '@material-ui/core';
-import DynamicForm from '../../../../../../shared/components/DynamicForm/DynamicForm';
-import FetchErrorHandler from '../../../../../../shared/helpers/errorHandlers/FetchErrorHandler';
+import React, { useContext, useState } from "react";
+import { toast } from "react-toastify";
+import PropTypes from "prop-types";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import { Context } from "../../../../../../shared/stores/Store";
+import useForm from "../../../../../../shared/helpers/forms/useForm";
+import { TextField, Button, CircularProgress } from "@material-ui/core";
+import DynamicForm from "../../../../../../shared/components/DynamicForm/DynamicForm";
+import FetchErrorHandler from "../../../../../../shared/helpers/errorHandlers/FetchErrorHandler";
 
 function ProductDetailForm(props) {
 
@@ -24,10 +24,10 @@ function ProductDetailForm(props) {
 
     const stateSchema = {
 
-        id: { value: props.product ? props.product.id : null, error: '' },
-        name: { value: props.product ? props.product.name : '', error: '' },
-        sku: { value: props.product ? props.product.sku : '', error: '' },
-        schemaId: { value: props.schema ? props.schema.id : null, error: '' },
+        id: { value: props.product ? props.product.id : null, error: "" },
+        name: { value: props.product ? props.product.name : "", error: "" },
+        sku: { value: props.product ? props.product.sku : "", error: "" },
+        schemaId: { value: props.schema ? props.schema.id : null, error: "" },
         formData: props.product && props.product.formData ? JSON.parse(props.product.formData) : {}
     };
 
@@ -49,18 +49,18 @@ function ProductDetailForm(props) {
 
     function onSubmitForm(state) {
 
-        dispatch({ type: 'SET_IS_LOADING', payload: true });
+        dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(state)
         };
 
         fetch(props.saveUrl, requestOptions)
             .then(function (response) {
 
-                dispatch({ type: 'SET_IS_LOADING', payload: false });
+                dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 FetchErrorHandler.handleUnauthorizedResponse(response);
 
@@ -79,7 +79,7 @@ function ProductDetailForm(props) {
             }).catch(error => {
 
                 console.log(error);
-                dispatch({ type: 'SET_IS_LOADING', payload: false });
+                dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
     }
@@ -115,11 +115,11 @@ function ProductDetailForm(props) {
                 </div>
                 <div className="field">
                     <TextField id="sku" name="sku" label={props.skuLabel} fullWidth={true}
-                        value={sku} onChange={handleOnChange} helperText={dirty.sku ? errors.sku : ''} error={(errors.sku.length > 0) && dirty.sku} />
+                        value={sku} onChange={handleOnChange} helperText={dirty.sku ? errors.sku : ""} error={(errors.sku.length > 0) && dirty.sku} />
                 </div>
                 <div className="field">
                     <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
-                        value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ''} error={(errors.name.length > 0) && dirty.name} />
+                        value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
                 </div>
                 {jsonSchema &&
                     <DynamicForm jsonSchema={jsonSchema} uiSchema={uiSchema} formData={formData} onChange={handleOnChange} />

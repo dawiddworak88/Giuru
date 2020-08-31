@@ -1,4 +1,4 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme } from "@material-ui/core/styles";
 
 export default class GlobalHelper {
 
@@ -7,15 +7,15 @@ export default class GlobalHelper {
     const theme = createMuiTheme({
       typography: {
         button: {
-          textTransform: 'none'
+          textTransform: "none"
         }
       },
       palette: {
         primary: {
-          main: '#BF202F'
+          main: "#BF202F"
         },
         secondary: {
-          main: '#5E1916'
+          main: "#5E1916"
         }
       }
     });

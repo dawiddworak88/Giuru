@@ -6,7 +6,7 @@ import { asNumber } from "../utils/utils";
 // Matches a string that ends in a . character, optionally followed by a sequence of
 // digits followed by any number of 0 characters up until the end of the line.
 // Ensuring that there is at least one prefixed character is important so that
-// you don't incorrectly match against "0".
+// you don"t incorrectly match against "0".
 const trailingCharMatcherWithPrefix = /\.([0-9]*0)*$/;
 
 // This is used for trimming the trailing 0 and . characters without affecting
@@ -45,7 +45,7 @@ class NumberField extends React.Component {
     // Cache the original value in component state
     this.setState({ lastValue: value });
 
-    // Normalize decimals that don't start with a zero character in advance so
+    // Normalize decimals that don"t start with a zero character in advance so
     // that the rest of the normalization logic is simpler
     if (`${value}`.charAt(0) === ".") {
       value = `0${value}`;
@@ -71,8 +71,8 @@ class NumberField extends React.Component {
 
     if (typeof lastValue === "string" && typeof value === "number") {
       // Construct a regular expression that checks for a string that consists
-      // of the formData value suffixed with zero or one '.' characters and zero
-      // or more '0' characters
+      // of the formData value suffixed with zero or one "." characters and zero
+      // or more "0" characters
       const re = new RegExp(`${value}`.replace(".", "\\.") + "\\.?0*$");
 
       // If the cached "lastValue" is a match, use that instead of the formData

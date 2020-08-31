@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { TextField, Button } from '@material-ui/core';
-import LanguageSwitcher from '../../../../../shared/components/LanguageSwitcher/LanguageSwitcher';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { TextField, Button } from "@material-ui/core";
+import LanguageSwitcher from "../../../../../shared/components/LanguageSwitcher/LanguageSwitcher";
 
-import logo from '../../../../../shared/layouts/images/logo.png';
+import logo from "../../../../../shared/layouts/images/logo.png";
 
 function Header(props) {
 
-    const [search, setSearch] = useState('');
+    const [search, setSearch] = useState("");
 
     return (
         <header>

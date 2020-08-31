@@ -1,27 +1,27 @@
 
-import React, { useContext } from 'react';
-import { toast } from 'react-toastify';
-import moment from 'moment';
-import Fab from '@material-ui/core/Fab';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import React, { useContext } from "react";
+import { toast } from "react-toastify";
+import moment from "moment";
+import Fab from "@material-ui/core/Fab";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, TablePagination, CircularProgress,
     Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
-} from '@material-ui/core';
-import FetchErrorHandler from '../../../../../../shared/helpers/errorHandlers/FetchErrorHandler';
-import KeyConstants from '../../../../../../shared/constants/KeyConstants';
-import { Context } from '../../../../../../shared/stores/Store';
-import QueryStringSerializer from '../../../../../../shared/helpers/serializers/QueryStringSerializer';
-import PaginationConstants from '../../../../../../shared/constants/PaginationConstants';
+} from "@material-ui/core";
+import FetchErrorHandler from "../../../../../../shared/helpers/errorHandlers/FetchErrorHandler";
+import KeyConstants from "../../../../../../shared/constants/KeyConstants";
+import { Context } from "../../../../../../shared/stores/Store";
+import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
+import PaginationConstants from "../../../../../../shared/constants/PaginationConstants";
 
 function ProductCatalog(props) {
 
     const [state, dispatch] = useContext(Context);
     const [page, setPage] = React.useState(0);
     const [itemsPerPage,] = React.useState(PaginationConstants.DefaultRowsPerPage());
-    const [searchTerm, setSearchTerm] = React.useState('');
+    const [searchTerm, setSearchTerm] = React.useState("");
     const [products, setProducts] = React.useState(props.pagedProducts.data);
     const [total, setTotal] = React.useState(props.pagedProducts.total);
     const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
@@ -40,7 +40,7 @@ function ProductCatalog(props) {
 
     const handleChangePage = (event, newPage) => {
 
-        dispatch({ type: 'SET_IS_LOADING', payload: true });
+        dispatch({ type: "SET_IS_LOADING", payload: true });
 
         setPage(() => newPage);
 
@@ -52,16 +52,16 @@ function ProductCatalog(props) {
         };
 
         const requestOptions = {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
         };
 
-        const url = props.searchApiUrl + '?' + QueryStringSerializer.serialize(searchParameters);
+        const url = props.searchApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
 
         return fetch(url, requestOptions)
             .then(function (response) {
 
-                dispatch({ type: 'SET_IS_LOADING', payload: false });
+                dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 FetchErrorHandler.handleUnauthorizedResponse(response);
 
@@ -80,14 +80,14 @@ function ProductCatalog(props) {
                 })
             }).catch(error => {
                 console.log(error);
-                dispatch({ type: 'SET_IS_LOADING', payload: false });
+                dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
     }
 
     const search = () => {
 
-        dispatch({ type: 'SET_IS_LOADING', payload: true });
+        dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const searchParameters = {
 
@@ -97,16 +97,16 @@ function ProductCatalog(props) {
         };
 
         const requestOptions = {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
         };
 
-        const url = props.searchApiUrl + '?' + QueryStringSerializer.serialize(searchParameters);
+        const url = props.searchApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
 
         return fetch(url, requestOptions)
             .then(function (response) {
 
-                dispatch({ type: 'SET_IS_LOADING', payload: false });
+                dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 FetchErrorHandler.handleUnauthorizedResponse(response);
 
@@ -127,7 +127,7 @@ function ProductCatalog(props) {
                 })
             }).catch(error => {
                 console.log(error);
-                dispatch({ type: 'SET_IS_LOADING', payload: false });
+                dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
     }
@@ -144,7 +144,7 @@ function ProductCatalog(props) {
 
     const handleDeleteEntity = () => {
 
-        dispatch({ type: 'SET_IS_LOADING', payload: true });
+        dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const deleteParameters = {
 
@@ -152,16 +152,16 @@ function ProductCatalog(props) {
         };
 
         const requestOptions = {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' }
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" }
         };
 
-        const url = props.deleteApiUrl + '?' + QueryStringSerializer.serialize(deleteParameters);
+        const url = props.deleteApiUrl + "?" + QueryStringSerializer.serialize(deleteParameters);
 
         return fetch(url, requestOptions)
             .then(function (response) {
 
-                dispatch({ type: 'SET_IS_LOADING', payload: false });
+                dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 FetchErrorHandler.handleUnauthorizedResponse(response);
 
@@ -182,7 +182,7 @@ function ProductCatalog(props) {
                 })
             }).catch(error => {
                 console.log(error);
-                dispatch({ type: 'SET_IS_LOADING', payload: false });
+                dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
     };
@@ -213,7 +213,7 @@ function ProductCatalog(props) {
                                     {products.map((product) => (
                                         <TableRow key={product.name}>
                                             <TableCell width="11%">
-                                                <a href={props.editUrl + '/' + product.id}>
+                                                <a href={props.editUrl + "/" + product.id}>
                                                     <Fab size="small" color="secondary" aria-label={props.editLabel}>
                                                         <EditIcon />
                                                     </Fab>
@@ -224,8 +224,8 @@ function ProductCatalog(props) {
                                             </TableCell>
                                             <TableCell>{product.sku}</TableCell>
                                             <TableCell>{product.name}</TableCell>
-                                            <TableCell>{moment(product.lastModifiedDate).local().format('L LT')}</TableCell>
-                                            <TableCell>{moment(product.createdDate).local().format('L LT')}</TableCell>
+                                            <TableCell>{moment(product.lastModifiedDate).local().format("L LT")}</TableCell>
+                                            <TableCell>{moment(product.createdDate).local().format("L LT")}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -259,7 +259,7 @@ function ProductCatalog(props) {
                 <DialogTitle id="alert-dialog-title">{props.deleteConfirmationLabel}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        {props.areYouSureLabel}: {entityToDelete ? entityToDelete.name : ''}?
+                        {props.areYouSureLabel}: {entityToDelete ? entityToDelete.name : ""}?
                 </DialogContentText>
                 </DialogContent>
                 <DialogActions>

@@ -5706,7 +5706,7 @@ function asNumber(value) {
   }
 
   if (/\.$/.test(value)) {
-    // "3." can't really be considered a number even if it parses in js. The
+    // "3." can"t really be considered a number even if it parses in js. The
     // user is most likely entering a float.
     return value;
   }
@@ -5720,7 +5720,7 @@ function asNumber(value) {
   var valid = typeof n === "number" && !Number.isNaN(n);
 
   if (/\.\d*0$/.test(value)) {
-    // It's a number, that's cool - but we need it as a string so it doesn't screw
+    // It"s a number, that"s cool - but we need it as a string so it doesn"t screw
     // with the user when entering dollar amounts or other values (such as those with
     // specific precision or number of significant digits)
     return value;
@@ -5741,7 +5741,7 @@ function orderProperties(properties, order) {
   };
 
   var errorPropList = function errorPropList(arr) {
-    return arr.length > 1 ? "properties '".concat(arr.join("', '"), "'") : "property '".concat(arr[0], "'");
+    return arr.length > 1 ? "properties \"".concat(arr.join("", ""), "\"") : "property \"".concat(arr[0], "\"");
   };
 
   var propertyHash = arrayToHash(properties);
@@ -5895,7 +5895,7 @@ var utils_guessType = function guessType(value) {
     return "number";
   } else if (Object(esm_typeof["a" /* default */])(value) === "object") {
     return "object";
-  } // Default to string if we can't figure it out
+  } // Default to string if we can"t figure it out
 
 
   return "string";
@@ -5904,7 +5904,7 @@ var utils_guessType = function guessType(value) {
 function stubExistingAdditionalProperties(schema) {
   var rootSchema = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   var formData = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  // Clone the schema so we don't ruin the consumer's original
+  // Clone the schema so we don"t ruin the consumer"s original
   schema = Object(objectSpread2["a" /* default */])(Object(objectSpread2["a" /* default */])({}, schema), {}, {
     properties: Object(objectSpread2["a" /* default */])({}, schema.properties)
   });
@@ -6119,7 +6119,7 @@ function withExactlyOneSubschema(schema, rootSchema, formData, dependencyKey, on
 // The difference between mergeSchemas and mergeObjects
 // is that mergeSchemas only concats arrays for
 // values under the "required" keyword, and when it does,
-// it doesn't include duplicate values.
+// it doesn"t include duplicate values.
 
 
 function mergeSchemas(obj1, obj2) {
@@ -6132,7 +6132,7 @@ function mergeSchemas(obj1, obj2) {
     if (obj1 && obj1.hasOwnProperty(key) && isObject(right)) {
       acc[key] = mergeSchemas(left, right);
     } else if (obj1 && obj2 && (getSchemaType(obj1) === "object" || getSchemaType(obj2) === "object") && key === "required" && Array.isArray(left) && Array.isArray(right)) {
-      // Don't include duplicate values when merging
+      // Don"t include duplicate values when merging
       // "required" fields.
       acc[key] = union_default()(left, right);
     } else {
@@ -6181,7 +6181,7 @@ function deepEquals(a, b) {
     }
 
     var ka = Object.keys(a);
-    var kb = Object.keys(b); // don't bother with stack acrobatics if there's nothing there
+    var kb = Object.keys(b); // don"t bother with stack acrobatics if there"s nothing there
 
     if (ka.length === 0 && kb.length === 0) {
       return true;
@@ -6254,7 +6254,7 @@ function toIdSchema(schema, id, rootSchema) {
   for (var name in schema.properties || {}) {
     var field = schema.properties[name];
     var fieldId = idSchema.$id + "_" + name;
-    idSchema[name] = toIdSchema(isObject(field) ? field : {}, fieldId, rootSchema, // It's possible that formData is not an object -- this can happen if an
+    idSchema[name] = toIdSchema(isObject(field) ? field : {}, fieldId, rootSchema, // It"s possible that formData is not an object -- this can happen if an
     // array item has just been added, but not populated with data yet
     (formData || {})[name], idPrefix);
   }
@@ -6281,7 +6281,7 @@ function toPathSchema(schema) {
     });
   } else if (schema.hasOwnProperty("properties")) {
     for (var property in schema.properties) {
-      pathSchema[property] = toPathSchema(schema.properties[property], "".concat(name, ".").concat(property), rootSchema, // It's possible that formData is not an object -- this can happen if an
+      pathSchema[property] = toPathSchema(schema.properties[property], "".concat(name, ".").concat(property), rootSchema, // It"s possible that formData is not an object -- this can happen if an
       // array item has just been added, but not populated with data yet
       (formData || {})[property]);
     }
@@ -6404,7 +6404,7 @@ function getMatchingOption(formData, options, rootSchema) {
     var option = options[i]; // If the schema describes an object then we need to add slightly more
     // strict matching to the schema, because unless the schema uses the
     // "requires" keyword, an object will match the schema as long as it
-    // doesn't have matching keys with a conflicting type. To do this we use an
+    // doesn"t have matching keys with a conflicting type. To do this we use an
     // "anyOf" with an array of requires. This augmentation expresses that the
     // schema should match if any of the keys in the schema are present on the
     // object and pass validation.
@@ -6436,7 +6436,7 @@ function getMatchingOption(formData, options, rootSchema) {
         augmentedSchema = shallowClone;
       } else {
         augmentedSchema = Object.assign({}, option, requiresAnyOf);
-      } // Remove the "required" field as it's likely that not all fields have
+      } // Remove the "required" field as it"s likely that not all fields have
       // been filled in yet, which will mean that the schema is not valid
 
 
@@ -22180,7 +22180,7 @@ var objectSpread2 = __webpack_require__(12);
 
 var Reducer_Reducer = function Reducer(state, action) {
   switch (action.type) {
-    case 'SET_IS_LOADING':
+    case "SET_IS_LOADING":
       return Object(objectSpread2["a" /* default */])(Object(objectSpread2["a" /* default */])({}, state), {}, {
         isLoading: action.payload
       });
@@ -22472,7 +22472,7 @@ var CssSsrRemovalHelper = /*#__PURE__*/function () {
   Object(C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(CssSsrRemovalHelper, null, [{
     key: "Remove",
     value: function Remove() {
-      var jssStyles = document.querySelector('#jss-server-side');
+      var jssStyles = document.querySelector("#jss-server-side");
 
       if (jssStyles) {
         jssStyles.parentElement.removeChild(jssStyles);
@@ -22503,7 +22503,7 @@ var react_default = /*#__PURE__*/__webpack_require__.n(react);
 
 function LanguageSwitcher(props) {
   function handleLanguageChange(e) {
-    if (typeof window !== 'undefined' && e && e.target) {
+    if (typeof window !== "undefined" && e && e.target) {
       window.location.href = e.target.value;
     }
   }
@@ -22560,7 +22560,7 @@ function Header(props) {
     onClick: function onClick() {
       return setIsActive(!isActive);
     },
-    className: isActive ? 'navbar-burger is-active' : 'navbar-burger',
+    className: isActive ? "navbar-burger is-active" : "navbar-burger",
     "aria-label": "menu",
     "aria-expanded": "false"
   }, /*#__PURE__*/react_default.a.createElement("span", {
@@ -22570,7 +22570,7 @@ function Header(props) {
   }), /*#__PURE__*/react_default.a.createElement("span", {
     "aria-hidden": "true"
   }))), /*#__PURE__*/react_default.a.createElement("div", {
-    className: isActive ? 'navbar-menu is-active' : 'navbar-menu'
+    className: isActive ? "navbar-menu is-active" : "navbar-menu"
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "navbar-start"
   }, links), /*#__PURE__*/react_default.a.createElement("div", {
@@ -22866,7 +22866,7 @@ var FetchErrorHandler_FetchErrorHandler = /*#__PURE__*/function () {
     value: function handleUnauthorizedResponse(response) {
       if (!response.ok) {
         if (response.status === ResponseStatusConstants_ResponseStatusConstants.Unauthorized()) {
-          if (typeof window !== 'undefined') {
+          if (typeof window !== "undefined") {
             window.location.reload();
           }
         }
@@ -23929,15 +23929,15 @@ var GlobalHelper = /*#__PURE__*/function () {
       var theme = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])({
         typography: {
           button: {
-            textTransform: 'none'
+            textTransform: "none"
           }
         },
         palette: {
           primary: {
-            main: '#BF202F'
+            main: "#BF202F"
           },
           secondary: {
-            main: '#5E1916'
+            main: "#5E1916"
           }
         }
       });
@@ -30841,7 +30841,7 @@ if (!Array.prototype.fill) {
   Array.prototype.fill = function (value) {
     // Steps 1-2.
     if (this == null) {
-      throw new TypeError('this is null or not defined');
+      throw new TypeError("this is null or not defined");
     }
 
     var O = Object(this); // Steps 3-5.
@@ -31517,7 +31517,7 @@ if (!Array.prototype.includes) {
   Array.prototype.includes = function (searchElement
   /*, fromIndex*/
   ) {
-    'use strict';
+    "use strict";
 
     var O = Object(this);
     var len = parseInt(O.length) || 0;
@@ -35031,21 +35031,21 @@ var esm_typeof = __webpack_require__(28);
 
 // CONCATENATED MODULE: ./src/shared/helpers/forms/utils.js
 
-var VALUE = 'value';
-var ERROR = 'error';
+var VALUE = "value";
+var ERROR = "error";
 
 function is_bool(value) {
-  return typeof value === 'boolean';
+  return typeof value === "boolean";
 }
 /**
- * Determines a value if it's an object
+ * Determines a value if it"s an object
  *
  * @param {object} value
  */
 
 
 function is_object(value) {
-  return Object(esm_typeof["a" /* default */])(value) === 'object' && value !== null;
+  return Object(esm_typeof["a" /* default */])(value) === "object" && value !== null;
 }
 function get_prop_values(stateSchema, prop) {
   return Object.keys(stateSchema).reduce(function (field, key) {
@@ -35161,21 +35161,21 @@ function useForm() {
 
     if (!validator[name]) return;
     var field = validator[name];
-    var error = '';
+    var error = "";
 
-    if (is_object(field['required']) && error === '') {
-      var required = field['required'];
+    if (is_object(field["required"]) && error === "") {
+      var required = field["required"];
 
-      if (required['isRequired'] && !value) {
-        error = required['error'];
+      if (required["isRequired"] && !value) {
+        error = required["error"];
       }
     }
 
-    if (is_object(field['validator']) && error === '') {
-      var validateFieldByCallback = field['validator']; // Test the function callback if the value is meet the criteria
+    if (is_object(field["validator"]) && error === "") {
+      var validateFieldByCallback = field["validator"]; // Test the function callback if the value is meet the criteria
 
-      if (!validateFieldByCallback['func'](value, values)) {
-        error = validateFieldByCallback['error'];
+      if (!validateFieldByCallback["func"](value, values)) {
+        error = validateFieldByCallback["error"];
       }
     }
 
@@ -35190,7 +35190,7 @@ function useForm() {
         error: validateField(name, values[name])
       });
     });
-  }, [errors, values, validateField]); // Used to disable submit button if there's a value in errors
+  }, [errors, values, validateField]); // Used to disable submit button if there"s a value in errors
   // or the required field in state has no value.
   // Wrapped in useCallback to cached the function to avoid intensive memory leaked
   // in every re-render in component
@@ -35205,7 +35205,7 @@ function useForm() {
   // without any errors in state...
 
   var handleOnSubmit = Object(react["useCallback"])(function (event) {
-    event.preventDefault(); // Making sure that there's no error in the state
+    event.preventDefault(); // Making sure that there"s no error in the state
     // before calling the submit callback function
 
     if (!validateErrorState()) {
@@ -35965,7 +35965,7 @@ function getFieldComponent(schema, uiSchema, idSchema, fields) {
     return fields[field];
   }
 
-  var componentName = COMPONENT_TYPES[Object(_utils_utils__WEBPACK_IMPORTED_MODULE_8__[/* getSchemaType */ "g"])(schema)]; // If the type is not defined and the schema uses 'anyOf' or 'oneOf', don't
+  var componentName = COMPONENT_TYPES[Object(_utils_utils__WEBPACK_IMPORTED_MODULE_8__[/* getSchemaType */ "g"])(schema)]; // If the type is not defined and the schema uses "anyOf" or "oneOf", don"t
   // render a field and let the MultiSchemaField component handle the form display
 
   if (!componentName && (schema.anyOf || schema.oneOf)) {
@@ -36102,7 +36102,7 @@ function SchemaFieldRender(props) {
   }
 
   var __errors = errorSchema.__errors,
-      fieldErrorSchema = Object(C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(errorSchema, ["__errors"]); // See #439: uiSchema: Don't pass consumed class names to child components
+      fieldErrorSchema = Object(C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_objectWithoutProperties__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"])(errorSchema, ["__errors"]); // See #439: uiSchema: Don"t pass consumed class names to child components
 
 
   var field = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_7___default.a.createElement(FieldComponent, Object.assign({}, props, {
@@ -53594,7 +53594,7 @@ var ObjectField_ObjectField = /*#__PURE__*/function (_Component) {
       var addedByAdditionalProperties = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
       return function (value, errorSchema) {
         if (!value && addedByAdditionalProperties) {
-          // Don't set value = undefined for fields added by
+          // Don"t set value = undefined for fields added by
           // additionalProperties. Doing so removes them from the
           // formData, which causes them to completely disappear
           // (including the input field for the property name). Unlike
@@ -53719,7 +53719,7 @@ var ObjectField_ObjectField = /*#__PURE__*/function (_Component) {
           return {};
 
         default:
-          // We don't have a datatype for some reason (perhaps additionalProperties was true)
+          // We don"t have a datatype for some reason (perhaps additionalProperties was true)
           return "New Value";
       }
     }
@@ -53934,7 +53934,7 @@ function TitleField_TitleField(props) {
  // Matches a string that ends in a . character, optionally followed by a sequence of
 // digits followed by any number of 0 characters up until the end of the line.
 // Ensuring that there is at least one prefixed character is important so that
-// you don't incorrectly match against "0".
+// you don"t incorrectly match against "0".
 
 var trailingCharMatcherWithPrefix = /\.([0-9]*0)*$/; // This is used for trimming the trailing 0 and . characters without affecting
 // the rest of the string. Its possible to use one RegEx with groups for this
@@ -53976,7 +53976,7 @@ var NumberField_NumberField = /*#__PURE__*/function (_React$Component) {
       // Cache the original value in component state
       _this.setState({
         lastValue: value
-      }); // Normalize decimals that don't start with a zero character in advance so
+      }); // Normalize decimals that don"t start with a zero character in advance so
       // that the rest of the normalization logic is simpler
 
 
@@ -54012,8 +54012,8 @@ var NumberField_NumberField = /*#__PURE__*/function (_React$Component) {
 
       if (typeof lastValue === "string" && typeof value === "number") {
         // Construct a regular expression that checks for a string that consists
-        // of the formData value suffixed with zero or one '.' characters and zero
-        // or more '0' characters
+        // of the formData value suffixed with zero or one "." characters and zero
+        // or more "0" characters
         var re = new RegExp("".concat(value).replace(".", "\\.") + "\\.?0*$"); // If the cached "lastValue" is a match, use that instead of the formData
         // value to prevent the input value from changing in the UI
 
@@ -54402,7 +54402,7 @@ var ArrayField_ArrayField = /*#__PURE__*/function (_Component) {
     key: "isItemRequired",
     value: function isItemRequired(itemSchema) {
       if (Array.isArray(itemSchema.type)) {
-        // While we don't yet support composite/nullable jsonschema types, it's
+        // While we don"t yet support composite/nullable jsonschema types, it"s
         // future-proof to check for requirement against these.
         return !itemSchema.type.includes("null");
       } // All non-null array item types are inherently required by design
@@ -54809,7 +54809,7 @@ var ArrayField_ArrayField = /*#__PURE__*/function (_Component) {
   }], [{
     key: "getDerivedStateFromProps",
     value: function getDerivedStateFromProps(nextProps, prevState) {
-      // Don't call getDerivedStateFromProps if keyed formdata was just updated.
+      // Don"t call getDerivedStateFromProps if keyed formdata was just updated.
       if (prevState.updatedKeyedFormData) {
         return {
           updatedKeyedFormData: false
@@ -57383,19 +57383,19 @@ function ProductDetailForm(props) {
   var stateSchema = {
     id: {
       value: props.product ? props.product.id : null,
-      error: ''
+      error: ""
     },
     name: {
-      value: props.product ? props.product.name : '',
-      error: ''
+      value: props.product ? props.product.name : "",
+      error: ""
     },
     sku: {
-      value: props.product ? props.product.sku : '',
-      error: ''
+      value: props.product ? props.product.sku : "",
+      error: ""
     },
     schemaId: {
       value: props.schema ? props.schema.id : null,
-      error: ''
+      error: ""
     },
     formData: props.product && props.product.formData ? JSON.parse(props.product.formData) : {}
   };
@@ -57416,19 +57416,19 @@ function ProductDetailForm(props) {
 
   function onSubmitForm(state) {
     dispatch({
-      type: 'SET_IS_LOADING',
+      type: "SET_IS_LOADING",
       payload: true
     });
     var requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(state)
     };
     fetch(props.saveUrl, requestOptions).then(function (response) {
       dispatch({
-        type: 'SET_IS_LOADING',
+        type: "SET_IS_LOADING",
         payload: false
       });
       FetchErrorHandler["a" /* default */].handleUnauthorizedResponse(response);
@@ -57447,7 +57447,7 @@ function ProductDetailForm(props) {
     }).catch(function (error) {
       console.log(error);
       dispatch({
-        type: 'SET_IS_LOADING',
+        type: "SET_IS_LOADING",
         payload: false
       });
       react_toastify["a" /* toast */].error(props.generalErrorMessage);
@@ -57498,7 +57498,7 @@ function ProductDetailForm(props) {
     fullWidth: true,
     value: sku,
     onChange: handleOnChange,
-    helperText: dirty.sku ? errors.sku : '',
+    helperText: dirty.sku ? errors.sku : "",
     error: errors.sku.length > 0 && dirty.sku
   })), /*#__PURE__*/react_default.a.createElement("div", {
     className: "field"
@@ -57509,7 +57509,7 @@ function ProductDetailForm(props) {
     fullWidth: true,
     value: name,
     onChange: handleOnChange,
-    helperText: dirty.name ? errors.name : '',
+    helperText: dirty.name ? errors.name : "",
     error: errors.name.length > 0 && dirty.name
   })), jsonSchema && /*#__PURE__*/react_default.a.createElement(DynamicForm_DynamicForm, {
     jsonSchema: jsonSchema,
@@ -57573,7 +57573,7 @@ var CssSsrRemovalHelper = __webpack_require__(58);
 
 
 CssSsrRemovalHelper["a" /* default */].Remove();
-react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(ProductDetailPage_ProductDetailPage, window.data), document.getElementById('root'));
+react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(ProductDetailPage_ProductDetailPage, window.data), document.getElementById("root"));
 
 /***/ }),
 /* 604 */
@@ -57630,7 +57630,7 @@ var utils = __webpack_require__(15);
 
 
 
-var nums = new Set(['number', 'integer']);
+var nums = new Set(["number", "integer"]);
 /**
  * This is a silly limitation in the DOM where option change event values are
  * always retrieved as strings.
@@ -57641,13 +57641,13 @@ var SelectWidget_processValue = function processValue(schema, value) {
   var type = schema.type,
       items = schema.items;
 
-  if (value === '') {
+  if (value === "") {
     return undefined;
-  } else if (type === 'array' && items && nums.has(items.type)) {
+  } else if (type === "array" && items && nums.has(items.type)) {
     return value.map(utils["c" /* asNumber */]);
-  } else if (type === 'boolean') {
-    return value === 'true';
-  } else if (type === 'number') {
+  } else if (type === "boolean") {
+    return value === "true";
+  } else if (type === "number") {
     return Object(utils["c" /* asNumber */])(value);
   } // If type is undefined, but an enum is present, try and infer the type from
   // the enum values
@@ -57655,13 +57655,13 @@ var SelectWidget_processValue = function processValue(schema, value) {
 
   if (schema.enum) {
     if (schema.enum.every(function (x) {
-      return Object(utils["j" /* guessType */])(x) === 'number';
+      return Object(utils["j" /* guessType */])(x) === "number";
     })) {
       return Object(utils["c" /* asNumber */])(value);
     } else if (schema.enum.every(function (x) {
-      return Object(utils["j" /* guessType */])(x) === 'boolean';
+      return Object(utils["j" /* guessType */])(x) === "boolean";
     })) {
-      return value === 'true';
+      return value === "true";
     }
   }
 
@@ -57684,7 +57684,7 @@ var SelectWidget_SelectWidget = function SelectWidget(_ref) {
       onFocus = _ref.onFocus;
   var enumOptions = options.enumOptions,
       enumDisabled = options.enumDisabled;
-  var emptyValue = multiple ? [] : '';
+  var emptyValue = multiple ? [] : "";
   return /*#__PURE__*/react_default.a.createElement("div", {
     className: "field"
   }, /*#__PURE__*/react_default.a.createElement(FormControl["a" /* default */], {
@@ -57696,8 +57696,8 @@ var SelectWidget_SelectWidget = function SelectWidget(_ref) {
   }, label || schema.title), /*#__PURE__*/react_default.a.createElement(Select["a" /* default */], {
     id: id,
     name: id,
-    multiple: typeof multiple === 'undefined' ? false : multiple,
-    value: typeof value === 'undefined' ? emptyValue : value,
+    multiple: typeof multiple === "undefined" ? false : multiple,
+    value: typeof value === "undefined" ? emptyValue : value,
     required: required,
     disabled: disabled || readonly,
     autoFocus: autofocus,

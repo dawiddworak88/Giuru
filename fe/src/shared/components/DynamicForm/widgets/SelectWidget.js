@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
-import FormControl from '@material-ui/core/FormControl';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from "@material-ui/core/FormControl";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
 import { asNumber, guessType } from "../utils/utils";
-const nums = new Set(['number', 'integer']);
+const nums = new Set(["number", "integer"]);
 
 /**
  * This is a silly limitation in the DOM where option change event values are
@@ -15,23 +15,23 @@ const processValue = (schema, value) => {
 
     // "enum" is a reserved word, so only "type" and "items" can be destructured
     const { type, items } = schema;
-    if (value === '') {
+    if (value === "") {
         return undefined;
-    } else if (type === 'array' && items && nums.has(items.type)) {
+    } else if (type === "array" && items && nums.has(items.type)) {
         return value.map(asNumber);
-    } else if (type === 'boolean') {
-        return value === 'true';
-    } else if (type === 'number') {
+    } else if (type === "boolean") {
+        return value === "true";
+    } else if (type === "number") {
         return asNumber(value);
     }
 
     // If type is undefined, but an enum is present, try and infer the type from
     // the enum values
     if (schema.enum) {
-        if (schema.enum.every((x) => guessType(x) === 'number')) {
+        if (schema.enum.every((x) => guessType(x) === "number")) {
             return asNumber(value);
-        } else if (schema.enum.every((x) => guessType(x) === 'boolean')) {
-            return value === 'true';
+        } else if (schema.enum.every((x) => guessType(x) === "boolean")) {
+            return value === "true";
         }
     }
 
@@ -56,7 +56,7 @@ const SelectWidget = ({
 
     const { enumOptions, enumDisabled } = options;
 
-    const emptyValue = multiple ? [] : '';
+    const emptyValue = multiple ? [] : "";
 
     return (
         <div className="field">
@@ -69,8 +69,8 @@ const SelectWidget = ({
                 <Select
                     id={id}
                     name={id}
-                    multiple={typeof multiple === 'undefined' ? false : multiple}
-                    value={typeof value === 'undefined' ? emptyValue : value}
+                    multiple={typeof multiple === "undefined" ? false : multiple}
+                    value={typeof value === "undefined" ? emptyValue : value}
                     required={required}
                     disabled={disabled || readonly}
                     autoFocus={autofocus}
