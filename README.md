@@ -1,4 +1,4 @@
-# Giuru &middot; [![GitHub license](https://img.shields.io/badge/license-GPL-blue.svg)](https://github.com/dawiddworak88/Giuru/blob/master/LICENSE.md) ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+# Giuru &middot; [![GitHub license](https://img.shields.io/badge/license-GPL-blue.svg)](https://github.com/dawiddworak88/Giuru/blob/master/LICENSE.md) ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/8ee660cb3f7b42c1aa7ca8d7d8158b85)](https://www.codacy.com/manual/dawiddworak88/Giuru?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dawiddworak88/Giuru&amp;utm_campaign=Badge_Grade)
 
 Giuru is a user-friendly, fast and complete B2B Commerce that connects with your existing ERP, CRM and CMS systems. 
 
@@ -6,7 +6,7 @@ Giuru is a user-friendly, fast and complete B2B Commerce that connects with your
 
 ### Prerequisites
 
-* **[.NET Core 3.1.1](https://dotnet.microsoft.com/download/dotnet-core/3.1):** download and install the latest version
+* **[.NET Core 3.1.7](https://dotnet.microsoft.com/download/dotnet-core/3.1):** download and install the latest version
 * **[Node.js](https://nodejs.org/en/download/):** download and install the latest LTS version
 * **[Docker](http://hub.docker.com/):** to run ASP.NET Core web app, Node for SSR and Storybook in containers. Download and install the latest version
 
@@ -19,73 +19,7 @@ Giuru is a user-friendly, fast and complete B2B Commerce that connects with your
 
     npm run build-fe
 
-3. Exectue the following commands from the /misc/docker folder to run the services:
-
-    docker-compose -f docker-compose-dev.yml up --build -d
-
-**The ASP.NET Core web application will be available at http://localhost:51117**
-
-**The Storybook will be available at http://localhost:8091**
-
-## How to develop new components and pages
-
-To efficiently develop new components and pages, stop docker containers and start storybook and node server (for SSR) on your local machine. Remember to change SSR Node endpoint (ServerSideRenderingEndpoint) in appsettings.json and appsettings.Development.json under /be/src/Project/AspNetCore to http://localhost:3000
-
-1. Install npm packages from the /fe directory:
-
-    npm install
-
-2. Start Storybook:
-
-    npm run storybook
-
-3. Develop your React components and pages at /fe/src, reference them as shown in an example story at /fe/src/stories and preview your stories at http://localhost:9009
-
-4. Enable server-side rendering by adding your components and pages at /fe/server/middleware/renderer.js exactly as it has been done for HomePage and start the node server: from the /fe folder:
-
-    node server/bootstrap.js
-
-5. You want to integrate your work into ASP.NET Core web application. To achieve this add your new page to /fe/webpack.config.js as shown in an example homepage component. To bundle, minify and copy the css and js assets to ASP.NET Core wwwroot execute:
-
-    npm run build-fe
-
-6. Please reference the generated assets as shown in an example Index.cshtml at /be/src/Project/AspNetCore/Views
-
-7. Start Debugging (F5) or Start Without Debugging (Ctrl+F5) to see your pages live
-
-## Troubleshooting
-
-1. In case you experience a problem with webpack (especially on Windows), install it globally with the following command (yes, I know it's not recommended):
-
-    npm install --global webpack
-
-2. In case you experience a problem with a missing NODE_ENV upon frontend build (yes, Windows) execute the command from the /fe folder:
-
-    * Windows Command Prompt:
-
-    SET NODE_ENV=production&&npm run build-fe
-
-    * Windows Powershell:
-
-    $env:NODE_ENV="production";npm run build-fe
-
-3. In case you experience a problem with a missing NODE_ENV upon node server run (for SSR) execute the command from the /fe folder:
-
-    * Windows Command Prompt:
-
-    SET NODE_ENV=production&&node server/bootstrap.js
-
-    * Windows Powershell:
-
-    $env:NODE_ENV="production";node server/bootstrap.js
-
-4. SocketException: No connection could be made because the target machine actively refused it:
-
-Please make sure that your node server is up and running. Check if your ServerSideRenderingEndpoint in appsettings.json and appsettings.Development.json point to http://localhost:3000 (for local node server) or http://react-ssr-web:3000 (for Docker node server).
-
-5. window is not defined or global is not defined:
-
-There is a good chance your window or global variables are undefined when doing SSR. Please have a look at [Stack Overflow](https://stackoverflow.com/questions/38951721/react-js-server-side-issue-window-not-found) to find ways to fix your code.
+3. Open Visual Studio, set the docker-compose project as a startup project and hit F5
 
 ## Documentation
 
