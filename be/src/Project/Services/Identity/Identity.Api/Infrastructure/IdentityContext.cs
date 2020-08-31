@@ -1,7 +1,7 @@
 ﻿using Identity.Api.Infrastructure.Accounts.Entities;
 using Identity.Api.Infrastructure.Addresses.Entities;
 using Identity.Api.Infrastructure.Clients.Entities;
-using Identity.Api.Infrastructure.Secrets.Entities;
+using Identity.Api.Infrastructure.Organisations.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,11 +18,12 @@ namespace Identity.Api.Infrastructure
             optionsBuilder.UseLazyLoadingProxies();
         }
 
+        public DbSet<Organisation> Organisations { get; set; }
+        public DbSet<Connection> Connections { get; set; }
         public DbSet<ApplicationUser> Accounts { get; set; }
-        public DbSet<AddressClient> LinkAddressesClients { get; set; }
-        public DbSet<AppSecretClient> LinkAppSecretsClients { get; set; }
-        public DbSet<Client> Clients { get; set; }
         public DbSet<Address> Addresses { get; set; }
-        public DbSet<AppSecret> AppSecrets { get; set; }
+        public DbSet<AddressOrganisation> LinkAddressesOrganisations { get; set; }
+        public DbSet<AppSecretOrganisation> AppSecretsOrganisations { get; set; }
+        public DbSet<Client> Clients { get; set; }
     }
 }

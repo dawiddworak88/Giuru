@@ -1,5 +1,4 @@
-﻿using Catalog.Api.Infrastructure.Brands.Entities;
-using Catalog.Api.Infrastructure.Categories.Entites;
+﻿using Catalog.Api.Infrastructure.Categories.Entites;
 using Catalog.Api.Infrastructure.Categories.Entities;
 using Catalog.Api.Infrastructure.Products.Entities;
 using Catalog.Api.Infrastructure.Schemas.Entities;
@@ -19,14 +18,10 @@ namespace Catalog.Api.Infrastructure
             optionsBuilder.UseLazyLoadingProxies();
         }
 
-        public DbSet<Brand> Brands { get; set; }
-        public DbSet<BrandTranslation> BrandTranslations { get; set; }
-        public DbSet<BrandImage> BrandImages { get; set; }
-        public DbSet<BrandVideo> BrandVideos { get; set; }
-        public DbSet<BrandFile> BrandFiles { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<CategoryTranslation> CategoryTranslations { get; set; }
         public DbSet<CategoryImage> CategoryImages { get; set; }
+        public DbSet<Brand> Brands { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductTranslation> ProductTranslations { get; set; }

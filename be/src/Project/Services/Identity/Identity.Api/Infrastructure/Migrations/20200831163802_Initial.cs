@@ -34,18 +34,20 @@ namespace Identity.Api.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AppSecrets",
+                name: "AppSecretsOrganisations",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    Secret = table.Column<Guid>(nullable: false)
+                    OrganisaitonId = table.Column<Guid>(nullable: false),
+                    AppSecret = table.Column<string>(nullable: true),
+                    CreatedBy = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AppSecrets", x => x.Id);
+                    table.PrimaryKey("PK_AppSecretsOrganisations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -83,7 +85,7 @@ namespace Identity.Api.Infrastructure.Migrations
                     AccessFailedCount = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
-                    ClientId = table.Column<Guid>(nullable: true)
+                    OrganisationId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -99,9 +101,9 @@ namespace Identity.Api.Infrastructure.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    Domain = table.Column<string>(nullable: true),
-                    Key = table.Column<string>(nullable: true),
-                    Language = table.Column<string>(nullable: false)
+                    Email = table.Column<string>(nullable: false),
+                    Language = table.Column<string>(nullable: false),
+                    SellerId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -109,7 +111,25 @@ namespace Identity.Api.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LinkAddressesClients",
+                name: "Connections",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    ConnectedFrom = table.Column<Guid>(nullable: false),
+                    ConnectedTo = table.Column<Guid>(nullable: false),
+                    InvitationStatus = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Connections", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LinkAddressesOrganisations",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -117,28 +137,31 @@ namespace Identity.Api.Infrastructure.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     AddressId = table.Column<Guid>(nullable: false),
-                    ClientId = table.Column<Guid>(nullable: false),
+                    OrganisationId = table.Column<Guid>(nullable: false),
                     Order = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LinkAddressesClients", x => x.Id);
+                    table.PrimaryKey("PK_LinkAddressesOrganisations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "LinkAppSecretsClients",
+                name: "Organisations",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    AppSecretId = table.Column<Guid>(nullable: false),
-                    ClientId = table.Column<Guid>(nullable: false)
+                    Key = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Domain = table.Column<string>(nullable: false),
+                    IsSeller = table.Column<bool>(nullable: false),
+                    Language = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LinkAppSecretsClients", x => x.Id);
+                    table.PrimaryKey("PK_Organisations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -293,7 +316,7 @@ namespace Identity.Api.Infrastructure.Migrations
                 name: "Addresses");
 
             migrationBuilder.DropTable(
-                name: "AppSecrets");
+                name: "AppSecretsOrganisations");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -314,10 +337,13 @@ namespace Identity.Api.Infrastructure.Migrations
                 name: "Clients");
 
             migrationBuilder.DropTable(
-                name: "LinkAddressesClients");
+                name: "Connections");
 
             migrationBuilder.DropTable(
-                name: "LinkAppSecretsClients");
+                name: "LinkAddressesOrganisations");
+
+            migrationBuilder.DropTable(
+                name: "Organisations");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

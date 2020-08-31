@@ -28,9 +28,6 @@ namespace Identity.Api.Infrastructure.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("ClientId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -61,6 +58,9 @@ namespace Identity.Api.Infrastructure.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
+
+                    b.Property<Guid>("OrganisationId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -151,16 +151,48 @@ namespace Identity.Api.Infrastructure.Migrations
                     b.ToTable("Addresses");
                 });
 
-            modelBuilder.Entity("Identity.Api.Infrastructure.Clients.Entities.AddressClient", b =>
+            modelBuilder.Entity("Identity.Api.Infrastructure.Clients.Entities.Client", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("SellerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clients");
+                });
+
+            modelBuilder.Entity("Identity.Api.Infrastructure.Organisations.Entities.AddressOrganisation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("AddressId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ClientId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -175,22 +207,25 @@ namespace Identity.Api.Infrastructure.Migrations
                     b.Property<int>("Order")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("OrganisationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.ToTable("LinkAddressesClients");
+                    b.ToTable("LinkAddressesOrganisations");
                 });
 
-            modelBuilder.Entity("Identity.Api.Infrastructure.Clients.Entities.AppSecretClient", b =>
+            modelBuilder.Entity("Identity.Api.Infrastructure.Organisations.Entities.AppSecretOrganisation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("AppSecretId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("AppSecret")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ClientId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -201,12 +236,48 @@ namespace Identity.Api.Infrastructure.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("OrganisaitonId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.ToTable("LinkAppSecretsClients");
+                    b.ToTable("AppSecretsOrganisations");
                 });
 
-            modelBuilder.Entity("Identity.Api.Infrastructure.Clients.Entities.Client", b =>
+            modelBuilder.Entity("Identity.Api.Infrastructure.Organisations.Entities.Connection", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ConnectedFrom")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ConnectedTo")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("InvitationStatus")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Connections");
+                });
+
+            modelBuilder.Entity("Identity.Api.Infrastructure.Organisations.Entities.Organisation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -216,12 +287,17 @@ namespace Identity.Api.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Domain")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsSeller")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Key")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Language")
@@ -237,30 +313,7 @@ namespace Identity.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Clients");
-                });
-
-            modelBuilder.Entity("Identity.Api.Infrastructure.Secrets.Entities.AppSecret", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Secret")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AppSecrets");
+                    b.ToTable("Organisations");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

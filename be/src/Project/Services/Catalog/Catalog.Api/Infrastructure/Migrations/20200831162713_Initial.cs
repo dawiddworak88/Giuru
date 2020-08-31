@@ -8,86 +8,19 @@ namespace Catalog.Api.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "BrandFiles",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    MediaId = table.Column<Guid>(nullable: false),
-                    Order = table.Column<int>(nullable: false),
-                    BrandId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BrandFiles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BrandImages",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    MediaId = table.Column<Guid>(nullable: false),
-                    Order = table.Column<int>(nullable: false),
-                    BrandId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BrandImages", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Brands",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: false)
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    SellerId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Brands", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BrandTranslations",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    Language = table.Column<string>(nullable: true),
-                    IsDefaultLanguage = table.Column<bool>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BrandTranslations", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BrandVideos",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    MediaId = table.Column<Guid>(nullable: false),
-                    Order = table.Column<int>(nullable: false),
-                    BrandId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BrandVideos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -392,18 +325,6 @@ namespace Catalog.Api.Infrastructure.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "BrandFiles");
-
-            migrationBuilder.DropTable(
-                name: "BrandImages");
-
-            migrationBuilder.DropTable(
-                name: "BrandTranslations");
-
-            migrationBuilder.DropTable(
-                name: "BrandVideos");
-
             migrationBuilder.DropTable(
                 name: "CategoryImages");
 

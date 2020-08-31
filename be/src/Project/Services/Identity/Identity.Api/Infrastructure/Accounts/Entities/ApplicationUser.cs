@@ -7,6 +7,6 @@ namespace Identity.Api.Infrastructure.Accounts.Entities
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public Guid? ClientId { get; set; }
+        public Guid OrganisationId { get; set; }
     }
 }

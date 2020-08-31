@@ -2,15 +2,15 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Identity.Api.Infrastructure.Clients.Entities
+namespace Identity.Api.Infrastructure.Organisations.Entities
 {
-    public class AddressClient : Entity
+    public class AddressOrganisation : Entity
     {
         [Required]
         public Guid AddressId { get; set; }
 
         [Required]
-        public Guid ClientId { get; set; }
+        public Guid OrganisationId { get; set; }
 
         [Required]
         public int Order { get; set; }
