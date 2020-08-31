@@ -1,3 +1,4 @@
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/191b6962c85a4c28923c3f7999b639f5)](https://app.codacy.com/manual/dawiddworak88/Giuru?utm_source=github.com&utm_medium=referral&utm_content=dawiddworak88/Giuru&utm_campaign=Badge_Grade_Dashboard)
 # Giuru &middot; [![GitHub license](https://img.shields.io/badge/license-GPL-blue.svg)](https://github.com/dawiddworak88/Giuru/blob/master/LICENSE.md) ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
 Giuru is a user-friendly, fast and complete B2B Commerce that connects with your existing ERP, CRM and CMS systems. 
