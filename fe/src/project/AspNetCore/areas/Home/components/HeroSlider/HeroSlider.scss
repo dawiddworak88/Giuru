@@ -1,0 +1,33 @@
+.hero-slider {
+
+    background-color: $grey;
+    width: 950px;
+
+    &__item {
+        height: 370px;
+        position: relative;
+    }
+
+    &__teaser {
+        color: white;
+        position: absolute;
+        background-color: rgba(0,23,31,0.7);
+        padding: 2rem;
+        top: 2rem;
+        left: 2rem;
+    }
+
+    &__teaser-title {
+        color: white;
+        margin: 0.5rem;
+        text-align: left;
+    }
+
+    &__teaser-text {
+        margin: 0.5rem;
+    }
+
+    &__teaser-link {
+        margin: 0.5rem;
+    }
+}

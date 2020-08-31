@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import IconConstants from '../../constants/IconConstants';
 import * as Icon from 'react-feather';
 
 function Tile(props) {
@@ -9,7 +10,7 @@ function Tile(props) {
     return (
         <a href={props.url} className="tile">
             <div className="tile__icon">
-                <IconTag size={32} />
+                <IconTag size={IconConstants.DefaultSize()} />
             </div>
             <div className="tile__title">
                 {props.title}

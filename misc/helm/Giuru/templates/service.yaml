@@ -53,11 +53,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tenant-portal-web-service
+  name: seller-portal-web-service
 spec:
   type: ClusterIP
   selector:
-    app: tenant-portal-web
+    app: seller-portal-web
   ports:
   - protocol: TCP
     port: 80
