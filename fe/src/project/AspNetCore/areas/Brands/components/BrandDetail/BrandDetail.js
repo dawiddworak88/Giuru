@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Files from '../../../../shared/components/Files/Files';
+import React from "react";
+import PropTypes from "prop-types";
+import Files from "../../../../shared/components/Files/Files";
 
 function BrandDetail(props) {
 

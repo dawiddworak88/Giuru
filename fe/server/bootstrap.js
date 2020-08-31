@@ -1,8 +1,8 @@
-require('ignore-styles');
+require("ignore-styles");
 
-require('@babel/register')({
+require("@babel/register")({
     root:"./middleware",
-    presets: ['@babel/preset-env','@babel/preset-react'],
+    presets: ["@babel/preset-env","@babel/preset-react"],
     plugins: [
         ["@babel/plugin-proposal-class-properties"],
         [
@@ -16,4 +16,4 @@ require('@babel/register')({
 	]
 });
 
-require('./index');
+require("./index");

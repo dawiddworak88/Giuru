@@ -1,15 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { TextField, Button } from '@material-ui/core';
-import useForm from '../../../../../../shared/helpers/forms/useForm';
-import EmailValidator from '../../../../../../shared/helpers/validators/EmailValidator';
-import PasswordValidator from '../../../../../../shared/helpers/validators/PasswordValidator';
+import React from "react";
+import PropTypes from "prop-types";
+import { TextField, Button } from "@material-ui/core";
+import useForm from "../../../../../../shared/helpers/forms/useForm";
+import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
+import PasswordValidator from "../../../../../../shared/helpers/validators/PasswordValidator";
 
 function SignInForm(props) {
 
     const stateSchema = {
-        email: { value: '', error: '' },
-        password: { value: '', error: '' }
+        email: { value: "", error: "" },
+        password: { value: "", error: "" }
     };
 
     const stateValidatorSchema = {
@@ -54,11 +54,11 @@ function SignInForm(props) {
             </div>
             <div className="field">
                 <TextField id="email" name="email" label={props.enterEmailText} fullWidth={true} 
-                    value={email} onChange={handleOnChange} helperText={dirty.email ? errors.email : ''} error={(errors.email.length > 0) && dirty.email} />
+                    value={email} onChange={handleOnChange} helperText={dirty.email ? errors.email : ""} error={(errors.email.length > 0) && dirty.email} />
             </div>
             <div className="field">
                 <TextField id="password" name="password" type="password" label={props.enterPasswordText} fullWidth={true} 
-                    value={password} onChange={handleOnChange} helperText={dirty.password ? errors.password : ''} error={(errors.password.length > 0) && dirty.password} />
+                    value={password} onChange={handleOnChange} helperText={dirty.password ? errors.password : ""} error={(errors.password.length > 0) && dirty.password} />
             </div>
             <div className="field">
                 <Button type="submit" variant="contained" color="primary" disabled={disable} fullWidth={true}>

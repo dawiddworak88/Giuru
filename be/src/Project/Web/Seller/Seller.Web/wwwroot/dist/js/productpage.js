@@ -26278,7 +26278,7 @@ var objectSpread2 = __webpack_require__(12);
 
 var Reducer_Reducer = function Reducer(state, action) {
   switch (action.type) {
-    case 'SET_IS_LOADING':
+    case "SET_IS_LOADING":
       return Object(objectSpread2["a" /* default */])(Object(objectSpread2["a" /* default */])({}, state), {}, {
         isLoading: action.payload
       });
@@ -26570,7 +26570,7 @@ var CssSsrRemovalHelper = /*#__PURE__*/function () {
   Object(C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(CssSsrRemovalHelper, null, [{
     key: "Remove",
     value: function Remove() {
-      var jssStyles = document.querySelector('#jss-server-side');
+      var jssStyles = document.querySelector("#jss-server-side");
 
       if (jssStyles) {
         jssStyles.parentElement.removeChild(jssStyles);
@@ -26601,7 +26601,7 @@ var react_default = /*#__PURE__*/__webpack_require__.n(react);
 
 function LanguageSwitcher(props) {
   function handleLanguageChange(e) {
-    if (typeof window !== 'undefined' && e && e.target) {
+    if (typeof window !== "undefined" && e && e.target) {
       window.location.href = e.target.value;
     }
   }
@@ -26658,7 +26658,7 @@ function Header(props) {
     onClick: function onClick() {
       return setIsActive(!isActive);
     },
-    className: isActive ? 'navbar-burger is-active' : 'navbar-burger',
+    className: isActive ? "navbar-burger is-active" : "navbar-burger",
     "aria-label": "menu",
     "aria-expanded": "false"
   }, /*#__PURE__*/react_default.a.createElement("span", {
@@ -26668,7 +26668,7 @@ function Header(props) {
   }), /*#__PURE__*/react_default.a.createElement("span", {
     "aria-hidden": "true"
   }))), /*#__PURE__*/react_default.a.createElement("div", {
-    className: isActive ? 'navbar-menu is-active' : 'navbar-menu'
+    className: isActive ? "navbar-menu is-active" : "navbar-menu"
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "navbar-start"
   }, links), /*#__PURE__*/react_default.a.createElement("div", {
@@ -26964,7 +26964,7 @@ var FetchErrorHandler_FetchErrorHandler = /*#__PURE__*/function () {
     value: function handleUnauthorizedResponse(response) {
       if (!response.ok) {
         if (response.status === ResponseStatusConstants_ResponseStatusConstants.Unauthorized()) {
-          if (typeof window !== 'undefined') {
+          if (typeof window !== "undefined") {
             window.location.reload();
           }
         }
@@ -27958,15 +27958,15 @@ var GlobalHelper = /*#__PURE__*/function () {
       var theme = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])({
         typography: {
           button: {
-            textTransform: 'none'
+            textTransform: "none"
           }
         },
         palette: {
           primary: {
-            main: '#BF202F'
+            main: "#BF202F"
           },
           secondary: {
-            main: '#5E1916'
+            main: "#5E1916"
           }
         }
       });
@@ -53488,7 +53488,7 @@ var KeyConstants_KeyConstants = /*#__PURE__*/function () {
   Object(createClass["a" /* default */])(KeyConstants, null, [{
     key: "Enter",
     value: function Enter() {
-      return 'Enter';
+      return "Enter";
     }
   }]);
 
@@ -53574,7 +53574,7 @@ function ProductCatalog(props) {
       _React$useState4 = Object(slicedToArray["a" /* default */])(_React$useState3, 1),
       itemsPerPage = _React$useState4[0];
 
-  var _React$useState5 = react_default.a.useState(''),
+  var _React$useState5 = react_default.a.useState(""),
       _React$useState6 = Object(slicedToArray["a" /* default */])(_React$useState5, 2),
       searchTerm = _React$useState6[0],
       setSearchTerm = _React$useState6[1];
@@ -53611,7 +53611,7 @@ function ProductCatalog(props) {
 
   var handleChangePage = function handleChangePage(event, newPage) {
     dispatch({
-      type: 'SET_IS_LOADING',
+      type: "SET_IS_LOADING",
       payload: true
     });
     setPage(function () {
@@ -53623,15 +53623,15 @@ function ProductCatalog(props) {
       itemsPerPage: itemsPerPage
     };
     var requestOptions = {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       }
     };
-    var url = props.searchApiUrl + '?' + QueryStringSerializer_QueryStringSerializer.serialize(searchParameters);
+    var url = props.searchApiUrl + "?" + QueryStringSerializer_QueryStringSerializer.serialize(searchParameters);
     return fetch(url, requestOptions).then(function (response) {
       dispatch({
-        type: 'SET_IS_LOADING',
+        type: "SET_IS_LOADING",
         payload: false
       });
       FetchErrorHandler["a" /* default */].handleUnauthorizedResponse(response);
@@ -53654,7 +53654,7 @@ function ProductCatalog(props) {
     }).catch(function (error) {
       console.log(error);
       dispatch({
-        type: 'SET_IS_LOADING',
+        type: "SET_IS_LOADING",
         payload: false
       });
       react_toastify["a" /* toast */].error(props.generalErrorMessage);
@@ -53663,7 +53663,7 @@ function ProductCatalog(props) {
 
   var search = function search() {
     dispatch({
-      type: 'SET_IS_LOADING',
+      type: "SET_IS_LOADING",
       payload: true
     });
     var searchParameters = {
@@ -53672,15 +53672,15 @@ function ProductCatalog(props) {
       itemsPerPage: itemsPerPage
     };
     var requestOptions = {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       }
     };
-    var url = props.searchApiUrl + '?' + QueryStringSerializer_QueryStringSerializer.serialize(searchParameters);
+    var url = props.searchApiUrl + "?" + QueryStringSerializer_QueryStringSerializer.serialize(searchParameters);
     return fetch(url, requestOptions).then(function (response) {
       dispatch({
-        type: 'SET_IS_LOADING',
+        type: "SET_IS_LOADING",
         payload: false
       });
       FetchErrorHandler["a" /* default */].handleUnauthorizedResponse(response);
@@ -53706,7 +53706,7 @@ function ProductCatalog(props) {
     }).catch(function (error) {
       console.log(error);
       dispatch({
-        type: 'SET_IS_LOADING',
+        type: "SET_IS_LOADING",
         payload: false
       });
       react_toastify["a" /* toast */].error(props.generalErrorMessage);
@@ -53733,22 +53733,22 @@ function ProductCatalog(props) {
 
   var handleDeleteEntity = function handleDeleteEntity() {
     dispatch({
-      type: 'SET_IS_LOADING',
+      type: "SET_IS_LOADING",
       payload: true
     });
     var deleteParameters = {
       id: entityToDelete.id
     };
     var requestOptions = {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       }
     };
-    var url = props.deleteApiUrl + '?' + QueryStringSerializer_QueryStringSerializer.serialize(deleteParameters);
+    var url = props.deleteApiUrl + "?" + QueryStringSerializer_QueryStringSerializer.serialize(deleteParameters);
     return fetch(url, requestOptions).then(function (response) {
       dispatch({
-        type: 'SET_IS_LOADING',
+        type: "SET_IS_LOADING",
         payload: false
       });
       FetchErrorHandler["a" /* default */].handleUnauthorizedResponse(response);
@@ -53777,7 +53777,7 @@ function ProductCatalog(props) {
     }).catch(function (error) {
       console.log(error);
       dispatch({
-        type: 'SET_IS_LOADING',
+        type: "SET_IS_LOADING",
         payload: false
       });
       react_toastify["a" /* toast */].error(props.generalErrorMessage);
@@ -53817,7 +53817,7 @@ function ProductCatalog(props) {
     }, /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, {
       width: "11%"
     }, /*#__PURE__*/react_default.a.createElement("a", {
-      href: props.editUrl + '/' + product.id
+      href: props.editUrl + "/" + product.id
     }, /*#__PURE__*/react_default.a.createElement(esm_Fab_Fab, {
       size: "small",
       color: "secondary",
@@ -53829,7 +53829,7 @@ function ProductCatalog(props) {
       size: "small",
       color: "primary",
       "aria-label": props.deleteLabel
-    }, /*#__PURE__*/react_default.a.createElement(Delete_default.a, null))), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, product.sku), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, product.name), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, moment_default()(product.lastModifiedDate).local().format('L LT')), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, moment_default()(product.createdDate).local().format('L LT')));
+    }, /*#__PURE__*/react_default.a.createElement(Delete_default.a, null))), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, product.sku), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, product.name), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, moment_default()(product.lastModifiedDate).local().format("L LT")), /*#__PURE__*/react_default.a.createElement(esm_TableCell_TableCell, null, moment_default()(product.createdDate).local().format("L LT")));
   }))))), /*#__PURE__*/react_default.a.createElement("div", {
     className: "catalog__pagination is-flex-centered"
   }, /*#__PURE__*/react_default.a.createElement(esm_TablePagination_TablePagination, {
@@ -53861,7 +53861,7 @@ function ProductCatalog(props) {
     id: "alert-dialog-title"
   }, props.deleteConfirmationLabel), /*#__PURE__*/react_default.a.createElement(esm_DialogContent_DialogContent, null, /*#__PURE__*/react_default.a.createElement(esm_DialogContentText_DialogContentText, {
     id: "alert-dialog-description"
-  }, props.areYouSureLabel, ": ", entityToDelete ? entityToDelete.name : '', "?")), /*#__PURE__*/react_default.a.createElement(esm_DialogActions_DialogActions, null, /*#__PURE__*/react_default.a.createElement(Button["a" /* default */], {
+  }, props.areYouSureLabel, ": ", entityToDelete ? entityToDelete.name : "", "?")), /*#__PURE__*/react_default.a.createElement(esm_DialogActions_DialogActions, null, /*#__PURE__*/react_default.a.createElement(Button["a" /* default */], {
     onClick: handleDeleteDialogClose,
     color: "primary"
   }, props.noLabel), /*#__PURE__*/react_default.a.createElement(Button["a" /* default */], {
@@ -53922,7 +53922,7 @@ var CssSsrRemovalHelper = __webpack_require__(58);
 
 
 CssSsrRemovalHelper["a" /* default */].Remove();
-react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(ProductPage_ProductPage, window.data), document.getElementById('root'));
+react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(ProductPage_ProductPage, window.data), document.getElementById("root"));
 
 /***/ })
 /******/ ]);

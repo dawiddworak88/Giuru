@@ -1,15 +1,15 @@
-import React from 'react';
-import { toast } from 'react-toastify';
-import { ThemeProvider } from '@material-ui/core/styles';
-import GlobalHelper from '../../../../../../shared/helpers/globals/GlobalHelper';
-import Store from '../../../../../../shared/stores/Store';
-import Header from '../../../../../../shared/components/Header/Header';
-import Footer from '../../../../../../shared/components/Footer/Footer';
-import MenuTiles from '../../../../../../shared/components/MenuTiles/MenuTiles';
-import ImportOrderForm from '../../components/ImportOrder/ImportOrderForm';
+import React from "react";
+import { toast } from "react-toastify";
+import { ThemeProvider } from "@material-ui/core/styles";
+import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
+import Store from "../../../../../../shared/stores/Store";
+import Header from "../../../../../../shared/components/Header/Header";
+import Footer from "../../../../../../shared/components/Footer/Footer";
+import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
+import ImportOrderForm from "../../components/ImportOrder/ImportOrderForm";
 
 /* eslint-disable no-unused-vars */
-import favicon from '../../../../../../shared/layouts/images/favicon.png';
+import favicon from "../../../../../../shared/layouts/images/favicon.png";
 /* eslint-enable no-unused-vars */
 
 function ImportOrderPage(props) {

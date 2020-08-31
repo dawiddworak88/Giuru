@@ -4,7 +4,7 @@ if (!Array.prototype.fill) {
   
       // Steps 1-2.
       if (this == null) {
-        throw new TypeError('this is null or not defined');
+        throw new TypeError("this is null or not defined");
       }
   
       var O = Object(this);

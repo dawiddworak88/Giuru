@@ -1,19 +1,19 @@
-import React, { useContext }  from 'react';
-import PropTypes from 'prop-types';
-import { Context } from '../../../../../../shared/stores/Store';
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from '@material-ui/core';
-import useForm from '../../../../../../shared/helpers/forms/useForm';
-import EmailValidator from '../../../../../../shared/helpers/validators/EmailValidator';
-import ClientDetailService from '../../services/ClientDetail/ClientDetailService';
+import React, { useContext }  from "react";
+import PropTypes from "prop-types";
+import { Context } from "../../../../../../shared/stores/Store";
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from "@material-ui/core";
+import useForm from "../../../../../../shared/helpers/forms/useForm";
+import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
+import ClientDetailService from "../../services/ClientDetail/ClientDetailService";
 
 function ClientDetailForm(props) {
 
     const [state, dispatch] = useContext(Context);
 
     const stateSchema = {
-        name: { value: '', error: '' },
-        email: { value: '', error: '' },
-        communicationLanguage: { value: '', error: '' }
+        name: { value: "", error: "" },
+        email: { value: "", error: "" },
+        communicationLanguage: { value: "", error: "" }
     };
 
     const stateValidatorSchema = {
@@ -61,11 +61,11 @@ function ClientDetailForm(props) {
         <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
             <div className="field">
                 <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
-                    value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ''} error={(errors.name.length > 0) && dirty.name} />
+                    value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
             </div>
             <div className="field">
                 <TextField id="email" name="email" label={props.emailLabel} fullWidth={true}
-                    value={email} onChange={handleOnChange} helperText={dirty.email ? errors.email : ''} error={(errors.email.length > 0) && dirty.email} />
+                    value={email} onChange={handleOnChange} helperText={dirty.email ? errors.email : ""} error={(errors.email.length > 0) && dirty.email} />
             </div>
             <div className="field">
                 <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage}>

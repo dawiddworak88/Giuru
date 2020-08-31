@@ -1,17 +1,17 @@
-export const VALUE = 'value';
-export const ERROR = 'error';
+export const VALUE = "value";
+export const ERROR = "error";
 
 function is_bool(value) {
-    return typeof value === 'boolean';
+    return typeof value === "boolean";
 }
 
 /**
- * Determines a value if it's an object
+ * Determines a value if it"s an object
  *
  * @param {object} value
  */
 export function is_object(value) {
-    return typeof value === 'object' && value !== null;
+    return typeof value === "object" && value !== null;
 }
 
 export function get_prop_values(stateSchema, prop) {

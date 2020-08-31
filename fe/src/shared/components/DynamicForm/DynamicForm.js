@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import SchemaField from '../DynamicForm/fields/SchemaField';
+import React from "react";
+import PropTypes from "prop-types";
+import SchemaField from "../DynamicForm/fields/SchemaField";
 import { getDefaultRegistry } from "./utils/utils";
 
 function DynamicForm(props) {

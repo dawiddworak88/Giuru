@@ -3812,7 +3812,7 @@ if (!Array.prototype.fill) {
   Array.prototype.fill = function (value) {
     // Steps 1-2.
     if (this == null) {
-      throw new TypeError('this is null or not defined');
+      throw new TypeError("this is null or not defined");
     }
 
     var O = Object(this); // Steps 3-5.
@@ -4507,7 +4507,7 @@ if (!Array.prototype.includes) {
   Array.prototype.includes = function (searchElement
   /*, fromIndex*/
   ) {
-    'use strict';
+    "use strict";
 
     var O = Object(this);
     var len = parseInt(O.length) || 0;
@@ -5133,21 +5133,21 @@ var esm_typeof = __webpack_require__(28);
 
 // CONCATENATED MODULE: ./src/shared/helpers/forms/utils.js
 
-var VALUE = 'value';
-var ERROR = 'error';
+var VALUE = "value";
+var ERROR = "error";
 
 function is_bool(value) {
-  return typeof value === 'boolean';
+  return typeof value === "boolean";
 }
 /**
- * Determines a value if it's an object
+ * Determines a value if it"s an object
  *
  * @param {object} value
  */
 
 
 function is_object(value) {
-  return Object(esm_typeof["a" /* default */])(value) === 'object' && value !== null;
+  return Object(esm_typeof["a" /* default */])(value) === "object" && value !== null;
 }
 function get_prop_values(stateSchema, prop) {
   return Object.keys(stateSchema).reduce(function (field, key) {
@@ -5263,21 +5263,21 @@ function useForm() {
 
     if (!validator[name]) return;
     var field = validator[name];
-    var error = '';
+    var error = "";
 
-    if (is_object(field['required']) && error === '') {
-      var required = field['required'];
+    if (is_object(field["required"]) && error === "") {
+      var required = field["required"];
 
-      if (required['isRequired'] && !value) {
-        error = required['error'];
+      if (required["isRequired"] && !value) {
+        error = required["error"];
       }
     }
 
-    if (is_object(field['validator']) && error === '') {
-      var validateFieldByCallback = field['validator']; // Test the function callback if the value is meet the criteria
+    if (is_object(field["validator"]) && error === "") {
+      var validateFieldByCallback = field["validator"]; // Test the function callback if the value is meet the criteria
 
-      if (!validateFieldByCallback['func'](value, values)) {
-        error = validateFieldByCallback['error'];
+      if (!validateFieldByCallback["func"](value, values)) {
+        error = validateFieldByCallback["error"];
       }
     }
 
@@ -5292,7 +5292,7 @@ function useForm() {
         error: validateField(name, values[name])
       });
     });
-  }, [errors, values, validateField]); // Used to disable submit button if there's a value in errors
+  }, [errors, values, validateField]); // Used to disable submit button if there"s a value in errors
   // or the required field in state has no value.
   // Wrapped in useCallback to cached the function to avoid intensive memory leaked
   // in every re-render in component
@@ -5307,7 +5307,7 @@ function useForm() {
   // without any errors in state...
 
   var handleOnSubmit = Object(react["useCallback"])(function (event) {
-    event.preventDefault(); // Making sure that there's no error in the state
+    event.preventDefault(); // Making sure that there"s no error in the state
     // before calling the submit callback function
 
     if (!validateErrorState()) {
@@ -27668,7 +27668,7 @@ var objectSpread2 = __webpack_require__(12);
 
 var Reducer_Reducer = function Reducer(state, action) {
   switch (action.type) {
-    case 'SET_IS_LOADING':
+    case "SET_IS_LOADING":
       return Object(objectSpread2["a" /* default */])(Object(objectSpread2["a" /* default */])({}, state), {}, {
         isLoading: action.payload
       });
@@ -27965,7 +27965,7 @@ var CssSsrRemovalHelper = /*#__PURE__*/function () {
   Object(C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(CssSsrRemovalHelper, null, [{
     key: "Remove",
     value: function Remove() {
-      var jssStyles = document.querySelector('#jss-server-side');
+      var jssStyles = document.querySelector("#jss-server-side");
 
       if (jssStyles) {
         jssStyles.parentElement.removeChild(jssStyles);
@@ -27997,7 +27997,7 @@ var react_default = /*#__PURE__*/__webpack_require__.n(react);
 
 function LanguageSwitcher(props) {
   function handleLanguageChange(e) {
-    if (typeof window !== 'undefined' && e && e.target) {
+    if (typeof window !== "undefined" && e && e.target) {
       window.location.href = e.target.value;
     }
   }
@@ -28054,7 +28054,7 @@ function Header(props) {
     onClick: function onClick() {
       return setIsActive(!isActive);
     },
-    className: isActive ? 'navbar-burger is-active' : 'navbar-burger',
+    className: isActive ? "navbar-burger is-active" : "navbar-burger",
     "aria-label": "menu",
     "aria-expanded": "false"
   }, /*#__PURE__*/react_default.a.createElement("span", {
@@ -28064,7 +28064,7 @@ function Header(props) {
   }), /*#__PURE__*/react_default.a.createElement("span", {
     "aria-hidden": "true"
   }))), /*#__PURE__*/react_default.a.createElement("div", {
-    className: isActive ? 'navbar-menu is-active' : 'navbar-menu'
+    className: isActive ? "navbar-menu is-active" : "navbar-menu"
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "navbar-start"
   }, links), /*#__PURE__*/react_default.a.createElement("div", {
@@ -28271,19 +28271,19 @@ var ClientDetailService_ClientDetailService = /*#__PURE__*/function () {
     value: function Save(url, client, generalErrorMessage, dispatch) {
       react_toastify["a" /* toast */].configure();
       dispatch({
-        type: 'SET_IS_LOADING',
+        type: "SET_IS_LOADING",
         payload: true
       });
       var requestOptions = {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
         },
         body: JSON.stringify(client)
       };
       return fetch(url, requestOptions).then(function (response) {
         dispatch({
-          type: 'SET_IS_LOADING',
+          type: "SET_IS_LOADING",
           payload: false
         });
         FetchErrorHandler["a" /* default */].handleUnauthorizedResponse(response);
@@ -28298,7 +28298,7 @@ var ClientDetailService_ClientDetailService = /*#__PURE__*/function () {
       }).catch(function (error) {
         console.log(error);
         dispatch({
-          type: 'SET_IS_LOADING',
+          type: "SET_IS_LOADING",
           payload: false
         });
         react_toastify["a" /* toast */].error(generalErrorMessage);
@@ -28327,16 +28327,16 @@ function ClientDetailForm(props) {
 
   var stateSchema = {
     name: {
-      value: '',
-      error: ''
+      value: "",
+      error: ""
     },
     email: {
-      value: '',
-      error: ''
+      value: "",
+      error: ""
     },
     communicationLanguage: {
-      value: '',
-      error: ''
+      value: "",
+      error: ""
     }
   };
   var stateValidatorSchema = {
@@ -28394,7 +28394,7 @@ function ClientDetailForm(props) {
     fullWidth: true,
     value: name,
     onChange: handleOnChange,
-    helperText: dirty.name ? errors.name : '',
+    helperText: dirty.name ? errors.name : "",
     error: errors.name.length > 0 && dirty.name
   })), /*#__PURE__*/react_default.a.createElement("div", {
     className: "field"
@@ -28405,7 +28405,7 @@ function ClientDetailForm(props) {
     fullWidth: true,
     value: email,
     onChange: handleOnChange,
-    helperText: dirty.email ? errors.email : '',
+    helperText: dirty.email ? errors.email : "",
     error: errors.email.length > 0 && dirty.email
   })), /*#__PURE__*/react_default.a.createElement("div", {
     className: "field"
@@ -28480,7 +28480,7 @@ var CssSsrRemovalHelper = __webpack_require__(58);
 
 
 CssSsrRemovalHelper["a" /* default */].Remove();
-react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(ClientDetailPage_ClientDetailPage, window.data), document.getElementById('root'));
+react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(ClientDetailPage_ClientDetailPage, window.data), document.getElementById("root"));
 
 /***/ }),
 
@@ -28717,7 +28717,7 @@ var FetchErrorHandler_FetchErrorHandler = /*#__PURE__*/function () {
     value: function handleUnauthorizedResponse(response) {
       if (!response.ok) {
         if (response.status === ResponseStatusConstants_ResponseStatusConstants.Unauthorized()) {
-          if (typeof window !== 'undefined') {
+          if (typeof window !== "undefined") {
             window.location.reload();
           }
         }
@@ -29737,15 +29737,15 @@ var GlobalHelper = /*#__PURE__*/function () {
       var theme = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])({
         typography: {
           button: {
-            textTransform: 'none'
+            textTransform: "none"
           }
         },
         palette: {
           primary: {
-            main: '#BF202F'
+            main: "#BF202F"
           },
           secondary: {
-            main: '#5E1916'
+            main: "#5E1916"
           }
         }
       });

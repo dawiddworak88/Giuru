@@ -84,7 +84,7 @@ class ObjectField extends Component {
   onPropertyChange = (name, addedByAdditionalProperties = false) => {
     return (value, errorSchema) => {
       if (!value && addedByAdditionalProperties) {
-        // Don't set value = undefined for fields added by
+        // Don"t set value = undefined for fields added by
         // additionalProperties. Doing so removes them from the
         // formData, which causes them to completely disappear
         // (including the input field for the property name). Unlike
@@ -168,7 +168,7 @@ class ObjectField extends Component {
       case "object":
         return {};
       default:
-        // We don't have a datatype for some reason (perhaps additionalProperties was true)
+        // We don"t have a datatype for some reason (perhaps additionalProperties was true)
         return "New Value";
     }
   }

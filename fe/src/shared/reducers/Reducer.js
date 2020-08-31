@@ -1,6 +1,6 @@
 const Reducer = (state, action) => {
     switch (action.type) {
-        case 'SET_IS_LOADING':
+        case "SET_IS_LOADING":
             return {
                 ...state,
                 isLoading: action.payload

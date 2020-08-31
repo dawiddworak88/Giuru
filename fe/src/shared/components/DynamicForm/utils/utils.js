@@ -402,7 +402,7 @@ export function asNumber(value) {
         return null;
     }
     if (/\.$/.test(value)) {
-        // "3." can't really be considered a number even if it parses in js. The
+        // "3." can"t really be considered a number even if it parses in js. The
         // user is most likely entering a float.
         return value;
     }
@@ -414,7 +414,7 @@ export function asNumber(value) {
     const valid = typeof n === "number" && !Number.isNaN(n);
 
     if (/\.\d*0$/.test(value)) {
-        // It's a number, that's cool - but we need it as a string so it doesn't screw
+        // It"s a number, that"s cool - but we need it as a string so it doesn"t screw
         // with the user when entering dollar amounts or other values (such as those with
         // specific precision or number of significant digits)
         return value;
@@ -435,8 +435,8 @@ export function orderProperties(properties, order) {
         }, {});
     const errorPropList = arr =>
         arr.length > 1
-            ? `properties '${arr.join("', '")}'`
-            : `property '${arr[0]}'`;
+            ? `properties "${arr.join("", "")}"`
+            : `property "${arr[0]}"`;
     const propertyHash = arrayToHash(properties);
     const orderFiltered = order.filter(
         prop => prop === "*" || propertyHash[prop]
@@ -577,7 +577,7 @@ export const guessType = function guessType(value) {
     } else if (typeof value === "object") {
         return "object";
     }
-    // Default to string if we can't figure it out
+    // Default to string if we can"t figure it out
     return "string";
 };
 
@@ -587,7 +587,7 @@ export function stubExistingAdditionalProperties(
     rootSchema = {},
     formData = {}
 ) {
-    // Clone the schema so we don't ruin the consumer's original
+    // Clone the schema so we don"t ruin the consumer"s original
     schema = {
         ...schema,
         properties: { ...schema.properties },
@@ -842,7 +842,7 @@ function withExactlyOneSubschema(
 // The difference between mergeSchemas and mergeObjects
 // is that mergeSchemas only concats arrays for
 // values under the "required" keyword, and when it does,
-// it doesn't include duplicate values.
+// it doesn"t include duplicate values.
 export function mergeSchemas(obj1, obj2) {
     var acc = Object.assign({}, obj1); // Prevent mutation of source object.
     return Object.keys(obj2).reduce((acc, key) => {
@@ -858,7 +858,7 @@ export function mergeSchemas(obj1, obj2) {
             Array.isArray(left) &&
             Array.isArray(right)
         ) {
-            // Don't include duplicate values when merging
+            // Don"t include duplicate values when merging
             // "required" fields.
             acc[key] = union(left, right);
         } else {
@@ -909,7 +909,7 @@ export function deepEquals(a, b, ca = [], cb = []) {
 
         let ka = Object.keys(a);
         let kb = Object.keys(b);
-        // don't bother with stack acrobatics if there's nothing there
+        // don"t bother with stack acrobatics if there"s nothing there
         if (ka.length === 0 && kb.length === 0) {
             return true;
         }
@@ -981,7 +981,7 @@ export function toIdSchema(
             isObject(field) ? field : {},
             fieldId,
             rootSchema,
-            // It's possible that formData is not an object -- this can happen if an
+            // It"s possible that formData is not an object -- this can happen if an
             // array item has just been added, but not populated with data yet
             (formData || {})[name],
             idPrefix
@@ -1013,7 +1013,7 @@ export function toPathSchema(schema, name = "", rootSchema, formData = {}) {
                 schema.properties[property],
                 `${name}.${property}`,
                 rootSchema,
-                // It's possible that formData is not an object -- this can happen if an
+                // It"s possible that formData is not an object -- this can happen if an
                 // array item has just been added, but not populated with data yet
                 (formData || {})[property]
             );
@@ -1118,7 +1118,7 @@ export function getMatchingOption(formData, options, rootSchema) {
         // If the schema describes an object then we need to add slightly more
         // strict matching to the schema, because unless the schema uses the
         // "requires" keyword, an object will match the schema as long as it
-        // doesn't have matching keys with a conflicting type. To do this we use an
+        // doesn"t have matching keys with a conflicting type. To do this we use an
         // "anyOf" with an array of requires. This augmentation expresses that the
         // schema should match if any of the keys in the schema are present on the
         // object and pass validation.
@@ -1152,7 +1152,7 @@ export function getMatchingOption(formData, options, rootSchema) {
                 augmentedSchema = Object.assign({}, option, requiresAnyOf);
             }
 
-            // Remove the "required" field as it's likely that not all fields have
+            // Remove the "required" field as it"s likely that not all fields have
             // been filled in yet, which will mean that the schema is not valid
             delete augmentedSchema.required;
 

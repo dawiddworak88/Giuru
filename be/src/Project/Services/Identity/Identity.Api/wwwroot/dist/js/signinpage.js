@@ -2539,15 +2539,15 @@ var GlobalHelper_GlobalHelper = /*#__PURE__*/function () {
       var theme = styles_createMuiTheme({
         typography: {
           button: {
-            textTransform: 'none'
+            textTransform: "none"
           }
         },
         palette: {
           primary: {
-            main: '#BF202F'
+            main: "#BF202F"
           },
           secondary: {
-            main: '#5E1916'
+            main: "#5E1916"
           }
         }
       });
@@ -2627,7 +2627,7 @@ function slicedToArray_slicedToArray(arr, i) {
 
 function LanguageSwitcher(props) {
   function handleLanguageChange(e) {
-    if (typeof window !== 'undefined' && e && e.target) {
+    if (typeof window !== "undefined" && e && e.target) {
       window.location.href = e.target.value;
     }
   }
@@ -2684,7 +2684,7 @@ function Header(props) {
     onClick: function onClick() {
       return setIsActive(!isActive);
     },
-    className: isActive ? 'navbar-burger is-active' : 'navbar-burger',
+    className: isActive ? "navbar-burger is-active" : "navbar-burger",
     "aria-label": "menu",
     "aria-expanded": "false"
   }, /*#__PURE__*/react_default.a.createElement("span", {
@@ -2694,7 +2694,7 @@ function Header(props) {
   }), /*#__PURE__*/react_default.a.createElement("span", {
     "aria-hidden": "true"
   }))), /*#__PURE__*/react_default.a.createElement("div", {
-    className: isActive ? 'navbar-menu is-active' : 'navbar-menu'
+    className: isActive ? "navbar-menu is-active" : "navbar-menu"
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "navbar-start"
   }, links), /*#__PURE__*/react_default.a.createElement("div", {
@@ -13791,21 +13791,21 @@ function typeof_typeof(obj) {
 }
 // CONCATENATED MODULE: ./src/shared/helpers/forms/utils.js
 
-var VALUE = 'value';
-var ERROR = 'error';
+var VALUE = "value";
+var ERROR = "error";
 
 function is_bool(value) {
-  return typeof value === 'boolean';
+  return typeof value === "boolean";
 }
 /**
- * Determines a value if it's an object
+ * Determines a value if it"s an object
  *
  * @param {object} value
  */
 
 
 function is_object(value) {
-  return typeof_typeof(value) === 'object' && value !== null;
+  return typeof_typeof(value) === "object" && value !== null;
 }
 function get_prop_values(stateSchema, prop) {
   return Object.keys(stateSchema).reduce(function (field, key) {
@@ -13921,21 +13921,21 @@ function useForm() {
 
     if (!validator[name]) return;
     var field = validator[name];
-    var error = '';
+    var error = "";
 
-    if (is_object(field['required']) && error === '') {
-      var required = field['required'];
+    if (is_object(field["required"]) && error === "") {
+      var required = field["required"];
 
-      if (required['isRequired'] && !value) {
-        error = required['error'];
+      if (required["isRequired"] && !value) {
+        error = required["error"];
       }
     }
 
-    if (is_object(field['validator']) && error === '') {
-      var validateFieldByCallback = field['validator']; // Test the function callback if the value is meet the criteria
+    if (is_object(field["validator"]) && error === "") {
+      var validateFieldByCallback = field["validator"]; // Test the function callback if the value is meet the criteria
 
-      if (!validateFieldByCallback['func'](value, values)) {
-        error = validateFieldByCallback['error'];
+      if (!validateFieldByCallback["func"](value, values)) {
+        error = validateFieldByCallback["error"];
       }
     }
 
@@ -13950,7 +13950,7 @@ function useForm() {
         error: validateField(name, values[name])
       });
     });
-  }, [errors, values, validateField]); // Used to disable submit button if there's a value in errors
+  }, [errors, values, validateField]); // Used to disable submit button if there"s a value in errors
   // or the required field in state has no value.
   // Wrapped in useCallback to cached the function to avoid intensive memory leaked
   // in every re-render in component
@@ -13965,7 +13965,7 @@ function useForm() {
   // without any errors in state...
 
   var handleOnSubmit = Object(react["useCallback"])(function (event) {
-    event.preventDefault(); // Making sure that there's no error in the state
+    event.preventDefault(); // Making sure that there"s no error in the state
     // before calling the submit callback function
 
     if (!validateErrorState()) {
@@ -14072,12 +14072,12 @@ var PasswordValidator_PasswordValidator = /*#__PURE__*/function () {
 function SignInForm(props) {
   var stateSchema = {
     email: {
-      value: '',
-      error: ''
+      value: "",
+      error: ""
     },
     password: {
-      value: '',
-      error: ''
+      value: "",
+      error: ""
     }
   };
   var stateValidatorSchema = {
@@ -14135,7 +14135,7 @@ function SignInForm(props) {
     fullWidth: true,
     value: email,
     onChange: handleOnChange,
-    helperText: dirty.email ? errors.email : '',
+    helperText: dirty.email ? errors.email : "",
     error: errors.email.length > 0 && dirty.email
   })), /*#__PURE__*/react_default.a.createElement("div", {
     className: "field"
@@ -14147,7 +14147,7 @@ function SignInForm(props) {
     fullWidth: true,
     value: password,
     onChange: handleOnChange,
-    helperText: dirty.password ? errors.password : '',
+    helperText: dirty.password ? errors.password : "",
     error: errors.password.length > 0 && dirty.password
   })), /*#__PURE__*/react_default.a.createElement("div", {
     className: "field"
@@ -14198,7 +14198,7 @@ var CssSsrRemovalHelper_CssSsrRemovalHelper = /*#__PURE__*/function () {
   _createClass(CssSsrRemovalHelper, null, [{
     key: "Remove",
     value: function Remove() {
-      var jssStyles = document.querySelector('#jss-server-side');
+      var jssStyles = document.querySelector("#jss-server-side");
 
       if (jssStyles) {
         jssStyles.parentElement.removeChild(jssStyles);
@@ -14216,7 +14216,7 @@ var CssSsrRemovalHelper_CssSsrRemovalHelper = /*#__PURE__*/function () {
 
 
 CssSsrRemovalHelper_CssSsrRemovalHelper.Remove();
-react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(SignIn_SignInPage, window.data), document.getElementById('root'));
+react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(SignIn_SignInPage, window.data), document.getElementById("root"));
 
 /***/ })
 /******/ ]);

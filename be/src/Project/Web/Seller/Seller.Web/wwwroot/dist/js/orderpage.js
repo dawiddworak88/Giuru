@@ -14197,7 +14197,7 @@ var CssSsrRemovalHelper = /*#__PURE__*/function () {
   Object(C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(CssSsrRemovalHelper, null, [{
     key: "Remove",
     value: function Remove() {
-      var jssStyles = document.querySelector('#jss-server-side');
+      var jssStyles = document.querySelector("#jss-server-side");
 
       if (jssStyles) {
         jssStyles.parentElement.removeChild(jssStyles);
@@ -14229,7 +14229,7 @@ var react_default = /*#__PURE__*/__webpack_require__.n(react);
 
 function LanguageSwitcher(props) {
   function handleLanguageChange(e) {
-    if (typeof window !== 'undefined' && e && e.target) {
+    if (typeof window !== "undefined" && e && e.target) {
       window.location.href = e.target.value;
     }
   }
@@ -14286,7 +14286,7 @@ function Header(props) {
     onClick: function onClick() {
       return setIsActive(!isActive);
     },
-    className: isActive ? 'navbar-burger is-active' : 'navbar-burger',
+    className: isActive ? "navbar-burger is-active" : "navbar-burger",
     "aria-label": "menu",
     "aria-expanded": "false"
   }, /*#__PURE__*/react_default.a.createElement("span", {
@@ -14296,7 +14296,7 @@ function Header(props) {
   }), /*#__PURE__*/react_default.a.createElement("span", {
     "aria-hidden": "true"
   }))), /*#__PURE__*/react_default.a.createElement("div", {
-    className: isActive ? 'navbar-menu is-active' : 'navbar-menu'
+    className: isActive ? "navbar-menu is-active" : "navbar-menu"
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "navbar-start"
   }, links), /*#__PURE__*/react_default.a.createElement("div", {
@@ -14440,7 +14440,7 @@ var CssSsrRemovalHelper = __webpack_require__(58);
 
 
 CssSsrRemovalHelper["a" /* default */].Remove();
-react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(OrderPage_OrderPage, window.data), document.getElementById('root'));
+react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(OrderPage_OrderPage, window.data), document.getElementById("root"));
 
 /***/ }),
 
