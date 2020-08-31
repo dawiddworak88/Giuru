@@ -2,6 +2,6 @@
 {
     public static class MetaTagsConstants
     {
-        public const string SiteName = "Giuru";
+        public static readonly string SiteName = "Giuru";
     }
 }

@@ -4,7 +4,7 @@
     {
         public struct Catalog
         {
-            public const string CategoriesApiEndpoint = "/api/v1/categories";
+            public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
         }
     }
 }

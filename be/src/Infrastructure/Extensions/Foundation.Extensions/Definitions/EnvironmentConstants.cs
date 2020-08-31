@@ -2,6 +2,6 @@
 {
     public static class EnvironmentConstants
     {
-        public const string DevelopmentEnvironmentName = "Development";
+        public static readonly string DevelopmentEnvironmentName = "Development";
     }
 }
