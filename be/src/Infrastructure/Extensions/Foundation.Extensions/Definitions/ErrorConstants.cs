@@ -2,7 +2,7 @@
 {
     public static class ErrorConstants
     {
-        public const string NoSeller = "Seller does not exist";
-        public const string NotFound = "Entity not found";
+        public static readonly string NoSeller = "Seller does not exist";
+        public static readonly string NotFound = "Entity not found";
     }
 }

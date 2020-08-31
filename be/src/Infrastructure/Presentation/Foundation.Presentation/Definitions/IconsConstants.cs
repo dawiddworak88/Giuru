@@ -2,11 +2,11 @@
 {
     public static class IconsConstants
     {
-        public const string ShoppingCart = "ShoppingCart";
-        public const string Package = "Package";
-        public const string Users = "Users";
-        public const string ProductCards = "Edit";
-        public const string Media = "Tv";
-        public const string Settings = "Settings";
+        public static readonly string ShoppingCart = "ShoppingCart";
+        public static readonly string Package = "Package";
+        public static readonly string Users = "Users";
+        public static readonly string ProductCards = "Edit";
+        public static readonly string Media = "Tv";
+        public static readonly string Settings = "Settings";
     }
 }

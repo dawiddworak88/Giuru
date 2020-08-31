@@ -2,9 +2,9 @@
 {
     public static class AccountConstants
     {
-        public const string HttpsScheme = "https";
-        public const string HttpScheme = "http";
-        public const string SellerIdClaim = "SellerId";
+        public static readonly string HttpsScheme = "https";
+        public static readonly string HttpScheme = "http";
+        public static readonly string SellerIdClaim = "SellerId";
         public const int DefaultTokenLifetimeInDays = 14;
     }
 }
