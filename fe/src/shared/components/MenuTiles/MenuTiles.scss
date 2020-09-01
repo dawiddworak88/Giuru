@@ -1,12 +1,10 @@
 .menu-tiles {
-
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     padding: 1.5rem 1.5rem;
 
     .tile {
-
         margin-right: 1rem;
         margin-bottom: 1rem;
         width: 7.5rem;
@@ -17,13 +15,11 @@
         min-width: 7.5rem;
 
         &:hover {
-
             cursor: pointer;
             transform: scale(1.15) perspective(1px);
         }
 
         &__icon {
-
             display: flex;
             justify-content: center;
             align-items: center;
@@ -32,7 +28,6 @@
         }
 
         &__title {
-
             color: $swamp;
             font-size: 0.8rem;
             text-align: center;
