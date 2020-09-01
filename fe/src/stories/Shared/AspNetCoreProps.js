@@ -34,7 +34,7 @@ export var mainNavigation = {
     { url: "#", text: "Categories" },
     { url: "#", text: "Sell" }
   ]
-}
+};
 
 export var files = {
   files: [

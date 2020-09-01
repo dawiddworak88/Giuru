@@ -92,7 +92,7 @@ function ProductCatalog(props) {
 
             searchTerm: searchTerm,
             pageIndex: 1,
-            itemsPerPage: itemsPerPage
+            itemsPerPage
         };
 
         const requestOptions = {

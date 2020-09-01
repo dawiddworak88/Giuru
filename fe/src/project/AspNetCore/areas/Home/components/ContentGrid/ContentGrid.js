@@ -62,6 +62,6 @@ function ContentGrid(props) {
 
 ContentGrid.propTypes = {
     items: PropTypes.array
-}
+};
 
 export default ContentGrid;

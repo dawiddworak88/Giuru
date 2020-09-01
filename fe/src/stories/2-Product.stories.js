@@ -56,7 +56,7 @@ var productDetail = {
     inStockLabel: "In Stock",
     features: getFeatures(11),
     files: files
-}
+};
 
 export const ProductPageStory = () => <ProductPage header={header} mainNavigation={mainNavigation} productDetail={productDetail} footer={footer} />
 

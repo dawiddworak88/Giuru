@@ -495,7 +495,7 @@ class ArrayField extends Component {
           index,
           canMoveUp: index > 0,
           canMoveDown: index < formData.length - 1,
-          itemSchema: itemSchema,
+          itemSchema,
           itemIdSchema,
           itemErrorSchema,
           itemData: item,
