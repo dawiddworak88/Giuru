@@ -51,7 +51,7 @@ function ContentGrid(props) {
                                 )}
                             </Carousel>
                         </div>
-                    )
+                    );
                 }
 
                 return [];

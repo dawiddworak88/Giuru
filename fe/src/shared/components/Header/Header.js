@@ -41,6 +41,6 @@ function Header(props) {
 Header.propTypes = {
     logo: PropTypes.object.isRequired,
     links: PropTypes.array.isRequired
-}
+};
 
 export default Header;

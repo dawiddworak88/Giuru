@@ -22,6 +22,6 @@ function Footer(props) {
 Footer.propTypes = {
     links: PropTypes.array.isRequired,
     copyright: PropTypes.string.isRequired
-}
+};
 
 export default Footer;

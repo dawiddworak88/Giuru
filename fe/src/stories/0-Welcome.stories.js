@@ -8,7 +8,7 @@ var heroSlider = {
     { imageSrc: "https://eltap.pl/upload/gallery/55/marinosavana05soft11okajpg6870.jpg", imageAlt: "Best sectionals", imageTitle: "Best sectionals", teaserTitle: "Shop sectionals", teaserText: "Best sectionals in the industry", ctaUrl: "#", ctaText: "Shop now!" },
     { imageSrc: "https://eltap.pl/upload/gallery/83/sofa-neva01197rgbjpg8615.jpg", imageAlt: "Best sectionals", imageTitle: "Best sectionals" }
   ]
-}
+};
 
 var contentGrid = {
   items: [

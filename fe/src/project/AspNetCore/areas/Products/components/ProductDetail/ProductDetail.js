@@ -72,6 +72,6 @@ ProductDetail.propTypes = {
     descriptionLabel: PropTypes.string.isRequired,
     productDescription: PropTypes.string,
     files: PropTypes.object.isRequired
-}
+};
 
 export default ProductDetail;

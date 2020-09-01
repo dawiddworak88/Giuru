@@ -10,7 +10,7 @@ import moment from "moment";
 function Files(props) {
 
     const handleDownloadClick = (file) => {
-    }
+    };
 
     const handleCopyClick = (file) => {
     }

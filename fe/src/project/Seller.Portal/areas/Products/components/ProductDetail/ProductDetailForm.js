@@ -75,7 +75,7 @@ function ProductDetailForm(props) {
                         FetchErrorHandler.consoleLogResponseDetails(state, response, jsonResponse);
                         toast.error(props.generalErrorMessage);
                     }
-                })
+                });
             }).catch(error => {
 
                 console.log(error);

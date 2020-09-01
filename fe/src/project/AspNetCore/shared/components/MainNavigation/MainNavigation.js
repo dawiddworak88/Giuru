@@ -17,6 +17,6 @@ function MainNavigation(props) {
 
 MainNavigation.propTypes = {
     links: PropTypes.array
-}
+};
 
 export default MainNavigation;

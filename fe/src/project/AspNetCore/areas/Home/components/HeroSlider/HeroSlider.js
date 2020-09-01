@@ -41,6 +41,6 @@ function HeroSlider(props) {
 
 HeroSlider.propTypes = {
     items: PropTypes.array
-}
+};
 
 export default HeroSlider;

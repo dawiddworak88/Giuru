@@ -71,6 +71,6 @@ Catalog.propTypes = {
     signInUrl: PropTypes.string.isRequired,
     signInToSeePricesLabel: PropTypes.string.isRequired,
     items: PropTypes.array
-}
+};
 
 export default Catalog;

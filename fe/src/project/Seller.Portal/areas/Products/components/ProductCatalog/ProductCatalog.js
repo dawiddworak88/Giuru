@@ -32,7 +32,7 @@ function ProductCatalog(props) {
         if (event.key === KeyConstants.enter()) {
             search();
         }
-    }
+    };
 
     const handleOnChange = (event) => {
         setSearchTerm(event.target.value);

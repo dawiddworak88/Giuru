@@ -59,10 +59,8 @@ function ImportOrderForm(props) {
                             FetchErrorHandler.consoleLogResponseDetails(state, response, jsonResponse);
                             toast.error(props.generalErrorMessage);
                         }
-                    })
+                    });
                 }).catch(error => {
-
-                    console.log(error);
                     dispatch({ type: "SET_IS_LOADING", payload: false });
                     toast.error(props.generalErrorMessage);
                 })

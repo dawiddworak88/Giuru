@@ -29,6 +29,6 @@ BrandDetail.propTypes = {
     description: PropTypes.string.isRequired,
     files: PropTypes.object.isRequired,
     logo: PropTypes.object.isRequired
-}
+};
 
 export default BrandDetail;
