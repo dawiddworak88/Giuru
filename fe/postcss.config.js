@@ -2,4 +2,4 @@
     plugins: [
         require("autoprefixer")
     ]
-}
+};

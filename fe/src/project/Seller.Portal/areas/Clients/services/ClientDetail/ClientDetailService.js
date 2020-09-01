@@ -31,7 +31,7 @@ export default class ClientDetailService {
                         FetchErrorHandler.consoleLogResponseDetails(client, response, jsonResponse);
                         toast.error(jsonResponse.message);
                     }
-                })
+                });
             }).catch(error => {
 
                 console.log(error);

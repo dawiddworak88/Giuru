@@ -44,6 +44,6 @@ Header.propTypes = {
     searchPlaceholderLabel: PropTypes.string.isRequired,
     searchLabel: PropTypes.string.isRequired,
     searchUrl: PropTypes.string.isRequired
-}
+};
 
 export default Header;
