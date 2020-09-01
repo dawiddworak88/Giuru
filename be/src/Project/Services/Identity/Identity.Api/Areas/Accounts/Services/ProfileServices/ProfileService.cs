@@ -1,18 +1,12 @@
-﻿using Foundation.Account.Definitions;
-using IdentityServer4.Extensions;
+﻿using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Identity.Api.Areas.Accounts.Services.ProfileServices
 {
     public class ProfileService : IProfileService
     {
-        public ProfileService()
-        {
-        }
-
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
             var sub = context.Subject?.GetSubjectId();

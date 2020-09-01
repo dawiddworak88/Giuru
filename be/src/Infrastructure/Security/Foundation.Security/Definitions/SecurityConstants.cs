@@ -2,6 +2,6 @@
 {
     public static class SecurityConstants
     {
-        public const int HstsMaxAgeInDays = 365;
+        public static readonly int HstsMaxAgeInDays = 365;
     }
 }

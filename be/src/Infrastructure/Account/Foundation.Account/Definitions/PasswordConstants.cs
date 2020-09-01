@@ -2,6 +2,6 @@
 {
     public static class PasswordConstants
     {
-        public const int DefaultMinLength = 8;
+        public static readonly int DefaultMinLength = 8;
     }
 }
