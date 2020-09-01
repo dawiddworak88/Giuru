@@ -20,7 +20,7 @@ function ProductCatalog(props) {
 
     const [state, dispatch] = useContext(Context);
     const [page, setPage] = React.useState(0);
-    const [itemsPerPage,] = React.useState(PaginationConstants.DefaultRowsPerPage());
+    const [itemsPerPage,] = React.useState(PaginationConstants.defaultRowsPerPage());
     const [searchTerm, setSearchTerm] = React.useState("");
     const [products, setProducts] = React.useState(props.pagedProducts.data);
     const [total, setTotal] = React.useState(props.pagedProducts.total);
@@ -29,7 +29,7 @@ function ProductCatalog(props) {
 
     const handleSearchTermKeyPress = (event) => {
 
-        if (event.key === KeyConstants.Enter()) {
+        if (event.key === KeyConstants.enter()) {
             search();
         }
     }
@@ -48,7 +48,7 @@ function ProductCatalog(props) {
 
             searchTerm: searchTerm,
             pageIndex: newPage + 1,
-            itemsPerPage: itemsPerPage
+            itemsPerPage
         };
 
         const requestOptions = {
@@ -77,9 +77,8 @@ function ProductCatalog(props) {
                         FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
                         toast.error(props.generalErrorMessage);
                     }
-                })
+                });
             }).catch(error => {
-                console.log(error);
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
@@ -238,12 +237,12 @@ function ProductCatalog(props) {
                             labelRowsPerPage={props.rowsPerPageLabel}
                             backIconButtonText={props.backIconButtonText}
                             nextIconButtonText={props.nextIconButtonText}
-                            rowsPerPageOptions={[ PaginationConstants.DefaultRowsPerPage() ]}
+                            rowsPerPageOptions={[ PaginationConstants.defaultRowsPerPage() ]}
                             component="div"
                             count={total}
                             page={page}
                             onChangePage={handleChangePage}
-                            rowsPerPage={PaginationConstants.DefaultRowsPerPage()}
+                            rowsPerPage={PaginationConstants.defaultRowsPerPage()}
                         />
                     </div>
                 </div>) :
@@ -273,7 +272,7 @@ function ProductCatalog(props) {
             </Dialog>
             {state.isLoading && <CircularProgress className="progressBar" />}
         </div>
-    )
+    );
 }
 
 export default ProductCatalog;

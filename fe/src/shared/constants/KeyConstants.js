@@ -1,5 +1,5 @@
 export default class KeyConstants {
-    static Enter() {
+    static enter() {
         return "Enter";
     }
 }
