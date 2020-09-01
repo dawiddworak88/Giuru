@@ -40,7 +40,7 @@ var productDetail = {
 
     title: "Mounting Dream Tilt TV Wall Mount Bracket for Most 37-70 Inches TVs, TV Mount with VESA up to 600x400mm, Fits 16",
     isAuthenticated: false,
-    images: images,
+    images,
     signInUrl: "#",
     skuLabel: "SKU:",
     sku: "23829",

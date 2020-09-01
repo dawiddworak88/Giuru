@@ -34,6 +34,6 @@ function DynamicForm(props) {
 DynamicForm.propTypes = {
     jsonSchema: PropTypes.object.isRequired,
     formData: PropTypes.object
-}
+};
 
 export default DynamicForm;

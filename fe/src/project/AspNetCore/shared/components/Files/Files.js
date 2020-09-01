@@ -13,7 +13,7 @@ function Files(props) {
     };
 
     const handleCopyClick = (file) => {
-    }
+    };
 
     return (
         
