@@ -27,12 +27,12 @@ const Components = {
 	ClientDetailPage,
 	ProductPage,
 	ProductDetailPage
-  };
+};
 
 export default (req, res, next) => {
 
-    let Component = Components[req.body.moduleName];
-	
+	let Component = Components[req.body.moduleName];
+
 	if (Component) {
 
 		const sheets = new ServerStyleSheets();
@@ -41,10 +41,10 @@ export default (req, res, next) => {
 			sheets.collect(
 				<Component {...req.body.parameters} />
 			)
-		  );
-		
+		);
+
 		const css = sheets.toString();
-		
+
 		return res.send(
 			ReactDOMServer.renderToString(
 				<React.Fragment>
@@ -52,11 +52,11 @@ export default (req, res, next) => {
 						<style id="jss-server-side">
 							{css}
 						</style>
-					}					
+					}
 					<Component {...req.body.parameters} />
 				</React.Fragment>
-			  ));
+			));
 	}
-	
+
 	res.status(400).end();
 };
