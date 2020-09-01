@@ -36,7 +36,7 @@ function ProductCatalog(props) {
 
     const handleOnChange = (event) => {
         setSearchTerm(event.target.value);
-    }
+    };
 
     const handleChangePage = (event, newPage) => {
 
@@ -46,7 +46,7 @@ function ProductCatalog(props) {
 
         const searchParameters = {
 
-            searchTerm: searchTerm,
+            searchTerm,
             pageIndex: newPage + 1,
             itemsPerPage
         };
@@ -123,9 +123,8 @@ function ProductCatalog(props) {
                         FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
                         toast.error(props.generalErrorMessage);
                     }
-                })
+                });
             }).catch(error => {
-                console.log(error);
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
