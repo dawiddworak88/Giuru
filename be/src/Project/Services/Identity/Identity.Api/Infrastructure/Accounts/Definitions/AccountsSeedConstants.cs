@@ -1,10 +1,10 @@
 ﻿namespace Identity.Api.Infrastructure.Accounts.Definitions
 {
-    public class AccountsSeedConstants
+    public static class AccountsSeedConstants
     {
-        public const int EmailIndex = 0;
-        public const int FirstNameIndex = 1;
-        public const int LastNameIndex = 2;
-        public const int PasswordIndex = 3;
+        public static readonly int EmailIndex = 0;
+        public static readonly int FirstNameIndex = 1;
+        public static readonly int LastNameIndex = 2;
+        public static readonly int PasswordIndex = 3;
     }
 }
