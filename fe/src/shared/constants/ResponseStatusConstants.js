@@ -1,5 +1,5 @@
 export default class ResponseStatusConstants {
-    static Unauthorized() {
+    static unauthorized() {
         return 401;
     }
 }

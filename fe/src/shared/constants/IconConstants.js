@@ -1,5 +1,5 @@
 export default class IconConstants {
-    static DefaultSize() {
+    static defaultSize() {
         return 32;
     }
 }

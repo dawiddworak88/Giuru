@@ -106,7 +106,7 @@ function ImportOrderForm(props) {
                                 (
                                     <div className="dropzone dropzone--active">
                                         <p>
-                                            <UploadCloud size={IconConstants.DefaultSize()} />
+                                            <UploadCloud size={IconConstants.defaultSize()} />
                                         </p>
                                         <p>{props.dropFilesLabel}</p>
                                     </div>
@@ -114,7 +114,7 @@ function ImportOrderForm(props) {
                                 (
                                     <div className="dropzone">
                                         <p>
-                                            <UploadCloud size={IconConstants.DefaultSize()} />
+                                            <UploadCloud size={IconConstants.defaultSize()} />
                                         </p>
                                         <p>{props.dropOrSelectFilesLabel}</p>
                                     </div>

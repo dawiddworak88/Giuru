@@ -10,7 +10,7 @@ function Tile(props) {
     return (
         <a href={props.url} className="tile">
             <div className="tile__icon">
-                <IconTag size={IconConstants.DefaultSize()} />
+                <IconTag size={IconConstants.defaultSize()} />
             </div>
             <div className="tile__title">
                 {props.title}
