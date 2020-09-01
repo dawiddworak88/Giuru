@@ -5,6 +5,6 @@
         public static readonly string HttpsScheme = "https";
         public static readonly string HttpScheme = "http";
         public static readonly string SellerIdClaim = "SellerId";
-        public const int DefaultTokenLifetimeInDays = 14;
+        public static readonly int DefaultTokenLifetimeInDays = 14;
     }
 }

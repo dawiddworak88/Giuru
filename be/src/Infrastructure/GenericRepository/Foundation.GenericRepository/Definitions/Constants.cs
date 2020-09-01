@@ -2,8 +2,8 @@
 {
     public static class Constants
     {
-        public const int DefaultPageIndex = 1;
-        public const int DefaultItemsPerPage = 25;
-        public const int MaxItemsPerPage = 100;
+        public static readonly int DefaultPageIndex = 1;
+        public static readonly int DefaultItemsPerPage = 25;
+        public static readonly int MaxItemsPerPage = 100;
     }
 }

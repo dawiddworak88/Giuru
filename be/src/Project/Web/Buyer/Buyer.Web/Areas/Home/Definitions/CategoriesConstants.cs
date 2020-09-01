@@ -2,7 +2,7 @@
 {
     public static class CategoriesConstants
     {
-        public const int FirstLevel = 1;
-        public const int SecondLevel = 2;
+        public static readonly int FirstLevel = 1;
+        public static readonly int SecondLevel = 2;
     }
 }
