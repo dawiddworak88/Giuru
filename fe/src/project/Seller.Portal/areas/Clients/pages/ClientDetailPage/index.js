@@ -4,6 +4,6 @@ import "../../../../../../shared/polyfills/index";
 import ClientDetailPage from "./ClientDetailPage";
 import CssSsrRemovalHelper from "../../../../../../shared/helpers/globals/CssSsrRemovalHelper";
 
-CssSsrRemovalHelper.Remove();
+CssSsrRemovalHelper.remove();
 
 ReactDOM.hydrate(<ClientDetailPage {...window.data} />, document.getElementById("root"));

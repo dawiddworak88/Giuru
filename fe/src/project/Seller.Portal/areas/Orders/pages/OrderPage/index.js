@@ -3,6 +3,6 @@ import ReactDOM from "react-dom";
 import OrderPage from "./OrderPage";
 import CssSsrRemovalHelper from "../../../../../../shared/helpers/globals/CssSsrRemovalHelper";
 
-CssSsrRemovalHelper.Remove();
+CssSsrRemovalHelper.remove();
 
 ReactDOM.hydrate(<OrderPage {...window.data} />, document.getElementById("root"));
