@@ -82,7 +82,7 @@ function ProductCatalog(props) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
-    }
+    };
 
     const search = () => {
 
@@ -90,7 +90,7 @@ function ProductCatalog(props) {
 
         const searchParameters = {
 
-            searchTerm: searchTerm,
+            searchTerm,
             pageIndex: 1,
             itemsPerPage
         };

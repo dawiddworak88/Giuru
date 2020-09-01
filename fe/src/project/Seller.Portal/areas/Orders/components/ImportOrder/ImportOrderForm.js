@@ -63,7 +63,7 @@ function ImportOrderForm(props) {
                 }).catch(error => {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
                     toast.error(props.generalErrorMessage);
-                })
+                });
         })
     }, [client, dispatch, state, props.generalErrorMessage, props.validateOrderUrl]);
 
