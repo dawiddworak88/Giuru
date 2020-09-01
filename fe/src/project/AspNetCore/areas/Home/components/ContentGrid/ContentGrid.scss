@@ -2,14 +2,14 @@
 
     background-color: $grey;
 
-    &__item:first-child {
-        margin-top: 0rem;
-    }
-
     &__item {
         background-color: white;
         margin-top: 2rem;
         padding: 2rem;
+    }
+
+    &__item:first-child {
+        margin-top: 0rem;
     }
 
     .card {

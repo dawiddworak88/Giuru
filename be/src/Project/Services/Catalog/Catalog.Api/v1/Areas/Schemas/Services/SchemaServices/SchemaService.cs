@@ -28,158 +28,17 @@ namespace Catalog.Api.v1.Areas.Schemas.Services.SchemaServices
 
         public async Task<SchemaResultModel> CreateAsync(CreateSchemaModel model)
         {
-            //var validator = new CreateSchemaModelValidator();
-
-            //var validationResult = await validator.ValidateAsync(model);
-
-            //var createSchemaResultModel = new SchemaResultModel();
-
-            //if (!validationResult.IsValid)
-            //{
-            //    createSchemaResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
-            //    return createSchemaResultModel;
-            //}
-
-            //var seller = this.sellerRepository.GetById(model.SellerId.Value);
-
-            //if (seller == null)
-            //{
-            //    createSchemaResultModel.Errors.Add(ErrorConstants.NoSeller);
-            //    return createSchemaResultModel;
-            //}
-
-            //foreach (var property in model.JsonSchema["properties"].OfType<JProperty>())
-            //{
-            //    foreach (var propertyValue in property)
-            //    {
-            //        var titleTranslation = new Translation
-            //        {
-            //            Key = $"Product Schema | {propertyValue.Value<string>("title").Replace(":", string.Empty)}",
-            //            Value = propertyValue.Value<string>("title"),
-            //            Language = model.Language
-            //        };
-
-            //        await this.context.Translations.AddAsync(this.entityService.EnrichEntity(titleTranslation, model.Username));
-
-            //        await this.context.SaveChangesAsync();
-
-            //        propertyValue["title"] = titleTranslation.Id;
-            //    }
-            //}
-
-            //var schema = new Schema
-            //{
-            //    JsonSchema = model.JsonSchema?.ToString(),
-            //    UiSchema = model.UiSchema?.ToString()
-            //};
-
-            //await this.context.Schemas.AddAsync(this.entityService.EnrichEntity(schema, model.Username));
-
-            //await this.context.SaveChangesAsync();
-
-            //var translation = new Translation
-            //{
-            //    Key = schema.Id.ToString(),
-            //    Language = model.Language
-            //};
-
-            //await this.context.Translations.AddAsync(this.entityService.EnrichEntity(translation, model.Username));
-
-            //await this.context.SaveChangesAsync();
-
-            //createSchemaResultModel.Schema = schema;
-
-            //return createSchemaResultModel;
-
             return default;
         }
 
 
         public async Task<SchemaResultModel> GetByIdAsync(GetSchemaModel getSchemaModel)
         {
-            //var validator = new GetSchemaModelValidator();
-
-            //var validationResult = await validator.ValidateAsync(getSchemaModel);
-
-            //var getSchemaResultModel = new SchemaResultModel();
-
-            //if (!validationResult.IsValid)
-            //{
-            //    getSchemaResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
-            //    return getSchemaResultModel;
-            //}
-
-            //var seller = this.sellerRepository.GetById(getSchemaModel.SellerId.Value);
-
-            //if (seller == null)
-            //{
-            //    getSchemaResultModel.Errors.Add(ErrorConstants.NoSeller);
-            //    return getSchemaResultModel;
-            //}
-
-            //var schema = this.context.Schemas.FirstOrDefault(x => x.Id == getSchemaModel.Id.Value && x.IsActive);
-
-            //if (schema == null)
-            //{
-            //    getSchemaResultModel.Errors.Add(ErrorConstants.NotFound);
-            //    return getSchemaResultModel;
-            //}
-
-            //getSchemaResultModel.Schema = new Schema
-            //{ 
-            //    Id = schema.Id,
-            //    JsonSchema = await this.GetJsonSchemaAsync(schema.JsonSchema, getSchemaModel.Language),
-            //    UiSchema = schema.UiSchema,
-            //    LastModifiedDate = schema.LastModifiedDate,
-            //    CreatedDate = schema.CreatedDate
-            //};
-
-            //return getSchemaResultModel;
-
             return default;
         }
 
         public async Task<SchemaResultModel> GetByEntityTypeIdAsync(GetSchemaByEntityTypeModel getSchemaModel)
         {
-            //var validator = new GetSchemaByEntityTypeModelValidator();
-
-            //var validationResult = await validator.ValidateAsync(getSchemaModel);
-
-            //var getSchemaResultModel = new SchemaResultModel();
-
-            //if (!validationResult.IsValid)
-            //{
-            //    getSchemaResultModel.Errors.AddRange(validationResult.Errors.Select(x => x.ErrorMessage));
-            //    return getSchemaResultModel;
-            //}
-
-            //var seller = this.sellerRepository.GetById(getSchemaModel.SellerId.Value);
-
-            //if (seller == null)
-            //{
-            //    getSchemaResultModel.Errors.Add(ErrorConstants.NoSeller);
-            //    return getSchemaResultModel;
-            //}
-
-            //var schema = this.context.Schemas.FirstOrDefault(x => x.Id == getSchemaModel.Id && x.IsActive);
-
-            //if (schema == null)
-            //{
-            //    getSchemaResultModel.Errors.Add(ErrorConstants.NotFound);
-            //    return getSchemaResultModel;
-            //}
-
-            //getSchemaResultModel.Schema = new Schema
-            //{
-            //    Id = schema.Id,
-            //    JsonSchema = await this.GetJsonSchemaAsync(schema.JsonSchema, getSchemaModel.Language),
-            //    UiSchema = schema.UiSchema,
-            //    LastModifiedDate = schema.LastModifiedDate,
-            //    CreatedDate = schema.CreatedDate
-            //};
-
-            //return getSchemaResultModel;
-
             return default;
         }
 
@@ -188,24 +47,6 @@ namespace Catalog.Api.v1.Areas.Schemas.Services.SchemaServices
             var jsonSchema = JObject.Parse(jsonSchemaSerialized);
 
             var properties = (JObject)jsonSchema["properties"];
-
-            //var translations = this.context.Translations.Where(x => x.IsActive).ToList();
-
-            //foreach (var property in properties)
-            //{
-            //    var propertyDetails = (JObject)property.Value;
-
-            //    var propertyTitle = (string)propertyDetails["title"];
-
-            //    Guid propertyTitleGuid;
-
-            //    var isPropertyTitleGuid = Guid.TryParse(propertyTitle, out propertyTitleGuid);
-
-            //    if (!string.IsNullOrWhiteSpace(propertyTitle) && isPropertyTitleGuid)
-            //    {
-            //        // propertyDetails["title"] = TranslationHelper.Text(translations, propertyTitleGuid, language);
-            //    }
-            //}
 
             var definitons = (JObject)jsonSchema["definitions"];
 
@@ -234,13 +75,6 @@ namespace Catalog.Api.v1.Areas.Schemas.Services.SchemaServices
 
                             foreach (var flattenedTaxonomy in flattenedTaxonomies)
                             {
-                                //var flattenedTaxonomyTitle = TranslationHelper.Text(translations, flattenedTaxonomy.Id.ToString(), language);
-
-                                //definitionItems.Add(new JObject(
-                                //        new JProperty("type", "string"),
-                                //        new JProperty("title", flattenedTaxonomyTitle),
-                                //        new JProperty("enum", new JArray(flattenedTaxonomy.Id))
-                                //    ));
                             }
 
                             definitionValue.Add("anyOf", definitionItems);
