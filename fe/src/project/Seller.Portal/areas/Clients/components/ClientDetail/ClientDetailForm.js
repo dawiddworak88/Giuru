@@ -79,7 +79,7 @@ function ClientDetailForm(props) {
                         {props.languages.map(language => {
                             return (
                                 <MenuItem key={language.value} value={language.value}>{language.text}</MenuItem>
-                            )
+                            );
                         })}
                     </Select>
                     {errors.communicationLanguage && dirty.communicationLanguage && (

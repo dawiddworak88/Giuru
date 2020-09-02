@@ -289,7 +289,7 @@ var contentGrid = {
       ]
     }
   ]
-}
+};
 
 export const HomePageStory = () => <HomePage header={header} mainNavigation={mainNavigation} heroSlider={heroSlider} contentGrid={contentGrid} footer={footer} />
 

@@ -128,7 +128,7 @@ function ProductCatalog(props) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
-    }
+    };
 
     const handleDeleteClick = (product) => {
         setEntityToDelete(() => product);
@@ -177,7 +177,7 @@ function ProductCatalog(props) {
                         FetchErrorHandler.consoleLogResponseDetails(url, response, jsonResponse);
                         toast.error(props.generalErrorMessage);
                     }
-                })
+                });
             }).catch(error => {
                 console.log(error);
                 dispatch({ type: "SET_IS_LOADING", payload: false });

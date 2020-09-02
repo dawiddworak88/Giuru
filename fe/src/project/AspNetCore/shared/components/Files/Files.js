@@ -82,6 +82,6 @@ Files.propTypes = {
     descriptionLabel: PropTypes.string.isRequired,
     lastModifiedDateLabel: PropTypes.string.isRequired,
     createdDateLabel: PropTypes.string.isRequired
-}
+};
 
 export default Files;

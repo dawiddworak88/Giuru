@@ -9,7 +9,7 @@
         margin-bottom: 1rem;
         width: 7.5rem;
         height: 7.5rem;
-        box-shadow: 0 0.5em 1em -0.125em rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.02);
+        box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.02);
         transition: all 0.5s ease;
         transform: scale(1);
         min-width: 7.5rem;
@@ -31,7 +31,7 @@
             color: $swamp;
             font-size: 0.8rem;
             text-align: center;
-            padding: 0rem 0.3rem;
+            padding: 0 0.3rem;
         }
     }
 }

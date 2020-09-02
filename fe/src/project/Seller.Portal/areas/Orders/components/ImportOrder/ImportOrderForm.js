@@ -64,7 +64,7 @@ function ImportOrderForm(props) {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
                     toast.error(props.generalErrorMessage);
                 });
-        })
+        });
     }, [client, dispatch, state, props.generalErrorMessage, props.validateOrderUrl]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({

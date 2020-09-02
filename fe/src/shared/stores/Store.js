@@ -11,7 +11,7 @@ const Store = ({children}) => {
         <Context.Provider value={[state, dispatch]}>
             {children}
         </Context.Provider>
-    )
+    );
 };
 
 export const Context = createContext(initialState);
