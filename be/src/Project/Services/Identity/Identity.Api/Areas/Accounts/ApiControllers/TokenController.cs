@@ -31,7 +31,7 @@ namespace Identity.Api.Areas.Accounts.Controllers
         {
             try
             {
-                var token = await this.tokenService.GetTokenAsync(model.Email, model.Password);
+                var token = await this.tokenService.GetTokenAsync(model.Email, model.OrganisationId, model.AppSecret);
 
                 if (!string.IsNullOrWhiteSpace(token))
                 {

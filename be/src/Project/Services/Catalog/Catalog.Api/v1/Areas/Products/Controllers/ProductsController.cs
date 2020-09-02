@@ -49,7 +49,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         {
             try
             {
-                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.SellerIdClaim);
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
                 var getProductsModel = new GetProductsModel
                 {

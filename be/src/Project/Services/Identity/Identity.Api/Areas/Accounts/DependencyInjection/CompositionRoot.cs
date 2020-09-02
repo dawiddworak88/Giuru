@@ -13,6 +13,7 @@ using ITokenService = Identity.Api.Areas.Accounts.Services.TokenServices.ITokenS
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Identity.Api.Infrastructure;
 using Identity.Api.Areas.Accounts.Services.UserServices;
+using Identity.Api.Areas.Accounts.Repositories.AppSecrets;
 
 namespace Identity.Api.Areas.Accounts.DependencyInjection
 {
@@ -65,6 +66,7 @@ namespace Identity.Api.Areas.Accounts.DependencyInjection
             // Register services
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAppSecretRepository, AppSecretRepository>();
         }
     }
 }

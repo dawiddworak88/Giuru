@@ -48,7 +48,7 @@ namespace Catalog.Api.v1.Areas.Taxonomies.Controllers
         {
             try
             {
-                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.SellerIdClaim);
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
                 var createTaxonomyModel = new CreateTaxonomyModel
                 {
@@ -93,7 +93,7 @@ namespace Catalog.Api.v1.Areas.Taxonomies.Controllers
         {
             try
             {
-                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.SellerIdClaim);
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
                 var getTaxonomyModel = new GetTaxonomyModel
                 {

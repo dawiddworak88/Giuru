@@ -50,7 +50,7 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
         {
             try
             {
-                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.SellerIdClaim);
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
                 var createSchemaModel = new CreateSchemaModel
                 {
@@ -96,7 +96,7 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
         {
             try
             {
-                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.SellerIdClaim);
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
                 var getSchemaModel = new GetSchemaModel
                 {
@@ -145,7 +145,7 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
         {
             try
             {
-                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.SellerIdClaim);
+                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
                 var getSchemaModel = new GetSchemaByEntityTypeModel
                 {
