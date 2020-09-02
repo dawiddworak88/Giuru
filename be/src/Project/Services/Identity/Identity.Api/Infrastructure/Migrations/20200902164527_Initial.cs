@@ -41,7 +41,7 @@ namespace Identity.Api.Infrastructure.Migrations
                     IsActive = table.Column<bool>(nullable: false),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    OrganisaitonId = table.Column<Guid>(nullable: false),
+                    OrganisationId = table.Column<Guid>(nullable: false),
                     AppSecret = table.Column<string>(nullable: true),
                     CreatedBy = table.Column<string>(nullable: true)
                 },

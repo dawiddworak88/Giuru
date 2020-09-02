@@ -236,7 +236,7 @@ namespace Identity.Api.Infrastructure.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("OrganisaitonId")
+                    b.Property<Guid>("OrganisationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");

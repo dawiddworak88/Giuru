@@ -11,7 +11,7 @@ using NetTopologySuite.Geometries;
 namespace Identity.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20200831163802_Initial")]
+    [Migration("20200902164527_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -238,7 +238,7 @@ namespace Identity.Api.Infrastructure.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("OrganisaitonId")
+                    b.Property<Guid>("OrganisationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");

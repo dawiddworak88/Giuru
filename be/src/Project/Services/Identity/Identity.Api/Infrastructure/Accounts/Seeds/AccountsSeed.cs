@@ -30,6 +30,7 @@ namespace Identity.Api.Infrastructure.Accounts.Seeds
                             NormalizedUserName = accountConfiguration[AccountsSeedConstants.EmailIndex],
                             Email = accountConfiguration[AccountsSeedConstants.EmailIndex],
                             NormalizedEmail = accountConfiguration[AccountsSeedConstants.EmailIndex],
+                            OrganisationId = Guid.Parse(accountConfiguration[AccountsSeedConstants.OrganisationIdIndex]),
                             SecurityStamp = Guid.NewGuid().ToString(),
                             PhoneNumber = null,
                             PhoneNumberConfirmed = false,

@@ -63,8 +63,8 @@ services:
       - MediaUrl=${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - ConnectionString=Server=sqldata;Database=IdentityDb;User Id=sa;Password=Gre@tPassw0rd
       - Clients=663bba90-0036-4a58-8516-39faa8baba87&c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9&${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5104
-      - Sellers=ELTAP&eltap&eltap.com&EN
-      - Accounts=seller@user.com&Greg&Salesman&Gre@tPassw0rd
+      - Accounts=seller@user.com&Greg&Salesman&Gre@tPassw0rd&09affcc9-1665-45d6-919f-3d2026106ba1
+      - Organisations=09affcc9-1665-45d6-919f-3d2026106ba1&ELTAP&eltap&eltap.com&True&EN&98daf0da-89ac-48db-8b9f-edc6383153ed
     ports:
       - "5105:80"
 
