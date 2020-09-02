@@ -1669,7 +1669,7 @@ var CssSsrRemovalHelper = __webpack_require__(49);
 
 
 
-CssSsrRemovalHelper["a" /* default */].Remove();
+CssSsrRemovalHelper["a" /* default */].remove();
 react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(CategoryPage_CategoryPage, window.data), document.getElementById("root"));
 
 /***/ }),
@@ -4517,8 +4517,8 @@ var CssSsrRemovalHelper = /*#__PURE__*/function () {
   }
 
   Object(C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(CssSsrRemovalHelper, null, [{
-    key: "Remove",
-    value: function Remove() {
+    key: "remove",
+    value: function remove() {
       var jssStyles = document.querySelector("#jss-server-side");
 
       if (jssStyles) {

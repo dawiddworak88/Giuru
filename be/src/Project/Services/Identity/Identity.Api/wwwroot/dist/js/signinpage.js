@@ -14196,8 +14196,8 @@ var CssSsrRemovalHelper_CssSsrRemovalHelper = /*#__PURE__*/function () {
   }
 
   _createClass(CssSsrRemovalHelper, null, [{
-    key: "Remove",
-    value: function Remove() {
+    key: "remove",
+    value: function remove() {
       var jssStyles = document.querySelector("#jss-server-side");
 
       if (jssStyles) {
@@ -14215,7 +14215,7 @@ var CssSsrRemovalHelper_CssSsrRemovalHelper = /*#__PURE__*/function () {
 
 
 
-CssSsrRemovalHelper_CssSsrRemovalHelper.Remove();
+CssSsrRemovalHelper_CssSsrRemovalHelper.remove();
 react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(SignIn_SignInPage, window.data), document.getElementById("root"));
 
 /***/ })

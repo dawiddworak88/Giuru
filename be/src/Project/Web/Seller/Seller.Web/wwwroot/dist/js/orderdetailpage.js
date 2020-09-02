@@ -17618,8 +17618,8 @@ var IconConstants = /*#__PURE__*/function () {
   }
 
   Object(C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(IconConstants, null, [{
-    key: "DefaultSize",
-    value: function DefaultSize() {
+    key: "defaultSize",
+    value: function defaultSize() {
       return 32;
     }
   }]);
@@ -17977,8 +17977,8 @@ var CssSsrRemovalHelper = /*#__PURE__*/function () {
   }
 
   Object(C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(CssSsrRemovalHelper, null, [{
-    key: "Remove",
-    value: function Remove() {
+    key: "remove",
+    value: function remove() {
       var jssStyles = document.querySelector("#jss-server-side");
 
       if (jssStyles) {
@@ -18120,7 +18120,7 @@ function Tile(props) {
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "tile__icon"
   }, /*#__PURE__*/react_default.a.createElement(IconTag, {
-    size: IconConstants["a" /* default */].DefaultSize()
+    size: IconConstants["a" /* default */].defaultSize()
   })), /*#__PURE__*/react_default.a.createElement("div", {
     className: "tile__title"
   }, props.title));
@@ -18225,7 +18225,7 @@ var CssSsrRemovalHelper = __webpack_require__(58);
 
 
 
-CssSsrRemovalHelper["a" /* default */].Remove();
+CssSsrRemovalHelper["a" /* default */].remove();
 react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(OrderDetailPage_OrderDetailPage, window.data), document.getElementById("root"));
 
 /***/ }),
