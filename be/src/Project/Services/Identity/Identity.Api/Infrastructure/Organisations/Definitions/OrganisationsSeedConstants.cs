@@ -1,6 +1,6 @@
 ﻿namespace Identity.Api.Infrastructure.Organisations.Definitions
 {
-    public class OrganisationsSeedConstants
+    public static class OrganisationsSeedConstants
     {
         public static readonly int IdIndex = 0;
         public static readonly int NameIndex = 1;
