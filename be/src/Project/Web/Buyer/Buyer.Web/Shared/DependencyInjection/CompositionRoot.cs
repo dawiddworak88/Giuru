@@ -11,6 +11,7 @@ using Buyer.Web.Areas.Home.DependencyInjection;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;
 using Buyer.Web.Shared.Services.Catalogs;
+using Buyer.Web.Areas.Products.DependencyInjection;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -19,6 +20,7 @@ namespace Buyer.Web.Shared.DependencyInjection
         public static void RegisterDependencies(this IServiceCollection services)
         {
             services.RegisterHomeDependencies();
+            services.RegisterProductDependencies();
 
             // Model Builders
             services.AddScoped<IModelBuilder<BuyerHeaderViewModel>, HeaderModelBuilder>();
