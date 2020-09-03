@@ -6,8 +6,10 @@ using Foundation.Extensions.ModelBuilders;
 using Foundation.Extensions.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ContentGrids.ViewModels;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,12 +20,18 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
         private readonly ICatalogService catalogService;
         private readonly IOptions<AppSettings> options;
         private readonly IMediaService mediaService;
+        private readonly LinkGenerator linkGenerator;
 
-        public CategoriesContentGridModelBuilder(ICatalogService catalogService, IOptions<AppSettings> options, IMediaService mediaService)
+        public CategoriesContentGridModelBuilder(
+            ICatalogService catalogService, 
+            IOptions<AppSettings> options, 
+            IMediaService mediaService,
+            LinkGenerator linkGenerator)
         {
             this.catalogService = catalogService;
             this.options = options;
             this.mediaService = mediaService;
+            this.linkGenerator = linkGenerator;
         }
 
         public async Task<CategoriesContentGridViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -43,7 +51,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                         Id = subCategory.Id,
                         Title = subCategory.Name,
                         ImageAlt = subCategory.Name,
-                        Url = "#"
+                        Url = this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, subCategory.Id })
                     };
 
                     if (subCategory.ThumbnailMediaId.HasValue)

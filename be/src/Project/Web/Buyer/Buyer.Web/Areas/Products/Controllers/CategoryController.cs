@@ -3,6 +3,7 @@ using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace Buyer.Web.Areas.Products.Controllers
             this.categoryPageModelBuilder = categoryPageModelBuilder;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Guid? categoryId)
         {
             var componentModel = new ComponentModelBase
             {
