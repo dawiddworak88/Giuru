@@ -16,8 +16,8 @@ function getItems(length) {
       imageUrl: "https://eltap.pl/upload/gallery/190/cay02jpg163.jpg",
       imageAlt: "Alessia",
       inStock: true,
-      brandName: '',
-      brandUrl: '#',
+      brandName: "eltap",
+      brandUrl: "#",
     };
 
     items.push(item);
