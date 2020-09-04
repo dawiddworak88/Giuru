@@ -1,7 +1,7 @@
 ﻿using Buyer.Web.Areas.Home.Definitions;
 using Buyer.Web.Areas.Home.ViewModel;
+using Buyer.Web.Shared.Catalogs.Services;
 using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Services.Catalogs;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Extensions.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;

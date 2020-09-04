@@ -1,6 +1,6 @@
-﻿using Buyer.Web.Shared.Configurations;
+﻿using Buyer.Web.Shared.Catalogs.Models;
+using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions;
-using Buyer.Web.Shared.Models.Catalogs;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Shared.Services.Catalogs
+namespace Buyer.Web.Shared.Catalogs.Services
 {
     public class CatalogService : ICatalogService
     {

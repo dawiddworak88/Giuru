@@ -10,8 +10,8 @@ using Buyer.Web.Shared.Headers.ViewModels;
 using Buyer.Web.Areas.Home.DependencyInjection;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;
-using Buyer.Web.Shared.Services.Catalogs;
 using Buyer.Web.Areas.Products.DependencyInjection;
+using Buyer.Web.Shared.Catalogs.Services;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {

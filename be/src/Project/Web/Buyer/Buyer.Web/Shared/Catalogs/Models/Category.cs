@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Buyer.Web.Shared.Models.Catalogs
+namespace Buyer.Web.Shared.Catalogs.Models
 {
     public class Category
     {
