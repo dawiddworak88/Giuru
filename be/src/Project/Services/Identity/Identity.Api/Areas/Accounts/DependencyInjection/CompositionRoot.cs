@@ -36,6 +36,7 @@ namespace Identity.Api.Areas.Accounts.DependencyInjection
                 options.Events.RaiseSuccessEvents = true;
             })
             .AddInMemoryIdentityResources(IdentityServerConfig.Ids)
+            .AddInMemoryApiScopes(IdentityServerConfig.ApiScopes)
             .AddInMemoryApiResources(IdentityServerConfig.Apis)
             .AddInMemoryClients(IdentityServerConfig.GetClients(configuration))
             .AddAspNetIdentity<ApplicationUser>();
