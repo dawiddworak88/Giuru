@@ -135,6 +135,9 @@
   <data name="ProductDetailText" xml:space="preserve">
     <value>Product</value>
   </data>
+  <data name="ProductInformation" xml:space="preserve">
+    <value>Product information</value>
+  </data>
   <data name="Products" xml:space="preserve">
     <value>Products</value>
   </data>

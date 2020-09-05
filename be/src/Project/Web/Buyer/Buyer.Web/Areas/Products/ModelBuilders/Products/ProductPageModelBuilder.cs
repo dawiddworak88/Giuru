@@ -12,15 +12,18 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
     {
         private readonly IModelBuilder<BuyerHeaderViewModel> headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel> productDetailModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public ProductPageModelBuilder(
             IModelBuilder<BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel> productDetailModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.mainNavigationModelBuilder = mainNavigationModelBuilder;
+            this.productDetailModelBuilder = productDetailModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
         }
 
@@ -31,6 +34,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             {
                 Header = headerModelBuilder.BuildModel(),
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
+                ProductDetail = await this.productDetailModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };
 

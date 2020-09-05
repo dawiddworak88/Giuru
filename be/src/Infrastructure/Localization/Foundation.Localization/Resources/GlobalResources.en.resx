@@ -123,6 +123,9 @@
   <data name="AreYouSureLabel" xml:space="preserve">
     <value>Are you sure you want to delete</value>
   </data>
+  <data name="By" xml:space="preserve">
+    <value>by</value>
+  </data>
   <data name="Cards" xml:space="preserve">
     <value>Cards</value>
   </data>
@@ -156,6 +159,9 @@
   <data name="DeleteConfirmationLabel" xml:space="preserve">
     <value>Confirm to delete</value>
   </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
   <data name="DisplayedRows" xml:space="preserve">
     <value>of</value>
   </data>
@@ -182,6 +188,9 @@
   </data>
   <data name="ErrorContactAdmin" xml:space="preserve">
     <value>An error has occurred. Please contact your administrators and give them this information:</value>
+  </data>
+  <data name="InStock" xml:space="preserve">
+    <value>In stock</value>
   </data>
   <data name="LanguageRequiredErrorMessage" xml:space="preserve">
     <value>Select language preferred for communication with the client</value>
@@ -210,6 +219,9 @@
   <data name="No" xml:space="preserve">
     <value>No</value>
   </data>
+  <data name="NoResults" xml:space="preserve">
+    <value>There are no results.</value>
+  </data>
   <data name="NoResultsLabel" xml:space="preserve">
     <value>No results have been found.</value>
   </data>
@@ -234,11 +246,17 @@
   <data name="PriceList" xml:space="preserve">
     <value>Price List</value>
   </data>
+  <data name="Prices" xml:space="preserve">
+    <value>Prices</value>
+  </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Privacy Policy</value>
   </data>
   <data name="Products" xml:space="preserve">
     <value>Products</value>
+  </data>
+  <data name="Results" xml:space="preserve">
+    <value>results</value>
   </data>
   <data name="RowsPerPage" xml:space="preserve">
     <value>Rows per page</value>
@@ -263,6 +281,9 @@
   </data>
   <data name="SignIn" xml:space="preserve">
     <value>Sign in</value>
+  </data>
+  <data name="SignInToSeePrices" xml:space="preserve">
+    <value>Sign in to see prices</value>
   </data>
   <data name="TermsAndConditions" xml:space="preserve">
     <value>Terms and Conditions</value>
