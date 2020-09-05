@@ -38,6 +38,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         /// Returns products by search term. Returns all products (paginated) if search term is empty.
         /// </summary>
         /// <param name="language">The language.</param>
+        /// <param name="categoryId">The category id.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The number of items per page.</param>
@@ -45,38 +46,29 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Get(string language, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(string language, Guid? categoryId, string searchTerm, int pageIndex, int itemsPerPage)
         {
-            try
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            var getProductsModel = new GetProductsModel
             {
-                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                SearchTerm = searchTerm,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Language = language
+            };
 
-                var getProductsModel = new GetProductsModel
-                {
-                    PageIndex = pageIndex,
-                    ItemsPerPage = itemsPerPage,
-                    SearchTerm = searchTerm,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    Language = language
-                };
+            var getProductsResult = await this.productService.GetAsync(getProductsModel);
 
-                var getProductsResult = await this.productService.GetAsync(getProductsModel);
-
-                if (getProductsResult.IsValid)
-                {
-                    return this.StatusCode((int)HttpStatusCode.OK, new ProductsResponseModel(getProductsResult.Products));
-                }
-                else
-                {
-                    return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
-                }
+            if (getProductsResult.IsValid)
+            {
+                return this.StatusCode((int)HttpStatusCode.OK, new ProductsResponseModel(getProductsResult.Products));
             }
-            catch (Exception exception)
+            else
             {
-                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
-                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
-                return this.StatusCode((int)HttpStatusCode.BadRequest, new ProductResponseModel { Error = error });
+                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
     }
