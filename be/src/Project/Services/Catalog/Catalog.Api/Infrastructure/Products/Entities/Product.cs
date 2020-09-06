@@ -1,4 +1,5 @@
-﻿using Foundation.GenericRepository.Entities;
+﻿using Catalog.Api.Infrastructure.Categories.Entities;
+using Foundation.GenericRepository.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,9 +11,15 @@ namespace Catalog.Api.Infrastructure.Products.Entities
         [Required]
         public string Sku { get; set; }
 
+        [Required]
         public Guid BrandId { get; set; }
 
         public virtual Brand Brand { get; set; }
+
+        [Required]
+        public Guid CategoryId { get; set; }
+
+        public virtual Category Category { get; set; }
 
         public virtual IEnumerable<ProductTranslation> Translations { get; set; }
     }
