@@ -1,10 +1,10 @@
 ﻿using Catalog.Api.Infrastructure;
-using Catalog.Api.Infrastructure.Categories.Entities;
 using Catalog.Api.v1.Areas.Categories.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using Catalog.Api.v1.Areas.Categories.ResultModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Api.v1.Areas.Categories.Services
 {
@@ -40,6 +40,31 @@ namespace Catalog.Api.v1.Areas.Categories.Services
 
 
             return categories;
+        }
+
+        public async Task<CategoryResultModel> GetAsync(GetCategoryModel model)
+        {
+            var categories = from c in this.context.Categories
+                             join t in this.context.CategoryTranslations on c.Id equals t.CategoryId into ct
+                             from x in ct.DefaultIfEmpty()
+                             join m in this.context.CategoryImages on c.Id equals m.CategoryId into cm
+                             from y in cm.DefaultIfEmpty()
+                             where x.Language == model.Language && c.Id == model.Id && c.IsActive
+                             orderby c.Order
+                             select new CategoryResultModel
+                             {
+                                 Id = c.Id,
+                                 Order = c.Order,
+                                 Level = c.Level,
+                                 IsLeaf = c.IsLeaf,
+                                 Parentid = c.Parentid,
+                                 SchemaId = c.SchemaId,
+                                 Name = x.Name,
+                                 ThumbnailMediaId = y.MediaId
+                             };
+
+
+            return await categories.FirstOrDefaultAsync();
         }
     }
 }

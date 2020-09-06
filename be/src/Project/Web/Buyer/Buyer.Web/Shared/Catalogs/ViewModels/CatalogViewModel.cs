@@ -6,7 +6,6 @@ namespace Buyer.Web.Shared.Catalogs.ViewModels
     public class CatalogViewModel
     {
         public string Title { get; set; }
-        public int ResultsCount { get; set; }
         public string ResultsLabel { get; set; }
         public string NoResultsLabel { get; set; }
         public string SkuLabel { get; set; }
@@ -15,6 +14,11 @@ namespace Buyer.Web.Shared.Catalogs.ViewModels
         public bool IsAuthenticated { get; set; }
         public string SignInUrl { get; set; }
         public string SignInToSeePricesLabel { get; set; }
-        public PagedResults<IEnumerable<CatalogItemViewModel>> Items { get; set; }
+        public string DisplayedRowsLabel { get; set; }
+        public string RowsPerPageLabel { get; set; }
+        public string BackIconButtonText { get; set; }
+        public string NextIconButtonText { get; set; }
+        public string GeneralErrorMessage { get; set; }
+        public PagedResults<IEnumerable<CatalogItemViewModel>> PagedItems { get; set; }
     }
 }

@@ -26,7 +26,7 @@ namespace Buyer.Web.Areas.Products.Controllers
         {
             var componentModel = new CategoryComponentModel
             {
-                CategoryId = id,
+                Id = id,
                 SearchTerm = searchTerm,
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated

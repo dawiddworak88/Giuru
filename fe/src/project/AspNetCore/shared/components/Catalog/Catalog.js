@@ -1,20 +1,78 @@
-import React from "react";
+import React, { useContext } from "react";
+import { toast } from "react-toastify";
 import PropTypes from "prop-types";
+import PaginationConstants from "../../../../../shared/constants/PaginationConstants";
+import { Context } from "../../../../../shared/stores/Store";
+import FetchErrorHandler from "../../../../../shared/helpers/errorHandlers/FetchErrorHandler";
+import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
+import { TablePagination } from "@material-ui/core";
 
 function Catalog(props) {
+
+    const [state, dispatch] = useContext(Context);
+    const [page, setPage] = React.useState(0);
+    const [itemsPerPage,] = React.useState(PaginationConstants.defaultRowsPerPage());
+    const [items, setItems] = React.useState(props.pagedItems.data);
+    const [total, setTotal] = React.useState(props.pagedItems.total);
+
+    const handleChangePage = (event, newPage) => {
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        setPage(() => newPage);
+
+        const searchParameters = {
+
+            categoryId: props.categoryId,
+            pageIndex: newPage + 1,
+            itemsPerPage
+        };
+
+        const requestOptions = {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+        };
+
+        const url = props.productsApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+
+        return fetch(url, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                FetchErrorHandler.handleUnauthorizedResponse(response);
+
+                return response.json().then(jsonResponse => {
+
+                    if (response.ok) {
+
+                        setItems(() => []);
+                        setItems(() => jsonResponse.data.pagedItems.data);
+                        setTotal(() => jsonResponse.data.pagedItems.total);
+                    }
+                    else {
+                        FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    };
 
     return (
 
         <section className="catalog section">
             <h1 className="title is-3">{props.title}</h1>
-            {props.resultsCount &&
-                <p className="subtitle is-6">{props.resultsCount} {props.resultsLabel}</p>
-            }
-            {props.items ?
+            {items && items.length > 0 ?
                 (
                     <div>
+                        {total &&
+                            <p className="subtitle is-6">{total} {props.resultsLabel}</p>
+                        }
                         <div className="columns is-tablet is-multiline">
-                            {props.items.map((item, index) =>
+                            {items.map((item, index) =>
                                 <div key={item.id} className="column is-3">
                                     <div className="catalog-item card">
                                         <a href={item.url}>
@@ -32,18 +90,6 @@ function Catalog(props) {
                                                     <h3>{props.byLabel} <a href={item.brandUrl}>{item.brandName}</a></h3>
                                                 </div>
                                             }
-                                            {item.inStock &&
-                                                <div className="catalog-item__in-stock">
-                                                    {props.inStockLabel}
-                                                </div>
-                                            }
-                                            <div className="catalog-item__price">
-                                                {!props.isAuthenticated &&
-                                                    <a href={props.signInUrl}>
-                                                        {props.signInToSeePricesLabel}
-                                                    </a>
-                                                }
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -70,7 +116,6 @@ function Catalog(props) {
                         <span className="is-title is-5">{props.noResultsLabel}</span>
                     </section>
                 )}
-
         </section>
     );
 }
@@ -86,6 +131,13 @@ Catalog.propTypes = {
     isAuthenticated: PropTypes.bool.isRequired,
     signInUrl: PropTypes.string.isRequired,
     signInToSeePricesLabel: PropTypes.string.isRequired,
+    displayedRowsLabel: PropTypes.string.isRequired,
+    rowsPerPageLabel: PropTypes.string.isRequired,
+    backIconButtonText: PropTypes.string.isRequired,
+    nextIconButtonText: PropTypes.string.isRequired,
+    generalErrorMessage: PropTypes.string.isRequired,
+    productsApiUrl: PropTypes.string.isRequired,
+    categoryId: PropTypes.string.isRequired,
     items: PropTypes.array
 };
 

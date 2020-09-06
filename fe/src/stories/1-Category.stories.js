@@ -23,12 +23,14 @@ function getItems(length) {
     items.push(item);
   }
 
-  return items;
+  return {
+    data: items,
+    total: length
+  };
 }
 
 var catalog = {
   title: "Sofas",
-  resultsCount: 2823,
   resultsLabel: "results",
   noResultsLabel: "There are no results.",
   skuLabel: "SKU:",
@@ -37,7 +39,14 @@ var catalog = {
   isAuthenticated: false,
   signInUrl: "#",
   signInToSeePricesLabel: "Log in to see prices",
-  items: getItems(48)
+  displayedRowsLabel: "of",
+  rowsPerPageLabel: "Rows per Page",
+  backIconButtonText: "Previous",
+  nextIconButtonText: "Next",
+  generalErrorMessage: "An Error Occurred",
+  productsApiUrl: "#",
+  categoryId: "11",
+  pagedItems: getItems(100)
 };
 
 export const CategoryPageStory = () => <CategoryPage header={header} mainNavigation={mainNavigation} catalog={catalog} footer={footer} />

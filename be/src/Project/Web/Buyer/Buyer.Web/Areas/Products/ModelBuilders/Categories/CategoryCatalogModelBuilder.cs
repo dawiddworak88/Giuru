@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Products.ComponentModels;
+using Buyer.Web.Areas.Products.Repositories.Categories;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Categories;
 using Buyer.Web.Shared.Catalogs.ViewModels;
@@ -15,15 +16,18 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
     public class CategoryCatalogModelBuilder : IAsyncComponentModelBuilder<CategoryComponentModel, CategoryCatalogViewModel>
     {
         private readonly IProductsRepository productsRepository;
+        private readonly ICategoryRepository categoryRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
 
         public CategoryCatalogModelBuilder(
             IProductsRepository productsRepository,
+            ICategoryRepository categoryRepository,
             IStringLocalizer<GlobalResources> globalLocalizer, 
             IStringLocalizer<ProductResources> productLocalizer)
         {
             this.productsRepository = productsRepository;
+            this.categoryRepository = categoryRepository;
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
         }
@@ -39,37 +43,57 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
                 ByLabel = this.globalLocalizer.GetString("By"),
                 InStockLabel = this.productLocalizer.GetString("InStock"),
                 NoResultsLabel = this.globalLocalizer.GetString("NoResults"),
+                GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"],
+                DisplayedRowsLabel = this.globalLocalizer["DisplayedRows"],
+                RowsPerPageLabel = this.globalLocalizer["RowsPerPage"],
+                BackIconButtonText = this.globalLocalizer["Previous"],
+                NextIconButtonText = this.globalLocalizer["Next"],
                 IsAuthenticated = componentModel.IsAuthenticated
             };
 
-            var pagedProducts = await this.productsRepository.GetProductsAsync(
-                componentModel.CategoryId,
-                componentModel.Language,
-                componentModel.SearchTerm,
-                PaginationConstants.DefaultPageIndex,
-                PaginationConstants.DefaultPageSize,
-                componentModel.Token);
+            var category = await this.categoryRepository.GetCategoryAsync(componentModel.Id, componentModel.Token);
 
-            if (pagedProducts?.Data != null)
+            if (category != null)
             {
+                viewModel.Title = category.Name;
+                viewModel.CategoryId = category.Id;
+
+                var pagedProducts = await this.productsRepository.GetProductsAsync(
+                    componentModel.Id,
+                    componentModel.Language,
+                    componentModel.SearchTerm,
+                    PaginationConstants.DefaultPageIndex,
+                    PaginationConstants.DefaultPageSize,
+                    componentModel.Token);
+
                 var catalogItemList = new List<CatalogItemViewModel>();
 
-                foreach (var product in pagedProducts.Data)
+                if (pagedProducts?.Data != null)
                 {
-                    var catalogItem = new CatalogItemViewModel
-                    { 
-                         Id = product.Id,
-                         Sku = product.Sku,
-                         Title = product.Name
+                    foreach (var product in pagedProducts.Data)
+                    {
+                        var catalogItem = new CatalogItemViewModel
+                        {
+                            Id = product.Id,
+                            Sku = product.Sku,
+                            Title = product.Name
+                        };
+
+                        catalogItemList.Add(catalogItem);
+                    }
+
+                    viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(pagedProducts.Total, pagedProducts.PageSize)
+                    {
+                        Data = catalogItemList
                     };
-
-                    catalogItemList.Add(catalogItem);
                 }
-
-                viewModel.Items = new PagedResults<IEnumerable<CatalogItemViewModel>>(pagedProducts.Total, pagedProducts.PageSize)
-                { 
-                    Data = catalogItemList
-                };
+                else
+                {
+                    viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(catalogItemList.Count, PaginationConstants.DefaultPageSize)
+                    {
+                        Data = catalogItemList
+                    };
+                }
             }
 
             return viewModel;
