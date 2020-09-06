@@ -2,16 +2,12 @@
 using Catalog.Api.v1.Areas.Products.Models;
 using Catalog.Api.v1.Areas.Products.Services;
 using Foundation.ApiExtensions.Controllers;
-using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Net;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using Foundation.Account.Definitions;
 using Catalog.Api.v1.Areas.Products.Validators;
 
 namespace Catalog.Api.v1.Areas.Products.Controllers
@@ -48,8 +44,6 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Get(string language, Guid? categoryId, string searchTerm, int pageIndex, int itemsPerPage)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
-
             var serviceModel = new GetProductsModel
             {
                 PageIndex = pageIndex,

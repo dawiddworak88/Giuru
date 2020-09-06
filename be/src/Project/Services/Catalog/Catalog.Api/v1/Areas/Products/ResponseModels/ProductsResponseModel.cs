@@ -10,17 +10,20 @@ namespace Catalog.Api.v1.Areas.Products.ResponseModels
 
         public ProductsResponseModel(PagedResults<IEnumerable<Product>> pagedProducts)
         {
-            var productsList = new List<ProductResponseModel>();
-
-            foreach (var product in pagedProducts.Data)
+            if (pagedProducts?.Data != null)
             {
-                productsList.Add(new ProductResponseModel(product));
-            }
+                var productsList = new List<ProductResponseModel>();
 
-            this.PagedProducts = new PagedResults<IEnumerable<ProductResponseModel>>(pagedProducts.Total, pagedProducts.PageSize)
-            { 
-                Data = productsList
-            };
+                foreach (var product in pagedProducts.Data)
+                {
+                    productsList.Add(new ProductResponseModel(product));
+                }
+
+                this.PagedProducts = new PagedResults<IEnumerable<ProductResponseModel>>(pagedProducts.Total, pagedProducts.PageSize)
+                {
+                    Data = productsList
+                };
+            }
         }
     }
 }

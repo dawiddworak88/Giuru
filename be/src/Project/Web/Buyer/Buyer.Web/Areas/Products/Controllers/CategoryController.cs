@@ -22,11 +22,11 @@ namespace Buyer.Web.Areas.Products.Controllers
             this.categoryPageModelBuilder = categoryPageModelBuilder;
         }
 
-        public async Task<IActionResult> Index(Guid? categoryId, string searchTerm)
+        public async Task<IActionResult> Index(Guid? id, string searchTerm)
         {
             var componentModel = new CategoryComponentModel
             {
-                CategoryId = categoryId,
+                CategoryId = id,
                 SearchTerm = searchTerm,
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated

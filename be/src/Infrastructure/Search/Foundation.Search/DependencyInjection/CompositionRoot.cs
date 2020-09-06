@@ -16,6 +16,11 @@ namespace Foundation.Search.DependencyInjection
                 .DefaultIndex(defaultIndex);
 
             var client = new ElasticClient(settings);
+            
+            if (!client.Indices.Exists(defaultIndex).Exists)
+            {
+                client.Indices.Create(defaultIndex);
+            }
 
             services.AddSingleton<IElasticClient>(client);
         }
