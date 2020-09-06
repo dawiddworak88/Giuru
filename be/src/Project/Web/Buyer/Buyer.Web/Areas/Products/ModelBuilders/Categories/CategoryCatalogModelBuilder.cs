@@ -56,7 +56,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
             if (category != null)
             {
                 viewModel.Title = category.Name;
-                viewModel.CategoryId = category.Id;
+                viewModel.Id = category.Id;
 
                 var pagedProducts = await this.productsRepository.GetProductsAsync(
                     componentModel.Id,

@@ -9,7 +9,7 @@ import { TablePagination } from "@material-ui/core";
 
 function Catalog(props) {
 
-    const [state, dispatch] = useContext(Context);
+    const [, dispatch] = useContext(Context);
     const [page, setPage] = React.useState(0);
     const [itemsPerPage,] = React.useState(PaginationConstants.defaultRowsPerPage());
     const [items, setItems] = React.useState(props.pagedItems.data);
@@ -23,7 +23,7 @@ function Catalog(props) {
 
         const searchParameters = {
 
-            categoryId: props.categoryId,
+            id: props.id,
             pageIndex: newPage + 1,
             itemsPerPage
         };

@@ -45,7 +45,7 @@ var catalog = {
   nextIconButtonText: "Next",
   generalErrorMessage: "An Error Occurred",
   productsApiUrl: "#",
-  categoryId: "11",
+  id: "11",
   pagedItems: getItems(100)
 };
 
