@@ -34,5 +34,6 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Mailing\Foundation.Mailing\Foundation.Mailing.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\Search\Foundation.Search\Foundation.Search.csproj" />
   </ItemGroup>
 </Project>

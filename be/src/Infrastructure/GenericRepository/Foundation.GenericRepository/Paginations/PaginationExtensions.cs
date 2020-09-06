@@ -11,11 +11,9 @@
         {
             if (pagination.TotalItems == 0)
             {
-                return new PagedResults<IEnumerable<T>>
+                return new PagedResults<IEnumerable<T>>(pagination.TotalItems, pagination.PageSize)
                 {
-                    Data = new List<T>(),
-                    Total = pagination.TotalItems,
-                    PageCount = 1
+                    Data = new List<T>()
                 };
             }
 
@@ -24,11 +22,9 @@
                 throw new ArgumentException($"Page index must >= {pagination.MinPage} and = < {pagination.MaxPage}");
             }
 
-            var pagedResult = new PagedResults<IEnumerable<T>>
+            var pagedResult = new PagedResults<IEnumerable<T>>(pagination.TotalItems, pagination.PageSize)
             {
-                Data = query.Skip(GetSkip(pageIndex, pagination.PageSize)).Take(pagination.PageSize),
-                Total = pagination.TotalItems,
-                PageCount = (int) Math.Ceiling ((decimal) pagination.TotalItems / pagination.PageSize )
+                Data = query.Skip(GetSkip(pageIndex, pagination.PageSize)).Take(pagination.PageSize)
             };
 
             return pagedResult;

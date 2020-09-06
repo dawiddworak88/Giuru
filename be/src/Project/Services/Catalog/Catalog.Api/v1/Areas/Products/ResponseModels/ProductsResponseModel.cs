@@ -17,11 +17,9 @@ namespace Catalog.Api.v1.Areas.Products.ResponseModels
                 productsList.Add(new ProductResponseModel(product));
             }
 
-            this.PagedProducts = new PagedResults<IEnumerable<ProductResponseModel>>
+            this.PagedProducts = new PagedResults<IEnumerable<ProductResponseModel>>(pagedProducts.Total, pagedProducts.PageSize)
             { 
-                Data = productsList,
-                PageCount = pagedProducts.PageCount,
-                Total = pagedProducts.Total
+                Data = productsList
             };
         }
     }

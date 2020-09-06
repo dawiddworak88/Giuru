@@ -1,11 +1,27 @@
-﻿namespace Foundation.GenericRepository.Paginations
+﻿using System;
+
+namespace Foundation.GenericRepository.Paginations
 {
     public class PagedResults<T>
     {
+        public PagedResults(long total, int pageSize)
+        {
+            this.Total = total;
+            this.PageSize = pageSize;
+        }
+
         public T Data { get; set; }
 
-        public int Total { get; set; }
+        public long Total { get; }
 
-        public int PageCount { get; set; }
+        public int PageSize { get; }
+
+        public int PageCount 
+        {
+            get
+            {
+                return (int)Math.Ceiling((decimal)this.Total / this.PageSize);
+            }  
+        }
     }
 }

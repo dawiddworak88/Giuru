@@ -2,7 +2,6 @@
 using Catalog.Api.v1.Areas.Products.Models;
 using Catalog.Api.v1.Areas.Products.Services;
 using Foundation.ApiExtensions.Controllers;
-using Foundation.ApiExtensions.Helpers;
 using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +9,10 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Foundation.Account.Definitions;
+using Catalog.Api.v1.Areas.Products.Validators;
 
 namespace Catalog.Api.v1.Areas.Products.Controllers
 {
@@ -45,31 +44,34 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         /// <returns></returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(422)]
         public async Task<IActionResult> Get(string language, Guid? categoryId, string searchTerm, int pageIndex, int itemsPerPage)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
-            var getProductsModel = new GetProductsModel
+            var serviceModel = new GetProductsModel
             {
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
                 SearchTerm = searchTerm,
+                CategoryId = categoryId,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Language = language
             };
 
-            var getProductsResult = await this.productService.GetAsync(getProductsModel);
+            var validator = new GetProductsModelValidator();
 
-            if (getProductsResult.IsValid)
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
             {
-                return this.StatusCode((int)HttpStatusCode.OK, new ProductsResponseModel(getProductsResult.Products));
+                var products = await this.productService.GetAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK, new ProductsResponseModel(products));
             }
-            else
-            {
-                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
-            }
+
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }
