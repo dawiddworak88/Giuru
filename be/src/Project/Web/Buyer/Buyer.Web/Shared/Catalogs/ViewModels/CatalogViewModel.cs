@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Foundation.GenericRepository.Paginations;
+using System.Collections.Generic;
 
 namespace Buyer.Web.Shared.Catalogs.ViewModels
 {
@@ -14,6 +15,6 @@ namespace Buyer.Web.Shared.Catalogs.ViewModels
         public bool IsAuthenticated { get; set; }
         public string SignInUrl { get; set; }
         public string SignInToSeePricesLabel { get; set; }
-        public IEnumerable<CatalogItemViewModel> Items { get; set; }
+        public PagedResults<IEnumerable<CatalogItemViewModel>> Items { get; set; }
     }
 }

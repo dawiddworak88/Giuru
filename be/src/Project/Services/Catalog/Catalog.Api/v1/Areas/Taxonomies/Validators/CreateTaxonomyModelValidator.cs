@@ -4,7 +4,7 @@ using Catalog.Api.v1.Areas.Taxonomies.Models;
 
 namespace Catalog.Api.v1.Areas.Taxonomies.Validators
 {
-    public class CreateTaxonomyModelValidator : BaseServiceModelValidator<CreateTaxonomyModel>
+    public class CreateTaxonomyModelValidator : BaseAuthorizedServiceModelValidator<CreateTaxonomyModel>
     {
         public CreateTaxonomyModelValidator()
         {

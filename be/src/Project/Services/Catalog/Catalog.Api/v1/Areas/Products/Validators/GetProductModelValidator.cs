@@ -4,7 +4,7 @@ using Foundation.Extensions.Validators;
 
 namespace Catalog.Api.v1.Areas.Products.Validators
 {
-    public class GetProductModelValidator : BaseServiceModelValidator<GetProductModel>
+    public class GetProductModelValidator : BaseAuthorizedServiceModelValidator<GetProductModel>
     {
         public GetProductModelValidator()
         {

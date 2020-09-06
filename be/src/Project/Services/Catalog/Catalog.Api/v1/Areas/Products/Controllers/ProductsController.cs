@@ -45,6 +45,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType(200)]
         [ProducesResponseType(422)]
+        [AllowAnonymous]
         public async Task<IActionResult> Get(string language, Guid? categoryId, string searchTerm, int pageIndex, int itemsPerPage)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
@@ -55,8 +56,6 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                 ItemsPerPage = itemsPerPage,
                 SearchTerm = searchTerm,
                 CategoryId = categoryId,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Language = language
             };
 

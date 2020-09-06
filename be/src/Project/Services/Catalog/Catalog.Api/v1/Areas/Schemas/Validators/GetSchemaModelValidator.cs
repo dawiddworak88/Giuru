@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace Catalog.Api.v1.Areas.Schemas.Validators
 {
-    public class GetSchemaModelValidator : BaseServiceModelValidator<GetSchemaModel>
+    public class GetSchemaModelValidator : BaseAuthorizedServiceModelValidator<GetSchemaModel>
     {
         public GetSchemaModelValidator()
         {

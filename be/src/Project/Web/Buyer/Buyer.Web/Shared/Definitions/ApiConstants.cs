@@ -5,6 +5,7 @@
         public struct Catalog
         {
             public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
+            public static readonly string ProductsApiEndpoint = "/api/v1/products";
         }
     }
 }
