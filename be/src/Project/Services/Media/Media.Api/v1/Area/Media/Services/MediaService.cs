@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 using System.Linq;
 using Media.Api.v1.Area.Media.Models;
 using Media.Api.v1.Area.Media.Repositories;
+using Media.Api.Infrastructure.Media.Entities;
+using Foundation.GenericRepository.Helpers;
+using MimeMapping;
+using System.IO;
 
 namespace Media.Api.v1.Area.Media.Services
 {
@@ -19,7 +23,46 @@ namespace Media.Api.v1.Area.Media.Services
             this.mediaRepository = mediaRepository;
         }
 
-        public async Task<MediaItemResultModel> GetMediaItemAsync(Guid? mediaId)
+        public async Task<Guid> CreateMediaItemAsync(CreateMediaItemModel serviceModel)
+        {
+            var mediaItem = new MediaItem
+            {
+                IsProtected = false
+            };
+
+            context.MediaItems.Add(EntitySeedHelper.SeedEntity(mediaItem));
+
+            var mediaItemVersion = new MediaItemVersion
+            {
+                MediaItemId = mediaItem.Id,
+                Filename = Path.GetFileNameWithoutExtension(serviceModel.File.FileName),
+                Extension = Path.GetExtension(serviceModel.File.FileName),
+                Folder = serviceModel.SellerId.ToString(),
+                MimeType = MimeUtility.GetMimeMapping(Path.GetExtension(serviceModel.File.FileName)),
+                Size = serviceModel.File.Length,
+                CreatedBy = serviceModel.Username,
+                Version = 1
+            };
+
+            context.MediaItemVersions.Add(EntitySeedHelper.SeedEntity(mediaItemVersion));
+
+            var mediaItemTranslation = new MediaItemTranslation
+            {
+                MediaItemVersionId = mediaItemVersion.Id,
+                Language = serviceModel.Language,
+                Name = Path.GetFileNameWithoutExtension(serviceModel.File.FileName)
+            };
+
+            context.MediaItemTranslations.Add(EntitySeedHelper.SeedEntity(mediaItemTranslation));
+
+            context.SaveChanges();
+
+            await this.mediaRepository.CreateFileAsync(mediaItemVersion.Id, serviceModel.SellerId.ToString(), serviceModel.File);
+
+            return mediaItem.Id;
+        }
+
+        public async Task<MediaFileResultModel> GetMediaItemAsync(Guid? mediaId)
         {
             if (mediaId.HasValue)
             {
@@ -45,7 +88,7 @@ namespace Media.Api.v1.Area.Media.Services
 
                     if (file != null)
                     {
-                        return new MediaItemResultModel
+                        return new MediaFileResultModel
                         {
                             Id = mediaItem.Id,
                             Filename = $"{mediaItem.Filename}{mediaItem.Extension}",

@@ -6,7 +6,6 @@ using MimeMapping;
 using System;
 using System.IO;
 using System.Linq;
-using System.Net;
 
 namespace Media.Api.Infrastructure.Media.Seeds
 {
@@ -55,7 +54,6 @@ namespace Media.Api.Infrastructure.Media.Seeds
 
                 if (!blob.Exists())
                 {
-                    using (var client = new WebClient())
                     using (var stream = new MemoryStream(File.ReadAllBytes(mediaUrl)))
                     {
                         blob.Upload(stream);

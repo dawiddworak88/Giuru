@@ -1,4 +1,5 @@
-﻿using Media.Api.v1.Area.Media.ResultModels;
+﻿using Media.Api.v1.Area.Media.Models;
+using Media.Api.v1.Area.Media.ResultModels;
 using System;
 using System.Threading.Tasks;
 
@@ -6,6 +7,7 @@ namespace Media.Api.v1.Area.Media.Services
 {
     public interface IMediaService
     {
-        Task<MediaItemResultModel> GetMediaItemAsync(Guid? mediaId);
+        Task<MediaFileResultModel> GetMediaItemAsync(Guid? mediaId);
+        Task<Guid> CreateMediaItemAsync(CreateMediaItemModel serviceModel);
     }
 }

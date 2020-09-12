@@ -2,7 +2,7 @@
 
 namespace Media.Api.v1.Area.Media.ResultModels
 {
-    public class MediaItemResultModel
+    public class MediaFileResultModel
     {
         public Guid Id { get; set; }
         public byte[] File { get; set; }
