@@ -8,6 +8,10 @@ namespace Catalog.Api.Infrastructure.Products.Entities
 {
     public class Product : Entity
     {
+        public Guid? PrimaryProductId { get; set; }
+
+        public virtual Product PrimaryProduct { get; set; }
+
         [Required]
         public string Sku { get; set; }
 

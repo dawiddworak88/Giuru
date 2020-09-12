@@ -191,6 +191,7 @@ namespace Catalog.Api.Infrastructure.Migrations
                     IsActive = table.Column<bool>(nullable: false),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
+                    PrimaryProductId = table.Column<Guid>(nullable: true),
                     Sku = table.Column<string>(nullable: false),
                     BrandId = table.Column<Guid>(nullable: false),
                     CategoryId = table.Column<Guid>(nullable: false)
@@ -210,6 +211,12 @@ namespace Catalog.Api.Infrastructure.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Products_Products_PrimaryProductId",
+                        column: x => x.PrimaryProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -301,6 +308,11 @@ namespace Catalog.Api.Infrastructure.Migrations
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_PrimaryProductId",
+                table: "Products",
+                column: "PrimaryProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductTranslations_ProductId",
