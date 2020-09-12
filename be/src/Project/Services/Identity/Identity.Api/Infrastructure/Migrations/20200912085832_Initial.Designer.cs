@@ -11,7 +11,7 @@ using NetTopologySuite.Geometries;
 namespace Identity.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20200902164527_Initial")]
+    [Migration("20200912085832_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
