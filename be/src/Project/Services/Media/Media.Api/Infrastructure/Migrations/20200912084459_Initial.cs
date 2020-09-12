@@ -36,6 +36,7 @@ namespace Media.Api.Infrastructure.Migrations
                     Extension = table.Column<string>(nullable: true),
                     MimeType = table.Column<string>(nullable: true),
                     Version = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
                     MediaItemId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
