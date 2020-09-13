@@ -12,7 +12,6 @@ namespace Catalog.Api.Infrastructure.Products.Entities
 
         public virtual Product PrimaryProduct { get; set; }
 
-        [Required]
         public string Sku { get; set; }
 
         [Required]
