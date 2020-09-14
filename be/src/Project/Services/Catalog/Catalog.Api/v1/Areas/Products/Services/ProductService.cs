@@ -1,35 +1,111 @@
 ﻿using Catalog.Api.v1.Areas.Products.Models;
-using Catalog.Api.v1.Areas.Products.ResultModels;
-using Foundation.GenericRepository.Services;
 using System.Threading.Tasks;
-using Catalog.Api.Infrastructure;
+using System.Linq;
 using Foundation.GenericRepository.Paginations;
 using System.Collections.Generic;
+using Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories;
+using Catalog.Api.v1.Areas.Products.ResultModels;
 using Catalog.Api.Infrastructure.Products.Entities;
-using Nest;
-using System.Linq;
+using Catalog.Api.Infrastructure;
+using NetTopologySuite.Utilities;
+using Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories;
+using Foundation.GenericRepository.Services;
+using System.Dynamic;
 
 namespace Catalog.Api.v1.Areas.Products.Services
 {
     public class ProductService : IProductService
     {
-        private readonly IElasticClient elasticClient;
-        private readonly CatalogContext context;
+        private readonly CatalogContext catalogContext;
         private readonly IEntityService entityService;
+        private readonly IProductSearchRepository productSearchRepository;
+        private readonly IProductIndexingRepository productIndexingRepository;
 
         public ProductService(
-            IElasticClient elasticClient,
-            CatalogContext context,
-            IEntityService entityService)
+            CatalogContext catalogContext,
+            IEntityService entityService,
+            IProductSearchRepository productSearchRepository,
+            IProductIndexingRepository productIndexingRepository)
         {
-            this.elasticClient = elasticClient;
-            this.context = context;
+            this.catalogContext = catalogContext;
             this.entityService = entityService;
+            this.productSearchRepository = productSearchRepository;
+            this.productIndexingRepository = productIndexingRepository;
         }
 
         public async Task<ProductResultModel> CreateAsync(CreateUpdateProductModel model)
         {
-            return default;
+            var product = new Product
+            {
+                Sku = model.Sku,
+                BrandId = model.SellerId.GetValueOrDefault(),
+                CategoryId = model.CategoryId.GetValueOrDefault(),
+                PrimaryProductId = model.PrimaryProductId.GetValueOrDefault()
+            };
+
+            await this.catalogContext.Products.AddAsync(this.entityService.EnrichEntity(product));
+
+            var productTranslation = new ProductTranslation
+            { 
+                Language = model.Language,
+                Name = model.Name,
+                Description = model.Description,
+                FormData = model.FormData,
+                ProductId = product.Id
+            };
+
+            await this.catalogContext.ProductTranslations.AddAsync(this.entityService.EnrichEntity(productTranslation));
+
+            if (model.Images != null && model.Images.Any())
+            {
+                foreach (var imageId in model.Images)
+                {
+                    var productImage = new ProductImage
+                    {
+                        MediaId = imageId,
+                        ProductId = product.Id
+                    };
+
+                    await this.catalogContext.ProductImages.AddAsync(this.entityService.EnrichEntity(productImage));
+                }
+            }
+
+            if (model.Videos != null && model.Videos.Any())
+            {
+                foreach (var videoId in model.Videos)
+                {
+                    var productVideo = new ProductVideo
+                    { 
+                        MediaId = videoId,
+                        ProductId = product.Id
+                    };
+
+                    await this.catalogContext.ProductVideos.AddAsync(this.entityService.EnrichEntity(productVideo));
+                }
+            }
+
+            if (model.Files != null && model.Files.Any())
+            {
+                foreach (var fileId in model.Files)
+                {
+                    var productFile = new ProductFile
+                    { 
+                        MediaId = fileId,
+                        ProductId = product.Id
+                    };
+
+                    await this.catalogContext.ProductFiles.AddAsync(productFile);
+                }
+            }
+
+            await this.catalogContext.SaveChangesAsync();
+
+            await this.productIndexingRepository.IndexAsync(product.Id);
+
+            return new ProductResultModel
+            { 
+                Id = product.Id
+            };
         }
 
         public async Task<ProductResultModel> UpdateAsync(CreateUpdateProductModel model)
@@ -37,34 +113,44 @@ namespace Catalog.Api.v1.Areas.Products.Services
             return default;
         }
 
-        public async Task<DeleteProductResultModel> DeleteAsync(DeleteProductModel deleteProductModel)
+        public async Task DeleteAsync(DeleteProductModel model)
         {
-            return default;
         }
 
-        public async Task<PagedResults<IEnumerable<Product>>> GetAsync(GetProductsModel getProductsModel)
+        public async Task<PagedResults<IEnumerable<ProductResultModel>>> GetAsync(GetProductsModel model)
         {
-            var query = Query<Product>.Term(x => x.IsActive, true);
+            var searchResults = await this.productSearchRepository.GetAsync(model.Language, model.CategoryId, model.SellerId, model.SearchTerm, model.PageIndex, model.ItemsPerPage);
 
-            if (!string.IsNullOrWhiteSpace(getProductsModel.SearchTerm))
+            if (searchResults?.Data != null && searchResults.Data.Any())
             {
-                query = query && Query<Product>.QueryString(d => d.Query(getProductsModel.SearchTerm));
-            }
+                var products = new List<ProductResultModel>();
 
-            var response = await this.elasticClient.SearchAsync<Product>(s => s.From((getProductsModel.PageIndex - 1) * getProductsModel.ItemsPerPage).Size(getProductsModel.ItemsPerPage).Query(x => x && query));
+                foreach (var searchResultItem in searchResults.Data)
+                {
+                    var product = new ProductResultModel
+                    {
+                        Id = searchResultItem.Id,
+                        Sku = searchResultItem.Sku,
+                        Name = searchResultItem.Name,
+                        Description = searchResultItem.Description,
+                        FormData = searchResultItem.FormData,
+                        LastModifiedDate = searchResultItem.LastModifiedDate,
+                        CreatedDate = searchResultItem.CreatedDate
+                    };
 
-            if (response.IsValid && response.Hits.Any())
-            {
-                return new PagedResults<IEnumerable<Product>>(response.Total, getProductsModel.ItemsPerPage)
-                { 
-                    Data = response.Documents
+                    products.Add(product);
+                }
+
+                return new PagedResults<IEnumerable<ProductResultModel>>(searchResults.Total, searchResults.PageSize)
+                {
+                    Data = products
                 };
             }
 
             return default;
         }
 
-        public async Task<ProductResultModel> GetByIdAsync(GetProductModel getProductModel)
+        public async Task<ProductResultModel> GetByIdAsync(GetProductModel model)
         {
             return default;
         }

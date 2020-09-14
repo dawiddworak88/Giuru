@@ -4,6 +4,6 @@ namespace Foundation.GenericRepository.Services
 {
     public interface IEntityService
     {
-        T EnrichEntity<T>(T entity, string username) where T : Entity;
+        T EnrichEntity<T>(T entity) where T : Entity;
     }
 }

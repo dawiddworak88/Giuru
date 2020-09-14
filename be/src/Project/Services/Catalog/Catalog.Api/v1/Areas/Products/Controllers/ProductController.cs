@@ -1,21 +1,17 @@
 ﻿using Catalog.Api.v1.Areas.Products.RequestModels;
-using Catalog.Api.v1.Areas.Products.ResponseModels;
 using Catalog.Api.v1.Areas.Products.Models;
 using Catalog.Api.v1.Areas.Products.Services;
 using Foundation.ApiExtensions.Controllers;
-using Foundation.ApiExtensions.Helpers;
-using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Foundation.Account.Definitions;
+using Catalog.Api.v1.Areas.Products.Validators;
 
 namespace Catalog.Api.v1.Areas.Products.Controllers
 {
@@ -28,12 +24,9 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
     {
         private readonly IProductService productService;
 
-        private readonly ILogger logger;
-
-        public ProductController(IProductService productService, ILogger<ProductController> logger)
+        public ProductController(IProductService productService)
         {
             this.productService = productService;
-            this.logger = logger;
         }
 
         /// <summary>
@@ -48,39 +41,48 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Save([FromBody] ProductRequestModel request)
         {
-            try
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            var serviceModel = new CreateUpdateProductModel
             {
-                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+                Id = request.Id,
+                Sku = request.Sku,
+                Name = request.Name,
+                Description = request.Description,
+                FormData = request.FormData,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Language = request.Language
+            };
 
-                var createUpdateModel = new CreateUpdateProductModel
-                {
-                    Id = request.Id,
-                    Sku = request.Sku,
-                    Name = request.Name,
-                    SchemaId = request.SchemaId,
-                    FormData = request.FormData,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    Language = request.Language
-                };
+            if (request.Id.HasValue)
+            {
+                var validator = new UpdateProductModelValidator();
 
-                var resultModel = request.Id.HasValue ? await this.productService.UpdateAsync(createUpdateModel) : await this.productService.CreateAsync(createUpdateModel);
-                
-                if (resultModel.IsValid)
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
                 {
-                    return this.StatusCode((int)HttpStatusCode.Created, new ProductResponseModel(resultModel.Product));
-                }
-                else
-                {
-                    return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+                    var product = await this.productService.UpdateAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.OK, product);
                 }
             }
-            catch (Exception exception)
+            else
             {
-                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
-                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
-                return this.StatusCode((int)HttpStatusCode.BadRequest, new ProductResponseModel { Error = error });
+                var validator = new CreateProductModelValidator();
+
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var product = await this.productService.CreateAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.Created, product);
+                }
             }
+
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
@@ -95,40 +97,28 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetById(string language, Guid? id)
         {
-            try
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            var serviceModel = new GetProductModel
             {
-                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+                Id = id,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Language = language
+            };
 
-                var getProductModel = new GetProductModel
-                {
-                    Id = id,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    Language = language
-                };
+            var validator = new GetProductModelValidator();
 
-                var getProductResult = await this.productService.GetByIdAsync(getProductModel);
+            var validationResult = await validator.ValidateAsync(serviceModel);
 
-                if (getProductResult.IsValid)
-                {
-                    return this.StatusCode((int)HttpStatusCode.OK, new ProductResponseModel(getProductResult.Product));
-                }
-                else
-                {
-                    if (getProductResult.Errors.Contains(ErrorConstants.NotFound))
-                    {
-                        return this.StatusCode((int)HttpStatusCode.NotFound);
-                    }
-
-                    return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
-                }
-            }
-            catch (Exception exception)
+            if (validationResult.IsValid)
             {
-                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
-                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
-                return this.StatusCode((int)HttpStatusCode.BadRequest, new ProductResponseModel { Error = error });
+                var product = await this.productService.GetByIdAsync(serviceModel);
+
+                return product != null ? this.StatusCode((int)HttpStatusCode.OK, product) : (IActionResult)this.StatusCode((int)HttpStatusCode.NotFound);
             }
+
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
@@ -142,35 +132,28 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Delete(string language, Guid? id)
         {
-            try
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            var serviceModel = new DeleteProductModel
+            {   
+                Language = language,
+                Id = id,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                SellerId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new DeleteProductModelValidator();
+
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
             {
-                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+                await this.productService.DeleteAsync(serviceModel);
 
-                var deleteProductModel = new DeleteProductModel
-                {   
-                    Language = language,
-                    Id = id,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value)
-                };
-
-                var deleteProductResult = await this.productService.DeleteAsync(deleteProductModel);
-
-                if (deleteProductResult.IsValid)
-                {
-                    return this.StatusCode((int)HttpStatusCode.OK);
-                }
-                else
-                {
-                    return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
-                }
+                return this.StatusCode((int)HttpStatusCode.OK);
             }
-            catch (Exception exception)
-            {
-                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
-                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
-                return this.StatusCode((int)HttpStatusCode.BadRequest, new ProductResponseModel { Error = error });
-            }
+
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }

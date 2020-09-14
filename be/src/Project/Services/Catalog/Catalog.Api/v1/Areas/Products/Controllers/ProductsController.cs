@@ -1,5 +1,4 @@
-﻿using Catalog.Api.v1.Areas.Products.ResponseModels;
-using Catalog.Api.v1.Areas.Products.Models;
+﻿using Catalog.Api.v1.Areas.Products.Models;
 using Catalog.Api.v1.Areas.Products.Services;
 using Foundation.ApiExtensions.Controllers;
 using Microsoft.AspNetCore.Authorization;
@@ -21,12 +20,9 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
     {
         private readonly IProductService productService;
 
-        private readonly ILogger logger;
-
-        public ProductsController(IProductService productService, ILogger<ProductController> logger)
+        public ProductsController(IProductService productService)
         {
             this.productService = productService;
-            this.logger = logger;
         }
 
         /// <summary>
@@ -61,7 +57,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
             {
                 var products = await this.productService.GetAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK, new ProductsResponseModel(products));
+                return this.StatusCode((int)HttpStatusCode.OK, products);
             }
 
             return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);

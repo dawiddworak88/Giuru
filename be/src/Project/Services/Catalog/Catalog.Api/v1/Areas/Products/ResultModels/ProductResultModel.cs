@@ -1,9 +1,17 @@
-﻿using Foundation.Extensions.Models;
+﻿using Foundation.ApiExtensions.Models.Response;
+using Catalog.Api.Infrastructure.Products.Entities;
+using System;
 
 namespace Catalog.Api.v1.Areas.Products.ResultModels
 {
-    public class ProductResultModel : BaseServiceResultModel
+    public class ProductResultModel : BaseResponseModel
     {
-        public Catalog.Api.Infrastructure.Products.Entities.Product Product { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Sku { get; set; }
+        public string FormData { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }
