@@ -1,5 +1,4 @@
 ﻿using Foundation.ApiExtensions.Models.Response;
-using Catalog.Api.Infrastructure.Products.Entities;
 using System;
 
 namespace Catalog.Api.v1.Areas.Products.ResultModels

@@ -7,10 +7,8 @@ using Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories;
 using Catalog.Api.v1.Areas.Products.ResultModels;
 using Catalog.Api.Infrastructure.Products.Entities;
 using Catalog.Api.Infrastructure;
-using NetTopologySuite.Utilities;
 using Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories;
 using Foundation.GenericRepository.Services;
-using System.Dynamic;
 
 namespace Catalog.Api.v1.Areas.Products.Services
 {
