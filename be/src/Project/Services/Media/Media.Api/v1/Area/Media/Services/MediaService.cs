@@ -9,6 +9,7 @@ using Media.Api.Infrastructure.Media.Entities;
 using Foundation.GenericRepository.Helpers;
 using MimeMapping;
 using System.IO;
+using Media.Api.Shared.Checksums;
 
 namespace Media.Api.v1.Area.Media.Services
 {
@@ -16,15 +17,26 @@ namespace Media.Api.v1.Area.Media.Services
     {
         private readonly MediaContext context;
         private readonly IMediaRepository mediaRepository;
+        private readonly IChecksumService checksumService;
 
-        public MediaService(MediaContext context, IMediaRepository mediaRepository)
+        public MediaService(MediaContext context, IMediaRepository mediaRepository, IChecksumService checksumService)
         {
             this.context = context;
             this.mediaRepository = mediaRepository;
+            this.checksumService = checksumService;
         }
 
         public async Task<Guid> CreateMediaItemAsync(CreateMediaItemModel serviceModel)
         {
+            var checksum = this.checksumService.GetMd5(serviceModel.File.OpenReadStream());
+
+            var existingMediaItemVersion = context.MediaItemVersions.FirstOrDefault(x => x.Checksum == checksum && x.Filename == Path.GetFileNameWithoutExtension(serviceModel.File.FileName) && x.IsActive);
+
+            if (existingMediaItemVersion != null)
+            {
+                return existingMediaItemVersion.MediaItemId;
+            }
+
             var mediaItem = new MediaItem
             {
                 IsProtected = false
@@ -40,6 +52,7 @@ namespace Media.Api.v1.Area.Media.Services
                 Folder = serviceModel.SellerId.ToString(),
                 MimeType = MimeUtility.GetMimeMapping(Path.GetExtension(serviceModel.File.FileName)),
                 Size = serviceModel.File.Length,
+                Checksum = checksum,
                 CreatedBy = serviceModel.Username,
                 Version = 1
             };
@@ -57,7 +70,7 @@ namespace Media.Api.v1.Area.Media.Services
 
             context.SaveChanges();
 
-            await this.mediaRepository.CreateFileAsync(mediaItemVersion.Id, serviceModel.SellerId.ToString(), serviceModel.File);
+            await this.mediaRepository.CreateFileAsync(mediaItemVersion.Id, serviceModel.SellerId.ToString(), serviceModel.File.OpenReadStream(), serviceModel.File.FileName);
 
             return mediaItem.Id;
         }

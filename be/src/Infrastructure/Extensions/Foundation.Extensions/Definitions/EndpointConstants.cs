@@ -1,6 +1,6 @@
 ﻿namespace Foundation.Extensions.Definitions
 {
-    public static class ApiConstants
+    public static class EndpointConstants
     {
         public struct Media
         {

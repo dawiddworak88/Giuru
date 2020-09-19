@@ -15,7 +15,7 @@ namespace Foundation.Extensions.Services.MediaServices
 
         public string GetMediaUrl(string baseUrl, Guid mediaId)
         {
-            return $"{this.httpContextAccessor.HttpContext.Request.Scheme}://{baseUrl}{ApiConstants.Media.MediaApiEndpoint}/{mediaId}";
+            return $"{this.httpContextAccessor.HttpContext.Request.Scheme}://{baseUrl}{EndpointConstants.Media.MediaApiEndpoint}/{mediaId}";
         }
     }
 }
