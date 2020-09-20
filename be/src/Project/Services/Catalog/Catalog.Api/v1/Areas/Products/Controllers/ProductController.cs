@@ -46,6 +46,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
             var serviceModel = new CreateUpdateProductModel
             {
                 Id = request.Id,
+                PrimaryProductId = request.PrimaryProductId,
                 Sku = request.Sku,
                 Name = request.Name,
                 Description = request.Description,
