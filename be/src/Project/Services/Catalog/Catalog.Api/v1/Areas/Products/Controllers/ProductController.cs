@@ -51,7 +51,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                 Description = request.Description,
                 FormData = request.FormData,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Language = request.Language
             };
 
@@ -103,7 +103,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
             {
                 Id = id,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Language = language
             };
 
@@ -139,7 +139,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                 Language = language,
                 Id = id,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                SellerId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new DeleteProductModelValidator();

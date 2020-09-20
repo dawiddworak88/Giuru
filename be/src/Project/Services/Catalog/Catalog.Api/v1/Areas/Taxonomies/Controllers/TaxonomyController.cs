@@ -55,7 +55,7 @@ namespace Catalog.Api.v1.Areas.Taxonomies.Controllers
                     Name = taxonomyModel.Name,
                     ParentId = taxonomyModel.ParentId,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = taxonomyModel.Language
                 };
 
@@ -100,7 +100,7 @@ namespace Catalog.Api.v1.Areas.Taxonomies.Controllers
                     Name = name,
                     RootId = rootId,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = language
                 };
 

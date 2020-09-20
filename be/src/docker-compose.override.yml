@@ -66,8 +66,6 @@ services:
       - ConnectionString=Server=sqldata;Database=MediaDb;User Id=sa;Password=Gre@tPassw0rd
       - StorageConnectionString=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;QueueEndpoint=http://azurite:10001/devstoreaccount1;
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
-    depends_on:
-      - azurite
     ports:
       - "5131:80"
 

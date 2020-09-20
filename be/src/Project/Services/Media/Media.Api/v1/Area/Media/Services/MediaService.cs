@@ -39,6 +39,7 @@ namespace Media.Api.v1.Area.Media.Services
 
             var mediaItem = new MediaItem
             {
+                OrganisationId = serviceModel.OrganisationId,
                 IsProtected = false
             };
 
@@ -49,7 +50,7 @@ namespace Media.Api.v1.Area.Media.Services
                 MediaItemId = mediaItem.Id,
                 Filename = Path.GetFileNameWithoutExtension(serviceModel.File.FileName),
                 Extension = Path.GetExtension(serviceModel.File.FileName),
-                Folder = serviceModel.SellerId.ToString(),
+                Folder = serviceModel.OrganisationId.ToString(),
                 MimeType = MimeUtility.GetMimeMapping(Path.GetExtension(serviceModel.File.FileName)),
                 Size = serviceModel.File.Length,
                 Checksum = checksum,
@@ -70,7 +71,7 @@ namespace Media.Api.v1.Area.Media.Services
 
             context.SaveChanges();
 
-            await this.mediaRepository.CreateFileAsync(mediaItemVersion.Id, serviceModel.SellerId.ToString(), serviceModel.File.OpenReadStream(), serviceModel.File.FileName);
+            await this.mediaRepository.CreateFileAsync(mediaItemVersion.Id, serviceModel.OrganisationId.ToString(), serviceModel.File.OpenReadStream(), serviceModel.File.FileName);
 
             return mediaItem.Id;
         }

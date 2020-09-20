@@ -59,7 +59,7 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
                     JsonSchema = !string.IsNullOrWhiteSpace(schemaModel.JsonSchema) ? JObject.Parse(schemaModel.JsonSchema) : null,
                     UiSchema = !string.IsNullOrWhiteSpace(schemaModel.UiSchema) ? JObject.Parse(schemaModel.UiSchema) : null,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = schemaModel.Language
                 };
 
@@ -102,7 +102,7 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
                 {
                     Id = id,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = language
                 };
 
@@ -151,7 +151,7 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
                 {
                     EntityTypeId = id,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                     Language = language
                 };
 

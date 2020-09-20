@@ -66,7 +66,7 @@ namespace Media.Api.v1.Area.Media.Controllers
             var serviceModel = new CreateMediaItemModel
             {
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                SellerId = GuidHelper.ParseNullable(organisationClaim?.Value),
+                OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
                 Language = model.Language,
                 File = model.File
             };

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Media.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(MediaContext))]
-    [Migration("20200918181526_Initial")]
+    [Migration("20200920074416_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,9 @@ namespace Media.Api.Infrastructure.Migrations
 
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("OrganisationId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 

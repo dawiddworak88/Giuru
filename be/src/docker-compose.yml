@@ -46,6 +46,7 @@ services:
       dockerfile: Project/Services/Media/Media.Api/Dockerfile
     restart: always
     depends_on:
+      - azurite
       - sqldata
 
   catalog-api:

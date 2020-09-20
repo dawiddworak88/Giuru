@@ -36,7 +36,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
             var product = new Product
             {
                 Sku = model.Sku,
-                BrandId = model.SellerId.GetValueOrDefault(),
+                BrandId = model.OrganisationId.GetValueOrDefault(),
                 CategoryId = model.CategoryId.GetValueOrDefault(),
                 PrimaryProductId = model.PrimaryProductId.GetValueOrDefault()
             };
@@ -117,7 +117,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
         public async Task<PagedResults<IEnumerable<ProductResultModel>>> GetAsync(GetProductsModel model)
         {
-            var searchResults = await this.productSearchRepository.GetAsync(model.Language, model.CategoryId, model.SellerId, model.SearchTerm, model.PageIndex, model.ItemsPerPage);
+            var searchResults = await this.productSearchRepository.GetAsync(model.Language, model.CategoryId, model.OrganisationId, model.SearchTerm, model.PageIndex, model.ItemsPerPage);
 
             if (searchResults?.Data != null && searchResults.Data.Any())
             {

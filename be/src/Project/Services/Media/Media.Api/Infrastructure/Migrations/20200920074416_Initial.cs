@@ -15,6 +15,7 @@ namespace Media.Api.Infrastructure.Migrations
                     IsActive = table.Column<bool>(nullable: false),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
+                    OrganisationId = table.Column<Guid>(nullable: true),
                     IsProtected = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>

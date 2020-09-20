@@ -1,4 +1,5 @@
 ﻿using Media.Api.Infrastructure.Media.Seeds;
+using Media.Api.Shared.Checksums;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
@@ -21,10 +22,10 @@ namespace Media.Api.Infrastructure
             return !total.Except(applied).Any();
         }
 
-        public static void EnsureSeeded(this MediaContext context, IConfiguration configuration)
+        public static void EnsureSeeded(this MediaContext context, IConfiguration configuration, IChecksumService checksumService)
         {
-            MediaSeed.SeedCategories(context, configuration["StorageConnectionString"]);
-            MediaSeed.SeedHeroSliderItems(context, configuration["StorageConnectionString"]);
+            MediaSeed.SeedCategories(context, configuration["StorageConnectionString"], checksumService);
+            MediaSeed.SeedHeroSliderItems(context, configuration["StorageConnectionString"], checksumService);
         }
     }
 }
