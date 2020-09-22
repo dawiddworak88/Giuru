@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Catalog.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20200913085241_Initial")]
+    [Migration("20200922161530_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -178,8 +178,6 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.HasIndex("BrandId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("PrimaryProductId");
 
                     b.ToTable("Products");
                 });
@@ -485,10 +483,6 @@ namespace Catalog.Api.Infrastructure.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Catalog.Api.Infrastructure.Products.Entities.Product", "PrimaryProduct")
-                        .WithMany()
-                        .HasForeignKey("PrimaryProductId");
                 });
 
             modelBuilder.Entity("Catalog.Api.Infrastructure.Products.Entities.ProductTranslation", b =>
