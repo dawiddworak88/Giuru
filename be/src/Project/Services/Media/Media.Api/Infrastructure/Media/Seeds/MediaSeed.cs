@@ -78,6 +78,7 @@ namespace Media.Api.Infrastructure.Media.Seeds
                         Folder = MediaConstants.General.ContainerName,
                         MimeType = MimeUtility.GetMimeMapping(Path.GetExtension(mediaUrl)),
                         Size = blob.GetProperties().Value.ContentLength,
+                        CreatedBy = "system",
                         Version = 1
                     };
 

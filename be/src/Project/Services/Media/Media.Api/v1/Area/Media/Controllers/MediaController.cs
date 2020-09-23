@@ -7,7 +7,6 @@ using Media.Api.v1.Area.Media.Models;
 using Media.Api.v1.Area.Media.Services;
 using Media.Api.v1.Area.Media.Validators;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using System;
@@ -54,6 +53,7 @@ namespace Media.Api.v1.Area.Media.Controllers
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
+        [DisableRequestSizeLimit]
         public async Task<IActionResult> Create([FromForm] UploadMediaRequestModel model)
         {
             if (model.File == null)
