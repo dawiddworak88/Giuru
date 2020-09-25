@@ -191,7 +191,7 @@ namespace Catalog.Api.Infrastructure.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     PrimaryProductId = table.Column<Guid>(nullable: true),
-                    Protected = table.Column<bool>(nullable: false),
+                    IsProtected = table.Column<bool>(nullable: false),
                     IsNew = table.Column<bool>(nullable: false),
                     Sku = table.Column<string>(nullable: true),
                     BrandId = table.Column<Guid>(nullable: false),

@@ -162,14 +162,14 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.Property<bool>("IsNew")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsProtected")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("PrimaryProductId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Protected")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Sku")
                         .HasColumnType("nvarchar(max)");

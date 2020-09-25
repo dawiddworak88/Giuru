@@ -39,6 +39,8 @@ namespace Catalog.Api.v1.Areas.Products.Services
             {
                 var product = new Product
                 {
+                    IsNew = model.IsNew,
+                    IsProtected = model.IsProtected,
                     Sku = model.Sku,
                     BrandId = brand.Id,
                     CategoryId = model.CategoryId.GetValueOrDefault(),

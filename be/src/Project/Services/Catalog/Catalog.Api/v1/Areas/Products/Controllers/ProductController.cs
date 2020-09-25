@@ -48,6 +48,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                 Id = request.Id,
                 CategoryId = request.CategoryId,
                 PrimaryProductId = request.PrimaryProductId,
+                IsNew = request.IsNew,
+                IsProtected = request.IsProtected,
                 Videos = request.Videos,
                 Files = request.Files,
                 Images = request.Images,

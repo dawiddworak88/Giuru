@@ -9,6 +9,8 @@ namespace Catalog.Api.v1.Areas.Products.Models
         public Guid? Id { get; set; }
         public Guid? CategoryId { get; set; }
         public Guid? PrimaryProductId { get; set; }
+        public bool IsNew { get; set; }
+        public bool IsProtected { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Sku { get; set; }

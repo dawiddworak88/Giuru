@@ -11,7 +11,7 @@ namespace Catalog.Api.Infrastructure.Products.Entities
         public Guid? PrimaryProductId { get; set; }
 
         [Required]
-        public bool Protected { get; set; }
+        public bool IsProtected { get; set; }
 
         [Required]
         public bool IsNew { get; set; }
