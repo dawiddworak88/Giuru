@@ -9,6 +9,7 @@ using Catalog.Api.Infrastructure.Products.Entities;
 using Catalog.Api.Infrastructure;
 using Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories;
 using Foundation.GenericRepository.Services;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Catalog.Api.v1.Areas.Products.Services
 {
@@ -34,8 +35,9 @@ namespace Catalog.Api.v1.Areas.Products.Services
         public async Task<ProductResultModel> CreateAsync(CreateUpdateProductModel model)
         {
             var brand = catalogContext.Brands.FirstOrDefault(x => x.SellerId == model.OrganisationId.Value && x.IsActive);
+            var category = catalogContext.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
 
-            if (brand != null)
+            if (brand != null && category != null)
             {
                 var product = new Product
                 {
@@ -43,8 +45,8 @@ namespace Catalog.Api.v1.Areas.Products.Services
                     IsProtected = model.IsProtected,
                     Sku = model.Sku,
                     BrandId = brand.Id,
-                    CategoryId = model.CategoryId.GetValueOrDefault(),
-                    PrimaryProductId = model.PrimaryProductId.GetValueOrDefault()
+                    CategoryId = category.Id,
+                    PrimaryProductId = model.PrimaryProductId
                 };
 
                 await this.catalogContext.Products.AddAsync(this.entityService.EnrichEntity(product));
