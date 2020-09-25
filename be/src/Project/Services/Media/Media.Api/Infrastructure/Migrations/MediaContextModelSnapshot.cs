@@ -60,9 +60,6 @@ namespace Media.Api.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsDefaultLanguage")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Language")
                         .HasColumnType("nvarchar(max)");
 

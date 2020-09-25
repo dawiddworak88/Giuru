@@ -61,7 +61,6 @@ namespace Media.Api.Infrastructure.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Language = table.Column<string>(nullable: true),
-                    IsDefaultLanguage = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Metadata = table.Column<string>(nullable: true),

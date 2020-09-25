@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Media.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(MediaContext))]
-    [Migration("20200920074416_Initial")]
+    [Migration("20200925194005_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,9 +60,6 @@ namespace Media.Api.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDefaultLanguage")
                         .HasColumnType("bit");
 
                     b.Property<string>("Language")

@@ -69,8 +69,7 @@ namespace Catalog.Api.Infrastructure.Categories.Seeds
                 {
                     CategoryId = category.Id,
                     Language = "en",
-                    Name = englishName,
-                    IsDefaultLanguage = true
+                    Name = englishName
                 };
 
                 var plCategoryTranslation = new CategoryTranslation

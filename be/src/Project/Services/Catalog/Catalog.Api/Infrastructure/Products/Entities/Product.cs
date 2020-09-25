@@ -10,6 +10,12 @@ namespace Catalog.Api.Infrastructure.Products.Entities
     {
         public Guid? PrimaryProductId { get; set; }
 
+        [Required]
+        public bool Protected { get; set; }
+
+        [Required]
+        public bool IsNew { get; set; }
+
         public string Sku { get; set; }
 
         [Required]

@@ -168,7 +168,6 @@ namespace Catalog.Api.Infrastructure.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Language = table.Column<string>(nullable: true),
-                    IsDefaultLanguage = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     CategoryId = table.Column<Guid>(nullable: false)
                 },
@@ -192,6 +191,8 @@ namespace Catalog.Api.Infrastructure.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     PrimaryProductId = table.Column<Guid>(nullable: true),
+                    Protected = table.Column<bool>(nullable: false),
+                    IsNew = table.Column<bool>(nullable: false),
                     Sku = table.Column<string>(nullable: true),
                     BrandId = table.Column<Guid>(nullable: false),
                     CategoryId = table.Column<Guid>(nullable: false)
@@ -222,7 +223,6 @@ namespace Catalog.Api.Infrastructure.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Language = table.Column<string>(nullable: true),
-                    IsDefaultLanguage = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     JsonSchema = table.Column<string>(nullable: true),
                     SchemaId = table.Column<Guid>(nullable: false)
@@ -247,7 +247,6 @@ namespace Catalog.Api.Infrastructure.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Language = table.Column<string>(nullable: true),
-                    IsDefaultLanguage = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     TaxonomyId = table.Column<Guid>(nullable: false)
                 },
@@ -271,7 +270,6 @@ namespace Catalog.Api.Infrastructure.Migrations
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Language = table.Column<string>(nullable: true),
-                    IsDefaultLanguage = table.Column<bool>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     FormData = table.Column<string>(nullable: true),
