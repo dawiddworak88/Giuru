@@ -9,7 +9,6 @@ using Catalog.Api.Infrastructure.Products.Entities;
 using Catalog.Api.Infrastructure;
 using Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories;
 using Foundation.GenericRepository.Services;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Catalog.Api.v1.Areas.Products.Services
 {
