@@ -13,7 +13,7 @@ namespace Foundation.Search.DependencyInjection
             var defaultIndex = configuration["ElasticsearchIndex"];
 
             var settings = new ConnectionSettings(new Uri(url))
-                .DefaultIndex(defaultIndex);
+                .DefaultIndex(defaultIndex).DefaultDisableIdInference();
 
             var client = new ElasticClient(settings);
             

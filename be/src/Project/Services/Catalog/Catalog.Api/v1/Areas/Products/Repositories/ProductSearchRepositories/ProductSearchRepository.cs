@@ -1,5 +1,5 @@
 ﻿using Catalog.Api.Infrastructure.Products.Entities;
-using Catalog.Api.v1.Areas.Products.SearchResultModels;
+using Catalog.Api.v1.Areas.Products.SearchModels;
 using Foundation.GenericRepository.Paginations;
 using Nest;
 using System;
@@ -18,30 +18,30 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
             this.elasticClient = elasticClient;
         }
 
-        public async Task<PagedResults<IEnumerable<ProductSearchResultModel>>> GetAsync(string language, Guid? categoryId, Guid? brandId, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? categoryId, Guid? brandId, string searchTerm, int pageIndex, int itemsPerPage)
         {
-            var query = Query<ProductSearchResultModel>.Term(x => x.IsActive && x.CategoryId == categoryId && x.Language == language, true);
+            var query = Query<ProductSearchModel>.Term(x => x.IsActive && x.CategoryId == categoryId && x.Language == language, true);
 
             if (categoryId.HasValue)
             {
-                query = query && Query<ProductSearchResultModel>.Term(x => x.CategoryId == categoryId.Value, true);
+                query = query && Query<ProductSearchModel>.Term(x => x.CategoryId == categoryId.Value, true);
             }
 
             if (brandId.HasValue)
             {
-                query = query && Query<ProductSearchResultModel>.Term(x => x.BrandId == brandId.Value, true);
+                query = query && Query<ProductSearchModel>.Term(x => x.BrandId == brandId.Value, true);
             }
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                query = query && Query<ProductSearchResultModel>.QueryString(d => d.Query(searchTerm));
+                query = query && Query<ProductSearchModel>.QueryString(d => d.Query(searchTerm));
             }
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchResultModel>(s => s.From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(x => x && query));
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(x => x && query));
 
             if (response.IsValid && response.Hits.Any())
             {
-                return new PagedResults<IEnumerable<ProductSearchResultModel>>(response.Total, itemsPerPage)
+                return new PagedResults<IEnumerable<ProductSearchModel>>(response.Total, itemsPerPage)
                 {
                     Data = response.Documents
                 };

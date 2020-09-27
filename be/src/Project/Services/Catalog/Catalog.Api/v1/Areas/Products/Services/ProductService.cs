@@ -99,7 +99,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
                             ProductId = product.Id
                         };
 
-                        await this.catalogContext.ProductFiles.AddAsync(productFile);
+                        await this.catalogContext.ProductFiles.AddAsync(this.entityService.EnrichEntity(productFile));
                     }
                 }
 
@@ -137,7 +137,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
                 {
                     var product = new ProductResultModel
                     {
-                        Id = searchResultItem.Id,
+                        Id = searchResultItem.ProductId,
                         Sku = searchResultItem.Sku,
                         Name = searchResultItem.Name,
                         Description = searchResultItem.Description,

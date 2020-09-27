@@ -1,11 +1,13 @@
 ﻿using Foundation.Search.SearchResultModels;
+using Nest;
 using System;
 using System.Collections.Generic;
 
-namespace Catalog.Api.v1.Areas.Products.SearchResultModels
+namespace Catalog.Api.v1.Areas.Products.SearchModels
 {
-    public class ProductSearchResultModel : SearchResultModelBase
+    public class ProductSearchModel : SearchModelBase
     {
+        public Guid ProductId { get; set; }
         public string Sku { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

@@ -1,4 +1,5 @@
-﻿using Media.Api.Infrastructure;
+﻿using Media.Api.Configurations;
+using Media.Api.Infrastructure;
 using Media.Api.Shared.Checksums;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,11 @@ namespace Media.Api.DependencyInjection
                     dbContext.EnsureSeeded(configuration, checksumService);
                 }
             }
+        }
+
+        public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<AppSettings>(configuration);
         }
     }
 }

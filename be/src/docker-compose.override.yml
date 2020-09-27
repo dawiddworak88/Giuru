@@ -79,6 +79,7 @@ services:
       - ElasticsearchUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:9200
       - ElasticsearchIndex=catalog
       - Brands=4a8f8442-43b0-4223-83bb-978d5e81acc7&ELTAP&09affcc9-1665-45d6-919f-3d2026106ba1
+      - SupportedCultures=${SUPPORTED_CULTURES}
     ports:
       - "5101:80"
 

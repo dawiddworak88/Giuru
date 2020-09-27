@@ -1,4 +1,4 @@
-﻿using Catalog.Api.v1.Areas.Products.SearchResultModels;
+﻿using Catalog.Api.v1.Areas.Products.SearchModels;
 using Foundation.GenericRepository.Paginations;
 using System;
 using System.Collections.Generic;
@@ -8,6 +8,6 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
 {
     public interface IProductSearchRepository
     {
-        Task<PagedResults<IEnumerable<ProductSearchResultModel>>> GetAsync(string language, Guid? categoryId, Guid? brandId, string searchTerm, int pageIndex, int itemsPerPage);
+        Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? categoryId, Guid? brandId, string searchTerm, int pageIndex, int itemsPerPage);
     }
 }

@@ -2,9 +2,8 @@
 
 namespace Foundation.Search.SearchResultModels
 {
-    public class SearchResultModelBase
+    public class SearchModelBase
     {
-        public Guid Id { get; set; }
         public string Language { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
