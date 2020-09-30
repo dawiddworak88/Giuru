@@ -6,6 +6,7 @@ namespace Buyer.Web.Shared.Catalogs.ViewModels
     {
         public Guid Id { get; set; }
         public string Sku { get; set; }
+        public string Url { get; set; }
         public string Title { get; set; }
         public string ImageUrl { get; set; }
         public string ImageAlt { get; set; }

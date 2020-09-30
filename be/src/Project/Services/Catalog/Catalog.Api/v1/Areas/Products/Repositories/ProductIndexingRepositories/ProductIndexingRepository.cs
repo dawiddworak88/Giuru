@@ -49,6 +49,13 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories
                         productTranslations = product.Translations.FirstOrDefault(x => x.IsActive);
                     }
 
+                    var categoryTranslations = product.Category.Translations.FirstOrDefault(x => x.Language == language && x.IsActive);
+
+                    if (categoryTranslations == null)
+                    {
+                        categoryTranslations = product.Category.Translations.FirstOrDefault(x => x.IsActive);
+                    }
+
                     if (productTranslations != null)
                     {
                         dynamic document = new ExpandoObject();
@@ -56,6 +63,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories
                         document.language = language;
                         document.productId = product.Id;
                         document.categoryId = product.CategoryId;
+                        document.categoryName = categoryTranslations.Name;
                         document.brandId = product.Brand.Id;
                         document.brandName = product.Brand.Name;
                         document.isNew = product.IsNew;

@@ -54,7 +54,18 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                     {
                         Id = productResponse.Id,
                         Sku = productResponse.Sku,
-                        Name = productResponse.Name
+                        Name = productResponse.Name,
+                        Description = productResponse.Description,
+                        IsNew = productResponse.IsNew,
+                        IsProtected = productResponse.IsProtected,
+                        FormData = productResponse.FormData,
+                        BrandId = productResponse.BrandId,
+                        BrandName = productResponse.BrandName,
+                        CategoryId = productResponse.CategoryId,
+                        CategoryName = productResponse.CategoryName,
+                        Images = productResponse.Images,
+                        Files = productResponse.Files,
+                        Videos = productResponse.Videos
                     };
 
                     products.Add(product);

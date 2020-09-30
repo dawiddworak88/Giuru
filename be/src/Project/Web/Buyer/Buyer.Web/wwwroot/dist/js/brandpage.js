@@ -33326,8 +33326,6 @@ function Catalog(props) {
       total = _React$useState8[0],
       setTotal = _React$useState8[1];
 
-  console.log(props);
-
   var handleChangePage = function handleChangePage(event, newPage) {
     dispatch({
       type: "SET_IS_LOADING",

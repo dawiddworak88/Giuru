@@ -19,7 +19,7 @@ namespace Buyer.Web.Areas.Products.Controllers
             this.productPageModelBuilder = productPageModelBuilder;
         }
 
-        public async Task<IActionResult> Index(Guid? productId)
+        public async Task<IActionResult> Index(Guid? id)
         {
             var componentModel = new ComponentModelBase
             {

@@ -1,5 +1,4 @@
-﻿using Catalog.Api.Infrastructure.Products.Entities;
-using Catalog.Api.v1.Areas.Products.SearchModels;
+﻿using Catalog.Api.v1.Areas.Products.SearchModels;
 using Foundation.GenericRepository.Paginations;
 using Nest;
 using System;
