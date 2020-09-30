@@ -8,6 +8,9 @@ namespace Catalog.Api.v1.Areas.Products.ResultModels
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Url { get; set; }
+        public string ImageUrl { get; set; }
+        public string ImageAlt { get; set; }
         public string Sku { get; set; }
         public string FormData { get; set; }
         public DateTime LastModifiedDate { get; set; }

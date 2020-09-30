@@ -67,6 +67,8 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories
                         document.sku = product.Sku;
                         document.formData = productTranslations.FormData;
                         document.name = productTranslations.Name;
+                        document.primaryProductId = product.PrimaryProductId;
+                        document.primaryProductIdHasValue = product.PrimaryProductId.HasValue;
                         document.description = productTranslations.Description;
                         document.lastModifiedDate = product.LastModifiedDate;
                         document.createdDate = product.CreatedDate;

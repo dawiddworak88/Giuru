@@ -13352,7 +13352,6 @@ var TablePagination_TablePagination = react["forwardRef"](function TablePaginati
 function Catalog(props) {
   var _useContext = Object(react["useContext"])(Store["a" /* Context */]),
       _useContext2 = Object(slicedToArray["a" /* default */])(_useContext, 2),
-      state = _useContext2[0],
       dispatch = _useContext2[1];
 
   var _React$useState = react_default.a.useState(0),
@@ -13374,6 +13373,8 @@ function Catalog(props) {
       total = _React$useState8[0],
       setTotal = _React$useState8[1];
 
+  console.log(props);
+
   var handleChangePage = function handleChangePage(event, newPage) {
     dispatch({
       type: "SET_IS_LOADING",
@@ -13383,7 +13384,7 @@ function Catalog(props) {
       return newPage;
     });
     var searchParameters = {
-      searchTerm: searchTerm,
+      id: props.id,
       pageIndex: newPage + 1,
       itemsPerPage: itemsPerPage
     };

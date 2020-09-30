@@ -42,13 +42,13 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<ProductsRequestModel>, ProductsRequestModel, ProductsResponseModel>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<ProductsRequestModel>, ProductsRequestModel, PagedResults<IEnumerable<ProductResponseModel>>>(apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data?.PagedProducts?.Data != null)
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
                 var products = new List<Product>();
 
-                foreach (var productResponse in response.Data.PagedProducts.Data)
+                foreach (var productResponse in response.Data.Data)
                 {
                     var product = new Product
                     {
@@ -60,7 +60,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                     products.Add(product);
                 }
 
-                return new PagedResults<IEnumerable<Product>>(response.Data.PagedProducts.Total, response.Data.PagedProducts.PageSize)
+                return new PagedResults<IEnumerable<Product>>(response.Data.Total, response.Data.PageSize)
                 {
                     Data = products
                 };

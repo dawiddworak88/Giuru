@@ -6,6 +6,6 @@ namespace Buyer.Web.Areas.Products.ApiResponseModels
 {
     public class ProductsResponseModel : BaseResponseModel
     {
-        public PagedResults<IEnumerable<ProductResponseModel>> PagedProducts { get; set; }
+        public PagedResults<IEnumerable<ProductResponseModel>> PagedResults { get; set; }
     }
 }

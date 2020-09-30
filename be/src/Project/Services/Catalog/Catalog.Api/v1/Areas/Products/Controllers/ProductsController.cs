@@ -46,7 +46,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                 ItemsPerPage = itemsPerPage,
                 SearchTerm = searchTerm,
                 CategoryId = categoryId,
-                Language = language
+                Language = language,
+                PrimaryProductsOnly = true
             };
 
             var validator = new GetProductsModelValidator();

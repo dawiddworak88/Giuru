@@ -14,6 +14,8 @@ namespace Catalog.Api.v1.Areas.Products.SearchModels
         public string FormData { get; set; }
         public Guid CategoryId { get; set; }
         public Guid BrandId { get; set; }
+        public Guid? PrimaryProductId { get; set; }
+        public bool PrimaryProductIdHasValue { get; set; }
         public IEnumerable<Guid> Images { get; set; }
         public IEnumerable<Guid> Videos { get; set; }
         public IEnumerable<Guid> Files { get; set; }

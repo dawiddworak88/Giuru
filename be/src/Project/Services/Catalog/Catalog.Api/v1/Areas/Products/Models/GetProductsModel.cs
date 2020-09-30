@@ -9,5 +9,7 @@ namespace Catalog.Api.v1.Areas.Products.Models
         public int PageIndex { get; set; }
         public int ItemsPerPage { get; set; }
         public string SearchTerm { get; set; }
+        public bool PrimaryProductsOnly { get; set; }
+        public bool ProductVariantsOnly { get; set; }
     }
 }

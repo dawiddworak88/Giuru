@@ -15,6 +15,8 @@ function Catalog(props) {
     const [items, setItems] = React.useState(props.pagedItems.data);
     const [total, setTotal] = React.useState(props.pagedItems.total);
 
+    console.log(props);
+
     const handleChangePage = (event, newPage) => {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });

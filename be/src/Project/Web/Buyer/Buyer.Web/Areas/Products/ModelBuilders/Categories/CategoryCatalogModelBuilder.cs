@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Products.ComponentModels;
+using Buyer.Web.Areas.Products.ModelBuilders.Definitions;
 using Buyer.Web.Areas.Products.Repositories.Categories;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Categories;
@@ -63,7 +64,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
                     componentModel.Language,
                     componentModel.SearchTerm,
                     PaginationConstants.DefaultPageIndex,
-                    PaginationConstants.DefaultPageSize,
+                    CategoryConstants.CategoryCatalogPaginationPageSize,
                     componentModel.Token);
 
                 var catalogItemList = new List<CatalogItemViewModel>();
