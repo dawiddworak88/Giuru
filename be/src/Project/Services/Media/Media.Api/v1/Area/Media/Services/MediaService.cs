@@ -10,6 +10,8 @@ using Foundation.GenericRepository.Helpers;
 using MimeMapping;
 using System.IO;
 using Media.Api.Shared.Checksums;
+using Media.Api.Shared.ImageResizers;
+using System.Collections.Generic;
 
 namespace Media.Api.v1.Area.Media.Services
 {
@@ -18,12 +20,17 @@ namespace Media.Api.v1.Area.Media.Services
         private readonly MediaContext context;
         private readonly IMediaRepository mediaRepository;
         private readonly IChecksumService checksumService;
+        private readonly IImageResizeService imageResizeService;
 
-        public MediaService(MediaContext context, IMediaRepository mediaRepository, IChecksumService checksumService)
+        public MediaService(MediaContext context, 
+            IMediaRepository mediaRepository, 
+            IChecksumService checksumService,
+            IImageResizeService imageResizeService)
         {
             this.context = context;
             this.mediaRepository = mediaRepository;
             this.checksumService = checksumService;
+            this.imageResizeService = imageResizeService;
         }
 
         public async Task<Guid> CreateMediaItemAsync(CreateMediaItemModel serviceModel)
@@ -76,7 +83,7 @@ namespace Media.Api.v1.Area.Media.Services
             return mediaItem.Id;
         }
 
-        public async Task<MediaFileResultModel> GetMediaItemAsync(Guid? mediaId)
+        public async Task<MediaFileResultModel> GetMediaItemAsync(Guid? mediaId, int? width, int? height)
         {
             if (mediaId.HasValue)
             {
@@ -102,6 +109,11 @@ namespace Media.Api.v1.Area.Media.Services
 
                     if (file != null)
                     {
+                        if (this.IsImage(mediaItem.ContentType) && width.HasValue && height.HasValue)
+                        {
+                            file = this.imageResizeService.Resize(file, width.Value, height.Value);
+                        }
+
                         return new MediaFileResultModel
                         {
                             Id = mediaItem.Id,
@@ -114,6 +126,18 @@ namespace Media.Api.v1.Area.Media.Services
             }
 
             return default;
+        }
+
+        private bool IsImage(string contentType)
+        {
+            var imageContentTypes = new List<string>
+            {
+                "image/jpeg",
+                "image/png",
+                "image/svg+xml"
+            };
+
+            return imageContentTypes.Contains(contentType);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Media.Api.v1.Area.Media.Services
 {
     public interface IMediaService
     {
-        Task<MediaFileResultModel> GetMediaItemAsync(Guid? mediaId);
+        Task<MediaFileResultModel> GetMediaItemAsync(Guid? mediaId, int? width, int? height);
         Task<Guid> CreateMediaItemAsync(CreateMediaItemModel serviceModel);
     }
 }

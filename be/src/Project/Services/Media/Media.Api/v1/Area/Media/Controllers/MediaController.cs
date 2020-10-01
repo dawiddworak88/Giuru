@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
@@ -36,9 +37,9 @@ namespace Media.Api.v1.Area.Media.Controllers
         [Route("{mediaId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Get(Guid? mediaId)
+        public async Task<IActionResult> Get(Guid? mediaId, int? w, int? h)
         {
-            var mediaFile = await this.mediaService.GetMediaItemAsync(mediaId);
+            var mediaFile = await this.mediaService.GetMediaItemAsync(mediaId, w, h);
 
             if (mediaFile != null)
             {

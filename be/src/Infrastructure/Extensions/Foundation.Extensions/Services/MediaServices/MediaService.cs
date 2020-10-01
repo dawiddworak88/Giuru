@@ -13,9 +13,16 @@ namespace Foundation.Extensions.Services.MediaServices
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public string GetMediaUrl(string baseUrl, Guid mediaId)
+        public string GetMediaUrl(string baseUrl, Guid mediaId, int? maxWidth = null, int? maxHeight = null)
         {
-            return $"{this.httpContextAccessor.HttpContext.Request.Scheme}://{baseUrl}{EndpointConstants.Media.MediaApiEndpoint}/{mediaId}";
+            var url = $"{this.httpContextAccessor.HttpContext.Request.Scheme}://{baseUrl}{EndpointConstants.Media.MediaApiEndpoint}/{mediaId}";
+
+            if (maxWidth.HasValue && maxHeight.HasValue)
+            {
+                url += $"?w={maxWidth.Value}&h={maxHeight.Value}";
+            }
+
+            return url;
         }
     }
 }

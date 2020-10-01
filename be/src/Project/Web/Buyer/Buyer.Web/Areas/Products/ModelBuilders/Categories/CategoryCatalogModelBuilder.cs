@@ -107,7 +107,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
                             if (imageGuid != null)
                             {
                                 catalogItem.ImageAlt = product.Name;
-                                catalogItem.ImageUrl = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, imageGuid);
+                                catalogItem.ImageUrl = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, imageGuid, CategoryConstants.CategoryCatalogItemImageWidth, CategoryConstants.CategoryCatalogItemImageHeight);
                             }
                         }
 
