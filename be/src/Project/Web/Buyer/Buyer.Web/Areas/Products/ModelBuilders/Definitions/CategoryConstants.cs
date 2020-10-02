@@ -2,8 +2,8 @@
 {
     public static class CategoryConstants
     {
-        public static readonly int CategoryCatalogPaginationPageSize = 25;
+        public static readonly int CategoryCatalogPaginationPageSize = 20;
         public static readonly int CategoryCatalogItemImageWidth = 710;
-        public static readonly int CategoryCatalogItemImageHeight = 200;
+        public static readonly int CategoryCatalogItemImageHeight = 520;
     }
 }

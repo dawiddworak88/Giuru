@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-import PaginationConstants from "../../../../../shared/constants/PaginationConstants";
 import { Context } from "../../../../../shared/stores/Store";
 import FetchErrorHandler from "../../../../../shared/helpers/errorHandlers/FetchErrorHandler";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
@@ -102,12 +101,12 @@ function Catalog(props) {
                                 labelRowsPerPage={props.rowsPerPageLabel}
                                 backIconButtonText={props.backIconButtonText}
                                 nextIconButtonText={props.nextIconButtonText}
-                                rowsPerPageOptions={[PaginationConstants.defaultRowsPerPage()]}
+                                rowsPerPageOptions={[CatalogConstants.defaultCatalogItemsPerPage()]}
                                 component="div"
                                 count={total}
                                 page={page}
                                 onChangePage={handleChangePage}
-                                rowsPerPage={PaginationConstants.defaultRowsPerPage()}
+                                rowsPerPage={CatalogConstants.defaultCatalogItemsPerPage()}
                             />
                         </div>
                     </div>
