@@ -102,13 +102,14 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
+        [AllowAnonymous]
         public async Task<IActionResult> GetById(string language, Guid? id)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
             var serviceModel = new GetProductModel
             {
-                Id = id,
+                Id = id.Value,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Language = language

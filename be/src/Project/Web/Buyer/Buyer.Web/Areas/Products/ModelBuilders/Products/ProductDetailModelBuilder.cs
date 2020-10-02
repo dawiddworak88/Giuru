@@ -1,21 +1,43 @@
-﻿using Buyer.Web.Areas.Products.ViewModels.Products;
+﻿using Buyer.Web.Areas.Products.ModelBuilders.Definitions;
+using Buyer.Web.Areas.Products.Repositories.Products;
+using Buyer.Web.Areas.Products.ViewModels.Products;
+using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Images.ViewModels;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.Extensions.Services.MediaServices;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
     public class ProductDetailModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel>
     {
+        private readonly IProductsRepository productsRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
+        private readonly IOptions<AppSettings> options;
+        private readonly IMediaService mediaService;
+        private readonly LinkGenerator linkGenerator;
 
-        public ProductDetailModelBuilder(IStringLocalizer<GlobalResources> globalLocalizer, IStringLocalizer<ProductResources> productLocalizer)
+        public ProductDetailModelBuilder(IProductsRepository productsRepository,
+            IStringLocalizer<GlobalResources> globalLocalizer, 
+            IStringLocalizer<ProductResources> productLocalizer,
+            IOptions<AppSettings> options,
+            IMediaService mediaService,
+            LinkGenerator linkGenerator)
         {
+            this.productsRepository = productsRepository;
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
+            this.options = options;
+            this.mediaService = mediaService;
+            this.linkGenerator = linkGenerator;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -33,6 +55,32 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 SignInUrl = "#",
                 SkuLabel = this.productLocalizer.GetString("Sku"),
             };
+
+            var product = await this.productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, componentModel.Token);
+
+            if (product != null)
+            {
+                viewModel.Title = product.Name;
+                viewModel.BrandName = product.BrandName;
+                viewModel.BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Brands", culture = CultureInfo.CurrentUICulture.Name, product.BrandId });
+                viewModel.Description = product.Description;
+                viewModel.Sku = product.Sku;
+
+                var images = new List<ImageViewModel>();
+
+                foreach (var image in product.Images)
+                {
+                    var imageViewModel = new ImageViewModel
+                    { 
+                        Original = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, image, ProductConstants.OriginalMaxWidth, ProductConstants.OriginalMaxHeight),
+                        Thumbnail = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, image, ProductConstants.ThumbnailMaxWidth, ProductConstants.ThumbnailMaxHeight)
+                    };
+
+                    images.Add(imageViewModel);
+                }
+
+                viewModel.Images = images;
+            }
 
             return viewModel;
         }

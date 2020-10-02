@@ -10,9 +10,11 @@ function ProductDetail(props) {
         <section className="product-detail section">
             <div className="columns is-tablet">
                 <div className="column is-6">
-                    <div className="product-detail__image-gallery">
-                        <ImageGallery items={props.images} />
-                    </div>
+                    {props.images && props.images.length &&
+                        <div className="product-detail__image-gallery">
+                            <ImageGallery items={props.images} />
+                        </div>
+                    }
                 </div>
                 <div className="column is-4">
                     <p className="product-detail__sku">{props.skuLabel} {props.sku}</p>
@@ -71,7 +73,8 @@ ProductDetail.propTypes = {
     inStockLabel: PropTypes.string.isRequired,
     descriptionLabel: PropTypes.string.isRequired,
     productDescription: PropTypes.string,
-    files: PropTypes.object.isRequired
+    images: PropTypes.array,
+    files: PropTypes.object
 };
 
 export default ProductDetail;

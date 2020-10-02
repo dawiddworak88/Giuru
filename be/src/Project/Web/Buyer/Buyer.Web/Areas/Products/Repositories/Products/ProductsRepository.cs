@@ -4,6 +4,7 @@ using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions;
 using Foundation.ApiExtensions.Communications;
+using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
@@ -22,6 +23,47 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
         {
             this.apiClientService = apiClientService;
             this.settings = settings;
+        }
+
+        public async Task<Product> GetProductAsync(Guid? productId, string language, string token)
+        {
+            var productRequestModel = new RequestModelBase
+            { 
+                Id = productId,
+                Language = language
+            };
+
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Data = this.apiClientService.InitializeRequestModelContext(productRequestModel),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ProductResponseModel>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return new Product
+                {
+                    Id = response.Data.Id,
+                    Sku = response.Data.Sku,
+                    Name = response.Data.Name,
+                    Description = response.Data.Description,
+                    IsNew = response.Data.IsNew,
+                    IsProtected = response.Data.IsProtected,
+                    FormData = response.Data.FormData,
+                    BrandId = response.Data.BrandId,
+                    BrandName = response.Data.BrandName,
+                    CategoryId = response.Data.CategoryId,
+                    CategoryName = response.Data.CategoryName,
+                    Images = response.Data.Images,
+                    Files = response.Data.Files,
+                    Videos = response.Data.Videos
+                };
+            }
+
+            return default;
         }
 
         public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(Guid? categoryId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)

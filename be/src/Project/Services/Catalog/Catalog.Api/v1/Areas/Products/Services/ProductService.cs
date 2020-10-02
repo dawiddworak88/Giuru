@@ -169,6 +169,31 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
         public async Task<ProductResultModel> GetByIdAsync(GetProductModel model)
         {
+            var searchResultItem = await this.productSearchRepository.GetAsync(model.Id.Value, model.Language);
+
+            if (searchResultItem != null)
+            {
+                return new ProductResultModel
+                {
+                    Id = searchResultItem.ProductId,
+                    Images = searchResultItem.Images,
+                    Files = searchResultItem.Files,
+                    Videos = searchResultItem.Videos,
+                    BrandId = searchResultItem.BrandId,
+                    BrandName = searchResultItem.BrandName,
+                    CategoryId = searchResultItem.CategoryId,
+                    CategoryName = searchResultItem.CategoryName,
+                    IsNew = searchResultItem.IsNew,
+                    IsProtected = searchResultItem.IsProtected,
+                    Sku = searchResultItem.Sku,
+                    Name = searchResultItem.Name,
+                    Description = searchResultItem.Description,
+                    FormData = searchResultItem.FormData,
+                    LastModifiedDate = searchResultItem.LastModifiedDate,
+                    CreatedDate = searchResultItem.CreatedDate
+                };
+            }
+
             return default;
         }
     }

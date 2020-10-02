@@ -22,7 +22,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string Description { get; set; }
         public string InStockLabel { get; set; }
         public FilesViewModel Files { get; set; }
-        public IEnumerator<ImageViewModel> Images { get; set; }
+        public IEnumerable<ImageViewModel> Images { get; set; }
         public IEnumerable<ProductFeatureViewModel> Features { get; set; }
     }
 }

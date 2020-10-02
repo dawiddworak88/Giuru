@@ -59,5 +59,21 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
 
             return default;
         }
+
+        public async Task<ProductSearchModel> GetAsync(Guid id, string language)
+        {
+            var query = Query<ProductSearchModel>.Match(m => m.Field(f => f.ProductId).Query(id.ToString()))
+                && Query<ProductSearchModel>.Match(m => m.Field(f => f.Language).Query(language))
+                && Query<ProductSearchModel>.Term(t => t.IsActive, true);
+
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query));
+
+            if (response.IsValid && response.Hits.Any())
+            {
+                return response.Documents.FirstOrDefault();
+            }
+
+            return default;
+        }
     }
 }
