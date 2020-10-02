@@ -53536,7 +53536,7 @@ var PaginationConstants_PaginationConstants = /*#__PURE__*/function () {
   Object(createClass["a" /* default */])(PaginationConstants, null, [{
     key: "defaultRowsPerPage",
     value: function defaultRowsPerPage() {
-      return 25;
+      return 50;
     }
   }]);
 

@@ -10633,27 +10633,6 @@ function useEventCallback(fn) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _defineProperty; });
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-/***/ }),
-/* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _classCallCheck; });
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -10662,7 +10641,7 @@ function _classCallCheck(instance, Constructor) {
 }
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10681,6 +10660,27 @@ function _createClass(Constructor, protoProps, staticProps) {
   if (protoProps) _defineProperties(Constructor.prototype, protoProps);
   if (staticProps) _defineProperties(Constructor, staticProps);
   return Constructor;
+}
+
+/***/ }),
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _defineProperty; });
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
 }
 
 /***/ }),
@@ -12627,7 +12627,7 @@ var Context = Object(react["createContext"])(initialState);
 "use strict";
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(18);
+var defineProperty = __webpack_require__(20);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
 var objectWithoutProperties = __webpack_require__(3);
@@ -13764,8 +13764,8 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GlobalHelper; });
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(19);
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
 /* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(47);
 
 
@@ -14001,8 +14001,8 @@ function Footer(props) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CssSsrRemovalHelper; });
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(19);
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
 
 
 
@@ -32212,10 +32212,10 @@ var react_default = /*#__PURE__*/__webpack_require__.n(react);
 var react_toastify = __webpack_require__(44);
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck.js
-var classCallCheck = __webpack_require__(19);
+var classCallCheck = __webpack_require__(18);
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createClass.js
-var createClass = __webpack_require__(20);
+var createClass = __webpack_require__(19);
 
 // CONCATENATED MODULE: ./src/shared/constants/PaginationConstants.js
 
@@ -32229,7 +32229,7 @@ var PaginationConstants_PaginationConstants = /*#__PURE__*/function () {
   Object(createClass["a" /* default */])(PaginationConstants, null, [{
     key: "defaultRowsPerPage",
     value: function defaultRowsPerPage() {
-      return 25;
+      return 50;
     }
   }]);
 
@@ -32341,7 +32341,7 @@ var withStyles = __webpack_require__(6);
 var InputBase = __webpack_require__(65);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(18);
+var defineProperty = __webpack_require__(20);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/ButtonBase/ButtonBase.js + 3 modules
 var ButtonBase = __webpack_require__(80);
@@ -33292,7 +33292,28 @@ var TablePagination_TablePagination = react["forwardRef"](function TablePaginati
 /* harmony default export */ var esm_TablePagination_TablePagination = (Object(withStyles["a" /* default */])(TablePagination_styles, {
   name: 'MuiTablePagination'
 })(TablePagination_TablePagination));
+// CONCATENATED MODULE: ./src/project/AspNetCore/shared/components/Catalog/CatalogConstants.js
+
+
+
+var CatalogConstants_CatalogConstants = /*#__PURE__*/function () {
+  function CatalogConstants() {
+    Object(classCallCheck["a" /* default */])(this, CatalogConstants);
+  }
+
+  Object(createClass["a" /* default */])(CatalogConstants, null, [{
+    key: "defaultCatalogItemsPerPage",
+    value: function defaultCatalogItemsPerPage() {
+      return 20;
+    }
+  }]);
+
+  return CatalogConstants;
+}();
+
+
 // CONCATENATED MODULE: ./src/project/AspNetCore/shared/components/Catalog/Catalog.js
+
 
 
 
@@ -33312,7 +33333,7 @@ function Catalog(props) {
       page = _React$useState2[0],
       setPage = _React$useState2[1];
 
-  var _React$useState3 = react_default.a.useState(PaginationConstants_PaginationConstants.defaultRowsPerPage()),
+  var _React$useState3 = react_default.a.useState(CatalogConstants_CatalogConstants.defaultCatalogItemsPerPage()),
       _React$useState4 = Object(slicedToArray["a" /* default */])(_React$useState3, 1),
       itemsPerPage = _React$useState4[0];
 
@@ -37970,7 +37991,7 @@ var clsx_m = __webpack_require__(4);
 var InputBase = __webpack_require__(65);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(18);
+var defineProperty = __webpack_require__(20);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/withStyles.js + 21 modules
 var withStyles = __webpack_require__(6);
@@ -38574,7 +38595,7 @@ function BrandDetail(props) {
 }
 
 /* harmony default export */ var BrandDetail_BrandDetail = (BrandDetail);
-// EXTERNAL MODULE: ./src/project/AspNetCore/shared/components/Catalog/Catalog.js + 13 modules
+// EXTERNAL MODULE: ./src/project/AspNetCore/shared/components/Catalog/Catalog.js + 14 modules
 var Catalog = __webpack_require__(217);
 
 // EXTERNAL MODULE: ./src/shared/components/Footer/Footer.js

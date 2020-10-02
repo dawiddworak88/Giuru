@@ -6,12 +6,13 @@ import { Context } from "../../../../../shared/stores/Store";
 import FetchErrorHandler from "../../../../../shared/helpers/errorHandlers/FetchErrorHandler";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import { TablePagination } from "@material-ui/core";
+import CatalogConstants from "./CatalogConstants";
 
 function Catalog(props) {
 
     const [, dispatch] = useContext(Context);
     const [page, setPage] = React.useState(0);
-    const [itemsPerPage,] = React.useState(PaginationConstants.defaultRowsPerPage());
+    const [itemsPerPage,] = React.useState(CatalogConstants.defaultCatalogItemsPerPage());
     const [items, setItems] = React.useState(props.pagedItems.data);
     const [total, setTotal] = React.useState(props.pagedItems.total);
 
