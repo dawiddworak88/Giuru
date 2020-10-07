@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import ImageGallery from "react-image-gallery";
 import Files from "../../../../shared/components/Files/Files";
+import ContentGrid from "../../../../shared/components/ContentGrid/ContentGrid";
 
 function ProductDetail(props) {
 
@@ -33,7 +34,7 @@ function ProductDetail(props) {
                             </a>
                         }
                     </div>
-                    {props.description && 
+                    {props.description &&
                         <div className="product-detail__product-description">
                             <h3 className="product-detail__feature-title">{props.descriptionLabel}</h3>
                             <p>{props.description}</p>
@@ -44,18 +45,21 @@ function ProductDetail(props) {
                             <h3 className="product-detail__feature-title">{props.productInformationLabel}</h3>
                             <div className="product-detail__product-information-list">
                                 <dl>
-                                {props.features.map((item, index) => 
-                                    <Fragment key={index}>
-                                        <dt>{item.key}</dt>
-                                        <dd>{item.value}</dd>
-                                    </Fragment>
-                                )}
+                                    {props.features.map((item, index) =>
+                                        <Fragment key={index}>
+                                            <dt>{item.key}</dt>
+                                            <dd>{item.value}</dd>
+                                        </Fragment>
+                                    )}
                                 </dl>
                             </div>
                         </div>
                     }
                 </div>
             </div>
+            {props.productVariants && props.productVariants.length &&
+                <ContentGrid items={props.productVariants} />
+            }
             <Files {...props.files} />
         </section>
     );
@@ -73,6 +77,7 @@ ProductDetail.propTypes = {
     inStockLabel: PropTypes.string.isRequired,
     descriptionLabel: PropTypes.string.isRequired,
     productDescription: PropTypes.string,
+    productVariants: PropTypes.array,
     images: PropTypes.array,
     files: PropTypes.object
 };

@@ -44,23 +44,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
-                return new Product
-                {
-                    Id = response.Data.Id,
-                    Sku = response.Data.Sku,
-                    Name = response.Data.Name,
-                    Description = response.Data.Description,
-                    IsNew = response.Data.IsNew,
-                    IsProtected = response.Data.IsProtected,
-                    FormData = response.Data.FormData,
-                    BrandId = response.Data.BrandId,
-                    BrandName = response.Data.BrandName,
-                    CategoryId = response.Data.CategoryId,
-                    CategoryName = response.Data.CategoryName,
-                    Images = response.Data.Images,
-                    Files = response.Data.Files,
-                    Videos = response.Data.Videos
-                };
+                return this.MapProductResponseToProduct(response.Data);
             }
 
             return default;
@@ -92,23 +76,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
 
                 foreach (var productResponse in response.Data.Data)
                 {
-                    var product = new Product
-                    {
-                        Id = productResponse.Id,
-                        Sku = productResponse.Sku,
-                        Name = productResponse.Name,
-                        Description = productResponse.Description,
-                        IsNew = productResponse.IsNew,
-                        IsProtected = productResponse.IsProtected,
-                        FormData = productResponse.FormData,
-                        BrandId = productResponse.BrandId,
-                        BrandName = productResponse.BrandName,
-                        CategoryId = productResponse.CategoryId,
-                        CategoryName = productResponse.CategoryName,
-                        Images = productResponse.Images,
-                        Files = productResponse.Files,
-                        Videos = productResponse.Videos
-                    };
+                    var product = this.MapProductResponseToProduct(productResponse);
 
                     products.Add(product);
                 }
@@ -120,6 +88,67 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             }
 
             return default;
+        }
+
+        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(IEnumerable<Guid> ids, string language, string token)
+        {
+            var productsRequestModel = new ProductsRequestModel
+            {
+                Ids = ids,
+                Language = language,
+                PageIndex = PaginationConstants.DefaultPageIndex,
+                ItemsPerPage = PaginationConstants.DefaultPageSize
+            };
+
+            var apiRequest = new ApiRequest<ProductsRequestModel>
+            {
+                Data = this.apiClientService.InitializeRequestModelContext(productsRequestModel),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<ProductsRequestModel>, ProductsRequestModel, PagedResults<IEnumerable<ProductResponseModel>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                var products = new List<Product>();
+
+                foreach (var productResponse in response.Data.Data)
+                {
+                    var product = this.MapProductResponseToProduct(productResponse);
+
+                    products.Add(product);
+                }
+
+                return new PagedResults<IEnumerable<Product>>(response.Data.Total, response.Data.PageSize)
+                {
+                    Data = products
+                };
+            }
+
+            return default;
+        }
+
+        private Product MapProductResponseToProduct(ProductResponseModel productResponse)
+        { 
+            return new Product
+            {
+                Id = productResponse.Id,
+                Sku = productResponse.Sku,
+                Name = productResponse.Name,
+                Description = productResponse.Description,
+                IsNew = productResponse.IsNew,
+                IsProtected = productResponse.IsProtected,
+                FormData = productResponse.FormData,
+                BrandId = productResponse.BrandId,
+                BrandName = productResponse.BrandName,
+                CategoryId = productResponse.CategoryId,
+                CategoryName = productResponse.CategoryName,
+                ProductVariants = productResponse.ProductVariants,
+                Images = productResponse.Images,
+                Files = productResponse.Files,
+                Videos = productResponse.Videos
+            };
         }
     }
 }

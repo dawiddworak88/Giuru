@@ -144,6 +144,9 @@
   <data name="ProductSavedSuccessfully" xml:space="preserve">
     <value>Product has been saved succcessfully.</value>
   </data>
+  <data name="ProductVariants" xml:space="preserve">
+    <value>Product variants</value>
+  </data>
   <data name="Sku" xml:space="preserve">
     <value>SKU</value>
   </data>

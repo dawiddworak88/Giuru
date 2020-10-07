@@ -9,6 +9,7 @@ using Catalog.Api.Infrastructure.Products.Entities;
 using Catalog.Api.Infrastructure;
 using Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories;
 using Foundation.GenericRepository.Services;
+using Catalog.Api.v1.Areas.Products.SearchModels;
 
 namespace Catalog.Api.v1.Areas.Products.Services
 {
@@ -127,7 +128,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
         public async Task<PagedResults<IEnumerable<ProductResultModel>>> GetAsync(GetProductsModel model)
         {
-            var searchResults = await this.productSearchRepository.GetAsync(model.Language, model.CategoryId, model.OrganisationId, model.SearchTerm, model.PageIndex, model.ItemsPerPage, model.PrimaryProductsOnly, model.ProductVariantsOnly);
+            var searchResults = model.Ids != null ? await this.productSearchRepository.GetAsync(model.Language, model.Ids) : await this.productSearchRepository.GetAsync(model.Language, model.CategoryId, model.OrganisationId, model.SearchTerm, model.PageIndex, model.ItemsPerPage, model.PrimaryProductsOnly, model.ProductVariantsOnly);
 
             if (searchResults?.Data != null && searchResults.Data.Any())
             {
@@ -135,27 +136,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
                 foreach (var searchResultItem in searchResults.Data)
                 {
-                    var product = new ProductResultModel
-                    {
-                        Id = searchResultItem.ProductId,
-                        Images = searchResultItem.Images,
-                        Files = searchResultItem.Files,
-                        Videos = searchResultItem.Videos,
-                        BrandId = searchResultItem.BrandId,
-                        BrandName = searchResultItem.BrandName,
-                        CategoryId = searchResultItem.CategoryId,
-                        CategoryName = searchResultItem.CategoryName,
-                        IsNew = searchResultItem.IsNew,
-                        IsProtected = searchResultItem.IsProtected,
-                        Sku = searchResultItem.Sku,
-                        Name = searchResultItem.Name,
-                        Description = searchResultItem.Description,
-                        FormData = searchResultItem.FormData,
-                        LastModifiedDate = searchResultItem.LastModifiedDate,
-                        CreatedDate = searchResultItem.CreatedDate
-                    };
-
-                    products.Add(product);
+                    products.Add(this.MapProductSearchModelToProductResult(searchResultItem));
                 }
 
                 return new PagedResults<IEnumerable<ProductResultModel>>(searchResults.Total, searchResults.PageSize)
@@ -173,28 +154,33 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
             if (searchResultItem != null)
             {
-                return new ProductResultModel
-                {
-                    Id = searchResultItem.ProductId,
-                    Images = searchResultItem.Images,
-                    Files = searchResultItem.Files,
-                    Videos = searchResultItem.Videos,
-                    BrandId = searchResultItem.BrandId,
-                    BrandName = searchResultItem.BrandName,
-                    CategoryId = searchResultItem.CategoryId,
-                    CategoryName = searchResultItem.CategoryName,
-                    IsNew = searchResultItem.IsNew,
-                    IsProtected = searchResultItem.IsProtected,
-                    Sku = searchResultItem.Sku,
-                    Name = searchResultItem.Name,
-                    Description = searchResultItem.Description,
-                    FormData = searchResultItem.FormData,
-                    LastModifiedDate = searchResultItem.LastModifiedDate,
-                    CreatedDate = searchResultItem.CreatedDate
-                };
+                return this.MapProductSearchModelToProductResult(searchResultItem);
             }
 
             return default;
+        }
+
+        private ProductResultModel MapProductSearchModelToProductResult(ProductSearchModel searchResultItem)
+        { 
+            return new ProductResultModel
+            {
+                Id = searchResultItem.ProductId,
+                Images = searchResultItem.Images,
+                Files = searchResultItem.Files,
+                Videos = searchResultItem.Videos,
+                BrandId = searchResultItem.BrandId,
+                BrandName = searchResultItem.BrandName,
+                CategoryId = searchResultItem.CategoryId,
+                CategoryName = searchResultItem.CategoryName,
+                IsNew = searchResultItem.IsNew,
+                IsProtected = searchResultItem.IsProtected,
+                Sku = searchResultItem.Sku,
+                Name = searchResultItem.Name,
+                Description = searchResultItem.Description,
+                FormData = searchResultItem.FormData,
+                LastModifiedDate = searchResultItem.LastModifiedDate,
+                CreatedDate = searchResultItem.CreatedDate
+            };
         }
     }
 }

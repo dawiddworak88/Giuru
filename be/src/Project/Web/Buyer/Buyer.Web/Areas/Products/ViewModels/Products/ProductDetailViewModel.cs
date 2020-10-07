@@ -1,5 +1,6 @@
 ﻿using Buyer.Web.Shared.Files.ViewModels;
 using Buyer.Web.Shared.Images.ViewModels;
+using Foundation.PageContent.Components.ContentGrids.ViewModels;
 using System.Collections.Generic;
 
 namespace Buyer.Web.Areas.Products.ViewModels.Products
@@ -21,6 +22,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string DescriptionLabel { get; set; }
         public string Description { get; set; }
         public string InStockLabel { get; set; }
+        public IEnumerable<ContentGridItemViewModel> ProductVariants { get; set; }
         public FilesViewModel Files { get; set; }
         public IEnumerable<ImageViewModel> Images { get; set; }
         public IEnumerable<ProductFeatureViewModel> Features { get; set; }

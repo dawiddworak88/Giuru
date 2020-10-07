@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Nest;
 using System;
-using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -76,6 +75,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories
                         document.formData = productTranslations.FormData;
                         document.name = productTranslations.Name;
                         document.primaryProductId = product.PrimaryProductId;
+                        document.productVariants = this.catalogContext.Products.Where(x => x.PrimaryProductId == product.Id && x.IsActive).Select(x => x.Id);
                         document.primaryProductIdHasValue = product.PrimaryProductId.HasValue;
                         document.description = productTranslations.Description;
                         document.lastModifiedDate = product.LastModifiedDate;

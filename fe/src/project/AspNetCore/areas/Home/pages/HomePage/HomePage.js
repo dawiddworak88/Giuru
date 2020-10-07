@@ -6,7 +6,7 @@ import Store from "../../../../../../shared/stores/Store";
 import Header from "../../../../shared/components/Header/Header";
 import MainNavigation from "../../../../shared/components/MainNavigation/MainNavigation";
 import HeroSlider from "../../components/HeroSlider/HeroSlider";
-import ContentGrid from "../../components/ContentGrid/ContentGrid";
+import ContentGrid from "../../../../shared/components/ContentGrid/ContentGrid";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 
 /* eslint-disable no-unused-vars */

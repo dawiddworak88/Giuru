@@ -1,27 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Carousel from "react-multi-carousel";
+import CarouselConstants from "../Carousel/CarouselConstants";
 
 function ContentGrid(props) {
-
-    const responsive = {
-        superLargeDesktop: {
-            breakpoint: { max: 4000, min: 3000 },
-            items: 7
-        },
-        desktop: {
-            breakpoint: { max: 3000, min: 1024 },
-            items: 4
-        },
-        tablet: {
-            breakpoint: { max: 1024, min: 464 },
-            items: 2
-        },
-        mobile: {
-            breakpoint: { max: 464, min: 0 },
-            items: 1
-        }
-    };
 
     return (
 
@@ -31,7 +13,7 @@ function ContentGrid(props) {
                     return (
                         <div key={item.id} className="content-grid__item">
                             <p className="title is-4">{item.title}</p>
-                            <Carousel responsive={responsive}>
+                            <Carousel responsive={CarouselConstants.defaultCarouselResponsive()}>
                                 {item.carouselItems.map((carouselItem) =>
                                     <div key={carouselItem.id} className="card">
                                         <a href={carouselItem.url}>
