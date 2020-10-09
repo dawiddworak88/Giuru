@@ -26,14 +26,6 @@ function ProductDetail(props) {
                             {props.inStockLabel}
                         </div>
                     }
-                    <div className="product-detail__price">
-                        <h3 className="product-detail__feature-title">{props.pricesLabel}</h3>
-                        {!props.isAuthenticated &&
-                            <a href={props.signInUrl}>
-                                {props.signInToSeePricesLabel}
-                            </a>
-                        }
-                    </div>
                     {props.description &&
                         <div className="product-detail__product-description">
                             <h3 className="product-detail__feature-title">{props.descriptionLabel}</h3>
@@ -57,9 +49,7 @@ function ProductDetail(props) {
                     }
                 </div>
             </div>
-            {props.productVariants && props.productVariants.length &&
-                <ContentGrid items={props.productVariants} />
-            }
+            <ContentGrid items={props.productVariants} />
             <Files {...props.files} />
         </section>
     );

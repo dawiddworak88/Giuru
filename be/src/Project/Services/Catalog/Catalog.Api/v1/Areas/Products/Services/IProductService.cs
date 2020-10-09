@@ -12,6 +12,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
         Task<ProductResultModel> UpdateAsync(CreateUpdateProductModel model);
         Task<ProductResultModel> GetByIdAsync(GetProductModel getProductModel);
         Task<PagedResults<IEnumerable<ProductResultModel>>> GetAsync(GetProductsModel getProductsModel);
+        Task<PagedResults<IEnumerable<ProductResultModel>>> GetByIdsAsync(GetProductsByIdsModel getProductsModel);
         Task DeleteAsync(DeleteProductModel deleteProductModel);
     }
 }

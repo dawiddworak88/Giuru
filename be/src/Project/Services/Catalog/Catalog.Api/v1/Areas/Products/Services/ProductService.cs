@@ -128,24 +128,14 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
         public async Task<PagedResults<IEnumerable<ProductResultModel>>> GetAsync(GetProductsModel model)
         {
-            var searchResults = model.Ids != null ? await this.productSearchRepository.GetAsync(model.Language, model.Ids) : await this.productSearchRepository.GetAsync(model.Language, model.CategoryId, model.OrganisationId, model.SearchTerm, model.PageIndex, model.ItemsPerPage, model.PrimaryProductsOnly, model.ProductVariantsOnly);
+            var searchResults = await this.productSearchRepository.GetAsync(model.Language, model.CategoryId, model.OrganisationId, model.SearchTerm, model.PageIndex, model.ItemsPerPage);
+            return await this.MapToPageResultsAsync(searchResults, model.Language);
+        }
 
-            if (searchResults?.Data != null && searchResults.Data.Any())
-            {
-                var products = new List<ProductResultModel>();
-
-                foreach (var searchResultItem in searchResults.Data)
-                {
-                    products.Add(this.MapProductSearchModelToProductResult(searchResultItem));
-                }
-
-                return new PagedResults<IEnumerable<ProductResultModel>>(searchResults.Total, searchResults.PageSize)
-                {
-                    Data = products
-                };
-            }
-
-            return default;
+        public async Task<PagedResults<IEnumerable<ProductResultModel>>> GetByIdsAsync(GetProductsByIdsModel model)
+        {
+            var searchResults = await this.productSearchRepository.GetAsync(model.Language, model.Ids);
+            return await this.MapToPageResultsAsync(searchResults, model.Language);
         }
 
         public async Task<ProductResultModel> GetByIdAsync(GetProductModel model)
@@ -154,7 +144,51 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
             if (searchResultItem != null)
             {
-                return this.MapProductSearchModelToProductResult(searchResultItem);
+                var productSearchModel = this.MapProductSearchModelToProductResult(searchResultItem);
+
+                if (!searchResultItem.PrimaryProductIdHasValue)
+                {
+                    var productVariants = await this.productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, model.Language);
+
+                    if (productVariants?.Data != null && productVariants.Data.Any())
+                    {
+                        productSearchModel.ProductVariants = productVariants.Data.Select(x => x.ProductId);
+                    }
+                }
+
+                return productSearchModel;
+            }
+
+            return default;
+        }
+
+        private async Task<PagedResults<IEnumerable<ProductResultModel>>> MapToPageResultsAsync(PagedResults<IEnumerable<ProductSearchModel>> searchResults, string language)
+        {
+            if (searchResults?.Data != null && searchResults.Data.Any())
+            {
+                var products = new List<ProductResultModel>();
+
+                foreach (var searchResultItem in searchResults.Data)
+                {
+                    var productSearchModel = this.MapProductSearchModelToProductResult(searchResultItem);
+
+                    if (!searchResultItem.PrimaryProductIdHasValue)
+                    {
+                        var productVariants = await this.productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, language);
+
+                        if (productVariants?.Data != null && productVariants.Data.Any())
+                        {
+                            productSearchModel.ProductVariants = productVariants.Data.Select(x => x.ProductId);
+                        }
+                    }
+
+                    products.Add(productSearchModel);
+                }
+
+                return new PagedResults<IEnumerable<ProductResultModel>>(searchResults.Total, searchResults.PageSize)
+                {
+                    Data = products
+                };
             }
 
             return default;

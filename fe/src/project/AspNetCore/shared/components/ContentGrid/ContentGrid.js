@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import Carousel from "react-multi-carousel";
 import CarouselConstants from "../Carousel/CarouselConstants";
@@ -7,10 +7,10 @@ function ContentGrid(props) {
 
     return (
 
-        <section className="section content-grid">
-            {props.items && props.items.map((item) => {
-                if (item.carouselItems && item.carouselItems.length > 0) {
-                    return (
+        <Fragment>
+            {props.items && props.items.map((item) =>
+                <section className="section content-grid">
+                    {item.carouselItems && item.carouselItems.length > 0 && 
                         <div key={item.id} className="content-grid__item">
                             <p className="title is-4">{item.title}</p>
                             <Carousel responsive={CarouselConstants.defaultCarouselResponsive()}>
@@ -28,17 +28,14 @@ function ContentGrid(props) {
                                                 <p className="content-grid-card__title title is-5 has-text-centered">{carouselItem.title}</p>
                                             </a>
                                         </div>
-
                                     </div>
-                                )}
+                                    )}
                             </Carousel>
-                        </div>
-                    );
-                }
-
-                return [];
-            })}
-        </section>
+                        </div> 
+                    }
+                </section>
+            )}
+        </Fragment>
     );
 }
 

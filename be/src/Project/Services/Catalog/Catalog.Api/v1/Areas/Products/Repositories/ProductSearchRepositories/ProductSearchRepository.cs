@@ -17,10 +17,11 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
             this.elasticClient = elasticClient;
         }
 
-        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? categoryId, Guid? brandId, string searchTerm, int pageIndex, int itemsPerPage, bool primaryProductsOnly, bool productVariantsOnly)
+        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? categoryId, Guid? brandId, string searchTerm, int pageIndex, int itemsPerPage)
         {
-            var query = Query<ProductSearchModel>.Match(m => m.Field(f => f.Language).Query(language))
-                && Query<ProductSearchModel>.Term(t => t.IsActive, true);
+            var query = Query<ProductSearchModel>.Term(t => t.Language, language)
+                && Query<ProductSearchModel>.Term(t => t.IsActive, true)
+                && Query<ProductSearchModel>.Term(t => t.PrimaryProductIdHasValue, false);
 
             if (categoryId.HasValue)
             {
@@ -37,17 +38,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
                 query = query && Query<ProductSearchModel>.QueryString(d => d.Query(searchTerm));
             }
 
-            if (primaryProductsOnly)
-            {
-                query = query && Query<ProductSearchModel>.Term(t => t.PrimaryProductIdHasValue, false);
-            }
-
-            if (productVariantsOnly)
-            {
-                query = query && Query<ProductSearchModel>.Term(t => t.PrimaryProductIdHasValue, true);
-            }
-
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(x => x && query).Sort(s => s.Descending(SortSpecialField.Score).Descending(f => f.CreatedDate)));
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(x => x && query).Sort(s => s.Descending(SortSpecialField.Score)));
 
             if (response.IsValid && response.Hits.Any())
             {
@@ -81,7 +72,6 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
             var query = Query<ProductSearchModel>.Match(m => m.Field(f => f.Language).Query(language))
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
-
             var idsQuery = Query<ProductSearchModel>.MatchNone();
 
             foreach (var id in ids)
@@ -90,6 +80,25 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
             }
 
             query = query && idsQuery;
+
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query));
+
+            if (response.IsValid && response.Hits.Any())
+            {
+                return new PagedResults<IEnumerable<ProductSearchModel>>(response.Total, (int)response.Total)
+                {
+                    Data = response.Documents
+                };
+            }
+
+            return default;
+        }
+
+        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetProductVariantsAsync(Guid id, string language)
+        {
+            var query = Query<ProductSearchModel>.Term(t => t.PrimaryProductId, id)
+                && Query<ProductSearchModel>.Term(t => t.Language, language)
+                && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
             var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query));
 

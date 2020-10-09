@@ -6,6 +6,7 @@ using Buyer.Web.Shared.Definitions;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
 using System;
@@ -94,7 +95,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
         {
             var productsRequestModel = new ProductsRequestModel
             {
-                Ids = ids,
+                Ids = ids.ToEndpointParameterString(),
                 Language = language,
                 PageIndex = PaginationConstants.DefaultPageIndex,
                 ItemsPerPage = PaginationConstants.DefaultPageSize

@@ -41,26 +41,50 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Get(string ids, string language, Guid? categoryId, string searchTerm, int pageIndex, int itemsPerPage)
         {
-            var serviceModel = new GetProductsModel
+            var productIds = ids.ToEnumerableGuidIds();
+
+            if (productIds != null)
             {
-                Ids = ids.ToEnumerableGuidIds(),
-                PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage,
-                SearchTerm = searchTerm,
-                CategoryId = categoryId,
-                Language = language,
-                PrimaryProductsOnly = true
-            };
+                var serviceModel = new GetProductsByIdsModel
+                {
+                    Ids = productIds,
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    Language = language
+                };
 
-            var validator = new GetProductsModelValidator();
+                var validator = new GetProductsByIdsModelValidator();
 
-            var validationResult = await validator.ValidateAsync(serviceModel);
+                var validationResult = await validator.ValidateAsync(serviceModel);
 
-            if (validationResult.IsValid)
+                if (validationResult.IsValid)
+                {
+                    var products = await this.productService.GetByIdsAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.OK, products);
+                }
+            }
+            else
             {
-                var products = await this.productService.GetAsync(serviceModel);
+                var serviceModel = new GetProductsModel
+                {
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    SearchTerm = searchTerm,
+                    CategoryId = categoryId,
+                    Language = language
+                };
 
-                return this.StatusCode((int)HttpStatusCode.OK, products);
+                var validator = new GetProductsModelValidator();
+
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var products = await this.productService.GetAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.OK, products);
+                }
             }
 
             return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);

@@ -24,23 +24,12 @@ namespace Media.Api.Infrastructure.Media.Seeds
             SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.CouchesMediaId, MediaConstants.Categories.CouchesMediaVersionId, MediaConstants.Categories.CouchesMediaUrl);
             SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.SectionalsMediaId, MediaConstants.Categories.SectionalsMediaVersionId, MediaConstants.Categories.SectionalsMediaUrl);
             SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.CoffeeTablesMediaId, MediaConstants.Categories.CoffeeTablesMediaVersionId, MediaConstants.Categories.CoffeeTablesMediaUrl);
-            SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.TvStandsMediaId, MediaConstants.Categories.TvStandsMediaVersionId, MediaConstants.Categories.TvStandsMediaUrl);
-            SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.WallUnitsMediaId, MediaConstants.Categories.WallUnitsMediaVersionId, MediaConstants.Categories.WallUnitsMediaUrl);
             SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.ChairsMediaId, MediaConstants.Categories.ChairsMediaVersionId, MediaConstants.Categories.ChairsMediaUrl);
             SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.PoufsMediaId, MediaConstants.Categories.PoufsMediaVersionId, MediaConstants.Categories.PoufsMediaUrl);
 
             SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.BedsMediaId, MediaConstants.Categories.BedsMediaVersionId, MediaConstants.Categories.BedsMediaUrl);
-            SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.WardrobesMediaId, MediaConstants.Categories.WardrobesMediaVersionId, MediaConstants.Categories.WardrobesMediaUrl);
-            SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.ChestsMediaId, MediaConstants.Categories.ChestsMediaVersionId, MediaConstants.Categories.ChestsMediaUrl);
             SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.MattressesMediaId, MediaConstants.Categories.MattressesMediaVersionId, MediaConstants.Categories.MattressesMediaUrl);
 
-            SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.DiningTablesSeatingMediaId, MediaConstants.Categories.DiningTablesSeatingMediaVersionId, MediaConstants.Categories.DiningTablesSeatingMediaUrl);
-
-            SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.BathroomVanitiesCabinetsMediaId, MediaConstants.Categories.BathroomVanitiesCabinetsMediaVersionId, MediaConstants.Categories.BathroomVanitiesCabinetsMediaUrl);
-
-            SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.KidsBedsMediaId, MediaConstants.Categories.KidsBedsMediaVersionId, MediaConstants.Categories.KidsBedsMediaUrl);
-            SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.KidsBunkBedsMediaId, MediaConstants.Categories.KidsBunkBedsMediaVersionId, MediaConstants.Categories.KidsBunkBedsMediaUrl);
-            SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.KidsDesksMediaId, MediaConstants.Categories.KidsDesksMediaVersionId, MediaConstants.Categories.KidsDesksMediaUrl);
         }
 
         private static void SeedMedia(MediaContext context, IChecksumService checksumService, string storageConnectionString, Guid mediaId, Guid mediaVersionId, string mediaUrl)

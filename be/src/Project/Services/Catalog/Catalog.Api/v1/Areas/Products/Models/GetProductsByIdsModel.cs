@@ -1,13 +1,13 @@
 ﻿using Foundation.Extensions.Models;
 using System;
+using System.Collections.Generic;
 
 namespace Catalog.Api.v1.Areas.Products.Models
 {
-    public class GetProductsModel : BaseServiceModel
+    public class GetProductsByIdsModel : BaseServiceModel
     {
-        public Guid? CategoryId { get; set; }
+        public IEnumerable<Guid> Ids { get; set; }
         public int PageIndex { get; set; }
         public int ItemsPerPage { get; set; }
-        public string SearchTerm { get; set; }
     }
 }

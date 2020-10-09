@@ -12319,41 +12319,37 @@ var CarouselConstants_CarouselConstants = /*#__PURE__*/function () {
 
 
 function ContentGrid(props) {
-  return /*#__PURE__*/react_default.a.createElement("section", {
-    className: "section content-grid"
-  }, props.items && props.items.map(function (item) {
-    if (item.carouselItems && item.carouselItems.length > 0) {
+  return /*#__PURE__*/react_default.a.createElement(react["Fragment"], null, props.items && props.items.map(function (item) {
+    return /*#__PURE__*/react_default.a.createElement("section", {
+      className: "section content-grid"
+    }, item.carouselItems && item.carouselItems.length > 0 && /*#__PURE__*/react_default.a.createElement("div", {
+      key: item.id,
+      className: "content-grid__item"
+    }, /*#__PURE__*/react_default.a.createElement("p", {
+      className: "title is-4"
+    }, item.title), /*#__PURE__*/react_default.a.createElement(react_multi_carousel_default.a, {
+      responsive: CarouselConstants_CarouselConstants.defaultCarouselResponsive()
+    }, item.carouselItems.map(function (carouselItem) {
       return /*#__PURE__*/react_default.a.createElement("div", {
-        key: item.id,
-        className: "content-grid__item"
+        key: carouselItem.id,
+        className: "card"
+      }, /*#__PURE__*/react_default.a.createElement("a", {
+        href: carouselItem.url
+      }, /*#__PURE__*/react_default.a.createElement("div", {
+        className: "card-image"
+      }, /*#__PURE__*/react_default.a.createElement("figure", {
+        className: "image is-4by3"
+      }, /*#__PURE__*/react_default.a.createElement("img", {
+        src: carouselItem.imageUrl,
+        alt: carouselItem.imageAlt
+      })))), /*#__PURE__*/react_default.a.createElement("div", {
+        className: "media-content"
+      }, /*#__PURE__*/react_default.a.createElement("a", {
+        href: carouselItem.url
       }, /*#__PURE__*/react_default.a.createElement("p", {
-        className: "title is-4"
-      }, item.title), /*#__PURE__*/react_default.a.createElement(react_multi_carousel_default.a, {
-        responsive: CarouselConstants_CarouselConstants.defaultCarouselResponsive()
-      }, item.carouselItems.map(function (carouselItem) {
-        return /*#__PURE__*/react_default.a.createElement("div", {
-          key: carouselItem.id,
-          className: "card"
-        }, /*#__PURE__*/react_default.a.createElement("a", {
-          href: carouselItem.url
-        }, /*#__PURE__*/react_default.a.createElement("div", {
-          className: "card-image"
-        }, /*#__PURE__*/react_default.a.createElement("figure", {
-          className: "image is-4by3"
-        }, /*#__PURE__*/react_default.a.createElement("img", {
-          src: carouselItem.imageUrl,
-          alt: carouselItem.imageAlt
-        })))), /*#__PURE__*/react_default.a.createElement("div", {
-          className: "media-content"
-        }, /*#__PURE__*/react_default.a.createElement("a", {
-          href: carouselItem.url
-        }, /*#__PURE__*/react_default.a.createElement("p", {
-          className: "content-grid-card__title title is-5 has-text-centered"
-        }, carouselItem.title))));
-      })));
-    }
-
-    return [];
+        className: "content-grid-card__title title is-5 has-text-centered"
+      }, carouselItem.title))));
+    }))));
   }));
 }
 
