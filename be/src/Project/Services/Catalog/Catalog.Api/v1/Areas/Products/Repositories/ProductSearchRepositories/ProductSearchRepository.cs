@@ -25,12 +25,12 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
 
             if (categoryId.HasValue)
             {
-                query = query && Query<ProductSearchModel>.Match(m => m.Field(f => f.CategoryId).Query(categoryId.Value.ToString()));
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.CategoryId.Suffix("keyword")).Value(categoryId.Value));
             }
 
             if (brandId.HasValue)
             {
-                query = query && Query<ProductSearchModel>.Match(m => m.Field(f => f.BrandId).Query(brandId.Value.ToString()));
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.BrandId.Suffix("keyword")).Value(brandId.Value));
             }
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -53,8 +53,8 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
 
         public async Task<ProductSearchModel> GetAsync(Guid id, string language)
         {
-            var query = Query<ProductSearchModel>.Match(m => m.Field(f => f.ProductId).Query(id.ToString()))
-                && Query<ProductSearchModel>.Match(m => m.Field(f => f.Language).Query(language))
+            var query = Query<ProductSearchModel>.Term(t => t.Field(x => x.ProductId.Suffix("keyword")).Value(id))
+                && Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
             var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query));
@@ -69,14 +69,14 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
 
         public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, IEnumerable<Guid> ids)
         {
-            var query = Query<ProductSearchModel>.Match(m => m.Field(f => f.Language).Query(language))
+            var query = Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
             var idsQuery = Query<ProductSearchModel>.MatchNone();
 
             foreach (var id in ids)
             {
-                idsQuery = idsQuery || Query<ProductSearchModel>.Match(m => m.Field(f => f.ProductId).Query(id.ToString()));
+                idsQuery = idsQuery || Query<ProductSearchModel>.Term(t => t.Field(x => x.ProductId.Suffix("keyword")).Value(id));
             }
 
             query = query && idsQuery;
@@ -96,7 +96,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
 
         public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetProductVariantsAsync(Guid id, string language)
         {
-            var query = Query<ProductSearchModel>.Term(t => t.PrimaryProductId, id)
+            var query = Query<ProductSearchModel>.Term(t => t.Field(x => x.PrimaryProductId.Suffix("keyword")).Value(id))
                 && Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 

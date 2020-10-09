@@ -9,7 +9,7 @@ function ProductDetail(props) {
     return (
 
         <section className="product-detail section">
-            <div className="columns is-tablet">
+            <div className="product-detail__head columns is-tablet">
                 <div className="column is-6">
                     {props.images && props.images.length &&
                         <div className="product-detail__image-gallery">

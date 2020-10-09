@@ -43321,7 +43321,7 @@ function ProductDetail(props) {
   return /*#__PURE__*/react_default.a.createElement("section", {
     className: "product-detail section"
   }, /*#__PURE__*/react_default.a.createElement("div", {
-    className: "columns is-tablet"
+    className: "product-detail__head columns is-tablet"
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "column is-6"
   }, props.images && props.images.length && /*#__PURE__*/react_default.a.createElement("div", {

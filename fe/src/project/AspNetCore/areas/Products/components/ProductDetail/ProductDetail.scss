@@ -18,6 +18,10 @@
         font-size: 0.9rem;
     }
 
+    &__head {
+        min-height: 630px;
+    }
+
     &__brand {
         a:hover {
             color: $primary;
