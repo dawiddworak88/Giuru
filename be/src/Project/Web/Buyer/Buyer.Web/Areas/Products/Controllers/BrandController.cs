@@ -4,7 +4,7 @@ using System;
 
 namespace Buyer.Web.Areas.Brands.Controllers
 {
-    [Area("Brands")]
+    [Area("Products")]
     public class BrandController : BaseController
     {
         public IActionResult Index(Guid? id)

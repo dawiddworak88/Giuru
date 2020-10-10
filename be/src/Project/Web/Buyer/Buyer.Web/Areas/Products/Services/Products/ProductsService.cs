@@ -52,7 +52,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                             Sku = product.Sku,
                             Title = product.Name,
                             Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
-                            BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Brands", culture = CultureInfo.CurrentUICulture.Name, product.BrandId }),
+                            BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.BrandId }),
                             BrandName = product.BrandName,
                             InStock = false
                         };

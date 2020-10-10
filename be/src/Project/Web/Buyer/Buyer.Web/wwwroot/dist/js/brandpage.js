@@ -38553,7 +38553,7 @@ var MainNavigation = __webpack_require__(60);
 // EXTERNAL MODULE: ./src/project/AspNetCore/shared/components/Files/Files.js + 10 modules
 var Files = __webpack_require__(222);
 
-// CONCATENATED MODULE: ./src/project/AspNetCore/areas/Brands/components/BrandDetail/BrandDetail.js
+// CONCATENATED MODULE: ./src/project/AspNetCore/areas/Products/components/BrandDetail/BrandDetail.js
 
 
 
@@ -38584,7 +38584,7 @@ var Footer = __webpack_require__(61);
 // EXTERNAL MODULE: ./src/shared/layouts/images/favicon.png
 var favicon = __webpack_require__(80);
 
-// CONCATENATED MODULE: ./src/project/AspNetCore/areas/Brands/pages/BrandPage/BrandPage.js
+// CONCATENATED MODULE: ./src/project/AspNetCore/areas/Products/pages/BrandPage/BrandPage.js
 
 
 
@@ -38613,7 +38613,7 @@ function BrandPage(props) {
 // EXTERNAL MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.js
 var CssSsrRemovalHelper = __webpack_require__(62);
 
-// CONCATENATED MODULE: ./src/project/AspNetCore/areas/Brands/pages/BrandPage/index.js
+// CONCATENATED MODULE: ./src/project/AspNetCore/areas/Products/pages/BrandPage/index.js
 
 
 
