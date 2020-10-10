@@ -10,6 +10,7 @@ using Foundation.Extensions.DependencyInjection;
 using Foundation.PageContent.DependencyInjection;
 using Foundation.Security.DependencyInjection;
 using Foundation.ApiExtensions.DependencyInjection;
+using Foundation.Account.DependencyInjection;
 
 namespace AspNetCore
 {
@@ -31,6 +32,8 @@ namespace AspNetCore
             services.AddCultureRouteConstraint();
 
             services.AddControllersWithViews();
+
+            services.RegisterClientAccountDependencies(this.Configuration);
 
             services.RegisterLocalizationDependencies();
 
@@ -54,6 +57,8 @@ namespace AspNetCore
             app.UseGeneralStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthenticationAuthorization();
 
             app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
 

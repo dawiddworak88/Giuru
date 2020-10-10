@@ -43,7 +43,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                 this.heroSliderLocalizer["LowPrices"],
                 string.Empty,
                 this.heroSliderLocalizer["Discover"],
-                this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.SectionalsCategoryId }));
+                this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.Sectionals.Id }));
 
             var furnishBedroomHeroSliderItem = GetHeroSliderItem(this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.BedroomMediaId),
                 this.heroSliderLocalizer["TrackOrders"],
@@ -51,7 +51,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                 this.heroSliderLocalizer["TrackOrders"],
                 string.Empty,
                 this.heroSliderLocalizer["Browse"],
-                this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.BedsCategoryId }));
+                this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.Beds.Id }));
 
             var furnishKidsRoomHeroSliderItem = GetHeroSliderItem(this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.KidsRoomMediaId),
                 this.heroSliderLocalizer["EasyRepurchase"],
@@ -59,7 +59,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                 this.heroSliderLocalizer["EasyRepurchase"],
                 string.Empty,
                 this.heroSliderLocalizer["Shop"],
-                this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.SectionalsCategoryId }));
+                this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.Sectionals.Id }));
 
             heroSliderItems.Add(furnishBedroomHeroSliderItem);
             heroSliderItems.Add(furnishLivingRoomHeroSliderItem);

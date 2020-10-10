@@ -21,6 +21,7 @@ namespace Buyer.Web.Shared.Catalogs.ViewModels
         public string BackIconButtonText { get; set; }
         public string NextIconButtonText { get; set; }
         public string GeneralErrorMessage { get; set; }
+        public string ProductsApiUrl { get; set; }
         public PagedResults<IEnumerable<CatalogItemViewModel>> PagedItems { get; set; }
     }
 }

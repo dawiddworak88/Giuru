@@ -33339,7 +33339,7 @@ function Catalog(props) {
       return newPage;
     });
     var searchParameters = {
-      id: props.id,
+      categoryId: props.id,
       pageIndex: newPage + 1,
       itemsPerPage: itemsPerPage
     };
@@ -33362,10 +33362,10 @@ function Catalog(props) {
             return [];
           });
           setItems(function () {
-            return jsonResponse.data.pagedItems.data;
+            return jsonResponse.data;
           });
           setTotal(function () {
-            return jsonResponse.data.pagedItems.total;
+            return jsonResponse.total;
           });
         } else {
           FetchErrorHandler_FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);

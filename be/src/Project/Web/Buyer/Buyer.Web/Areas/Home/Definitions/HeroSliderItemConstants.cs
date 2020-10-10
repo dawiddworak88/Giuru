@@ -13,8 +13,15 @@ namespace Buyer.Web.Areas.Home.Definitions
 
         public struct Categories
         {
-            public static readonly Guid SectionalsCategoryId = Guid.Parse("4d54153b-10a6-4bf7-9a44-a38759d8be53");
-            public static readonly Guid BedsCategoryId = Guid.Parse("1b4a61fb-cdda-45b2-a4d6-92a27acdf833");
+            public struct Sectionals 
+            {
+                public static readonly Guid Id = Guid.Parse("4d54153b-10a6-4bf7-9a44-a38759d8be53");
+            }
+
+            public struct Beds
+            {
+                public static readonly Guid Id = Guid.Parse("1b4a61fb-cdda-45b2-a4d6-92a27acdf833");
+            }
         }
     }
 }

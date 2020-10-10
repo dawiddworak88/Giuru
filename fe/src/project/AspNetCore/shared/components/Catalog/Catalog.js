@@ -23,7 +23,7 @@ function Catalog(props) {
 
         const searchParameters = {
 
-            id: props.id,
+            categoryId: props.id,
             pageIndex: newPage + 1,
             itemsPerPage
         };
@@ -47,8 +47,8 @@ function Catalog(props) {
                     if (response.ok) {
 
                         setItems(() => []);
-                        setItems(() => jsonResponse.data.pagedItems.data);
-                        setTotal(() => jsonResponse.data.pagedItems.total);
+                        setItems(() => jsonResponse.data);
+                        setTotal(() => jsonResponse.total);
                     }
                     else {
                         FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
