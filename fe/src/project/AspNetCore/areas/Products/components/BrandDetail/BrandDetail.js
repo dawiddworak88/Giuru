@@ -27,8 +27,7 @@ BrandDetail.propTypes = {
     logoUrl: PropTypes.string,
     name: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    files: PropTypes.object.isRequired,
-    logo: PropTypes.object.isRequired
+    files: PropTypes.object.isRequired
 };
 
 export default BrandDetail;

@@ -10,6 +10,7 @@ using Catalog.Api.Infrastructure;
 using Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories;
 using Foundation.GenericRepository.Services;
 using Catalog.Api.v1.Areas.Products.SearchModels;
+using System;
 
 namespace Catalog.Api.v1.Areas.Products.Services
 {
@@ -124,6 +125,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
         public async Task DeleteAsync(DeleteProductModel model)
         {
+            throw new NotSupportedException();
         }
 
         public async Task<PagedResults<IEnumerable<ProductResultModel>>> GetAsync(GetProductsModel model)

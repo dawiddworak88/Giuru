@@ -6,7 +6,7 @@ namespace Media.Api.Shared.ImageResizers
 {
     public class ImageResizeService : IImageResizeService
     {
-        public byte[] Resize(byte[] fileContents, int maxWidth, int maxHeight, SKFilterQuality quality = SKFilterQuality.Medium)
+        public byte[] Resize(byte[] fileContents, int maxWidth, int maxHeight)
         {
             using MemoryStream ms = new MemoryStream(fileContents);
             using SKBitmap sourceBitmap = SKBitmap.Decode(ms);
@@ -18,7 +18,7 @@ namespace Media.Api.Shared.ImageResizers
             var newWidth = (int)(sourceBitmap.Width * ratio);
             var newHeight = (int)(sourceBitmap.Height * ratio);
 
-            using SKBitmap scaledBitmap = sourceBitmap.Resize(new SKImageInfo(newWidth, newHeight), quality);
+            using SKBitmap scaledBitmap = sourceBitmap.Resize(new SKImageInfo(newWidth, newHeight), SKFilterQuality.Medium);
             using SKImage scaledImage = SKImage.FromBitmap(scaledBitmap);
             using SKData data = scaledImage.Encode();
 
