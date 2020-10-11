@@ -12,6 +12,7 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;
 using Buyer.Web.Areas.Products.DependencyInjection;
 using Buyer.Web.Shared.Catalogs.Services;
+using Buyer.Web.Shared.Catalogs.ModelBuilders;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -23,6 +24,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.RegisterProductDependencies();
 
             // Model Builders
+            services.AddScoped(typeof(ICatalogModelBuilder<,>), typeof(CatalogModelBuilder<,>));
             services.AddScoped<IModelBuilder<BuyerHeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>, MainNavigationModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();

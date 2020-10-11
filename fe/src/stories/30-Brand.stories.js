@@ -1,6 +1,6 @@
 import React from "react";
-import "../project/AspNetCore/areas/Brands/pages/BrandPage/BrandPage.scss";
-import BrandPage from "../project/AspNetCore/areas/Brands/pages/BrandPage/BrandPage";
+import "../project/AspNetCore/areas/Products/pages/BrandPage/BrandPage.scss";
+import BrandPage from "../project/AspNetCore/areas/Products/pages/BrandPage/BrandPage";
 import { header, mainNavigation, files, footer } from "./Shared/AspNetCoreProps";
 
 function getItems(length) {
@@ -39,7 +39,7 @@ var catalog = {
   isAuthenticated: false,
   signInUrl: "#",
   signInToSeePricesLabel: "Log in to see prices",
-  items: getItems(20)
+  pagedItems: getItems(20)
 };
 
 var brandDetail = {

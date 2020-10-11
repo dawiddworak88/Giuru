@@ -1,15 +1,36 @@
-﻿using Foundation.Extensions.Controllers;
+﻿using Buyer.Web.Areas.Products.ViewModels.Brands;
+using Foundation.Extensions.Controllers;
+using Foundation.Extensions.ModelBuilders;
+using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Globalization;
+using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Brands.Controllers
 {
     [Area("Products")]
     public class BrandController : BaseController
     {
-        public IActionResult Index(Guid? id)
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, BrandPageViewModel> brandPageModelBuilder;
+
+        public BrandController(IAsyncComponentModelBuilder<ComponentModelBase, BrandPageViewModel> brandPageModelBuilder)
         {
-            return this.View();
+            this.brandPageModelBuilder = brandPageModelBuilder;
+        }
+
+        public async Task<IActionResult> Index(Guid? brandId)
+        {
+            var componentModel = new ComponentModelBase
+            {
+                Id = brandId,
+                Language = CultureInfo.CurrentUICulture.Name,
+                IsAuthenticated = this.User.Identity.IsAuthenticated
+            };
+
+            var viewModel = await this.brandPageModelBuilder.BuildModelAsync(componentModel);
+
+            return this.View(viewModel);
         }
     }
 }
