@@ -51,11 +51,12 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(Guid? categoryId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
+        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(Guid? categoryId, Guid? brandId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
         {
             var productsRequestModel = new ProductsRequestModel
             {
                 CategoryId = categoryId,
+                BrandId = brandId,
                 Language = language,
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,

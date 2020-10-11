@@ -34,13 +34,13 @@ namespace Buyer.Web.Areas.Products.Services.Products
             this.linkGenerator = linkGenerator;
         }
 
-        public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(Guid? categoryId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
+        public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(Guid? categoryId, Guid? brandId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
         {
             var catalogItemList = new List<CatalogItemViewModel>();
 
-            if (categoryId.HasValue)
+            if (categoryId.HasValue || brandId.HasValue)
             {
-                var pagedProducts = await this.productsRepository.GetProductsAsync(categoryId, language, searchTerm, pageIndex, itemsPerPage, token);
+                var pagedProducts = await this.productsRepository.GetProductsAsync(categoryId, brandId, language, searchTerm, pageIndex, itemsPerPage, token);
 
                 if (pagedProducts?.Data != null)
                 {
@@ -64,7 +64,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                             if (imageGuid != null)
                             {
                                 catalogItem.ImageAlt = product.Name;
-                                catalogItem.ImageUrl = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, imageGuid, CategoryConstants.CategoryCatalogItemImageWidth, CategoryConstants.CategoryCatalogItemImageHeight);
+                                catalogItem.ImageUrl = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, imageGuid, ProductConstants.ProductsCatalogItemImageWidth, ProductConstants.ProductsCatalogItemImageHeight);
                             }
                         }
 

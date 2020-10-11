@@ -38,7 +38,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
                 Header = headerModelBuilder.BuildModel(),
                 BrandDetail = await this.brandDetailModelBuilder.BuildModelAsync(componentModel), 
                 Catalog = await this.brandCatalogModelBuilder.BuildModelAsync(componentModel),
-                MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(new ComponentModelBase { Id = componentModel.Id, Token = componentModel.Token, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language }),
+                MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };
 

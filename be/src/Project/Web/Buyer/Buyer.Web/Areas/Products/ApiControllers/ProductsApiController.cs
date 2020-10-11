@@ -22,10 +22,11 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(Guid? categoryId, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(Guid? categoryId, Guid? brandId, string searchTerm, int pageIndex, int itemsPerPage)
         {
             var products = await this.productsService.GetProductsAsync(
                 categoryId,
+                brandId,
                 CultureInfo.CurrentUICulture.Name,
                 searchTerm,
                 pageIndex,

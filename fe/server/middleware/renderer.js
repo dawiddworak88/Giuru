@@ -6,7 +6,7 @@ import { ServerStyleSheets } from "@material-ui/core/styles";
 import HomePage from "../../src/project/AspNetCore/areas/Home/pages/HomePage/HomePage";
 import CategoryPage from "../../src/project/AspNetCore/areas/Products/pages/CategoryPage/CategoryPage";
 import BuyerProductPage from "../../src/project/AspNetCore/areas/Products/pages/ProductPage/ProductPage";
-import BrandPage from "../../src/project/AspNetCore/areas/Brands/pages/BrandPage/BrandPage";
+import BrandPage from "../../src/project/AspNetCore/areas/Products/pages/BrandPage/BrandPage";
 
 // Account
 import SignInPage from "../../src/project/Account/areas/Accounts/pages/SignIn/SignInPage";

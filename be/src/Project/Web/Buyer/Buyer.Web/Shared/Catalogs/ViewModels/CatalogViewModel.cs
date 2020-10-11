@@ -6,7 +6,6 @@ namespace Buyer.Web.Shared.Catalogs.ViewModels
 {
     public class CatalogViewModel
     {
-        public Guid Id { get; set; }
         public string Title { get; set; }
         public string ResultsLabel { get; set; }
         public string NoResultsLabel { get; set; }

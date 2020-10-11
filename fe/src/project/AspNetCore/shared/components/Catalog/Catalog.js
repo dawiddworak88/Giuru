@@ -23,7 +23,8 @@ function Catalog(props) {
 
         const searchParameters = {
 
-            categoryId: props.id,
+            categoryId: props.categoryId,
+            brandId: props.brandId,
             pageIndex: newPage + 1,
             itemsPerPage
         };

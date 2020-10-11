@@ -7,6 +7,7 @@ namespace Buyer.Web.Areas.Products.ApiRequestModels
     {
         public string Ids { get; set; }
         public Guid? CategoryId { get; set; }
+        public Guid? BrandId { get; set; }
         public string SearchTerm { get; set; }
         public int PageIndex { get; set; }
         public int ItemsPerPage { get; set; }

@@ -32,10 +32,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
             
             viewModel.PagedItems = await this.productsService.GetProductsAsync(
                 componentModel.Id,
+                null,
                 componentModel.Language,
                 componentModel.SearchTerm,
                 PaginationConstants.DefaultPageIndex,
-                CategoryConstants.CategoryCatalogPaginationPageSize,
+                ProductConstants.ProductsCatalogPaginationPageSize,
                 componentModel.Token);
 
             var category = await this.categoryRepository.GetCategoryAsync(componentModel.Id, componentModel.Token);
@@ -43,7 +44,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
             if (category != null)
             {
                 viewModel.Title = category.Name;
-                viewModel.Id = category.Id;
+                viewModel.CategoryId = category.Id;
             }
 
             return viewModel;

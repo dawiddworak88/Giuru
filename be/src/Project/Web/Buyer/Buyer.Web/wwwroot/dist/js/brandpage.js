@@ -33339,7 +33339,8 @@ function Catalog(props) {
       return newPage;
     });
     var searchParameters = {
-      categoryId: props.id,
+      categoryId: props.categoryId,
+      brandId: props.brandId,
       pageIndex: newPage + 1,
       itemsPerPage: itemsPerPage
     };
