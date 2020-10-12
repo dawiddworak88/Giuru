@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 292);
+/******/ 	return __webpack_require__(__webpack_require__.s = 291);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2502,7 +2502,7 @@ var jss_esm_index = jss_esm_create();
 
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/mergeClasses/mergeClasses.js
-var mergeClasses = __webpack_require__(250);
+var mergeClasses = __webpack_require__(249);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/makeStyles/multiKeyStore.js
 // Used https://github.com/thinkloop/multi-key-cache as inspiration
@@ -4043,7 +4043,7 @@ function increment() {
 var esm_typeof = __webpack_require__(22);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/utils/esm/deepmerge.js
-var deepmerge = __webpack_require__(248);
+var deepmerge = __webpack_require__(247);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/getStylesCreator/getStylesCreator.js
 
@@ -4349,7 +4349,7 @@ function makeStyles(stylesOrCreator) {
   return useStyles;
 }
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/getThemeProps/getThemeProps.js
-var getThemeProps = __webpack_require__(251);
+var getThemeProps = __webpack_require__(250);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/withStyles/withStyles.js
 
@@ -5590,8 +5590,8 @@ if (false) {}
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(29);
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(82);
-/* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(83);
+/* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(81);
+/* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(82);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(8);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_8__);
 
@@ -6961,7 +6961,7 @@ var defineProperty = __webpack_require__(20);
 var objectWithoutProperties = __webpack_require__(3);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/utils/esm/deepmerge.js
-var deepmerge = __webpack_require__(248);
+var deepmerge = __webpack_require__(247);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
 var esm_extends = __webpack_require__(1);
@@ -8381,13 +8381,13 @@ var prop_types = __webpack_require__(2);
 var clsx_m = __webpack_require__(4);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Input/Input.js
-var Input = __webpack_require__(249);
+var Input = __webpack_require__(248);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FilledInput/FilledInput.js
-var FilledInput = __webpack_require__(252);
+var FilledInput = __webpack_require__(251);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/OutlinedInput/OutlinedInput.js + 1 modules
-var OutlinedInput = __webpack_require__(270);
+var OutlinedInput = __webpack_require__(269);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/formControlState.js
 var formControlState = __webpack_require__(12);
@@ -8923,7 +8923,7 @@ var FormHelperText_FormHelperText = react["forwardRef"](function FormHelperText(
   name: 'MuiFormHelperText'
 })(FormHelperText_FormHelperText));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Select/Select.js + 21 modules
-var Select = __webpack_require__(269);
+var Select = __webpack_require__(268);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/TextField/TextField.js
 
@@ -9101,7 +9101,7 @@ var TextField_TextField = react["forwardRef"](function TextField(props, ref) {
   name: 'MuiTextField'
 })(TextField_TextField));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Button/Button.js
-var Button = __webpack_require__(254);
+var Button = __webpack_require__(253);
 
 // CONCATENATED MODULE: ./src/shared/components/LanguageSwitcher/LanguageSwitcher.js
 
@@ -9130,10 +9130,7 @@ function LanguageSwitcher(props) {
 }
 
 /* harmony default export */ var LanguageSwitcher_LanguageSwitcher = (LanguageSwitcher);
-// CONCATENATED MODULE: ./src/shared/layouts/images/logo.png
-/* harmony default export */ var logo = ("/dist/images/logo.png");
 // CONCATENATED MODULE: ./src/project/AspNetCore/shared/components/Header/Header.js
-
 
 
 
@@ -9152,7 +9149,7 @@ function Header(props) {
   }, /*#__PURE__*/react_default.a.createElement("a", {
     href: props.logo.targetUrl
   }, /*#__PURE__*/react_default.a.createElement("img", {
-    src: logo,
+    src: props.logoUrl,
     alt: props.logo.logoAltLabel
   }))), /*#__PURE__*/react_default.a.createElement("div", {
     className: "navbar-menu is-flex is-flex-wrap"
@@ -10470,13 +10467,6 @@ exports.isValidElementType=function(a){return"string"===typeof a||"function"===t
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony default export */ var _unused_webpack_default_export = ("/dist/images/favicon.png");
-
-/***/ }),
-/* 81 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 
 // UNUSED EXPORTS: styles
 
@@ -10665,7 +10655,7 @@ function useIsFocusVisible() {
 var toConsumableArray = __webpack_require__(15);
 
 // EXTERNAL MODULE: ./node_modules/react-transition-group/esm/TransitionGroup.js + 1 modules
-var TransitionGroup = __webpack_require__(83);
+var TransitionGroup = __webpack_require__(82);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/ButtonBase/Ripple.js
 
@@ -11343,7 +11333,7 @@ var ButtonBase_ButtonBase = react["forwardRef"](function ButtonBase(props, ref) 
 })(ButtonBase_ButtonBase));
 
 /***/ }),
-/* 82 */
+/* 81 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11807,7 +11797,7 @@ Transition_Transition.EXITING = EXITING;
 /* harmony default export */ var esm_Transition = __webpack_exports__["a"] = (Transition_Transition);
 
 /***/ }),
-/* 83 */
+/* 82 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12110,6 +12100,7 @@ TransitionGroup_TransitionGroup.defaultProps = defaultProps;
 /* harmony default export */ var esm_TransitionGroup = __webpack_exports__["a"] = (TransitionGroup_TransitionGroup);
 
 /***/ }),
+/* 83 */,
 /* 84 */,
 /* 85 */,
 /* 86 */,
@@ -12246,8 +12237,7 @@ TransitionGroup_TransitionGroup.defaultProps = defaultProps;
 /* 217 */,
 /* 218 */,
 /* 219 */,
-/* 220 */,
-/* 221 */
+/* 220 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12375,7 +12365,7 @@ var InputBase = __webpack_require__(66);
 var defineProperty = __webpack_require__(20);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/ButtonBase/ButtonBase.js + 3 modules
-var ButtonBase = __webpack_require__(81);
+var ButtonBase = __webpack_require__(80);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/isMuiElement.js
 var isMuiElement = __webpack_require__(32);
@@ -12663,10 +12653,10 @@ var MenuItem_MenuItem = react["forwardRef"](function MenuItem(props, ref) {
   name: 'MuiMenuItem'
 })(MenuItem_MenuItem));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Select/Select.js + 21 modules
-var Select = __webpack_require__(269);
+var Select = __webpack_require__(268);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/TableCell/TableCell.js
-var TableCell = __webpack_require__(276);
+var TableCell = __webpack_require__(275);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Toolbar/Toolbar.js
 
@@ -13493,6 +13483,7 @@ function Catalog(props) {
 /* harmony default export */ var Catalog_Catalog = __webpack_exports__["a"] = (Catalog);
 
 /***/ }),
+/* 221 */,
 /* 222 */,
 /* 223 */,
 /* 224 */,
@@ -13518,8 +13509,7 @@ function Catalog(props) {
 /* 244 */,
 /* 245 */,
 /* 246 */,
-/* 247 */,
-/* 248 */
+/* 247 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13557,7 +13547,7 @@ function deepmerge(target, source) {
 }
 
 /***/ }),
-/* 249 */
+/* 248 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13717,7 +13707,7 @@ Input.muiName = 'Input';
 })(Input));
 
 /***/ }),
-/* 250 */
+/* 249 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13750,7 +13740,7 @@ function mergeClasses() {
 }
 
 /***/ }),
-/* 251 */
+/* 250 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13780,7 +13770,7 @@ function getThemeProps(params) {
 }
 
 /***/ }),
-/* 252 */
+/* 251 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13993,7 +13983,7 @@ FilledInput.muiName = 'Input';
 })(FilledInput));
 
 /***/ }),
-/* 253 */
+/* 252 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14063,7 +14053,7 @@ var Paper = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function Paper(prop
 })(Paper));
 
 /***/ }),
-/* 254 */
+/* 253 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14077,7 +14067,7 @@ var Paper = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function Paper(prop
 /* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
 /* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6);
 /* harmony import */ var _styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(11);
-/* harmony import */ var _ButtonBase__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(81);
+/* harmony import */ var _ButtonBase__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(80);
 /* harmony import */ var _utils_capitalize__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(7);
 
 
@@ -14419,6 +14409,7 @@ var Button = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function Button(pr
 })(Button));
 
 /***/ }),
+/* 254 */,
 /* 255 */,
 /* 256 */,
 /* 257 */,
@@ -14430,8 +14421,7 @@ var Button = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function Button(pr
 /* 263 */,
 /* 264 */,
 /* 265 */,
-/* 266 */,
-/* 267 */
+/* 266 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14497,8 +14487,8 @@ if (false) {}
 /* harmony default export */ __webpack_exports__["a"] = (ThemeProvider);
 
 /***/ }),
-/* 268 */,
-/* 269 */
+/* 267 */,
+/* 268 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14518,7 +14508,7 @@ var react = __webpack_require__(0);
 var prop_types = __webpack_require__(2);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/mergeClasses/mergeClasses.js
-var mergeClasses = __webpack_require__(250);
+var mergeClasses = __webpack_require__(249);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 2 modules
 var toConsumableArray = __webpack_require__(15);
@@ -14593,7 +14583,7 @@ function createChainedFunction() {
 var useTheme = __webpack_require__(64);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/getThemeProps/getThemeProps.js
-var getThemeProps = __webpack_require__(251);
+var getThemeProps = __webpack_require__(250);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/setRef.js
 var setRef = __webpack_require__(21);
@@ -15434,7 +15424,7 @@ var Modal_Modal = react["forwardRef"](function Modal(inProps, ref) {
  false ? undefined : void 0;
 /* harmony default export */ var esm_Modal_Modal = (Modal_Modal);
 // EXTERNAL MODULE: ./node_modules/react-transition-group/esm/Transition.js + 1 modules
-var Transition = __webpack_require__(82);
+var Transition = __webpack_require__(81);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/useTheme.js
 var styles_useTheme = __webpack_require__(23);
@@ -15600,7 +15590,7 @@ var Grow_Grow = react["forwardRef"](function Grow(props, ref) {
 Grow_Grow.muiSupportAuto = true;
 /* harmony default export */ var esm_Grow_Grow = (Grow_Grow);
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Paper/Paper.js
-var Paper = __webpack_require__(253);
+var Paper = __webpack_require__(252);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Popover/Popover.js
 
@@ -16832,7 +16822,7 @@ var createSvgIcon = __webpack_require__(41);
   d: "M7 10l5 5 5-5z"
 }), 'ArrowDropDown'));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Input/Input.js
-var Input = __webpack_require__(249);
+var Input = __webpack_require__(248);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/NativeSelect/NativeSelectInput.js
 
@@ -17022,10 +17012,10 @@ NativeSelect_NativeSelect.muiName = 'Select';
   name: 'MuiNativeSelect'
 })(NativeSelect_NativeSelect));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FilledInput/FilledInput.js
-var FilledInput = __webpack_require__(252);
+var FilledInput = __webpack_require__(251);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/OutlinedInput/OutlinedInput.js + 1 modules
-var OutlinedInput = __webpack_require__(270);
+var OutlinedInput = __webpack_require__(269);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Select/Select.js
 
@@ -17137,7 +17127,7 @@ Select_Select.muiName = 'Select';
 })(Select_Select));
 
 /***/ }),
-/* 270 */
+/* 269 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17459,12 +17449,12 @@ OutlinedInput_OutlinedInput.muiName = 'Input';
 })(OutlinedInput_OutlinedInput));
 
 /***/ }),
+/* 270 */,
 /* 271 */,
 /* 272 */,
 /* 273 */,
 /* 274 */,
-/* 275 */,
-/* 276 */
+/* 275 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17653,6 +17643,7 @@ var TableCell = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function TableC
 })(TableCell));
 
 /***/ }),
+/* 276 */,
 /* 277 */,
 /* 278 */,
 /* 279 */,
@@ -17667,21 +17658,21 @@ var TableCell = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function TableC
 /* 288 */,
 /* 289 */,
 /* 290 */,
-/* 291 */,
-/* 292 */
+/* 291 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(307);
-module.exports = __webpack_require__(293);
+__webpack_require__(306);
+module.exports = __webpack_require__(292);
 
 
 /***/ }),
-/* 293 */
+/* 292 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
+/* 293 */,
 /* 294 */,
 /* 295 */,
 /* 296 */,
@@ -17694,8 +17685,7 @@ module.exports = __webpack_require__(293);
 /* 303 */,
 /* 304 */,
 /* 305 */,
-/* 306 */,
-/* 307 */
+/* 306 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17714,7 +17704,7 @@ var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
 var react_toastify = __webpack_require__(44);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/ThemeProvider/ThemeProvider.js
-var ThemeProvider = __webpack_require__(267);
+var ThemeProvider = __webpack_require__(266);
 
 // EXTERNAL MODULE: ./src/shared/helpers/globals/GlobalHelper.js
 var GlobalHelper = __webpack_require__(55);
@@ -17722,20 +17712,17 @@ var GlobalHelper = __webpack_require__(55);
 // EXTERNAL MODULE: ./src/shared/stores/Store.js + 3 modules
 var Store = __webpack_require__(47);
 
-// EXTERNAL MODULE: ./src/project/AspNetCore/shared/components/Header/Header.js + 7 modules
+// EXTERNAL MODULE: ./src/project/AspNetCore/shared/components/Header/Header.js + 6 modules
 var Header = __webpack_require__(63);
 
 // EXTERNAL MODULE: ./src/project/AspNetCore/shared/components/MainNavigation/MainNavigation.js
 var MainNavigation = __webpack_require__(60);
 
 // EXTERNAL MODULE: ./src/project/AspNetCore/shared/components/Catalog/Catalog.js + 13 modules
-var Catalog = __webpack_require__(221);
+var Catalog = __webpack_require__(220);
 
 // EXTERNAL MODULE: ./src/shared/components/Footer/Footer.js
 var Footer = __webpack_require__(61);
-
-// EXTERNAL MODULE: ./src/shared/layouts/images/favicon.png
-var favicon = __webpack_require__(80);
 
 // CONCATENATED MODULE: ./src/project/AspNetCore/areas/Products/pages/CategoryPage/CategoryPage.js
 
@@ -17747,10 +17734,6 @@ var favicon = __webpack_require__(80);
 
 
 
-/* eslint-disable no-unused-vars */
-
-
-/* eslint-enable no-unused-vars */
 
 function CategoryPage(props) {
   react_toastify["a" /* toast */].configure();

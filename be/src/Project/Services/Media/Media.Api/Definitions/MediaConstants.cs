@@ -9,6 +9,17 @@ namespace Media.Api.Definitions
             public static readonly string ContainerName = "giuru";
         }
 
+        public struct Headers
+        {
+            public static readonly Guid LogoMediaId = Guid.Parse("85b14b09-856d-4fd0-8af4-7c077953b214");
+            public static readonly Guid LogoMediaVersionId = Guid.Parse("615434fe-5a08-432d-a2c9-5ac4e0830713");
+            public static readonly string LogoMediaUrl = "./Infrastructure/Media/Seeds/Images/Headers/logo.png";
+
+            public static readonly Guid FaviconMediaId = Guid.Parse("0b8ed469-e84c-455b-b616-12a60d38da1c");
+            public static readonly Guid FaviconMediaVersionId = Guid.Parse("5a9a1483-89db-4f70-b77f-c45c12b3001d");
+            public static readonly string FaviconMediaUrl = "./Infrastructure/Media/Seeds/Images/Headers/favicon.png";
+        }
+
         public struct HeroSliderItems
         {
             public static readonly Guid LivingRoomMediaId = Guid.Parse("c6c96ab8-a81f-446f-adc2-d375479ece98");

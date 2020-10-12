@@ -2,14 +2,12 @@
 using Seller.Web.Shared.Headers.ModelBuilders;
 using Foundation.Extensions.ModelBuilders;
 using Seller.Web.Shared.Footers.ModelBuilders;
-using Microsoft.Extensions.Configuration;
-using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.MenuTiles.ModelBuilders;
 using Foundation.PageContent.MenuTiles.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
-using Seller.Web.Areas.Clients.Configurations;
-using Seller.Web.Areas.Clients.Controllers.Configurations;
+using Microsoft.Extensions.Configuration;
+using Seller.Web.Shared.Configurations;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -25,10 +23,7 @@ namespace Seller.Web.Shared.DependencyInjection
 
         public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<ServicesEndpointsConfiguration>(configuration.GetSection("ServicesEndpoints"));
-
-            services.Configure<ApiConfiguration>(configuration.GetSection("ServicesEndpoints").GetSection("Api"));
-            services.Configure<EndpointsConfiguration>(configuration.GetSection("ServicesEndpoints").GetSection("Api").GetSection("Endpoints"));
+            services.Configure<AppSettings>(configuration);
         }
     }
 }

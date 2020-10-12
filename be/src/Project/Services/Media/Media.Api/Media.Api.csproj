@@ -77,4 +77,8 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastructure\Media\Seeds\Images\Headers\" />
+  </ItemGroup>
+
 </Project>

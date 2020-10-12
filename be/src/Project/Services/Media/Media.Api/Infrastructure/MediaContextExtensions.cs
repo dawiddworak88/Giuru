@@ -24,6 +24,7 @@ namespace Media.Api.Infrastructure
 
         public static void EnsureSeeded(this MediaContext context, IConfiguration configuration, IChecksumService checksumService)
         {
+            MediaSeed.SeedHeaders(context, configuration["StorageConnectionString"], checksumService);
             MediaSeed.SeedCategories(context, configuration["StorageConnectionString"], checksumService);
             MediaSeed.SeedHeroSliderItems(context, configuration["StorageConnectionString"], checksumService);
         }

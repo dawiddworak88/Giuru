@@ -198,6 +198,9 @@
   <data name="LastModifiedDate" xml:space="preserve">
     <value>Zuletzt geändertes Datum</value>
   </data>
+  <data name="Logo" xml:space="preserve">
+    <value>Logo</value>
+  </data>
   <data name="MakeTheFuture" xml:space="preserve">
     <value>Machen Sie die Zukunft mit Giuru</value>
   </data>

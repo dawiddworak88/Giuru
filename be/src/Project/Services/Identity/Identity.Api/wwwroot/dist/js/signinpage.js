@@ -2649,10 +2649,7 @@ function LanguageSwitcher(props) {
 }
 
 /* harmony default export */ var LanguageSwitcher_LanguageSwitcher = (LanguageSwitcher);
-// CONCATENATED MODULE: ./src/shared/layouts/images/logo.png
-/* harmony default export */ var logo = ("/dist/images/logo.png");
 // CONCATENATED MODULE: ./src/shared/components/Header/Header.js
-
 
 
 
@@ -2677,7 +2674,7 @@ function Header(props) {
   }, /*#__PURE__*/react_default.a.createElement("a", {
     href: props.logo.targetUrl
   }, /*#__PURE__*/react_default.a.createElement("img", {
-    src: logo,
+    src: props.logoUrl,
     alt: props.logo.logoAltLabel
   })), /*#__PURE__*/react_default.a.createElement("div", {
     role: "button",
@@ -14161,8 +14158,6 @@ function SignInForm(props) {
 }
 
 /* harmony default export */ var SignIn_SignInForm = (SignInForm);
-// CONCATENATED MODULE: ./src/shared/layouts/images/favicon.png
-/* harmony default export */ var favicon = ("/dist/images/favicon.png");
 // CONCATENATED MODULE: ./src/project/Account/areas/Accounts/pages/SignIn/SignInPage.js
 
 
@@ -14170,10 +14165,6 @@ function SignInForm(props) {
 
 
 
-/* eslint-disable no-unused-vars */
-
-
-/* eslint-enable no-unused-vars */
 
 function SignInPage(props) {
   return /*#__PURE__*/react_default.a.createElement(ThemeProvider_ThemeProvider, {

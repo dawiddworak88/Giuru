@@ -8,10 +8,6 @@ import MainNavigation from "../../../../shared/components/MainNavigation/MainNav
 import Catalog from "../../../../shared/components/Catalog/Catalog";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 
-/* eslint-disable no-unused-vars */
-import favicon from "../../../../../../shared/layouts/images/favicon.png";
-/* eslint-enable no-unused-vars */
-
 function CategoryPage(props) {
 
   toast.configure();

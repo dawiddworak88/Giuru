@@ -12,6 +12,12 @@ namespace Media.Api.Infrastructure.Media.Seeds
 {
     public static class MediaSeed
     {
+        public static void SeedHeaders(MediaContext context, string storageConnectionString, IChecksumService checksumService)
+        {
+            SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Headers.LogoMediaId, MediaConstants.Headers.LogoMediaVersionId, MediaConstants.Headers.LogoMediaUrl);
+            SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Headers.FaviconMediaId, MediaConstants.Headers.FaviconMediaVersionId, MediaConstants.Headers.FaviconMediaUrl);
+        }
+
         public static void SeedHeroSliderItems(MediaContext context, string storageConnectionString, IChecksumService checksumService)
         {
             SeedMedia(context, checksumService, storageConnectionString, MediaConstants.HeroSliderItems.LivingRoomMediaId, MediaConstants.HeroSliderItems.LivingRoomMediaVersionId, MediaConstants.HeroSliderItems.LivingRoomMediaUrl);
@@ -29,7 +35,6 @@ namespace Media.Api.Infrastructure.Media.Seeds
 
             SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.BedsMediaId, MediaConstants.Categories.BedsMediaVersionId, MediaConstants.Categories.BedsMediaUrl);
             SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.MattressesMediaId, MediaConstants.Categories.MattressesMediaVersionId, MediaConstants.Categories.MattressesMediaUrl);
-
         }
 
         private static void SeedMedia(MediaContext context, IChecksumService checksumService, string storageConnectionString, Guid mediaId, Guid mediaVersionId, string mediaUrl)

@@ -54,6 +54,8 @@ namespace Account
             services.RegisterDependencies();
 
             services.ConfigureGenericRepositoryOptions(this.Configuration);
+
+            services.ConfigureOptions(this.Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<LocalizationConfiguration> localizationOptions, IUserService userService)

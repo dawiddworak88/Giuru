@@ -4,5 +4,6 @@
     {
         public string TargetUrl { get; set; }
         public string LogoAltLabel { get; set; }
+        public string LogoUrl { get; set; }
     }
 }

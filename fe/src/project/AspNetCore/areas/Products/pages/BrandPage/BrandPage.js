@@ -9,10 +9,6 @@ import BrandDetail from "../../components/BrandDetail/BrandDetail";
 import Catalog from "../../../../shared/components/Catalog/Catalog";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 
-/* eslint-disable no-unused-vars */
-import favicon from "../../../../../../shared/layouts/images/favicon.png";
-/* eslint-enable no-unused-vars */
-
 function BrandPage(props) {
 
   toast.configure();

@@ -8,10 +8,6 @@ import MainNavigation from "../../../../shared/components/MainNavigation/MainNav
 import ProductDetail from "../../components/ProductDetail/ProductDetail";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 
-/* eslint-disable no-unused-vars */
-import favicon from "../../../../../../shared/layouts/images/favicon.png";
-/* eslint-enable no-unused-vars */
-
 function ProductPage(props) {
 
   toast.configure();

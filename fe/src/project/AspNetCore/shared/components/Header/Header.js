@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import { TextField, Button } from "@material-ui/core";
 import LanguageSwitcher from "../../../../../shared/components/LanguageSwitcher/LanguageSwitcher";
 
-import logo from "../../../../../shared/layouts/images/logo.png";
-
 function Header(props) {
 
     const [search, setSearch] = useState("");
@@ -14,7 +12,7 @@ function Header(props) {
             <nav className="navbar is-spaced">
                 <div className="navbar-brand">
                     <a href={props.logo.targetUrl}>
-                        <img src={logo} alt={props.logo.logoAltLabel} />
+                        <img src={props.logoUrl} alt={props.logo.logoAltLabel} />
                     </a>
                 </div>
                 <div className="navbar-menu is-flex is-flex-wrap">
@@ -40,7 +38,7 @@ function Header(props) {
 }
 
 Header.propTypes = {
-    logo: PropTypes.object.isRequired,
+    logoUrl: PropTypes.string.isRequired,
     searchPlaceholderLabel: PropTypes.string.isRequired,
     searchLabel: PropTypes.string.isRequired,
     searchUrl: PropTypes.string.isRequired

@@ -9,10 +9,6 @@ import HeroSlider from "../../components/HeroSlider/HeroSlider";
 import ContentGrid from "../../../../shared/components/ContentGrid/ContentGrid";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 
-/* eslint-disable no-unused-vars */
-import favicon from "../../../../../../shared/layouts/images/favicon.png";
-/* eslint-enable no-unused-vars */
-
 function HomePage(props) {
 
   toast.configure();

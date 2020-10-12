@@ -10,10 +10,6 @@ import Footer from "../../../../../../shared/components/Footer/Footer";
 import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
 import ProductCatalog from "../../components/ProductCatalog/ProductCatalog";
 
-/* eslint-disable no-unused-vars */
-import favicon from "../../../../../../shared/layouts/images/favicon.png";
-/* eslint-enable no-unused-vars */
-
 function ProductPage(props) {
 
   toast.configure();
