@@ -84,41 +84,41 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 }
 
                 viewModel.Images = images;
-            }
 
-            var productVariants = await this.productsRepository.GetProductsAsync(product.ProductVariants, componentModel.Language, componentModel.Token);
+                var productVariants = await this.productsRepository.GetProductsAsync(product.ProductVariants, componentModel.Language, componentModel.Token);
 
-            if (productVariants?.Data != null && productVariants.Data.Any())
-            {
-                var carouselItems = new List<ContentGridCarouselItemViewModel>();
-
-                foreach (var productVariant in productVariants.Data)
+                if (productVariants?.Data != null && productVariants.Data.Any())
                 {
-                    var carouselItem = new ContentGridCarouselItemViewModel
-                    { 
-                        Id = productVariant.Id,
-                        Title = productVariant.Name,
-                        ImageAlt = productVariant.Name,
-                        Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id })
+                    var carouselItems = new List<ContentGridCarouselItemViewModel>();
+
+                    foreach (var productVariant in productVariants.Data)
+                    {
+                        var carouselItem = new ContentGridCarouselItemViewModel
+                        {
+                            Id = productVariant.Id,
+                            Title = productVariant.Name,
+                            ImageAlt = productVariant.Name,
+                            Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id })
+                        };
+
+                        if (productVariant.Images != null && productVariant.Images.Any())
+                        {
+                            carouselItem.ImageUrl = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), ContentGridConstants.CarouselItemImageMaxWidth, ContentGridConstants.CarouselItemImageMaxHeight);
+                        }
+
+                        carouselItems.Add(carouselItem);
+                    }
+
+                    viewModel.ProductVariants = new List<ContentGridItemViewModel>
+                    {
+                        new ContentGridItemViewModel
+                        {
+                            Id = product.Id,
+                            Title = this.productLocalizer.GetString("ProductVariants"),
+                            CarouselItems = carouselItems
+                        }
                     };
-
-                    if (productVariant.Images != null && productVariant.Images.Any())
-                    {
-                        carouselItem.ImageUrl = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), ContentGridConstants.CarouselItemImageMaxWidth, ContentGridConstants.CarouselItemImageMaxHeight);
-                    }
-
-                    carouselItems.Add(carouselItem);
                 }
-
-                viewModel.ProductVariants = new List<ContentGridItemViewModel>
-                {
-                    new ContentGridItemViewModel
-                    {
-                        Id = product.Id,
-                        Title = this.productLocalizer.GetString("ProductVariants"),
-                        CarouselItems = carouselItems
-                    }
-                };
             }
 
             return viewModel;
