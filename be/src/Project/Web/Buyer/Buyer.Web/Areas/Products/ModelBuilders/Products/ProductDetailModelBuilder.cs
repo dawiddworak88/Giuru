@@ -2,6 +2,7 @@
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Definitions;
 using Buyer.Web.Shared.Images.ViewModels;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
@@ -85,7 +86,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 viewModel.Images = images;
 
-                var productVariants = await this.productsRepository.GetProductsAsync(product.ProductVariants, componentModel.Language, componentModel.Token);
+                var productVariants = await this.productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token);
 
                 var carouselItems = new List<ContentGridCarouselItemViewModel>();
 

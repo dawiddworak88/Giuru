@@ -40,7 +40,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
             if (categoryId.HasValue || brandId.HasValue)
             {
-                var pagedProducts = await this.productsRepository.GetProductsAsync(categoryId, brandId, language, searchTerm, pageIndex, itemsPerPage, token);
+                var pagedProducts = await this.productsRepository.GetProductsAsync(null, categoryId, brandId, language, searchTerm, pageIndex, itemsPerPage, token);
 
                 if (pagedProducts?.Data != null)
                 {
@@ -61,11 +61,8 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         {
                             var imageGuid = product.Images.FirstOrDefault();
 
-                            if (imageGuid != null)
-                            {
-                                catalogItem.ImageAlt = product.Name;
-                                catalogItem.ImageUrl = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, imageGuid, ProductConstants.ProductsCatalogItemImageWidth, ProductConstants.ProductsCatalogItemImageHeight);
-                            }
+                            catalogItem.ImageAlt = product.Name;
+                            catalogItem.ImageUrl = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, imageGuid, ProductConstants.ProductsCatalogItemImageWidth, ProductConstants.ProductsCatalogItemImageHeight);
                         }
 
                         catalogItemList.Add(catalogItem);

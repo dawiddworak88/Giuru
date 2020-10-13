@@ -24,6 +24,11 @@ namespace Foundation.Extensions.Services.MediaServices
 
         public string GetMediaUrl(string baseUrl, Guid mediaId)
         {
+            if (string.IsNullOrWhiteSpace(baseUrl) || mediaId == Guid.Empty)
+            {
+                return string.Empty;
+            }
+
             return $"{this.httpContextAccessor.HttpContext.Request.Scheme}://{baseUrl}{EndpointConstants.Media.MediaApiEndpoint}/{mediaId}";
         }
     }

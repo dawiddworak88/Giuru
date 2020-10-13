@@ -51,55 +51,17 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(Guid? categoryId, Guid? brandId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
+        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? brandId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
         {
             var productsRequestModel = new ProductsRequestModel
             {
+                Ids = ids.ToEndpointParameterString(),
                 CategoryId = categoryId,
                 BrandId = brandId,
                 Language = language,
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage
-            };
-
-            var apiRequest = new ApiRequest<ProductsRequestModel>
-            {
-                Data = this.apiClientService.InitializeRequestModelContext(productsRequestModel),
-                AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
-            };
-
-            var response = await this.apiClientService.GetAsync<ApiRequest<ProductsRequestModel>, ProductsRequestModel, PagedResults<IEnumerable<ProductResponseModel>>>(apiRequest);
-
-            if (response.IsSuccessStatusCode && response.Data?.Data != null)
-            {
-                var products = new List<Product>();
-
-                foreach (var productResponse in response.Data.Data)
-                {
-                    var product = this.MapProductResponseToProduct(productResponse);
-
-                    products.Add(product);
-                }
-
-                return new PagedResults<IEnumerable<Product>>(response.Data.Total, response.Data.PageSize)
-                {
-                    Data = products
-                };
-            }
-
-            return default;
-        }
-
-        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(IEnumerable<Guid> ids, string language, string token)
-        {
-            var productsRequestModel = new ProductsRequestModel
-            {
-                Ids = ids.ToEndpointParameterString(),
-                Language = language,
-                PageIndex = PaginationConstants.DefaultPageIndex,
-                ItemsPerPage = PaginationConstants.DefaultPageSize
             };
 
             var apiRequest = new ApiRequest<ProductsRequestModel>
