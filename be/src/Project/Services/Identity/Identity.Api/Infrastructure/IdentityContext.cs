@@ -19,6 +19,7 @@ namespace Identity.Api.Infrastructure
         }
 
         public DbSet<Organisation> Organisations { get; set; }
+        public DbSet<OrganisationTranslation> OrganisationTranslations { get; set; }
         public DbSet<Connection> Connections { get; set; }
         public DbSet<ApplicationUser> Accounts { get; set; }
         public DbSet<Address> Addresses { get; set; }

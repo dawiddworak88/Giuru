@@ -155,6 +155,7 @@ namespace Identity.Api.Infrastructure.Migrations
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Key = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
+                    ContactEmail = table.Column<string>(nullable: false),
                     Domain = table.Column<string>(nullable: false),
                     IsSeller = table.Column<bool>(nullable: false),
                     Language = table.Column<string>(nullable: false)
@@ -162,6 +163,23 @@ namespace Identity.Api.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Organisations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrganisationTranslations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    Language = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    OrganisationId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrganisationTranslations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -344,6 +362,9 @@ namespace Identity.Api.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Organisations");
+
+            migrationBuilder.DropTable(
+                name: "OrganisationTranslations");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

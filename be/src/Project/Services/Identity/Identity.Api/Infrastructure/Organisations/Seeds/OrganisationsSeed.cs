@@ -4,6 +4,7 @@ using Identity.Api.Infrastructure.Organisations.Entities;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
+using System.Web;
 
 namespace Identity.Api.Infrastructure.Organisations.Seeds
 {
@@ -29,9 +30,35 @@ namespace Identity.Api.Infrastructure.Organisations.Seeds
                             Domain = organisationConfiguration[OrganisationsSeedConstants.DomainIndex],
                             IsSeller = bool.Parse(organisationConfiguration[OrganisationsSeedConstants.IsSellerIndex]),
                             Language = organisationConfiguration[OrganisationsSeedConstants.LanguageIndex],
+                            ContactEmail = organisationConfiguration[OrganisationsSeedConstants.ContactEmailIndex]
                         };
 
                         context.Organisations.Add(EntitySeedHelper.SeedEntity(organisationEntity));
+
+                        var plOrganisationTranslationEntity = new OrganisationTranslation
+                        {
+                            Language = "pl",
+                            OrganisationId = Guid.Parse(organisationConfiguration[OrganisationsSeedConstants.IdIndex]),
+                            Description = HttpUtility.UrlDecode(organisationConfiguration[OrganisationsSeedConstants.PlDescriptionIndex])
+                        };
+
+                        var enOrganisationTranslationEntity = new OrganisationTranslation
+                        {
+                            Language = "en",
+                            OrganisationId = Guid.Parse(organisationConfiguration[OrganisationsSeedConstants.IdIndex]),
+                            Description = HttpUtility.UrlDecode(organisationConfiguration[OrganisationsSeedConstants.EnDescriptionIndex])
+                        };
+
+                        var deOrganisationTranslationEntity = new OrganisationTranslation
+                        {
+                            Language = "de",
+                            OrganisationId = Guid.Parse(organisationConfiguration[OrganisationsSeedConstants.IdIndex]),
+                            Description = HttpUtility.UrlDecode(organisationConfiguration[OrganisationsSeedConstants.DeDescriptionIndex])
+                        };
+
+                        context.OrganisationTranslations.Add(EntitySeedHelper.SeedEntity(plOrganisationTranslationEntity));
+                        context.OrganisationTranslations.Add(EntitySeedHelper.SeedEntity(enOrganisationTranslationEntity));
+                        context.OrganisationTranslations.Add(EntitySeedHelper.SeedEntity(deOrganisationTranslationEntity));
 
                         var appSecretOrganisation = new AppSecretOrganisation
                         { 
