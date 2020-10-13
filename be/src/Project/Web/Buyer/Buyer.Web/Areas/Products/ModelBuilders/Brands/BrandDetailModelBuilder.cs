@@ -1,32 +1,35 @@
 ﻿using Buyer.Web.Areas.Products.ViewModels.Brands;
+using Buyer.Web.Shared.Configurations;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.Localization;
+using Foundation.Extensions.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Localization;
+using Foundation.PageContent.Components.Headers.Definitions;
+using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
 {
     public class BrandDetailModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, BrandDetailViewModel>
     {
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<ProductResources> productLocalizer;
-        private readonly LinkGenerator linkGenerator;
+        private readonly IMediaService mediaService;
+        private readonly IOptions<AppSettings> options;
 
         public BrandDetailModelBuilder(
-            IStringLocalizer<GlobalResources> globalLocalizer,
-            IStringLocalizer<ProductResources> productLocalizer,
-            LinkGenerator linkGenerator)
+            IOptions<AppSettings> options,
+            IMediaService mediaService)
         {
-            this.globalLocalizer = globalLocalizer;
-            this.productLocalizer = productLocalizer;
-            this.linkGenerator = linkGenerator;
+            this.options = options;
+            this.mediaService = mediaService;
         }
 
         public async Task<BrandDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            return default;
+            var viewModel = new BrandDetailViewModel
+            {
+                LogoUrl = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, LogoConstants.LogoMediaId)
+            };
+
+            return viewModel;
         }
     }
 }
