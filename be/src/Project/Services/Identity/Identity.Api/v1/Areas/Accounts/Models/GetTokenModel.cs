@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Identity.Api.Areas.Accounts.Models
+namespace Identity.Api.v1.Areas.Accounts.Models
 {
     public class GetTokenModel
     {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
-namespace Identity.Api.Areas.Accounts.Repositories.AppSecrets
+namespace Identity.Api.v1.Areas.Accounts.Repositories.AppSecrets
 {
     public class AppSecretRepository : IAppSecretRepository
     {

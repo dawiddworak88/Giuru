@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Foundation.Account.Definitions;
 using System;
-using Identity.Api.Areas.Accounts.Repositories.AppSecrets;
+using Identity.Api.v1.Areas.Accounts.Repositories.AppSecrets;
 using Foundation.ApiExtensions.Definitions;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +10,7 @@ using Identity.Api.Infrastructure.Accounts.Entities;
 using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace Identity.Api.Areas.Accounts.Services.TokenServices
+namespace Identity.Api.v1.Areas.Accounts.Services.TokenServices
 {
     public class TokenService : ITokenService
     {

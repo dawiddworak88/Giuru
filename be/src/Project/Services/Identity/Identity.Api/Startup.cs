@@ -16,6 +16,10 @@ using Identity.Api.Infrastructure.DependencyInjection;
 using Identity.Api.Areas.Accounts.DependencyInjection;
 using Identity.Api.Areas.Accounts.Services.UserServices;
 using Microsoft.AspNetCore.Http;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+using System.IO;
+using System;
 
 namespace Account
 {
@@ -56,6 +60,17 @@ namespace Account
             services.ConfigureGenericRepositoryOptions(this.Configuration);
 
             services.ConfigureOptions(this.Configuration);
+
+            services.AddApiVersioning();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Identity API", Version = "v1" });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<LocalizationConfiguration> localizationOptions, IUserService userService)
@@ -74,13 +89,21 @@ namespace Account
 
             app.UseIdentityServer();
 
-            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax,  });
+            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
 
             app.UseAuthorization();
 
             app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
 
             app.UseSecurityHeaders(this.Configuration);
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity API");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseEndpoints(endpoints =>
             {

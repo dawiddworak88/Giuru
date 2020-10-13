@@ -4,7 +4,6 @@ using Identity.Api.Infrastructure.Accounts.Entities;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Identity.Api.Infrastructure.Accounts.Seeds
 {
