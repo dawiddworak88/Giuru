@@ -57,7 +57,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                             InStock = false
                         };
 
-                        if (product.Images != null && product.Images.Any())
+                        if (product.Images != null)
                         {
                             var imageGuid = product.Images.FirstOrDefault();
 

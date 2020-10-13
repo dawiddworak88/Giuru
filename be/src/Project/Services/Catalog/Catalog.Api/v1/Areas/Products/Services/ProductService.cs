@@ -11,6 +11,7 @@ using Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories;
 using Foundation.GenericRepository.Services;
 using Catalog.Api.v1.Areas.Products.SearchModels;
 using System;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Catalog.Api.v1.Areas.Products.Services
 {
@@ -63,46 +64,37 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
                 await this.catalogContext.ProductTranslations.AddAsync(this.entityService.EnrichEntity(productTranslation));
 
-                if (model.Images != null && model.Images.Any())
+                foreach (var imageId in model.Images.OrEmptyIfNull())
                 {
-                    foreach (var imageId in model.Images)
+                    var productImage = new ProductImage
                     {
-                        var productImage = new ProductImage
-                        {
-                            MediaId = imageId,
-                            ProductId = product.Id
-                        };
+                        MediaId = imageId,
+                        ProductId = product.Id
+                    };
 
-                        await this.catalogContext.ProductImages.AddAsync(this.entityService.EnrichEntity(productImage));
-                    }
+                    await this.catalogContext.ProductImages.AddAsync(this.entityService.EnrichEntity(productImage));
                 }
 
-                if (model.Videos != null && model.Videos.Any())
+                foreach (var videoId in model.Videos.OrEmptyIfNull())
                 {
-                    foreach (var videoId in model.Videos)
+                    var productVideo = new ProductVideo
                     {
-                        var productVideo = new ProductVideo
-                        {
-                            MediaId = videoId,
-                            ProductId = product.Id
-                        };
+                        MediaId = videoId,
+                        ProductId = product.Id
+                    };
 
-                        await this.catalogContext.ProductVideos.AddAsync(this.entityService.EnrichEntity(productVideo));
-                    }
+                    await this.catalogContext.ProductVideos.AddAsync(this.entityService.EnrichEntity(productVideo));
                 }
 
-                if (model.Files != null && model.Files.Any())
+                foreach (var fileId in model.Files.OrEmptyIfNull())
                 {
-                    foreach (var fileId in model.Files)
+                    var productFile = new ProductFile
                     {
-                        var productFile = new ProductFile
-                        {
-                            MediaId = fileId,
-                            ProductId = product.Id
-                        };
+                        MediaId = fileId,
+                        ProductId = product.Id
+                    };
 
-                        await this.catalogContext.ProductFiles.AddAsync(this.entityService.EnrichEntity(productFile));
-                    }
+                    await this.catalogContext.ProductFiles.AddAsync(this.entityService.EnrichEntity(productFile));
                 }
 
                 await this.catalogContext.SaveChangesAsync();
@@ -151,11 +143,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
                 if (!searchResultItem.PrimaryProductIdHasValue)
                 {
                     var productVariants = await this.productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, model.Language);
-
-                    if (productVariants?.Data != null && productVariants.Data.Any())
-                    {
-                        productSearchModel.ProductVariants = productVariants.Data.Select(x => x.ProductId);
-                    }
+                    productSearchModel.ProductVariants = productVariants.Data?.Select(x => x.ProductId);
                 }
 
                 return productSearchModel;
@@ -177,11 +165,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
                     if (!searchResultItem.PrimaryProductIdHasValue)
                     {
                         var productVariants = await this.productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, language);
-
-                        if (productVariants?.Data != null && productVariants.Data.Any())
-                        {
-                            productSearchModel.ProductVariants = productVariants.Data.Select(x => x.ProductId);
-                        }
+                        productSearchModel.ProductVariants = productVariants.Data?.Select(x => x.ProductId);
                     }
 
                     products.Add(productSearchModel);

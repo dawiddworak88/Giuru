@@ -16,5 +16,10 @@ namespace Foundation.Extensions.ExtensionMethods
 
             return default;
         }
+        
+        public static IEnumerable<T> OrEmptyIfNull<T>(this IEnumerable<T> source)
+        {
+            return source ?? Enumerable.Empty<T>();
+        }
     }
 }
