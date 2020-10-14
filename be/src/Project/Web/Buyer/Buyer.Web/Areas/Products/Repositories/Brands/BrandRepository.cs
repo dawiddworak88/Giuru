@@ -34,7 +34,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Brands
             {
                 Data = this.apiClientService.InitializeRequestModelContext(productsRequestModel),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Catalog.CategoryApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Seller.SellerApiEndpoint}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, BrandResponseModel>(apiRequest);

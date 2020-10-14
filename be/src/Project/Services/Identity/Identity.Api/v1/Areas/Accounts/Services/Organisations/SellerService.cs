@@ -20,7 +20,7 @@ namespace Identity.Api.v1.Areas.Accounts.Services.Organisations
         {
             var result = new SellerResultModel();
 
-            var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.IsActive);
+            var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.IsSeller && x.IsActive);
 
             if (organisation != null)
             {
