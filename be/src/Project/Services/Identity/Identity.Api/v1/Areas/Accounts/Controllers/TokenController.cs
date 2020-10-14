@@ -1,5 +1,5 @@
 ﻿using Identity.Api.v1.Areas.Accounts.Models;
-using Identity.Api.v1.Areas.Accounts.Services.TokenServices;
+using Identity.Api.v1.Areas.Accounts.Services.Tokens;
 using Foundation.ApiExtensions.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,14 +10,13 @@ namespace Identity.Api.v1.Areas.Accounts.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Produces("application/json")]
     [AllowAnonymous]
     [ApiController]
-    public class TokenApiController : BaseApiController
+    public class TokenController : BaseApiController
     {
         private readonly ITokenService tokenService;
 
-        public TokenApiController(ITokenService tokenService)
+        public TokenController(ITokenService tokenService)
         {
             this.tokenService = tokenService;
         }

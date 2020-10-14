@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Identity.Api.v1.Areas.Accounts.Services.TokenServices
+namespace Identity.Api.v1.Areas.Accounts.Services.Tokens
 {
     public interface ITokenService
     {

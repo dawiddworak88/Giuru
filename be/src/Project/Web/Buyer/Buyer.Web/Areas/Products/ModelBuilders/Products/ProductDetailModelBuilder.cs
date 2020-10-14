@@ -67,7 +67,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             {
                 viewModel.Title = product.Name;
                 viewModel.BrandName = product.BrandName;
-                viewModel.BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.BrandId });
+                viewModel.BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.SellerId });
                 viewModel.Description = product.Description;
                 viewModel.Sku = product.Sku;
 

@@ -9,5 +9,10 @@
             public static readonly string ProductsApiEndpoint = "/api/v1/products";
             public static readonly string ProductApiEndpoint = "/api/v1/product";
         }
+
+        public struct Seller
+        {
+            public static readonly string SellerApiEndpoint = "/api/v1/seller";
+        }
     }
 }

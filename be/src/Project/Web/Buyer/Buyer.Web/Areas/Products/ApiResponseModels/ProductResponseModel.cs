@@ -13,7 +13,7 @@ namespace Buyer.Web.Areas.Products.ApiResponseModels
         public bool IsNew { get; set; }
         public bool IsProtected { get; set; }
         public string FormData { get; set; }
-        public Guid BrandId { get; set; }
+        public Guid SellerId { get; set; }
         public string BrandName { get; set; }
         public Guid CategoryId { get; set; }
         public string CategoryName { get; set; }

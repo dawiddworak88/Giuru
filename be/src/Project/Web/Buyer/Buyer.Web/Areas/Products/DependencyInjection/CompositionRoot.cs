@@ -2,6 +2,7 @@
 using Buyer.Web.Areas.Products.ModelBuilders.Brands;
 using Buyer.Web.Areas.Products.ModelBuilders.Categories;
 using Buyer.Web.Areas.Products.ModelBuilders.Products;
+using Buyer.Web.Areas.Products.Repositories.Brands;
 using Buyer.Web.Areas.Products.Repositories.Categories;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.Services.Products;
@@ -18,6 +19,7 @@ namespace Buyer.Web.Areas.Products.DependencyInjection
     {
         public static void RegisterProductDependencies(this IServiceCollection services)
         {
+            services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
 

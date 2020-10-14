@@ -188,7 +188,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
                 Images = searchResultItem.Images,
                 Files = searchResultItem.Files,
                 Videos = searchResultItem.Videos,
-                BrandId = searchResultItem.BrandId,
+                SellerId = searchResultItem.SellerId,
                 BrandName = searchResultItem.BrandName,
                 CategoryId = searchResultItem.CategoryId,
                 CategoryName = searchResultItem.CategoryName,

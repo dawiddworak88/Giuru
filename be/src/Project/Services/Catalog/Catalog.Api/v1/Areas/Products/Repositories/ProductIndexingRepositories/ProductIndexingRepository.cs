@@ -63,7 +63,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories
                         document.productId = product.Id;
                         document.categoryId = product.CategoryId;
                         document.categoryName = categoryTranslations.Name;
-                        document.brandId = product.Brand.Id;
+                        document.sellerId = product.Brand.SellerId;
                         document.brandName = product.Brand.Name;
                         document.isNew = product.IsNew;
                         document.isProtected = product.IsProtected;

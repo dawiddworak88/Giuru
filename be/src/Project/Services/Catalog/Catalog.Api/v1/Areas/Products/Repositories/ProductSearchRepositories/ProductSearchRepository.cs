@@ -17,7 +17,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
             this.elasticClient = elasticClient;
         }
 
-        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? categoryId, Guid? brandId, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? categoryId, Guid? sellerId, string searchTerm, int pageIndex, int itemsPerPage)
         {
             var query = Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true)
@@ -28,9 +28,9 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.CategoryId.Suffix("keyword")).Value(categoryId.Value));
             }
 
-            if (brandId.HasValue)
+            if (sellerId.HasValue)
             {
-                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.BrandId.Suffix("keyword")).Value(brandId.Value));
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId.Suffix("keyword")).Value(sellerId.Value));
             }
 
             if (!string.IsNullOrWhiteSpace(searchTerm))

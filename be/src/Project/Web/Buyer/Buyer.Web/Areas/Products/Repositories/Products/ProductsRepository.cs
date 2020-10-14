@@ -51,13 +51,13 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? brandId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
+        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
         {
             var productsRequestModel = new ProductsRequestModel
             {
                 Ids = ids.ToEndpointParameterString(),
                 CategoryId = categoryId,
-                BrandId = brandId,
+                SellerId = sellerId,
                 Language = language,
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
@@ -104,7 +104,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 IsNew = productResponse.IsNew,
                 IsProtected = productResponse.IsProtected,
                 FormData = productResponse.FormData,
-                BrandId = productResponse.BrandId,
+                SellerId = productResponse.SellerId,
                 BrandName = productResponse.BrandName,
                 CategoryId = productResponse.CategoryId,
                 CategoryName = productResponse.CategoryName,

@@ -19,11 +19,11 @@ namespace Buyer.Web.Areas.Brands.Controllers
             this.brandPageModelBuilder = brandPageModelBuilder;
         }
 
-        public async Task<IActionResult> Index(Guid? brandId)
+        public async Task<IActionResult> Index(Guid? id)
         {
             var componentModel = new ComponentModelBase
             {
-                Id = brandId,
+                Id = id,
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated
             };

@@ -34,13 +34,13 @@ namespace Buyer.Web.Areas.Products.Services.Products
             this.linkGenerator = linkGenerator;
         }
 
-        public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(Guid? categoryId, Guid? brandId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
+        public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(Guid? categoryId, Guid? sellerId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
         {
             var catalogItemList = new List<CatalogItemViewModel>();
 
-            if (categoryId.HasValue || brandId.HasValue)
+            if (categoryId.HasValue || sellerId.HasValue)
             {
-                var pagedProducts = await this.productsRepository.GetProductsAsync(null, categoryId, brandId, language, searchTerm, pageIndex, itemsPerPage, token);
+                var pagedProducts = await this.productsRepository.GetProductsAsync(null, categoryId, sellerId, language, searchTerm, pageIndex, itemsPerPage, token);
 
                 if (pagedProducts?.Data != null)
                 {
@@ -52,7 +52,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                             Sku = product.Sku,
                             Title = product.Name,
                             Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
-                            BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.BrandId }),
+                            BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId }),
                             BrandName = product.BrandName,
                             InStock = false
                         };

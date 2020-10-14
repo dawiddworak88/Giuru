@@ -10,7 +10,7 @@ using Identity.Api.Infrastructure.Accounts.Entities;
 using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace Identity.Api.v1.Areas.Accounts.Services.TokenServices
+namespace Identity.Api.v1.Areas.Accounts.Services.Tokens
 {
     public class TokenService : ITokenService
     {

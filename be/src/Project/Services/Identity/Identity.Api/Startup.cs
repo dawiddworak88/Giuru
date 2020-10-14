@@ -13,13 +13,13 @@ using Foundation.Account.DependencyInjection;
 using Foundation.GenericRepository.DependencyInjection;
 using Foundation.Extensions.Definitions;
 using Identity.Api.Infrastructure.DependencyInjection;
-using Identity.Api.Areas.Accounts.DependencyInjection;
 using Identity.Api.Areas.Accounts.Services.UserServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.IO;
 using System;
+using Identity.Api.Areas.Accounts.Configurations;
 
 namespace Account
 {
