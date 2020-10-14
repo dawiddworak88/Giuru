@@ -14826,7 +14826,7 @@ function Header(props) {
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "navbar-brand"
   }, /*#__PURE__*/react_default.a.createElement("a", {
-    href: props.logo.targetUrl
+    href: props.targetUrl
   }, /*#__PURE__*/react_default.a.createElement("img", {
     src: props.logoUrl,
     alt: props.logo.logoAltLabel
