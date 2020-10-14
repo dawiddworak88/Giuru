@@ -11,8 +11,8 @@ function Header(props) {
         <header>
             <nav className="navbar is-spaced">
                 <div className="navbar-brand">
-                    <a href={props.targetUrl}>
-                        <img src={props.logoUrl} alt={props.logo.logoAltLabel} />
+                    <a href={props.logo.targetUrl}>
+                        <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} />
                     </a>
                 </div>
                 <div className="navbar-menu is-flex is-flex-wrap">
@@ -38,8 +38,7 @@ function Header(props) {
 }
 
 Header.propTypes = {
-    logoUrl: PropTypes.string.isRequired,
-    targetUrl: PropTypes.string.isRequired,
+    logo: PropTypes.object.isRequired,
     searchPlaceholderLabel: PropTypes.string.isRequired,
     searchLabel: PropTypes.string.isRequired,
     searchUrl: PropTypes.string.isRequired
