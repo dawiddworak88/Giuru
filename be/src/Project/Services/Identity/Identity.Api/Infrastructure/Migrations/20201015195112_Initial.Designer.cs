@@ -11,7 +11,7 @@ using NetTopologySuite.Geometries;
 namespace Identity.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20201013211116_Initial")]
+    [Migration("20201015195112_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -186,6 +186,34 @@ namespace Identity.Api.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Clients");
+                });
+
+            modelBuilder.Entity("Identity.Api.Infrastructure.Contents.Entities.Content", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Contents");
                 });
 
             modelBuilder.Entity("Identity.Api.Infrastructure.Organisations.Entities.AddressOrganisation", b =>

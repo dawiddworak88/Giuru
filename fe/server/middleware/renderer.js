@@ -10,6 +10,7 @@ import BrandPage from "../../src/project/AspNetCore/areas/Products/pages/BrandPa
 
 // Account
 import SignInPage from "../../src/project/Account/areas/Accounts/pages/SignIn/SignInPage";
+import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
 
 // Seller Portal
 import OrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage";
@@ -26,6 +27,7 @@ const Components = {
 	BuyerProductPage,
 	BrandPage,
 	SignInPage,
+	ContentPage,
 	OrderPage,
 	OrderDetailPage,
 	ImportOrderPage,

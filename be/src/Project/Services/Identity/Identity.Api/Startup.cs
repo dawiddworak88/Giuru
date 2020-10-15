@@ -55,8 +55,6 @@ namespace Account
 
             services.RegisterGeneralDependencies();
 
-            services.RegisterDependencies();
-
             services.ConfigureGenericRepositoryOptions(this.Configuration);
 
             services.ConfigureOptions(this.Configuration);

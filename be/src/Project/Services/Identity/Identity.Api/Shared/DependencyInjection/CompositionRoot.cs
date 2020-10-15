@@ -14,6 +14,8 @@ using Identity.Api.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using IdentityServer4.Services;
 using Identity.Api.v1.Areas.Accounts.DependencyInjection;
+using Identity.Api.Areas.Accounts.DependencyInjection;
+using Identity.Api.Areas.Home.DependencyInjection;
 
 namespace Identity.Api.Shared.DependencyInjection
 {
@@ -63,9 +65,9 @@ namespace Identity.Api.Shared.DependencyInjection
 
             services.AddAuthentication();
 
-            // Register services
-            services.RegisterDependencies();
+            services.RegisterAccountsViewsDependencies();
             services.RegisterAccountsApiDependencies();
+            services.RegisterHomeViewsDependencies();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAppSecretRepository, AppSecretRepository>();
         }

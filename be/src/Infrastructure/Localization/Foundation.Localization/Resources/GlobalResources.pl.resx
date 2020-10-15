@@ -258,6 +258,9 @@
   <data name="Products" xml:space="preserve">
     <value>Produkty</value>
   </data>
+  <data name="Regulations" xml:space="preserve">
+    <value>Regulamin</value>
+  </data>
   <data name="Results" xml:space="preserve">
     <value>wyniki</value>
   </data>
