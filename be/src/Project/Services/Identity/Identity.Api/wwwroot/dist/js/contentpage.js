@@ -1122,7 +1122,7 @@ function Header(props) {
   }, /*#__PURE__*/react_default.a.createElement("a", {
     href: props.logo.targetUrl
   }, /*#__PURE__*/react_default.a.createElement("img", {
-    src: props.logoUrl,
+    src: props.logo.logoUrl,
     alt: props.logo.logoAltLabel
   })), /*#__PURE__*/react_default.a.createElement("div", {
     role: "button",

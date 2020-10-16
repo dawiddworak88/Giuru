@@ -1,7 +1,6 @@
 ﻿using Foundation.Security.Definitions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
-using System.Runtime.CompilerServices;
 
 namespace Foundation.Security.DependencyInjection
 {

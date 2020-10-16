@@ -3,6 +3,7 @@
 @using Microsoft.Extensions.Localization
 @using Microsoft.Extensions.Options;
 @using Buyer.Web.Shared.Configurations
+@using Foundation.Security.Definitions
 @inject IOptions<AppSettings> Options
 @inject IStringLocalizer<CookieConsentResources> CookieConsentnLocalizer
 
@@ -10,13 +11,15 @@
     var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
     var showBanner = !consentFeature?.CanTrack ?? false;
     var cookieString = consentFeature?.CreateConsentCookie();
+    var regulationsUrl = $"{this.Options.Value.IdentityUrl}{SecurityConstants.RegulationsEndpoint}";
+    var privacyPolicyUrl = $"{this.Options.Value.IdentityUrl}{SecurityConstants.PrivacyPolicyEndpoint}";
 }
 
 @if (showBanner)
 {
     <div id="cookieConsent" class="cookie-popup" role="alert">
         <div class="cookie-popup__text">
-            @CookieConsentnLocalizer.GetString("CookieConsentText") <a href="@this.Options.Value.IdentityUrl/Home/Content/Regulations" target="_blank">@CookieConsentnLocalizer.GetString("RegulationsText")</a> @CookieConsentnLocalizer.GetString("AndText")<a href="@this.Options.Value.IdentityUrl/Home/Content/PrivacyPolicy" target="_blank">@CookieConsentnLocalizer.GetString("PrivacyPolicyText")</a>.
+            @CookieConsentnLocalizer.GetString("CookieConsentText") <a href="@regulationsUrl" target="_blank">@CookieConsentnLocalizer.GetString("RegulationsText")</a> @CookieConsentnLocalizer.GetString("AndText")<a href="@privacyPolicyUrl" target="_blank">@CookieConsentnLocalizer.GetString("PrivacyPolicyText")</a>.
             <button type="button" class="button is-small is-dark" data-cookie-string="@cookieString">@CookieConsentnLocalizer.GetString("Accept")</button>
         </div>
     </div>
