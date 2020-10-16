@@ -46,7 +46,7 @@ var brandDetail = {
     name: "eltap",
     logoUrl: "https://eltap.pl/templates/default/img/logo.jpg",
     description: "The ELTAP upholstered furniture factory was established in 1993. Its founder is Leszek Dworak, who, together with his wife, ran the company until 2020 - since then the company changed its legal status to ELTAP Spółka z ograniczoną odpowiedzialnością Sp.k. which the son joined. Over the years, as a result of development, the company has gained the name of a well-known and respected brand on the Polish and international market.",
-    files: files
+    files
 };
 
 export const BrandPageStory = () => <BrandPage header={header} mainNavigation={mainNavigation} brandDetail={brandDetail} catalog={catalog} footer={footer} />
