@@ -31,6 +31,13 @@ namespace AspNetCore
 
             services.AddCultureRouteConstraint();
 
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
+                options.Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
+            });
+
             services.AddControllersWithViews();
 
             services.RegisterClientAccountDependencies(this.Configuration);
@@ -44,12 +51,6 @@ namespace AspNetCore
             services.RegisterApiExtensionsDependencies();
 
             services.ConfigureOptions(this.Configuration);
-
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.None;
-            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<LocalizationConfiguration> localizationOptions)
@@ -62,6 +63,8 @@ namespace AspNetCore
 
             app.UseGeneralStaticFiles();
 
+            app.UseCookiePolicy();
+
             app.UseRouting();
 
             app.UseAuthenticationAuthorization();
@@ -69,8 +72,6 @@ namespace AspNetCore
             app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
 
             app.UseSecurityHeaders(this.Configuration);
-
-            app.UseCookiePolicy();
 
             app.UseEndpoints(endpoints =>
             {
