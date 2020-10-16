@@ -37,9 +37,8 @@ function Header(props) {
 }
 
 Header.propTypes = {
-    logoUrl: PropTypes.string.isRequired,
-    links: PropTypes.array.isRequired,
-    logoAltLabel: PropTypes.string.isRequired
+    logo: PropTypes.object.isRequired,
+    links: PropTypes.array.isRequired
 };
 
 export default Header;
