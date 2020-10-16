@@ -6,10 +6,13 @@ function ContentDetail(props) {
 
     return (
 
-        <section className="content-detail section">
-            <h1 className="title is-3">{props.title}</h1>
-            <div>
-                {parse(props.content)}
+        <section className="section">
+            <div className="container">
+                <div class="content has-text-justified"></div>
+                <h1 className="title is-3">{props.title}</h1>
+                <div>
+                    {parse(props.content)}
+                </div>
             </div>
         </section>
     );
