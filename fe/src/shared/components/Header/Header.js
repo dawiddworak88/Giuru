@@ -13,7 +13,7 @@ function Header(props) {
             <nav className="navbar is-spaced">
                 <div className="navbar-brand">
                     <a href={props.logo.targetUrl}>
-                        <img src={props.logoUrl} alt={props.logo.logoAltLabel} />
+                        <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} />
                     </a>
                     <div role="button" onClick={() => setIsActive(!isActive)} className={isActive ? "navbar-burger is-active" : "navbar-burger"} aria-label="menu" aria-expanded="false">
                         <span aria-hidden="true"></span>
