@@ -162,6 +162,40 @@ namespace Identity.Api.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OrganisationFiles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    MediaId = table.Column<Guid>(nullable: false),
+                    Order = table.Column<int>(nullable: false),
+                    OrganisationId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrganisationFiles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrganisationImages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    MediaId = table.Column<Guid>(nullable: false),
+                    Order = table.Column<int>(nullable: false),
+                    OrganisationId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrganisationImages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Organisations",
                 columns: table => new
                 {
@@ -196,6 +230,23 @@ namespace Identity.Api.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrganisationTranslations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrganisationVideos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    MediaId = table.Column<Guid>(nullable: false),
+                    Order = table.Column<int>(nullable: false),
+                    OrganisationId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrganisationVideos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -380,10 +431,19 @@ namespace Identity.Api.Infrastructure.Migrations
                 name: "LinkAddressesOrganisations");
 
             migrationBuilder.DropTable(
+                name: "OrganisationFiles");
+
+            migrationBuilder.DropTable(
+                name: "OrganisationImages");
+
+            migrationBuilder.DropTable(
                 name: "Organisations");
 
             migrationBuilder.DropTable(
                 name: "OrganisationTranslations");
+
+            migrationBuilder.DropTable(
+                name: "OrganisationVideos");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

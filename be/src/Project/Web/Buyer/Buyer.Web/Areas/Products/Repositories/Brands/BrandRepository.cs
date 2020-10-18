@@ -45,7 +45,8 @@ namespace Buyer.Web.Areas.Products.Repositories.Brands
                 {
                     Id = response.Data.Id,
                     Name = response.Data.Name,
-                    Description = response.Data.Description
+                    Description = response.Data.Description,
+                    Files = response.Data.Files
                 };
             }
 
