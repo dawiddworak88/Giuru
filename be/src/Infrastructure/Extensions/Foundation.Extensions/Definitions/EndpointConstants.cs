@@ -4,7 +4,7 @@
     {
         public struct Media
         {
-            public static readonly string MediaApiEndpoint = "/api/v1/media";
+            public static readonly string MediaApiEndpoint = "/api/v1/file";
         }
     }
 }

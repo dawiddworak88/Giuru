@@ -13,13 +13,13 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
     public class BrandDetailModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, BrandDetailViewModel>
     {
         private readonly IBrandRepository brandRepository;
-        private readonly IMediaService mediaService;
+        private readonly IMediaHelperService mediaService;
         private readonly IOptions<AppSettings> options;
 
         public BrandDetailModelBuilder(
             IBrandRepository brandRepository,
             IOptions<AppSettings> options,
-            IMediaService mediaService)
+            IMediaHelperService mediaService)
         {
             this.brandRepository = brandRepository;
             this.options = options;
@@ -30,7 +30,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
         {
             var viewModel = new BrandDetailViewModel
             {
-                LogoUrl = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, LogoConstants.LogoMediaId)
+                LogoUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, LogoConstants.LogoMediaId)
             };
 
             var brand = await this.brandRepository.GetBrandAsync(componentModel.Id, componentModel.Token);

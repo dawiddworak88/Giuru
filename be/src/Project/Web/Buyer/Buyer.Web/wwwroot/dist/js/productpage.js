@@ -32732,7 +32732,7 @@ function Files(props) {
   return /*#__PURE__*/react_default.a.createElement(react["Fragment"], null, props.files && /*#__PURE__*/react_default.a.createElement("section", {
     className: "section files"
   }, /*#__PURE__*/react_default.a.createElement("h3", {
-    className: "files__title"
+    className: "title is-4"
   }, props.downloadLabel), /*#__PURE__*/react_default.a.createElement("div", {
     className: "table-container"
   }, /*#__PURE__*/react_default.a.createElement("div", {

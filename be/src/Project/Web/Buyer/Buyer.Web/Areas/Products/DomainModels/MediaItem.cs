@@ -1,11 +1,12 @@
 ﻿using System;
 
-namespace Buyer.Web.Shared.Files.ViewModels
+namespace Buyer.Web.Areas.Products.DomainModels
 {
-    public class FileViewModel
+    public class MediaItem
     {
-        public string Filename { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
+        public string Filename { get; set; }
         public string Description { get; set; }
         public bool IsProtected { get; set; }
         public long Size { get; set; }

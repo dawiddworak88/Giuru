@@ -17,11 +17,11 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
     {
         private readonly IStringLocalizer<HeroSliderResources> heroSliderLocalizer;
         private readonly IOptions<AppSettings> options;
-        private readonly IMediaService mediaService;
+        private readonly IMediaHelperService mediaService;
         private readonly LinkGenerator linkGenerator;
 
         public HeroSliderModelBuilder(IOptions<AppSettings> options,
-            IMediaService mediaService,
+            IMediaHelperService mediaService,
             IStringLocalizer<HeroSliderResources> heroSliderLocalizer,
             LinkGenerator linkGenerator)
         {
@@ -37,7 +37,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
 
             var heroSliderItems = new List<HeroSliderItemViewModel>();
 
-            var furnishLivingRoomHeroSliderItem = GetHeroSliderItem(this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.LivingRoomMediaId),
+            var furnishLivingRoomHeroSliderItem = GetHeroSliderItem(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.LivingRoomMediaId),
                 this.heroSliderLocalizer["LowPrices"],
                 this.heroSliderLocalizer["LowPrices"],
                 this.heroSliderLocalizer["LowPrices"],
@@ -45,7 +45,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                 this.heroSliderLocalizer["Discover"],
                 this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.Sectionals.Id }));
 
-            var furnishBedroomHeroSliderItem = GetHeroSliderItem(this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.BedroomMediaId),
+            var furnishBedroomHeroSliderItem = GetHeroSliderItem(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.BedroomMediaId),
                 this.heroSliderLocalizer["TrackOrders"],
                 this.heroSliderLocalizer["TrackOrders"],
                 this.heroSliderLocalizer["TrackOrders"],
@@ -53,7 +53,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                 this.heroSliderLocalizer["Browse"],
                 this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.Beds.Id }));
 
-            var furnishKidsRoomHeroSliderItem = GetHeroSliderItem(this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.KidsRoomMediaId),
+            var furnishKidsRoomHeroSliderItem = GetHeroSliderItem(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.KidsRoomMediaId),
                 this.heroSliderLocalizer["EasyRepurchase"],
                 this.heroSliderLocalizer["EasyRepurchase"],
                 this.heroSliderLocalizer["EasyRepurchase"],

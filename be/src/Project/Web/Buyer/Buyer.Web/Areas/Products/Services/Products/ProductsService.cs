@@ -18,13 +18,13 @@ namespace Buyer.Web.Areas.Products.Services.Products
     public class ProductsService : IProductsService
     {
         private readonly IProductsRepository productsRepository;
-        private readonly IMediaService mediaService;
+        private readonly IMediaHelperService mediaService;
         private readonly IOptions<AppSettings> options;
         private readonly LinkGenerator linkGenerator;
 
         public ProductsService(
             IProductsRepository productsRepository,
-            IMediaService mediaService,
+            IMediaHelperService mediaService,
             IOptions<AppSettings> options,
             LinkGenerator linkGenerator)
         {
@@ -62,7 +62,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                             var imageGuid = product.Images.FirstOrDefault();
 
                             catalogItem.ImageAlt = product.Name;
-                            catalogItem.ImageUrl = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, imageGuid, ProductConstants.ProductsCatalogItemImageWidth, ProductConstants.ProductsCatalogItemImageHeight);
+                            catalogItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, ProductConstants.ProductsCatalogItemImageWidth, ProductConstants.ProductsCatalogItemImageHeight);
                         }
 
                         catalogItemList.Add(catalogItem);

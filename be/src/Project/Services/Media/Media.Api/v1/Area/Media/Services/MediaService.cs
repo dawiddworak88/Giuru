@@ -12,6 +12,9 @@ using System.IO;
 using Media.Api.Shared.Checksums;
 using Media.Api.Shared.ImageResizers;
 using System.Collections.Generic;
+using Foundation.GenericRepository.Paginations;
+using Foundation.GenericRepository.Predicates;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Media.Api.v1.Area.Media.Services
 {
@@ -33,7 +36,7 @@ namespace Media.Api.v1.Area.Media.Services
             this.imageResizeService = imageResizeService;
         }
 
-        public async Task<Guid> CreateMediaItemAsync(CreateMediaItemModel serviceModel)
+        public async Task<Guid> CreateFileAsync(CreateMediaItemModel serviceModel)
         {
             var checksum = this.checksumService.GetMd5(serviceModel.File.OpenReadStream());
 
@@ -83,7 +86,7 @@ namespace Media.Api.v1.Area.Media.Services
             return mediaItem.Id;
         }
 
-        public async Task<MediaFileResultModel> GetMediaItemAsync(Guid? mediaId, int? width, int? height)
+        public async Task<MediaFileResultModel> GetFileAsync(Guid? mediaId, int? width, int? height)
         {
             if (mediaId.HasValue)
             {
@@ -126,6 +129,59 @@ namespace Media.Api.v1.Area.Media.Services
             }
 
             return default;
+        }
+
+        public PagedResults<IEnumerable<MediaItemResultModel>> GetMediaItemsByIds(GetMediaItemsByIdsModel model)
+        {
+            var mediaItemResult = new MediaItemResultModel();
+
+            var mediaItemsResults = new List<MediaItemResultModel>();
+
+            var predicateBuilder = PredicateBuilder.False<MediaItem>();
+
+            foreach (var id in model.Ids)
+            {
+                predicateBuilder = predicateBuilder.Or(x => x.Id == id);
+            }
+
+            var mediaItems = this.context.MediaItems.Where(x => x.IsActive).Where(predicateBuilder).ToList();
+
+            foreach (var mediaItem in mediaItems.OrEmptyIfNull())
+            {
+                mediaItemResult.Id = mediaItem.Id;
+                mediaItemResult.IsProtected = mediaItem.IsProtected;
+                mediaItemResult.LastModifiedDate = mediaItem.LastModifiedDate;
+                mediaItemResult.CreatedDate = mediaItem.CreatedDate;
+
+                var mediaItemVersion = this.context.MediaItemVersions.Where(x => x.MediaItemId == mediaItem.Id && x.IsActive).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
+
+                if (mediaItemVersion != null)
+                {
+                    mediaItemResult.Filename = $"{mediaItemVersion.Filename}{mediaItemVersion.Extension}";
+                    mediaItemResult.Size = mediaItemVersion.Size;
+
+                    var mediaItemVersionTranslation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaItemVersion.Id && x.Language == model.Language && x.IsActive);
+
+                    if (mediaItemVersionTranslation == null)
+                    {
+                        mediaItemVersionTranslation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaItemVersion.Id && x.IsActive);
+                    }
+
+                    if (mediaItemVersionTranslation != null)
+                    {
+                        mediaItemResult.Name = mediaItemVersionTranslation.Name;
+                        mediaItemResult.Description = mediaItemVersionTranslation.Description;
+                    }
+                }
+
+                mediaItemsResults.Add(mediaItemResult);
+            }
+
+            return new PagedResults<IEnumerable<MediaItemResultModel>>(mediaItemsResults.Count, PaginationConstants.DefaultPageIndex)
+            { 
+                Data = mediaItemsResults,
+                
+            };
         }
 
         private bool IsImage(string contentType)

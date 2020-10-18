@@ -4,8 +4,8 @@ using Buyer.Web.Areas.Products.Repositories.Categories;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.Categories;
 using Buyer.Web.Shared.Catalogs.ModelBuilders;
-using Buyer.Web.Shared.Definitions;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.GenericRepository.Paginations;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Categories

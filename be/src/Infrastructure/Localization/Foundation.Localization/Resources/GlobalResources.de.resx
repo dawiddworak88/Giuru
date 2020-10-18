@@ -186,6 +186,12 @@
   <data name="ErrorContactAdmin" xml:space="preserve">
     <value>Ein Fehler ist aufgetreten. Bitte wenden Sie sich an den Administrator mit der folgenden Referenznummer:</value>
   </data>
+  <data name="Filename" xml:space="preserve">
+    <value>Dateiname</value>
+  </data>
+  <data name="FilesToDownload" xml:space="preserve">
+    <value>Dateien herunterladen</value>
+  </data>
   <data name="InStock" xml:space="preserve">
     <value>Auf Lager</value>
   </data>
@@ -290,6 +296,9 @@
   </data>
   <data name="SignInToSeePrices" xml:space="preserve">
     <value>Melden Sie sich an, um die Preise zu sehen</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Dateigröße</value>
   </data>
   <data name="TermsAndConditions" xml:space="preserve">
     <value>Geschäftsbedingungen</value>

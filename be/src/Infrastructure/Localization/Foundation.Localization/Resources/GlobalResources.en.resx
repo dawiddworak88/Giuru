@@ -189,6 +189,12 @@
   <data name="ErrorContactAdmin" xml:space="preserve">
     <value>An error has occurred. Please contact your administrators and give them this information:</value>
   </data>
+  <data name="Filename" xml:space="preserve">
+    <value>Filename</value>
+  </data>
+  <data name="FilesToDownload" xml:space="preserve">
+    <value>Download</value>
+  </data>
   <data name="InStock" xml:space="preserve">
     <value>In stock</value>
   </data>
@@ -290,6 +296,9 @@
   </data>
   <data name="SignInToSeePrices" xml:space="preserve">
     <value>Sign in to see prices</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Size</value>
   </data>
   <data name="TermsAndConditions" xml:space="preserve">
     <value>Terms and Conditions</value>

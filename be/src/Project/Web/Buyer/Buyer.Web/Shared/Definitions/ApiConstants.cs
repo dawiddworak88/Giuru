@@ -14,5 +14,10 @@
         {
             public static readonly string SellerApiEndpoint = "/api/v1/seller";
         }
+
+        public struct Media
+        {
+            public static readonly string MediaItemsApiEndpoint = "/api/v1/mediaitems";
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Buyer.Web.Shared.Definitions
+﻿namespace Foundation.GenericRepository.Paginations
 {
     public static class PaginationConstants
     {

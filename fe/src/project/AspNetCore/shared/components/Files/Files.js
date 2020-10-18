@@ -20,7 +20,7 @@ function Files(props) {
         <Fragment>
             {props.files &&
                 <section className="section files">
-                    <h3 className="files__title">{props.downloadLabel}</h3>
+                    <h3 className="title is-4">{props.downloadLabel}</h3>
                     <div className="table-container">
                         <div className="catalog__table">
                             <TableContainer component={Paper}>

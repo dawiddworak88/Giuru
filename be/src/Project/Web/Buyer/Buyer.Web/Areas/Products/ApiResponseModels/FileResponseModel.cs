@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Foundation.ApiExtensions.Models.Response;
+using System;
 
-namespace Buyer.Web.Shared.Files.ViewModels
+namespace Buyer.Web.Areas.Products.ApiResponseModels
 {
-    public class FileViewModel
+    public class FileResponseModel : BaseResponseModel
     {
-        public string Filename { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
+        public string Filename { get; set; }
         public string Description { get; set; }
         public bool IsProtected { get; set; }
         public long Size { get; set; }

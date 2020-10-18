@@ -2,8 +2,8 @@
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.Brands;
 using Buyer.Web.Shared.Catalogs.ModelBuilders;
-using Buyer.Web.Shared.Definitions;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.Localization;

@@ -19,13 +19,13 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
     {
         private readonly ICatalogService catalogService;
         private readonly IOptions<AppSettings> options;
-        private readonly IMediaService mediaService;
+        private readonly IMediaHelperService mediaService;
         private readonly LinkGenerator linkGenerator;
 
         public CategoriesContentGridModelBuilder(
             ICatalogService catalogService, 
             IOptions<AppSettings> options, 
-            IMediaService mediaService,
+            IMediaHelperService mediaService,
             LinkGenerator linkGenerator)
         {
             this.catalogService = catalogService;
@@ -56,7 +56,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
 
                     if (subCategory.ThumbnailMediaId.HasValue)
                     {
-                        carouselItem.ImageUrl = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, subCategory.ThumbnailMediaId.Value);
+                        carouselItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, subCategory.ThumbnailMediaId.Value);
                     }
 
                     contentGridCarouselItems.Add(carouselItem);

@@ -22,15 +22,22 @@ namespace Media.Api.v1.Area.Media.Controllers
     [Produces("application/json")]
     [Authorize]
     [ApiController]
-    public class MediaController : BaseApiController
+    public class FileController : BaseApiController
     {
         private readonly IMediaService mediaService;
 
-        public MediaController(IMediaService mediaService)
+        public FileController(IMediaService mediaService)
         {
             this.mediaService = mediaService;
         }
 
+        /// <summary>
+        /// Gets a file by media id. Provide width and height to resize the image files.
+        /// </summary>
+        /// <param name="mediaId"></param>
+        /// <param name="w">The image width.</param>
+        /// <param name="h">The image height.</param>
+        /// <returns>The file.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [Route("{mediaId}")]
@@ -38,7 +45,7 @@ namespace Media.Api.v1.Area.Media.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> Get(Guid? mediaId, int? w, int? h)
         {
-            var mediaFile = await this.mediaService.GetMediaItemAsync(mediaId, w, h);
+            var mediaFile = await this.mediaService.GetFileAsync(mediaId, w, h);
 
             if (mediaFile != null)
             {
@@ -50,6 +57,11 @@ namespace Media.Api.v1.Area.Media.Controllers
             return this.BadRequest();
         }
 
+        /// <summary>
+        /// Uploads a file.
+        /// </summary>
+        /// <param name="model">File contents.</param>
+        /// <returns>Created if the file has been uploaded successfully.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
@@ -77,7 +89,7 @@ namespace Media.Api.v1.Area.Media.Controllers
 
             if (validationResult.IsValid)
             {
-                var mediaItemId = await this.mediaService.CreateMediaItemAsync(serviceModel);
+                var mediaItemId = await this.mediaService.CreateFileAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.Created, new { Id = mediaItemId });
             }

@@ -16,13 +16,13 @@ namespace Seller.Web.Shared.Headers.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IOptions<AppSettings> options;
         private readonly LinkGenerator linkGenerator;
-        private readonly IMediaService mediaService;
+        private readonly IMediaHelperService mediaService;
 
         public LogoModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IOptions<AppSettings> options,
             LinkGenerator linkGenerator,
-            IMediaService mediaService)
+            IMediaHelperService mediaService)
         {
             this.globalLocalizer = globalLocalizer;
             this.options = options;
@@ -36,7 +36,7 @@ namespace Seller.Web.Shared.Headers.ModelBuilders
             {
                 LogoAltLabel = this.globalLocalizer.GetString("Logo"),
                 TargetUrl = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                LogoUrl = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, LogoConstants.LogoMediaId)
+                LogoUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, LogoConstants.LogoMediaId)
             };
         }
     }

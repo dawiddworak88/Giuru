@@ -1,12 +1,16 @@
 ﻿using Buyer.Web.Areas.Products.ModelBuilders.Definitions;
+using Buyer.Web.Areas.Products.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions;
+using Buyer.Web.Shared.Files.ComponentModels;
+using Buyer.Web.Shared.Files.ViewModels;
 using Buyer.Web.Shared.Images.ViewModels;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Extensions.Services.MediaServices;
+using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ContentGrids.Definitions;
@@ -24,20 +28,27 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
     public class ProductDetailModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel>
     {
+        private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder;
+        private readonly IMediaItemsRepository mediaRepository;
         private readonly IProductsRepository productsRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly IOptions<AppSettings> options;
-        private readonly IMediaService mediaService;
+        private readonly IMediaHelperService mediaService;
         private readonly LinkGenerator linkGenerator;
 
-        public ProductDetailModelBuilder(IProductsRepository productsRepository,
+        public ProductDetailModelBuilder(
+            IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
+            IMediaItemsRepository filesRepository,
+            IProductsRepository productsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer, 
             IStringLocalizer<ProductResources> productLocalizer,
             IOptions<AppSettings> options,
-            IMediaService mediaService,
+            IMediaHelperService mediaService,
             LinkGenerator linkGenerator)
         {
+            this.filesModelBuilder = filesModelBuilder;
+            this.mediaRepository = filesRepository;
             this.productsRepository = productsRepository;
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
@@ -77,14 +88,16 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 {
                     var imageViewModel = new ImageViewModel
                     { 
-                        Original = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, image, ProductConstants.OriginalMaxWidth, ProductConstants.OriginalMaxHeight),
-                        Thumbnail = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, image, ProductConstants.ThumbnailMaxWidth, ProductConstants.ThumbnailMaxHeight)
+                        Original = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.OriginalMaxWidth, ProductConstants.OriginalMaxHeight),
+                        Thumbnail = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.ThumbnailMaxWidth, ProductConstants.ThumbnailMaxHeight)
                     };
 
                     images.Add(imageViewModel);
                 }
 
                 viewModel.Images = images;
+
+                viewModel.Files = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = product.Files });
 
                 var productVariants = await this.productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token);
 
@@ -104,7 +117,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                         if (productVariant.Images != null && productVariant.Images.Any())
                         {
-                            carouselItem.ImageUrl = this.mediaService.GetMediaUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), ContentGridConstants.CarouselItemImageMaxWidth, ContentGridConstants.CarouselItemImageMaxHeight);
+                            carouselItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), ContentGridConstants.CarouselItemImageMaxWidth, ContentGridConstants.CarouselItemImageMaxHeight);
                         }
 
                         carouselItems.Add(carouselItem);

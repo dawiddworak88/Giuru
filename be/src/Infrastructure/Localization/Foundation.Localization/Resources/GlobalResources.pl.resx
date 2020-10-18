@@ -189,6 +189,12 @@
   <data name="ErrorContactAdmin" xml:space="preserve">
     <value>Wystąpił błąd. Proszę skontaktuj się z administratorem i podaj mu następujące informacje:</value>
   </data>
+  <data name="Filename" xml:space="preserve">
+    <value>Nazwa pliku</value>
+  </data>
+  <data name="FilesToDownload" xml:space="preserve">
+    <value>Pliki do pobrania</value>
+  </data>
   <data name="InStock" xml:space="preserve">
     <value>Na stanie</value>
   </data>
@@ -290,6 +296,9 @@
   </data>
   <data name="SignInToSeePrices" xml:space="preserve">
     <value>Zaloguj się, aby zobaczyć ceny</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Rozmiar</value>
   </data>
   <data name="TermsAndConditions" xml:space="preserve">
     <value>Regulamin</value>
