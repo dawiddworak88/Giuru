@@ -99,3 +99,26 @@
 .pb-0 {
     padding-bottom: 0;
 }
+
+.cookie-popup {
+    padding: 24px;
+    font-size: 16px;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    flex-direction: row;
+    display: flex;
+    background: rgba(0, 0, 0, 0.6);
+    bottom: 0;
+    color: rgb(255, 255, 255);
+    left: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 999999;
+}
+
+.cookie-popup a {
+    color: rgb(255, 255, 255);
+    text-decoration: underline;
+}

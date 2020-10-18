@@ -1,6 +1,5 @@
 ﻿using Foundation.GenericRepository.Entities;
 using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Catalog.Api.Infrastructure.Products.Entities
 {

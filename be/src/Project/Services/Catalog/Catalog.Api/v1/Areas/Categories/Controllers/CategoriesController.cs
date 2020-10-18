@@ -1,5 +1,6 @@
 ﻿using Catalog.Api.v1.Areas.Categories.Models;
 using Catalog.Api.v1.Areas.Categories.Services;
+using Catalog.Api.v1.Areas.Categories.Validators;
 using Foundation.ApiExtensions.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,22 +27,29 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(422)]
         public async Task<IActionResult> Get(string language)
         {
-            var getCategoriesModel = new GetCategoriesModel
+            var serviceModel = new GetCategoriesModel
             {
                 Language = language
             };
 
-            var categories = await this.categoryService.GetAsync(getCategoriesModel);
+            var validator = new GetCategoriesModelValidator();
 
-            if (categories != null && categories.Any())
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
             {
-                return this.StatusCode((int)HttpStatusCode.OK, categories);
+                var categories = await this.categoryService.GetAsync(serviceModel);
+
+                return categories != null && categories.Any()
+                    ? this.StatusCode((int)HttpStatusCode.OK, categories)
+                    : (IActionResult)this.StatusCode((int)HttpStatusCode.NotFound);
             }
 
-            return this.StatusCode((int)HttpStatusCode.BadRequest);
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }

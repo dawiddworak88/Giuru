@@ -4,6 +4,9 @@ using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.Localization.Definitions;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Buyer.Web.Shared.Configurations;
+using Foundation.Security.Definitions;
 using System;
 using System.Collections.Generic;
 
@@ -12,19 +15,30 @@ namespace Buyer.Web.Shared.Footers.ModelBuilders
     public class FooterModelBuilder : IModelBuilder<FooterViewModel>
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IOptions<AppSettings> options;
 
-        public FooterModelBuilder(IStringLocalizer<GlobalResources> globalLocalizer)
+        public FooterModelBuilder(
+            IStringLocalizer<GlobalResources> globalLocalizer,
+            IOptions<AppSettings> options)
         {
             this.globalLocalizer = globalLocalizer;
+            this.options = options;
         }
 
         public FooterViewModel BuildModel()
         {
             var links = new List<LinkViewModel>
             {
-                new LinkViewModel { Text = this.globalLocalizer["TermsConditions"], Url = "#" },
-                new LinkViewModel { Text = this.globalLocalizer["PrivacyPolicy"], Url = "#" },
-                new LinkViewModel { Text = this.globalLocalizer["Contact"], Url = "#" },
+                new LinkViewModel 
+                { 
+                    Text = this.globalLocalizer["TermsConditions"], 
+                    Url = $"{this.options.Value.IdentityUrl}{SecurityConstants.RegulationsEndpoint}"
+                },
+                new LinkViewModel 
+                { 
+                    Text = this.globalLocalizer["PrivacyPolicy"], 
+                    Url = $"{this.options.Value.IdentityUrl}{SecurityConstants.PrivacyPolicyEndpoint}"
+                }
             };
 
             var viewModel = new FooterViewModel 

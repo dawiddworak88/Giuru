@@ -8,10 +8,6 @@ import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
 import Store from "../../../../../../shared/stores/Store";
 import ClientDetailForm from "../../components/ClientDetail/ClientDetailForm";
 
-/* eslint-disable no-unused-vars */
-import favicon from "../../../../../../shared/layouts/images/favicon.png";
-/* eslint-enable no-unused-vars */
-
 function ClientDetailPage(props) {
 
   return (

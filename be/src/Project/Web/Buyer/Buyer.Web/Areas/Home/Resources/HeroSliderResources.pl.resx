@@ -121,7 +121,7 @@
     <value>Przeglądaj produkty</value>
   </data>
   <data name="Discover" xml:space="preserve">
-    <value>Odkrywaj</value>
+    <value>Odkrywaj produkty</value>
   </data>
   <data name="EasyRepurchase" xml:space="preserve">
     <value>Zamawiaj 24/7</value>
@@ -130,7 +130,7 @@
     <value>Niskie ceny i niepowtarzalne okazje każdego dnia</value>
   </data>
   <data name="Shop" xml:space="preserve">
-    <value>Kupuj teraz</value>
+    <value>Zapoznaj się z ofertą</value>
   </data>
   <data name="TrackOrders" xml:space="preserve">
     <value>Śledź zamówienia przez Internet</value>

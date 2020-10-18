@@ -6,6 +6,7 @@ using Foundation.Extensions.DependencyInjection;
 using Foundation.GenericRepository.DependencyInjection;
 using Foundation.Localization.DependencyInjection;
 using Media.Api.DependencyInjection;
+using Media.Api.Shared.Checksums;
 using Media.Api.v1.Area.Media.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -60,13 +61,13 @@ namespace Media.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IChecksumService checksumService)
         {
             IdentityModelEventSource.ShowPII = true;
 
             app.UseSwagger();
 
-            app.ConfigureDatabaseMigrations(this.Configuration);
+            app.ConfigureDatabaseMigrations(this.Configuration, checksumService);
 
             app.UseSwaggerUI(c =>
             {

@@ -2,17 +2,17 @@ import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import {
     Fab, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, Button
+    TableHead, TableRow, Paper, Button, Tooltip
 } from "@material-ui/core";
 import { GetApp, Link, LockOutlined } from "@material-ui/icons";
 import moment from "moment";
+import ClipboardHelper from "../../../../../shared/helpers/globals/ClipboardHelper";
 
 function Files(props) {
 
-    const handleDownloadClick = (file) => {
-    };
-
     const handleCopyClick = (file) => {
+
+        ClipboardHelper.copyToClipboard(file.url);
     };
 
     return (
@@ -20,7 +20,7 @@ function Files(props) {
         <Fragment>
             {props.files &&
                 <section className="section files">
-                    <h3 className="files__title">{props.downloadLabel}</h3>
+                    <h3 className="title is-4">{props.downloadFilesLabel}</h3>
                     <div className="table-container">
                         <div className="catalog__table">
                             <TableContainer component={Paper}>
@@ -40,15 +40,19 @@ function Files(props) {
                                         {props.files.map((file) => (
                                             <TableRow key={file.id}>
                                                 <TableCell width="11%">
-                                                    <Fab onClick={() => handleDownloadClick(file)} size="small" color="primary" aria-label={props.deleteLabel}>
-                                                        <GetApp />
-                                                    </Fab>
-                                                    <Fab onClick={() => handleCopyClick(file)} size="small" color="secondary" aria-label={props.copyLinkLabel}>
-                                                        <Link />
-                                                    </Fab>
+                                                    <Tooltip title={props.downloadLabel} aria-label={props.downloadLabel}>
+                                                        <Fab href={file.url} size="small" color="primary">
+                                                                <GetApp />
+                                                        </Fab>
+                                                    </Tooltip>
+                                                    <Tooltip title={props.copyLinkLabel} aria-label={props.copyLinkLabel}>
+                                                        <Fab onClick={() => handleCopyClick(file)} size="small" color="secondary">
+                                                            <Link />
+                                                        </Fab>
+                                                    </Tooltip>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <Button variant="text" onClick={() => handleDownloadClick(file)}>
+                                                    <Button variant="text" href={file.url}>
                                                         {file.filename}
                                                         {(file.isProtected && !props.isAuthenticated) &&
                                                             <LockOutlined color="primary" />
@@ -75,7 +79,9 @@ function Files(props) {
 
 Files.propTypes = {
     files: PropTypes.array.isRequired,
+    downloadFilesLabel: PropTypes.string.isRequired,
     downloadLabel: PropTypes.string.isRequired,
+    copyLinkLabel: PropTypes.string.isRequired,
     filenameLabel: PropTypes.string.isRequired,
     sizeLabel: PropTypes.string.isRequired,
     nameLabel: PropTypes.string.isRequired,

@@ -4,7 +4,7 @@ namespace Foundation.GenericRepository.Paginations
 {
     public class Pagination
     {
-        public int TotalItems { get; }
+        public long TotalItems { get; }
 
         public int PageSize { get; }
 

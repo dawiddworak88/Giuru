@@ -4,7 +4,7 @@ using Foundation.Extensions.Validators;
 
 namespace Catalog.Api.v1.Areas.Products.Validators
 {
-    public class DeleteProductModelValidator : BaseServiceModelValidator<DeleteProductModel>
+    public class DeleteProductModelValidator : BaseAuthorizedServiceModelValidator<DeleteProductModel>
     {
         public DeleteProductModelValidator()
         {

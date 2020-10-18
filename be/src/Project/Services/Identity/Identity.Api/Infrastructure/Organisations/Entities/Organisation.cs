@@ -12,6 +12,9 @@ namespace Identity.Api.Infrastructure.Organisations.Entities
         public string Name { get; set; }
 
         [Required]
+        public string ContactEmail { get; set; }
+
+        [Required]
         public string Domain { get; set; }
 
         [Required]

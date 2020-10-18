@@ -1,7 +1,8 @@
-﻿namespace Catalog.Api.v1.Areas.Categories.Models
+﻿using Foundation.Extensions.Models;
+
+namespace Catalog.Api.v1.Areas.Categories.Models
 {
-    public class GetCategoriesModel
+    public class GetCategoriesModel : BaseServiceModel
     {
-        public string Language { get; set; }
     }
 }

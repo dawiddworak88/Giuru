@@ -91,11 +91,9 @@ namespace Seller.Web.Areas.Clients.Repositories
                     clients.Add(client);
                 }
 
-                return new PagedResults<IEnumerable<Client>>
+                return new PagedResults<IEnumerable<Client>>(response.Data.PagedClients.Total, response.Data.PagedClients.PageSize)
                 {
-                    Data = clients,
-                    PageCount = response.Data.PagedClients.PageCount,
-                    Total = response.Data.PagedClients.Total
+                    Data = clients
                 };
             }
 

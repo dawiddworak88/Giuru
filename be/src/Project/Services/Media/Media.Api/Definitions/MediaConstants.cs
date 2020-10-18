@@ -9,6 +9,17 @@ namespace Media.Api.Definitions
             public static readonly string ContainerName = "giuru";
         }
 
+        public struct Headers
+        {
+            public static readonly Guid LogoMediaId = Guid.Parse("85b14b09-856d-4fd0-8af4-7c077953b214");
+            public static readonly Guid LogoMediaVersionId = Guid.Parse("615434fe-5a08-432d-a2c9-5ac4e0830713");
+            public static readonly string LogoMediaUrl = "./Infrastructure/Media/Seeds/Images/Headers/logo.png";
+
+            public static readonly Guid FaviconMediaId = Guid.Parse("0b8ed469-e84c-455b-b616-12a60d38da1c");
+            public static readonly Guid FaviconMediaVersionId = Guid.Parse("5a9a1483-89db-4f70-b77f-c45c12b3001d");
+            public static readonly string FaviconMediaUrl = "./Infrastructure/Media/Seeds/Images/Headers/favicon.png";
+        }
+
         public struct HeroSliderItems
         {
             public static readonly Guid LivingRoomMediaId = Guid.Parse("c6c96ab8-a81f-446f-adc2-d375479ece98");
@@ -38,14 +49,6 @@ namespace Media.Api.Definitions
             public static readonly Guid CoffeeTablesMediaVersionId = Guid.Parse("d66ae4f5-9772-4f47-8f12-094979185111");
             public static readonly string CoffeeTablesMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/CoffeeTables.jpg";
 
-            public static readonly Guid TvStandsMediaId = Guid.Parse("80167673-c46e-4a63-a242-8042e9fdc6aa");
-            public static readonly Guid TvStandsMediaVersionId = Guid.Parse("06f9dea9-b7b9-4614-8b44-c68a47cf40a9");
-            public static readonly string TvStandsMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/TvTables.jpg";
-
-            public static readonly Guid WallUnitsMediaId = Guid.Parse("8120e8a6-f364-4611-b133-040fd163ecdd");
-            public static readonly Guid WallUnitsMediaVersionId = Guid.Parse("70ffc1f1-6b80-4527-8236-f233326d2455");
-            public static readonly string WallUnitsMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/WallUnits.jpg";
-
             public static readonly Guid ChairsMediaId = Guid.Parse("d0d611c1-67bd-46ef-9133-382d161c09e5");
             public static readonly Guid ChairsMediaVersionId = Guid.Parse("3958f1df-aca5-47d7-91ee-6319bd693ef5");
             public static readonly string ChairsMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/Armchairs.jpg";
@@ -62,34 +65,9 @@ namespace Media.Api.Definitions
             public static readonly Guid WardrobesMediaVersionId = Guid.Parse("c14b7541-8f41-4040-9c3c-0a04743eefeb");
             public static readonly string WardrobesMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/Wardrobes.jpg";
 
-            public static readonly Guid ChestsMediaId = Guid.Parse("00d64a65-0b50-4869-bd9f-38ae2e9dc417");
-            public static readonly Guid ChestsMediaVersionId = Guid.Parse("63c12bd8-8044-4cc5-acd5-409d14ec1779");
-            public static readonly string ChestsMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/Chests.jpg";
-
             public static readonly Guid MattressesMediaId = Guid.Parse("ce5f8282-e6a0-44c4-bb1e-e186f2f8c1da");
             public static readonly Guid MattressesMediaVersionId = Guid.Parse("23beeaec-8a7e-4397-83a6-7bf450b9e491");
             public static readonly string MattressesMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/BoxSprings.jpg";
-
-            public static readonly Guid DiningTablesSeatingMediaId = Guid.Parse("54e9fe96-8852-4677-a409-4dd154e56822");
-            public static readonly Guid DiningTablesSeatingMediaVersionId = Guid.Parse("1131e368-eb09-4ae2-875a-78160c09b517");
-            public static readonly string DiningTablesSeatingMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/KitchenTables.jpg";
-
-            public static readonly Guid BathroomVanitiesCabinetsMediaId = Guid.Parse("36b0b2f3-cc5c-455d-bac3-3679238e094a");
-            public static readonly Guid BathroomVanitiesCabinetsMediaVersionId = Guid.Parse("0735f4f5-9f3f-41e0-b0b1-c946a852141d");
-            public static readonly string BathroomVanitiesCabinetsMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/BathroomCabinets.jpg";
-
-            public static readonly Guid KidsBedsMediaId = Guid.Parse("8f274241-0c37-43b0-b24a-a97fddfaa8b2");
-            public static readonly Guid KidsBedsMediaVersionId = Guid.Parse("5b9a9b02-d76a-4180-b43d-6013f64512a8");
-            public static readonly string KidsBedsMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/KidsBeds.jpg";
-
-            public static readonly Guid KidsBunkBedsMediaId = Guid.Parse("368c1c95-cb0c-45aa-a8ed-cffa1e0aa33e");
-            public static readonly Guid KidsBunkBedsMediaVersionId = Guid.Parse("adb7edaa-050d-4dce-95cc-3ab60504d2a3");
-            public static readonly string KidsBunkBedsMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/BunkBeds.jpg";
-
-            public static readonly Guid KidsDesksMediaId = Guid.Parse("87ddb36d-080c-429f-8dba-b38db9ae8e8b");
-            public static readonly Guid KidsDesksMediaVersionId = Guid.Parse("9c89dcc7-3902-4d1c-8bcd-088db9e85120");
-            public static readonly string KidsDesksMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/KidsDesks.jpg";
-
         }
     }
 }

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Foundation.PageContent.Components.Links.ViewModels;
 using Microsoft.Extensions.Localization;
-using Buyer.Web.Shared.Configurations;
-using Microsoft.Extensions.Options;
 using Foundation.Localization;
 using Foundation.PageContent.Components.LanguageSwitchers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
@@ -17,19 +15,15 @@ namespace Buyer.Web.Shared.Headers.ModelBuilders
 
         private readonly IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel;
 
-        private readonly IOptions<AppSettings> servicesEndpointsConfiguration;
-
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
 
         public HeaderModelBuilder(
             IModelBuilder<LogoViewModel> logoModelBuilder,
             IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel,
-            IOptions<AppSettings> servicesEndpointsConfiguration,
             IStringLocalizer<GlobalResources> globalLocalizer)
         {
             this.logoModelBuilder = logoModelBuilder;
             this.languageSwitcherViewModel = languageSwitcherViewModel;
-            this.servicesEndpointsConfiguration = servicesEndpointsConfiguration;
             this.globalLocalizer = globalLocalizer;
         }
 

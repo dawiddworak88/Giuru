@@ -61,7 +61,7 @@ var browserConfig = {
         homepage: ["./src/project/AspNetCore/areas/Home/pages/HomePage/index.js", "./src/project/AspNetCore/areas/Home/pages/HomePage/HomePage.scss"],
         categorypage: ["./src/project/AspNetCore/areas/Products/pages/CategoryPage/index.js", "./src/project/AspNetCore/areas/Products/pages/CategoryPage/CategoryPage.scss"],
         productpage: ["./src/project/AspNetCore/areas/Products/pages/ProductPage/index.js", "./src/project/AspNetCore/areas/Products/pages/ProductPage/ProductPage.scss"],
-        brandpage: ["./src/project/AspNetCore/areas/Brands/pages/BrandPage/index.js", "./src/project/AspNetCore/areas/Brands/pages/BrandPage/BrandPage.scss"]
+        brandpage: ["./src/project/AspNetCore/areas/Products/pages/BrandPage/index.js", "./src/project/AspNetCore/areas/Products/pages/BrandPage/BrandPage.scss"]
     },
     output: {
         publicPath: path.resolve(__dirname, "../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),
@@ -124,7 +124,8 @@ var accountBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
-        signinpage: ["./src/project/Account/areas/Accounts/pages/SignIn/index.js", "./src/project/Account/areas/Accounts/pages/SignIn/SignInPage.scss"]
+        signinpage: ["./src/project/Account/areas/Accounts/pages/SignIn/index.js", "./src/project/Account/areas/Accounts/pages/SignIn/SignInPage.scss"],
+        contentpage: ["./src/project/Account/areas/Home/pages/Content/index.js", "./src/project/Account/areas/Home/pages/Content/ContentPage.scss"]
     },
     output: {
         publicPath: path.resolve(__dirname, "../be/src/Project/Services/Identity/Identity.Api/wwwroot/dist/js"),

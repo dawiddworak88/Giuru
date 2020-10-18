@@ -23,6 +23,13 @@ namespace Identity.Api.Areas.Accounts.Configurations
                 new ApiResource(ApiExtensionsConstants.AllScopes, ApiExtensionsConstants.AllScopes)
             };
 
+
+        public static IEnumerable<ApiScope> ApiScopes =>
+            new[]
+            {
+                new ApiScope(ApiExtensionsConstants.AllScopes, ApiExtensionsConstants.AllScopes)
+            };
+
         public static IEnumerable<Client> GetClients(IConfiguration configuration)
         {
             var clientsList = new List<Client>();

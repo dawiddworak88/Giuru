@@ -70,11 +70,9 @@ namespace Seller.Web.Areas.Products.Repositories
                         products.Add(product);
                     }
 
-                    return new PagedResults<IEnumerable<Product>>
+                    return new PagedResults<IEnumerable<Product>>(response.Data.PagedProducts.Total, response.Data.PagedProducts.PageSize)
                     {
-                        Data = products,
-                        PageCount = response.Data.PagedProducts.PageCount,
-                        Total = response.Data.PagedProducts.Total
+                        Data = products
                     };
                 }
             }
@@ -85,7 +83,7 @@ namespace Seller.Web.Areas.Products.Repositories
                 this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
             }
 
-            return new PagedResults<IEnumerable<Product>>();
+            return default;
         }
     }
 }

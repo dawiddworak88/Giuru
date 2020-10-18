@@ -1,19 +1,13 @@
-﻿using Catalog.Api.v1.Areas.Products.ResponseModels;
-using Catalog.Api.v1.Areas.Products.Models;
+﻿using Catalog.Api.v1.Areas.Products.Models;
 using Catalog.Api.v1.Areas.Products.Services;
 using Foundation.ApiExtensions.Controllers;
-using Foundation.ApiExtensions.Helpers;
-using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Net;
-using System.Reflection;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using Foundation.Account.Definitions;
+using Catalog.Api.v1.Areas.Products.Validators;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Catalog.Api.v1.Areas.Products.Controllers
 {
@@ -26,58 +20,76 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
     {
         private readonly IProductService productService;
 
-        private readonly ILogger logger;
-
-        public ProductsController(IProductService productService, ILogger<ProductController> logger)
+        public ProductsController(IProductService productService)
         {
             this.productService = productService;
-            this.logger = logger;
         }
 
         /// <summary>
         /// Returns products by search term. Returns all products (paginated) if search term is empty.
         /// </summary>
+        /// <param name="ids">The list of product ids.</param>
         /// <param name="language">The language.</param>
+        /// <param name="categoryId">The category id.</param>
+        /// <param name="sellerId">The brand id.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The number of items per page.</param>
         /// <returns></returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
-        public async Task<IActionResult> Get(string language, string searchTerm, int pageIndex, int itemsPerPage)
+        [ProducesResponseType(422)]
+        [AllowAnonymous]
+        public async Task<IActionResult> Get(string ids, string language, Guid? categoryId, Guid? sellerId, string searchTerm, int pageIndex, int itemsPerPage)
         {
-            try
-            {
-                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.SellerIdClaim);
+            var productIds = ids.ToEnumerableGuidIds();
 
-                var getProductsModel = new GetProductsModel
+            if (productIds != null)
+            {
+                var serviceModel = new GetProductsByIdsModel
+                {
+                    Ids = productIds,
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    Language = language
+                };
+
+                var validator = new GetProductsByIdsModelValidator();
+
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var products = await this.productService.GetByIdsAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.OK, products);
+                }
+            }
+            else
+            {
+                var serviceModel = new GetProductsModel
                 {
                     PageIndex = pageIndex,
                     ItemsPerPage = itemsPerPage,
                     SearchTerm = searchTerm,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    SellerId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    CategoryId = categoryId,
+                    OrganisationId = sellerId,
                     Language = language
                 };
 
-                var getProductsResult = await this.productService.GetAsync(getProductsModel);
+                var validator = new GetProductsModelValidator();
 
-                if (getProductsResult.IsValid)
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
                 {
-                    return this.StatusCode((int)HttpStatusCode.OK, new ProductsResponseModel(getProductsResult.Products));
-                }
-                else
-                {
-                    return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+                    var products = await this.productService.GetAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.OK, products);
                 }
             }
-            catch (Exception exception)
-            {
-                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
-                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
-                return this.StatusCode((int)HttpStatusCode.BadRequest, new ProductResponseModel { Error = error });
-            }
+
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }

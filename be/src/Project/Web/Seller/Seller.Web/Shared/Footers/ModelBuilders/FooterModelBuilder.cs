@@ -1,29 +1,50 @@
-﻿using Foundation.PageContent.Components.Links.ViewModels;
+﻿using Foundation.PageContent.Components.Footers.ViewModels;
+using Foundation.PageContent.Components.Links.ViewModels;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.Localization;
+using Foundation.Localization.Definitions;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Seller.Web.Shared.Configurations;
+using Foundation.Security.Definitions;
 using System;
 using System.Collections.Generic;
-using Foundation.Localization;
-using Foundation.PageContent.Components.Footers.ViewModels;
-using Foundation.Localization.Definitions;
 
 namespace Seller.Web.Shared.Footers.ModelBuilders
 {
     public class FooterModelBuilder : IModelBuilder<FooterViewModel>
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IOptions<AppSettings> options;
 
-        public FooterModelBuilder(IStringLocalizer<GlobalResources> globalLocalizer)
+        public FooterModelBuilder(
+            IStringLocalizer<GlobalResources> globalLocalizer,
+            IOptions<AppSettings> options)
         {
             this.globalLocalizer = globalLocalizer;
+            this.options = options;
         }
 
         public FooterViewModel BuildModel()
         {
-            var viewModel = new FooterViewModel 
+            var links = new List<LinkViewModel>
+            {
+                new LinkViewModel
+                {
+                    Text = this.globalLocalizer["TermsConditions"],
+                    Url = $"{this.options.Value.IdentityUrl}{SecurityConstants.RegulationsEndpoint}"
+                },
+                new LinkViewModel
+                {
+                    Text = this.globalLocalizer["PrivacyPolicy"],
+                    Url = $"{this.options.Value.IdentityUrl}{SecurityConstants.PrivacyPolicyEndpoint}"
+                }
+            };
+
+            var viewModel = new FooterViewModel
             {
                 Copyright = this.globalLocalizer["Copyright"]?.Value.Replace(LocalizationConstants.YearToken, DateTime.Now.Year.ToString()),
-                Links = new List<LinkViewModel>()
+                Links = links
             };
 
             return viewModel;

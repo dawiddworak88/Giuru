@@ -6,5 +6,6 @@
         public static readonly int FirstNameIndex = 1;
         public static readonly int LastNameIndex = 2;
         public static readonly int PasswordIndex = 3;
+        public static readonly int OrganisationIdIndex = 4;
     }
 }

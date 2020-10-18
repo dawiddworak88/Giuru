@@ -1,0 +1,22 @@
+﻿<div id="root" asp-prerender-module="ContentPage" asp-prerender-data="@Model">
+</div>
+
+<script>
+    window.data = @Html.Raw(Json.Serialize(@Model));
+</script>
+
+@section MetaTags {
+    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("PrivacyPolicy"), false)</title>
+    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("PrivacyPolicy")))
+    {
+        <meta name="description" content="@this.Localizer.GetString("PrivacyPolicy")" />
+    }
+}
+
+@section HeadStyles {
+    <link rel="stylesheet" href="~/dist/css/contentpage.css" type="text/css" asp-append-version="true" />
+}
+
+@section BodyScripts {
+    <script src="~/dist/js/contentpage.js" asp-append-version="true"></script>
+}

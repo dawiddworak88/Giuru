@@ -8,10 +8,6 @@ import Footer from "../../../../../../shared/components/Footer/Footer";
 import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
 import ImportOrderForm from "../../components/ImportOrder/ImportOrderForm";
 
-/* eslint-disable no-unused-vars */
-import favicon from "../../../../../../shared/layouts/images/favicon.png";
-/* eslint-enable no-unused-vars */
-
 function ImportOrderPage(props) {
 
   toast.configure();

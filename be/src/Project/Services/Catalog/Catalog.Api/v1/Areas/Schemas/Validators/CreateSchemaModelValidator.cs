@@ -4,7 +4,7 @@ using Catalog.Api.v1.Areas.Schemas.Models;
 
 namespace Catalog.Api.v1.Areas.Schemas.Validators
 {
-    public class CreateSchemaModelValidator : BaseServiceModelValidator<CreateSchemaModel>
+    public class CreateSchemaModelValidator : BaseAuthorizedServiceModelValidator<CreateSchemaModel>
     {
         public CreateSchemaModelValidator()
         {

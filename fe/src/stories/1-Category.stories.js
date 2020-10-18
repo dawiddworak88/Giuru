@@ -12,25 +12,25 @@ function getItems(length) {
     var item = {
       id: (i + 1),
       sku: (i + 271829),
-      title: "Mounting Dream Tilt TV Wall Mount Bracket for Most 37-70 Inches TVs, TV Mount with VESA up to 600x400mm, Fits 16"",
+      title: "Mounting Dream Tilt TV Wall Mount Bracket for Most 37-70 Inches TVs, TV Mount with VESA up to 600x400mm, Fits 16",
       imageUrl: "https://eltap.pl/upload/gallery/190/cay02jpg163.jpg",
       imageAlt: "Alessia",
       inStock: true,
-      brand: {
-        name: "eltap",
-        url: "#"
-      }
+      brandName: "eltap",
+      brandUrl: "#",
     };
 
     items.push(item);
   }
 
-  return items;
+  return {
+    data: items,
+    total: length
+  };
 }
 
 var catalog = {
   title: "Sofas",
-  resultsCount: 2823,
   resultsLabel: "results",
   noResultsLabel: "There are no results.",
   skuLabel: "SKU:",
@@ -39,7 +39,14 @@ var catalog = {
   isAuthenticated: false,
   signInUrl: "#",
   signInToSeePricesLabel: "Log in to see prices",
-  items: getItems(48)
+  displayedRowsLabel: "of",
+  rowsPerPageLabel: "Rows per Page",
+  backIconButtonText: "Previous",
+  nextIconButtonText: "Next",
+  generalErrorMessage: "An Error Occurred",
+  productsApiUrl: "#",
+  id: "11",
+  pagedItems: getItems(100)
 };
 
 export const CategoryPageStory = () => <CategoryPage header={header} mainNavigation={mainNavigation} catalog={catalog} footer={footer} />

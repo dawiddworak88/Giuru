@@ -12,6 +12,8 @@ namespace Media.Api.Infrastructure.Media.Entities
         public string Extension { get; set; }
         public string MimeType { get; set; }
         public int Version { get; set; }
+        public string Checksum { get; set; }
+        public string CreatedBy { get; set; }
         public Guid MediaItemId { get; set; }
         public virtual IEnumerable<MediaItemTranslation> Translations { get; set; }
     }

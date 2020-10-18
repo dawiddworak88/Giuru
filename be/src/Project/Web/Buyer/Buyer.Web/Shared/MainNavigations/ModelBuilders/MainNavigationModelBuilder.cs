@@ -25,12 +25,7 @@ namespace Buyer.Web.Shared.Headers.ModelBuilders
                 new LinkViewModel 
                 {
                     Text = this.globalLocalizer["Categories"],
-                    Url = "#"
-                },
-                new LinkViewModel
-                {
-                    Text = this.globalLocalizer["Sell"],
-                    Url = "#"
+                    Url = "#categories"
                 }
             };
 

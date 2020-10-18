@@ -1,6 +1,6 @@
 import React from "react";
-import "../project/AspNetCore/areas/Brands/pages/BrandPage/BrandPage.scss";
-import BrandPage from "../project/AspNetCore/areas/Brands/pages/BrandPage/BrandPage";
+import "../project/AspNetCore/areas/Products/pages/BrandPage/BrandPage.scss";
+import BrandPage from "../project/AspNetCore/areas/Products/pages/BrandPage/BrandPage";
 import { header, mainNavigation, files, footer } from "./Shared/AspNetCoreProps";
 
 function getItems(length) {
@@ -12,7 +12,7 @@ function getItems(length) {
     var item = {
       id: (i + 1),
       sku: (i + 271829),
-      title: "Mounting Dream Tilt TV Wall Mount Bracket for Most 37-70 Inches TVs, TV Mount with VESA up to 600x400mm, Fits 16"",
+      title: "Mounting Dream Tilt TV Wall Mount Bracket for Most 37-70 Inches TVs, TV Mount with VESA up to 600x400mm, Fits 16",
       imageUrl: "https://eltap.pl/upload/gallery/190/cay02jpg163.jpg",
       imageAlt: "Alessia",
       inStock: true,
@@ -39,14 +39,14 @@ var catalog = {
   isAuthenticated: false,
   signInUrl: "#",
   signInToSeePricesLabel: "Log in to see prices",
-  items: getItems(20)
+  pagedItems: getItems(20)
 };
 
 var brandDetail = {
     name: "eltap",
     logoUrl: "https://eltap.pl/templates/default/img/logo.jpg",
     description: "The ELTAP upholstered furniture factory was established in 1993. Its founder is Leszek Dworak, who, together with his wife, ran the company until 2020 - since then the company changed its legal status to ELTAP Spółka z ograniczoną odpowiedzialnością Sp.k. which the son joined. Over the years, as a result of development, the company has gained the name of a well-known and respected brand on the Polish and international market.",
-    files: files
+    files
 };
 
 export const BrandPageStory = () => <BrandPage header={header} mainNavigation={mainNavigation} brandDetail={brandDetail} catalog={catalog} footer={footer} />

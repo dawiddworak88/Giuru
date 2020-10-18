@@ -63,9 +63,6 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsDefaultLanguage")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Language")
                         .HasColumnType("nvarchar(max)");
 
@@ -153,32 +150,6 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.Property<Guid>("BrandId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Sku")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BrandId");
-
-                    b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("Catalog.Api.Infrastructure.Products.Entities.ProductCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
@@ -188,18 +159,28 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsNew")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsProtected")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid?>("PrimaryProductId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Sku")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategories");
+                    b.HasIndex("BrandId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Catalog.Api.Infrastructure.Products.Entities.ProductFile", b =>
@@ -276,9 +257,6 @@ namespace Catalog.Api.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDefaultLanguage")
                         .HasColumnType("bit");
 
                     b.Property<string>("Language")
@@ -359,9 +337,6 @@ namespace Catalog.Api.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDefaultLanguage")
                         .HasColumnType("bit");
 
                     b.Property<string>("JsonSchema")
@@ -459,9 +434,6 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsDefaultLanguage")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Language")
                         .HasColumnType("nvarchar(max)");
 
@@ -495,6 +467,12 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.HasOne("Catalog.Api.Infrastructure.Products.Entities.Brand", "Brand")
                         .WithMany()
                         .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Catalog.Api.Infrastructure.Categories.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

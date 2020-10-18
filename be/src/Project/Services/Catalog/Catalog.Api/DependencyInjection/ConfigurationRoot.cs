@@ -1,4 +1,5 @@
-﻿using Catalog.Api.Infrastructure;
+﻿using Catalog.Api.Configurations;
+using Catalog.Api.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +23,11 @@ namespace Catalog.Api.DependencyInjection
                     dbContext.EnsureSeeded(configuration);
                 }
             }
+        }
+
+        public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<AppSettings>(configuration);
         }
     }
 }

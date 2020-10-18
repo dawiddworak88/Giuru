@@ -1,4 +1,4 @@
-@import "../../../../shared/components/Files/Files.scss";
+@import "../../../../shared/components/ContentGrid/ContentGrid.scss";
 
 .product-detail {
     &__feature-title {
@@ -17,6 +17,18 @@
         font-size: 0.9rem;
     }
 
+    &__head {
+        min-height: 630px;
+    }
+
+    &__price {
+        margin-top: 1rem;
+
+        a {
+            color: $primary;
+        }
+    }
+
     &__brand {
         a:hover {
             color: $primary;
@@ -27,14 +39,6 @@
         margin-top: 1rem;
         color: darkgreen;
         font-size: 1.1rem;
-    }
-
-    &__price {
-        margin-top: 1rem;
-
-        a {
-            color: $primary;
-        }
     }
 
     &__product-information {
@@ -64,4 +68,8 @@
             width: 50%;
         }
     }
+}
+
+.image-gallery-image {
+    min-height: 446px;
 }

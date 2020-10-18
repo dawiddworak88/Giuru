@@ -1,5 +1,4 @@
-﻿using Azure.Storage;
-using Azure.Storage.Blobs;
+﻿using Azure.Storage.Blobs;
 using Media.Api.Configurations;
 using Microsoft.Extensions.Options;
 using System;
@@ -12,7 +11,8 @@ namespace Media.Api.v1.Area.Media.Repositories
     {
         private readonly IOptions<AppSettings> configuration;
 
-        public MediaRepository(IOptions<AppSettings> configuration)
+        public MediaRepository(
+            IOptions<AppSettings> configuration)
         {
             this.configuration = configuration;
         }
@@ -34,6 +34,20 @@ namespace Media.Api.v1.Area.Media.Repositories
             }
 
             return default;
+        }
+
+        public async Task CreateFileAsync(Guid mediaItemVersionId, string folderName, Stream stream, string filename)
+        {
+            var container = new BlobContainerClient(this.configuration.Value.StorageConnectionString, folderName);
+
+            await container.CreateIfNotExistsAsync();
+
+            var blob = container.GetBlobClient($"{mediaItemVersionId}{Path.GetExtension(filename)}");
+
+            if (!blob.Exists())
+            {
+                blob.Upload(stream);
+            }
         }
     }
 }

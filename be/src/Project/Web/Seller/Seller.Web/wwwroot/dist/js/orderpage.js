@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 419);
+/******/ 	return __webpack_require__(__webpack_require__.s = 418);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -228,16 +228,16 @@ function _arrayLikeToArray(arr, len) {
 
 /***/ }),
 
-/***/ 419:
+/***/ 418:
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(605);
-module.exports = __webpack_require__(420);
+__webpack_require__(604);
+module.exports = __webpack_require__(419);
 
 
 /***/ }),
 
-/***/ 420:
+/***/ 419:
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
@@ -14251,10 +14251,7 @@ function LanguageSwitcher(props) {
 }
 
 /* harmony default export */ var LanguageSwitcher_LanguageSwitcher = (LanguageSwitcher);
-// CONCATENATED MODULE: ./src/shared/layouts/images/logo.png
-/* harmony default export */ var logo = ("/dist/images/logo.png");
 // CONCATENATED MODULE: ./src/shared/components/Header/Header.js
-
 
 
 
@@ -14279,7 +14276,7 @@ function Header(props) {
   }, /*#__PURE__*/react_default.a.createElement("a", {
     href: props.logo.targetUrl
   }, /*#__PURE__*/react_default.a.createElement("img", {
-    src: logo,
+    src: props.logo.logoUrl,
     alt: props.logo.logoAltLabel
   })), /*#__PURE__*/react_default.a.createElement("div", {
     role: "button",
@@ -14366,7 +14363,7 @@ function MenuTiles(props) {
 
 /***/ }),
 
-/***/ 605:
+/***/ 604:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14387,7 +14384,7 @@ var plus = __webpack_require__(55);
 // EXTERNAL MODULE: ./node_modules/react-feather/dist/icons/upload-cloud.js
 var upload_cloud = __webpack_require__(56);
 
-// EXTERNAL MODULE: ./src/shared/components/Header/Header.js + 2 modules
+// EXTERNAL MODULE: ./src/shared/components/Header/Header.js + 1 modules
 var Header = __webpack_require__(59);
 
 // EXTERNAL MODULE: ./src/shared/components/Footer/Footer.js
@@ -14396,19 +14393,12 @@ var Footer = __webpack_require__(57);
 // EXTERNAL MODULE: ./src/shared/components/MenuTiles/MenuTiles.js + 1 modules
 var MenuTiles = __webpack_require__(60);
 
-// EXTERNAL MODULE: ./src/shared/layouts/images/favicon.png
-var favicon = __webpack_require__(82);
-
 // CONCATENATED MODULE: ./src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage.js
 
 
 
 
 
-/* eslint-disable no-unused-vars */
-
-
-/* eslint-enable no-unused-vars */
 
 function OrderPage(props) {
   return /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement(Header["a" /* default */], props.header), /*#__PURE__*/react_default.a.createElement(MenuTiles["a" /* default */], props.menuTiles), /*#__PURE__*/react_default.a.createElement("section", {
@@ -14943,14 +14933,6 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
-
-/***/ }),
-
-/***/ 82:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony default export */ var _unused_webpack_default_export = ("/dist/images/favicon.png");
 
 /***/ })
 

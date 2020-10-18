@@ -10,6 +10,7 @@ using Foundation.Extensions.DependencyInjection;
 using Foundation.PageContent.DependencyInjection;
 using Foundation.Security.DependencyInjection;
 using Foundation.ApiExtensions.DependencyInjection;
+using Foundation.Account.DependencyInjection;
 
 namespace AspNetCore
 {
@@ -30,7 +31,16 @@ namespace AspNetCore
 
             services.AddCultureRouteConstraint();
 
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
+                options.Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
+            });
+
             services.AddControllersWithViews();
+
+            services.RegisterClientAccountDependencies(this.Configuration);
 
             services.RegisterLocalizationDependencies();
 
@@ -53,7 +63,11 @@ namespace AspNetCore
 
             app.UseGeneralStaticFiles();
 
+            app.UseCookiePolicy();
+
             app.UseRouting();
+
+            app.UseAuthenticationAuthorization();
 
             app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
 

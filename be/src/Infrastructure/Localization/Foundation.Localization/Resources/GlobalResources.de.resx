@@ -123,6 +123,9 @@
   <data name="AreYouSureLabel" xml:space="preserve">
     <value>Sind Sie sicher, dass Sie löschen möchten</value>
   </data>
+  <data name="By" xml:space="preserve">
+    <value>von</value>
+  </data>
   <data name="Categories" xml:space="preserve">
     <value>Kategorien</value>
   </data>
@@ -141,6 +144,9 @@
   <data name="Contact" xml:space="preserve">
     <value>Kontakt</value>
   </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Link kopieren</value>
+  </data>
   <data name="Copyright" xml:space="preserve">
     <value>Copyright © [year] Giuru</value>
   </data>
@@ -153,8 +159,14 @@
   <data name="DeleteConfirmationLabel" xml:space="preserve">
     <value>Löschen bestätigen</value>
   </data>
+  <data name="Description" xml:space="preserve">
+    <value>Beschreibung</value>
+  </data>
   <data name="DisplayedRows" xml:space="preserve">
     <value>von</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Herunterladen</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Bearbeiten</value>
@@ -180,6 +192,15 @@
   <data name="ErrorContactAdmin" xml:space="preserve">
     <value>Ein Fehler ist aufgetreten. Bitte wenden Sie sich an den Administrator mit der folgenden Referenznummer:</value>
   </data>
+  <data name="Filename" xml:space="preserve">
+    <value>Dateiname</value>
+  </data>
+  <data name="FilesToDownload" xml:space="preserve">
+    <value>Dateien herunterladen</value>
+  </data>
+  <data name="InStock" xml:space="preserve">
+    <value>Auf Lager</value>
+  </data>
   <data name="Karten" xml:space="preserve">
     <value>Karty</value>
   </data>
@@ -188,6 +209,9 @@
   </data>
   <data name="LastModifiedDate" xml:space="preserve">
     <value>Zuletzt geändertes Datum</value>
+  </data>
+  <data name="Logo" xml:space="preserve">
+    <value>Logo</value>
   </data>
   <data name="MakeTheFuture" xml:space="preserve">
     <value>Machen Sie die Zukunft mit Giuru</value>
@@ -209,6 +233,9 @@
   </data>
   <data name="No" xml:space="preserve">
     <value>Nein</value>
+  </data>
+  <data name="NoResults" xml:space="preserve">
+    <value>Es gibt keine Ergebnisse.</value>
   </data>
   <data name="NoResultsLabel" xml:space="preserve">
     <value>Keine Ergebnisse.</value>
@@ -234,11 +261,20 @@
   <data name="PriceList" xml:space="preserve">
     <value>Preisliste</value>
   </data>
+  <data name="Prices" xml:space="preserve">
+    <value>Preise</value>
+  </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Datenschutz-Bestimmungen</value>
   </data>
   <data name="Products" xml:space="preserve">
     <value>Produkte</value>
+  </data>
+  <data name="Regulations" xml:space="preserve">
+    <value>Geschäftsbedingungen</value>
+  </data>
+  <data name="Results" xml:space="preserve">
+    <value>Ergebnisse</value>
   </data>
   <data name="RowsPerPage" xml:space="preserve">
     <value>Zeilen pro Seite</value>
@@ -263,6 +299,12 @@
   </data>
   <data name="SignIn" xml:space="preserve">
     <value>Einloggen</value>
+  </data>
+  <data name="SignInToSeePrices" xml:space="preserve">
+    <value>Melden Sie sich an, um die Preise zu sehen</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Dateigröße</value>
   </data>
   <data name="TermsAndConditions" xml:space="preserve">
     <value>Geschäftsbedingungen</value>

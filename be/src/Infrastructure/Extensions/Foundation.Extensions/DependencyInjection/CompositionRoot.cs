@@ -13,7 +13,7 @@ namespace Foundation.Extensions.DependencyInjection
         {
             services.AddHttpContextAccessor();
 
-            services.AddScoped<IMediaService, MediaService>();
+            services.AddScoped<IMediaHelperService, MediaHelperService>();
 
             services.Configure<GzipCompressionProviderOptions>(options =>
             {

@@ -10,7 +10,12 @@ using Buyer.Web.Shared.Headers.ViewModels;
 using Buyer.Web.Areas.Home.DependencyInjection;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;
-using Buyer.Web.Shared.Services.Catalogs;
+using Buyer.Web.Areas.Products.DependencyInjection;
+using Buyer.Web.Shared.Catalogs.Services;
+using Buyer.Web.Shared.Catalogs.ModelBuilders;
+using Buyer.Web.Shared.Files.ComponentModels;
+using Buyer.Web.Shared.Files.ViewModels;
+using Buyer.Web.Shared.Files.ModelBuilders;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -19,8 +24,11 @@ namespace Buyer.Web.Shared.DependencyInjection
         public static void RegisterDependencies(this IServiceCollection services)
         {
             services.RegisterHomeDependencies();
+            services.RegisterProductDependencies();
 
             // Model Builders
+            services.AddScoped(typeof(ICatalogModelBuilder<,>), typeof(CatalogModelBuilder<,>));
+            services.AddScoped<IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel>, FilesModelBuilder>();
             services.AddScoped<IModelBuilder<BuyerHeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>, MainNavigationModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();

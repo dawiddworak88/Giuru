@@ -1,6 +1,7 @@
 ﻿using Identity.Api.Infrastructure.Accounts.Entities;
 using Identity.Api.Infrastructure.Addresses.Entities;
 using Identity.Api.Infrastructure.Clients.Entities;
+using Identity.Api.Infrastructure.Contents.Entities;
 using Identity.Api.Infrastructure.Organisations.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,12 @@ namespace Identity.Api.Infrastructure
             optionsBuilder.UseLazyLoadingProxies();
         }
 
+        public DbSet<Content> Contents { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
+        public DbSet<OrganisationTranslation> OrganisationTranslations { get; set; }
+        public DbSet<OrganisationImage> OrganisationImages { get; set; }
+        public DbSet<OrganisationVideo> OrganisationVideos { get; set; }
+        public DbSet<OrganisationFile> OrganisationFiles { get; set; }
         public DbSet<Connection> Connections { get; set; }
         public DbSet<ApplicationUser> Accounts { get; set; }
         public DbSet<Address> Addresses { get; set; }

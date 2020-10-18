@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 22);
+/******/ 	return __webpack_require__(__webpack_require__.s = 53);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -92,12 +92,63 @@
 
 
 if (true) {
-  module.exports = __webpack_require__(23);
+  module.exports = __webpack_require__(34);
 } else {}
 
 
 /***/ }),
 /* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _extends; });
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _objectWithoutProperties; });
+/* harmony import */ var _objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
+
+function _objectWithoutProperties(source, excluded) {
+  if (source == null) return {};
+  var target = Object(_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(source, excluded);
+  var key, i;
+
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+
+    for (i = 0; i < sourceSymbolKeys.length; i++) {
+      key = sourceSymbolKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      target[key] = source[key];
+    }
+  }
+
+  return target;
+}
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -110,12 +161,12 @@ if (true) {
 if (false) { var throwOnDirectAccess, ReactIs; } else {
   // By explicitly using `prop-types` you are opting into new production behavior.
   // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(27)();
+  module.exports = __webpack_require__(38)();
 }
 
 
 /***/ }),
-/* 2 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -144,13 +195,395 @@ if (true) {
   // DCE check should happen before ReactDOM bundle executes so that
   // DevTools can report bad minification during injection.
   checkDCE();
-  module.exports = __webpack_require__(24);
+  module.exports = __webpack_require__(35);
 } else {}
 
 
 /***/ }),
-/* 3 */,
-/* 4 */
+/* 5 */,
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export hexToRgb */
+/* unused harmony export rgbToHex */
+/* unused harmony export hslToRgb */
+/* unused harmony export decomposeColor */
+/* unused harmony export recomposeColor */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getContrastRatio; });
+/* unused harmony export getLuminance */
+/* unused harmony export emphasize */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return fade; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return darken; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return lighten; });
+/* eslint-disable no-use-before-define */
+
+/**
+ * Returns a number whose value is limited to the given range.
+ *
+ * @param {number} value The value to be clamped
+ * @param {number} min The lower boundary of the output range
+ * @param {number} max The upper boundary of the output range
+ * @returns {number} A number in the range [min, max]
+ */
+function clamp(value) {
+  var min = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+  var max = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
+
+  if (false) {}
+
+  return Math.min(Math.max(min, value), max);
+}
+/**
+ * Converts a color from CSS hex format to CSS rgb format.
+ *
+ * @param {string} color - Hex color, i.e. #nnn or #nnnnnn
+ * @returns {string} A CSS rgb color string
+ */
+
+
+function hexToRgb(color) {
+  color = color.substr(1);
+  var re = new RegExp(".{1,".concat(color.length / 3, "}"), 'g');
+  var colors = color.match(re);
+
+  if (colors && colors[0].length === 1) {
+    colors = colors.map(function (n) {
+      return n + n;
+    });
+  }
+
+  return colors ? "rgb(".concat(colors.map(function (n) {
+    return parseInt(n, 16);
+  }).join(', '), ")") : '';
+}
+
+function intToHex(int) {
+  var hex = int.toString(16);
+  return hex.length === 1 ? "0".concat(hex) : hex;
+}
+/**
+ * Converts a color from CSS rgb format to CSS hex format.
+ *
+ * @param {string} color - RGB color, i.e. rgb(n, n, n)
+ * @returns {string} A CSS rgb color string, i.e. #nnnnnn
+ */
+
+
+function rgbToHex(color) {
+  // Idempotent
+  if (color.indexOf('#') === 0) {
+    return color;
+  }
+
+  var _decomposeColor = decomposeColor(color),
+      values = _decomposeColor.values;
+
+  return "#".concat(values.map(function (n) {
+    return intToHex(n);
+  }).join(''));
+}
+/**
+ * Converts a color from hsl format to rgb format.
+ *
+ * @param {string} color - HSL color values
+ * @returns {string} rgb color values
+ */
+
+function hslToRgb(color) {
+  color = decomposeColor(color);
+  var _color = color,
+      values = _color.values;
+  var h = values[0];
+  var s = values[1] / 100;
+  var l = values[2] / 100;
+  var a = s * Math.min(l, 1 - l);
+
+  var f = function f(n) {
+    var k = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (n + h / 30) % 12;
+    return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+  };
+
+  var type = 'rgb';
+  var rgb = [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)];
+
+  if (color.type === 'hsla') {
+    type += 'a';
+    rgb.push(values[3]);
+  }
+
+  return recomposeColor({
+    type: type,
+    values: rgb
+  });
+}
+/**
+ * Returns an object with the type and values of a color.
+ *
+ * Note: Does not support rgb % values.
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @returns {object} - A MUI color object: {type: string, values: number[]}
+ */
+
+function decomposeColor(color) {
+  // Idempotent
+  if (color.type) {
+    return color;
+  }
+
+  if (color.charAt(0) === '#') {
+    return decomposeColor(hexToRgb(color));
+  }
+
+  var marker = color.indexOf('(');
+  var type = color.substring(0, marker);
+
+  if (['rgb', 'rgba', 'hsl', 'hsla'].indexOf(type) === -1) {
+    throw new Error(["Material-UI: unsupported `".concat(color, "` color."), 'We support the following formats: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla().'].join('\n'));
+  }
+
+  var values = color.substring(marker + 1, color.length - 1).split(',');
+  values = values.map(function (value) {
+    return parseFloat(value);
+  });
+  return {
+    type: type,
+    values: values
+  };
+}
+/**
+ * Converts a color object with type and values to a string.
+ *
+ * @param {object} color - Decomposed color
+ * @param {string} color.type - One of: 'rgb', 'rgba', 'hsl', 'hsla'
+ * @param {array} color.values - [n,n,n] or [n,n,n,n]
+ * @returns {string} A CSS color string
+ */
+
+function recomposeColor(color) {
+  var type = color.type;
+  var values = color.values;
+
+  if (type.indexOf('rgb') !== -1) {
+    // Only convert the first 3 values to int (i.e. not alpha)
+    values = values.map(function (n, i) {
+      return i < 3 ? parseInt(n, 10) : n;
+    });
+  } else if (type.indexOf('hsl') !== -1) {
+    values[1] = "".concat(values[1], "%");
+    values[2] = "".concat(values[2], "%");
+  }
+
+  return "".concat(type, "(").concat(values.join(', '), ")");
+}
+/**
+ * Calculates the contrast ratio between two colors.
+ *
+ * Formula: https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
+ *
+ * @param {string} foreground - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @param {string} background - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @returns {number} A contrast ratio value in the range 0 - 21.
+ */
+
+function getContrastRatio(foreground, background) {
+  var lumA = getLuminance(foreground);
+  var lumB = getLuminance(background);
+  return (Math.max(lumA, lumB) + 0.05) / (Math.min(lumA, lumB) + 0.05);
+}
+/**
+ * The relative brightness of any point in a color space,
+ * normalized to 0 for darkest black and 1 for lightest white.
+ *
+ * Formula: https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @returns {number} The relative brightness of the color in the range 0 - 1
+ */
+
+function getLuminance(color) {
+  color = decomposeColor(color);
+  var rgb = color.type === 'hsl' ? decomposeColor(hslToRgb(color)).values : color.values;
+  rgb = rgb.map(function (val) {
+    val /= 255; // normalized
+
+    return val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
+  }); // Truncate at 3 digits
+
+  return Number((0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]).toFixed(3));
+}
+/**
+ * Darken or lighten a color, depending on its luminance.
+ * Light colors are darkened, dark colors are lightened.
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @param {number} coefficient=0.15 - multiplier in the range 0 - 1
+ * @returns {string} A CSS color string. Hex input values are returned as rgb
+ */
+
+function emphasize(color) {
+  var coefficient = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.15;
+  return getLuminance(color) > 0.5 ? darken(color, coefficient) : lighten(color, coefficient);
+}
+/**
+ * Set the absolute transparency of a color.
+ * Any existing alpha values are overwritten.
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @param {number} value - value to set the alpha channel to in the range 0 -1
+ * @returns {string} A CSS color string. Hex input values are returned as rgb
+ */
+
+function fade(color, value) {
+  color = decomposeColor(color);
+  value = clamp(value);
+
+  if (color.type === 'rgb' || color.type === 'hsl') {
+    color.type += 'a';
+  }
+
+  color.values[3] = value;
+  return recomposeColor(color);
+}
+/**
+ * Darkens a color.
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @param {number} coefficient - multiplier in the range 0 - 1
+ * @returns {string} A CSS color string. Hex input values are returned as rgb
+ */
+
+function darken(color, coefficient) {
+  color = decomposeColor(color);
+  coefficient = clamp(coefficient);
+
+  if (color.type.indexOf('hsl') !== -1) {
+    color.values[2] *= 1 - coefficient;
+  } else if (color.type.indexOf('rgb') !== -1) {
+    for (var i = 0; i < 3; i += 1) {
+      color.values[i] *= 1 - coefficient;
+    }
+  }
+
+  return recomposeColor(color);
+}
+/**
+ * Lightens a color.
+ *
+ * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
+ * @param {number} coefficient - multiplier in the range 0 - 1
+ * @returns {string} A CSS color string. Hex input values are returned as rgb
+ */
+
+function lighten(color, coefficient) {
+  color = decomposeColor(color);
+  coefficient = clamp(coefficient);
+
+  if (color.type.indexOf('hsl') !== -1) {
+    color.values[2] += (100 - color.values[2]) * coefficient;
+  } else if (color.type.indexOf('rgb') !== -1) {
+    for (var i = 0; i < 3; i += 1) {
+      color.values[i] += (255 - color.values[i]) * coefficient;
+    }
+  }
+
+  return recomposeColor(color);
+}
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _classCallCheck; });
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _createClass; });
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _toConsumableArray; });
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
+var arrayLikeToArray = __webpack_require__(14);
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) return Object(arrayLikeToArray["a" /* default */])(arr);
+}
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArray.js
+var iterableToArray = __webpack_require__(24);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
+var unsupportedIterableToArray = __webpack_require__(15);
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js
+
+
+
+
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || Object(iterableToArray["a" /* default */])(arr) || Object(unsupportedIterableToArray["a" /* default */])(arr) || _nonIterableSpread();
+}
+
+/***/ }),
+/* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _defineProperty; });
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+/***/ }),
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -172,7 +605,101 @@ function _typeof(obj) {
 }
 
 /***/ }),
-/* 5 */
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _slicedToArray; });
+
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
+function _iterableToArrayLimit(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) {
+    arr2[i] = arr[i];
+  }
+
+  return arr2;
+}
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(n);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js
+
+
+
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+}
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _objectWithoutPropertiesLoose; });
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+/***/ }),
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -188,38 +715,12 @@ function _arrayLikeToArray(arr, len) {
 }
 
 /***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _assertThisInitialized; });
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return self;
-}
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-if (true) {
-  module.exports = __webpack_require__(29);
-} else {}
-
-
-/***/ }),
-/* 8 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _unsupportedIterableToArray; });
-/* harmony import */ var _arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
+/* harmony import */ var _arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
 
 function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;
@@ -231,11 +732,101 @@ function _unsupportedIterableToArray(o, minLen) {
 }
 
 /***/ }),
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+var ThemeContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext(null);
+
+if (false) {}
+
+/* harmony default export */ __webpack_exports__["a"] = (ThemeContext);
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+// We need to centralize the zIndex definitions as they work
+// like global values in the browser.
+var zIndex = {
+  mobileStepper: 1000,
+  speedDial: 1050,
+  appBar: 1100,
+  drawer: 1200,
+  modal: 1300,
+  snackbar: 1400,
+  tooltip: 1500
+};
+/* harmony default export */ __webpack_exports__["a"] = (zIndex);
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var hasSymbol = typeof Symbol === 'function' && Symbol.for;
+/* harmony default export */ __webpack_exports__["a"] = (hasSymbol ? Symbol.for('mui.nested') : '__THEME_NESTED__');
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _slicedToArray; });
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
+var arrayWithHoles = __webpack_require__(22);
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
+function _iterableToArrayLimit(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
+var unsupportedIterableToArray = __webpack_require__(15);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
+var nonIterableRest = __webpack_require__(23);
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js
+
+
+
+
+function _slicedToArray(arr, i) {
+  return Object(arrayWithHoles["a" /* default */])(arr) || _iterableToArrayLimit(arr, i) || Object(unsupportedIterableToArray["a" /* default */])(arr, i) || Object(nonIterableRest["a" /* default */])();
+}
+
+/***/ }),
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -332,7 +923,52 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 14 */
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GlobalHelper; });
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(29);
+
+
+
+
+var GlobalHelper = /*#__PURE__*/function () {
+  function GlobalHelper() {
+    Object(C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(this, GlobalHelper);
+  }
+
+  Object(C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(GlobalHelper, null, [{
+    key: "initMuiTheme",
+    value: function initMuiTheme() {
+      var theme = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])({
+        typography: {
+          button: {
+            textTransform: "none"
+          }
+        },
+        palette: {
+          primary: {
+            main: "#BF202F"
+          },
+          secondary: {
+            main: "#5E1916"
+          }
+        }
+      });
+      return theme;
+    }
+  }]);
+
+  return GlobalHelper;
+}();
+
+
+
+/***/ }),
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -342,7 +978,7 @@ function _arrayWithHoles(arr) {
 }
 
 /***/ }),
-/* 15 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -352,7 +988,7 @@ function _nonIterableRest() {
 }
 
 /***/ }),
-/* 16 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -362,129 +998,1209 @@ function _iterableToArray(iter) {
 }
 
 /***/ }),
-/* 17 */
+/* 25 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function Footer(props) {
+  var links = props.links.map(function (link, index) {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+      key: index
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      href: link.url
+    }, link.text));
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("footer", {
+    className: "footer"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "content"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, links)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "content has-text-centered has-text-white"
+  }, props.copyright));
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (Footer);
+
+/***/ }),
+/* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CssSsrRemovalHelper; });
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
+
+
+
+var CssSsrRemovalHelper = /*#__PURE__*/function () {
+  function CssSsrRemovalHelper() {
+    Object(C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(this, CssSsrRemovalHelper);
+  }
+
+  Object(C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(CssSsrRemovalHelper, null, [{
+    key: "remove",
+    value: function remove() {
+      var jssStyles = document.querySelector("#jss-server-side");
+
+      if (jssStyles) {
+        jssStyles.parentElement.removeChild(jssStyles);
+      }
+    }
+  }]);
+
+  return CssSsrRemovalHelper;
+}();
+
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 5 modules
+var slicedToArray = __webpack_require__(12);
+
+// EXTERNAL MODULE: ./node_modules/react/index.js
+var react = __webpack_require__(0);
+var react_default = /*#__PURE__*/__webpack_require__.n(react);
+
+// CONCATENATED MODULE: ./src/shared/components/LanguageSwitcher/LanguageSwitcher.js
+
+
+function LanguageSwitcher(props) {
+  function handleLanguageChange(e) {
+    if (typeof window !== "undefined" && e && e.target) {
+      window.location.href = e.target.value;
+    }
+  }
+
+  var languages = props.availableLanguages.map(function (language, index) {
+    return /*#__PURE__*/react_default.a.createElement("option", {
+      key: index,
+      value: language.url
+    }, language.text);
+  });
+  return /*#__PURE__*/react_default.a.createElement("div", {
+    className: "select"
+  }, /*#__PURE__*/react_default.a.createElement("select", {
+    value: props.selectedLanguageUrl,
+    onChange: function onChange(e) {
+      return handleLanguageChange(e);
+    }
+  }, languages));
+}
+
+/* harmony default export */ var LanguageSwitcher_LanguageSwitcher = (LanguageSwitcher);
+// CONCATENATED MODULE: ./src/shared/components/Header/Header.js
+
+
+
+
+function Header(props) {
+  var _useState = Object(react["useState"])(false),
+      _useState2 = Object(slicedToArray["a" /* default */])(_useState, 2),
+      isActive = _useState2[0],
+      setIsActive = _useState2[1];
+
+  var links = props.links.map(function (link, index) {
+    return /*#__PURE__*/react_default.a.createElement("a", {
+      key: index,
+      className: "navbar-item",
+      href: link.url
+    }, link.text);
+  });
+  return /*#__PURE__*/react_default.a.createElement("header", null, /*#__PURE__*/react_default.a.createElement("nav", {
+    className: "navbar is-spaced"
+  }, /*#__PURE__*/react_default.a.createElement("div", {
+    className: "navbar-brand"
+  }, /*#__PURE__*/react_default.a.createElement("a", {
+    href: props.logo.targetUrl
+  }, /*#__PURE__*/react_default.a.createElement("img", {
+    src: props.logo.logoUrl,
+    alt: props.logo.logoAltLabel
+  })), /*#__PURE__*/react_default.a.createElement("div", {
+    role: "button",
+    onClick: function onClick() {
+      return setIsActive(!isActive);
+    },
+    className: isActive ? "navbar-burger is-active" : "navbar-burger",
+    "aria-label": "menu",
+    "aria-expanded": "false"
+  }, /*#__PURE__*/react_default.a.createElement("span", {
+    "aria-hidden": "true"
+  }), /*#__PURE__*/react_default.a.createElement("span", {
+    "aria-hidden": "true"
+  }), /*#__PURE__*/react_default.a.createElement("span", {
+    "aria-hidden": "true"
+  }))), /*#__PURE__*/react_default.a.createElement("div", {
+    className: isActive ? "navbar-menu is-active" : "navbar-menu"
+  }, /*#__PURE__*/react_default.a.createElement("div", {
+    className: "navbar-start"
+  }, links), /*#__PURE__*/react_default.a.createElement("div", {
+    className: "navbar-end"
+  }, /*#__PURE__*/react_default.a.createElement("div", {
+    className: "navbar-item"
+  }, /*#__PURE__*/react_default.a.createElement(LanguageSwitcher_LanguageSwitcher, props.languageSwitcher))))));
+}
+
+/* harmony default export */ var Header_Header = __webpack_exports__["a"] = (Header);
+
+/***/ }),
+/* 28 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _assertThisInitialized; });
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+/***/ }),
+/* 29 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
+var defineProperty = __webpack_require__(10);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
+var objectWithoutProperties = __webpack_require__(2);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/utils/esm/deepmerge.js
+var deepmerge = __webpack_require__(54);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
+var esm_extends = __webpack_require__(1);
+
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/createBreakpoints.js
+
+
+// Sorted ASC by size. That's important.
+// It can't be configured as it's used statically for propTypes.
+var keys = ['xs', 'sm', 'md', 'lg', 'xl']; // Keep in mind that @media is inclusive by the CSS specification.
+
+function createBreakpoints(breakpoints) {
+  var _breakpoints$values = breakpoints.values,
+      values = _breakpoints$values === void 0 ? {
+    xs: 0,
+    sm: 600,
+    md: 960,
+    lg: 1280,
+    xl: 1920
+  } : _breakpoints$values,
+      _breakpoints$unit = breakpoints.unit,
+      unit = _breakpoints$unit === void 0 ? 'px' : _breakpoints$unit,
+      _breakpoints$step = breakpoints.step,
+      step = _breakpoints$step === void 0 ? 5 : _breakpoints$step,
+      other = Object(objectWithoutProperties["a" /* default */])(breakpoints, ["values", "unit", "step"]);
+
+  function up(key) {
+    var value = typeof values[key] === 'number' ? values[key] : key;
+    return "@media (min-width:".concat(value).concat(unit, ")");
+  }
+
+  function down(key) {
+    var endIndex = keys.indexOf(key) + 1;
+    var upperbound = values[keys[endIndex]];
+
+    if (endIndex === keys.length) {
+      // xl down applies to all sizes
+      return up('xs');
+    }
+
+    var value = typeof upperbound === 'number' && endIndex > 0 ? upperbound : key;
+    return "@media (max-width:".concat(value - step / 100).concat(unit, ")");
+  }
+
+  function between(start, end) {
+    var endIndex = keys.indexOf(end);
+
+    if (endIndex === keys.length - 1) {
+      return up(start);
+    }
+
+    return "@media (min-width:".concat(typeof values[start] === 'number' ? values[start] : start).concat(unit, ") and ") + "(max-width:".concat((endIndex !== -1 && typeof values[keys[endIndex + 1]] === 'number' ? values[keys[endIndex + 1]] : end) - step / 100).concat(unit, ")");
+  }
+
+  function only(key) {
+    return between(key, key);
+  }
+
+  function width(key) {
+    return values[key];
+  }
+
+  return Object(esm_extends["a" /* default */])({
+    keys: keys,
+    values: values,
+    up: up,
+    down: down,
+    between: between,
+    only: only,
+    width: width
+  }, other);
+}
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/createMixins.js
+
+
+function createMixins(breakpoints, spacing, mixins) {
+  var _toolbar;
+
+  return Object(esm_extends["a" /* default */])({
+    gutters: function gutters() {
+      var styles = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      // To deprecate in v4.1
+      //       warning(
+      //         false,
+      //         [
+      //           'Material-UI: theme.mixins.gutters() is deprecated.',
+      //           'You can use the source of the mixin directly:',
+      //           `
+      // paddingLeft: theme.spacing(2),
+      // paddingRight: theme.spacing(2),
+      // [theme.breakpoints.up('sm')]: {
+      //   paddingLeft: theme.spacing(3),
+      //   paddingRight: theme.spacing(3),
+      // },
+      // `,
+      //         ].join('\n'),
+      //       );
+      return Object(esm_extends["a" /* default */])({
+        paddingLeft: spacing(2),
+        paddingRight: spacing(2)
+      }, styles, Object(defineProperty["a" /* default */])({}, breakpoints.up('sm'), Object(esm_extends["a" /* default */])({
+        paddingLeft: spacing(3),
+        paddingRight: spacing(3)
+      }, styles[breakpoints.up('sm')])));
+    },
+    toolbar: (_toolbar = {
+      minHeight: 56
+    }, Object(defineProperty["a" /* default */])(_toolbar, "".concat(breakpoints.up('xs'), " and (orientation: landscape)"), {
+      minHeight: 48
+    }), Object(defineProperty["a" /* default */])(_toolbar, breakpoints.up('sm'), {
+      minHeight: 64
+    }), _toolbar)
+  }, mixins);
+}
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/colors/common.js
+var common = {
+  black: '#000',
+  white: '#fff'
+};
+/* harmony default export */ var colors_common = (common);
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/colors/grey.js
+var grey = {
+  50: '#fafafa',
+  100: '#f5f5f5',
+  200: '#eeeeee',
+  300: '#e0e0e0',
+  400: '#bdbdbd',
+  500: '#9e9e9e',
+  600: '#757575',
+  700: '#616161',
+  800: '#424242',
+  900: '#212121',
+  A100: '#d5d5d5',
+  A200: '#aaaaaa',
+  A400: '#303030',
+  A700: '#616161'
+};
+/* harmony default export */ var colors_grey = (grey);
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/colors/indigo.js
+var indigo = {
+  50: '#e8eaf6',
+  100: '#c5cae9',
+  200: '#9fa8da',
+  300: '#7986cb',
+  400: '#5c6bc0',
+  500: '#3f51b5',
+  600: '#3949ab',
+  700: '#303f9f',
+  800: '#283593',
+  900: '#1a237e',
+  A100: '#8c9eff',
+  A200: '#536dfe',
+  A400: '#3d5afe',
+  A700: '#304ffe'
+};
+/* harmony default export */ var colors_indigo = (indigo);
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/colors/pink.js
+var pink = {
+  50: '#fce4ec',
+  100: '#f8bbd0',
+  200: '#f48fb1',
+  300: '#f06292',
+  400: '#ec407a',
+  500: '#e91e63',
+  600: '#d81b60',
+  700: '#c2185b',
+  800: '#ad1457',
+  900: '#880e4f',
+  A100: '#ff80ab',
+  A200: '#ff4081',
+  A400: '#f50057',
+  A700: '#c51162'
+};
+/* harmony default export */ var colors_pink = (pink);
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/colors/red.js
+var red = {
+  50: '#ffebee',
+  100: '#ffcdd2',
+  200: '#ef9a9a',
+  300: '#e57373',
+  400: '#ef5350',
+  500: '#f44336',
+  600: '#e53935',
+  700: '#d32f2f',
+  800: '#c62828',
+  900: '#b71c1c',
+  A100: '#ff8a80',
+  A200: '#ff5252',
+  A400: '#ff1744',
+  A700: '#d50000'
+};
+/* harmony default export */ var colors_red = (red);
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/colors/orange.js
+var orange = {
+  50: '#fff3e0',
+  100: '#ffe0b2',
+  200: '#ffcc80',
+  300: '#ffb74d',
+  400: '#ffa726',
+  500: '#ff9800',
+  600: '#fb8c00',
+  700: '#f57c00',
+  800: '#ef6c00',
+  900: '#e65100',
+  A100: '#ffd180',
+  A200: '#ffab40',
+  A400: '#ff9100',
+  A700: '#ff6d00'
+};
+/* harmony default export */ var colors_orange = (orange);
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/colors/blue.js
+var blue = {
+  50: '#e3f2fd',
+  100: '#bbdefb',
+  200: '#90caf9',
+  300: '#64b5f6',
+  400: '#42a5f5',
+  500: '#2196f3',
+  600: '#1e88e5',
+  700: '#1976d2',
+  800: '#1565c0',
+  900: '#0d47a1',
+  A100: '#82b1ff',
+  A200: '#448aff',
+  A400: '#2979ff',
+  A700: '#2962ff'
+};
+/* harmony default export */ var colors_blue = (blue);
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/colors/green.js
+var green = {
+  50: '#e8f5e9',
+  100: '#c8e6c9',
+  200: '#a5d6a7',
+  300: '#81c784',
+  400: '#66bb6a',
+  500: '#4caf50',
+  600: '#43a047',
+  700: '#388e3c',
+  800: '#2e7d32',
+  900: '#1b5e20',
+  A100: '#b9f6ca',
+  A200: '#69f0ae',
+  A400: '#00e676',
+  A700: '#00c853'
+};
+/* harmony default export */ var colors_green = (green);
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/colorManipulator.js
+var colorManipulator = __webpack_require__(6);
+
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/createPalette.js
+
+
+
+
+
+
+
+
+
+
+
+
+var light = {
+  // The colors used to style the text.
+  text: {
+    // The most important text.
+    primary: 'rgba(0, 0, 0, 0.87)',
+    // Secondary text.
+    secondary: 'rgba(0, 0, 0, 0.54)',
+    // Disabled text have even lower visual prominence.
+    disabled: 'rgba(0, 0, 0, 0.38)',
+    // Text hints.
+    hint: 'rgba(0, 0, 0, 0.38)'
+  },
+  // The color used to divide different elements.
+  divider: 'rgba(0, 0, 0, 0.12)',
+  // The background colors used to style the surfaces.
+  // Consistency between these values is important.
+  background: {
+    paper: colors_common.white,
+    default: colors_grey[50]
+  },
+  // The colors used to style the action elements.
+  action: {
+    // The color of an active action like an icon button.
+    active: 'rgba(0, 0, 0, 0.54)',
+    // The color of an hovered action.
+    hover: 'rgba(0, 0, 0, 0.04)',
+    hoverOpacity: 0.04,
+    // The color of a selected action.
+    selected: 'rgba(0, 0, 0, 0.08)',
+    selectedOpacity: 0.08,
+    // The color of a disabled action.
+    disabled: 'rgba(0, 0, 0, 0.26)',
+    // The background color of a disabled action.
+    disabledBackground: 'rgba(0, 0, 0, 0.12)',
+    disabledOpacity: 0.38,
+    focus: 'rgba(0, 0, 0, 0.12)',
+    focusOpacity: 0.12,
+    activatedOpacity: 0.12
+  }
+};
+var dark = {
+  text: {
+    primary: colors_common.white,
+    secondary: 'rgba(255, 255, 255, 0.7)',
+    disabled: 'rgba(255, 255, 255, 0.5)',
+    hint: 'rgba(255, 255, 255, 0.5)',
+    icon: 'rgba(255, 255, 255, 0.5)'
+  },
+  divider: 'rgba(255, 255, 255, 0.12)',
+  background: {
+    paper: colors_grey[800],
+    default: '#303030'
+  },
+  action: {
+    active: colors_common.white,
+    hover: 'rgba(255, 255, 255, 0.08)',
+    hoverOpacity: 0.08,
+    selected: 'rgba(255, 255, 255, 0.16)',
+    selectedOpacity: 0.16,
+    disabled: 'rgba(255, 255, 255, 0.3)',
+    disabledBackground: 'rgba(255, 255, 255, 0.12)',
+    disabledOpacity: 0.38,
+    focus: 'rgba(255, 255, 255, 0.12)',
+    focusOpacity: 0.12,
+    activatedOpacity: 0.24
+  }
+};
+
+function addLightOrDark(intent, direction, shade, tonalOffset) {
+  var tonalOffsetLight = tonalOffset.light || tonalOffset;
+  var tonalOffsetDark = tonalOffset.dark || tonalOffset * 1.5;
+
+  if (!intent[direction]) {
+    if (intent.hasOwnProperty(shade)) {
+      intent[direction] = intent[shade];
+    } else if (direction === 'light') {
+      intent.light = Object(colorManipulator["d" /* lighten */])(intent.main, tonalOffsetLight);
+    } else if (direction === 'dark') {
+      intent.dark = Object(colorManipulator["a" /* darken */])(intent.main, tonalOffsetDark);
+    }
+  }
+}
+
+function createPalette(palette) {
+  var _palette$primary = palette.primary,
+      primary = _palette$primary === void 0 ? {
+    light: colors_indigo[300],
+    main: colors_indigo[500],
+    dark: colors_indigo[700]
+  } : _palette$primary,
+      _palette$secondary = palette.secondary,
+      secondary = _palette$secondary === void 0 ? {
+    light: colors_pink.A200,
+    main: colors_pink.A400,
+    dark: colors_pink.A700
+  } : _palette$secondary,
+      _palette$error = palette.error,
+      error = _palette$error === void 0 ? {
+    light: colors_red[300],
+    main: colors_red[500],
+    dark: colors_red[700]
+  } : _palette$error,
+      _palette$warning = palette.warning,
+      warning = _palette$warning === void 0 ? {
+    light: colors_orange[300],
+    main: colors_orange[500],
+    dark: colors_orange[700]
+  } : _palette$warning,
+      _palette$info = palette.info,
+      info = _palette$info === void 0 ? {
+    light: colors_blue[300],
+    main: colors_blue[500],
+    dark: colors_blue[700]
+  } : _palette$info,
+      _palette$success = palette.success,
+      success = _palette$success === void 0 ? {
+    light: colors_green[300],
+    main: colors_green[500],
+    dark: colors_green[700]
+  } : _palette$success,
+      _palette$type = palette.type,
+      type = _palette$type === void 0 ? 'light' : _palette$type,
+      _palette$contrastThre = palette.contrastThreshold,
+      contrastThreshold = _palette$contrastThre === void 0 ? 3 : _palette$contrastThre,
+      _palette$tonalOffset = palette.tonalOffset,
+      tonalOffset = _palette$tonalOffset === void 0 ? 0.2 : _palette$tonalOffset,
+      other = Object(objectWithoutProperties["a" /* default */])(palette, ["primary", "secondary", "error", "warning", "info", "success", "type", "contrastThreshold", "tonalOffset"]); // Use the same logic as
+  // Bootstrap: https://github.com/twbs/bootstrap/blob/1d6e3710dd447de1a200f29e8fa521f8a0908f70/scss/_functions.scss#L59
+  // and material-components-web https://github.com/material-components/material-components-web/blob/ac46b8863c4dab9fc22c4c662dc6bd1b65dd652f/packages/mdc-theme/_functions.scss#L54
+
+
+  function getContrastText(background) {
+    var contrastText = Object(colorManipulator["c" /* getContrastRatio */])(background, dark.text.primary) >= contrastThreshold ? dark.text.primary : light.text.primary;
+
+    if (false) { var contrast; }
+
+    return contrastText;
+  }
+
+  var augmentColor = function augmentColor(color) {
+    var mainShade = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
+    var lightShade = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 300;
+    var darkShade = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 700;
+    color = Object(esm_extends["a" /* default */])({}, color);
+
+    if (!color.main && color[mainShade]) {
+      color.main = color[mainShade];
+    }
+
+    if (!color.main) {
+      throw new Error(['Material-UI: the color provided to augmentColor(color) is invalid.', "The color object needs to have a `main` property or a `".concat(mainShade, "` property.")].join('\n'));
+    }
+
+    if (typeof color.main !== 'string') {
+      throw new Error(['Material-UI: the color provided to augmentColor(color) is invalid.', "`color.main` should be a string, but `".concat(JSON.stringify(color.main), "` was provided instead."), '', 'Did you intend to use one of the following approaches?', '', 'import { green } from "@material-ui/core/colors";', '', 'const theme1 = createMuiTheme({ palette: {', '  primary: green,', '} });', '', 'const theme2 = createMuiTheme({ palette: {', '  primary: { main: green[500] },', '} });'].join('\n'));
+    }
+
+    addLightOrDark(color, 'light', lightShade, tonalOffset);
+    addLightOrDark(color, 'dark', darkShade, tonalOffset);
+
+    if (!color.contrastText) {
+      color.contrastText = getContrastText(color.main);
+    }
+
+    return color;
+  };
+
+  var types = {
+    dark: dark,
+    light: light
+  };
+
+  if (false) {}
+
+  var paletteOutput = Object(deepmerge["a" /* default */])(Object(esm_extends["a" /* default */])({
+    // A collection of common colors.
+    common: colors_common,
+    // The palette type, can be light or dark.
+    type: type,
+    // The colors used to represent primary interface elements for a user.
+    primary: augmentColor(primary),
+    // The colors used to represent secondary interface elements for a user.
+    secondary: augmentColor(secondary, 'A400', 'A200', 'A700'),
+    // The colors used to represent interface elements that the user should be made aware of.
+    error: augmentColor(error),
+    // The colors used to represent potentially dangerous actions or important messages.
+    warning: augmentColor(warning),
+    // The colors used to present information to the user that is neutral and not necessarily important.
+    info: augmentColor(info),
+    // The colors used to indicate the successful completion of an action that user triggered.
+    success: augmentColor(success),
+    // The grey colors.
+    grey: colors_grey,
+    // Used by `getContrastText()` to maximize the contrast between
+    // the background and the text.
+    contrastThreshold: contrastThreshold,
+    // Takes a background color and returns the text color that maximizes the contrast.
+    getContrastText: getContrastText,
+    // Generate a rich color object.
+    augmentColor: augmentColor,
+    // Used by the functions below to shift a color's luminance by approximately
+    // two indexes within its tonal palette.
+    // E.g., shift from Red 500 to Red 300 or Red 700.
+    tonalOffset: tonalOffset
+  }, types[type]), other);
+  return paletteOutput;
+}
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/createTypography.js
+
+
+
+
+function round(value) {
+  return Math.round(value * 1e5) / 1e5;
+}
+
+var caseAllCaps = {
+  textTransform: 'uppercase'
+};
+var defaultFontFamily = '"Roboto", "Helvetica", "Arial", sans-serif';
+/**
+ * @see @link{https://material.io/design/typography/the-type-system.html}
+ * @see @link{https://material.io/design/typography/understanding-typography.html}
+ */
+
+function createTypography(palette, typography) {
+  var _ref = typeof typography === 'function' ? typography(palette) : typography,
+      _ref$fontFamily = _ref.fontFamily,
+      fontFamily = _ref$fontFamily === void 0 ? defaultFontFamily : _ref$fontFamily,
+      _ref$fontSize = _ref.fontSize,
+      fontSize = _ref$fontSize === void 0 ? 14 : _ref$fontSize,
+      _ref$fontWeightLight = _ref.fontWeightLight,
+      fontWeightLight = _ref$fontWeightLight === void 0 ? 300 : _ref$fontWeightLight,
+      _ref$fontWeightRegula = _ref.fontWeightRegular,
+      fontWeightRegular = _ref$fontWeightRegula === void 0 ? 400 : _ref$fontWeightRegula,
+      _ref$fontWeightMedium = _ref.fontWeightMedium,
+      fontWeightMedium = _ref$fontWeightMedium === void 0 ? 500 : _ref$fontWeightMedium,
+      _ref$fontWeightBold = _ref.fontWeightBold,
+      fontWeightBold = _ref$fontWeightBold === void 0 ? 700 : _ref$fontWeightBold,
+      _ref$htmlFontSize = _ref.htmlFontSize,
+      htmlFontSize = _ref$htmlFontSize === void 0 ? 16 : _ref$htmlFontSize,
+      allVariants = _ref.allVariants,
+      pxToRem2 = _ref.pxToRem,
+      other = Object(objectWithoutProperties["a" /* default */])(_ref, ["fontFamily", "fontSize", "fontWeightLight", "fontWeightRegular", "fontWeightMedium", "fontWeightBold", "htmlFontSize", "allVariants", "pxToRem"]);
+
+  if (false) {}
+
+  var coef = fontSize / 14;
+
+  var pxToRem = pxToRem2 || function (size) {
+    return "".concat(size / htmlFontSize * coef, "rem");
+  };
+
+  var buildVariant = function buildVariant(fontWeight, size, lineHeight, letterSpacing, casing) {
+    return Object(esm_extends["a" /* default */])({
+      fontFamily: fontFamily,
+      fontWeight: fontWeight,
+      fontSize: pxToRem(size),
+      // Unitless following https://meyerweb.com/eric/thoughts/2006/02/08/unitless-line-heights/
+      lineHeight: lineHeight
+    }, fontFamily === defaultFontFamily ? {
+      letterSpacing: "".concat(round(letterSpacing / size), "em")
+    } : {}, {}, casing, {}, allVariants);
+  };
+
+  var variants = {
+    h1: buildVariant(fontWeightLight, 96, 1.167, -1.5),
+    h2: buildVariant(fontWeightLight, 60, 1.2, -0.5),
+    h3: buildVariant(fontWeightRegular, 48, 1.167, 0),
+    h4: buildVariant(fontWeightRegular, 34, 1.235, 0.25),
+    h5: buildVariant(fontWeightRegular, 24, 1.334, 0),
+    h6: buildVariant(fontWeightMedium, 20, 1.6, 0.15),
+    subtitle1: buildVariant(fontWeightRegular, 16, 1.75, 0.15),
+    subtitle2: buildVariant(fontWeightMedium, 14, 1.57, 0.1),
+    body1: buildVariant(fontWeightRegular, 16, 1.5, 0.15),
+    body2: buildVariant(fontWeightRegular, 14, 1.43, 0.15),
+    button: buildVariant(fontWeightMedium, 14, 1.75, 0.4, caseAllCaps),
+    caption: buildVariant(fontWeightRegular, 12, 1.66, 0.4),
+    overline: buildVariant(fontWeightRegular, 12, 2.66, 1, caseAllCaps)
+  };
+  return Object(deepmerge["a" /* default */])(Object(esm_extends["a" /* default */])({
+    htmlFontSize: htmlFontSize,
+    pxToRem: pxToRem,
+    round: round,
+    // TODO v5: remove
+    fontFamily: fontFamily,
+    fontSize: fontSize,
+    fontWeightLight: fontWeightLight,
+    fontWeightRegular: fontWeightRegular,
+    fontWeightMedium: fontWeightMedium,
+    fontWeightBold: fontWeightBold
+  }, variants), other, {
+    clone: false // No need to clone deep
+
+  });
+}
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/shadows.js
+var shadowKeyUmbraOpacity = 0.2;
+var shadowKeyPenumbraOpacity = 0.14;
+var shadowAmbientShadowOpacity = 0.12;
+
+function createShadow() {
+  return ["".concat(arguments.length <= 0 ? undefined : arguments[0], "px ").concat(arguments.length <= 1 ? undefined : arguments[1], "px ").concat(arguments.length <= 2 ? undefined : arguments[2], "px ").concat(arguments.length <= 3 ? undefined : arguments[3], "px rgba(0,0,0,").concat(shadowKeyUmbraOpacity, ")"), "".concat(arguments.length <= 4 ? undefined : arguments[4], "px ").concat(arguments.length <= 5 ? undefined : arguments[5], "px ").concat(arguments.length <= 6 ? undefined : arguments[6], "px ").concat(arguments.length <= 7 ? undefined : arguments[7], "px rgba(0,0,0,").concat(shadowKeyPenumbraOpacity, ")"), "".concat(arguments.length <= 8 ? undefined : arguments[8], "px ").concat(arguments.length <= 9 ? undefined : arguments[9], "px ").concat(arguments.length <= 10 ? undefined : arguments[10], "px ").concat(arguments.length <= 11 ? undefined : arguments[11], "px rgba(0,0,0,").concat(shadowAmbientShadowOpacity, ")")].join(',');
+} // Values from https://github.com/material-components/material-components-web/blob/be8747f94574669cb5e7add1a7c54fa41a89cec7/packages/mdc-elevation/_variables.scss
+
+
+var shadows = ['none', createShadow(0, 2, 1, -1, 0, 1, 1, 0, 0, 1, 3, 0), createShadow(0, 3, 1, -2, 0, 2, 2, 0, 0, 1, 5, 0), createShadow(0, 3, 3, -2, 0, 3, 4, 0, 0, 1, 8, 0), createShadow(0, 2, 4, -1, 0, 4, 5, 0, 0, 1, 10, 0), createShadow(0, 3, 5, -1, 0, 5, 8, 0, 0, 1, 14, 0), createShadow(0, 3, 5, -1, 0, 6, 10, 0, 0, 1, 18, 0), createShadow(0, 4, 5, -2, 0, 7, 10, 1, 0, 2, 16, 1), createShadow(0, 5, 5, -3, 0, 8, 10, 1, 0, 3, 14, 2), createShadow(0, 5, 6, -3, 0, 9, 12, 1, 0, 3, 16, 2), createShadow(0, 6, 6, -3, 0, 10, 14, 1, 0, 4, 18, 3), createShadow(0, 6, 7, -4, 0, 11, 15, 1, 0, 4, 20, 3), createShadow(0, 7, 8, -4, 0, 12, 17, 2, 0, 5, 22, 4), createShadow(0, 7, 8, -4, 0, 13, 19, 2, 0, 5, 24, 4), createShadow(0, 7, 9, -4, 0, 14, 21, 2, 0, 5, 26, 4), createShadow(0, 8, 9, -5, 0, 15, 22, 2, 0, 6, 28, 5), createShadow(0, 8, 10, -5, 0, 16, 24, 2, 0, 6, 30, 5), createShadow(0, 8, 11, -5, 0, 17, 26, 2, 0, 6, 32, 5), createShadow(0, 9, 11, -5, 0, 18, 28, 2, 0, 7, 34, 6), createShadow(0, 9, 12, -6, 0, 19, 29, 2, 0, 7, 36, 6), createShadow(0, 10, 13, -6, 0, 20, 31, 3, 0, 8, 38, 7), createShadow(0, 10, 13, -6, 0, 21, 33, 3, 0, 8, 40, 7), createShadow(0, 10, 14, -6, 0, 22, 35, 3, 0, 8, 42, 7), createShadow(0, 11, 14, -7, 0, 23, 36, 3, 0, 9, 44, 8), createShadow(0, 11, 15, -7, 0, 24, 38, 3, 0, 9, 46, 8)];
+/* harmony default export */ var styles_shadows = (shadows);
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/shape.js
+var shape = {
+  borderRadius: 4
+};
+/* harmony default export */ var styles_shape = (shape);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 1 modules
+var slicedToArray = __webpack_require__(19);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 2 modules
+var toConsumableArray = __webpack_require__(9);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
+var esm_typeof = __webpack_require__(11);
+
+// EXTERNAL MODULE: ./node_modules/prop-types/index.js
+var prop_types = __webpack_require__(3);
+
+// CONCATENATED MODULE: ./node_modules/@material-ui/system/esm/merge.js
+
+
+function merge(acc, item) {
+  if (!item) {
+    return acc;
+  }
+
+  return Object(deepmerge["a" /* default */])(acc, item, {
+    clone: false // No need to clone deep, it's way faster.
+
+  });
+}
+
+/* harmony default export */ var esm_merge = (merge);
+// CONCATENATED MODULE: ./node_modules/@material-ui/system/esm/breakpoints.js
+
+
+
+
+ // The breakpoint **start** at this value.
+// For instance with the first breakpoint xs: [xs, sm[.
+
+var breakpoints_values = {
+  xs: 0,
+  sm: 600,
+  md: 960,
+  lg: 1280,
+  xl: 1920
+};
+var defaultBreakpoints = {
+  // Sorted ASC by size. That's important.
+  // It can't be configured as it's used statically for propTypes.
+  keys: ['xs', 'sm', 'md', 'lg', 'xl'],
+  up: function up(key) {
+    return "@media (min-width:".concat(breakpoints_values[key], "px)");
+  }
+};
+function handleBreakpoints(props, propValue, styleFromPropValue) {
+  if (false) {}
+
+  if (Array.isArray(propValue)) {
+    var themeBreakpoints = props.theme.breakpoints || defaultBreakpoints;
+    return propValue.reduce(function (acc, item, index) {
+      acc[themeBreakpoints.up(themeBreakpoints.keys[index])] = styleFromPropValue(propValue[index]);
+      return acc;
+    }, {});
+  }
+
+  if (Object(esm_typeof["a" /* default */])(propValue) === 'object') {
+    var _themeBreakpoints = props.theme.breakpoints || defaultBreakpoints;
+
+    return Object.keys(propValue).reduce(function (acc, breakpoint) {
+      acc[_themeBreakpoints.up(breakpoint)] = styleFromPropValue(propValue[breakpoint]);
+      return acc;
+    }, {});
+  }
+
+  var output = styleFromPropValue(propValue);
+  return output;
+}
+
+function breakpoints_breakpoints(styleFunction) {
+  var newStyleFunction = function newStyleFunction(props) {
+    var base = styleFunction(props);
+    var themeBreakpoints = props.theme.breakpoints || defaultBreakpoints;
+    var extended = themeBreakpoints.keys.reduce(function (acc, key) {
+      if (props[key]) {
+        acc = acc || {};
+        acc[themeBreakpoints.up(key)] = styleFunction(Object(esm_extends["a" /* default */])({
+          theme: props.theme
+        }, props[key]));
+      }
+
+      return acc;
+    }, null);
+    return esm_merge(base, extended);
+  };
+
+  newStyleFunction.propTypes =  false ? undefined : {};
+  newStyleFunction.filterProps = ['xs', 'sm', 'md', 'lg', 'xl'].concat(Object(toConsumableArray["a" /* default */])(styleFunction.filterProps));
+  return newStyleFunction;
+}
+
+/* harmony default export */ var esm_breakpoints = (breakpoints_breakpoints);
+// CONCATENATED MODULE: ./node_modules/@material-ui/system/esm/memoize.js
+function memoize(fn) {
+  var cache = {};
+  return function (arg) {
+    if (cache[arg] === undefined) {
+      cache[arg] = fn(arg);
+    }
+
+    return cache[arg];
+  };
+}
+// CONCATENATED MODULE: ./node_modules/@material-ui/system/esm/spacing.js
+
+
+
+
+
+var properties = {
+  m: 'margin',
+  p: 'padding'
+};
+var directions = {
+  t: 'Top',
+  r: 'Right',
+  b: 'Bottom',
+  l: 'Left',
+  x: ['Left', 'Right'],
+  y: ['Top', 'Bottom']
+};
+var aliases = {
+  marginX: 'mx',
+  marginY: 'my',
+  paddingX: 'px',
+  paddingY: 'py'
+}; // memoize() impact:
+// From 300,000 ops/sec
+// To 350,000 ops/sec
+
+var getCssProperties = memoize(function (prop) {
+  // It's not a shorthand notation.
+  if (prop.length > 2) {
+    if (aliases[prop]) {
+      prop = aliases[prop];
+    } else {
+      return [prop];
+    }
+  }
+
+  var _prop$split = prop.split(''),
+      _prop$split2 = Object(slicedToArray["a" /* default */])(_prop$split, 2),
+      a = _prop$split2[0],
+      b = _prop$split2[1];
+
+  var property = properties[a];
+  var direction = directions[b] || '';
+  return Array.isArray(direction) ? direction.map(function (dir) {
+    return property + dir;
+  }) : [property + direction];
+});
+var spacingKeys = ['m', 'mt', 'mr', 'mb', 'ml', 'mx', 'my', 'p', 'pt', 'pr', 'pb', 'pl', 'px', 'py', 'margin', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft', 'marginX', 'marginY', 'padding', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'paddingX', 'paddingY'];
+function createUnarySpacing(theme) {
+  var themeSpacing = theme.spacing || 8;
+
+  if (typeof themeSpacing === 'number') {
+    return function (abs) {
+      if (false) {}
+
+      return themeSpacing * abs;
+    };
+  }
+
+  if (Array.isArray(themeSpacing)) {
+    return function (abs) {
+      if (false) {}
+
+      return themeSpacing[abs];
+    };
+  }
+
+  if (typeof themeSpacing === 'function') {
+    return themeSpacing;
+  }
+
+  if (false) {}
+
+  return function () {
+    return undefined;
+  };
+}
+
+function getValue(transformer, propValue) {
+  if (typeof propValue === 'string') {
+    return propValue;
+  }
+
+  var abs = Math.abs(propValue);
+  var transformed = transformer(abs);
+
+  if (propValue >= 0) {
+    return transformed;
+  }
+
+  if (typeof transformed === 'number') {
+    return -transformed;
+  }
+
+  return "-".concat(transformed);
+}
+
+function getStyleFromPropValue(cssProperties, transformer) {
+  return function (propValue) {
+    return cssProperties.reduce(function (acc, cssProperty) {
+      acc[cssProperty] = getValue(transformer, propValue);
+      return acc;
+    }, {});
+  };
+}
+
+function spacing_spacing(props) {
+  var theme = props.theme;
+  var transformer = createUnarySpacing(theme);
+  return Object.keys(props).map(function (prop) {
+    // Using a hash computation over an array iteration could be faster, but with only 28 items,
+    // it's doesn't worth the bundle size.
+    if (spacingKeys.indexOf(prop) === -1) {
+      return null;
+    }
+
+    var cssProperties = getCssProperties(prop);
+    var styleFromPropValue = getStyleFromPropValue(cssProperties, transformer);
+    var propValue = props[prop];
+    return handleBreakpoints(props, propValue, styleFromPropValue);
+  }).reduce(esm_merge, {});
+}
+
+spacing_spacing.propTypes =  false ? undefined : {};
+spacing_spacing.filterProps = spacingKeys;
+/* harmony default export */ var esm_spacing = (spacing_spacing);
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/createSpacing.js
+
+var warnOnce;
+function createSpacing() {
+  var spacingInput = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 8;
+
+  // Already transformed.
+  if (spacingInput.mui) {
+    return spacingInput;
+  } // Material Design layouts are visually balanced. Most measurements align to an 8dp grid applied, which aligns both spacing and the overall layout.
+  // Smaller components, such as icons and type, can align to a 4dp grid.
+  // https://material.io/design/layout/understanding-layout.html#usage
+
+
+  var transform = createUnarySpacing({
+    spacing: spacingInput
+  });
+
+  var spacing = function spacing() {
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    if (false) {}
+
+    if (args.length === 0) {
+      return transform(1);
+    }
+
+    if (args.length === 1) {
+      return transform(args[0]);
+    }
+
+    return args.map(function (argument) {
+      if (typeof argument === 'string') {
+        return argument;
+      }
+
+      var output = transform(argument);
+      return typeof output === 'number' ? "".concat(output, "px") : output;
+    }).join(' ');
+  }; // Backward compatibility, to remove in v5.
+
+
+  Object.defineProperty(spacing, 'unit', {
+    get: function get() {
+      if (false) {}
+
+      return spacingInput;
+    }
+  });
+  spacing.mui = true;
+  return spacing;
+}
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/transitions.js
+
+// Follow https://material.google.com/motion/duration-easing.html#duration-easing-natural-easing-curves
+// to learn the context in which each easing should be used.
+var easing = {
+  // This is the most common easing curve.
+  easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+  // Objects enter the screen at full velocity from off-screen and
+  // slowly decelerate to a resting point.
+  easeOut: 'cubic-bezier(0.0, 0, 0.2, 1)',
+  // Objects leave the screen at full velocity. They do not decelerate when off-screen.
+  easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
+  // The sharp curve is used by objects that may return to the screen at any time.
+  sharp: 'cubic-bezier(0.4, 0, 0.6, 1)'
+}; // Follow https://material.io/guidelines/motion/duration-easing.html#duration-easing-common-durations
+// to learn when use what timing
+
+var duration = {
+  shortest: 150,
+  shorter: 200,
+  short: 250,
+  // most basic recommended timing
+  standard: 300,
+  // this is to be used in complex animations
+  complex: 375,
+  // recommended when something is entering screen
+  enteringScreen: 225,
+  // recommended when something is leaving screen
+  leavingScreen: 195
+};
+
+function formatMs(milliseconds) {
+  return "".concat(Math.round(milliseconds), "ms");
+}
+/**
+ * @param {string|Array} props
+ * @param {object} param
+ * @param {string} param.prop
+ * @param {number} param.duration
+ * @param {string} param.easing
+ * @param {number} param.delay
+ */
+
+
+/* harmony default export */ var transitions = ({
+  easing: easing,
+  duration: duration,
+  create: function create() {
+    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ['all'];
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    var _options$duration = options.duration,
+        durationOption = _options$duration === void 0 ? duration.standard : _options$duration,
+        _options$easing = options.easing,
+        easingOption = _options$easing === void 0 ? easing.easeInOut : _options$easing,
+        _options$delay = options.delay,
+        delay = _options$delay === void 0 ? 0 : _options$delay,
+        other = Object(objectWithoutProperties["a" /* default */])(options, ["duration", "easing", "delay"]);
+
+    if (false) { var isNumber, isString; }
+
+    return (Array.isArray(props) ? props : [props]).map(function (animatedProp) {
+      return "".concat(animatedProp, " ").concat(typeof durationOption === 'string' ? durationOption : formatMs(durationOption), " ").concat(easingOption, " ").concat(typeof delay === 'string' ? delay : formatMs(delay));
+    }).join(',');
+  },
+  getAutoHeightDuration: function getAutoHeightDuration(height) {
+    if (!height) {
+      return 0;
+    }
+
+    var constant = height / 36; // https://www.wolframalpha.com/input/?i=(4+%2B+15+*+(x+%2F+36+)+**+0.25+%2B+(x+%2F+36)+%2F+5)+*+10
+
+    return Math.round((4 + 15 * Math.pow(constant, 0.25) + constant / 5) * 10);
+  }
+});
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/zIndex.js
+var zIndex = __webpack_require__(17);
+
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/createMuiTheme.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+function createMuiTheme() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  var _options$breakpoints = options.breakpoints,
+      breakpointsInput = _options$breakpoints === void 0 ? {} : _options$breakpoints,
+      _options$mixins = options.mixins,
+      mixinsInput = _options$mixins === void 0 ? {} : _options$mixins,
+      _options$palette = options.palette,
+      paletteInput = _options$palette === void 0 ? {} : _options$palette,
+      spacingInput = options.spacing,
+      _options$typography = options.typography,
+      typographyInput = _options$typography === void 0 ? {} : _options$typography,
+      other = Object(objectWithoutProperties["a" /* default */])(options, ["breakpoints", "mixins", "palette", "spacing", "typography"]);
+
+  var palette = createPalette(paletteInput);
+  var breakpoints = createBreakpoints(breakpointsInput);
+  var spacing = createSpacing(spacingInput);
+  var muiTheme = Object(deepmerge["a" /* default */])({
+    breakpoints: breakpoints,
+    direction: 'ltr',
+    mixins: createMixins(breakpoints, spacing, mixinsInput),
+    overrides: {},
+    // Inject custom styles
+    palette: palette,
+    props: {},
+    // Provide default props
+    shadows: styles_shadows,
+    typography: createTypography(palette, typographyInput),
+    spacing: spacing,
+    shape: styles_shape,
+    transitions: transitions,
+    zIndex: zIndex["a" /* default */]
+  }, other);
+
+  for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    args[_key - 1] = arguments[_key];
+  }
+
+  muiTheme = args.reduce(function (acc, argument) {
+    return Object(deepmerge["a" /* default */])(acc, argument);
+  }, muiTheme);
+
+  if (false) { var traverse, pseudoClasses; }
+
+  return muiTheme;
+}
+
+/* harmony default export */ var styles_createMuiTheme = __webpack_exports__["a"] = (createMuiTheme);
+
+/***/ }),
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var reactIs = __webpack_require__(7);
-
-/**
- * Copyright 2015, Yahoo! Inc.
- * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
- */
-var REACT_STATICS = {
-  childContextTypes: true,
-  contextType: true,
-  contextTypes: true,
-  defaultProps: true,
-  displayName: true,
-  getDefaultProps: true,
-  getDerivedStateFromError: true,
-  getDerivedStateFromProps: true,
-  mixins: true,
-  propTypes: true,
-  type: true
-};
-var KNOWN_STATICS = {
-  name: true,
-  length: true,
-  prototype: true,
-  caller: true,
-  callee: true,
-  arguments: true,
-  arity: true
-};
-var FORWARD_REF_STATICS = {
-  '$$typeof': true,
-  render: true,
-  defaultProps: true,
-  displayName: true,
-  propTypes: true
-};
-var MEMO_STATICS = {
-  '$$typeof': true,
-  compare: true,
-  defaultProps: true,
-  displayName: true,
-  propTypes: true,
-  type: true
-};
-var TYPE_STATICS = {};
-TYPE_STATICS[reactIs.ForwardRef] = FORWARD_REF_STATICS;
-TYPE_STATICS[reactIs.Memo] = MEMO_STATICS;
-
-function getStatics(component) {
-  // React v16.11 and below
-  if (reactIs.isMemo(component)) {
-    return MEMO_STATICS;
-  } // React v16.12 and above
-
-
-  return TYPE_STATICS[component['$$typeof']] || REACT_STATICS;
-}
-
-var defineProperty = Object.defineProperty;
-var getOwnPropertyNames = Object.getOwnPropertyNames;
-var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-var getPrototypeOf = Object.getPrototypeOf;
-var objectPrototype = Object.prototype;
-function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
-  if (typeof sourceComponent !== 'string') {
-    // don't hoist over string (html) components
-    if (objectPrototype) {
-      var inheritedComponent = getPrototypeOf(sourceComponent);
-
-      if (inheritedComponent && inheritedComponent !== objectPrototype) {
-        hoistNonReactStatics(targetComponent, inheritedComponent, blacklist);
-      }
-    }
-
-    var keys = getOwnPropertyNames(sourceComponent);
-
-    if (getOwnPropertySymbols) {
-      keys = keys.concat(getOwnPropertySymbols(sourceComponent));
-    }
-
-    var targetStatics = getStatics(targetComponent);
-    var sourceStatics = getStatics(sourceComponent);
-
-    for (var i = 0; i < keys.length; ++i) {
-      var key = keys[i];
-
-      if (!KNOWN_STATICS[key] && !(blacklist && blacklist[key]) && !(sourceStatics && sourceStatics[key]) && !(targetStatics && targetStatics[key])) {
-        var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
-
-        try {
-          // Avoid failures from read-only properties
-          defineProperty(targetComponent, key, descriptor);
-        } catch (e) {}
-      }
-    }
-  }
-
-  return targetComponent;
-}
-
-module.exports = hoistNonReactStatics;
+if (true) {
+  module.exports = __webpack_require__(55);
+} else {}
 
 
 /***/ }),
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(31);
-module.exports = __webpack_require__(30);
-
-
-/***/ }),
-/* 23 */
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -497,7 +2213,7 @@ module.exports = __webpack_require__(30);
  * LICENSE file in the root directory of this source tree.
  */
 
-var l=__webpack_require__(13),n="function"===typeof Symbol&&Symbol.for,p=n?Symbol.for("react.element"):60103,q=n?Symbol.for("react.portal"):60106,r=n?Symbol.for("react.fragment"):60107,t=n?Symbol.for("react.strict_mode"):60108,u=n?Symbol.for("react.profiler"):60114,v=n?Symbol.for("react.provider"):60109,w=n?Symbol.for("react.context"):60110,x=n?Symbol.for("react.forward_ref"):60112,y=n?Symbol.for("react.suspense"):60113,z=n?Symbol.for("react.memo"):60115,A=n?Symbol.for("react.lazy"):
+var l=__webpack_require__(20),n="function"===typeof Symbol&&Symbol.for,p=n?Symbol.for("react.element"):60103,q=n?Symbol.for("react.portal"):60106,r=n?Symbol.for("react.fragment"):60107,t=n?Symbol.for("react.strict_mode"):60108,u=n?Symbol.for("react.profiler"):60114,v=n?Symbol.for("react.provider"):60109,w=n?Symbol.for("react.context"):60110,x=n?Symbol.for("react.forward_ref"):60112,y=n?Symbol.for("react.suspense"):60113,z=n?Symbol.for("react.memo"):60115,A=n?Symbol.for("react.lazy"):
 60116,B="function"===typeof Symbol&&Symbol.iterator;function C(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return"Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}
 var D={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}},E={};function F(a,b,c){this.props=a;this.context=b;this.refs=E;this.updater=c||D}F.prototype.isReactComponent={};F.prototype.setState=function(a,b){if("object"!==typeof a&&"function"!==typeof a&&null!=a)throw Error(C(85));this.updater.enqueueSetState(this,a,b,"setState")};F.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate")};
 function G(){}G.prototype=F.prototype;function H(a,b,c){this.props=a;this.context=b;this.refs=E;this.updater=c||D}var I=H.prototype=new G;I.constructor=H;l(I,F.prototype);I.isPureReactComponent=!0;var J={current:null},K=Object.prototype.hasOwnProperty,L={key:!0,ref:!0,__self:!0,__source:!0};
@@ -516,7 +2232,7 @@ exports.useLayoutEffect=function(a,b){return Z().useLayoutEffect(a,b)};exports.u
 
 
 /***/ }),
-/* 24 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -532,7 +2248,7 @@ exports.useLayoutEffect=function(a,b){return Z().useLayoutEffect(a,b)};exports.u
 /*
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(0),n=__webpack_require__(13),r=__webpack_require__(25);function u(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return"Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}if(!aa)throw Error(u(227));
+var aa=__webpack_require__(0),n=__webpack_require__(20),r=__webpack_require__(36);function u(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return"Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}if(!aa)throw Error(u(227));
 function ba(a,b,c,d,e,f,g,h,k){var l=Array.prototype.slice.call(arguments,3);try{b.apply(c,l)}catch(m){this.onError(m)}}var da=!1,ea=null,fa=!1,ha=null,ia={onError:function(a){da=!0;ea=a}};function ja(a,b,c,d,e,f,g,h,k){da=!1;ea=null;ba.apply(ia,arguments)}function ka(a,b,c,d,e,f,g,h,k){ja.apply(this,arguments);if(da){if(da){var l=ea;da=!1;ea=null}else throw Error(u(198));fa||(fa=!0,ha=l)}}var la=null,ma=null,na=null;
 function oa(a,b,c){var d=a.type||"unknown-event";a.currentTarget=na(c);ka(d,b,void 0,a);a.currentTarget=null}var pa=null,qa={};
 function ra(){if(pa)for(var a in qa){var b=qa[a],c=pa.indexOf(a);if(!(-1<c))throw Error(u(96,a));if(!sa[c]){if(!b.extractEvents)throw Error(u(97,a));sa[c]=b;c=b.eventTypes;for(var d in c){var e=void 0;var f=c[d],g=b,h=d;if(ta.hasOwnProperty(h))throw Error(u(99,h));ta[h]=f;var k=f.phasedRegistrationNames;if(k){for(e in k)k.hasOwnProperty(e)&&ua(k[e],g,h);e=!0}else f.registrationName?(ua(f.registrationName,g,h),e=!0):e=!1;if(!e)throw Error(u(98,d,a));}}}}
@@ -815,19 +2531,19 @@ exports.unstable_renderSubtreeIntoContainer=function(a,b,c,d){if(!gk(c))throw Er
 
 
 /***/ }),
-/* 25 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 if (true) {
-  module.exports = __webpack_require__(26);
+  module.exports = __webpack_require__(37);
 } else {}
 
 
 /***/ }),
-/* 26 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -855,7 +2571,7 @@ exports.unstable_shouldYield=function(){var a=exports.unstable_now();V(a);var b=
 
 
 /***/ }),
-/* 27 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -868,7 +2584,7 @@ exports.unstable_shouldYield=function(){var a=exports.unstable_now();V(a);var b=
 
 
 
-var ReactPropTypesSecret = __webpack_require__(28);
+var ReactPropTypesSecret = __webpack_require__(39);
 
 function emptyFunction() {}
 function emptyFunctionWithReset() {}
@@ -926,7 +2642,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 28 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -945,7 +2661,193 @@ module.exports = ReactPropTypesSecret;
 
 
 /***/ }),
-/* 29 */
+/* 40 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useTheme; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _ThemeContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
+
+
+function useTheme() {
+  var theme = react__WEBPACK_IMPORTED_MODULE_0___default.a.useContext(_ThemeContext__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"]);
+
+  if (false) {}
+
+  return theme;
+}
+
+/***/ }),
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var reactIs = __webpack_require__(30);
+
+/**
+ * Copyright 2015, Yahoo! Inc.
+ * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+ */
+var REACT_STATICS = {
+  childContextTypes: true,
+  contextType: true,
+  contextTypes: true,
+  defaultProps: true,
+  displayName: true,
+  getDefaultProps: true,
+  getDerivedStateFromError: true,
+  getDerivedStateFromProps: true,
+  mixins: true,
+  propTypes: true,
+  type: true
+};
+var KNOWN_STATICS = {
+  name: true,
+  length: true,
+  prototype: true,
+  caller: true,
+  callee: true,
+  arguments: true,
+  arity: true
+};
+var FORWARD_REF_STATICS = {
+  '$$typeof': true,
+  render: true,
+  defaultProps: true,
+  displayName: true,
+  propTypes: true
+};
+var MEMO_STATICS = {
+  '$$typeof': true,
+  compare: true,
+  defaultProps: true,
+  displayName: true,
+  propTypes: true,
+  type: true
+};
+var TYPE_STATICS = {};
+TYPE_STATICS[reactIs.ForwardRef] = FORWARD_REF_STATICS;
+TYPE_STATICS[reactIs.Memo] = MEMO_STATICS;
+
+function getStatics(component) {
+  // React v16.11 and below
+  if (reactIs.isMemo(component)) {
+    return MEMO_STATICS;
+  } // React v16.12 and above
+
+
+  return TYPE_STATICS[component['$$typeof']] || REACT_STATICS;
+}
+
+var defineProperty = Object.defineProperty;
+var getOwnPropertyNames = Object.getOwnPropertyNames;
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+var getPrototypeOf = Object.getPrototypeOf;
+var objectPrototype = Object.prototype;
+function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
+  if (typeof sourceComponent !== 'string') {
+    // don't hoist over string (html) components
+    if (objectPrototype) {
+      var inheritedComponent = getPrototypeOf(sourceComponent);
+
+      if (inheritedComponent && inheritedComponent !== objectPrototype) {
+        hoistNonReactStatics(targetComponent, inheritedComponent, blacklist);
+      }
+    }
+
+    var keys = getOwnPropertyNames(sourceComponent);
+
+    if (getOwnPropertySymbols) {
+      keys = keys.concat(getOwnPropertySymbols(sourceComponent));
+    }
+
+    var targetStatics = getStatics(targetComponent);
+    var sourceStatics = getStatics(sourceComponent);
+
+    for (var i = 0; i < keys.length; ++i) {
+      var key = keys[i];
+
+      if (!KNOWN_STATICS[key] && !(blacklist && blacklist[key]) && !(sourceStatics && sourceStatics[key]) && !(targetStatics && targetStatics[key])) {
+        var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
+
+        try {
+          // Avoid failures from read-only properties
+          defineProperty(targetComponent, key, descriptor);
+        } catch (e) {}
+      }
+    }
+  }
+
+  return targetComponent;
+}
+
+module.exports = hoistNonReactStatics;
+
+
+/***/ }),
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(70);
+module.exports = __webpack_require__(57);
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export isPlainObject */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return deepmerge; });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _babel_runtime_helpers_esm_typeof__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
+
+
+function isPlainObject(item) {
+  return item && Object(_babel_runtime_helpers_esm_typeof__WEBPACK_IMPORTED_MODULE_1__[/* default */ "a"])(item) === 'object' && item.constructor === Object;
+}
+function deepmerge(target, source) {
+  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {
+    clone: true
+  };
+  var output = options.clone ? Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, target) : target;
+
+  if (isPlainObject(target) && isPlainObject(source)) {
+    Object.keys(source).forEach(function (key) {
+      // Avoid prototype pollution
+      if (key === '__proto__') {
+        return;
+      }
+
+      if (isPlainObject(source[key]) && key in target) {
+        output[key] = deepmerge(target[key], source[key], options);
+      } else {
+        output[key] = source[key];
+      }
+    });
+  }
+
+  return output;
+}
+
+/***/ }),
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -967,69 +2869,18 @@ exports.isValidElementType=function(a){return"string"===typeof a||"function"===t
 
 
 /***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-/* 31 */
+/* 56 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
-
-// EXTERNAL MODULE: ./node_modules/react/index.js
-var react = __webpack_require__(0);
-var react_default = /*#__PURE__*/__webpack_require__.n(react);
-
-// EXTERNAL MODULE: ./node_modules/react-dom/index.js
-var react_dom = __webpack_require__(2);
-var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
-function _extends() {
-  _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-// EXTERNAL MODULE: ./node_modules/prop-types/index.js
-var prop_types = __webpack_require__(1);
-
-// CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/useTheme/ThemeContext.js
-
-var ThemeContext = react_default.a.createContext(null);
-
-if (false) {}
-
-/* harmony default export */ var useTheme_ThemeContext = (ThemeContext);
-// CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/useTheme/useTheme.js
-
-
-function useTheme() {
-  var theme = react_default.a.useContext(useTheme_ThemeContext);
-
-  if (false) {}
-
-  return theme;
-}
-// CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/ThemeProvider/nested.js
-var hasSymbol = typeof Symbol === 'function' && Symbol.for;
-/* harmony default export */ var nested = (hasSymbol ? Symbol.for('mui.nested') : '__THEME_NESTED__');
-// CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/ThemeProvider/ThemeProvider.js
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _useTheme_ThemeContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(16);
+/* harmony import */ var _useTheme__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(40);
+/* harmony import */ var _nested__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(18);
 
 
 
@@ -1047,7 +2898,7 @@ function mergeOuterLocalTheme(outerTheme, localTheme) {
     return mergedTheme;
   }
 
-  return _extends(_extends({}, outerTheme), localTheme);
+  return Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])({}, outerTheme), localTheme);
 }
 /**
  * This component takes a `theme` prop.
@@ -1059,20 +2910,20 @@ function mergeOuterLocalTheme(outerTheme, localTheme) {
 function ThemeProvider(props) {
   var children = props.children,
       localTheme = props.theme;
-  var outerTheme = useTheme();
+  var outerTheme = Object(_useTheme__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])();
 
   if (false) {}
 
-  var theme = react_default.a.useMemo(function () {
+  var theme = react__WEBPACK_IMPORTED_MODULE_1___default.a.useMemo(function () {
     var output = outerTheme === null ? localTheme : mergeOuterLocalTheme(outerTheme, localTheme);
 
     if (output != null) {
-      output[nested] = outerTheme !== null;
+      output[_nested__WEBPACK_IMPORTED_MODULE_5__[/* default */ "a"]] = outerTheme !== null;
     }
 
     return output;
   }, [localTheme, outerTheme]);
-  return /*#__PURE__*/react_default.a.createElement(useTheme_ThemeContext.Provider, {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_useTheme_ThemeContext__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"].Provider, {
     value: theme
   }, children);
 }
@@ -1081,1651 +2932,63 @@ function ThemeProvider(props) {
 
 if (false) {}
 
-/* harmony default export */ var ThemeProvider_ThemeProvider = (ThemeProvider);
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck.js
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createClass.js
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
-  }
-}
+/* harmony default export */ __webpack_exports__["a"] = (ThemeProvider);
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */,
+/* 63 */,
+/* 64 */,
+/* 65 */,
+/* 66 */,
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXTERNAL MODULE: ./node_modules/react/index.js
+var react = __webpack_require__(0);
+var react_default = /*#__PURE__*/__webpack_require__.n(react);
+
+// EXTERNAL MODULE: ./node_modules/react-dom/index.js
+var react_dom = __webpack_require__(4);
+var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/ThemeProvider/ThemeProvider.js
+var ThemeProvider = __webpack_require__(56);
+
+// EXTERNAL MODULE: ./src/shared/helpers/globals/GlobalHelper.js
+var GlobalHelper = __webpack_require__(21);
+
+// EXTERNAL MODULE: ./src/shared/components/Header/Header.js + 1 modules
+var Header = __webpack_require__(27);
+
+// EXTERNAL MODULE: ./src/shared/components/Footer/Footer.js
+var Footer = __webpack_require__(25);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
+var esm_extends = __webpack_require__(1);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
+var objectWithoutProperties = __webpack_require__(2);
+
+// EXTERNAL MODULE: ./node_modules/prop-types/index.js
+var prop_types = __webpack_require__(3);
 
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
-
-function _objectWithoutProperties(source, excluded) {
-  if (source == null) return {};
-  var target = _objectWithoutPropertiesLoose(source, excluded);
-  var key, i;
-
-  if (Object.getOwnPropertySymbols) {
-    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-
-    for (i = 0; i < sourceSymbolKeys.length; i++) {
-      key = sourceSymbolKeys[i];
-      if (excluded.indexOf(key) >= 0) continue;
-      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
-      target[key] = source[key];
-    }
-  }
-
-  return target;
-}
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
-var esm_typeof = __webpack_require__(4);
-
-// CONCATENATED MODULE: ./node_modules/@material-ui/utils/esm/deepmerge.js
-
-
-function isPlainObject(item) {
-  return item && Object(esm_typeof["a" /* default */])(item) === 'object' && item.constructor === Object;
-}
-function deepmerge(target, source) {
-  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {
-    clone: true
-  };
-  var output = options.clone ? _extends({}, target) : target;
-
-  if (isPlainObject(target) && isPlainObject(source)) {
-    Object.keys(source).forEach(function (key) {
-      // Avoid prototype pollution
-      if (key === '__proto__') {
-        return;
-      }
-
-      if (isPlainObject(source[key]) && key in target) {
-        output[key] = deepmerge(target[key], source[key], options);
-      } else {
-        output[key] = source[key];
-      }
-    });
-  }
-
-  return output;
-}
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/createBreakpoints.js
-
-
-// Sorted ASC by size. That's important.
-// It can't be configured as it's used statically for propTypes.
-var keys = ['xs', 'sm', 'md', 'lg', 'xl']; // Keep in mind that @media is inclusive by the CSS specification.
-
-function createBreakpoints(breakpoints) {
-  var _breakpoints$values = breakpoints.values,
-      values = _breakpoints$values === void 0 ? {
-    xs: 0,
-    sm: 600,
-    md: 960,
-    lg: 1280,
-    xl: 1920
-  } : _breakpoints$values,
-      _breakpoints$unit = breakpoints.unit,
-      unit = _breakpoints$unit === void 0 ? 'px' : _breakpoints$unit,
-      _breakpoints$step = breakpoints.step,
-      step = _breakpoints$step === void 0 ? 5 : _breakpoints$step,
-      other = _objectWithoutProperties(breakpoints, ["values", "unit", "step"]);
-
-  function up(key) {
-    var value = typeof values[key] === 'number' ? values[key] : key;
-    return "@media (min-width:".concat(value).concat(unit, ")");
-  }
-
-  function down(key) {
-    var endIndex = keys.indexOf(key) + 1;
-    var upperbound = values[keys[endIndex]];
-
-    if (endIndex === keys.length) {
-      // xl down applies to all sizes
-      return up('xs');
-    }
-
-    var value = typeof upperbound === 'number' && endIndex > 0 ? upperbound : key;
-    return "@media (max-width:".concat(value - step / 100).concat(unit, ")");
-  }
-
-  function between(start, end) {
-    var endIndex = keys.indexOf(end);
-
-    if (endIndex === keys.length - 1) {
-      return up(start);
-    }
-
-    return "@media (min-width:".concat(typeof values[start] === 'number' ? values[start] : start).concat(unit, ") and ") + "(max-width:".concat((endIndex !== -1 && typeof values[keys[endIndex + 1]] === 'number' ? values[keys[endIndex + 1]] : end) - step / 100).concat(unit, ")");
-  }
-
-  function only(key) {
-    return between(key, key);
-  }
-
-  function width(key) {
-    return values[key];
-  }
-
-  return _extends({
-    keys: keys,
-    values: values,
-    up: up,
-    down: down,
-    between: between,
-    only: only,
-    width: width
-  }, other);
-}
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/createMixins.js
-
-
-function createMixins(breakpoints, spacing, mixins) {
-  var _toolbar;
-
-  return _extends({
-    gutters: function gutters() {
-      var styles = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      // To deprecate in v4.1
-      //       warning(
-      //         false,
-      //         [
-      //           'Material-UI: theme.mixins.gutters() is deprecated.',
-      //           'You can use the source of the mixin directly:',
-      //           `
-      // paddingLeft: theme.spacing(2),
-      // paddingRight: theme.spacing(2),
-      // [theme.breakpoints.up('sm')]: {
-      //   paddingLeft: theme.spacing(3),
-      //   paddingRight: theme.spacing(3),
-      // },
-      // `,
-      //         ].join('\n'),
-      //       );
-      return _extends({
-        paddingLeft: spacing(2),
-        paddingRight: spacing(2)
-      }, styles, _defineProperty({}, breakpoints.up('sm'), _extends({
-        paddingLeft: spacing(3),
-        paddingRight: spacing(3)
-      }, styles[breakpoints.up('sm')])));
-    },
-    toolbar: (_toolbar = {
-      minHeight: 56
-    }, _defineProperty(_toolbar, "".concat(breakpoints.up('xs'), " and (orientation: landscape)"), {
-      minHeight: 48
-    }), _defineProperty(_toolbar, breakpoints.up('sm'), {
-      minHeight: 64
-    }), _toolbar)
-  }, mixins);
-}
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/colors/common.js
-var common = {
-  black: '#000',
-  white: '#fff'
-};
-/* harmony default export */ var colors_common = (common);
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/colors/grey.js
-var grey = {
-  50: '#fafafa',
-  100: '#f5f5f5',
-  200: '#eeeeee',
-  300: '#e0e0e0',
-  400: '#bdbdbd',
-  500: '#9e9e9e',
-  600: '#757575',
-  700: '#616161',
-  800: '#424242',
-  900: '#212121',
-  A100: '#d5d5d5',
-  A200: '#aaaaaa',
-  A400: '#303030',
-  A700: '#616161'
-};
-/* harmony default export */ var colors_grey = (grey);
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/colors/indigo.js
-var indigo = {
-  50: '#e8eaf6',
-  100: '#c5cae9',
-  200: '#9fa8da',
-  300: '#7986cb',
-  400: '#5c6bc0',
-  500: '#3f51b5',
-  600: '#3949ab',
-  700: '#303f9f',
-  800: '#283593',
-  900: '#1a237e',
-  A100: '#8c9eff',
-  A200: '#536dfe',
-  A400: '#3d5afe',
-  A700: '#304ffe'
-};
-/* harmony default export */ var colors_indigo = (indigo);
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/colors/pink.js
-var pink = {
-  50: '#fce4ec',
-  100: '#f8bbd0',
-  200: '#f48fb1',
-  300: '#f06292',
-  400: '#ec407a',
-  500: '#e91e63',
-  600: '#d81b60',
-  700: '#c2185b',
-  800: '#ad1457',
-  900: '#880e4f',
-  A100: '#ff80ab',
-  A200: '#ff4081',
-  A400: '#f50057',
-  A700: '#c51162'
-};
-/* harmony default export */ var colors_pink = (pink);
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/colors/red.js
-var red = {
-  50: '#ffebee',
-  100: '#ffcdd2',
-  200: '#ef9a9a',
-  300: '#e57373',
-  400: '#ef5350',
-  500: '#f44336',
-  600: '#e53935',
-  700: '#d32f2f',
-  800: '#c62828',
-  900: '#b71c1c',
-  A100: '#ff8a80',
-  A200: '#ff5252',
-  A400: '#ff1744',
-  A700: '#d50000'
-};
-/* harmony default export */ var colors_red = (red);
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/colors/orange.js
-var orange = {
-  50: '#fff3e0',
-  100: '#ffe0b2',
-  200: '#ffcc80',
-  300: '#ffb74d',
-  400: '#ffa726',
-  500: '#ff9800',
-  600: '#fb8c00',
-  700: '#f57c00',
-  800: '#ef6c00',
-  900: '#e65100',
-  A100: '#ffd180',
-  A200: '#ffab40',
-  A400: '#ff9100',
-  A700: '#ff6d00'
-};
-/* harmony default export */ var colors_orange = (orange);
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/colors/blue.js
-var blue = {
-  50: '#e3f2fd',
-  100: '#bbdefb',
-  200: '#90caf9',
-  300: '#64b5f6',
-  400: '#42a5f5',
-  500: '#2196f3',
-  600: '#1e88e5',
-  700: '#1976d2',
-  800: '#1565c0',
-  900: '#0d47a1',
-  A100: '#82b1ff',
-  A200: '#448aff',
-  A400: '#2979ff',
-  A700: '#2962ff'
-};
-/* harmony default export */ var colors_blue = (blue);
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/colors/green.js
-var green = {
-  50: '#e8f5e9',
-  100: '#c8e6c9',
-  200: '#a5d6a7',
-  300: '#81c784',
-  400: '#66bb6a',
-  500: '#4caf50',
-  600: '#43a047',
-  700: '#388e3c',
-  800: '#2e7d32',
-  900: '#1b5e20',
-  A100: '#b9f6ca',
-  A200: '#69f0ae',
-  A400: '#00e676',
-  A700: '#00c853'
-};
-/* harmony default export */ var colors_green = (green);
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/colorManipulator.js
-/* eslint-disable no-use-before-define */
-
-/**
- * Returns a number whose value is limited to the given range.
- *
- * @param {number} value The value to be clamped
- * @param {number} min The lower boundary of the output range
- * @param {number} max The upper boundary of the output range
- * @returns {number} A number in the range [min, max]
- */
-function clamp(value) {
-  var min = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-  var max = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
-
-  if (false) {}
-
-  return Math.min(Math.max(min, value), max);
-}
-/**
- * Converts a color from CSS hex format to CSS rgb format.
- *
- * @param {string} color - Hex color, i.e. #nnn or #nnnnnn
- * @returns {string} A CSS rgb color string
- */
-
-
-function hexToRgb(color) {
-  color = color.substr(1);
-  var re = new RegExp(".{1,".concat(color.length / 3, "}"), 'g');
-  var colors = color.match(re);
-
-  if (colors && colors[0].length === 1) {
-    colors = colors.map(function (n) {
-      return n + n;
-    });
-  }
-
-  return colors ? "rgb(".concat(colors.map(function (n) {
-    return parseInt(n, 16);
-  }).join(', '), ")") : '';
-}
-
-function intToHex(int) {
-  var hex = int.toString(16);
-  return hex.length === 1 ? "0".concat(hex) : hex;
-}
-/**
- * Converts a color from CSS rgb format to CSS hex format.
- *
- * @param {string} color - RGB color, i.e. rgb(n, n, n)
- * @returns {string} A CSS rgb color string, i.e. #nnnnnn
- */
-
-
-function rgbToHex(color) {
-  // Idempotent
-  if (color.indexOf('#') === 0) {
-    return color;
-  }
-
-  var _decomposeColor = decomposeColor(color),
-      values = _decomposeColor.values;
-
-  return "#".concat(values.map(function (n) {
-    return intToHex(n);
-  }).join(''));
-}
-/**
- * Converts a color from hsl format to rgb format.
- *
- * @param {string} color - HSL color values
- * @returns {string} rgb color values
- */
-
-function hslToRgb(color) {
-  color = decomposeColor(color);
-  var _color = color,
-      values = _color.values;
-  var h = values[0];
-  var s = values[1] / 100;
-  var l = values[2] / 100;
-  var a = s * Math.min(l, 1 - l);
-
-  var f = function f(n) {
-    var k = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : (n + h / 30) % 12;
-    return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-  };
-
-  var type = 'rgb';
-  var rgb = [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)];
-
-  if (color.type === 'hsla') {
-    type += 'a';
-    rgb.push(values[3]);
-  }
-
-  return recomposeColor({
-    type: type,
-    values: rgb
-  });
-}
-/**
- * Returns an object with the type and values of a color.
- *
- * Note: Does not support rgb % values.
- *
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @returns {object} - A MUI color object: {type: string, values: number[]}
- */
-
-function decomposeColor(color) {
-  // Idempotent
-  if (color.type) {
-    return color;
-  }
-
-  if (color.charAt(0) === '#') {
-    return decomposeColor(hexToRgb(color));
-  }
-
-  var marker = color.indexOf('(');
-  var type = color.substring(0, marker);
-
-  if (['rgb', 'rgba', 'hsl', 'hsla'].indexOf(type) === -1) {
-    throw new Error(["Material-UI: unsupported `".concat(color, "` color."), 'We support the following formats: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla().'].join('\n'));
-  }
-
-  var values = color.substring(marker + 1, color.length - 1).split(',');
-  values = values.map(function (value) {
-    return parseFloat(value);
-  });
-  return {
-    type: type,
-    values: values
-  };
-}
-/**
- * Converts a color object with type and values to a string.
- *
- * @param {object} color - Decomposed color
- * @param {string} color.type - One of: 'rgb', 'rgba', 'hsl', 'hsla'
- * @param {array} color.values - [n,n,n] or [n,n,n,n]
- * @returns {string} A CSS color string
- */
-
-function recomposeColor(color) {
-  var type = color.type;
-  var values = color.values;
-
-  if (type.indexOf('rgb') !== -1) {
-    // Only convert the first 3 values to int (i.e. not alpha)
-    values = values.map(function (n, i) {
-      return i < 3 ? parseInt(n, 10) : n;
-    });
-  } else if (type.indexOf('hsl') !== -1) {
-    values[1] = "".concat(values[1], "%");
-    values[2] = "".concat(values[2], "%");
-  }
-
-  return "".concat(type, "(").concat(values.join(', '), ")");
-}
-/**
- * Calculates the contrast ratio between two colors.
- *
- * Formula: https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- *
- * @param {string} foreground - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @param {string} background - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @returns {number} A contrast ratio value in the range 0 - 21.
- */
-
-function getContrastRatio(foreground, background) {
-  var lumA = getLuminance(foreground);
-  var lumB = getLuminance(background);
-  return (Math.max(lumA, lumB) + 0.05) / (Math.min(lumA, lumB) + 0.05);
-}
-/**
- * The relative brightness of any point in a color space,
- * normalized to 0 for darkest black and 1 for lightest white.
- *
- * Formula: https://www.w3.org/TR/WCAG20-TECHS/G17.html#G17-tests
- *
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @returns {number} The relative brightness of the color in the range 0 - 1
- */
-
-function getLuminance(color) {
-  color = decomposeColor(color);
-  var rgb = color.type === 'hsl' ? decomposeColor(hslToRgb(color)).values : color.values;
-  rgb = rgb.map(function (val) {
-    val /= 255; // normalized
-
-    return val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
-  }); // Truncate at 3 digits
-
-  return Number((0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]).toFixed(3));
-}
-/**
- * Darken or lighten a color, depending on its luminance.
- * Light colors are darkened, dark colors are lightened.
- *
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @param {number} coefficient=0.15 - multiplier in the range 0 - 1
- * @returns {string} A CSS color string. Hex input values are returned as rgb
- */
-
-function emphasize(color) {
-  var coefficient = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.15;
-  return getLuminance(color) > 0.5 ? darken(color, coefficient) : lighten(color, coefficient);
-}
-/**
- * Set the absolute transparency of a color.
- * Any existing alpha values are overwritten.
- *
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @param {number} value - value to set the alpha channel to in the range 0 -1
- * @returns {string} A CSS color string. Hex input values are returned as rgb
- */
-
-function fade(color, value) {
-  color = decomposeColor(color);
-  value = clamp(value);
-
-  if (color.type === 'rgb' || color.type === 'hsl') {
-    color.type += 'a';
-  }
-
-  color.values[3] = value;
-  return recomposeColor(color);
-}
-/**
- * Darkens a color.
- *
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @param {number} coefficient - multiplier in the range 0 - 1
- * @returns {string} A CSS color string. Hex input values are returned as rgb
- */
-
-function darken(color, coefficient) {
-  color = decomposeColor(color);
-  coefficient = clamp(coefficient);
-
-  if (color.type.indexOf('hsl') !== -1) {
-    color.values[2] *= 1 - coefficient;
-  } else if (color.type.indexOf('rgb') !== -1) {
-    for (var i = 0; i < 3; i += 1) {
-      color.values[i] *= 1 - coefficient;
-    }
-  }
-
-  return recomposeColor(color);
-}
-/**
- * Lightens a color.
- *
- * @param {string} color - CSS color, i.e. one of: #nnn, #nnnnnn, rgb(), rgba(), hsl(), hsla()
- * @param {number} coefficient - multiplier in the range 0 - 1
- * @returns {string} A CSS color string. Hex input values are returned as rgb
- */
-
-function lighten(color, coefficient) {
-  color = decomposeColor(color);
-  coefficient = clamp(coefficient);
-
-  if (color.type.indexOf('hsl') !== -1) {
-    color.values[2] += (100 - color.values[2]) * coefficient;
-  } else if (color.type.indexOf('rgb') !== -1) {
-    for (var i = 0; i < 3; i += 1) {
-      color.values[i] += (255 - color.values[i]) * coefficient;
-    }
-  }
-
-  return recomposeColor(color);
-}
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/createPalette.js
-
-
-
-
-
-
-
-
-
-
-
-
-var createPalette_light = {
-  // The colors used to style the text.
-  text: {
-    // The most important text.
-    primary: 'rgba(0, 0, 0, 0.87)',
-    // Secondary text.
-    secondary: 'rgba(0, 0, 0, 0.54)',
-    // Disabled text have even lower visual prominence.
-    disabled: 'rgba(0, 0, 0, 0.38)',
-    // Text hints.
-    hint: 'rgba(0, 0, 0, 0.38)'
-  },
-  // The color used to divide different elements.
-  divider: 'rgba(0, 0, 0, 0.12)',
-  // The background colors used to style the surfaces.
-  // Consistency between these values is important.
-  background: {
-    paper: colors_common.white,
-    default: colors_grey[50]
-  },
-  // The colors used to style the action elements.
-  action: {
-    // The color of an active action like an icon button.
-    active: 'rgba(0, 0, 0, 0.54)',
-    // The color of an hovered action.
-    hover: 'rgba(0, 0, 0, 0.04)',
-    hoverOpacity: 0.04,
-    // The color of a selected action.
-    selected: 'rgba(0, 0, 0, 0.08)',
-    selectedOpacity: 0.08,
-    // The color of a disabled action.
-    disabled: 'rgba(0, 0, 0, 0.26)',
-    // The background color of a disabled action.
-    disabledBackground: 'rgba(0, 0, 0, 0.12)',
-    disabledOpacity: 0.38,
-    focus: 'rgba(0, 0, 0, 0.12)',
-    focusOpacity: 0.12,
-    activatedOpacity: 0.12
-  }
-};
-var dark = {
-  text: {
-    primary: colors_common.white,
-    secondary: 'rgba(255, 255, 255, 0.7)',
-    disabled: 'rgba(255, 255, 255, 0.5)',
-    hint: 'rgba(255, 255, 255, 0.5)',
-    icon: 'rgba(255, 255, 255, 0.5)'
-  },
-  divider: 'rgba(255, 255, 255, 0.12)',
-  background: {
-    paper: colors_grey[800],
-    default: '#303030'
-  },
-  action: {
-    active: colors_common.white,
-    hover: 'rgba(255, 255, 255, 0.08)',
-    hoverOpacity: 0.08,
-    selected: 'rgba(255, 255, 255, 0.16)',
-    selectedOpacity: 0.16,
-    disabled: 'rgba(255, 255, 255, 0.3)',
-    disabledBackground: 'rgba(255, 255, 255, 0.12)',
-    disabledOpacity: 0.38,
-    focus: 'rgba(255, 255, 255, 0.12)',
-    focusOpacity: 0.12,
-    activatedOpacity: 0.24
-  }
-};
-
-function addLightOrDark(intent, direction, shade, tonalOffset) {
-  var tonalOffsetLight = tonalOffset.light || tonalOffset;
-  var tonalOffsetDark = tonalOffset.dark || tonalOffset * 1.5;
-
-  if (!intent[direction]) {
-    if (intent.hasOwnProperty(shade)) {
-      intent[direction] = intent[shade];
-    } else if (direction === 'light') {
-      intent.light = lighten(intent.main, tonalOffsetLight);
-    } else if (direction === 'dark') {
-      intent.dark = darken(intent.main, tonalOffsetDark);
-    }
-  }
-}
-
-function createPalette(palette) {
-  var _palette$primary = palette.primary,
-      primary = _palette$primary === void 0 ? {
-    light: colors_indigo[300],
-    main: colors_indigo[500],
-    dark: colors_indigo[700]
-  } : _palette$primary,
-      _palette$secondary = palette.secondary,
-      secondary = _palette$secondary === void 0 ? {
-    light: colors_pink.A200,
-    main: colors_pink.A400,
-    dark: colors_pink.A700
-  } : _palette$secondary,
-      _palette$error = palette.error,
-      error = _palette$error === void 0 ? {
-    light: colors_red[300],
-    main: colors_red[500],
-    dark: colors_red[700]
-  } : _palette$error,
-      _palette$warning = palette.warning,
-      warning = _palette$warning === void 0 ? {
-    light: colors_orange[300],
-    main: colors_orange[500],
-    dark: colors_orange[700]
-  } : _palette$warning,
-      _palette$info = palette.info,
-      info = _palette$info === void 0 ? {
-    light: colors_blue[300],
-    main: colors_blue[500],
-    dark: colors_blue[700]
-  } : _palette$info,
-      _palette$success = palette.success,
-      success = _palette$success === void 0 ? {
-    light: colors_green[300],
-    main: colors_green[500],
-    dark: colors_green[700]
-  } : _palette$success,
-      _palette$type = palette.type,
-      type = _palette$type === void 0 ? 'light' : _palette$type,
-      _palette$contrastThre = palette.contrastThreshold,
-      contrastThreshold = _palette$contrastThre === void 0 ? 3 : _palette$contrastThre,
-      _palette$tonalOffset = palette.tonalOffset,
-      tonalOffset = _palette$tonalOffset === void 0 ? 0.2 : _palette$tonalOffset,
-      other = _objectWithoutProperties(palette, ["primary", "secondary", "error", "warning", "info", "success", "type", "contrastThreshold", "tonalOffset"]); // Use the same logic as
-  // Bootstrap: https://github.com/twbs/bootstrap/blob/1d6e3710dd447de1a200f29e8fa521f8a0908f70/scss/_functions.scss#L59
-  // and material-components-web https://github.com/material-components/material-components-web/blob/ac46b8863c4dab9fc22c4c662dc6bd1b65dd652f/packages/mdc-theme/_functions.scss#L54
-
-
-  function getContrastText(background) {
-    var contrastText = getContrastRatio(background, dark.text.primary) >= contrastThreshold ? dark.text.primary : createPalette_light.text.primary;
-
-    if (false) { var contrast; }
-
-    return contrastText;
-  }
-
-  var augmentColor = function augmentColor(color) {
-    var mainShade = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
-    var lightShade = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 300;
-    var darkShade = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 700;
-    color = _extends({}, color);
-
-    if (!color.main && color[mainShade]) {
-      color.main = color[mainShade];
-    }
-
-    if (!color.main) {
-      throw new Error(['Material-UI: the color provided to augmentColor(color) is invalid.', "The color object needs to have a `main` property or a `".concat(mainShade, "` property.")].join('\n'));
-    }
-
-    if (typeof color.main !== 'string') {
-      throw new Error(['Material-UI: the color provided to augmentColor(color) is invalid.', "`color.main` should be a string, but `".concat(JSON.stringify(color.main), "` was provided instead."), '', 'Did you intend to use one of the following approaches?', '', 'import { green } from "@material-ui/core/colors";', '', 'const theme1 = createMuiTheme({ palette: {', '  primary: green,', '} });', '', 'const theme2 = createMuiTheme({ palette: {', '  primary: { main: green[500] },', '} });'].join('\n'));
-    }
-
-    addLightOrDark(color, 'light', lightShade, tonalOffset);
-    addLightOrDark(color, 'dark', darkShade, tonalOffset);
-
-    if (!color.contrastText) {
-      color.contrastText = getContrastText(color.main);
-    }
-
-    return color;
-  };
-
-  var types = {
-    dark: dark,
-    light: createPalette_light
-  };
-
-  if (false) {}
-
-  var paletteOutput = deepmerge(_extends({
-    // A collection of common colors.
-    common: colors_common,
-    // The palette type, can be light or dark.
-    type: type,
-    // The colors used to represent primary interface elements for a user.
-    primary: augmentColor(primary),
-    // The colors used to represent secondary interface elements for a user.
-    secondary: augmentColor(secondary, 'A400', 'A200', 'A700'),
-    // The colors used to represent interface elements that the user should be made aware of.
-    error: augmentColor(error),
-    // The colors used to represent potentially dangerous actions or important messages.
-    warning: augmentColor(warning),
-    // The colors used to present information to the user that is neutral and not necessarily important.
-    info: augmentColor(info),
-    // The colors used to indicate the successful completion of an action that user triggered.
-    success: augmentColor(success),
-    // The grey colors.
-    grey: colors_grey,
-    // Used by `getContrastText()` to maximize the contrast between
-    // the background and the text.
-    contrastThreshold: contrastThreshold,
-    // Takes a background color and returns the text color that maximizes the contrast.
-    getContrastText: getContrastText,
-    // Generate a rich color object.
-    augmentColor: augmentColor,
-    // Used by the functions below to shift a color's luminance by approximately
-    // two indexes within its tonal palette.
-    // E.g., shift from Red 500 to Red 300 or Red 700.
-    tonalOffset: tonalOffset
-  }, types[type]), other);
-  return paletteOutput;
-}
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/createTypography.js
-
-
-
-
-function round(value) {
-  return Math.round(value * 1e5) / 1e5;
-}
-
-var caseAllCaps = {
-  textTransform: 'uppercase'
-};
-var defaultFontFamily = '"Roboto", "Helvetica", "Arial", sans-serif';
-/**
- * @see @link{https://material.io/design/typography/the-type-system.html}
- * @see @link{https://material.io/design/typography/understanding-typography.html}
- */
-
-function createTypography(palette, typography) {
-  var _ref = typeof typography === 'function' ? typography(palette) : typography,
-      _ref$fontFamily = _ref.fontFamily,
-      fontFamily = _ref$fontFamily === void 0 ? defaultFontFamily : _ref$fontFamily,
-      _ref$fontSize = _ref.fontSize,
-      fontSize = _ref$fontSize === void 0 ? 14 : _ref$fontSize,
-      _ref$fontWeightLight = _ref.fontWeightLight,
-      fontWeightLight = _ref$fontWeightLight === void 0 ? 300 : _ref$fontWeightLight,
-      _ref$fontWeightRegula = _ref.fontWeightRegular,
-      fontWeightRegular = _ref$fontWeightRegula === void 0 ? 400 : _ref$fontWeightRegula,
-      _ref$fontWeightMedium = _ref.fontWeightMedium,
-      fontWeightMedium = _ref$fontWeightMedium === void 0 ? 500 : _ref$fontWeightMedium,
-      _ref$fontWeightBold = _ref.fontWeightBold,
-      fontWeightBold = _ref$fontWeightBold === void 0 ? 700 : _ref$fontWeightBold,
-      _ref$htmlFontSize = _ref.htmlFontSize,
-      htmlFontSize = _ref$htmlFontSize === void 0 ? 16 : _ref$htmlFontSize,
-      allVariants = _ref.allVariants,
-      pxToRem2 = _ref.pxToRem,
-      other = _objectWithoutProperties(_ref, ["fontFamily", "fontSize", "fontWeightLight", "fontWeightRegular", "fontWeightMedium", "fontWeightBold", "htmlFontSize", "allVariants", "pxToRem"]);
-
-  if (false) {}
-
-  var coef = fontSize / 14;
-
-  var pxToRem = pxToRem2 || function (size) {
-    return "".concat(size / htmlFontSize * coef, "rem");
-  };
-
-  var buildVariant = function buildVariant(fontWeight, size, lineHeight, letterSpacing, casing) {
-    return _extends({
-      fontFamily: fontFamily,
-      fontWeight: fontWeight,
-      fontSize: pxToRem(size),
-      // Unitless following https://meyerweb.com/eric/thoughts/2006/02/08/unitless-line-heights/
-      lineHeight: lineHeight
-    }, fontFamily === defaultFontFamily ? {
-      letterSpacing: "".concat(round(letterSpacing / size), "em")
-    } : {}, {}, casing, {}, allVariants);
-  };
-
-  var variants = {
-    h1: buildVariant(fontWeightLight, 96, 1.167, -1.5),
-    h2: buildVariant(fontWeightLight, 60, 1.2, -0.5),
-    h3: buildVariant(fontWeightRegular, 48, 1.167, 0),
-    h4: buildVariant(fontWeightRegular, 34, 1.235, 0.25),
-    h5: buildVariant(fontWeightRegular, 24, 1.334, 0),
-    h6: buildVariant(fontWeightMedium, 20, 1.6, 0.15),
-    subtitle1: buildVariant(fontWeightRegular, 16, 1.75, 0.15),
-    subtitle2: buildVariant(fontWeightMedium, 14, 1.57, 0.1),
-    body1: buildVariant(fontWeightRegular, 16, 1.5, 0.15),
-    body2: buildVariant(fontWeightRegular, 14, 1.43, 0.15),
-    button: buildVariant(fontWeightMedium, 14, 1.75, 0.4, caseAllCaps),
-    caption: buildVariant(fontWeightRegular, 12, 1.66, 0.4),
-    overline: buildVariant(fontWeightRegular, 12, 2.66, 1, caseAllCaps)
-  };
-  return deepmerge(_extends({
-    htmlFontSize: htmlFontSize,
-    pxToRem: pxToRem,
-    round: round,
-    // TODO v5: remove
-    fontFamily: fontFamily,
-    fontSize: fontSize,
-    fontWeightLight: fontWeightLight,
-    fontWeightRegular: fontWeightRegular,
-    fontWeightMedium: fontWeightMedium,
-    fontWeightBold: fontWeightBold
-  }, variants), other, {
-    clone: false // No need to clone deep
-
-  });
-}
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/shadows.js
-var shadowKeyUmbraOpacity = 0.2;
-var shadowKeyPenumbraOpacity = 0.14;
-var shadowAmbientShadowOpacity = 0.12;
-
-function createShadow() {
-  return ["".concat(arguments.length <= 0 ? undefined : arguments[0], "px ").concat(arguments.length <= 1 ? undefined : arguments[1], "px ").concat(arguments.length <= 2 ? undefined : arguments[2], "px ").concat(arguments.length <= 3 ? undefined : arguments[3], "px rgba(0,0,0,").concat(shadowKeyUmbraOpacity, ")"), "".concat(arguments.length <= 4 ? undefined : arguments[4], "px ").concat(arguments.length <= 5 ? undefined : arguments[5], "px ").concat(arguments.length <= 6 ? undefined : arguments[6], "px ").concat(arguments.length <= 7 ? undefined : arguments[7], "px rgba(0,0,0,").concat(shadowKeyPenumbraOpacity, ")"), "".concat(arguments.length <= 8 ? undefined : arguments[8], "px ").concat(arguments.length <= 9 ? undefined : arguments[9], "px ").concat(arguments.length <= 10 ? undefined : arguments[10], "px ").concat(arguments.length <= 11 ? undefined : arguments[11], "px rgba(0,0,0,").concat(shadowAmbientShadowOpacity, ")")].join(',');
-} // Values from https://github.com/material-components/material-components-web/blob/be8747f94574669cb5e7add1a7c54fa41a89cec7/packages/mdc-elevation/_variables.scss
-
-
-var shadows = ['none', createShadow(0, 2, 1, -1, 0, 1, 1, 0, 0, 1, 3, 0), createShadow(0, 3, 1, -2, 0, 2, 2, 0, 0, 1, 5, 0), createShadow(0, 3, 3, -2, 0, 3, 4, 0, 0, 1, 8, 0), createShadow(0, 2, 4, -1, 0, 4, 5, 0, 0, 1, 10, 0), createShadow(0, 3, 5, -1, 0, 5, 8, 0, 0, 1, 14, 0), createShadow(0, 3, 5, -1, 0, 6, 10, 0, 0, 1, 18, 0), createShadow(0, 4, 5, -2, 0, 7, 10, 1, 0, 2, 16, 1), createShadow(0, 5, 5, -3, 0, 8, 10, 1, 0, 3, 14, 2), createShadow(0, 5, 6, -3, 0, 9, 12, 1, 0, 3, 16, 2), createShadow(0, 6, 6, -3, 0, 10, 14, 1, 0, 4, 18, 3), createShadow(0, 6, 7, -4, 0, 11, 15, 1, 0, 4, 20, 3), createShadow(0, 7, 8, -4, 0, 12, 17, 2, 0, 5, 22, 4), createShadow(0, 7, 8, -4, 0, 13, 19, 2, 0, 5, 24, 4), createShadow(0, 7, 9, -4, 0, 14, 21, 2, 0, 5, 26, 4), createShadow(0, 8, 9, -5, 0, 15, 22, 2, 0, 6, 28, 5), createShadow(0, 8, 10, -5, 0, 16, 24, 2, 0, 6, 30, 5), createShadow(0, 8, 11, -5, 0, 17, 26, 2, 0, 6, 32, 5), createShadow(0, 9, 11, -5, 0, 18, 28, 2, 0, 7, 34, 6), createShadow(0, 9, 12, -6, 0, 19, 29, 2, 0, 7, 36, 6), createShadow(0, 10, 13, -6, 0, 20, 31, 3, 0, 8, 38, 7), createShadow(0, 10, 13, -6, 0, 21, 33, 3, 0, 8, 40, 7), createShadow(0, 10, 14, -6, 0, 22, 35, 3, 0, 8, 42, 7), createShadow(0, 11, 14, -7, 0, 23, 36, 3, 0, 9, 44, 8), createShadow(0, 11, 15, -7, 0, 24, 38, 3, 0, 9, 46, 8)];
-/* harmony default export */ var styles_shadows = (shadows);
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/shape.js
-var shape = {
-  borderRadius: 4
-};
-/* harmony default export */ var styles_shape = (shape);
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
-var arrayWithHoles = __webpack_require__(14);
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
-function _iterableToArrayLimit(arr, i) {
-  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
-
-  try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
-    }
-  }
-
-  return _arr;
-}
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-var unsupportedIterableToArray = __webpack_require__(8);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
-var nonIterableRest = __webpack_require__(15);
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js
-
-
-
-
-function _slicedToArray(arr, i) {
-  return Object(arrayWithHoles["a" /* default */])(arr) || _iterableToArrayLimit(arr, i) || Object(unsupportedIterableToArray["a" /* default */])(arr, i) || Object(nonIterableRest["a" /* default */])();
-}
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
-var arrayLikeToArray = __webpack_require__(5);
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
-
-function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) return Object(arrayLikeToArray["a" /* default */])(arr);
-}
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArray.js
-var iterableToArray = __webpack_require__(16);
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js
-
-
-
-
-function _toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || Object(iterableToArray["a" /* default */])(arr) || Object(unsupportedIterableToArray["a" /* default */])(arr) || _nonIterableSpread();
-}
-// CONCATENATED MODULE: ./node_modules/@material-ui/system/esm/merge.js
-
-
-function merge(acc, item) {
-  if (!item) {
-    return acc;
-  }
-
-  return deepmerge(acc, item, {
-    clone: false // No need to clone deep, it's way faster.
-
-  });
-}
-
-/* harmony default export */ var esm_merge = (merge);
-// CONCATENATED MODULE: ./node_modules/@material-ui/system/esm/breakpoints.js
-
-
-
-
- // The breakpoint **start** at this value.
-// For instance with the first breakpoint xs: [xs, sm[.
-
-var breakpoints_values = {
-  xs: 0,
-  sm: 600,
-  md: 960,
-  lg: 1280,
-  xl: 1920
-};
-var defaultBreakpoints = {
-  // Sorted ASC by size. That's important.
-  // It can't be configured as it's used statically for propTypes.
-  keys: ['xs', 'sm', 'md', 'lg', 'xl'],
-  up: function up(key) {
-    return "@media (min-width:".concat(breakpoints_values[key], "px)");
-  }
-};
-function handleBreakpoints(props, propValue, styleFromPropValue) {
-  if (false) {}
-
-  if (Array.isArray(propValue)) {
-    var themeBreakpoints = props.theme.breakpoints || defaultBreakpoints;
-    return propValue.reduce(function (acc, item, index) {
-      acc[themeBreakpoints.up(themeBreakpoints.keys[index])] = styleFromPropValue(propValue[index]);
-      return acc;
-    }, {});
-  }
-
-  if (Object(esm_typeof["a" /* default */])(propValue) === 'object') {
-    var _themeBreakpoints = props.theme.breakpoints || defaultBreakpoints;
-
-    return Object.keys(propValue).reduce(function (acc, breakpoint) {
-      acc[_themeBreakpoints.up(breakpoint)] = styleFromPropValue(propValue[breakpoint]);
-      return acc;
-    }, {});
-  }
-
-  var output = styleFromPropValue(propValue);
-  return output;
-}
-
-function breakpoints_breakpoints(styleFunction) {
-  var newStyleFunction = function newStyleFunction(props) {
-    var base = styleFunction(props);
-    var themeBreakpoints = props.theme.breakpoints || defaultBreakpoints;
-    var extended = themeBreakpoints.keys.reduce(function (acc, key) {
-      if (props[key]) {
-        acc = acc || {};
-        acc[themeBreakpoints.up(key)] = styleFunction(_extends({
-          theme: props.theme
-        }, props[key]));
-      }
-
-      return acc;
-    }, null);
-    return esm_merge(base, extended);
-  };
-
-  newStyleFunction.propTypes =  false ? undefined : {};
-  newStyleFunction.filterProps = ['xs', 'sm', 'md', 'lg', 'xl'].concat(_toConsumableArray(styleFunction.filterProps));
-  return newStyleFunction;
-}
-
-/* harmony default export */ var esm_breakpoints = (breakpoints_breakpoints);
-// CONCATENATED MODULE: ./node_modules/@material-ui/system/esm/memoize.js
-function memoize(fn) {
-  var cache = {};
-  return function (arg) {
-    if (cache[arg] === undefined) {
-      cache[arg] = fn(arg);
-    }
-
-    return cache[arg];
-  };
-}
-// CONCATENATED MODULE: ./node_modules/@material-ui/system/esm/spacing.js
-
-
-
-
-
-var properties = {
-  m: 'margin',
-  p: 'padding'
-};
-var directions = {
-  t: 'Top',
-  r: 'Right',
-  b: 'Bottom',
-  l: 'Left',
-  x: ['Left', 'Right'],
-  y: ['Top', 'Bottom']
-};
-var aliases = {
-  marginX: 'mx',
-  marginY: 'my',
-  paddingX: 'px',
-  paddingY: 'py'
-}; // memoize() impact:
-// From 300,000 ops/sec
-// To 350,000 ops/sec
-
-var getCssProperties = memoize(function (prop) {
-  // It's not a shorthand notation.
-  if (prop.length > 2) {
-    if (aliases[prop]) {
-      prop = aliases[prop];
-    } else {
-      return [prop];
-    }
-  }
-
-  var _prop$split = prop.split(''),
-      _prop$split2 = _slicedToArray(_prop$split, 2),
-      a = _prop$split2[0],
-      b = _prop$split2[1];
-
-  var property = properties[a];
-  var direction = directions[b] || '';
-  return Array.isArray(direction) ? direction.map(function (dir) {
-    return property + dir;
-  }) : [property + direction];
-});
-var spacingKeys = ['m', 'mt', 'mr', 'mb', 'ml', 'mx', 'my', 'p', 'pt', 'pr', 'pb', 'pl', 'px', 'py', 'margin', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft', 'marginX', 'marginY', 'padding', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'paddingX', 'paddingY'];
-function createUnarySpacing(theme) {
-  var themeSpacing = theme.spacing || 8;
-
-  if (typeof themeSpacing === 'number') {
-    return function (abs) {
-      if (false) {}
-
-      return themeSpacing * abs;
-    };
-  }
-
-  if (Array.isArray(themeSpacing)) {
-    return function (abs) {
-      if (false) {}
-
-      return themeSpacing[abs];
-    };
-  }
-
-  if (typeof themeSpacing === 'function') {
-    return themeSpacing;
-  }
-
-  if (false) {}
-
-  return function () {
-    return undefined;
-  };
-}
-
-function getValue(transformer, propValue) {
-  if (typeof propValue === 'string') {
-    return propValue;
-  }
-
-  var abs = Math.abs(propValue);
-  var transformed = transformer(abs);
-
-  if (propValue >= 0) {
-    return transformed;
-  }
-
-  if (typeof transformed === 'number') {
-    return -transformed;
-  }
-
-  return "-".concat(transformed);
-}
-
-function getStyleFromPropValue(cssProperties, transformer) {
-  return function (propValue) {
-    return cssProperties.reduce(function (acc, cssProperty) {
-      acc[cssProperty] = getValue(transformer, propValue);
-      return acc;
-    }, {});
-  };
-}
-
-function spacing_spacing(props) {
-  var theme = props.theme;
-  var transformer = createUnarySpacing(theme);
-  return Object.keys(props).map(function (prop) {
-    // Using a hash computation over an array iteration could be faster, but with only 28 items,
-    // it's doesn't worth the bundle size.
-    if (spacingKeys.indexOf(prop) === -1) {
-      return null;
-    }
-
-    var cssProperties = getCssProperties(prop);
-    var styleFromPropValue = getStyleFromPropValue(cssProperties, transformer);
-    var propValue = props[prop];
-    return handleBreakpoints(props, propValue, styleFromPropValue);
-  }).reduce(esm_merge, {});
-}
-
-spacing_spacing.propTypes =  false ? undefined : {};
-spacing_spacing.filterProps = spacingKeys;
-/* harmony default export */ var esm_spacing = (spacing_spacing);
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/createSpacing.js
-
-var warnOnce;
-function createSpacing() {
-  var spacingInput = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 8;
-
-  // Already transformed.
-  if (spacingInput.mui) {
-    return spacingInput;
-  } // Material Design layouts are visually balanced. Most measurements align to an 8dp grid applied, which aligns both spacing and the overall layout.
-  // Smaller components, such as icons and type, can align to a 4dp grid.
-  // https://material.io/design/layout/understanding-layout.html#usage
-
-
-  var transform = createUnarySpacing({
-    spacing: spacingInput
-  });
-
-  var spacing = function spacing() {
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    if (false) {}
-
-    if (args.length === 0) {
-      return transform(1);
-    }
-
-    if (args.length === 1) {
-      return transform(args[0]);
-    }
-
-    return args.map(function (argument) {
-      if (typeof argument === 'string') {
-        return argument;
-      }
-
-      var output = transform(argument);
-      return typeof output === 'number' ? "".concat(output, "px") : output;
-    }).join(' ');
-  }; // Backward compatibility, to remove in v5.
-
-
-  Object.defineProperty(spacing, 'unit', {
-    get: function get() {
-      if (false) {}
-
-      return spacingInput;
-    }
-  });
-  spacing.mui = true;
-  return spacing;
-}
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/transitions.js
-
-// Follow https://material.google.com/motion/duration-easing.html#duration-easing-natural-easing-curves
-// to learn the context in which each easing should be used.
-var easing = {
-  // This is the most common easing curve.
-  easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
-  // Objects enter the screen at full velocity from off-screen and
-  // slowly decelerate to a resting point.
-  easeOut: 'cubic-bezier(0.0, 0, 0.2, 1)',
-  // Objects leave the screen at full velocity. They do not decelerate when off-screen.
-  easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
-  // The sharp curve is used by objects that may return to the screen at any time.
-  sharp: 'cubic-bezier(0.4, 0, 0.6, 1)'
-}; // Follow https://material.io/guidelines/motion/duration-easing.html#duration-easing-common-durations
-// to learn when use what timing
-
-var transitions_duration = {
-  shortest: 150,
-  shorter: 200,
-  short: 250,
-  // most basic recommended timing
-  standard: 300,
-  // this is to be used in complex animations
-  complex: 375,
-  // recommended when something is entering screen
-  enteringScreen: 225,
-  // recommended when something is leaving screen
-  leavingScreen: 195
-};
-
-function formatMs(milliseconds) {
-  return "".concat(Math.round(milliseconds), "ms");
-}
-/**
- * @param {string|Array} props
- * @param {object} param
- * @param {string} param.prop
- * @param {number} param.duration
- * @param {string} param.easing
- * @param {number} param.delay
- */
-
-
-/* harmony default export */ var transitions = ({
-  easing: easing,
-  duration: transitions_duration,
-  create: function create() {
-    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ['all'];
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    var _options$duration = options.duration,
-        durationOption = _options$duration === void 0 ? transitions_duration.standard : _options$duration,
-        _options$easing = options.easing,
-        easingOption = _options$easing === void 0 ? easing.easeInOut : _options$easing,
-        _options$delay = options.delay,
-        delay = _options$delay === void 0 ? 0 : _options$delay,
-        other = _objectWithoutProperties(options, ["duration", "easing", "delay"]);
-
-    if (false) { var isNumber, isString; }
-
-    return (Array.isArray(props) ? props : [props]).map(function (animatedProp) {
-      return "".concat(animatedProp, " ").concat(typeof durationOption === 'string' ? durationOption : formatMs(durationOption), " ").concat(easingOption, " ").concat(typeof delay === 'string' ? delay : formatMs(delay));
-    }).join(',');
-  },
-  getAutoHeightDuration: function getAutoHeightDuration(height) {
-    if (!height) {
-      return 0;
-    }
-
-    var constant = height / 36; // https://www.wolframalpha.com/input/?i=(4+%2B+15+*+(x+%2F+36+)+**+0.25+%2B+(x+%2F+36)+%2F+5)+*+10
-
-    return Math.round((4 + 15 * Math.pow(constant, 0.25) + constant / 5) * 10);
-  }
-});
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/zIndex.js
-// We need to centralize the zIndex definitions as they work
-// like global values in the browser.
-var zIndex = {
-  mobileStepper: 1000,
-  speedDial: 1050,
-  appBar: 1100,
-  drawer: 1200,
-  modal: 1300,
-  snackbar: 1400,
-  tooltip: 1500
-};
-/* harmony default export */ var styles_zIndex = (zIndex);
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/createMuiTheme.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-function createMuiTheme() {
-  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-  var _options$breakpoints = options.breakpoints,
-      breakpointsInput = _options$breakpoints === void 0 ? {} : _options$breakpoints,
-      _options$mixins = options.mixins,
-      mixinsInput = _options$mixins === void 0 ? {} : _options$mixins,
-      _options$palette = options.palette,
-      paletteInput = _options$palette === void 0 ? {} : _options$palette,
-      spacingInput = options.spacing,
-      _options$typography = options.typography,
-      typographyInput = _options$typography === void 0 ? {} : _options$typography,
-      other = _objectWithoutProperties(options, ["breakpoints", "mixins", "palette", "spacing", "typography"]);
-
-  var palette = createPalette(paletteInput);
-  var breakpoints = createBreakpoints(breakpointsInput);
-  var spacing = createSpacing(spacingInput);
-  var muiTheme = deepmerge({
-    breakpoints: breakpoints,
-    direction: 'ltr',
-    mixins: createMixins(breakpoints, spacing, mixinsInput),
-    overrides: {},
-    // Inject custom styles
-    palette: palette,
-    props: {},
-    // Provide default props
-    shadows: styles_shadows,
-    typography: createTypography(palette, typographyInput),
-    spacing: spacing,
-    shape: styles_shape,
-    transitions: transitions,
-    zIndex: styles_zIndex
-  }, other);
-
-  for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    args[_key - 1] = arguments[_key];
-  }
-
-  muiTheme = args.reduce(function (acc, argument) {
-    return deepmerge(acc, argument);
-  }, muiTheme);
-
-  if (false) { var traverse, pseudoClasses; }
-
-  return muiTheme;
-}
-
-/* harmony default export */ var styles_createMuiTheme = (createMuiTheme);
-// CONCATENATED MODULE: ./src/shared/helpers/globals/GlobalHelper.js
-
-
-
-
-var GlobalHelper_GlobalHelper = /*#__PURE__*/function () {
-  function GlobalHelper() {
-    _classCallCheck(this, GlobalHelper);
-  }
-
-  _createClass(GlobalHelper, null, [{
-    key: "initMuiTheme",
-    value: function initMuiTheme() {
-      var theme = styles_createMuiTheme({
-        typography: {
-          button: {
-            textTransform: "none"
-          }
-        },
-        palette: {
-          primary: {
-            main: "#BF202F"
-          },
-          secondary: {
-            main: "#5E1916"
-          }
-        }
-      });
-      return theme;
-    }
-  }]);
-
-  return GlobalHelper;
-}();
-
-
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
-function iterableToArrayLimit_iterableToArrayLimit(arr, i) {
-  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
-
-  try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
-    }
-  }
-
-  return _arr;
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
-  }
-
-  return arr2;
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(n);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-}
-// CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js
-
-
-
-
-function slicedToArray_slicedToArray(arr, i) {
-  return _arrayWithHoles(arr) || iterableToArrayLimit_iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
-}
-// CONCATENATED MODULE: ./src/shared/components/LanguageSwitcher/LanguageSwitcher.js
-
-
-function LanguageSwitcher(props) {
-  function handleLanguageChange(e) {
-    if (typeof window !== "undefined" && e && e.target) {
-      window.location.href = e.target.value;
-    }
-  }
-
-  var languages = props.availableLanguages.map(function (language, index) {
-    return /*#__PURE__*/react_default.a.createElement("option", {
-      key: index,
-      value: language.url
-    }, language.text);
-  });
-  return /*#__PURE__*/react_default.a.createElement("div", {
-    className: "select"
-  }, /*#__PURE__*/react_default.a.createElement("select", {
-    value: props.selectedLanguageUrl,
-    onChange: function onChange(e) {
-      return handleLanguageChange(e);
-    }
-  }, languages));
-}
-
-/* harmony default export */ var LanguageSwitcher_LanguageSwitcher = (LanguageSwitcher);
-// CONCATENATED MODULE: ./src/shared/layouts/images/logo.png
-/* harmony default export */ var logo = ("/dist/images/logo.png");
-// CONCATENATED MODULE: ./src/shared/components/Header/Header.js
-
-
-
-
-
-function Header(props) {
-  var _useState = Object(react["useState"])(false),
-      _useState2 = slicedToArray_slicedToArray(_useState, 2),
-      isActive = _useState2[0],
-      setIsActive = _useState2[1];
-
-  var links = props.links.map(function (link, index) {
-    return /*#__PURE__*/react_default.a.createElement("a", {
-      key: index,
-      className: "navbar-item",
-      href: link.url
-    }, link.text);
-  });
-  return /*#__PURE__*/react_default.a.createElement("header", null, /*#__PURE__*/react_default.a.createElement("nav", {
-    className: "navbar is-spaced"
-  }, /*#__PURE__*/react_default.a.createElement("div", {
-    className: "navbar-brand"
-  }, /*#__PURE__*/react_default.a.createElement("a", {
-    href: props.logo.targetUrl
-  }, /*#__PURE__*/react_default.a.createElement("img", {
-    src: logo,
-    alt: props.logo.logoAltLabel
-  })), /*#__PURE__*/react_default.a.createElement("div", {
-    role: "button",
-    onClick: function onClick() {
-      return setIsActive(!isActive);
-    },
-    className: isActive ? "navbar-burger is-active" : "navbar-burger",
-    "aria-label": "menu",
-    "aria-expanded": "false"
-  }, /*#__PURE__*/react_default.a.createElement("span", {
-    "aria-hidden": "true"
-  }), /*#__PURE__*/react_default.a.createElement("span", {
-    "aria-hidden": "true"
-  }), /*#__PURE__*/react_default.a.createElement("span", {
-    "aria-hidden": "true"
-  }))), /*#__PURE__*/react_default.a.createElement("div", {
-    className: isActive ? "navbar-menu is-active" : "navbar-menu"
-  }, /*#__PURE__*/react_default.a.createElement("div", {
-    className: "navbar-start"
-  }, links), /*#__PURE__*/react_default.a.createElement("div", {
-    className: "navbar-end"
-  }, /*#__PURE__*/react_default.a.createElement("div", {
-    className: "navbar-item"
-  }, /*#__PURE__*/react_default.a.createElement(LanguageSwitcher_LanguageSwitcher, props.languageSwitcher))))));
-}
-
-/* harmony default export */ var Header_Header = (Header);
-// CONCATENATED MODULE: ./src/shared/components/Footer/Footer.js
-
-
-function Footer(props) {
-  var links = props.links.map(function (link, index) {
-    return /*#__PURE__*/react_default.a.createElement("li", {
-      key: index
-    }, /*#__PURE__*/react_default.a.createElement("a", {
-      href: link.url
-    }, link.text));
-  });
-  return /*#__PURE__*/react_default.a.createElement("footer", {
-    className: "footer"
-  }, /*#__PURE__*/react_default.a.createElement("div", {
-    className: "content"
-  }, /*#__PURE__*/react_default.a.createElement("ul", null, links)), /*#__PURE__*/react_default.a.createElement("div", {
-    className: "content has-text-centered has-text-white"
-  }, props.copyright));
-}
-
-/* harmony default export */ var Footer_Footer = (Footer);
 // CONCATENATED MODULE: ./node_modules/clsx/dist/clsx.m.js
 function toVal(mix) {
 	var k, y, str='';
@@ -2800,7 +3063,7 @@ function useFormControl() {
 }
 /* harmony default export */ var FormControl_FormControlContext = (FormControlContext);
 // EXTERNAL MODULE: ./node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js
-var hoist_non_react_statics_cjs = __webpack_require__(17);
+var hoist_non_react_statics_cjs = __webpack_require__(46);
 var hoist_non_react_statics_cjs_default = /*#__PURE__*/__webpack_require__.n(hoist_non_react_statics_cjs);
 
 // CONCATENATED MODULE: ./node_modules/is-in-browser/dist/module.js
@@ -2812,7 +3075,7 @@ var isBrowser = (typeof window === "undefined" ? "undefined" : _typeof(window)) 
 
 // CONCATENATED MODULE: ./node_modules/tiny-warning/dist/tiny-warning.esm.js
 var isProduction = "production" === 'production';
-function tiny_warning_esm_warning(condition, message) {
+function warning(condition, message) {
   if (!isProduction) {
     if (condition) {
       return;
@@ -2830,10 +3093,10 @@ function tiny_warning_esm_warning(condition, message) {
   }
 }
 
-/* harmony default export */ var tiny_warning_esm = (tiny_warning_esm_warning);
+/* harmony default export */ var tiny_warning_esm = (warning);
 
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
-function createClass_defineProperties(target, props) {
+function _defineProperties(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
     descriptor.enumerable = descriptor.enumerable || false;
@@ -2843,9 +3106,9 @@ function createClass_defineProperties(target, props) {
   }
 }
 
-function createClass_createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) createClass_defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) createClass_defineProperties(Constructor, staticProps);
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
   return Constructor;
 }
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
@@ -2855,7 +3118,10 @@ function _inheritsLoose(subClass, superClass) {
   subClass.__proto__ = superClass;
 }
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
-var assertThisInitialized = __webpack_require__(6);
+var assertThisInitialized = __webpack_require__(28);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
+var objectWithoutPropertiesLoose = __webpack_require__(13);
 
 // CONCATENATED MODULE: ./node_modules/jss/dist/jss.esm.js
 
@@ -3167,13 +3433,13 @@ function (_BaseStyleRule) {
   _proto2.toString = function toString(options) {
     var sheet = this.options.sheet;
     var link = sheet ? sheet.options.link : false;
-    var opts = link ? _extends({}, options, {
+    var opts = link ? Object(esm_extends["a" /* default */])({}, options, {
       allowEmpty: true
     }) : options;
     return toCss(this.selectorText, this.style, opts);
   };
 
-  createClass_createClass(StyleRule, [{
+  _createClass(StyleRule, [{
     key: "selector",
     set: function set(selector) {
       if (selector === this.selectorText) return;
@@ -3235,7 +3501,7 @@ function () {
     var atMatch = key.match(atRegExp);
     this.at = atMatch ? atMatch[1] : 'unknown';
     this.options = options;
-    this.rules = new jss_esm_RuleList(_extends({}, options, {
+    this.rules = new jss_esm_RuleList(Object(esm_extends["a" /* default */])({}, options, {
       parent: this
     }));
 
@@ -3341,12 +3607,12 @@ function () {
         sheet = options.sheet,
         generateId = options.generateId;
     this.id = scoped === false ? this.name : jss_esm_escape(generateId(this, sheet));
-    this.rules = new jss_esm_RuleList(_extends({}, options, {
+    this.rules = new jss_esm_RuleList(Object(esm_extends["a" /* default */])({}, options, {
       parent: this
     }));
 
     for (var name in frames) {
-      this.rules.add(name, frames[name], _extends({}, options, {
+      this.rules.add(name, frames[name], Object(esm_extends["a" /* default */])({}, options, {
         parent: this
       }));
     }
@@ -3466,7 +3732,7 @@ function (_BaseStyleRule) {
   _proto.toString = function toString(options) {
     var sheet = this.options.sheet;
     var link = sheet ? sheet.options.link : false;
-    var opts = link ? _extends({}, options, {
+    var opts = link ? Object(esm_extends["a" /* default */])({}, options, {
       allowEmpty: true
     }) : options;
     return toCss(this.key, this.style, opts);
@@ -3666,7 +3932,7 @@ function () {
         generateId = _this$options.generateId,
         scoped = _this$options.scoped;
 
-    var options = _extends({
+    var options = Object(esm_extends["a" /* default */])({
       classes: this.classes,
       parent: parent,
       sheet: sheet,
@@ -3890,7 +4156,7 @@ function () {
     this.deployed = false;
     this.classes = {};
     this.keyframes = {};
-    this.options = _extends({}, options, {
+    this.options = Object(esm_extends["a" /* default */])({}, options, {
       sheet: this,
       parent: this,
       classes: this.classes,
@@ -4258,7 +4524,7 @@ function () {
   _proto.toString = function toString(_temp) {
     var _ref = _temp === void 0 ? {} : _temp,
         attached = _ref.attached,
-        options = _objectWithoutPropertiesLoose(_ref, ["attached"]);
+        options = Object(objectWithoutPropertiesLoose["a" /* default */])(_ref, ["attached"]);
 
     var css = '';
 
@@ -4276,7 +4542,7 @@ function () {
     return css;
   };
 
-  createClass_createClass(SheetsRegistry, [{
+  _createClass(SheetsRegistry, [{
     key: "index",
 
     /**
@@ -4356,7 +4622,7 @@ var createGenerateId = function createGenerateId(options) {
 /**
  * Cache the value from the first time a function is called.
  */
-var jss_esm_memoize = function memoize(fn) {
+var memoize = function memoize(fn) {
   var value;
   return function () {
     if (!value) value = fn();
@@ -4446,7 +4712,7 @@ function setSelector(cssRule, selectorText) {
  */
 
 
-var getHead = jss_esm_memoize(function () {
+var getHead = memoize(function () {
   return document.querySelector('head');
 });
 /**
@@ -4577,7 +4843,7 @@ function insertStyle(style, options) {
  */
 
 
-var getNonce = jss_esm_memoize(function () {
+var getNonce = memoize(function () {
   var node = document.querySelector('meta[property="csp-nonce"]');
   return node ? node.getAttribute('content') : null;
 });
@@ -4848,7 +5114,7 @@ function () {
     }
 
     if (options.id) {
-      this.options.id = _extends({}, this.options.id, options.id);
+      this.options.id = Object(esm_extends["a" /* default */])({}, this.options.id, options.id);
     }
 
     if (options.createGenerateId || options.id) {
@@ -4882,7 +5148,7 @@ function () {
       index = sheets.index === 0 ? 0 : sheets.index + 1;
     }
 
-    var sheet = new jss_esm_StyleSheet(styles, _extends({}, options, {
+    var sheet = new jss_esm_StyleSheet(styles, Object(esm_extends["a" /* default */])({}, options, {
       jss: this,
       generateId: options.generateId || this.generateId,
       insertionPoint: this.options.insertionPoint,
@@ -4922,7 +5188,7 @@ function () {
       return this.createRule(undefined, name, style);
     }
 
-    var ruleOptions = _extends({}, options, {
+    var ruleOptions = Object(esm_extends["a" /* default */])({}, options, {
       name: name,
       jss: this,
       Renderer: this.options.Renderer
@@ -5041,7 +5307,7 @@ function () {
     }
   };
 
-  createClass_createClass(SheetsManager, [{
+  _createClass(SheetsManager, [{
     key: "size",
     get: function get() {
       return this.length;
@@ -5093,7 +5359,7 @@ function mergeClasses() {
     return baseClasses;
   }
 
-  var nextClasses = _extends({}, baseClasses);
+  var nextClasses = Object(esm_extends["a" /* default */])({}, baseClasses);
 
   if (false) {}
 
@@ -5129,6 +5395,12 @@ var multiKeyStore = {
   }
 };
 /* harmony default export */ var makeStyles_multiKeyStore = (multiKeyStore);
+// EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/useTheme/useTheme.js
+var useTheme = __webpack_require__(40);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/ThemeProvider/nested.js
+var nested = __webpack_require__(18);
+
 // CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/createGenerateClassName/createGenerateClassName.js
 
 /**
@@ -5141,7 +5413,7 @@ var multiKeyStore = {
  * being untouched by simple user overrides.
  */
 
-var createGenerateClassName_pseudoClasses = ['checked', 'disabled', 'error', 'focused', 'focusVisible', 'required', 'expanded', 'selected']; // Returns a function which generates unique class names based on counters.
+var pseudoClasses = ['checked', 'disabled', 'error', 'focused', 'focusVisible', 'required', 'expanded', 'selected']; // Returns a function which generates unique class names based on counters.
 // When new generator function is created, rule counter is reset.
 // We need to reset the rule counter for SSR for each request.
 //
@@ -5172,13 +5444,13 @@ function createGenerateClassName() {
 
     if (name && name.indexOf('Mui') === 0 && !styleSheet.options.link && !disableGlobal) {
       // We can use a shorthand class name, we never use the keys to style the components.
-      if (createGenerateClassName_pseudoClasses.indexOf(rule.key) !== -1) {
+      if (pseudoClasses.indexOf(rule.key) !== -1) {
         return "Mui-".concat(rule.key);
       }
 
       var prefix = "".concat(seedPrefix).concat(name, "-").concat(rule.key);
 
-      if (!styleSheet.options.theme[nested] || seed !== '') {
+      if (!styleSheet.options.theme[nested["a" /* default */]] || seed !== '') {
         return prefix;
       }
 
@@ -5277,7 +5549,7 @@ function () {
     this.isProcessed = false;
     this.key = key;
     this.options = options;
-    this.rules = new jss_esm_RuleList(_extends({}, options, {
+    this.rules = new jss_esm_RuleList(Object(esm_extends["a" /* default */])({}, options, {
       parent: this
     }));
 
@@ -5340,7 +5612,7 @@ function () {
     this.key = key;
     this.options = options;
     var selector = key.substr(atPrefix.length);
-    this.rule = options.jss.createRule(selector, style, _extends({}, options, {
+    this.rule = options.jss.createRule(selector, style, Object(esm_extends["a" /* default */])({}, options, {
       parent: this
     }));
   }
@@ -5375,7 +5647,7 @@ function handleNestedGlobalContainerRule(rule) {
   if (!rules) return;
 
   for (var name in rules) {
-    options.sheet.addRule(name, rules[name], _extends({}, options, {
+    options.sheet.addRule(name, rules[name], Object(esm_extends["a" /* default */])({}, options, {
       selector: addScope(name, rule.selector)
     }));
   }
@@ -5390,7 +5662,7 @@ function handlePrefixedGlobalRule(rule) {
   for (var prop in style) {
     if (prop[0] !== '@' || prop.substr(0, at.length) !== at) continue;
     var selector = addScope(prop.substr(at.length), rule.selector);
-    options.sheet.addRule(selector, style[prop], _extends({}, options, {
+    options.sheet.addRule(selector, style[prop], Object(esm_extends["a" /* default */])({}, options, {
       selector: selector
     }));
     delete style[prop];
@@ -5496,13 +5768,13 @@ function jssNested() {
 
   function getOptions(rule, container, prevOptions) {
     // Options has been already created, now we only increase index.
-    if (prevOptions) return _extends({}, prevOptions, {
+    if (prevOptions) return Object(esm_extends["a" /* default */])({}, prevOptions, {
       index: prevOptions.index + 1
     });
     var nestingLevel = rule.options.nestingLevel;
     nestingLevel = nestingLevel === undefined ? 1 : nestingLevel + 1;
 
-    var options = _extends({}, rule.options, {
+    var options = Object(esm_extends["a" /* default */])({}, rule.options, {
       nestingLevel: nestingLevel,
       index: container.indexOf(rule) + 1 // We don't need the parent name to be set options for chlid.
 
@@ -5532,7 +5804,7 @@ function jssNested() {
         if (!replaceRef) replaceRef = getReplaceRef(container, sheet); // Replace all $refs.
 
         selector = selector.replace(jss_plugin_nested_esm_refRegExp, replaceRef);
-        container.addRule(selector, style[prop], _extends({}, options, {
+        container.addRule(selector, style[prop], Object(esm_extends["a" /* default */])({}, options, {
           selector: selector
         }));
       } else if (isNestedConditional) {
@@ -5860,6 +6132,9 @@ function defaultUnit(options) {
 
 /* harmony default export */ var jss_plugin_default_unit_esm = (defaultUnit);
 
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 2 modules
+var toConsumableArray = __webpack_require__(9);
+
 // CONCATENATED MODULE: ./node_modules/css-vendor/dist/css-vendor.esm.js
 
 
@@ -6040,7 +6315,7 @@ var textOrientation = {
 
 // https://caniuse.com/#search=transform
 
-var css_vendor_esm_transform = {
+var transform = {
   noPrefill: ['transform'],
   supportedProperty: function supportedProperty(prop, style, options) {
     if (prop !== 'transform') return false;
@@ -6259,7 +6534,7 @@ var flex2009 = {
 // 'flex2009' going after 'flex2012'.
 // 'prefixed' going after 'unprefixed'
 
-var css_vendor_esm_plugins = [appearence, colorAdjust, mask, textOrientation, css_vendor_esm_transform, transition, writingMode, userSelect, breakPropsOld, inlineLogicalOld, unprefixed, prefixed, scrollSnap, overscrollBehavior, flex2012, flex2009];
+var css_vendor_esm_plugins = [appearence, colorAdjust, mask, textOrientation, transform, transition, writingMode, userSelect, breakPropsOld, inlineLogicalOld, unprefixed, prefixed, scrollSnap, overscrollBehavior, flex2012, flex2009];
 var propertyDetectors = css_vendor_esm_plugins.filter(function (p) {
   return p.supportedProperty;
 }).map(function (p) {
@@ -6268,7 +6543,7 @@ var propertyDetectors = css_vendor_esm_plugins.filter(function (p) {
 var noPrefill = css_vendor_esm_plugins.filter(function (p) {
   return p.noPrefill;
 }).reduce(function (a, p) {
-  a.push.apply(a, _toConsumableArray(p.noPrefill));
+  a.push.apply(a, Object(toConsumableArray["a" /* default */])(p.noPrefill));
   return a;
 }, []);
 
@@ -6580,11 +6855,11 @@ function StylesProvider(props) {
       injectFirst = _props$injectFirst === void 0 ? false : _props$injectFirst,
       _props$disableGenerat = props.disableGeneration,
       disableGeneration = _props$disableGenerat === void 0 ? false : _props$disableGenerat,
-      localOptions = _objectWithoutProperties(props, ["children", "injectFirst", "disableGeneration"]);
+      localOptions = Object(objectWithoutProperties["a" /* default */])(props, ["children", "injectFirst", "disableGeneration"]);
 
   var outerOptions = react_default.a.useContext(StylesContext);
 
-  var context = _extends(_extends({}, outerOptions), {}, {
+  var context = Object(esm_extends["a" /* default */])(Object(esm_extends["a" /* default */])({}, outerOptions), {}, {
     disableGeneration: disableGeneration
   }, localOptions);
 
@@ -6632,6 +6907,12 @@ function increment() {
 
   return indexCounter;
 }
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
+var esm_typeof = __webpack_require__(11);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/utils/esm/deepmerge.js
+var deepmerge = __webpack_require__(54);
+
 // CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/getStylesCreator/getStylesCreator.js
 
 
@@ -6660,12 +6941,12 @@ function getStylesCreator(stylesOrCreator) {
 
       var overrides = theme.overrides[name];
 
-      var stylesWithOverrides = _extends({}, styles);
+      var stylesWithOverrides = Object(esm_extends["a" /* default */])({}, styles);
 
       Object.keys(overrides).forEach(function (key) {
         if (false) {}
 
-        stylesWithOverrides[key] = deepmerge(stylesWithOverrides[key], overrides[key]);
+        stylesWithOverrides[key] = Object(deepmerge["a" /* default */])(stylesWithOverrides[key], overrides[key]);
       });
       return stylesWithOverrides;
     },
@@ -6755,7 +7036,7 @@ function attach(_ref2, props) {
     makeStyles_multiKeyStore.set(stylesOptions.sheetsManager, stylesCreator, theme, sheetManager);
   }
 
-  var options = _extends(_extends(_extends({}, stylesCreator.options), stylesOptions), {}, {
+  var options = Object(esm_extends["a" /* default */])(Object(esm_extends["a" /* default */])(Object(esm_extends["a" /* default */])({}, stylesCreator.options), stylesOptions), {}, {
     theme: theme,
     flip: typeof stylesOptions.flip === 'boolean' ? stylesOptions.flip : theme.direction === 'rtl'
   });
@@ -6773,7 +7054,7 @@ function attach(_ref2, props) {
     var styles = stylesCreator.create(theme, name);
 
     if (!staticSheet) {
-      staticSheet = stylesOptions.jss.createStyleSheet(styles, _extends({
+      staticSheet = stylesOptions.jss.createStyleSheet(styles, Object(esm_extends["a" /* default */])({
         link: false
       }, options));
       staticSheet.attach();
@@ -6792,7 +7073,7 @@ function attach(_ref2, props) {
   }
 
   if (sheetManager.dynamicStyles) {
-    var dynamicSheet = stylesOptions.jss.createStyleSheet(sheetManager.dynamicStyles, _extends({
+    var dynamicSheet = stylesOptions.jss.createStyleSheet(sheetManager.dynamicStyles, Object(esm_extends["a" /* default */])({
       link: true
     }, options));
     dynamicSheet.update(props);
@@ -6885,7 +7166,7 @@ function makeStyles(stylesOrCreator) {
       Component = options.Component,
       _options$defaultTheme = options.defaultTheme,
       defaultTheme = _options$defaultTheme === void 0 ? getStylesCreator_noopTheme : _options$defaultTheme,
-      stylesOptions2 = _objectWithoutProperties(options, ["name", "classNamePrefix", "Component", "defaultTheme"]);
+      stylesOptions2 = Object(objectWithoutProperties["a" /* default */])(options, ["name", "classNamePrefix", "Component", "defaultTheme"]);
 
   var stylesCreator = getStylesCreator(stylesOrCreator);
   var classNamePrefix = name || classNamePrefixOption || 'makeStyles';
@@ -6898,9 +7179,9 @@ function makeStyles(stylesOrCreator) {
 
   var useStyles = function useStyles() {
     var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var theme = useTheme() || defaultTheme;
+    var theme = Object(useTheme["a" /* default */])() || defaultTheme;
 
-    var stylesOptions = _extends(_extends({}, react_default.a.useContext(StylesContext)), stylesOptions2);
+    var stylesOptions = Object(esm_extends["a" /* default */])(Object(esm_extends["a" /* default */])({}, react_default.a.useContext(StylesContext)), stylesOptions2);
 
     var instance = react_default.a.useRef();
     var shouldUpdate = react_default.a.useRef();
@@ -6979,7 +7260,7 @@ var withStyles_withStyles = function withStyles(stylesOrCreator) {
         _options$withTheme = options.withTheme,
         withTheme = _options$withTheme === void 0 ? false : _options$withTheme,
         name = options.name,
-        stylesOptions = _objectWithoutProperties(options, ["defaultTheme", "withTheme", "name"]);
+        stylesOptions = Object(objectWithoutProperties["a" /* default */])(options, ["defaultTheme", "withTheme", "name"]);
 
     if (false) {}
 
@@ -6987,7 +7268,7 @@ var withStyles_withStyles = function withStyles(stylesOrCreator) {
 
     if (false) { var displayName; }
 
-    var useStyles = makeStyles(stylesOrCreator, _extends({
+    var useStyles = makeStyles(stylesOrCreator, Object(esm_extends["a" /* default */])({
       defaultTheme: defaultTheme,
       Component: Component,
       name: name || Component.displayName,
@@ -6996,19 +7277,19 @@ var withStyles_withStyles = function withStyles(stylesOrCreator) {
     var WithStyles = react_default.a.forwardRef(function WithStyles(props, ref) {
       var classesProp = props.classes,
           innerRef = props.innerRef,
-          other = _objectWithoutProperties(props, ["classes", "innerRef"]); // The wrapper receives only user supplied props, which could be a subset of
+          other = Object(objectWithoutProperties["a" /* default */])(props, ["classes", "innerRef"]); // The wrapper receives only user supplied props, which could be a subset of
       // the actual props Component might receive due to merging with defaultProps.
       // So copying it here would give us the same result in the wrapper as well.
 
 
-      var classes = useStyles(_extends(_extends({}, Component.defaultProps), props));
+      var classes = useStyles(Object(esm_extends["a" /* default */])(Object(esm_extends["a" /* default */])({}, Component.defaultProps), props));
       var theme;
       var more = other;
 
       if (typeof name === 'string' || withTheme) {
         // name and withTheme are invariant in the outer scope
         // eslint-disable-next-line react-hooks/rules-of-hooks
-        theme = useTheme() || defaultTheme;
+        theme = Object(useTheme["a" /* default */])() || defaultTheme;
 
         if (name) {
           more = getThemeProps({
@@ -7025,7 +7306,7 @@ var withStyles_withStyles = function withStyles(stylesOrCreator) {
         }
       }
 
-      return /*#__PURE__*/react_default.a.createElement(Component, _extends({
+      return /*#__PURE__*/react_default.a.createElement(Component, Object(esm_extends["a" /* default */])({
         ref: innerRef || ref,
         classes: classes
       }, more));
@@ -7043,9 +7324,12 @@ var withStyles_withStyles = function withStyles(stylesOrCreator) {
 };
 
 /* harmony default export */ var esm_withStyles_withStyles = (withStyles_withStyles);
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/createMuiTheme.js + 20 modules
+var createMuiTheme = __webpack_require__(29);
+
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/defaultTheme.js
 
-var defaultTheme_defaultTheme = styles_createMuiTheme();
+var defaultTheme_defaultTheme = Object(createMuiTheme["a" /* default */])();
 /* harmony default export */ var styles_defaultTheme = (defaultTheme_defaultTheme);
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/withStyles.js
 
@@ -7053,7 +7337,7 @@ var defaultTheme_defaultTheme = styles_createMuiTheme();
 
 
 function styles_withStyles_withStyles(stylesOrCreator, options) {
-  return esm_withStyles_withStyles(stylesOrCreator, _extends({
+  return esm_withStyles_withStyles(stylesOrCreator, Object(esm_extends["a" /* default */])({
     defaultTheme: styles_defaultTheme
   }, options));
 }
@@ -7164,7 +7448,7 @@ var TextareaAutosize_TextareaAutosize = react["forwardRef"](function TextareaAut
       rowsMinProp = _props$rowsMin === void 0 ? 1 : _props$rowsMin,
       style = props.style,
       value = props.value,
-      other = _objectWithoutProperties(props, ["onChange", "rows", "rowsMax", "rowsMin", "style", "value"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["onChange", "rows", "rowsMax", "rowsMin", "style", "value"]);
 
   var rowsMin = rows || rowsMinProp;
 
@@ -7263,13 +7547,13 @@ var TextareaAutosize_TextareaAutosize = react["forwardRef"](function TextareaAut
     }
   };
 
-  return /*#__PURE__*/react["createElement"](react["Fragment"], null, /*#__PURE__*/react["createElement"]("textarea", _extends({
+  return /*#__PURE__*/react["createElement"](react["Fragment"], null, /*#__PURE__*/react["createElement"]("textarea", Object(esm_extends["a" /* default */])({
     value: value,
     onChange: handleChange,
     ref: handleRef // Apply the rows prop to get a "correct" first SSR paint
     ,
     rows: rowsMin,
-    style: _extends({
+    style: Object(esm_extends["a" /* default */])({
       height: state.outerHeightStyle,
       // Need a large enough difference to allow scrolling.
       // This prevents infinite rendering loop.
@@ -7281,7 +7565,7 @@ var TextareaAutosize_TextareaAutosize = react["forwardRef"](function TextareaAut
     readOnly: true,
     ref: shadowRef,
     tabIndex: -1,
-    style: _extends({}, TextareaAutosize_styles.shadow, {}, style)
+    style: Object(esm_extends["a" /* default */])({}, TextareaAutosize_styles.shadow, {}, style)
   }));
 });
  false ? undefined : void 0;
@@ -7358,7 +7642,7 @@ var InputBase_styles = function styles(theme) {
     },
 
     /* Styles applied to the root element. */
-    root: _extends({}, theme.typography.body1, {
+    root: Object(esm_extends["a" /* default */])({}, theme.typography.body1, {
       color: theme.palette.text.primary,
       lineHeight: '1.1876em',
       // Reset (19px), match the native input line-height
@@ -7550,7 +7834,7 @@ var InputBase_InputBase = react["forwardRef"](function InputBase(props, ref) {
       _props$type = props.type,
       type = _props$type === void 0 ? 'text' : _props$type,
       valueProp = props.value,
-      other = _objectWithoutProperties(props, ["aria-describedby", "autoComplete", "autoFocus", "classes", "className", "color", "defaultValue", "disabled", "endAdornment", "error", "fullWidth", "id", "inputComponent", "inputProps", "inputRef", "margin", "multiline", "name", "onBlur", "onChange", "onClick", "onFocus", "onKeyDown", "onKeyUp", "placeholder", "readOnly", "renderSuffix", "rows", "rowsMax", "rowsMin", "startAdornment", "type", "value"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["aria-describedby", "autoComplete", "autoFocus", "classes", "className", "color", "defaultValue", "disabled", "endAdornment", "error", "fullWidth", "id", "inputComponent", "inputProps", "inputRef", "margin", "multiline", "name", "onBlur", "onChange", "onClick", "onFocus", "onKeyDown", "onKeyUp", "placeholder", "readOnly", "renderSuffix", "rows", "rowsMax", "rowsMin", "startAdornment", "type", "value"]);
 
   var value = inputPropsProp.value != null ? inputPropsProp.value : valueProp;
 
@@ -7693,12 +7977,12 @@ var InputBase_InputBase = react["forwardRef"](function InputBase(props, ref) {
 
   var InputComponent = inputComponent;
 
-  var inputProps = _extends({}, inputPropsProp, {
+  var inputProps = Object(esm_extends["a" /* default */])({}, inputPropsProp, {
     ref: handleInputRef
   });
 
   if (typeof InputComponent !== 'string') {
-    inputProps = _extends({
+    inputProps = Object(esm_extends["a" /* default */])({
       // Rename ref to inputRef as we don't know the
       // provided `inputComponent` structure.
       inputRef: handleInputRef,
@@ -7710,14 +7994,14 @@ var InputBase_InputBase = react["forwardRef"](function InputBase(props, ref) {
     if (rows && !rowsMax && !rowsMin) {
       InputComponent = 'textarea';
     } else {
-      inputProps = _extends({
+      inputProps = Object(esm_extends["a" /* default */])({
         rows: rows,
         rowsMax: rowsMax
       }, inputProps);
       InputComponent = esm_TextareaAutosize_TextareaAutosize;
     }
   } else {
-    inputProps = _extends({
+    inputProps = Object(esm_extends["a" /* default */])({
       type: type
     }, inputProps);
   }
@@ -7734,13 +8018,13 @@ var InputBase_InputBase = react["forwardRef"](function InputBase(props, ref) {
       muiFormControl.setAdornedStart(Boolean(startAdornment));
     }
   }, [muiFormControl, startAdornment]);
-  return /*#__PURE__*/react["createElement"]("div", _extends({
+  return /*#__PURE__*/react["createElement"]("div", Object(esm_extends["a" /* default */])({
     className: clsx_m(classes.root, classes["color".concat(capitalize(fcs.color || 'primary'))], className, fcs.disabled && classes.disabled, fcs.error && classes.error, fullWidth && classes.fullWidth, fcs.focused && classes.focused, muiFormControl && classes.formControl, multiline && classes.multiline, startAdornment && classes.adornedStart, endAdornment && classes.adornedEnd, fcs.margin === 'dense' && classes.marginDense),
     onClick: handleClick,
     ref: ref
   }, other), startAdornment, /*#__PURE__*/react["createElement"](FormControl_FormControlContext.Provider, {
     value: null
-  }, /*#__PURE__*/react["createElement"](InputComponent, _extends({
+  }, /*#__PURE__*/react["createElement"](InputComponent, Object(esm_extends["a" /* default */])({
     "aria-invalid": fcs.error,
     "aria-describedby": ariaDescribedby,
     autoComplete: autoComplete,
@@ -7762,7 +8046,7 @@ var InputBase_InputBase = react["forwardRef"](function InputBase(props, ref) {
     onBlur: handleBlur,
     onChange: handleChange,
     onFocus: handleFocus
-  }))), endAdornment, renderSuffix ? renderSuffix(_extends({}, fcs, {
+  }))), endAdornment, renderSuffix ? renderSuffix(Object(esm_extends["a" /* default */])({}, fcs, {
     startAdornment: startAdornment
   })) : null);
 });
@@ -7896,10 +8180,10 @@ var Input_Input = react["forwardRef"](function Input(props, ref) {
       multiline = _props$multiline === void 0 ? false : _props$multiline,
       _props$type = props.type,
       type = _props$type === void 0 ? 'text' : _props$type,
-      other = _objectWithoutProperties(props, ["disableUnderline", "classes", "fullWidth", "inputComponent", "multiline", "type"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["disableUnderline", "classes", "fullWidth", "inputComponent", "multiline", "type"]);
 
-  return /*#__PURE__*/react["createElement"](esm_InputBase_InputBase, _extends({
-    classes: _extends({}, classes, {
+  return /*#__PURE__*/react["createElement"](esm_InputBase_InputBase, Object(esm_extends["a" /* default */])({
+    classes: Object(esm_extends["a" /* default */])({}, classes, {
       root: clsx_m(classes.root, !disableUnderline && classes.underline),
       underline: null
     }),
@@ -8094,10 +8378,10 @@ var FilledInput_FilledInput = react["forwardRef"](function FilledInput(props, re
       multiline = _props$multiline === void 0 ? false : _props$multiline,
       _props$type = props.type,
       type = _props$type === void 0 ? 'text' : _props$type,
-      other = _objectWithoutProperties(props, ["disableUnderline", "classes", "fullWidth", "inputComponent", "multiline", "type"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["disableUnderline", "classes", "fullWidth", "inputComponent", "multiline", "type"]);
 
-  return /*#__PURE__*/react["createElement"](esm_InputBase_InputBase, _extends({
-    classes: _extends({}, classes, {
+  return /*#__PURE__*/react["createElement"](esm_InputBase_InputBase, Object(esm_extends["a" /* default */])({
+    classes: Object(esm_extends["a" /* default */])({}, classes, {
       root: clsx_m(classes.root, !disableUnderline && classes.underline),
       underline: null
     }),
@@ -8113,12 +8397,15 @@ FilledInput_FilledInput.muiName = 'Input';
 /* harmony default export */ var esm_FilledInput_FilledInput = (styles_withStyles(FilledInput_styles, {
   name: 'MuiFilledInput'
 })(FilledInput_FilledInput));
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
+var defineProperty = __webpack_require__(10);
+
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/useTheme.js
 
 
 
 function useTheme_useTheme() {
-  var theme = useTheme() || styles_defaultTheme;
+  var theme = Object(useTheme["a" /* default */])() || styles_defaultTheme;
 
   if (false) {}
 
@@ -8209,13 +8496,13 @@ var NotchedOutline_NotchedOutline = react["forwardRef"](function NotchedOutline(
       labelWidthProp = props.labelWidth,
       notched = props.notched,
       style = props.style,
-      other = _objectWithoutProperties(props, ["children", "classes", "className", "label", "labelWidth", "notched", "style"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["children", "classes", "className", "label", "labelWidth", "notched", "style"]);
 
   var theme = useTheme_useTheme();
   var align = theme.direction === 'rtl' ? 'right' : 'left';
 
   if (label !== undefined) {
-    return /*#__PURE__*/react["createElement"]("fieldset", _extends({
+    return /*#__PURE__*/react["createElement"]("fieldset", Object(esm_extends["a" /* default */])({
       "aria-hidden": true,
       className: clsx_m(classes.root, className),
       ref: ref,
@@ -8230,9 +8517,9 @@ var NotchedOutline_NotchedOutline = react["forwardRef"](function NotchedOutline(
   }
 
   var labelWidth = labelWidthProp > 0 ? labelWidthProp * 0.75 + 8 : 0.01;
-  return /*#__PURE__*/react["createElement"]("fieldset", _extends({
+  return /*#__PURE__*/react["createElement"]("fieldset", Object(esm_extends["a" /* default */])({
     "aria-hidden": true,
-    style: _extends(_defineProperty({}, "padding".concat(capitalize(align)), 8), style),
+    style: Object(esm_extends["a" /* default */])(Object(defineProperty["a" /* default */])({}, "padding".concat(capitalize(align)), 8), style),
     className: clsx_m(classes.root, className),
     ref: ref
   }, other), /*#__PURE__*/react["createElement"]("legend", {
@@ -8380,9 +8667,9 @@ var OutlinedInput_OutlinedInput = react["forwardRef"](function OutlinedInput(pro
       notched = props.notched,
       _props$type = props.type,
       type = _props$type === void 0 ? 'text' : _props$type,
-      other = _objectWithoutProperties(props, ["classes", "fullWidth", "inputComponent", "label", "labelWidth", "multiline", "notched", "type"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["classes", "fullWidth", "inputComponent", "label", "labelWidth", "multiline", "notched", "type"]);
 
-  return /*#__PURE__*/react["createElement"](esm_InputBase_InputBase, _extends({
+  return /*#__PURE__*/react["createElement"](esm_InputBase_InputBase, Object(esm_extends["a" /* default */])({
     renderSuffix: function renderSuffix(state) {
       return /*#__PURE__*/react["createElement"](OutlinedInput_NotchedOutline, {
         className: classes.notchedOutline,
@@ -8391,7 +8678,7 @@ var OutlinedInput_OutlinedInput = react["forwardRef"](function OutlinedInput(pro
         notched: typeof notched !== 'undefined' ? notched : Boolean(state.startAdornment || state.filled || state.focused)
       });
     },
-    classes: _extends({}, classes, {
+    classes: Object(esm_extends["a" /* default */])({}, classes, {
       root: clsx_m(classes.root, classes.underline),
       notchedOutline: null
     }),
@@ -8426,7 +8713,7 @@ function useFormControl_useFormControl() {
 var FormLabel_styles = function styles(theme) {
   return {
     /* Styles applied to the root element. */
-    root: _extends({
+    root: Object(esm_extends["a" /* default */])({
       color: theme.palette.text.secondary
     }, theme.typography.body1, {
       lineHeight: 1,
@@ -8484,7 +8771,7 @@ var FormLabel_FormLabel = react["forwardRef"](function FormLabel(props, ref) {
       filled = props.filled,
       focused = props.focused,
       required = props.required,
-      other = _objectWithoutProperties(props, ["children", "classes", "className", "color", "component", "disabled", "error", "filled", "focused", "required"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["children", "classes", "className", "color", "component", "disabled", "error", "filled", "focused", "required"]);
 
   var muiFormControl = useFormControl_useFormControl();
   var fcs = formControlState({
@@ -8492,7 +8779,7 @@ var FormLabel_FormLabel = react["forwardRef"](function FormLabel(props, ref) {
     muiFormControl: muiFormControl,
     states: ['color', 'required', 'focused', 'disabled', 'error', 'filled']
   });
-  return /*#__PURE__*/react["createElement"](Component, _extends({
+  return /*#__PURE__*/react["createElement"](Component, Object(esm_extends["a" /* default */])({
     className: clsx_m(classes.root, classes["color".concat(capitalize(fcs.color || 'primary'))], className, fcs.disabled && classes.disabled, fcs.error && classes.error, fcs.filled && classes.filled, fcs.focused && classes.focused, fcs.required && classes.required),
     ref: ref
   }, other), children, fcs.required && /*#__PURE__*/react["createElement"]("span", {
@@ -8608,7 +8895,7 @@ var InputLabel_InputLabel = react["forwardRef"](function InputLabel(props, ref) 
       margin = props.margin,
       shrinkProp = props.shrink,
       variant = props.variant,
-      other = _objectWithoutProperties(props, ["classes", "className", "disableAnimation", "margin", "shrink", "variant"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["classes", "className", "disableAnimation", "margin", "shrink", "variant"]);
 
   var muiFormControl = useFormControl_useFormControl();
   var shrink = shrinkProp;
@@ -8622,7 +8909,7 @@ var InputLabel_InputLabel = react["forwardRef"](function InputLabel(props, ref) 
     muiFormControl: muiFormControl,
     states: ['margin', 'variant']
   });
-  return /*#__PURE__*/react["createElement"](esm_FormLabel_FormLabel, _extends({
+  return /*#__PURE__*/react["createElement"](esm_FormLabel_FormLabel, Object(esm_extends["a" /* default */])({
     "data-shrink": shrink,
     className: clsx_m(classes.root, className, muiFormControl && classes.formControl, !disableAnimation && classes.animated, shrink && classes.shrink, fcs.margin === 'dense' && classes.marginDense, {
       'filled': classes.filled,
@@ -8738,7 +9025,7 @@ var FormControl_FormControl = react["forwardRef"](function FormControl(props, re
       size = props.size,
       _props$variant = props.variant,
       variant = _props$variant === void 0 ? 'standard' : _props$variant,
-      other = _objectWithoutProperties(props, ["children", "classes", "className", "color", "component", "disabled", "error", "fullWidth", "focused", "hiddenLabel", "margin", "required", "size", "variant"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["children", "classes", "className", "color", "component", "disabled", "error", "fullWidth", "focused", "hiddenLabel", "margin", "required", "size", "variant"]);
 
   var _React$useState = react["useState"](function () {
     // We need to iterate through the children and find the Input in order
@@ -8831,7 +9118,7 @@ var FormControl_FormControl = react["forwardRef"](function FormControl(props, re
   };
   return /*#__PURE__*/react["createElement"](FormControl_FormControlContext.Provider, {
     value: childContext
-  }, /*#__PURE__*/react["createElement"](Component, _extends({
+  }, /*#__PURE__*/react["createElement"](Component, Object(esm_extends["a" /* default */])({
     className: clsx_m(classes.root, className, margin !== 'none' && classes["margin".concat(capitalize(margin))], fullWidth && classes.fullWidth),
     ref: ref
   }, other), children));
@@ -8852,7 +9139,7 @@ var FormControl_FormControl = react["forwardRef"](function FormControl(props, re
 var FormHelperText_styles = function styles(theme) {
   return {
     /* Styles applied to the root element. */
-    root: _extends({
+    root: Object(esm_extends["a" /* default */])({
       color: theme.palette.text.secondary
     }, theme.typography.caption, {
       textAlign: 'left',
@@ -8906,7 +9193,7 @@ var FormHelperText_FormHelperText = react["forwardRef"](function FormHelperText(
       margin = props.margin,
       required = props.required,
       variant = props.variant,
-      other = _objectWithoutProperties(props, ["children", "classes", "className", "component", "disabled", "error", "filled", "focused", "margin", "required", "variant"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["children", "classes", "className", "component", "disabled", "error", "filled", "focused", "margin", "required", "variant"]);
 
   var muiFormControl = useFormControl_useFormControl();
   var fcs = formControlState({
@@ -8914,7 +9201,7 @@ var FormHelperText_FormHelperText = react["forwardRef"](function FormHelperText(
     muiFormControl: muiFormControl,
     states: ['variant', 'margin', 'disabled', 'error', 'filled', 'focused', 'required']
   });
-  return /*#__PURE__*/react["createElement"](Component, _extends({
+  return /*#__PURE__*/react["createElement"](Component, Object(esm_extends["a" /* default */])({
     className: clsx_m(classes.root, (fcs.variant === 'filled' || fcs.variant === 'outlined') && classes.contained, className, fcs.disabled && classes.disabled, fcs.error && classes.error, fcs.filled && classes.filled, fcs.focused && classes.focused, fcs.required && classes.required, fcs.margin === 'dense' && classes.marginDense),
     ref: ref
   }, other), children === ' ' ?
@@ -8930,8 +9217,11 @@ var FormHelperText_FormHelperText = react["forwardRef"](function FormHelperText(
 /* harmony default export */ var esm_FormHelperText_FormHelperText = (styles_withStyles(FormHelperText_styles, {
   name: 'MuiFormHelperText'
 })(FormHelperText_FormHelperText));
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 1 modules
+var slicedToArray = __webpack_require__(19);
+
 // EXTERNAL MODULE: ./node_modules/react-is/index.js
-var react_is = __webpack_require__(7);
+var react_is = __webpack_require__(30);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/utils/ownerDocument.js
 function ownerDocument(node) {
@@ -9063,8 +9353,11 @@ function useEventCallback(fn) {
     return (0, ref.current).apply(void 0, arguments);
   }, []);
 }
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/zIndex.js
+var zIndex = __webpack_require__(17);
+
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
-function classCallCheck_classCallCheck(instance, Constructor) {
+function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
   }
@@ -9117,7 +9410,7 @@ function getPaddingRight(node) {
 function ariaHiddenSiblings(container, mountNode, currentNode) {
   var nodesToExclude = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [];
   var show = arguments.length > 4 ? arguments[4] : undefined;
-  var blacklist = [mountNode, currentNode].concat(_toConsumableArray(nodesToExclude));
+  var blacklist = [mountNode, currentNode].concat(Object(toConsumableArray["a" /* default */])(nodesToExclude));
   var blacklistTagNames = ['TEMPLATE', 'SCRIPT', 'STYLE'];
   [].forEach.call(container.children, function (node) {
     if (node.nodeType === 1 && blacklist.indexOf(node) === -1 && blacklistTagNames.indexOf(node.tagName) === -1) {
@@ -9225,7 +9518,7 @@ function getHiddenSiblings(container) {
 
 var ModalManager_ModalManager = /*#__PURE__*/function () {
   function ModalManager() {
-    classCallCheck_classCallCheck(this, ModalManager);
+    _classCallCheck(this, ModalManager);
 
     // this.modals[modalIndex] = modal
     this.modals = []; // this.containers[containerIndex] = {
@@ -9237,7 +9530,7 @@ var ModalManager_ModalManager = /*#__PURE__*/function () {
     this.containers = [];
   }
 
-  createClass_createClass(ModalManager, [{
+  _createClass(ModalManager, [{
     key: "add",
     value: function add(modal, container) {
       var modalIndex = this.modals.indexOf(modal);
@@ -9537,13 +9830,13 @@ var SimpleBackdrop_SimpleBackdrop = react["forwardRef"](function SimpleBackdrop(
   var _props$invisible = props.invisible,
       invisible = _props$invisible === void 0 ? false : _props$invisible,
       open = props.open,
-      other = _objectWithoutProperties(props, ["invisible", "open"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["invisible", "open"]);
 
-  return open ? /*#__PURE__*/react["createElement"]("div", _extends({
+  return open ? /*#__PURE__*/react["createElement"]("div", Object(esm_extends["a" /* default */])({
     "aria-hidden": true,
     ref: ref
   }, other, {
-    style: _extends({}, SimpleBackdrop_styles.root, {}, invisible ? SimpleBackdrop_styles.invisible : {}, {}, other.style)
+    style: Object(esm_extends["a" /* default */])({}, SimpleBackdrop_styles.root, {}, invisible ? SimpleBackdrop_styles.invisible : {}, {}, other.style)
   })) : null;
 });
  false ? undefined : void 0;
@@ -9611,10 +9904,10 @@ var Modal_styles = function styles(theme) {
  */
 
 var Modal_Modal = react["forwardRef"](function Modal(inProps, ref) {
-  var theme = useTheme();
+  var theme = Object(useTheme["a" /* default */])();
   var props = getThemeProps({
     name: 'MuiModal',
-    props: _extends({}, inProps),
+    props: Object(esm_extends["a" /* default */])({}, inProps),
     theme: theme
   });
 
@@ -9650,7 +9943,7 @@ var Modal_Modal = react["forwardRef"](function Modal(inProps, ref) {
       onEscapeKeyDown = props.onEscapeKeyDown,
       onRendered = props.onRendered,
       open = props.open,
-      other = _objectWithoutProperties(props, ["BackdropComponent", "BackdropProps", "children", "closeAfterTransition", "container", "disableAutoFocus", "disableBackdropClick", "disableEnforceFocus", "disableEscapeKeyDown", "disablePortal", "disableRestoreFocus", "disableScrollLock", "hideBackdrop", "keepMounted", "manager", "onBackdropClick", "onClose", "onEscapeKeyDown", "onRendered", "open"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["BackdropComponent", "BackdropProps", "children", "closeAfterTransition", "container", "disableAutoFocus", "disableBackdropClick", "disableEnforceFocus", "disableEscapeKeyDown", "disablePortal", "disableRestoreFocus", "disableScrollLock", "hideBackdrop", "keepMounted", "manager", "onBackdropClick", "onClose", "onEscapeKeyDown", "onRendered", "open"]);
 
   var _React$useState = react["useState"](true),
       exited = _React$useState[0],
@@ -9778,7 +10071,7 @@ var Modal_Modal = react["forwardRef"](function Modal(inProps, ref) {
   };
 
   var inlineStyle = Modal_styles(theme || {
-    zIndex: styles_zIndex
+    zIndex: zIndex["a" /* default */]
   });
   var childProps = {};
 
@@ -9796,13 +10089,13 @@ var Modal_Modal = react["forwardRef"](function Modal(inProps, ref) {
     ref: handlePortalRef,
     container: container,
     disablePortal: disablePortal
-  }, /*#__PURE__*/react["createElement"]("div", _extends({
+  }, /*#__PURE__*/react["createElement"]("div", Object(esm_extends["a" /* default */])({
     ref: handleRef,
     onKeyDown: handleKeyDown,
     role: "presentation"
   }, other, {
-    style: _extends({}, inlineStyle.root, {}, !open && exited ? inlineStyle.hidden : {}, {}, other.style)
-  }), hideBackdrop ? null : /*#__PURE__*/react["createElement"](BackdropComponent, _extends({
+    style: Object(esm_extends["a" /* default */])({}, inlineStyle.root, {}, !open && exited ? inlineStyle.hidden : {}, {}, other.style)
+  }), hideBackdrop ? null : /*#__PURE__*/react["createElement"](BackdropComponent, Object(esm_extends["a" /* default */])({
     open: open,
     onClick: handleBackdropClick
   }, BackdropProps)), /*#__PURE__*/react["createElement"](Modal_TrapFocus, {
@@ -10215,7 +10508,7 @@ var Transition_Transition = /*#__PURE__*/function (_React$Component) {
         _onExiting = _this$props.onExiting,
         _onExited = _this$props.onExited,
         _nodeRef = _this$props.nodeRef,
-        childProps = _objectWithoutPropertiesLoose(_this$props, ["children", "in", "mountOnEnter", "unmountOnExit", "appear", "enter", "exit", "timeout", "addEndListener", "onEnter", "onEntering", "onEntered", "onExit", "onExiting", "onExited", "nodeRef"]);
+        childProps = Object(objectWithoutPropertiesLoose["a" /* default */])(_this$props, ["children", "in", "mountOnEnter", "unmountOnExit", "appear", "enter", "exit", "timeout", "addEndListener", "onEnter", "onEntering", "onEntered", "onExit", "onExiting", "onExited", "nodeRef"]);
 
     return (
       /*#__PURE__*/
@@ -10307,7 +10600,7 @@ var Grow_Grow = react["forwardRef"](function Grow(props, ref) {
       timeout = _props$timeout === void 0 ? 'auto' : _props$timeout,
       _props$TransitionComp = props.TransitionComponent,
       TransitionComponent = _props$TransitionComp === void 0 ? esm_Transition : _props$TransitionComp,
-      other = _objectWithoutProperties(props, ["children", "in", "onEnter", "onExit", "style", "timeout", "TransitionComponent"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["children", "in", "onEnter", "onExit", "style", "timeout", "TransitionComponent"]);
 
   var timer = react["useRef"]();
   var autoTimeout = react["useRef"]();
@@ -10393,7 +10686,7 @@ var Grow_Grow = react["forwardRef"](function Grow(props, ref) {
       clearTimeout(timer.current);
     };
   }, []);
-  return /*#__PURE__*/react["createElement"](TransitionComponent, _extends({
+  return /*#__PURE__*/react["createElement"](TransitionComponent, Object(esm_extends["a" /* default */])({
     appear: true,
     in: inProp,
     onEnter: handleEnter,
@@ -10401,8 +10694,8 @@ var Grow_Grow = react["forwardRef"](function Grow(props, ref) {
     addEndListener: addEndListener,
     timeout: timeout === 'auto' ? null : timeout
   }, other), function (state, childProps) {
-    return react["cloneElement"](children, _extends({
-      style: _extends({
+    return react["cloneElement"](children, Object(esm_extends["a" /* default */])({
+      style: Object(esm_extends["a" /* default */])({
         opacity: 0,
         transform: getScale(0.75),
         visibility: state === 'exited' && !inProp ? 'hidden' : undefined
@@ -10429,7 +10722,7 @@ var Paper_styles = function styles(theme) {
       boxShadow: shadow
     };
   });
-  return _extends({
+  return Object(esm_extends["a" /* default */])({
     /* Styles applied to the root element. */
     root: {
       backgroundColor: theme.palette.background.paper,
@@ -10459,9 +10752,9 @@ var Paper_Paper = react["forwardRef"](function Paper(props, ref) {
       elevation = _props$elevation === void 0 ? 1 : _props$elevation,
       _props$variant = props.variant,
       variant = _props$variant === void 0 ? 'elevation' : _props$variant,
-      other = _objectWithoutProperties(props, ["classes", "className", "component", "square", "elevation", "variant"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["classes", "className", "component", "square", "elevation", "variant"]);
 
-  return /*#__PURE__*/react["createElement"](Component, _extends({
+  return /*#__PURE__*/react["createElement"](Component, Object(esm_extends["a" /* default */])({
     className: clsx_m(classes.root, className, variant === 'outlined' ? classes.outlined : classes["elevation".concat(elevation)], !square && classes.rounded),
     ref: ref
   }, other));
@@ -10595,7 +10888,7 @@ var Popover_Popover = react["forwardRef"](function Popover(props, ref) {
       transitionDurationProp = _props$transitionDura === void 0 ? 'auto' : _props$transitionDura,
       _props$TransitionProp = props.TransitionProps,
       TransitionProps = _props$TransitionProp === void 0 ? {} : _props$TransitionProp,
-      other = _objectWithoutProperties(props, ["action", "anchorEl", "anchorOrigin", "anchorPosition", "anchorReference", "children", "classes", "className", "container", "elevation", "getContentAnchorEl", "marginThreshold", "onEnter", "onEntered", "onEntering", "onExit", "onExited", "onExiting", "open", "PaperProps", "transformOrigin", "TransitionComponent", "transitionDuration", "TransitionProps"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["action", "anchorEl", "anchorOrigin", "anchorPosition", "anchorReference", "children", "classes", "className", "container", "elevation", "getContentAnchorEl", "marginThreshold", "onEnter", "onEntered", "onEntering", "onExit", "onExited", "onExiting", "open", "PaperProps", "transformOrigin", "TransitionComponent", "transitionDuration", "TransitionProps"]);
 
   var paperRef = react["useRef"](); // Returns the top/left offset of the position
   // to attach to on the anchor element (or body if none is provided)
@@ -10779,7 +11072,7 @@ var Popover_Popover = react["forwardRef"](function Popover(props, ref) {
 
 
   var container = containerProp || (anchorEl ? ownerDocument(getAnchorEl(anchorEl)).body : undefined);
-  return /*#__PURE__*/react["createElement"](esm_Modal_Modal, _extends({
+  return /*#__PURE__*/react["createElement"](esm_Modal_Modal, Object(esm_extends["a" /* default */])({
     container: container,
     open: open,
     ref: ref,
@@ -10787,7 +11080,7 @@ var Popover_Popover = react["forwardRef"](function Popover(props, ref) {
       invisible: true
     },
     className: clsx_m(classes.root, className)
-  }, other), /*#__PURE__*/react["createElement"](TransitionComponent, _extends({
+  }, other), /*#__PURE__*/react["createElement"](TransitionComponent, Object(esm_extends["a" /* default */])({
     appear: true,
     in: open,
     onEnter: onEnter,
@@ -10798,7 +11091,7 @@ var Popover_Popover = react["forwardRef"](function Popover(props, ref) {
     timeout: transitionDuration
   }, TransitionProps, {
     onEntering: createChainedFunction(handleEntering, TransitionProps.onEntering)
-  }), /*#__PURE__*/react["createElement"](esm_Paper_Paper, _extends({
+  }), /*#__PURE__*/react["createElement"](esm_Paper_Paper, Object(esm_extends["a" /* default */])({
     elevation: elevation,
     ref: handlePaperRef
   }, PaperProps, {
@@ -10862,7 +11155,7 @@ var List_List = react["forwardRef"](function List(props, ref) {
       _props$disablePadding = props.disablePadding,
       disablePadding = _props$disablePadding === void 0 ? false : _props$disablePadding,
       subheader = props.subheader,
-      other = _objectWithoutProperties(props, ["children", "classes", "className", "component", "dense", "disablePadding", "subheader"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["children", "classes", "className", "component", "dense", "disablePadding", "subheader"]);
 
   var context = react["useMemo"](function () {
     return {
@@ -10871,7 +11164,7 @@ var List_List = react["forwardRef"](function List(props, ref) {
   }, [dense]);
   return /*#__PURE__*/react["createElement"](List_ListContext.Provider, {
     value: context
-  }, /*#__PURE__*/react["createElement"](Component, _extends({
+  }, /*#__PURE__*/react["createElement"](Component, Object(esm_extends["a" /* default */])({
     className: clsx_m(classes.root, className, dense && classes.dense, !disablePadding && classes.padding, subheader && classes.subheader),
     ref: ref
   }, other), subheader, children));
@@ -10991,7 +11284,7 @@ var MenuList_MenuList = react["forwardRef"](function MenuList(props, ref) {
       onKeyDown = props.onKeyDown,
       _props$variant = props.variant,
       variant = _props$variant === void 0 ? 'selectedMenu' : _props$variant,
-      other = _objectWithoutProperties(props, ["actions", "autoFocus", "autoFocusItem", "children", "className", "disabledItemsFocusable", "disableListWrap", "onKeyDown", "variant"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["actions", "autoFocus", "autoFocusItem", "children", "className", "disabledItemsFocusable", "disableListWrap", "onKeyDown", "variant"]);
 
   var listRef = react["useRef"](null);
   var textCriteriaRef = react["useRef"]({
@@ -11127,7 +11420,7 @@ var MenuList_MenuList = react["forwardRef"](function MenuList(props, ref) {
 
     return child;
   });
-  return /*#__PURE__*/react["createElement"](esm_List_List, _extends({
+  return /*#__PURE__*/react["createElement"](esm_List_List, Object(esm_extends["a" /* default */])({
     role: "menu",
     ref: handleRef,
     className: className,
@@ -11194,7 +11487,7 @@ var Menu_Menu = react["forwardRef"](function Menu(props, ref) {
       transitionDuration = _props$transitionDura === void 0 ? 'auto' : _props$transitionDura,
       _props$variant = props.variant,
       variant = _props$variant === void 0 ? 'selectedMenu' : _props$variant,
-      other = _objectWithoutProperties(props, ["autoFocus", "children", "classes", "disableAutoFocusItem", "MenuListProps", "onClose", "onEntering", "open", "PaperProps", "PopoverClasses", "transitionDuration", "variant"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["autoFocus", "children", "classes", "disableAutoFocusItem", "MenuListProps", "onClose", "onEntering", "open", "PaperProps", "PopoverClasses", "transitionDuration", "variant"]);
 
   var theme = useTheme_useTheme();
   var autoFocusItem = autoFocus && !disableAutoFocusItem && open;
@@ -11263,22 +11556,22 @@ var Menu_Menu = react["forwardRef"](function Menu(props, ref) {
 
     return child;
   });
-  return /*#__PURE__*/react["createElement"](esm_Popover_Popover, _extends({
+  return /*#__PURE__*/react["createElement"](esm_Popover_Popover, Object(esm_extends["a" /* default */])({
     getContentAnchorEl: getContentAnchorEl,
     classes: PopoverClasses,
     onClose: onClose,
     onEntering: handleEntering,
     anchorOrigin: theme.direction === 'rtl' ? RTL_ORIGIN : LTR_ORIGIN,
     transformOrigin: theme.direction === 'rtl' ? RTL_ORIGIN : LTR_ORIGIN,
-    PaperProps: _extends({}, PaperProps, {
-      classes: _extends({}, PaperProps.classes, {
+    PaperProps: Object(esm_extends["a" /* default */])({}, PaperProps, {
+      classes: Object(esm_extends["a" /* default */])({}, PaperProps.classes, {
         root: classes.paper
       })
     }),
     open: open,
     ref: ref,
     transitionDuration: transitionDuration
-  }, other), /*#__PURE__*/react["createElement"](esm_MenuList_MenuList, _extends({
+  }, other), /*#__PURE__*/react["createElement"](esm_MenuList_MenuList, Object(esm_extends["a" /* default */])({
     onKeyDown: handleListKeyDown,
     actions: menuListActionsRef,
     autoFocus: autoFocus && (activeItemIndex === -1 || disableAutoFocusItem),
@@ -11386,14 +11679,14 @@ var SelectInput_SelectInput = react["forwardRef"](function SelectInput(props, re
       valueProp = props.value,
       _props$variant = props.variant,
       variant = _props$variant === void 0 ? 'standard' : _props$variant,
-      other = _objectWithoutProperties(props, ["aria-label", "autoFocus", "autoWidth", "children", "classes", "className", "defaultValue", "disabled", "displayEmpty", "IconComponent", "inputRef", "labelId", "MenuProps", "multiple", "name", "onBlur", "onChange", "onClose", "onFocus", "onOpen", "open", "readOnly", "renderValue", "required", "SelectDisplayProps", "tabIndex", "type", "value", "variant"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["aria-label", "autoFocus", "autoWidth", "children", "classes", "className", "defaultValue", "disabled", "displayEmpty", "IconComponent", "inputRef", "labelId", "MenuProps", "multiple", "name", "onBlur", "onChange", "onClose", "onFocus", "onOpen", "open", "readOnly", "renderValue", "required", "SelectDisplayProps", "tabIndex", "type", "value", "variant"]);
 
   var _useControlled = useControlled({
     controlled: valueProp,
     default: defaultValue,
     name: 'SelectInput'
   }),
-      _useControlled2 = _slicedToArray(_useControlled, 2),
+      _useControlled2 = Object(slicedToArray["a" /* default */])(_useControlled, 2),
       value = _useControlled2[0],
       setValue = _useControlled2[1];
 
@@ -11470,7 +11763,7 @@ var SelectInput_SelectInput = react["forwardRef"](function SelectInput(props, re
       var newValue;
 
       if (multiple) {
-        newValue = Array.isArray(value) ? _toConsumableArray(value) : [];
+        newValue = Array.isArray(value) ? Object(toConsumableArray["a" /* default */])(value) : [];
         var itemIndex = value.indexOf(child.props.value);
 
         if (itemIndex === -1) {
@@ -11632,7 +11925,7 @@ var SelectInput_SelectInput = react["forwardRef"](function SelectInput(props, re
   }
 
   var buttonId = SelectDisplayProps.id || (name ? "mui-component-select-".concat(name) : undefined);
-  return /*#__PURE__*/react["createElement"](react["Fragment"], null, /*#__PURE__*/react["createElement"]("div", _extends({
+  return /*#__PURE__*/react["createElement"](react["Fragment"], null, /*#__PURE__*/react["createElement"]("div", Object(esm_extends["a" /* default */])({
     className: clsx_m(classes.root, // TODO v5: merge root and select
     classes.select, classes.selectMenu, classes[variant], className, disabled && classes.disabled),
     ref: setDisplayNode,
@@ -11657,7 +11950,7 @@ var SelectInput_SelectInput = react["forwardRef"](function SelectInput(props, re
     dangerouslySetInnerHTML: {
       __html: '&#8203;'
     }
-  }) : display), /*#__PURE__*/react["createElement"]("input", _extends({
+  }) : display), /*#__PURE__*/react["createElement"]("input", Object(esm_extends["a" /* default */])({
     value: Array.isArray(value) ? value.join(',') : value,
     name: name,
     ref: inputRef,
@@ -11665,19 +11958,19 @@ var SelectInput_SelectInput = react["forwardRef"](function SelectInput(props, re
     autoFocus: autoFocus
   }, other)), /*#__PURE__*/react["createElement"](IconComponent, {
     className: clsx_m(classes.icon, classes["icon".concat(capitalize(variant))], open && classes.iconOpen, disabled && classes.disabled)
-  }), /*#__PURE__*/react["createElement"](esm_Menu_Menu, _extends({
+  }), /*#__PURE__*/react["createElement"](esm_Menu_Menu, Object(esm_extends["a" /* default */])({
     id: "menu-".concat(name || ''),
     anchorEl: displayNode,
     open: open,
     onClose: handleClose
   }, MenuProps, {
-    MenuListProps: _extends({
+    MenuListProps: Object(esm_extends["a" /* default */])({
       'aria-labelledby': labelId,
       role: 'listbox',
       disableListWrap: true
     }, MenuProps.MenuListProps),
-    PaperProps: _extends({}, MenuProps.PaperProps, {
-      style: _extends({
+    PaperProps: Object(esm_extends["a" /* default */])({}, MenuProps.PaperProps, {
+      style: Object(esm_extends["a" /* default */])({
         minWidth: menuMinWidth
       }, MenuProps.PaperProps != null ? MenuProps.PaperProps.style : null)
     })
@@ -11764,9 +12057,9 @@ var SvgIcon_SvgIcon = react["forwardRef"](function SvgIcon(props, ref) {
       titleAccess = props.titleAccess,
       _props$viewBox = props.viewBox,
       viewBox = _props$viewBox === void 0 ? '0 0 24 24' : _props$viewBox,
-      other = _objectWithoutProperties(props, ["children", "classes", "className", "color", "component", "fontSize", "htmlColor", "titleAccess", "viewBox"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["children", "classes", "className", "color", "component", "fontSize", "htmlColor", "titleAccess", "viewBox"]);
 
-  return /*#__PURE__*/react["createElement"](Component, _extends({
+  return /*#__PURE__*/react["createElement"](Component, Object(esm_extends["a" /* default */])({
     className: clsx_m(classes.root, className, color !== 'inherit' && classes["color".concat(capitalize(color))], fontSize !== 'default' && classes["fontSize".concat(capitalize(fontSize))]),
     focusable: "false",
     viewBox: viewBox,
@@ -11791,7 +12084,7 @@ SvgIcon_SvgIcon.muiName = 'SvgIcon';
 
 function createSvgIcon(path, displayName) {
   var Component = react_default.a.memo(react_default.a.forwardRef(function (props, ref) {
-    return /*#__PURE__*/react_default.a.createElement(esm_SvgIcon_SvgIcon, _extends({
+    return /*#__PURE__*/react_default.a.createElement(esm_SvgIcon_SvgIcon, Object(esm_extends["a" /* default */])({
       ref: ref
     }, props), path);
   }));
@@ -11831,9 +12124,9 @@ var NativeSelectInput_NativeSelectInput = react["forwardRef"](function NativeSel
       inputRef = props.inputRef,
       _props$variant = props.variant,
       variant = _props$variant === void 0 ? 'standard' : _props$variant,
-      other = _objectWithoutProperties(props, ["classes", "className", "disabled", "IconComponent", "inputRef", "variant"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["classes", "className", "disabled", "IconComponent", "inputRef", "variant"]);
 
-  return /*#__PURE__*/react["createElement"](react["Fragment"], null, /*#__PURE__*/react["createElement"]("select", _extends({
+  return /*#__PURE__*/react["createElement"](react["Fragment"], null, /*#__PURE__*/react["createElement"]("select", Object(esm_extends["a" /* default */])({
     className: clsx_m(classes.root, // TODO v5: merge root and select
     classes.select, classes[variant], className, disabled && classes.disabled),
     disabled: disabled,
@@ -11971,7 +12264,7 @@ var NativeSelect_NativeSelect = react["forwardRef"](function NativeSelect(props,
       input = _props$input === void 0 ? defaultInput : _props$input,
       inputProps = props.inputProps,
       variant = props.variant,
-      other = _objectWithoutProperties(props, ["children", "classes", "IconComponent", "input", "inputProps", "variant"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["children", "classes", "IconComponent", "input", "inputProps", "variant"]);
 
   var muiFormControl = useFormControl_useFormControl();
   var fcs = formControlState({
@@ -11979,11 +12272,11 @@ var NativeSelect_NativeSelect = react["forwardRef"](function NativeSelect(props,
     muiFormControl: muiFormControl,
     states: ['variant']
   });
-  return react["cloneElement"](input, _extends({
+  return react["cloneElement"](input, Object(esm_extends["a" /* default */])({
     // Most of the logic is implemented in `NativeSelectInput`.
     // The `Select` component is a simple API wrapper to expose something better to play with.
     inputComponent: NativeSelect_NativeSelectInput,
-    inputProps: _extends({
+    inputProps: Object(esm_extends["a" /* default */])({
       children: children,
       classes: classes,
       IconComponent: IconComponent,
@@ -12048,7 +12341,7 @@ var Select_Select = react["forwardRef"](function Select(props, ref) {
       SelectDisplayProps = props.SelectDisplayProps,
       _props$variant = props.variant,
       variantProps = _props$variant === void 0 ? 'standard' : _props$variant,
-      other = _objectWithoutProperties(props, ["autoWidth", "children", "classes", "displayEmpty", "IconComponent", "id", "input", "inputProps", "label", "labelId", "labelWidth", "MenuProps", "multiple", "native", "onClose", "onOpen", "open", "renderValue", "SelectDisplayProps", "variant"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["autoWidth", "children", "classes", "displayEmpty", "IconComponent", "id", "input", "inputProps", "label", "labelId", "labelWidth", "MenuProps", "multiple", "native", "onClose", "onOpen", "open", "renderValue", "SelectDisplayProps", "variant"]);
 
   var inputComponent = native ? NativeSelect_NativeSelectInput : Select_SelectInput;
   var muiFormControl = useFormControl_useFormControl();
@@ -12066,11 +12359,11 @@ var Select_Select = react["forwardRef"](function Select(props, ref) {
     }),
     filled: Select_ref2
   }[variant];
-  return react["cloneElement"](InputComponent, _extends({
+  return react["cloneElement"](InputComponent, Object(esm_extends["a" /* default */])({
     // Most of the logic is implemented in `SelectInput`.
     // The `Select` component is a simple API wrapper to expose something better to play with.
     inputComponent: inputComponent,
-    inputProps: _extends({
+    inputProps: Object(esm_extends["a" /* default */])({
       children: children,
       IconComponent: IconComponent,
       variant: variant,
@@ -12088,7 +12381,7 @@ var Select_Select = react["forwardRef"](function Select(props, ref) {
       onOpen: onOpen,
       open: open,
       renderValue: renderValue,
-      SelectDisplayProps: _extends({
+      SelectDisplayProps: Object(esm_extends["a" /* default */])({
         id: id
       }, SelectDisplayProps)
     }, {}, inputProps, {
@@ -12206,7 +12499,7 @@ var TextField_TextField = react["forwardRef"](function TextField(props, ref) {
       value = props.value,
       _props$variant = props.variant,
       variant = _props$variant === void 0 ? 'standard' : _props$variant,
-      other = _objectWithoutProperties(props, ["autoComplete", "autoFocus", "children", "classes", "className", "color", "defaultValue", "disabled", "error", "FormHelperTextProps", "fullWidth", "helperText", "hiddenLabel", "id", "InputLabelProps", "inputProps", "InputProps", "inputRef", "label", "multiline", "name", "onBlur", "onChange", "onFocus", "placeholder", "required", "rows", "rowsMax", "select", "SelectProps", "type", "value", "variant"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["autoComplete", "autoFocus", "children", "classes", "className", "color", "defaultValue", "disabled", "error", "FormHelperTextProps", "fullWidth", "helperText", "hiddenLabel", "id", "InputLabelProps", "inputProps", "InputProps", "inputRef", "label", "multiline", "name", "onBlur", "onChange", "onFocus", "placeholder", "required", "rows", "rowsMax", "select", "SelectProps", "type", "value", "variant"]);
 
   if (false) {}
 
@@ -12234,7 +12527,7 @@ var TextField_TextField = react["forwardRef"](function TextField(props, ref) {
   var helperTextId = helperText && id ? "".concat(id, "-helper-text") : undefined;
   var inputLabelId = label && id ? "".concat(id, "-label") : undefined;
   var InputComponent = variantComponent[variant];
-  var InputElement = /*#__PURE__*/react["createElement"](InputComponent, _extends({
+  var InputElement = /*#__PURE__*/react["createElement"](InputComponent, Object(esm_extends["a" /* default */])({
     "aria-describedby": helperTextId,
     autoComplete: autoComplete,
     autoFocus: autoFocus,
@@ -12254,7 +12547,7 @@ var TextField_TextField = react["forwardRef"](function TextField(props, ref) {
     placeholder: placeholder,
     inputProps: inputProps
   }, InputMore, InputProps));
-  return /*#__PURE__*/react["createElement"](esm_FormControl_FormControl, _extends({
+  return /*#__PURE__*/react["createElement"](esm_FormControl_FormControl, Object(esm_extends["a" /* default */])({
     className: clsx_m(classes.root, className),
     disabled: disabled,
     error: error,
@@ -12264,16 +12557,16 @@ var TextField_TextField = react["forwardRef"](function TextField(props, ref) {
     required: required,
     color: color,
     variant: variant
-  }, other), label && /*#__PURE__*/react["createElement"](esm_InputLabel_InputLabel, _extends({
+  }, other), label && /*#__PURE__*/react["createElement"](esm_InputLabel_InputLabel, Object(esm_extends["a" /* default */])({
     htmlFor: id,
     id: inputLabelId
-  }, InputLabelProps), label), select ? /*#__PURE__*/react["createElement"](esm_Select_Select, _extends({
+  }, InputLabelProps), label), select ? /*#__PURE__*/react["createElement"](esm_Select_Select, Object(esm_extends["a" /* default */])({
     "aria-describedby": helperTextId,
     id: id,
     labelId: inputLabelId,
     value: value,
     input: InputElement
-  }, SelectProps), children) : InputElement, helperText && /*#__PURE__*/react["createElement"](esm_FormHelperText_FormHelperText, _extends({
+  }, SelectProps), children) : InputElement, helperText && /*#__PURE__*/react["createElement"](esm_FormHelperText_FormHelperText, Object(esm_extends["a" /* default */])({
     id: helperTextId
   }, FormHelperTextProps), helperText));
 });
@@ -12281,6 +12574,9 @@ var TextField_TextField = react["forwardRef"](function TextField(props, ref) {
 /* harmony default export */ var esm_TextField_TextField = (styles_withStyles(TextField_styles, {
   name: 'MuiTextField'
 })(TextField_TextField));
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/colorManipulator.js
+var colorManipulator = __webpack_require__(6);
+
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/utils/useIsFocusVisible.js
 // based on https://github.com/WICG/focus-visible/blob/v4.1.5/src/focus-visible.js
 
@@ -12670,7 +12966,7 @@ var TransitionGroup_TransitionGroup = /*#__PURE__*/function (_React$Component) {
 
     if (this.mounted) {
       this.setState(function (state) {
-        var children = _extends({}, state.children);
+        var children = Object(esm_extends["a" /* default */])({}, state.children);
 
         delete children[child.key];
         return {
@@ -12684,7 +12980,7 @@ var TransitionGroup_TransitionGroup = /*#__PURE__*/function (_React$Component) {
     var _this$props = this.props,
         Component = _this$props.component,
         childFactory = _this$props.childFactory,
-        props = _objectWithoutPropertiesLoose(_this$props, ["component", "childFactory"]);
+        props = Object(objectWithoutPropertiesLoose["a" /* default */])(_this$props, ["component", "childFactory"]);
 
     var contextValue = this.state.contextValue;
     var children = TransitionGroup_values(this.state.children).map(childFactory);
@@ -12878,7 +13174,7 @@ var TouchRipple_TouchRipple = react["forwardRef"](function TouchRipple(props, re
       centerProp = _props$center === void 0 ? false : _props$center,
       classes = props.classes,
       className = props.className,
-      other = _objectWithoutProperties(props, ["center", "classes", "className"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["center", "classes", "className"]);
 
   var _React$useState = react["useState"]([]),
       ripples = _React$useState[0],
@@ -12912,7 +13208,7 @@ var TouchRipple_TouchRipple = react["forwardRef"](function TouchRipple(props, re
         rippleSize = params.rippleSize,
         cb = params.cb;
     setRipples(function (oldRipples) {
-      return [].concat(_toConsumableArray(oldRipples), [/*#__PURE__*/react["createElement"](ButtonBase_Ripple, {
+      return [].concat(Object(toConsumableArray["a" /* default */])(oldRipples), [/*#__PURE__*/react["createElement"](ButtonBase_Ripple, {
         key: nextKey.current,
         classes: classes,
         timeout: DURATION,
@@ -13050,7 +13346,7 @@ var TouchRipple_TouchRipple = react["forwardRef"](function TouchRipple(props, re
       stop: stop
     };
   }, [pulsate, start, stop]);
-  return /*#__PURE__*/react["createElement"]("span", _extends({
+  return /*#__PURE__*/react["createElement"]("span", Object(esm_extends["a" /* default */])({
     className: clsx_m(classes.root, className),
     ref: container
   }, other), /*#__PURE__*/react["createElement"](esm_TransitionGroup, {
@@ -13164,7 +13460,7 @@ var ButtonBase_ButtonBase = react["forwardRef"](function ButtonBase(props, ref) 
       TouchRippleProps = props.TouchRippleProps,
       _props$type = props.type,
       type = _props$type === void 0 ? 'button' : _props$type,
-      other = _objectWithoutProperties(props, ["action", "buttonRef", "centerRipple", "children", "classes", "className", "component", "disabled", "disableRipple", "disableTouchRipple", "focusRipple", "focusVisibleClassName", "onBlur", "onClick", "onFocus", "onFocusVisible", "onKeyDown", "onKeyUp", "onMouseDown", "onMouseLeave", "onMouseUp", "onTouchEnd", "onTouchMove", "onTouchStart", "onDragLeave", "tabIndex", "TouchRippleProps", "type"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["action", "buttonRef", "centerRipple", "children", "classes", "className", "component", "disabled", "disableRipple", "disableTouchRipple", "focusRipple", "focusVisibleClassName", "onBlur", "onClick", "onFocus", "onFocusVisible", "onKeyDown", "onKeyUp", "onMouseDown", "onMouseLeave", "onMouseUp", "onTouchEnd", "onTouchMove", "onTouchStart", "onDragLeave", "tabIndex", "TouchRippleProps", "type"]);
 
   var buttonRef = react["useRef"](null);
 
@@ -13354,7 +13650,7 @@ var ButtonBase_ButtonBase = react["forwardRef"](function ButtonBase(props, ref) 
 
   if (false) {}
 
-  return /*#__PURE__*/react["createElement"](ComponentProp, _extends({
+  return /*#__PURE__*/react["createElement"](ComponentProp, Object(esm_extends["a" /* default */])({
     className: clsx_m(classes.root, className, focusVisible && [classes.focusVisible, focusVisibleClassName], disabled && classes.disabled),
     onBlur: handleBlur,
     onClick: onClick,
@@ -13374,7 +13670,7 @@ var ButtonBase_ButtonBase = react["forwardRef"](function ButtonBase(props, ref) 
   /*#__PURE__*/
 
   /* TouchRipple is only needed client-side, x2 boost on the server. */
-  react["createElement"](ButtonBase_TouchRipple, _extends({
+  react["createElement"](ButtonBase_TouchRipple, Object(esm_extends["a" /* default */])({
     ref: rippleRef,
     center: centerRipple
   }, TouchRippleProps)) : null);
@@ -13396,7 +13692,7 @@ var ButtonBase_ButtonBase = react["forwardRef"](function ButtonBase(props, ref) 
 var Button_styles = function styles(theme) {
   return {
     /* Styles applied to the root element. */
-    root: _extends({}, theme.typography.button, {
+    root: Object(esm_extends["a" /* default */])({}, theme.typography.button, {
       boxSizing: 'border-box',
       minWidth: 64,
       padding: '6px 16px',
@@ -13407,7 +13703,7 @@ var Button_styles = function styles(theme) {
       }),
       '&:hover': {
         textDecoration: 'none',
-        backgroundColor: fade(theme.palette.text.primary, theme.palette.action.hoverOpacity),
+        backgroundColor: Object(colorManipulator["b" /* fade */])(theme.palette.text.primary, theme.palette.action.hoverOpacity),
         // Reset on touch devices, it doesn't add specificity
         '@media (hover: none)': {
           backgroundColor: 'transparent'
@@ -13439,7 +13735,7 @@ var Button_styles = function styles(theme) {
     textPrimary: {
       color: theme.palette.primary.main,
       '&:hover': {
-        backgroundColor: fade(theme.palette.primary.main, theme.palette.action.hoverOpacity),
+        backgroundColor: Object(colorManipulator["b" /* fade */])(theme.palette.primary.main, theme.palette.action.hoverOpacity),
         // Reset on touch devices, it doesn't add specificity
         '@media (hover: none)': {
           backgroundColor: 'transparent'
@@ -13451,7 +13747,7 @@ var Button_styles = function styles(theme) {
     textSecondary: {
       color: theme.palette.secondary.main,
       '&:hover': {
-        backgroundColor: fade(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
+        backgroundColor: Object(colorManipulator["b" /* fade */])(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
         // Reset on touch devices, it doesn't add specificity
         '@media (hover: none)': {
           backgroundColor: 'transparent'
@@ -13471,10 +13767,10 @@ var Button_styles = function styles(theme) {
     /* Styles applied to the root element if `variant="outlined"` and `color="primary"`. */
     outlinedPrimary: {
       color: theme.palette.primary.main,
-      border: "1px solid ".concat(fade(theme.palette.primary.main, 0.5)),
+      border: "1px solid ".concat(Object(colorManipulator["b" /* fade */])(theme.palette.primary.main, 0.5)),
       '&:hover': {
         border: "1px solid ".concat(theme.palette.primary.main),
-        backgroundColor: fade(theme.palette.primary.main, theme.palette.action.hoverOpacity),
+        backgroundColor: Object(colorManipulator["b" /* fade */])(theme.palette.primary.main, theme.palette.action.hoverOpacity),
         // Reset on touch devices, it doesn't add specificity
         '@media (hover: none)': {
           backgroundColor: 'transparent'
@@ -13485,10 +13781,10 @@ var Button_styles = function styles(theme) {
     /* Styles applied to the root element if `variant="outlined"` and `color="secondary"`. */
     outlinedSecondary: {
       color: theme.palette.secondary.main,
-      border: "1px solid ".concat(fade(theme.palette.secondary.main, 0.5)),
+      border: "1px solid ".concat(Object(colorManipulator["b" /* fade */])(theme.palette.secondary.main, 0.5)),
       '&:hover': {
         border: "1px solid ".concat(theme.palette.secondary.main),
-        backgroundColor: fade(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
+        backgroundColor: Object(colorManipulator["b" /* fade */])(theme.palette.secondary.main, theme.palette.action.hoverOpacity),
         // Reset on touch devices, it doesn't add specificity
         '@media (hover: none)': {
           backgroundColor: 'transparent'
@@ -13698,7 +13994,7 @@ var Button_Button = react["forwardRef"](function Button(props, ref) {
       type = _props$type === void 0 ? 'button' : _props$type,
       _props$variant = props.variant,
       variant = _props$variant === void 0 ? 'text' : _props$variant,
-      other = _objectWithoutProperties(props, ["children", "classes", "className", "color", "component", "disabled", "disableElevation", "disableFocusRipple", "endIcon", "focusVisibleClassName", "fullWidth", "size", "startIcon", "type", "variant"]);
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["children", "classes", "className", "color", "component", "disabled", "disableElevation", "disableFocusRipple", "endIcon", "focusVisibleClassName", "fullWidth", "size", "startIcon", "type", "variant"]);
 
   var startIcon = startIconProp && /*#__PURE__*/react["createElement"]("span", {
     className: clsx_m(classes.startIcon, classes["iconSize".concat(capitalize(size))])
@@ -13706,7 +14002,7 @@ var Button_Button = react["forwardRef"](function Button(props, ref) {
   var endIcon = endIconProp && /*#__PURE__*/react["createElement"]("span", {
     className: clsx_m(classes.endIcon, classes["iconSize".concat(capitalize(size))])
   }, endIconProp);
-  return /*#__PURE__*/react["createElement"](esm_ButtonBase_ButtonBase, _extends({
+  return /*#__PURE__*/react["createElement"](esm_ButtonBase_ButtonBase, Object(esm_extends["a" /* default */])({
     className: clsx_m(classes.root, classes[variant], className, color === 'inherit' ? classes.colorInherit : color !== 'default' && classes["".concat(variant).concat(capitalize(color))], size !== 'medium' && [classes["".concat(variant, "Size").concat(capitalize(size))], classes["size".concat(capitalize(size))]], disableElevation && classes.disableElevation, disabled && classes.disabled, fullWidth && classes.fullWidth),
     component: component,
     disabled: disabled,
@@ -13723,7 +14019,7 @@ var Button_Button = react["forwardRef"](function Button(props, ref) {
   name: 'MuiButton'
 })(Button_Button));
 // CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/defineProperty.js
-function defineProperty_defineProperty(obj, key, value) {
+function _defineProperty(obj, key, value) {
   if (key in obj) {
     Object.defineProperty(obj, key, {
       value: value,
@@ -13760,7 +14056,7 @@ function _objectSpread2(target) {
 
     if (i % 2) {
       ownKeys(Object(source), true).forEach(function (key) {
-        defineProperty_defineProperty(target, key, source[key]);
+        _defineProperty(target, key, source[key]);
       });
     } else if (Object.getOwnPropertyDescriptors) {
       Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
@@ -13773,6 +14069,9 @@ function _objectSpread2(target) {
 
   return target;
 }
+// EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 5 modules
+var esm_slicedToArray = __webpack_require__(12);
+
 // CONCATENATED MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/typeof.js
 function typeof_typeof(obj) {
   "@babel/helpers - typeof";
@@ -13838,32 +14137,32 @@ function useForm() {
   var submitFormCallback = arguments.length > 2 ? arguments[2] : undefined;
 
   var _useState = Object(react["useState"])(stateSchema),
-      _useState2 = slicedToArray_slicedToArray(_useState, 2),
+      _useState2 = Object(esm_slicedToArray["a" /* default */])(_useState, 2),
       state = _useState2[0],
       setStateSchema = _useState2[1];
 
   var _useState3 = Object(react["useState"])(get_prop_values(state, VALUE)),
-      _useState4 = slicedToArray_slicedToArray(_useState3, 2),
+      _useState4 = Object(esm_slicedToArray["a" /* default */])(_useState3, 2),
       values = _useState4[0],
       setValues = _useState4[1];
 
   var _useState5 = Object(react["useState"])(get_prop_values(state, ERROR)),
-      _useState6 = slicedToArray_slicedToArray(_useState5, 2),
+      _useState6 = Object(esm_slicedToArray["a" /* default */])(_useState5, 2),
       errors = _useState6[0],
       setErrors = _useState6[1];
 
   var _useState7 = Object(react["useState"])(get_prop_values(state, false)),
-      _useState8 = slicedToArray_slicedToArray(_useState7, 2),
+      _useState8 = Object(esm_slicedToArray["a" /* default */])(_useState7, 2),
       dirty = _useState8[0],
       setDirty = _useState8[1];
 
   var _useState9 = Object(react["useState"])(false),
-      _useState10 = slicedToArray_slicedToArray(_useState9, 2),
+      _useState10 = Object(esm_slicedToArray["a" /* default */])(_useState9, 2),
       disable = _useState10[0],
       setDisable = _useState10[1];
 
   var _useState11 = Object(react["useState"])(false),
-      _useState12 = slicedToArray_slicedToArray(_useState11, 2),
+      _useState12 = Object(esm_slicedToArray["a" /* default */])(_useState11, 2),
       isDirty = _useState12[0],
       setIsDirty = _useState12[1]; // Get a local copy of stateSchema
 
@@ -13898,10 +14197,10 @@ function useForm() {
     var name = _ref.name,
         value = _ref.value;
     setValues(function (prevState) {
-      return _objectSpread2(_objectSpread2({}, prevState), {}, defineProperty_defineProperty({}, name, value));
+      return _objectSpread2(_objectSpread2({}, prevState), {}, _defineProperty({}, name, value));
     });
     setDirty(function (prevState) {
-      return _objectSpread2(_objectSpread2({}, prevState), {}, defineProperty_defineProperty({}, name, true));
+      return _objectSpread2(_objectSpread2({}, prevState), {}, _defineProperty({}, name, true));
     });
   }; // Set an error of a specific field
 
@@ -13910,7 +14209,7 @@ function useForm() {
     var name = _ref2.name,
         error = _ref2.error;
     return setErrors(function (prevState) {
-      return _objectSpread2(_objectSpread2({}, prevState), {}, defineProperty_defineProperty({}, name, error));
+      return _objectSpread2(_objectSpread2({}, prevState), {}, _defineProperty({}, name, error));
     });
   }; // Validate fields in forms
 
@@ -13980,7 +14279,7 @@ function useForm() {
     if (event.isFormData) {
       setFieldValue({
         name: "formData",
-        value: _objectSpread2(_objectSpread2({}, event.formData), {}, defineProperty_defineProperty({}, event.name, event.target.value))
+        value: _objectSpread2(_objectSpread2({}, event.formData), {}, _defineProperty({}, event.name, event.target.value))
       });
     } else {
       var name = event.target.name;
@@ -14010,16 +14309,22 @@ function useForm() {
 }
 
 /* harmony default export */ var forms_useForm = (useForm);
+// EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck.js
+var classCallCheck = __webpack_require__(7);
+
+// EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createClass.js
+var createClass = __webpack_require__(8);
+
 // CONCATENATED MODULE: ./src/shared/helpers/validators/EmailValidator.js
 
 
 
 var EmailValidator_EmailValidator = /*#__PURE__*/function () {
   function EmailValidator() {
-    _classCallCheck(this, EmailValidator);
+    Object(classCallCheck["a" /* default */])(this, EmailValidator);
   }
 
-  _createClass(EmailValidator, null, [{
+  Object(createClass["a" /* default */])(EmailValidator, null, [{
     key: "validateFormat",
     value: function validateFormat(email) {
       var format = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/); // eslint-disable-line
@@ -14042,10 +14347,10 @@ var EmailValidator_EmailValidator = /*#__PURE__*/function () {
 
 var PasswordValidator_PasswordValidator = /*#__PURE__*/function () {
   function PasswordValidator() {
-    _classCallCheck(this, PasswordValidator);
+    Object(classCallCheck["a" /* default */])(this, PasswordValidator);
   }
 
-  _createClass(PasswordValidator, null, [{
+  Object(createClass["a" /* default */])(PasswordValidator, null, [{
     key: "validateFormat",
     value: function validateFormat(password) {
       var format = new RegExp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
@@ -14161,8 +14466,6 @@ function SignInForm(props) {
 }
 
 /* harmony default export */ var SignIn_SignInForm = (SignInForm);
-// CONCATENATED MODULE: ./src/shared/layouts/images/favicon.png
-/* harmony default export */ var favicon = ("/dist/images/favicon.png");
 // CONCATENATED MODULE: ./src/project/Account/areas/Accounts/pages/SignIn/SignInPage.js
 
 
@@ -14170,52 +14473,27 @@ function SignInForm(props) {
 
 
 
-/* eslint-disable no-unused-vars */
-
-
-/* eslint-enable no-unused-vars */
 
 function SignInPage(props) {
-  return /*#__PURE__*/react_default.a.createElement(ThemeProvider_ThemeProvider, {
-    theme: GlobalHelper_GlobalHelper.initMuiTheme()
-  }, /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement(Header_Header, props.header), /*#__PURE__*/react_default.a.createElement("section", {
+  return /*#__PURE__*/react_default.a.createElement(ThemeProvider["a" /* default */], {
+    theme: GlobalHelper["a" /* default */].initMuiTheme()
+  }, /*#__PURE__*/react_default.a.createElement("div", null, /*#__PURE__*/react_default.a.createElement(Header["a" /* default */], props.header), /*#__PURE__*/react_default.a.createElement("section", {
     className: "section is-flex-centered"
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "account-card"
-  }, /*#__PURE__*/react_default.a.createElement(SignIn_SignInForm, props.signInForm))), /*#__PURE__*/react_default.a.createElement(Footer_Footer, props.footer)));
+  }, /*#__PURE__*/react_default.a.createElement(SignIn_SignInForm, props.signInForm))), /*#__PURE__*/react_default.a.createElement(Footer["a" /* default */], props.footer)));
 }
 
 /* harmony default export */ var SignIn_SignInPage = (SignInPage);
-// CONCATENATED MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.js
-
-
-
-var CssSsrRemovalHelper_CssSsrRemovalHelper = /*#__PURE__*/function () {
-  function CssSsrRemovalHelper() {
-    _classCallCheck(this, CssSsrRemovalHelper);
-  }
-
-  _createClass(CssSsrRemovalHelper, null, [{
-    key: "remove",
-    value: function remove() {
-      var jssStyles = document.querySelector("#jss-server-side");
-
-      if (jssStyles) {
-        jssStyles.parentElement.removeChild(jssStyles);
-      }
-    }
-  }]);
-
-  return CssSsrRemovalHelper;
-}();
-
+// EXTERNAL MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.js
+var CssSsrRemovalHelper = __webpack_require__(26);
 
 // CONCATENATED MODULE: ./src/project/Account/areas/Accounts/pages/SignIn/index.js
 
 
 
 
-CssSsrRemovalHelper_CssSsrRemovalHelper.remove();
+CssSsrRemovalHelper["a" /* default */].remove();
 react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(SignIn_SignInPage, window.data), document.getElementById("root"));
 
 /***/ })

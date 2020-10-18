@@ -6,25 +6,38 @@ using Foundation.Localization.Definitions;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Routing;
+using System.Globalization;
 
 namespace Identity.Api.Shared.Footers.ModelBuilders
 {
     public class FooterModelBuilder : IModelBuilder<FooterViewModel>
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly LinkGenerator linkGenerator;
 
-        public FooterModelBuilder(IStringLocalizer<GlobalResources> globalLocalizer)
+        public FooterModelBuilder(
+            IStringLocalizer<GlobalResources> globalLocalizer,
+            LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
+            this.linkGenerator = linkGenerator;
         }
 
         public FooterViewModel BuildModel()
         {
             var links = new List<LinkViewModel>
             {
-                new LinkViewModel { Text = this.globalLocalizer["PrivacyPolicy"], Url = "#" },
-                new LinkViewModel { Text = this.globalLocalizer["TermsAndConditions"], Url = "#" }
-
+                new LinkViewModel 
+                { 
+                    Text = this.globalLocalizer["PrivacyPolicy"], 
+                    Url = this.linkGenerator.GetPathByAction("PrivacyPolicy", "Content", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name })
+                },
+                new LinkViewModel 
+                { 
+                    Text = this.globalLocalizer["TermsAndConditions"], 
+                    Url = this.linkGenerator.GetPathByAction("Regulations", "Content", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name })
+                }
             };
 
             var viewModel = new FooterViewModel

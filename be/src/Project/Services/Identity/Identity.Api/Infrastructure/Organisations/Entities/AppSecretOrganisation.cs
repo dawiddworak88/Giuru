@@ -7,7 +7,7 @@ namespace Identity.Api.Infrastructure.Organisations.Entities
     public class AppSecretOrganisation : Entity
     {
         [Required]
-        public Guid OrganisaitonId { get; set; }
+        public Guid OrganisationId { get; set; }
 
         public string AppSecret { get; set; }
 

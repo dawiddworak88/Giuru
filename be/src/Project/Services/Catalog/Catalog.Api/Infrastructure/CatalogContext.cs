@@ -23,7 +23,6 @@ namespace Catalog.Api.Infrastructure
         public DbSet<CategoryImage> CategoryImages { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductTranslation> ProductTranslations { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<ProductVideo> ProductVideos { get; set; }
