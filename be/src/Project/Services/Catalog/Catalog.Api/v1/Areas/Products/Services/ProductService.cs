@@ -165,7 +165,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
                     if (!searchResultItem.PrimaryProductIdHasValue)
                     {
                         var productVariants = await this.productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, language);
-                        productSearchModel.ProductVariants = productVariants.Data?.Select(x => x.ProductId);
+                        productSearchModel.ProductVariants = productVariants?.Data?.Select(x => x.ProductId);
                     }
 
                     products.Add(productSearchModel);
