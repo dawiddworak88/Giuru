@@ -1,18 +1,10 @@
 ﻿using Foundation.Extensions.Definitions;
-using Microsoft.AspNetCore.Http;
 using System;
 
 namespace Foundation.Extensions.Services.MediaServices
 {
     public class MediaHelperService : IMediaHelperService
     {
-        private readonly IHttpContextAccessor httpContextAccessor;
-
-        public MediaHelperService(IHttpContextAccessor httpContextAccessor)
-        {
-            this.httpContextAccessor = httpContextAccessor;
-        }
-
         public string GetFileUrl(string baseUrl, Guid mediaId, int maxWidth, int maxHeight)
         {
             var url = this.GetFileUrl(baseUrl, mediaId);
