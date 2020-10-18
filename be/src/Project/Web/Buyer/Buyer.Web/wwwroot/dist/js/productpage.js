@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 293);
+/******/ 	return __webpack_require__(__webpack_require__.s = 302);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -92,7 +92,7 @@
 
 
 if (true) {
-  module.exports = __webpack_require__(72);
+  module.exports = __webpack_require__(77);
 } else {}
 
 
@@ -134,7 +134,7 @@ function _extends() {
 if (false) { var throwOnDirectAccess, ReactIs; } else {
   // By explicitly using `prop-types` you are opting into new production behavior.
   // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(76)();
+  module.exports = __webpack_require__(81)();
 }
 
 
@@ -144,7 +144,7 @@ if (false) { var throwOnDirectAccess, ReactIs; } else {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _objectWithoutProperties; });
-/* harmony import */ var _objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
+/* harmony import */ var _objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
 
 function _objectWithoutProperties(source, excluded) {
   if (source == null) return {};
@@ -2307,7 +2307,7 @@ function toVal(mix) {
             try {
                 oldLocale = globalLocale._abbr;
                 aliasedRequire = require;
-                __webpack_require__(267)("./" + name);
+                __webpack_require__(274)("./" + name);
                 getSetGlobalLocale(oldLocale);
             } catch (e) {
                 // mark as not found to avoid repeating expensive file require call causing high CPU
@@ -5885,7 +5885,7 @@ function toVal(mix) {
 
 })));
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(224)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(232)(module)))
 
 /***/ }),
 /* 6 */
@@ -5907,7 +5907,7 @@ var react_default = /*#__PURE__*/__webpack_require__.n(react);
 var prop_types = __webpack_require__(2);
 
 // EXTERNAL MODULE: ./node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js
-var hoist_non_react_statics_cjs = __webpack_require__(59);
+var hoist_non_react_statics_cjs = __webpack_require__(64);
 var hoist_non_react_statics_cjs_default = /*#__PURE__*/__webpack_require__.n(hoist_non_react_statics_cjs);
 
 // CONCATENATED MODULE: ./node_modules/is-in-browser/dist/module.js
@@ -5940,16 +5940,16 @@ function warning(condition, message) {
 /* harmony default export */ var tiny_warning_esm = (warning);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
-var createClass = __webpack_require__(27);
+var createClass = __webpack_require__(29);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
-var inheritsLoose = __webpack_require__(16);
+var inheritsLoose = __webpack_require__(21);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
-var assertThisInitialized = __webpack_require__(31);
+var assertThisInitialized = __webpack_require__(35);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
-var objectWithoutPropertiesLoose = __webpack_require__(13);
+var objectWithoutPropertiesLoose = __webpack_require__(15);
 
 // CONCATENATED MODULE: ./node_modules/jss/dist/jss.esm.js
 
@@ -8175,7 +8175,7 @@ var jss_esm_index = jss_esm_create();
 
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/mergeClasses/mergeClasses.js
-var mergeClasses = __webpack_require__(249);
+var mergeClasses = __webpack_require__(255);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/makeStyles/multiKeyStore.js
 // Used https://github.com/thinkloop/multi-key-cache as inspiration
@@ -8201,10 +8201,10 @@ var multiKeyStore = {
 };
 /* harmony default export */ var makeStyles_multiKeyStore = (multiKeyStore);
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/useTheme/useTheme.js
-var useTheme = __webpack_require__(64);
+var useTheme = __webpack_require__(69);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/ThemeProvider/nested.js
-var nested = __webpack_require__(39);
+var nested = __webpack_require__(43);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/createGenerateClassName/createGenerateClassName.js
 
@@ -8938,7 +8938,7 @@ function defaultUnit(options) {
 /* harmony default export */ var jss_plugin_default_unit_esm = (defaultUnit);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 2 modules
-var toConsumableArray = __webpack_require__(15);
+var toConsumableArray = __webpack_require__(19);
 
 // CONCATENATED MODULE: ./node_modules/css-vendor/dist/css-vendor.esm.js
 
@@ -9713,10 +9713,10 @@ function increment() {
   return indexCounter;
 }
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
-var esm_typeof = __webpack_require__(22);
+var esm_typeof = __webpack_require__(24);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/utils/esm/deepmerge.js
-var deepmerge = __webpack_require__(247);
+var deepmerge = __webpack_require__(253);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/getStylesCreator/getStylesCreator.js
 
@@ -10022,7 +10022,7 @@ function makeStyles(stylesOrCreator) {
   return useStyles;
 }
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/getThemeProps/getThemeProps.js
-var getThemeProps = __webpack_require__(250);
+var getThemeProps = __webpack_require__(256);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/styles/esm/withStyles/withStyles.js
 
@@ -10109,7 +10109,7 @@ var withStyles_withStyles = function withStyles(stylesOrCreator) {
 
 /* harmony default export */ var esm_withStyles_withStyles = (withStyles_withStyles);
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/defaultTheme.js
-var styles_defaultTheme = __webpack_require__(40);
+var styles_defaultTheme = __webpack_require__(44);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/withStyles.js
 
@@ -10170,7 +10170,7 @@ if (true) {
   // DCE check should happen before ReactDOM bundle executes so that
   // DevTools can report bad minification during injection.
   checkDCE();
-  module.exports = __webpack_require__(73);
+  module.exports = __webpack_require__(78);
 } else {}
 
 
@@ -10182,7 +10182,7 @@ if (true) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useForkRef; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _setRef__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
+/* harmony import */ var _setRef__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(20);
 
 
 function useForkRef(refA, refB) {
@@ -10500,6 +10500,16 @@ function lighten(color, coefficient) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ownerDocument; });
+function ownerDocument(node) {
+  return node && node.ownerDocument || document;
+}
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return formControlState; });
 function formControlState(_ref) {
   var props = _ref.props,
@@ -10519,7 +10529,28 @@ function formControlState(_ref) {
 }
 
 /***/ }),
-/* 13 */
+/* 14 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _defineProperty; });
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+/***/ }),
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10540,14 +10571,48 @@ function _objectWithoutPropertiesLoose(source, excluded) {
 }
 
 /***/ }),
-/* 14 */
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _classCallCheck; });
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _createClass; });
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+/***/ }),
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useFormControl; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _FormControlContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(24);
+/* harmony import */ var _FormControlContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(25);
 
 
 function useFormControl() {
@@ -10555,7 +10620,7 @@ function useFormControl() {
 }
 
 /***/ }),
-/* 15 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10564,7 +10629,7 @@ function useFormControl() {
 __webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _toConsumableArray; });
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
-var arrayLikeToArray = __webpack_require__(30);
+var arrayLikeToArray = __webpack_require__(34);
 
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js
 
@@ -10572,10 +10637,10 @@ function _arrayWithoutHoles(arr) {
   if (Array.isArray(arr)) return Object(arrayLikeToArray["a" /* default */])(arr);
 }
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArray.js
-var iterableToArray = __webpack_require__(58);
+var iterableToArray = __webpack_require__(63);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-var unsupportedIterableToArray = __webpack_require__(35);
+var unsupportedIterableToArray = __webpack_require__(39);
 
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js
 function _nonIterableSpread() {
@@ -10591,7 +10656,22 @@ function _toConsumableArray(arr) {
 }
 
 /***/ }),
-/* 16 */
+/* 20 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return setRef; });
+// TODO v5: consider to make it private
+function setRef(ref, value) {
+  if (typeof ref === 'function') {
+    ref(value);
+  } else if (ref) {
+    ref.current = value;
+  }
+}
+
+/***/ }),
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10603,7 +10683,7 @@ function _inheritsLoose(subClass, superClass) {
 }
 
 /***/ }),
-/* 17 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10629,77 +10709,28 @@ function useEventCallback(fn) {
 }
 
 /***/ }),
-/* 18 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _classCallCheck; });
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useTheme; });
+/* harmony import */ var _material_ui_styles__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(69);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _defaultTheme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(44);
+
+
+
+function useTheme() {
+  var theme = Object(_material_ui_styles__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])() || _defaultTheme__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"];
+
+  if (false) {}
+
+  return theme;
 }
 
 /***/ }),
-/* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _createClass; });
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
-  }
-}
-
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
-}
-
-/***/ }),
-/* 20 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _defineProperty; });
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-/***/ }),
-/* 21 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return setRef; });
-// TODO v5: consider to make it private
-function setRef(ref, value) {
-  if (typeof ref === 'function') {
-    ref(value);
-  } else if (ref) {
-    ref.current = value;
-  }
-}
-
-/***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10721,28 +10752,7 @@ function _typeof(obj) {
 }
 
 /***/ }),
-/* 23 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useTheme; });
-/* harmony import */ var _material_ui_styles__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(64);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _defaultTheme__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(40);
-
-
-
-function useTheme() {
-  var theme = Object(_material_ui_styles__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])() || _defaultTheme__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"];
-
-  if (false) {}
-
-  return theme;
-}
-
-/***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10764,7 +10774,7 @@ function useFormControl() {
 /* harmony default export */ __webpack_exports__["a"] = (FormControlContext);
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10802,7 +10812,7 @@ function isAdornedStart(obj) {
 }
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10875,7 +10885,45 @@ function _slicedToArray(arr, i) {
 }
 
 /***/ }),
-/* 27 */
+/* 28 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createChainedFunction; });
+/**
+ * Safe chained function
+ *
+ * Will only create a new function if needed,
+ * otherwise will pass back existing functions or null.
+ *
+ * @param {function} functions to chain
+ * @returns {function|null}
+ */
+function createChainedFunction() {
+  for (var _len = arguments.length, funcs = new Array(_len), _key = 0; _key < _len; _key++) {
+    funcs[_key] = arguments[_key];
+  }
+
+  return funcs.reduce(function (acc, func) {
+    if (func == null) {
+      return acc;
+    }
+
+    if (false) {}
+
+    return function chainedFunction() {
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      acc.apply(this, args);
+      func.apply(this, args);
+    };
+  }, function () {});
+}
+
+/***/ }),
+/* 29 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10897,7 +10945,7 @@ function _createClass(Constructor, protoProps, staticProps) {
 }
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10907,7 +10955,20 @@ function _createClass(Constructor, protoProps, staticProps) {
 /* harmony default export */ __webpack_exports__["a"] = (react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext(null));
 
 /***/ }),
-/* 29 */
+/* 31 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ownerWindow; });
+/* harmony import */ var _ownerDocument__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
+
+function ownerWindow(node) {
+  var doc = Object(_ownerDocument__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(node);
+  return doc.defaultView || window;
+}
+
+/***/ }),
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10964,7 +11025,61 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 30 */
+/* 33 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _slicedToArray; });
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
+var arrayWithHoles = __webpack_require__(61);
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
+function _iterableToArrayLimit(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
+var unsupportedIterableToArray = __webpack_require__(39);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
+var nonIterableRest = __webpack_require__(62);
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js
+
+
+
+
+function _slicedToArray(arr, i) {
+  return Object(arrayWithHoles["a" /* default */])(arr) || _iterableToArrayLimit(arr, i) || Object(unsupportedIterableToArray["a" /* default */])(arr, i) || Object(nonIterableRest["a" /* default */])();
+}
+
+/***/ }),
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10980,7 +11095,7 @@ function _arrayLikeToArray(arr, len) {
 }
 
 /***/ }),
-/* 31 */
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10994,7 +11109,7 @@ function _assertThisInitialized(self) {
 }
 
 /***/ }),
-/* 32 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11007,7 +11122,7 @@ function isMuiElement(element, muiNames) {
 }
 
 /***/ }),
-/* 33 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11025,24 +11140,24 @@ if (false) {}
 /* harmony default export */ __webpack_exports__["a"] = (Tablelvl2Context);
 
 /***/ }),
-/* 34 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 if (true) {
-  module.exports = __webpack_require__(78);
+  module.exports = __webpack_require__(83);
 } else {}
 
 
 /***/ }),
-/* 35 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _unsupportedIterableToArray; });
-/* harmony import */ var _arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(30);
+/* harmony import */ var _arrayLikeToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(34);
 
 function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;
@@ -11054,7 +11169,7 @@ function _unsupportedIterableToArray(o, minLen) {
 }
 
 /***/ }),
-/* 36 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11072,7 +11187,7 @@ var zIndex = {
 /* harmony default export */ __webpack_exports__["a"] = (zIndex);
 
 /***/ }),
-/* 37 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11107,7 +11222,7 @@ function debounce(func) {
 }
 
 /***/ }),
-/* 38 */
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11121,7 +11236,7 @@ if (false) {}
 /* harmony default export */ __webpack_exports__["a"] = (ThemeContext);
 
 /***/ }),
-/* 39 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11129,17 +11244,17 @@ var hasSymbol = typeof Symbol === 'function' && Symbol.for;
 /* harmony default export */ __webpack_exports__["a"] = (hasSymbol ? Symbol.for('mui.nested') : '__THEME_NESTED__');
 
 /***/ }),
-/* 40 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _createMuiTheme__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(48);
+/* harmony import */ var _createMuiTheme__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(53);
 
 var defaultTheme = Object(_createMuiTheme__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])();
 /* harmony default export */ __webpack_exports__["a"] = (defaultTheme);
 
 /***/ }),
-/* 41 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11147,7 +11262,7 @@ var defaultTheme = Object(_createMuiTheme__WEBPACK_IMPORTED_MODULE_0__[/* defaul
 /* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _SvgIcon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(65);
+/* harmony import */ var _SvgIcon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(70);
 
 
 
@@ -11169,61 +11284,7 @@ function createSvgIcon(path, displayName) {
 }
 
 /***/ }),
-/* 42 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ _slicedToArray; });
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js
-var arrayWithHoles = __webpack_require__(56);
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
-function _iterableToArrayLimit(arr, i) {
-  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
-
-  try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
-    }
-  }
-
-  return _arr;
-}
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-var unsupportedIterableToArray = __webpack_require__(35);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js
-var nonIterableRest = __webpack_require__(57);
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js
-
-
-
-
-function _slicedToArray(arr, i) {
-  return Object(arrayWithHoles["a" /* default */])(arr) || _iterableToArrayLimit(arr, i) || Object(unsupportedIterableToArray["a" /* default */])(arr, i) || Object(nonIterableRest["a" /* default */])();
-}
-
-/***/ }),
-/* 43 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11241,7 +11302,8 @@ if (false) {}
 /* harmony default export */ __webpack_exports__["a"] = (ListContext);
 
 /***/ }),
-/* 44 */
+/* 47 */,
+/* 48 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11255,16 +11317,16 @@ if (false) {}
 /* unused harmony export cssTransition */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return toast; });
 /* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(13);
-/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(16);
+/* harmony import */ var _babel_runtime_helpers_esm_objectWithoutPropertiesLoose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
+/* harmony import */ var _babel_runtime_helpers_esm_inheritsLoose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(0);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(2);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(29);
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(32);
 /* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(81);
-/* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(82);
+/* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(87);
+/* harmony import */ var react_transition_group__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(88);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(8);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_8__);
 
@@ -12513,15 +12575,215 @@ eventManager.on(ACTION.DID_MOUNT, function (containerInstance) {
 
 
 /***/ }),
-/* 45 */,
-/* 46 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports,"__esModule",{value:!0});var elementWidth_1=__webpack_require__(86);function notEnoughChildren(state){var slidesToShow=state.slidesToShow;return state.totalItems<slidesToShow}function getInitialState(state,props){var flexBisis,domLoaded=state.domLoaded,slidesToShow=state.slidesToShow,containerWidth=state.containerWidth,itemWidth=state.itemWidth,deviceType=props.deviceType,responsive=props.responsive,ssr=props.ssr,partialVisbile=props.partialVisbile,partialVisible=props.partialVisible,domFullyLoaded=Boolean(domLoaded&&slidesToShow&&containerWidth&&itemWidth);ssr&&deviceType&&!domFullyLoaded&&(flexBisis=elementWidth_1.getWidthFromDeviceType(deviceType,responsive));var shouldRenderOnSSR=Boolean(ssr&&deviceType&&!domFullyLoaded&&flexBisis);return{shouldRenderOnSSR:shouldRenderOnSSR,flexBisis:flexBisis,domFullyLoaded:domFullyLoaded,partialVisibilityGutter:elementWidth_1.getPartialVisibilityGutter(responsive,partialVisbile||partialVisible,deviceType,state.deviceType),shouldRenderAtAll:shouldRenderOnSSR||domFullyLoaded}}function getIfSlideIsVisbile(index,state){var currentSlide=state.currentSlide,slidesToShow=state.slidesToShow;return currentSlide<=index&&index<currentSlide+slidesToShow}function getTransformForCenterMode(state,props,transformPlaceHolder){var transform=transformPlaceHolder||state.transform;return!props.infinite&&0===state.currentSlide||notEnoughChildren(state)?transform:transform+state.itemWidth/2}function isInLeftEnd(_a){return!(0<_a.currentSlide)}function isInRightEnd(_a){var currentSlide=_a.currentSlide,totalItems=_a.totalItems;return!(currentSlide+_a.slidesToShow<totalItems)}function getTransformForPartialVsibile(state,partialVisibilityGutter,props,transformPlaceHolder){void 0===partialVisibilityGutter&&(partialVisibilityGutter=0);var currentSlide=state.currentSlide,slidesToShow=state.slidesToShow,isRightEndReach=isInRightEnd(state),shouldRemoveRightGutter=!props.infinite&&isRightEndReach,baseTransform=transformPlaceHolder||state.transform;if(notEnoughChildren(state))return baseTransform;var transform=baseTransform+currentSlide*partialVisibilityGutter;return shouldRemoveRightGutter?transform+(state.containerWidth-(state.itemWidth-partialVisibilityGutter)*slidesToShow):transform}function getTransform(state,props,transformPlaceHolder){var partialVisbile=props.partialVisbile,partialVisible=props.partialVisible,responsive=props.responsive,deviceType=props.deviceType,centerMode=props.centerMode,transform=transformPlaceHolder||state.transform,partialVisibilityGutter=elementWidth_1.getPartialVisibilityGutter(responsive,partialVisbile||partialVisible,deviceType,state.deviceType);return partialVisible||partialVisbile?getTransformForPartialVsibile(state,partialVisibilityGutter,props,transformPlaceHolder):centerMode?getTransformForCenterMode(state,props,transformPlaceHolder):transform}function getSlidesToSlide(state,props){var domLoaded=state.domLoaded,slidesToShow=state.slidesToShow,containerWidth=state.containerWidth,itemWidth=state.itemWidth,deviceType=props.deviceType,responsive=props.responsive,slidesToScroll=props.slidesToSlide||1,domFullyLoaded=Boolean(domLoaded&&slidesToShow&&containerWidth&&itemWidth);return props.ssr&&props.deviceType&&!domFullyLoaded&&Object.keys(responsive).forEach(function(device){var slidesToSlide=responsive[device].slidesToSlide;deviceType===device&&slidesToSlide&&(slidesToScroll=slidesToSlide)}),domFullyLoaded&&Object.keys(responsive).forEach(function(item){var _a=responsive[item],breakpoint=_a.breakpoint,slidesToSlide=_a.slidesToSlide,max=breakpoint.max,min=breakpoint.min;slidesToSlide&&window.innerWidth>=min&&window.innerWidth<=max&&(slidesToScroll=slidesToSlide)}),slidesToScroll}exports.notEnoughChildren=notEnoughChildren,exports.getInitialState=getInitialState,exports.getIfSlideIsVisbile=getIfSlideIsVisbile,exports.getTransformForCenterMode=getTransformForCenterMode,exports.isInLeftEnd=isInLeftEnd,exports.isInRightEnd=isInRightEnd,exports.getTransformForPartialVsibile=getTransformForPartialVsibile,exports.getTransform=getTransform,exports.getSlidesToSlide=getSlidesToSlide;
+Object.defineProperty(exports,"__esModule",{value:!0});var elementWidth_1=__webpack_require__(94);function notEnoughChildren(state){var slidesToShow=state.slidesToShow;return state.totalItems<slidesToShow}function getInitialState(state,props){var flexBisis,domLoaded=state.domLoaded,slidesToShow=state.slidesToShow,containerWidth=state.containerWidth,itemWidth=state.itemWidth,deviceType=props.deviceType,responsive=props.responsive,ssr=props.ssr,partialVisbile=props.partialVisbile,partialVisible=props.partialVisible,domFullyLoaded=Boolean(domLoaded&&slidesToShow&&containerWidth&&itemWidth);ssr&&deviceType&&!domFullyLoaded&&(flexBisis=elementWidth_1.getWidthFromDeviceType(deviceType,responsive));var shouldRenderOnSSR=Boolean(ssr&&deviceType&&!domFullyLoaded&&flexBisis);return{shouldRenderOnSSR:shouldRenderOnSSR,flexBisis:flexBisis,domFullyLoaded:domFullyLoaded,partialVisibilityGutter:elementWidth_1.getPartialVisibilityGutter(responsive,partialVisbile||partialVisible,deviceType,state.deviceType),shouldRenderAtAll:shouldRenderOnSSR||domFullyLoaded}}function getIfSlideIsVisbile(index,state){var currentSlide=state.currentSlide,slidesToShow=state.slidesToShow;return currentSlide<=index&&index<currentSlide+slidesToShow}function getTransformForCenterMode(state,props,transformPlaceHolder){var transform=transformPlaceHolder||state.transform;return!props.infinite&&0===state.currentSlide||notEnoughChildren(state)?transform:transform+state.itemWidth/2}function isInLeftEnd(_a){return!(0<_a.currentSlide)}function isInRightEnd(_a){var currentSlide=_a.currentSlide,totalItems=_a.totalItems;return!(currentSlide+_a.slidesToShow<totalItems)}function getTransformForPartialVsibile(state,partialVisibilityGutter,props,transformPlaceHolder){void 0===partialVisibilityGutter&&(partialVisibilityGutter=0);var currentSlide=state.currentSlide,slidesToShow=state.slidesToShow,isRightEndReach=isInRightEnd(state),shouldRemoveRightGutter=!props.infinite&&isRightEndReach,baseTransform=transformPlaceHolder||state.transform;if(notEnoughChildren(state))return baseTransform;var transform=baseTransform+currentSlide*partialVisibilityGutter;return shouldRemoveRightGutter?transform+(state.containerWidth-(state.itemWidth-partialVisibilityGutter)*slidesToShow):transform}function getTransform(state,props,transformPlaceHolder){var partialVisbile=props.partialVisbile,partialVisible=props.partialVisible,responsive=props.responsive,deviceType=props.deviceType,centerMode=props.centerMode,transform=transformPlaceHolder||state.transform,partialVisibilityGutter=elementWidth_1.getPartialVisibilityGutter(responsive,partialVisbile||partialVisible,deviceType,state.deviceType);return partialVisible||partialVisbile?getTransformForPartialVsibile(state,partialVisibilityGutter,props,transformPlaceHolder):centerMode?getTransformForCenterMode(state,props,transformPlaceHolder):transform}function getSlidesToSlide(state,props){var domLoaded=state.domLoaded,slidesToShow=state.slidesToShow,containerWidth=state.containerWidth,itemWidth=state.itemWidth,deviceType=props.deviceType,responsive=props.responsive,slidesToScroll=props.slidesToSlide||1,domFullyLoaded=Boolean(domLoaded&&slidesToShow&&containerWidth&&itemWidth);return props.ssr&&props.deviceType&&!domFullyLoaded&&Object.keys(responsive).forEach(function(device){var slidesToSlide=responsive[device].slidesToSlide;deviceType===device&&slidesToSlide&&(slidesToScroll=slidesToSlide)}),domFullyLoaded&&Object.keys(responsive).forEach(function(item){var _a=responsive[item],breakpoint=_a.breakpoint,slidesToSlide=_a.slidesToSlide,max=breakpoint.max,min=breakpoint.min;slidesToSlide&&window.innerWidth>=min&&window.innerWidth<=max&&(slidesToScroll=slidesToSlide)}),slidesToScroll}exports.notEnoughChildren=notEnoughChildren,exports.getInitialState=getInitialState,exports.getIfSlideIsVisbile=getIfSlideIsVisbile,exports.getTransformForCenterMode=getTransformForCenterMode,exports.isInLeftEnd=isInLeftEnd,exports.isInRightEnd=isInRightEnd,exports.getTransformForPartialVsibile=getTransformForPartialVsibile,exports.getTransform=getTransform,exports.getSlidesToSlide=getSlidesToSlide;
 
 /***/ }),
-/* 47 */
+/* 50 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useControlled; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* eslint-disable react-hooks/rules-of-hooks, react-hooks/exhaustive-deps */
+
+function useControlled(_ref) {
+  var controlled = _ref.controlled,
+      defaultProp = _ref.default,
+      name = _ref.name,
+      _ref$state = _ref.state,
+      state = _ref$state === void 0 ? 'value' : _ref$state;
+
+  var _React$useRef = react__WEBPACK_IMPORTED_MODULE_0__["useRef"](controlled !== undefined),
+      isControlled = _React$useRef.current;
+
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__["useState"](defaultProp),
+      valueState = _React$useState[0],
+      setValue = _React$useState[1];
+
+  var value = isControlled ? controlled : valueState;
+
+  if (false) { var _React$useRef2, defaultValue; }
+
+  var setValueIfUncontrolled = react__WEBPACK_IMPORTED_MODULE_0__["useCallback"](function (newValue) {
+    if (!isControlled) {
+      setValue(newValue);
+    }
+  }, []);
+  return [value, setValueIfUncontrolled];
+}
+
+/***/ }),
+/* 51 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export teardown */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useIsFocusVisible; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+// based on https://github.com/WICG/focus-visible/blob/v4.1.5/src/focus-visible.js
+
+
+var hadKeyboardEvent = true;
+var hadFocusVisibleRecently = false;
+var hadFocusVisibleRecentlyTimeout = null;
+var inputTypesWhitelist = {
+  text: true,
+  search: true,
+  url: true,
+  tel: true,
+  email: true,
+  password: true,
+  number: true,
+  date: true,
+  month: true,
+  week: true,
+  time: true,
+  datetime: true,
+  'datetime-local': true
+};
+/**
+ * Computes whether the given element should automatically trigger the
+ * `focus-visible` class being added, i.e. whether it should always match
+ * `:focus-visible` when focused.
+ * @param {Element} node
+ * @return {boolean}
+ */
+
+function focusTriggersKeyboardModality(node) {
+  var type = node.type,
+      tagName = node.tagName;
+
+  if (tagName === 'INPUT' && inputTypesWhitelist[type] && !node.readOnly) {
+    return true;
+  }
+
+  if (tagName === 'TEXTAREA' && !node.readOnly) {
+    return true;
+  }
+
+  if (node.isContentEditable) {
+    return true;
+  }
+
+  return false;
+}
+/**
+ * Keep track of our keyboard modality state with `hadKeyboardEvent`.
+ * If the most recent user interaction was via the keyboard;
+ * and the key press did not include a meta, alt/option, or control key;
+ * then the modality is keyboard. Otherwise, the modality is not keyboard.
+ * @param {KeyboardEvent} event
+ */
+
+
+function handleKeyDown(event) {
+  if (event.metaKey || event.altKey || event.ctrlKey) {
+    return;
+  }
+
+  hadKeyboardEvent = true;
+}
+/**
+ * If at any point a user clicks with a pointing device, ensure that we change
+ * the modality away from keyboard.
+ * This avoids the situation where a user presses a key on an already focused
+ * element, and then clicks on a different element, focusing it with a
+ * pointing device, while we still think we're in keyboard modality.
+ */
+
+
+function handlePointerDown() {
+  hadKeyboardEvent = false;
+}
+
+function handleVisibilityChange() {
+  if (this.visibilityState === 'hidden') {
+    // If the tab becomes active again, the browser will handle calling focus
+    // on the element (Safari actually calls it twice).
+    // If this tab change caused a blur on an element with focus-visible,
+    // re-apply the class when the user switches back to the tab.
+    if (hadFocusVisibleRecently) {
+      hadKeyboardEvent = true;
+    }
+  }
+}
+
+function prepare(doc) {
+  doc.addEventListener('keydown', handleKeyDown, true);
+  doc.addEventListener('mousedown', handlePointerDown, true);
+  doc.addEventListener('pointerdown', handlePointerDown, true);
+  doc.addEventListener('touchstart', handlePointerDown, true);
+  doc.addEventListener('visibilitychange', handleVisibilityChange, true);
+}
+
+function teardown(doc) {
+  doc.removeEventListener('keydown', handleKeyDown, true);
+  doc.removeEventListener('mousedown', handlePointerDown, true);
+  doc.removeEventListener('pointerdown', handlePointerDown, true);
+  doc.removeEventListener('touchstart', handlePointerDown, true);
+  doc.removeEventListener('visibilitychange', handleVisibilityChange, true);
+}
+
+function isFocusVisible(event) {
+  var target = event.target;
+
+  try {
+    return target.matches(':focus-visible');
+  } catch (error) {} // browsers not implementing :focus-visible will throw a SyntaxError
+  // we use our own heuristic for those browsers
+  // rethrow might be better if it's not the expected error but do we really
+  // want to crash if focus-visible malfunctioned?
+  // no need for validFocusTarget check. the user does that by attaching it to
+  // focusable events only
+
+
+  return hadKeyboardEvent || focusTriggersKeyboardModality(target);
+}
+/**
+ * Should be called if a blur event is fired on a focus-visible element
+ */
+
+
+function handleBlurVisible() {
+  // To detect a tab/window switch, we look for a blur event followed
+  // rapidly by a visibility change.
+  // If we don't see a visibility change within 100ms, it's probably a
+  // regular focus change.
+  hadFocusVisibleRecently = true;
+  window.clearTimeout(hadFocusVisibleRecentlyTimeout);
+  hadFocusVisibleRecentlyTimeout = window.setTimeout(function () {
+    hadFocusVisibleRecently = false;
+  }, 100);
+}
+
+function useIsFocusVisible() {
+  var ref = react__WEBPACK_IMPORTED_MODULE_0__["useCallback"](function (instance) {
+    var node = react_dom__WEBPACK_IMPORTED_MODULE_1__["findDOMNode"](instance);
+
+    if (node != null) {
+      prepare(node.ownerDocument);
+    }
+  }, []);
+
+  if (false) {}
+
+  return {
+    isFocusVisible: isFocusVisible,
+    onBlurVisible: handleBlurVisible,
+    ref: ref
+  };
+}
+
+/***/ }),
+/* 52 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12530,7 +12792,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var elementWidth_1=__webp
 __webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ Context; });
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 5 modules
-var slicedToArray = __webpack_require__(26);
+var slicedToArray = __webpack_require__(27);
 
 // EXTERNAL MODULE: ./node_modules/react/index.js
 var react = __webpack_require__(0);
@@ -12628,19 +12890,19 @@ var Context = Object(react["createContext"])(initialState);
 /* harmony default export */ var stores_Store = __webpack_exports__["b"] = (Store_Store);
 
 /***/ }),
-/* 48 */
+/* 53 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(20);
+var defineProperty = __webpack_require__(14);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
 var objectWithoutProperties = __webpack_require__(3);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/utils/esm/deepmerge.js
-var deepmerge = __webpack_require__(247);
+var deepmerge = __webpack_require__(253);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
 var esm_extends = __webpack_require__(1);
@@ -13217,13 +13479,13 @@ var shape = {
 };
 /* harmony default export */ var styles_shape = (shape);
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 1 modules
-var slicedToArray = __webpack_require__(42);
+var slicedToArray = __webpack_require__(33);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 2 modules
-var toConsumableArray = __webpack_require__(15);
+var toConsumableArray = __webpack_require__(19);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
-var esm_typeof = __webpack_require__(22);
+var esm_typeof = __webpack_require__(24);
 
 // EXTERNAL MODULE: ./node_modules/prop-types/index.js
 var prop_types = __webpack_require__(2);
@@ -13581,7 +13843,7 @@ function formatMs(milliseconds) {
   }
 });
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/zIndex.js
-var zIndex = __webpack_require__(36);
+var zIndex = __webpack_require__(40);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/styles/createMuiTheme.js
 
@@ -13647,8 +13909,8 @@ function createMuiTheme() {
 /* harmony default export */ var styles_createMuiTheme = __webpack_exports__["a"] = (createMuiTheme);
 
 /***/ }),
-/* 49 */,
-/* 50 */
+/* 54 */,
+/* 55 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13666,10 +13928,10 @@ if (false) {}
 /* harmony default export */ __webpack_exports__["a"] = (TableContext);
 
 /***/ }),
-/* 51 */,
-/* 52 */,
-/* 53 */,
-/* 54 */
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13766,14 +14028,14 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 55 */
+/* 60 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GlobalHelper; });
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(48);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(16);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(17);
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(53);
 
 
 
@@ -13811,7 +14073,7 @@ var GlobalHelper = /*#__PURE__*/function () {
 
 
 /***/ }),
-/* 56 */
+/* 61 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13821,7 +14083,7 @@ function _arrayWithHoles(arr) {
 }
 
 /***/ }),
-/* 57 */
+/* 62 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13831,7 +14093,7 @@ function _nonIterableRest() {
 }
 
 /***/ }),
-/* 58 */
+/* 63 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13841,13 +14103,13 @@ function _iterableToArray(iter) {
 }
 
 /***/ }),
-/* 59 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var reactIs = __webpack_require__(34);
+var reactIs = __webpack_require__(38);
 
 /**
  * Copyright 2015, Yahoo! Inc.
@@ -13951,7 +14213,7 @@ module.exports = hoistNonReactStatics;
 
 
 /***/ }),
-/* 60 */
+/* 65 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13975,7 +14237,7 @@ function MainNavigation(props) {
 /* harmony default export */ __webpack_exports__["a"] = (MainNavigation);
 
 /***/ }),
-/* 61 */
+/* 66 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14003,13 +14265,13 @@ function Footer(props) {
 /* harmony default export */ __webpack_exports__["a"] = (Footer);
 
 /***/ }),
-/* 62 */
+/* 67 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CssSsrRemovalHelper; });
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(19);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(16);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(17);
 
 
 
@@ -14035,13 +14297,13 @@ var CssSsrRemovalHelper = /*#__PURE__*/function () {
 
 
 /***/ }),
-/* 63 */
+/* 68 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 5 modules
-var slicedToArray = __webpack_require__(26);
+var slicedToArray = __webpack_require__(27);
 
 // EXTERNAL MODULE: ./node_modules/react/index.js
 var react = __webpack_require__(0);
@@ -14060,19 +14322,19 @@ var prop_types = __webpack_require__(2);
 var clsx_m = __webpack_require__(4);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Input/Input.js
-var Input = __webpack_require__(248);
+var Input = __webpack_require__(254);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FilledInput/FilledInput.js
-var FilledInput = __webpack_require__(251);
+var FilledInput = __webpack_require__(257);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/OutlinedInput/OutlinedInput.js + 1 modules
-var OutlinedInput = __webpack_require__(269);
+var OutlinedInput = __webpack_require__(276);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/formControlState.js
-var formControlState = __webpack_require__(12);
+var formControlState = __webpack_require__(13);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/useFormControl.js
-var useFormControl = __webpack_require__(14);
+var useFormControl = __webpack_require__(18);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/withStyles.js + 21 modules
 var withStyles = __webpack_require__(6);
@@ -14310,13 +14572,13 @@ var InputLabel_InputLabel = react["forwardRef"](function InputLabel(props, ref) 
   name: 'MuiInputLabel'
 })(InputLabel_InputLabel));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/InputBase/utils.js
-var utils = __webpack_require__(25);
+var utils = __webpack_require__(26);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/isMuiElement.js
-var isMuiElement = __webpack_require__(32);
+var isMuiElement = __webpack_require__(36);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/FormControlContext.js
-var FormControlContext = __webpack_require__(24);
+var FormControlContext = __webpack_require__(25);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/FormControl/FormControl.js
 
@@ -14601,8 +14863,8 @@ var FormHelperText_FormHelperText = react["forwardRef"](function FormHelperText(
 /* harmony default export */ var esm_FormHelperText_FormHelperText = (Object(withStyles["a" /* default */])(FormHelperText_styles, {
   name: 'MuiFormHelperText'
 })(FormHelperText_FormHelperText));
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Select/Select.js + 21 modules
-var Select = __webpack_require__(268);
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Select/Select.js + 14 modules
+var Select = __webpack_require__(275);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/TextField/TextField.js
 
@@ -14780,7 +15042,7 @@ var TextField_TextField = react["forwardRef"](function TextField(props, ref) {
   name: 'MuiTextField'
 })(TextField_TextField));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Button/Button.js
-var Button = __webpack_require__(253);
+var Button = __webpack_require__(260);
 
 // CONCATENATED MODULE: ./src/shared/components/LanguageSwitcher/LanguageSwitcher.js
 
@@ -14865,14 +15127,14 @@ function Header(props) {
 /* harmony default export */ var Header_Header = __webpack_exports__["a"] = (Header);
 
 /***/ }),
-/* 64 */
+/* 69 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useTheme; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _ThemeContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(38);
+/* harmony import */ var _ThemeContext__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(42);
 
 
 function useTheme() {
@@ -14884,7 +15146,7 @@ function useTheme() {
 }
 
 /***/ }),
-/* 65 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -14995,7 +15257,7 @@ SvgIcon.muiName = 'SvgIcon';
 })(SvgIcon));
 
 /***/ }),
-/* 66 */
+/* 71 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15018,10 +15280,10 @@ var prop_types = __webpack_require__(2);
 var clsx_m = __webpack_require__(4);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/formControlState.js
-var formControlState = __webpack_require__(12);
+var formControlState = __webpack_require__(13);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/FormControlContext.js
-var FormControlContext = __webpack_require__(24);
+var FormControlContext = __webpack_require__(25);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/withStyles.js + 21 modules
 var withStyles = __webpack_require__(6);
@@ -15033,7 +15295,7 @@ var capitalize = __webpack_require__(7);
 var useForkRef = __webpack_require__(9);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/debounce.js
-var debounce = __webpack_require__(37);
+var debounce = __webpack_require__(41);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/TextareaAutosize/TextareaAutosize.js
 
@@ -15195,7 +15457,7 @@ var TextareaAutosize_TextareaAutosize = react["forwardRef"](function TextareaAut
  false ? undefined : void 0;
 /* harmony default export */ var esm_TextareaAutosize_TextareaAutosize = (TextareaAutosize_TextareaAutosize);
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/InputBase/utils.js
-var utils = __webpack_require__(25);
+var utils = __webpack_require__(26);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/InputBase/InputBase.js
 
@@ -15653,12 +15915,12 @@ var InputBase_InputBase = react["forwardRef"](function InputBase(props, ref) {
 })(InputBase_InputBase));
 
 /***/ }),
-/* 67 */,
-/* 68 */,
-/* 69 */,
-/* 70 */,
-/* 71 */,
-/* 72 */
+/* 72 */,
+/* 73 */,
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15671,7 +15933,7 @@ var InputBase_InputBase = react["forwardRef"](function InputBase(props, ref) {
  * LICENSE file in the root directory of this source tree.
  */
 
-var l=__webpack_require__(54),n="function"===typeof Symbol&&Symbol.for,p=n?Symbol.for("react.element"):60103,q=n?Symbol.for("react.portal"):60106,r=n?Symbol.for("react.fragment"):60107,t=n?Symbol.for("react.strict_mode"):60108,u=n?Symbol.for("react.profiler"):60114,v=n?Symbol.for("react.provider"):60109,w=n?Symbol.for("react.context"):60110,x=n?Symbol.for("react.forward_ref"):60112,y=n?Symbol.for("react.suspense"):60113,z=n?Symbol.for("react.memo"):60115,A=n?Symbol.for("react.lazy"):
+var l=__webpack_require__(59),n="function"===typeof Symbol&&Symbol.for,p=n?Symbol.for("react.element"):60103,q=n?Symbol.for("react.portal"):60106,r=n?Symbol.for("react.fragment"):60107,t=n?Symbol.for("react.strict_mode"):60108,u=n?Symbol.for("react.profiler"):60114,v=n?Symbol.for("react.provider"):60109,w=n?Symbol.for("react.context"):60110,x=n?Symbol.for("react.forward_ref"):60112,y=n?Symbol.for("react.suspense"):60113,z=n?Symbol.for("react.memo"):60115,A=n?Symbol.for("react.lazy"):
 60116,B="function"===typeof Symbol&&Symbol.iterator;function C(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return"Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}
 var D={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}},E={};function F(a,b,c){this.props=a;this.context=b;this.refs=E;this.updater=c||D}F.prototype.isReactComponent={};F.prototype.setState=function(a,b){if("object"!==typeof a&&"function"!==typeof a&&null!=a)throw Error(C(85));this.updater.enqueueSetState(this,a,b,"setState")};F.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate")};
 function G(){}G.prototype=F.prototype;function H(a,b,c){this.props=a;this.context=b;this.refs=E;this.updater=c||D}var I=H.prototype=new G;I.constructor=H;l(I,F.prototype);I.isPureReactComponent=!0;var J={current:null},K=Object.prototype.hasOwnProperty,L={key:!0,ref:!0,__self:!0,__source:!0};
@@ -15690,7 +15952,7 @@ exports.useLayoutEffect=function(a,b){return Z().useLayoutEffect(a,b)};exports.u
 
 
 /***/ }),
-/* 73 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15706,7 +15968,7 @@ exports.useLayoutEffect=function(a,b){return Z().useLayoutEffect(a,b)};exports.u
 /*
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(0),n=__webpack_require__(54),r=__webpack_require__(74);function u(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return"Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}if(!aa)throw Error(u(227));
+var aa=__webpack_require__(0),n=__webpack_require__(59),r=__webpack_require__(79);function u(a){for(var b="https://reactjs.org/docs/error-decoder.html?invariant="+a,c=1;c<arguments.length;c++)b+="&args[]="+encodeURIComponent(arguments[c]);return"Minified React error #"+a+"; visit "+b+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings."}if(!aa)throw Error(u(227));
 function ba(a,b,c,d,e,f,g,h,k){var l=Array.prototype.slice.call(arguments,3);try{b.apply(c,l)}catch(m){this.onError(m)}}var da=!1,ea=null,fa=!1,ha=null,ia={onError:function(a){da=!0;ea=a}};function ja(a,b,c,d,e,f,g,h,k){da=!1;ea=null;ba.apply(ia,arguments)}function ka(a,b,c,d,e,f,g,h,k){ja.apply(this,arguments);if(da){if(da){var l=ea;da=!1;ea=null}else throw Error(u(198));fa||(fa=!0,ha=l)}}var la=null,ma=null,na=null;
 function oa(a,b,c){var d=a.type||"unknown-event";a.currentTarget=na(c);ka(d,b,void 0,a);a.currentTarget=null}var pa=null,qa={};
 function ra(){if(pa)for(var a in qa){var b=qa[a],c=pa.indexOf(a);if(!(-1<c))throw Error(u(96,a));if(!sa[c]){if(!b.extractEvents)throw Error(u(97,a));sa[c]=b;c=b.eventTypes;for(var d in c){var e=void 0;var f=c[d],g=b,h=d;if(ta.hasOwnProperty(h))throw Error(u(99,h));ta[h]=f;var k=f.phasedRegistrationNames;if(k){for(e in k)k.hasOwnProperty(e)&&ua(k[e],g,h);e=!0}else f.registrationName?(ua(f.registrationName,g,h),e=!0):e=!1;if(!e)throw Error(u(98,d,a));}}}}
@@ -15989,19 +16251,19 @@ exports.unstable_renderSubtreeIntoContainer=function(a,b,c,d){if(!gk(c))throw Er
 
 
 /***/ }),
-/* 74 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 if (true) {
-  module.exports = __webpack_require__(75);
+  module.exports = __webpack_require__(80);
 } else {}
 
 
 /***/ }),
-/* 75 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16029,7 +16291,7 @@ exports.unstable_shouldYield=function(){var a=exports.unstable_now();V(a);var b=
 
 
 /***/ }),
-/* 76 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16042,7 +16304,7 @@ exports.unstable_shouldYield=function(){var a=exports.unstable_now();V(a);var b=
 
 
 
-var ReactPropTypesSecret = __webpack_require__(77);
+var ReactPropTypesSecret = __webpack_require__(82);
 
 function emptyFunction() {}
 function emptyFunctionWithReset() {}
@@ -16100,7 +16362,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 77 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16119,7 +16381,7 @@ module.exports = ReactPropTypesSecret;
 
 
 /***/ }),
-/* 78 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16141,14 +16403,40 @@ exports.isValidElementType=function(a){return"string"===typeof a||"function"===t
 
 
 /***/ }),
-/* 79 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 function getOriginalCounterPart(index,_a,childrenArr){var slidesToShow=_a.slidesToShow,currentSlide=_a.currentSlide;return childrenArr.length>2*slidesToShow?index+2*slidesToShow:currentSlide>=childrenArr.length?childrenArr.length+index:index}function getOriginalIndexLookupTableByClones(slidesToShow,childrenArr){if(childrenArr.length>2*slidesToShow){for(var table={},firstBeginningOfClones=childrenArr.length-2*slidesToShow,firstEndOfClones=childrenArr.length-firstBeginningOfClones,firstCount=firstBeginningOfClones,i=0;i<firstEndOfClones;i++)table[i]=firstCount,firstCount++;var secondBeginningOfClones=childrenArr.length+firstEndOfClones,secondEndOfClones=secondBeginningOfClones+childrenArr.slice(0,2*slidesToShow).length,secondCount=0;for(i=secondBeginningOfClones;i<=secondEndOfClones;i++)table[i]=secondCount,secondCount++;var originalEnd=secondBeginningOfClones,originalCounter=0;for(i=firstEndOfClones;i<originalEnd;i++)table[i]=originalCounter,originalCounter++;return table}table={};var totalSlides=3*childrenArr.length,count=0;for(i=0;i<totalSlides;i++)table[i]=count,++count===childrenArr.length&&(count=0);return table}function getClones(slidesToShow,childrenArr){return childrenArr.length<slidesToShow?childrenArr:childrenArr.length>2*slidesToShow?childrenArr.slice(childrenArr.length-2*slidesToShow,childrenArr.length).concat(childrenArr,childrenArr.slice(0,2*slidesToShow)):childrenArr.concat(childrenArr,childrenArr)}function getInitialSlideInInfiniteMode(slidesToShow,childrenArr){return childrenArr.length>2*slidesToShow?2*slidesToShow:childrenArr.length}function checkClonesPosition(_a,childrenArr,props){var isReachingTheEnd,currentSlide=_a.currentSlide,slidesToShow=_a.slidesToShow,itemWidth=_a.itemWidth,totalItems=_a.totalItems,nextSlide=0,nextPosition=0,isReachingTheStart=0===currentSlide,originalFirstSlide=childrenArr.length-(childrenArr.length-2*slidesToShow);return childrenArr.length<slidesToShow?(nextPosition=nextSlide=0,isReachingTheStart=isReachingTheEnd=!1):childrenArr.length>2*slidesToShow?((isReachingTheEnd=currentSlide>=originalFirstSlide+childrenArr.length)&&(nextPosition=-itemWidth*(nextSlide=currentSlide-childrenArr.length)),isReachingTheStart&&(nextPosition=-itemWidth*(nextSlide=originalFirstSlide+(childrenArr.length-2*slidesToShow)))):((isReachingTheEnd=currentSlide>=2*childrenArr.length)&&(nextPosition=-itemWidth*(nextSlide=currentSlide-childrenArr.length)),isReachingTheStart&&(nextPosition=props.showDots?-itemWidth*(nextSlide=childrenArr.length):-itemWidth*(nextSlide=totalItems-2*slidesToShow))),{isReachingTheEnd:isReachingTheEnd,isReachingTheStart:isReachingTheStart,nextSlide:nextSlide,nextPosition:nextPosition}}Object.defineProperty(exports,"__esModule",{value:!0}),exports.getOriginalCounterPart=getOriginalCounterPart,exports.getOriginalIndexLookupTableByClones=getOriginalIndexLookupTableByClones,exports.getClones=getClones,exports.getInitialSlideInInfiniteMode=getInitialSlideInInfiniteMode,exports.checkClonesPosition=checkClonesPosition;
 
 /***/ }),
-/* 80 */
+/* 85 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || new Function("return this")();
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 86 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16177,170 +16465,19 @@ var clsx_m = __webpack_require__(4);
 var useForkRef = __webpack_require__(9);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useEventCallback.js
-var useEventCallback = __webpack_require__(17);
+var useEventCallback = __webpack_require__(22);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/withStyles.js + 21 modules
 var withStyles = __webpack_require__(6);
 
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/utils/useIsFocusVisible.js
-// based on https://github.com/WICG/focus-visible/blob/v4.1.5/src/focus-visible.js
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useIsFocusVisible.js
+var useIsFocusVisible = __webpack_require__(51);
 
-
-var hadKeyboardEvent = true;
-var hadFocusVisibleRecently = false;
-var hadFocusVisibleRecentlyTimeout = null;
-var inputTypesWhitelist = {
-  text: true,
-  search: true,
-  url: true,
-  tel: true,
-  email: true,
-  password: true,
-  number: true,
-  date: true,
-  month: true,
-  week: true,
-  time: true,
-  datetime: true,
-  'datetime-local': true
-};
-/**
- * Computes whether the given element should automatically trigger the
- * `focus-visible` class being added, i.e. whether it should always match
- * `:focus-visible` when focused.
- * @param {Element} node
- * @return {boolean}
- */
-
-function focusTriggersKeyboardModality(node) {
-  var type = node.type,
-      tagName = node.tagName;
-
-  if (tagName === 'INPUT' && inputTypesWhitelist[type] && !node.readOnly) {
-    return true;
-  }
-
-  if (tagName === 'TEXTAREA' && !node.readOnly) {
-    return true;
-  }
-
-  if (node.isContentEditable) {
-    return true;
-  }
-
-  return false;
-}
-/**
- * Keep track of our keyboard modality state with `hadKeyboardEvent`.
- * If the most recent user interaction was via the keyboard;
- * and the key press did not include a meta, alt/option, or control key;
- * then the modality is keyboard. Otherwise, the modality is not keyboard.
- * @param {KeyboardEvent} event
- */
-
-
-function useIsFocusVisible_handleKeyDown(event) {
-  if (event.metaKey || event.altKey || event.ctrlKey) {
-    return;
-  }
-
-  hadKeyboardEvent = true;
-}
-/**
- * If at any point a user clicks with a pointing device, ensure that we change
- * the modality away from keyboard.
- * This avoids the situation where a user presses a key on an already focused
- * element, and then clicks on a different element, focusing it with a
- * pointing device, while we still think we're in keyboard modality.
- */
-
-
-function handlePointerDown() {
-  hadKeyboardEvent = false;
-}
-
-function handleVisibilityChange() {
-  if (this.visibilityState === 'hidden') {
-    // If the tab becomes active again, the browser will handle calling focus
-    // on the element (Safari actually calls it twice).
-    // If this tab change caused a blur on an element with focus-visible,
-    // re-apply the class when the user switches back to the tab.
-    if (hadFocusVisibleRecently) {
-      hadKeyboardEvent = true;
-    }
-  }
-}
-
-function prepare(doc) {
-  doc.addEventListener('keydown', useIsFocusVisible_handleKeyDown, true);
-  doc.addEventListener('mousedown', handlePointerDown, true);
-  doc.addEventListener('pointerdown', handlePointerDown, true);
-  doc.addEventListener('touchstart', handlePointerDown, true);
-  doc.addEventListener('visibilitychange', handleVisibilityChange, true);
-}
-
-function teardown(doc) {
-  doc.removeEventListener('keydown', useIsFocusVisible_handleKeyDown, true);
-  doc.removeEventListener('mousedown', handlePointerDown, true);
-  doc.removeEventListener('pointerdown', handlePointerDown, true);
-  doc.removeEventListener('touchstart', handlePointerDown, true);
-  doc.removeEventListener('visibilitychange', handleVisibilityChange, true);
-}
-
-function useIsFocusVisible_isFocusVisible(event) {
-  var target = event.target;
-
-  try {
-    return target.matches(':focus-visible');
-  } catch (error) {} // browsers not implementing :focus-visible will throw a SyntaxError
-  // we use our own heuristic for those browsers
-  // rethrow might be better if it's not the expected error but do we really
-  // want to crash if focus-visible malfunctioned?
-  // no need for validFocusTarget check. the user does that by attaching it to
-  // focusable events only
-
-
-  return hadKeyboardEvent || focusTriggersKeyboardModality(target);
-}
-/**
- * Should be called if a blur event is fired on a focus-visible element
- */
-
-
-function handleBlurVisible() {
-  // To detect a tab/window switch, we look for a blur event followed
-  // rapidly by a visibility change.
-  // If we don't see a visibility change within 100ms, it's probably a
-  // regular focus change.
-  hadFocusVisibleRecently = true;
-  window.clearTimeout(hadFocusVisibleRecentlyTimeout);
-  hadFocusVisibleRecentlyTimeout = window.setTimeout(function () {
-    hadFocusVisibleRecently = false;
-  }, 100);
-}
-
-function useIsFocusVisible() {
-  var ref = react["useCallback"](function (instance) {
-    var node = react_dom["findDOMNode"](instance);
-
-    if (node != null) {
-      prepare(node.ownerDocument);
-    }
-  }, []);
-
-  if (false) {}
-
-  return {
-    isFocusVisible: useIsFocusVisible_isFocusVisible,
-    onBlurVisible: handleBlurVisible,
-    ref: ref
-  };
-}
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 2 modules
-var toConsumableArray = __webpack_require__(15);
+var toConsumableArray = __webpack_require__(19);
 
 // EXTERNAL MODULE: ./node_modules/react-transition-group/esm/TransitionGroup.js + 1 modules
-var TransitionGroup = __webpack_require__(82);
+var TransitionGroup = __webpack_require__(88);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/ButtonBase/Ripple.js
 
@@ -16816,7 +16953,7 @@ var ButtonBase_ButtonBase = react["forwardRef"](function ButtonBase(props, ref) 
     setFocusVisible(false);
   }
 
-  var _useIsFocusVisible = useIsFocusVisible(),
+  var _useIsFocusVisible = Object(useIsFocusVisible["a" /* default */])(),
       isFocusVisible = _useIsFocusVisible.isFocusVisible,
       onBlurVisible = _useIsFocusVisible.onBlurVisible,
       focusVisibleRef = _useIsFocusVisible.ref;
@@ -17018,7 +17155,7 @@ var ButtonBase_ButtonBase = react["forwardRef"](function ButtonBase(props, ref) 
 })(ButtonBase_ButtonBase));
 
 /***/ }),
-/* 81 */
+/* 87 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17026,10 +17163,10 @@ var ButtonBase_ButtonBase = react["forwardRef"](function ButtonBase(props, ref) 
 // UNUSED EXPORTS: UNMOUNTED, EXITED, ENTERING, ENTERED, EXITING
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
-var objectWithoutPropertiesLoose = __webpack_require__(13);
+var objectWithoutPropertiesLoose = __webpack_require__(15);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
-var inheritsLoose = __webpack_require__(16);
+var inheritsLoose = __webpack_require__(21);
 
 // EXTERNAL MODULE: ./node_modules/prop-types/index.js
 var prop_types = __webpack_require__(2);
@@ -17047,7 +17184,7 @@ var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
   disabled: false
 });
 // EXTERNAL MODULE: ./node_modules/react-transition-group/esm/TransitionGroupContext.js
-var TransitionGroupContext = __webpack_require__(28);
+var TransitionGroupContext = __webpack_require__(30);
 
 // CONCATENATED MODULE: ./node_modules/react-transition-group/esm/Transition.js
 
@@ -17482,22 +17619,22 @@ Transition_Transition.EXITING = EXITING;
 /* harmony default export */ var esm_Transition = __webpack_exports__["a"] = (Transition_Transition);
 
 /***/ }),
-/* 82 */
+/* 88 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
-var objectWithoutPropertiesLoose = __webpack_require__(13);
+var objectWithoutPropertiesLoose = __webpack_require__(15);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
 var esm_extends = __webpack_require__(1);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js
-var assertThisInitialized = __webpack_require__(31);
+var assertThisInitialized = __webpack_require__(35);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
-var inheritsLoose = __webpack_require__(16);
+var inheritsLoose = __webpack_require__(21);
 
 // EXTERNAL MODULE: ./node_modules/prop-types/index.js
 var prop_types = __webpack_require__(2);
@@ -17507,7 +17644,7 @@ var react = __webpack_require__(0);
 var react_default = /*#__PURE__*/__webpack_require__.n(react);
 
 // EXTERNAL MODULE: ./node_modules/react-transition-group/esm/TransitionGroupContext.js
-var TransitionGroupContext = __webpack_require__(28);
+var TransitionGroupContext = __webpack_require__(30);
 
 // CONCATENATED MODULE: ./node_modules/react-transition-group/esm/utils/ChildMapping.js
 
@@ -17785,23 +17922,25 @@ TransitionGroup_TransitionGroup.defaultProps = defaultProps;
 /* harmony default export */ var esm_TransitionGroup = __webpack_exports__["a"] = (TransitionGroup_TransitionGroup);
 
 /***/ }),
-/* 83 */,
-/* 84 */,
-/* 85 */
+/* 89 */,
+/* 90 */,
+/* 91 */,
+/* 92 */,
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports,"__esModule",{value:!0});var clones_1=__webpack_require__(79);exports.getOriginalCounterPart=clones_1.getOriginalCounterPart,exports.getClones=clones_1.getClones,exports.checkClonesPosition=clones_1.checkClonesPosition,exports.getInitialSlideInInfiniteMode=clones_1.getInitialSlideInInfiniteMode;var elementWidth_1=__webpack_require__(86);exports.getWidthFromDeviceType=elementWidth_1.getWidthFromDeviceType,exports.getPartialVisibilityGutter=elementWidth_1.getPartialVisibilityGutter,exports.getItemClientSideWidth=elementWidth_1.getItemClientSideWidth;var common_1=__webpack_require__(46);exports.getInitialState=common_1.getInitialState,exports.getIfSlideIsVisbile=common_1.getIfSlideIsVisbile,exports.getTransformForCenterMode=common_1.getTransformForCenterMode,exports.getTransformForPartialVsibile=common_1.getTransformForPartialVsibile,exports.isInLeftEnd=common_1.isInLeftEnd,exports.isInRightEnd=common_1.isInRightEnd,exports.notEnoughChildren=common_1.notEnoughChildren,exports.getSlidesToSlide=common_1.getSlidesToSlide;var throttle_1=__webpack_require__(256);exports.throttle=throttle_1.default;var throwError_1=__webpack_require__(257);exports.throwError=throwError_1.default;var next_1=__webpack_require__(258);exports.populateNextSlides=next_1.populateNextSlides;var previous_1=__webpack_require__(259);exports.populatePreviousSlides=previous_1.populatePreviousSlides;var mouseOrTouchMove_1=__webpack_require__(260);exports.populateSlidesOnMouseTouchMove=mouseOrTouchMove_1.populateSlidesOnMouseTouchMove;
+Object.defineProperty(exports,"__esModule",{value:!0});var clones_1=__webpack_require__(84);exports.getOriginalCounterPart=clones_1.getOriginalCounterPart,exports.getClones=clones_1.getClones,exports.checkClonesPosition=clones_1.checkClonesPosition,exports.getInitialSlideInInfiniteMode=clones_1.getInitialSlideInInfiniteMode;var elementWidth_1=__webpack_require__(94);exports.getWidthFromDeviceType=elementWidth_1.getWidthFromDeviceType,exports.getPartialVisibilityGutter=elementWidth_1.getPartialVisibilityGutter,exports.getItemClientSideWidth=elementWidth_1.getItemClientSideWidth;var common_1=__webpack_require__(49);exports.getInitialState=common_1.getInitialState,exports.getIfSlideIsVisbile=common_1.getIfSlideIsVisbile,exports.getTransformForCenterMode=common_1.getTransformForCenterMode,exports.getTransformForPartialVsibile=common_1.getTransformForPartialVsibile,exports.isInLeftEnd=common_1.isInLeftEnd,exports.isInRightEnd=common_1.isInRightEnd,exports.notEnoughChildren=common_1.notEnoughChildren,exports.getSlidesToSlide=common_1.getSlidesToSlide;var throttle_1=__webpack_require__(263);exports.throttle=throttle_1.default;var throwError_1=__webpack_require__(264);exports.throwError=throwError_1.default;var next_1=__webpack_require__(265);exports.populateNextSlides=next_1.populateNextSlides;var previous_1=__webpack_require__(266);exports.populatePreviousSlides=previous_1.populatePreviousSlides;var mouseOrTouchMove_1=__webpack_require__(267);exports.populateSlidesOnMouseTouchMove=mouseOrTouchMove_1.populateSlidesOnMouseTouchMove;
 
 /***/ }),
-/* 86 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;function getPartialVisibilityGutter(responsive,partialVisible,serverSideDeviceType,clientSideDeviceType){var gutter=0,deviceType=clientSideDeviceType||serverSideDeviceType;return partialVisible&&deviceType&&(!hasWarnAboutTypo&&"production"!=="production"&&responsive[deviceType].paritialVisibilityGutter&&(hasWarnAboutTypo=!0,console.warn("You appear to be using paritialVisibilityGutter instead of partialVisibilityGutter which will be moved to partialVisibilityGutter in the future completely")),gutter=responsive[deviceType].partialVisibilityGutter||responsive[deviceType].paritialVisibilityGutter),gutter}function getWidthFromDeviceType(deviceType,responsive){var itemWidth;responsive[deviceType]&&(itemWidth=(100/responsive[deviceType].items).toFixed(1));return itemWidth}function getItemClientSideWidth(props,slidesToShow,containerWidth){return Math.round(containerWidth/(slidesToShow+(props.centerMode?1:0)))}exports.getPartialVisibilityGutter=getPartialVisibilityGutter,exports.getWidthFromDeviceType=getWidthFromDeviceType,exports.getItemClientSideWidth=getItemClientSideWidth;
 
 /***/ }),
-/* 87 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -17887,7 +18026,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 88 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18091,7 +18230,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 89 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18262,7 +18401,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 90 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18331,7 +18470,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 91 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18517,7 +18656,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 92 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18587,7 +18726,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 93 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18706,7 +18845,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 94 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18775,7 +18914,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 95 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -18891,7 +19030,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 96 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19047,7 +19186,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 97 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19147,7 +19286,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 98 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19213,7 +19352,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 99 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19346,7 +19485,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 100 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19483,7 +19622,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 101 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19663,7 +19802,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 102 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19827,7 +19966,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 103 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -19939,7 +20078,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 104 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20125,7 +20264,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 105 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20202,7 +20341,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 106 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20314,7 +20453,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 107 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20382,7 +20521,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 108 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20472,7 +20611,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 109 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20563,7 +20702,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 110 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20651,7 +20790,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 111 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20756,7 +20895,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 112 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20875,7 +21014,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 113 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -20958,7 +21097,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 114 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21037,7 +21176,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 115 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21120,7 +21259,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 116 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21203,7 +21342,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 117 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21282,7 +21421,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 118 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21365,7 +21504,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 119 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21448,7 +21587,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 120 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21531,7 +21670,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 121 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21614,7 +21753,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 122 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21733,7 +21872,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 123 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21850,7 +21989,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 124 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -21969,7 +22108,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 125 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22062,7 +22201,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 126 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22140,7 +22279,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 127 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22265,7 +22404,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 128 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22400,7 +22539,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 129 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22473,7 +22612,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 130 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22544,7 +22683,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 131 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22637,7 +22776,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 132 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22721,7 +22860,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 133 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22809,7 +22948,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 134 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -22901,7 +23040,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 135 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23011,7 +23150,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 136 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23121,7 +23260,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 137 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23210,7 +23349,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 138 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23349,7 +23488,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 139 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23488,7 +23627,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 140 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23624,7 +23763,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 141 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23733,7 +23872,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 142 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -23867,7 +24006,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 143 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24036,7 +24175,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 144 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24167,7 +24306,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 145 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24274,7 +24413,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 146 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24365,7 +24504,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 147 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24519,7 +24658,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 148 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24640,7 +24779,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 149 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24719,7 +24858,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 150 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24882,7 +25021,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 151 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -24973,7 +25112,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 152 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25080,7 +25219,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 153 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25177,7 +25316,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 154 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25294,7 +25433,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 155 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25432,7 +25571,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 156 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25522,7 +25661,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 157 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25655,7 +25794,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 158 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25754,7 +25893,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 159 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25904,7 +26043,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 160 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -25984,7 +26123,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 161 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26122,7 +26261,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 162 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26230,7 +26369,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 163 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26363,7 +26502,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 164 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26437,7 +26576,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 165 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26538,7 +26677,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 166 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26633,7 +26772,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 167 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26747,7 +26886,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 168 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -26964,7 +27103,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 169 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27054,7 +27193,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 170 */
+/* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27145,7 +27284,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 171 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27215,7 +27354,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 172 */
+/* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27321,7 +27460,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 173 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27395,7 +27534,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 174 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27530,7 +27669,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 175 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27647,7 +27786,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 176 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27764,7 +27903,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 177 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27837,7 +27976,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 178 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -27935,7 +28074,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 179 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28071,7 +28210,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 180 */
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28215,7 +28354,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 181 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28290,7 +28429,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 182 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28361,7 +28500,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 183 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28448,7 +28587,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 184 */
+/* 192 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28666,7 +28805,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 185 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28762,7 +28901,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 186 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28834,7 +28973,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 187 */
+/* 195 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -28917,7 +29056,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 188 */
+/* 196 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29076,7 +29215,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 189 */
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29261,7 +29400,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 190 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29341,7 +29480,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 191 */
+/* 199 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29473,7 +29612,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 192 */
+/* 200 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29603,7 +29742,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 193 */
+/* 201 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29701,7 +29840,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 194 */
+/* 202 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29784,7 +29923,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 195 */
+/* 203 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29853,7 +29992,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 196 */
+/* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -29997,7 +30136,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 197 */
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30098,7 +30237,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 198 */
+/* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30181,7 +30320,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 199 */
+/* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30307,7 +30446,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 200 */
+/* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30384,7 +30523,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 201 */
+/* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30456,7 +30595,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 202 */
+/* 210 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30596,7 +30735,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 203 */
+/* 211 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30715,7 +30854,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 204 */
+/* 212 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30819,7 +30958,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 205 */
+/* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30887,7 +31026,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 206 */
+/* 214 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -30955,7 +31094,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 207 */
+/* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js language configuration
@@ -31080,7 +31219,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 208 */
+/* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31258,7 +31397,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 209 */
+/* 217 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31355,7 +31494,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 210 */
+/* 218 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31421,7 +31560,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 211 */
+/* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31489,7 +31628,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 212 */
+/* 220 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31581,7 +31720,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 213 */
+/* 221 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31667,7 +31806,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 214 */
+/* 222 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31735,7 +31874,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 215 */
+/* 223 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31868,7 +32007,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 216 */
+/* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -31984,7 +32123,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 217 */
+/* 225 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32099,7 +32238,7 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 218 */
+/* 226 */
 /***/ (function(module, exports, __webpack_require__) {
 
 //! moment.js locale configuration
@@ -32213,15 +32352,2638 @@ Object.defineProperty(exports,"__esModule",{value:!0});var hasWarnAboutTypo=!1;f
 
 
 /***/ }),
-/* 219 */
+/* 227 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(254);
+module.exports = __webpack_require__(261);
 
 
 /***/ }),
-/* 220 */,
-/* 221 */
+/* 228 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {/**!
+ * @fileOverview Kickass library to create and place poppers near their reference elements.
+ * @version 1.16.1
+ * @license
+ * Copyright (c) 2016 Federico Zivolo and contributors
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+var isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined' && typeof navigator !== 'undefined';
+
+var timeoutDuration = function () {
+  var longerTimeoutBrowsers = ['Edge', 'Trident', 'Firefox'];
+  for (var i = 0; i < longerTimeoutBrowsers.length; i += 1) {
+    if (isBrowser && navigator.userAgent.indexOf(longerTimeoutBrowsers[i]) >= 0) {
+      return 1;
+    }
+  }
+  return 0;
+}();
+
+function microtaskDebounce(fn) {
+  var called = false;
+  return function () {
+    if (called) {
+      return;
+    }
+    called = true;
+    window.Promise.resolve().then(function () {
+      called = false;
+      fn();
+    });
+  };
+}
+
+function taskDebounce(fn) {
+  var scheduled = false;
+  return function () {
+    if (!scheduled) {
+      scheduled = true;
+      setTimeout(function () {
+        scheduled = false;
+        fn();
+      }, timeoutDuration);
+    }
+  };
+}
+
+var supportsMicroTasks = isBrowser && window.Promise;
+
+/**
+* Create a debounced version of a method, that's asynchronously deferred
+* but called in the minimum time possible.
+*
+* @method
+* @memberof Popper.Utils
+* @argument {Function} fn
+* @returns {Function}
+*/
+var debounce = supportsMicroTasks ? microtaskDebounce : taskDebounce;
+
+/**
+ * Check if the given variable is a function
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Any} functionToCheck - variable to check
+ * @returns {Boolean} answer to: is a function?
+ */
+function isFunction(functionToCheck) {
+  var getType = {};
+  return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+}
+
+/**
+ * Get CSS computed property of the given element
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Eement} element
+ * @argument {String} property
+ */
+function getStyleComputedProperty(element, property) {
+  if (element.nodeType !== 1) {
+    return [];
+  }
+  // NOTE: 1 DOM access here
+  var window = element.ownerDocument.defaultView;
+  var css = window.getComputedStyle(element, null);
+  return property ? css[property] : css;
+}
+
+/**
+ * Returns the parentNode or the host of the element
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Element} element
+ * @returns {Element} parent
+ */
+function getParentNode(element) {
+  if (element.nodeName === 'HTML') {
+    return element;
+  }
+  return element.parentNode || element.host;
+}
+
+/**
+ * Returns the scrolling parent of the given element
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Element} element
+ * @returns {Element} scroll parent
+ */
+function getScrollParent(element) {
+  // Return body, `getScroll` will take care to get the correct `scrollTop` from it
+  if (!element) {
+    return document.body;
+  }
+
+  switch (element.nodeName) {
+    case 'HTML':
+    case 'BODY':
+      return element.ownerDocument.body;
+    case '#document':
+      return element.body;
+  }
+
+  // Firefox want us to check `-x` and `-y` variations as well
+
+  var _getStyleComputedProp = getStyleComputedProperty(element),
+      overflow = _getStyleComputedProp.overflow,
+      overflowX = _getStyleComputedProp.overflowX,
+      overflowY = _getStyleComputedProp.overflowY;
+
+  if (/(auto|scroll|overlay)/.test(overflow + overflowY + overflowX)) {
+    return element;
+  }
+
+  return getScrollParent(getParentNode(element));
+}
+
+/**
+ * Returns the reference node of the reference object, or the reference object itself.
+ * @method
+ * @memberof Popper.Utils
+ * @param {Element|Object} reference - the reference element (the popper will be relative to this)
+ * @returns {Element} parent
+ */
+function getReferenceNode(reference) {
+  return reference && reference.referenceNode ? reference.referenceNode : reference;
+}
+
+var isIE11 = isBrowser && !!(window.MSInputMethodContext && document.documentMode);
+var isIE10 = isBrowser && /MSIE 10/.test(navigator.userAgent);
+
+/**
+ * Determines if the browser is Internet Explorer
+ * @method
+ * @memberof Popper.Utils
+ * @param {Number} version to check
+ * @returns {Boolean} isIE
+ */
+function isIE(version) {
+  if (version === 11) {
+    return isIE11;
+  }
+  if (version === 10) {
+    return isIE10;
+  }
+  return isIE11 || isIE10;
+}
+
+/**
+ * Returns the offset parent of the given element
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Element} element
+ * @returns {Element} offset parent
+ */
+function getOffsetParent(element) {
+  if (!element) {
+    return document.documentElement;
+  }
+
+  var noOffsetParent = isIE(10) ? document.body : null;
+
+  // NOTE: 1 DOM access here
+  var offsetParent = element.offsetParent || null;
+  // Skip hidden elements which don't have an offsetParent
+  while (offsetParent === noOffsetParent && element.nextElementSibling) {
+    offsetParent = (element = element.nextElementSibling).offsetParent;
+  }
+
+  var nodeName = offsetParent && offsetParent.nodeName;
+
+  if (!nodeName || nodeName === 'BODY' || nodeName === 'HTML') {
+    return element ? element.ownerDocument.documentElement : document.documentElement;
+  }
+
+  // .offsetParent will return the closest TH, TD or TABLE in case
+  // no offsetParent is present, I hate this job...
+  if (['TH', 'TD', 'TABLE'].indexOf(offsetParent.nodeName) !== -1 && getStyleComputedProperty(offsetParent, 'position') === 'static') {
+    return getOffsetParent(offsetParent);
+  }
+
+  return offsetParent;
+}
+
+function isOffsetContainer(element) {
+  var nodeName = element.nodeName;
+
+  if (nodeName === 'BODY') {
+    return false;
+  }
+  return nodeName === 'HTML' || getOffsetParent(element.firstElementChild) === element;
+}
+
+/**
+ * Finds the root node (document, shadowDOM root) of the given element
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Element} node
+ * @returns {Element} root node
+ */
+function getRoot(node) {
+  if (node.parentNode !== null) {
+    return getRoot(node.parentNode);
+  }
+
+  return node;
+}
+
+/**
+ * Finds the offset parent common to the two provided nodes
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Element} element1
+ * @argument {Element} element2
+ * @returns {Element} common offset parent
+ */
+function findCommonOffsetParent(element1, element2) {
+  // This check is needed to avoid errors in case one of the elements isn't defined for any reason
+  if (!element1 || !element1.nodeType || !element2 || !element2.nodeType) {
+    return document.documentElement;
+  }
+
+  // Here we make sure to give as "start" the element that comes first in the DOM
+  var order = element1.compareDocumentPosition(element2) & Node.DOCUMENT_POSITION_FOLLOWING;
+  var start = order ? element1 : element2;
+  var end = order ? element2 : element1;
+
+  // Get common ancestor container
+  var range = document.createRange();
+  range.setStart(start, 0);
+  range.setEnd(end, 0);
+  var commonAncestorContainer = range.commonAncestorContainer;
+
+  // Both nodes are inside #document
+
+  if (element1 !== commonAncestorContainer && element2 !== commonAncestorContainer || start.contains(end)) {
+    if (isOffsetContainer(commonAncestorContainer)) {
+      return commonAncestorContainer;
+    }
+
+    return getOffsetParent(commonAncestorContainer);
+  }
+
+  // one of the nodes is inside shadowDOM, find which one
+  var element1root = getRoot(element1);
+  if (element1root.host) {
+    return findCommonOffsetParent(element1root.host, element2);
+  } else {
+    return findCommonOffsetParent(element1, getRoot(element2).host);
+  }
+}
+
+/**
+ * Gets the scroll value of the given element in the given side (top and left)
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Element} element
+ * @argument {String} side `top` or `left`
+ * @returns {number} amount of scrolled pixels
+ */
+function getScroll(element) {
+  var side = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'top';
+
+  var upperSide = side === 'top' ? 'scrollTop' : 'scrollLeft';
+  var nodeName = element.nodeName;
+
+  if (nodeName === 'BODY' || nodeName === 'HTML') {
+    var html = element.ownerDocument.documentElement;
+    var scrollingElement = element.ownerDocument.scrollingElement || html;
+    return scrollingElement[upperSide];
+  }
+
+  return element[upperSide];
+}
+
+/*
+ * Sum or subtract the element scroll values (left and top) from a given rect object
+ * @method
+ * @memberof Popper.Utils
+ * @param {Object} rect - Rect object you want to change
+ * @param {HTMLElement} element - The element from the function reads the scroll values
+ * @param {Boolean} subtract - set to true if you want to subtract the scroll values
+ * @return {Object} rect - The modifier rect object
+ */
+function includeScroll(rect, element) {
+  var subtract = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+  var scrollTop = getScroll(element, 'top');
+  var scrollLeft = getScroll(element, 'left');
+  var modifier = subtract ? -1 : 1;
+  rect.top += scrollTop * modifier;
+  rect.bottom += scrollTop * modifier;
+  rect.left += scrollLeft * modifier;
+  rect.right += scrollLeft * modifier;
+  return rect;
+}
+
+/*
+ * Helper to detect borders of a given element
+ * @method
+ * @memberof Popper.Utils
+ * @param {CSSStyleDeclaration} styles
+ * Result of `getStyleComputedProperty` on the given element
+ * @param {String} axis - `x` or `y`
+ * @return {number} borders - The borders size of the given axis
+ */
+
+function getBordersSize(styles, axis) {
+  var sideA = axis === 'x' ? 'Left' : 'Top';
+  var sideB = sideA === 'Left' ? 'Right' : 'Bottom';
+
+  return parseFloat(styles['border' + sideA + 'Width']) + parseFloat(styles['border' + sideB + 'Width']);
+}
+
+function getSize(axis, body, html, computedStyle) {
+  return Math.max(body['offset' + axis], body['scroll' + axis], html['client' + axis], html['offset' + axis], html['scroll' + axis], isIE(10) ? parseInt(html['offset' + axis]) + parseInt(computedStyle['margin' + (axis === 'Height' ? 'Top' : 'Left')]) + parseInt(computedStyle['margin' + (axis === 'Height' ? 'Bottom' : 'Right')]) : 0);
+}
+
+function getWindowSizes(document) {
+  var body = document.body;
+  var html = document.documentElement;
+  var computedStyle = isIE(10) && getComputedStyle(html);
+
+  return {
+    height: getSize('Height', body, html, computedStyle),
+    width: getSize('Width', body, html, computedStyle)
+  };
+}
+
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+
+
+
+
+var defineProperty = function (obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+};
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+/**
+ * Given element offsets, generate an output similar to getBoundingClientRect
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Object} offsets
+ * @returns {Object} ClientRect like output
+ */
+function getClientRect(offsets) {
+  return _extends({}, offsets, {
+    right: offsets.left + offsets.width,
+    bottom: offsets.top + offsets.height
+  });
+}
+
+/**
+ * Get bounding client rect of given element
+ * @method
+ * @memberof Popper.Utils
+ * @param {HTMLElement} element
+ * @return {Object} client rect
+ */
+function getBoundingClientRect(element) {
+  var rect = {};
+
+  // IE10 10 FIX: Please, don't ask, the element isn't
+  // considered in DOM in some circumstances...
+  // This isn't reproducible in IE10 compatibility mode of IE11
+  try {
+    if (isIE(10)) {
+      rect = element.getBoundingClientRect();
+      var scrollTop = getScroll(element, 'top');
+      var scrollLeft = getScroll(element, 'left');
+      rect.top += scrollTop;
+      rect.left += scrollLeft;
+      rect.bottom += scrollTop;
+      rect.right += scrollLeft;
+    } else {
+      rect = element.getBoundingClientRect();
+    }
+  } catch (e) {}
+
+  var result = {
+    left: rect.left,
+    top: rect.top,
+    width: rect.right - rect.left,
+    height: rect.bottom - rect.top
+  };
+
+  // subtract scrollbar size from sizes
+  var sizes = element.nodeName === 'HTML' ? getWindowSizes(element.ownerDocument) : {};
+  var width = sizes.width || element.clientWidth || result.width;
+  var height = sizes.height || element.clientHeight || result.height;
+
+  var horizScrollbar = element.offsetWidth - width;
+  var vertScrollbar = element.offsetHeight - height;
+
+  // if an hypothetical scrollbar is detected, we must be sure it's not a `border`
+  // we make this check conditional for performance reasons
+  if (horizScrollbar || vertScrollbar) {
+    var styles = getStyleComputedProperty(element);
+    horizScrollbar -= getBordersSize(styles, 'x');
+    vertScrollbar -= getBordersSize(styles, 'y');
+
+    result.width -= horizScrollbar;
+    result.height -= vertScrollbar;
+  }
+
+  return getClientRect(result);
+}
+
+function getOffsetRectRelativeToArbitraryNode(children, parent) {
+  var fixedPosition = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+
+  var isIE10 = isIE(10);
+  var isHTML = parent.nodeName === 'HTML';
+  var childrenRect = getBoundingClientRect(children);
+  var parentRect = getBoundingClientRect(parent);
+  var scrollParent = getScrollParent(children);
+
+  var styles = getStyleComputedProperty(parent);
+  var borderTopWidth = parseFloat(styles.borderTopWidth);
+  var borderLeftWidth = parseFloat(styles.borderLeftWidth);
+
+  // In cases where the parent is fixed, we must ignore negative scroll in offset calc
+  if (fixedPosition && isHTML) {
+    parentRect.top = Math.max(parentRect.top, 0);
+    parentRect.left = Math.max(parentRect.left, 0);
+  }
+  var offsets = getClientRect({
+    top: childrenRect.top - parentRect.top - borderTopWidth,
+    left: childrenRect.left - parentRect.left - borderLeftWidth,
+    width: childrenRect.width,
+    height: childrenRect.height
+  });
+  offsets.marginTop = 0;
+  offsets.marginLeft = 0;
+
+  // Subtract margins of documentElement in case it's being used as parent
+  // we do this only on HTML because it's the only element that behaves
+  // differently when margins are applied to it. The margins are included in
+  // the box of the documentElement, in the other cases not.
+  if (!isIE10 && isHTML) {
+    var marginTop = parseFloat(styles.marginTop);
+    var marginLeft = parseFloat(styles.marginLeft);
+
+    offsets.top -= borderTopWidth - marginTop;
+    offsets.bottom -= borderTopWidth - marginTop;
+    offsets.left -= borderLeftWidth - marginLeft;
+    offsets.right -= borderLeftWidth - marginLeft;
+
+    // Attach marginTop and marginLeft because in some circumstances we may need them
+    offsets.marginTop = marginTop;
+    offsets.marginLeft = marginLeft;
+  }
+
+  if (isIE10 && !fixedPosition ? parent.contains(scrollParent) : parent === scrollParent && scrollParent.nodeName !== 'BODY') {
+    offsets = includeScroll(offsets, parent);
+  }
+
+  return offsets;
+}
+
+function getViewportOffsetRectRelativeToArtbitraryNode(element) {
+  var excludeScroll = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+  var html = element.ownerDocument.documentElement;
+  var relativeOffset = getOffsetRectRelativeToArbitraryNode(element, html);
+  var width = Math.max(html.clientWidth, window.innerWidth || 0);
+  var height = Math.max(html.clientHeight, window.innerHeight || 0);
+
+  var scrollTop = !excludeScroll ? getScroll(html) : 0;
+  var scrollLeft = !excludeScroll ? getScroll(html, 'left') : 0;
+
+  var offset = {
+    top: scrollTop - relativeOffset.top + relativeOffset.marginTop,
+    left: scrollLeft - relativeOffset.left + relativeOffset.marginLeft,
+    width: width,
+    height: height
+  };
+
+  return getClientRect(offset);
+}
+
+/**
+ * Check if the given element is fixed or is inside a fixed parent
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Element} element
+ * @argument {Element} customContainer
+ * @returns {Boolean} answer to "isFixed?"
+ */
+function isFixed(element) {
+  var nodeName = element.nodeName;
+  if (nodeName === 'BODY' || nodeName === 'HTML') {
+    return false;
+  }
+  if (getStyleComputedProperty(element, 'position') === 'fixed') {
+    return true;
+  }
+  var parentNode = getParentNode(element);
+  if (!parentNode) {
+    return false;
+  }
+  return isFixed(parentNode);
+}
+
+/**
+ * Finds the first parent of an element that has a transformed property defined
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Element} element
+ * @returns {Element} first transformed parent or documentElement
+ */
+
+function getFixedPositionOffsetParent(element) {
+  // This check is needed to avoid errors in case one of the elements isn't defined for any reason
+  if (!element || !element.parentElement || isIE()) {
+    return document.documentElement;
+  }
+  var el = element.parentElement;
+  while (el && getStyleComputedProperty(el, 'transform') === 'none') {
+    el = el.parentElement;
+  }
+  return el || document.documentElement;
+}
+
+/**
+ * Computed the boundaries limits and return them
+ * @method
+ * @memberof Popper.Utils
+ * @param {HTMLElement} popper
+ * @param {HTMLElement} reference
+ * @param {number} padding
+ * @param {HTMLElement} boundariesElement - Element used to define the boundaries
+ * @param {Boolean} fixedPosition - Is in fixed position mode
+ * @returns {Object} Coordinates of the boundaries
+ */
+function getBoundaries(popper, reference, padding, boundariesElement) {
+  var fixedPosition = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
+
+  // NOTE: 1 DOM access here
+
+  var boundaries = { top: 0, left: 0 };
+  var offsetParent = fixedPosition ? getFixedPositionOffsetParent(popper) : findCommonOffsetParent(popper, getReferenceNode(reference));
+
+  // Handle viewport case
+  if (boundariesElement === 'viewport') {
+    boundaries = getViewportOffsetRectRelativeToArtbitraryNode(offsetParent, fixedPosition);
+  } else {
+    // Handle other cases based on DOM element used as boundaries
+    var boundariesNode = void 0;
+    if (boundariesElement === 'scrollParent') {
+      boundariesNode = getScrollParent(getParentNode(reference));
+      if (boundariesNode.nodeName === 'BODY') {
+        boundariesNode = popper.ownerDocument.documentElement;
+      }
+    } else if (boundariesElement === 'window') {
+      boundariesNode = popper.ownerDocument.documentElement;
+    } else {
+      boundariesNode = boundariesElement;
+    }
+
+    var offsets = getOffsetRectRelativeToArbitraryNode(boundariesNode, offsetParent, fixedPosition);
+
+    // In case of HTML, we need a different computation
+    if (boundariesNode.nodeName === 'HTML' && !isFixed(offsetParent)) {
+      var _getWindowSizes = getWindowSizes(popper.ownerDocument),
+          height = _getWindowSizes.height,
+          width = _getWindowSizes.width;
+
+      boundaries.top += offsets.top - offsets.marginTop;
+      boundaries.bottom = height + offsets.top;
+      boundaries.left += offsets.left - offsets.marginLeft;
+      boundaries.right = width + offsets.left;
+    } else {
+      // for all the other DOM elements, this one is good
+      boundaries = offsets;
+    }
+  }
+
+  // Add paddings
+  padding = padding || 0;
+  var isPaddingNumber = typeof padding === 'number';
+  boundaries.left += isPaddingNumber ? padding : padding.left || 0;
+  boundaries.top += isPaddingNumber ? padding : padding.top || 0;
+  boundaries.right -= isPaddingNumber ? padding : padding.right || 0;
+  boundaries.bottom -= isPaddingNumber ? padding : padding.bottom || 0;
+
+  return boundaries;
+}
+
+function getArea(_ref) {
+  var width = _ref.width,
+      height = _ref.height;
+
+  return width * height;
+}
+
+/**
+ * Utility used to transform the `auto` placement to the placement with more
+ * available space.
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Object} data - The data object generated by update method
+ * @argument {Object} options - Modifiers configuration and options
+ * @returns {Object} The data object, properly modified
+ */
+function computeAutoPlacement(placement, refRect, popper, reference, boundariesElement) {
+  var padding = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 0;
+
+  if (placement.indexOf('auto') === -1) {
+    return placement;
+  }
+
+  var boundaries = getBoundaries(popper, reference, padding, boundariesElement);
+
+  var rects = {
+    top: {
+      width: boundaries.width,
+      height: refRect.top - boundaries.top
+    },
+    right: {
+      width: boundaries.right - refRect.right,
+      height: boundaries.height
+    },
+    bottom: {
+      width: boundaries.width,
+      height: boundaries.bottom - refRect.bottom
+    },
+    left: {
+      width: refRect.left - boundaries.left,
+      height: boundaries.height
+    }
+  };
+
+  var sortedAreas = Object.keys(rects).map(function (key) {
+    return _extends({
+      key: key
+    }, rects[key], {
+      area: getArea(rects[key])
+    });
+  }).sort(function (a, b) {
+    return b.area - a.area;
+  });
+
+  var filteredAreas = sortedAreas.filter(function (_ref2) {
+    var width = _ref2.width,
+        height = _ref2.height;
+    return width >= popper.clientWidth && height >= popper.clientHeight;
+  });
+
+  var computedPlacement = filteredAreas.length > 0 ? filteredAreas[0].key : sortedAreas[0].key;
+
+  var variation = placement.split('-')[1];
+
+  return computedPlacement + (variation ? '-' + variation : '');
+}
+
+/**
+ * Get offsets to the reference element
+ * @method
+ * @memberof Popper.Utils
+ * @param {Object} state
+ * @param {Element} popper - the popper element
+ * @param {Element} reference - the reference element (the popper will be relative to this)
+ * @param {Element} fixedPosition - is in fixed position mode
+ * @returns {Object} An object containing the offsets which will be applied to the popper
+ */
+function getReferenceOffsets(state, popper, reference) {
+  var fixedPosition = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+
+  var commonOffsetParent = fixedPosition ? getFixedPositionOffsetParent(popper) : findCommonOffsetParent(popper, getReferenceNode(reference));
+  return getOffsetRectRelativeToArbitraryNode(reference, commonOffsetParent, fixedPosition);
+}
+
+/**
+ * Get the outer sizes of the given element (offset size + margins)
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Element} element
+ * @returns {Object} object containing width and height properties
+ */
+function getOuterSizes(element) {
+  var window = element.ownerDocument.defaultView;
+  var styles = window.getComputedStyle(element);
+  var x = parseFloat(styles.marginTop || 0) + parseFloat(styles.marginBottom || 0);
+  var y = parseFloat(styles.marginLeft || 0) + parseFloat(styles.marginRight || 0);
+  var result = {
+    width: element.offsetWidth + y,
+    height: element.offsetHeight + x
+  };
+  return result;
+}
+
+/**
+ * Get the opposite placement of the given one
+ * @method
+ * @memberof Popper.Utils
+ * @argument {String} placement
+ * @returns {String} flipped placement
+ */
+function getOppositePlacement(placement) {
+  var hash = { left: 'right', right: 'left', bottom: 'top', top: 'bottom' };
+  return placement.replace(/left|right|bottom|top/g, function (matched) {
+    return hash[matched];
+  });
+}
+
+/**
+ * Get offsets to the popper
+ * @method
+ * @memberof Popper.Utils
+ * @param {Object} position - CSS position the Popper will get applied
+ * @param {HTMLElement} popper - the popper element
+ * @param {Object} referenceOffsets - the reference offsets (the popper will be relative to this)
+ * @param {String} placement - one of the valid placement options
+ * @returns {Object} popperOffsets - An object containing the offsets which will be applied to the popper
+ */
+function getPopperOffsets(popper, referenceOffsets, placement) {
+  placement = placement.split('-')[0];
+
+  // Get popper node sizes
+  var popperRect = getOuterSizes(popper);
+
+  // Add position, width and height to our offsets object
+  var popperOffsets = {
+    width: popperRect.width,
+    height: popperRect.height
+  };
+
+  // depending by the popper placement we have to compute its offsets slightly differently
+  var isHoriz = ['right', 'left'].indexOf(placement) !== -1;
+  var mainSide = isHoriz ? 'top' : 'left';
+  var secondarySide = isHoriz ? 'left' : 'top';
+  var measurement = isHoriz ? 'height' : 'width';
+  var secondaryMeasurement = !isHoriz ? 'height' : 'width';
+
+  popperOffsets[mainSide] = referenceOffsets[mainSide] + referenceOffsets[measurement] / 2 - popperRect[measurement] / 2;
+  if (placement === secondarySide) {
+    popperOffsets[secondarySide] = referenceOffsets[secondarySide] - popperRect[secondaryMeasurement];
+  } else {
+    popperOffsets[secondarySide] = referenceOffsets[getOppositePlacement(secondarySide)];
+  }
+
+  return popperOffsets;
+}
+
+/**
+ * Mimics the `find` method of Array
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Array} arr
+ * @argument prop
+ * @argument value
+ * @returns index or -1
+ */
+function find(arr, check) {
+  // use native find if supported
+  if (Array.prototype.find) {
+    return arr.find(check);
+  }
+
+  // use `filter` to obtain the same behavior of `find`
+  return arr.filter(check)[0];
+}
+
+/**
+ * Return the index of the matching object
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Array} arr
+ * @argument prop
+ * @argument value
+ * @returns index or -1
+ */
+function findIndex(arr, prop, value) {
+  // use native findIndex if supported
+  if (Array.prototype.findIndex) {
+    return arr.findIndex(function (cur) {
+      return cur[prop] === value;
+    });
+  }
+
+  // use `find` + `indexOf` if `findIndex` isn't supported
+  var match = find(arr, function (obj) {
+    return obj[prop] === value;
+  });
+  return arr.indexOf(match);
+}
+
+/**
+ * Loop trough the list of modifiers and run them in order,
+ * each of them will then edit the data object.
+ * @method
+ * @memberof Popper.Utils
+ * @param {dataObject} data
+ * @param {Array} modifiers
+ * @param {String} ends - Optional modifier name used as stopper
+ * @returns {dataObject}
+ */
+function runModifiers(modifiers, data, ends) {
+  var modifiersToRun = ends === undefined ? modifiers : modifiers.slice(0, findIndex(modifiers, 'name', ends));
+
+  modifiersToRun.forEach(function (modifier) {
+    if (modifier['function']) {
+      // eslint-disable-line dot-notation
+      console.warn('`modifier.function` is deprecated, use `modifier.fn`!');
+    }
+    var fn = modifier['function'] || modifier.fn; // eslint-disable-line dot-notation
+    if (modifier.enabled && isFunction(fn)) {
+      // Add properties to offsets to make them a complete clientRect object
+      // we do this before each modifier to make sure the previous one doesn't
+      // mess with these values
+      data.offsets.popper = getClientRect(data.offsets.popper);
+      data.offsets.reference = getClientRect(data.offsets.reference);
+
+      data = fn(data, modifier);
+    }
+  });
+
+  return data;
+}
+
+/**
+ * Updates the position of the popper, computing the new offsets and applying
+ * the new style.<br />
+ * Prefer `scheduleUpdate` over `update` because of performance reasons.
+ * @method
+ * @memberof Popper
+ */
+function update() {
+  // if popper is destroyed, don't perform any further update
+  if (this.state.isDestroyed) {
+    return;
+  }
+
+  var data = {
+    instance: this,
+    styles: {},
+    arrowStyles: {},
+    attributes: {},
+    flipped: false,
+    offsets: {}
+  };
+
+  // compute reference element offsets
+  data.offsets.reference = getReferenceOffsets(this.state, this.popper, this.reference, this.options.positionFixed);
+
+  // compute auto placement, store placement inside the data object,
+  // modifiers will be able to edit `placement` if needed
+  // and refer to originalPlacement to know the original value
+  data.placement = computeAutoPlacement(this.options.placement, data.offsets.reference, this.popper, this.reference, this.options.modifiers.flip.boundariesElement, this.options.modifiers.flip.padding);
+
+  // store the computed placement inside `originalPlacement`
+  data.originalPlacement = data.placement;
+
+  data.positionFixed = this.options.positionFixed;
+
+  // compute the popper offsets
+  data.offsets.popper = getPopperOffsets(this.popper, data.offsets.reference, data.placement);
+
+  data.offsets.popper.position = this.options.positionFixed ? 'fixed' : 'absolute';
+
+  // run the modifiers
+  data = runModifiers(this.modifiers, data);
+
+  // the first `update` will call `onCreate` callback
+  // the other ones will call `onUpdate` callback
+  if (!this.state.isCreated) {
+    this.state.isCreated = true;
+    this.options.onCreate(data);
+  } else {
+    this.options.onUpdate(data);
+  }
+}
+
+/**
+ * Helper used to know if the given modifier is enabled.
+ * @method
+ * @memberof Popper.Utils
+ * @returns {Boolean}
+ */
+function isModifierEnabled(modifiers, modifierName) {
+  return modifiers.some(function (_ref) {
+    var name = _ref.name,
+        enabled = _ref.enabled;
+    return enabled && name === modifierName;
+  });
+}
+
+/**
+ * Get the prefixed supported property name
+ * @method
+ * @memberof Popper.Utils
+ * @argument {String} property (camelCase)
+ * @returns {String} prefixed property (camelCase or PascalCase, depending on the vendor prefix)
+ */
+function getSupportedPropertyName(property) {
+  var prefixes = [false, 'ms', 'Webkit', 'Moz', 'O'];
+  var upperProp = property.charAt(0).toUpperCase() + property.slice(1);
+
+  for (var i = 0; i < prefixes.length; i++) {
+    var prefix = prefixes[i];
+    var toCheck = prefix ? '' + prefix + upperProp : property;
+    if (typeof document.body.style[toCheck] !== 'undefined') {
+      return toCheck;
+    }
+  }
+  return null;
+}
+
+/**
+ * Destroys the popper.
+ * @method
+ * @memberof Popper
+ */
+function destroy() {
+  this.state.isDestroyed = true;
+
+  // touch DOM only if `applyStyle` modifier is enabled
+  if (isModifierEnabled(this.modifiers, 'applyStyle')) {
+    this.popper.removeAttribute('x-placement');
+    this.popper.style.position = '';
+    this.popper.style.top = '';
+    this.popper.style.left = '';
+    this.popper.style.right = '';
+    this.popper.style.bottom = '';
+    this.popper.style.willChange = '';
+    this.popper.style[getSupportedPropertyName('transform')] = '';
+  }
+
+  this.disableEventListeners();
+
+  // remove the popper if user explicitly asked for the deletion on destroy
+  // do not use `remove` because IE11 doesn't support it
+  if (this.options.removeOnDestroy) {
+    this.popper.parentNode.removeChild(this.popper);
+  }
+  return this;
+}
+
+/**
+ * Get the window associated with the element
+ * @argument {Element} element
+ * @returns {Window}
+ */
+function getWindow(element) {
+  var ownerDocument = element.ownerDocument;
+  return ownerDocument ? ownerDocument.defaultView : window;
+}
+
+function attachToScrollParents(scrollParent, event, callback, scrollParents) {
+  var isBody = scrollParent.nodeName === 'BODY';
+  var target = isBody ? scrollParent.ownerDocument.defaultView : scrollParent;
+  target.addEventListener(event, callback, { passive: true });
+
+  if (!isBody) {
+    attachToScrollParents(getScrollParent(target.parentNode), event, callback, scrollParents);
+  }
+  scrollParents.push(target);
+}
+
+/**
+ * Setup needed event listeners used to update the popper position
+ * @method
+ * @memberof Popper.Utils
+ * @private
+ */
+function setupEventListeners(reference, options, state, updateBound) {
+  // Resize event listener on window
+  state.updateBound = updateBound;
+  getWindow(reference).addEventListener('resize', state.updateBound, { passive: true });
+
+  // Scroll event listener on scroll parents
+  var scrollElement = getScrollParent(reference);
+  attachToScrollParents(scrollElement, 'scroll', state.updateBound, state.scrollParents);
+  state.scrollElement = scrollElement;
+  state.eventsEnabled = true;
+
+  return state;
+}
+
+/**
+ * It will add resize/scroll events and start recalculating
+ * position of the popper element when they are triggered.
+ * @method
+ * @memberof Popper
+ */
+function enableEventListeners() {
+  if (!this.state.eventsEnabled) {
+    this.state = setupEventListeners(this.reference, this.options, this.state, this.scheduleUpdate);
+  }
+}
+
+/**
+ * Remove event listeners used to update the popper position
+ * @method
+ * @memberof Popper.Utils
+ * @private
+ */
+function removeEventListeners(reference, state) {
+  // Remove resize event listener on window
+  getWindow(reference).removeEventListener('resize', state.updateBound);
+
+  // Remove scroll event listener on scroll parents
+  state.scrollParents.forEach(function (target) {
+    target.removeEventListener('scroll', state.updateBound);
+  });
+
+  // Reset state
+  state.updateBound = null;
+  state.scrollParents = [];
+  state.scrollElement = null;
+  state.eventsEnabled = false;
+  return state;
+}
+
+/**
+ * It will remove resize/scroll events and won't recalculate popper position
+ * when they are triggered. It also won't trigger `onUpdate` callback anymore,
+ * unless you call `update` method manually.
+ * @method
+ * @memberof Popper
+ */
+function disableEventListeners() {
+  if (this.state.eventsEnabled) {
+    cancelAnimationFrame(this.scheduleUpdate);
+    this.state = removeEventListeners(this.reference, this.state);
+  }
+}
+
+/**
+ * Tells if a given input is a number
+ * @method
+ * @memberof Popper.Utils
+ * @param {*} input to check
+ * @return {Boolean}
+ */
+function isNumeric(n) {
+  return n !== '' && !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+/**
+ * Set the style to the given popper
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Element} element - Element to apply the style to
+ * @argument {Object} styles
+ * Object with a list of properties and values which will be applied to the element
+ */
+function setStyles(element, styles) {
+  Object.keys(styles).forEach(function (prop) {
+    var unit = '';
+    // add unit if the value is numeric and is one of the following
+    if (['width', 'height', 'top', 'right', 'bottom', 'left'].indexOf(prop) !== -1 && isNumeric(styles[prop])) {
+      unit = 'px';
+    }
+    element.style[prop] = styles[prop] + unit;
+  });
+}
+
+/**
+ * Set the attributes to the given popper
+ * @method
+ * @memberof Popper.Utils
+ * @argument {Element} element - Element to apply the attributes to
+ * @argument {Object} styles
+ * Object with a list of properties and values which will be applied to the element
+ */
+function setAttributes(element, attributes) {
+  Object.keys(attributes).forEach(function (prop) {
+    var value = attributes[prop];
+    if (value !== false) {
+      element.setAttribute(prop, attributes[prop]);
+    } else {
+      element.removeAttribute(prop);
+    }
+  });
+}
+
+/**
+ * @function
+ * @memberof Modifiers
+ * @argument {Object} data - The data object generated by `update` method
+ * @argument {Object} data.styles - List of style properties - values to apply to popper element
+ * @argument {Object} data.attributes - List of attribute properties - values to apply to popper element
+ * @argument {Object} options - Modifiers configuration and options
+ * @returns {Object} The same data object
+ */
+function applyStyle(data) {
+  // any property present in `data.styles` will be applied to the popper,
+  // in this way we can make the 3rd party modifiers add custom styles to it
+  // Be aware, modifiers could override the properties defined in the previous
+  // lines of this modifier!
+  setStyles(data.instance.popper, data.styles);
+
+  // any property present in `data.attributes` will be applied to the popper,
+  // they will be set as HTML attributes of the element
+  setAttributes(data.instance.popper, data.attributes);
+
+  // if arrowElement is defined and arrowStyles has some properties
+  if (data.arrowElement && Object.keys(data.arrowStyles).length) {
+    setStyles(data.arrowElement, data.arrowStyles);
+  }
+
+  return data;
+}
+
+/**
+ * Set the x-placement attribute before everything else because it could be used
+ * to add margins to the popper margins needs to be calculated to get the
+ * correct popper offsets.
+ * @method
+ * @memberof Popper.modifiers
+ * @param {HTMLElement} reference - The reference element used to position the popper
+ * @param {HTMLElement} popper - The HTML element used as popper
+ * @param {Object} options - Popper.js options
+ */
+function applyStyleOnLoad(reference, popper, options, modifierOptions, state) {
+  // compute reference element offsets
+  var referenceOffsets = getReferenceOffsets(state, popper, reference, options.positionFixed);
+
+  // compute auto placement, store placement inside the data object,
+  // modifiers will be able to edit `placement` if needed
+  // and refer to originalPlacement to know the original value
+  var placement = computeAutoPlacement(options.placement, referenceOffsets, popper, reference, options.modifiers.flip.boundariesElement, options.modifiers.flip.padding);
+
+  popper.setAttribute('x-placement', placement);
+
+  // Apply `position` to popper before anything else because
+  // without the position applied we can't guarantee correct computations
+  setStyles(popper, { position: options.positionFixed ? 'fixed' : 'absolute' });
+
+  return options;
+}
+
+/**
+ * @function
+ * @memberof Popper.Utils
+ * @argument {Object} data - The data object generated by `update` method
+ * @argument {Boolean} shouldRound - If the offsets should be rounded at all
+ * @returns {Object} The popper's position offsets rounded
+ *
+ * The tale of pixel-perfect positioning. It's still not 100% perfect, but as
+ * good as it can be within reason.
+ * Discussion here: https://github.com/FezVrasta/popper.js/pull/715
+ *
+ * Low DPI screens cause a popper to be blurry if not using full pixels (Safari
+ * as well on High DPI screens).
+ *
+ * Firefox prefers no rounding for positioning and does not have blurriness on
+ * high DPI screens.
+ *
+ * Only horizontal placement and left/right values need to be considered.
+ */
+function getRoundedOffsets(data, shouldRound) {
+  var _data$offsets = data.offsets,
+      popper = _data$offsets.popper,
+      reference = _data$offsets.reference;
+  var round = Math.round,
+      floor = Math.floor;
+
+  var noRound = function noRound(v) {
+    return v;
+  };
+
+  var referenceWidth = round(reference.width);
+  var popperWidth = round(popper.width);
+
+  var isVertical = ['left', 'right'].indexOf(data.placement) !== -1;
+  var isVariation = data.placement.indexOf('-') !== -1;
+  var sameWidthParity = referenceWidth % 2 === popperWidth % 2;
+  var bothOddWidth = referenceWidth % 2 === 1 && popperWidth % 2 === 1;
+
+  var horizontalToInteger = !shouldRound ? noRound : isVertical || isVariation || sameWidthParity ? round : floor;
+  var verticalToInteger = !shouldRound ? noRound : round;
+
+  return {
+    left: horizontalToInteger(bothOddWidth && !isVariation && shouldRound ? popper.left - 1 : popper.left),
+    top: verticalToInteger(popper.top),
+    bottom: verticalToInteger(popper.bottom),
+    right: horizontalToInteger(popper.right)
+  };
+}
+
+var isFirefox = isBrowser && /Firefox/i.test(navigator.userAgent);
+
+/**
+ * @function
+ * @memberof Modifiers
+ * @argument {Object} data - The data object generated by `update` method
+ * @argument {Object} options - Modifiers configuration and options
+ * @returns {Object} The data object, properly modified
+ */
+function computeStyle(data, options) {
+  var x = options.x,
+      y = options.y;
+  var popper = data.offsets.popper;
+
+  // Remove this legacy support in Popper.js v2
+
+  var legacyGpuAccelerationOption = find(data.instance.modifiers, function (modifier) {
+    return modifier.name === 'applyStyle';
+  }).gpuAcceleration;
+  if (legacyGpuAccelerationOption !== undefined) {
+    console.warn('WARNING: `gpuAcceleration` option moved to `computeStyle` modifier and will not be supported in future versions of Popper.js!');
+  }
+  var gpuAcceleration = legacyGpuAccelerationOption !== undefined ? legacyGpuAccelerationOption : options.gpuAcceleration;
+
+  var offsetParent = getOffsetParent(data.instance.popper);
+  var offsetParentRect = getBoundingClientRect(offsetParent);
+
+  // Styles
+  var styles = {
+    position: popper.position
+  };
+
+  var offsets = getRoundedOffsets(data, window.devicePixelRatio < 2 || !isFirefox);
+
+  var sideA = x === 'bottom' ? 'top' : 'bottom';
+  var sideB = y === 'right' ? 'left' : 'right';
+
+  // if gpuAcceleration is set to `true` and transform is supported,
+  //  we use `translate3d` to apply the position to the popper we
+  // automatically use the supported prefixed version if needed
+  var prefixedProperty = getSupportedPropertyName('transform');
+
+  // now, let's make a step back and look at this code closely (wtf?)
+  // If the content of the popper grows once it's been positioned, it
+  // may happen that the popper gets misplaced because of the new content
+  // overflowing its reference element
+  // To avoid this problem, we provide two options (x and y), which allow
+  // the consumer to define the offset origin.
+  // If we position a popper on top of a reference element, we can set
+  // `x` to `top` to make the popper grow towards its top instead of
+  // its bottom.
+  var left = void 0,
+      top = void 0;
+  if (sideA === 'bottom') {
+    // when offsetParent is <html> the positioning is relative to the bottom of the screen (excluding the scrollbar)
+    // and not the bottom of the html element
+    if (offsetParent.nodeName === 'HTML') {
+      top = -offsetParent.clientHeight + offsets.bottom;
+    } else {
+      top = -offsetParentRect.height + offsets.bottom;
+    }
+  } else {
+    top = offsets.top;
+  }
+  if (sideB === 'right') {
+    if (offsetParent.nodeName === 'HTML') {
+      left = -offsetParent.clientWidth + offsets.right;
+    } else {
+      left = -offsetParentRect.width + offsets.right;
+    }
+  } else {
+    left = offsets.left;
+  }
+  if (gpuAcceleration && prefixedProperty) {
+    styles[prefixedProperty] = 'translate3d(' + left + 'px, ' + top + 'px, 0)';
+    styles[sideA] = 0;
+    styles[sideB] = 0;
+    styles.willChange = 'transform';
+  } else {
+    // othwerise, we use the standard `top`, `left`, `bottom` and `right` properties
+    var invertTop = sideA === 'bottom' ? -1 : 1;
+    var invertLeft = sideB === 'right' ? -1 : 1;
+    styles[sideA] = top * invertTop;
+    styles[sideB] = left * invertLeft;
+    styles.willChange = sideA + ', ' + sideB;
+  }
+
+  // Attributes
+  var attributes = {
+    'x-placement': data.placement
+  };
+
+  // Update `data` attributes, styles and arrowStyles
+  data.attributes = _extends({}, attributes, data.attributes);
+  data.styles = _extends({}, styles, data.styles);
+  data.arrowStyles = _extends({}, data.offsets.arrow, data.arrowStyles);
+
+  return data;
+}
+
+/**
+ * Helper used to know if the given modifier depends from another one.<br />
+ * It checks if the needed modifier is listed and enabled.
+ * @method
+ * @memberof Popper.Utils
+ * @param {Array} modifiers - list of modifiers
+ * @param {String} requestingName - name of requesting modifier
+ * @param {String} requestedName - name of requested modifier
+ * @returns {Boolean}
+ */
+function isModifierRequired(modifiers, requestingName, requestedName) {
+  var requesting = find(modifiers, function (_ref) {
+    var name = _ref.name;
+    return name === requestingName;
+  });
+
+  var isRequired = !!requesting && modifiers.some(function (modifier) {
+    return modifier.name === requestedName && modifier.enabled && modifier.order < requesting.order;
+  });
+
+  if (!isRequired) {
+    var _requesting = '`' + requestingName + '`';
+    var requested = '`' + requestedName + '`';
+    console.warn(requested + ' modifier is required by ' + _requesting + ' modifier in order to work, be sure to include it before ' + _requesting + '!');
+  }
+  return isRequired;
+}
+
+/**
+ * @function
+ * @memberof Modifiers
+ * @argument {Object} data - The data object generated by update method
+ * @argument {Object} options - Modifiers configuration and options
+ * @returns {Object} The data object, properly modified
+ */
+function arrow(data, options) {
+  var _data$offsets$arrow;
+
+  // arrow depends on keepTogether in order to work
+  if (!isModifierRequired(data.instance.modifiers, 'arrow', 'keepTogether')) {
+    return data;
+  }
+
+  var arrowElement = options.element;
+
+  // if arrowElement is a string, suppose it's a CSS selector
+  if (typeof arrowElement === 'string') {
+    arrowElement = data.instance.popper.querySelector(arrowElement);
+
+    // if arrowElement is not found, don't run the modifier
+    if (!arrowElement) {
+      return data;
+    }
+  } else {
+    // if the arrowElement isn't a query selector we must check that the
+    // provided DOM node is child of its popper node
+    if (!data.instance.popper.contains(arrowElement)) {
+      console.warn('WARNING: `arrow.element` must be child of its popper element!');
+      return data;
+    }
+  }
+
+  var placement = data.placement.split('-')[0];
+  var _data$offsets = data.offsets,
+      popper = _data$offsets.popper,
+      reference = _data$offsets.reference;
+
+  var isVertical = ['left', 'right'].indexOf(placement) !== -1;
+
+  var len = isVertical ? 'height' : 'width';
+  var sideCapitalized = isVertical ? 'Top' : 'Left';
+  var side = sideCapitalized.toLowerCase();
+  var altSide = isVertical ? 'left' : 'top';
+  var opSide = isVertical ? 'bottom' : 'right';
+  var arrowElementSize = getOuterSizes(arrowElement)[len];
+
+  //
+  // extends keepTogether behavior making sure the popper and its
+  // reference have enough pixels in conjunction
+  //
+
+  // top/left side
+  if (reference[opSide] - arrowElementSize < popper[side]) {
+    data.offsets.popper[side] -= popper[side] - (reference[opSide] - arrowElementSize);
+  }
+  // bottom/right side
+  if (reference[side] + arrowElementSize > popper[opSide]) {
+    data.offsets.popper[side] += reference[side] + arrowElementSize - popper[opSide];
+  }
+  data.offsets.popper = getClientRect(data.offsets.popper);
+
+  // compute center of the popper
+  var center = reference[side] + reference[len] / 2 - arrowElementSize / 2;
+
+  // Compute the sideValue using the updated popper offsets
+  // take popper margin in account because we don't have this info available
+  var css = getStyleComputedProperty(data.instance.popper);
+  var popperMarginSide = parseFloat(css['margin' + sideCapitalized]);
+  var popperBorderSide = parseFloat(css['border' + sideCapitalized + 'Width']);
+  var sideValue = center - data.offsets.popper[side] - popperMarginSide - popperBorderSide;
+
+  // prevent arrowElement from being placed not contiguously to its popper
+  sideValue = Math.max(Math.min(popper[len] - arrowElementSize, sideValue), 0);
+
+  data.arrowElement = arrowElement;
+  data.offsets.arrow = (_data$offsets$arrow = {}, defineProperty(_data$offsets$arrow, side, Math.round(sideValue)), defineProperty(_data$offsets$arrow, altSide, ''), _data$offsets$arrow);
+
+  return data;
+}
+
+/**
+ * Get the opposite placement variation of the given one
+ * @method
+ * @memberof Popper.Utils
+ * @argument {String} placement variation
+ * @returns {String} flipped placement variation
+ */
+function getOppositeVariation(variation) {
+  if (variation === 'end') {
+    return 'start';
+  } else if (variation === 'start') {
+    return 'end';
+  }
+  return variation;
+}
+
+/**
+ * List of accepted placements to use as values of the `placement` option.<br />
+ * Valid placements are:
+ * - `auto`
+ * - `top`
+ * - `right`
+ * - `bottom`
+ * - `left`
+ *
+ * Each placement can have a variation from this list:
+ * - `-start`
+ * - `-end`
+ *
+ * Variations are interpreted easily if you think of them as the left to right
+ * written languages. Horizontally (`top` and `bottom`), `start` is left and `end`
+ * is right.<br />
+ * Vertically (`left` and `right`), `start` is top and `end` is bottom.
+ *
+ * Some valid examples are:
+ * - `top-end` (on top of reference, right aligned)
+ * - `right-start` (on right of reference, top aligned)
+ * - `bottom` (on bottom, centered)
+ * - `auto-end` (on the side with more space available, alignment depends by placement)
+ *
+ * @static
+ * @type {Array}
+ * @enum {String}
+ * @readonly
+ * @method placements
+ * @memberof Popper
+ */
+var placements = ['auto-start', 'auto', 'auto-end', 'top-start', 'top', 'top-end', 'right-start', 'right', 'right-end', 'bottom-end', 'bottom', 'bottom-start', 'left-end', 'left', 'left-start'];
+
+// Get rid of `auto` `auto-start` and `auto-end`
+var validPlacements = placements.slice(3);
+
+/**
+ * Given an initial placement, returns all the subsequent placements
+ * clockwise (or counter-clockwise).
+ *
+ * @method
+ * @memberof Popper.Utils
+ * @argument {String} placement - A valid placement (it accepts variations)
+ * @argument {Boolean} counter - Set to true to walk the placements counterclockwise
+ * @returns {Array} placements including their variations
+ */
+function clockwise(placement) {
+  var counter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+  var index = validPlacements.indexOf(placement);
+  var arr = validPlacements.slice(index + 1).concat(validPlacements.slice(0, index));
+  return counter ? arr.reverse() : arr;
+}
+
+var BEHAVIORS = {
+  FLIP: 'flip',
+  CLOCKWISE: 'clockwise',
+  COUNTERCLOCKWISE: 'counterclockwise'
+};
+
+/**
+ * @function
+ * @memberof Modifiers
+ * @argument {Object} data - The data object generated by update method
+ * @argument {Object} options - Modifiers configuration and options
+ * @returns {Object} The data object, properly modified
+ */
+function flip(data, options) {
+  // if `inner` modifier is enabled, we can't use the `flip` modifier
+  if (isModifierEnabled(data.instance.modifiers, 'inner')) {
+    return data;
+  }
+
+  if (data.flipped && data.placement === data.originalPlacement) {
+    // seems like flip is trying to loop, probably there's not enough space on any of the flippable sides
+    return data;
+  }
+
+  var boundaries = getBoundaries(data.instance.popper, data.instance.reference, options.padding, options.boundariesElement, data.positionFixed);
+
+  var placement = data.placement.split('-')[0];
+  var placementOpposite = getOppositePlacement(placement);
+  var variation = data.placement.split('-')[1] || '';
+
+  var flipOrder = [];
+
+  switch (options.behavior) {
+    case BEHAVIORS.FLIP:
+      flipOrder = [placement, placementOpposite];
+      break;
+    case BEHAVIORS.CLOCKWISE:
+      flipOrder = clockwise(placement);
+      break;
+    case BEHAVIORS.COUNTERCLOCKWISE:
+      flipOrder = clockwise(placement, true);
+      break;
+    default:
+      flipOrder = options.behavior;
+  }
+
+  flipOrder.forEach(function (step, index) {
+    if (placement !== step || flipOrder.length === index + 1) {
+      return data;
+    }
+
+    placement = data.placement.split('-')[0];
+    placementOpposite = getOppositePlacement(placement);
+
+    var popperOffsets = data.offsets.popper;
+    var refOffsets = data.offsets.reference;
+
+    // using floor because the reference offsets may contain decimals we are not going to consider here
+    var floor = Math.floor;
+    var overlapsRef = placement === 'left' && floor(popperOffsets.right) > floor(refOffsets.left) || placement === 'right' && floor(popperOffsets.left) < floor(refOffsets.right) || placement === 'top' && floor(popperOffsets.bottom) > floor(refOffsets.top) || placement === 'bottom' && floor(popperOffsets.top) < floor(refOffsets.bottom);
+
+    var overflowsLeft = floor(popperOffsets.left) < floor(boundaries.left);
+    var overflowsRight = floor(popperOffsets.right) > floor(boundaries.right);
+    var overflowsTop = floor(popperOffsets.top) < floor(boundaries.top);
+    var overflowsBottom = floor(popperOffsets.bottom) > floor(boundaries.bottom);
+
+    var overflowsBoundaries = placement === 'left' && overflowsLeft || placement === 'right' && overflowsRight || placement === 'top' && overflowsTop || placement === 'bottom' && overflowsBottom;
+
+    // flip the variation if required
+    var isVertical = ['top', 'bottom'].indexOf(placement) !== -1;
+
+    // flips variation if reference element overflows boundaries
+    var flippedVariationByRef = !!options.flipVariations && (isVertical && variation === 'start' && overflowsLeft || isVertical && variation === 'end' && overflowsRight || !isVertical && variation === 'start' && overflowsTop || !isVertical && variation === 'end' && overflowsBottom);
+
+    // flips variation if popper content overflows boundaries
+    var flippedVariationByContent = !!options.flipVariationsByContent && (isVertical && variation === 'start' && overflowsRight || isVertical && variation === 'end' && overflowsLeft || !isVertical && variation === 'start' && overflowsBottom || !isVertical && variation === 'end' && overflowsTop);
+
+    var flippedVariation = flippedVariationByRef || flippedVariationByContent;
+
+    if (overlapsRef || overflowsBoundaries || flippedVariation) {
+      // this boolean to detect any flip loop
+      data.flipped = true;
+
+      if (overlapsRef || overflowsBoundaries) {
+        placement = flipOrder[index + 1];
+      }
+
+      if (flippedVariation) {
+        variation = getOppositeVariation(variation);
+      }
+
+      data.placement = placement + (variation ? '-' + variation : '');
+
+      // this object contains `position`, we want to preserve it along with
+      // any additional property we may add in the future
+      data.offsets.popper = _extends({}, data.offsets.popper, getPopperOffsets(data.instance.popper, data.offsets.reference, data.placement));
+
+      data = runModifiers(data.instance.modifiers, data, 'flip');
+    }
+  });
+  return data;
+}
+
+/**
+ * @function
+ * @memberof Modifiers
+ * @argument {Object} data - The data object generated by update method
+ * @argument {Object} options - Modifiers configuration and options
+ * @returns {Object} The data object, properly modified
+ */
+function keepTogether(data) {
+  var _data$offsets = data.offsets,
+      popper = _data$offsets.popper,
+      reference = _data$offsets.reference;
+
+  var placement = data.placement.split('-')[0];
+  var floor = Math.floor;
+  var isVertical = ['top', 'bottom'].indexOf(placement) !== -1;
+  var side = isVertical ? 'right' : 'bottom';
+  var opSide = isVertical ? 'left' : 'top';
+  var measurement = isVertical ? 'width' : 'height';
+
+  if (popper[side] < floor(reference[opSide])) {
+    data.offsets.popper[opSide] = floor(reference[opSide]) - popper[measurement];
+  }
+  if (popper[opSide] > floor(reference[side])) {
+    data.offsets.popper[opSide] = floor(reference[side]);
+  }
+
+  return data;
+}
+
+/**
+ * Converts a string containing value + unit into a px value number
+ * @function
+ * @memberof {modifiers~offset}
+ * @private
+ * @argument {String} str - Value + unit string
+ * @argument {String} measurement - `height` or `width`
+ * @argument {Object} popperOffsets
+ * @argument {Object} referenceOffsets
+ * @returns {Number|String}
+ * Value in pixels, or original string if no values were extracted
+ */
+function toValue(str, measurement, popperOffsets, referenceOffsets) {
+  // separate value from unit
+  var split = str.match(/((?:\-|\+)?\d*\.?\d*)(.*)/);
+  var value = +split[1];
+  var unit = split[2];
+
+  // If it's not a number it's an operator, I guess
+  if (!value) {
+    return str;
+  }
+
+  if (unit.indexOf('%') === 0) {
+    var element = void 0;
+    switch (unit) {
+      case '%p':
+        element = popperOffsets;
+        break;
+      case '%':
+      case '%r':
+      default:
+        element = referenceOffsets;
+    }
+
+    var rect = getClientRect(element);
+    return rect[measurement] / 100 * value;
+  } else if (unit === 'vh' || unit === 'vw') {
+    // if is a vh or vw, we calculate the size based on the viewport
+    var size = void 0;
+    if (unit === 'vh') {
+      size = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+    } else {
+      size = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+    }
+    return size / 100 * value;
+  } else {
+    // if is an explicit pixel unit, we get rid of the unit and keep the value
+    // if is an implicit unit, it's px, and we return just the value
+    return value;
+  }
+}
+
+/**
+ * Parse an `offset` string to extrapolate `x` and `y` numeric offsets.
+ * @function
+ * @memberof {modifiers~offset}
+ * @private
+ * @argument {String} offset
+ * @argument {Object} popperOffsets
+ * @argument {Object} referenceOffsets
+ * @argument {String} basePlacement
+ * @returns {Array} a two cells array with x and y offsets in numbers
+ */
+function parseOffset(offset, popperOffsets, referenceOffsets, basePlacement) {
+  var offsets = [0, 0];
+
+  // Use height if placement is left or right and index is 0 otherwise use width
+  // in this way the first offset will use an axis and the second one
+  // will use the other one
+  var useHeight = ['right', 'left'].indexOf(basePlacement) !== -1;
+
+  // Split the offset string to obtain a list of values and operands
+  // The regex addresses values with the plus or minus sign in front (+10, -20, etc)
+  var fragments = offset.split(/(\+|\-)/).map(function (frag) {
+    return frag.trim();
+  });
+
+  // Detect if the offset string contains a pair of values or a single one
+  // they could be separated by comma or space
+  var divider = fragments.indexOf(find(fragments, function (frag) {
+    return frag.search(/,|\s/) !== -1;
+  }));
+
+  if (fragments[divider] && fragments[divider].indexOf(',') === -1) {
+    console.warn('Offsets separated by white space(s) are deprecated, use a comma (,) instead.');
+  }
+
+  // If divider is found, we divide the list of values and operands to divide
+  // them by ofset X and Y.
+  var splitRegex = /\s*,\s*|\s+/;
+  var ops = divider !== -1 ? [fragments.slice(0, divider).concat([fragments[divider].split(splitRegex)[0]]), [fragments[divider].split(splitRegex)[1]].concat(fragments.slice(divider + 1))] : [fragments];
+
+  // Convert the values with units to absolute pixels to allow our computations
+  ops = ops.map(function (op, index) {
+    // Most of the units rely on the orientation of the popper
+    var measurement = (index === 1 ? !useHeight : useHeight) ? 'height' : 'width';
+    var mergeWithPrevious = false;
+    return op
+    // This aggregates any `+` or `-` sign that aren't considered operators
+    // e.g.: 10 + +5 => [10, +, +5]
+    .reduce(function (a, b) {
+      if (a[a.length - 1] === '' && ['+', '-'].indexOf(b) !== -1) {
+        a[a.length - 1] = b;
+        mergeWithPrevious = true;
+        return a;
+      } else if (mergeWithPrevious) {
+        a[a.length - 1] += b;
+        mergeWithPrevious = false;
+        return a;
+      } else {
+        return a.concat(b);
+      }
+    }, [])
+    // Here we convert the string values into number values (in px)
+    .map(function (str) {
+      return toValue(str, measurement, popperOffsets, referenceOffsets);
+    });
+  });
+
+  // Loop trough the offsets arrays and execute the operations
+  ops.forEach(function (op, index) {
+    op.forEach(function (frag, index2) {
+      if (isNumeric(frag)) {
+        offsets[index] += frag * (op[index2 - 1] === '-' ? -1 : 1);
+      }
+    });
+  });
+  return offsets;
+}
+
+/**
+ * @function
+ * @memberof Modifiers
+ * @argument {Object} data - The data object generated by update method
+ * @argument {Object} options - Modifiers configuration and options
+ * @argument {Number|String} options.offset=0
+ * The offset value as described in the modifier description
+ * @returns {Object} The data object, properly modified
+ */
+function offset(data, _ref) {
+  var offset = _ref.offset;
+  var placement = data.placement,
+      _data$offsets = data.offsets,
+      popper = _data$offsets.popper,
+      reference = _data$offsets.reference;
+
+  var basePlacement = placement.split('-')[0];
+
+  var offsets = void 0;
+  if (isNumeric(+offset)) {
+    offsets = [+offset, 0];
+  } else {
+    offsets = parseOffset(offset, popper, reference, basePlacement);
+  }
+
+  if (basePlacement === 'left') {
+    popper.top += offsets[0];
+    popper.left -= offsets[1];
+  } else if (basePlacement === 'right') {
+    popper.top += offsets[0];
+    popper.left += offsets[1];
+  } else if (basePlacement === 'top') {
+    popper.left += offsets[0];
+    popper.top -= offsets[1];
+  } else if (basePlacement === 'bottom') {
+    popper.left += offsets[0];
+    popper.top += offsets[1];
+  }
+
+  data.popper = popper;
+  return data;
+}
+
+/**
+ * @function
+ * @memberof Modifiers
+ * @argument {Object} data - The data object generated by `update` method
+ * @argument {Object} options - Modifiers configuration and options
+ * @returns {Object} The data object, properly modified
+ */
+function preventOverflow(data, options) {
+  var boundariesElement = options.boundariesElement || getOffsetParent(data.instance.popper);
+
+  // If offsetParent is the reference element, we really want to
+  // go one step up and use the next offsetParent as reference to
+  // avoid to make this modifier completely useless and look like broken
+  if (data.instance.reference === boundariesElement) {
+    boundariesElement = getOffsetParent(boundariesElement);
+  }
+
+  // NOTE: DOM access here
+  // resets the popper's position so that the document size can be calculated excluding
+  // the size of the popper element itself
+  var transformProp = getSupportedPropertyName('transform');
+  var popperStyles = data.instance.popper.style; // assignment to help minification
+  var top = popperStyles.top,
+      left = popperStyles.left,
+      transform = popperStyles[transformProp];
+
+  popperStyles.top = '';
+  popperStyles.left = '';
+  popperStyles[transformProp] = '';
+
+  var boundaries = getBoundaries(data.instance.popper, data.instance.reference, options.padding, boundariesElement, data.positionFixed);
+
+  // NOTE: DOM access here
+  // restores the original style properties after the offsets have been computed
+  popperStyles.top = top;
+  popperStyles.left = left;
+  popperStyles[transformProp] = transform;
+
+  options.boundaries = boundaries;
+
+  var order = options.priority;
+  var popper = data.offsets.popper;
+
+  var check = {
+    primary: function primary(placement) {
+      var value = popper[placement];
+      if (popper[placement] < boundaries[placement] && !options.escapeWithReference) {
+        value = Math.max(popper[placement], boundaries[placement]);
+      }
+      return defineProperty({}, placement, value);
+    },
+    secondary: function secondary(placement) {
+      var mainSide = placement === 'right' ? 'left' : 'top';
+      var value = popper[mainSide];
+      if (popper[placement] > boundaries[placement] && !options.escapeWithReference) {
+        value = Math.min(popper[mainSide], boundaries[placement] - (placement === 'right' ? popper.width : popper.height));
+      }
+      return defineProperty({}, mainSide, value);
+    }
+  };
+
+  order.forEach(function (placement) {
+    var side = ['left', 'top'].indexOf(placement) !== -1 ? 'primary' : 'secondary';
+    popper = _extends({}, popper, check[side](placement));
+  });
+
+  data.offsets.popper = popper;
+
+  return data;
+}
+
+/**
+ * @function
+ * @memberof Modifiers
+ * @argument {Object} data - The data object generated by `update` method
+ * @argument {Object} options - Modifiers configuration and options
+ * @returns {Object} The data object, properly modified
+ */
+function shift(data) {
+  var placement = data.placement;
+  var basePlacement = placement.split('-')[0];
+  var shiftvariation = placement.split('-')[1];
+
+  // if shift shiftvariation is specified, run the modifier
+  if (shiftvariation) {
+    var _data$offsets = data.offsets,
+        reference = _data$offsets.reference,
+        popper = _data$offsets.popper;
+
+    var isVertical = ['bottom', 'top'].indexOf(basePlacement) !== -1;
+    var side = isVertical ? 'left' : 'top';
+    var measurement = isVertical ? 'width' : 'height';
+
+    var shiftOffsets = {
+      start: defineProperty({}, side, reference[side]),
+      end: defineProperty({}, side, reference[side] + reference[measurement] - popper[measurement])
+    };
+
+    data.offsets.popper = _extends({}, popper, shiftOffsets[shiftvariation]);
+  }
+
+  return data;
+}
+
+/**
+ * @function
+ * @memberof Modifiers
+ * @argument {Object} data - The data object generated by update method
+ * @argument {Object} options - Modifiers configuration and options
+ * @returns {Object} The data object, properly modified
+ */
+function hide(data) {
+  if (!isModifierRequired(data.instance.modifiers, 'hide', 'preventOverflow')) {
+    return data;
+  }
+
+  var refRect = data.offsets.reference;
+  var bound = find(data.instance.modifiers, function (modifier) {
+    return modifier.name === 'preventOverflow';
+  }).boundaries;
+
+  if (refRect.bottom < bound.top || refRect.left > bound.right || refRect.top > bound.bottom || refRect.right < bound.left) {
+    // Avoid unnecessary DOM access if visibility hasn't changed
+    if (data.hide === true) {
+      return data;
+    }
+
+    data.hide = true;
+    data.attributes['x-out-of-boundaries'] = '';
+  } else {
+    // Avoid unnecessary DOM access if visibility hasn't changed
+    if (data.hide === false) {
+      return data;
+    }
+
+    data.hide = false;
+    data.attributes['x-out-of-boundaries'] = false;
+  }
+
+  return data;
+}
+
+/**
+ * @function
+ * @memberof Modifiers
+ * @argument {Object} data - The data object generated by `update` method
+ * @argument {Object} options - Modifiers configuration and options
+ * @returns {Object} The data object, properly modified
+ */
+function inner(data) {
+  var placement = data.placement;
+  var basePlacement = placement.split('-')[0];
+  var _data$offsets = data.offsets,
+      popper = _data$offsets.popper,
+      reference = _data$offsets.reference;
+
+  var isHoriz = ['left', 'right'].indexOf(basePlacement) !== -1;
+
+  var subtractLength = ['top', 'left'].indexOf(basePlacement) === -1;
+
+  popper[isHoriz ? 'left' : 'top'] = reference[basePlacement] - (subtractLength ? popper[isHoriz ? 'width' : 'height'] : 0);
+
+  data.placement = getOppositePlacement(placement);
+  data.offsets.popper = getClientRect(popper);
+
+  return data;
+}
+
+/**
+ * Modifier function, each modifier can have a function of this type assigned
+ * to its `fn` property.<br />
+ * These functions will be called on each update, this means that you must
+ * make sure they are performant enough to avoid performance bottlenecks.
+ *
+ * @function ModifierFn
+ * @argument {dataObject} data - The data object generated by `update` method
+ * @argument {Object} options - Modifiers configuration and options
+ * @returns {dataObject} The data object, properly modified
+ */
+
+/**
+ * Modifiers are plugins used to alter the behavior of your poppers.<br />
+ * Popper.js uses a set of 9 modifiers to provide all the basic functionalities
+ * needed by the library.
+ *
+ * Usually you don't want to override the `order`, `fn` and `onLoad` props.
+ * All the other properties are configurations that could be tweaked.
+ * @namespace modifiers
+ */
+var modifiers = {
+  /**
+   * Modifier used to shift the popper on the start or end of its reference
+   * element.<br />
+   * It will read the variation of the `placement` property.<br />
+   * It can be one either `-end` or `-start`.
+   * @memberof modifiers
+   * @inner
+   */
+  shift: {
+    /** @prop {number} order=100 - Index used to define the order of execution */
+    order: 100,
+    /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
+    enabled: true,
+    /** @prop {ModifierFn} */
+    fn: shift
+  },
+
+  /**
+   * The `offset` modifier can shift your popper on both its axis.
+   *
+   * It accepts the following units:
+   * - `px` or unit-less, interpreted as pixels
+   * - `%` or `%r`, percentage relative to the length of the reference element
+   * - `%p`, percentage relative to the length of the popper element
+   * - `vw`, CSS viewport width unit
+   * - `vh`, CSS viewport height unit
+   *
+   * For length is intended the main axis relative to the placement of the popper.<br />
+   * This means that if the placement is `top` or `bottom`, the length will be the
+   * `width`. In case of `left` or `right`, it will be the `height`.
+   *
+   * You can provide a single value (as `Number` or `String`), or a pair of values
+   * as `String` divided by a comma or one (or more) white spaces.<br />
+   * The latter is a deprecated method because it leads to confusion and will be
+   * removed in v2.<br />
+   * Additionally, it accepts additions and subtractions between different units.
+   * Note that multiplications and divisions aren't supported.
+   *
+   * Valid examples are:
+   * ```
+   * 10
+   * '10%'
+   * '10, 10'
+   * '10%, 10'
+   * '10 + 10%'
+   * '10 - 5vh + 3%'
+   * '-10px + 5vh, 5px - 6%'
+   * ```
+   * > **NB**: If you desire to apply offsets to your poppers in a way that may make them overlap
+   * > with their reference element, unfortunately, you will have to disable the `flip` modifier.
+   * > You can read more on this at this [issue](https://github.com/FezVrasta/popper.js/issues/373).
+   *
+   * @memberof modifiers
+   * @inner
+   */
+  offset: {
+    /** @prop {number} order=200 - Index used to define the order of execution */
+    order: 200,
+    /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
+    enabled: true,
+    /** @prop {ModifierFn} */
+    fn: offset,
+    /** @prop {Number|String} offset=0
+     * The offset value as described in the modifier description
+     */
+    offset: 0
+  },
+
+  /**
+   * Modifier used to prevent the popper from being positioned outside the boundary.
+   *
+   * A scenario exists where the reference itself is not within the boundaries.<br />
+   * We can say it has "escaped the boundaries" — or just "escaped".<br />
+   * In this case we need to decide whether the popper should either:
+   *
+   * - detach from the reference and remain "trapped" in the boundaries, or
+   * - if it should ignore the boundary and "escape with its reference"
+   *
+   * When `escapeWithReference` is set to`true` and reference is completely
+   * outside its boundaries, the popper will overflow (or completely leave)
+   * the boundaries in order to remain attached to the edge of the reference.
+   *
+   * @memberof modifiers
+   * @inner
+   */
+  preventOverflow: {
+    /** @prop {number} order=300 - Index used to define the order of execution */
+    order: 300,
+    /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
+    enabled: true,
+    /** @prop {ModifierFn} */
+    fn: preventOverflow,
+    /**
+     * @prop {Array} [priority=['left','right','top','bottom']]
+     * Popper will try to prevent overflow following these priorities by default,
+     * then, it could overflow on the left and on top of the `boundariesElement`
+     */
+    priority: ['left', 'right', 'top', 'bottom'],
+    /**
+     * @prop {number} padding=5
+     * Amount of pixel used to define a minimum distance between the boundaries
+     * and the popper. This makes sure the popper always has a little padding
+     * between the edges of its container
+     */
+    padding: 5,
+    /**
+     * @prop {String|HTMLElement} boundariesElement='scrollParent'
+     * Boundaries used by the modifier. Can be `scrollParent`, `window`,
+     * `viewport` or any DOM element.
+     */
+    boundariesElement: 'scrollParent'
+  },
+
+  /**
+   * Modifier used to make sure the reference and its popper stay near each other
+   * without leaving any gap between the two. Especially useful when the arrow is
+   * enabled and you want to ensure that it points to its reference element.
+   * It cares only about the first axis. You can still have poppers with margin
+   * between the popper and its reference element.
+   * @memberof modifiers
+   * @inner
+   */
+  keepTogether: {
+    /** @prop {number} order=400 - Index used to define the order of execution */
+    order: 400,
+    /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
+    enabled: true,
+    /** @prop {ModifierFn} */
+    fn: keepTogether
+  },
+
+  /**
+   * This modifier is used to move the `arrowElement` of the popper to make
+   * sure it is positioned between the reference element and its popper element.
+   * It will read the outer size of the `arrowElement` node to detect how many
+   * pixels of conjunction are needed.
+   *
+   * It has no effect if no `arrowElement` is provided.
+   * @memberof modifiers
+   * @inner
+   */
+  arrow: {
+    /** @prop {number} order=500 - Index used to define the order of execution */
+    order: 500,
+    /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
+    enabled: true,
+    /** @prop {ModifierFn} */
+    fn: arrow,
+    /** @prop {String|HTMLElement} element='[x-arrow]' - Selector or node used as arrow */
+    element: '[x-arrow]'
+  },
+
+  /**
+   * Modifier used to flip the popper's placement when it starts to overlap its
+   * reference element.
+   *
+   * Requires the `preventOverflow` modifier before it in order to work.
+   *
+   * **NOTE:** this modifier will interrupt the current update cycle and will
+   * restart it if it detects the need to flip the placement.
+   * @memberof modifiers
+   * @inner
+   */
+  flip: {
+    /** @prop {number} order=600 - Index used to define the order of execution */
+    order: 600,
+    /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
+    enabled: true,
+    /** @prop {ModifierFn} */
+    fn: flip,
+    /**
+     * @prop {String|Array} behavior='flip'
+     * The behavior used to change the popper's placement. It can be one of
+     * `flip`, `clockwise`, `counterclockwise` or an array with a list of valid
+     * placements (with optional variations)
+     */
+    behavior: 'flip',
+    /**
+     * @prop {number} padding=5
+     * The popper will flip if it hits the edges of the `boundariesElement`
+     */
+    padding: 5,
+    /**
+     * @prop {String|HTMLElement} boundariesElement='viewport'
+     * The element which will define the boundaries of the popper position.
+     * The popper will never be placed outside of the defined boundaries
+     * (except if `keepTogether` is enabled)
+     */
+    boundariesElement: 'viewport',
+    /**
+     * @prop {Boolean} flipVariations=false
+     * The popper will switch placement variation between `-start` and `-end` when
+     * the reference element overlaps its boundaries.
+     *
+     * The original placement should have a set variation.
+     */
+    flipVariations: false,
+    /**
+     * @prop {Boolean} flipVariationsByContent=false
+     * The popper will switch placement variation between `-start` and `-end` when
+     * the popper element overlaps its reference boundaries.
+     *
+     * The original placement should have a set variation.
+     */
+    flipVariationsByContent: false
+  },
+
+  /**
+   * Modifier used to make the popper flow toward the inner of the reference element.
+   * By default, when this modifier is disabled, the popper will be placed outside
+   * the reference element.
+   * @memberof modifiers
+   * @inner
+   */
+  inner: {
+    /** @prop {number} order=700 - Index used to define the order of execution */
+    order: 700,
+    /** @prop {Boolean} enabled=false - Whether the modifier is enabled or not */
+    enabled: false,
+    /** @prop {ModifierFn} */
+    fn: inner
+  },
+
+  /**
+   * Modifier used to hide the popper when its reference element is outside of the
+   * popper boundaries. It will set a `x-out-of-boundaries` attribute which can
+   * be used to hide with a CSS selector the popper when its reference is
+   * out of boundaries.
+   *
+   * Requires the `preventOverflow` modifier before it in order to work.
+   * @memberof modifiers
+   * @inner
+   */
+  hide: {
+    /** @prop {number} order=800 - Index used to define the order of execution */
+    order: 800,
+    /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
+    enabled: true,
+    /** @prop {ModifierFn} */
+    fn: hide
+  },
+
+  /**
+   * Computes the style that will be applied to the popper element to gets
+   * properly positioned.
+   *
+   * Note that this modifier will not touch the DOM, it just prepares the styles
+   * so that `applyStyle` modifier can apply it. This separation is useful
+   * in case you need to replace `applyStyle` with a custom implementation.
+   *
+   * This modifier has `850` as `order` value to maintain backward compatibility
+   * with previous versions of Popper.js. Expect the modifiers ordering method
+   * to change in future major versions of the library.
+   *
+   * @memberof modifiers
+   * @inner
+   */
+  computeStyle: {
+    /** @prop {number} order=850 - Index used to define the order of execution */
+    order: 850,
+    /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
+    enabled: true,
+    /** @prop {ModifierFn} */
+    fn: computeStyle,
+    /**
+     * @prop {Boolean} gpuAcceleration=true
+     * If true, it uses the CSS 3D transformation to position the popper.
+     * Otherwise, it will use the `top` and `left` properties
+     */
+    gpuAcceleration: true,
+    /**
+     * @prop {string} [x='bottom']
+     * Where to anchor the X axis (`bottom` or `top`). AKA X offset origin.
+     * Change this if your popper should grow in a direction different from `bottom`
+     */
+    x: 'bottom',
+    /**
+     * @prop {string} [x='left']
+     * Where to anchor the Y axis (`left` or `right`). AKA Y offset origin.
+     * Change this if your popper should grow in a direction different from `right`
+     */
+    y: 'right'
+  },
+
+  /**
+   * Applies the computed styles to the popper element.
+   *
+   * All the DOM manipulations are limited to this modifier. This is useful in case
+   * you want to integrate Popper.js inside a framework or view library and you
+   * want to delegate all the DOM manipulations to it.
+   *
+   * Note that if you disable this modifier, you must make sure the popper element
+   * has its position set to `absolute` before Popper.js can do its work!
+   *
+   * Just disable this modifier and define your own to achieve the desired effect.
+   *
+   * @memberof modifiers
+   * @inner
+   */
+  applyStyle: {
+    /** @prop {number} order=900 - Index used to define the order of execution */
+    order: 900,
+    /** @prop {Boolean} enabled=true - Whether the modifier is enabled or not */
+    enabled: true,
+    /** @prop {ModifierFn} */
+    fn: applyStyle,
+    /** @prop {Function} */
+    onLoad: applyStyleOnLoad,
+    /**
+     * @deprecated since version 1.10.0, the property moved to `computeStyle` modifier
+     * @prop {Boolean} gpuAcceleration=true
+     * If true, it uses the CSS 3D transformation to position the popper.
+     * Otherwise, it will use the `top` and `left` properties
+     */
+    gpuAcceleration: undefined
+  }
+};
+
+/**
+ * The `dataObject` is an object containing all the information used by Popper.js.
+ * This object is passed to modifiers and to the `onCreate` and `onUpdate` callbacks.
+ * @name dataObject
+ * @property {Object} data.instance The Popper.js instance
+ * @property {String} data.placement Placement applied to popper
+ * @property {String} data.originalPlacement Placement originally defined on init
+ * @property {Boolean} data.flipped True if popper has been flipped by flip modifier
+ * @property {Boolean} data.hide True if the reference element is out of boundaries, useful to know when to hide the popper
+ * @property {HTMLElement} data.arrowElement Node used as arrow by arrow modifier
+ * @property {Object} data.styles Any CSS property defined here will be applied to the popper. It expects the JavaScript nomenclature (eg. `marginBottom`)
+ * @property {Object} data.arrowStyles Any CSS property defined here will be applied to the popper arrow. It expects the JavaScript nomenclature (eg. `marginBottom`)
+ * @property {Object} data.boundaries Offsets of the popper boundaries
+ * @property {Object} data.offsets The measurements of popper, reference and arrow elements
+ * @property {Object} data.offsets.popper `top`, `left`, `width`, `height` values
+ * @property {Object} data.offsets.reference `top`, `left`, `width`, `height` values
+ * @property {Object} data.offsets.arrow] `top` and `left` offsets, only one of them will be different from 0
+ */
+
+/**
+ * Default options provided to Popper.js constructor.<br />
+ * These can be overridden using the `options` argument of Popper.js.<br />
+ * To override an option, simply pass an object with the same
+ * structure of the `options` object, as the 3rd argument. For example:
+ * ```
+ * new Popper(ref, pop, {
+ *   modifiers: {
+ *     preventOverflow: { enabled: false }
+ *   }
+ * })
+ * ```
+ * @type {Object}
+ * @static
+ * @memberof Popper
+ */
+var Defaults = {
+  /**
+   * Popper's placement.
+   * @prop {Popper.placements} placement='bottom'
+   */
+  placement: 'bottom',
+
+  /**
+   * Set this to true if you want popper to position it self in 'fixed' mode
+   * @prop {Boolean} positionFixed=false
+   */
+  positionFixed: false,
+
+  /**
+   * Whether events (resize, scroll) are initially enabled.
+   * @prop {Boolean} eventsEnabled=true
+   */
+  eventsEnabled: true,
+
+  /**
+   * Set to true if you want to automatically remove the popper when
+   * you call the `destroy` method.
+   * @prop {Boolean} removeOnDestroy=false
+   */
+  removeOnDestroy: false,
+
+  /**
+   * Callback called when the popper is created.<br />
+   * By default, it is set to no-op.<br />
+   * Access Popper.js instance with `data.instance`.
+   * @prop {onCreate}
+   */
+  onCreate: function onCreate() {},
+
+  /**
+   * Callback called when the popper is updated. This callback is not called
+   * on the initialization/creation of the popper, but only on subsequent
+   * updates.<br />
+   * By default, it is set to no-op.<br />
+   * Access Popper.js instance with `data.instance`.
+   * @prop {onUpdate}
+   */
+  onUpdate: function onUpdate() {},
+
+  /**
+   * List of modifiers used to modify the offsets before they are applied to the popper.
+   * They provide most of the functionalities of Popper.js.
+   * @prop {modifiers}
+   */
+  modifiers: modifiers
+};
+
+/**
+ * @callback onCreate
+ * @param {dataObject} data
+ */
+
+/**
+ * @callback onUpdate
+ * @param {dataObject} data
+ */
+
+// Utils
+// Methods
+var Popper = function () {
+  /**
+   * Creates a new Popper.js instance.
+   * @class Popper
+   * @param {Element|referenceObject} reference - The reference element used to position the popper
+   * @param {Element} popper - The HTML / XML element used as the popper
+   * @param {Object} options - Your custom options to override the ones defined in [Defaults](#defaults)
+   * @return {Object} instance - The generated Popper.js instance
+   */
+  function Popper(reference, popper) {
+    var _this = this;
+
+    var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    classCallCheck(this, Popper);
+
+    this.scheduleUpdate = function () {
+      return requestAnimationFrame(_this.update);
+    };
+
+    // make update() debounced, so that it only runs at most once-per-tick
+    this.update = debounce(this.update.bind(this));
+
+    // with {} we create a new object with the options inside it
+    this.options = _extends({}, Popper.Defaults, options);
+
+    // init state
+    this.state = {
+      isDestroyed: false,
+      isCreated: false,
+      scrollParents: []
+    };
+
+    // get reference and popper elements (allow jQuery wrappers)
+    this.reference = reference && reference.jquery ? reference[0] : reference;
+    this.popper = popper && popper.jquery ? popper[0] : popper;
+
+    // Deep merge modifiers options
+    this.options.modifiers = {};
+    Object.keys(_extends({}, Popper.Defaults.modifiers, options.modifiers)).forEach(function (name) {
+      _this.options.modifiers[name] = _extends({}, Popper.Defaults.modifiers[name] || {}, options.modifiers ? options.modifiers[name] : {});
+    });
+
+    // Refactoring modifiers' list (Object => Array)
+    this.modifiers = Object.keys(this.options.modifiers).map(function (name) {
+      return _extends({
+        name: name
+      }, _this.options.modifiers[name]);
+    })
+    // sort the modifiers by order
+    .sort(function (a, b) {
+      return a.order - b.order;
+    });
+
+    // modifiers have the ability to execute arbitrary code when Popper.js get inited
+    // such code is executed in the same order of its modifier
+    // they could add new properties to their options configuration
+    // BE AWARE: don't add options to `options.modifiers.name` but to `modifierOptions`!
+    this.modifiers.forEach(function (modifierOptions) {
+      if (modifierOptions.enabled && isFunction(modifierOptions.onLoad)) {
+        modifierOptions.onLoad(_this.reference, _this.popper, _this.options, modifierOptions, _this.state);
+      }
+    });
+
+    // fire the first update to position the popper in the right place
+    this.update();
+
+    var eventsEnabled = this.options.eventsEnabled;
+    if (eventsEnabled) {
+      // setup event listeners, they will take care of update the position in specific situations
+      this.enableEventListeners();
+    }
+
+    this.state.eventsEnabled = eventsEnabled;
+  }
+
+  // We can't use class properties because they don't get listed in the
+  // class prototype and break stuff like Sinon stubs
+
+
+  createClass(Popper, [{
+    key: 'update',
+    value: function update$$1() {
+      return update.call(this);
+    }
+  }, {
+    key: 'destroy',
+    value: function destroy$$1() {
+      return destroy.call(this);
+    }
+  }, {
+    key: 'enableEventListeners',
+    value: function enableEventListeners$$1() {
+      return enableEventListeners.call(this);
+    }
+  }, {
+    key: 'disableEventListeners',
+    value: function disableEventListeners$$1() {
+      return disableEventListeners.call(this);
+    }
+
+    /**
+     * Schedules an update. It will run on the next UI update available.
+     * @method scheduleUpdate
+     * @memberof Popper
+     */
+
+
+    /**
+     * Collection of utilities useful when writing custom modifiers.
+     * Starting from version 1.7, this method is available only if you
+     * include `popper-utils.js` before `popper.js`.
+     *
+     * **DEPRECATION**: This way to access PopperUtils is deprecated
+     * and will be removed in v2! Use the PopperUtils module directly instead.
+     * Due to the high instability of the methods contained in Utils, we can't
+     * guarantee them to follow semver. Use them at your own risk!
+     * @static
+     * @private
+     * @type {Object}
+     * @deprecated since version 1.8
+     * @member Utils
+     * @memberof Popper
+     */
+
+  }]);
+  return Popper;
+}();
+
+/**
+ * The `referenceObject` is an object that provides an interface compatible with Popper.js
+ * and lets you use it as replacement of a real DOM node.<br />
+ * You can use this method to position a popper relatively to a set of coordinates
+ * in case you don't have a DOM node to use as reference.
+ *
+ * ```
+ * new Popper(referenceObject, popperNode);
+ * ```
+ *
+ * NB: This feature isn't supported in Internet Explorer 10.
+ * @name referenceObject
+ * @property {Function} data.getBoundingClientRect
+ * A function that returns a set of coordinates compatible with the native `getBoundingClientRect` method.
+ * @property {number} data.clientWidth
+ * An ES6 getter that will return the width of the virtual reference element.
+ * @property {number} data.clientHeight
+ * An ES6 getter that will return the height of the virtual reference element.
+ */
+
+
+Popper.Utils = (typeof window !== 'undefined' ? window : global).PopperUtils;
+Popper.placements = placements;
+Popper.Defaults = Defaults;
+
+/* harmony default export */ __webpack_exports__["a"] = (Popper);
+//# sourceMappingURL=popper.js.map
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(85)))
+
+/***/ }),
+/* 229 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -32276,10 +35038,10 @@ var TableContainer_TableContainer = react["forwardRef"](function TableContainer(
   name: 'MuiTableContainer'
 })(TableContainer_TableContainer));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Paper/Paper.js
-var Paper = __webpack_require__(252);
+var Paper = __webpack_require__(259);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Table/TableContext.js
-var TableContext = __webpack_require__(50);
+var TableContext = __webpack_require__(55);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Table/Table.js
 
@@ -32345,7 +35107,7 @@ var Table_Table = react["forwardRef"](function Table(props, ref) {
   name: 'MuiTable'
 })(Table_Table));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Table/Tablelvl2Context.js
-var Tablelvl2Context = __webpack_require__(33);
+var Tablelvl2Context = __webpack_require__(37);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/TableHead/TableHead.js
 
@@ -32458,7 +35220,7 @@ var TableRow_TableRow = react["forwardRef"](function TableRow(props, ref) {
   name: 'MuiTableRow'
 })(TableRow_TableRow));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/TableCell/TableCell.js
-var TableCell = __webpack_require__(275);
+var TableCell = __webpack_require__(283);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/TableBody/TableBody.js
 
@@ -32497,11 +35259,800 @@ var TableBody_TableBody = react["forwardRef"](function TableBody(props, ref) {
 /* harmony default export */ var esm_TableBody_TableBody = (Object(withStyles["a" /* default */])(TableBody_styles, {
   name: 'MuiTableBody'
 })(TableBody_TableBody));
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/ButtonBase/ButtonBase.js + 3 modules
-var ButtonBase = __webpack_require__(80);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 1 modules
+var slicedToArray = __webpack_require__(33);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
+var defineProperty = __webpack_require__(14);
+
+// EXTERNAL MODULE: ./node_modules/react-dom/index.js
+var react_dom = __webpack_require__(8);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/utils/esm/deepmerge.js
+var deepmerge = __webpack_require__(253);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/capitalize.js
 var capitalize = __webpack_require__(7);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Grow/Grow.js + 1 modules
+var Grow = __webpack_require__(277);
+
+// EXTERNAL MODULE: ./node_modules/popper.js/dist/esm/popper.js
+var esm_popper = __webpack_require__(228);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/useTheme/useTheme.js
+var useTheme = __webpack_require__(69);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Portal/Portal.js
+var Portal = __webpack_require__(258);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/createChainedFunction.js
+var createChainedFunction = __webpack_require__(28);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/setRef.js
+var setRef = __webpack_require__(20);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useForkRef.js
+var useForkRef = __webpack_require__(9);
+
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Popper/Popper.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+function flipPlacement(placement, theme) {
+  var direction = theme && theme.direction || 'ltr';
+
+  if (direction === 'ltr') {
+    return placement;
+  }
+
+  switch (placement) {
+    case 'bottom-end':
+      return 'bottom-start';
+
+    case 'bottom-start':
+      return 'bottom-end';
+
+    case 'top-end':
+      return 'top-start';
+
+    case 'top-start':
+      return 'top-end';
+
+    default:
+      return placement;
+  }
+}
+
+function getAnchorEl(anchorEl) {
+  return typeof anchorEl === 'function' ? anchorEl() : anchorEl;
+}
+
+var useEnhancedEffect = typeof window !== 'undefined' ? react["useLayoutEffect"] : react["useEffect"];
+var defaultPopperOptions = {};
+/**
+ * Poppers rely on the 3rd party library [Popper.js](https://popper.js.org/docs/v1/) for positioning.
+ */
+
+var Popper_Popper = react["forwardRef"](function Popper(props, ref) {
+  var anchorEl = props.anchorEl,
+      children = props.children,
+      container = props.container,
+      _props$disablePortal = props.disablePortal,
+      disablePortal = _props$disablePortal === void 0 ? false : _props$disablePortal,
+      _props$keepMounted = props.keepMounted,
+      keepMounted = _props$keepMounted === void 0 ? false : _props$keepMounted,
+      modifiers = props.modifiers,
+      open = props.open,
+      _props$placement = props.placement,
+      initialPlacement = _props$placement === void 0 ? 'bottom' : _props$placement,
+      _props$popperOptions = props.popperOptions,
+      popperOptions = _props$popperOptions === void 0 ? defaultPopperOptions : _props$popperOptions,
+      popperRefProp = props.popperRef,
+      style = props.style,
+      _props$transition = props.transition,
+      transition = _props$transition === void 0 ? false : _props$transition,
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["anchorEl", "children", "container", "disablePortal", "keepMounted", "modifiers", "open", "placement", "popperOptions", "popperRef", "style", "transition"]);
+
+  var tooltipRef = react["useRef"](null);
+  var ownRef = Object(useForkRef["a" /* default */])(tooltipRef, ref);
+  var popperRef = react["useRef"](null);
+  var handlePopperRef = Object(useForkRef["a" /* default */])(popperRef, popperRefProp);
+  var handlePopperRefRef = react["useRef"](handlePopperRef);
+  useEnhancedEffect(function () {
+    handlePopperRefRef.current = handlePopperRef;
+  }, [handlePopperRef]);
+  react["useImperativeHandle"](popperRefProp, function () {
+    return popperRef.current;
+  }, []);
+
+  var _React$useState = react["useState"](true),
+      exited = _React$useState[0],
+      setExited = _React$useState[1];
+
+  var theme = Object(useTheme["a" /* default */])();
+  var rtlPlacement = flipPlacement(initialPlacement, theme);
+  /**
+   * placement initialized from prop but can change during lifetime if modifiers.flip.
+   * modifiers.flip is essentially a flip for controlled/uncontrolled behavior
+   */
+
+  var _React$useState2 = react["useState"](rtlPlacement),
+      placement = _React$useState2[0],
+      setPlacement = _React$useState2[1];
+
+  react["useEffect"](function () {
+    if (popperRef.current) {
+      popperRef.current.update();
+    }
+  });
+  var handleOpen = react["useCallback"](function () {
+    if (!tooltipRef.current || !anchorEl || !open) {
+      return;
+    }
+
+    if (popperRef.current) {
+      popperRef.current.destroy();
+      handlePopperRefRef.current(null);
+    }
+
+    var handlePopperUpdate = function handlePopperUpdate(data) {
+      setPlacement(data.placement);
+    };
+
+    var resolvedAnchorEl = getAnchorEl(anchorEl);
+
+    if (false) { var box, containerWindow; }
+
+    var popper = new esm_popper["a" /* default */](getAnchorEl(anchorEl), tooltipRef.current, Object(esm_extends["a" /* default */])({
+      placement: rtlPlacement
+    }, popperOptions, {
+      modifiers: Object(esm_extends["a" /* default */])({}, disablePortal ? {} : {
+        // It's using scrollParent by default, we can use the viewport when using a portal.
+        preventOverflow: {
+          boundariesElement: 'window'
+        }
+      }, {}, modifiers, {}, popperOptions.modifiers),
+      // We could have been using a custom modifier like react-popper is doing.
+      // But it seems this is the best public API for this use case.
+      onCreate: Object(createChainedFunction["a" /* default */])(handlePopperUpdate, popperOptions.onCreate),
+      onUpdate: Object(createChainedFunction["a" /* default */])(handlePopperUpdate, popperOptions.onUpdate)
+    }));
+    handlePopperRefRef.current(popper);
+  }, [anchorEl, disablePortal, modifiers, open, rtlPlacement, popperOptions]);
+  var handleRef = react["useCallback"](function (node) {
+    Object(setRef["a" /* default */])(ownRef, node);
+    handleOpen();
+  }, [ownRef, handleOpen]);
+
+  var handleEnter = function handleEnter() {
+    setExited(false);
+  };
+
+  var handleClose = function handleClose() {
+    if (!popperRef.current) {
+      return;
+    }
+
+    popperRef.current.destroy();
+    handlePopperRefRef.current(null);
+  };
+
+  var handleExited = function handleExited() {
+    setExited(true);
+    handleClose();
+  };
+
+  react["useEffect"](function () {
+    // Let's update the popper position.
+    handleOpen();
+  }, [handleOpen]);
+  react["useEffect"](function () {
+    return function () {
+      handleClose();
+    };
+  }, []);
+  react["useEffect"](function () {
+    if (!open && !transition) {
+      // Otherwise handleExited will call this.
+      handleClose();
+    }
+  }, [open, transition]);
+
+  if (!keepMounted && !open && (!transition || exited)) {
+    return null;
+  }
+
+  var childProps = {
+    placement: placement
+  };
+
+  if (transition) {
+    childProps.TransitionProps = {
+      in: open,
+      onEnter: handleEnter,
+      onExited: handleExited
+    };
+  }
+
+  return /*#__PURE__*/react["createElement"](Portal["a" /* default */], {
+    disablePortal: disablePortal,
+    container: container
+  }, /*#__PURE__*/react["createElement"]("div", Object(esm_extends["a" /* default */])({
+    ref: handleRef,
+    role: "tooltip"
+  }, other, {
+    style: Object(esm_extends["a" /* default */])({
+      // Prevents scroll issue, waiting for Popper.js to add this style once initiated.
+      position: 'fixed',
+      // Fix Popper.js display issue
+      top: 0,
+      left: 0
+    }, style)
+  }), typeof children === 'function' ? children(childProps) : children));
+});
+ false ? undefined : void 0;
+/* harmony default export */ var esm_Popper_Popper = (Popper_Popper);
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/utils/unstable_useId.js
+
+/**
+ * Private module reserved for @material-ui/x packages.
+ */
+
+function useId(idOverride) {
+  var _React$useState = react["useState"](idOverride),
+      defaultId = _React$useState[0],
+      setDefaultId = _React$useState[1];
+
+  var id = idOverride || defaultId;
+  react["useEffect"](function () {
+    if (defaultId == null) {
+      // Fallback to this default id when possible.
+      // Use the random value for client-side rendering only.
+      // We can't use it server-side.
+      setDefaultId("mui-".concat(Math.round(Math.random() * 1e5)));
+    }
+  }, [defaultId]);
+  return id;
+}
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useIsFocusVisible.js
+var useIsFocusVisible = __webpack_require__(51);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useControlled.js
+var useControlled = __webpack_require__(50);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/useTheme.js
+var styles_useTheme = __webpack_require__(23);
+
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Tooltip/Tooltip.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function round(value) {
+  return Math.round(value * 1e5) / 1e5;
+}
+
+function arrowGenerator() {
+  return {
+    '&[x-placement*="bottom"] $arrow': {
+      flip: false,
+      top: 0,
+      left: 0,
+      marginTop: '-0.95em',
+      marginLeft: 4,
+      marginRight: 4,
+      width: '2em',
+      height: '1em',
+      '&::before': {
+        flip: false,
+        borderWidth: '0 1em 1em 1em',
+        borderColor: 'transparent transparent currentcolor transparent'
+      }
+    },
+    '&[x-placement*="top"] $arrow': {
+      flip: false,
+      bottom: 0,
+      left: 0,
+      marginBottom: '-0.95em',
+      marginLeft: 4,
+      marginRight: 4,
+      width: '2em',
+      height: '1em',
+      '&::before': {
+        flip: false,
+        borderWidth: '1em 1em 0 1em',
+        borderColor: 'currentcolor transparent transparent transparent'
+      }
+    },
+    '&[x-placement*="right"] $arrow': {
+      flip: false,
+      left: 0,
+      marginLeft: '-0.95em',
+      marginTop: 4,
+      marginBottom: 4,
+      height: '2em',
+      width: '1em',
+      '&::before': {
+        flip: false,
+        borderWidth: '1em 1em 1em 0',
+        borderColor: 'transparent currentcolor transparent transparent'
+      }
+    },
+    '&[x-placement*="left"] $arrow': {
+      flip: false,
+      right: 0,
+      marginRight: '-0.95em',
+      marginTop: 4,
+      marginBottom: 4,
+      height: '2em',
+      width: '1em',
+      '&::before': {
+        flip: false,
+        borderWidth: '1em 0 1em 1em',
+        borderColor: 'transparent transparent transparent currentcolor'
+      }
+    }
+  };
+}
+
+var Tooltip_styles = function styles(theme) {
+  return {
+    /* Styles applied to the Popper component. */
+    popper: {
+      zIndex: theme.zIndex.tooltip,
+      pointerEvents: 'none',
+      flip: false // disable jss-rtl plugin
+
+    },
+
+    /* Styles applied to the Popper component if `interactive={true}`. */
+    popperInteractive: {
+      pointerEvents: 'auto'
+    },
+
+    /* Styles applied to the Popper component if `arrow={true}`. */
+    popperArrow: arrowGenerator(),
+
+    /* Styles applied to the tooltip (label wrapper) element. */
+    tooltip: {
+      backgroundColor: Object(colorManipulator["b" /* fade */])(theme.palette.grey[700], 0.9),
+      borderRadius: theme.shape.borderRadius,
+      color: theme.palette.common.white,
+      fontFamily: theme.typography.fontFamily,
+      padding: '4px 8px',
+      fontSize: theme.typography.pxToRem(10),
+      lineHeight: "".concat(round(14 / 10), "em"),
+      maxWidth: 300,
+      wordWrap: 'break-word',
+      fontWeight: theme.typography.fontWeightMedium
+    },
+
+    /* Styles applied to the tooltip (label wrapper) element if `arrow={true}`. */
+    tooltipArrow: {
+      position: 'relative',
+      margin: '0'
+    },
+
+    /* Styles applied to the arrow element. */
+    arrow: {
+      position: 'absolute',
+      fontSize: 6,
+      color: Object(colorManipulator["b" /* fade */])(theme.palette.grey[700], 0.9),
+      '&::before': {
+        content: '""',
+        margin: 'auto',
+        display: 'block',
+        width: 0,
+        height: 0,
+        borderStyle: 'solid'
+      }
+    },
+
+    /* Styles applied to the tooltip (label wrapper) element if the tooltip is opened by touch. */
+    touch: {
+      padding: '8px 16px',
+      fontSize: theme.typography.pxToRem(14),
+      lineHeight: "".concat(round(16 / 14), "em"),
+      fontWeight: theme.typography.fontWeightRegular
+    },
+
+    /* Styles applied to the tooltip (label wrapper) element if `placement` contains "left". */
+    tooltipPlacementLeft: Object(defineProperty["a" /* default */])({
+      transformOrigin: 'right center',
+      margin: '0 24px '
+    }, theme.breakpoints.up('sm'), {
+      margin: '0 14px'
+    }),
+
+    /* Styles applied to the tooltip (label wrapper) element if `placement` contains "right". */
+    tooltipPlacementRight: Object(defineProperty["a" /* default */])({
+      transformOrigin: 'left center',
+      margin: '0 24px'
+    }, theme.breakpoints.up('sm'), {
+      margin: '0 14px'
+    }),
+
+    /* Styles applied to the tooltip (label wrapper) element if `placement` contains "top". */
+    tooltipPlacementTop: Object(defineProperty["a" /* default */])({
+      transformOrigin: 'center bottom',
+      margin: '24px 0'
+    }, theme.breakpoints.up('sm'), {
+      margin: '14px 0'
+    }),
+
+    /* Styles applied to the tooltip (label wrapper) element if `placement` contains "bottom". */
+    tooltipPlacementBottom: Object(defineProperty["a" /* default */])({
+      transformOrigin: 'center top',
+      margin: '24px 0'
+    }, theme.breakpoints.up('sm'), {
+      margin: '14px 0'
+    })
+  };
+};
+var hystersisOpen = false;
+var hystersisTimer = null;
+function testReset() {
+  hystersisOpen = false;
+  clearTimeout(hystersisTimer);
+}
+var Tooltip_Tooltip = react["forwardRef"](function Tooltip(props, ref) {
+  var _props$arrow = props.arrow,
+      arrow = _props$arrow === void 0 ? false : _props$arrow,
+      children = props.children,
+      classes = props.classes,
+      _props$disableFocusLi = props.disableFocusListener,
+      disableFocusListener = _props$disableFocusLi === void 0 ? false : _props$disableFocusLi,
+      _props$disableHoverLi = props.disableHoverListener,
+      disableHoverListener = _props$disableHoverLi === void 0 ? false : _props$disableHoverLi,
+      _props$disableTouchLi = props.disableTouchListener,
+      disableTouchListener = _props$disableTouchLi === void 0 ? false : _props$disableTouchLi,
+      _props$enterDelay = props.enterDelay,
+      enterDelay = _props$enterDelay === void 0 ? 100 : _props$enterDelay,
+      _props$enterNextDelay = props.enterNextDelay,
+      enterNextDelay = _props$enterNextDelay === void 0 ? 0 : _props$enterNextDelay,
+      _props$enterTouchDela = props.enterTouchDelay,
+      enterTouchDelay = _props$enterTouchDela === void 0 ? 700 : _props$enterTouchDela,
+      idProp = props.id,
+      _props$interactive = props.interactive,
+      interactive = _props$interactive === void 0 ? false : _props$interactive,
+      _props$leaveDelay = props.leaveDelay,
+      leaveDelay = _props$leaveDelay === void 0 ? 0 : _props$leaveDelay,
+      _props$leaveTouchDela = props.leaveTouchDelay,
+      leaveTouchDelay = _props$leaveTouchDela === void 0 ? 1500 : _props$leaveTouchDela,
+      onClose = props.onClose,
+      onOpen = props.onOpen,
+      openProp = props.open,
+      _props$placement = props.placement,
+      placement = _props$placement === void 0 ? 'bottom' : _props$placement,
+      PopperProps = props.PopperProps,
+      title = props.title,
+      _props$TransitionComp = props.TransitionComponent,
+      TransitionComponent = _props$TransitionComp === void 0 ? Grow["a" /* default */] : _props$TransitionComp,
+      TransitionProps = props.TransitionProps,
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["arrow", "children", "classes", "disableFocusListener", "disableHoverListener", "disableTouchListener", "enterDelay", "enterNextDelay", "enterTouchDelay", "id", "interactive", "leaveDelay", "leaveTouchDelay", "onClose", "onOpen", "open", "placement", "PopperProps", "title", "TransitionComponent", "TransitionProps"]);
+
+  var theme = Object(styles_useTheme["a" /* default */])();
+
+  var _React$useState = react["useState"](),
+      childNode = _React$useState[0],
+      setChildNode = _React$useState[1];
+
+  var _React$useState2 = react["useState"](null),
+      arrowRef = _React$useState2[0],
+      setArrowRef = _React$useState2[1];
+
+  var ignoreNonTouchEvents = react["useRef"](false);
+  var closeTimer = react["useRef"]();
+  var enterTimer = react["useRef"]();
+  var leaveTimer = react["useRef"]();
+  var touchTimer = react["useRef"]();
+
+  var _useControlled = Object(useControlled["a" /* default */])({
+    controlled: openProp,
+    default: false,
+    name: 'Tooltip',
+    state: 'open'
+  }),
+      _useControlled2 = Object(slicedToArray["a" /* default */])(_useControlled, 2),
+      openState = _useControlled2[0],
+      setOpenState = _useControlled2[1];
+
+  var open = openState;
+
+  if (false) { var _React$useRef, isControlled; }
+
+  var id = useId(idProp);
+  react["useEffect"](function () {
+    return function () {
+      clearTimeout(closeTimer.current);
+      clearTimeout(enterTimer.current);
+      clearTimeout(leaveTimer.current);
+      clearTimeout(touchTimer.current);
+    };
+  }, []);
+
+  var handleOpen = function handleOpen(event) {
+    clearTimeout(hystersisTimer);
+    hystersisOpen = true; // The mouseover event will trigger for every nested element in the tooltip.
+    // We can skip rerendering when the tooltip is already open.
+    // We are using the mouseover event instead of the mouseenter event to fix a hide/show issue.
+
+    setOpenState(true);
+
+    if (onOpen) {
+      onOpen(event);
+    }
+  };
+
+  var handleEnter = function handleEnter() {
+    var forward = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+    return function (event) {
+      var childrenProps = children.props;
+
+      if (event.type === 'mouseover' && childrenProps.onMouseOver && forward) {
+        childrenProps.onMouseOver(event);
+      }
+
+      if (ignoreNonTouchEvents.current && event.type !== 'touchstart') {
+        return;
+      } // Remove the title ahead of time.
+      // We don't want to wait for the next render commit.
+      // We would risk displaying two tooltips at the same time (native + this one).
+
+
+      if (childNode) {
+        childNode.removeAttribute('title');
+      }
+
+      clearTimeout(enterTimer.current);
+      clearTimeout(leaveTimer.current);
+
+      if (enterDelay || hystersisOpen && enterNextDelay) {
+        event.persist();
+        enterTimer.current = setTimeout(function () {
+          handleOpen(event);
+        }, hystersisOpen ? enterNextDelay : enterDelay);
+      } else {
+        handleOpen(event);
+      }
+    };
+  };
+
+  var _useIsFocusVisible = Object(useIsFocusVisible["a" /* default */])(),
+      isFocusVisible = _useIsFocusVisible.isFocusVisible,
+      onBlurVisible = _useIsFocusVisible.onBlurVisible,
+      focusVisibleRef = _useIsFocusVisible.ref;
+
+  var _React$useState3 = react["useState"](false),
+      childIsFocusVisible = _React$useState3[0],
+      setChildIsFocusVisible = _React$useState3[1];
+
+  var handleBlur = function handleBlur() {
+    if (childIsFocusVisible) {
+      setChildIsFocusVisible(false);
+      onBlurVisible();
+    }
+  };
+
+  var handleFocus = function handleFocus() {
+    var forward = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+    return function (event) {
+      // Workaround for https://github.com/facebook/react/issues/7769
+      // The autoFocus of React might trigger the event before the componentDidMount.
+      // We need to account for this eventuality.
+      if (!childNode) {
+        setChildNode(event.currentTarget);
+      }
+
+      if (isFocusVisible(event)) {
+        setChildIsFocusVisible(true);
+        handleEnter()(event);
+      }
+
+      var childrenProps = children.props;
+
+      if (childrenProps.onFocus && forward) {
+        childrenProps.onFocus(event);
+      }
+    };
+  };
+
+  var handleClose = function handleClose(event) {
+    clearTimeout(hystersisTimer);
+    hystersisTimer = setTimeout(function () {
+      hystersisOpen = false;
+    }, 800 + leaveDelay);
+    setOpenState(false);
+
+    if (onClose) {
+      onClose(event);
+    }
+
+    clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(function () {
+      ignoreNonTouchEvents.current = false;
+    }, theme.transitions.duration.shortest);
+  };
+
+  var handleLeave = function handleLeave() {
+    var forward = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+    return function (event) {
+      var childrenProps = children.props;
+
+      if (event.type === 'blur') {
+        if (childrenProps.onBlur && forward) {
+          childrenProps.onBlur(event);
+        }
+
+        handleBlur();
+      }
+
+      if (event.type === 'mouseleave' && childrenProps.onMouseLeave && event.currentTarget === childNode) {
+        childrenProps.onMouseLeave(event);
+      }
+
+      clearTimeout(enterTimer.current);
+      clearTimeout(leaveTimer.current);
+      event.persist();
+      leaveTimer.current = setTimeout(function () {
+        handleClose(event);
+      }, leaveDelay);
+    };
+  };
+
+  var handleTouchStart = function handleTouchStart(event) {
+    ignoreNonTouchEvents.current = true;
+    var childrenProps = children.props;
+
+    if (childrenProps.onTouchStart) {
+      childrenProps.onTouchStart(event);
+    }
+
+    clearTimeout(leaveTimer.current);
+    clearTimeout(closeTimer.current);
+    clearTimeout(touchTimer.current);
+    event.persist();
+    touchTimer.current = setTimeout(function () {
+      handleEnter()(event);
+    }, enterTouchDelay);
+  };
+
+  var handleTouchEnd = function handleTouchEnd(event) {
+    if (children.props.onTouchEnd) {
+      children.props.onTouchEnd(event);
+    }
+
+    clearTimeout(touchTimer.current);
+    clearTimeout(leaveTimer.current);
+    event.persist();
+    leaveTimer.current = setTimeout(function () {
+      handleClose(event);
+    }, leaveTouchDelay);
+  };
+
+  var handleUseRef = Object(useForkRef["a" /* default */])(setChildNode, ref);
+  var handleFocusRef = Object(useForkRef["a" /* default */])(focusVisibleRef, handleUseRef); // can be removed once we drop support for non ref forwarding class components
+
+  var handleOwnRef = react["useCallback"](function (instance) {
+    // #StrictMode ready
+    Object(setRef["a" /* default */])(handleFocusRef, react_dom["findDOMNode"](instance));
+  }, [handleFocusRef]);
+  var handleRef = Object(useForkRef["a" /* default */])(children.ref, handleOwnRef); // There is no point in displaying an empty tooltip.
+
+  if (title === '') {
+    open = false;
+  } // For accessibility and SEO concerns, we render the title to the DOM node when
+  // the tooltip is hidden. However, we have made a tradeoff when
+  // `disableHoverListener` is set. This title logic is disabled.
+  // It's allowing us to keep the implementation size minimal.
+  // We are open to change the tradeoff.
+
+
+  var shouldShowNativeTitle = !open && !disableHoverListener;
+
+  var childrenProps = Object(esm_extends["a" /* default */])({
+    'aria-describedby': open ? id : null,
+    title: shouldShowNativeTitle && typeof title === 'string' ? title : null
+  }, other, {}, children.props, {
+    className: Object(clsx_m["default"])(other.className, children.props.className),
+    ref: handleRef
+  });
+
+  var interactiveWrapperListeners = {};
+
+  if (!disableTouchListener) {
+    childrenProps.onTouchStart = handleTouchStart;
+    childrenProps.onTouchEnd = handleTouchEnd;
+  }
+
+  if (!disableHoverListener) {
+    childrenProps.onMouseOver = handleEnter();
+    childrenProps.onMouseLeave = handleLeave();
+
+    if (interactive) {
+      interactiveWrapperListeners.onMouseOver = handleEnter(false);
+      interactiveWrapperListeners.onMouseLeave = handleLeave(false);
+    }
+  }
+
+  if (!disableFocusListener) {
+    childrenProps.onFocus = handleFocus();
+    childrenProps.onBlur = handleLeave();
+
+    if (interactive) {
+      interactiveWrapperListeners.onFocus = handleFocus(false);
+      interactiveWrapperListeners.onBlur = handleLeave(false);
+    }
+  }
+
+  if (false) {}
+
+  var mergedPopperProps = react["useMemo"](function () {
+    return Object(deepmerge["a" /* default */])({
+      popperOptions: {
+        modifiers: {
+          arrow: {
+            enabled: Boolean(arrowRef),
+            element: arrowRef
+          }
+        }
+      }
+    }, PopperProps);
+  }, [arrowRef, PopperProps]);
+  return /*#__PURE__*/react["createElement"](react["Fragment"], null, react["cloneElement"](children, childrenProps), /*#__PURE__*/react["createElement"](esm_Popper_Popper, Object(esm_extends["a" /* default */])({
+    className: Object(clsx_m["default"])(classes.popper, interactive && classes.popperInteractive, arrow && classes.popperArrow),
+    placement: placement,
+    anchorEl: childNode,
+    open: childNode ? open : false,
+    id: childrenProps['aria-describedby'],
+    transition: true
+  }, interactiveWrapperListeners, mergedPopperProps), function (_ref) {
+    var placementInner = _ref.placement,
+        TransitionPropsInner = _ref.TransitionProps;
+    return /*#__PURE__*/react["createElement"](TransitionComponent, Object(esm_extends["a" /* default */])({
+      timeout: theme.transitions.duration.shorter
+    }, TransitionPropsInner, TransitionProps), /*#__PURE__*/react["createElement"]("div", {
+      className: Object(clsx_m["default"])(classes.tooltip, classes["tooltipPlacement".concat(Object(capitalize["a" /* default */])(placementInner.split('-')[0]))], ignoreNonTouchEvents.current && classes.touch, arrow && classes.tooltipArrow)
+    }, title, arrow ? /*#__PURE__*/react["createElement"]("span", {
+      className: classes.arrow,
+      ref: setArrowRef
+    }) : null));
+  }));
+});
+ false ? undefined : void 0;
+/* harmony default export */ var esm_Tooltip_Tooltip = (Object(withStyles["a" /* default */])(Tooltip_styles, {
+  name: 'MuiTooltip'
+})(Tooltip_Tooltip));
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/ButtonBase/ButtonBase.js + 2 modules
+var ButtonBase = __webpack_require__(86);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Fab/Fab.js
 
@@ -32675,10 +36226,10 @@ var Fab_Fab = react["forwardRef"](function Fab(props, ref) {
   name: 'MuiFab'
 })(Fab_Fab));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Button/Button.js
-var Button = __webpack_require__(253);
+var Button = __webpack_require__(260);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/SvgIcon/SvgIcon.js
-var SvgIcon = __webpack_require__(65);
+var SvgIcon = __webpack_require__(70);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/icons/esm/utils/createSvgIcon.js
 
@@ -32718,22 +36269,56 @@ function createSvgIcon(path, displayName) {
 var moment = __webpack_require__(5);
 var moment_default = /*#__PURE__*/__webpack_require__.n(moment);
 
+// EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck.js
+var classCallCheck = __webpack_require__(16);
+
+// EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createClass.js
+var createClass = __webpack_require__(17);
+
+// CONCATENATED MODULE: ./src/shared/helpers/globals/ClipboardHelper.js
+
+
+
+var ClipboardHelper_ClipboardHelper = /*#__PURE__*/function () {
+  function ClipboardHelper() {
+    Object(classCallCheck["a" /* default */])(this, ClipboardHelper);
+  }
+
+  Object(createClass["a" /* default */])(ClipboardHelper, null, [{
+    key: "copyToClipboard",
+    value: function copyToClipboard(text) {
+      if (typeof window !== "undefined") {
+        var dummy = document.createElement("textarea");
+        document.body.appendChild(dummy);
+        dummy.value = text;
+        dummy.select();
+        document.execCommand("copy");
+        document.body.removeChild(dummy);
+      }
+    }
+  }]);
+
+  return ClipboardHelper;
+}();
+
+
 // CONCATENATED MODULE: ./src/project/AspNetCore/shared/components/Files/Files.js
 
 
 
 
 
-function Files(props) {
-  var handleDownloadClick = function handleDownloadClick(file) {};
 
-  var handleCopyClick = function handleCopyClick(file) {};
+function Files(props) {
+  var handleCopyClick = function handleCopyClick(file) {
+    ClipboardHelper_ClipboardHelper.copyToClipboard(file.url);
+  };
 
   return /*#__PURE__*/react_default.a.createElement(react["Fragment"], null, props.files && /*#__PURE__*/react_default.a.createElement("section", {
     className: "section files"
   }, /*#__PURE__*/react_default.a.createElement("h3", {
     className: "title is-4"
-  }, props.downloadLabel), /*#__PURE__*/react_default.a.createElement("div", {
+  }, props.downloadFilesLabel), /*#__PURE__*/react_default.a.createElement("div", {
     className: "table-container"
   }, /*#__PURE__*/react_default.a.createElement("div", {
     className: "catalog__table"
@@ -32748,25 +36333,25 @@ function Files(props) {
       key: file.id
     }, /*#__PURE__*/react_default.a.createElement(TableCell["a" /* default */], {
       width: "11%"
+    }, /*#__PURE__*/react_default.a.createElement(esm_Tooltip_Tooltip, {
+      title: props.downloadLabel,
+      "aria-label": props.downloadLabel
     }, /*#__PURE__*/react_default.a.createElement(esm_Fab_Fab, {
-      onClick: function onClick() {
-        return handleDownloadClick(file);
-      },
+      href: file.url,
       size: "small",
-      color: "primary",
-      "aria-label": props.deleteLabel
-    }, /*#__PURE__*/react_default.a.createElement(GetApp, null)), /*#__PURE__*/react_default.a.createElement(esm_Fab_Fab, {
+      color: "primary"
+    }, /*#__PURE__*/react_default.a.createElement(GetApp, null))), /*#__PURE__*/react_default.a.createElement(esm_Tooltip_Tooltip, {
+      title: props.copyLinkLabel,
+      "aria-label": props.copyLinkLabel
+    }, /*#__PURE__*/react_default.a.createElement(esm_Fab_Fab, {
       onClick: function onClick() {
         return handleCopyClick(file);
       },
       size: "small",
-      color: "secondary",
-      "aria-label": props.copyLinkLabel
-    }, /*#__PURE__*/react_default.a.createElement(Link, null))), /*#__PURE__*/react_default.a.createElement(TableCell["a" /* default */], null, /*#__PURE__*/react_default.a.createElement(Button["a" /* default */], {
+      color: "secondary"
+    }, /*#__PURE__*/react_default.a.createElement(Link, null)))), /*#__PURE__*/react_default.a.createElement(TableCell["a" /* default */], null, /*#__PURE__*/react_default.a.createElement(Button["a" /* default */], {
       variant: "text",
-      onClick: function onClick() {
-        return handleDownloadClick(file);
-      }
+      href: file.url
     }, file.filename, file.isProtected && !props.isAuthenticated && /*#__PURE__*/react_default.a.createElement(LockOutlined, {
       color: "primary"
     }))), /*#__PURE__*/react_default.a.createElement(TableCell["a" /* default */], null, file.name), /*#__PURE__*/react_default.a.createElement(TableCell["a" /* default */], null, file.description), /*#__PURE__*/react_default.a.createElement(TableCell["a" /* default */], null, file.size), /*#__PURE__*/react_default.a.createElement(TableCell["a" /* default */], null, moment_default()(file.lastModifiedDate).local().format("L LT")), /*#__PURE__*/react_default.a.createElement(TableCell["a" /* default */], null, moment_default()(file.createdDate).local().format("L LT")));
@@ -32776,7 +36361,8 @@ function Files(props) {
 /* harmony default export */ var Files_Files = __webpack_exports__["a"] = (Files);
 
 /***/ }),
-/* 222 */
+/* 230 */,
+/* 231 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -32786,14 +36372,14 @@ var react = __webpack_require__(0);
 var react_default = /*#__PURE__*/__webpack_require__.n(react);
 
 // EXTERNAL MODULE: ./node_modules/react-multi-carousel/index.js
-var react_multi_carousel = __webpack_require__(219);
+var react_multi_carousel = __webpack_require__(227);
 var react_multi_carousel_default = /*#__PURE__*/__webpack_require__.n(react_multi_carousel);
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck.js
-var classCallCheck = __webpack_require__(18);
+var classCallCheck = __webpack_require__(16);
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createClass.js
-var createClass = __webpack_require__(19);
+var createClass = __webpack_require__(17);
 
 // CONCATENATED MODULE: ./src/project/AspNetCore/shared/components/Carousel/CarouselConstants.js
 
@@ -32887,33 +36473,7 @@ function ContentGrid(props) {
 /* harmony default export */ var ContentGrid_ContentGrid = __webpack_exports__["a"] = (ContentGrid);
 
 /***/ }),
-/* 223 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 224 */
+/* 232 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -32941,14 +36501,6 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 225 */,
-/* 226 */,
-/* 227 */,
-/* 228 */,
-/* 229 */,
-/* 230 */,
-/* 231 */,
-/* 232 */,
 /* 233 */,
 /* 234 */,
 /* 235 */,
@@ -32963,14 +36515,20 @@ module.exports = function(module) {
 /* 244 */,
 /* 245 */,
 /* 246 */,
-/* 247 */
+/* 247 */,
+/* 248 */,
+/* 249 */,
+/* 250 */,
+/* 251 */,
+/* 252 */,
+/* 253 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export isPlainObject */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return deepmerge; });
 /* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-/* harmony import */ var _babel_runtime_helpers_esm_typeof__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(22);
+/* harmony import */ var _babel_runtime_helpers_esm_typeof__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(24);
 
 
 function isPlainObject(item) {
@@ -33001,7 +36559,7 @@ function deepmerge(target, source) {
 }
 
 /***/ }),
-/* 248 */
+/* 254 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33013,7 +36571,7 @@ function deepmerge(target, source) {
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
-/* harmony import */ var _InputBase__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(66);
+/* harmony import */ var _InputBase__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(71);
 /* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
 
 
@@ -33161,7 +36719,7 @@ Input.muiName = 'Input';
 })(Input));
 
 /***/ }),
-/* 249 */
+/* 255 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33194,7 +36752,7 @@ function mergeClasses() {
 }
 
 /***/ }),
-/* 250 */
+/* 256 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33224,7 +36782,7 @@ function getThemeProps(params) {
 }
 
 /***/ }),
-/* 251 */
+/* 257 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33236,7 +36794,7 @@ function getThemeProps(params) {
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
-/* harmony import */ var _InputBase__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(66);
+/* harmony import */ var _InputBase__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(71);
 /* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6);
 
 
@@ -33437,7 +36995,90 @@ FilledInput.muiName = 'Input';
 })(FilledInput));
 
 /***/ }),
-/* 252 */
+/* 258 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _utils_setRef__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(20);
+/* harmony import */ var _utils_useForkRef__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9);
+
+
+
+
+
+
+
+function getContainer(container) {
+  container = typeof container === 'function' ? container() : container; // #StrictMode ready
+
+  return react_dom__WEBPACK_IMPORTED_MODULE_1__["findDOMNode"](container);
+}
+
+var useEnhancedEffect = typeof window !== 'undefined' ? react__WEBPACK_IMPORTED_MODULE_0__["useLayoutEffect"] : react__WEBPACK_IMPORTED_MODULE_0__["useEffect"];
+/**
+ * Portals provide a first-class way to render children into a DOM node
+ * that exists outside the DOM hierarchy of the parent component.
+ */
+
+var Portal = react__WEBPACK_IMPORTED_MODULE_0__["forwardRef"](function Portal(props, ref) {
+  var children = props.children,
+      container = props.container,
+      _props$disablePortal = props.disablePortal,
+      disablePortal = _props$disablePortal === void 0 ? false : _props$disablePortal,
+      onRendered = props.onRendered;
+
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__["useState"](null),
+      mountNode = _React$useState[0],
+      setMountNode = _React$useState[1];
+
+  var handleRef = Object(_utils_useForkRef__WEBPACK_IMPORTED_MODULE_4__[/* default */ "a"])(react__WEBPACK_IMPORTED_MODULE_0__["isValidElement"](children) ? children.ref : null, ref);
+  useEnhancedEffect(function () {
+    if (!disablePortal) {
+      setMountNode(getContainer(container) || document.body);
+    }
+  }, [container, disablePortal]);
+  useEnhancedEffect(function () {
+    if (mountNode && !disablePortal) {
+      Object(_utils_setRef__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(ref, mountNode);
+      return function () {
+        Object(_utils_setRef__WEBPACK_IMPORTED_MODULE_3__[/* default */ "a"])(ref, null);
+      };
+    }
+
+    return undefined;
+  }, [ref, mountNode, disablePortal]);
+  useEnhancedEffect(function () {
+    if (onRendered && (mountNode || disablePortal)) {
+      onRendered();
+    }
+  }, [onRendered, mountNode, disablePortal]);
+
+  if (disablePortal) {
+    if (react__WEBPACK_IMPORTED_MODULE_0__["isValidElement"](children)) {
+      return react__WEBPACK_IMPORTED_MODULE_0__["cloneElement"](children, {
+        ref: handleRef
+      });
+    }
+
+    return children;
+  }
+
+  return mountNode ? react_dom__WEBPACK_IMPORTED_MODULE_1__["createPortal"](children, mountNode) : mountNode;
+});
+ false ? undefined : void 0;
+
+if (false) {}
+
+/* harmony default export */ __webpack_exports__["a"] = (Portal);
+
+/***/ }),
+/* 259 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33507,7 +37148,7 @@ var Paper = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function Paper(prop
 })(Paper));
 
 /***/ }),
-/* 253 */
+/* 260 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33521,7 +37162,7 @@ var Paper = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function Paper(prop
 /* harmony import */ var clsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
 /* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6);
 /* harmony import */ var _styles_colorManipulator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(11);
-/* harmony import */ var _ButtonBase__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(80);
+/* harmony import */ var _ButtonBase__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(86);
 /* harmony import */ var _utils_capitalize__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(7);
 
 
@@ -33863,91 +37504,91 @@ var Button = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function Button(pr
 })(Button));
 
 /***/ }),
-/* 254 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports,"__esModule",{value:!0});var Carousel_1=__webpack_require__(255);exports.default=Carousel_1.default;
-
-/***/ }),
-/* 255 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-var __extends=this&&this.__extends||function(){var extendStatics=function(d,b){return(extendStatics=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(d,b){d.__proto__=b}||function(d,b){for(var p in b)b.hasOwnProperty(p)&&(d[p]=b[p])})(d,b)};return function(d,b){function __(){this.constructor=d}extendStatics(d,b),d.prototype=null===b?Object.create(b):(__.prototype=b.prototype,new __)}}();Object.defineProperty(exports,"__esModule",{value:!0});var React=__webpack_require__(0),utils_1=__webpack_require__(85),types_1=__webpack_require__(261),Dots_1=__webpack_require__(262),Arrows_1=__webpack_require__(264),CarouselItems_1=__webpack_require__(265),common_1=__webpack_require__(46),defaultTransitionDuration=400,defaultTransition="transform 400ms ease-in-out",Carousel=function(_super){function Carousel(props){var _this=_super.call(this,props)||this;return _this.containerRef=React.createRef(),_this.listRef=React.createRef(),_this.state={itemWidth:0,slidesToShow:0,currentSlide:0,totalItems:React.Children.count(props.children),deviceType:"",domLoaded:!1,transform:0,containerWidth:0},_this.onResize=_this.onResize.bind(_this),_this.handleDown=_this.handleDown.bind(_this),_this.handleMove=_this.handleMove.bind(_this),_this.handleOut=_this.handleOut.bind(_this),_this.onKeyUp=_this.onKeyUp.bind(_this),_this.handleEnter=_this.handleEnter.bind(_this),_this.setIsInThrottle=_this.setIsInThrottle.bind(_this),_this.next=utils_1.throttle(_this.next.bind(_this),props.transitionDuration||defaultTransitionDuration,_this.setIsInThrottle),_this.previous=utils_1.throttle(_this.previous.bind(_this),props.transitionDuration||defaultTransitionDuration,_this.setIsInThrottle),_this.goToSlide=utils_1.throttle(_this.goToSlide.bind(_this),props.transitionDuration||defaultTransitionDuration,_this.setIsInThrottle),_this.onMove=!1,_this.initialX=0,_this.lastX=0,_this.isAnimationAllowed=!1,_this.direction="",_this.initialY=0,_this.isInThrottle=!1,_this.transformPlaceHolder=0,_this}return __extends(Carousel,_super),Carousel.prototype.resetTotalItems=function(){var _this=this,totalItems=React.Children.count(this.props.children),currentSlide=utils_1.notEnoughChildren(this.state)?0:Math.max(0,Math.min(this.state.currentSlide,totalItems));this.setState({totalItems:totalItems,currentSlide:currentSlide},function(){_this.setContainerAndItemWidth(_this.state.slidesToShow,!0)})},Carousel.prototype.setIsInThrottle=function(isInThrottle){void 0===isInThrottle&&(isInThrottle=!1),this.isInThrottle=isInThrottle},Carousel.prototype.setTransformDirectly=function(position,withAnimation){var additionalTransfrom=this.props.additionalTransfrom,currentTransform=common_1.getTransform(this.state,this.props,position);this.transformPlaceHolder=position,this.listRef&&this.listRef.current&&(this.setAnimationDirectly(withAnimation),this.listRef.current.style.transform="translate3d("+(currentTransform+additionalTransfrom)+"px,0,0)")},Carousel.prototype.setAnimationDirectly=function(animationAllowed){this.listRef&&this.listRef.current&&(this.listRef.current.style.transition=animationAllowed?this.props.customTransition||defaultTransition:"none")},Carousel.prototype.componentDidMount=function(){this.setState({domLoaded:!0}),this.setItemsToShow(),window.addEventListener("resize",this.onResize),this.onResize(!0),this.props.keyBoardControl&&window.addEventListener("keyup",this.onKeyUp),this.props.autoPlay&&this.props.autoPlaySpeed&&(this.autoPlay=setInterval(this.next,this.props.autoPlaySpeed))},Carousel.prototype.setClones=function(slidesToShow,itemWidth,forResizing,resetCurrentSlide){var _this=this;void 0===resetCurrentSlide&&(resetCurrentSlide=!1),this.isAnimationAllowed=!1;var childrenArr=React.Children.toArray(this.props.children),initialSlide=utils_1.getInitialSlideInInfiniteMode(slidesToShow||this.state.slidesToShow,childrenArr),clones=utils_1.getClones(this.state.slidesToShow,childrenArr),currentSlide=childrenArr.length<this.state.slidesToShow?0:this.state.currentSlide;this.setState({totalItems:clones.length,currentSlide:forResizing&&!resetCurrentSlide?currentSlide:initialSlide},function(){_this.correctItemsPosition(itemWidth||_this.state.itemWidth)})},Carousel.prototype.setItemsToShow=function(shouldCorrectItemPosition,resetCurrentSlide){var _this=this,responsive=this.props.responsive;Object.keys(responsive).forEach(function(item){var _a=responsive[item],breakpoint=_a.breakpoint,items=_a.items,max=breakpoint.max,min=breakpoint.min;window.innerWidth>=min&&window.innerWidth<=max&&(_this.setState({slidesToShow:items,deviceType:item}),_this.setContainerAndItemWidth(items,shouldCorrectItemPosition,resetCurrentSlide))})},Carousel.prototype.setContainerAndItemWidth=function(slidesToShow,shouldCorrectItemPosition,resetCurrentSlide){var _this=this;if(this.containerRef&&this.containerRef.current){var containerWidth=this.containerRef.current.offsetWidth,itemWidth_1=utils_1.getItemClientSideWidth(this.props,slidesToShow,containerWidth);this.setState({containerWidth:containerWidth,itemWidth:itemWidth_1},function(){_this.props.infinite&&_this.setClones(slidesToShow,itemWidth_1,shouldCorrectItemPosition,resetCurrentSlide)}),shouldCorrectItemPosition&&this.correctItemsPosition(itemWidth_1)}},Carousel.prototype.correctItemsPosition=function(itemWidth,isAnimationAllowed,setToDomDirectly){isAnimationAllowed&&(this.isAnimationAllowed=!0),!isAnimationAllowed&&this.isAnimationAllowed&&(this.isAnimationAllowed=!1);var nextTransform=this.state.totalItems<this.state.slidesToShow?0:-itemWidth*this.state.currentSlide;setToDomDirectly&&this.setTransformDirectly(nextTransform,!0),this.setState({transform:nextTransform})},Carousel.prototype.onResize=function(value){var shouldCorrectItemPosition;shouldCorrectItemPosition=!!this.props.infinite&&("boolean"!=typeof value||!value),this.setItemsToShow(shouldCorrectItemPosition)},Carousel.prototype.componentDidUpdate=function(_a,_b){var _this=this,keyBoardControl=_a.keyBoardControl,autoPlay=_a.autoPlay,children=_a.children,containerWidth=_b.containerWidth,domLoaded=_b.domLoaded,currentSlide=_b.currentSlide;this.containerRef&&this.containerRef.current&&this.containerRef.current.offsetWidth!==containerWidth&&setTimeout(function(){_this.setItemsToShow(!0)},this.props.transitionDuration||defaultTransitionDuration),keyBoardControl&&!this.props.keyBoardControl&&window.removeEventListener("keyup",this.onKeyUp),!keyBoardControl&&this.props.keyBoardControl&&window.addEventListener("keyup",this.onKeyUp),autoPlay&&!this.props.autoPlay&&this.autoPlay&&(clearInterval(this.autoPlay),this.autoPlay=void 0),autoPlay||!this.props.autoPlay||this.autoPlay||(this.autoPlay=setInterval(this.next,this.props.autoPlaySpeed)),children.length!==this.props.children.length?setTimeout(function(){_this.props.infinite?_this.setClones(_this.state.slidesToShow,_this.state.itemWidth,!0,!0):_this.resetTotalItems()},this.props.transitionDuration||defaultTransitionDuration):this.props.infinite&&this.state.currentSlide!==currentSlide&&this.correctClonesPosition({domLoaded:domLoaded}),this.transformPlaceHolder!==this.state.transform&&(this.transformPlaceHolder=this.state.transform)},Carousel.prototype.correctClonesPosition=function(_a){var _this=this,domLoaded=_a.domLoaded,childrenArr=React.Children.toArray(this.props.children),_b=utils_1.checkClonesPosition(this.state,childrenArr,this.props),isReachingTheEnd=_b.isReachingTheEnd,isReachingTheStart=_b.isReachingTheStart,nextSlide=_b.nextSlide,nextPosition=_b.nextPosition;this.state.domLoaded&&domLoaded&&(isReachingTheEnd||isReachingTheStart)&&(this.isAnimationAllowed=!1,setTimeout(function(){_this.setState({transform:nextPosition,currentSlide:nextSlide})},this.props.transitionDuration||defaultTransitionDuration))},Carousel.prototype.next=function(slidesHavePassed){var _this=this;void 0===slidesHavePassed&&(slidesHavePassed=0);var _a=this.props,afterChange=_a.afterChange,beforeChange=_a.beforeChange;if(!utils_1.notEnoughChildren(this.state)){var _b=utils_1.populateNextSlides(this.state,this.props,slidesHavePassed),nextSlides=_b.nextSlides,nextPosition=_b.nextPosition,previousSlide=this.state.currentSlide;void 0!==nextSlides&&void 0!==nextPosition&&("function"==typeof beforeChange&&beforeChange(nextSlides,this.getState()),this.isAnimationAllowed=!0,this.setState({transform:nextPosition,currentSlide:nextSlides},function(){"function"==typeof afterChange&&setTimeout(function(){afterChange(previousSlide,_this.getState())},_this.props.transitionDuration||defaultTransitionDuration)}))}},Carousel.prototype.previous=function(slidesHavePassed){var _this=this;void 0===slidesHavePassed&&(slidesHavePassed=0);var _a=this.props,afterChange=_a.afterChange,beforeChange=_a.beforeChange;if(!utils_1.notEnoughChildren(this.state)){var _b=utils_1.populatePreviousSlides(this.state,this.props,slidesHavePassed),nextSlides=_b.nextSlides,nextPosition=_b.nextPosition;if(void 0!==nextSlides&&void 0!==nextPosition){var previousSlide=this.state.currentSlide;"function"==typeof beforeChange&&beforeChange(nextSlides,this.getState()),this.isAnimationAllowed=!0,this.setState({transform:nextPosition,currentSlide:nextSlides},function(){"function"==typeof afterChange&&setTimeout(function(){afterChange(previousSlide,_this.getState())},_this.props.transitionDuration||defaultTransitionDuration)})}}},Carousel.prototype.componentWillUnmount=function(){window.removeEventListener("resize",this.onResize),this.props.keyBoardControl&&window.removeEventListener("keyup",this.onKeyUp),this.props.autoPlay&&this.autoPlay&&(clearInterval(this.autoPlay),this.autoPlay=void 0)},Carousel.prototype.resetMoveStatus=function(){this.onMove=!1,this.initialX=0,this.lastX=0,this.direction="",this.initialY=0},Carousel.prototype.handleDown=function(e){if(!(!types_1.isMouseMoveEvent(e)&&!this.props.swipeable||types_1.isMouseMoveEvent(e)&&!this.props.draggable||this.isInThrottle)){var _a=types_1.isMouseMoveEvent(e)?e:e.touches[0],clientX=_a.clientX,clientY=_a.clientY;this.onMove=!0,this.initialX=clientX,this.initialY=clientY,this.lastX=clientX,this.isAnimationAllowed=!1}},Carousel.prototype.handleMove=function(e){if(!(!types_1.isMouseMoveEvent(e)&&!this.props.swipeable||types_1.isMouseMoveEvent(e)&&!this.props.draggable||utils_1.notEnoughChildren(this.state))){var _a=types_1.isMouseMoveEvent(e)?e:e.touches[0],clientX=_a.clientX,clientY=_a.clientY,diffX=this.initialX-clientX,diffY=this.initialY-clientY;if(!types_1.isMouseMoveEvent(e)&&this.autoPlay&&this.props.autoPlay&&(clearInterval(this.autoPlay),this.autoPlay=void 0),this.onMove){if(!(Math.abs(diffX)>Math.abs(diffY)))return;var _b=utils_1.populateSlidesOnMouseTouchMove(this.state,this.props,this.initialX,this.lastX,clientX,this.transformPlaceHolder),direction=_b.direction,nextPosition=_b.nextPosition,canContinue=_b.canContinue;direction&&(this.direction=direction,canContinue&&void 0!==nextPosition&&this.setTransformDirectly(nextPosition)),this.lastX=clientX}}},Carousel.prototype.handleOut=function(e){this.props.autoPlay&&!this.autoPlay&&(this.autoPlay=setInterval(this.next,this.props.autoPlaySpeed));var shouldDisableOnMobile="touchend"===e.type&&!this.props.swipeable,shouldDisableOnDesktop=("mouseleave"===e.type||"mouseup"===e.type)&&!this.props.draggable;if(!shouldDisableOnMobile&&!shouldDisableOnDesktop&&this.onMove){if(this.setAnimationDirectly(!0),"right"===this.direction)if(this.initialX-this.lastX>=this.props.minimumTouchDrag){var slidesHavePassed=Math.round((this.initialX-this.lastX)/this.state.itemWidth);this.next(slidesHavePassed)}else this.correctItemsPosition(this.state.itemWidth,!0,!0);if("left"===this.direction)if(this.lastX-this.initialX>this.props.minimumTouchDrag){slidesHavePassed=Math.round((this.lastX-this.initialX)/this.state.itemWidth);this.previous(slidesHavePassed)}else this.correctItemsPosition(this.state.itemWidth,!0,!0);this.resetMoveStatus()}},Carousel.prototype.onKeyUp=function(e){switch(e.keyCode){case 37:return this.previous();case 39:return this.next()}},Carousel.prototype.handleEnter=function(){this.autoPlay&&this.props.autoPlay&&(clearInterval(this.autoPlay),this.autoPlay=void 0)},Carousel.prototype.goToSlide=function(slide,skipCallbacks){var _this=this;if(!this.isInThrottle){var itemWidth=this.state.itemWidth,_a=this.props,afterChange=_a.afterChange,beforeChange=_a.beforeChange,previousSlide=this.state.currentSlide;"function"!=typeof beforeChange||skipCallbacks&&("object"!=typeof skipCallbacks||skipCallbacks.skipBeforeChange)||beforeChange(slide,this.getState()),this.isAnimationAllowed=!0,this.setState({currentSlide:slide,transform:-itemWidth*slide},function(){_this.props.infinite&&_this.correctClonesPosition({domLoaded:!0}),"function"!=typeof afterChange||skipCallbacks&&("object"!=typeof skipCallbacks||skipCallbacks.skipAfterChange)||setTimeout(function(){afterChange(previousSlide,_this.getState())},_this.props.transitionDuration||defaultTransitionDuration)})}},Carousel.prototype.getState=function(){return this.state},Carousel.prototype.renderLeftArrow=function(){var _this=this,customLeftArrow=this.props.customLeftArrow;return React.createElement(Arrows_1.LeftArrow,{customLeftArrow:customLeftArrow,getState:function(){return _this.getState()},previous:this.previous})},Carousel.prototype.renderRightArrow=function(){var _this=this,customRightArrow=this.props.customRightArrow;return React.createElement(Arrows_1.RightArrow,{customRightArrow:customRightArrow,getState:function(){return _this.getState()},next:this.next})},Carousel.prototype.renderButtonGroups=function(){var _this=this,customButtonGroup=this.props.customButtonGroup;return customButtonGroup?React.cloneElement(customButtonGroup,{previous:function(){return _this.previous()},next:function(){return _this.next()},goToSlide:function(slideIndex,skipCallbacks){return _this.goToSlide(slideIndex,skipCallbacks)},carouselState:this.getState()}):null},Carousel.prototype.renderDotsList=function(){var _this=this;return React.createElement(Dots_1.default,{state:this.state,props:this.props,goToSlide:this.goToSlide,getState:function(){return _this.getState()}})},Carousel.prototype.renderCarouselItems=function(){var clones=[];if(this.props.infinite){var childrenArr=React.Children.toArray(this.props.children);clones=utils_1.getClones(this.state.slidesToShow,childrenArr)}return React.createElement(CarouselItems_1.default,{clones:clones,goToSlide:this.goToSlide,state:this.state,notEnoughChildren:utils_1.notEnoughChildren(this.state),props:this.props})},Carousel.prototype.render=function(){var _a=this.props,deviceType=_a.deviceType,arrows=_a.arrows,removeArrowOnDeviceType=_a.removeArrowOnDeviceType,infinite=_a.infinite,containerClass=_a.containerClass,sliderClass=_a.sliderClass,customTransition=_a.customTransition,additionalTransfrom=_a.additionalTransfrom,renderDotsOutside=_a.renderDotsOutside,renderButtonGroupOutside=_a.renderButtonGroupOutside,className=_a.className; false&&false;var _b=utils_1.getInitialState(this.state,this.props),shouldRenderOnSSR=_b.shouldRenderOnSSR,shouldRenderAtAll=_b.shouldRenderAtAll,isLeftEndReach=utils_1.isInLeftEnd(this.state),isRightEndReach=utils_1.isInRightEnd(this.state),shouldShowArrows=arrows&&!(removeArrowOnDeviceType&&(deviceType&&-1<removeArrowOnDeviceType.indexOf(deviceType)||this.state.deviceType&&-1<removeArrowOnDeviceType.indexOf(this.state.deviceType)))&&!utils_1.notEnoughChildren(this.state)&&shouldRenderAtAll,disableLeftArrow=!infinite&&isLeftEndReach,disableRightArrow=!infinite&&isRightEndReach,currentTransform=common_1.getTransform(this.state,this.props);return React.createElement(React.Fragment,null,React.createElement("div",{className:"react-multi-carousel-list "+containerClass+" "+className,ref:this.containerRef},React.createElement("ul",{ref:this.listRef,className:"react-multi-carousel-track "+sliderClass,style:{transition:this.isAnimationAllowed?customTransition||defaultTransition:"none",overflow:shouldRenderOnSSR?"hidden":"unset",transform:"translate3d("+(currentTransform+additionalTransfrom)+"px,0,0)"},onMouseMove:this.handleMove,onMouseDown:this.handleDown,onMouseUp:this.handleOut,onMouseEnter:this.handleEnter,onMouseLeave:this.handleOut,onTouchStart:this.handleDown,onTouchMove:this.handleMove,onTouchEnd:this.handleOut},this.renderCarouselItems()),shouldShowArrows&&!disableLeftArrow&&this.renderLeftArrow(),shouldShowArrows&&!disableRightArrow&&this.renderRightArrow(),shouldRenderAtAll&&!renderButtonGroupOutside&&this.renderButtonGroups(),shouldRenderAtAll&&!renderDotsOutside&&this.renderDotsList()),shouldRenderAtAll&&renderDotsOutside&&this.renderDotsList(),shouldRenderAtAll&&renderButtonGroupOutside&&this.renderButtonGroups())},Carousel.defaultProps={slidesToSlide:1,infinite:!1,draggable:!0,swipeable:!0,arrows:!0,containerClass:"",sliderClass:"",itemClass:"",keyBoardControl:!0,autoPlaySpeed:3e3,showDots:!1,renderDotsOutside:!1,renderButtonGroupOutside:!1,minimumTouchDrag:80,className:"",dotListClass:"",focusOnSelect:!1,centerMode:!1,additionalTransfrom:0},Carousel}(React.Component);exports.default=Carousel;
-
-/***/ }),
-/* 256 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports,"__esModule",{value:!0});var throttle=function(func,limit,setIsInThrottle){var inThrottle;return function(){var args=arguments;inThrottle||(func.apply(this,args),inThrottle=!0,"function"==typeof setIsInThrottle&&setIsInThrottle(!0),setTimeout(function(){inThrottle=!1,"function"==typeof setIsInThrottle&&setIsInThrottle(!1)},limit))}};exports.default=throttle;
-
-/***/ }),
-/* 257 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-function throwError(state,props){var partialVisbile=props.partialVisbile,partialVisible=props.partialVisible,centerMode=props.centerMode,ssr=props.ssr,responsive=props.responsive;if((partialVisbile||partialVisible)&&centerMode)throw new Error("center mode can not be used at the same time with partialVisible");if(!responsive)throw ssr?new Error("ssr mode need to be used in conjunction with responsive prop"):new Error("Responsive prop is needed for deciding the amount of items to show on the screen");if(responsive&&"object"!=typeof responsive)throw new Error("responsive prop must be an object")}Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=throwError;
-
-/***/ }),
-/* 258 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports,"__esModule",{value:!0});var common_1=__webpack_require__(46);function populateNextSlides(state,props,slidesHavePassed){void 0===slidesHavePassed&&(slidesHavePassed=0);var nextSlides,nextPosition,slidesToShow=state.slidesToShow,currentSlide=state.currentSlide,itemWidth=state.itemWidth,totalItems=state.totalItems,slidesToSlide=common_1.getSlidesToSlide(state,props),nextMaximumSlides=currentSlide+1+slidesHavePassed+slidesToShow+(0<slidesHavePassed?0:slidesToSlide);return nextPosition=nextMaximumSlides<=totalItems?-itemWidth*(nextSlides=currentSlide+slidesHavePassed+(0<slidesHavePassed?0:slidesToSlide)):totalItems<nextMaximumSlides&&currentSlide!==totalItems-slidesToShow?-itemWidth*(nextSlides=totalItems-slidesToShow):nextSlides=void 0,{nextSlides:nextSlides,nextPosition:nextPosition}}exports.populateNextSlides=populateNextSlides;
-
-/***/ }),
-/* 259 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(exports,"__esModule",{value:!0});var React=__webpack_require__(0),common_1=__webpack_require__(46),common_2=__webpack_require__(46);function populatePreviousSlides(state,props,slidesHavePassed){void 0===slidesHavePassed&&(slidesHavePassed=0);var nextSlides,nextPosition,currentSlide=state.currentSlide,itemWidth=state.itemWidth,slidesToShow=state.slidesToShow,children=props.children,showDots=props.showDots,infinite=props.infinite,slidesToSlide=common_1.getSlidesToSlide(state,props),nextMaximumSlides=currentSlide-slidesHavePassed-(0<slidesHavePassed?0:slidesToSlide),additionalSlides=(React.Children.toArray(children).length-slidesToShow)%slidesToSlide;return nextPosition=0<=nextMaximumSlides?(nextSlides=nextMaximumSlides,showDots&&!infinite&&0<additionalSlides&&common_2.isInRightEnd(state)&&(nextSlides=currentSlide-additionalSlides),-itemWidth*nextSlides):nextSlides=nextMaximumSlides<0&&0!==currentSlide?0:void 0,{nextSlides:nextSlides,nextPosition:nextPosition}}exports.populatePreviousSlides=populatePreviousSlides;
-
-/***/ }),
-/* 260 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-function populateSlidesOnMouseTouchMove(state,props,initialX,lastX,clientX,transformPlaceHolder){var direction,nextPosition,itemWidth=state.itemWidth,slidesToShow=state.slidesToShow,totalItems=state.totalItems,currentSlide=state.currentSlide,infinite=props.infinite,canContinue=!1,slidesHavePassedRight=Math.round((initialX-lastX)/itemWidth),slidesHavePassedLeft=Math.round((lastX-initialX)/itemWidth),isMovingLeft=initialX<clientX;if(clientX<initialX&&!!(slidesHavePassedRight<=slidesToShow)){direction="right";var translateXLimit=Math.abs(-itemWidth*(totalItems-slidesToShow)),nextTranslate=transformPlaceHolder-(lastX-clientX),isLastSlide=currentSlide===totalItems-slidesToShow;(Math.abs(nextTranslate)<=translateXLimit||isLastSlide&&infinite)&&(nextPosition=nextTranslate,canContinue=!0)}isMovingLeft&&slidesHavePassedLeft<=slidesToShow&&(direction="left",((nextTranslate=transformPlaceHolder+(clientX-lastX))<=0||0===currentSlide&&infinite)&&(canContinue=!0,nextPosition=nextTranslate));return{direction:direction,nextPosition:nextPosition,canContinue:canContinue}}Object.defineProperty(exports,"__esModule",{value:!0}),exports.populateSlidesOnMouseTouchMove=populateSlidesOnMouseTouchMove;
-
-/***/ }),
 /* 261 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-var __extends=this&&this.__extends||function(){var extendStatics=function(d,b){return(extendStatics=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(d,b){d.__proto__=b}||function(d,b){for(var p in b)b.hasOwnProperty(p)&&(d[p]=b[p])})(d,b)};return function(d,b){function __(){this.constructor=d}extendStatics(d,b),d.prototype=null===b?Object.create(b):(__.prototype=b.prototype,new __)}}();Object.defineProperty(exports,"__esModule",{value:!0});var React=__webpack_require__(0);function isMouseMoveEvent(e){return"clientY"in e}exports.isMouseMoveEvent=isMouseMoveEvent;var Carousel=function(_super){function Carousel(){return null!==_super&&_super.apply(this,arguments)||this}return __extends(Carousel,_super),Carousel}(React.Component);exports.default=Carousel;
+Object.defineProperty(exports,"__esModule",{value:!0});var Carousel_1=__webpack_require__(262);exports.default=Carousel_1.default;
 
 /***/ }),
 /* 262 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports,"__esModule",{value:!0});var React=__webpack_require__(0),clones_1=__webpack_require__(79),dots_1=__webpack_require__(263),common_1=__webpack_require__(46),Dots=function(_a){var props=_a.props,state=_a.state,goToSlide=_a.goToSlide,getState=_a.getState,showDots=props.showDots,customDot=props.customDot,dotListClass=props.dotListClass,infinite=props.infinite,children=props.children;if(!showDots||common_1.notEnoughChildren(state))return null;var numberOfDotsToShow,currentSlide=state.currentSlide,slidesToShow=state.slidesToShow,slidesToSlide=common_1.getSlidesToSlide(state,props),childrenArr=React.Children.toArray(children);numberOfDotsToShow=infinite?Math.ceil(childrenArr.length/slidesToSlide):Math.ceil((childrenArr.length-slidesToShow)/slidesToSlide)+1;var nextSlidesTable=dots_1.getLookupTableForNextSlides(numberOfDotsToShow,state,props,childrenArr),lookupTable=clones_1.getOriginalIndexLookupTableByClones(slidesToShow,childrenArr),currentSlides=lookupTable[currentSlide];return React.createElement("ul",{className:"react-multi-carousel-dot-list "+dotListClass},Array(numberOfDotsToShow).fill(0).map(function(_,index){var isActive,nextSlide;if(infinite){nextSlide=nextSlidesTable[index];var cloneIndex=lookupTable[nextSlide];isActive=currentSlides===cloneIndex||cloneIndex<=currentSlides&&currentSlides<cloneIndex+slidesToSlide}else{var maximumNextSlide=childrenArr.length-slidesToShow,possibileNextSlides=index*slidesToSlide;isActive=(nextSlide=maximumNextSlide<possibileNextSlides?maximumNextSlide:possibileNextSlides)===currentSlide||nextSlide<currentSlide&&currentSlide<nextSlide+slidesToSlide&&currentSlide<childrenArr.length-slidesToShow}return customDot?React.cloneElement(customDot,{index:index,active:isActive,key:index,onClick:function(){return goToSlide(nextSlide)},carouselState:getState()}):React.createElement("li",{"data-index":index,key:index,className:"react-multi-carousel-dot "+(isActive?"react-multi-carousel-dot--active":"")},React.createElement("button",{"aria-label":"Go to slide "+(index+1),onClick:function(){return goToSlide(nextSlide)}}))}))};exports.default=Dots;
+var __extends=this&&this.__extends||function(){var extendStatics=function(d,b){return(extendStatics=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(d,b){d.__proto__=b}||function(d,b){for(var p in b)b.hasOwnProperty(p)&&(d[p]=b[p])})(d,b)};return function(d,b){function __(){this.constructor=d}extendStatics(d,b),d.prototype=null===b?Object.create(b):(__.prototype=b.prototype,new __)}}();Object.defineProperty(exports,"__esModule",{value:!0});var React=__webpack_require__(0),utils_1=__webpack_require__(93),types_1=__webpack_require__(268),Dots_1=__webpack_require__(269),Arrows_1=__webpack_require__(271),CarouselItems_1=__webpack_require__(272),common_1=__webpack_require__(49),defaultTransitionDuration=400,defaultTransition="transform 400ms ease-in-out",Carousel=function(_super){function Carousel(props){var _this=_super.call(this,props)||this;return _this.containerRef=React.createRef(),_this.listRef=React.createRef(),_this.state={itemWidth:0,slidesToShow:0,currentSlide:0,totalItems:React.Children.count(props.children),deviceType:"",domLoaded:!1,transform:0,containerWidth:0},_this.onResize=_this.onResize.bind(_this),_this.handleDown=_this.handleDown.bind(_this),_this.handleMove=_this.handleMove.bind(_this),_this.handleOut=_this.handleOut.bind(_this),_this.onKeyUp=_this.onKeyUp.bind(_this),_this.handleEnter=_this.handleEnter.bind(_this),_this.setIsInThrottle=_this.setIsInThrottle.bind(_this),_this.next=utils_1.throttle(_this.next.bind(_this),props.transitionDuration||defaultTransitionDuration,_this.setIsInThrottle),_this.previous=utils_1.throttle(_this.previous.bind(_this),props.transitionDuration||defaultTransitionDuration,_this.setIsInThrottle),_this.goToSlide=utils_1.throttle(_this.goToSlide.bind(_this),props.transitionDuration||defaultTransitionDuration,_this.setIsInThrottle),_this.onMove=!1,_this.initialX=0,_this.lastX=0,_this.isAnimationAllowed=!1,_this.direction="",_this.initialY=0,_this.isInThrottle=!1,_this.transformPlaceHolder=0,_this}return __extends(Carousel,_super),Carousel.prototype.resetTotalItems=function(){var _this=this,totalItems=React.Children.count(this.props.children),currentSlide=utils_1.notEnoughChildren(this.state)?0:Math.max(0,Math.min(this.state.currentSlide,totalItems));this.setState({totalItems:totalItems,currentSlide:currentSlide},function(){_this.setContainerAndItemWidth(_this.state.slidesToShow,!0)})},Carousel.prototype.setIsInThrottle=function(isInThrottle){void 0===isInThrottle&&(isInThrottle=!1),this.isInThrottle=isInThrottle},Carousel.prototype.setTransformDirectly=function(position,withAnimation){var additionalTransfrom=this.props.additionalTransfrom,currentTransform=common_1.getTransform(this.state,this.props,position);this.transformPlaceHolder=position,this.listRef&&this.listRef.current&&(this.setAnimationDirectly(withAnimation),this.listRef.current.style.transform="translate3d("+(currentTransform+additionalTransfrom)+"px,0,0)")},Carousel.prototype.setAnimationDirectly=function(animationAllowed){this.listRef&&this.listRef.current&&(this.listRef.current.style.transition=animationAllowed?this.props.customTransition||defaultTransition:"none")},Carousel.prototype.componentDidMount=function(){this.setState({domLoaded:!0}),this.setItemsToShow(),window.addEventListener("resize",this.onResize),this.onResize(!0),this.props.keyBoardControl&&window.addEventListener("keyup",this.onKeyUp),this.props.autoPlay&&this.props.autoPlaySpeed&&(this.autoPlay=setInterval(this.next,this.props.autoPlaySpeed))},Carousel.prototype.setClones=function(slidesToShow,itemWidth,forResizing,resetCurrentSlide){var _this=this;void 0===resetCurrentSlide&&(resetCurrentSlide=!1),this.isAnimationAllowed=!1;var childrenArr=React.Children.toArray(this.props.children),initialSlide=utils_1.getInitialSlideInInfiniteMode(slidesToShow||this.state.slidesToShow,childrenArr),clones=utils_1.getClones(this.state.slidesToShow,childrenArr),currentSlide=childrenArr.length<this.state.slidesToShow?0:this.state.currentSlide;this.setState({totalItems:clones.length,currentSlide:forResizing&&!resetCurrentSlide?currentSlide:initialSlide},function(){_this.correctItemsPosition(itemWidth||_this.state.itemWidth)})},Carousel.prototype.setItemsToShow=function(shouldCorrectItemPosition,resetCurrentSlide){var _this=this,responsive=this.props.responsive;Object.keys(responsive).forEach(function(item){var _a=responsive[item],breakpoint=_a.breakpoint,items=_a.items,max=breakpoint.max,min=breakpoint.min;window.innerWidth>=min&&window.innerWidth<=max&&(_this.setState({slidesToShow:items,deviceType:item}),_this.setContainerAndItemWidth(items,shouldCorrectItemPosition,resetCurrentSlide))})},Carousel.prototype.setContainerAndItemWidth=function(slidesToShow,shouldCorrectItemPosition,resetCurrentSlide){var _this=this;if(this.containerRef&&this.containerRef.current){var containerWidth=this.containerRef.current.offsetWidth,itemWidth_1=utils_1.getItemClientSideWidth(this.props,slidesToShow,containerWidth);this.setState({containerWidth:containerWidth,itemWidth:itemWidth_1},function(){_this.props.infinite&&_this.setClones(slidesToShow,itemWidth_1,shouldCorrectItemPosition,resetCurrentSlide)}),shouldCorrectItemPosition&&this.correctItemsPosition(itemWidth_1)}},Carousel.prototype.correctItemsPosition=function(itemWidth,isAnimationAllowed,setToDomDirectly){isAnimationAllowed&&(this.isAnimationAllowed=!0),!isAnimationAllowed&&this.isAnimationAllowed&&(this.isAnimationAllowed=!1);var nextTransform=this.state.totalItems<this.state.slidesToShow?0:-itemWidth*this.state.currentSlide;setToDomDirectly&&this.setTransformDirectly(nextTransform,!0),this.setState({transform:nextTransform})},Carousel.prototype.onResize=function(value){var shouldCorrectItemPosition;shouldCorrectItemPosition=!!this.props.infinite&&("boolean"!=typeof value||!value),this.setItemsToShow(shouldCorrectItemPosition)},Carousel.prototype.componentDidUpdate=function(_a,_b){var _this=this,keyBoardControl=_a.keyBoardControl,autoPlay=_a.autoPlay,children=_a.children,containerWidth=_b.containerWidth,domLoaded=_b.domLoaded,currentSlide=_b.currentSlide;this.containerRef&&this.containerRef.current&&this.containerRef.current.offsetWidth!==containerWidth&&setTimeout(function(){_this.setItemsToShow(!0)},this.props.transitionDuration||defaultTransitionDuration),keyBoardControl&&!this.props.keyBoardControl&&window.removeEventListener("keyup",this.onKeyUp),!keyBoardControl&&this.props.keyBoardControl&&window.addEventListener("keyup",this.onKeyUp),autoPlay&&!this.props.autoPlay&&this.autoPlay&&(clearInterval(this.autoPlay),this.autoPlay=void 0),autoPlay||!this.props.autoPlay||this.autoPlay||(this.autoPlay=setInterval(this.next,this.props.autoPlaySpeed)),children.length!==this.props.children.length?setTimeout(function(){_this.props.infinite?_this.setClones(_this.state.slidesToShow,_this.state.itemWidth,!0,!0):_this.resetTotalItems()},this.props.transitionDuration||defaultTransitionDuration):this.props.infinite&&this.state.currentSlide!==currentSlide&&this.correctClonesPosition({domLoaded:domLoaded}),this.transformPlaceHolder!==this.state.transform&&(this.transformPlaceHolder=this.state.transform)},Carousel.prototype.correctClonesPosition=function(_a){var _this=this,domLoaded=_a.domLoaded,childrenArr=React.Children.toArray(this.props.children),_b=utils_1.checkClonesPosition(this.state,childrenArr,this.props),isReachingTheEnd=_b.isReachingTheEnd,isReachingTheStart=_b.isReachingTheStart,nextSlide=_b.nextSlide,nextPosition=_b.nextPosition;this.state.domLoaded&&domLoaded&&(isReachingTheEnd||isReachingTheStart)&&(this.isAnimationAllowed=!1,setTimeout(function(){_this.setState({transform:nextPosition,currentSlide:nextSlide})},this.props.transitionDuration||defaultTransitionDuration))},Carousel.prototype.next=function(slidesHavePassed){var _this=this;void 0===slidesHavePassed&&(slidesHavePassed=0);var _a=this.props,afterChange=_a.afterChange,beforeChange=_a.beforeChange;if(!utils_1.notEnoughChildren(this.state)){var _b=utils_1.populateNextSlides(this.state,this.props,slidesHavePassed),nextSlides=_b.nextSlides,nextPosition=_b.nextPosition,previousSlide=this.state.currentSlide;void 0!==nextSlides&&void 0!==nextPosition&&("function"==typeof beforeChange&&beforeChange(nextSlides,this.getState()),this.isAnimationAllowed=!0,this.setState({transform:nextPosition,currentSlide:nextSlides},function(){"function"==typeof afterChange&&setTimeout(function(){afterChange(previousSlide,_this.getState())},_this.props.transitionDuration||defaultTransitionDuration)}))}},Carousel.prototype.previous=function(slidesHavePassed){var _this=this;void 0===slidesHavePassed&&(slidesHavePassed=0);var _a=this.props,afterChange=_a.afterChange,beforeChange=_a.beforeChange;if(!utils_1.notEnoughChildren(this.state)){var _b=utils_1.populatePreviousSlides(this.state,this.props,slidesHavePassed),nextSlides=_b.nextSlides,nextPosition=_b.nextPosition;if(void 0!==nextSlides&&void 0!==nextPosition){var previousSlide=this.state.currentSlide;"function"==typeof beforeChange&&beforeChange(nextSlides,this.getState()),this.isAnimationAllowed=!0,this.setState({transform:nextPosition,currentSlide:nextSlides},function(){"function"==typeof afterChange&&setTimeout(function(){afterChange(previousSlide,_this.getState())},_this.props.transitionDuration||defaultTransitionDuration)})}}},Carousel.prototype.componentWillUnmount=function(){window.removeEventListener("resize",this.onResize),this.props.keyBoardControl&&window.removeEventListener("keyup",this.onKeyUp),this.props.autoPlay&&this.autoPlay&&(clearInterval(this.autoPlay),this.autoPlay=void 0)},Carousel.prototype.resetMoveStatus=function(){this.onMove=!1,this.initialX=0,this.lastX=0,this.direction="",this.initialY=0},Carousel.prototype.handleDown=function(e){if(!(!types_1.isMouseMoveEvent(e)&&!this.props.swipeable||types_1.isMouseMoveEvent(e)&&!this.props.draggable||this.isInThrottle)){var _a=types_1.isMouseMoveEvent(e)?e:e.touches[0],clientX=_a.clientX,clientY=_a.clientY;this.onMove=!0,this.initialX=clientX,this.initialY=clientY,this.lastX=clientX,this.isAnimationAllowed=!1}},Carousel.prototype.handleMove=function(e){if(!(!types_1.isMouseMoveEvent(e)&&!this.props.swipeable||types_1.isMouseMoveEvent(e)&&!this.props.draggable||utils_1.notEnoughChildren(this.state))){var _a=types_1.isMouseMoveEvent(e)?e:e.touches[0],clientX=_a.clientX,clientY=_a.clientY,diffX=this.initialX-clientX,diffY=this.initialY-clientY;if(!types_1.isMouseMoveEvent(e)&&this.autoPlay&&this.props.autoPlay&&(clearInterval(this.autoPlay),this.autoPlay=void 0),this.onMove){if(!(Math.abs(diffX)>Math.abs(diffY)))return;var _b=utils_1.populateSlidesOnMouseTouchMove(this.state,this.props,this.initialX,this.lastX,clientX,this.transformPlaceHolder),direction=_b.direction,nextPosition=_b.nextPosition,canContinue=_b.canContinue;direction&&(this.direction=direction,canContinue&&void 0!==nextPosition&&this.setTransformDirectly(nextPosition)),this.lastX=clientX}}},Carousel.prototype.handleOut=function(e){this.props.autoPlay&&!this.autoPlay&&(this.autoPlay=setInterval(this.next,this.props.autoPlaySpeed));var shouldDisableOnMobile="touchend"===e.type&&!this.props.swipeable,shouldDisableOnDesktop=("mouseleave"===e.type||"mouseup"===e.type)&&!this.props.draggable;if(!shouldDisableOnMobile&&!shouldDisableOnDesktop&&this.onMove){if(this.setAnimationDirectly(!0),"right"===this.direction)if(this.initialX-this.lastX>=this.props.minimumTouchDrag){var slidesHavePassed=Math.round((this.initialX-this.lastX)/this.state.itemWidth);this.next(slidesHavePassed)}else this.correctItemsPosition(this.state.itemWidth,!0,!0);if("left"===this.direction)if(this.lastX-this.initialX>this.props.minimumTouchDrag){slidesHavePassed=Math.round((this.lastX-this.initialX)/this.state.itemWidth);this.previous(slidesHavePassed)}else this.correctItemsPosition(this.state.itemWidth,!0,!0);this.resetMoveStatus()}},Carousel.prototype.onKeyUp=function(e){switch(e.keyCode){case 37:return this.previous();case 39:return this.next()}},Carousel.prototype.handleEnter=function(){this.autoPlay&&this.props.autoPlay&&(clearInterval(this.autoPlay),this.autoPlay=void 0)},Carousel.prototype.goToSlide=function(slide,skipCallbacks){var _this=this;if(!this.isInThrottle){var itemWidth=this.state.itemWidth,_a=this.props,afterChange=_a.afterChange,beforeChange=_a.beforeChange,previousSlide=this.state.currentSlide;"function"!=typeof beforeChange||skipCallbacks&&("object"!=typeof skipCallbacks||skipCallbacks.skipBeforeChange)||beforeChange(slide,this.getState()),this.isAnimationAllowed=!0,this.setState({currentSlide:slide,transform:-itemWidth*slide},function(){_this.props.infinite&&_this.correctClonesPosition({domLoaded:!0}),"function"!=typeof afterChange||skipCallbacks&&("object"!=typeof skipCallbacks||skipCallbacks.skipAfterChange)||setTimeout(function(){afterChange(previousSlide,_this.getState())},_this.props.transitionDuration||defaultTransitionDuration)})}},Carousel.prototype.getState=function(){return this.state},Carousel.prototype.renderLeftArrow=function(){var _this=this,customLeftArrow=this.props.customLeftArrow;return React.createElement(Arrows_1.LeftArrow,{customLeftArrow:customLeftArrow,getState:function(){return _this.getState()},previous:this.previous})},Carousel.prototype.renderRightArrow=function(){var _this=this,customRightArrow=this.props.customRightArrow;return React.createElement(Arrows_1.RightArrow,{customRightArrow:customRightArrow,getState:function(){return _this.getState()},next:this.next})},Carousel.prototype.renderButtonGroups=function(){var _this=this,customButtonGroup=this.props.customButtonGroup;return customButtonGroup?React.cloneElement(customButtonGroup,{previous:function(){return _this.previous()},next:function(){return _this.next()},goToSlide:function(slideIndex,skipCallbacks){return _this.goToSlide(slideIndex,skipCallbacks)},carouselState:this.getState()}):null},Carousel.prototype.renderDotsList=function(){var _this=this;return React.createElement(Dots_1.default,{state:this.state,props:this.props,goToSlide:this.goToSlide,getState:function(){return _this.getState()}})},Carousel.prototype.renderCarouselItems=function(){var clones=[];if(this.props.infinite){var childrenArr=React.Children.toArray(this.props.children);clones=utils_1.getClones(this.state.slidesToShow,childrenArr)}return React.createElement(CarouselItems_1.default,{clones:clones,goToSlide:this.goToSlide,state:this.state,notEnoughChildren:utils_1.notEnoughChildren(this.state),props:this.props})},Carousel.prototype.render=function(){var _a=this.props,deviceType=_a.deviceType,arrows=_a.arrows,removeArrowOnDeviceType=_a.removeArrowOnDeviceType,infinite=_a.infinite,containerClass=_a.containerClass,sliderClass=_a.sliderClass,customTransition=_a.customTransition,additionalTransfrom=_a.additionalTransfrom,renderDotsOutside=_a.renderDotsOutside,renderButtonGroupOutside=_a.renderButtonGroupOutside,className=_a.className; false&&false;var _b=utils_1.getInitialState(this.state,this.props),shouldRenderOnSSR=_b.shouldRenderOnSSR,shouldRenderAtAll=_b.shouldRenderAtAll,isLeftEndReach=utils_1.isInLeftEnd(this.state),isRightEndReach=utils_1.isInRightEnd(this.state),shouldShowArrows=arrows&&!(removeArrowOnDeviceType&&(deviceType&&-1<removeArrowOnDeviceType.indexOf(deviceType)||this.state.deviceType&&-1<removeArrowOnDeviceType.indexOf(this.state.deviceType)))&&!utils_1.notEnoughChildren(this.state)&&shouldRenderAtAll,disableLeftArrow=!infinite&&isLeftEndReach,disableRightArrow=!infinite&&isRightEndReach,currentTransform=common_1.getTransform(this.state,this.props);return React.createElement(React.Fragment,null,React.createElement("div",{className:"react-multi-carousel-list "+containerClass+" "+className,ref:this.containerRef},React.createElement("ul",{ref:this.listRef,className:"react-multi-carousel-track "+sliderClass,style:{transition:this.isAnimationAllowed?customTransition||defaultTransition:"none",overflow:shouldRenderOnSSR?"hidden":"unset",transform:"translate3d("+(currentTransform+additionalTransfrom)+"px,0,0)"},onMouseMove:this.handleMove,onMouseDown:this.handleDown,onMouseUp:this.handleOut,onMouseEnter:this.handleEnter,onMouseLeave:this.handleOut,onTouchStart:this.handleDown,onTouchMove:this.handleMove,onTouchEnd:this.handleOut},this.renderCarouselItems()),shouldShowArrows&&!disableLeftArrow&&this.renderLeftArrow(),shouldShowArrows&&!disableRightArrow&&this.renderRightArrow(),shouldRenderAtAll&&!renderButtonGroupOutside&&this.renderButtonGroups(),shouldRenderAtAll&&!renderDotsOutside&&this.renderDotsList()),shouldRenderAtAll&&renderDotsOutside&&this.renderDotsList(),shouldRenderAtAll&&renderButtonGroupOutside&&this.renderButtonGroups())},Carousel.defaultProps={slidesToSlide:1,infinite:!1,draggable:!0,swipeable:!0,arrows:!0,containerClass:"",sliderClass:"",itemClass:"",keyBoardControl:!0,autoPlaySpeed:3e3,showDots:!1,renderDotsOutside:!1,renderButtonGroupOutside:!1,minimumTouchDrag:80,className:"",dotListClass:"",focusOnSelect:!1,centerMode:!1,additionalTransfrom:0},Carousel}(React.Component);exports.default=Carousel;
 
 /***/ }),
 /* 263 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports,"__esModule",{value:!0});var clones_1=__webpack_require__(79),common_1=__webpack_require__(46);function getLookupTableForNextSlides(numberOfDotsToShow,state,props,childrenArr){var table={},slidesToSlide=common_1.getSlidesToSlide(state,props);return Array(numberOfDotsToShow).fill(0).forEach(function(_,i){var nextSlide=clones_1.getOriginalCounterPart(i,state,childrenArr);if(0===i)table[0]=nextSlide;else{var now=table[i-1]+slidesToSlide;table[i]=now}}),table}exports.getLookupTableForNextSlides=getLookupTableForNextSlides;
+Object.defineProperty(exports,"__esModule",{value:!0});var throttle=function(func,limit,setIsInThrottle){var inThrottle;return function(){var args=arguments;inThrottle||(func.apply(this,args),inThrottle=!0,"function"==typeof setIsInThrottle&&setIsInThrottle(!0),setTimeout(function(){inThrottle=!1,"function"==typeof setIsInThrottle&&setIsInThrottle(!1)},limit))}};exports.default=throttle;
 
 /***/ }),
 /* 264 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports,"__esModule",{value:!0});var React=__webpack_require__(0),LeftArrow=function(_a){var customLeftArrow=_a.customLeftArrow,getState=_a.getState,previous=_a.previous;return customLeftArrow?React.cloneElement(customLeftArrow,{onClick:function(){return previous()},carouselState:getState()}):React.createElement("button",{"aria-label":"Go to previous slide",className:"react-multiple-carousel__arrow react-multiple-carousel__arrow--left",onClick:function(){return previous()}})};exports.LeftArrow=LeftArrow;var RightArrow=function(_a){var customRightArrow=_a.customRightArrow,next=_a.next,getState=_a.getState;return customRightArrow?React.cloneElement(customRightArrow,{onClick:function(){return next()},carouselState:getState()}):React.createElement("button",{"aria-label":"Go to next slide",className:"react-multiple-carousel__arrow react-multiple-carousel__arrow--right",onClick:function(){return next()}})};exports.RightArrow=RightArrow;
+function throwError(state,props){var partialVisbile=props.partialVisbile,partialVisible=props.partialVisible,centerMode=props.centerMode,ssr=props.ssr,responsive=props.responsive;if((partialVisbile||partialVisible)&&centerMode)throw new Error("center mode can not be used at the same time with partialVisible");if(!responsive)throw ssr?new Error("ssr mode need to be used in conjunction with responsive prop"):new Error("Responsive prop is needed for deciding the amount of items to show on the screen");if(responsive&&"object"!=typeof responsive)throw new Error("responsive prop must be an object")}Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=throwError;
 
 /***/ }),
 /* 265 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(exports,"__esModule",{value:!0});var React=__webpack_require__(0),utils_1=__webpack_require__(85),CarouselItems=function(_a){var props=_a.props,state=_a.state,goToSlide=_a.goToSlide,clones=_a.clones,notEnoughChildren=_a.notEnoughChildren,itemWidth=state.itemWidth,children=props.children,infinite=props.infinite,itemClass=props.itemClass,partialVisbile=props.partialVisbile,partialVisible=props.partialVisible,_b=utils_1.getInitialState(state,props),flexBisis=_b.flexBisis,shouldRenderOnSSR=_b.shouldRenderOnSSR,domFullyLoaded=_b.domFullyLoaded,partialVisibilityGutter=_b.partialVisibilityGutter;return _b.shouldRenderAtAll?(partialVisbile&&console.warn('WARNING: Please correct props name: "partialVisible" as old typo will be removed in future versions!'),React.createElement(React.Fragment,null,(infinite?clones:React.Children.toArray(children)).map(function(child,index){return React.createElement("li",{key:index,"data-index":index,onClick:function(){props.focusOnSelect&&goToSlide(index)},"aria-hidden":utils_1.getIfSlideIsVisbile(index,state)?"false":"true",style:{flex:shouldRenderOnSSR?"1 0 "+flexBisis+"%":"auto",position:"relative",width:domFullyLoaded?((partialVisbile||partialVisible)&&partialVisibilityGutter&&!notEnoughChildren?itemWidth-partialVisibilityGutter:itemWidth)+"px":"auto"},className:"react-multi-carousel-item "+(utils_1.getIfSlideIsVisbile(index,state)?"react-multi-carousel-item--active":"")+" "+itemClass},child)}))):null};exports.default=CarouselItems;
+Object.defineProperty(exports,"__esModule",{value:!0});var common_1=__webpack_require__(49);function populateNextSlides(state,props,slidesHavePassed){void 0===slidesHavePassed&&(slidesHavePassed=0);var nextSlides,nextPosition,slidesToShow=state.slidesToShow,currentSlide=state.currentSlide,itemWidth=state.itemWidth,totalItems=state.totalItems,slidesToSlide=common_1.getSlidesToSlide(state,props),nextMaximumSlides=currentSlide+1+slidesHavePassed+slidesToShow+(0<slidesHavePassed?0:slidesToSlide);return nextPosition=nextMaximumSlides<=totalItems?-itemWidth*(nextSlides=currentSlide+slidesHavePassed+(0<slidesHavePassed?0:slidesToSlide)):totalItems<nextMaximumSlides&&currentSlide!==totalItems-slidesToShow?-itemWidth*(nextSlides=totalItems-slidesToShow):nextSlides=void 0,{nextSlides:nextSlides,nextPosition:nextPosition}}exports.populateNextSlides=populateNextSlides;
 
 /***/ }),
 /* 266 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports,"__esModule",{value:!0});var React=__webpack_require__(0),common_1=__webpack_require__(49),common_2=__webpack_require__(49);function populatePreviousSlides(state,props,slidesHavePassed){void 0===slidesHavePassed&&(slidesHavePassed=0);var nextSlides,nextPosition,currentSlide=state.currentSlide,itemWidth=state.itemWidth,slidesToShow=state.slidesToShow,children=props.children,showDots=props.showDots,infinite=props.infinite,slidesToSlide=common_1.getSlidesToSlide(state,props),nextMaximumSlides=currentSlide-slidesHavePassed-(0<slidesHavePassed?0:slidesToSlide),additionalSlides=(React.Children.toArray(children).length-slidesToShow)%slidesToSlide;return nextPosition=0<=nextMaximumSlides?(nextSlides=nextMaximumSlides,showDots&&!infinite&&0<additionalSlides&&common_2.isInRightEnd(state)&&(nextSlides=currentSlide-additionalSlides),-itemWidth*nextSlides):nextSlides=nextMaximumSlides<0&&0!==currentSlide?0:void 0,{nextSlides:nextSlides,nextPosition:nextPosition}}exports.populatePreviousSlides=populatePreviousSlides;
+
+/***/ }),
+/* 267 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+function populateSlidesOnMouseTouchMove(state,props,initialX,lastX,clientX,transformPlaceHolder){var direction,nextPosition,itemWidth=state.itemWidth,slidesToShow=state.slidesToShow,totalItems=state.totalItems,currentSlide=state.currentSlide,infinite=props.infinite,canContinue=!1,slidesHavePassedRight=Math.round((initialX-lastX)/itemWidth),slidesHavePassedLeft=Math.round((lastX-initialX)/itemWidth),isMovingLeft=initialX<clientX;if(clientX<initialX&&!!(slidesHavePassedRight<=slidesToShow)){direction="right";var translateXLimit=Math.abs(-itemWidth*(totalItems-slidesToShow)),nextTranslate=transformPlaceHolder-(lastX-clientX),isLastSlide=currentSlide===totalItems-slidesToShow;(Math.abs(nextTranslate)<=translateXLimit||isLastSlide&&infinite)&&(nextPosition=nextTranslate,canContinue=!0)}isMovingLeft&&slidesHavePassedLeft<=slidesToShow&&(direction="left",((nextTranslate=transformPlaceHolder+(clientX-lastX))<=0||0===currentSlide&&infinite)&&(canContinue=!0,nextPosition=nextTranslate));return{direction:direction,nextPosition:nextPosition,canContinue:canContinue}}Object.defineProperty(exports,"__esModule",{value:!0}),exports.populateSlidesOnMouseTouchMove=populateSlidesOnMouseTouchMove;
+
+/***/ }),
+/* 268 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+var __extends=this&&this.__extends||function(){var extendStatics=function(d,b){return(extendStatics=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(d,b){d.__proto__=b}||function(d,b){for(var p in b)b.hasOwnProperty(p)&&(d[p]=b[p])})(d,b)};return function(d,b){function __(){this.constructor=d}extendStatics(d,b),d.prototype=null===b?Object.create(b):(__.prototype=b.prototype,new __)}}();Object.defineProperty(exports,"__esModule",{value:!0});var React=__webpack_require__(0);function isMouseMoveEvent(e){return"clientY"in e}exports.isMouseMoveEvent=isMouseMoveEvent;var Carousel=function(_super){function Carousel(){return null!==_super&&_super.apply(this,arguments)||this}return __extends(Carousel,_super),Carousel}(React.Component);exports.default=Carousel;
+
+/***/ }),
+/* 269 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports,"__esModule",{value:!0});var React=__webpack_require__(0),clones_1=__webpack_require__(84),dots_1=__webpack_require__(270),common_1=__webpack_require__(49),Dots=function(_a){var props=_a.props,state=_a.state,goToSlide=_a.goToSlide,getState=_a.getState,showDots=props.showDots,customDot=props.customDot,dotListClass=props.dotListClass,infinite=props.infinite,children=props.children;if(!showDots||common_1.notEnoughChildren(state))return null;var numberOfDotsToShow,currentSlide=state.currentSlide,slidesToShow=state.slidesToShow,slidesToSlide=common_1.getSlidesToSlide(state,props),childrenArr=React.Children.toArray(children);numberOfDotsToShow=infinite?Math.ceil(childrenArr.length/slidesToSlide):Math.ceil((childrenArr.length-slidesToShow)/slidesToSlide)+1;var nextSlidesTable=dots_1.getLookupTableForNextSlides(numberOfDotsToShow,state,props,childrenArr),lookupTable=clones_1.getOriginalIndexLookupTableByClones(slidesToShow,childrenArr),currentSlides=lookupTable[currentSlide];return React.createElement("ul",{className:"react-multi-carousel-dot-list "+dotListClass},Array(numberOfDotsToShow).fill(0).map(function(_,index){var isActive,nextSlide;if(infinite){nextSlide=nextSlidesTable[index];var cloneIndex=lookupTable[nextSlide];isActive=currentSlides===cloneIndex||cloneIndex<=currentSlides&&currentSlides<cloneIndex+slidesToSlide}else{var maximumNextSlide=childrenArr.length-slidesToShow,possibileNextSlides=index*slidesToSlide;isActive=(nextSlide=maximumNextSlide<possibileNextSlides?maximumNextSlide:possibileNextSlides)===currentSlide||nextSlide<currentSlide&&currentSlide<nextSlide+slidesToSlide&&currentSlide<childrenArr.length-slidesToShow}return customDot?React.cloneElement(customDot,{index:index,active:isActive,key:index,onClick:function(){return goToSlide(nextSlide)},carouselState:getState()}):React.createElement("li",{"data-index":index,key:index,className:"react-multi-carousel-dot "+(isActive?"react-multi-carousel-dot--active":"")},React.createElement("button",{"aria-label":"Go to slide "+(index+1),onClick:function(){return goToSlide(nextSlide)}}))}))};exports.default=Dots;
+
+/***/ }),
+/* 270 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports,"__esModule",{value:!0});var clones_1=__webpack_require__(84),common_1=__webpack_require__(49);function getLookupTableForNextSlides(numberOfDotsToShow,state,props,childrenArr){var table={},slidesToSlide=common_1.getSlidesToSlide(state,props);return Array(numberOfDotsToShow).fill(0).forEach(function(_,i){var nextSlide=clones_1.getOriginalCounterPart(i,state,childrenArr);if(0===i)table[0]=nextSlide;else{var now=table[i-1]+slidesToSlide;table[i]=now}}),table}exports.getLookupTableForNextSlides=getLookupTableForNextSlides;
+
+/***/ }),
+/* 271 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports,"__esModule",{value:!0});var React=__webpack_require__(0),LeftArrow=function(_a){var customLeftArrow=_a.customLeftArrow,getState=_a.getState,previous=_a.previous;return customLeftArrow?React.cloneElement(customLeftArrow,{onClick:function(){return previous()},carouselState:getState()}):React.createElement("button",{"aria-label":"Go to previous slide",className:"react-multiple-carousel__arrow react-multiple-carousel__arrow--left",onClick:function(){return previous()}})};exports.LeftArrow=LeftArrow;var RightArrow=function(_a){var customRightArrow=_a.customRightArrow,next=_a.next,getState=_a.getState;return customRightArrow?React.cloneElement(customRightArrow,{onClick:function(){return next()},carouselState:getState()}):React.createElement("button",{"aria-label":"Go to next slide",className:"react-multiple-carousel__arrow react-multiple-carousel__arrow--right",onClick:function(){return next()}})};exports.RightArrow=RightArrow;
+
+/***/ }),
+/* 272 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(exports,"__esModule",{value:!0});var React=__webpack_require__(0),utils_1=__webpack_require__(93),CarouselItems=function(_a){var props=_a.props,state=_a.state,goToSlide=_a.goToSlide,clones=_a.clones,notEnoughChildren=_a.notEnoughChildren,itemWidth=state.itemWidth,children=props.children,infinite=props.infinite,itemClass=props.itemClass,partialVisbile=props.partialVisbile,partialVisible=props.partialVisible,_b=utils_1.getInitialState(state,props),flexBisis=_b.flexBisis,shouldRenderOnSSR=_b.shouldRenderOnSSR,domFullyLoaded=_b.domFullyLoaded,partialVisibilityGutter=_b.partialVisibilityGutter;return _b.shouldRenderAtAll?(partialVisbile&&console.warn('WARNING: Please correct props name: "partialVisible" as old typo will be removed in future versions!'),React.createElement(React.Fragment,null,(infinite?clones:React.Children.toArray(children)).map(function(child,index){return React.createElement("li",{key:index,"data-index":index,onClick:function(){props.focusOnSelect&&goToSlide(index)},"aria-hidden":utils_1.getIfSlideIsVisbile(index,state)?"false":"true",style:{flex:shouldRenderOnSSR?"1 0 "+flexBisis+"%":"auto",position:"relative",width:domFullyLoaded?((partialVisbile||partialVisible)&&partialVisibilityGutter&&!notEnoughChildren?itemWidth-partialVisibilityGutter:itemWidth)+"px":"auto"},className:"react-multi-carousel-item "+(utils_1.getIfSlideIsVisbile(index,state)?"react-multi-carousel-item--active":"")+" "+itemClass},child)}))):null};exports.default=CarouselItems;
+
+/***/ }),
+/* 273 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -33956,9 +37597,9 @@ Object.defineProperty(exports,"__esModule",{value:!0});var React=__webpack_requi
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _useTheme_ThemeContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(38);
-/* harmony import */ var _useTheme__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(64);
-/* harmony import */ var _nested__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(39);
+/* harmony import */ var _useTheme_ThemeContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(42);
+/* harmony import */ var _useTheme__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(69);
+/* harmony import */ var _nested__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(43);
 
 
 
@@ -34013,274 +37654,274 @@ if (false) {}
 /* harmony default export */ __webpack_exports__["a"] = (ThemeProvider);
 
 /***/ }),
-/* 267 */
+/* 274 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./af": 87,
-	"./af.js": 87,
-	"./ar": 88,
-	"./ar-dz": 89,
-	"./ar-dz.js": 89,
-	"./ar-kw": 90,
-	"./ar-kw.js": 90,
-	"./ar-ly": 91,
-	"./ar-ly.js": 91,
-	"./ar-ma": 92,
-	"./ar-ma.js": 92,
-	"./ar-sa": 93,
-	"./ar-sa.js": 93,
-	"./ar-tn": 94,
-	"./ar-tn.js": 94,
-	"./ar.js": 88,
-	"./az": 95,
-	"./az.js": 95,
-	"./be": 96,
-	"./be.js": 96,
-	"./bg": 97,
-	"./bg.js": 97,
-	"./bm": 98,
-	"./bm.js": 98,
-	"./bn": 99,
-	"./bn.js": 99,
-	"./bo": 100,
-	"./bo.js": 100,
-	"./br": 101,
-	"./br.js": 101,
-	"./bs": 102,
-	"./bs.js": 102,
-	"./ca": 103,
-	"./ca.js": 103,
-	"./cs": 104,
-	"./cs.js": 104,
-	"./cv": 105,
-	"./cv.js": 105,
-	"./cy": 106,
-	"./cy.js": 106,
-	"./da": 107,
-	"./da.js": 107,
-	"./de": 108,
-	"./de-at": 109,
-	"./de-at.js": 109,
-	"./de-ch": 110,
-	"./de-ch.js": 110,
-	"./de.js": 108,
-	"./dv": 111,
-	"./dv.js": 111,
-	"./el": 112,
-	"./el.js": 112,
-	"./en-au": 113,
-	"./en-au.js": 113,
-	"./en-ca": 114,
-	"./en-ca.js": 114,
-	"./en-gb": 115,
-	"./en-gb.js": 115,
-	"./en-ie": 116,
-	"./en-ie.js": 116,
-	"./en-il": 117,
-	"./en-il.js": 117,
-	"./en-in": 118,
-	"./en-in.js": 118,
-	"./en-nz": 119,
-	"./en-nz.js": 119,
-	"./en-sg": 120,
-	"./en-sg.js": 120,
-	"./eo": 121,
-	"./eo.js": 121,
-	"./es": 122,
-	"./es-do": 123,
-	"./es-do.js": 123,
-	"./es-us": 124,
-	"./es-us.js": 124,
-	"./es.js": 122,
-	"./et": 125,
-	"./et.js": 125,
-	"./eu": 126,
-	"./eu.js": 126,
-	"./fa": 127,
-	"./fa.js": 127,
-	"./fi": 128,
-	"./fi.js": 128,
-	"./fil": 129,
-	"./fil.js": 129,
-	"./fo": 130,
-	"./fo.js": 130,
-	"./fr": 131,
-	"./fr-ca": 132,
-	"./fr-ca.js": 132,
-	"./fr-ch": 133,
-	"./fr-ch.js": 133,
-	"./fr.js": 131,
-	"./fy": 134,
-	"./fy.js": 134,
-	"./ga": 135,
-	"./ga.js": 135,
-	"./gd": 136,
-	"./gd.js": 136,
-	"./gl": 137,
-	"./gl.js": 137,
-	"./gom-deva": 138,
-	"./gom-deva.js": 138,
-	"./gom-latn": 139,
-	"./gom-latn.js": 139,
-	"./gu": 140,
-	"./gu.js": 140,
-	"./he": 141,
-	"./he.js": 141,
-	"./hi": 142,
-	"./hi.js": 142,
-	"./hr": 143,
-	"./hr.js": 143,
-	"./hu": 144,
-	"./hu.js": 144,
-	"./hy-am": 145,
-	"./hy-am.js": 145,
-	"./id": 146,
-	"./id.js": 146,
-	"./is": 147,
-	"./is.js": 147,
-	"./it": 148,
-	"./it-ch": 149,
-	"./it-ch.js": 149,
-	"./it.js": 148,
-	"./ja": 150,
-	"./ja.js": 150,
-	"./jv": 151,
-	"./jv.js": 151,
-	"./ka": 152,
-	"./ka.js": 152,
-	"./kk": 153,
-	"./kk.js": 153,
-	"./km": 154,
-	"./km.js": 154,
-	"./kn": 155,
-	"./kn.js": 155,
-	"./ko": 156,
-	"./ko.js": 156,
-	"./ku": 157,
-	"./ku.js": 157,
-	"./ky": 158,
-	"./ky.js": 158,
-	"./lb": 159,
-	"./lb.js": 159,
-	"./lo": 160,
-	"./lo.js": 160,
-	"./lt": 161,
-	"./lt.js": 161,
-	"./lv": 162,
-	"./lv.js": 162,
-	"./me": 163,
-	"./me.js": 163,
-	"./mi": 164,
-	"./mi.js": 164,
-	"./mk": 165,
-	"./mk.js": 165,
-	"./ml": 166,
-	"./ml.js": 166,
-	"./mn": 167,
-	"./mn.js": 167,
-	"./mr": 168,
-	"./mr.js": 168,
-	"./ms": 169,
-	"./ms-my": 170,
-	"./ms-my.js": 170,
-	"./ms.js": 169,
-	"./mt": 171,
-	"./mt.js": 171,
-	"./my": 172,
-	"./my.js": 172,
-	"./nb": 173,
-	"./nb.js": 173,
-	"./ne": 174,
-	"./ne.js": 174,
-	"./nl": 175,
-	"./nl-be": 176,
-	"./nl-be.js": 176,
-	"./nl.js": 175,
-	"./nn": 177,
-	"./nn.js": 177,
-	"./oc-lnc": 178,
-	"./oc-lnc.js": 178,
-	"./pa-in": 179,
-	"./pa-in.js": 179,
-	"./pl": 180,
-	"./pl.js": 180,
-	"./pt": 181,
-	"./pt-br": 182,
-	"./pt-br.js": 182,
-	"./pt.js": 181,
-	"./ro": 183,
-	"./ro.js": 183,
-	"./ru": 184,
-	"./ru.js": 184,
-	"./sd": 185,
-	"./sd.js": 185,
-	"./se": 186,
-	"./se.js": 186,
-	"./si": 187,
-	"./si.js": 187,
-	"./sk": 188,
-	"./sk.js": 188,
-	"./sl": 189,
-	"./sl.js": 189,
-	"./sq": 190,
-	"./sq.js": 190,
-	"./sr": 191,
-	"./sr-cyrl": 192,
-	"./sr-cyrl.js": 192,
-	"./sr.js": 191,
-	"./ss": 193,
-	"./ss.js": 193,
-	"./sv": 194,
-	"./sv.js": 194,
-	"./sw": 195,
-	"./sw.js": 195,
-	"./ta": 196,
-	"./ta.js": 196,
-	"./te": 197,
-	"./te.js": 197,
-	"./tet": 198,
-	"./tet.js": 198,
-	"./tg": 199,
-	"./tg.js": 199,
-	"./th": 200,
-	"./th.js": 200,
-	"./tl-ph": 201,
-	"./tl-ph.js": 201,
-	"./tlh": 202,
-	"./tlh.js": 202,
-	"./tr": 203,
-	"./tr.js": 203,
-	"./tzl": 204,
-	"./tzl.js": 204,
-	"./tzm": 205,
-	"./tzm-latn": 206,
-	"./tzm-latn.js": 206,
-	"./tzm.js": 205,
-	"./ug-cn": 207,
-	"./ug-cn.js": 207,
-	"./uk": 208,
-	"./uk.js": 208,
-	"./ur": 209,
-	"./ur.js": 209,
-	"./uz": 210,
-	"./uz-latn": 211,
-	"./uz-latn.js": 211,
-	"./uz.js": 210,
-	"./vi": 212,
-	"./vi.js": 212,
-	"./x-pseudo": 213,
-	"./x-pseudo.js": 213,
-	"./yo": 214,
-	"./yo.js": 214,
-	"./zh-cn": 215,
-	"./zh-cn.js": 215,
-	"./zh-hk": 216,
-	"./zh-hk.js": 216,
-	"./zh-mo": 217,
-	"./zh-mo.js": 217,
-	"./zh-tw": 218,
-	"./zh-tw.js": 218
+	"./af": 95,
+	"./af.js": 95,
+	"./ar": 96,
+	"./ar-dz": 97,
+	"./ar-dz.js": 97,
+	"./ar-kw": 98,
+	"./ar-kw.js": 98,
+	"./ar-ly": 99,
+	"./ar-ly.js": 99,
+	"./ar-ma": 100,
+	"./ar-ma.js": 100,
+	"./ar-sa": 101,
+	"./ar-sa.js": 101,
+	"./ar-tn": 102,
+	"./ar-tn.js": 102,
+	"./ar.js": 96,
+	"./az": 103,
+	"./az.js": 103,
+	"./be": 104,
+	"./be.js": 104,
+	"./bg": 105,
+	"./bg.js": 105,
+	"./bm": 106,
+	"./bm.js": 106,
+	"./bn": 107,
+	"./bn.js": 107,
+	"./bo": 108,
+	"./bo.js": 108,
+	"./br": 109,
+	"./br.js": 109,
+	"./bs": 110,
+	"./bs.js": 110,
+	"./ca": 111,
+	"./ca.js": 111,
+	"./cs": 112,
+	"./cs.js": 112,
+	"./cv": 113,
+	"./cv.js": 113,
+	"./cy": 114,
+	"./cy.js": 114,
+	"./da": 115,
+	"./da.js": 115,
+	"./de": 116,
+	"./de-at": 117,
+	"./de-at.js": 117,
+	"./de-ch": 118,
+	"./de-ch.js": 118,
+	"./de.js": 116,
+	"./dv": 119,
+	"./dv.js": 119,
+	"./el": 120,
+	"./el.js": 120,
+	"./en-au": 121,
+	"./en-au.js": 121,
+	"./en-ca": 122,
+	"./en-ca.js": 122,
+	"./en-gb": 123,
+	"./en-gb.js": 123,
+	"./en-ie": 124,
+	"./en-ie.js": 124,
+	"./en-il": 125,
+	"./en-il.js": 125,
+	"./en-in": 126,
+	"./en-in.js": 126,
+	"./en-nz": 127,
+	"./en-nz.js": 127,
+	"./en-sg": 128,
+	"./en-sg.js": 128,
+	"./eo": 129,
+	"./eo.js": 129,
+	"./es": 130,
+	"./es-do": 131,
+	"./es-do.js": 131,
+	"./es-us": 132,
+	"./es-us.js": 132,
+	"./es.js": 130,
+	"./et": 133,
+	"./et.js": 133,
+	"./eu": 134,
+	"./eu.js": 134,
+	"./fa": 135,
+	"./fa.js": 135,
+	"./fi": 136,
+	"./fi.js": 136,
+	"./fil": 137,
+	"./fil.js": 137,
+	"./fo": 138,
+	"./fo.js": 138,
+	"./fr": 139,
+	"./fr-ca": 140,
+	"./fr-ca.js": 140,
+	"./fr-ch": 141,
+	"./fr-ch.js": 141,
+	"./fr.js": 139,
+	"./fy": 142,
+	"./fy.js": 142,
+	"./ga": 143,
+	"./ga.js": 143,
+	"./gd": 144,
+	"./gd.js": 144,
+	"./gl": 145,
+	"./gl.js": 145,
+	"./gom-deva": 146,
+	"./gom-deva.js": 146,
+	"./gom-latn": 147,
+	"./gom-latn.js": 147,
+	"./gu": 148,
+	"./gu.js": 148,
+	"./he": 149,
+	"./he.js": 149,
+	"./hi": 150,
+	"./hi.js": 150,
+	"./hr": 151,
+	"./hr.js": 151,
+	"./hu": 152,
+	"./hu.js": 152,
+	"./hy-am": 153,
+	"./hy-am.js": 153,
+	"./id": 154,
+	"./id.js": 154,
+	"./is": 155,
+	"./is.js": 155,
+	"./it": 156,
+	"./it-ch": 157,
+	"./it-ch.js": 157,
+	"./it.js": 156,
+	"./ja": 158,
+	"./ja.js": 158,
+	"./jv": 159,
+	"./jv.js": 159,
+	"./ka": 160,
+	"./ka.js": 160,
+	"./kk": 161,
+	"./kk.js": 161,
+	"./km": 162,
+	"./km.js": 162,
+	"./kn": 163,
+	"./kn.js": 163,
+	"./ko": 164,
+	"./ko.js": 164,
+	"./ku": 165,
+	"./ku.js": 165,
+	"./ky": 166,
+	"./ky.js": 166,
+	"./lb": 167,
+	"./lb.js": 167,
+	"./lo": 168,
+	"./lo.js": 168,
+	"./lt": 169,
+	"./lt.js": 169,
+	"./lv": 170,
+	"./lv.js": 170,
+	"./me": 171,
+	"./me.js": 171,
+	"./mi": 172,
+	"./mi.js": 172,
+	"./mk": 173,
+	"./mk.js": 173,
+	"./ml": 174,
+	"./ml.js": 174,
+	"./mn": 175,
+	"./mn.js": 175,
+	"./mr": 176,
+	"./mr.js": 176,
+	"./ms": 177,
+	"./ms-my": 178,
+	"./ms-my.js": 178,
+	"./ms.js": 177,
+	"./mt": 179,
+	"./mt.js": 179,
+	"./my": 180,
+	"./my.js": 180,
+	"./nb": 181,
+	"./nb.js": 181,
+	"./ne": 182,
+	"./ne.js": 182,
+	"./nl": 183,
+	"./nl-be": 184,
+	"./nl-be.js": 184,
+	"./nl.js": 183,
+	"./nn": 185,
+	"./nn.js": 185,
+	"./oc-lnc": 186,
+	"./oc-lnc.js": 186,
+	"./pa-in": 187,
+	"./pa-in.js": 187,
+	"./pl": 188,
+	"./pl.js": 188,
+	"./pt": 189,
+	"./pt-br": 190,
+	"./pt-br.js": 190,
+	"./pt.js": 189,
+	"./ro": 191,
+	"./ro.js": 191,
+	"./ru": 192,
+	"./ru.js": 192,
+	"./sd": 193,
+	"./sd.js": 193,
+	"./se": 194,
+	"./se.js": 194,
+	"./si": 195,
+	"./si.js": 195,
+	"./sk": 196,
+	"./sk.js": 196,
+	"./sl": 197,
+	"./sl.js": 197,
+	"./sq": 198,
+	"./sq.js": 198,
+	"./sr": 199,
+	"./sr-cyrl": 200,
+	"./sr-cyrl.js": 200,
+	"./sr.js": 199,
+	"./ss": 201,
+	"./ss.js": 201,
+	"./sv": 202,
+	"./sv.js": 202,
+	"./sw": 203,
+	"./sw.js": 203,
+	"./ta": 204,
+	"./ta.js": 204,
+	"./te": 205,
+	"./te.js": 205,
+	"./tet": 206,
+	"./tet.js": 206,
+	"./tg": 207,
+	"./tg.js": 207,
+	"./th": 208,
+	"./th.js": 208,
+	"./tl-ph": 209,
+	"./tl-ph.js": 209,
+	"./tlh": 210,
+	"./tlh.js": 210,
+	"./tr": 211,
+	"./tr.js": 211,
+	"./tzl": 212,
+	"./tzl.js": 212,
+	"./tzm": 213,
+	"./tzm-latn": 214,
+	"./tzm-latn.js": 214,
+	"./tzm.js": 213,
+	"./ug-cn": 215,
+	"./ug-cn.js": 215,
+	"./uk": 216,
+	"./uk.js": 216,
+	"./ur": 217,
+	"./ur.js": 217,
+	"./uz": 218,
+	"./uz-latn": 219,
+	"./uz-latn.js": 219,
+	"./uz.js": 218,
+	"./vi": 220,
+	"./vi.js": 220,
+	"./x-pseudo": 221,
+	"./x-pseudo.js": 221,
+	"./yo": 222,
+	"./yo.js": 222,
+	"./zh-cn": 223,
+	"./zh-cn.js": 223,
+	"./zh-hk": 224,
+	"./zh-hk.js": 224,
+	"./zh-mo": 225,
+	"./zh-mo.js": 225,
+	"./zh-tw": 226,
+	"./zh-tw.js": 226
 };
 
 
@@ -34301,10 +37942,10 @@ webpackContext.keys = function webpackContextKeys() {
 };
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
-webpackContext.id = 267;
+webpackContext.id = 274;
 
 /***/ }),
-/* 268 */
+/* 275 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -34324,19 +37965,19 @@ var react = __webpack_require__(0);
 var prop_types = __webpack_require__(2);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/mergeClasses/mergeClasses.js
-var mergeClasses = __webpack_require__(249);
+var mergeClasses = __webpack_require__(255);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 2 modules
-var toConsumableArray = __webpack_require__(15);
+var toConsumableArray = __webpack_require__(19);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 1 modules
-var slicedToArray = __webpack_require__(42);
+var slicedToArray = __webpack_require__(33);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
-var esm_typeof = __webpack_require__(22);
+var esm_typeof = __webpack_require__(24);
 
 // EXTERNAL MODULE: ./node_modules/react-is/index.js
-var react_is = __webpack_require__(34);
+var react_is = __webpack_require__(38);
 
 // EXTERNAL MODULE: ./node_modules/clsx/dist/clsx.m.js
 var clsx_m = __webpack_require__(4);
@@ -34351,137 +37992,34 @@ var withStyles = __webpack_require__(6);
 var react_dom = __webpack_require__(8);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/debounce.js
-var debounce = __webpack_require__(37);
+var debounce = __webpack_require__(41);
 
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/utils/ownerDocument.js
-function ownerDocument(node) {
-  return node && node.ownerDocument || document;
-}
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/utils/ownerWindow.js
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/ownerDocument.js
+var ownerDocument = __webpack_require__(12);
 
-function ownerWindow(node) {
-  var doc = ownerDocument(node);
-  return doc.defaultView || window;
-}
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/utils/createChainedFunction.js
-/**
- * Safe chained function
- *
- * Will only create a new function if needed,
- * otherwise will pass back existing functions or null.
- *
- * @param {function} functions to chain
- * @returns {function|null}
- */
-function createChainedFunction() {
-  for (var _len = arguments.length, funcs = new Array(_len), _key = 0; _key < _len; _key++) {
-    funcs[_key] = arguments[_key];
-  }
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/ownerWindow.js
+var ownerWindow = __webpack_require__(31);
 
-  return funcs.reduce(function (acc, func) {
-    if (func == null) {
-      return acc;
-    }
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/createChainedFunction.js
+var createChainedFunction = __webpack_require__(28);
 
-    if (false) {}
-
-    return function chainedFunction() {
-      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
-      }
-
-      acc.apply(this, args);
-      func.apply(this, args);
-    };
-  }, function () {});
-}
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/useTheme/useTheme.js
-var useTheme = __webpack_require__(64);
+var useTheme = __webpack_require__(69);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/getThemeProps/getThemeProps.js
-var getThemeProps = __webpack_require__(250);
+var getThemeProps = __webpack_require__(256);
 
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/setRef.js
-var setRef = __webpack_require__(21);
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Portal/Portal.js
+var Portal = __webpack_require__(258);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useForkRef.js
 var useForkRef = __webpack_require__(9);
 
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Portal/Portal.js
-
-
-
-
-
-
-
-function getContainer(container) {
-  container = typeof container === 'function' ? container() : container; // #StrictMode ready
-
-  return react_dom["findDOMNode"](container);
-}
-
-var useEnhancedEffect = typeof window !== 'undefined' ? react["useLayoutEffect"] : react["useEffect"];
-/**
- * Portals provide a first-class way to render children into a DOM node
- * that exists outside the DOM hierarchy of the parent component.
- */
-
-var Portal_Portal = react["forwardRef"](function Portal(props, ref) {
-  var children = props.children,
-      container = props.container,
-      _props$disablePortal = props.disablePortal,
-      disablePortal = _props$disablePortal === void 0 ? false : _props$disablePortal,
-      onRendered = props.onRendered;
-
-  var _React$useState = react["useState"](null),
-      mountNode = _React$useState[0],
-      setMountNode = _React$useState[1];
-
-  var handleRef = Object(useForkRef["a" /* default */])(react["isValidElement"](children) ? children.ref : null, ref);
-  useEnhancedEffect(function () {
-    if (!disablePortal) {
-      setMountNode(getContainer(container) || document.body);
-    }
-  }, [container, disablePortal]);
-  useEnhancedEffect(function () {
-    if (mountNode && !disablePortal) {
-      Object(setRef["a" /* default */])(ref, mountNode);
-      return function () {
-        Object(setRef["a" /* default */])(ref, null);
-      };
-    }
-
-    return undefined;
-  }, [ref, mountNode, disablePortal]);
-  useEnhancedEffect(function () {
-    if (onRendered && (mountNode || disablePortal)) {
-      onRendered();
-    }
-  }, [onRendered, mountNode, disablePortal]);
-
-  if (disablePortal) {
-    if (react["isValidElement"](children)) {
-      return react["cloneElement"](children, {
-        ref: handleRef
-      });
-    }
-
-    return children;
-  }
-
-  return mountNode ? react_dom["createPortal"](children, mountNode) : mountNode;
-});
- false ? undefined : void 0;
-
-if (false) {}
-
-/* harmony default export */ var esm_Portal_Portal = (Portal_Portal);
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useEventCallback.js
-var useEventCallback = __webpack_require__(17);
+var useEventCallback = __webpack_require__(22);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/zIndex.js
-var zIndex = __webpack_require__(36);
+var zIndex = __webpack_require__(40);
 
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
 function _classCallCheck(instance, Constructor) {
@@ -34490,7 +38028,7 @@ function _classCallCheck(instance, Constructor) {
   }
 }
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
-var createClass = __webpack_require__(27);
+var createClass = __webpack_require__(29);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/utils/getScrollbarSize.js
 // A change of the browser zoom change the scrollbar size.
@@ -34516,10 +38054,10 @@ function getScrollbarSize() {
  // Is a vertical scrollbar displayed?
 
 function isOverflowing(container) {
-  var doc = ownerDocument(container);
+  var doc = Object(ownerDocument["a" /* default */])(container);
 
   if (doc.body === container) {
-    return ownerWindow(doc).innerWidth > doc.documentElement.clientWidth;
+    return Object(ownerWindow["a" /* default */])(doc).innerWidth > doc.documentElement.clientWidth;
   }
 
   return container.scrollHeight > container.clientHeight;
@@ -34580,7 +38118,7 @@ function handleContainer(containerInfo, props) {
 
       container.style['padding-right'] = "".concat(getPaddingRight(container) + scrollbarSize, "px"); // .mui-fixed is a global helper.
 
-      fixedNodes = ownerDocument(container).querySelectorAll('.mui-fixed');
+      fixedNodes = Object(ownerDocument["a" /* default */])(container).querySelectorAll('.mui-fixed');
       [].forEach.call(fixedNodes, function (node) {
         restorePaddings.push(node.style.paddingRight);
         node.style.paddingRight = "".concat(getPaddingRight(node) + scrollbarSize, "px");
@@ -34808,7 +38346,7 @@ function TrapFocus(props) {
       return;
     }
 
-    var doc = ownerDocument(rootRef.current); // We might render an empty child.
+    var doc = Object(ownerDocument["a" /* default */])(rootRef.current); // We might render an empty child.
 
     if (!disableAutoFocus && rootRef.current && !rootRef.current.contains(doc.activeElement)) {
       if (!rootRef.current.hasAttribute('tabIndex')) {
@@ -34989,7 +38527,7 @@ var SimpleBackdrop_SimpleBackdrop = react["forwardRef"](function SimpleBackdrop(
 
 
 
-function Modal_getContainer(container) {
+function getContainer(container) {
   container = typeof container === 'function' ? container() : container;
   return react_dom["findDOMNode"](container);
 }
@@ -35086,7 +38624,7 @@ var Modal_Modal = react["forwardRef"](function Modal(inProps, ref) {
   var hasTransition = getHasTransition(props);
 
   var getDoc = function getDoc() {
-    return ownerDocument(mountNodeRef.current);
+    return Object(ownerDocument["a" /* default */])(mountNodeRef.current);
   };
 
   var getModal = function getModal() {
@@ -35104,7 +38642,7 @@ var Modal_Modal = react["forwardRef"](function Modal(inProps, ref) {
   };
 
   var handleOpen = Object(useEventCallback["a" /* default */])(function () {
-    var resolvedContainer = Modal_getContainer(container) || getDoc().body;
+    var resolvedContainer = getContainer(container) || getDoc().body;
     manager.add(getModal(), resolvedContainer); // The element was already mounted.
 
     if (modalRef.current) {
@@ -35211,11 +38749,11 @@ var Modal_Modal = react["forwardRef"](function Modal(inProps, ref) {
 
 
   if (hasTransition) {
-    childProps.onEnter = createChainedFunction(handleEnter, children.props.onEnter);
-    childProps.onExited = createChainedFunction(handleExited, children.props.onExited);
+    childProps.onEnter = Object(createChainedFunction["a" /* default */])(handleEnter, children.props.onEnter);
+    childProps.onExited = Object(createChainedFunction["a" /* default */])(handleExited, children.props.onExited);
   }
 
-  return /*#__PURE__*/react["createElement"](esm_Portal_Portal, {
+  return /*#__PURE__*/react["createElement"](Portal["a" /* default */], {
     ref: handlePortalRef,
     container: container,
     disablePortal: disablePortal
@@ -35239,174 +38777,11 @@ var Modal_Modal = react["forwardRef"](function Modal(inProps, ref) {
 });
  false ? undefined : void 0;
 /* harmony default export */ var esm_Modal_Modal = (Modal_Modal);
-// EXTERNAL MODULE: ./node_modules/react-transition-group/esm/Transition.js + 1 modules
-var Transition = __webpack_require__(81);
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Grow/Grow.js + 1 modules
+var Grow = __webpack_require__(277);
 
-// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/useTheme.js
-var styles_useTheme = __webpack_require__(23);
-
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/transitions/utils.js
-var reflow = function reflow(node) {
-  return node.scrollTop;
-};
-function getTransitionProps(props, options) {
-  var timeout = props.timeout,
-      _props$style = props.style,
-      style = _props$style === void 0 ? {} : _props$style;
-  return {
-    duration: style.transitionDuration || typeof timeout === 'number' ? timeout : timeout[options.mode] || 0,
-    delay: style.transitionDelay
-  };
-}
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Grow/Grow.js
-
-
-
-
-
-
-
-
-
-function getScale(value) {
-  return "scale(".concat(value, ", ").concat(Math.pow(value, 2), ")");
-}
-
-var Grow_styles = {
-  entering: {
-    opacity: 1,
-    transform: getScale(1)
-  },
-  entered: {
-    opacity: 1,
-    transform: 'none'
-  }
-};
-/**
- * The Grow transition is used by the [Tooltip](/components/tooltips/) and
- * [Popover](/components/popover/) components.
- * It uses [react-transition-group](https://github.com/reactjs/react-transition-group) internally.
- */
-
-var Grow_Grow = react["forwardRef"](function Grow(props, ref) {
-  var children = props.children,
-      inProp = props.in,
-      onEnter = props.onEnter,
-      onExit = props.onExit,
-      style = props.style,
-      _props$timeout = props.timeout,
-      timeout = _props$timeout === void 0 ? 'auto' : _props$timeout,
-      _props$TransitionComp = props.TransitionComponent,
-      TransitionComponent = _props$TransitionComp === void 0 ? Transition["a" /* default */] : _props$TransitionComp,
-      other = Object(objectWithoutProperties["a" /* default */])(props, ["children", "in", "onEnter", "onExit", "style", "timeout", "TransitionComponent"]);
-
-  var timer = react["useRef"]();
-  var autoTimeout = react["useRef"]();
-  var handleRef = Object(useForkRef["a" /* default */])(children.ref, ref);
-  var theme = Object(styles_useTheme["a" /* default */])();
-
-  var handleEnter = function handleEnter(node, isAppearing) {
-    reflow(node); // So the animation always start from the start.
-
-    var _getTransitionProps = getTransitionProps({
-      style: style,
-      timeout: timeout
-    }, {
-      mode: 'enter'
-    }),
-        transitionDuration = _getTransitionProps.duration,
-        delay = _getTransitionProps.delay;
-
-    var duration;
-
-    if (timeout === 'auto') {
-      duration = theme.transitions.getAutoHeightDuration(node.clientHeight);
-      autoTimeout.current = duration;
-    } else {
-      duration = transitionDuration;
-    }
-
-    node.style.transition = [theme.transitions.create('opacity', {
-      duration: duration,
-      delay: delay
-    }), theme.transitions.create('transform', {
-      duration: duration * 0.666,
-      delay: delay
-    })].join(',');
-
-    if (onEnter) {
-      onEnter(node, isAppearing);
-    }
-  };
-
-  var handleExit = function handleExit(node) {
-    var _getTransitionProps2 = getTransitionProps({
-      style: style,
-      timeout: timeout
-    }, {
-      mode: 'exit'
-    }),
-        transitionDuration = _getTransitionProps2.duration,
-        delay = _getTransitionProps2.delay;
-
-    var duration;
-
-    if (timeout === 'auto') {
-      duration = theme.transitions.getAutoHeightDuration(node.clientHeight);
-      autoTimeout.current = duration;
-    } else {
-      duration = transitionDuration;
-    }
-
-    node.style.transition = [theme.transitions.create('opacity', {
-      duration: duration,
-      delay: delay
-    }), theme.transitions.create('transform', {
-      duration: duration * 0.666,
-      delay: delay || duration * 0.333
-    })].join(',');
-    node.style.opacity = '0';
-    node.style.transform = getScale(0.75);
-
-    if (onExit) {
-      onExit(node);
-    }
-  };
-
-  var addEndListener = function addEndListener(_, next) {
-    if (timeout === 'auto') {
-      timer.current = setTimeout(next, autoTimeout.current || 0);
-    }
-  };
-
-  react["useEffect"](function () {
-    return function () {
-      clearTimeout(timer.current);
-    };
-  }, []);
-  return /*#__PURE__*/react["createElement"](TransitionComponent, Object(esm_extends["a" /* default */])({
-    appear: true,
-    in: inProp,
-    onEnter: handleEnter,
-    onExit: handleExit,
-    addEndListener: addEndListener,
-    timeout: timeout === 'auto' ? null : timeout
-  }, other), function (state, childProps) {
-    return react["cloneElement"](children, Object(esm_extends["a" /* default */])({
-      style: Object(esm_extends["a" /* default */])({
-        opacity: 0,
-        transform: getScale(0.75),
-        visibility: state === 'exited' && !inProp ? 'hidden' : undefined
-      }, Grow_styles[state], {}, style, {}, children.props.style),
-      ref: handleRef
-    }, childProps));
-  });
-});
- false ? undefined : void 0;
-Grow_Grow.muiSupportAuto = true;
-/* harmony default export */ var esm_Grow_Grow = (Grow_Grow);
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Paper/Paper.js
-var Paper = __webpack_require__(252);
+var Paper = __webpack_require__(259);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Popover/Popover.js
 
@@ -35528,7 +38903,7 @@ var Popover_Popover = react["forwardRef"](function Popover(props, ref) {
     horizontal: 'left'
   } : _props$transformOrigi,
       _props$TransitionComp = props.TransitionComponent,
-      TransitionComponent = _props$TransitionComp === void 0 ? esm_Grow_Grow : _props$TransitionComp,
+      TransitionComponent = _props$TransitionComp === void 0 ? Grow["a" /* default */] : _props$TransitionComp,
       _props$transitionDura = props.transitionDuration,
       transitionDurationProp = _props$transitionDura === void 0 ? 'auto' : _props$transitionDura,
       _props$TransitionProp = props.TransitionProps,
@@ -35546,9 +38921,9 @@ var Popover_Popover = react["forwardRef"](function Popover(props, ref) {
     }
 
     var resolvedAnchorEl = getAnchorEl(anchorEl);
-    var containerWindow = ownerWindow(resolvedAnchorEl); // If an anchor element wasn't provided, just use the parent body element of this Popover
+    var containerWindow = Object(ownerWindow["a" /* default */])(resolvedAnchorEl); // If an anchor element wasn't provided, just use the parent body element of this Popover
 
-    var anchorElement = resolvedAnchorEl instanceof containerWindow.Element ? resolvedAnchorEl : ownerDocument(paperRef.current).body;
+    var anchorElement = resolvedAnchorEl instanceof containerWindow.Element ? resolvedAnchorEl : Object(ownerDocument["a" /* default */])(paperRef.current).body;
     var anchorRect = anchorElement.getBoundingClientRect();
 
     if (false) { var box; }
@@ -35612,7 +38987,7 @@ var Popover_Popover = react["forwardRef"](function Popover(props, ref) {
     var bottom = top + elemRect.height;
     var right = left + elemRect.width; // Use the parent window of the anchorEl if provided
 
-    var containerWindow = ownerWindow(getAnchorEl(anchorEl)); // Window thresholds taking required margin into account
+    var containerWindow = Object(ownerWindow["a" /* default */])(getAnchorEl(anchorEl)); // Window thresholds taking required margin into account
 
     var heightThreshold = containerWindow.innerHeight - marginThreshold;
     var widthThreshold = containerWindow.innerWidth - marginThreshold; // Check if the vertical axis needs shifting
@@ -35716,7 +39091,7 @@ var Popover_Popover = react["forwardRef"](function Popover(props, ref) {
   // If neither are provided let the Modal take care of choosing the container
 
 
-  var container = containerProp || (anchorEl ? ownerDocument(getAnchorEl(anchorEl)).body : undefined);
+  var container = containerProp || (anchorEl ? Object(ownerDocument["a" /* default */])(getAnchorEl(anchorEl)).body : undefined);
   return /*#__PURE__*/react["createElement"](esm_Modal_Modal, Object(esm_extends["a" /* default */])({
     container: container,
     open: open,
@@ -35735,7 +39110,7 @@ var Popover_Popover = react["forwardRef"](function Popover(props, ref) {
     onExiting: onExiting,
     timeout: transitionDuration
   }, TransitionProps, {
-    onEntering: createChainedFunction(handleEntering, TransitionProps.onEntering)
+    onEntering: Object(createChainedFunction["a" /* default */])(handleEntering, TransitionProps.onEntering)
   }), /*#__PURE__*/react["createElement"](Paper["a" /* default */], Object(esm_extends["a" /* default */])({
     elevation: elevation,
     ref: handlePaperRef
@@ -35748,7 +39123,7 @@ var Popover_Popover = react["forwardRef"](function Popover(props, ref) {
   name: 'MuiPopover'
 })(Popover_Popover));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/List/ListContext.js
-var ListContext = __webpack_require__(43);
+var ListContext = __webpack_require__(46);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/List/List.js
 
@@ -35898,7 +39273,7 @@ function moveFocus(list, currentFocus, disableListWrap, disabledItemsFocusable, 
   }
 }
 
-var MenuList_useEnhancedEffect = typeof window === 'undefined' ? react["useEffect"] : react["useLayoutEffect"];
+var useEnhancedEffect = typeof window === 'undefined' ? react["useEffect"] : react["useLayoutEffect"];
 /**
  * A permanently displayed menu following https://www.w3.org/TR/wai-aria-practices/#menubutton.
  * It's exposed to help customization of the [`Menu`](/api/menu/) component. If you
@@ -35930,7 +39305,7 @@ var MenuList_MenuList = react["forwardRef"](function MenuList(props, ref) {
     previousKeyMatched: true,
     lastTime: null
   });
-  MenuList_useEnhancedEffect(function () {
+  useEnhancedEffect(function () {
     if (autoFocus) {
       listRef.current.focus();
     }
@@ -35963,7 +39338,7 @@ var MenuList_MenuList = react["forwardRef"](function MenuList(props, ref) {
      * trigger this specific handler.
      */
 
-    var currentFocus = ownerDocument(list).activeElement;
+    var currentFocus = Object(ownerDocument["a" /* default */])(list).activeElement;
 
     if (key === 'ArrowDown') {
       // Prevent scroll of the page
@@ -36067,6 +39442,12 @@ var MenuList_MenuList = react["forwardRef"](function MenuList(props, ref) {
 });
  false ? undefined : void 0;
 /* harmony default export */ var esm_MenuList_MenuList = (MenuList_MenuList);
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/setRef.js
+var setRef = __webpack_require__(20);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/useTheme.js
+var styles_useTheme = __webpack_require__(23);
+
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Menu/Menu.js
 
 
@@ -36223,36 +39604,11 @@ var Menu_Menu = react["forwardRef"](function Menu(props, ref) {
   name: 'MuiMenu'
 })(Menu_Menu));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/InputBase/utils.js
-var utils = __webpack_require__(25);
+var utils = __webpack_require__(26);
 
-// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/utils/useControlled.js
-/* eslint-disable react-hooks/rules-of-hooks, react-hooks/exhaustive-deps */
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useControlled.js
+var useControlled = __webpack_require__(50);
 
-function useControlled(_ref) {
-  var controlled = _ref.controlled,
-      defaultProp = _ref.default,
-      name = _ref.name,
-      _ref$state = _ref.state,
-      state = _ref$state === void 0 ? 'value' : _ref$state;
-
-  var _React$useRef = react["useRef"](controlled !== undefined),
-      isControlled = _React$useRef.current;
-
-  var _React$useState = react["useState"](defaultProp),
-      valueState = _React$useState[0],
-      setValue = _React$useState[1];
-
-  var value = isControlled ? controlled : valueState;
-
-  if (false) { var _React$useRef2, defaultValue; }
-
-  var setValueIfUncontrolled = react["useCallback"](function (newValue) {
-    if (!isControlled) {
-      setValue(newValue);
-    }
-  }, []);
-  return [value, setValueIfUncontrolled];
-}
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Select/SelectInput.js
 
 
@@ -36321,7 +39677,7 @@ var SelectInput_SelectInput = react["forwardRef"](function SelectInput(props, re
       variant = _props$variant === void 0 ? 'standard' : _props$variant,
       other = Object(objectWithoutProperties["a" /* default */])(props, ["aria-label", "autoFocus", "autoWidth", "children", "classes", "className", "defaultValue", "disabled", "displayEmpty", "IconComponent", "inputRef", "labelId", "MenuProps", "multiple", "name", "onBlur", "onChange", "onClose", "onFocus", "onOpen", "open", "readOnly", "renderValue", "required", "SelectDisplayProps", "tabIndex", "type", "value", "variant"]);
 
-  var _useControlled = useControlled({
+  var _useControlled = Object(useControlled["a" /* default */])({
     controlled: valueProp,
     default: defaultValue,
     name: 'SelectInput'
@@ -36619,13 +39975,13 @@ var SelectInput_SelectInput = react["forwardRef"](function SelectInput(props, re
  false ? undefined : void 0;
 /* harmony default export */ var Select_SelectInput = (SelectInput_SelectInput);
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/formControlState.js
-var formControlState = __webpack_require__(12);
+var formControlState = __webpack_require__(13);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FormControl/useFormControl.js
-var useFormControl = __webpack_require__(14);
+var useFormControl = __webpack_require__(18);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/createSvgIcon.js
-var createSvgIcon = __webpack_require__(41);
+var createSvgIcon = __webpack_require__(45);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/internal/svg-icons/ArrowDropDown.js
 
@@ -36638,7 +39994,7 @@ var createSvgIcon = __webpack_require__(41);
   d: "M7 10l5 5 5-5z"
 }), 'ArrowDropDown'));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/Input/Input.js
-var Input = __webpack_require__(248);
+var Input = __webpack_require__(254);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/NativeSelect/NativeSelectInput.js
 
@@ -36828,10 +40184,10 @@ NativeSelect_NativeSelect.muiName = 'Select';
   name: 'MuiNativeSelect'
 })(NativeSelect_NativeSelect));
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/FilledInput/FilledInput.js
-var FilledInput = __webpack_require__(251);
+var FilledInput = __webpack_require__(257);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/OutlinedInput/OutlinedInput.js + 1 modules
-var OutlinedInput = __webpack_require__(269);
+var OutlinedInput = __webpack_require__(276);
 
 // CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Select/Select.js
 
@@ -36851,7 +40207,7 @@ var OutlinedInput = __webpack_require__(269);
 
 var Select_styles = NativeSelect_styles;
 
-var Select_ref = /*#__PURE__*/react["createElement"](Input["a" /* default */], null);
+var _ref = /*#__PURE__*/react["createElement"](Input["a" /* default */], null);
 
 var _ref2 = /*#__PURE__*/react["createElement"](FilledInput["a" /* default */], null);
 
@@ -36894,7 +40250,7 @@ var Select_Select = react["forwardRef"](function Select(props, ref) {
   });
   var variant = fcs.variant || variantProps;
   var InputComponent = input || {
-    standard: Select_ref,
+    standard: _ref,
     outlined: /*#__PURE__*/react["createElement"](OutlinedInput["a" /* default */], {
       label: label,
       labelWidth: labelWidth
@@ -36943,7 +40299,7 @@ Select_Select.muiName = 'Select';
 })(Select_Select));
 
 /***/ }),
-/* 269 */
+/* 276 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -36966,10 +40322,10 @@ var prop_types = __webpack_require__(2);
 var clsx_m = __webpack_require__(4);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/InputBase/InputBase.js + 1 modules
-var InputBase = __webpack_require__(66);
+var InputBase = __webpack_require__(71);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__(20);
+var defineProperty = __webpack_require__(14);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/withStyles.js + 21 modules
 var withStyles = __webpack_require__(6);
@@ -37265,12 +40621,200 @@ OutlinedInput_OutlinedInput.muiName = 'Input';
 })(OutlinedInput_OutlinedInput));
 
 /***/ }),
-/* 270 */,
-/* 271 */,
-/* 272 */,
-/* 273 */,
-/* 274 */,
-/* 275 */
+/* 277 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
+var esm_extends = __webpack_require__(1);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutProperties.js
+var objectWithoutProperties = __webpack_require__(3);
+
+// EXTERNAL MODULE: ./node_modules/react/index.js
+var react = __webpack_require__(0);
+
+// EXTERNAL MODULE: ./node_modules/prop-types/index.js
+var prop_types = __webpack_require__(2);
+
+// EXTERNAL MODULE: ./node_modules/react-transition-group/esm/Transition.js + 1 modules
+var Transition = __webpack_require__(87);
+
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/styles/useTheme.js
+var useTheme = __webpack_require__(23);
+
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/transitions/utils.js
+var reflow = function reflow(node) {
+  return node.scrollTop;
+};
+function getTransitionProps(props, options) {
+  var timeout = props.timeout,
+      _props$style = props.style,
+      style = _props$style === void 0 ? {} : _props$style;
+  return {
+    duration: style.transitionDuration || typeof timeout === 'number' ? timeout : timeout[options.mode] || 0,
+    delay: style.transitionDelay
+  };
+}
+// EXTERNAL MODULE: ./node_modules/@material-ui/core/esm/utils/useForkRef.js
+var useForkRef = __webpack_require__(9);
+
+// CONCATENATED MODULE: ./node_modules/@material-ui/core/esm/Grow/Grow.js
+
+
+
+
+
+
+
+
+
+function getScale(value) {
+  return "scale(".concat(value, ", ").concat(Math.pow(value, 2), ")");
+}
+
+var styles = {
+  entering: {
+    opacity: 1,
+    transform: getScale(1)
+  },
+  entered: {
+    opacity: 1,
+    transform: 'none'
+  }
+};
+/**
+ * The Grow transition is used by the [Tooltip](/components/tooltips/) and
+ * [Popover](/components/popover/) components.
+ * It uses [react-transition-group](https://github.com/reactjs/react-transition-group) internally.
+ */
+
+var Grow_Grow = react["forwardRef"](function Grow(props, ref) {
+  var children = props.children,
+      inProp = props.in,
+      onEnter = props.onEnter,
+      onExit = props.onExit,
+      style = props.style,
+      _props$timeout = props.timeout,
+      timeout = _props$timeout === void 0 ? 'auto' : _props$timeout,
+      _props$TransitionComp = props.TransitionComponent,
+      TransitionComponent = _props$TransitionComp === void 0 ? Transition["a" /* default */] : _props$TransitionComp,
+      other = Object(objectWithoutProperties["a" /* default */])(props, ["children", "in", "onEnter", "onExit", "style", "timeout", "TransitionComponent"]);
+
+  var timer = react["useRef"]();
+  var autoTimeout = react["useRef"]();
+  var handleRef = Object(useForkRef["a" /* default */])(children.ref, ref);
+  var theme = Object(useTheme["a" /* default */])();
+
+  var handleEnter = function handleEnter(node, isAppearing) {
+    reflow(node); // So the animation always start from the start.
+
+    var _getTransitionProps = getTransitionProps({
+      style: style,
+      timeout: timeout
+    }, {
+      mode: 'enter'
+    }),
+        transitionDuration = _getTransitionProps.duration,
+        delay = _getTransitionProps.delay;
+
+    var duration;
+
+    if (timeout === 'auto') {
+      duration = theme.transitions.getAutoHeightDuration(node.clientHeight);
+      autoTimeout.current = duration;
+    } else {
+      duration = transitionDuration;
+    }
+
+    node.style.transition = [theme.transitions.create('opacity', {
+      duration: duration,
+      delay: delay
+    }), theme.transitions.create('transform', {
+      duration: duration * 0.666,
+      delay: delay
+    })].join(',');
+
+    if (onEnter) {
+      onEnter(node, isAppearing);
+    }
+  };
+
+  var handleExit = function handleExit(node) {
+    var _getTransitionProps2 = getTransitionProps({
+      style: style,
+      timeout: timeout
+    }, {
+      mode: 'exit'
+    }),
+        transitionDuration = _getTransitionProps2.duration,
+        delay = _getTransitionProps2.delay;
+
+    var duration;
+
+    if (timeout === 'auto') {
+      duration = theme.transitions.getAutoHeightDuration(node.clientHeight);
+      autoTimeout.current = duration;
+    } else {
+      duration = transitionDuration;
+    }
+
+    node.style.transition = [theme.transitions.create('opacity', {
+      duration: duration,
+      delay: delay
+    }), theme.transitions.create('transform', {
+      duration: duration * 0.666,
+      delay: delay || duration * 0.333
+    })].join(',');
+    node.style.opacity = '0';
+    node.style.transform = getScale(0.75);
+
+    if (onExit) {
+      onExit(node);
+    }
+  };
+
+  var addEndListener = function addEndListener(_, next) {
+    if (timeout === 'auto') {
+      timer.current = setTimeout(next, autoTimeout.current || 0);
+    }
+  };
+
+  react["useEffect"](function () {
+    return function () {
+      clearTimeout(timer.current);
+    };
+  }, []);
+  return /*#__PURE__*/react["createElement"](TransitionComponent, Object(esm_extends["a" /* default */])({
+    appear: true,
+    in: inProp,
+    onEnter: handleEnter,
+    onExit: handleExit,
+    addEndListener: addEndListener,
+    timeout: timeout === 'auto' ? null : timeout
+  }, other), function (state, childProps) {
+    return react["cloneElement"](children, Object(esm_extends["a" /* default */])({
+      style: Object(esm_extends["a" /* default */])({
+        opacity: 0,
+        transform: getScale(0.75),
+        visibility: state === 'exited' && !inProp ? 'hidden' : undefined
+      }, styles[state], {}, style, {}, children.props.style),
+      ref: handleRef
+    }, childProps));
+  });
+});
+ false ? undefined : void 0;
+Grow_Grow.muiSupportAuto = true;
+/* harmony default export */ var esm_Grow_Grow = __webpack_exports__["a"] = (Grow_Grow);
+
+/***/ }),
+/* 278 */,
+/* 279 */,
+/* 280 */,
+/* 281 */,
+/* 282 */,
+/* 283 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -37285,8 +40829,8 @@ OutlinedInput_OutlinedInput.muiName = 'Input';
 /* harmony import */ var _styles_withStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6);
 /* harmony import */ var _utils_capitalize__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(7);
 /* harmony import */ var _styles_colorManipulator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(11);
-/* harmony import */ var _Table_TableContext__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(50);
-/* harmony import */ var _Table_Tablelvl2Context__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(33);
+/* harmony import */ var _Table_TableContext__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(55);
+/* harmony import */ var _Table_Tablelvl2Context__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(37);
 
 
 
@@ -37459,8 +41003,8 @@ var TableCell = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function TableC
 })(TableCell));
 
 /***/ }),
-/* 276 */,
-/* 277 */
+/* 284 */,
+/* 285 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37482,27 +41026,27 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactSwipeable = __webpack_require__(294);
+var _reactSwipeable = __webpack_require__(303);
 
-var _lodash = __webpack_require__(295);
+var _lodash = __webpack_require__(304);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _lodash3 = __webpack_require__(296);
+var _lodash3 = __webpack_require__(305);
 
 var _lodash4 = _interopRequireDefault(_lodash3);
 
-var _lodash5 = __webpack_require__(297);
+var _lodash5 = __webpack_require__(306);
 
 var _lodash6 = _interopRequireDefault(_lodash5);
 
-var _resizeObserverPolyfill = __webpack_require__(298);
+var _resizeObserverPolyfill = __webpack_require__(307);
 
 var _resizeObserverPolyfill2 = _interopRequireDefault(_resizeObserverPolyfill);
 
 var _propTypes = __webpack_require__(2);
 
-var _SVG = __webpack_require__(299);
+var _SVG = __webpack_require__(308);
 
 var _SVG2 = _interopRequireDefault(_SVG);
 
@@ -39165,14 +42709,6 @@ ImageGallery.defaultProps = {
 exports.default = ImageGallery;
 
 /***/ }),
-/* 278 */,
-/* 279 */,
-/* 280 */,
-/* 281 */,
-/* 282 */,
-/* 283 */,
-/* 284 */,
-/* 285 */,
 /* 286 */,
 /* 287 */,
 /* 288 */,
@@ -39180,15 +42716,24 @@ exports.default = ImageGallery;
 /* 290 */,
 /* 291 */,
 /* 292 */,
-/* 293 */
+/* 293 */,
+/* 294 */,
+/* 295 */,
+/* 296 */,
+/* 297 */,
+/* 298 */,
+/* 299 */,
+/* 300 */,
+/* 301 */,
+/* 302 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(304);
-module.exports = __webpack_require__(300);
+__webpack_require__(313);
+module.exports = __webpack_require__(309);
 
 
 /***/ }),
-/* 294 */
+/* 303 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39553,7 +43098,7 @@ Swipeable.defaultProps = defaultProps;
 
 
 /***/ }),
-/* 295 */
+/* 304 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -39996,10 +43541,10 @@ function toNumber(value) {
 
 module.exports = throttle;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(223)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(85)))
 
 /***/ }),
-/* 296 */
+/* 305 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -40380,10 +43925,10 @@ function toNumber(value) {
 
 module.exports = debounce;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(223)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(85)))
 
 /***/ }),
-/* 297 */
+/* 306 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -42235,10 +45780,10 @@ function stubFalse() {
 
 module.exports = isEqual;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(223), __webpack_require__(224)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(85), __webpack_require__(232)(module)))
 
 /***/ }),
-/* 298 */
+/* 307 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43172,10 +46717,10 @@ var index = (function () {
 
 /* harmony default export */ __webpack_exports__["default"] = (index);
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(223)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(85)))
 
 /***/ }),
-/* 299 */
+/* 308 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43249,16 +46794,16 @@ SVG.defaultProps = {
 exports.default = SVG;
 
 /***/ }),
-/* 300 */
+/* 309 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 301 */,
-/* 302 */,
-/* 303 */,
-/* 304 */
+/* 310 */,
+/* 311 */,
+/* 312 */,
+/* 313 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43274,32 +46819,32 @@ var react_dom = __webpack_require__(8);
 var react_dom_default = /*#__PURE__*/__webpack_require__.n(react_dom);
 
 // EXTERNAL MODULE: ./node_modules/react-toastify/esm/react-toastify.js
-var react_toastify = __webpack_require__(44);
+var react_toastify = __webpack_require__(48);
 
 // EXTERNAL MODULE: ./node_modules/@material-ui/styles/esm/ThemeProvider/ThemeProvider.js
-var ThemeProvider = __webpack_require__(266);
+var ThemeProvider = __webpack_require__(273);
 
 // EXTERNAL MODULE: ./src/shared/helpers/globals/GlobalHelper.js
-var GlobalHelper = __webpack_require__(55);
+var GlobalHelper = __webpack_require__(60);
 
 // EXTERNAL MODULE: ./src/shared/stores/Store.js + 3 modules
-var Store = __webpack_require__(47);
+var Store = __webpack_require__(52);
 
 // EXTERNAL MODULE: ./src/project/AspNetCore/shared/components/Header/Header.js + 6 modules
-var Header = __webpack_require__(63);
+var Header = __webpack_require__(68);
 
 // EXTERNAL MODULE: ./src/project/AspNetCore/shared/components/MainNavigation/MainNavigation.js
-var MainNavigation = __webpack_require__(60);
+var MainNavigation = __webpack_require__(65);
 
 // EXTERNAL MODULE: ./node_modules/react-image-gallery/build/image-gallery.js
-var image_gallery = __webpack_require__(277);
+var image_gallery = __webpack_require__(285);
 var image_gallery_default = /*#__PURE__*/__webpack_require__.n(image_gallery);
 
-// EXTERNAL MODULE: ./src/project/AspNetCore/shared/components/Files/Files.js + 10 modules
-var Files = __webpack_require__(221);
+// EXTERNAL MODULE: ./src/project/AspNetCore/shared/components/Files/Files.js + 14 modules
+var Files = __webpack_require__(229);
 
 // EXTERNAL MODULE: ./src/project/AspNetCore/shared/components/ContentGrid/ContentGrid.js + 1 modules
-var ContentGrid = __webpack_require__(222);
+var ContentGrid = __webpack_require__(231);
 
 // CONCATENATED MODULE: ./src/project/AspNetCore/areas/Products/components/ProductDetail/ProductDetail.js
 
@@ -43351,7 +46896,7 @@ function ProductDetail(props) {
 
 /* harmony default export */ var ProductDetail_ProductDetail = (ProductDetail);
 // EXTERNAL MODULE: ./src/shared/components/Footer/Footer.js
-var Footer = __webpack_require__(61);
+var Footer = __webpack_require__(66);
 
 // CONCATENATED MODULE: ./src/project/AspNetCore/areas/Products/pages/ProductPage/ProductPage.js
 
@@ -43375,7 +46920,7 @@ function ProductPage(props) {
 
 /* harmony default export */ var ProductPage_ProductPage = (ProductPage);
 // EXTERNAL MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.js
-var CssSsrRemovalHelper = __webpack_require__(62);
+var CssSsrRemovalHelper = __webpack_require__(67);
 
 // CONCATENATED MODULE: ./src/project/AspNetCore/areas/Products/pages/ProductPage/index.js
 

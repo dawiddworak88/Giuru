@@ -147,6 +147,9 @@
   <data name="Contact" xml:space="preserve">
     <value>Contact</value>
   </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Copy link</value>
+  </data>
   <data name="Copyright" xml:space="preserve">
     <value>Copyright © [year] Giuru</value>
   </data>
@@ -164,6 +167,9 @@
   </data>
   <data name="DisplayedRows" xml:space="preserve">
     <value>of</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
