@@ -44,9 +44,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
             {
                 viewModel.Name = brand.Name;
                 viewModel.Description = brand.Description;
+                viewModel.Files = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = brand.Files });
             }
-
-            viewModel.Files = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = brand.Files });
 
             return viewModel;
         }
