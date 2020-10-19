@@ -38,41 +38,38 @@ namespace Buyer.Web.Areas.Products.Services.Products
         {
             var catalogItemList = new List<CatalogItemViewModel>();
 
-            if (categoryId.HasValue || sellerId.HasValue)
+            var pagedProducts = await this.productsRepository.GetProductsAsync(null, categoryId, sellerId, language, searchTerm, pageIndex, itemsPerPage, token);
+
+            if (pagedProducts?.Data != null)
             {
-                var pagedProducts = await this.productsRepository.GetProductsAsync(null, categoryId, sellerId, language, searchTerm, pageIndex, itemsPerPage, token);
-
-                if (pagedProducts?.Data != null)
+                foreach (var product in pagedProducts.Data)
                 {
-                    foreach (var product in pagedProducts.Data)
+                    var catalogItem = new CatalogItemViewModel
                     {
-                        var catalogItem = new CatalogItemViewModel
-                        {
-                            Id = product.Id,
-                            Sku = product.Sku,
-                            Title = product.Name,
-                            Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
-                            BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId }),
-                            BrandName = product.BrandName,
-                            InStock = false
-                        };
+                        Id = product.Id,
+                        Sku = product.Sku,
+                        Title = product.Name,
+                        Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
+                        BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId }),
+                        BrandName = product.BrandName,
+                        InStock = false
+                    };
 
-                        if (product.Images != null)
-                        {
-                            var imageGuid = product.Images.FirstOrDefault();
+                    if (product.Images != null)
+                    {
+                        var imageGuid = product.Images.FirstOrDefault();
 
-                            catalogItem.ImageAlt = product.Name;
-                            catalogItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, ProductConstants.ProductsCatalogItemImageWidth, ProductConstants.ProductsCatalogItemImageHeight);
-                        }
-
-                        catalogItemList.Add(catalogItem);
+                        catalogItem.ImageAlt = product.Name;
+                        catalogItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, ProductConstants.ProductsCatalogItemImageWidth, ProductConstants.ProductsCatalogItemImageHeight);
                     }
 
-                    return new PagedResults<IEnumerable<CatalogItemViewModel>>(pagedProducts.Total, pagedProducts.PageSize)
-                    {
-                        Data = catalogItemList
-                    };
+                    catalogItemList.Add(catalogItem);
                 }
+
+                return new PagedResults<IEnumerable<CatalogItemViewModel>>(pagedProducts.Total, pagedProducts.PageSize)
+                {
+                    Data = catalogItemList
+                };
             }
 
             return new PagedResults<IEnumerable<CatalogItemViewModel>>(catalogItemList.Count, PaginationConstants.DefaultPageIndex)

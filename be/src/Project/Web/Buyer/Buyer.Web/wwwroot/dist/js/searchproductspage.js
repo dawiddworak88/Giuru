@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 300);
+/******/ 	return __webpack_require__(__webpack_require__.s = 302);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -17757,22 +17757,22 @@ var TableCell = react__WEBPACK_IMPORTED_MODULE_2__["forwardRef"](function TableC
 /* 297 */,
 /* 298 */,
 /* 299 */,
-/* 300 */
+/* 300 */,
+/* 301 */,
+/* 302 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(317);
-module.exports = __webpack_require__(301);
+__webpack_require__(318);
+module.exports = __webpack_require__(303);
 
 
 /***/ }),
-/* 301 */
+/* 303 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 302 */,
-/* 303 */,
 /* 304 */,
 /* 305 */,
 /* 306 */,
@@ -17786,7 +17786,8 @@ module.exports = __webpack_require__(301);
 /* 314 */,
 /* 315 */,
 /* 316 */,
-/* 317 */
+/* 317 */,
+/* 318 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17825,7 +17826,7 @@ var Catalog = __webpack_require__(87);
 // EXTERNAL MODULE: ./src/shared/components/Footer/Footer.js
 var Footer = __webpack_require__(66);
 
-// CONCATENATED MODULE: ./src/project/AspNetCore/areas/Products/pages/CategoryPage/CategoryPage.js
+// CONCATENATED MODULE: ./src/project/AspNetCore/areas/Products/pages/SearchProductsPage/SearchProductsPage.js
 
 
 
@@ -17836,26 +17837,26 @@ var Footer = __webpack_require__(66);
 
 
 
-function CategoryPage(props) {
+function SearchProductsPage(props) {
   react_toastify["a" /* toast */].configure();
   return /*#__PURE__*/react_default.a.createElement(ThemeProvider["a" /* default */], {
     theme: GlobalHelper["a" /* default */].initMuiTheme()
   }, /*#__PURE__*/react_default.a.createElement(Store["b" /* default */], null, /*#__PURE__*/react_default.a.createElement("div", {
-    className: "category-page"
+    className: "search-products-page"
   }, /*#__PURE__*/react_default.a.createElement(Header["a" /* default */], props.header), /*#__PURE__*/react_default.a.createElement(MainNavigation["a" /* default */], props.mainNavigation), /*#__PURE__*/react_default.a.createElement(Catalog["a" /* default */], props.catalog), /*#__PURE__*/react_default.a.createElement(Footer["a" /* default */], props.footer))));
 }
 
-/* harmony default export */ var CategoryPage_CategoryPage = (CategoryPage);
+/* harmony default export */ var SearchProductsPage_SearchProductsPage = (SearchProductsPage);
 // EXTERNAL MODULE: ./src/shared/helpers/globals/CssSsrRemovalHelper.js
 var CssSsrRemovalHelper = __webpack_require__(67);
 
-// CONCATENATED MODULE: ./src/project/AspNetCore/areas/Products/pages/CategoryPage/index.js
+// CONCATENATED MODULE: ./src/project/AspNetCore/areas/Products/pages/SearchProductsPage/index.js
 
 
 
 
 CssSsrRemovalHelper["a" /* default */].remove();
-react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(CategoryPage_CategoryPage, window.data), document.getElementById("root"));
+react_dom_default.a.hydrate( /*#__PURE__*/react_default.a.createElement(SearchProductsPage_SearchProductsPage, window.data), document.getElementById("root"));
 
 /***/ })
 /******/ ]);

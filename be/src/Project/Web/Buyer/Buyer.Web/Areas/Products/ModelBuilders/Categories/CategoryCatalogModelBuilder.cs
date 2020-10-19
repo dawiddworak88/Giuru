@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
 {
-    public class CategoryCatalogModelBuilder : IAsyncComponentModelBuilder<CategoryComponentModel, CategoryCatalogViewModel>
+    public class CategoryCatalogModelBuilder : IAsyncComponentModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel>
     {
-        private readonly ICatalogModelBuilder<CategoryComponentModel, CategoryCatalogViewModel> catalogModelBuilder;
+        private readonly ICatalogModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel> catalogModelBuilder;
         private readonly IProductsService productsService;
         private readonly ICategoryRepository categoryRepository;
 
         public CategoryCatalogModelBuilder(
-            ICatalogModelBuilder<CategoryComponentModel, CategoryCatalogViewModel> catalogModelBuilder,
+            ICatalogModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel> catalogModelBuilder,
             IProductsService productsService,
             ICategoryRepository categoryRepository)
         {
@@ -26,7 +26,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
             this.categoryRepository = categoryRepository;
         }
 
-        public async Task<CategoryCatalogViewModel> BuildModelAsync(CategoryComponentModel componentModel)
+        public async Task<CategoryCatalogViewModel> BuildModelAsync(SearchProductsComponentModel componentModel)
         {
             var viewModel = this.catalogModelBuilder.BuildModel(componentModel);
             
