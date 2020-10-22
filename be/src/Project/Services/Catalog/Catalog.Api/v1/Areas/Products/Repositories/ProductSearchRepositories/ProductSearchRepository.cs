@@ -112,5 +112,26 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
 
             return default;
         }
+
+        public async Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language)
+        {
+            var query = Query<ProductSearchModel>.Term(t => t.PrimaryProductIdHasValue, false)
+                && Query<ProductSearchModel>.Term(t => t.Language, language)
+                && Query<ProductSearchModel>.Term(t => t.IsActive, true);
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                query = query && Query<ProductSearchModel>.Match(d => d.Field(f => f.Name).Query(searchTerm));
+            }
+
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Size(size).Query(x => x && query));
+
+            if (response.IsValid && response.Hits.Any())
+            {
+                return response.Documents.Select(x => x.Name).Distinct();
+            }
+
+            return default;
+        }
     }
 }

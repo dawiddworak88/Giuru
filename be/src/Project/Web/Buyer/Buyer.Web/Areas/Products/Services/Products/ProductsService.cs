@@ -77,5 +77,10 @@ namespace Buyer.Web.Areas.Products.Services.Products
                 Data = catalogItemList
             };
         }
+
+        public async Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token)
+        {
+            return await this.productsRepository.GetProductSuggestionsAsync(searchTerm, size, language, token);
+        }
     }
 }

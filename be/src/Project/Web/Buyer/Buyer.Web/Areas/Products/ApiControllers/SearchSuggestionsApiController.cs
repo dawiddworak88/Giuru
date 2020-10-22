@@ -11,28 +11,25 @@ using System.Threading.Tasks;
 namespace Buyer.Web.Areas.Products.ApiControllers
 {
     [Area("Products")]
-    public class ProductsApiController : BaseApiController
+    public class SearchSuggestionsApiController : BaseApiController
     {
         private readonly IProductsService productsService;
 
-        public ProductsApiController(IProductsService productsService)
+        public SearchSuggestionsApiController(IProductsService productsService)
         {
             this.productsService = productsService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(Guid? categoryId, Guid? brandId, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(string searchTerm, int size)
         {
-            var products = await this.productsService.GetProductsAsync(
-                categoryId,
-                brandId,
-                CultureInfo.CurrentUICulture.Name,
+            var suggestions = await this.productsService.GetProductSuggestionsAsync(
                 searchTerm,
-                pageIndex,
-                itemsPerPage,
+                size,
+                CultureInfo.CurrentUICulture.Name,
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName));
 
-            return this.StatusCode((int)HttpStatusCode.OK, products);
+            return this.StatusCode((int)HttpStatusCode.OK, suggestions);
         }
     }
 }
