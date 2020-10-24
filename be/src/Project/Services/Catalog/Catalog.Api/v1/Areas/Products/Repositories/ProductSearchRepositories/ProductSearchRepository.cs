@@ -35,7 +35,9 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                query = query && Query<ProductSearchModel>.QueryString(d => d.Query(searchTerm));
+                query = query && 
+                    (Query<ProductSearchModel>.QueryString(d => d.Query(searchTerm)) 
+                        || Query<ProductSearchModel>.Prefix(x => x.Name.Suffix("keyword"), searchTerm));
             }
 
             var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(x => x && query).Sort(s => s.Descending(SortSpecialField.Score)));
