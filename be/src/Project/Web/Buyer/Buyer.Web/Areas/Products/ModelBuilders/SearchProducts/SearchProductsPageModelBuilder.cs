@@ -38,6 +38,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 Footer = footerModelBuilder.BuildModel()
             };
 
+            viewModel.Header.SearchTerm = componentModel.SearchTerm;
+
             return viewModel;
         }
     }
