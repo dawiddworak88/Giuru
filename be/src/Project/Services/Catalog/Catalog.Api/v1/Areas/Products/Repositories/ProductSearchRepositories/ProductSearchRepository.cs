@@ -121,10 +121,8 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
                 .Suggest(su => su
                     .Completion("name", cs => cs
                         .Contexts(ctx => ctx
-                            .Context("isActive", x => x.Context(true.ToString()))
-                            .Context("primaryProductIdHasValue", x => x.Context(false.ToString())))
+                            .Context("isActive", x => x.Context(true.ToString())))
                         .Contexts(ctx => ctx
-                            .Context("isActive", x => x.Context(true.ToString()))
                             .Context("primaryProductIdHasValue", x => x.Context(false.ToString())))
                         .Field(f => f.NameSuggest)
                         .Prefix(searchTerm)
@@ -144,7 +142,8 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
                 .Suggest(su => su
                     .Completion("brandName", cs => cs
                         .Contexts(ctx => ctx
-                            .Context("isActive", x => x.Context(true.ToString()))
+                            .Context("isActive", x => x.Context(true.ToString())))
+                        .Contexts(ctx => ctx
                             .Context("primaryProductIdHasValue", x => x.Context(false.ToString())))
                         .Field(f => f.BrandNameSuggest)
                         .Prefix(searchTerm)
