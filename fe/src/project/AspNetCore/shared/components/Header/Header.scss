@@ -3,15 +3,28 @@
     margin-left: 2rem;
     height: 56px;
 
-    &__button {
-        max-height: 40px;
+    &__field {
+        font-family: inherit;
+        width: 100%;
+        border: 0;
+        border-bottom: 1px solid lightgrey;
+        outline: 0;
+        font-size: 16px;
+        color: #212121;
+        padding: 7px 0 7px 0.5rem;
+        background: transparent;
+        transition: border-color 0.2s;
     }
-
     
+    &__field:focus {
+        padding-bottom: 6px;
+        border-bottom: 2px solid darkgrey;
+    }
 
     .react-autosuggest__container 
     {
         position: relative;
+        width: 100%;
     }
         
     .react-autosuggest__input 
@@ -45,7 +58,7 @@
     {
         display: block;
         position: absolute;
-        top: 35px;
+        top: 2.5rem;
         width: 100%;
         margin-left: 1px;
         background-color: #FFFFFF;
@@ -65,7 +78,7 @@
     .react-autosuggest__suggestion 
     {
         cursor: pointer;
-        padding: 10px 20px;
+        padding: 10px 20px 10px 0.5rem;
     }
 
     .react-autosuggest__suggestion--highlighted 

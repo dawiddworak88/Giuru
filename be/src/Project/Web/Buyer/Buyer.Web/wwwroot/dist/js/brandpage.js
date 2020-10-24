@@ -14307,7 +14307,7 @@ var HeaderConstants_HeaderConstants = /*#__PURE__*/function () {
   Object(createClass["a" /* default */])(HeaderConstants, null, [{
     key: "MinSearchTermLength",
     value: function MinSearchTermLength() {
-      return 4;
+      return 3;
     }
   }, {
     key: "SearchSuggenstionsSize",
@@ -14420,13 +14420,15 @@ function Header(props) {
   };
 
   var onSuggestionsFetchRequested = function onSuggestionsFetchRequested(args) {
+    setSearchTerm(args.value);
+
     if (args.value && args.value.length >= HeaderConstants_HeaderConstants.MinSearchTermLength()) {
       dispatch({
         type: "SET_IS_LOADING",
         payload: true
       });
       var searchParameters = {
-        searchTerm: searchTerm,
+        searchTerm: args.value,
         size: HeaderConstants_HeaderConstants.SearchSuggenstionsSize()
       };
       var requestOptions = {
@@ -14465,26 +14467,25 @@ function Header(props) {
     }
   };
 
-  var onSuggestionsClearRequested = function onSuggestionsClearRequested() {
-    setSuggestions(function () {
-      return [];
-    });
-  };
-
   var onSuggestionSelected = function onSuggestionSelected(event, _ref) {
     var suggestion = _ref.suggestion;
     NavigationHelper_NavigationHelper.redirect(props.searchUrl + '?' + 'searchTerm=' + encodeURI(suggestion));
   };
 
-  var handleSuggestionChange = function handleSuggestionChange(event, args) {
-    setSearchTerm(args.newValue);
+  var onSearchSubmit = function onSearchSubmit(e) {
+    e.preventDefault();
+    NavigationHelper_NavigationHelper.redirect(props.searchUrl + '?' + 'searchTerm=' + encodeURI(searchTerm));
   };
 
   var searchInputProps = {
     placeholder: props.searchPlaceholderLabel,
     className: "search__field",
     value: searchTerm,
-    onChange: handleSuggestionChange
+    onChange: function onChange(_, _ref2) {
+      var newValue = _ref2.newValue,
+          method = _ref2.method;
+      setSearchTerm(newValue);
+    }
   };
   return /*#__PURE__*/react_default.a.createElement("header", null, /*#__PURE__*/react_default.a.createElement("nav", {
     className: "navbar is-spaced"
@@ -14502,19 +14503,25 @@ function Header(props) {
   }, /*#__PURE__*/react_default.a.createElement("form", {
     action: props.searchUrl,
     method: "get",
-    role: "search"
+    role: "search",
+    onSubmit: onSearchSubmit
   }, /*#__PURE__*/react_default.a.createElement("div", {
-    className: "field is-flex is-flex-centered has-text-centered search"
+    className: "field is-flex is-flex-centered search"
   }, /*#__PURE__*/react_default.a.createElement(dist_default.a, {
     suggestions: suggestions,
-    onSuggestionsFetchRequested: DebounceHelper_DebounceHelper.debounce(onSuggestionsFetchRequested),
-    onSuggestionsClearRequested: onSuggestionsClearRequested,
+    onSuggestionsFetchRequested: onSuggestionsFetchRequested,
+    onSuggestionsClearRequested: function onSuggestionsClearRequested() {
+      return setSuggestions([]);
+    },
     getSuggestionValue: getSuggestionValue,
     onSuggestionSelected: onSuggestionSelected,
     renderSuggestion: renderSuggestion,
     inputProps: searchInputProps
   }), /*#__PURE__*/react_default.a.createElement(Button["a" /* default */], {
-    className: "search__button",
+    style: {
+      maxHeight: '40px',
+      marginLeft: '0.5rem'
+    },
     type: "submit",
     variant: "contained",
     color: "primary"

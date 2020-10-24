@@ -1,7 +1,7 @@
 export default class HeaderConstants {
     
     static MinSearchTermLength() {
-        return 4;
+        return 3;
     }
 
     static SearchSuggenstionsSize() {

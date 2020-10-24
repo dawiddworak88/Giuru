@@ -25,12 +25,12 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
 
             if (categoryId.HasValue)
             {
-                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.CategoryId.Suffix("keyword")).Value(categoryId.Value));
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.CategoryId).Value(categoryId.Value));
             }
 
             if (sellerId.HasValue)
             {
-                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId.Suffix("keyword")).Value(sellerId.Value));
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(sellerId.Value));
             }
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -53,7 +53,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
 
         public async Task<ProductSearchModel> GetAsync(Guid id, string language)
         {
-            var query = Query<ProductSearchModel>.Term(t => t.Field(x => x.ProductId.Suffix("keyword")).Value(id))
+            var query = Query<ProductSearchModel>.Term(t => t.Field(x => x.ProductId).Value(id))
                 && Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
@@ -76,7 +76,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
 
             foreach (var id in ids)
             {
-                idsQuery = idsQuery || Query<ProductSearchModel>.Term(t => t.Field(x => x.ProductId.Suffix("keyword")).Value(id));
+                idsQuery = idsQuery || Query<ProductSearchModel>.Term(t => t.Field(x => x.ProductId).Value(id));
             }
 
             query = query && idsQuery;
@@ -96,7 +96,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
 
         public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetProductVariantsAsync(Guid id, string language)
         {
-            var query = Query<ProductSearchModel>.Term(t => t.Field(x => x.PrimaryProductId.Suffix("keyword")).Value(id))
+            var query = Query<ProductSearchModel>.Term(t => t.Field(x => x.PrimaryProductId).Value(id))
                 && Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
@@ -113,25 +113,57 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
             return default;
         }
 
-        public async Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language)
+        public IEnumerable<string> GetProductSuggestions(string searchTerm, int size)
         {
-            var query = Query<ProductSearchModel>.Term(t => t.PrimaryProductIdHasValue, false)
-                && Query<ProductSearchModel>.Term(t => t.Language, language)
-                && Query<ProductSearchModel>.Term(t => t.IsActive, true);
+            var suggestions = new List<string>();
 
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                query = query && Query<ProductSearchModel>.Match(d => d.Field(f => f.Name).Query(searchTerm));
-            }
+            var nameResponse = this.elasticClient.Search<ProductSearchModel>(s => s
+                .Suggest(su => su
+                    .Completion("name", cs => cs
+                        .Contexts(ctx => ctx
+                            .Context("isActive", x => x.Context(true.ToString()))
+                            .Context("primaryProductIdHasValue", x => x.Context(false.ToString())))
+                        .Contexts(ctx => ctx
+                            .Context("isActive", x => x.Context(true.ToString()))
+                            .Context("primaryProductIdHasValue", x => x.Context(false.ToString())))
+                        .Field(f => f.NameSuggest)
+                        .Prefix(searchTerm)
+                        .Fuzzy(f => f
+                            .Fuzziness(Fuzziness.Auto)
+                        )
+                    )
+                )
+            );
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Size(size).Query(x => x && query));
+            var nameSuggestions = 
+                from suggest in nameResponse.Suggest["name"]
+                from option in suggest.Options
+                select option.Text;
 
-            if (response.IsValid && response.Hits.Any())
-            {
-                return response.Documents.Select(x => x.Name).Distinct();
-            }
+            var brandResponse = this.elasticClient.Search<ProductSearchModel>(s => s
+                .Suggest(su => su
+                    .Completion("brandName", cs => cs
+                        .Contexts(ctx => ctx
+                            .Context("isActive", x => x.Context(true.ToString()))
+                            .Context("primaryProductIdHasValue", x => x.Context(false.ToString())))
+                        .Field(f => f.BrandNameSuggest)
+                        .Prefix(searchTerm)
+                        .Fuzzy(f => f
+                            .Fuzziness(Fuzziness.Auto)
+                        )
+                    )
+                )
+            );
 
-            return default;
+            var brandSuggestions =
+                from suggest in brandResponse.Suggest["brandName"]
+                from option in suggest.Options
+                select option.Text;
+
+            suggestions.AddRange(nameSuggestions.Distinct());
+            suggestions.AddRange(brandSuggestions.Distinct());
+
+            return suggestions.Take(size);
         }
     }
 }

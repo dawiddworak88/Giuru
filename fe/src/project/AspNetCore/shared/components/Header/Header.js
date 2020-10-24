@@ -32,13 +32,15 @@ function Header(props) {
 
     const onSuggestionsFetchRequested = (args) => {
 
+        setSearchTerm(args.value);
+
         if (args.value && args.value.length >= HeaderConstants.MinSearchTermLength()) {
         
             dispatch({ type: "SET_IS_LOADING", payload: true });
 
             const searchParameters = {
 
-                searchTerm,
+                searchTerm: args.value,
                 size: HeaderConstants.SearchSuggenstionsSize()
             };
 
@@ -75,26 +77,25 @@ function Header(props) {
         }
     }
 
-    const onSuggestionsClearRequested = () => {
-
-        setSuggestions(() => []);
-    }
-
     const onSuggestionSelected = (event, { suggestion }) => {
 
         NavigationHelper.redirect(props.searchUrl + '?' + 'searchTerm=' + encodeURI(suggestion));
     }
 
-    const handleSuggestionChange = (event, args) => {
+    const onSearchSubmit = (e) => {
 
-        setSearchTerm(args.newValue);
+        e.preventDefault();
+
+        NavigationHelper.redirect(props.searchUrl + '?' + 'searchTerm=' + encodeURI(searchTerm));
     }
 
     const searchInputProps = {
         placeholder: props.searchPlaceholderLabel,
         className: "search__field",
         value: searchTerm,
-        onChange: handleSuggestionChange
+        onChange: (_, { newValue, method }) => {
+            setSearchTerm(newValue);
+        }
     };
 
     return (
@@ -107,17 +108,17 @@ function Header(props) {
                 </div>
                 <div className="navbar-menu is-flex is-flex-wrap">
                     <div className="navbar-start">
-                        <form action={props.searchUrl} method="get" role="search">
-                            <div className="field is-flex is-flex-centered has-text-centered search">
+                        <form action={props.searchUrl} method="get" role="search" onSubmit={onSearchSubmit}>
+                            <div className="field is-flex is-flex-centered search">
                                 <Autosuggest
                                     suggestions={suggestions}
-                                    onSuggestionsFetchRequested={DebounceHelper.debounce(onSuggestionsFetchRequested)}
-                                    onSuggestionsClearRequested={onSuggestionsClearRequested}
+                                    onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                                    onSuggestionsClearRequested={() => setSuggestions([])}
                                     getSuggestionValue={getSuggestionValue}
                                     onSuggestionSelected={onSuggestionSelected}
                                     renderSuggestion={renderSuggestion}
                                     inputProps={searchInputProps} />
-                                <Button className="search__button" type="submit" variant="contained" color="primary">
+                                <Button style={{ maxHeight: '40px', marginLeft: '0.5rem'  }} type="submit" variant="contained" color="primary">
                                     {props.searchLabel}
                                 </Button>
                             </div>

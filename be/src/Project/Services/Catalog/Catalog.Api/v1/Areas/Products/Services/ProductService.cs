@@ -152,9 +152,9 @@ namespace Catalog.Api.v1.Areas.Products.Services
             return default;
         }
 
-        public async Task<IEnumerable<string>> GetProductSuggestionsAsync(GetProductSuggestionsModel model)
+        public IEnumerable<string> GetProductSuggestions(GetProductSuggestionsModel model)
         {
-            return await this.productSearchRepository.GetProductSuggestionsAsync(model.SearchTerm, model.Size, model.Language);
+            return this.productSearchRepository.GetProductSuggestions(model.SearchTerm, model.Size);
         }
 
         private async Task<PagedResults<IEnumerable<ProductResultModel>>> MapToPageResultsAsync(PagedResults<IEnumerable<ProductSearchModel>> searchResults, string language)

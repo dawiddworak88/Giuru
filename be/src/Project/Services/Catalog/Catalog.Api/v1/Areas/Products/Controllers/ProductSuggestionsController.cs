@@ -48,7 +48,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
 
             if (validationResult.IsValid)
             {
-                var suggestions = await this.productService.GetProductSuggestionsAsync(serviceModel);
+                var suggestions = this.productService.GetProductSuggestions(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK, suggestions);
             }

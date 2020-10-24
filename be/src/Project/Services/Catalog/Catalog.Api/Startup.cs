@@ -16,7 +16,6 @@ using System.Reflection;
 using Foundation.Account.DependencyInjection;
 using Catalog.Api.DependencyInjection;
 using Catalog.Api.v1.Areas.Categories.DependencyInjection;
-using Foundation.Search.DependencyInjection;
 
 namespace Api
 {
