@@ -117,7 +117,7 @@ function Header(props) {
                                     onSuggestionSelected={onSuggestionSelected}
                                     renderSuggestion={renderSuggestion}
                                     inputProps={searchInputProps} />
-                                <Button style={{ maxHeight: '40px', marginLeft: '0.5rem'  }} type="submit" variant="contained" color="primary">
+                                <Button style={{ maxHeight: "40px", marginLeft: "0.5rem"  }} type="submit" variant="contained" color="primary">
                                     {props.searchLabel}
                                 </Button>
                             </div>

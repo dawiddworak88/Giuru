@@ -8710,8 +8710,8 @@ function Header(props) {
     inputProps: searchInputProps
   }), /*#__PURE__*/react_default.a.createElement(Button["a" /* default */], {
     style: {
-      maxHeight: '40px',
-      marginLeft: '0.5rem'
+      maxHeight: "40px",
+      marginLeft: "0.5rem"
     },
     type: "submit",
     variant: "contained",
