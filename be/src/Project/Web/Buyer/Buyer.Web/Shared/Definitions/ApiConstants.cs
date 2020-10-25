@@ -8,6 +8,7 @@
             public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
             public static readonly string ProductsApiEndpoint = "/api/v1/products";
             public static readonly string ProductApiEndpoint = "/api/v1/product";
+            public static readonly string ProductSuggestionsApiEndpoint = "/api/v1/productsuggestions";
         }
 
         public struct Seller

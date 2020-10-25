@@ -11,6 +11,7 @@ using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.Repositories.Products
@@ -91,6 +92,32 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             }
 
             return default;
+        }
+
+        public async Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token)
+        {
+            var productRequestModel = new ProductSuggestionsRequestModel
+            {
+                SearchTerm = searchTerm,
+                Size = size,
+                Language = language
+            };
+
+            var apiRequest = new ApiRequest<ProductSuggestionsRequestModel>
+            {
+                Data = this.apiClientService.InitializeRequestModelContext(productRequestModel),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductSuggestionsApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<ProductSuggestionsRequestModel>, ProductSuggestionsRequestModel, IEnumerable<string>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            return Enumerable.Empty<string>();
         }
 
         private Product MapProductResponseToProduct(ProductResponseModel productResponse)

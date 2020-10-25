@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Nest;
 using System;
-using System.Dynamic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -57,35 +57,66 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories
 
                     if (productTranslations != null)
                     {
-                        dynamic document = new ExpandoObject();
+                        var document = new ProductSearchModel
+                        { 
+                            Language = language,
+                            ProductId = product.Id,
+                            CategoryId = product.CategoryId,
+                            CategoryName = categoryTranslations.Name,
+                            SellerId = product.Brand.SellerId,
+                            BrandName = product.Brand.Name,
+                            BrandNameSuggest = new CompletionField
+                            {
+                                Input = new[] { product.Brand.Name },
+                                Contexts = new Dictionary<string, IEnumerable<string>>
+                                {
+                                    {
+                                        "isActive",
+                                        new[] { product.IsActive.ToString() }
+                                    },
+                                    {
+                                        "primaryProductIdHasValue",
+                                        new[] { product.PrimaryProductId.HasValue.ToString() }
+                                    }
+                                }
+                            },
+                            IsNew = product.IsNew,
+                            IsProtected = product.IsProtected,
+                            Images = this.catalogContext.ProductImages.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.MediaId),
+                            Videos = this.catalogContext.ProductVideos.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.MediaId),
+                            Files = this.catalogContext.ProductFiles.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.MediaId),
+                            IsActive = product.IsActive,
+                            Sku = product.Sku,
+                            FormData = productTranslations.FormData,
+                            Name = productTranslations.Name,
+                            NameSuggest = new CompletionField
+                            {
+                                Input = new[] { productTranslations.Name },
+                                Contexts = new Dictionary<string, IEnumerable<string>>
+                                {
+                                    {
+                                        "isActive",
+                                        new[] { product.IsActive.ToString() }
+                                    },
+                                    {
+                                        "primaryProductIdHasValue",
+                                        new[] { product.PrimaryProductId.HasValue.ToString() }
+                                    }
+                                }
+                            },
+                            PrimaryProductId = product.PrimaryProductId,
+                            PrimaryProductIdHasValue = product.PrimaryProductId.HasValue,
+                            Description = productTranslations.Description,
+                            LastModifiedDate = product.LastModifiedDate,
+                            CreatedDate = product.CreatedDate
+                        };
 
-                        document.language = language;
-                        document.productId = product.Id;
-                        document.categoryId = product.CategoryId;
-                        document.categoryName = categoryTranslations.Name;
-                        document.sellerId = product.Brand.SellerId;
-                        document.brandName = product.Brand.Name;
-                        document.isNew = product.IsNew;
-                        document.isProtected = product.IsProtected;
-                        document.images = this.catalogContext.ProductImages.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.MediaId);
-                        document.videos = this.catalogContext.ProductVideos.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.MediaId);
-                        document.files = this.catalogContext.ProductFiles.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.MediaId);
-                        document.isActive = product.IsActive;
-                        document.sku = product.Sku;
-                        document.formData = productTranslations.FormData;
-                        document.name = productTranslations.Name;
-                        document.primaryProductId = product.PrimaryProductId;
-                        document.primaryProductIdHasValue = product.PrimaryProductId.HasValue;
-                        document.description = productTranslations.Description;
-                        document.lastModifiedDate = product.LastModifiedDate;
-                        document.createdDate = product.CreatedDate;
-
-                        descriptor.Index<object>(i => i
-                            .Document((object)document));
+                        descriptor.Index<ProductSearchModel>(i => i
+                            .Document(document));
                     }
                 }
 
-                await this.elasticClient.BulkAsync(descriptor);
+                var response = await this.elasticClient.BulkAsync(descriptor);
             }
         }
     }

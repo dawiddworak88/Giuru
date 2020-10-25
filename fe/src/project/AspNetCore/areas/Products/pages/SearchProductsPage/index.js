@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import ProductPage from "./ProductPage";
+import SearchProductsPage from "./SearchProductsPage";
 import CssSsrRemovalHelper from "../../../../../../shared/helpers/globals/CssSsrRemovalHelper";
 
 CssSsrRemovalHelper.remove();
 
-ReactDOM.hydrate(<ProductPage {...window.data} />, document.getElementById("root"));
+ReactDOM.hydrate(<SearchProductsPage {...window.data} />, document.getElementById("root"));

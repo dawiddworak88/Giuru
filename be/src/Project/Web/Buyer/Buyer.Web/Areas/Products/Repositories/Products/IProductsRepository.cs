@@ -10,5 +10,6 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
     {
         Task<Product> GetProductAsync(Guid? productId, string language, string token);
         Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token);
+        Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token);
     }
 }

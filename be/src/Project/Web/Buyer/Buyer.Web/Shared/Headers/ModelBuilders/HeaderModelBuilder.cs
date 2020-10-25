@@ -6,25 +6,28 @@ using Foundation.Localization;
 using Foundation.PageContent.Components.LanguageSwitchers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Buyer.Web.Shared.Headers.ViewModels;
+using System.Globalization;
+using Microsoft.AspNetCore.Routing;
 
 namespace Buyer.Web.Shared.Headers.ModelBuilders
 {
     public class HeaderModelBuilder : IModelBuilder<BuyerHeaderViewModel>
     {
         private readonly IModelBuilder<LogoViewModel> logoModelBuilder;
-
         private readonly IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel;
-
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly LinkGenerator linkGenerator;
 
         public HeaderModelBuilder(
             IModelBuilder<LogoViewModel> logoModelBuilder,
             IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel,
-            IStringLocalizer<GlobalResources> globalLocalizer)
+            IStringLocalizer<GlobalResources> globalLocalizer,
+            LinkGenerator linkGenerator)
         {
             this.logoModelBuilder = logoModelBuilder;
             this.languageSwitcherViewModel = languageSwitcherViewModel;
             this.globalLocalizer = globalLocalizer;
+            this.linkGenerator = linkGenerator;
         }
 
         public BuyerHeaderViewModel BuildModel()
@@ -42,11 +45,14 @@ namespace Buyer.Web.Shared.Headers.ModelBuilders
                 LoginLink = new LinkViewModel
                 {
                     Url = "/",
-                    Text = this.globalLocalizer["Portal"]
+                    Text = this.globalLocalizer.GetString("Portal")
                 },
-                SearchLabel = this.globalLocalizer["Search"],
-                SearchPlaceholderLabel = this.globalLocalizer["Search"],
-                SearchUrl = "#",
+                SearchLabel = this.globalLocalizer.GetString("Search"),
+                SearchPlaceholderLabel = this.globalLocalizer.GetString("Search"),
+                SearchUrl = this.linkGenerator.GetPathByAction("Index", "SearchProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                GetSuggestionsUrl = this.linkGenerator.GetPathByAction("Get", "SearchSuggestionsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                SearchTerm = string.Empty,
                 Links = links
             };
         }

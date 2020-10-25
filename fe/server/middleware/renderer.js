@@ -5,6 +5,7 @@ import { ServerStyleSheets } from "@material-ui/core/styles";
 // AspNetCore
 import HomePage from "../../src/project/AspNetCore/areas/Home/pages/HomePage/HomePage";
 import CategoryPage from "../../src/project/AspNetCore/areas/Products/pages/CategoryPage/CategoryPage";
+import SearchProductsPage from "../../src/project/AspNetCore/areas/Products/pages/SearchProductsPage/SearchProductsPage";
 import BuyerProductPage from "../../src/project/AspNetCore/areas/Products/pages/ProductPage/ProductPage";
 import BrandPage from "../../src/project/AspNetCore/areas/Products/pages/BrandPage/BrandPage";
 
@@ -24,6 +25,7 @@ import ProductDetailPage from "../../src/project/Seller.Portal/areas/Products/pa
 const Components = {
 	HomePage,
 	CategoryPage,
+	SearchProductsPage,
 	BuyerProductPage,
 	BrandPage,
 	SignInPage,

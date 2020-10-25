@@ -152,6 +152,11 @@ namespace Catalog.Api.v1.Areas.Products.Services
             return default;
         }
 
+        public IEnumerable<string> GetProductSuggestions(GetProductSuggestionsModel model)
+        {
+            return this.productSearchRepository.GetProductSuggestions(model.SearchTerm, model.Size);
+        }
+
         private async Task<PagedResults<IEnumerable<ProductResultModel>>> MapToPageResultsAsync(PagedResults<IEnumerable<ProductSearchModel>> searchResults, string language)
         {
             if (searchResults?.Data != null && searchResults.Data.Any())

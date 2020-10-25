@@ -12,5 +12,6 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
         Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, IEnumerable<Guid> ids);
         Task<PagedResults<IEnumerable<ProductSearchModel>>> GetProductVariantsAsync(Guid id, string language);
         Task<ProductSearchModel> GetAsync(Guid id, string language);
+        IEnumerable<string> GetProductSuggestions(string searchTerm, int size);
     }
 }

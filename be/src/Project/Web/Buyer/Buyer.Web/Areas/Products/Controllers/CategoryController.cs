@@ -12,16 +12,16 @@ namespace Buyer.Web.Areas.Products.Controllers
     [Area("Products")]
     public class CategoryController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<CategoryComponentModel, CategoryPageViewModel> categoryPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<SearchProductsComponentModel, CategoryPageViewModel> categoryPageModelBuilder;
 
-        public CategoryController(IAsyncComponentModelBuilder<CategoryComponentModel, CategoryPageViewModel> categoryPageModelBuilder)
+        public CategoryController(IAsyncComponentModelBuilder<SearchProductsComponentModel, CategoryPageViewModel> categoryPageModelBuilder)
         {
             this.categoryPageModelBuilder = categoryPageModelBuilder;
         }
 
         public async Task<IActionResult> Index(Guid? id, string searchTerm)
         {
-            var componentModel = new CategoryComponentModel
+            var componentModel = new SearchProductsComponentModel
             {
                 Id = id,
                 SearchTerm = searchTerm,

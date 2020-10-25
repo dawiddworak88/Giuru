@@ -14,5 +14,6 @@ namespace Catalog.Api.v1.Areas.Products.Services
         Task<PagedResults<IEnumerable<ProductResultModel>>> GetAsync(GetProductsModel getProductsModel);
         Task<PagedResults<IEnumerable<ProductResultModel>>> GetByIdsAsync(GetProductsByIdsModel getProductsModel);
         Task DeleteAsync(DeleteProductModel deleteProductModel);
+        IEnumerable<string> GetProductSuggestions(GetProductSuggestionsModel model);
     }
 }
