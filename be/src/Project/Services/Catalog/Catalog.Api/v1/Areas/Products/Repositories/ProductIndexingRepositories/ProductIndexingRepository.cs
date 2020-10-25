@@ -116,7 +116,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories
                     }
                 }
 
-                var response = await this.elasticClient.BulkAsync(descriptor);
+                await this.elasticClient.BulkAsync(descriptor);
             }
         }
     }

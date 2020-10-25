@@ -4822,7 +4822,8 @@ function useForkRef(refA, refB) {
 }
 
 /***/ }),
-/* 11 */
+/* 11 */,
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4834,7 +4835,7 @@ function _classCallCheck(instance, Constructor) {
 }
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4856,7 +4857,6 @@ function _createClass(Constructor, protoProps, staticProps) {
 }
 
 /***/ }),
-/* 13 */,
 /* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -6592,10 +6592,10 @@ function _assertThisInitialized(self) {
 __webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ FetchErrorHandler_FetchErrorHandler; });
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck.js
-var classCallCheck = __webpack_require__(11);
+var classCallCheck = __webpack_require__(12);
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createClass.js
-var createClass = __webpack_require__(12);
+var createClass = __webpack_require__(13);
 
 // CONCATENATED MODULE: ./src/shared/constants/ResponseStatusConstants.js
 
@@ -6781,8 +6781,8 @@ var zIndex = {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return QueryStringSerializer; });
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(13);
 
 
 
@@ -8188,8 +8188,8 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GlobalHelper; });
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(13);
 /* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(43);
 
 
@@ -8434,8 +8434,8 @@ function Footer(props) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CssSsrRemovalHelper; });
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(11);
-/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(12);
+/* harmony import */ var C_Projects_Giuru_fe_node_modules_babel_preset_react_app_node_modules_babel_runtime_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(13);
 
 
 
@@ -8511,10 +8511,10 @@ function LanguageSwitcher(props) {
 
 /* harmony default export */ var LanguageSwitcher_LanguageSwitcher = (LanguageSwitcher);
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck.js
-var classCallCheck = __webpack_require__(11);
+var classCallCheck = __webpack_require__(12);
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createClass.js
-var createClass = __webpack_require__(12);
+var createClass = __webpack_require__(13);
 
 // CONCATENATED MODULE: ./src/project/AspNetCore/shared/components/Header/HeaderConstants.js
 
@@ -8526,13 +8526,13 @@ var HeaderConstants_HeaderConstants = /*#__PURE__*/function () {
   }
 
   Object(createClass["a" /* default */])(HeaderConstants, null, [{
-    key: "MinSearchTermLength",
-    value: function MinSearchTermLength() {
+    key: "minSearchTermLength",
+    value: function minSearchTermLength() {
       return 3;
     }
   }, {
-    key: "SearchSuggenstionsSize",
-    value: function SearchSuggenstionsSize() {
+    key: "searchSuggenstionsSize",
+    value: function searchSuggenstionsSize() {
       return 7;
     }
   }]);
@@ -8572,37 +8572,7 @@ var NavigationHelper_NavigationHelper = /*#__PURE__*/function () {
 // EXTERNAL MODULE: ./src/shared/stores/Store.js + 3 modules
 var Store = __webpack_require__(26);
 
-// CONCATENATED MODULE: ./src/shared/helpers/globals/DebounceHelper.js
-
-
-
-var DebounceHelper_DebounceHelper = /*#__PURE__*/function () {
-  function DebounceHelper() {
-    Object(classCallCheck["a" /* default */])(this, DebounceHelper);
-  }
-
-  Object(createClass["a" /* default */])(DebounceHelper, null, [{
-    key: "debounce",
-    value: function debounce(fn) {
-      var delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 200;
-      var timer = null;
-      return function () {
-        var context = this,
-            args = arguments;
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-          fn.apply(context, args);
-        }, delay);
-      };
-    }
-  }]);
-
-  return DebounceHelper;
-}();
-
-
 // CONCATENATED MODULE: ./src/project/AspNetCore/shared/components/Header/Header.js
-
 
 
 
@@ -8643,14 +8613,14 @@ function Header(props) {
   var onSuggestionsFetchRequested = function onSuggestionsFetchRequested(args) {
     setSearchTerm(args.value);
 
-    if (args.value && args.value.length >= HeaderConstants_HeaderConstants.MinSearchTermLength()) {
+    if (args.value && args.value.length >= HeaderConstants_HeaderConstants.minSearchTermLength()) {
       dispatch({
         type: "SET_IS_LOADING",
         payload: true
       });
       var searchParameters = {
         searchTerm: args.value,
-        size: HeaderConstants_HeaderConstants.SearchSuggenstionsSize()
+        size: HeaderConstants_HeaderConstants.searchSuggenstionsSize()
       };
       var requestOptions = {
         method: "GET",
@@ -8690,12 +8660,12 @@ function Header(props) {
 
   var onSuggestionSelected = function onSuggestionSelected(event, _ref) {
     var suggestion = _ref.suggestion;
-    NavigationHelper_NavigationHelper.redirect(props.searchUrl + '?' + 'searchTerm=' + encodeURI(suggestion));
+    NavigationHelper_NavigationHelper.redirect(props.searchUrl + "?" + "searchTerm=" + encodeURI(suggestion));
   };
 
   var onSearchSubmit = function onSearchSubmit(e) {
     e.preventDefault();
-    NavigationHelper_NavigationHelper.redirect(props.searchUrl + '?' + 'searchTerm=' + encodeURI(searchTerm));
+    NavigationHelper_NavigationHelper.redirect(props.searchUrl + "?" + "searchTerm=" + encodeURI(searchTerm));
   };
 
   var searchInputProps = {
@@ -12998,10 +12968,10 @@ var react_multi_carousel = __webpack_require__(226);
 var react_multi_carousel_default = /*#__PURE__*/__webpack_require__.n(react_multi_carousel);
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/classCallCheck.js
-var classCallCheck = __webpack_require__(11);
+var classCallCheck = __webpack_require__(12);
 
 // EXTERNAL MODULE: ./node_modules/babel-preset-react-app/node_modules/@babel/runtime/helpers/esm/createClass.js
-var createClass = __webpack_require__(12);
+var createClass = __webpack_require__(13);
 
 // CONCATENATED MODULE: ./src/project/AspNetCore/shared/components/Carousel/CarouselConstants.js
 
@@ -15654,7 +15624,7 @@ var GlobalHelper = __webpack_require__(51);
 // EXTERNAL MODULE: ./src/shared/stores/Store.js + 3 modules
 var Store = __webpack_require__(26);
 
-// EXTERNAL MODULE: ./src/project/AspNetCore/shared/components/Header/Header.js + 4 modules
+// EXTERNAL MODULE: ./src/project/AspNetCore/shared/components/Header/Header.js + 3 modules
 var Header = __webpack_require__(60);
 
 // EXTERNAL MODULE: ./src/project/AspNetCore/shared/components/MainNavigation/MainNavigation.js
