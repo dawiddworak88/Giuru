@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { toast } from "react-toastify";
-import Autosuggest from 'react-autosuggest';
+import Autosuggest from "react-autosuggest";
 import PropTypes from "prop-types";
 import { Button } from "@material-ui/core";
 import LanguageSwitcher from "../../../../../shared/components/LanguageSwitcher/LanguageSwitcher";
@@ -9,7 +9,6 @@ import FetchErrorHandler from "../../../../../shared/helpers/errorHandlers/Fetch
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import { Context } from "../../../../../shared/stores/Store";
-import DebounceHelper from "../../../../../shared/helpers/globals/DebounceHelper";
 
 function Header(props) {
 
@@ -27,21 +26,21 @@ function Header(props) {
             <div className="suggestion">
                 {suggestion}
             </div>
-        )
+        );
     };
 
     const onSuggestionsFetchRequested = (args) => {
 
         setSearchTerm(args.value);
 
-        if (args.value && args.value.length >= HeaderConstants.MinSearchTermLength()) {
+        if (args.value && args.value.length >= HeaderConstants.minSearchTermLength()) {
         
             dispatch({ type: "SET_IS_LOADING", payload: true });
 
             const searchParameters = {
 
                 searchTerm: args.value,
-                size: HeaderConstants.SearchSuggenstionsSize()
+                size: HeaderConstants.searchSuggenstionsSize()
             };
 
             const requestOptions = {
@@ -75,18 +74,18 @@ function Header(props) {
                 toast.error(props.generalErrorMessage);
             });
         }
-    }
+    };
 
     const onSuggestionSelected = (event, { suggestion }) => {
 
-        NavigationHelper.redirect(props.searchUrl + '?' + 'searchTerm=' + encodeURI(suggestion));
+        NavigationHelper.redirect(props.searchUrl + "?" + "searchTerm=" + encodeURI(suggestion));
     }
 
     const onSearchSubmit = (e) => {
 
         e.preventDefault();
 
-        NavigationHelper.redirect(props.searchUrl + '?' + 'searchTerm=' + encodeURI(searchTerm));
+        NavigationHelper.redirect(props.searchUrl + "?" + "searchTerm=" + encodeURI(searchTerm));
     }
 
     const searchInputProps = {
@@ -118,7 +117,7 @@ function Header(props) {
                                     onSuggestionSelected={onSuggestionSelected}
                                     renderSuggestion={renderSuggestion}
                                     inputProps={searchInputProps} />
-                                <Button style={{ maxHeight: '40px', marginLeft: '0.5rem'  }} type="submit" variant="contained" color="primary">
+                                <Button style={{ maxHeight: "40px", marginLeft: "0.5rem"  }} type="submit" variant="contained" color="primary">
                                     {props.searchLabel}
                                 </Button>
                             </div>
