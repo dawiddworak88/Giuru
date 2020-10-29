@@ -21,7 +21,7 @@ namespace Foundation.Extensions.Services.MediaServices
                 return string.Empty;
             }
 
-            return $"{baseUrl}{EndpointConstants.Media.MediaApiEndpoint}/{mediaId}";
+            return $"{baseUrl}{EndpointConstants.Files.FilesApiEndpoint}/{mediaId}";
         }
     }
 }

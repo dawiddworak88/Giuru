@@ -8,6 +8,11 @@ using System.Net;
 using System.Threading.Tasks;
 using Catalog.Api.v1.Areas.Products.Validators;
 using Foundation.Extensions.ExtensionMethods;
+using System.Linq;
+using System.Security.Claims;
+using Foundation.Account.Definitions;
+using Foundation.Extensions.Helpers;
+using Catalog.Api.v1.Areas.Products.RequestModels;
 
 namespace Catalog.Api.v1.Areas.Products.Controllers
 {
@@ -87,6 +92,143 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.OK, products);
                 }
+            }
+
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Saves the product. Performs create if id is null and update otherwise.
+        /// </summary>
+        /// <param name="request">Product to save.</param>
+        /// <returns>Product creation result.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(422)]
+        public async Task<IActionResult> Save([FromBody] ProductRequestModel request)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            var serviceModel = new CreateUpdateProductModel
+            {
+                Id = request.Id,
+                CategoryId = request.CategoryId,
+                PrimaryProductId = request.PrimaryProductId,
+                IsNew = request.IsNew,
+                IsProtected = request.IsProtected,
+                Videos = request.Videos,
+                Files = request.Files,
+                Images = request.Images,
+                Sku = request.Sku,
+                Name = request.Name,
+                Description = request.Description,
+                FormData = request.FormData,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Language = request.Language
+            };
+
+            if (request.Id.HasValue)
+            {
+                var validator = new UpdateProductModelValidator();
+
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var product = await this.productService.UpdateAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.OK, product);
+                }
+            }
+            else
+            {
+                var validator = new CreateProductModelValidator();
+
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var product = await this.productService.CreateAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.Created, product);
+                }
+            }
+
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Returns a product by id.
+        /// </summary>
+        /// <param name="language">The language.</param>
+        /// <param name="id">The product id.</param>
+        /// <returns>The product.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetById(string language, Guid? id)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            var serviceModel = new GetProductModel
+            {
+                Id = id.Value,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Language = language
+            };
+
+            var validator = new GetProductModelValidator();
+
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var product = await this.productService.GetByIdAsync(serviceModel);
+
+                return product != null ? this.StatusCode((int)HttpStatusCode.OK, product) : (IActionResult)this.StatusCode((int)HttpStatusCode.NotFound);
+            }
+
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Deletes the product by id.
+        /// </summary>
+        /// <param name="language">The language.</param>
+        /// <param name="id">The id of a product to delete.</param>
+        /// <returns>The deletion process result.</returns>
+        [HttpDelete, MapToApiVersion("1.0")]
+        [Route("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(422)]
+        public async Task<IActionResult> Delete(string language, Guid? id)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            var serviceModel = new DeleteProductModel
+            {
+                Language = language,
+                Id = id,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new DeleteProductModelValidator();
+
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                await this.productService.DeleteAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
             }
 
             return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);

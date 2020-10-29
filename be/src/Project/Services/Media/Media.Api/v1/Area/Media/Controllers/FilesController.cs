@@ -22,11 +22,11 @@ namespace Media.Api.v1.Area.Media.Controllers
     [Produces("application/json")]
     [Authorize]
     [ApiController]
-    public class FileController : BaseApiController
+    public class FilesController : BaseApiController
     {
         private readonly IMediaService mediaService;
 
-        public FileController(IMediaService mediaService)
+        public FilesController(IMediaService mediaService)
         {
             this.mediaService = mediaService;
         }

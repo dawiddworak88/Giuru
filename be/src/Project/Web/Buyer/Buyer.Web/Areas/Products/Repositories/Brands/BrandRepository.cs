@@ -7,7 +7,6 @@ using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Microsoft.Extensions.Options;
 using System;
-using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.Repositories.Brands
@@ -25,16 +24,11 @@ namespace Buyer.Web.Areas.Products.Repositories.Brands
 
         public async Task<Brand> GetBrandAsync(Guid? sellerId, string token)
         {
-            var productsRequestModel = new RequestModelBase
-            {
-                Id = sellerId
-            };
-
             var apiRequest = new ApiRequest<RequestModelBase>
             {
-                Data = this.apiClientService.InitializeRequestModelContext(productsRequestModel),
+                Data = this.apiClientService.InitializeRequestModelContext(new RequestModelBase()),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Seller.SellerApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Seller.SellersApiEndpoint}/{sellerId}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, BrandResponseModel>(apiRequest);

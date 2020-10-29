@@ -2,9 +2,9 @@
 {
     public static class EndpointConstants
     {
-        public struct Media
+        public struct Files
         {
-            public static readonly string MediaApiEndpoint = "/api/v1/file";
+            public static readonly string FilesApiEndpoint = "/api/v1/files";
         }
     }
 }

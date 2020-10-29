@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Products.ApiRequestModels;
-using Buyer.Web.Areas.Products.ApiResponseModels;
+﻿using Buyer.Web.Areas.Products.ApiResponseModels;
 using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions;
@@ -25,16 +24,11 @@ namespace Buyer.Web.Areas.Products.Repositories.Categories
 
         public async Task<Category> GetCategoryAsync(Guid? categoryId, string token)
         {
-            var productsRequestModel = new RequestModelBase
-            {
-                Id = categoryId
-            };
-
             var apiRequest = new ApiRequest<RequestModelBase>
             {
-                Data = this.apiClientService.InitializeRequestModelContext(productsRequestModel),
+                Data = this.apiClientService.InitializeRequestModelContext(new RequestModelBase()),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoryApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}/{categoryId}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, CategoryResponseModel>(apiRequest);

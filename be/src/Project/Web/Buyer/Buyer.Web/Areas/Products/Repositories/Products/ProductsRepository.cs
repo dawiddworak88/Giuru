@@ -30,16 +30,15 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
         public async Task<Product> GetProductAsync(Guid? productId, string language, string token)
         {
             var productRequestModel = new RequestModelBase
-            { 
-                Id = productId,
+            {
                 Language = language
             };
 
             var apiRequest = new ApiRequest<RequestModelBase>
             {
-                Data = this.apiClientService.InitializeRequestModelContext(productRequestModel),
+                Data = productRequestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}/{productId}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ProductResponseModel>(apiRequest);

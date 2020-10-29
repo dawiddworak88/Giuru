@@ -15,16 +15,17 @@ namespace Identity.Api.v1.Areas.Accounts.Controllers
     [Produces("application/json")]
     [Authorize]
     [ApiController]
-    public class SellerController : BaseApiController
+    public class SellersController : BaseApiController
     {
         private readonly ISellerService organisationService;
 
-        public SellerController(ISellerService organisationService)
+        public SellersController(ISellerService organisationService)
         {
             this.organisationService = organisationService;
         }
 
         [HttpGet, MapToApiVersion("1.0")]
+        [Route("{id}")]
         [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
