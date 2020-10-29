@@ -24,6 +24,12 @@ namespace Identity.Api.v1.Areas.Accounts.Controllers
             this.organisationService = organisationService;
         }
 
+        /// <summary>
+        /// Gets the seller by id.
+        /// </summary>
+        /// <param name="language">The language.</param>
+        /// <param name="id">The id.</param>
+        /// <returns>The seller.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
         [AllowAnonymous]

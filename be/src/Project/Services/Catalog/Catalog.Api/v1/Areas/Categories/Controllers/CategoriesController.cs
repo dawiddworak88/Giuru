@@ -25,6 +25,11 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
             this.categoryService = categoryService;
         }
 
+        /// <summary>
+        /// Gets list of categories.
+        /// </summary>
+        /// <param name="language">The language.</param>
+        /// <returns>The list of categories.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [ProducesResponseType(200)]
@@ -53,6 +58,12 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
             return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
+        /// <summary>
+        /// Gets category by id.
+        /// </summary>
+        /// <param name="language">The language.</param>
+        /// <param name="id">The id.</param>
+        /// <returns>The category.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
         [AllowAnonymous]
