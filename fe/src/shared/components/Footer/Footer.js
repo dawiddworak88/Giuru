@@ -1,5 +1,5 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 function Footer(props) {
 
@@ -22,6 +22,6 @@ function Footer(props) {
 Footer.propTypes = {
     links: PropTypes.array.isRequired,
     copyright: PropTypes.string.isRequired
-}
+};
 
 export default Footer;

@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import SchemaField from '../DynamicForm/fields/SchemaField';
+import React from "react";
+import PropTypes from "prop-types";
+import SchemaField from "../DynamicForm/fields/SchemaField";
 import { getDefaultRegistry } from "./utils/utils";
 
 function DynamicForm(props) {
@@ -34,6 +34,6 @@ function DynamicForm(props) {
 DynamicForm.propTypes = {
     jsonSchema: PropTypes.object.isRequired,
     formData: PropTypes.object
-}
+};
 
 export default DynamicForm;

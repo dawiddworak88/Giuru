@@ -6,9 +6,9 @@ export default class FetchErrorHandler {
 
         if (!response.ok) {
 
-            if (response.status === ResponseStatusConstants.Unauthorized())
+            if (response.status === ResponseStatusConstants.unauthorized())
             {
-                if (typeof window !== 'undefined') {
+                if (typeof window !== "undefined") {
 
                     window.location.reload();
                 }

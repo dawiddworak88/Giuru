@@ -1,0 +1,50 @@
+﻿using Foundation.PageContent.Components.Footers.ViewModels;
+using Foundation.PageContent.Components.Headers.ViewModels;
+using Foundation.PageContent.MenuTiles.ViewModels;
+using Foundation.Extensions.ModelBuilders;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Localization;
+using System.Globalization;
+using Seller.Web.Areas.Clients.ViewModels;
+using Foundation.Localization;
+
+namespace Seller.Web.Areas.Clients.ModelBuilders
+{
+    public class ClientPageModelBuilder : IModelBuilder<ClientPageViewModel>
+    {
+        private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
+        private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
+        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+        private readonly IStringLocalizer<ClientResources> clientLocalizer;
+        private readonly LinkGenerator linkGenerator;
+
+        public ClientPageModelBuilder(
+            IModelBuilder<HeaderViewModel> headerModelBuilder,
+            IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
+            IStringLocalizer<ClientResources> clientLocalizer,
+            LinkGenerator linkGenerator,
+            IModelBuilder<FooterViewModel> footerModelBuilder)
+        {
+            this.headerModelBuilder = headerModelBuilder;
+            this.menuTilesModelBuilder = menuTilesModelBuilder;
+            this.clientLocalizer = clientLocalizer;
+            this.linkGenerator = linkGenerator;
+            this.footerModelBuilder = footerModelBuilder;
+        }
+
+        public ClientPageViewModel BuildModel()
+        {
+            var viewModel = new ClientPageViewModel
+            {
+                Header = headerModelBuilder.BuildModel(),
+                MenuTiles = menuTilesModelBuilder.BuildModel(),
+                Title = this.clientLocalizer["Clients"],
+                NewText = this.clientLocalizer["NewClient"],
+                NewUrl = this.linkGenerator.GetPathByAction("Index", "ClientDetail", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                Footer = footerModelBuilder.BuildModel()
+            };
+
+            return viewModel;
+        }
+    }
+}

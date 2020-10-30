@@ -1,7 +1,7 @@
-import React from 'react';
-import '../project/Account/areas/Accounts/pages/SignIn/SignInPage.scss';
-import SignInPage from '../project/Account/areas/Accounts/pages/SignIn/SignInPage';
-import { header, footer } from './Shared/Props';
+import React from "react";
+import "../project/Account/areas/Accounts/pages/SignIn/SignInPage.scss";
+import SignInPage from "../project/Account/areas/Accounts/pages/SignIn/SignInPage";
+import { header, footer } from "./Shared/Props";
 
 var signInForm = {
   emailRequiredErrorMessage: "Enter e-mail address",
@@ -16,10 +16,10 @@ var signInForm = {
 export const SignInPageStory = () => <SignInPage header={header} signInForm={signInForm} footer={footer} />
 
 SignInPageStory.story = {
-  name: 'Sign in Page',
+  name: "Sign in Page",
 };
 
 export default {
-  title: 'Account.Pages',
+  title: "Account.Pages",
   component: SignInPageStory,
 };

@@ -25,7 +25,7 @@ export const fieldProps = {
   onFocus: PropTypes.func,
   rawErrors: PropTypes.arrayOf(PropTypes.string),
   readonly: PropTypes.bool,
-  registry: registry,
+  registry,
   required: PropTypes.bool,
   schema: PropTypes.object.isRequired,
   uiSchema: PropTypes.shape({

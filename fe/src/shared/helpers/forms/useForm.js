@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { get_prop_values, is_object, VALUE, ERROR } from './utils';
+import { useState, useEffect, useCallback } from "react";
+import { get_prop_values, is_object, VALUE, ERROR } from "./utils";
 
 /**
  * useForm hooks to handle your validation in your forms
@@ -70,24 +70,24 @@ function useForm(
 
       const field = validator[name];
 
-      let error = '';
+      let error = "";
 
-      if (is_object(field['required']) && error === '') {
+      if (is_object(field["required"]) && error === "") {
 
-        const required = field['required'];
+        const required = field["required"];
 
-        if (required['isRequired'] && !value) {
+        if (required["isRequired"] && !value) {
 
-            error = required['error'];
+            error = required["error"];
         }
       }
 
-      if (is_object(field['validator']) && error === '') {
-        const validateFieldByCallback = field['validator'];
+      if (is_object(field["validator"]) && error === "") {
+        const validateFieldByCallback = field["validator"];
 
         // Test the function callback if the value is meet the criteria
-        if (!validateFieldByCallback['func'](value, values)) {
-          error = validateFieldByCallback['error'];
+        if (!validateFieldByCallback["func"](value, values)) {
+          error = validateFieldByCallback["error"];
         }
       }
 
@@ -104,7 +104,7 @@ function useForm(
     );
   }, [errors, values, validateField]);
 
-  // Used to disable submit button if there's a value in errors
+  // Used to disable submit button if there"s a value in errors
   // or the required field in state has no value.
   // Wrapped in useCallback to cached the function to avoid intensive memory leaked
   // in every re-render in component
@@ -119,7 +119,7 @@ function useForm(
     event => {
       event.preventDefault();
 
-      // Making sure that there's no error in the state
+      // Making sure that there"s no error in the state
       // before calling the submit callback function
       if (!validateErrorState()) {
         submitFormCallback(values);
@@ -131,6 +131,9 @@ function useForm(
   // Event handler for handling changes in input.
   const handleOnChange = useCallback(
     event => {
+
+      console.log(event);
+
       setIsDirty(true);
 
       if (event.isFormData) {

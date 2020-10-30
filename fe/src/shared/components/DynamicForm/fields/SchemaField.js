@@ -1,7 +1,7 @@
 // Source: https://github.com/rjsf-team/react-jsonschema-form/blob/master/packages/core/src/components/fields/SchemaField.js
 import * as types from "../types/types";
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 import {
   isMultiSelect,
@@ -38,7 +38,7 @@ function getFieldComponent(schema, uiSchema, idSchema, fields) {
 
   const componentName = COMPONENT_TYPES[getSchemaType(schema)];
 
-  // If the type is not defined and the schema uses 'anyOf' or 'oneOf', don't
+  // If the type is not defined and the schema uses "anyOf" or "oneOf", don"t
   // render a field and let the MultiSchemaField component handle the form display
   if (!componentName && (schema.anyOf || schema.oneOf)) {
     return () => null;
@@ -188,7 +188,7 @@ function SchemaFieldRender(props) {
 
   const { __errors, ...fieldErrorSchema } = errorSchema;
 
-  // See #439: uiSchema: Don't pass consumed class names to child components
+  // See #439: uiSchema: Don"t pass consumed class names to child components
   const field = (
     <FieldComponent
       {...props}
@@ -266,7 +266,7 @@ function SchemaFieldRender(props) {
         {field}
 
         {/*
-        If the schema `anyOf` or 'oneOf' can be rendered as a select control, don't
+        If the schema `anyOf` or "oneOf" can be rendered as a select control, don"t
         render the selection and let `StringField` component handle
         rendering
       */}

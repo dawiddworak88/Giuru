@@ -1,30 +1,30 @@
 export var footer = {
-    copyright: 'Copyright © 2021 Giuru',
+    copyright: "Copyright © 2021 Giuru",
     links: [
     ]
   };
 
 export var header = {
   logo: {
-    targetUrl: '/',
-    logoAltLabel: 'Logo'
+    targetUrl: "/",
+    logoAltLabel: "Logo"
   },
   languageSwitcher: {
     availableLanguages: [
       {
-        url: '/en',
-        text: 'EN'
+        url: "/en",
+        text: "EN"
       },
       {
-        url: '/de',
-        text: 'DE'
+        url: "/de",
+        text: "DE"
       },
       {
-        url: '/pl',
-        text: 'PL'
+        url: "/pl",
+        text: "PL"
       }
     ],
-    selectedLanguageUrl: '/en'
+    selectedLanguageUrl: "/en"
   },
   links: [
   ],
@@ -36,9 +36,9 @@ export var header = {
 
 export var menuTiles = {
   tiles: [
-    { icon: 'ShoppingCart', title: 'Orders', url: '#' },
-    { icon: 'Package', title: 'Products', url: '#' },
-    { icon: 'Users', title: 'Clients', url: '#' },
-    { icon: 'Settings', title: 'Settings', url: '#' }
+    { icon: "ShoppingCart", title: "Orders", url: "#" },
+    { icon: "Package", title: "Products", url: "#" },
+    { icon: "Users", title: "Clients", url: "#" },
+    { icon: "Settings", title: "Settings", url: "#" }
   ],
 };

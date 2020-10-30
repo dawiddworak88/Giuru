@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 function LanguageSwitcher(props) {
 
     function handleLanguageChange(e) {
 
-        if (typeof window !== 'undefined' && e && e.target) {
+        if (typeof window !== "undefined" && e && e.target) {
 
             window.location.href = e.target.value;
         }

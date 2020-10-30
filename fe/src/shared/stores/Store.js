@@ -1,5 +1,5 @@
 import React, {createContext, useReducer} from "react";
-import Reducer from '../reducers/Reducer';
+import Reducer from "../reducers/Reducer";
 
 const initialState = {
     isLoading: false
@@ -11,7 +11,7 @@ const Store = ({children}) => {
         <Context.Provider value={[state, dispatch]}>
             {children}
         </Context.Provider>
-    )
+    );
 };
 
 export const Context = createContext(initialState);

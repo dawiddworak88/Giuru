@@ -11,7 +11,7 @@ spec:
     - {{ .Values.ingress.apidomain }}
     - {{ .Values.ingress.domain }}
     - {{ .Values.ingress.accountdomain }}
-    - {{ .Values.ingress.tenantportaldomain }}
+    - {{ .Values.ingress.sellerportaldomain }}
     secretName: wildcard
   rules:
   - host: {{ .Values.ingress.apidomain }}
@@ -35,10 +35,10 @@ spec:
           serviceName: account-web-service
           servicePort: 80
         path: /
-  - host: {{ .Values.ingress.tenantportaldomain }}
+  - host: {{ .Values.ingress.sellerportaldomain }}
     http:
       paths:
       - backend:
-          serviceName: tenant-portal-web-service
+          serviceName: seller-portal-web-service
           servicePort: 80
         path: /
