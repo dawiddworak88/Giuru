@@ -111,6 +111,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         {
                             Id = productVariant.Id,
                             Title = productVariant.Name,
+                            Subtitle = productVariant.Sku,
                             ImageAlt = productVariant.Name,
                             Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id })
                         };

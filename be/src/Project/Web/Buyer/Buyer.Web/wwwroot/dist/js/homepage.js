@@ -8665,7 +8665,10 @@ function Header(props) {
 
   var onSearchSubmit = function onSearchSubmit(e) {
     e.preventDefault();
-    NavigationHelper_NavigationHelper.redirect(props.searchUrl + "?" + "searchTerm=" + encodeURI(searchTerm));
+
+    if (searchTerm && searchTerm.length >= HeaderConstants_HeaderConstants.minSearchTermLength()) {
+      NavigationHelper_NavigationHelper.redirect(props.searchUrl + "?" + "searchTerm=" + encodeURI(searchTerm));
+    }
   };
 
   var searchInputProps = {
@@ -13052,12 +13055,14 @@ function ContentGrid(props) {
         src: carouselItem.imageUrl,
         alt: carouselItem.imageAlt
       })))), /*#__PURE__*/react_default.a.createElement("div", {
-        className: "media-content"
+        className: "card-content"
       }, /*#__PURE__*/react_default.a.createElement("a", {
         href: carouselItem.url
-      }, /*#__PURE__*/react_default.a.createElement("p", {
-        className: "content-grid-card__title title is-5 has-text-centered"
-      }, carouselItem.title))));
+      }, carouselItem.title && /*#__PURE__*/react_default.a.createElement("p", {
+        className: "title is-5 has-text-centered"
+      }, carouselItem.title), carouselItem.subtitle && /*#__PURE__*/react_default.a.createElement("p", {
+        className: "subtitle is-6 has-text-centered"
+      }, carouselItem.subtitle))));
     }))));
   }));
 }

@@ -85,7 +85,10 @@ function Header(props) {
 
         e.preventDefault();
 
-        NavigationHelper.redirect(props.searchUrl + "?" + "searchTerm=" + encodeURI(searchTerm));
+        if (searchTerm && searchTerm.length >= HeaderConstants.minSearchTermLength()) {
+
+            NavigationHelper.redirect(props.searchUrl + "?" + "searchTerm=" + encodeURI(searchTerm));
+        }
     }
 
     const searchInputProps = {

@@ -8771,7 +8771,10 @@ function Header(props) {
 
   var onSearchSubmit = function onSearchSubmit(e) {
     e.preventDefault();
-    NavigationHelper_NavigationHelper.redirect(props.searchUrl + "?" + "searchTerm=" + encodeURI(searchTerm));
+
+    if (searchTerm && searchTerm.length >= HeaderConstants_HeaderConstants.minSearchTermLength()) {
+      NavigationHelper_NavigationHelper.redirect(props.searchUrl + "?" + "searchTerm=" + encodeURI(searchTerm));
+    }
   };
 
   var searchInputProps = {

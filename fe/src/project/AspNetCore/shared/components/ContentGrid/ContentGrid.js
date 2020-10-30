@@ -23,9 +23,15 @@ function ContentGrid(props) {
                                                 </figure>
                                             </div>
                                         </a>
-                                        <div className="media-content">
+                                        <div className="card-content">
                                             <a href={carouselItem.url}>
-                                                <p className="content-grid-card__title title is-5 has-text-centered">{carouselItem.title}</p>
+                                                {carouselItem.title &&
+                                                    <p className="title is-5 has-text-centered">{carouselItem.title}</p>
+                                                }
+
+                                                {carouselItem.subtitle &&
+                                                    <p className="subtitle is-6 has-text-centered">{carouselItem.subtitle}</p>
+                                                }
                                             </a>
                                         </div>
                                     </div>
