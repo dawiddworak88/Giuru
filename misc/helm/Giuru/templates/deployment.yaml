@@ -114,27 +114,27 @@ spec:
         - name: ServerSideRenderingEndpoint
           value: {{ .Values.serverSideRenderingEndpoint }}
         - name: ConnectionString
-          value: {{ .Values.identitygApi.connectionString }}
+          value: {{ .Values.identityApi.connectionString }}
         - name: CatalogUrl
           value: {{ .Values.catalogUrl }}
         - name: MediaUrl
           value: {{ .Values.mediaUrl }}
         - name: Clients
-          value: {{ .Values.identitygApi.clients }}
+          value: {{ .Values.identityApi.clients }}
         - name: Accounts
-          value: {{ .Values.identitygApi.accounts }}
+          value: {{ .Values.identityApi.accounts }}
         - name: Organisations
-          value: {{ .Values.identitygApi.organisations }}
+          value: {{ .Values.identityApi.organisations }}
         - name: PrivacyPolicy
-          value: {{ .Values.identitygApi.privacyPolicy }}
+          value: {{ .Values.identityApi.privacyPolicy }}
         - name: Regulations
-          value: {{ .Values.identitygApi.regulations }}
+          value: {{ .Values.identityApi.regulations }}
         - name: AzureKeyVaultGiuruIdentityServer4Certificate
-          value: {{ .Values.identitygApi.azureKeyVaultGiuruIdentityServer4Certificate }}
+          value: {{ .Values.identityApi.azureKeyVaultGiuruIdentityServer4Certificate }}
         - name: AzureKeyVaultClientId
-          value: {{ .Values.identitygApi.azureKeyVaultClientId }}
+          value: {{ .Values.identityApi.azureKeyVaultClientId }}
         - name: AzureKeyVaultClientSecret
-          value: {{ .Values.identitygApi.azureKeyVaultClientSecret }}
+          value: {{ .Values.identityApi.azureKeyVaultClientSecret }}
         ports:
         - containerPort: 80
 ---
