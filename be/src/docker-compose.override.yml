@@ -86,7 +86,6 @@ services:
   identity-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
       - ServerSideRenderingEndpoint=http://react-ssr:3000
       - CatalogUrl=http://catalog-api
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
@@ -108,7 +107,6 @@ services:
   basket-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
       - ConnectionString=http://basketdata
       - identityUrl=http://identity-api
       - IdentityUrlExternal=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -121,7 +119,6 @@ services:
   ordering-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
       - ConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Password=Gre@tPassw0rd
       - identityUrl=http://identity-api
       - IdentityUrlExternal=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -135,7 +132,6 @@ services:
   ordering-backgroundtasks:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
       - ConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Password=Gre@tPassw0rd
       - EventBusConnection=http://rabbitmq
       - CheckUpdateTime=30000
@@ -160,7 +156,6 @@ services:
   ordering-signalrhub:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
       - EventBusConnection=http://rabbitmq
       - identityUrl=http://identity-api
     ports:
@@ -169,7 +164,6 @@ services:
   seller-web:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
       - ServerSideRenderingEndpoint=http://react-ssr:3000
       - ClientId=663bba90-0036-4a58-8516-39faa8baba87
       - ClientSecret=c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9
@@ -183,7 +177,6 @@ services:
   buyer-web:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:80
       - ServerSideRenderingEndpoint=http://react-ssr:3000
       - ClientId=d9316849-7e98-4c5b-853b-5a322aecdc75
       - ClientSecret=693667b0-545e-48b6-9ef8-02ada81be946

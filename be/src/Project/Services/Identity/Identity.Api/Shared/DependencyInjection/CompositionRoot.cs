@@ -46,17 +46,15 @@ namespace Identity.Api.Shared.DependencyInjection
 
             if (isProduction)
             {
-                var azureKeyVaultConfiguration = configuration.GetSection("AzureKeyVault");
-
                 var client = new KeyVaultClient(new KeyVaultClient.AuthenticationCallback(async (authority, resource, scope) =>
                 {
                     var context = new AuthenticationContext(authority);
-                    var credentials = new ClientCredential(azureKeyVaultConfiguration.GetValue<string>("ClientId"), azureKeyVaultConfiguration.GetValue<string>("ClientSecret"));
+                    var credentials = new ClientCredential(configuration.GetValue<string>("AzureKeyVaultClientId"), configuration.GetValue<string>("AzureKeyVaultClientSecret"));
                     var authenticationResult = await context.AcquireTokenAsync(resource, credentials);
                     return authenticationResult.AccessToken;
                 }));
 
-                builder.AddSigningCredential(new X509Certificate2(Convert.FromBase64String(client.GetSecretAsync(azureKeyVaultConfiguration.GetValue<string>("GiuruIdentityServer4Certificate")).Result.Value)));
+                builder.AddSigningCredential(new X509Certificate2(Convert.FromBase64String(client.GetSecretAsync(configuration.GetValue<string>("AzureKeyVaultGiuruIdentityServer4Certificate")).Result.Value)));
             }
             else
             {
