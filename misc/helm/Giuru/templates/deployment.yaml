@@ -1,21 +1,68 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-deployment
+  name: media-api-deployment
   labels:
-    app: api
+    app: media-api
 spec:
   selector:
     matchLabels:
-      app: api
+      app: media-api
   template:
     metadata:
       labels:
-        app: api
+        app: media-api
     spec:
       containers:
-      - name: api-container
-        image: {{ .Values.image.registry }}/api:{{ .Values.image.tag }}
+      - name: media-api-container
+        image: {{ .Values.image.registry }}/media-api:{{ .Values.image.tag }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: ConnectionString
+          value: {{ .Values.mediaApi.connectionString }}
+        - name: StorageConnectionString
+          value: {{ .Values.mediaApi.storageConnectionString }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-api-deployment
+  labels:
+    app: catalog-api
+spec:
+  selector:
+    matchLabels:
+      app: catalog-api
+  template:
+    metadata:
+      labels:
+        app: catalog-api
+    spec:
+      containers:
+      - name: catalog-api-container
+        image: {{ .Values.image.registry }}/catalog-api:{{ .Values.image.tag }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: ConnectionString
+          value: {{ .Values.catalogApi.connectionString }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: MediaUrl
+          value: {{ .Values.mediaUrl }}
+        - name: ElasticsearchUrl
+          value: {{ .Values.elasticsearchUrl }}
+        - name: ElasticsearchIndex
+          value: {{ .Values.catalogApi.elasticsearchIndex }}
+        - name: Brands
+          value: {{ .Values.catalogApi.brands }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
         ports:
         - containerPort: 80
 ---
@@ -37,68 +84,128 @@ spec:
       containers:
       - name: react-ssr-web-container
         image: {{ .Values.image.registry }}/react-ssr-web:{{ .Values.image.tag }}
+        env:
+        - name: NODE_ENV
+          value: {{ .Values.nodeEnvironment }}
         ports:
         - containerPort: 3000
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aspnetcore-web-deployment
+  name: identity-api-deployment
   labels:
-    app: aspnetcore-web
+    app: identity-api
 spec:
   selector:
     matchLabels:
-      app: aspnetcore-web
+      app: identity-api
   template:
     metadata:
       labels:
-        app: aspnetcore-web
+        app: identity-api
     spec:
       containers:
-      - name: aspnetcore-web-container
-        image: {{ .Values.image.registry }}/aspnetcore-web:{{ .Values.image.tag }}
+      - name: identity-api-container
+        image: {{ .Values.image.registry }}/identity-api:{{ .Values.image.tag }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: ServerSideRenderingEndpoint
+          value: {{ .Values.serverSideRenderingEndpoint }}
+        - name: ConnectionString
+          value: {{ .Values.identitygApi.connectionString }}
+        - name: CatalogUrl
+          value: {{ .Values.catalogUrl }}
+        - name: MediaUrl
+          value: {{ .Values.mediaUrl }}
+        - name: Clients
+          value: {{ .Values.identitygApi.clients }}
+        - name: Accounts
+          value: {{ .Values.identitygApi.accounts }}
+        - name: Organisations
+          value: {{ .Values.identitygApi.organisations }}
+        - name: PrivacyPolicy
+          value: {{ .Values.identitygApi.privacyPolicy }}
+        - name: Regulations
+          value: {{ .Values.identitygApi.regulations }}
+        - name: AzureKeyVaultGiuruIdentityServer4Certificate
+          value: {{ .Values.identitygApi.azureKeyVaultGiuruIdentityServer4Certificate }}
+        - name: AzureKeyVaultClientId
+          value: {{ .Values.identitygApi.azureKeyVaultClientId }}
+        - name: AzureKeyVaultClientSecret
+          value: {{ .Values.identitygApi.azureKeyVaultClientSecret }}
         ports:
         - containerPort: 80
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: account-web-deployment
+  name: buyer-web-deployment
   labels:
-    app: account-web
+    app: buyer-web
 spec:
   selector:
     matchLabels:
-      app: account-web
+      app: buyer-web
   template:
     metadata:
       labels:
-        app: account-web
+        app: buyer-web
     spec:
       containers:
-      - name: account-web-container
-        image: {{ .Values.image.registry }}/account-web:{{ .Values.image.tag }}
+      - name: buyer-web-container
+        image: {{ .Values.image.registry }}/buyer-web:{{ .Values.image.tag }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: ServerSideRenderingEndpoint
+          value: {{ .Values.serverSideRenderingEndpoint }}
+        - name: CatalogUrl
+          value: {{ .Values.catalogUrl }}
+        - name: MediaUrl
+          value: {{ .Values.mediaUrl }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: ClientId
+          value: {{ .Values.buyerWeb.clientId }}
+        - name: ClientSecret
+          value: {{ .Values.buyerWeb.clientSecret }}
         ports:
         - containerPort: 80
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: seller-portal-web-deployment
+  name: seller-web-deployment
   labels:
-    app: seller-portal-web
+    app: seller-web
 spec:
   selector:
     matchLabels:
-      app: seller-portal-web
+      app: seller-web
   template:
     metadata:
       labels:
-        app: seller-portal-web
+        app: seller-web
     spec:
       containers:
-      - name: seller-portal-web-container
-        image: {{ .Values.image.registry }}/seller-portal-web:{{ .Values.image.tag }}
+      - name: seller-web-container
+        image: {{ .Values.image.registry }}/seller-web:{{ .Values.image.tag }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: ServerSideRenderingEndpoint
+          value: {{ .Values.serverSideRenderingEndpoint }}
+        - name: CatalogUrl
+          value: {{ .Values.catalogUrl }}
+        - name: MediaUrl
+          value: {{ .Values.mediaUrl }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: ClientId
+          value: {{ .Values.sellerWeb.clientId }}
+        - name: ClientSecret
+          value: {{ .Values.sellerWeb.clientSecret }}
         ports:
         - containerPort: 80
