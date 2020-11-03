@@ -10,6 +10,7 @@ spec:
   - hosts:
     - {{ .Values.ingress.mediaapidomain }}
     - {{ .Values.ingress.identityapidomain }}
+    - {{ .Values.ingress.catalogapidomain }}
     - {{ .Values.ingress.buyerapidomain }}
     - {{ .Values.ingress.sellerapidomain }}
     secretName: tls-secret
@@ -26,6 +27,13 @@ spec:
       paths:
       - backend:
           serviceName: identity-api-service
+          servicePort: 80
+        path: /
+  - host: {{ .Values.ingress.catalogapidomain }}
+    http:
+      paths:
+      - backend:
+          serviceName: catalog-api-service
           servicePort: 80
         path: /
   - host: {{ .Values.ingress.buyerapidomain }}
