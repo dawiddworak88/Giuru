@@ -21,26 +21,26 @@ spec:
       paths:
       - backend:
           serviceName: media-api-service
-          servicePort: 80
+          servicePort: 443
         path: /(.*)
   - host: {{ .Values.ingress.identityapidomain }}
     http:
       paths:
       - backend:
           serviceName: identity-api-service
-          servicePort: 80
+          servicePort: 443
         path: /(.*)
   - host: {{ .Values.ingress.buyerapidomain }}
     http:
       paths:
       - backend:
           serviceName: buyer-web-service
-          servicePort: 80
+          servicePort: 443
         path: /(.*)
   - host: {{ .Values.ingress.sellerapidomain }}
     http:
       paths:
       - backend:
           serviceName: seller-web-service
-          servicePort: 80
+          servicePort: 443
         path: /(.*)
