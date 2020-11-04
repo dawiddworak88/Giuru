@@ -14,6 +14,30 @@ namespace Foundation.Extensions.Services.MediaServices
             return url;
         }
 
+        public string GetFileUrl(string baseUrl, Guid mediaId, int maxWidth, int maxHeight, bool optimizeImage)
+        {
+            var url = this.GetFileUrl(baseUrl, mediaId, maxWidth, maxHeight);
+
+            if (optimizeImage)
+            {
+                url += $"&o=true";
+            }
+
+            return url;
+        }
+
+        public string GetFileUrl(string baseUrl, Guid mediaId, bool optimizeImage)
+        {
+            var url = this.GetFileUrl(baseUrl, mediaId);
+
+            if (optimizeImage)
+            {
+                url += $"?o=true";
+            }
+
+            return url;
+        }
+
         public string GetFileUrl(string baseUrl, Guid mediaId)
         {
             if (string.IsNullOrWhiteSpace(baseUrl) || mediaId == Guid.Empty)

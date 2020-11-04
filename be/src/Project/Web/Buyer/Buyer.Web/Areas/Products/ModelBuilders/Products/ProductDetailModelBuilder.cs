@@ -88,8 +88,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 {
                     var imageViewModel = new ImageViewModel
                     { 
-                        Original = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.OriginalMaxWidth, ProductConstants.OriginalMaxHeight),
-                        Thumbnail = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.ThumbnailMaxWidth, ProductConstants.ThumbnailMaxHeight)
+                        Original = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.OriginalMaxWidth, ProductConstants.OriginalMaxHeight, true),
+                        Thumbnail = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.ThumbnailMaxWidth, ProductConstants.ThumbnailMaxHeight, true)
                     };
 
                     images.Add(imageViewModel);
@@ -118,7 +118,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                         if (productVariant.Images != null && productVariant.Images.Any())
                         {
-                            carouselItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), ContentGridConstants.CarouselItemImageMaxWidth, ContentGridConstants.CarouselItemImageMaxHeight);
+                            carouselItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), ContentGridConstants.CarouselItemImageMaxWidth, ContentGridConstants.CarouselItemImageMaxHeight, true);
                         }
 
                         carouselItems.Add(carouselItem);

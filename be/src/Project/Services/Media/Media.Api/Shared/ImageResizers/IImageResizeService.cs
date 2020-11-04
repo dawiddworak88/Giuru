@@ -1,6 +1,4 @@
-﻿using SkiaSharp;
-
-namespace Media.Api.Shared.ImageResizers
+﻿namespace Media.Api.Shared.ImageResizers
 {
     public interface IImageResizeService
     {

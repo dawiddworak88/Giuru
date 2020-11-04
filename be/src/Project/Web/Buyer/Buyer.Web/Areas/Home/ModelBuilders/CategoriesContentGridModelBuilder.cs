@@ -56,7 +56,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
 
                     if (subCategory.ThumbnailMediaId.HasValue)
                     {
-                        carouselItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, subCategory.ThumbnailMediaId.Value);
+                        carouselItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, subCategory.ThumbnailMediaId.Value, true);
                     }
 
                     contentGridCarouselItems.Add(carouselItem);
