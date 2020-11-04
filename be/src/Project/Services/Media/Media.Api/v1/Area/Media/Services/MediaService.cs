@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using Foundation.GenericRepository.Paginations;
 using Foundation.GenericRepository.Predicates;
 using Foundation.Extensions.ExtensionMethods;
-using Media.Api.Shared.ImageOptimizers;
+using Media.Api.Definitions;
 
 namespace Media.Api.v1.Area.Media.Services
 {
@@ -24,19 +24,16 @@ namespace Media.Api.v1.Area.Media.Services
         private readonly MediaContext context;
         private readonly IMediaRepository mediaRepository;
         private readonly IChecksumService checksumService;
-        private readonly IImageOptimizeService imageOptimizeService;
         private readonly IImageResizeService imageResizeService;
 
         public MediaService(MediaContext context, 
             IMediaRepository mediaRepository, 
             IChecksumService checksumService,
-            IImageOptimizeService imageOptimizeService,
             IImageResizeService imageResizeService)
         {
             this.context = context;
             this.mediaRepository = mediaRepository;
             this.checksumService = checksumService;
-            this.imageOptimizeService = imageOptimizeService;
             this.imageResizeService = imageResizeService;
         }
 
@@ -120,12 +117,12 @@ namespace Media.Api.v1.Area.Media.Services
                         {
                             if (width.HasValue && height.HasValue)
                             {
-                                file = this.imageResizeService.Resize(file, width.Value, height.Value);
+                                file = this.imageResizeService.Resize(file, width.Value, height.Value, optimize.HasValue && optimize.Value, mediaItem.ContentType);
                             }
 
                             if (optimize.HasValue && optimize.Value)
                             {
-                                file = this.imageOptimizeService.Optimize(file);
+                                file = this.imageResizeService.Optimize(file, mediaItem.ContentType);
                             }
                         }
 
@@ -200,9 +197,9 @@ namespace Media.Api.v1.Area.Media.Services
         {
             var imageContentTypes = new List<string>
             {
-                "image/jpeg",
-                "image/png",
-                "image/svg+xml"
+                MediaConstants.MimeTypes.Jpeg,
+                MediaConstants.MimeTypes.Png,
+                MediaConstants.MimeTypes.Svg
             };
 
             return imageContentTypes.Contains(contentType);

@@ -1,6 +1,5 @@
 ﻿using Media.Api.Infrastructure;
 using Media.Api.Shared.Checksums;
-using Media.Api.Shared.ImageOptimizers;
 using Media.Api.Shared.ImageResizers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -14,7 +13,6 @@ namespace Media.Api.DependencyInjection
         {
             services.AddScoped<MediaContext>();
             services.AddScoped<IChecksumService, ChecksumService>();
-            services.AddScoped<IImageOptimizeService, ImageOptimizeService>();
             services.AddScoped<IImageResizeService, ImageResizeService>();
 
             services.AddDbContext<MediaContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
