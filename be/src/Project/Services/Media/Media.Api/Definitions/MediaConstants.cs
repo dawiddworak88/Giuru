@@ -69,5 +69,17 @@ namespace Media.Api.Definitions
             public static readonly Guid MattressesMediaVersionId = Guid.Parse("23beeaec-8a7e-4397-83a6-7bf450b9e491");
             public static readonly string MattressesMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/BoxSprings.jpg";
         }
+
+        public struct ImageConversion
+        {
+            public static readonly int ImageQuality = 75;
+        }
+
+        public struct MimeTypes
+        {
+            public const string Jpeg = "image/jpeg";
+            public const string Png = "image/png";
+            public const string Svg = "image/svg+xml";
+        }
     }
 }
