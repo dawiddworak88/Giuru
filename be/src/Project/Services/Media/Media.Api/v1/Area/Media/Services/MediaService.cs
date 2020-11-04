@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using Foundation.GenericRepository.Paginations;
 using Foundation.GenericRepository.Predicates;
 using Foundation.Extensions.ExtensionMethods;
+using Media.Api.Shared.ImageOptimizers;
 
 namespace Media.Api.v1.Area.Media.Services
 {
@@ -23,16 +24,19 @@ namespace Media.Api.v1.Area.Media.Services
         private readonly MediaContext context;
         private readonly IMediaRepository mediaRepository;
         private readonly IChecksumService checksumService;
+        private readonly IImageOptimizeService imageOptimizeService;
         private readonly IImageResizeService imageResizeService;
 
         public MediaService(MediaContext context, 
             IMediaRepository mediaRepository, 
             IChecksumService checksumService,
+            IImageOptimizeService imageOptimizeService,
             IImageResizeService imageResizeService)
         {
             this.context = context;
             this.mediaRepository = mediaRepository;
             this.checksumService = checksumService;
+            this.imageOptimizeService = imageOptimizeService;
             this.imageResizeService = imageResizeService;
         }
 
@@ -86,7 +90,7 @@ namespace Media.Api.v1.Area.Media.Services
             return mediaItem.Id;
         }
 
-        public async Task<MediaFileResultModel> GetFileAsync(Guid? mediaId, int? width, int? height)
+        public async Task<MediaFileResultModel> GetFileAsync(Guid? mediaId, bool? optimize, int? width, int? height)
         {
             if (mediaId.HasValue)
             {
@@ -112,9 +116,17 @@ namespace Media.Api.v1.Area.Media.Services
 
                     if (file != null)
                     {
-                        if (this.IsImage(mediaItem.ContentType) && width.HasValue && height.HasValue)
+                        if (this.IsImage(mediaItem.ContentType))
                         {
-                            file = this.imageResizeService.Resize(file, width.Value, height.Value);
+                            if (width.HasValue && height.HasValue)
+                            {
+                                file = this.imageResizeService.Resize(file, width.Value, height.Value);
+                            }
+
+                            if (optimize.HasValue && optimize.Value)
+                            {
+                                file = this.imageOptimizeService.Optimize(file);
+                            }
                         }
 
                         return new MediaFileResultModel

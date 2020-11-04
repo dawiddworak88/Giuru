@@ -34,7 +34,8 @@ namespace Media.Api.v1.Area.Media.Controllers
         /// <summary>
         /// Gets a file by media id. Provide width and height to resize the image files.
         /// </summary>
-        /// <param name="mediaId"></param>
+        /// <param name="mediaId">The media id to get.</param>
+        /// <param name="o">The flag that indicates whether image file should be optimized.</param>
         /// <param name="w">The image width.</param>
         /// <param name="h">The image height.</param>
         /// <returns>The file.</returns>
@@ -43,9 +44,9 @@ namespace Media.Api.v1.Area.Media.Controllers
         [Route("{mediaId}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Get(Guid? mediaId, int? w, int? h)
+        public async Task<IActionResult> Get(Guid? mediaId, bool? o, int? w, int? h)
         {
-            var mediaFile = await this.mediaService.GetFileAsync(mediaId, w, h);
+            var mediaFile = await this.mediaService.GetFileAsync(mediaId, o, w, h);
 
             if (mediaFile != null)
             {

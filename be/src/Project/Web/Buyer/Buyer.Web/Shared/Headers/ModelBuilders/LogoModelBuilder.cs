@@ -36,7 +36,7 @@ namespace Buyer.Web.Shared.Headers.ModelBuilders
             {
                 LogoAltLabel = this.globalLocalizer.GetString("Logo"),
                 TargetUrl = this.linkGenerator.GetPathByAction("Index", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
-                LogoUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, LogoConstants.LogoMediaId)
+                LogoUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, LogoConstants.LogoMediaId, true)
             };
         }
     }
