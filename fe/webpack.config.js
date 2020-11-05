@@ -2,6 +2,7 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 var browserConfig = {
@@ -51,7 +52,8 @@ var browserConfig = {
     ],
     optimization: {
         minimizer: [
-            new OptimizeCSSAssetsPlugin({})
+            new OptimizeCSSAssetsPlugin({}),
+            new TerserPlugin({})
         ]
     },
     resolve: {
@@ -118,7 +120,8 @@ var accountBrowserConfig = {
     ],
     optimization: {
         minimizer: [
-            new OptimizeCSSAssetsPlugin({})
+            new OptimizeCSSAssetsPlugin({}),
+            new TerserPlugin({})
         ]
     },
     resolve: {
@@ -182,7 +185,8 @@ var sellerPortalBrowserConfig = {
     ],
     optimization: {
         minimizer: [
-            new OptimizeCSSAssetsPlugin({})
+            new OptimizeCSSAssetsPlugin({}),
+            new TerserPlugin({})
         ]
     },
     resolve: {
