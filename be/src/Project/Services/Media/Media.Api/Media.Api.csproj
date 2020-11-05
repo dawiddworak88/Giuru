@@ -21,6 +21,11 @@
     <None Remove="Infrastructure\Media\Seeds\Images\Categories\Couches.jpg" />
     <None Remove="Infrastructure\Media\Seeds\Images\Categories\Poufs.jpg" />
     <None Remove="Infrastructure\Media\Seeds\Images\Categories\Sectionals.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Headers\favicon.png" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Headers\logo.png" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Bedroom.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\KidsRoom.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\LivingRoom.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,6 +48,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Infrastructure\Media\Seeds\Images\Categories\Sectionals.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Headers\favicon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Headers\logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Bedroom.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\KidsRoom.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\LivingRoom.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -75,10 +95,6 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\ApiExtensions\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Infrastructure\Media\Seeds\Images\Headers\" />
   </ItemGroup>
 
 </Project>
