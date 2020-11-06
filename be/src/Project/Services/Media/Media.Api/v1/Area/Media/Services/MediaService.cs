@@ -39,58 +39,52 @@ namespace Media.Api.v1.Area.Media.Services
 
         public async Task<Guid> CreateFileAsync(CreateMediaItemModel serviceModel)
         {
-            using (var calculateChecksumStream = serviceModel.File.OpenReadStream())
+            var checksum = this.checksumService.GetMd5(serviceModel.File);
+
+            var existingMediaItemVersion = context.MediaItemVersions.FirstOrDefault(x => x.Checksum == checksum && x.Filename == Path.GetFileNameWithoutExtension(serviceModel.File.FileName) && x.IsActive);
+
+            if (existingMediaItemVersion != null)
             {
-                using (var uploadFileStream = serviceModel.File.OpenReadStream())
-                {
-                    var checksum = this.checksumService.GetMd5(serviceModel.File.OpenReadStream());
-
-                    var existingMediaItemVersion = context.MediaItemVersions.FirstOrDefault(x => x.Checksum == checksum && x.Filename == Path.GetFileNameWithoutExtension(serviceModel.File.FileName) && x.IsActive);
-
-                    if (existingMediaItemVersion != null)
-                    {
-                        return existingMediaItemVersion.MediaItemId;
-                    }
-
-                    var mediaItem = new MediaItem
-                    {
-                        OrganisationId = serviceModel.OrganisationId,
-                        IsProtected = false
-                    };
-
-                    context.MediaItems.Add(EntitySeedHelper.SeedEntity(mediaItem));
-
-                    var mediaItemVersion = new MediaItemVersion
-                    {
-                        MediaItemId = mediaItem.Id,
-                        Filename = Path.GetFileNameWithoutExtension(serviceModel.File.FileName),
-                        Extension = Path.GetExtension(serviceModel.File.FileName),
-                        Folder = serviceModel.OrganisationId.ToString(),
-                        MimeType = MimeUtility.GetMimeMapping(Path.GetExtension(serviceModel.File.FileName)),
-                        Size = serviceModel.File.Length,
-                        Checksum = checksum,
-                        CreatedBy = serviceModel.Username,
-                        Version = 1
-                    };
-
-                    context.MediaItemVersions.Add(EntitySeedHelper.SeedEntity(mediaItemVersion));
-
-                    var mediaItemTranslation = new MediaItemTranslation
-                    {
-                        MediaItemVersionId = mediaItemVersion.Id,
-                        Language = serviceModel.Language,
-                        Name = Path.GetFileNameWithoutExtension(serviceModel.File.FileName)
-                    };
-
-                    context.MediaItemTranslations.Add(EntitySeedHelper.SeedEntity(mediaItemTranslation));
-
-                    context.SaveChanges();
-
-                    await this.mediaRepository.CreateFileAsync(mediaItemVersion.Id, serviceModel.OrganisationId.ToString(), serviceModel.File.OpenReadStream(), serviceModel.File.FileName);
-
-                    return mediaItem.Id;
-                }
+                return existingMediaItemVersion.MediaItemId;
             }
+
+            var mediaItem = new MediaItem
+            {
+                OrganisationId = serviceModel.OrganisationId,
+                IsProtected = false
+            };
+
+            context.MediaItems.Add(EntitySeedHelper.SeedEntity(mediaItem));
+
+            var mediaItemVersion = new MediaItemVersion
+            {
+                MediaItemId = mediaItem.Id,
+                Filename = Path.GetFileNameWithoutExtension(serviceModel.File.FileName),
+                Extension = Path.GetExtension(serviceModel.File.FileName),
+                Folder = serviceModel.OrganisationId.ToString(),
+                MimeType = MimeUtility.GetMimeMapping(Path.GetExtension(serviceModel.File.FileName)),
+                Size = serviceModel.File.Length,
+                Checksum = checksum,
+                CreatedBy = serviceModel.Username,
+                Version = 1
+            };
+
+            context.MediaItemVersions.Add(EntitySeedHelper.SeedEntity(mediaItemVersion));
+
+            var mediaItemTranslation = new MediaItemTranslation
+            {
+                MediaItemVersionId = mediaItemVersion.Id,
+                Language = serviceModel.Language,
+                Name = Path.GetFileNameWithoutExtension(serviceModel.File.FileName)
+            };
+
+            context.MediaItemTranslations.Add(EntitySeedHelper.SeedEntity(mediaItemTranslation));
+
+            context.SaveChanges();
+
+            await this.mediaRepository.CreateFileAsync(mediaItemVersion.Id, serviceModel.OrganisationId.ToString(), serviceModel.File, serviceModel.File.FileName);
+
+            return mediaItem.Id;
         }
 
         public async Task<MediaFileResultModel> GetFileAsync(Guid? mediaId, bool? optimize, int? width, int? height)
