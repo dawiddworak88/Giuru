@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using Media.Api.Configurations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System;
 using System.IO;
@@ -36,7 +37,7 @@ namespace Media.Api.v1.Area.Media.Repositories
             return default;
         }
 
-        public async Task CreateFileAsync(Guid mediaItemVersionId, string folderName, Stream stream, string filename)
+        public async Task CreateFileAsync(Guid mediaItemVersionId, string folderName, IFormFile file, string filename)
         {
             var container = new BlobContainerClient(this.configuration.Value.StorageConnectionString, folderName);
 
@@ -46,7 +47,10 @@ namespace Media.Api.v1.Area.Media.Repositories
 
             if (!blob.Exists())
             {
-                blob.Upload(stream);
+                using (var stream = file.OpenReadStream())
+                {
+                    blob.Upload(stream);
+                }
             }
         }
     }
