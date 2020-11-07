@@ -198,6 +198,9 @@
   <data name="FilesToDownload" xml:space="preserve">
     <value>Dateien herunterladen</value>
   </data>
+  <data name="Home" xml:space="preserve">
+    <value>Startseite</value>
+  </data>
   <data name="InStock" xml:space="preserve">
     <value>Auf Lager</value>
   </data>
