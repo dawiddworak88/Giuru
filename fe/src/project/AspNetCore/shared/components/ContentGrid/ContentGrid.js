@@ -1,7 +1,8 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import Carousel from "react-multi-carousel";
-import LazyLoad from 'react-lazyload';
+import LazyLoad from "react-lazyload";
+import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
 import CarouselConstants from "../Carousel/CarouselConstants";
 
 function ContentGrid(props) {
@@ -20,7 +21,7 @@ function ContentGrid(props) {
                                         <a href={carouselItem.url}>
                                             <div className="card-image">
                                                 <figure className="image is-4by3">
-                                                    <LazyLoad>
+                                                    <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
                                                         <img src={carouselItem.imageUrl} alt={carouselItem.imageAlt} />
                                                     </LazyLoad>
                                                 </figure>

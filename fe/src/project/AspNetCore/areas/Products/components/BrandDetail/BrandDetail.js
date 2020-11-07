@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
-import LazyLoad from 'react-lazyload';
+import LazyLoad from "react-lazyload";
 import Files from "../../../../shared/components/Files/Files";
+import LazyLoadConstants from "../../../../../../shared/constants/LazyLoadConstants";
 
 function BrandDetail(props) {
 
@@ -11,7 +12,7 @@ function BrandDetail(props) {
             <div className="columns is-tablet">
                 <div className="column is-4 is-flex is-flex-centered">
                     {props.logoUrl &&
-                        <LazyLoad>
+                        <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
                             <img src={props.logoUrl} alt={props.name} />
                         </LazyLoad>
                     }
