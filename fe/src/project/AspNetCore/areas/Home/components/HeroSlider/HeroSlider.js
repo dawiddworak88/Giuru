@@ -11,28 +11,28 @@ function HeroSlider(props) {
             <section className="section pb-0 is-flex is-flex-centered is-desktop is-grey-background is-hidden-touch">
                 <Carousel className="hero-slider" autoPlay={true} showArrows={true} showThumbs={false} useKeyboardArrows={false} dynamicHeight={false} showStatus={false} swipeable={true}>
                     {props.items.map((item, index) =>
-                        <div className="hero-slider__item" key={index}>
-                            <LazyLoad>
-                                <img src={item.imageSrc} alt={item.imageAlt} title={item.imageTitle} />
-                            </LazyLoad>
-                            {item.teaserTitle &&
-                                <div className="hero-slider__teaser">
-                                    <div className="hero-slider__teaser-title title is-5 has-text-white">
-                                        {item.teaserTitle}
-                                    </div>
-                                    <div className="hero-slider__teaser-text">
-                                        {item.teaserText}
-                                    </div>
-                                    {item.ctaUrl &&
-                                        <div className="field">
-                                            <p className="control">
-                                                <a href={item.ctaUrl} className="button is-primary hero-slider__teaser-link">{item.ctaText}</a>
-                                            </p>
+                        <LazyLoad>
+                            <div className="hero-slider__item" key={index}>
+                                    <img src={item.imageSrc} alt={item.imageAlt} title={item.imageTitle} />
+                                {item.teaserTitle &&
+                                    <div className="hero-slider__teaser">
+                                        <div className="hero-slider__teaser-title title is-5 has-text-white">
+                                            {item.teaserTitle}
                                         </div>
-                                    }
-                                </div>
-                            }
-                        </div>
+                                        <div className="hero-slider__teaser-text">
+                                            {item.teaserText}
+                                        </div>
+                                        {item.ctaUrl &&
+                                            <div className="field">
+                                                <p className="control">
+                                                    <a href={item.ctaUrl} className="button is-primary hero-slider__teaser-link">{item.ctaText}</a>
+                                                </p>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </LazyLoad>
                     )}
                 </Carousel>
             </section>
