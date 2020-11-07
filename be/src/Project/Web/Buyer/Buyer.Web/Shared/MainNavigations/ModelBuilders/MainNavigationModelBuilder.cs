@@ -6,16 +6,22 @@ using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
+using Microsoft.AspNetCore.Routing;
+using System.Globalization;
 
 namespace Buyer.Web.Shared.Headers.ModelBuilders
 {
     public class MainNavigationModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly LinkGenerator linkGenerator;
 
-        public MainNavigationModelBuilder(IStringLocalizer<GlobalResources> globalLocalizer)
+        public MainNavigationModelBuilder(
+            IStringLocalizer<GlobalResources> globalLocalizer,
+            LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
+            this.linkGenerator = linkGenerator;
         }
 
         public async Task<MainNavigationViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -24,8 +30,8 @@ namespace Buyer.Web.Shared.Headers.ModelBuilders
             { 
                 new LinkViewModel 
                 {
-                    Text = this.globalLocalizer["Categories"],
-                    Url = "#categories"
+                    Text = this.globalLocalizer["Home"],
+                    Url = this.linkGenerator.GetPathByAction("Index", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name })
                 }
             };
 
