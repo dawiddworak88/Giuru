@@ -1,8 +1,8 @@
-﻿using Buyer.Web.Areas.Products.DomainModels;
+﻿using Buyer.Web.Shared.Brands.DomainModels;
 using System;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Products.Repositories.Brands
+namespace Buyer.Web.Shared.Brands.Repositories
 {
     public interface IBrandRepository
     {

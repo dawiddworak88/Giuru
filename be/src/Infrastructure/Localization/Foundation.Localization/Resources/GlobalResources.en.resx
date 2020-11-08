@@ -123,6 +123,9 @@
   <data name="AreYouSureLabel" xml:space="preserve">
     <value>Are you sure you want to delete</value>
   </data>
+  <data name="BrandZone" xml:space="preserve">
+    <value>{0} zone</value>
+  </data>
   <data name="By" xml:space="preserve">
     <value>by</value>
   </data>

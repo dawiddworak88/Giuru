@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Products.DomainModels;
+﻿using Buyer.Web.Shared.Brands.DomainModels;
 using Foundation.GenericRepository.Paginations;
 using System;
 using System.Collections.Generic;

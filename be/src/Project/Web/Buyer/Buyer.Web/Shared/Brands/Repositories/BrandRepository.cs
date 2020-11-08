@@ -1,5 +1,5 @@
 ﻿using Buyer.Web.Areas.Products.ApiResponseModels;
-using Buyer.Web.Areas.Products.DomainModels;
+using Buyer.Web.Shared.Brands.DomainModels;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions;
 using Foundation.ApiExtensions.Communications;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Products.Repositories.Brands
+namespace Buyer.Web.Shared.Brands.Repositories
 {
     public class BrandRepository : IBrandRepository
     {
