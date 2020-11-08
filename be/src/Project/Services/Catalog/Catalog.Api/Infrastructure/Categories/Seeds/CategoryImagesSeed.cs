@@ -16,11 +16,11 @@ namespace Catalog.Api.Infrastructure.Categories.Seeds
             SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.LivingRoom.WallUnitsId, CategoryImageConstants.WallUnitsImageMediaId);
             SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.LivingRoom.ChairsId, CategoryImageConstants.ChairsImageMediaId);
             SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.LivingRoom.PoufsId, CategoryImageConstants.PoufsImageMediaId);
+            SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.LivingRoom.LivingRoomSetsId, CategoryImageConstants.LivingRoomSetsMediaId);
 
             SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.Bedroom.BedsId, CategoryImageConstants.BedsImageMediaId);
             SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.Bedroom.WardrobesId, CategoryImageConstants.WardrobesImageMediaId);
             SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.Bedroom.ChestsId, CategoryImageConstants.ChestsImageMediaId);
-            SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.Bedroom.MattressesId, CategoryImageConstants.MattressesImageMediaId);
 
             SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.KitchenDiningRoom.DiningTablesSeatingId, CategoryImageConstants.DiningTablesSeatingImageMediaId);
 

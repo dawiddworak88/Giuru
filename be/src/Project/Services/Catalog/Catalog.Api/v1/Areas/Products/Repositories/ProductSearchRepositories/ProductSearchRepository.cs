@@ -36,11 +36,12 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 query = query && 
-                    (Query<ProductSearchModel>.QueryString(d => d.Query(searchTerm)) 
+                    (Query<ProductSearchModel>.QueryString(d => d.Query(searchTerm))
+                        || Query<ProductSearchModel>.Match(x => x.Field(f => f.CategoryName).Query(searchTerm).Fuzziness(Fuzziness.Auto))
                         || Query<ProductSearchModel>.Prefix(x => x.Name.Suffix("keyword"), searchTerm));
             }
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(x => x && query).Sort(s => s.Descending(SortSpecialField.Score)));
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(x => x && query).Sort(s => s.Descending(SortSpecialField.Score).Ascending(x => x.CreatedDate)));
 
             if (response.IsValid && response.Hits.Any())
             {
@@ -83,7 +84,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
 
             query = query && idsQuery;
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query));
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query).Sort(s => s.Ascending(f => f.CreatedDate)));
 
             if (response.IsValid && response.Hits.Any())
             {
@@ -102,7 +103,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
                 && Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query));
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query).Sort(s => s.Ascending(x => x.CreatedDate)));
 
             if (response.IsValid && response.Hits.Any())
             {
@@ -118,6 +119,25 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
         public IEnumerable<string> GetProductSuggestions(string searchTerm, int size)
         {
             var suggestions = new List<string>();
+
+            var categoryResponse = this.elasticClient.Search<ProductSearchModel>(s => s
+                .Suggest(su => su
+                    .Completion("categoryName", cs => cs
+                        .Contexts(ctx => ctx
+                            .Context("isActive", x => x.Context(true.ToString())))
+                        .Field(f => f.CategoryNameSuggest)
+                        .Prefix(searchTerm)
+                        .Fuzzy(f => f
+                            .Fuzziness(Fuzziness.Auto)
+                        )
+                    )
+                )
+            );
+
+            var categorySuggestions =
+                from suggest in categoryResponse.Suggest["categoryName"]
+                from option in suggest.Options
+                select option.Text;
 
             var nameResponse = this.elasticClient.Search<ProductSearchModel>(s => s
                 .Suggest(su => su
@@ -161,6 +181,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
                 from option in suggest.Options
                 select option.Text;
 
+            suggestions.AddRange(categorySuggestions.Distinct());
             suggestions.AddRange(nameSuggestions.Distinct());
             suggestions.AddRange(brandSuggestions.Distinct());
 

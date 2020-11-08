@@ -11,11 +11,11 @@ namespace Catalog.Api.Infrastructure.Categories.Definitions
         public static readonly Guid WallUnitsImageMediaId = Guid.Parse("8120e8a6-f364-4611-b133-040fd163ecdd");
         public static readonly Guid ChairsImageMediaId = Guid.Parse("d0d611c1-67bd-46ef-9133-382d161c09e5");
         public static readonly Guid PoufsImageMediaId = Guid.Parse("27a91dfe-139b-4c36-a716-9dacc0c685c9");
+        public static readonly Guid LivingRoomSetsMediaId = Guid.Parse("f2aeeb0d-455c-422b-987b-6ded4295bd74");
 
         public static readonly Guid BedsImageMediaId = Guid.Parse("1aacaa2a-0719-45e6-9bcd-0f5ed2bbe4b8");
         public static readonly Guid WardrobesImageMediaId = Guid.Parse("f593f89d-354f-4e00-9cb5-50a32462cf9e");
         public static readonly Guid ChestsImageMediaId = Guid.Parse("00d64a65-0b50-4869-bd9f-38ae2e9dc417");
-        public static readonly Guid MattressesImageMediaId = Guid.Parse("ce5f8282-e6a0-44c4-bb1e-e186f2f8c1da");
 
         public static readonly Guid DiningTablesSeatingImageMediaId = Guid.Parse("54e9fe96-8852-4677-a409-4dd154e56822");
 
