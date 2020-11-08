@@ -42,7 +42,11 @@ namespace Catalog.Api.DependencyInjection
                                 .Name(n => n.BrandNameSuggest)
                                 .Contexts(ctxs => ctxs
                                     .Category(ctgr => ctgr.Name("isActive"))
-                                    .Category(ctgr => ctgr.Name("primaryProductIdHasValue")))))));
+                                    .Category(ctgr => ctgr.Name("primaryProductIdHasValue"))))
+                            .Completion(cmpl => cmpl
+                                .Name(n => n.CategoryNameSuggest)
+                                .Contexts(ctxs => ctxs
+                                    .Category(ctgr => ctgr.Name("isActive")))))));
             }
 
             services.AddSingleton<IElasticClient>(client);

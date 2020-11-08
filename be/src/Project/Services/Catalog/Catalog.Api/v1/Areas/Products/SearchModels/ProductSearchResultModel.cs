@@ -16,6 +16,7 @@ namespace Catalog.Api.v1.Areas.Products.SearchModels
         public string FormData { get; set; }
         public Guid CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public CompletionField CategoryNameSuggest { get; set; }
         public Guid SellerId { get; set; }
         public string BrandName { get; set; }
         public CompletionField BrandNameSuggest { get; set; }

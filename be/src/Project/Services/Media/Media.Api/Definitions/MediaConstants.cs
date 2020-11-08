@@ -57,6 +57,10 @@ namespace Media.Api.Definitions
             public static readonly Guid PoufsMediaVersionId = Guid.Parse("e6d8ede2-a786-413c-887f-b33bc3f5fa41");
             public static readonly string PoufsMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/Poufs.jpg";
 
+            public static readonly Guid SetsMediaId = Guid.Parse("f2aeeb0d-455c-422b-987b-6ded4295bd74");
+            public static readonly Guid SetsMediaVersionId = Guid.Parse("62f2c58e-f461-4347-9476-41de6d170e50");
+            public static readonly string SetsMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/Sets.jpg";
+
             public static readonly Guid BedsMediaId = Guid.Parse("1aacaa2a-0719-45e6-9bcd-0f5ed2bbe4b8");
             public static readonly Guid BedsMediaVersionId = Guid.Parse("c6a71890-c424-40b3-adad-6d98388566b3");
             public static readonly string BedsMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/Beds.jpg";
@@ -67,7 +71,7 @@ namespace Media.Api.Definitions
 
             public static readonly Guid MattressesMediaId = Guid.Parse("ce5f8282-e6a0-44c4-bb1e-e186f2f8c1da");
             public static readonly Guid MattressesMediaVersionId = Guid.Parse("23beeaec-8a7e-4397-83a6-7bf450b9e491");
-            public static readonly string MattressesMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/BoxSprings.jpg";
+            public static readonly string MattressesMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/Mattresses.jpg";
         }
 
         public struct ImageConversion

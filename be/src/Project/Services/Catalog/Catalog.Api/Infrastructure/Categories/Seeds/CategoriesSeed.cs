@@ -25,10 +25,10 @@ namespace Catalog.Api.Infrastructure.Categories.Seeds
             SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.LivingRoom.CoffeeTablesId, 2, CategoryConstants.CategoryGuids.Furniture.LivingRoomFurnitureId, 20, true, "Coffee Tables", "Stoliki kawowe i ławy", "Wohnzimmertische");
             SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.LivingRoom.ChairsId, 2, CategoryConstants.CategoryGuids.Furniture.LivingRoomFurnitureId, 50, true, "Chairs & Recliners", "Krzesła i fotele", "Sessel & Stühle");
             SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.LivingRoom.PoufsId, 2, CategoryConstants.CategoryGuids.Furniture.LivingRoomFurnitureId, 60, true, "Poufs", "Pufy", "Fußhocker");
+            SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.LivingRoom.LivingRoomSetsId, 2, CategoryConstants.CategoryGuids.Furniture.LivingRoomFurnitureId, 70, true, "Lounge suites", "Zestawy", "Sitzgruppen");
 
             // Level 2 Bedroom
-            SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.Bedroom.BedsId, 2, CategoryConstants.CategoryGuids.Furniture.BedroomFurnitureId, 0, true, "Beds", "Łóżka", "Betten");
-            SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.Bedroom.MattressesId, 2, CategoryConstants.CategoryGuids.Furniture.BedroomFurnitureId, 30, true, "Mattresses & Box Springs", "Materace & Box Spring", "Matratzen & Box Springs");
+            SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.Bedroom.BedsId, 2, CategoryConstants.CategoryGuids.Furniture.BedroomFurnitureId, 0, true, "Beds & Box Springs", "Łóżka & Box Spring", "Betten & Box Springs");
         }
 
         private static void SeedCategory(CatalogContext context, Guid id, int level, Guid? parentId, int order, bool isLeaf, string englishName, string polishName, string germanName)

@@ -63,6 +63,17 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories
                             ProductId = product.Id,
                             CategoryId = product.CategoryId,
                             CategoryName = categoryTranslations.Name,
+                            CategoryNameSuggest = new CompletionField
+                            {
+                                Input = categoryTranslations.Name.Split(' '),
+                                Contexts = new Dictionary<string, IEnumerable<string>>
+                                {
+                                    {
+                                        "isActive",
+                                        new[] { product.Category.IsActive.ToString() }
+                                    }
+                                }
+                            },
                             SellerId = product.Brand.SellerId,
                             BrandName = product.Brand.Name,
                             BrandNameSuggest = new CompletionField
