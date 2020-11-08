@@ -159,6 +159,10 @@ spec:
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
+        - name: IsMarketplace
+          value: {{ .Values.isMarketplace }}
+        - name: OrganisationId
+          value: {{ .Values.organisationId }}
         - name: ServerSideRenderingEndpoint
           value: {{ .Values.serverSideRenderingEndpoint }}
         - name: CatalogUrl

@@ -1,5 +1,5 @@
 ﻿using Buyer.Web.Areas.Products.ApiResponseModels;
-using Buyer.Web.Areas.Products.DomainModels;
+using Buyer.Web.Shared.Brands.DomainModels;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Definitions;
 using Foundation.ApiExtensions.Communications;

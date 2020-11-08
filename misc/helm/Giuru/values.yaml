@@ -3,6 +3,8 @@
 # Declare variables to be passed into your templates.
 environment: "#{Environment}#"
 nodeEnvironment: "#{NodeEnvironment}#"
+isMarketplace: "#{IsMarketplace}#"
+organisationId: "#{OrganisationId}#"
 serverSideRenderingEndpoint: "#{ServerSideRenderingEndpoint}#"
 identityUrl: "#{IdentityUrl}#"
 mediaUrl: "#{MediaUrl}#"

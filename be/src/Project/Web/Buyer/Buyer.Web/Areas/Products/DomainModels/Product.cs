@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Buyer.Web.Areas.Products.DomainModels
+namespace Buyer.Web.Shared.Brands.DomainModels
 {
     public class Product
     {

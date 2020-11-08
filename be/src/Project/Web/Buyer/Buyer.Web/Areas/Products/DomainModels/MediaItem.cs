@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Buyer.Web.Areas.Products.DomainModels
+namespace Buyer.Web.Shared.Brands.DomainModels
 {
     public class MediaItem
     {

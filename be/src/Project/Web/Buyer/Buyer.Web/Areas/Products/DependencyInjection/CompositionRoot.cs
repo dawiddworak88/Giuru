@@ -3,7 +3,7 @@ using Buyer.Web.Areas.Products.ModelBuilders.Brands;
 using Buyer.Web.Areas.Products.ModelBuilders.Categories;
 using Buyer.Web.Areas.Products.ModelBuilders.Products;
 using Buyer.Web.Areas.Products.ModelBuilders.SearchProducts;
-using Buyer.Web.Areas.Products.Repositories.Brands;
+using Buyer.Web.Shared.Brands.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Categories;
 using Buyer.Web.Areas.Products.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Products;

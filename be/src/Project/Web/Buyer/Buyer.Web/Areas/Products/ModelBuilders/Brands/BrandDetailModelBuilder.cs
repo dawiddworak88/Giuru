@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Products.Repositories.Brands;
+﻿using Buyer.Web.Shared.Brands.Repositories;
 using Buyer.Web.Areas.Products.ViewModels.Brands;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Files.ComponentModels;
