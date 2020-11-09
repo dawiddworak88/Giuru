@@ -41,15 +41,43 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     IsActive = false
                 };
 
-                var productBreadcrumb = new BreadcrumbViewModel
-                { 
-                    Name = product.Name,
-                    Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.Id }),
-                    IsActive = true
-                };
-
                 viewModel.Items.Add(categoryBreadcrumb);
-                viewModel.Items.Add(productBreadcrumb);
+
+                if (product.PrimaryProductId.HasValue)
+                {
+                    var primaryProduct = await this.productsRepository.GetProductAsync(product.PrimaryProductId.Value, componentModel.Language, componentModel.Token);
+
+                    if (primaryProduct != null)
+                    {
+                        var primaryProductBreadcrumb = new BreadcrumbViewModel
+                        {
+                            Name = primaryProduct.Name,
+                            Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, primaryProduct.Id }),
+                            IsActive = false
+                        };
+
+                        var secondaryProductBreadcrumb = new BreadcrumbViewModel
+                        {
+                            Name = $"{product.Name} ({product.Sku})",
+                            Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
+                            IsActive = true
+                        };
+
+                        viewModel.Items.Add(primaryProductBreadcrumb);
+                        viewModel.Items.Add(secondaryProductBreadcrumb);
+                    }
+                }
+                else
+                {
+                    var productBreadcrumb = new BreadcrumbViewModel
+                    {
+                        Name = product.Name,
+                        Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
+                        IsActive = true
+                    };
+
+                    viewModel.Items.Add(productBreadcrumb);
+                }
             }
 
             return viewModel;
