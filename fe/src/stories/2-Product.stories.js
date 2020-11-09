@@ -1,7 +1,7 @@
 import React from "react";
 import "../project/AspNetCore/areas/Products/pages/ProductPage/ProductPage.scss";
 import ProductPage from "../project/AspNetCore/areas/Products/pages/ProductPage/ProductPage";
-import { header, mainNavigation, files, footer } from "./Shared/AspNetCoreProps";
+import { header, breadcrumbs, mainNavigation, files, footer } from "./Shared/AspNetCoreProps";
 
 const images = [
   {
@@ -58,7 +58,7 @@ var productDetail = {
     files
 };
 
-export const ProductPageStory = () => <ProductPage header={header} mainNavigation={mainNavigation} productDetail={productDetail} footer={footer} />
+export const ProductPageStory = () => <ProductPage header={header} breadcrumbs={breadcrumbs} mainNavigation={mainNavigation} productDetail={productDetail} footer={footer} />
 
 ProductPageStory.story = {
   name: "Product Page",

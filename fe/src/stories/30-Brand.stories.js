@@ -1,7 +1,7 @@
 import React from "react";
 import "../project/AspNetCore/areas/Products/pages/BrandPage/BrandPage.scss";
 import BrandPage from "../project/AspNetCore/areas/Products/pages/BrandPage/BrandPage";
-import { header, mainNavigation, files, footer } from "./Shared/AspNetCoreProps";
+import { header, mainNavigation, breadcrumbs, files, footer } from "./Shared/AspNetCoreProps";
 
 function getItems(length) {
 
@@ -49,7 +49,7 @@ var brandDetail = {
     files
 };
 
-export const BrandPageStory = () => <BrandPage header={header} mainNavigation={mainNavigation} brandDetail={brandDetail} catalog={catalog} footer={footer} />
+export const BrandPageStory = () => <BrandPage header={header} mainNavigation={mainNavigation} breadcrumbs={breadcrumbs} brandDetail={brandDetail} catalog={catalog} footer={footer} />
 
 BrandPageStory.story = {
   name: "Brand Page",

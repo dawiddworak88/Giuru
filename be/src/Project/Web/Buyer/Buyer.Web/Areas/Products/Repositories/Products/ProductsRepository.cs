@@ -124,6 +124,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             return new Product
             {
                 Id = productResponse.Id,
+                PrimaryProductId = productResponse.PrimaryProductId,
                 Sku = productResponse.Sku,
                 Name = productResponse.Name,
                 Description = productResponse.Description,

@@ -8,6 +8,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Categories
     {
         public BuyerHeaderViewModel Header { get; set; }
         public MainNavigationViewModel MainNavigation { get; set; }
+        public CategoryBreadcrumbsViewModel Breadcrumbs { get; set; }
         public CategoryCatalogViewModel Catalog { get; set; }
         public FooterViewModel Footer { get; set; }
     }

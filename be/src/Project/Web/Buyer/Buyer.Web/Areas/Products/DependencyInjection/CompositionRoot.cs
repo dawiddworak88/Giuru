@@ -36,6 +36,9 @@ namespace Buyer.Web.Areas.Products.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel>, ProductPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel>, ProductDetailModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BrandCatalogViewModel>, BrandCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BrandBreadcrumbsViewModel>, BrandBreadcrumbsModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CategoryBreadcrumbsViewModel>, CategoryBreadcrumbsModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductBreadcrumbsViewModel>, ProductBreadcrumbsModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BrandDetailViewModel>, BrandDetailModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BrandPageViewModel>, BrandPageModelBuilder>();
         }

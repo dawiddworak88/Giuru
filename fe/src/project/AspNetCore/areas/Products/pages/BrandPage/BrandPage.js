@@ -8,6 +8,7 @@ import MainNavigation from "../../../../shared/components/MainNavigation/MainNav
 import BrandDetail from "../../components/BrandDetail/BrandDetail";
 import Catalog from "../../../../shared/components/Catalog/Catalog";
 import Footer from "../../../../../../shared/components/Footer/Footer";
+import Breadcrumbs from "../../../../shared/components/Breadcrumb/Breadcrumbs";
 
 function BrandPage(props) {
 
@@ -19,6 +20,7 @@ function BrandPage(props) {
         <div className="brand-page">
           <Header {...props.header}></Header>
           <MainNavigation {...props.mainNavigation}></MainNavigation>
+          <Breadcrumbs {...props.breadcrumbs}></Breadcrumbs>
           <BrandDetail {...props.brandDetail}></BrandDetail>
           <Catalog {...props.catalog}></Catalog>
           <Footer {...props.footer}></Footer>

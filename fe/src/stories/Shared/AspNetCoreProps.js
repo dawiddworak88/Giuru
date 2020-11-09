@@ -1,7 +1,8 @@
 export var header = {
   logo: {
     targetUrl: "/",
-    logoAltLabel: "Logo"
+    logoAltLabel: "Logo",
+    logoUrl: "https://media.eltap.com/api/v1/files/85b14b09-856d-4fd0-8af4-7c077953b214?o=true"
   },
   languageSwitcher: {
     availableLanguages: [
@@ -20,6 +21,7 @@ export var header = {
     ],
     selectedLanguageUrl: "/en"
   },
+  searchTerm: "",
   searchUrl: "#",
   searchLabel: "Search",
   searchPlaceholderLabel: "Search",
@@ -28,6 +30,26 @@ export var header = {
     text: "Sign in"
   }
 };
+
+export var breadcrumbs = {
+  items: [
+    {
+      url: "#",
+      name: "Home",
+      isActive: false
+    },
+    {
+      url: "#",
+      name: "Corners",
+      isActive: false
+    },
+    {
+      url: "#",
+      name: "Mounting Dream Tilt TV Wall",
+      isActive: true
+    }
+  ]
+}
 
 export var mainNavigation = {
   links: [

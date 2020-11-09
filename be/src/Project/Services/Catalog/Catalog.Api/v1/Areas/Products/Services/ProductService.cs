@@ -190,6 +190,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
             return new ProductResultModel
             {
                 Id = searchResultItem.ProductId,
+                PrimaryProductId = searchResultItem.PrimaryProductId,
                 Images = searchResultItem.Images,
                 Files = searchResultItem.Files,
                 Videos = searchResultItem.Videos,
