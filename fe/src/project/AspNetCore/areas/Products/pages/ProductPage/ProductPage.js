@@ -7,6 +7,7 @@ import Header from "../../../../shared/components/Header/Header";
 import MainNavigation from "../../../../shared/components/MainNavigation/MainNavigation";
 import ProductDetail from "../../components/ProductDetail/ProductDetail";
 import Footer from "../../../../../../shared/components/Footer/Footer";
+import Breadcrumbs from "../../../../shared/components/Breadcrumb/Breadcrumbs";
 
 function ProductPage(props) {
 
@@ -18,6 +19,7 @@ function ProductPage(props) {
         <div className="category-page">
           <Header {...props.header}></Header>
           <MainNavigation {...props.mainNavigation}></MainNavigation>
+          <Breadcrumbs {...props.breadcrumbs}></Breadcrumbs>
           <ProductDetail {...props.productDetail}></ProductDetail>
           <Footer {...props.footer}></Footer>
         </div>

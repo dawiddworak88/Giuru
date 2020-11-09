@@ -78,7 +78,7 @@ function Header(props) {
 
     const onSuggestionSelected = (event, { suggestion }) => {
 
-        NavigationHelper.redirect(props.searchUrl + "?" + "searchTerm=" + encodeURI(suggestion));
+        NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(suggestion));
     }
 
     const onSearchSubmit = (e) => {
@@ -87,7 +87,7 @@ function Header(props) {
 
         if (searchTerm && searchTerm.length >= HeaderConstants.minSearchTermLength()) {
 
-            NavigationHelper.redirect(props.searchUrl + "?" + "searchTerm=" + encodeURI(searchTerm));
+            NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(searchTerm));
         }
     }
 

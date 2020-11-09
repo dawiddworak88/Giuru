@@ -7,6 +7,7 @@ import Header from "../../../../shared/components/Header/Header";
 import MainNavigation from "../../../../shared/components/MainNavigation/MainNavigation";
 import Catalog from "../../../../shared/components/Catalog/Catalog";
 import Footer from "../../../../../../shared/components/Footer/Footer";
+import Breadcrumbs from "../../../../shared/components/Breadcrumb/Breadcrumbs";
 
 function CategoryPage(props) {
 
@@ -18,6 +19,7 @@ function CategoryPage(props) {
         <div className="category-page">
           <Header {...props.header}></Header>
           <MainNavigation {...props.mainNavigation}></MainNavigation>
+          <Breadcrumbs {...props.breadcrumbs}></Breadcrumbs>
           <Catalog {...props.catalog}></Catalog>
           <Footer {...props.footer}></Footer>
         </div>

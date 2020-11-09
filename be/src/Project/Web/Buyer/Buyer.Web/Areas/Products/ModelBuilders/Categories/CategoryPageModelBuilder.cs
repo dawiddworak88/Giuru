@@ -13,17 +13,20 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
     {
         private readonly IModelBuilder<BuyerHeaderViewModel> headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryBreadcrumbsViewModel> categoryBreadcrumbsModelBuilder;
         private readonly IAsyncComponentModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel> categoryCatalogModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public CategoryPageModelBuilder(
             IModelBuilder<BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, CategoryBreadcrumbsViewModel> categoryBreadcrumbsModelBuilder,
             IAsyncComponentModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel> categoryCatalogModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.mainNavigationModelBuilder = mainNavigationModelBuilder;
+            this.categoryBreadcrumbsModelBuilder = categoryBreadcrumbsModelBuilder;
             this.categoryCatalogModelBuilder = categoryCatalogModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
         }
@@ -34,7 +37,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
             var viewModel = new CategoryPageViewModel
             {
                 Header = headerModelBuilder.BuildModel(),
-                MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(new ComponentModelBase { Id = componentModel.Id, Token = componentModel.Token, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language }),
+                MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
+                Breadcrumbs = await this.categoryBreadcrumbsModelBuilder.BuildModelAsync(componentModel),
                 Catalog = await this.categoryCatalogModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };

@@ -13,7 +13,7 @@ function ProductDetail(props) {
                 <div className="column is-6">
                     {props.images && props.images.length &&
                         <div className="product-detail__image-gallery">
-                            <ImageGallery  items={props.images} />
+                            <ImageGallery items={props.images} />
                         </div>
                     }
                 </div>

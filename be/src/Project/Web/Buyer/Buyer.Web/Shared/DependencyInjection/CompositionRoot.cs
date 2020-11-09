@@ -16,6 +16,7 @@ using Buyer.Web.Shared.Catalogs.ModelBuilders;
 using Buyer.Web.Shared.Files.ComponentModels;
 using Buyer.Web.Shared.Files.ViewModels;
 using Buyer.Web.Shared.Files.ModelBuilders;
+using Buyer.Web.Shared.Breadcrumbs.ModelBuilders;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -28,6 +29,7 @@ namespace Buyer.Web.Shared.DependencyInjection
 
             // Model Builders
             services.AddScoped(typeof(ICatalogModelBuilder<,>), typeof(CatalogModelBuilder<,>));
+            services.AddScoped(typeof(IBreadcrumbsModelBuilder<,>), typeof(BreadcrumbsModelBuilder<,>));
             services.AddScoped<IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel>, FilesModelBuilder>();
             services.AddScoped<IModelBuilder<BuyerHeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>, MainNavigationModelBuilder>();

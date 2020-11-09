@@ -72,4 +72,8 @@
 
 .image-gallery-image {
     min-height: 446px;
+
+    @media only screen and (max-width: $tablet) {
+        min-height: 300px;
+    }
 }
