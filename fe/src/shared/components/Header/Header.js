@@ -1,10 +1,54 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
+import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import ListItem from '@material-ui/core/ListItem';
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import ColorConstants from "../../constants/ColorConstants";
+import * as Icon from "react-feather";
+
+const useStyles = makeStyles({
+    drawerStyles: {
+        width: '63px',
+        borderRadius: '0'
+    },
+    fullList: {
+      width: 'auto'
+    },
+    darkMenuColor: {
+        color: ColorConstants.swampColor()
+    }
+  });
 
 function Header(props) {
 
     const [isActive, setIsActive] = useState(false);
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(false);
+
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    };
+
+    const handleDrawerClose = () => {
+        setOpen(false);
+    };
+
+    const ListIcon = (name) => {
+        
+        const IconTag = Icon[name];
+
+        return (
+            <IconTag color={ColorConstants.swampColor()} />
+        );
+    };
 
     const links = props.links.map((link, index) => <a key={index} className="navbar-item" href={link.url}>{link.text}</a>);
 
@@ -12,6 +56,41 @@ function Header(props) {
         <header>
             <nav className="navbar is-spaced">
                 <div className="navbar-brand">
+                    {props.drawerMenuCategories &&
+                        <Fragment>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                edge="start"
+                                className={clsx(classes.menuButton, classes.drawerStyles, open && classes.hide)}>
+                                <MenuIcon />
+                            </IconButton>
+                            <Drawer anchor="top" open={open} onClose={handleDrawerClose}>
+                                <div
+                                    className={clsx(classes.fullList, classes.darkMenuColor)}
+                                    role="presentation"
+                                    onClick={handleDrawerOpen}
+                                    onKeyDown={handleDrawerOpen}>
+                                        {props.drawerMenuCategories.map((category) => (
+                                        <Fragment key={category.title}>
+                                            <List>
+                                                {category.items.map((item) => (
+                                                <a href={item.url}>
+                                                    <ListItem selected={item.isActive} button key={item.title}>
+                                                        <ListItemIcon>{ListIcon(item.icon)}</ListItemIcon>
+                                                        <ListItemText primary={item.title} />
+                                                    </ListItem>
+                                                </a>
+                                                ))}
+                                            </List>
+                                            <Divider />
+                                        </Fragment>
+                                        ))}
+                                </div>
+                            </Drawer>
+                        </Fragment>
+                    }
                     <a href={props.logo.targetUrl}>
                         <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} />
                     </a>
@@ -38,7 +117,8 @@ function Header(props) {
 
 Header.propTypes = {
     logo: PropTypes.object.isRequired,
-    links: PropTypes.array.isRequired
+    links: PropTypes.array.isRequired,
+    drawerMenuCategories: PropTypes.array.isRequired
 };
 
 export default Header;
