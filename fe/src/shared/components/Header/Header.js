@@ -15,17 +15,18 @@ import ColorConstants from "../../constants/ColorConstants";
 import * as Icon from "react-feather";
 
 const useStyles = makeStyles({
-    drawerStyles: {
-        width: '63px',
-        borderRadius: '0'
-    },
     fullList: {
-      width: 'auto'
+        width: 'auto'
     },
     darkMenuColor: {
         color: ColorConstants.swampColor()
     }
-  });
+});
+
+const drawerStyles = {
+    width: '63px',
+    borderRadius: 0
+};
 
 function Header(props) {
 
@@ -42,7 +43,7 @@ function Header(props) {
     };
 
     const ListIcon = (name) => {
-        
+
         const IconTag = Icon[name];
 
         return (
@@ -63,7 +64,8 @@ function Header(props) {
                                 aria-label="open drawer"
                                 onClick={handleDrawerOpen}
                                 edge="start"
-                                className={clsx(classes.menuButton, classes.drawerStyles, open && classes.hide)}>
+                                style={drawerStyles}
+                                className={clsx(classes.menuButton, open && classes.hide)}>
                                 <MenuIcon />
                             </IconButton>
                             <Drawer anchor="top" open={open} onClose={handleDrawerClose}>
@@ -72,21 +74,21 @@ function Header(props) {
                                     role="presentation"
                                     onClick={handleDrawerOpen}
                                     onKeyDown={handleDrawerOpen}>
-                                        {props.drawerMenuCategories.map((category) => (
+                                    {props.drawerMenuCategories.map((category) => (
                                         <Fragment key={category.title}>
                                             <List>
                                                 {category.items.map((item) => (
-                                                <a href={item.url}>
-                                                    <ListItem selected={item.isActive} button key={item.title}>
-                                                        <ListItemIcon>{ListIcon(item.icon)}</ListItemIcon>
-                                                        <ListItemText primary={item.title} />
-                                                    </ListItem>
-                                                </a>
+                                                    <a href={item.url}>
+                                                        <ListItem selected={item.isActive} button key={item.title}>
+                                                            <ListItemIcon>{ListIcon(item.icon)}</ListItemIcon>
+                                                            <ListItemText primary={item.title} />
+                                                        </ListItem>
+                                                    </a>
                                                 ))}
                                             </List>
                                             <Divider />
                                         </Fragment>
-                                        ))}
+                                    ))}
                                 </div>
                             </Drawer>
                         </Fragment>
