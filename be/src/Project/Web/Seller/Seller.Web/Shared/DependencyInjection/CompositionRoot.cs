@@ -8,6 +8,9 @@ using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Seller.Web.Shared.Configurations;
+using System.Collections.Generic;
+using Foundation.PageContent.Components.DrawerMenu.ViewModels;
+using Seller.Web.Shared.DrawerMenu.ModelBuilders;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -17,6 +20,7 @@ namespace Seller.Web.Shared.DependencyInjection
         {
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IModelBuilder<MenuTilesViewModel>, MenuTilesModelBuilder>();
+            services.AddScoped<IModelBuilder<IEnumerable<DrawerMenuViewModel>>, DrawerMenuModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
         }
