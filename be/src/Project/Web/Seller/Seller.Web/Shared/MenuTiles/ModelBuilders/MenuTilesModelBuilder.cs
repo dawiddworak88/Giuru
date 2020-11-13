@@ -31,25 +31,31 @@ namespace Seller.Web.Shared.MenuTiles.ModelBuilders
                     new MenuTileViewModel
                     {
                         Icon = IconsConstants.ShoppingCart,
-                        Title = this.globalLocalizer["Orders"],
-                        Url = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                        Title = this.globalLocalizer.GetString("Orders"),
+                        Url = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
                     },
                     new MenuTileViewModel
                     {
                         Icon = IconsConstants.Package,
-                        Title = this.globalLocalizer["Products"],
-                        Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                        Title = this.globalLocalizer.GetString("Products"),
+                        Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                    },
+                    new MenuTileViewModel
+                    {
+                        Icon = IconsConstants.Grid,
+                        Title = this.globalLocalizer.GetString("Categories"),
+                        Url = "#"
                     },
                     new MenuTileViewModel
                     {
                         Icon = IconsConstants.Users,
-                        Title = this.globalLocalizer["Clients"],
-                        Url = this.linkGenerator.GetPathByAction("Index", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                        Title = this.globalLocalizer.GetString("Clients"),
+                        Url = this.linkGenerator.GetPathByAction("Index", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                     },
                     new MenuTileViewModel
                     {
                         Icon = IconsConstants.Settings,
-                        Title = this.globalLocalizer["Settings"],
+                        Title = this.globalLocalizer.GetString("Settings"),
                         Url = "#"
                     }
                 }
