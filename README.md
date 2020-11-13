@@ -6,7 +6,7 @@ Giuru is a user-friendly, fast and complete B2B Commerce that connects with your
 
 ### Prerequisites
 
-* **[.NET Core 3.1.9](https://dotnet.microsoft.com/download/dotnet-core/3.1):** download and install the latest version
+* **[.NET Core 3.1.10](https://dotnet.microsoft.com/download/dotnet-core/3.1):** download and install the latest version
 * **[Node.js](https://nodejs.org/en/download/):** download and install the latest LTS version
 * **[Docker](http://hub.docker.com/):** to run ASP.NET Core web app, Node for SSR and Storybook in containers. Download and install the latest version
 
