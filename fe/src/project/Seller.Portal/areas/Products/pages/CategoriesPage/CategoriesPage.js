@@ -9,7 +9,7 @@ import Footer from "../../../../../../shared/components/Footer/Footer";
 import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
 import Catalog from "../../../../shared/components/Catalog/Catalog";
 
-function ProductPage(props) {
+function CategoriesPage(props) {
 
   toast.configure();
 
@@ -29,4 +29,4 @@ function ProductPage(props) {
   );
 }
 
-export default ProductPage;
+export default CategoriesPage;

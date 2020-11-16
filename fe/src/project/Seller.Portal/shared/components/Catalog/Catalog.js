@@ -1,0 +1,305 @@
+
+import React, { useContext } from "react";
+import { toast } from "react-toastify";
+import moment from "moment";
+import Fab from "@material-ui/core/Fab";
+import { Plus } from "react-feather";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
+import {
+    Button, TextField, Table, TableBody, TableCell, TableContainer,
+    TableHead, TableRow, Paper, TablePagination, CircularProgress,
+    Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
+} from "@material-ui/core";
+import FetchErrorHandler from "../../../../../shared/helpers/errorHandlers/FetchErrorHandler";
+import KeyConstants from "../../../../../shared/constants/KeyConstants";
+import { Context } from "../../../../../shared/stores/Store";
+import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
+import PaginationConstants from "../../../../../shared/constants/PaginationConstants";
+
+function Catalog(props) {
+
+    const [state, dispatch] = useContext(Context);
+    const [page, setPage] = React.useState(0);
+    const [itemsPerPage,] = React.useState(PaginationConstants.defaultRowsPerPage());
+    const [searchTerm, setSearchTerm] = React.useState("");
+    const [items, setItems] = React.useState(props.pagedItems.data);
+    const [total, setTotal] = React.useState(props.pagedItems.total);
+    const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+    const [entityToDelete, setEntityToDelete] = React.useState(null);
+
+    const handleSearchTermKeyPress = (event) => {
+
+        if (event.key === KeyConstants.enter()) {
+            search();
+        }
+    };
+
+    const handleOnChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    const handleChangePage = (event, newPage) => {
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        setPage(() => newPage);
+
+        const searchParameters = {
+
+            searchTerm,
+            pageIndex: newPage + 1,
+            itemsPerPage
+        };
+
+        const requestOptions = {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+        };
+
+        const url = props.searchApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+
+        return fetch(url, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                FetchErrorHandler.handleUnauthorizedResponse(response);
+
+                return response.json().then(jsonResponse => {
+
+                    if (response.ok) {
+
+                        setItems(() => []);
+                        setItems(() => jsonResponse.data.pagedItems.data);
+                        setTotal(() => jsonResponse.data.pagedItems.total);
+                    }
+                    else {
+                        FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(error => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    };
+
+    const search = () => {
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const searchParameters = {
+
+            searchTerm,
+            pageIndex: 1,
+            itemsPerPage
+        };
+
+        const requestOptions = {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+        };
+
+        const url = props.searchApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+
+        return fetch(url, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                FetchErrorHandler.handleUnauthorizedResponse(response);
+
+                return response.json().then(jsonResponse => {
+
+                    if (response.ok) {
+
+                        setPage(() => 0);
+
+                        setItems(() => []);
+                        setItems(() => jsonResponse.data.pagedItems.data);
+                        setTotal(() => jsonResponse.data.pagedItems.total);
+                    }
+                    else {
+                        FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(error => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    };
+
+    const handleDeleteClick = (item) => {
+        setEntityToDelete(() => item);
+        setOpenDeleteDialog(() => true);
+    };
+
+    const handleDeleteDialogClose = () => {
+        setOpenDeleteDialog(() => false);
+        setEntityToDelete(() => null);
+    };
+
+    const handleDeleteEntity = () => {
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const deleteParameters = {
+
+            id: entityToDelete.id
+        };
+
+        const requestOptions = {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" }
+        };
+
+        const url = props.deleteApiUrl + "?" + QueryStringSerializer.serialize(deleteParameters);
+
+        return fetch(url, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                FetchErrorHandler.handleUnauthorizedResponse(response);
+
+                return response.json().then(jsonResponse => {
+
+                    if (response.ok) {
+
+                        toast.success(jsonResponse.message);
+                        setItems(() => items.filter(item => item.id !== entityToDelete.id));
+                        setTotal(() => total - 1);
+                        setOpenDeleteDialog(() => false);
+                        setEntityToDelete(() => null);
+                    }
+                    else {
+                        FetchErrorHandler.consoleLogResponseDetails(url, response, jsonResponse);
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(error => {
+                console.log(error);
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    };
+
+    return (
+        <section className="section section-small-padding catalog">
+            <h1 className="subtitle is-4">{props.title}</h1>
+            <div>
+              {props.newUrl &&
+                <a href={props.newUrl} className="button is-primary">
+                  <span className="icon">
+                    <Plus />
+                  </span>
+                  <span>
+                    {props.newText}
+                  </span>
+                </a>
+              }
+            </div>
+            <div>
+                <div className="catalog__search is-flex-centered">
+                    <TextField id="search" name="search" value={searchTerm} onChange={handleOnChange} onKeyPress={handleSearchTermKeyPress} className="catalog__search-field" label={props.searchLabel} type="search" autoComplete="off" />
+                    <Button onClick={search} type="button" variant="contained" color="primary">
+                        {props.searchLabel}
+                    </Button>
+                </div>
+                {(items && items.length > 0 && props.table) ?
+                    (<div className="table-container">
+                        <div className="catalog__table">
+                            <TableContainer component={Paper}>
+                                <Table aria-label={props.title}>
+                                    <TableHead>
+                                        <TableRow>
+                                            {props.table.actions &&
+                                                <TableCell width="11%"></TableCell>
+                                            }
+                                            {props.table.labels.map((item, index) =>
+                                                <TableCell key={item.title}>{item.title}</TableCell>
+                                            )}
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {items.map((item) => (
+                                            <TableRow key={item.name}>
+                                                {props.table.actions &&
+                                                    <TableCell width="11%">
+                                                        {props.table.actions.map((item) => {
+                                                            if (item.isEdit) return (
+                                                                <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel}>
+                                                                    <EditIcon />
+                                                                </Fab>)
+                                                            else if (item.isDelete) return (
+                                                                <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
+                                                                    <DeleteIcon />
+                                                                </Fab>)
+                                                            else return (
+                                                                <div></div>)})}
+                                                    </TableCell>
+                                                }
+
+                                                {props.table.properties && props.table.properties.map((property) => {
+
+                                                    if (property.isDateTime) return (
+                                                        <TableCell>{moment(item[property.title]).local().format("L LT")}</TableCell>
+                                                    )
+                                                    else {
+                                                        return (
+                                                            <TableCell>{item[property.title]}</TableCell>
+                                                        )}})}
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </div>
+                        <div className="catalog__pagination is-flex-centered">
+                            <TablePagination
+                                labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
+                                labelRowsPerPage={props.rowsPerPageLabel}
+                                backIconButtonText={props.backIconButtonText}
+                                nextIconButtonText={props.nextIconButtonText}
+                                rowsPerPageOptions={[PaginationConstants.defaultRowsPerPage()]}
+                                component="div"
+                                count={total}
+                                page={page}
+                                onChangePage={handleChangePage}
+                                rowsPerPage={PaginationConstants.defaultRowsPerPage()}
+                            />
+                        </div>
+                    </div>) :
+                    (<section className="section is-flex-centered">
+                        <span className="is-title is-5">{props.noResultsLabel}</span>
+                    </section>)
+                }
+                <Dialog
+                    open={openDeleteDialog}
+                    onClose={handleDeleteDialogClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description">
+                    <DialogTitle id="alert-dialog-title">{props.deleteConfirmationLabel}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {props.areYouSureLabel}: {entityToDelete ? entityToDelete.name : ""}?
+                    </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleDeleteDialogClose} color="primary">
+                            {props.noLabel}
+                        </Button>
+                        <Button disabled={state.isLoading} onClick={handleDeleteEntity} color="primary" autoFocus>
+                            {props.yesLabel}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                {state.isLoading && <CircularProgress className="progressBar" />}
+            </div>
+        </section>
+    );
+}
+
+export default Catalog;
