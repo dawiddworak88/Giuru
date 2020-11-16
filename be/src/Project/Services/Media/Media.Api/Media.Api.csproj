@@ -25,9 +25,22 @@
     <None Remove="Infrastructure\Media\Seeds\Images\Categories\Sets.jpg" />
     <None Remove="Infrastructure\Media\Seeds\Images\Headers\favicon.png" />
     <None Remove="Infrastructure\Media\Seeds\Images\Headers\logo.png" />
-    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Bedroom.jpg" />
-    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\KidsRoom.jpg" />
-    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\LivingRoom.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings_1024x400.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings_1600x400.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings_414x286.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs_1024x400.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs_1600x400.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs_414x286.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Corners.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Corners_1024x400.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Corners_1600x400.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Corners_414x286.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Sets.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Sets_1024x400.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Sets_1600x400.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Sets_414x286.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -58,13 +71,50 @@
     <Content Include="Infrastructure\Media\Seeds\Images\Headers\logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Bedroom.jpg">
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings_1024x400.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\KidsRoom.jpg">
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\LivingRoom.jpg">
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings_1600x400.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings_414x286.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs.jpg" />
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs_1024x400.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs_1600x400.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs_414x286.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Corners.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Corners_1024x400.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Corners_1600x400.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Corners_414x286.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Sets.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Sets_1024x400.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Sets_1600x400.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Sets_414x286.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

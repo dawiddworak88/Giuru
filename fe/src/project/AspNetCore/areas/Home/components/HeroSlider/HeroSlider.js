@@ -3,19 +3,21 @@ import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
 import { Carousel } from "react-responsive-carousel";
 import LazyLoadConstants from "../../../../../../shared/constants/LazyLoadConstants";
+import ResponsiveImage from "../../../../../../shared/components/Picture/ResponsiveImage";
 
 function HeroSlider(props) {
 
     if (props.items) {
 
         return (
-            <section className="section pb-0 is-flex is-flex-centered is-desktop is-grey-background is-hidden-touch">
+            <div>
                 <Carousel className="hero-slider" autoPlay={true} showArrows={true} showThumbs={false} useKeyboardArrows={false} dynamicHeight={false} showStatus={false} swipeable={true}>
                     {props.items.map((item, index) =>
                         <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
                             <div className="hero-slider__item" key={index}>
+                                    <ResponsiveImage {...item.image} />
                                     <img src={item.imageSrc} alt={item.imageAlt} title={item.imageTitle} />
-                                {item.teaserTitle &&
+                                    {item.teaserTitle &&
                                     <div className="hero-slider__teaser">
                                         <div className="hero-slider__teaser-title title is-5 has-text-white">
                                             {item.teaserTitle}
@@ -36,7 +38,7 @@ function HeroSlider(props) {
                         </LazyLoad>
                     )}
                 </Carousel>
-            </section>
+            </div>
         );
     }
 
