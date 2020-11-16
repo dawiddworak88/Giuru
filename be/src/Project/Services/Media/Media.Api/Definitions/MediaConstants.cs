@@ -22,17 +22,69 @@ namespace Media.Api.Definitions
 
         public struct HeroSliderItems
         {
-            public static readonly Guid LivingRoomMediaId = Guid.Parse("c6c96ab8-a81f-446f-adc2-d375479ece98");
-            public static readonly Guid LivingRoomMediaVersionId = Guid.Parse("c5fb5a7c-6cc0-4cde-8998-ff1d397f1874");
-            public static readonly string LivingRoomMediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/LivingRoom.jpg";
+            public static readonly Guid BoxspringsMediaId = Guid.Parse("3d206600-4d0d-4bb0-880a-90ba85bbaeb5");
+            public static readonly Guid BoxspringsMediaVersionId = Guid.Parse("9896ad51-e2e3-42f7-9c1e-fbfba9de117e");
+            public static readonly string BoxspringsMediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Boxsprings.jpg";
 
-            public static readonly Guid BedroomMediaId = Guid.Parse("01bfe732-cfca-4cdf-a740-9f8e1ba0a537");
-            public static readonly Guid BedroomMediaVersionId = Guid.Parse("f6030dbf-3eaf-4e2a-b2dd-6ee3c53b67ff");
-            public static readonly string BedroomMediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Bedroom.jpg";
+            public static readonly Guid Boxsprings1600x400MediaId = Guid.Parse("126332f9-37d1-4ded-b05a-65c488350e67");
+            public static readonly Guid Boxsprings1600x400MediaVersionId = Guid.Parse("5f731b13-ebfd-4efd-b7e7-83988472c2e4");
+            public static readonly string Boxsprings1600x400MediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Boxsprings_1600x400.jpg";
 
-            public static readonly Guid KidsRoomMediaId = Guid.Parse("3c57aa8e-c54a-4571-8112-936d75331657");
-            public static readonly Guid KidsRoomMediaVersionId = Guid.Parse("f3dc4359-96b4-46f6-aa66-d8f3c3d1c808");
-            public static readonly string KidsRoomMediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/KidsRoom.jpg";
+            public static readonly Guid Boxsprings1024x400MediaId = Guid.Parse("3053043d-d667-40b7-bd8c-357e9456d5e5");
+            public static readonly Guid Boxsprings1024x400MediaVersionId = Guid.Parse("bd6d68b4-f6ea-4946-a6d4-aa500446ae8e");
+            public static readonly string Boxsprings1024x400MediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Boxsprings_1024x400.jpg";
+
+            public static readonly Guid Boxsprings414x286MediaId = Guid.Parse("57c78fa6-a09d-4ce3-bd6a-e000552de03b");
+            public static readonly Guid Boxsprings414x286MediaVersionId = Guid.Parse("0f0ea16a-88b1-4b36-b3dc-326bdb9b6bf4");
+            public static readonly string Boxsprings414x286MediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Boxsprings_414x286.jpg";
+
+            public static readonly Guid ChairsMediaId = Guid.Parse("09e85fba-f63a-45e2-87ab-12e3b78ed650");
+            public static readonly Guid ChairsMediaVersionId = Guid.Parse("e8c3b904-7dc2-43ba-921e-57bed71b471b");
+            public static readonly string ChairsMediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Chairs.jpg";
+
+            public static readonly Guid Chairs1600x400MediaId = Guid.Parse("2733247e-5c04-465e-863f-bc96663f2f5f");
+            public static readonly Guid Chairs1600x400MediaVersionId = Guid.Parse("c4b2bfdb-6b16-41d4-9013-b4bc40847ca1");
+            public static readonly string Chairs1600x400MediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Chairs_1600x400.jpg";
+
+            public static readonly Guid Chairs1024x400MediaId = Guid.Parse("a6c5d04f-a437-4065-89fb-73c8e84c133e");
+            public static readonly Guid Chairs1024x400MediaVersionId = Guid.Parse("e456f423-f615-4ab6-ac8e-bff482d75e94");
+            public static readonly string Chairs1024x400MediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Chairs_1024x400.jpg";
+
+            public static readonly Guid Chairs414x286MediaId = Guid.Parse("cf1dae4a-d093-4f03-aa8b-adc739dd57f9");
+            public static readonly Guid Chairs414x286MediaVersionId = Guid.Parse("2e4d4644-7005-461c-a35c-ebcdaee53522");
+            public static readonly string Chairs414x286MediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Chairs_414x286.jpg";
+
+            public static readonly Guid CornersMediaId = Guid.Parse("19221400-3812-49b6-a8d7-fb8bc8223919");
+            public static readonly Guid CornersMediaVersionId = Guid.Parse("16ae37a9-bff4-41e1-8813-84bb65568028");
+            public static readonly string CornersMediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Corners.jpg";
+
+            public static readonly Guid Corners1600x400MediaId = Guid.Parse("854e6468-1806-497d-a13b-197cc87f6664");
+            public static readonly Guid Corners1600x400MediaVersionId = Guid.Parse("0e522f44-3ca7-4e4c-b6d2-d141ab8bad2f");
+            public static readonly string Corners1600x400MediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Corners_1600x400.jpg";
+
+            public static readonly Guid Corners1024x400MediaId = Guid.Parse("3b15c40e-c907-4c0f-b026-af35b5824167");
+            public static readonly Guid Corners1024x400MediaVersionId = Guid.Parse("8ccc10c2-52f8-4de1-b486-16eae8c1b71d");
+            public static readonly string Corners1024x400MediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Corners_1024x400.jpg";
+
+            public static readonly Guid Corners414x286MediaId = Guid.Parse("a4029144-11b1-4031-8a69-23d288ef84f7");
+            public static readonly Guid Corners414x286MediaVersionId = Guid.Parse("03234f10-c21c-4558-a187-64a4b9443f02");
+            public static readonly string Corners414x286MediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Corners_414x286.jpg";
+
+            public static readonly Guid SetsMediaId = Guid.Parse("4c299e20-c8c5-47e1-bbe3-c308e8bd4478");
+            public static readonly Guid SetsMediaVersionId = Guid.Parse("f2bb7931-13c6-4018-a4cb-a3570c7c6545");
+            public static readonly string SetsMediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Sets.jpg";
+
+            public static readonly Guid Sets1600x400MediaId = Guid.Parse("7eb13893-07e6-44f0-a652-986b96713911");
+            public static readonly Guid Sets1600x400MediaVersionId = Guid.Parse("84164434-f709-42d6-8aa5-6fd8f352e1c6");
+            public static readonly string Sets1600x400MediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Sets_1600x400.jpg";
+
+            public static readonly Guid Sets1024x400MediaId = Guid.Parse("0731bdda-9f91-4616-ac88-3e54be4d1659");
+            public static readonly Guid Sets1024x400MediaVersionId = Guid.Parse("35887bad-7ba4-44ae-a550-3e9b2cf27ae5");
+            public static readonly string Sets1024x400MediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Sets_1024x400.jpg";
+
+            public static readonly Guid Sets414x286MediaId = Guid.Parse("c44e743d-1073-43ac-8be2-09c6e29c0318");
+            public static readonly Guid Sets414x286MediaVersionId = Guid.Parse("0677422f-4955-48c3-b41f-cabc8875596d");
+            public static readonly string Sets414x286MediaUrl = "./Infrastructure/Media/Seeds/Images/HeroSliderItems/Sets_414x286.jpg";
         }
 
         public struct Categories

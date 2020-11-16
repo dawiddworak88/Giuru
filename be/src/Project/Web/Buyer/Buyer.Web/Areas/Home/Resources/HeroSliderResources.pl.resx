@@ -120,8 +120,17 @@
   <data name="Browse" xml:space="preserve">
     <value>Przeglądaj produkty</value>
   </data>
+  <data name="BrowseCorners" xml:space="preserve">
+    <value>Przeglądaj stylowe narożniki</value>
+  </data>
+  <data name="BrowseSets" xml:space="preserve">
+    <value>Przeglądaj zestawy meblowe</value>
+  </data>
   <data name="Discover" xml:space="preserve">
     <value>Odkrywaj produkty</value>
+  </data>
+  <data name="DiscoverBeds" xml:space="preserve">
+    <value>Odkrywaj komfortowe łóżka</value>
   </data>
   <data name="EasyRepurchase" xml:space="preserve">
     <value>Zamawiaj 24/7</value>
@@ -131,6 +140,9 @@
   </data>
   <data name="Shop" xml:space="preserve">
     <value>Zapoznaj się z ofertą</value>
+  </data>
+  <data name="ShopChairs" xml:space="preserve">
+    <value>Kup idealne fotele</value>
   </data>
   <data name="TrackOrders" xml:space="preserve">
     <value>Śledź zamówienia przez Internet</value>

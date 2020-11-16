@@ -120,8 +120,17 @@
   <data name="Browse" xml:space="preserve">
     <value>Browse</value>
   </data>
+  <data name="BrowseCorners" xml:space="preserve">
+    <value>Browse modern sectionals</value>
+  </data>
+  <data name="BrowseSets" xml:space="preserve">
+    <value>Browse best lounge suites</value>
+  </data>
   <data name="Discover" xml:space="preserve">
     <value>Discover</value>
+  </data>
+  <data name="DiscoverBeds" xml:space="preserve">
+    <value>Discover comfortable beds</value>
   </data>
   <data name="EasyRepurchase" xml:space="preserve">
     <value>Easy repurchases 24/7</value>
@@ -131,6 +140,9 @@
   </data>
   <data name="Shop" xml:space="preserve">
     <value>Shop now</value>
+  </data>
+  <data name="ShopChairs" xml:space="preserve">
+    <value>Shop best armchairs</value>
   </data>
   <data name="TrackOrders" xml:space="preserve">
     <value>Track orders online and save time on the phone</value>

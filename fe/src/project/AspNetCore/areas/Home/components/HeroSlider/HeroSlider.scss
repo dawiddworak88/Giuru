@@ -1,9 +1,17 @@
 .hero-slider {
     background-color: $grey;
-    width: 950px;
+    width: 100%;
+
+    .carousel .control-dots {
+        margin: 30px 0;
+    }
+
+    .carousel .slide {
+        background-color: transparent;
+    }
 
     &__item {
-        height: 370px;
+        max-height: 400px;
         position: relative;
     }
 

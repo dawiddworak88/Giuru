@@ -4,6 +4,8 @@ using Foundation.Extensions.ModelBuilders;
 using Foundation.Extensions.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.HeroSliders.ViewModels;
+using Foundation.PageContent.Components.Images;
+using Foundation.PageContent.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -37,33 +39,70 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
 
             var heroSliderItems = new List<HeroSliderItemViewModel>();
 
-            var furnishLivingRoomHeroSliderItem = GetHeroSliderItem(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.LivingRoomMediaId, true),
-                this.heroSliderLocalizer["LowPrices"],
-                this.heroSliderLocalizer["LowPrices"],
-                this.heroSliderLocalizer["LowPrices"],
+            var cornersHeroSliderItem = GetHeroSliderItem(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.CornersMediaId, true),
+                this.heroSliderLocalizer.GetString("BrowseCorners"),
+                this.heroSliderLocalizer.GetString("BrowseCorners"),
+                this.heroSliderLocalizer.GetString("BrowseCorners"),
                 string.Empty,
-                this.heroSliderLocalizer["Discover"],
-                this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.Sectionals.Id }));
+                this.heroSliderLocalizer.GetString("Browse"),
+                this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.Sectionals.Id }),
+                new List<SourceViewModel>
+                {
+                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.CornersMediaId) },
+                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Corners1600x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Corners1024x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Corners414x286MediaId) }
+                });
 
-            var furnishBedroomHeroSliderItem = GetHeroSliderItem(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.BedroomMediaId, true),
-                this.heroSliderLocalizer["TrackOrders"],
-                this.heroSliderLocalizer["TrackOrders"],
-                this.heroSliderLocalizer["TrackOrders"],
+            var boxspringsHeroSliderItem = GetHeroSliderItem(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.BoxspringsMediaId, true),
+                this.heroSliderLocalizer.GetString("DiscoverBeds"),
+                this.heroSliderLocalizer.GetString("DiscoverBeds"),
+                this.heroSliderLocalizer.GetString("DiscoverBeds"),
                 string.Empty,
-                this.heroSliderLocalizer["Browse"],
-                this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.Beds.Id }));
+                this.heroSliderLocalizer.GetString("Discover"),
+                this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.Beds.Id }),
+                new List<SourceViewModel> 
+                { 
+                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.BoxspringsMediaId) },
+                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Boxsprings1600x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Boxsprings1024x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Boxsprings414x286MediaId) }
+                });
 
-            var furnishKidsRoomHeroSliderItem = GetHeroSliderItem(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.KidsRoomMediaId, true),
-                this.heroSliderLocalizer["EasyRepurchase"],
-                this.heroSliderLocalizer["EasyRepurchase"],
-                this.heroSliderLocalizer["EasyRepurchase"],
+            var chairsHeroSliderItem = GetHeroSliderItem(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.ChairsMediaId, true),
+                this.heroSliderLocalizer.GetString("ShopChairs"),
+                this.heroSliderLocalizer.GetString("ShopChairs"),
+                this.heroSliderLocalizer.GetString("ShopChairs"),
                 string.Empty,
-                this.heroSliderLocalizer["Shop"],
-                this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.Sectionals.Id }));
+                this.heroSliderLocalizer.GetString("Shop"),
+                this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.Chairs.Id }),
+                new List<SourceViewModel>
+                {
+                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.ChairsMediaId) },
+                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Chairs1600x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Chairs1024x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Chairs414x286MediaId) }
+                });
 
-            heroSliderItems.Add(furnishBedroomHeroSliderItem);
-            heroSliderItems.Add(furnishLivingRoomHeroSliderItem);
-            heroSliderItems.Add(furnishKidsRoomHeroSliderItem);
+            var setsHeroSliderItem = GetHeroSliderItem(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.SetsMediaId, true),
+                this.heroSliderLocalizer.GetString("BrowseSets"),
+                this.heroSliderLocalizer.GetString("BrowseSets"),
+                this.heroSliderLocalizer.GetString("BrowseSets"),
+                string.Empty,
+                this.heroSliderLocalizer.GetString("Browse"),
+                this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.Sets.Id }),
+                new List<SourceViewModel>
+                {
+                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.SetsMediaId) },
+                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Sets1600x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Sets1024x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Sets414x286MediaId) }
+                });
+
+            heroSliderItems.Add(cornersHeroSliderItem);
+            heroSliderItems.Add(boxspringsHeroSliderItem);
+            heroSliderItems.Add(chairsHeroSliderItem);
+            heroSliderItems.Add(setsHeroSliderItem);
 
             viewModel.Items = heroSliderItems;
 
@@ -76,17 +115,22 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             string teaserTitle, 
             string teaserText, 
             string ctaText, 
-            string ctaUrl)
-        { 
+            string ctaUrl,
+            IEnumerable<SourceViewModel> sources)
+        {
             return new HeroSliderItemViewModel
             {
-                ImageSrc = imageSrc,
-                ImageAlt = imageAlt,
-                ImageTitle = imageTitle,
                 TeaserTitle = teaserTitle,
                 TeaserText = teaserText,
                 CtaText = ctaText,
-                CtaUrl = ctaUrl
+                CtaUrl = ctaUrl,
+                Image = new ImageViewModel
+                { 
+                    ImageAlt = imageAlt,
+                    ImageSrc = imageSrc,
+                    ImageTitle = imageTitle,
+                    Sources = sources
+                }
             };
         }
     }
