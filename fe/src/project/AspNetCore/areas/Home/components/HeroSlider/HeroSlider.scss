@@ -1,10 +1,10 @@
 .hero-slider {
     background-color: $grey;
     width: 100%;
-    min-height: 400px;
+    height: 400px;
 
     @media only screen and (max-width: $tablet) {
-        min-height: 351px;
+        height: 250px;
     }
 
     .carousel .control-dots {
@@ -27,6 +27,10 @@
         padding: 2rem;
         top: 2rem;
         left: 2rem;
+
+        @media only screen and (max-width: $tablet) {
+            width: 300px;
+        }
     }
 
     &__teaser-title {
