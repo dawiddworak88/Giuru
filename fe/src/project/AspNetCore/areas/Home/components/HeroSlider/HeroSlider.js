@@ -10,8 +10,8 @@ function HeroSlider(props) {
     if (props.items) {
 
         return (
-            <div>
-                <Carousel className="hero-slider" autoPlay={true} showArrows={true} showThumbs={false} useKeyboardArrows={false} dynamicHeight={false} showStatus={false} swipeable={true}>
+            <div className="hero-slider">
+                <Carousel autoPlay={true} showArrows={true} showThumbs={false} useKeyboardArrows={false} dynamicHeight={false} showStatus={false} swipeable={true}>
                     {props.items.map((item, index) =>
                         <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
                             <div className="hero-slider__item" key={index}>
