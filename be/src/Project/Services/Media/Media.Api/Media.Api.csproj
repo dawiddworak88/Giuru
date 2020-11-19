@@ -83,7 +83,9 @@
     <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings_414x286.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs.jpg" />
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs_1024x400.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
