@@ -124,9 +124,9 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
         public async Task IndexAllAsync()
         {
-            foreach (var product in catalogContext.Products)
+            foreach (var productId in catalogContext.Products.Select(x => x.Id).ToList())
             {
-                await this.productIndexingRepository.IndexAsync(product.Id);
+                await this.productIndexingRepository.IndexAsync(productId);
             }
         }
 
