@@ -37,7 +37,8 @@ namespace Catalog.Api.DependencyInjection
 
                 if (productService.IsEmptyAsync().Result)
                 {
-                    productService.IndexAllAsync().RunSynchronously();
+                    var task = Task.Run(async () => { await productService.IndexAllAsync(); });
+                    task.Wait();
                 }
             }
         }
