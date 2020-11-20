@@ -97,6 +97,20 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
             return default;
         }
 
+        public async Task<int?> CountAllAsync()
+        {
+            var query = Query<ProductSearchModel>.Term(t => t.IsActive, true);
+
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query));
+
+            if (response.IsValid)
+            {
+                return response.Hits.Count;
+            }
+
+            return default;
+        }
+
         public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetProductVariantsAsync(Guid id, string language)
         {
             var query = Query<ProductSearchModel>.Term(t => t.Field(x => x.PrimaryProductId).Value(id))
