@@ -110,6 +110,26 @@ namespace Catalog.Api.v1.Areas.Products.Services
             return default;
         }
 
+        public async Task<bool> IsEmptyAsync()
+        {
+            var count = await this.productSearchRepository.CountAllAsync();
+
+            if (count.HasValue && count.Value == 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task IndexAllAsync()
+        {
+            foreach (var productId in catalogContext.Products.Select(x => x.Id).ToList())
+            {
+                await this.productIndexingRepository.IndexAsync(productId);
+            }
+        }
+
         public async Task<ProductResultModel> UpdateAsync(CreateUpdateProductModel model)
         {
             return default;

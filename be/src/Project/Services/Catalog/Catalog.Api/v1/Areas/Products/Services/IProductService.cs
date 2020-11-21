@@ -9,6 +9,8 @@ namespace Catalog.Api.v1.Areas.Products.Services
     public interface IProductService
     {
         Task<ProductResultModel> CreateAsync(CreateUpdateProductModel model);
+        Task IndexAllAsync();
+        Task<bool> IsEmptyAsync();
         Task<ProductResultModel> UpdateAsync(CreateUpdateProductModel model);
         Task<ProductResultModel> GetByIdAsync(GetProductModel getProductModel);
         Task<PagedResults<IEnumerable<ProductResultModel>>> GetAsync(GetProductsModel getProductsModel);

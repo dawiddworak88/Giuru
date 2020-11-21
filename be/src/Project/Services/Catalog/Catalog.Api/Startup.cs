@@ -5,7 +5,6 @@ using Foundation.Localization.DependencyInjection;
 using Foundation.Mailing.DependencyInjection;
 using Catalog.Api.v1.Areas.Taxonomies.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
@@ -23,7 +22,7 @@ namespace Api
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -70,13 +69,15 @@ namespace Api
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             IdentityModelEventSource.ShowPII = true;
 
             app.UseSwagger();
 
             app.ConfigureDatabaseMigrations(this.Configuration);
+
+            app.ConfigureSearchIndexing();
 
             app.UseSwaggerUI(c =>
             {
