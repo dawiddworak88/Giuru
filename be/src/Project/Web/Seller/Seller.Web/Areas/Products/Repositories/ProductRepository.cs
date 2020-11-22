@@ -10,64 +10,51 @@ using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.ApiResponseModels;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Shared.Configurations;
+using Foundation.ApiExtensions.Shared.Definitions;
+using Foundation.ApiExtensions.Models.Request;
 
 namespace Seller.Web.Areas.Products.Repositories
 {
     public class ProductRepository : IProductRepository
     {
         private readonly IApiClientService apiClientService;
+        private readonly IOptions<AppSettings> settings;
         private readonly ServicesEndpointsConfiguration servicesEndpointsConfiguration;
         private readonly ILogger logger;
 
         public ProductRepository(IApiClientService apiClientService,
+            IOptions<AppSettings> settings,
             IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration,
             ILogger<ProductsRepository> logger)
         {
             this.apiClientService = apiClientService;
+            this.settings = settings;
             this.servicesEndpointsConfiguration = servicesEndpointsConfiguration.CurrentValue;
             this.logger = logger;
         }
 
         public async Task<Product> GetProductAsync(string token, string language, Guid? id)
         {
-            try
+            var apiRequest = new ApiRequest<RequestModelBase>
             {
-                var productRequestModel = new ProductRequestModel
-                {
-                    Language = language,
-                    Id = id
-                };
+                Data = this.apiClientService.InitializeRequestModelContext(new RequestModelBase()),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}/{id}"
+            };
 
-                var apiRequest = new ApiRequest<ProductRequestModel>
-                {
-                    Data = this.apiClientService.InitializeRequestModelContext(productRequestModel),
-                    AccessToken = token,
-                    EndpointAddress = this.servicesEndpointsConfiguration.Api.Host + this.servicesEndpointsConfiguration.Api.Endpoints.Product
-                };
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, CategoryResponseModel>(apiRequest);
 
-                var response = await this.apiClientService.GetAsync<ApiRequest<ProductRequestModel>, ProductRequestModel, ProductResponseModel>(apiRequest);
-
-                if (response.IsSuccessStatusCode && response.Data != null)
-                {
-                    
-                    var product = new Product
-                    {
-                        Id = response.Data.Id,
-                        Sku = response.Data.Sku,
-                        Name = response.Data.Name,
-                        FormData = response.Data.FormData,
-                        LastModifiedDate = response.Data.LastModifiedDate,
-                        CreatedDate = response.Data.CreatedDate
-                    };
-
-                    return product;
-                }
-            }
-            catch (Exception exception)
+            if (response.IsSuccessStatusCode && response.Data != null)
             {
-                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
-
-                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
+                return new Product
+                { 
+                    Id = response.Data.Id,
+                    Name = response.Data.Name,
+                    Sku = response.Data.Sku,
+                    FormData = response.Data.FormData,
+                    LastModifiedDate = response.Data.LastModifiedDate,
+                    CreatedDate = response.Data.CreatedDate
+                };
             }
 
             return default;

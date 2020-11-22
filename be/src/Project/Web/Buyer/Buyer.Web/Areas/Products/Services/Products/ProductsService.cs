@@ -2,7 +2,7 @@
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Shared.Catalogs.ViewModels;
 using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Definitions;
+using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Routing;

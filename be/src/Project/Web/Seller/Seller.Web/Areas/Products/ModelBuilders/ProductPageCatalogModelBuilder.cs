@@ -10,6 +10,7 @@ using Foundation.PageContent.ComponentModels;
 using Seller.Web.Shared.ViewModels;
 using Seller.Web.Areas.Products.DomainModels;
 using System.Collections.Generic;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {
@@ -40,24 +41,51 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<Product>, Product>();
 
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "ProductDetail", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ProductApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            
+            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             
             viewModel.Table = new CatalogTableViewModel
             {
-                Labels = new string[] { "", "" },
+                Labels = new string[] 
+                { 
+                    this.globalLocalizer.GetString("Sku"),
+                    this.globalLocalizer.GetString("Name"),
+                    this.globalLocalizer.GetString("LastModifiedDate"),
+                    this.globalLocalizer.GetString("CreatedDate")
+                },
                 Actions = new List<CatalogActionViewModel>
                 {
                     new CatalogActionViewModel
                     {
+                        IsEdit = true
+                    },
+                    new CatalogActionViewModel
+                    { 
+                        IsDelete = true
                     }
                 },
                 Properties = new List<CatalogPropertyViewModel>
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = "",
+                        Title = nameof(Product.Sku).ToCamelCase(),
                         IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(Product.Name).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(Product.LastModifiedDate).ToCamelCase(),
+                        IsDateTime = true
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(Product.CreatedDate).ToCamelCase(),
+                        IsDateTime = true
                     }
                 }
             };

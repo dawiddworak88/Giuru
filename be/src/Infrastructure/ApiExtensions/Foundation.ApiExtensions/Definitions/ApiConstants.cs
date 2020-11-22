@@ -1,4 +1,4 @@
-﻿namespace Buyer.Web.Shared.Definitions
+﻿namespace Foundation.ApiExtensions.Shared.Definitions
 {
     public static class ApiConstants
     {
@@ -9,7 +9,7 @@
             public static readonly string ProductSuggestionsApiEndpoint = "/api/v1/productsuggestions";
         }
 
-        public struct Seller
+        public struct Identity
         {
             public static readonly string SellersApiEndpoint = "/api/v1/sellers";
         }

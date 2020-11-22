@@ -7,6 +7,7 @@ using Foundation.PageContent.ComponentModels;
 using Seller.Web.Areas.Categories.ModelBuilders;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Shared.ViewModels;
+using Seller.Web.Areas.Categories.Repositories;
 
 namespace Seller.Web.Areas.Products.DependencyInjection
 {

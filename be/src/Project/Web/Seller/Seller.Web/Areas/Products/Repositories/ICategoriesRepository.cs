@@ -1,0 +1,12 @@
+﻿using Foundation.GenericRepository.Paginations;
+using Seller.Web.Areas.Products.DomainModels;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Seller.Web.Areas.Products.Repositories
+{
+    public interface ICategoriesRepository
+    {
+        Task<PagedResults<IEnumerable<Category>>> GetCategoriesAsync(string token, string language, int pageIndex, int itemsPerPage);
+    }
+}

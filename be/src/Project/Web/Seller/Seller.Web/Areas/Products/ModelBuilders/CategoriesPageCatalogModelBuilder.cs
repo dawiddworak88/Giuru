@@ -1,12 +1,14 @@
-﻿using Foundation.Extensions.ModelBuilders;
+﻿using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Products.DomainModels;
-using Seller.Web.Areas.Products.ModelBuilders;
+using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Seller.Web.Shared.ViewModels;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -17,20 +19,17 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
         private readonly ICatalogModelBuilder catalogModelBuilder;
         private readonly ICategoriesRepository categoriesRepository;
         private readonly IStringLocalizer globalLocalizer;
-        private readonly IStringLocalizer productLocalizer;
         private readonly LinkGenerator linkGenerator;
 
         public CategoriesPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             ICategoriesRepository categoriesRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IStringLocalizer<ProductResources> productLocalizer,
             LinkGenerator linkGenerator)
         {
             this.catalogModelBuilder = catalogModelBuilder;
             this.categoriesRepository = categoriesRepository;
             this.globalLocalizer = globalLocalizer;
-            this.productLocalizer = productLocalizer;
             this.linkGenerator = linkGenerator;
         }
 
@@ -38,7 +37,57 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
         {
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<Category>, Category>();
 
-            // viewModel.PagedItems = await this.categoriesRepository.GetCategoriesAsync(componentModel.Token, CultureInfo.CurrentUICulture.Name, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage);
+            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            
+            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+
+            viewModel.Table = new CatalogTableViewModel
+            {
+                Labels = new string[]
+                {
+                    this.globalLocalizer.GetString("Sku"),
+                    this.globalLocalizer.GetString("Name"),
+                    this.globalLocalizer.GetString("LastModifiedDate"),
+                    this.globalLocalizer.GetString("CreatedDate")
+                },
+                Actions = new List<CatalogActionViewModel>
+                {
+                    new CatalogActionViewModel
+                    {
+                        IsEdit = true
+                    },
+                    new CatalogActionViewModel
+                    {
+                        IsDelete = true
+                    }
+                },
+                Properties = new List<CatalogPropertyViewModel>
+                {
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(Category.Name).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(Category.ParentCategoryName).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(Category.LastModifiedDate).ToCamelCase(),
+                        IsDateTime = true
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(Category.CreatedDate).ToCamelCase(),
+                        IsDateTime = true
+                    }
+                }
+            };
+
+            viewModel.PagedItems = await this.categoriesRepository.GetCategoriesAsync(componentModel.Token, CultureInfo.CurrentUICulture.Name, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage);
 
             return viewModel;
         }

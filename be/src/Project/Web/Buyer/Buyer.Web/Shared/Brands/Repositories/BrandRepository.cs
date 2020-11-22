@@ -1,7 +1,7 @@
 ﻿using Buyer.Web.Areas.Products.ApiResponseModels;
 using Buyer.Web.Shared.Brands.DomainModels;
 using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Definitions;
+using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
@@ -28,7 +28,7 @@ namespace Buyer.Web.Shared.Brands.Repositories
             {
                 Data = this.apiClientService.InitializeRequestModelContext(new RequestModelBase()),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Seller.SellersApiEndpoint}/{sellerId}"
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.SellersApiEndpoint}/{sellerId}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, BrandResponseModel>(apiRequest);
