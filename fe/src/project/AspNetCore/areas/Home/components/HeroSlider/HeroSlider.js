@@ -16,7 +16,6 @@ function HeroSlider(props) {
                         <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
                             <div className="hero-slider__item" key={index}>
                                     <ResponsiveImage {...item.image} />
-                                    <img src={item.imageSrc} alt={item.imageAlt} title={item.imageTitle} />
                                     {item.teaserTitle &&
                                     <div className="hero-slider__teaser">
                                         <div className="hero-slider__teaser-title title is-5 has-text-white">

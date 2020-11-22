@@ -1,6 +1,8 @@
-﻿namespace Seller.Web.Areas.Products.ViewModels
+﻿using Seller.Web.Shared.ViewModels;
+
+namespace Seller.Web.Areas.Products.ViewModels
 {
-    public class CategoryPageViewModel
+    public class CategoryPageViewModel : BasePageViewModel
     {
     }
 }

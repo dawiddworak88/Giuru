@@ -1,6 +1,9 @@
-﻿namespace Seller.Web.Shared.ViewModels
+﻿using Foundation.GenericRepository.Paginations;
+using System.Collections.Generic;
+
+namespace Seller.Web.Shared.ViewModels
 {
-    public class CatalogBaseViewModel
+    public class CatalogViewModel<T> where T: class
     {
         public string SearchApiUrl { get; set; }
         public string EditLabel { get; set; }
@@ -17,6 +20,10 @@
         public string AreYouSureLabel { get; set; }
         public string DeleteApiUrl { get; set; }
         public string EditUrl { get; set; }
+        public string LastModifiedDateLabel { get; set; }
+        public string CreatedDateLabel { get; set; }
         public string GeneralErrorMessage { get; set; }
+        public CatalogTableViewModel Table { get; set; }
+        public PagedResults<IEnumerable<T>> PagedItems { get; set; }
     }
 }

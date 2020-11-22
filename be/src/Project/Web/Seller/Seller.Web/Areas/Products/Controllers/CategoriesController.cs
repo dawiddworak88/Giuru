@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Categoriess.Controllers
 {
-    [Area("Categoriess")]
+    [Area("Products")]
     public class CategoriesController : BaseController
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoriesPageViewModel> categoriesPageModelBuilder;

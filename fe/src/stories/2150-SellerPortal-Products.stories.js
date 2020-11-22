@@ -36,18 +36,10 @@ var catalog = {
         }
     ],
     labels: [
-        {
-            title: "Sku"
-        },
-        {
-            title: "Name"
-        },
-        {
-            title: "Last modified date"
-        },
-        {
-            title: "Created date"
-        }
+        "Sku",
+        "Name",
+        "Last modified date",
+        "Created date"
     ],
     properties: [
         {

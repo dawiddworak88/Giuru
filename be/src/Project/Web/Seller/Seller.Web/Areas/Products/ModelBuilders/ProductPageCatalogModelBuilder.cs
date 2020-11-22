@@ -5,13 +5,15 @@ using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Products.Repositories;
-using Seller.Web.Areas.Products.ViewModels;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
+using Seller.Web.Shared.ViewModels;
+using Seller.Web.Areas.Products.DomainModels;
+using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {
-    public class ProductPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductPageCatalogViewModel>
+    public class ProductPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Product>>
     {
         private readonly ICatalogModelBuilder catalogModelBuilder;
         private readonly IProductsRepository productsRepository;
@@ -33,18 +35,34 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             this.linkGenerator = linkGenerator;
         }
 
-        public async Task<ProductPageCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<CatalogViewModel<Product>> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = this.catalogModelBuilder.BuildModel<ProductPageCatalogViewModel>();
+            var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<Product>, Product>();
 
-            viewModel.SkuLabel = this.productLocalizer["Sku"];
-            viewModel.NameLabel = this.globalLocalizer["Name"];
-            viewModel.LastModifiedDateLabel = this.globalLocalizer["LastModifiedDate"];
-            viewModel.CreatedDateLabel = this.globalLocalizer["CreatedDate"];
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "ProductDetail", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ProductApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.PagedProducts = await this.productsRepository.GetProductsAsync(componentModel.Token, CultureInfo.CurrentUICulture.Name, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage);
+            
+            viewModel.Table = new CatalogTableViewModel
+            {
+                Labels = new string[] { "", "" },
+                Actions = new List<CatalogActionViewModel>
+                {
+                    new CatalogActionViewModel
+                    {
+                    }
+                },
+                Properties = new List<CatalogPropertyViewModel>
+                {
+                    new CatalogPropertyViewModel
+                    {
+                        Title = "",
+                        IsDateTime = false
+                    }
+                }
+            };
+
+            viewModel.PagedItems = await this.productsRepository.GetProductsAsync(componentModel.Token, CultureInfo.CurrentUICulture.Name, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage);
             
             return viewModel;
         }

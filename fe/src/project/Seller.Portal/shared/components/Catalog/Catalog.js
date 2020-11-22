@@ -218,8 +218,8 @@ function Catalog(props) {
                                             {props.table.actions &&
                                                 <TableCell width="11%"></TableCell>
                                             }
-                                            {props.table.labels.map((item, index) =>
-                                                <TableCell key={item.title}>{item.title}</TableCell>
+                                            {props.table.labels.map((item) =>
+                                                <TableCell key={item}>{item}</TableCell>
                                             )}
                                         </TableRow>
                                     </TableHead>

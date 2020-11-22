@@ -4,6 +4,7 @@ using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Seller.Web.Areas.Products.ViewModels;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Products.Controllers

@@ -52,7 +52,7 @@ namespace Seller.Web.Shared.DrawerMenu.ModelBuilders
                         {
                             Icon = IconsConstants.Grid,
                             Title = this.globalLocalizer.GetString("Categories"),
-                            Url = "#",
+                            Url = this.linkGenerator.GetPathByAction("Index", "Categories", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
                         }
                     }
                 },
@@ -64,7 +64,7 @@ namespace Seller.Web.Shared.DrawerMenu.ModelBuilders
                         {
                             Icon = IconsConstants.Users,
                             Title = this.globalLocalizer.GetString("Clients"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                            Url = this.linkGenerator.GetPathByAction("Index", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                         }
                     }
                 },

@@ -22,8 +22,6 @@ var catalog = {
     editUrl: "#",
     deleteUrl: "#",
     noResultsLabel: "There are no results",
-    skuLabel: "SKU",
-    nameLabel: "Name",
     lastModifiedDateLabel: "Last modified date",
     createdDateLabel: "Created date",
     table: {
@@ -36,18 +34,10 @@ var catalog = {
             }
         ],
         labels: [
-            {
-                title: "Name"
-            },
-            {
-                title: "Parent name"
-            },
-            {
-                title: "Last modified date"
-            },
-            {
-                title: "Created date"
-            }
+            "Name",
+            "Parent name",
+            "Last modified date",
+            "Created date"
         ],
         properties: [
             {

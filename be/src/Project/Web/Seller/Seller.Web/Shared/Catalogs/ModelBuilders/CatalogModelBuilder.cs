@@ -14,7 +14,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             this.globalLocalizer = globalLocalizer;
         }
 
-        public T BuildModel<T>() where T : CatalogBaseViewModel, new()
+        public T BuildModel<T, W>() where T : CatalogViewModel<W>, new() where W: class
         {
             var viewModel = new T
             {
@@ -30,8 +30,10 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 RowsPerPageLabel = this.globalLocalizer["RowsPerPage"],
                 BackIconButtonText = this.globalLocalizer["Previous"],
                 NextIconButtonText = this.globalLocalizer["Next"],
-                NoResultsLabel = this.globalLocalizer["NoResultsLabel"]
-            };
+                NoResultsLabel = this.globalLocalizer["NoResultsLabel"],
+                LastModifiedDateLabel = this.globalLocalizer["LastModifiedDate"],
+                CreatedDateLabel = this.globalLocalizer["CreatedDate"]
+        };
 
             return viewModel;
         }
