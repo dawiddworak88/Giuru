@@ -7,6 +7,6 @@ namespace Seller.Web.Areas.Products.Repositories
 {
     public interface ICategoriesRepository
     {
-        Task<PagedResults<IEnumerable<Category>>> GetCategoriesAsync(string token, string language, int pageIndex, int itemsPerPage);
+        Task<PagedResults<IEnumerable<Category>>> GetCategoriesAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage);
     }
 }

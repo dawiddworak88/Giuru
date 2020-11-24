@@ -3,11 +3,8 @@ using System;
 
 namespace Catalog.Api.v1.Areas.Products.Models
 {
-    public class GetProductsModel : BaseServiceModel
+    public class GetProductsModel : PagedBaseServiceModel
     {
         public Guid? CategoryId { get; set; }
-        public int PageIndex { get; set; }
-        public int ItemsPerPage { get; set; }
-        public string SearchTerm { get; set; }
     }
 }

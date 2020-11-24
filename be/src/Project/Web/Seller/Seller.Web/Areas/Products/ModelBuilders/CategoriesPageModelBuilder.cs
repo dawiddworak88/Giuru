@@ -1,12 +1,11 @@
 ﻿using Foundation.Extensions.ModelBuilders;
-using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.ViewModels;
+using Seller.Web.Shared.ViewModels;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -16,21 +15,18 @@ namespace Seller.Web.Areas.Products.ModelBuilders
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Category>> catalogModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
-        private readonly IStringLocalizer<ProductResources> productLocalizer;
-        private readonly LinkGenerator linkGenerator;
 
         public CategoriesPageModelBuilder(
-            IStringLocalizer<ProductResources> productLocalizer,
-            LinkGenerator linkGenerator,
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Category>> catalogModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
-            this.productLocalizer = productLocalizer;
-            this.linkGenerator = linkGenerator;
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
+            this.catalogModelBuilder = catalogModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
         }
 
@@ -39,9 +35,10 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             var viewModel = new CategoriesPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = headerModelBuilder.BuildModel(),
-                MenuTiles = menuTilesModelBuilder.BuildModel(),
-                Footer = footerModelBuilder.BuildModel()
+                Header = this.headerModelBuilder.BuildModel(),
+                MenuTiles = this.menuTilesModelBuilder.BuildModel(),
+                Catalog = await this.catalogModelBuilder.BuildModelAsync(componentModel),
+                Footer = this.footerModelBuilder.BuildModel()
             };
 
             return viewModel;

@@ -3,8 +3,8 @@ using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.GenericRepository.Paginations;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.ApiResponseModels;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
@@ -18,30 +18,32 @@ namespace Seller.Web.Areas.Categories.Repositories
     {
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
-        private readonly ServicesEndpointsConfiguration servicesEndpointsConfiguration;
-        private readonly ILogger logger;
 
         public CategoriesRepository(IApiClientService apiClientService,
-            IOptions<AppSettings> settings,
-            IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration,
-            ILogger<CategoriesRepository> logger)
+            IOptions<AppSettings> settings)
         {
             this.apiClientService = apiClientService;
             this.settings = settings;
-            this.servicesEndpointsConfiguration = servicesEndpointsConfiguration.CurrentValue;
-            this.logger = logger;
         }
 
-        public async Task<PagedResults<IEnumerable<Category>>> GetCategoriesAsync(string token, string language, int pageIndex, int itemsPerPage)
+        public async Task<PagedResults<IEnumerable<Category>>> GetCategoriesAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage)
         {
-            var apiRequest = new ApiRequest<RequestModelBase>
+            var categoriesRequestModel = new CategoriesRequestModel
             {
-                Data = this.apiClientService.InitializeRequestModelContext(new RequestModelBase()),
+                Language = language,
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage
+            };
+
+            var apiRequest = new ApiRequest<CategoriesRequestModel>
+            {
+                Data = this.apiClientService.InitializeRequestModelContext(categoriesRequestModel),
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, PagedResults<IEnumerable<CategoryResponseModel>>>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<CategoriesRequestModel>, CategoriesRequestModel, PagedResults<IEnumerable<CategoryResponseModel>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {

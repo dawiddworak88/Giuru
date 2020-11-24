@@ -29,17 +29,25 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         /// Gets list of categories.
         /// </summary>
         /// <param name="language">The language.</param>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="level">The level.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The items per page.</param>
         /// <returns>The list of categories.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(422)]
-        public async Task<IActionResult> Get(string language)
+        public async Task<IActionResult> Get(string language, string searchTerm, int? level, int pageIndex, int itemsPerPage)
         {
             var serviceModel = new GetCategoriesModel
             {
-                Language = language
+                Level = level,
+                Language = language,
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage
             };
 
             var validator = new GetCategoriesModelValidator();
@@ -50,7 +58,7 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
             {
                 var categories = await this.categoryService.GetAsync(serviceModel);
 
-                return categories != null && categories.Any()
+                return categories?.Data != null && categories.Data.Any()
                     ? this.StatusCode((int)HttpStatusCode.OK, categories)
                     : (IActionResult)this.StatusCode((int)HttpStatusCode.NotFound);
             }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using Catalog.Api.v1.Areas.Categories.ResultModels;
 using Microsoft.EntityFrameworkCore;
+using Foundation.GenericRepository.Paginations;
 
 namespace Catalog.Api.v1.Areas.Categories.Services
 {
@@ -17,7 +18,7 @@ namespace Catalog.Api.v1.Areas.Categories.Services
             this.context = context;
         }
 
-        public async Task<IEnumerable<CategoryResultModel>> GetAsync(GetCategoriesModel model)
+        public async Task<PagedResults<IEnumerable<CategoryResultModel>>> GetAsync(GetCategoriesModel model)
         {
             var categories = from c in this.context.Categories
                              join t in this.context.CategoryTranslations on c.Id equals t.CategoryId into ct
@@ -38,8 +39,17 @@ namespace Catalog.Api.v1.Areas.Categories.Services
                                 ThumbnailMediaId = y.MediaId
                              };
 
+            if (!string.IsNullOrWhiteSpace(model.SearchTerm))
+            {
+                categories = categories.Where(x => x.Name.StartsWith(model.SearchTerm));
+            }
 
-            return categories;
+            if (model.Level.HasValue)
+            {
+                categories = categories.Where(x => x.Level == model.Level.Value);
+            }
+
+            return categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage), model.PageIndex);
         }
 
         public async Task<CategoryResultModel> GetAsync(GetCategoryModel model)

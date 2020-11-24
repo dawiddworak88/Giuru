@@ -18,21 +18,22 @@ namespace Seller.Web.Areas.Products.ModelBuilders
         {
             var viewModel = new T
             {
-                NoLabel = this.globalLocalizer["No"],
-                YesLabel = this.globalLocalizer["Yes"],
-                DeleteConfirmationLabel = this.globalLocalizer["DeleteConfirmationLabel"],
-                AreYouSureLabel = this.globalLocalizer["AreYouSureLabel"],
-                GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"],
-                SearchLabel = this.globalLocalizer["Search"],
-                EditLabel = this.globalLocalizer["Edit"],
-                DeleteLabel = this.globalLocalizer["Delete"],
-                DisplayedRowsLabel = this.globalLocalizer["DisplayedRows"],
-                RowsPerPageLabel = this.globalLocalizer["RowsPerPage"],
-                BackIconButtonText = this.globalLocalizer["Previous"],
-                NextIconButtonText = this.globalLocalizer["Next"],
-                NoResultsLabel = this.globalLocalizer["NoResultsLabel"],
-                LastModifiedDateLabel = this.globalLocalizer["LastModifiedDate"],
-                CreatedDateLabel = this.globalLocalizer["CreatedDate"]
+                NoLabel = this.globalLocalizer.GetString("No"),
+                YesLabel = this.globalLocalizer.GetString("Yes"),
+                DeleteConfirmationLabel = this.globalLocalizer.GetString("DeleteConfirmationLabel"),
+                AreYouSureLabel = this.globalLocalizer.GetString("AreYouSureLabel"),
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                SearchLabel = this.globalLocalizer.GetString("Search"),
+                EditLabel = this.globalLocalizer.GetString("Edit"),
+                DeleteLabel = this.globalLocalizer.GetString("Delete"),
+                DisplayedRowsLabel = this.globalLocalizer.GetString("DisplayedRows"),
+                RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage"),
+                BackIconButtonText = this.globalLocalizer.GetString("Previous"),
+                NextIconButtonText = this.globalLocalizer.GetString("Next"),
+                NoResultsLabel = this.globalLocalizer.GetString("NoResultsLabel"),
+                LastModifiedDateLabel = this.globalLocalizer.GetString("LastModifiedDate"),
+                CreatedDateLabel = this.globalLocalizer.GetString("CreatedDate"),
+                SearchTerm = string.Empty
         };
 
             return viewModel;

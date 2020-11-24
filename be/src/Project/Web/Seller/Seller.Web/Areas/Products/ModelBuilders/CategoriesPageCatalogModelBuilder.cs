@@ -87,7 +87,7 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.categoriesRepository.GetCategoriesAsync(componentModel.Token, CultureInfo.CurrentUICulture.Name, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage);
+            viewModel.PagedItems = await this.categoriesRepository.GetCategoriesAsync(componentModel.Token, CultureInfo.CurrentUICulture.Name, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage);
 
             return viewModel;
         }
