@@ -10,6 +10,7 @@ using Buyer.Web.Shared.Catalogs.ApiRequestModels;
 using Foundation.GenericRepository.Paginations;
 using System.Linq;
 using System;
+using Buyer.Web.Areas.Home.Definitions;
 
 namespace Buyer.Web.Shared.Catalogs.Services
 {
@@ -49,7 +50,7 @@ namespace Buyer.Web.Shared.Catalogs.Services
 
                 int totalPages = (int)Math.Ceiling(response.Data.Total / (double)itemsPerPage);
 
-                for (int i = 1; i <= totalPages; i++)
+                for (int i = CategoriesPaginationIndexes.SecondPage; i <= totalPages; i++)
                 {
                     apiRequest.Data.PageIndex = i;
 

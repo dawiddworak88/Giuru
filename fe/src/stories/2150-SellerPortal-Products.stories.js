@@ -22,10 +22,6 @@ var catalog = {
   editUrl: "#",
   deleteUrl: "#",
   noResultsLabel: "There are no results",
-  skuLabel: "SKU",
-  nameLabel: "Name",
-  lastModifiedDateLabel: "Last modified date",
-  createdDateLabel: "Created date",
   table: {
     actions: [
         {

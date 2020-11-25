@@ -252,6 +252,9 @@
   <data name="Orders" xml:space="preserve">
     <value>Zamówienia</value>
   </data>
+  <data name="ParentCategory" xml:space="preserve">
+    <value>Kategoria nadrzędna</value>
+  </data>
   <data name="PasswordFormatErrorMessage" xml:space="preserve">
     <value>Hasło powinno mieć conajmniej 8 znaków, zawierać wielką i małą literę, cyfrę oraz znak specjalny, np. Wp1s2H@s1o</value>
   </data>

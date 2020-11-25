@@ -31,8 +31,6 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 BackIconButtonText = this.globalLocalizer.GetString("Previous"),
                 NextIconButtonText = this.globalLocalizer.GetString("Next"),
                 NoResultsLabel = this.globalLocalizer.GetString("NoResultsLabel"),
-                LastModifiedDateLabel = this.globalLocalizer.GetString("LastModifiedDate"),
-                CreatedDateLabel = this.globalLocalizer.GetString("CreatedDate"),
                 SearchTerm = string.Empty
         };
 

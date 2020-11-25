@@ -252,6 +252,9 @@
   <data name="Orders" xml:space="preserve">
     <value>Orders</value>
   </data>
+  <data name="ParentCategory" xml:space="preserve">
+    <value>Parent category</value>
+  </data>
   <data name="PasswordFormatErrorMessage" xml:space="preserve">
     <value>Password must be at least 8 characters long, consist of at least one capital letter, one small letter, a digit and a special character, e.g. P@ssw0rd</value>
   </data>

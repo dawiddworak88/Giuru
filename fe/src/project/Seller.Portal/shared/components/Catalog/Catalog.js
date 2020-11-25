@@ -1,5 +1,6 @@
 
 import React, { useContext } from "react";
+import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import moment from "moment";
 import Fab from "@material-ui/core/Fab";
@@ -228,13 +229,13 @@ function Catalog(props) {
                                             <TableRow key={item.name}>
                                                 {props.table.actions &&
                                                     <TableCell width="11%">
-                                                        {props.table.actions.map((item) => {
-                                                            if (item.isEdit) return (
+                                                        {props.table.actions.map((actionItem) => {
+                                                            if (actionItem.isEdit) return (
                                                                 <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel}>
                                                                     <EditIcon />
                                                                 </Fab>)
-                                                            else if (item.isDelete) return (
-                                                                <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
+                                                            else if (actionItem.isDelete) return (
+                                                                <Fab onClick={() => handleDeleteClick(actionItem)} size="small" color="primary" aria-label={props.deleteLabel}>
                                                                     <DeleteIcon />
                                                                 </Fab>)
                                                             else return (
@@ -300,6 +301,28 @@ function Catalog(props) {
             </div>
         </section>
     );
+}
+
+Catalog.propTypes = {
+    title: PropTypes.string.isRequired,
+    newText: PropTypes.string,
+    newUrl: PropTypes.string,
+    noLabel: PropTypes.string,
+    yesLabel: PropTypes.string,
+    deleteConfirmationLabel: PropTypes.string,
+    areYouSureLabel: PropTypes.string,
+    generalErrorMessage: PropTypes.string.isRequired,
+    searchLabel: PropTypes.string.isRequired,
+    editLabel: PropTypes.string,
+    deleteLabel: PropTypes.string,
+    displayedRowsLabel: PropTypes.string.isRequired,
+    rowsPerPageLabel: PropTypes.string.isRequired,
+    backIconButtonText: PropTypes.string.isRequired,
+    nextIconButtonText: PropTypes.string.isRequired,
+    editUrl: PropTypes.string,
+    deleteUrl: PropTypes.string,
+    noResultsLabel: PropTypes.string.isRequired,
+    table: PropTypes.object.isRequired
 }
 
 export default Catalog;

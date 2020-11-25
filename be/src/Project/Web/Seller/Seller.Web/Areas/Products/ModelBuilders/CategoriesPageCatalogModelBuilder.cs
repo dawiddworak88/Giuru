@@ -37,6 +37,8 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
         {
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<Category>, Category>();
 
+            viewModel.Title = this.globalLocalizer.GetString("Categories");
+
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
@@ -46,8 +48,8 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("Sku"),
                     this.globalLocalizer.GetString("Name"),
+                    this.globalLocalizer.GetString("ParentCategory"),
                     this.globalLocalizer.GetString("LastModifiedDate"),
                     this.globalLocalizer.GetString("CreatedDate")
                 },
