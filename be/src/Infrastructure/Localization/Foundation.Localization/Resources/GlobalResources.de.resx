@@ -123,6 +123,9 @@
   <data name="AreYouSureLabel" xml:space="preserve">
     <value>Sind Sie sicher, dass Sie löschen möchten</value>
   </data>
+  <data name="Back" xml:space="preserve">
+    <value>zurück</value>
+  </data>
   <data name="BrandZone" xml:space="preserve">
     <value>{0} Zone</value>
   </data>

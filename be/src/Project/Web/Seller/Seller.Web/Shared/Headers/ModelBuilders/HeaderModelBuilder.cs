@@ -8,6 +8,7 @@ using Foundation.Localization;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.LanguageSwitchers.ViewModels;
 using Foundation.PageContent.Components.DrawerMenu.ViewModels;
+using Foundation.Presentation.Definitions;
 
 namespace Seller.Web.Shared.Headers.ModelBuilders
 {
@@ -37,6 +38,8 @@ namespace Seller.Web.Shared.Headers.ModelBuilders
         {
             return new HeaderViewModel
             {
+                DrawerBackLabel = this.globalLocalizer.GetString("Back"),
+                DrawerBackIcon = IconsConstants.ArrowLeft,
                 Logo = this.logoModelBuilder.BuildModel(),
                 DrawerMenuCategories = this.drawerMenuModelBuilder.BuildModel(),
                 LanguageSwitcher = this.languageSwitcherViewModel.BuildModel(),

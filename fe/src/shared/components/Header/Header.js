@@ -74,6 +74,13 @@ function Header(props) {
                                     role="presentation"
                                     onClick={handleDrawerOpen}
                                     onKeyDown={handleDrawerOpen}>
+                                        <List>
+                                            <ListItem onClick={handleDrawerClose} button>
+                                                <ListItemIcon>{ListIcon(props.drawerBackIcon)}</ListItemIcon>
+                                                <ListItemText primary={props.drawerBackLabel} />
+                                            </ListItem>
+                                        </List>
+                                        <Divider /><Divider />
                                     {props.drawerMenuCategories.map((category) => (
                                         <Fragment key={category.title}>
                                             <List>
@@ -118,6 +125,8 @@ function Header(props) {
 }
 
 Header.propTypes = {
+    drawerBackLabel: PropTypes.string.isRequired,
+    drawerBackIcon: PropTypes.string.isRequired,
     logo: PropTypes.object.isRequired,
     links: PropTypes.array.isRequired,
     drawerMenuCategories: PropTypes.array.isRequired
