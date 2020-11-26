@@ -250,7 +250,7 @@ function Catalog(props) {
                                                     )
                                                     else {
                                                         return (
-                                                            <TableCell>{item[property.title]}</TableCell>
+                                                            <TableCell>{item[property.title] ? item[property.title] : "-"}</TableCell>
                                                         )}})}
                                             </TableRow>
                                         ))}

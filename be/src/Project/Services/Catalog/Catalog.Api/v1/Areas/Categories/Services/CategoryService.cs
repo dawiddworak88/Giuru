@@ -25,7 +25,9 @@ namespace Catalog.Api.v1.Areas.Categories.Services
                              from x in ct.DefaultIfEmpty()
                              join m in this.context.CategoryImages on c.Id equals m.CategoryId into cm
                              from y in cm.DefaultIfEmpty()
-                             where x.Language == model.Language && c.IsActive
+                             join pct in this.context.CategoryTranslations on c.Parentid equals pct.CategoryId into pctg
+                             from w in pctg.DefaultIfEmpty()
+                             where x.Language == model.Language && (w.Language == model.Language || w.Language == null) && c.IsActive
                              orderby c.Order
                              select new CategoryResultModel
                              {
@@ -35,8 +37,11 @@ namespace Catalog.Api.v1.Areas.Categories.Services
                                  IsLeaf = c.IsLeaf,
                                  ParentId = c.Parentid,
                                  SchemaId = c.SchemaId,
+                                 ParentCategoryName = w.Name,
                                  Name = x.Name,
-                                 ThumbnailMediaId = y.MediaId
+                                 ThumbnailMediaId = y.MediaId,
+                                 LastModifiedDate = c.LastModifiedDate,
+                                 CreatedDate = c.CreatedDate
                              };
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
@@ -49,26 +54,7 @@ namespace Catalog.Api.v1.Areas.Categories.Services
                 categories = categories.Where(x => x.Level == model.Level.Value);
             }
 
-            var pagedCategories = categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage), model.PageIndex);
-
-            var categoriesList = pagedCategories.Data.ToList();
-
-            foreach (var categoryItem in categoriesList)
-            {
-                if (categoryItem.ParentId.HasValue)
-                {
-                    var parentCategoryItemTranslation = await this.context.CategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == categoryItem.ParentId && x.Language == model.Language);
-
-                    if (parentCategoryItemTranslation != null)
-                    {
-                        categoryItem.ParentCategoryName = parentCategoryItemTranslation.Name;
-                    }
-                }
-            }
-
-            pagedCategories.Data = categoriesList;
-
-            return pagedCategories;
+            return categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage), model.PageIndex);
         }
 
         public async Task<CategoryResultModel> GetAsync(GetCategoryModel model)

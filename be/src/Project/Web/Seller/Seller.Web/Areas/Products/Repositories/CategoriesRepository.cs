@@ -54,7 +54,15 @@ namespace Seller.Web.Areas.Categories.Repositories
                     var category = new Category
                     {
                         Id = categoryResponse.Id,
-                        Name = categoryResponse.Name
+                        Name = categoryResponse.Name,
+                        ParentId = categoryResponse.ParentId,
+                        ParentCategoryName = categoryResponse.ParentCategoryName,
+                        Level = categoryResponse.Level,
+                        IsLeaf = categoryResponse.IsLeaf,
+                        Order = categoryResponse.Order,
+                        ThumbnailMediaId = categoryResponse.ThumbnailMediaId,
+                        LastModifiedDate = categoryResponse.LastModifiedDate,
+                        CreatedDate = categoryResponse.CreatedDate
                     };
 
                     categories.Add(category);

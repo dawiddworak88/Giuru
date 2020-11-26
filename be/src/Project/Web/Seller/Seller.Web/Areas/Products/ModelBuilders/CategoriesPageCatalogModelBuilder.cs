@@ -50,6 +50,7 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
                 {
                     this.globalLocalizer.GetString("Name"),
                     this.globalLocalizer.GetString("ParentCategory"),
+                    this.globalLocalizer.GetString("Level"),
                     this.globalLocalizer.GetString("LastModifiedDate"),
                     this.globalLocalizer.GetString("CreatedDate")
                 },
@@ -74,6 +75,11 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
                     new CatalogPropertyViewModel
                     {
                         Title = nameof(Category.ParentCategoryName).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(Category.Level).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel

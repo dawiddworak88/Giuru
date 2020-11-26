@@ -216,6 +216,9 @@
   <data name="LastModifiedDate" xml:space="preserve">
     <value>Zuletzt geändertes Datum</value>
   </data>
+  <data name="Level" xml:space="preserve">
+    <value>Ebene</value>
+  </data>
   <data name="Logo" xml:space="preserve">
     <value>Logo</value>
   </data>

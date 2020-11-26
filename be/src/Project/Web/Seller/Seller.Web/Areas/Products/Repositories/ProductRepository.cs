@@ -1,12 +1,8 @@
 ﻿using Foundation.ApiExtensions.Communications;
-using Foundation.ApiExtensions.Helpers;
 using Foundation.ApiExtensions.Services.ApiClientServices;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
-using System.Reflection;
 using System.Threading.Tasks;
-using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.ApiResponseModels;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Shared.Configurations;
@@ -19,18 +15,12 @@ namespace Seller.Web.Areas.Products.Repositories
     {
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
-        private readonly ServicesEndpointsConfiguration servicesEndpointsConfiguration;
-        private readonly ILogger logger;
 
         public ProductRepository(IApiClientService apiClientService,
-            IOptions<AppSettings> settings,
-            IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration,
-            ILogger<ProductsRepository> logger)
+            IOptions<AppSettings> settings)
         {
             this.apiClientService = apiClientService;
             this.settings = settings;
-            this.servicesEndpointsConfiguration = servicesEndpointsConfiguration.CurrentValue;
-            this.logger = logger;
         }
 
         public async Task<Product> GetProductAsync(string token, string language, Guid? id)
@@ -42,7 +32,7 @@ namespace Seller.Web.Areas.Products.Repositories
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, CategoryResponseModel>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ProductResponseModel>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
