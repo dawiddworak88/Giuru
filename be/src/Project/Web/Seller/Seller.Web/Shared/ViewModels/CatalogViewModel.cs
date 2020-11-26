@@ -6,6 +6,8 @@ namespace Seller.Web.Shared.ViewModels
     public class CatalogViewModel<T> where T: class
     {
         public string Title { get; set; }
+        public string NewText { get; set; }
+        public string NewUrl { get; set; }
         public string SearchApiUrl { get; set; }
         public string EditLabel { get; set; }
         public string DeleteLabel { get; set; }

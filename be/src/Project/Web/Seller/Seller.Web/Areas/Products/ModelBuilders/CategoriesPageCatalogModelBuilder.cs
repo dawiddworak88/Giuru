@@ -19,17 +19,20 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
         private readonly ICatalogModelBuilder catalogModelBuilder;
         private readonly ICategoriesRepository categoriesRepository;
         private readonly IStringLocalizer globalLocalizer;
+        private readonly IStringLocalizer productLocalizer;
         private readonly LinkGenerator linkGenerator;
 
         public CategoriesPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             ICategoriesRepository categoriesRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
+            IStringLocalizer<ProductResources> productLocalizer,
             LinkGenerator linkGenerator)
         {
             this.catalogModelBuilder = catalogModelBuilder;
             this.categoriesRepository = categoriesRepository;
             this.globalLocalizer = globalLocalizer;
+            this.productLocalizer = productLocalizer;
             this.linkGenerator = linkGenerator;
         }
 
@@ -39,7 +42,9 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
 
             viewModel.Title = this.globalLocalizer.GetString("Categories");
 
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewText = this.productLocalizer.GetString("AddCategory");
+            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
