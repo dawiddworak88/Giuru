@@ -235,7 +235,7 @@ function Catalog(props) {
                                                                     <EditIcon />
                                                                 </Fab>)
                                                             else if (actionItem.isDelete) return (
-                                                                <Fab onClick={() => handleDeleteClick(actionItem)} size="small" color="primary" aria-label={props.deleteLabel}>
+                                                                <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
                                                                     <DeleteIcon />
                                                                 </Fab>)
                                                             else return (

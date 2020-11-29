@@ -38,7 +38,8 @@ function Header(props) {
         setOpen(true);
     };
 
-    const handleDrawerClose = () => {
+    const handleDrawerClose = (e) => {
+        e.stopPropagation();
         setOpen(false);
     };
 
@@ -75,7 +76,7 @@ function Header(props) {
                                     onClick={handleDrawerOpen}
                                     onKeyDown={handleDrawerOpen}>
                                         <List>
-                                            <ListItem onClick={handleDrawerClose} button>
+                                            <ListItem button onClick={handleDrawerClose}>
                                                 <ListItemIcon>{ListIcon(props.drawerBackIcon)}</ListItemIcon>
                                                 <ListItemText primary={props.drawerBackLabel} />
                                             </ListItem>
