@@ -2,6 +2,8 @@
 using Catalog.Api.v1.Areas.Categories.Services;
 using Catalog.Api.v1.Areas.Categories.Validators;
 using Foundation.ApiExtensions.Controllers;
+using Foundation.Extensions.Definitions;
+using Foundation.Extensions.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -63,7 +65,7 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
                     : (IActionResult)this.StatusCode((int)HttpStatusCode.NotFound);
             }
 
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>

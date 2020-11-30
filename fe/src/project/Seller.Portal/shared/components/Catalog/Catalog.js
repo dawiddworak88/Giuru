@@ -72,8 +72,8 @@ function Catalog(props) {
                     if (response.ok) {
 
                         setItems(() => []);
-                        setItems(() => jsonResponse.data.pagedItems.data);
-                        setTotal(() => jsonResponse.data.pagedItems.total);
+                        setItems(() => jsonResponse.data);
+                        setTotal(() => jsonResponse.total);
                     }
                     else {
                         FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
@@ -118,8 +118,8 @@ function Catalog(props) {
                         setPage(() => 0);
 
                         setItems(() => []);
-                        setItems(() => jsonResponse.data.pagedItems.data);
-                        setTotal(() => jsonResponse.data.pagedItems.total);
+                        setItems(() => jsonResponse.data);
+                        setTotal(() => jsonResponse.total);
                     }
                     else {
                         FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
@@ -313,6 +313,7 @@ Catalog.propTypes = {
     areYouSureLabel: PropTypes.string,
     generalErrorMessage: PropTypes.string.isRequired,
     searchLabel: PropTypes.string.isRequired,
+    searchApiUrl: PropTypes.string.isRequired,
     editLabel: PropTypes.string,
     deleteLabel: PropTypes.string,
     displayedRowsLabel: PropTypes.string.isRequired,

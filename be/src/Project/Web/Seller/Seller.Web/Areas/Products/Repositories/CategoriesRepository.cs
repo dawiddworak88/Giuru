@@ -1,7 +1,7 @@
 ﻿using Foundation.ApiExtensions.Communications;
-using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
+using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Products.ApiRequestModels;
@@ -72,6 +72,11 @@ namespace Seller.Web.Areas.Categories.Repositories
                 {
                     Data = categories
                 };
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
             return default;

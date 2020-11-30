@@ -15,6 +15,7 @@ using Seller.Web.Areas.Products.DependencyInjection;
 using Foundation.ApiExtensions.DependencyInjection;
 using Foundation.Localization.DependencyInjection;
 using Foundation.Account.DependencyInjection;
+using Foundation.Extensions.Filters;
 
 namespace Seller.Portal
 {
@@ -37,7 +38,10 @@ namespace Seller.Portal
 
             services.AddCultureRouteConstraint();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+            });
 
             services.RegisterClientAccountDependencies(this.Configuration);
 

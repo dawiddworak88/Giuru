@@ -15,6 +15,7 @@ using System.Reflection;
 using Foundation.Account.DependencyInjection;
 using Catalog.Api.DependencyInjection;
 using Catalog.Api.v1.Areas.Categories.DependencyInjection;
+using Foundation.Extensions.Filters;
 
 namespace Api
 {
@@ -29,7 +30,10 @@ namespace Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+            });
 
             services.AddLocalization();
 
