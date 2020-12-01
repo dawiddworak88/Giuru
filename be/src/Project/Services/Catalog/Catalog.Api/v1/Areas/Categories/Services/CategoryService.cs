@@ -6,16 +6,24 @@ using System.Linq;
 using Catalog.Api.v1.Areas.Categories.ResultModels;
 using Microsoft.EntityFrameworkCore;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Extensions.Exceptions;
+using System.Net;
+using Microsoft.Extensions.Localization;
+using Foundation.Localization;
 
 namespace Catalog.Api.v1.Areas.Categories.Services
 {
     public class CategoryService : ICategoryService
     {
         private readonly CatalogContext context;
+        private readonly IStringLocalizer<ProductResources> productLocalizer;
 
-        public CategoryService(CatalogContext context)
+        public CategoryService(
+            CatalogContext context,
+            IStringLocalizer<ProductResources> productLocalizer)
         {
             this.context = context;
+            this.productLocalizer = productLocalizer;
         }
 
         public async Task<PagedResults<IEnumerable<CategoryResultModel>>> GetAsync(GetCategoriesModel model)
@@ -80,6 +88,30 @@ namespace Catalog.Api.v1.Areas.Categories.Services
 
 
             return await categories.FirstOrDefaultAsync();
+        }
+
+        public async Task DeleteAsync(DeleteCategoryModel model)
+        {
+            var category = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+
+            if (category == null)
+            {
+                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            if (await this.context.Categories.AnyAsync(x => x.Parentid == category.Id && x.IsActive))
+            {
+                throw new CustomException(this.productLocalizer.GetString("SubcategoriesDeleteCategoryConflict"), (int)HttpStatusCode.Conflict);
+            }
+
+            if (await this.context.Products.AnyAsync(x => x.CategoryId == category.Id && x.IsActive))
+            {
+                throw new CustomException(this.productLocalizer.GetString("ProductsDeleteCategoryConflict"), (int)HttpStatusCode.Conflict);
+            }
+
+            category.IsActive = false;
+
+            await this.context.SaveChangesAsync();
         }
     }
 }

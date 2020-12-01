@@ -3,6 +3,7 @@ using Foundation.ApiExtensions.Definitions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Seller.Web.Areas.Products.Repositories;
+using System;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -29,6 +30,17 @@ namespace Seller.Web.Areas.Products.ApiControllers
                 itemsPerPage);
 
             return this.Ok(categories);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            await this.categoriesRepository.DeleteAsync(
+                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                CultureInfo.CurrentUICulture.Name,
+                id);
+
+            return this.Ok();
         }
     }
 }

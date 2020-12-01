@@ -18,6 +18,8 @@ using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.ApiResponseModels;
 using Seller.Web.Shared.Configurations;
 using Foundation.Localization;
+using Foundation.ApiExtensions.Models.Response;
+using Foundation.ApiExtensions.Models.Request;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
@@ -49,20 +51,20 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         {
             try
             {
-                var deleteProductRequestModel = new DeleteProductRequestModel
+                var model = new RequestModelBase
                 {
                     Language = CultureInfo.CurrentUICulture.Name,
                     Id = id
                 };
 
-                var apiRequest = new ApiRequest<DeleteProductRequestModel>
+                var apiRequest = new ApiRequest<RequestModelBase>
                 {
-                    Data = this.apiClientService.InitializeRequestModelContext(deleteProductRequestModel),
+                    Data = this.apiClientService.InitializeRequestModelContext(model),
                     AccessToken = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                     EndpointAddress = this.servicesEndpointsConfiguration.Api.Host + this.servicesEndpointsConfiguration.Api.Endpoints.Product
                 };
 
-                var response = await this.apiClientService.DeleteAsync<ApiRequest<DeleteProductRequestModel>, DeleteProductRequestModel, DeleteProductResponseModel>(apiRequest);
+                var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
                 
                 return this.StatusCode((int)response.StatusCode, this.apiResponseService.EnrichResponseMessage(response, this.productLocalizer["ProductDeletedSuccessfully"]));
             }

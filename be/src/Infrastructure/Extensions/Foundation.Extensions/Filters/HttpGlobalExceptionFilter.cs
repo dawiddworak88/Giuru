@@ -19,7 +19,7 @@ namespace Foundation.Extensions.Filters
         {
             if (context.Exception.GetType() == typeof(CustomException))
             {
-                var redirectUrl = (string)context.Exception.Data[FilterConstants.StatusCodeKeyName];
+                var redirectUrl = (string)context.Exception.Data[FilterConstants.RedirectUrlKeyName];
 
                 if (string.IsNullOrWhiteSpace(redirectUrl))
                 {

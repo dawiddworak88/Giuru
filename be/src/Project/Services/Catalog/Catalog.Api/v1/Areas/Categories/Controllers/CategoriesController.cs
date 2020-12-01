@@ -79,6 +79,7 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
         [ProducesResponseType(422)]
         public async Task<IActionResult> Get(string language, Guid? id)
         {
@@ -99,7 +100,39 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
                 return category != null ? this.StatusCode((int)HttpStatusCode.OK, category) : (IActionResult)this.StatusCode((int)HttpStatusCode.NotFound);
             }
 
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Delete category by id.
+        /// </summary>
+        /// <param name="language">The language.</param>
+        /// <param name="id">The id.</param>
+        /// <returns>The category.</returns>
+        [HttpDelete, MapToApiVersion("1.0")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(422)]
+        public async Task<IActionResult> Delete(string language, Guid? id)
+        {
+            var serviceModel = new DeleteCategoryModel
+            {
+                Id = id,
+                Language = language
+            };
+
+            var validator = new DeleteCategoryModelValidator();
+
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                await this.categoryService.DeleteAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }

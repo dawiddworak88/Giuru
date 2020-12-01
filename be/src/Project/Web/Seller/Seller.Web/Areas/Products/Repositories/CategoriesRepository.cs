@@ -1,14 +1,16 @@
 ﻿using Foundation.ApiExtensions.Communications;
+using Foundation.ApiExtensions.Models.Request;
+using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
-using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.ApiResponseModels;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Shared.Configurations;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -26,9 +28,32 @@ namespace Seller.Web.Areas.Categories.Repositories
             this.settings = settings;
         }
 
+        public async Task DeleteAsync(string token, string language, Guid? id)
+        {
+            var deleteRequestModel = new RequestModelBase
+            {
+                Id = id,
+                Language = language
+            };
+
+            var apiRequest = new ApiRequest<RequestModelBase>
+            { 
+                Data = deleteRequestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+        }
+
         public async Task<PagedResults<IEnumerable<Category>>> GetCategoriesAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage)
         {
-            var categoriesRequestModel = new CategoriesRequestModel
+            var categoriesRequestModel = new PagedRequestModelBase
             {
                 Language = language,
                 SearchTerm = searchTerm,
@@ -36,14 +61,14 @@ namespace Seller.Web.Areas.Categories.Repositories
                 ItemsPerPage = itemsPerPage
             };
 
-            var apiRequest = new ApiRequest<CategoriesRequestModel>
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
             {
-                Data = this.apiClientService.InitializeRequestModelContext(categoriesRequestModel),
+                Data = categoriesRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<CategoriesRequestModel>, CategoriesRequestModel, PagedResults<IEnumerable<CategoryResponseModel>>>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<CategoryResponseModel>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {

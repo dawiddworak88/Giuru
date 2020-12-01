@@ -120,6 +120,9 @@
   <data name="AddCategory" xml:space="preserve">
     <value>Add category</value>
   </data>
+  <data name="CategoryNotFound" xml:space="preserve">
+    <value>Category hasn't been found</value>
+  </data>
   <data name="EnterSkuText" xml:space="preserve">
     <value>Enter SKU</value>
   </data>
@@ -147,6 +150,9 @@
   <data name="ProductSavedSuccessfully" xml:space="preserve">
     <value>Product has been saved succcessfully.</value>
   </data>
+  <data name="ProductsDeleteCategoryConflict" xml:space="preserve">
+    <value>There are products that belong to this category. Delete them first</value>
+  </data>
   <data name="ProductVariants" xml:space="preserve">
     <value>Product variants</value>
   </data>
@@ -158,5 +164,8 @@
   </data>
   <data name="SkuRequiredErrorMessage" xml:space="preserve">
     <value>Enter SKU</value>
+  </data>
+  <data name="SubcategoriesDeleteCategoryConflict" xml:space="preserve">
+    <value>There are subcategories that belong to this category. Delete them first</value>
   </data>
 </root>
