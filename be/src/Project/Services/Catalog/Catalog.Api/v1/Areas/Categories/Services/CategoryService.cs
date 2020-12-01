@@ -10,19 +10,24 @@ using Foundation.Extensions.Exceptions;
 using System.Net;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
+using System.Globalization;
+using Foundation.Localization.Services;
 
 namespace Catalog.Api.v1.Areas.Categories.Services
 {
     public class CategoryService : ICategoryService
     {
         private readonly CatalogContext context;
+        private readonly ICultureService cultureService;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
 
         public CategoryService(
             CatalogContext context,
+            ICultureService cultureService,
             IStringLocalizer<ProductResources> productLocalizer)
         {
             this.context = context;
+            this.cultureService = cultureService;
             this.productLocalizer = productLocalizer;
         }
 
@@ -93,6 +98,8 @@ namespace Catalog.Api.v1.Areas.Categories.Services
         public async Task DeleteAsync(DeleteCategoryModel model)
         {
             var category = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+
+            this.cultureService.SetCulture(model.Language);
 
             if (category == null)
             {

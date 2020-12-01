@@ -32,7 +32,6 @@ namespace Seller.Web.Areas.Categories.Repositories
         {
             var deleteRequestModel = new RequestModelBase
             {
-                Id = id,
                 Language = language
             };
 
@@ -40,14 +39,14 @@ namespace Seller.Web.Areas.Categories.Repositories
             { 
                 Data = deleteRequestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}/{id}"
             };
 
             var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
 
-            if (!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode && response?.Data != null)
             {
-                throw new CustomException(response.Message, (int)response.StatusCode);
+                throw new CustomException(response.Data.Message, (int)response.StatusCode);
             }
         }
 

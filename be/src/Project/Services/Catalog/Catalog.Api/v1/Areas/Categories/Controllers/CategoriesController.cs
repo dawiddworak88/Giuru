@@ -110,8 +110,10 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         /// <param name="id">The id.</param>
         /// <returns>The category.</returns>
         [HttpDelete, MapToApiVersion("1.0")]
+        [Route("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
         [ProducesResponseType(422)]
         public async Task<IActionResult> Delete(string language, Guid? id)
         {

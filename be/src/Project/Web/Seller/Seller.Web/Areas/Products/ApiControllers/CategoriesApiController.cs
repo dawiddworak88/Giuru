@@ -1,10 +1,13 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Products.Repositories;
 using System;
 using System.Globalization;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Products.ApiControllers
@@ -13,10 +16,14 @@ namespace Seller.Web.Areas.Products.ApiControllers
     public class CategoriesApiController : BaseApiController
     {
         private readonly ICategoriesRepository categoriesRepository;
+        private readonly IStringLocalizer productLocalizer;
 
-        public CategoriesApiController(ICategoriesRepository categoriesRepository)
+        public CategoriesApiController(
+            ICategoriesRepository categoriesRepository,
+            IStringLocalizer<ProductResources> productLocalizer)
         {
             this.categoriesRepository = categoriesRepository;
+            this.productLocalizer = productLocalizer;
         }
 
         [HttpGet]
@@ -29,7 +36,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
                 pageIndex,
                 itemsPerPage);
 
-            return this.Ok(categories);
+            return this.StatusCode((int)HttpStatusCode.OK, categories);
         }
 
         [HttpDelete]
@@ -40,7 +47,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
                 CultureInfo.CurrentUICulture.Name,
                 id);
 
-            return this.Ok();
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.productLocalizer.GetString("CategoryDeletedSuccessfully").Value });
         }
     }
 }

@@ -120,8 +120,11 @@
   <data name="AddCategory" xml:space="preserve">
     <value>Dodaj kategorię</value>
   </data>
+  <data name="CategoryDeletedSuccessfully" xml:space="preserve">
+    <value>Kategoria została usunięta.</value>
+  </data>
   <data name="CategoryNotFound" xml:space="preserve">
-    <value>Kategoria nie została znaleziona</value>
+    <value>Kategoria nie została znaleziona.</value>
   </data>
   <data name="EnterSkuText" xml:space="preserve">
     <value>Wprowadź SKU</value>
@@ -136,7 +139,7 @@
     <value>Produkt został już utworzony.</value>
   </data>
   <data name="ProductDeletedSuccessfully" xml:space="preserve">
-    <value>Produkt został usunięty pomyślnie</value>
+    <value>Produkt został usunięty.</value>
   </data>
   <data name="ProductDetailText" xml:space="preserve">
     <value>Produkt</value>
@@ -151,7 +154,7 @@
     <value>Produkt został pomyślnie zapisany.</value>
   </data>
   <data name="ProductsDeleteCategoryConflict" xml:space="preserve">
-    <value>Istnieją produkty przypisane do tej kategorii. Usuń je w pierwszej kolejności.</value>
+    <value>Usuń produkty przypisane do tej kategorii.</value>
   </data>
   <data name="ProductVariants" xml:space="preserve">
     <value>Warianty produktu</value>
@@ -166,6 +169,6 @@
     <value>Wprowadź SKU</value>
   </data>
   <data name="SubcategoriesDeleteCategoryConflict" xml:space="preserve">
-    <value>Istnieją podkategorie tej kategorii. Usuń je w pierwszej kolejności.</value>
+    <value>Usuń podkategorie należące do tej kategorii.</value>
   </data>
 </root>

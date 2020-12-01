@@ -41,7 +41,7 @@ namespace Seller.Portal
             services.AddControllersWithViews(options =>
             {
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-            });
+            }).AddNewtonsoftJson();
 
             services.RegisterClientAccountDependencies(this.Configuration);
 

@@ -65,8 +65,6 @@ function Catalog(props) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                FetchErrorHandler.handleUnauthorizedResponse(response);
-
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
@@ -76,7 +74,6 @@ function Catalog(props) {
                         setTotal(() => jsonResponse.total);
                     }
                     else {
-                        FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
                         toast.error(props.generalErrorMessage);
                     }
                 });
@@ -163,8 +160,6 @@ function Catalog(props) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                FetchErrorHandler.handleUnauthorizedResponse(response);
-
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
@@ -176,12 +171,11 @@ function Catalog(props) {
                         setEntityToDelete(() => null);
                     }
                     else {
-                        FetchErrorHandler.consoleLogResponseDetails(url, response, jsonResponse);
-                        toast.error(props.generalErrorMessage);
+                        toast.error(jsonResponse.message);
                     }
                 });
             }).catch(error => {
-                console.log(error);
+                console.log(error)
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
