@@ -33,7 +33,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
 
         public async Task<CategoryPageViewModel> BuildModelAsync(SearchProductsComponentModel componentModel)
         {
-
             var viewModel = new CategoryPageViewModel
             {
                 Header = headerModelBuilder.BuildModel(),

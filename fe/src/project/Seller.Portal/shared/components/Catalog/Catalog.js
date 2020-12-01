@@ -12,7 +12,6 @@ import {
     TableHead, TableRow, Paper, TablePagination, CircularProgress,
     Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
 } from "@material-ui/core";
-import FetchErrorHandler from "../../../../../shared/helpers/errorHandlers/FetchErrorHandler";
 import KeyConstants from "../../../../../shared/constants/KeyConstants";
 import { Context } from "../../../../../shared/stores/Store";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
@@ -77,7 +76,7 @@ function Catalog(props) {
                         toast.error(props.generalErrorMessage);
                     }
                 });
-            }).catch(error => {
+            }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
@@ -106,8 +105,6 @@ function Catalog(props) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                FetchErrorHandler.handleUnauthorizedResponse(response);
-
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
@@ -119,11 +116,10 @@ function Catalog(props) {
                         setTotal(() => jsonResponse.total);
                     }
                     else {
-                        FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
                         toast.error(props.generalErrorMessage);
                     }
                 });
-            }).catch(error => {
+            }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
@@ -174,8 +170,7 @@ function Catalog(props) {
                         toast.error(jsonResponse.message);
                     }
                 });
-            }).catch(error => {
-                console.log(error)
+            }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });

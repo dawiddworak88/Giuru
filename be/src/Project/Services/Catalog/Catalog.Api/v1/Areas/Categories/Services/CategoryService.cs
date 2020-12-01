@@ -10,7 +10,6 @@ using Foundation.Extensions.Exceptions;
 using System.Net;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
-using System.Globalization;
 using Foundation.Localization.Services;
 
 namespace Catalog.Api.v1.Areas.Categories.Services
@@ -90,7 +89,6 @@ namespace Catalog.Api.v1.Areas.Categories.Services
                                  Name = x.Name,
                                  ThumbnailMediaId = y.MediaId
                              };
-
 
             return await categories.FirstOrDefaultAsync();
         }
