@@ -1,4 +1,5 @@
-﻿using Foundation.ApiExtensions.Definitions;
+﻿using Foundation.Account.Definitions;
+using Foundation.ApiExtensions.Definitions;
 using Identity.Api.Infrastructure.Accounts.Entities;
 using IdentityModel;
 using IdentityServer4.Extensions;
@@ -32,8 +33,8 @@ namespace Identity.Api.Areas.Accounts.Services.ProfileServices
                 {
                     var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Email, user.Email),
-                        new Claim(JwtClaimTypes.Audience, ApiExtensionsConstants.AllScopes)
+                        new Claim(AccountConstants.OrganisationIdClaim, user.OrganisationId.ToString()),
+                        new Claim(ClaimTypes.Email, user.Email)
                     };
 
                     context.IssuedClaims.AddRange(claims);
