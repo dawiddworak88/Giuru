@@ -10,7 +10,7 @@
     "@testing-library/react": "10.0.1",
     "@testing-library/user-event": "10.0.0",
     "ajv": "6.12.2",
-    "bulma": "0.8.0",
+    "bulma": "0.9.1",
     "express": "4.17.1",
     "html-react-parser": "0.14.0",
     "json-schema-merge-allof": "0.7.0",
