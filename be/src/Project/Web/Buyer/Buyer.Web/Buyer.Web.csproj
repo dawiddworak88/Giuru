@@ -8,6 +8,12 @@
     <DockerfileContext>..\..\..\..</DockerfileContext>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Shared\Definitions\**" />
+    <Content Remove="Shared\Definitions\**" />
+    <EmbeddedResource Remove="Shared\Definitions\**" />
+    <None Remove="Shared\Definitions\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -29,7 +35,6 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\PageContent\Foundation.PageContent\Foundation.PageContent.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Shared\Definitions\" />
     <Folder Include="wwwroot\dist\" />
   </ItemGroup>
 </Project>

@@ -126,11 +126,20 @@
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Kategorie nicht gefunden.</value>
   </data>
+  <data name="EditCategory" xml:space="preserve">
+    <value>Kategorie bearbeiten</value>
+  </data>
+  <data name="EnterCategoryName" xml:space="preserve">
+    <value>Bitte den Kategorienamen eingeben</value>
+  </data>
   <data name="EnterSkuText" xml:space="preserve">
     <value>Bitte SKU eingeben</value>
   </data>
   <data name="NewProduct" xml:space="preserve">
     <value>Neues Produkt</value>
+  </data>
+  <data name="ParentCategory" xml:space="preserve">
+    <value>Eltern-Kategorie</value>
   </data>
   <data name="Product" xml:space="preserve">
     <value>Produkt</value>
@@ -158,6 +167,9 @@
   </data>
   <data name="ProductVariants" xml:space="preserve">
     <value>Produktvarianten</value>
+  </data>
+  <data name="SelectCategory" xml:space="preserve">
+    <value>Kategorie wählen</value>
   </data>
   <data name="Sku" xml:space="preserve">
     <value>SKU</value>

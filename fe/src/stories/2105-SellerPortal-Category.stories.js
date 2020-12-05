@@ -25,7 +25,7 @@ var categoryDetailForm = {
   ]
 };
 
-export const CategoryPageStory = () => <CategoryPage header={header} menuTiles={menuTiles} title="Product" categoryDetailForm={categoryDetailForm} footer={footer} />
+export const CategoryPageStory = () => <CategoryPage header={header} menuTiles={menuTiles} categoryDetailForm={categoryDetailForm} footer={footer} />
 
 CategoryPageStory.story = {
   name: "Category Page",

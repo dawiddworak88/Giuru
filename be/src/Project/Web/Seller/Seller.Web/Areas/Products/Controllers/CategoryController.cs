@@ -5,6 +5,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Seller.Web.Areas.Products.ViewModels;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Products.Controllers
@@ -19,10 +20,11 @@ namespace Seller.Web.Areas.Products.Controllers
             this.categoryPageModelBuilder = categoryPageModelBuilder;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Edit()
         {
             var componentModel = new ComponentModelBase
             {
+                Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName)
             };
 

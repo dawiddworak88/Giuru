@@ -6,12 +6,12 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
-using Seller.Web.Areas.Products.ApiResponseModels;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Shared.Configurations;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Categories.Repositories
@@ -67,40 +67,73 @@ namespace Seller.Web.Areas.Categories.Repositories
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<CategoryResponseModel>>>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Category>>>(apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data != null)
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
-                var categories = new List<Category>();
-
-                foreach (var categoryResponse in response.Data.Data)
-                {
-                    var category = new Category
-                    {
-                        Id = categoryResponse.Id,
-                        Name = categoryResponse.Name,
-                        ParentId = categoryResponse.ParentId,
-                        ParentCategoryName = categoryResponse.ParentCategoryName,
-                        Level = categoryResponse.Level,
-                        IsLeaf = categoryResponse.IsLeaf,
-                        Order = categoryResponse.Order,
-                        ThumbnailMediaId = categoryResponse.ThumbnailMediaId,
-                        LastModifiedDate = categoryResponse.LastModifiedDate,
-                        CreatedDate = categoryResponse.CreatedDate
-                    };
-
-                    categories.Add(category);
-                }
-
                 return new PagedResults<IEnumerable<Category>>(response.Data.Total, response.Data.PageSize)
                 {
-                    Data = categories
+                    Data = response.Data.Data
                 };
             }
 
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
+        }
+
+        public async Task<IEnumerable<Category>> GetCategoriesAllAsync(string token, string language, int pageIndex, int itemsPerPage)
+        {
+            var categoriesRequestModel = new PagedRequestModelBase
+            {
+                Language = language,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage
+            };
+
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Data = categoriesRequestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Category>>>(apiRequest);
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                var categories = new List<Category>();
+
+                categories.AddRange(response.Data.Data);
+
+                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)itemsPerPage);
+
+                for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
+                {
+                    apiRequest.Data.PageIndex = i;
+
+                    var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Category>>>(apiRequest);
+
+                    if (!nextPagesResponse.IsSuccessStatusCode)
+                    {
+                        throw new CustomException(response.Message, (int)response.StatusCode);
+                    }
+
+                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Count() > 0)
+                    {
+                        categories.AddRange(nextPagesResponse.Data.Data);
+                    }
+                }
+
+                return categories;
             }
 
             return default;

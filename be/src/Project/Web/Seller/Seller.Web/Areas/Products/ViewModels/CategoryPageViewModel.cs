@@ -4,5 +4,6 @@ namespace Seller.Web.Areas.Products.ViewModels
 {
     public class CategoryPageViewModel : BasePageViewModel
     {
+        public CategoryDetailFormViewModel CategoryDetailForm { get; set; }
     }
 }

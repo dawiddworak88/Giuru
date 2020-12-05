@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress } from "@material-ui/core";
-import FetchErrorHandler from "../../../../../../shared/helpers/errorHandlers/FetchErrorHandler";
 
 function CategoryDetailForm(props) {
 
@@ -42,8 +41,6 @@ function CategoryDetailForm(props) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                FetchErrorHandler.handleUnauthorizedResponse(response);
-
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
@@ -52,12 +49,10 @@ function CategoryDetailForm(props) {
                         toast.success(jsonResponse.message);
                     }
                     else {
-                        FetchErrorHandler.consoleLogResponseDetails(state, response, jsonResponse);
                         toast.error(props.generalErrorMessage);
                     }
                 });
             }).catch(() => {
-
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
@@ -71,7 +66,7 @@ function CategoryDetailForm(props) {
         setFieldValue,
         handleOnChange,
         handleOnSubmit
-    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
+    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.category);
 
     const { name, parentCategory } = values;
 
@@ -95,7 +90,7 @@ function CategoryDetailForm(props) {
                                     value={parentCategory}
                                     onChange={handleOnChange}>
                                         <MenuItem value="">&nbsp;</MenuItem>
-                                        {props.parentCategories.map(category => 
+                                        {props.parentCategories && props.parentCategories.map(category => 
                                             <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
                                         )}
                                 </Select>
@@ -120,7 +115,8 @@ CategoryDetailForm.propTypes = {
     title: PropTypes.string.isRequired,
     nameLabel: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
-    generalErrorMessage: PropTypes.string.isRequired
+    generalErrorMessage: PropTypes.string.isRequired,
+    parentCategories: PropTypes.array.isRequired
 };
 
 export default CategoryDetailForm;

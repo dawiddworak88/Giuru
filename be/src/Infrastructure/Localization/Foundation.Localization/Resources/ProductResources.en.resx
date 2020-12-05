@@ -126,11 +126,20 @@
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Category hasn't been found.</value>
   </data>
+  <data name="EditCategory" xml:space="preserve">
+    <value>Edit category</value>
+  </data>
+  <data name="EnterCategoryName" xml:space="preserve">
+    <value>Enter category name</value>
+  </data>
   <data name="EnterSkuText" xml:space="preserve">
     <value>Enter SKU</value>
   </data>
   <data name="NewProduct" xml:space="preserve">
     <value>New product</value>
+  </data>
+  <data name="ParentCategory" xml:space="preserve">
+    <value>Parent category</value>
   </data>
   <data name="Product" xml:space="preserve">
     <value>Product</value>
@@ -158,6 +167,9 @@
   </data>
   <data name="ProductVariants" xml:space="preserve">
     <value>Product variants</value>
+  </data>
+  <data name="SelectCategory" xml:space="preserve">
+    <value>Select category</value>
   </data>
   <data name="Sku" xml:space="preserve">
     <value>SKU</value>

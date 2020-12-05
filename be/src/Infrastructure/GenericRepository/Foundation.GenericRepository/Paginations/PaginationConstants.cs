@@ -4,5 +4,6 @@
     {
         public static readonly int DefaultPageIndex = 1;
         public static readonly int DefaultPageSize = 50;
+        public static readonly int SecondPage = 2;
     }
 }

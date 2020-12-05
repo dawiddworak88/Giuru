@@ -4,19 +4,18 @@ using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
 using Seller.Web.Areas.Products.ViewModels;
-using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {
-    public class CategoryPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CategoryPageViewModel>
+    public class CategoryDetailPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CategoryPageViewModel>
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryDetailFormViewModel> categoryDetailFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
-        public CategoryPageModelBuilder(
+        public CategoryDetailPageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, CategoryDetailFormViewModel> categoryDetailFormModelBuilder,
@@ -30,13 +29,19 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 
         public async Task<CategoryPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
+            var categoryDetailFormComponentModel = new ComponentModelBase
+            {
+                Id = componentModel.Id,
+                Token = componentModel.Token,
+                Language = componentModel.Language
+            };
+
             var viewModel = new CategoryPageViewModel
             {
-                Locale = CultureInfo.CurrentUICulture.Name,
-                Header = this.headerModelBuilder.BuildModel(),
-                MenuTiles = this.menuTilesModelBuilder.BuildModel(),
-                CategoryDetailForm = await this.categoryDetailFormModelBuilder.BuildModelAsync(componentModel),
-                Footer = this. footerModelBuilder.BuildModel()
+                Header = headerModelBuilder.BuildModel(),
+                MenuTiles = menuTilesModelBuilder.BuildModel(),
+                CategoryDetailForm = await categoryDetailFormModelBuilder.BuildModelAsync(categoryDetailFormComponentModel),
+                Footer = footerModelBuilder.BuildModel()
             };
 
             return viewModel;

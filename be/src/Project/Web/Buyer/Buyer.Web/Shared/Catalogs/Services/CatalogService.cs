@@ -10,7 +10,6 @@ using Buyer.Web.Shared.Catalogs.ApiRequestModels;
 using Foundation.GenericRepository.Paginations;
 using System.Linq;
 using System;
-using Buyer.Web.Areas.Home.Definitions;
 
 namespace Buyer.Web.Shared.Catalogs.Services
 {
@@ -50,13 +49,13 @@ namespace Buyer.Web.Shared.Catalogs.Services
 
                 int totalPages = (int)Math.Ceiling(response.Data.Total / (double)itemsPerPage);
 
-                for (int i = CategoriesPaginationIndexes.SecondPage; i <= totalPages; i++)
+                for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
                 {
                     apiRequest.Data.PageIndex = i;
 
                     var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<CategoriesRequestModel>, CategoriesRequestModel, PagedResults<IEnumerable<Category>>>(apiRequest);
 
-                    if (nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Count() > 0)
+                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Count() > 0)
                     {
                         categories.AddRange(nextPagesResponse.Data.Data);
                     }
