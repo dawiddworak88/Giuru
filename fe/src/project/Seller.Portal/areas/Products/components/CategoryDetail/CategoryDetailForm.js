@@ -75,14 +75,11 @@ function CategoryDetailForm(props) {
     const { id, name, parentCategoryId, files } = values;
 
 
-    function deleteMedia(id) {
+    function deleteMedia(e, id) {
 
-        console.log(id);
+        e.preventDefault();
+        setFieldValue({ name: "files", value: files.filter((item) => item.id !== id) });
     }
-
-      useEffect(() => () => {
-        files.forEach(file => URL.revokeObjectURL(file.url));
-      }, [files]);
 
       const onDrop = useCallback(acceptedFiles => {
 
@@ -104,10 +101,12 @@ function CategoryDetailForm(props) {
 
                     dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                    return response.json().then(() => {
+                    return response.json().then((jsonResponse) => {
 
                         if (response.ok) {
+
                             dispatch({ type: "SET_IS_LOADING", payload: false });
+                            setFieldValue({ name: "files", value: [ jsonResponse ] });
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -118,7 +117,7 @@ function CategoryDetailForm(props) {
                     toast.error(props.generalErrorMessage);
                 });
         });
-    }, [dispatch, state, props.saveMediaUrl, props.generalErrorMessage]);
+    }, []);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
@@ -166,7 +165,7 @@ function CategoryDetailForm(props) {
                                         <p>{isDragActive ? props.dropOrSelectFilesLabel : props.dropFilesLabel}</p>
                                     </div>
                                 </div>
-                                {files &&
+                                {files && files.length > 0 &&
                                     <aside className="dropzone__preview">
                                         {files.map((file) =>
                                             <div className="dropzone__preview-thumbnail">
@@ -174,7 +173,7 @@ function CategoryDetailForm(props) {
                                                     <img src={file.url} />
                                                 </div>
                                                 <div className="is-flex is-flex-centered has-text-cenetered">
-                                                    <Button type="button" type="contained" color="primary" onClick={() => deleteMedia(file.id)}>
+                                                    <Button type="button" type="contained" color="primary" onClick={(e) => deleteMedia(e, file.id)}>
                                                         {props.deleteLabel}
                                                     </Button>
                                                 </div>

@@ -16,6 +16,7 @@ using Foundation.ApiExtensions.DependencyInjection;
 using Foundation.Localization.DependencyInjection;
 using Foundation.Account.DependencyInjection;
 using Foundation.Extensions.Filters;
+using Seller.Web.Areas.Media.DependencyInjection;
 
 namespace Seller.Portal
 {
@@ -58,6 +59,8 @@ namespace Seller.Portal
             services.RegisterClientsAreaDependencies();
 
             services.RegisterProductsAreaDependencies();
+
+            services.RegisterMediaAreaDependencies();
 
             services.ConfigureOptions(this.Configuration);
         }

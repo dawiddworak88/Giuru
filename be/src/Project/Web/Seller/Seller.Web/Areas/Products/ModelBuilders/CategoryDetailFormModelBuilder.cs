@@ -3,6 +3,7 @@ using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Products.Definitons;
@@ -11,6 +12,7 @@ using Seller.Web.Areas.Products.ViewModels;
 using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,19 +25,22 @@ namespace Seller.Web.Areas.Products.ModelBuilders
         private readonly IStringLocalizer productLocalizer;
         private readonly IMediaHelperService mediaHelperService;
         private readonly IOptionsMonitor<AppSettings> settings;
+        private readonly LinkGenerator linkGenerator;
 
         public CategoryDetailFormModelBuilder(
             ICategoriesRepository categoriesRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             IMediaHelperService mediaHelperService,
-            IOptionsMonitor<AppSettings> settings)
+            IOptionsMonitor<AppSettings> settings,
+            LinkGenerator linkGenerator)
         {
             this.categoriesRepository = categoriesRepository;
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
             this.mediaHelperService = mediaHelperService;
             this.settings = settings;
+            this.linkGenerator = linkGenerator;
         }
 
         public async Task<CategoryDetailFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -52,7 +57,8 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
                 DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
                 DeleteLabel = this.globalLocalizer.GetString("Delete"),
-                CategoryPictureLabel = this.productLocalizer.GetString("CategoryPicture")
+                CategoryPictureLabel = this.productLocalizer.GetString("CategoryPicture"),
+                SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var parentCategories = await this.categoriesRepository.GetCategoriesAllAsync(
