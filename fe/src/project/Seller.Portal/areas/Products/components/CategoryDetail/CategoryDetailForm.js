@@ -1,9 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useCallback, useEffect } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
+import { UploadCloud } from "react-feather";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
+import IconConstants from "../../../../../../shared/constants/IconConstants";
 import { TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress } from "@material-ui/core";
+import { useDropzone } from "react-dropzone";
 
 function CategoryDetailForm(props) {
 
@@ -11,9 +14,10 @@ function CategoryDetailForm(props) {
 
     const stateSchema = {
 
-        id: { value: props.category ? props.category.id : null, error: "" },
-        name: { value: props.category ? props.category.name : "", error: "" },
-        parentCategory: { value: props.category ? props.category.parentCategory: "" }
+        id: { value: props.id ? props.id : null, error: "" },
+        name: { value: props.name ? props.name : "", error: "" },
+        parentCategoryId: { value: props.parentCategoryId ? props.parentCategoryId : "" },
+        files: { value: props.files ? props.files : [] }
     };
 
     const stateValidatorSchema = {
@@ -66,9 +70,61 @@ function CategoryDetailForm(props) {
         setFieldValue,
         handleOnChange,
         handleOnSubmit
-    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.category);
+    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { name, parentCategory } = values;
+    const { id, name, parentCategoryId, files } = values;
+
+
+    function deleteMedia(id) {
+
+        console.log(id);
+    }
+
+      useEffect(() => () => {
+        files.forEach(file => URL.revokeObjectURL(file.url));
+      }, [files]);
+
+      const onDrop = useCallback(acceptedFiles => {
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        acceptedFiles.forEach((file) => {
+
+            const formData = new FormData();
+
+            formData.append("file", file);
+
+            const requestOptions = {
+                method: "POST",
+                body: formData
+            };
+
+            fetch(props.saveMediaUrl, requestOptions)
+                .then(function (response) {
+
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                    return response.json().then(() => {
+
+                        if (response.ok) {
+                            dispatch({ type: "SET_IS_LOADING", payload: false });
+                        }
+                        else {
+                            toast.error(props.generalErrorMessage);
+                        }
+                    });
+                }).catch(() => {
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
+                    toast.error(props.generalErrorMessage);
+                });
+        });
+    }, [dispatch, state, props.saveMediaUrl, props.generalErrorMessage]);
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop,
+        accept: ".png, .jpg",
+        multiple: false
+    });
 
     return (
         <section className="section section-small-padding">
@@ -87,7 +143,7 @@ function CategoryDetailForm(props) {
                                     labelId="parent-category"
                                     id="parentCategory"
                                     name="parentCategory"
-                                    value={parentCategory}
+                                    value={parentCategoryId}
                                     onChange={handleOnChange}>
                                         <MenuItem value="">&nbsp;</MenuItem>
                                         {props.parentCategories && props.parentCategories.map(category => 
@@ -95,6 +151,38 @@ function CategoryDetailForm(props) {
                                         )}
                                 </Select>
                             </FormControl>
+                        </div>
+                        <div className={"field"}>
+                            <div className="dropzone">
+                                {props.categoryPictureLabel &&
+                                    <label className="dropzone__title" for="media">{props.categoryPictureLabel}</label>
+                                }
+                                <div className="dropzone__pond-container" {...getRootProps()}>
+                                    <input id="media" name="media" {...getInputProps()} />
+                                    <div className={isDragActive ? "dropzone__pond dropzone--active" : "dropzone__pond"}>
+                                        <p>
+                                            <UploadCloud size={IconConstants.defaultSize()} />
+                                        </p>
+                                        <p>{isDragActive ? props.dropOrSelectFilesLabel : props.dropFilesLabel}</p>
+                                    </div>
+                                </div>
+                                {files &&
+                                    <aside className="dropzone__preview">
+                                        {files.map((file) =>
+                                            <div className="dropzone__preview-thumbnail">
+                                                <div>
+                                                    <img src={file.url} />
+                                                </div>
+                                                <div className="is-flex is-flex-centered has-text-cenetered">
+                                                    <Button type="button" type="contained" color="primary" onClick={() => deleteMedia(file.id)}>
+                                                        {props.deleteLabel}
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </aside>
+                                }
+                            </div>
                         </div>
                         <div className="field">
                             <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
@@ -116,7 +204,12 @@ CategoryDetailForm.propTypes = {
     nameLabel: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
-    parentCategories: PropTypes.array.isRequired
+    parentCategories: PropTypes.array.isRequired,
+    dropOrSelectFilesLabel: PropTypes.string.isRequired,
+    dropFilesLabel: PropTypes.string.isRequired,
+    saveMediaUrl: PropTypes.string.isRequired,
+    deleteLabel: PropTypes.string.isRequired,
+    categoryPictureLabel: PropTypes.string.isRequired
 };
 
 export default CategoryDetailForm;

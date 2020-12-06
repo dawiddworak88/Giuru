@@ -138,5 +138,34 @@ namespace Seller.Web.Areas.Categories.Repositories
 
             return default;
         }
+
+        public async Task<Category> GetCategoryAsync(string token, string language, Guid? id)
+        {
+            var request = new RequestModelBase
+            {
+                Language = language
+            };
+
+            var apiRequest = new ApiRequest<RequestModelBase>
+            { 
+                Data = request,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Category>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
     }
 }

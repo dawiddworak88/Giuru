@@ -1,11 +1,16 @@
 ﻿using Foundation.Extensions.ModelBuilders;
+using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Seller.Web.Areas.Products.Definitons;
 using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Areas.Products.ViewModels;
+using Seller.Web.Shared.Configurations;
+using Seller.Web.Shared.ViewModels;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,18 +21,21 @@ namespace Seller.Web.Areas.Products.ModelBuilders
         private readonly ICategoriesRepository categoriesRepository;
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer productLocalizer;
-        private readonly LinkGenerator linkGenerator;
+        private readonly IMediaHelperService mediaHelperService;
+        private readonly IOptionsMonitor<AppSettings> settings;
 
         public CategoryDetailFormModelBuilder(
             ICategoriesRepository categoriesRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
-            LinkGenerator linkGenerator)
+            IMediaHelperService mediaHelperService,
+            IOptionsMonitor<AppSettings> settings)
         {
             this.categoriesRepository = categoriesRepository;
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
-            this.linkGenerator = linkGenerator;
+            this.mediaHelperService = mediaHelperService;
+            this.settings = settings;
         }
 
         public async Task<CategoryDetailFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -40,7 +48,11 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 SelectCategoryLabel = this.productLocalizer.GetString("SelectCategory"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 NameRequiredErrorMessage = this.productLocalizer.GetString("EnterCategoryName"),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred")
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
+                DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
+                DeleteLabel = this.globalLocalizer.GetString("Delete"),
+                CategoryPictureLabel = this.productLocalizer.GetString("CategoryPicture")
             };
 
             var parentCategories = await this.categoriesRepository.GetCategoriesAllAsync(
@@ -52,9 +64,32 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             if (parentCategories != null)
             {
                 viewModel.ParentCategories = parentCategories.Select(x => new ParentCategoryViewModel { Id = x.Id, Name = x.Name, Level = x.Level }).OrderBy(x => x.Level).ThenBy(x => x.Name);
+            }
 
-                if (componentModel.Id.HasValue)
+            if (componentModel.Id.HasValue)
+            {
+                var category = await this.categoriesRepository.GetCategoryAsync(
+                    componentModel.Token,
+                    componentModel.Language,
+                    componentModel.Id);
+
+                if (category != null)
                 {
+                    viewModel.Id = category.Id;
+                    viewModel.Name = category.Name;
+                    viewModel.ParentCategoryId = category.ParentId;
+
+                    if (category.ThumbnailMediaId.HasValue)
+                    {
+                        viewModel.Files = new List<FileViewModel>
+                        {
+                            new FileViewModel
+                            { 
+                                Id = category.ThumbnailMediaId.Value,
+                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, category.ThumbnailMediaId.Value, Constants.CategoryPreviewMaxWidth, Constants.CategoryPreviewMaxHeight, true)
+                            }
+                        };
+                    }
                 }
             }
 

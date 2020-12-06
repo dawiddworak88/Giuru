@@ -34,8 +34,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             {
                 Clients = await this.clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language),
                 ValidateOrderUrl = this.linkGenerator.GetPathByAction("Validate", "ImportOrderApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                DropFilesLabel = this.orderLocalizer["DropFile"],
-                DropOrSelectFilesLabel = this.orderLocalizer["DropOrSelectFile"],
+                DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
+                DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
                 SelectClientLabel = this.orderLocalizer["SelectClient"],
                 SaveText = this.orderLocalizer["ImportOrder"],
                 GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"]

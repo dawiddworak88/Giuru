@@ -126,6 +126,9 @@
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Kategoria nie została znaleziona.</value>
   </data>
+  <data name="CategoryPicture" xml:space="preserve">
+    <value>Zdjęcie kategorii</value>
+  </data>
   <data name="EditCategory" xml:space="preserve">
     <value>Edytuj kategorię</value>
   </data>

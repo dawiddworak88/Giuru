@@ -177,6 +177,12 @@
   <data name="Download" xml:space="preserve">
     <value>Pobierz</value>
   </data>
+  <data name="DropFile" xml:space="preserve">
+    <value>Upuść plik tutaj...</value>
+  </data>
+  <data name="DropOrSelectFile" xml:space="preserve">
+    <value>Przeciągnij i upuść lub kliknij, aby wybrać</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Edytuj</value>
   </data>
