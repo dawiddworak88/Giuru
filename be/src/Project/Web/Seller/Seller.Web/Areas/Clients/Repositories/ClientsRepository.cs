@@ -84,7 +84,7 @@ namespace Seller.Web.Areas.Clients.Repositories
                 {
                     var client = new Client
                     {
-                        Id = clientResponse.Id,
+                        Id = clientResponse.Id.Value,
                         Name = clientResponse.Name
                     };
 

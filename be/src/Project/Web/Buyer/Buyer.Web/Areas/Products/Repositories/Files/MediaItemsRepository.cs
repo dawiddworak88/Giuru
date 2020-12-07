@@ -52,7 +52,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Files
                 {
                     var mediaItem = new MediaItem
                     { 
-                        Id = mediaItemResponse.Id,
+                        Id = mediaItemResponse.Id.Value,
                         Name = mediaItemResponse.Name,
                         Filename = mediaItemResponse.Filename,
                         IsProtected = mediaItemResponse.IsProtected,

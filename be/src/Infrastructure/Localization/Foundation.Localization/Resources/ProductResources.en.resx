@@ -129,6 +129,9 @@
   <data name="CategoryPicture" xml:space="preserve">
     <value>Category picture</value>
   </data>
+  <data name="CategorySavedSuccessfully" xml:space="preserve">
+    <value>Category has been saved successfully.</value>
+  </data>
   <data name="EditCategory" xml:space="preserve">
     <value>Edit category</value>
   </data>
@@ -143,6 +146,9 @@
   </data>
   <data name="ParentCategory" xml:space="preserve">
     <value>Parent category</value>
+  </data>
+  <data name="ParentCategoryNotFound" xml:space="preserve">
+    <value>Parent category hasn't been found</value>
   </data>
   <data name="Product" xml:space="preserve">
     <value>Product</value>

@@ -37,7 +37,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Categories
             {
                 return new Category
                 { 
-                    Id = response.Data.Id,
+                    Id = response.Data.Id.Value,
                     Name = response.Data.Name
                 };
             }

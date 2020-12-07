@@ -35,7 +35,7 @@ namespace Catalog.Api.Infrastructure.Products.Seeds
                     SellerId = sellerId
                 };
 
-                context.Brands.Add(EntitySeedHelper.SeedEntity(brand));
+                context.Brands.Add(EntityHelper.SeedEntity(brand));
 
                 context.SaveChanges();
             }

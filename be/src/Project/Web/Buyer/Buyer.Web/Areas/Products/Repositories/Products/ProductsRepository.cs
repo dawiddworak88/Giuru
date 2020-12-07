@@ -123,7 +123,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
         { 
             return new Product
             {
-                Id = productResponse.Id,
+                Id = productResponse.Id.Value,
                 PrimaryProductId = productResponse.PrimaryProductId,
                 Sku = productResponse.Sku,
                 Name = productResponse.Name,

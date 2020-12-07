@@ -65,10 +65,10 @@ namespace Catalog.Api.Infrastructure.Categories.Seeds
                     Name = germanName
                 };
 
-                context.Categories.Add(EntitySeedHelper.SeedEntity(category));
-                context.CategoryTranslations.Add(EntitySeedHelper.SeedEntity(enCategoryTranslation));
-                context.CategoryTranslations.Add(EntitySeedHelper.SeedEntity(plCategoryTranslation));
-                context.CategoryTranslations.Add(EntitySeedHelper.SeedEntity(deCategoryTranslation));
+                context.Categories.Add(EntityHelper.SeedEntity(category));
+                context.CategoryTranslations.Add(EntityHelper.SeedEntity(enCategoryTranslation));
+                context.CategoryTranslations.Add(EntityHelper.SeedEntity(plCategoryTranslation));
+                context.CategoryTranslations.Add(EntityHelper.SeedEntity(deCategoryTranslation));
 
                 context.SaveChanges();
             }

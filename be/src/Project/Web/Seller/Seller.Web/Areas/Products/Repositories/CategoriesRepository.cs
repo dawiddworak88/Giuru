@@ -6,6 +6,7 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
+using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Shared.Configurations;
@@ -26,6 +27,45 @@ namespace Seller.Web.Areas.Categories.Repositories
         {
             this.apiClientService = apiClientService;
             this.settings = settings;
+        }
+
+        public async Task<Guid> SaveAsync(
+            string token,
+            string language,
+            Guid? id,
+            Guid? parentCategoryId,
+            string name,
+            IEnumerable<Guid> files)
+        {
+            var requestModel = new SaveCategoryApiRequestModel
+            {
+                Id = id,
+                Language = language,
+                ParentCategoryId = parentCategoryId,
+                Name = name,
+                Files = files
+            };
+
+            var apiRequest = new ApiRequest<SaveCategoryApiRequestModel>
+            {
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.PostAsync<ApiRequest<SaveCategoryApiRequestModel>, SaveCategoryApiRequestModel, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data?.Id != null)
+            {
+                return response.Data.Id.Value;
+            }
+
+            return default;
         }
 
         public async Task DeleteAsync(string token, string language, Guid? id)

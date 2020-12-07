@@ -38,7 +38,7 @@ namespace Seller.Web.Areas.Products.Repositories
             {
                 return new Product
                 { 
-                    Id = response.Data.Id,
+                    Id = response.Data.Id.Value,
                     Name = response.Data.Name,
                     Sku = response.Data.Sku,
                     FormData = response.Data.FormData,

@@ -4,9 +4,11 @@ using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.Repositories;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -37,6 +39,20 @@ namespace Seller.Web.Areas.Products.ApiControllers
                 itemsPerPage);
 
             return this.StatusCode((int)HttpStatusCode.OK, categories);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] SaveCategoryRequestModel model)
+        {
+            var categoryId = await this.categoriesRepository.SaveAsync(
+                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                CultureInfo.CurrentUICulture.Name,
+                model.Id,
+                model.ParentCategoryId,
+                model.Name,
+                model.Files.Select(x => x.Id.Value));
+
+            return this.StatusCode((int)HttpStatusCode.OK, new { Id = categoryId, Message = this.productLocalizer.GetString("CategorySavedSuccessfully").Value });
         }
 
         [HttpDelete]

@@ -5,7 +5,6 @@ namespace Buyer.Web.Areas.Products.ApiResponseModels
 {
     public class FileResponseModel : BaseResponseModel
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Filename { get; set; }
         public string Description { get; set; }

@@ -3,7 +3,7 @@ using System;
 
 namespace Foundation.GenericRepository.Helpers
 {
-    public static class EntitySeedHelper
+    public static class EntityHelper
     {
         public static T SeedEntity<T>(T entity) where T: Entity
         {

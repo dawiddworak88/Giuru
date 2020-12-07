@@ -39,14 +39,19 @@ namespace Seller.Web.Areas.Media.Repositories
                 EndpointAddress = $"{this.settings.Value.MediaUrl}{ApiConstants.Media.FilesApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostMultipartFormAsync<ApiRequest<FileRequestModelBase>, FileRequestModelBase, BaseFileResponseModel>(apiRequest);
+            var response = await this.apiClientService.PostMultipartFormAsync<ApiRequest<FileRequestModelBase>, FileRequestModelBase, BaseResponseModel>(apiRequest);
 
-            if (!response.IsSuccessStatusCode && response?.Data != null)
+            if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Data.Message, (int)response.StatusCode);
             }
 
-            return response.Data.Id;
+            if (response.IsSuccessStatusCode && response.Data?.Id != null)
+            {
+                return response.Data.Id.Value;
+            }
+
+            return default;
         }
     }
 }

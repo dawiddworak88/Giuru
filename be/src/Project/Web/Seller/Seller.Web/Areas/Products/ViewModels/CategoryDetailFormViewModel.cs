@@ -22,6 +22,7 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string DeleteLabel { get; set; }
         public string CategoryPictureLabel { get; set; }
         public string SaveMediaUrl { get; set; }
+        public string SaveUrl { get; set; }
         public IEnumerable<ParentCategoryViewModel> ParentCategories { get; set; }
     }
 }

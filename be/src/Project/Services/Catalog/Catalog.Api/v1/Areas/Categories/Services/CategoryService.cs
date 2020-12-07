@@ -11,6 +11,11 @@ using System.Net;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
 using Foundation.Localization.Services;
+using Catalog.Api.Infrastructure.Categories.Entities;
+using System;
+using Catalog.Api.Infrastructure.Categories.Entites;
+using Foundation.GenericRepository.Helpers;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Catalog.Api.v1.Areas.Categories.Services
 {
@@ -117,6 +122,92 @@ namespace Catalog.Api.v1.Areas.Categories.Services
             category.IsActive = false;
 
             await this.context.SaveChangesAsync();
+        }
+
+        public async Task<CategoryResultModel> UpdateAsync(UpdateCategoryModel serviceModel)
+        {
+            var category = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.IsActive);
+
+            if (category == null)
+            {
+                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            var parentCategory = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == serviceModel.ParentId && x.IsActive);
+
+            if (parentCategory == null)
+            {
+                throw new CustomException(this.productLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            category.Parentid = serviceModel.ParentId;
+            category.Level = parentCategory.Level + 1;
+            category.IsLeaf = !await this.context.Categories.AnyAsync(x => x.Parentid == category.Id && x.IsActive);
+            category.LastModifiedDate = DateTime.UtcNow;
+
+            var categoryTranslation = await this.context.CategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == serviceModel.Id && x.Language == serviceModel.Language && x.IsActive);
+
+            categoryTranslation.Name = serviceModel.Name;
+            categoryTranslation.LastModifiedDate = DateTime.UtcNow;
+
+            if (serviceModel.Files != null)
+            {
+                var categoryImages = this.context.CategoryImages.Where(x => x.CategoryId == serviceModel.Id && x.IsActive);
+                this.context.RemoveRange(categoryImages);
+
+                foreach (var file in serviceModel.Files)
+                {
+                    var categoryImage = new CategoryImage
+                    { 
+                        CategoryId = serviceModel.Id.Value,
+                        MediaId = file
+                    };
+
+                    this.context.CategoryImages.Add(EntityHelper.SeedEntity(categoryImage));
+                }
+            }
+
+            await this.context.SaveChangesAsync();
+
+            return await this.GetAsync(new GetCategoryModel { Id = category.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
+        }
+
+        public async Task<CategoryResultModel> CreateAsync(CreateCategoryModel serviceModel)
+        {
+            var category = new Category
+            {
+                Parentid = serviceModel.ParentId,
+                IsLeaf = true
+            };
+
+            var parentCategory = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == serviceModel.ParentId && x.IsActive);
+            category.Level = parentCategory.Level + 1;
+
+            this.context.Categories.Add(EntityHelper.SeedEntity(category));
+
+            var categoryTranslation = new CategoryTranslation
+            { 
+                CategoryId = category.Id,
+                Name = serviceModel.Name,
+                Language = serviceModel.Language
+            };
+
+            this.context.CategoryTranslations.Add(EntityHelper.SeedEntity(categoryTranslation));
+
+            foreach (var file in serviceModel.Files.OrEmptyIfNull())
+            {
+                var categoryImage = new CategoryImage
+                {
+                    CategoryId = category.Id,
+                    MediaId = file,
+                };
+
+                this.context.CategoryImages.Add(EntityHelper.SeedEntity(categoryImage));
+            }
+
+            await this.context.SaveChangesAsync();
+
+            return await this.GetAsync(new GetCategoryModel { Id = category.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
     }
 }

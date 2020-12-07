@@ -11,5 +11,7 @@ namespace Catalog.Api.v1.Areas.Categories.Services
         Task<PagedResults<IEnumerable<CategoryResultModel>>> GetAsync(GetCategoriesModel model);
         Task<CategoryResultModel> GetAsync(GetCategoryModel model);
         Task DeleteAsync(DeleteCategoryModel model);
+        Task<CategoryResultModel> UpdateAsync(UpdateCategoryModel serviceModel);
+        Task<CategoryResultModel> CreateAsync(CreateCategoryModel serviceModel);
     }
 }

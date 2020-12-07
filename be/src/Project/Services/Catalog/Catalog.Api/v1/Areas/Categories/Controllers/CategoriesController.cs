@@ -1,14 +1,18 @@
 ﻿using Catalog.Api.v1.Areas.Categories.Models;
+using Catalog.Api.v1.Areas.Categories.RequestModels;
 using Catalog.Api.v1.Areas.Categories.Services;
 using Catalog.Api.v1.Areas.Categories.Validators;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Catalog.Api.v1.Areas.Categories.Controllers
@@ -101,6 +105,73 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Creates or updates category (if category id is set).
+        /// </summary>
+        /// <param name="request">The model.</param>
+        /// <returns>The category id.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
+        [ProducesResponseType(422)]
+        public async Task<IActionResult> Save(CategoryRequestModel request)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            if (request.Id.HasValue)
+            {
+                var serviceModel = new UpdateCategoryModel
+                { 
+                    Id = request.Id,
+                    Files = request.Files,
+                    Name = request.Name,
+                    ParentId = request.ParentCategoryId,
+                    Language = request.Language,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                };
+
+                var validator = new UpdateCategoryModelValidator();
+
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var category = await this.categoryService.UpdateAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = category.Id });
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
+            else
+            {
+                var serviceModel = new CreateCategoryModel
+                {
+                    Name = request.Name,
+                    ParentId = request.ParentCategoryId,
+                    Files = request.Files,
+                    Language = request.Language,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                };
+
+                var validator = new CreateCategoryModelValidator();
+
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var category = await this.categoryService.CreateAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.Created, new { Id = category.Id });
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
         }
 
         /// <summary>

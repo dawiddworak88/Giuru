@@ -43,7 +43,7 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
             viewModel.Title = this.globalLocalizer.GetString("Categories");
 
             viewModel.NewText = this.productLocalizer.GetString("AddCategory");
-            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });

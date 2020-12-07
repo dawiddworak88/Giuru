@@ -37,7 +37,7 @@ namespace Buyer.Web.Shared.Brands.Repositories
             {
                 return new Brand
                 {
-                    Id = response.Data.Id,
+                    Id = response.Data.Id.Value,
                     Name = response.Data.Name,
                     Description = response.Data.Description,
                     Files = response.Data.Files

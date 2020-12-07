@@ -81,7 +81,7 @@ function CategoryDetailForm(props) {
         setFieldValue({ name: "files", value: files.filter((item) => item.id !== id) });
     }
 
-      const onDrop = useCallback(acceptedFiles => {
+    const onDrop = useCallback(acceptedFiles => {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
@@ -106,7 +106,7 @@ function CategoryDetailForm(props) {
                         if (response.ok) {
 
                             dispatch({ type: "SET_IS_LOADING", payload: false });
-                            setFieldValue({ name: "files", value: [ jsonResponse ] });
+                            setFieldValue({ name: "files", value: [jsonResponse] });
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -131,6 +131,9 @@ function CategoryDetailForm(props) {
             <div className="columns is-desktop">
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
+                        {id &&
+                            <input id="id" name="id" type="hidden" value={id} />
+                        }
                         <div className="field">
                             <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
@@ -140,14 +143,14 @@ function CategoryDetailForm(props) {
                                 <InputLabel id="parent-category">{props.parentCategoryLabel}</InputLabel>
                                 <Select
                                     labelId="parent-category"
-                                    id="parentCategory"
-                                    name="parentCategory"
+                                    id="parentCategoryId"
+                                    name="parentCategoryId"
                                     value={parentCategoryId}
                                     onChange={handleOnChange}>
-                                        <MenuItem value="">&nbsp;</MenuItem>
-                                        {props.parentCategories && props.parentCategories.map(category => 
-                                            <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
-                                        )}
+                                    <MenuItem value="">&nbsp;</MenuItem>
+                                    {props.parentCategories && props.parentCategories.map(category =>
+                                        <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
+                                    )}
                                 </Select>
                             </FormControl>
                         </div>
@@ -208,7 +211,8 @@ CategoryDetailForm.propTypes = {
     dropFilesLabel: PropTypes.string.isRequired,
     saveMediaUrl: PropTypes.string.isRequired,
     deleteLabel: PropTypes.string.isRequired,
-    categoryPictureLabel: PropTypes.string.isRequired
+    categoryPictureLabel: PropTypes.string.isRequired,
+    saveUrl: PropTypes.string.isRequired
 };
 
 export default CategoryDetailForm;
