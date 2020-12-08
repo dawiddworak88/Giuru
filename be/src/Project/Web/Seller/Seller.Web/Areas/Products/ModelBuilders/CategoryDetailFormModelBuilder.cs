@@ -59,7 +59,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 DeleteLabel = this.globalLocalizer.GetString("Delete"),
                 CategoryPictureLabel = this.productLocalizer.GetString("CategoryPicture"),
                 SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
-                SaveUrl = this.linkGenerator.GetPathByAction("Post", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                SaveUrl = this.linkGenerator.GetPathByAction("Index", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var parentCategories = await this.categoriesRepository.GetCategoriesAllAsync(

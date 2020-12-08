@@ -150,11 +150,15 @@ namespace Catalog.Api.v1.Areas.Categories.Services
             categoryTranslation.Name = serviceModel.Name;
             categoryTranslation.LastModifiedDate = DateTime.UtcNow;
 
+            var categoryImages = this.context.CategoryImages.Where(x => x.CategoryId == serviceModel.Id);
+
+            foreach (var categoryImage in categoryImages)
+            {
+                this.context.CategoryImages.Remove(categoryImage);
+            }
+
             if (serviceModel.Files != null)
             {
-                var categoryImages = this.context.CategoryImages.Where(x => x.CategoryId == serviceModel.Id && x.IsActive);
-                this.context.RemoveRange(categoryImages);
-
                 foreach (var file in serviceModel.Files)
                 {
                     var categoryImage = new CategoryImage

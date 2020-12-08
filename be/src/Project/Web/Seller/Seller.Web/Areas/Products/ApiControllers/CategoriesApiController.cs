@@ -42,7 +42,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] SaveCategoryRequestModel model)
+        public async Task<IActionResult> Index([FromBody] SaveCategoryRequestModel model)
         {
             var categoryId = await this.categoriesRepository.SaveAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),

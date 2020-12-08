@@ -6,7 +6,7 @@ namespace Seller.Web.Areas.Products.ViewModels
 {
     public class CategoryDetailFormViewModel
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string Name { get; set; }
         public Guid? ParentCategoryId { get; set; }
         public IEnumerable<FileViewModel> Files { get; set; }
