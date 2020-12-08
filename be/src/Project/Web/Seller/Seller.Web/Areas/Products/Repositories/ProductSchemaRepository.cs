@@ -1,12 +1,9 @@
 ﻿using Foundation.ApiExtensions.Communications;
-using Foundation.ApiExtensions.Helpers;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
-using System.Reflection;
 using System.Threading.Tasks;
-using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.ApiResponseModels;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Shared.Configurations;
@@ -18,52 +15,40 @@ namespace Seller.Web.Areas.Products.Repositories
     {
         private readonly IApiClientService apiClientService;
         private readonly ServicesEndpointsConfiguration servicesEndpointsConfiguration;
-        private readonly ILogger logger;
 
         public ProductSchemaRepository(IApiClientService apiClientService,
-            IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration,
-            ILogger<ProductsRepository> logger)
+            IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration)
         {
             this.apiClientService = apiClientService;
             this.servicesEndpointsConfiguration = servicesEndpointsConfiguration.CurrentValue;
-            this.logger = logger;
         }
 
         public async Task<Schema> GetProductSchemaByIdAsync(string token, string language, Guid? id)
         {
-            try
+            var productSchemaRequestModel = new RequestModelBase
             {
-                var productSchemaRequestModel = new RequestModelBase
-                {
-                    Id = id,
-                    Language = language
-                };
+                Id = id,
+                Language = language
+            };
 
-                var apiRequest = new ApiRequest<RequestModelBase>
-                {
-                    Data = this.apiClientService.InitializeRequestModelContext(productSchemaRequestModel),
-                    AccessToken = token,
-                    EndpointAddress = this.servicesEndpointsConfiguration.Api.Host + this.servicesEndpointsConfiguration.Api.Endpoints.Schema
-                };
-
-                var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ProductSchemaResponseModel>(apiRequest);
-
-                if (response.IsSuccessStatusCode && response.Data != null)
-                {
-                    return new Schema
-                    { 
-                        Id = response.Data.Id,
-                        Name = response.Data.Name,
-                        JsonSchema = response.Data.JsonSchema,
-                        UiSchema = response.Data.UiSchema
-                    };
-                }
-            }
-            catch (Exception exception)
+            var apiRequest = new ApiRequest<RequestModelBase>
             {
-                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
+                Data = this.apiClientService.InitializeRequestModelContext(productSchemaRequestModel),
+                AccessToken = token,
+                EndpointAddress = this.servicesEndpointsConfiguration.Api.Host + this.servicesEndpointsConfiguration.Api.Endpoints.Schema
+            };
 
-                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ProductSchemaResponseModel>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return new Schema
+                { 
+                    Id = response.Data.Id,
+                    Name = response.Data.Name,
+                    JsonSchema = response.Data.JsonSchema,
+                    UiSchema = response.Data.UiSchema
+                };
             }
 
             return default;
@@ -71,39 +56,30 @@ namespace Seller.Web.Areas.Products.Repositories
 
         public async Task<Schema> GetProductSchemaByEntityTypeIdAsync(string token, string language, Guid? id)
         {
-            try
+            var productSchemaRequestModel = new RequestModelBase
             {
-                var productSchemaRequestModel = new RequestModelBase
-                {
-                    Id = id,
-                    Language = language
-                };
+                Id = id,
+                Language = language
+            };
 
-                var apiRequest = new ApiRequest<RequestModelBase>
-                {
-                    Data = this.apiClientService.InitializeRequestModelContext(productSchemaRequestModel),
-                    AccessToken = token,
-                    EndpointAddress = this.servicesEndpointsConfiguration.Api.Host + this.servicesEndpointsConfiguration.Api.Endpoints.SchemaByEntityType
-                };
-
-                var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ProductSchemaResponseModel>(apiRequest);
-
-                if (response.IsSuccessStatusCode && response.Data != null)
-                {
-                    return new Schema
-                    {
-                        Id = response.Data.Id,
-                        Name = response.Data.Name,
-                        JsonSchema = response.Data.JsonSchema,
-                        UiSchema = response.Data.UiSchema
-                    };
-                }
-            }
-            catch (Exception exception)
+            var apiRequest = new ApiRequest<RequestModelBase>
             {
-                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
+                Data = this.apiClientService.InitializeRequestModelContext(productSchemaRequestModel),
+                AccessToken = token,
+                EndpointAddress = this.servicesEndpointsConfiguration.Api.Host + this.servicesEndpointsConfiguration.Api.Endpoints.SchemaByEntityType
+            };
 
-                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ProductSchemaResponseModel>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return new Schema
+                {
+                    Id = response.Data.Id,
+                    Name = response.Data.Name,
+                    JsonSchema = response.Data.JsonSchema,
+                    UiSchema = response.Data.UiSchema
+                };
             }
 
             return default;
