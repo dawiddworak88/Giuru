@@ -8,7 +8,13 @@
     <DockerfileContext>..\..\..\..</DockerfileContext>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.9">
+    <Compile Remove="Shared\Definitions\**" />
+    <Content Remove="Shared\Definitions\**" />
+    <EmbeddedResource Remove="Shared\Definitions\**" />
+    <None Remove="Shared\Definitions\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

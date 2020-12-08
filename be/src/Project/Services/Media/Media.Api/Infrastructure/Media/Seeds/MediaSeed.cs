@@ -75,7 +75,7 @@ namespace Media.Api.Infrastructure.Media.Seeds
                         IsProtected = false
                     };
 
-                    context.MediaItems.Add(EntitySeedHelper.SeedEntity(mediaItem));
+                    context.MediaItems.Add(EntityHelper.SeedEntity(mediaItem));
 
                     var mediaItemVersion = new MediaItemVersion
                     {
@@ -91,7 +91,7 @@ namespace Media.Api.Infrastructure.Media.Seeds
                         Version = 1
                     };
 
-                    context.MediaItemVersions.Add(EntitySeedHelper.SeedEntity(mediaItemVersion));
+                    context.MediaItemVersions.Add(EntityHelper.SeedEntity(mediaItemVersion));
 
                     context.SaveChanges();
                 }

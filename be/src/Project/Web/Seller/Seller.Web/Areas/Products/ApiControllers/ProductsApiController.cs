@@ -1,17 +1,11 @@
 ﻿using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
-using Foundation.ApiExtensions.Helpers;
 using Foundation.ApiExtensions.Services.ApiClientServices;
-using Foundation.ApiExtensions.Services.ApiResponseServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
 using System.Globalization;
-using System.Net;
-using System.Reflection;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.ApiResponseModels;
@@ -23,54 +17,37 @@ namespace Seller.Web.Areas.Clients.ApiControllers
     public class ProductsApiController : BaseApiController
     {
         private readonly IApiClientService apiClientService;
-        private readonly IApiResponseService apiResponseService;
         private readonly ServicesEndpointsConfiguration servicesEndpointsConfiguration;
-        private readonly ILogger<ClientApiController> logger;
 
         public ProductsApiController(
             IApiClientService apiClientService,
-            IApiResponseService apiResponseService,
-            IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration,
-            ILogger<ClientApiController> logger)
+            IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration)
         {
             this.apiClientService = apiClientService;
-            this.apiResponseService = apiResponseService;
             this.servicesEndpointsConfiguration = servicesEndpointsConfiguration.CurrentValue;
-            this.logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage)
         {
-            try
+            var productsRequestModel = new ProductsRequestModel
             {
-                var productsRequestModel = new ProductsRequestModel
-                {
-                    Language = CultureInfo.CurrentUICulture.Name,
-                    SearchTerm = searchTerm,
-                    PageIndex = pageIndex,
-                    ItemsPerPage = itemsPerPage
-                };
+                Language = CultureInfo.CurrentUICulture.Name,
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage
+            };
 
-                var apiRequest = new ApiRequest<ProductsRequestModel>
-                {
-                    Data = this.apiClientService.InitializeRequestModelContext(productsRequestModel),
-                    AccessToken = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                    EndpointAddress = this.servicesEndpointsConfiguration.Api.Host + this.servicesEndpointsConfiguration.Api.Endpoints.Products
-                };
-
-                var response = await this.apiClientService.GetAsync<ApiRequest<ProductsRequestModel>, ProductsRequestModel, ProductsResponseModel>(apiRequest);
-
-                return this.StatusCode((int)response.StatusCode, response);
-            }
-            catch (Exception exception)
+            var apiRequest = new ApiRequest<ProductsRequestModel>
             {
-                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
+                Data = this.apiClientService.InitializeRequestModelContext(productsRequestModel),
+                AccessToken = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                EndpointAddress = this.servicesEndpointsConfiguration.Api.Host + this.servicesEndpointsConfiguration.Api.Endpoints.Products
+            };
 
-                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
+            var response = await this.apiClientService.GetAsync<ApiRequest<ProductsRequestModel>, ProductsRequestModel, ProductsResponseModel>(apiRequest);
 
-                return this.StatusCode((int)HttpStatusCode.BadRequest, this.apiResponseService.GenerateErrorApiResponse(error));
-            }
+            return this.StatusCode((int)response.StatusCode, response);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Foundation.ApiExtensions.Models.Response;
 using Catalog.Api.Infrastructure.Schemas.Entities;
-using System;
 
 namespace Catalog.Api.v1.Areas.Schemas.ResponseModels
 {
@@ -15,7 +14,6 @@ namespace Catalog.Api.v1.Areas.Schemas.ResponseModels
             this.Id = schema.Id;
         }
 
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string JsonSchema { get; set; }
         public string UiSchema { get; set; }

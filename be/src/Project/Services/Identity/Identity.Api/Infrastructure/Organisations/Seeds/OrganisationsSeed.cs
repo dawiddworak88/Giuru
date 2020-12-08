@@ -33,7 +33,7 @@ namespace Identity.Api.Infrastructure.Organisations.Seeds
                             ContactEmail = organisationConfiguration[OrganisationsSeedConstants.ContactEmailIndex]
                         };
 
-                        context.Organisations.Add(EntitySeedHelper.SeedEntity(organisationEntity));
+                        context.Organisations.Add(EntityHelper.SeedEntity(organisationEntity));
 
                         var plOrganisationTranslationEntity = new OrganisationTranslation
                         {
@@ -56,9 +56,9 @@ namespace Identity.Api.Infrastructure.Organisations.Seeds
                             Description = HttpUtility.UrlDecode(organisationConfiguration[OrganisationsSeedConstants.DeDescriptionIndex])
                         };
 
-                        context.OrganisationTranslations.Add(EntitySeedHelper.SeedEntity(plOrganisationTranslationEntity));
-                        context.OrganisationTranslations.Add(EntitySeedHelper.SeedEntity(enOrganisationTranslationEntity));
-                        context.OrganisationTranslations.Add(EntitySeedHelper.SeedEntity(deOrganisationTranslationEntity));
+                        context.OrganisationTranslations.Add(EntityHelper.SeedEntity(plOrganisationTranslationEntity));
+                        context.OrganisationTranslations.Add(EntityHelper.SeedEntity(enOrganisationTranslationEntity));
+                        context.OrganisationTranslations.Add(EntityHelper.SeedEntity(deOrganisationTranslationEntity));
 
                         var appSecretOrganisation = new AppSecretOrganisation
                         { 
@@ -67,7 +67,7 @@ namespace Identity.Api.Infrastructure.Organisations.Seeds
                             CreatedBy = "admin"
                         };
 
-                        context.AppSecretsOrganisations.Add(EntitySeedHelper.SeedEntity(appSecretOrganisation));
+                        context.AppSecretsOrganisations.Add(EntityHelper.SeedEntity(appSecretOrganisation));
                     }
 
                     context.SaveChanges();

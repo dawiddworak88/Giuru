@@ -54,7 +54,7 @@ namespace Media.Api.v1.Area.Media.Services
                 IsProtected = false
             };
 
-            context.MediaItems.Add(EntitySeedHelper.SeedEntity(mediaItem));
+            context.MediaItems.Add(EntityHelper.SeedEntity(mediaItem));
 
             var mediaItemVersion = new MediaItemVersion
             {
@@ -69,7 +69,7 @@ namespace Media.Api.v1.Area.Media.Services
                 Version = 1
             };
 
-            context.MediaItemVersions.Add(EntitySeedHelper.SeedEntity(mediaItemVersion));
+            context.MediaItemVersions.Add(EntityHelper.SeedEntity(mediaItemVersion));
 
             var mediaItemTranslation = new MediaItemTranslation
             {
@@ -78,7 +78,7 @@ namespace Media.Api.v1.Area.Media.Services
                 Name = Path.GetFileNameWithoutExtension(serviceModel.File.FileName)
             };
 
-            context.MediaItemTranslations.Add(EntitySeedHelper.SeedEntity(mediaItemTranslation));
+            context.MediaItemTranslations.Add(EntityHelper.SeedEntity(mediaItemTranslation));
 
             context.SaveChanges();
 

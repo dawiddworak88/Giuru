@@ -1,17 +1,12 @@
 ﻿using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
-using Foundation.ApiExtensions.Helpers;
 using Foundation.ApiExtensions.Services.ApiClientServices;
-using Foundation.ApiExtensions.Services.ApiResponseServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
 using System.Net;
-using System.Reflection;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.ApiResponseModels;
@@ -24,58 +19,37 @@ namespace Seller.Web.Areas.Clients.ApiControllers
     public class ClientApiController : BaseApiController
     {
         private readonly IApiClientService apiClientService;
-        private readonly IApiResponseService apiResponseService;
         private readonly IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration;
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
-        private readonly ILogger<ClientApiController> logger;
 
         public ClientApiController(
             IApiClientService apiClientService,
-            IApiResponseService apiResponseService,
             IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration,
-            IStringLocalizer<ClientResources> clientLocalizer,
-            ILogger<ClientApiController> logger)
+            IStringLocalizer<ClientResources> clientLocalizer)
         {
             this.apiClientService = apiClientService;
-            this.apiResponseService = apiResponseService;
             this.servicesEndpointsConfiguration = servicesEndpointsConfiguration;
             this.clientLocalizer = clientLocalizer;
-            this.logger = logger;
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ClientRequestModel clientRequestModel)
         {
-            try
+            var apiRequest = new ApiRequest<ClientRequestModel>
             {
-                var apiRequest = new ApiRequest<ClientRequestModel>
-                {
-                    Data = this.apiClientService.InitializeRequestModelContext(clientRequestModel),
-                    AccessToken = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                    EndpointAddress = this.servicesEndpointsConfiguration.CurrentValue.Api.Host + this.servicesEndpointsConfiguration.CurrentValue.Api.Endpoints.Client
-                };
+                Data = this.apiClientService.InitializeRequestModelContext(clientRequestModel),
+                AccessToken = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                EndpointAddress = this.servicesEndpointsConfiguration.CurrentValue.Api.Host + this.servicesEndpointsConfiguration.CurrentValue.Api.Endpoints.Client
+            };
 
-                var response = await this.apiClientService.PostAsync<ApiRequest<ClientRequestModel>, ClientRequestModel, ClientResponseModel>(apiRequest);
+            var response = await this.apiClientService.PostAsync<ApiRequest<ClientRequestModel>, ClientRequestModel, ClientResponseModel>(apiRequest);
 
-                if (response.StatusCode == HttpStatusCode.Conflict)
-                {
-                    response.Message = this.clientLocalizer["ClientAlreadyExists"];
-                }
-                else
-                {
-                    response = this.apiResponseService.EnrichResponseMessage(response, this.clientLocalizer["ClientSavedSuccessfully"]);
-                }
-
-                return this.StatusCode((int)response.StatusCode, response);
-            }
-            catch (Exception exception)
+            if (response.StatusCode == HttpStatusCode.Conflict)
             {
-                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
-
-                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
-
-                return this.StatusCode((int)HttpStatusCode.BadRequest, this.apiResponseService.GenerateErrorApiResponse(error));
+                response.Message = this.clientLocalizer["ClientAlreadyExists"];
             }
+
+            return this.StatusCode((int)response.StatusCode, response);
         }
     }
 }

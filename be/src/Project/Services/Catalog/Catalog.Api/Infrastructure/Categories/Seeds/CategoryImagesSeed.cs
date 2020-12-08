@@ -1,5 +1,6 @@
 ﻿using Catalog.Api.Infrastructure.Categories.Definitions;
 using Catalog.Api.Infrastructure.Categories.Entites;
+using Foundation.GenericRepository.Helpers;
 using System;
 using System.Linq;
 
@@ -42,7 +43,7 @@ namespace Catalog.Api.Infrastructure.Categories.Seeds
                     Order = 0
                 };
 
-                context.CategoryImages.Add(categoryImage);
+                context.CategoryImages.Add(EntityHelper.SeedEntity(categoryImage));
 
                 context.SaveChanges();
             }

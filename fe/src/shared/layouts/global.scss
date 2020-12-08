@@ -28,18 +28,51 @@
 
     .dropzone {
         display: flex;
-	    align-items: center;
         justify-content: center;
         flex-wrap: wrap;
         flex-direction: column;
-        cursor: pointer;
-        height: 11rem;
-        border: 1px solid lightgrey;
-        background-color: lightgrey;
-        text-align: center;
+        border: 1px lightgrey dashed;
 
-        &--active {
+        &__title {
+            margin: 0.5rem;
+        }
+
+        &__pond-container {
+            width: 100%;
+            padding: 0.5rem;
+        }
+
+        &__pond {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            flex-direction: column;
+            background-color: lightgrey;
+            text-align: center;
+            cursor: pointer;
+            height: 11rem;
+            padding: 1rem;
+        }
+
+        &__pond--active {
             background-color: white;
+        }
+
+        &__preview {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: row;
+            padding: 0.5rem;
+
+            img {
+                max-width: 200px;
+                max-height: 200px;
+                min-height: 200px;
+            }
+        }
+
+        &__preview-thumbnail {
+            margin: 0.5rem;
         }
     }
 }

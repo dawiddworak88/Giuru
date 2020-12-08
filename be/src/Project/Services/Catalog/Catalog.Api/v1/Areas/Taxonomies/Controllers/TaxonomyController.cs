@@ -2,17 +2,14 @@
 using Catalog.Api.v1.Areas.Taxonomies.ResponseModels;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
-using Foundation.ApiExtensions.Helpers;
 using Foundation.Extensions.Helpers;
 using Catalog.Api.v1.Areas.Taxonomies.Models;
 using Catalog.Api.v1.Areas.Taxonomies.Services.TaxonomyServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -27,12 +24,9 @@ namespace Catalog.Api.v1.Areas.Taxonomies.Controllers
     {
         private readonly ITaxonomyService taxonomyService;
 
-        private readonly ILogger logger;
-
-        public TaxonomyController(ITaxonomyService taxonomyService, ILogger<TaxonomyController> logger)
+        public TaxonomyController(ITaxonomyService taxonomyService)
         {
             this.taxonomyService = taxonomyService;
-            this.logger = logger;
         }
 
         /// <summary>
@@ -46,35 +40,26 @@ namespace Catalog.Api.v1.Areas.Taxonomies.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Create([FromBody] TaxonomyRequestModel taxonomyModel)
         {
-            try
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            var createTaxonomyModel = new CreateTaxonomyModel
             {
-                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+                Name = taxonomyModel.Name,
+                ParentId = taxonomyModel.ParentId,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Language = taxonomyModel.Language
+            };
 
-                var createTaxonomyModel = new CreateTaxonomyModel
-                {
-                    Name = taxonomyModel.Name,
-                    ParentId = taxonomyModel.ParentId,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    Language = taxonomyModel.Language
-                };
+            var createTaxonomyResult = await this.taxonomyService.CreateAsync(createTaxonomyModel);
 
-                var createTaxonomyResult = await this.taxonomyService.CreateAsync(createTaxonomyModel);
-
-                if (createTaxonomyResult.IsValid)
-                {
-                    return this.StatusCode((int)HttpStatusCode.Created, new TaxonomyResponseModel { Id = createTaxonomyResult.Taxonomy.Id });
-                }
-                else
-                {
-                    return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
-                }
+            if (createTaxonomyResult.IsValid)
+            {
+                return this.StatusCode((int)HttpStatusCode.Created, new TaxonomyResponseModel { Id = createTaxonomyResult.Taxonomy.Id });
             }
-            catch (Exception exception)
+            else
             {
-                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
-                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
-                return this.StatusCode((int)HttpStatusCode.BadRequest, new TaxonomyResponseModel { Error = error });
+                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
 
@@ -91,35 +76,26 @@ namespace Catalog.Api.v1.Areas.Taxonomies.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Get(string name, Guid? rootId, string language)
         {
-            try
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            var getTaxonomyModel = new GetTaxonomyModel
             {
-                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+                Name = name,
+                RootId = rootId,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Language = language
+            };
 
-                var getTaxonomyModel = new GetTaxonomyModel
-                {
-                    Name = name,
-                    RootId = rootId,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    Language = language
-                };
+            var getTaxonomyResult = await this.taxonomyService.GetByName(getTaxonomyModel);
 
-                var getTaxonomyResult = await this.taxonomyService.GetByName(getTaxonomyModel);
-
-                if (getTaxonomyResult.IsValid)
-                {
-                    return this.StatusCode((int)HttpStatusCode.OK, new TaxonomyResponseModel { Id = getTaxonomyResult.Taxonomy?.Id });
-                }
-                else
-                {
-                    return this.StatusCode((int)HttpStatusCode.NotFound);
-                }
+            if (getTaxonomyResult.IsValid)
+            {
+                return this.StatusCode((int)HttpStatusCode.OK, new TaxonomyResponseModel { Id = getTaxonomyResult.Taxonomy?.Id });
             }
-            catch (Exception exception)
+            else
             {
-                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
-                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
-                return this.StatusCode((int)HttpStatusCode.BadRequest, new TaxonomyResponseModel { Error = error });
+                return this.StatusCode((int)HttpStatusCode.NotFound);
             }
         }
     }

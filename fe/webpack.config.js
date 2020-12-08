@@ -199,7 +199,9 @@ var sellerPortalBrowserConfig = {
         clientpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage.scss"],
         clientdetailpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientDetailPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage.scss"],
         productpage: ["./src/project/Seller.Portal/areas/Products/pages/ProductPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage.scss"],
-        productdetailpage: ["./src/project/Seller.Portal/areas/Products/pages/ProductDetailPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage.scss"]
+        productdetailpage: ["./src/project/Seller.Portal/areas/Products/pages/ProductDetailPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage.scss"],
+        categoriespage: ["./src/project/Seller.Portal/areas/Products/pages/CategoriesPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/CategoriesPage/CategoriesPage.scss"],
+        categorypage: ["./src/project/Seller.Portal/areas/Products/pages/CategoryPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/CategoryPage/CategoryPage.scss"]
     },
     output: {
         publicPath: path.resolve(__dirname, "../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),

@@ -1,0 +1,17 @@
+﻿using Foundation.GenericRepository.Entities;
+using System;
+
+namespace Foundation.GenericRepository.Helpers
+{
+    public static class EntityHelper
+    {
+        public static T SeedEntity<T>(T entity) where T: Entity
+        {
+            entity.IsActive = true;
+            entity.LastModifiedDate = DateTime.UtcNow;
+            entity.CreatedDate = DateTime.UtcNow;
+
+            return entity;
+        }
+    }
+}

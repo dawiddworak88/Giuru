@@ -2,19 +2,16 @@
 using Catalog.Api.v1.Areas.Schemas.ResponseModels;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
-using Foundation.ApiExtensions.Helpers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Helpers;
 using Catalog.Api.v1.Areas.Schemas.Models;
 using Catalog.Api.v1.Areas.Schemas.Services.SchemaServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -29,12 +26,9 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
     {
         private readonly ISchemaService schemaService;
 
-        private readonly ILogger logger;
-
-        public SchemaController(ISchemaService schemaService, ILogger<SchemaController> logger)
+        public SchemaController(ISchemaService schemaService)
         {
             this.schemaService = schemaService;
-            this.logger = logger;
         }
 
         /// <summary>
@@ -48,37 +42,28 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Create([FromBody] SchemaRequestModel schemaModel)
         {
-            try
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            var createSchemaModel = new CreateSchemaModel
             {
-                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+                Name = schemaModel.Name,
+                EntityTypeId = schemaModel.EntityTypeId,
+                JsonSchema = !string.IsNullOrWhiteSpace(schemaModel.JsonSchema) ? JObject.Parse(schemaModel.JsonSchema) : null,
+                UiSchema = !string.IsNullOrWhiteSpace(schemaModel.UiSchema) ? JObject.Parse(schemaModel.UiSchema) : null,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Language = schemaModel.Language
+            };
 
-                var createSchemaModel = new CreateSchemaModel
-                {
-                    Name = schemaModel.Name,
-                    EntityTypeId = schemaModel.EntityTypeId,
-                    JsonSchema = !string.IsNullOrWhiteSpace(schemaModel.JsonSchema) ? JObject.Parse(schemaModel.JsonSchema) : null,
-                    UiSchema = !string.IsNullOrWhiteSpace(schemaModel.UiSchema) ? JObject.Parse(schemaModel.UiSchema) : null,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    Language = schemaModel.Language
-                };
+            var createSchemaResult = await this.schemaService.CreateAsync(createSchemaModel);
 
-                var createSchemaResult = await this.schemaService.CreateAsync(createSchemaModel);
-
-                if (createSchemaResult.IsValid)
-                {
-                    return this.StatusCode((int)HttpStatusCode.Created, new SchemaResponseModel { Id = createSchemaResult.Schema.Id });
-                }
-                else
-                {
-                    return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
-                }
+            if (createSchemaResult.IsValid)
+            {
+                return this.StatusCode((int)HttpStatusCode.Created, new SchemaResponseModel { Id = createSchemaResult.Schema.Id });
             }
-            catch (Exception exception)
+            else
             {
-                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
-                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
-                return this.StatusCode((int)HttpStatusCode.BadRequest, new SchemaResponseModel { Error = error });
+                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
 
@@ -94,39 +79,30 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetById(string language, Guid? id)
         {
-            try
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            var getSchemaModel = new GetSchemaModel
             {
-                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+                Id = id,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Language = language
+            };
 
-                var getSchemaModel = new GetSchemaModel
-                {
-                    Id = id,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    Language = language
-                };
+            var getSchemaResult = await this.schemaService.GetByIdAsync(getSchemaModel);
 
-                var getSchemaResult = await this.schemaService.GetByIdAsync(getSchemaModel);
-
-                if (getSchemaResult.IsValid)
-                {
-                    return this.StatusCode((int)HttpStatusCode.OK, new SchemaResponseModel(getSchemaResult.Schema));
-                }
-                else
-                {
-                    if (getSchemaResult.Errors.Contains(ErrorConstants.NotFound))
-                    {
-                        return this.StatusCode((int)HttpStatusCode.NotFound);
-                    }
-
-                    return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
-                }
+            if (getSchemaResult.IsValid)
+            {
+                return this.StatusCode((int)HttpStatusCode.OK, new SchemaResponseModel(getSchemaResult.Schema));
             }
-            catch (Exception exception)
+            else
             {
-                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
-                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
-                return this.StatusCode((int)HttpStatusCode.BadRequest, new SchemaResponseModel { Error = error });
+                if (getSchemaResult.Errors.Contains(ErrorConstants.NotFound))
+                {
+                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                }
+
+                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
 
@@ -143,39 +119,30 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
         [ProducesResponseType(404)]
         public async Task<IActionResult> GetByEntityTypeId(string language, Guid? id)
         {
-            try
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            var getSchemaModel = new GetSchemaByEntityTypeModel
             {
-                var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+                EntityTypeId = id,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Language = language
+            };
 
-                var getSchemaModel = new GetSchemaByEntityTypeModel
-                {
-                    EntityTypeId = id,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                    Language = language
-                };
+            var getSchemaResult = await this.schemaService.GetByEntityTypeIdAsync(getSchemaModel);
 
-                var getSchemaResult = await this.schemaService.GetByEntityTypeIdAsync(getSchemaModel);
-
-                if (getSchemaResult.IsValid)
-                {
-                    return this.StatusCode((int)HttpStatusCode.OK, new SchemaResponseModel(getSchemaResult.Schema));
-                }
-                else
-                {
-                    if (getSchemaResult.Errors.Contains(ErrorConstants.NotFound))
-                    {
-                        return this.StatusCode((int)HttpStatusCode.NotFound);
-                    }
-
-                    return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
-                }
+            if (getSchemaResult.IsValid)
+            {
+                return this.StatusCode((int)HttpStatusCode.OK, new SchemaResponseModel(getSchemaResult.Schema));
             }
-            catch (Exception exception)
+            else
             {
-                var error = ErrorHelper.GenerateErrorSignature(Assembly.GetExecutingAssembly().ToString());
-                this.logger.LogError(exception, $"{error.ErrorId} - {error.ErrorSource}");
-                return this.StatusCode((int)HttpStatusCode.BadRequest, new SchemaResponseModel { Error = error });
+                if (getSchemaResult.Errors.Contains(ErrorConstants.NotFound))
+                {
+                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                }
+
+                return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
         }
     }
