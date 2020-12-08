@@ -29,9 +29,7 @@ function ImportOrderForm(props) {
         acceptedFiles.forEach((file) => {
 
             const formData = new FormData();
-
-            console.log(client);
-
+            
             if (client) {
                 formData.append("clientId", client.id);
             }
@@ -101,25 +99,12 @@ function ImportOrderForm(props) {
                 <div className={isClientSelected ? "field" : "is-hidden"}>
                     <div {...getRootProps()}>
                         <input id="order" name="order" {...getInputProps()} />
-                        {
-                            isDragActive ?
-                                (
-                                    <div className="dropzone dropzone--active">
-                                        <p>
-                                            <UploadCloud size={IconConstants.defaultSize()} />
-                                        </p>
-                                        <p>{props.dropFilesLabel}</p>
-                                    </div>
-                                ) :
-                                (
-                                    <div className="dropzone">
-                                        <p>
-                                            <UploadCloud size={IconConstants.defaultSize()} />
-                                        </p>
-                                        <p>{props.dropOrSelectFilesLabel}</p>
-                                    </div>
-                                )
-                        }
+                        <div className={"dropzone" + isDragActive ? "dropzone--active" : ""}>
+                            <p>
+                                <UploadCloud size={IconConstants.defaultSize()} />
+                            </p>
+                            <p>{isDragActive ? props.dropOrSelectFilesLabel : props.dropFilesLabel}</p>
+                        </div>
                     </div>
                 </div>
                 <div className="field">

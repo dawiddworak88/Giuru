@@ -6,6 +6,6 @@ namespace Buyer.Web.Shared.Catalogs.Services
 {
     public interface ICatalogService
     {
-        Task<IEnumerable<Category>> GetCategoriesAsync(string language);
+        Task<IEnumerable<Category>> GetCategoriesAsync(string language, int pageIndex, int itemsPerPage);
     }
 }

@@ -7,7 +7,8 @@ export var footer = {
 export var header = {
   logo: {
     targetUrl: "/",
-    logoAltLabel: "Logo"
+    logoAltLabel: "Logo",
+    logoUrl: "https://media.eltap.com/api/v1/files/85b14b09-856d-4fd0-8af4-7c077953b214?o=true"
   },
   languageSwitcher: {
     availableLanguages: [
@@ -26,6 +27,46 @@ export var header = {
     ],
     selectedLanguageUrl: "/en"
   },
+  drawerMenuCategories: [
+    {
+      items: [
+        {
+          title: "Orders",
+          icon: "ShoppingCart",
+          isActive: true
+        }
+      ]
+    },
+    {
+      items: [
+        {
+          title: "Products",
+          icon: "Package",
+          url: "https://google.com"
+        },
+        {
+          title: "Categories",
+          icon: "Grid"
+        }
+      ]
+    },
+    {
+      items: [
+        {
+          title: "Clients",
+          icon: "Users"
+        }
+      ]
+    },
+    {
+      items: [
+        {
+          title: "Settings",
+          icon: "Settings"
+        }
+      ]
+    }
+  ],
   links: [
   ],
   loginLink: {

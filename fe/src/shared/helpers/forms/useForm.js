@@ -11,7 +11,8 @@ import { get_prop_values, is_object, VALUE, ERROR } from "./utils";
 function useForm(
   stateSchema = {},
   stateValidatorSchema = {},
-  submitFormCallback
+  submitFormCallback,
+  initDisable = true
 ) {
   const [state, setStateSchema] = useState(stateSchema);
 
@@ -19,13 +20,12 @@ function useForm(
   const [errors, setErrors] = useState(get_prop_values(state, ERROR));
   const [dirty, setDirty] = useState(get_prop_values(state, false));
 
-  const [disable, setDisable] = useState(false);
+  const [disable, setDisable] = useState(initDisable);
   const [isDirty, setIsDirty] = useState(false);
 
   // Get a local copy of stateSchema
   useEffect(() => {
     setStateSchema(stateSchema);
-    setDisable(false);
     setInitialErrorState();
   }, []); // eslint-disable-line
 

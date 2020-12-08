@@ -2,10 +2,12 @@
 using Foundation.ApiExtensions.Definitions;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Models.Response;
+using Foundation.ApiExtensions.Shared.Definitions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -21,6 +23,49 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
         {
             requestModel.Language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             return requestModel;
+        }
+
+        public async Task<ApiResponse<T>> PostMultipartFormAsync<S, W, T>(S request) where S : ApiRequest<W> where T : BaseResponseModel where W : FileRequestModelBase
+        {
+            using (var client = new HttpClient())
+            {
+                if (ApiExtensionsConstants.TimeoutMilliseconds > 0)
+                {
+                    client.Timeout = TimeSpan.FromMilliseconds(ApiExtensionsConstants.TimeoutMilliseconds);
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.AccessToken))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AccessToken);
+                }
+                using (var content = new MultipartFormDataContent())
+                {
+                    if (request?.Data.File != null && !string.IsNullOrWhiteSpace(request.Data.Filename))
+                    {
+                        content.Add(new StreamContent(new MemoryStream(request.Data.File)), ApiConstants.ContentNames.FileContentName, request.Data.Filename);
+                        content.Add(new StringContent(request.Data.Language), ApiConstants.ContentNames.LanguageContentName);
+
+                        var response = await client.PostAsync(request.EndpointAddress, content);
+
+                        var apiResponse = new ApiResponse<T>
+                        {
+                            IsSuccessStatusCode = response.IsSuccessStatusCode,
+                            StatusCode = response.StatusCode
+                        };
+
+                        var result = await response.Content.ReadAsStringAsync();
+
+                        if (!string.IsNullOrWhiteSpace(result))
+                        {
+                            apiResponse.Data = JsonConvert.DeserializeObject<T>(result);
+                        }
+
+                        return apiResponse;
+                    }
+                }
+            }
+
+            return default;
         }
 
         public async Task<ApiResponse<T>> PostAsync<S, W, T>(S request) where S : ApiRequest<W> where T : BaseResponseModel

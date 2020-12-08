@@ -38,7 +38,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
         {
             var items = new List<ContentGridItemViewModel>();
 
-            var categories = await this.catalogService.GetCategoriesAsync(componentModel.Language);
+            var categories = await this.catalogService.GetCategoriesAsync(componentModel.Language, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage);
 
             foreach (var category in categories.Where(x => x.Level == CategoriesConstants.FirstLevel))
             {

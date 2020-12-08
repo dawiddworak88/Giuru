@@ -3,7 +3,6 @@ using Buyer.Web.Areas.Products.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Definitions;
 using Buyer.Web.Shared.Files.ComponentModels;
 using Buyer.Web.Shared.Files.ViewModels;
 using Buyer.Web.Shared.Images.ViewModels;

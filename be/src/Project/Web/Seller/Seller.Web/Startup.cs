@@ -15,6 +15,8 @@ using Seller.Web.Areas.Products.DependencyInjection;
 using Foundation.ApiExtensions.DependencyInjection;
 using Foundation.Localization.DependencyInjection;
 using Foundation.Account.DependencyInjection;
+using Foundation.Extensions.Filters;
+using Seller.Web.Areas.Media.DependencyInjection;
 
 namespace Seller.Portal
 {
@@ -37,7 +39,10 @@ namespace Seller.Portal
 
             services.AddCultureRouteConstraint();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+            }).AddNewtonsoftJson();
 
             services.RegisterClientAccountDependencies(this.Configuration);
 
@@ -54,6 +59,8 @@ namespace Seller.Portal
             services.RegisterClientsAreaDependencies();
 
             services.RegisterProductsAreaDependencies();
+
+            services.RegisterMediaAreaDependencies();
 
             services.ConfigureOptions(this.Configuration);
         }

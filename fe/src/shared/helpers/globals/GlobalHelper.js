@@ -6,6 +6,9 @@ export default class GlobalHelper {
 
     const theme = createMuiTheme({
       typography: {
+        body1: {
+          fontFamily: "'Poppins', sans-serif"
+        },
         button: {
           textTransform: "none"
         }

@@ -5,7 +5,7 @@ import Tile from "./Tile";
 function MenuTiles(props) {
 
     return (
-        <nav className="section menu-tiles">
+        <nav className="section menu-tiles is-hidden-touch">
             {props.tiles.map((tile, index) => {
                 return(
                     <Tile key={index} icon={tile.icon} title={tile.title} url={tile.url} />

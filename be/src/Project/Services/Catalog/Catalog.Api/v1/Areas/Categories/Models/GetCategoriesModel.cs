@@ -2,7 +2,8 @@
 
 namespace Catalog.Api.v1.Areas.Categories.Models
 {
-    public class GetCategoriesModel : BaseServiceModel
+    public class GetCategoriesModel : PagedBaseServiceModel
     {
+        public int? Level { get; set; }
     }
 }

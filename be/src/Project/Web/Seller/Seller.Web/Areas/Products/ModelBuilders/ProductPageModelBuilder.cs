@@ -9,12 +9,14 @@ using System.Threading.Tasks;
 using Seller.Web.Areas.Products.ViewModels;
 using Foundation.PageContent.ComponentModels;
 using Foundation.Localization;
+using Seller.Web.Areas.Products.DomainModels;
+using Seller.Web.Shared.ViewModels;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {
     public class ProductPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductPageCatalogViewModel> productCatalogModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Product>> productCatalogModelBuilder;
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
@@ -22,7 +24,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
         private readonly LinkGenerator linkGenerator;
 
         public ProductPageModelBuilder(
-            IAsyncComponentModelBuilder<ComponentModelBase, ProductPageCatalogViewModel> productCatalogModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Product>> productCatalogModelBuilder,
             IStringLocalizer<ProductResources> productLocalizer,
             LinkGenerator linkGenerator,
             IModelBuilder<HeaderViewModel> headerModelBuilder,

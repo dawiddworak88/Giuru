@@ -7,6 +7,7 @@ namespace Catalog.Api.Infrastructure.Categories.Definitions
         public static class CategoryGuids
         {
             public static readonly Guid FurnitureId = Guid.Parse("e626a139-7068-4de0-abfe-1b970975f1d2");
+            public static readonly int LeafLevel = 2;
 
             public static class Furniture
             {

@@ -1,12 +1,18 @@
 ﻿using Catalog.Api.v1.Areas.Categories.Models;
+using Catalog.Api.v1.Areas.Categories.RequestModels;
 using Catalog.Api.v1.Areas.Categories.Services;
 using Catalog.Api.v1.Areas.Categories.Validators;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
+using Foundation.Extensions.Definitions;
+using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Catalog.Api.v1.Areas.Categories.Controllers
@@ -29,17 +35,25 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         /// Gets list of categories.
         /// </summary>
         /// <param name="language">The language.</param>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="level">The level.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The items per page.</param>
         /// <returns>The list of categories.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(422)]
-        public async Task<IActionResult> Get(string language)
+        public async Task<IActionResult> Get(string language, string searchTerm, int? level, int pageIndex, int itemsPerPage)
         {
             var serviceModel = new GetCategoriesModel
             {
-                Language = language
+                Level = level,
+                Language = language,
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage
             };
 
             var validator = new GetCategoriesModelValidator();
@@ -50,12 +64,12 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
             {
                 var categories = await this.categoryService.GetAsync(serviceModel);
 
-                return categories != null && categories.Any()
+                return categories?.Data != null && categories.Data.Any()
                     ? this.StatusCode((int)HttpStatusCode.OK, categories)
                     : (IActionResult)this.StatusCode((int)HttpStatusCode.NotFound);
             }
 
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
@@ -69,6 +83,7 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
         [ProducesResponseType(422)]
         public async Task<IActionResult> Get(string language, Guid? id)
         {
@@ -89,7 +104,108 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
                 return category != null ? this.StatusCode((int)HttpStatusCode.OK, category) : (IActionResult)this.StatusCode((int)HttpStatusCode.NotFound);
             }
 
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Creates or updates category (if category id is set).
+        /// </summary>
+        /// <param name="request">The model.</param>
+        /// <returns>The category id.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
+        [ProducesResponseType(422)]
+        public async Task<IActionResult> Save(CategoryRequestModel request)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            if (request.Id.HasValue)
+            {
+                var serviceModel = new UpdateCategoryModel
+                { 
+                    Id = request.Id,
+                    Files = request.Files,
+                    Name = request.Name,
+                    ParentId = request.ParentCategoryId,
+                    Language = request.Language,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                };
+
+                var validator = new UpdateCategoryModelValidator();
+
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var category = await this.categoryService.UpdateAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = category.Id });
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
+            else
+            {
+                var serviceModel = new CreateCategoryModel
+                {
+                    Name = request.Name,
+                    ParentId = request.ParentCategoryId,
+                    Files = request.Files,
+                    Language = request.Language,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                };
+
+                var validator = new CreateCategoryModelValidator();
+
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var category = await this.categoryService.CreateAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.Created, new { Id = category.Id });
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
+        }
+
+        /// <summary>
+        /// Delete category by id.
+        /// </summary>
+        /// <param name="language">The language.</param>
+        /// <param name="id">The id.</param>
+        /// <returns>The category.</returns>
+        [HttpDelete, MapToApiVersion("1.0")]
+        [Route("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
+        [ProducesResponseType(422)]
+        public async Task<IActionResult> Delete(string language, Guid? id)
+        {
+            var serviceModel = new DeleteCategoryModel
+            {
+                Id = id,
+                Language = language
+            };
+
+            var validator = new DeleteCategoryModelValidator();
+
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                await this.categoryService.DeleteAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }
