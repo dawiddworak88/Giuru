@@ -1,5 +1,6 @@
 ﻿using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Definitions;
+using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.Extensions.Configuration;
@@ -20,7 +21,17 @@ namespace Identity.Api.Areas.Accounts.Configurations
         public static IEnumerable<ApiResource> Apis =>
             new List<ApiResource>
             {
-                new ApiResource(ApiExtensionsConstants.AllScopes, ApiExtensionsConstants.AllScopes)
+                new ApiResource(ApiExtensionsConstants.AllScopes)
+                {
+                    UserClaims =
+                    {
+                        JwtClaimTypes.Audience
+                    },
+                    Scopes = new List<string>
+                    {
+                        ApiExtensionsConstants.AllScopes
+                    }
+                }
             };
 
 

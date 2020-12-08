@@ -123,6 +123,9 @@
   <data name="AreYouSureLabel" xml:space="preserve">
     <value>Czy napewno chcesz usunąć</value>
   </data>
+  <data name="Back" xml:space="preserve">
+    <value>wstecz</value>
+  </data>
   <data name="BrandZone" xml:space="preserve">
     <value>Strefa {0}</value>
   </data>
@@ -174,6 +177,12 @@
   <data name="Download" xml:space="preserve">
     <value>Pobierz</value>
   </data>
+  <data name="DropFile" xml:space="preserve">
+    <value>Upuść plik tutaj...</value>
+  </data>
+  <data name="DropOrSelectFile" xml:space="preserve">
+    <value>Przeciągnij i upuść lub kliknij, aby wybrać</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Edytuj</value>
   </data>
@@ -216,6 +225,9 @@
   <data name="LastModifiedDate" xml:space="preserve">
     <value>Zmodyfikowano</value>
   </data>
+  <data name="Level" xml:space="preserve">
+    <value>Poziom</value>
+  </data>
   <data name="Logo" xml:space="preserve">
     <value>Logo</value>
   </data>
@@ -251,6 +263,9 @@
   </data>
   <data name="Orders" xml:space="preserve">
     <value>Zamówienia</value>
+  </data>
+  <data name="ParentCategory" xml:space="preserve">
+    <value>Kategoria nadrzędna</value>
   </data>
   <data name="PasswordFormatErrorMessage" xml:space="preserve">
     <value>Hasło powinno mieć conajmniej 8 znaków, zawierać wielką i małą literę, cyfrę oraz znak specjalny, np. Wp1s2H@s1o</value>

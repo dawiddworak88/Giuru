@@ -1,0 +1,45 @@
+﻿using Foundation.Extensions.ModelBuilders;
+using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Components.Footers.ViewModels;
+using Foundation.PageContent.Components.Headers.ViewModels;
+using Foundation.PageContent.MenuTiles.ViewModels;
+using Seller.Web.Areas.Products.ViewModels;
+using System.Globalization;
+using System.Threading.Tasks;
+
+namespace Seller.Web.Areas.Products.ModelBuilders
+{
+    public class CategoryPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CategoryPageViewModel>
+    {
+        private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
+        private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryDetailFormViewModel> categoryDetailFormModelBuilder;
+        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+
+        public CategoryPageModelBuilder(
+            IModelBuilder<HeaderViewModel> headerModelBuilder,
+            IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, CategoryDetailFormViewModel> categoryDetailFormModelBuilder,
+            IModelBuilder<FooterViewModel> footerModelBuilder)
+        {
+            this.headerModelBuilder = headerModelBuilder;
+            this.menuTilesModelBuilder = menuTilesModelBuilder;
+            this.categoryDetailFormModelBuilder = categoryDetailFormModelBuilder;
+            this.footerModelBuilder = footerModelBuilder;
+        }
+
+        public async Task<CategoryPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        {
+            var viewModel = new CategoryPageViewModel
+            {
+                Locale = CultureInfo.CurrentUICulture.Name,
+                Header = this.headerModelBuilder.BuildModel(),
+                MenuTiles = this.menuTilesModelBuilder.BuildModel(),
+                CategoryDetailForm = await this.categoryDetailFormModelBuilder.BuildModelAsync(componentModel),
+                Footer = this. footerModelBuilder.BuildModel()
+            };
+
+            return viewModel;
+        }
+    }
+}

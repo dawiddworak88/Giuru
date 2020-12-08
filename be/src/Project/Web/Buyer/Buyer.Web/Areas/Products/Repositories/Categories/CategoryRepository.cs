@@ -1,7 +1,7 @@
 ﻿using Buyer.Web.Areas.Products.ApiResponseModels;
 using Buyer.Web.Shared.Brands.DomainModels;
 using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Definitions;
+using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
@@ -37,7 +37,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Categories
             {
                 return new Category
                 { 
-                    Id = response.Data.Id,
+                    Id = response.Data.Id.Value,
                     Name = response.Data.Name
                 };
             }

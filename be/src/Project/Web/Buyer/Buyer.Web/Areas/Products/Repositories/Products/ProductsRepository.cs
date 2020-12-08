@@ -2,7 +2,7 @@
 using Buyer.Web.Areas.Products.ApiResponseModels;
 using Buyer.Web.Shared.Brands.DomainModels;
 using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Definitions;
+using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
@@ -123,7 +123,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
         { 
             return new Product
             {
-                Id = productResponse.Id,
+                Id = productResponse.Id.Value,
                 PrimaryProductId = productResponse.PrimaryProductId,
                 Sku = productResponse.Sku,
                 Name = productResponse.Name,

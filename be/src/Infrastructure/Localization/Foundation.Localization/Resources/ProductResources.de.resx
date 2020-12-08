@@ -117,11 +117,38 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddCategory" xml:space="preserve">
+    <value>Kategorie hinzufügen</value>
+  </data>
+  <data name="CategoryDeletedSuccessfully" xml:space="preserve">
+    <value>Kategorie wurde erfolgreich gelöscht.</value>
+  </data>
+  <data name="CategoryNotFound" xml:space="preserve">
+    <value>Kategorie nicht gefunden.</value>
+  </data>
+  <data name="CategoryPicture" xml:space="preserve">
+    <value>Kategorie Bild</value>
+  </data>
+  <data name="CategorySavedSuccessfully" xml:space="preserve">
+    <value>Kategorie wurde erfolgreich gespeichert.</value>
+  </data>
+  <data name="EditCategory" xml:space="preserve">
+    <value>Kategorie bearbeiten</value>
+  </data>
+  <data name="EnterCategoryName" xml:space="preserve">
+    <value>Bitte den Kategorienamen eingeben</value>
+  </data>
   <data name="EnterSkuText" xml:space="preserve">
     <value>Bitte SKU eingeben</value>
   </data>
   <data name="NewProduct" xml:space="preserve">
     <value>Neues Produkt</value>
+  </data>
+  <data name="ParentCategory" xml:space="preserve">
+    <value>Eltern-Kategorie</value>
+  </data>
+  <data name="ParentCategoryNotFound" xml:space="preserve">
+    <value>Eltern Kategorie nicht gefunden </value>
   </data>
   <data name="Product" xml:space="preserve">
     <value>Produkt</value>
@@ -144,8 +171,14 @@
   <data name="ProductSavedSuccessfully" xml:space="preserve">
     <value>Das Produkt wurde erfolgreich gespeichert.</value>
   </data>
+  <data name="ProductsDeleteCategoryConflict" xml:space="preserve">
+    <value>Löschen Sie sie zuerst Produkte, die zu dieser Kategorie gehören. </value>
+  </data>
   <data name="ProductVariants" xml:space="preserve">
     <value>Produktvarianten</value>
+  </data>
+  <data name="SelectCategory" xml:space="preserve">
+    <value>Kategorie wählen</value>
   </data>
   <data name="Sku" xml:space="preserve">
     <value>SKU</value>
@@ -155,5 +188,8 @@
   </data>
   <data name="SkuRequiredErrorMessage" xml:space="preserve">
     <value>Bitte SKU eingeben</value>
+  </data>
+  <data name="SubcategoriesDeleteCategoryConflict" xml:space="preserve">
+    <value>Bitte zuerst die Unterkategorien löschen, die zu dieser Kategorie gehören.</value>
   </data>
 </root>

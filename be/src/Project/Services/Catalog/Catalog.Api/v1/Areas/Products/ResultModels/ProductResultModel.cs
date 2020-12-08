@@ -6,7 +6,6 @@ namespace Catalog.Api.v1.Areas.Products.ResultModels
 {
     public class ProductResultModel : BaseResponseModel
     {
-        public Guid Id { get; set; }
         public Guid? PrimaryProductId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

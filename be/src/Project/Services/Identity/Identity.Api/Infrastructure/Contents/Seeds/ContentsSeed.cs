@@ -17,7 +17,7 @@ namespace Identity.Api.Infrastructure.Contents.Seeds
                 Text = HttpUtility.UrlDecode(configuration["PrivacyPolicy"])
             };
 
-            context.Contents.Add(EntitySeedHelper.SeedEntity(privacyPolicyContent));
+            context.Contents.Add(EntityHelper.SeedEntity(privacyPolicyContent));
 
             var regulationsContent = new Content
             {
@@ -26,7 +26,7 @@ namespace Identity.Api.Infrastructure.Contents.Seeds
                 Text = HttpUtility.UrlDecode(configuration["Regulations"])
             };
 
-            context.Contents.Add(EntitySeedHelper.SeedEntity(regulationsContent));
+            context.Contents.Add(EntityHelper.SeedEntity(regulationsContent));
 
             context.SaveChanges();
         }

@@ -2,7 +2,7 @@
 using Buyer.Web.Areas.Products.ApiResponseModels;
 using Buyer.Web.Shared.Brands.DomainModels;
 using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Definitions;
+using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.Extensions.ExtensionMethods;
@@ -52,7 +52,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Files
                 {
                     var mediaItem = new MediaItem
                     { 
-                        Id = mediaItemResponse.Id,
+                        Id = mediaItemResponse.Id.Value,
                         Name = mediaItemResponse.Name,
                         Filename = mediaItemResponse.Filename,
                         IsProtected = mediaItemResponse.IsProtected,
