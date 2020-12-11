@@ -23,9 +23,9 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
     [ApiController]
     public class ProductsController : BaseApiController
     {
-        private readonly IProductService productService;
+        private readonly IProductsService productService;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductsService productService)
         {
             this.productService = productService;
         }
@@ -37,6 +37,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         /// <param name="language">The language.</param>
         /// <param name="categoryId">The category id.</param>
         /// <param name="sellerId">The brand id.</param>
+        /// <param name="includeProductVariants">Includes product variants in the results list.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The number of items per page.</param>
@@ -45,7 +46,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(422)]
         [AllowAnonymous]
-        public async Task<IActionResult> Get(string ids, string language, Guid? categoryId, Guid? sellerId, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(string ids, string language, Guid? categoryId, Guid? sellerId, bool includeProductVariants, string searchTerm, int pageIndex, int itemsPerPage)
         {
             var productIds = ids.ToEnumerableGuidIds();
 
@@ -79,7 +80,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                     SearchTerm = searchTerm,
                     CategoryId = categoryId,
                     OrganisationId = sellerId,
-                    Language = language
+                    Language = language,
+                    IncludeProductVariants = includeProductVariants
                 };
 
                 var validator = new GetProductsModelValidator();

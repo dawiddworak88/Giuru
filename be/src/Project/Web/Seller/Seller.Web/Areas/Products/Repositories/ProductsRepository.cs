@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Shared.Configurations;
-using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Shared.Definitions;
+using Foundation.Extensions.Exceptions;
+using Seller.Web.Areas.Products.ApiRequestModels;
+using System;
 
 namespace Seller.Web.Areas.Products.Repositories
 {
@@ -23,50 +25,38 @@ namespace Seller.Web.Areas.Products.Repositories
             this.settings = settings;
         }
 
-        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(string token, string language, string searchTerm, Guid? sellerId, int pageIndex, int itemsPerPage)
         {
-            var apiRequest = new ApiRequest<RequestModelBase>
+            var categoriesRequestModel = new PagedProductsRequestModel
             {
-                Data = this.apiClientService.InitializeRequestModelContext(new RequestModelBase()),
+                Language = language,
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                SellerId = sellerId,
+                IncludeProductVariants = true
+            };
+
+            var apiRequest = new ApiRequest<PagedProductsRequestModel>
+            {
+                Data = categoriesRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, PagedResults<IEnumerable<Product>>>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data != null)
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
-                var products = new List<Product>();
-
-                foreach (var productResponse in response.Data.Data)
-                {
-                    var product = new Product
-                    {
-                        Id = productResponse.Id,
-                        PrimaryProductId = productResponse.PrimaryProductId,
-                        Sku = productResponse.Sku,
-                        Name = productResponse.Name,
-                        Description = productResponse.Description,
-                        IsNew = productResponse.IsNew,
-                        IsProtected = productResponse.IsProtected,
-                        FormData = productResponse.FormData,
-                        SellerId = productResponse.SellerId,
-                        BrandName = productResponse.BrandName,
-                        CategoryId = productResponse.CategoryId,
-                        CategoryName = productResponse.CategoryName,
-                        ProductVariants = productResponse.ProductVariants,
-                        Images = productResponse.Images,
-                        Files = productResponse.Files,
-                        Videos = productResponse.Videos
-                    };
-
-                    products.Add(product);
-                }
-
                 return new PagedResults<IEnumerable<Product>>(response.Data.Total, response.Data.PageSize)
                 {
-                    Data = products
+                    Data = response.Data.Data
                 };
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
             return default;

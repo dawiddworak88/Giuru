@@ -11,7 +11,7 @@ namespace Catalog.Api.v1.Areas.Products.DependencyInjection
         {
             services.AddScoped<IProductIndexingRepository, ProductIndexingRepository>();
             services.AddScoped<IProductSearchRepository, ProductSearchRepository>();
-            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IProductsService, ProductsService>();
         }
     }
 }

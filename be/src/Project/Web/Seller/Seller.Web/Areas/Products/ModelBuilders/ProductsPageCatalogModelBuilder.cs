@@ -11,10 +11,11 @@ using Seller.Web.Shared.ViewModels;
 using Seller.Web.Areas.Products.DomainModels;
 using System.Collections.Generic;
 using Foundation.Extensions.ExtensionMethods;
+using System;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {
-    public class ProductPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Product>>
+    public class ProductsPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Product>>
     {
         private readonly ICatalogModelBuilder catalogModelBuilder;
         private readonly IProductsRepository productsRepository;
@@ -22,7 +23,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
         private readonly IStringLocalizer productLocalizer;
         private readonly LinkGenerator linkGenerator;
 
-        public ProductPageCatalogModelBuilder(
+        public ProductsPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IProductsRepository productsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -90,8 +91,8 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.productsRepository.GetProductsAsync(componentModel.Token, CultureInfo.CurrentUICulture.Name, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage);
-            
+            viewModel.PagedItems = await this.productsRepository.GetProductsAsync(componentModel.Token, componentModel.Language, null, componentModel.SellerId, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage);
+
             return viewModel;
         }
     }

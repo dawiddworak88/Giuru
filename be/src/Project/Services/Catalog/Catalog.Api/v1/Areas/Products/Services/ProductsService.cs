@@ -15,14 +15,14 @@ using Foundation.Extensions.ExtensionMethods;
 
 namespace Catalog.Api.v1.Areas.Products.Services
 {
-    public class ProductService : IProductService
+    public class ProductsService : IProductsService
     {
         private readonly CatalogContext catalogContext;
         private readonly IEntityService entityService;
         private readonly IProductSearchRepository productSearchRepository;
         private readonly IProductIndexingRepository productIndexingRepository;
 
-        public ProductService(
+        public ProductsService(
             CatalogContext catalogContext,
             IEntityService entityService,
             IProductSearchRepository productSearchRepository,
@@ -142,7 +142,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
         public async Task<PagedResults<IEnumerable<ProductResultModel>>> GetAsync(GetProductsModel model)
         {
-            var searchResults = await this.productSearchRepository.GetAsync(model.Language, model.CategoryId, model.OrganisationId, model.SearchTerm, model.PageIndex, model.ItemsPerPage);
+            var searchResults = await this.productSearchRepository.GetAsync(model.Language, model.CategoryId, model.OrganisationId, model.IncludeProductVariants, model.SearchTerm, model.PageIndex, model.ItemsPerPage);
             return await this.MapToPageResultsAsync(searchResults, model.Language);
         }
 

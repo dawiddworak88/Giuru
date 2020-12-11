@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Catalog.Api.v1.Areas.Products.Services
 {
-    public interface IProductService
+    public interface IProductsService
     {
         Task<ProductResultModel> CreateAsync(CreateUpdateProductModel model);
         Task IndexAllAsync();

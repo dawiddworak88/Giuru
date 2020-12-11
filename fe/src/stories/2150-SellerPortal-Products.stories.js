@@ -1,6 +1,6 @@
 import React from "react";
 import "../project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage.scss";
-import ProductPage from "../project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage";
+import ProductsPage from "../project/Seller.Portal/areas/Products/pages/ProductsPage/ProductsPage";
 import { header, menuTiles, footer } from "./Shared/Props";
 
 var catalog = {
@@ -70,13 +70,13 @@ var catalog = {
   }
 };
 
-export const ProductPageStory = () => <ProductPage header={header} menuTiles={menuTiles} catalog={catalog} footer={footer} />
+export const ProductsPageStory = () => <ProductsPage header={header} menuTiles={menuTiles} catalog={catalog} footer={footer} />
 
-ProductPageStory.story = {
+ProductsPageStory.story = {
   name: "Products Page",
 };
 
 export default {
   title: "SellerPortal.Products",
-  component: ProductPageStory,
+  component: ProductsPageStory,
 };

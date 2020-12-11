@@ -17,11 +17,10 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
             this.elasticClient = elasticClient;
         }
 
-        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? categoryId, Guid? sellerId, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? categoryId, Guid? sellerId, bool includeProductVariants, string searchTerm, int pageIndex, int itemsPerPage)
         {
             var query = Query<ProductSearchModel>.Term(t => t.Language, language)
-                && Query<ProductSearchModel>.Term(t => t.IsActive, true)
-                && Query<ProductSearchModel>.Term(t => t.PrimaryProductIdHasValue, false);
+                && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
             if (categoryId.HasValue)
             {
@@ -31,6 +30,11 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
             if (sellerId.HasValue)
             {
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(sellerId.Value));
+            }
+
+            if (!includeProductVariants)
+            {
+                query = query && Query<ProductSearchModel>.Term(t => t.PrimaryProductIdHasValue, false);
             }
 
             if (!string.IsNullOrWhiteSpace(searchTerm))

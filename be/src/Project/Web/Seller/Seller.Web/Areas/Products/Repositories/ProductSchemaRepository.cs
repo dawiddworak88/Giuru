@@ -1,6 +1,5 @@
 ﻿using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Services.ApiClientServices;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;

@@ -1,6 +1,6 @@
 import React from "react";
-import "../project/Seller.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage.scss";
-import ProductDetailPage from "../project/Seller.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage";
+import "../project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage.scss";
+import ProductPage from "../project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage";
 import { header, menuTiles, footer } from "./Shared/Props";
 
 var productDetailForm = {
@@ -280,13 +280,13 @@ var productDetailForm = {
   }
 };
 
-export const ProductDetailPageStory = () => <ProductDetailPage header={header} menuTiles={menuTiles} title="Product" productDetailForm={productDetailForm} footer={footer} />
+export const ProductPageStory = () => <ProductPage header={header} menuTiles={menuTiles} productDetailForm={productDetailForm} footer={footer} />
 
-ProductDetailPageStory.story = {
-  name: "Product Detail Page",
+ProductPageStory.story = {
+  name: "Product Page",
 };
 
 export default {
   title: "SellerPortal.Product",
-  component: ProductDetailPageStory,
+  component: ProductPageStory,
 };
