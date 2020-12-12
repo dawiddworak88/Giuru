@@ -10,6 +10,8 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Seller.Web.Areas.Products.ApiRequestModels;
 using System;
+using Foundation.ApiExtensions.Models.Request;
+using Foundation.ApiExtensions.Models.Response;
 
 namespace Seller.Web.Areas.Products.Repositories
 {
@@ -60,6 +62,28 @@ namespace Seller.Web.Areas.Products.Repositories
             }
 
             return default;
+        }
+
+        public async Task DeleteAsync(string token, string language, Guid? id)
+        {
+            var deleteRequestModel = new RequestModelBase
+            {
+                Language = language
+            };
+
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Data = deleteRequestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode && response?.Data != null)
+            {
+                throw new CustomException(response.Data.Message, (int)response.StatusCode);
+            }
         }
     }
 }

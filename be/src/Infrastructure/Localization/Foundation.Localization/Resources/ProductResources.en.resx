@@ -177,6 +177,9 @@
   <data name="ProductVariants" xml:space="preserve">
     <value>Product variants</value>
   </data>
+  <data name="ProductVariantsDeleteProductConflict" xml:space="preserve">
+    <value>Delete variants of this product first.</value>
+  </data>
   <data name="SelectCategory" xml:space="preserve">
     <value>Select category</value>
   </data>

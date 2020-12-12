@@ -179,7 +179,7 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         /// </summary>
         /// <param name="language">The language.</param>
         /// <param name="id">The id.</param>
-        /// <returns>The category.</returns>
+        /// <returns>OK.</returns>
         [HttpDelete, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType(200)]

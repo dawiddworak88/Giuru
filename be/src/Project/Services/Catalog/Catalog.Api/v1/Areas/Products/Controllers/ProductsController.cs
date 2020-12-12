@@ -13,6 +13,8 @@ using System.Security.Claims;
 using Foundation.Account.Definitions;
 using Foundation.Extensions.Helpers;
 using Catalog.Api.v1.Areas.Products.RequestModels;
+using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.Definitions;
 
 namespace Catalog.Api.v1.Areas.Products.Controllers
 {
@@ -70,6 +72,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.OK, products);
                 }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
             else
             {
@@ -94,9 +98,9 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.OK, products);
                 }
-            }
 
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
         }
 
         /// <summary>
@@ -116,7 +120,6 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
             var serviceModel = new CreateUpdateProductModel
             {
                 Id = request.Id,
-                CategoryId = request.CategoryId,
                 PrimaryProductId = request.PrimaryProductId,
                 IsNew = request.IsNew,
                 IsProtected = request.IsProtected,
@@ -201,14 +204,16 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         }
 
         /// <summary>
-        /// Deletes the product by id.
+        /// Delete product by id.
         /// </summary>
         /// <param name="language">The language.</param>
-        /// <param name="id">The id of a product to delete.</param>
-        /// <returns>The deletion process result.</returns>
+        /// <param name="id">The id.</param>
+        /// <returns>OK.</returns>
         [HttpDelete, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
         [ProducesResponseType(422)]
         public async Task<IActionResult> Delete(string language, Guid? id)
         {
@@ -216,8 +221,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
 
             var serviceModel = new DeleteProductModel
             {
-                Language = language,
                 Id = id,
+                Language = language,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
@@ -233,7 +238,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                 return this.StatusCode((int)HttpStatusCode.OK);
             }
 
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }

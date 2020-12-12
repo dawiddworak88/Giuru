@@ -12,20 +12,20 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 {
     public class ProductDetailFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailFormViewModel>
     {
-        private readonly IProductRepository productRepository;
+        private readonly IProductsRepository productsRepository;
         private readonly IProductSchemaRepository productSchemaRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly LinkGenerator linkGenerator;
 
         public ProductDetailFormModelBuilder(
-            IProductRepository productRepository,
+            IProductsRepository productRepository,
             IProductSchemaRepository productSchemaRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             LinkGenerator linkGenerator)
         {
-            this.productRepository = productRepository;
+            this.productsRepository = productRepository;
             this.productSchemaRepository = productSchemaRepository;
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
@@ -52,7 +52,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 
             if (componentModel.Id.HasValue)
             {
-                viewModel.Product = await this.productRepository.GetProductAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                // viewModel.Product = await this.productsRepository.GetProductAsync(componentModel.Token, componentModel.Language, componentModel.Id);
             }
 
             return viewModel;

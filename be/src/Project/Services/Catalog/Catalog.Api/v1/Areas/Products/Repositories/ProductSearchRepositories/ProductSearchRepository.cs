@@ -47,7 +47,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
 
             var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(x => x && query).Sort(s => s.Descending(SortSpecialField.Score).Ascending(x => x.CreatedDate)));
 
-            if (response.IsValid && response.Hits.Any())
+            if (response.IsValid)
             {
                 return new PagedResults<IEnumerable<ProductSearchModel>>(response.Total, itemsPerPage)
                 {

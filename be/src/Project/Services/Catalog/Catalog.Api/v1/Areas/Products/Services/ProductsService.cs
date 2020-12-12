@@ -10,8 +10,13 @@ using Catalog.Api.Infrastructure;
 using Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories;
 using Foundation.GenericRepository.Services;
 using Catalog.Api.v1.Areas.Products.SearchModels;
-using System;
 using Foundation.Extensions.ExtensionMethods;
+using Microsoft.EntityFrameworkCore;
+using Foundation.Extensions.Exceptions;
+using System.Net;
+using Microsoft.Extensions.Localization;
+using Foundation.Localization;
+using Foundation.Localization.Services;
 
 namespace Catalog.Api.v1.Areas.Products.Services
 {
@@ -21,17 +26,23 @@ namespace Catalog.Api.v1.Areas.Products.Services
         private readonly IEntityService entityService;
         private readonly IProductSearchRepository productSearchRepository;
         private readonly IProductIndexingRepository productIndexingRepository;
+        private readonly IStringLocalizer<ProductResources> productLocalizer;
+        private readonly ICultureService cultureService;
 
         public ProductsService(
             CatalogContext catalogContext,
             IEntityService entityService,
             IProductSearchRepository productSearchRepository,
-            IProductIndexingRepository productIndexingRepository)
+            IProductIndexingRepository productIndexingRepository,
+            IStringLocalizer<ProductResources> productLocalizer,
+            ICultureService cultureService)
         {
             this.catalogContext = catalogContext;
             this.entityService = entityService;
             this.productSearchRepository = productSearchRepository;
             this.productIndexingRepository = productIndexingRepository;
+            this.productLocalizer = productLocalizer;
+            this.cultureService = cultureService;
         }
 
         public async Task<ProductResultModel> CreateAsync(CreateUpdateProductModel model)
@@ -137,7 +148,25 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
         public async Task DeleteAsync(DeleteProductModel model)
         {
-            throw new NotSupportedException();
+            this.cultureService.SetCulture(model.Language);
+
+            var product = await this.catalogContext.Products.FirstOrDefaultAsync(x => x.Id == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive);
+
+            if (product == null)
+            {
+                throw new CustomException(this.productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            if (await this.catalogContext.Products.AnyAsync(x => x.PrimaryProductId == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive))
+            {
+                throw new CustomException(this.productLocalizer.GetString("ProductVariantsDeleteProductConflict"), (int)HttpStatusCode.Conflict);
+            }
+
+            product.IsActive = false;
+
+            await this.catalogContext.SaveChangesAsync();
+
+            await this.productIndexingRepository.IndexAsync(product.Id);
         }
 
         public async Task<PagedResults<IEnumerable<ProductResultModel>>> GetAsync(GetProductsModel model)
@@ -202,7 +231,10 @@ namespace Catalog.Api.v1.Areas.Products.Services
                 };
             }
 
-            return default;
+            return new PagedResults<IEnumerable<ProductResultModel>>(searchResults.Total, searchResults.PageSize)
+            {
+                Data = Enumerable.Empty<ProductResultModel>()
+            };
         }
 
         private ProductResultModel MapProductSearchModelToProductResult(ProductSearchModel searchResultItem)

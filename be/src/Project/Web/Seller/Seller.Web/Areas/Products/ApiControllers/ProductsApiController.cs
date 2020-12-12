@@ -59,15 +59,15 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         //    return this.StatusCode((int)HttpStatusCode.OK, new { Id = categoryId, Message = this.productLocalizer.GetString("CategorySavedSuccessfully").Value });
         //}
 
-        //[HttpDelete]
-        //public async Task<IActionResult> Delete(Guid? id)
-        //{
-        //    await this.productsRepository.DeleteAsync(
-        //        await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-        //        CultureInfo.CurrentUICulture.Name,
-        //        id);
+        [HttpDelete]
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            await this.productsRepository.DeleteAsync(
+                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                CultureInfo.CurrentUICulture.Name,
+                id);
 
-        //    return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.productLocalizer.GetString("CategoryDeletedSuccessfully").Value });
-        //}
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.productLocalizer.GetString("CategoryDeletedSuccessfully").Value });
+        }
     }
 }
