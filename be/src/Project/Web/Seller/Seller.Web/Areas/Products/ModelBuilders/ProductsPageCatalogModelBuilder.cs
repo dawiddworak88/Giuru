@@ -40,6 +40,10 @@ namespace Seller.Web.Areas.Products.ModelBuilders
         {
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<Product>, Product>();
 
+            viewModel.Title = this.productLocalizer.GetString("Products");
+
+            viewModel.NewText = this.productLocalizer.GetString("NewProduct");
+            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
