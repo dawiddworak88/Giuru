@@ -10,7 +10,7 @@ using Foundation.Localization;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {
-    public class ProductDetailPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailPageViewModel>
+    public class ProductDetailPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel>
     {
         private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
@@ -32,7 +32,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             this.productDetailFormModelBuilder = productDetailFormModelBuilder;
         }
 
-        public async Task<ProductDetailPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<ProductPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var productDetailFormComponentModel = new ComponentModelBase
             { 
@@ -41,7 +41,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 Language = componentModel.Language
             };
 
-            var viewModel = new ProductDetailPageViewModel
+            var viewModel = new ProductPageViewModel
             {
                 Title = this.productLocalizer["Product"],
                 Header = headerModelBuilder.BuildModel(),

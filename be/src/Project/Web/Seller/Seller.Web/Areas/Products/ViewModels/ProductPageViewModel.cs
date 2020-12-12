@@ -2,7 +2,7 @@
 
 namespace Seller.Web.Areas.Products.ViewModels
 {
-    public class ProductDetailPageViewModel : BasePageViewModel
+    public class ProductPageViewModel : BasePageViewModel
     {
         public string Title { get; set; }
 

@@ -11,7 +11,6 @@ using Seller.Web.Shared.ViewModels;
 using Seller.Web.Areas.Products.DomainModels;
 using System.Collections.Generic;
 using Foundation.Extensions.ExtensionMethods;
-using System;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {
@@ -41,7 +40,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
         {
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<Product>, Product>();
 
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "ProductDetail", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });

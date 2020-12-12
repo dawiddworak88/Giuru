@@ -14,9 +14,9 @@ namespace Seller.Web.Areas.Products.Controllers
     [Area("Products")]
     public class ProductController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailPageViewModel> productDetailPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel> productDetailPageModelBuilder;
 
-        public ProductController(IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailPageViewModel> productDetailPageModelBuilder)
+        public ProductController(IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel> productDetailPageModelBuilder)
         {
             this.productDetailPageModelBuilder = productDetailPageModelBuilder;
         }

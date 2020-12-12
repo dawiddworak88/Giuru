@@ -1,112 +1,73 @@
-﻿using Foundation.ApiExtensions.Communications;
-using Foundation.ApiExtensions.Controllers;
+﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
-using Foundation.ApiExtensions.Services.ApiClientServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using System.Globalization;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Products.ApiRequestModels;
-using Seller.Web.Areas.Products.ApiResponseModels;
-using Seller.Web.Shared.Configurations;
 using System;
-using Foundation.ApiExtensions.Models.Request;
-using Foundation.ApiExtensions.Models.Response;
 using System.Net;
 using Foundation.Localization;
 using Microsoft.Extensions.Localization;
+using System.Linq;
+using Seller.Web.Areas.Products.Repositories;
+using System.Security.Claims;
+using Foundation.Account.Definitions;
+using Foundation.Extensions.Helpers;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
     [Area("Products")]
     public class ProductsApiController : BaseApiController
     {
-        private readonly IApiClientService apiClientService;
-        private readonly ServicesEndpointsConfiguration servicesEndpointsConfiguration;
-        private readonly IStringLocalizer<ProductResources> productLocalizer;
+        private readonly IProductsRepository productsRepository;
+        private readonly IStringLocalizer productLocalizer;
 
         public ProductsApiController(
-            IApiClientService apiClientService,
-            IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration,
+            IProductsRepository productsRepository,
             IStringLocalizer<ProductResources> productLocalizer)
         {
-            this.apiClientService = apiClientService;
-            this.servicesEndpointsConfiguration = servicesEndpointsConfiguration.CurrentValue;
+            this.productsRepository = productsRepository;
             this.productLocalizer = productLocalizer;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage)
         {
-            var productsRequestModel = new PagedProductsRequestModel
-            {
-                Language = CultureInfo.CurrentUICulture.Name,
-                SearchTerm = searchTerm,
-                PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage
-            };
+            var products = await this.productsRepository.GetProductsAsync(
+                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                CultureInfo.CurrentUICulture.Name,
+                searchTerm,
+                GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value),
+                pageIndex,
+                itemsPerPage);
 
-            var apiRequest = new ApiRequest<PagedProductsRequestModel>
-            {
-                Data = this.apiClientService.InitializeRequestModelContext(productsRequestModel),
-                AccessToken = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                EndpointAddress = this.servicesEndpointsConfiguration.Api.Host + this.servicesEndpointsConfiguration.Api.Endpoints.Products
-            };
-
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, ProductsResponseModel>(apiRequest);
-
-            return this.StatusCode((int)response.StatusCode, response);
+            return this.StatusCode((int)HttpStatusCode.OK, products);
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> Delete(Guid? id)
-        {
-            var model = new RequestModelBase
-            {
-                Language = CultureInfo.CurrentUICulture.Name,
-                Id = id
-            };
+        //[HttpPost]
+        //public async Task<IActionResult> Index([FromBody] SaveCategoryRequestModel model)
+        //{
+        //    var categoryId = await this.productsRepository.SaveAsync(
+        //        await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+        //        CultureInfo.CurrentUICulture.Name,
+        //        model.Id,
+        //        model.ParentCategoryId,
+        //        model.Name,
+        //        model.Files.Select(x => x.Id.Value));
 
-            var apiRequest = new ApiRequest<RequestModelBase>
-            {
-                Data = this.apiClientService.InitializeRequestModelContext(model),
-                AccessToken = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                EndpointAddress = this.servicesEndpointsConfiguration.Api.Host + this.servicesEndpointsConfiguration.Api.Endpoints.Product
-            };
+        //    return this.StatusCode((int)HttpStatusCode.OK, new { Id = categoryId, Message = this.productLocalizer.GetString("CategorySavedSuccessfully").Value });
+        //}
 
-            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+        //[HttpDelete]
+        //public async Task<IActionResult> Delete(Guid? id)
+        //{
+        //    await this.productsRepository.DeleteAsync(
+        //        await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+        //        CultureInfo.CurrentUICulture.Name,
+        //        id);
 
-            return this.StatusCode((int)response.StatusCode);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Save([FromBody] SaveProductRequestModel requestModel)
-        {
-            var productRequestModel = new ProductRequestModel
-            {
-                Id = requestModel.Id,
-                Sku = requestModel.Sku,
-                Name = requestModel.Name,
-                SchemaId = requestModel.SchemaId,
-                FormData = requestModel.FormData.ToString()
-            };
-
-            var apiRequest = new ApiRequest<ProductRequestModel>
-            {
-                Data = this.apiClientService.InitializeRequestModelContext(productRequestModel),
-                AccessToken = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                EndpointAddress = this.servicesEndpointsConfiguration.Api.Host + this.servicesEndpointsConfiguration.Api.Endpoints.Product
-            };
-
-            var response = await this.apiClientService.PostAsync<ApiRequest<ProductRequestModel>, ProductRequestModel, ProductResponseModel>(apiRequest);
-
-            if (response.StatusCode == HttpStatusCode.Conflict)
-            {
-                response.Message = this.productLocalizer["ProductAlreadyExists"];
-            }
-
-            return this.StatusCode((int)response.StatusCode, response);
-        }
+        //    return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.productLocalizer.GetString("CategoryDeletedSuccessfully").Value });
+        //}
     }
 }
