@@ -6,7 +6,7 @@ import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress } from "@material-ui/core";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 
-function CategoryDetailForm(props) {
+function CategoryForm(props) {
 
     const [state, dispatch] = useContext(Context);
 
@@ -115,7 +115,7 @@ function CategoryDetailForm(props) {
                                 dropFilesLabel={props.dropFilesLabel}
                                 dropOrSelectFilesLabel={props.dropOrSelectFilesLabel}
                                 setFieldValue={setFieldValue}
-                                previewEnabled={true}
+                                imagePreviewEnabled={true}
                                 files={files}
                                 stateCollectionName="files"
                                 saveMediaUrl={props.saveMediaUrl} />
@@ -133,7 +133,11 @@ function CategoryDetailForm(props) {
     );
 }
 
-CategoryDetailForm.propTypes = {
+CategoryForm.propTypes = {
+    id: PropTypes.string,
+    name: PropTypes.string,
+    parentCategoryId: PropTypes.string,
+    files: PropTypes.array,
     selectCategoryLabel: PropTypes.string.isRequired,
     parentCategoryLabel: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
@@ -149,4 +153,4 @@ CategoryDetailForm.propTypes = {
     saveUrl: PropTypes.string.isRequired
 };
 
-export default CategoryDetailForm;
+export default CategoryForm;

@@ -171,6 +171,9 @@
   <data name="Description" xml:space="preserve">
     <value>Opis</value>
   </data>
+  <data name="DescriptionLabel" xml:space="preserve">
+    <value>Opis:</value>
+  </data>
   <data name="DisplayedRows" xml:space="preserve">
     <value>z</value>
   </data>

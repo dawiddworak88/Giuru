@@ -3,7 +3,7 @@ import "../project/Seller.Portal/areas/Products/pages/CategoryPage/CategoryPage.
 import CategoryPage from "../project/Seller.Portal/areas/Products/pages/CategoryPage/CategoryPage";
 import { header, menuTiles, footer } from "./Shared/Props";
 
-var categoryDetailForm = {
+var categoryForm = {
 
   title: "Category",
   nameLabel: "Name:",
@@ -25,7 +25,7 @@ var categoryDetailForm = {
   ]
 };
 
-export const CategoryPageStory = () => <CategoryPage header={header} menuTiles={menuTiles} categoryDetailForm={categoryDetailForm} footer={footer} />
+export const CategoryPageStory = () => <CategoryPage header={header} menuTiles={menuTiles} categoryForm={categoryForm} footer={footer} />
 
 CategoryPageStory.story = {
   name: "Category Page",

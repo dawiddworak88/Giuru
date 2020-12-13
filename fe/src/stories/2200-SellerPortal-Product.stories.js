@@ -3,7 +3,7 @@ import "../project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage.sc
 import ProductPage from "../project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage";
 import { header, menuTiles, footer } from "./Shared/Props";
 
-var productDetailForm = {
+var productForm = {
 
   nameLabel: "Name:",
   nameRequiredErrorMessage: "Enter name",
@@ -280,7 +280,7 @@ var productDetailForm = {
   }
 };
 
-export const ProductPageStory = () => <ProductPage header={header} menuTiles={menuTiles} productDetailForm={productDetailForm} footer={footer} />
+export const ProductPageStory = () => <ProductPage header={header} menuTiles={menuTiles} productForm={productForm} footer={footer} />
 
 ProductPageStory.story = {
   name: "Product Page",

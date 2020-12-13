@@ -12,6 +12,7 @@ using Seller.Web.Areas.Products.ApiRequestModels;
 using System;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Models.Response;
+using System.Linq;
 
 namespace Seller.Web.Areas.Products.Repositories
 {
@@ -29,7 +30,7 @@ namespace Seller.Web.Areas.Products.Repositories
 
         public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(string token, string language, string searchTerm, Guid? sellerId, int pageIndex, int itemsPerPage)
         {
-            var categoriesRequestModel = new PagedProductsRequestModel
+            var productsRequestModel = new PagedProductsRequestModel
             {
                 Language = language,
                 SearchTerm = searchTerm,
@@ -41,7 +42,7 @@ namespace Seller.Web.Areas.Products.Repositories
 
             var apiRequest = new ApiRequest<PagedProductsRequestModel>
             {
-                Data = categoriesRequestModel,
+                Data = productsRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
             };
@@ -59,6 +60,62 @@ namespace Seller.Web.Areas.Products.Repositories
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
+        }
+
+        public async Task<IEnumerable<Product>> GetAllPrimaryProductsAsync(string token, string language, Guid? sellerId, int pageIndex, int itemsPerPage)
+        {
+            var productsRequestModel = new PagedProductsRequestModel
+            {
+                Language = language,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                SellerId = sellerId,
+                IncludeProductVariants = false
+            };
+
+            var apiRequest = new ApiRequest<PagedProductsRequestModel>
+            {
+                Data = productsRequestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                var products = new List<Product>();
+
+                products.AddRange(response.Data.Data);
+
+                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)itemsPerPage);
+
+                for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
+                {
+                    apiRequest.Data.PageIndex = i;
+
+                    var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
+
+                    if (!nextPagesResponse.IsSuccessStatusCode)
+                    {
+                        throw new CustomException(response.Message, (int)response.StatusCode);
+                    }
+
+                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Count() > 0)
+                    {
+                        products.AddRange(nextPagesResponse.Data.Data);
+                    }
+                }
+
+                return products;
             }
 
             return default;
@@ -84,6 +141,35 @@ namespace Seller.Web.Areas.Products.Repositories
             {
                 throw new CustomException(response.Data.Message, (int)response.StatusCode);
             }
+        }
+
+        public async Task<Product> GetProductAsync(string token, string language, Guid? id)
+        {
+            var request = new RequestModelBase
+            {
+                Language = language
+            };
+
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Data = request,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Product>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            return default;
         }
     }
 }

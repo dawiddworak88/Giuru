@@ -6,6 +6,6 @@ namespace Seller.Web.Areas.Products.ViewModels
     {
         public string Title { get; set; }
 
-        public ProductDetailFormViewModel ProductDetailForm { get; set; }
+        public ProductFormViewModel ProductForm { get; set; }
     }
 }

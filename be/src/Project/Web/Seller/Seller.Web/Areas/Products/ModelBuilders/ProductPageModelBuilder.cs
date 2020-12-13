@@ -10,44 +10,37 @@ using Foundation.Localization;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {
-    public class ProductDetailPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel>
+    public class ProductPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel>
     {
         private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailFormViewModel> productDetailFormModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductFormViewModel> productFormModelBuilder;
 
-        public ProductDetailPageModelBuilder(
+        public ProductPageModelBuilder(
             IStringLocalizer<ProductResources> productLocalizer,
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailFormViewModel> productDetailFormModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, ProductFormViewModel> productFormModelBuilder)
         {
             this.productLocalizer = productLocalizer;
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
-            this.productDetailFormModelBuilder = productDetailFormModelBuilder;
+            this.productFormModelBuilder = productFormModelBuilder;
         }
 
         public async Task<ProductPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var productDetailFormComponentModel = new ComponentModelBase
-            { 
-                Id = componentModel.Id,
-                Token = componentModel.Token,
-                Language = componentModel.Language
-            };
-
             var viewModel = new ProductPageViewModel
             {
                 Title = this.productLocalizer["Product"],
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
                 Footer = footerModelBuilder.BuildModel(),
-                ProductDetailForm = await productDetailFormModelBuilder.BuildModelAsync(productDetailFormComponentModel)
+                ProductForm = await productFormModelBuilder.BuildModelAsync(componentModel)
             };
 
             return viewModel;

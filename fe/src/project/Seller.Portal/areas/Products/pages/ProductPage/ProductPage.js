@@ -6,7 +6,7 @@ import Header from "../../../../../../shared/components/Header/Header";
 import Store from "../../../../../../shared/stores/Store";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
-import ProductDetailForm from "../../components/ProductDetail/ProductDetailForm";
+import ProductForm from "../../components/ProductForm/ProductForm";
 
 function ProductPage(props) {
 
@@ -18,7 +18,7 @@ function ProductPage(props) {
         <div>
           <Header {...props.header}></Header>
           <MenuTiles {...props.menuTiles} />
-          <ProductDetailForm {...props.productDetailForm} />
+          <ProductForm {...props.productForm} />
           <Footer {...props.footer}></Footer>
         </div>
       </Store>

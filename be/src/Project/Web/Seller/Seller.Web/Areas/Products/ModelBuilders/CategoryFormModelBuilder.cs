@@ -3,6 +3,7 @@ using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -18,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {
-    public class CategoryDetailFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CategoryDetailFormViewModel>
+    public class CategoryFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CategoryFormViewModel>
     {
         private readonly ICategoriesRepository categoriesRepository;
         private readonly IStringLocalizer globalLocalizer;
@@ -27,7 +28,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
         private readonly IOptionsMonitor<AppSettings> settings;
         private readonly LinkGenerator linkGenerator;
 
-        public CategoryDetailFormModelBuilder(
+        public CategoryFormModelBuilder(
             ICategoriesRepository categoriesRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
@@ -43,9 +44,9 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             this.linkGenerator = linkGenerator;
         }
 
-        public async Task<CategoryDetailFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<CategoryFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new CategoryDetailFormViewModel
+            var viewModel = new CategoryFormViewModel
             {
                 Title = this.productLocalizer.GetString("EditCategory"),
                 NameLabel = this.globalLocalizer.GetString("Name"),
@@ -62,15 +63,16 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             };
 
-            var parentCategories = await this.categoriesRepository.GetCategoriesAllAsync(
+            var parentCategories = await this.categoriesRepository.GetAllCategoriesAsync(
                 componentModel.Token,
                 componentModel.Language,
+                false,
                 PaginationConstants.DefaultPageIndex,
                 PaginationConstants.DefaultPageSize);
 
             if (parentCategories != null)
             {
-                viewModel.ParentCategories = parentCategories.Select(x => new ParentCategoryViewModel { Id = x.Id, Name = x.Name, Level = x.Level }).OrderBy(x => x.Level).ThenBy(x => x.Name);
+                viewModel.ParentCategories = parentCategories.OrderBy(x => x.Level).ThenBy(x => x.Name).Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
             if (componentModel.Id.HasValue)
@@ -93,7 +95,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                             new FileViewModel
                             { 
                                 Id = category.ThumbnailMediaId.Value,
-                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, category.ThumbnailMediaId.Value, Constants.CategoryPreviewMaxWidth, Constants.CategoryPreviewMaxHeight, true)
+                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, category.ThumbnailMediaId.Value, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true)
                             }
                         };
                     }

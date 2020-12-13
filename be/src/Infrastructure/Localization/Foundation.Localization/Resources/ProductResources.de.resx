@@ -135,11 +135,17 @@
   <data name="EditCategory" xml:space="preserve">
     <value>Kategorie bearbeiten</value>
   </data>
+  <data name="EditProduct" xml:space="preserve">
+    <value>Produkt bearbeiten</value>
+  </data>
   <data name="EnterCategoryName" xml:space="preserve">
     <value>Bitte den Kategorienamen eingeben</value>
   </data>
   <data name="EnterSkuText" xml:space="preserve">
     <value>Bitte SKU eingeben</value>
+  </data>
+  <data name="IsNew" xml:space="preserve">
+    <value>Neu</value>
   </data>
   <data name="NewProduct" xml:space="preserve">
     <value>Neues Produkt</value>
@@ -162,8 +168,14 @@
   <data name="ProductDetailText" xml:space="preserve">
     <value>Produkt</value>
   </data>
+  <data name="ProductFilesLabel" xml:space="preserve">
+    <value>Produkt Dateien</value>
+  </data>
   <data name="ProductInformation" xml:space="preserve">
     <value>Produktinformation</value>
+  </data>
+  <data name="ProductPicturesLabel" xml:space="preserve">
+    <value>Produkt Bilder</value>
   </data>
   <data name="Products" xml:space="preserve">
     <value>Produkte</value>
@@ -182,6 +194,9 @@
   </data>
   <data name="SelectCategory" xml:space="preserve">
     <value>Kategorie wählen</value>
+  </data>
+  <data name="SelectPrimaryProduct" xml:space="preserve">
+    <value>Bitte Primärprodukt auswählen</value>
   </data>
   <data name="Sku" xml:space="preserve">
     <value>SKU</value>

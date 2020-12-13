@@ -75,7 +75,7 @@ function MediaCloud(props) {
                     <p>{isDragActive ? props.dropOrSelectFilesLabel : props.dropFilesLabel}</p>
                 </div>
             </div>
-            {props.previewEnabled && files && files.length > 0 &&
+            {props.imagePreviewEnabled && files && files.length > 0 &&
                 <aside className="dropzone__preview">
                     {files.map((file) =>
                         <div className="dropzone__preview-thumbnail">
@@ -106,7 +106,7 @@ MediaCloud.propTypes = {
     dropFilesLabel: PropTypes.string.isRequired,
     saveMediaUrl: PropTypes.string.isRequired,
     deleteLabel: PropTypes.string.isRequired,
-    previewEnabled: PropTypes.bool.isRequired,
+    imagePreviewEnabled: PropTypes.bool.isRequired,
     files: PropTypes.array,
     stateCollectionName: PropTypes.string.isRequired,
     setFieldValue: PropTypes.func.isRequired,

@@ -1,10 +1,11 @@
-﻿using Seller.Web.Shared.ViewModels;
+﻿using Foundation.PageContent.Components.ListItems.ViewModels;
+using Seller.Web.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Products.ViewModels
 {
-    public class CategoryDetailFormViewModel
+    public class CategoryFormViewModel
     {
         public Guid? Id { get; set; }
         public string Name { get; set; }
@@ -23,6 +24,6 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string CategoryPictureLabel { get; set; }
         public string SaveMediaUrl { get; set; }
         public string SaveUrl { get; set; }
-        public IEnumerable<ParentCategoryViewModel> ParentCategories { get; set; }
+        public IEnumerable<ListItemViewModel> ParentCategories { get; set; }
     }
 }
