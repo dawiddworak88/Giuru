@@ -16,7 +16,6 @@ namespace Seller.Web.Areas.Products.DependencyInjection
         public static void RegisterProductsAreaDependencies(this IServiceCollection services)
         {
             services.AddScoped<IProductsRepository, ProductsRepository>();
-            services.AddScoped<IProductSchemaRepository, ProductSchemaRepository>();
 
             services.AddScoped<ICategoriesRepository, CategoriesRepository>();
 

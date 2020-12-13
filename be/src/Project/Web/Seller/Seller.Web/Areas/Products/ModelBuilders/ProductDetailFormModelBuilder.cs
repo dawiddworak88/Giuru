@@ -13,20 +13,17 @@ namespace Seller.Web.Areas.Products.ModelBuilders
     public class ProductDetailFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailFormViewModel>
     {
         private readonly IProductsRepository productsRepository;
-        private readonly IProductSchemaRepository productSchemaRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly LinkGenerator linkGenerator;
 
         public ProductDetailFormModelBuilder(
             IProductsRepository productRepository,
-            IProductSchemaRepository productSchemaRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             LinkGenerator linkGenerator)
         {
             this.productsRepository = productRepository;
-            this.productSchemaRepository = productSchemaRepository;
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
             this.linkGenerator = linkGenerator;
@@ -36,7 +33,6 @@ namespace Seller.Web.Areas.Products.ModelBuilders
         {
             var viewModel = new ProductDetailFormViewModel
             {
-                Schema = await this.productSchemaRepository.GetProductSchemaByEntityTypeIdAsync(componentModel.Token, componentModel.Language, Definitons.Constants.ProductEntityTypeId),
                 GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"],
                 NameLabel = this.globalLocalizer["NameLabel"],
                 NameRequiredErrorMessage = this.globalLocalizer["NameRequiredErrorMessage"],

@@ -6,7 +6,6 @@ import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { TextField, Button, CircularProgress } from "@material-ui/core";
 import DynamicForm from "../../../../../../shared/components/DynamicForm/DynamicForm";
-import FetchErrorHandler from "../../../../../../shared/helpers/errorHandlers/FetchErrorHandler";
 
 function ProductDetailForm(props) {
 
@@ -16,37 +15,32 @@ function ProductDetailForm(props) {
     };
 
     const [state, dispatch] = useContext(Context);
-
-    const [category,] = useState(null);
-
-    const jsonSchema = props.schema && props.schema.jsonSchema ? JSON.parse(props.schema.jsonSchema) : {};
-    const uiSchema = props.schema && props.schema.uiSchema ? JSON.parse(props.schema.uiSchema) : {};
-
+    
     const stateSchema = {
 
-        id: { value: props.product ? props.product.id : null, error: "" },
-        name: { value: props.product ? props.product.name : "", error: "" },
-        sku: { value: props.product ? props.product.sku : "", error: "" },
-        schemaId: { value: props.schema ? props.schema.id : null, error: "" },
-        formData: props.product && props.product.formData ? JSON.parse(props.product.formData) : {}
+        id: { value: props.id ? props.id : null, error: "" },
+        name: { value: props.name ? props.name : "", error: "" },
+        sku: { value: props.sku ? props.sku : "", error: "" },
+        primaryProductId: { value: props.primaryProductId ? props.primaryProductId : "" },
+        images: { value: props.images ? props.images : [] },
+        files: { value: props.files ? props.files : [] }
     };
 
     const stateValidatorSchema = {
 
-        name: {
-            required: {
-                isRequired: true,
-                error: props.nameRequiredErrorMessage
-            }
-        },
         sku: {
             required: {
                 isRequired: true,
                 error: props.skuRequiredErrorMessage
             }
+        },
+        name: {
+            required: {
+                isRequired: true,
+                error: props.nameRequiredErrorMessage
+            }
         }
     };
-
     function onSubmitForm(state) {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -62,23 +56,18 @@ function ProductDetailForm(props) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                FetchErrorHandler.handleUnauthorizedResponse(response);
-
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
 
-                        setFieldValue({ name: "id", value: jsonResponse.data.id });
+                        setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
                     else {
-                        FetchErrorHandler.consoleLogResponseDetails(state, response, jsonResponse);
                         toast.error(props.generalErrorMessage);
                     }
                 });
-            }).catch(error => {
-
-                console.log(error);
+            }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
@@ -92,9 +81,9 @@ function ProductDetailForm(props) {
         setFieldValue,
         handleOnChange,
         handleOnSubmit
-    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
+    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { name, sku, schemaId, formData } = values;
+    const { id, name, sku, primaryProductId, images, files } = values;
 
     return (
         <div>

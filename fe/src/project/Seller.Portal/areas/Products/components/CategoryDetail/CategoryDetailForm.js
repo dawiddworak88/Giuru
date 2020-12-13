@@ -1,12 +1,10 @@
-import React, { useContext, useCallback, useEffect } from "react";
+import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-import { UploadCloud } from "react-feather";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
-import IconConstants from "../../../../../../shared/constants/IconConstants";
 import { TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress } from "@material-ui/core";
-import { useDropzone } from "react-dropzone";
+import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 
 function CategoryDetailForm(props) {
 
@@ -74,57 +72,6 @@ function CategoryDetailForm(props) {
 
     const { id, name, parentCategoryId, files } = values;
 
-
-    function deleteMedia(e, id) {
-
-        e.preventDefault();
-        setFieldValue({ name: "files", value: files.filter((item) => item.id !== id) });
-    }
-
-    const onDrop = useCallback(acceptedFiles => {
-
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        acceptedFiles.forEach((file) => {
-
-            const formData = new FormData();
-
-            formData.append("file", file);
-
-            const requestOptions = {
-                method: "POST",
-                body: formData
-            };
-
-            fetch(props.saveMediaUrl, requestOptions)
-                .then(function (response) {
-
-                    dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                    return response.json().then((jsonResponse) => {
-
-                        if (response.ok) {
-
-                            dispatch({ type: "SET_IS_LOADING", payload: false });
-                            setFieldValue({ name: "files", value: [jsonResponse] });
-                        }
-                        else {
-                            toast.error(props.generalErrorMessage);
-                        }
-                    });
-                }).catch(() => {
-                    dispatch({ type: "SET_IS_LOADING", payload: false });
-                    toast.error(props.generalErrorMessage);
-                });
-        });
-    }, []);
-
-    const { getRootProps, getInputProps, isDragActive } = useDropzone({
-        onDrop,
-        accept: ".png, .jpg",
-        multiple: false
-    });
-
     return (
         <section className="section section-small-padding">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -154,37 +101,24 @@ function CategoryDetailForm(props) {
                                 </Select>
                             </FormControl>
                         </div>
-                        <div className={"field"}>
-                            <div className="dropzone">
-                                {props.categoryPictureLabel &&
-                                    <label className="dropzone__title" for="media">{props.categoryPictureLabel}</label>
-                                }
-                                <div className="dropzone__pond-container" {...getRootProps()}>
-                                    <input id="media" name="media" {...getInputProps()} />
-                                    <div className={isDragActive ? "dropzone__pond dropzone--active" : "dropzone__pond"}>
-                                        <p>
-                                            <UploadCloud size={IconConstants.defaultSize()} />
-                                        </p>
-                                        <p>{isDragActive ? props.dropOrSelectFilesLabel : props.dropFilesLabel}</p>
-                                    </div>
-                                </div>
-                                {files && files.length > 0 &&
-                                    <aside className="dropzone__preview">
-                                        {files.map((file) =>
-                                            <div className="dropzone__preview-thumbnail">
-                                                <div>
-                                                    <img src={file.url} />
-                                                </div>
-                                                <div className="is-flex is-flex-centered has-text-cenetered">
-                                                    <Button type="button" type="contained" color="primary" onClick={(e) => deleteMedia(e, file.id)}>
-                                                        {props.deleteLabel}
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </aside>
-                                }
-                            </div>
+                        <div className="field">
+                            <MediaCloud
+                                id="images"
+                                name="images"
+                                label={props.categoryPictureLabel}  
+                                state={state}
+                                dispatch={dispatch}
+                                accept=".png, .jpg"
+                                multiple={false}
+                                generalErrorMessage={props.generalErrorMessage}
+                                deleteLabel={props.deleteLabel}
+                                dropFilesLabel={props.dropFilesLabel}
+                                dropOrSelectFilesLabel={props.dropOrSelectFilesLabel}
+                                setFieldValue={setFieldValue}
+                                previewEnabled={true}
+                                files={files}
+                                stateCollectionName="files"
+                                saveMediaUrl={props.saveMediaUrl} />
                         </div>
                         <div className="field">
                             <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
