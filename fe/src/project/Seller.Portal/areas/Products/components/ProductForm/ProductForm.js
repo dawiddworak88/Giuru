@@ -24,11 +24,11 @@ function ProductForm(props) {
     const stateSchema = {
 
         id: { value: props.id ? props.id : null, error: "" },
-        categoryId: { value: props.categoryId ? props.categoryId : "" },
+        category: { value: props.categoryId ? props.categories.find((item) => item.id === props.categoryId) : null },
         name: { value: props.name ? props.name : "", error: "" },
         description: { value: props.description ? props.description : "", error: "" },
         sku: { value: props.sku ? props.sku : "", error: "" },
-        primaryProductId: { value: props.primaryProductId ? props.primaryProductId : "" },
+        primaryProduct: { value: props.primaryProductId ? props.primaryProducts.find((item) => item.id === props.primaryProductId) : null },
         images: { value: props.images ? props.images : [] },
         files: { value: props.files ? props.files : [] },
         isNew: { value: props.isNew ? props.isNew : false }
@@ -92,7 +92,7 @@ function ProductForm(props) {
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, categoryId, sku, name, description,primaryProductId, images, files, isNew } = values;
+    const { id, category, sku, name, description, primaryProduct, images, files, isNew } = values;
 
     return (
         <section className="section section-small-padding">
@@ -106,11 +106,13 @@ function ProductForm(props) {
                         <div className="field">
                             <Autocomplete
                                 {...categoriesProps}
-                                id="categoryId"
-                                name="categoryId"
+                                id="category"
+                                name="category"
                                 fullWidth={true}
-                                value={categoryId}
-                                onChange={handleOnChange}
+                                value={category}
+                                onChange={(event, newValue) => {
+                                    setFieldValue({ name: "category", value: newValue });
+                                  }}
                                 autoComplete
                                 renderInput={(params) => <TextField {...params} label={props.selectCategoryLabel} margin="normal" />}
                             />
@@ -133,8 +135,10 @@ function ProductForm(props) {
                                 id="primaryProductId"
                                 name="primaryProductId"
                                 fullWidth={true}
-                                value={primaryProductId}
-                                onChange={handleOnChange}
+                                value={primaryProduct}
+                                onChange={(event, newValue) => {
+                                    setFieldValue({ name: "primaryProduct", value: newValue });
+                                  }}
                                 autoComplete
                                 renderInput={(params) => <TextField {...params} label={props.selectPrimaryProductLabel} margin="normal" />}
                             />
