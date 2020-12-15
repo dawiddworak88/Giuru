@@ -41,7 +41,13 @@ function MediaCloud(props) {
                         if (response.ok) {
 
                             dispatch({ type: "SET_IS_LOADING", payload: false });
-                            setFieldValue({ name: props.stateCollectionName, value: [jsonResponse] });
+
+                            if (props.multiple) {
+                                setFieldValue({ name: props.stateCollectionName, value: [...files, jsonResponse] });
+                            }
+                            else {
+                                setFieldValue({ name: props.stateCollectionName, value: [jsonResponse] });
+                            }
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -75,12 +81,18 @@ function MediaCloud(props) {
                     <p>{isDragActive ? props.dropOrSelectFilesLabel : props.dropFilesLabel}</p>
                 </div>
             </div>
-            {props.imagePreviewEnabled && files && files.length > 0 &&
+            {files && files.length > 0 &&
                 <aside className="dropzone__preview">
                     {files.map((file) =>
                         <div className="dropzone__preview-thumbnail">
                             <div>
-                                <img src={file.url} />
+                                {file.mimeType === "image/jpeg" || file.mimeType === "image/png" ?
+                                    <img src={file.url} /> :
+                                    <div className="dropzone__preview-tile">
+                                        <a href={file.url} alt={file.name}>{file.filename}</a>
+                                    </div>
+                                }
+                                
                             </div>
                             <div className="is-flex is-flex-centered has-text-cenetered">
                                 <Button type="button" type="contained" color="primary" onClick={(e) => deleteMedia(e, file.id)}>

@@ -1,10 +1,14 @@
 ﻿using Foundation.ApiExtensions.Controllers;
+using Foundation.Extensions.Definitions;
+using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Media.Api.v1.Area.Media.Models;
 using Media.Api.v1.Area.Media.Services;
 using Media.Api.v1.Area.Media.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -60,9 +64,44 @@ namespace Media.Api.v1.Area.Media.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.OK, mediaItems);
                 }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
 
             return this.BadRequest();
+        }
+
+        /// <summary>
+        /// Gets media item by id.
+        /// </summary>
+        /// <param name="id">The media item id.</param>
+        /// <param name="language">The language.</param>
+        /// <returns>The media item.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [AllowAnonymous]
+        [Route("{id}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> Get(Guid? id, string language)
+        {
+            var serviceModel = new GetMediaItemsByIdModel
+            {
+                Id = id,
+                Language = language
+            };
+
+            var validator = new GetMediaItemsByIdModelValidator();
+
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var mediaItems = this.mediaService.GetMediaItemById(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK, mediaItems);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }

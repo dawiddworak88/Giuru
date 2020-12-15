@@ -22,7 +22,8 @@ namespace Seller.Web.Areas.Categories.Repositories
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
 
-        public CategoriesRepository(IApiClientService apiClientService,
+        public CategoriesRepository(
+            IApiClientService apiClientService,
             IOptions<AppSettings> settings)
         {
             this.apiClientService = apiClientService;

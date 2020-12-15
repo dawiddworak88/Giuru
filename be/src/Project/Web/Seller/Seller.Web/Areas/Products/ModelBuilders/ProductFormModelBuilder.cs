@@ -16,6 +16,7 @@ using Seller.Web.Areas.Products.Definitons;
 using Foundation.GenericRepository.Paginations;
 using System.Linq;
 using Foundation.PageContent.Components.ListItems.ViewModels;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {
@@ -23,6 +24,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
     {
         private readonly IProductsRepository productsRepository;
         private readonly ICategoriesRepository categoriesRepository;
+        private readonly IMediaItemsRepository mediaItemsRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly IMediaHelperService mediaHelperService;
@@ -32,6 +34,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
         public ProductFormModelBuilder(
             IProductsRepository productsRepository,
             ICategoriesRepository categoriesRepository,
+            IMediaItemsRepository mediaItemsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             IMediaHelperService mediaHelperService,
@@ -40,6 +43,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
         {
             this.productsRepository = productsRepository;
             this.categoriesRepository = categoriesRepository;
+            this.mediaItemsRepository = mediaItemsRepository;
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
             this.mediaHelperService = mediaHelperService;
@@ -116,14 +120,25 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 
                     if (product.Images != null)
                     {
+                        var imageMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(
+                            componentModel.Token,
+                            componentModel.Language,
+                            product.Images.ToEndpointParameterString(),
+                            PaginationConstants.DefaultPageIndex,
+                            PaginationConstants.DefaultPageSize);
+
                         var images = new List<FileViewModel>();
 
-                        foreach (var imageId in product.Images)
+                        foreach (var mediaItem in imageMediaItems)
                         {
                             images.Add(new FileViewModel 
                             {
-                                Id = imageId,
-                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, imageId, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true)
+                                Id = mediaItem.Id,
+                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, mediaItem.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
+                                Name = mediaItem.Name,
+                                MimeType = mediaItem.MimeType,
+                                Filename = mediaItem.Filename,
+                                Extension = mediaItem.Extension
                             });
                         }
 
@@ -132,14 +147,25 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 
                     if (product.Files != null)
                     {
+                        var fileMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(
+                            componentModel.Token,
+                            componentModel.Language,
+                            product.Files.ToEndpointParameterString(),
+                            PaginationConstants.DefaultPageIndex,
+                            PaginationConstants.DefaultPageSize);
+
                         var files = new List<FileViewModel>();
 
-                        foreach (var fileId in product.Files)
+                        foreach (var file in fileMediaItems)
                         {
                             files.Add(new FileViewModel
                             {
-                                Id = fileId,
-                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, fileId, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true)
+                                Id = file.Id,
+                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, file.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
+                                Name = file.Name,
+                                MimeType = file.MimeType,
+                                Filename = file.Filename,
+                                Extension = file.Extension
                             });
                         }
 

@@ -115,7 +115,6 @@ function CategoryForm(props) {
                                 dropFilesLabel={props.dropFilesLabel}
                                 dropOrSelectFilesLabel={props.dropOrSelectFilesLabel}
                                 setFieldValue={setFieldValue}
-                                imagePreviewEnabled={true}
                                 files={files}
                                 stateCollectionName="files"
                                 saveMediaUrl={props.saveMediaUrl} />

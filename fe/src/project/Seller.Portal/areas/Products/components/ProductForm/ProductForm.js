@@ -157,7 +157,6 @@ function ProductForm(props) {
                                 dropFilesLabel={props.dropFilesLabel}
                                 dropOrSelectFilesLabel={props.dropOrSelectFilesLabel}
                                 setFieldValue={setFieldValue}
-                                imagePreviewEnabled={true}
                                 files={images}
                                 stateCollectionName="images"
                                 saveMediaUrl={props.saveMediaUrl} />
