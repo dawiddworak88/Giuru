@@ -195,19 +195,6 @@ function ProductForm(props) {
                                 label={props.isNewLabel} />
                         </div>
                         <div className="field">
-                            <FormControlLabel
-                                control={
-                                <Checkbox
-                                    checked={true}
-                                    onChange={handleOnChange}
-                                    name="checkedB"
-                                    color="primary"
-                                />
-                                }
-                                label="Primary"
-                            />
-                        </div>
-                        <div className="field">
                             <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
