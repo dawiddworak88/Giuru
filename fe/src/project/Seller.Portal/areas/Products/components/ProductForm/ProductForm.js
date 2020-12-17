@@ -184,13 +184,28 @@ function ProductForm(props) {
                             <FormControlLabel
                                 control={
                                 <Checkbox
-                                    onChange={handleOnChange}
-                                    value={isNew}
+                                    onChange={e => {
+                                        setFieldValue({ name: "isNew", value: e.target.checked });
+                                    }}
+                                    checked={isNew}
                                     id="isNew"
                                     name="isNew"
                                     color="secondary" />
                                 }
                                 label={props.isNewLabel} />
+                        </div>
+                        <div className="field">
+                            <FormControlLabel
+                                control={
+                                <Checkbox
+                                    checked={true}
+                                    onChange={handleOnChange}
+                                    name="checkedB"
+                                    color="primary"
+                                />
+                                }
+                                label="Primary"
+                            />
                         </div>
                         <div className="field">
                             <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>

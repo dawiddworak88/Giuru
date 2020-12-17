@@ -122,6 +122,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                 Id = request.Id,
                 PrimaryProductId = request.PrimaryProductId,
                 IsNew = request.IsNew,
+                CategoryId = request.CategoryId,
                 IsProtected = request.IsProtected,
                 Videos = request.Videos,
                 Files = request.Files,
@@ -147,6 +148,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.OK, product);
                 }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
             else
             {
@@ -160,6 +163,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.Created, product);
                 }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
 
             return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);

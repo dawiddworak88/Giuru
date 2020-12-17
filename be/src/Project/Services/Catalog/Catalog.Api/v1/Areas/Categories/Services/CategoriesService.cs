@@ -19,13 +19,13 @@ using Foundation.Extensions.ExtensionMethods;
 
 namespace Catalog.Api.v1.Areas.Categories.Services
 {
-    public class CategoryService : ICategoryService
+    public class CategoriesService : ICategoriesService
     {
         private readonly CatalogContext context;
         private readonly ICultureService cultureService;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
 
-        public CategoryService(
+        public CategoriesService(
             CatalogContext context,
             ICultureService cultureService,
             IStringLocalizer<ProductResources> productLocalizer)

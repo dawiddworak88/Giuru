@@ -171,5 +171,43 @@ namespace Seller.Web.Areas.Products.Repositories
 
             return default;
         }
+
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string name, string sku, string description, bool isNew, Guid? primaryProductId, Guid? categoryId, IEnumerable<Guid> images, IEnumerable<Guid> files)
+        {
+            var requestModel = new SaveProductApiRequestModel
+            {
+                Id = id,
+                Language = language,
+                Name = name,
+                Sku = sku,
+                Description = description,
+                IsNew = isNew,
+                PrimaryProductId = primaryProductId,
+                CategoryId = categoryId,
+                Images = images,
+                Files = files
+            };
+
+            var apiRequest = new ApiRequest<SaveProductApiRequestModel>
+            {
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.PostAsync<ApiRequest<SaveProductApiRequestModel>, SaveProductApiRequestModel, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data?.Id != null)
+            {
+                return response.Data.Id.Value;
+            }
+
+            return default;
+        }
     }
 }

@@ -17,6 +17,7 @@ using System.Net;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
 using Foundation.Localization.Services;
+using System;
 
 namespace Catalog.Api.v1.Areas.Products.Services
 {
@@ -48,77 +49,80 @@ namespace Catalog.Api.v1.Areas.Products.Services
         public async Task<ProductResultModel> CreateAsync(CreateUpdateProductModel model)
         {
             var brand = catalogContext.Brands.FirstOrDefault(x => x.SellerId == model.OrganisationId.Value && x.IsActive);
+
+            if (brand == null)
+            {
+                throw new CustomException(this.productLocalizer.GetString("BrandNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
             var category = catalogContext.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
 
-            if (brand != null && category != null)
+            if (category == null)
             {
-                var product = new Product
-                {
-                    IsNew = model.IsNew,
-                    IsProtected = model.IsProtected,
-                    Sku = model.Sku,
-                    BrandId = brand.Id,
-                    CategoryId = category.Id,
-                    PrimaryProductId = model.PrimaryProductId
-                };
+                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+            }
 
-                await this.catalogContext.Products.AddAsync(this.entityService.EnrichEntity(product));
+            var product = new Product
+            {
+                IsNew = model.IsNew,
+                IsProtected = model.IsProtected,
+                Sku = model.Sku,
+                BrandId = brand.Id,
+                CategoryId = category.Id,
+                PrimaryProductId = model.PrimaryProductId
+            };
 
-                var productTranslation = new ProductTranslation
+            await this.catalogContext.Products.AddAsync(this.entityService.EnrichEntity(product));
+
+            var productTranslation = new ProductTranslation
+            {
+                Language = model.Language,
+                Name = model.Name,
+                Description = model.Description,
+                FormData = model.FormData,
+                ProductId = product.Id
+            };
+
+            await this.catalogContext.ProductTranslations.AddAsync(this.entityService.EnrichEntity(productTranslation));
+
+            foreach (var imageId in model.Images.OrEmptyIfNull())
+            {
+                var productImage = new ProductImage
                 {
-                    Language = model.Language,
-                    Name = model.Name,
-                    Description = model.Description,
-                    FormData = model.FormData,
+                    MediaId = imageId,
                     ProductId = product.Id
                 };
 
-                await this.catalogContext.ProductTranslations.AddAsync(this.entityService.EnrichEntity(productTranslation));
-
-                foreach (var imageId in model.Images.OrEmptyIfNull())
-                {
-                    var productImage = new ProductImage
-                    {
-                        MediaId = imageId,
-                        ProductId = product.Id
-                    };
-
-                    await this.catalogContext.ProductImages.AddAsync(this.entityService.EnrichEntity(productImage));
-                }
-
-                foreach (var videoId in model.Videos.OrEmptyIfNull())
-                {
-                    var productVideo = new ProductVideo
-                    {
-                        MediaId = videoId,
-                        ProductId = product.Id
-                    };
-
-                    await this.catalogContext.ProductVideos.AddAsync(this.entityService.EnrichEntity(productVideo));
-                }
-
-                foreach (var fileId in model.Files.OrEmptyIfNull())
-                {
-                    var productFile = new ProductFile
-                    {
-                        MediaId = fileId,
-                        ProductId = product.Id
-                    };
-
-                    await this.catalogContext.ProductFiles.AddAsync(this.entityService.EnrichEntity(productFile));
-                }
-
-                await this.catalogContext.SaveChangesAsync();
-
-                await this.productIndexingRepository.IndexAsync(product.Id);
-
-                return new ProductResultModel
-                {
-                    Id = product.Id
-                };
+                await this.catalogContext.ProductImages.AddAsync(this.entityService.EnrichEntity(productImage));
             }
 
-            return default;
+            foreach (var videoId in model.Videos.OrEmptyIfNull())
+            {
+                var productVideo = new ProductVideo
+                {
+                    MediaId = videoId,
+                    ProductId = product.Id
+                };
+
+                await this.catalogContext.ProductVideos.AddAsync(this.entityService.EnrichEntity(productVideo));
+            }
+
+            foreach (var fileId in model.Files.OrEmptyIfNull())
+            {
+                var productFile = new ProductFile
+                {
+                    MediaId = fileId,
+                    ProductId = product.Id
+                };
+
+                await this.catalogContext.ProductFiles.AddAsync(this.entityService.EnrichEntity(productFile));
+            }
+
+            await this.catalogContext.SaveChangesAsync();
+
+            await this.productIndexingRepository.IndexAsync(product.Id);
+
+            return await this.GetByIdAsync(new GetProductModel { Id = product.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
         public async Task<bool> IsEmptyAsync()
@@ -143,7 +147,103 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
         public async Task<ProductResultModel> UpdateAsync(CreateUpdateProductModel model)
         {
-            return default;
+            var brand = catalogContext.Brands.FirstOrDefault(x => x.SellerId == model.OrganisationId.Value && x.IsActive);
+
+            if (brand == null)
+            {
+                throw new CustomException(this.productLocalizer.GetString("BrandNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            var category = catalogContext.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
+
+            if (category == null)
+            {
+                throw new CustomException(this.productLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            var product = await this.catalogContext.Products.FirstOrDefaultAsync(x => x.Id == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive);
+
+            if (product == null)
+            {
+                throw new CustomException(this.productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            product.IsNew = model.IsNew;
+            product.IsProtected = model.IsProtected;
+            product.Sku = model.Sku;
+            product.BrandId = brand.Id;
+            product.CategoryId = category.Id;
+            product.PrimaryProductId = model.PrimaryProductId;
+            product.LastModifiedDate = DateTime.UtcNow;
+
+            var productTranslation = await this.catalogContext.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == product.Id && x.Language == model.Language && x.IsActive);
+
+            if (productTranslation != null) 
+            {
+                productTranslation.Name = model.Name;
+                productTranslation.Description = model.Description;
+                productTranslation.FormData = model.FormData;
+            }
+
+            var productImages = this.catalogContext.ProductImages.Where(x => x.ProductId == model.Id && x.IsActive);
+
+            foreach (var productImage in productImages.OrEmptyIfNull())
+            {
+                this.catalogContext.ProductImages.Remove(productImage);
+            }
+
+            foreach (var imageId in model.Images.OrEmptyIfNull())
+            {
+                var productImage = new ProductImage
+                {
+                    MediaId = imageId,
+                    ProductId = product.Id
+                };
+
+                await this.catalogContext.ProductImages.AddAsync(this.entityService.EnrichEntity(productImage));
+            }
+
+            var productVideos = this.catalogContext.ProductVideos.Where(x => x.ProductId == model.Id && x.IsActive);
+
+            foreach (var productVideo in productVideos.OrEmptyIfNull())
+            {
+                this.catalogContext.ProductVideos.Remove(productVideo);
+            }
+
+            foreach (var videoId in model.Videos.OrEmptyIfNull())
+            {
+                var productVideo = new ProductVideo
+                {
+                    MediaId = videoId,
+                    ProductId = product.Id
+                };
+
+                await this.catalogContext.ProductVideos.AddAsync(this.entityService.EnrichEntity(productVideo));
+            }
+
+            var productFiles = this.catalogContext.ProductFiles.Where(x => x.ProductId == model.Id && x.IsActive);
+
+            foreach (var productFile in productFiles.OrEmptyIfNull())
+            {
+                this.catalogContext.ProductFiles.Remove(productFile);
+            }
+
+            foreach (var fileId in model.Files.OrEmptyIfNull())
+            {
+                var productFile = new ProductFile
+                {
+                    MediaId = fileId,
+                    ProductId = product.Id
+                };
+
+                await this.catalogContext.ProductFiles.AddAsync(this.entityService.EnrichEntity(productFile));
+            }
+
+            await this.catalogContext.SaveChangesAsync();
+
+            await this.productIndexingRepository.IndexAsync(product.Id);
+
+            return await this.GetByIdAsync(new GetProductModel { Id = product.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
         public async Task DeleteAsync(DeleteProductModel model)

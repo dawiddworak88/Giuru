@@ -69,7 +69,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 DeleteLabel = this.globalLocalizer.GetString("Delete"),
                 SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
-                SaveUrl = this.linkGenerator.GetPathByAction("Save", "ProductApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 ProductPicturesLabel = this.productLocalizer.GetString("ProductPicturesLabel"),
                 ProductFilesLabel = this.productLocalizer.GetString("ProductFilesLabel"),
                 SelectCategoryLabel = this.productLocalizer.GetString("SelectCategory"),

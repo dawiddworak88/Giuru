@@ -45,19 +45,24 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             return this.StatusCode((int)HttpStatusCode.OK, products);
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Index([FromBody] SaveCategoryRequestModel model)
-        //{
-        //    var categoryId = await this.productsRepository.SaveAsync(
-        //        await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-        //        CultureInfo.CurrentUICulture.Name,
-        //        model.Id,
-        //        model.ParentCategoryId,
-        //        model.Name,
-        //        model.Files.Select(x => x.Id.Value));
+        [HttpPost]
+        public async Task<IActionResult> Index([FromBody] SaveProductRequestModel model)
+        {
+            var productId = await this.productsRepository.SaveAsync(
+                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                CultureInfo.CurrentUICulture.Name,
+                model.Id,
+                model.Name,
+                model.Sku,
+                model.Description,
+                model.IsNew,
+                model.PrimaryProduct?.Id,
+                model.Category?.Id,
+                model.Images?.Select(x => x.Id),
+                model.Files?.Select(x => x.Id));
 
-        //    return this.StatusCode((int)HttpStatusCode.OK, new { Id = categoryId, Message = this.productLocalizer.GetString("CategorySavedSuccessfully").Value });
-        //}
+            return this.StatusCode((int)HttpStatusCode.OK, new { Id = productId, Message = this.productLocalizer.GetString("ProductSavedSuccessfully").Value });
+        }
 
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid? id)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Catalog.Api.v1.Areas.Categories.Services
 {
-    public interface ICategoryService
+    public interface ICategoriesService
     {
         Task<PagedResults<IEnumerable<CategoryResultModel>>> GetAsync(GetCategoriesModel model);
         Task<CategoryResultModel> GetAsync(GetCategoryModel model);
