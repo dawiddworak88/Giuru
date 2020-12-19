@@ -13,6 +13,8 @@ using System.Security.Claims;
 using Foundation.Account.Definitions;
 using Foundation.Extensions.Helpers;
 using Catalog.Api.v1.Areas.Products.RequestModels;
+using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.Definitions;
 
 namespace Catalog.Api.v1.Areas.Products.Controllers
 {
@@ -23,9 +25,9 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
     [ApiController]
     public class ProductsController : BaseApiController
     {
-        private readonly IProductService productService;
+        private readonly IProductsService productService;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductsService productService)
         {
             this.productService = productService;
         }
@@ -37,6 +39,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         /// <param name="language">The language.</param>
         /// <param name="categoryId">The category id.</param>
         /// <param name="sellerId">The brand id.</param>
+        /// <param name="includeProductVariants">Includes product variants in the results list.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The number of items per page.</param>
@@ -45,7 +48,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(422)]
         [AllowAnonymous]
-        public async Task<IActionResult> Get(string ids, string language, Guid? categoryId, Guid? sellerId, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(string ids, string language, Guid? categoryId, Guid? sellerId, bool includeProductVariants, string searchTerm, int pageIndex, int itemsPerPage)
         {
             var productIds = ids.ToEnumerableGuidIds();
 
@@ -69,6 +72,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.OK, products);
                 }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
             else
             {
@@ -79,7 +84,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                     SearchTerm = searchTerm,
                     CategoryId = categoryId,
                     OrganisationId = sellerId,
-                    Language = language
+                    Language = language,
+                    IncludeProductVariants = includeProductVariants
                 };
 
                 var validator = new GetProductsModelValidator();
@@ -92,9 +98,9 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.OK, products);
                 }
-            }
 
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
         }
 
         /// <summary>
@@ -114,9 +120,9 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
             var serviceModel = new CreateUpdateProductModel
             {
                 Id = request.Id,
-                CategoryId = request.CategoryId,
                 PrimaryProductId = request.PrimaryProductId,
                 IsNew = request.IsNew,
+                CategoryId = request.CategoryId,
                 IsProtected = request.IsProtected,
                 Videos = request.Videos,
                 Files = request.Files,
@@ -142,6 +148,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.OK, product);
                 }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
             else
             {
@@ -155,6 +163,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.Created, product);
                 }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
 
             return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
@@ -199,14 +209,16 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         }
 
         /// <summary>
-        /// Deletes the product by id.
+        /// Delete product by id.
         /// </summary>
         /// <param name="language">The language.</param>
-        /// <param name="id">The id of a product to delete.</param>
-        /// <returns>The deletion process result.</returns>
+        /// <param name="id">The id.</param>
+        /// <returns>OK.</returns>
         [HttpDelete, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(409)]
         [ProducesResponseType(422)]
         public async Task<IActionResult> Delete(string language, Guid? id)
         {
@@ -214,8 +226,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
 
             var serviceModel = new DeleteProductModel
             {
-                Language = language,
                 Id = id,
+                Language = language,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
@@ -231,7 +243,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                 return this.StatusCode((int)HttpStatusCode.OK);
             }
 
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }

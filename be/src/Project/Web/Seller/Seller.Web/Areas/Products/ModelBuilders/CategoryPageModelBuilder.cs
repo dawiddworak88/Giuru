@@ -13,18 +13,18 @@ namespace Seller.Web.Areas.Products.ModelBuilders
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryDetailFormViewModel> categoryDetailFormModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryFormViewModel> categoryFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public CategoryPageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, CategoryDetailFormViewModel> categoryDetailFormModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, CategoryFormViewModel> categoryFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
-            this.categoryDetailFormModelBuilder = categoryDetailFormModelBuilder;
+            this.categoryFormModelBuilder = categoryFormModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
         }
 
@@ -35,7 +35,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 Locale = CultureInfo.CurrentUICulture.Name,
                 Header = this.headerModelBuilder.BuildModel(),
                 MenuTiles = this.menuTilesModelBuilder.BuildModel(),
-                CategoryDetailForm = await this.categoryDetailFormModelBuilder.BuildModelAsync(componentModel),
+                CategoryForm = await this.categoryFormModelBuilder.BuildModelAsync(componentModel),
                 Footer = this. footerModelBuilder.BuildModel()
             };
 

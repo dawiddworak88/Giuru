@@ -198,8 +198,8 @@ var sellerPortalBrowserConfig = {
         importorderpage: ["./src/project/Seller.Portal/areas/Orders/pages/ImportOrderPage/index.js", "./src/project/Seller.Portal/areas/Orders/pages/ImportOrderPage/ImportOrderPage.scss"],
         clientpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage.scss"],
         clientdetailpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientDetailPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage.scss"],
+        productspage: ["./src/project/Seller.Portal/areas/Products/pages/ProductsPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/ProductsPage/ProductsPage.scss"],
         productpage: ["./src/project/Seller.Portal/areas/Products/pages/ProductPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage.scss"],
-        productdetailpage: ["./src/project/Seller.Portal/areas/Products/pages/ProductDetailPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage.scss"],
         categoriespage: ["./src/project/Seller.Portal/areas/Products/pages/CategoriesPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/CategoriesPage/CategoriesPage.scss"],
         categorypage: ["./src/project/Seller.Portal/areas/Products/pages/CategoryPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/CategoryPage/CategoryPage.scss"]
     },

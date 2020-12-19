@@ -168,6 +168,9 @@
   <data name="Description" xml:space="preserve">
     <value>Beschreibung</value>
   </data>
+  <data name="DescriptionLabel" xml:space="preserve">
+    <value>Beschreibung:</value>
+  </data>
   <data name="DisplayedRows" xml:space="preserve">
     <value>von</value>
   </data>

@@ -16,9 +16,9 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
     [ApiController]
     public class ProductSuggestionsController : BaseApiController
     {
-        private readonly IProductService productService;
+        private readonly IProductsService productService;
 
-        public ProductSuggestionsController(IProductService productService)
+        public ProductSuggestionsController(IProductsService productService)
         {
             this.productService = productService;
         }

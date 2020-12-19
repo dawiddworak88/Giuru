@@ -73,7 +73,8 @@ namespace Identity.Api.Areas.Accounts.Configurations
                             IdentityServerConstants.StandardScopes.Email,
                             ApiExtensionsConstants.AllScopes
                         },
-                        AllowOfflineAccess = true
+                        AllowOfflineAccess = true,
+                        AlwaysIncludeUserClaimsInIdToken = true
                     };
 
                     clientsList.Add(client);

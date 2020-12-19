@@ -12,5 +12,6 @@ namespace Media.Api.v1.Area.Media.Services
         Task<MediaFileResultModel> GetFileAsync(Guid? mediaId, bool? optimize, int? width, int? height);
         Task<Guid> CreateFileAsync(CreateMediaItemModel serviceModel);
         PagedResults<IEnumerable<MediaItemResultModel>> GetMediaItemsByIds(GetMediaItemsByIdsModel model);
+        MediaItemResultModel GetMediaItemById(GetMediaItemsByIdModel model);
     }
 }

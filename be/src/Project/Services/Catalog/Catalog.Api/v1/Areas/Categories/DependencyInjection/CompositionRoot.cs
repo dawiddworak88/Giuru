@@ -7,7 +7,7 @@ namespace Catalog.Api.v1.Areas.Categories.DependencyInjection
     {
         public static void RegisterCategoryDependencies(this IServiceCollection services)
         {
-            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICategoriesService, CategoriesService>();
         }
     }
 }

@@ -157,31 +157,7 @@ namespace Media.Api.v1.Area.Media.Services
 
             foreach (var mediaItem in mediaItems.OrEmptyIfNull())
             {
-                mediaItemResult.Id = mediaItem.Id;
-                mediaItemResult.IsProtected = mediaItem.IsProtected;
-                mediaItemResult.LastModifiedDate = mediaItem.LastModifiedDate;
-                mediaItemResult.CreatedDate = mediaItem.CreatedDate;
-
-                var mediaItemVersion = this.context.MediaItemVersions.Where(x => x.MediaItemId == mediaItem.Id && x.IsActive).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
-
-                if (mediaItemVersion != null)
-                {
-                    mediaItemResult.Filename = $"{mediaItemVersion.Filename}{mediaItemVersion.Extension}";
-                    mediaItemResult.Size = mediaItemVersion.Size;
-
-                    var mediaItemVersionTranslation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaItemVersion.Id && x.Language == model.Language && x.IsActive);
-
-                    if (mediaItemVersionTranslation == null)
-                    {
-                        mediaItemVersionTranslation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaItemVersion.Id && x.IsActive);
-                    }
-
-                    if (mediaItemVersionTranslation != null)
-                    {
-                        mediaItemResult.Name = mediaItemVersionTranslation.Name;
-                        mediaItemResult.Description = mediaItemVersionTranslation.Description;
-                    }
-                }
+                mediaItemResult = this.MapMediaItemToMediaItemResultModel(mediaItem, model.Language);
 
                 mediaItemsResults.Add(mediaItemResult);
             }
@@ -191,6 +167,54 @@ namespace Media.Api.v1.Area.Media.Services
                 Data = mediaItemsResults,
                 
             };
+        }
+
+        public MediaItemResultModel GetMediaItemById(GetMediaItemsByIdModel model)
+        {
+            var mediaItem = this.context.MediaItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+
+            if (mediaItem != null)
+            {
+                return this.MapMediaItemToMediaItemResultModel(mediaItem, model.Language);
+            }
+
+            return default;
+        }
+
+        private MediaItemResultModel MapMediaItemToMediaItemResultModel(MediaItem mediaItem, string language)
+        {
+            var mediaItemResult = new MediaItemResultModel
+            {
+                Id = mediaItem.Id,
+                IsProtected = mediaItem.IsProtected,
+                LastModifiedDate = mediaItem.LastModifiedDate,
+                CreatedDate = mediaItem.CreatedDate
+            };
+
+            var mediaItemVersion = this.context.MediaItemVersions.Where(x => x.MediaItemId == mediaItem.Id && x.IsActive).OrderByDescending(x => x.CreatedDate).FirstOrDefault();
+
+            if (mediaItemVersion != null)
+            {
+                mediaItemResult.Filename = $"{mediaItemVersion.Filename}{mediaItemVersion.Extension}";
+                mediaItemResult.Size = mediaItemVersion.Size;
+                mediaItemResult.MimeType = mediaItemVersion.MimeType;
+                mediaItemResult.Extension = mediaItemVersion.Extension;
+
+                var mediaItemVersionTranslation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaItemVersion.Id && x.Language == language && x.IsActive);
+
+                if (mediaItemVersionTranslation == null)
+                {
+                    mediaItemVersionTranslation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaItemVersion.Id && x.IsActive);
+                }
+
+                if (mediaItemVersionTranslation != null)
+                {
+                    mediaItemResult.Name = mediaItemVersionTranslation.Name;
+                    mediaItemResult.Description = mediaItemVersionTranslation.Description;
+                }
+            }
+
+            return mediaItemResult;
         }
 
         private bool IsImage(string contentType)
