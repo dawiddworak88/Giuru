@@ -118,7 +118,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                     viewModel.CategoryId = product.CategoryId;
                     viewModel.PrimaryProductId = product.PrimaryProductId;
 
-                    if (product.Images != null)
+                    if (product.Images != null && product.Images.Any())
                     {
                         var imageMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(
                             componentModel.Token,
@@ -145,7 +145,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                         viewModel.Images = images;
                     }
 
-                    if (product.Files != null)
+                    if (product.Files != null && product.Files.Any())
                     {
                         var fileMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(
                             componentModel.Token,

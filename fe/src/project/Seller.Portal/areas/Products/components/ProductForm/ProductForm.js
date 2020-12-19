@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
-import { TextField, Button, CircularProgress, FormControlLabel, Checkbox } from "@material-ui/core";
+import { TextField, Button, CircularProgress, FormControlLabel, Switch } from "@material-ui/core";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 
 function ProductForm(props) {
@@ -148,17 +148,14 @@ function ProductForm(props) {
                                 id="images"
                                 name="images"
                                 label={props.productPicturesLabel}
-                                state={state}
-                                dispatch={dispatch}
                                 accept=".png, .jpg"
                                 multiple={true}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
                                 dropFilesLabel={props.dropFilesLabel}
                                 dropOrSelectFilesLabel={props.dropOrSelectFilesLabel}
-                                setFieldValue={setFieldValue}
                                 files={images}
-                                stateCollectionName="images"
+                                setFieldValue={setFieldValue}
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
                         <div className="field">
@@ -166,24 +163,21 @@ function ProductForm(props) {
                                 id="files"
                                 name="files"
                                 label={props.productFilesLabel}
-                                state={state}
-                                dispatch={dispatch}
                                 accept=".png, .jpg, .pdf, .docx, .zip"
                                 multiple={true}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
                                 dropFilesLabel={props.dropFilesLabel}
                                 dropOrSelectFilesLabel={props.dropOrSelectFilesLabel}
-                                setFieldValue={setFieldValue}
                                 imagePreviewEnabled={false}
                                 files={files}
-                                stateCollectionName="files"
+                                setFieldValue={setFieldValue}
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
                         <div className="field">
                             <FormControlLabel
                                 control={
-                                <Checkbox
+                                <Switch
                                     onChange={e => {
                                         setFieldValue({ name: "isNew", value: e.target.checked });
                                     }}

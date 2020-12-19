@@ -1,19 +1,23 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { UploadCloud } from "react-feather";
 import { Button } from "@material-ui/core";
 import { useDropzone } from "react-dropzone";
+import { Context } from "../../../shared/stores/Store";
 import IconConstants from "../../constants/IconConstants";
 
 function MediaCloud(props) {
 
-    const { setFieldValue, dispatch, files } = props;
+    const [, dispatch] = useContext(Context);
+
+    const { setFieldValue, files } = props;
 
     function deleteMedia(e, id) {
 
-        e.preventDefault();
-        setFieldValue({ name: props.stateCollectionName, value: files.filter((item) => item.id !== id) });
+        e.preventDefault(); 
+
+        setFieldValue({ name: props.name, value: files.filter((item) => item.id !== id) }); 
     }
 
     const onDrop = useCallback(acceptedFiles => {
@@ -36,18 +40,15 @@ function MediaCloud(props) {
 
                     dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                    return response.json().then((jsonResponse) => {
+                    return response.json().then((media) => {
 
                         if (response.ok) {
 
                             dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                            if (props.multiple) {
-                                setFieldValue({ name: props.stateCollectionName, value: [...files, jsonResponse] });
-                            }
-                            else {
-                                setFieldValue({ name: props.stateCollectionName, value: [jsonResponse] });
-                            }
+                            props.multiple ? 
+                            setFieldValue({ name: props.name, value: [...files, media] }) : 
+                            setFieldValue({ name: props.name, value: [ media ] });
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -58,13 +59,17 @@ function MediaCloud(props) {
                     toast.error(props.generalErrorMessage);
                 });
         });
-    }, []);
+    }, [files]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         accept: props.accept,
         multiple: props.multiple
     });
+
+    useEffect(() => () => {
+        files.forEach(file => URL.revokeObjectURL(file.url));
+      }, [files]);
 
     return (
         
@@ -92,7 +97,6 @@ function MediaCloud(props) {
                                         <a href={file.url} alt={file.name}>{file.filename}</a>
                                     </div>
                                 }
-                                
                             </div>
                             <div className="is-flex is-flex-centered has-text-cenetered">
                                 <Button type="button" type="contained" color="primary" onClick={(e) => deleteMedia(e, file.id)}>
@@ -119,10 +123,8 @@ MediaCloud.propTypes = {
     saveMediaUrl: PropTypes.string.isRequired,
     deleteLabel: PropTypes.string.isRequired,
     imagePreviewEnabled: PropTypes.bool.isRequired,
-    files: PropTypes.array,
-    stateCollectionName: PropTypes.string.isRequired,
     setFieldValue: PropTypes.func.isRequired,
-    dispatch: PropTypes.func.isRequired
+    files: PropTypes.array
 };
 
 export default MediaCloud;
