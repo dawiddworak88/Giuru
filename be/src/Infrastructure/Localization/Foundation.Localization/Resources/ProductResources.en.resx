@@ -135,11 +135,17 @@
   <data name="EditCategory" xml:space="preserve">
     <value>Edit category</value>
   </data>
+  <data name="EditProduct" xml:space="preserve">
+    <value>Edit product</value>
+  </data>
   <data name="EnterCategoryName" xml:space="preserve">
     <value>Enter category name</value>
   </data>
   <data name="EnterSkuText" xml:space="preserve">
     <value>Enter SKU</value>
+  </data>
+  <data name="IsNew" xml:space="preserve">
+    <value>New</value>
   </data>
   <data name="NewProduct" xml:space="preserve">
     <value>New product</value>
@@ -162,8 +168,14 @@
   <data name="ProductDetailText" xml:space="preserve">
     <value>Product</value>
   </data>
+  <data name="ProductFilesLabel" xml:space="preserve">
+    <value>Product files</value>
+  </data>
   <data name="ProductInformation" xml:space="preserve">
     <value>Product information</value>
+  </data>
+  <data name="ProductPicturesLabel" xml:space="preserve">
+    <value>Product pictures</value>
   </data>
   <data name="Products" xml:space="preserve">
     <value>Products</value>
@@ -177,8 +189,14 @@
   <data name="ProductVariants" xml:space="preserve">
     <value>Product variants</value>
   </data>
+  <data name="ProductVariantsDeleteProductConflict" xml:space="preserve">
+    <value>Delete variants of this product first.</value>
+  </data>
   <data name="SelectCategory" xml:space="preserve">
     <value>Select category</value>
+  </data>
+  <data name="SelectPrimaryProduct" xml:space="preserve">
+    <value>Select primary product</value>
   </data>
   <data name="Sku" xml:space="preserve">
     <value>SKU</value>

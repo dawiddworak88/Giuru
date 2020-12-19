@@ -33,7 +33,7 @@ namespace Catalog.Api.DependencyInjection
 
             using (var scope = scopeFactory.CreateScope())
             {
-                var productService = scope.ServiceProvider.GetService<IProductService>();
+                var productService = scope.ServiceProvider.GetService<IProductsService>();
 
                 if (productService.IsEmptyAsync().Result)
                 {

@@ -19,8 +19,8 @@ import OrderDetailPage from "../../src/project/Seller.Portal/areas/Orders/pages/
 import ImportOrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/ImportOrderPage/ImportOrderPage";
 import ClientPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage";
 import ClientDetailPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage";
+import ProductsPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductsPage/ProductsPage";
 import ProductPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage";
-import ProductDetailPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductDetailPage/ProductDetailPage";
 import CategoriesPage from "../../src/project/Seller.Portal/areas/Products/pages/CategoriesPage/CategoriesPage";
 import SellerCategoryPage from "../../src/project/Seller.Portal/areas/Products/pages/CategoryPage/CategoryPage";
 
@@ -37,8 +37,8 @@ const Components = {
 	ImportOrderPage,
 	ClientPage,
 	ClientDetailPage,
+	ProductsPage,
 	ProductPage,
-	ProductDetailPage,
 	CategoriesPage,
 	SellerCategoryPage
 };

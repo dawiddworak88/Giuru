@@ -7,7 +7,7 @@ import Header from "../../../../../../shared/components/Header/Header";
 import Store from "../../../../../../shared/stores/Store";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
-import CategoryDetailForm from "../../components/CategoryDetail/CategoryDetailForm";
+import CategoryForm from "../../components/CategoryForm/CategoryForm";
 
 function CategoryPage(props) {
 
@@ -21,7 +21,7 @@ function CategoryPage(props) {
         <div>
           <Header {...props.header}></Header>
           <MenuTiles {...props.menuTiles} />
-          <CategoryDetailForm {...props.categoryDetailForm} />
+          <CategoryForm {...props.categoryForm} />
           <Footer {...props.footer}></Footer>
         </div>
       </Store>

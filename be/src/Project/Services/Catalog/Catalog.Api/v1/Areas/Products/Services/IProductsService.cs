@@ -1,0 +1,21 @@
+﻿using Catalog.Api.v1.Areas.Products.Models;
+using Catalog.Api.v1.Areas.Products.ResultModels;
+using Foundation.GenericRepository.Paginations;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Catalog.Api.v1.Areas.Products.Services
+{
+    public interface IProductsService
+    {
+        Task<ProductResultModel> CreateAsync(CreateUpdateProductModel model);
+        Task IndexAllAsync();
+        Task<bool> IsEmptyAsync();
+        Task<ProductResultModel> UpdateAsync(CreateUpdateProductModel model);
+        Task<ProductResultModel> GetByIdAsync(GetProductModel getProductModel);
+        Task<PagedResults<IEnumerable<ProductResultModel>>> GetAsync(GetProductsModel getProductsModel);
+        Task<PagedResults<IEnumerable<ProductResultModel>>> GetByIdsAsync(GetProductsByIdsModel getProductsModel);
+        Task DeleteAsync(DeleteProductModel deleteProductModel);
+        IEnumerable<string> GetProductSuggestions(GetProductSuggestionsModel model);
+    }
+}

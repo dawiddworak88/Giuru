@@ -46,7 +46,7 @@ namespace Seller.Web.Shared.DrawerMenu.ModelBuilders
                         {
                             Icon = IconsConstants.Package,
                             Title = this.globalLocalizer.GetString("Products"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                            Url = this.linkGenerator.GetPathByAction("Index", "Products", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                         },
                         new DrawerMenuItemViewModel
                         {

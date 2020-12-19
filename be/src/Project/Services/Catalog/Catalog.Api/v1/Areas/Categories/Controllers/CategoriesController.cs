@@ -24,9 +24,9 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
     [ApiController]
     public class CategoriesController : BaseApiController
     {
-        private readonly ICategoryService categoryService;
+        private readonly ICategoriesService categoryService;
 
-        public CategoriesController(ICategoryService categoryService)
+        public CategoriesController(ICategoriesService categoryService)
         {
             this.categoryService = categoryService;
         }
@@ -37,6 +37,7 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         /// <param name="language">The language.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="level">The level.</param>
+        /// <param name="leafOnly">Only categories with no subcategories.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
         /// <returns>The list of categories.</returns>
@@ -45,13 +46,14 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(422)]
-        public async Task<IActionResult> Get(string language, string searchTerm, int? level, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(string language, string searchTerm, int? level, bool? leafOnly, int pageIndex, int itemsPerPage)
         {
             var serviceModel = new GetCategoriesModel
             {
                 Level = level,
                 Language = language,
                 SearchTerm = searchTerm,
+                LeafOnly = leafOnly,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage
             };
@@ -179,7 +181,7 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         /// </summary>
         /// <param name="language">The language.</param>
         /// <param name="id">The id.</param>
-        /// <returns>The category.</returns>
+        /// <returns>OK.</returns>
         [HttpDelete, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType(200)]

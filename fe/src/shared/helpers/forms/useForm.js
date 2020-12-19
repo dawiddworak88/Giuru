@@ -132,8 +132,6 @@ function useForm(
   const handleOnChange = useCallback(
     event => {
 
-      console.log(event);
-
       setIsDirty(true);
 
       if (event.isFormData) {

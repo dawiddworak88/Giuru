@@ -2,55 +2,45 @@
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
 using Foundation.Extensions.ModelBuilders;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using System.Globalization;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Products.ViewModels;
 using Foundation.PageContent.ComponentModels;
 using Foundation.Localization;
-using Seller.Web.Areas.Products.DomainModels;
-using Seller.Web.Shared.ViewModels;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {
     public class ProductPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Product>> productCatalogModelBuilder;
+        private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
-        private readonly IStringLocalizer<ProductResources> productLocalizer;
-        private readonly LinkGenerator linkGenerator;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductFormViewModel> productFormModelBuilder;
 
         public ProductPageModelBuilder(
-            IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Product>> productCatalogModelBuilder,
             IStringLocalizer<ProductResources> productLocalizer,
-            LinkGenerator linkGenerator,
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IModelBuilder<FooterViewModel> footerModelBuilder)
+            IModelBuilder<FooterViewModel> footerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, ProductFormViewModel> productFormModelBuilder)
         {
-            this.productCatalogModelBuilder = productCatalogModelBuilder;
             this.productLocalizer = productLocalizer;
-            this.linkGenerator = linkGenerator;
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
+            this.productFormModelBuilder = productFormModelBuilder;
         }
 
         public async Task<ProductPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new ProductPageViewModel
             {
-                Locale = CultureInfo.CurrentUICulture.Name,
+                Title = this.productLocalizer["Product"],
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
-                Title = this.productLocalizer["Products"],
-                NewText = this.productLocalizer["NewProduct"],
-                NewUrl = this.linkGenerator.GetPathByAction("Edit", "ProductDetail", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                Catalog = await this.productCatalogModelBuilder.BuildModelAsync(new ComponentModelBase { Token = componentModel.Token }),
-                Footer = footerModelBuilder.BuildModel()
+                Footer = footerModelBuilder.BuildModel(),
+                ProductForm = await productFormModelBuilder.BuildModelAsync(componentModel)
             };
 
             return viewModel;

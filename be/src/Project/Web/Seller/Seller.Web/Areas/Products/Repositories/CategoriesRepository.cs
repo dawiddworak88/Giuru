@@ -22,7 +22,8 @@ namespace Seller.Web.Areas.Categories.Repositories
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
 
-        public CategoriesRepository(IApiClientService apiClientService,
+        public CategoriesRepository(
+            IApiClientService apiClientService,
             IOptions<AppSettings> settings)
         {
             this.apiClientService = apiClientService;
@@ -125,23 +126,24 @@ namespace Seller.Web.Areas.Categories.Repositories
             return default;
         }
 
-        public async Task<IEnumerable<Category>> GetCategoriesAllAsync(string token, string language, int pageIndex, int itemsPerPage)
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync(string token, string language, bool leafOnly, int pageIndex, int itemsPerPage)
         {
-            var categoriesRequestModel = new PagedRequestModelBase
+            var categoriesRequestModel = new PagedCategoriesRequestModel
             {
+                LeafOnly = leafOnly,
                 Language = language,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage
             };
 
-            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            var apiRequest = new ApiRequest<PagedCategoriesRequestModel>
             {
                 Data = categoriesRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Category>>>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedCategoriesRequestModel>, PagedCategoriesRequestModel, PagedResults<IEnumerable<Category>>>(apiRequest);
             
             if (!response.IsSuccessStatusCode)
             {
@@ -160,7 +162,7 @@ namespace Seller.Web.Areas.Categories.Repositories
                 {
                     apiRequest.Data.PageIndex = i;
 
-                    var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Category>>>(apiRequest);
+                    var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedCategoriesRequestModel>, PagedCategoriesRequestModel, PagedResults<IEnumerable<Category>>>(apiRequest);
 
                     if (!nextPagesResponse.IsSuccessStatusCode)
                     {
