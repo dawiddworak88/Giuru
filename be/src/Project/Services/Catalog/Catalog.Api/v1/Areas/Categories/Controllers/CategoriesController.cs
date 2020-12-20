@@ -66,9 +66,7 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
             {
                 var categories = await this.categoryService.GetAsync(serviceModel);
 
-                return categories?.Data != null && categories.Data.Any()
-                    ? this.StatusCode((int)HttpStatusCode.OK, categories)
-                    : (IActionResult)this.StatusCode((int)HttpStatusCode.NotFound);
+                return this.StatusCode((int)HttpStatusCode.OK, categories);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);

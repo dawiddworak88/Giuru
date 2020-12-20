@@ -8,6 +8,6 @@ namespace Seller.Web.Areas.Products.Repositories
     public interface IMediaItemsRepository
     {
         Task<IEnumerable<MediaItem>> GetAllMediaItemsAsync(string token, string language, string mediaItemIds, int pageIndex, int itemsPerPage);
-        Task<MediaItem> GetMediaItemsAsync(string token, string language, Guid id);
+        Task<MediaItem> GetMediaItemAsync(string token, string language, Guid id);
     }
 }

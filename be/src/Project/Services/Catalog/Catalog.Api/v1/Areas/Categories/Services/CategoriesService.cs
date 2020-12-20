@@ -73,7 +73,7 @@ namespace Catalog.Api.v1.Areas.Categories.Services
 
             if (model.LeafOnly.HasValue)
             {
-                categories = categories.Where(x => x.IsLeaf == true);
+                categories = categories.Where(x => x.IsLeaf == model.LeafOnly.Value);
             }
 
             return categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage), model.PageIndex);

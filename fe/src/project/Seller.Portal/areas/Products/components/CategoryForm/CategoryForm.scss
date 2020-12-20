@@ -1,0 +1,8 @@
+@import "../../../../../../shared/components/MediaCloud/MediaCloud.scss";
+
+.category {
+
+    @media only screen and (max-width: $tablet) {
+        margin-top: 0.5rem;;
+    }
+}
