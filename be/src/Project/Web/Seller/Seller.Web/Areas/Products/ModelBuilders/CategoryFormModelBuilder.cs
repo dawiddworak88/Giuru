@@ -22,6 +22,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
     public class CategoryFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CategoryFormViewModel>
     {
         private readonly ICategoriesRepository categoriesRepository;
+        private readonly IMediaItemsRepository mediaItemsRepository;
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer productLocalizer;
         private readonly IMediaHelperService mediaHelperService;
@@ -30,6 +31,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 
         public CategoryFormModelBuilder(
             ICategoriesRepository categoriesRepository,
+            IMediaItemsRepository mediaItemsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             IMediaHelperService mediaHelperService,
@@ -37,6 +39,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             LinkGenerator linkGenerator)
         {
             this.categoriesRepository = categoriesRepository;
+            this.mediaItemsRepository = mediaItemsRepository;
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
             this.mediaHelperService = mediaHelperService;
@@ -66,7 +69,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             var parentCategories = await this.categoriesRepository.GetAllCategoriesAsync(
                 componentModel.Token,
                 componentModel.Language,
-                false,
+                null,
                 PaginationConstants.DefaultPageIndex,
                 PaginationConstants.DefaultPageSize);
 
@@ -90,14 +93,26 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 
                     if (category.ThumbnailMediaId.HasValue)
                     {
-                        viewModel.Files = new List<FileViewModel>
+                        var mediaItem = await this.mediaItemsRepository.GetMediaItemAsync(
+                            componentModel.Token, 
+                            componentModel.Language,
+                            category.ThumbnailMediaId.Value);
+
+                        if (mediaItem != null)
                         {
-                            new FileViewModel
-                            { 
-                                Id = category.ThumbnailMediaId.Value,
-                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, category.ThumbnailMediaId.Value, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true)
-                            }
-                        };
+                            viewModel.Files = new List<FileViewModel>
+                            {
+                                new FileViewModel
+                                {
+                                    Id = mediaItem.Id,
+                                    Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, mediaItem.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
+                                    Name = mediaItem.Name,
+                                    MimeType = mediaItem.MimeType,
+                                    Filename = mediaItem.Filename,
+                                    Extension = mediaItem.Extension
+                                }
+                            };
+                        }
                     }
                 }
             }

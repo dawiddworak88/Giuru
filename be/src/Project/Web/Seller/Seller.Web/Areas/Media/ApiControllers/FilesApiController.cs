@@ -54,7 +54,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
                     ms.ToArray(),
                     model.File.FileName);
 
-                var mediaItem = await this.mediaItemsRepository.GetMediaItemsAsync(
+                var mediaItem = await this.mediaItemsRepository.GetMediaItemAsync(
                     await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                     CultureInfo.CurrentUICulture.Name,
                     fileId);
