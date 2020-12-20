@@ -83,7 +83,7 @@ namespace Seller.Web.Areas.Products.Repositories
             return default;
         }
 
-        public async Task<MediaItem> GetMediaItemsAsync(string token, string language, Guid id)
+        public async Task<MediaItem> GetMediaItemAsync(string token, string language, Guid id)
         {
             var request = new RequestModelBase
             {

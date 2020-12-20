@@ -95,7 +95,7 @@ function ProductForm(props) {
     const { id, category, sku, name, description, primaryProduct, images, files, isNew } = values;
 
     return (
-        <section className="section section-small-padding">
+        <section className="section section-small-padding product">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">

@@ -73,7 +73,7 @@ function CategoryForm(props) {
     const { id, name, parentCategoryId, files } = values;
 
     return (
-        <section className="section section-small-padding">
+        <section className="section section-small-padding category">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
