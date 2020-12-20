@@ -55,15 +55,15 @@ namespace Seller.Web.Areas.Categories.Repositories
             };
 
             var response = await this.apiClientService.PostAsync<ApiRequest<SaveCategoryApiRequestModel>, SaveCategoryApiRequestModel, BaseResponseModel>(apiRequest);
+            
+            if (response.IsSuccessStatusCode && response.Data?.Id != null)
+            {
+                return response.Data.Id.Value;
+            }
 
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
-            if (response.IsSuccessStatusCode && response.Data?.Id != null)
-            {
-                return response.Data.Id.Value;
             }
 
             return default;
@@ -126,7 +126,7 @@ namespace Seller.Web.Areas.Categories.Repositories
             return default;
         }
 
-        public async Task<IEnumerable<Category>> GetAllCategoriesAsync(string token, string language, bool leafOnly, int pageIndex, int itemsPerPage)
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync(string token, string language, bool? leafOnly, int pageIndex, int itemsPerPage)
         {
             var categoriesRequestModel = new PagedCategoriesRequestModel
             {
@@ -145,11 +145,6 @@ namespace Seller.Web.Areas.Categories.Repositories
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedCategoriesRequestModel>, PagedCategoriesRequestModel, PagedResults<IEnumerable<Category>>>(apiRequest);
             
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
                 var categories = new List<Category>();
@@ -178,6 +173,11 @@ namespace Seller.Web.Areas.Categories.Repositories
                 return categories;
             }
 
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
             return default;
         }
 
@@ -197,14 +197,14 @@ namespace Seller.Web.Areas.Categories.Repositories
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Category>(apiRequest);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return response.Data;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
             return default;
