@@ -11,14 +11,14 @@ using Seller.Web.Areas.Clients.ViewModels;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
-    public class ClientDetailFormModelBuilder : IModelBuilder<ClientDetailFormViewModel>
+    public class ClientFormModelBuilder : IModelBuilder<ClientFormViewModel>
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
         private readonly IOptionsMonitor<LocalizationConfiguration> localizationOptions;
         private readonly LinkGenerator linkGenerator;
 
-        public ClientDetailFormModelBuilder(
+        public ClientFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer, 
             IStringLocalizer<ClientResources> clientLocalizer,
             IOptionsMonitor<LocalizationConfiguration> localizationOptions,
@@ -30,7 +30,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             this.linkGenerator = linkGenerator;
         }
 
-        public ClientDetailFormViewModel BuildModel()
+        public ClientFormViewModel BuildModel()
         {
             var languages = new List<LanguageViewModel>
             { 
@@ -42,7 +42,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 languages.Add(new LanguageViewModel { Text = language.ToUpperInvariant(), Value = language.ToLowerInvariant() });
             }
 
-            return new ClientDetailFormViewModel
+            return new ClientFormViewModel
             {
                 GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"],
                 ClientDetailText = this.clientLocalizer["Client"],

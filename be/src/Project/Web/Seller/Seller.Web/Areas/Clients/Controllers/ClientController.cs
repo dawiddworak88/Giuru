@@ -8,16 +8,16 @@ namespace Seller.Web.Areas.Clients.Controllers
     [Area("Clients")]
     public class ClientController : BaseController
     {
-        private readonly IModelBuilder<ClientPageViewModel> clientPageModelBuilder;
+        private readonly IModelBuilder<ClientPageViewModel> clientDetailPageModelBuilder;
 
-        public ClientController(IModelBuilder<ClientPageViewModel> homePageModelBuilder)
+        public ClientController(IModelBuilder<ClientPageViewModel> clientDetailPageModelBuilder)
         {
-            this.clientPageModelBuilder = homePageModelBuilder;
+            this.clientDetailPageModelBuilder = clientDetailPageModelBuilder;
         }
 
         public IActionResult Index()
         {
-            var viewModel = this.clientPageModelBuilder.BuildModel();
+            var viewModel = this.clientDetailPageModelBuilder.BuildModel();
 
             return this.View(viewModel);
         }

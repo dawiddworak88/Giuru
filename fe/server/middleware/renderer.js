@@ -17,26 +17,29 @@ import ContentPage from "../../src/project/Account/areas/Home/pages/Content/Cont
 import OrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage";
 import OrderDetailPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderDetailPage/OrderDetailPage";
 import ImportOrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/ImportOrderPage/ImportOrderPage";
+import ClientsPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientsPage/ClientsPage";
 import ClientPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage";
-import ClientDetailPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage";
 import ProductsPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductsPage/ProductsPage";
 import ProductPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage";
 import CategoriesPage from "../../src/project/Seller.Portal/areas/Products/pages/CategoriesPage/CategoriesPage";
 import SellerCategoryPage from "../../src/project/Seller.Portal/areas/Products/pages/CategoryPage/CategoryPage";
 
 const Components = {
+
 	HomePage,
 	CategoryPage,
 	SearchProductsPage,
 	BuyerProductPage,
 	BrandPage,
+
 	SignInPage,
 	ContentPage,
+
 	OrderPage,
 	OrderDetailPage,
 	ImportOrderPage,
+	ClientsPage,
 	ClientPage,
-	ClientDetailPage,
 	ProductsPage,
 	ProductPage,
 	CategoriesPage,

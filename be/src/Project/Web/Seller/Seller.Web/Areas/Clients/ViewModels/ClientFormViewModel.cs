@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Clients.ViewModels
 {
-    public class ClientDetailFormViewModel
+    public class ClientFormViewModel
     {
         public string GeneralErrorMessage { get; set; }
         public string NameLabel { get; set; }

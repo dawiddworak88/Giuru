@@ -1,9 +1,9 @@
 import React from "react";
-import "../project/Seller.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage.scss";
-import ClientDetailPage from "../project/Seller.Portal/areas/Clients/pages/ClientDetailPage/ClientDetailPage";
+import "../project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage.scss";
+import ClientPage from "../project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage";
 import { header, menuTiles, footer } from "./Shared/Props";
 
-var clientDetailForm = {
+var clientForm = {
 
   generalErrorMessage: "An error has occurred",
   nameLabel: "Name:",
@@ -27,7 +27,7 @@ var clientDetailForm = {
   saveText: "Save"
 };
 
-export const ClientDetailPageStory = () => <ClientDetailPage header={header} menuTiles={menuTiles} title="Client" clientDetailForm={clientDetailForm} footer={footer} />
+export const ClientDetailPageStory = () => <ClientPage header={header} menuTiles={menuTiles} clientForm={clientForm} footer={footer} />
 
 ClientDetailPageStory.story = {
   name: "Client Detail Page",

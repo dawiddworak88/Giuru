@@ -11,9 +11,9 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
         public static void RegisterClientsAreaDependencies(this IServiceCollection services)
         {
             services.AddScoped<IClientsRepository, ClientsRepository>();
+            services.AddScoped<IModelBuilder<ClientsPageViewModel>, ClientsPageModelBuilder>();
             services.AddScoped<IModelBuilder<ClientPageViewModel>, ClientPageModelBuilder>();
-            services.AddScoped<IModelBuilder<ClientDetailPageViewModel>, ClientDetailPageModelBuilder>();
-            services.AddScoped<IModelBuilder<ClientDetailFormViewModel>, ClientDetailFormModelBuilder>();
+            services.AddScoped<IModelBuilder<ClientFormViewModel>, ClientFormModelBuilder>();
         }
     }
 }

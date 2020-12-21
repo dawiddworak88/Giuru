@@ -2,46 +2,40 @@
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
 using Foundation.Extensions.ModelBuilders;
-using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.ViewModels;
-using Foundation.Localization;
+using Foundation.PageContent.ComponentModels;
+using Seller.Web.Shared.ViewModels;
+using Seller.Web.Areas.Clients.DomainModels;
+using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
-    public class ClientDetailPageModelBuilder : IModelBuilder<ClientDetailPageViewModel>
+    public class ClientsPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel>
     {
-        private readonly IStringLocalizer<ClientResources> clientLocalizer;
-
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
-
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>> clientsCatalogModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
-        private readonly IModelBuilder<ClientDetailFormViewModel> clientDetailFormModelBuilder;
-
-        public ClientDetailPageModelBuilder(
-            IStringLocalizer<ClientResources> clientLocalizer,
+        public ClientsPageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IModelBuilder<ClientDetailFormViewModel> clientDetailFormModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>> clientsCatalogModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
-            this.clientLocalizer = clientLocalizer;
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
-            this.clientDetailFormModelBuilder = clientDetailFormModelBuilder;
+            this.clientsCatalogModelBuilder = clientsCatalogModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
         }
 
-        public ClientDetailPageViewModel BuildModel()
+        public async Task<ClientsPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new ClientDetailPageViewModel
+            var viewModel = new ClientsPageViewModel
             {
-                Title = clientLocalizer["Client"],
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
-                ClientDetailForm = clientDetailFormModelBuilder.BuildModel(),
+                Catalog = await this.clientsCatalogModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };
 

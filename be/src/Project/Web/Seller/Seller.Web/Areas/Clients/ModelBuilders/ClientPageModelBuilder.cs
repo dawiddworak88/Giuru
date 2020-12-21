@@ -2,45 +2,38 @@
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
 using Foundation.Extensions.ModelBuilders;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Localization;
-using System.Globalization;
+using System.Threading.Tasks;
 using Seller.Web.Areas.Clients.ViewModels;
-using Foundation.Localization;
+using Foundation.PageContent.ComponentModels;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
-    public class ClientPageModelBuilder : IModelBuilder<ClientPageViewModel>
+    public class ClientPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientPageViewModel>
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ClientFormViewModel> clientFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
-        private readonly IStringLocalizer<ClientResources> clientLocalizer;
-        private readonly LinkGenerator linkGenerator;
 
         public ClientPageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IStringLocalizer<ClientResources> clientLocalizer,
-            LinkGenerator linkGenerator,
+            IAsyncComponentModelBuilder<ComponentModelBase, ClientFormViewModel> clientFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
-            this.clientLocalizer = clientLocalizer;
-            this.linkGenerator = linkGenerator;
+            this.clientFormModelBuilder = clientFormModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
         }
 
-        public ClientPageViewModel BuildModel()
+        public async Task<ClientPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new ClientPageViewModel
             {
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
-                Title = this.clientLocalizer["Clients"],
-                NewText = this.clientLocalizer["NewClient"],
-                NewUrl = this.linkGenerator.GetPathByAction("Index", "ClientDetail", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                ClientForm = await clientFormModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };
 
