@@ -1,4 +1,5 @@
 ﻿using Foundation.Extensions.ModelBuilders;
+using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.DependencyInjection;
 using Seller.Web.Areas.Clients.ModelBuilders;
 using Seller.Web.Areas.Clients.Repositories;
@@ -11,8 +12,8 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
         public static void RegisterClientsAreaDependencies(this IServiceCollection services)
         {
             services.AddScoped<IClientsRepository, ClientsRepository>();
-            services.AddScoped<IModelBuilder<ClientsPageViewModel>, ClientsPageModelBuilder>();
-            services.AddScoped<IModelBuilder<ClientPageViewModel>, ClientPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel>, ClientsPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientPageViewModel>, ClientPageModelBuilder>();
             services.AddScoped<IModelBuilder<ClientFormViewModel>, ClientFormModelBuilder>();
         }
     }

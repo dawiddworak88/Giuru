@@ -8,7 +8,6 @@ using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.Repositories;
 using System;
 using System.Globalization;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -48,9 +47,9 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 model.Id,
-                model.ParentClientId,
                 model.Name,
-                model.Files.Select(x => x.Id.Value));
+                model.Email,
+                model.CommunicationLanguage);
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Id = categoryId, Message = this.clientLocalizer.GetString("ClientSavedSuccessfully").Value });
         }

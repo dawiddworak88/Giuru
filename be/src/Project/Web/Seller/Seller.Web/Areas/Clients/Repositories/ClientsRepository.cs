@@ -9,6 +9,8 @@ using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.ApiResponseModels;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Shared.Configurations;
+using System;
+using Foundation.ApiExtensions.Models.Request;
 
 namespace Seller.Web.Areas.Clients.Repositories
 {
@@ -22,6 +24,11 @@ namespace Seller.Web.Areas.Clients.Repositories
         {
             this.apiClientService = apiClientService;
             this.servicesEndpointsConfiguration = servicesEndpointsConfiguration.CurrentValue;
+        }
+
+        public Task DeleteAsync(string token, string language, Guid? id)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<IEnumerable<Client>> GetAllClientsAsync(string token, string language)
@@ -40,9 +47,19 @@ namespace Seller.Web.Areas.Clients.Repositories
             return clients;
         }
 
+        public async Task<Client> GetClientAsync(string token, string language, Guid? id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<PagedResults<IEnumerable<Client>>> GetClientsAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<PagedResults<IEnumerable<Client>>> GetPagedClientsAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage)
         {
-            var clientsRequestModel = new ClientsRequestModel
+            var clientsRequestModel = new PagedRequestModelBase
             {
                 Language = language,
                 SearchTerm = searchTerm,
@@ -50,14 +67,14 @@ namespace Seller.Web.Areas.Clients.Repositories
                 ItemsPerPage = itemsPerPage
             };
 
-            var apiRequest = new ApiRequest<ClientsRequestModel>
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
             {
                 Data = this.apiClientService.InitializeRequestModelContext(clientsRequestModel),
                 AccessToken = token,
                 EndpointAddress = this.servicesEndpointsConfiguration.Api.Host + this.servicesEndpointsConfiguration.Api.Endpoints.Clients
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<ClientsRequestModel>, ClientsRequestModel, ClientsResponseModel>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, ClientsResponseModel>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.PagedClients?.Data != null)
             {
@@ -81,6 +98,11 @@ namespace Seller.Web.Areas.Clients.Repositories
             }
 
             return default;
+        }
+
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string name, string email, string communicationLanguage)
+        {
+            throw new NotImplementedException();
         }
     }
 }
