@@ -32,7 +32,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
         {
             var viewModel = new ImportOrderFormViewModel
             {
-                Clients = await this.clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language),
+                Clients = await this.clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language, componentModel.SellerId),
                 ValidateOrderUrl = this.linkGenerator.GetPathByAction("Validate", "ImportOrderApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
                 DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),

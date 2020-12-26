@@ -1,66 +1,145 @@
 ﻿using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.GenericRepository.Paginations;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Clients.ApiRequestModels;
-using Seller.Web.Areas.Clients.ApiResponseModels;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Shared.Configurations;
 using System;
 using Foundation.ApiExtensions.Models.Request;
+using Foundation.Extensions.Exceptions;
+using Foundation.ApiExtensions.Shared.Definitions;
+using Foundation.ApiExtensions.Models.Response;
+using System.Linq;
 
 namespace Seller.Web.Areas.Clients.Repositories
 {
     public class ClientsRepository : IClientsRepository
     {
         private readonly IApiClientService apiClientService;
-        private readonly ServicesEndpointsConfiguration servicesEndpointsConfiguration;
+        private readonly IOptions<AppSettings> settings;
 
-        public ClientsRepository(IApiClientService apiClientService,
-            IOptionsMonitor<ServicesEndpointsConfiguration> servicesEndpointsConfiguration)
+        public ClientsRepository(
+            IApiClientService apiClientService,
+            IOptions<AppSettings> settings)
         {
             this.apiClientService = apiClientService;
-            this.servicesEndpointsConfiguration = servicesEndpointsConfiguration.CurrentValue;
+            this.settings = settings;
         }
 
-        public Task DeleteAsync(string token, string language, Guid? id)
+        public async Task DeleteAsync(string token, string language, Guid? id)
         {
-            throw new NotImplementedException();
+            var deleteRequestModel = new RequestModelBase
+            {
+                Language = language
+            };
+
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Data = deleteRequestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.ClientsApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode && response?.Data != null)
+            {
+                throw new CustomException(response.Data.Message, (int)response.StatusCode);
+            }
         }
 
-        public async Task<IEnumerable<Client>> GetAllClientsAsync(string token, string language)
+        public async Task<IEnumerable<Client>> GetAllClientsAsync(string token, string language, Guid? sellerId)
         {
-            var initialPagedClients = await this.GetPagedClientsAsync(token, language, null, 1, 100);
+            var categoriesRequestModel = new PagedRequestModelBase
+            {
+                SellerId = sellerId,
+                Language = language,
+                PageIndex = PaginationConstants.DefaultPageIndex,
+                ItemsPerPage = PaginationConstants.DefaultPageSize
+            };
 
-            var clients = new List<Client>();
-            clients.AddRange(initialPagedClients.Data);
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Data = categoriesRequestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
+            };
 
-            for (int i = 1; i < initialPagedClients.PageCount; i++)
-            { 
-                var pagedClients = await this.GetPagedClientsAsync(token, language, null, i, 100);
-                clients.AddRange(pagedClients.Data);
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                var categories = new List<Client>();
+
+                categories.AddRange(response.Data.Data);
+
+                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
+
+                for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
+                {
+                    apiRequest.Data.PageIndex = i;
+
+                    var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>>(apiRequest);
+
+                    if (!nextPagesResponse.IsSuccessStatusCode)
+                    {
+                        throw new CustomException(response.Message, (int)response.StatusCode);
+                    }
+
+                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Count() > 0)
+                    {
+                        categories.AddRange(nextPagesResponse.Data.Data);
+                    }
+                }
+
+                return categories;
             }
 
-            return clients;
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
         }
 
-        public async Task<Client> GetClientAsync(string token, string language, Guid? id)
+        public async Task<Client> GetClientAsync(string token, string language, Guid? sellerId, Guid? id)
         {
-            throw new NotImplementedException();
+            var request = new RequestModelBase
+            {
+                Language = language
+            };
+
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Data = request,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.ClientsApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Client>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            return default;
         }
 
-        public async Task<PagedResults<IEnumerable<Client>>> GetClientsAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<PagedResults<IEnumerable<Client>>> GetPagedClientsAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<PagedResults<IEnumerable<Client>>> GetClientsAsync(string token, string language, string searchTerm, Guid? sellerId, int pageIndex, int itemsPerPage)
         {
             var clientsRequestModel = new PagedRequestModelBase
             {
+                SellerId = sellerId,
                 Language = language,
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
@@ -71,30 +150,22 @@ namespace Seller.Web.Areas.Clients.Repositories
             {
                 Data = this.apiClientService.InitializeRequestModelContext(clientsRequestModel),
                 AccessToken = token,
-                EndpointAddress = this.servicesEndpointsConfiguration.Api.Host + this.servicesEndpointsConfiguration.Api.Endpoints.Clients
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, ClientsResponseModel>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>> (apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data?.PagedClients?.Data != null)
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
-                var clients = new List<Client>();
-
-                foreach (var clientResponse in response.Data.PagedClients.Data)
+                return new PagedResults<IEnumerable<Client>>(response.Data.Total, response.Data.PageSize)
                 {
-                    var client = new Client
-                    {
-                        Id = clientResponse.Id.Value,
-                        Name = clientResponse.Name
-                    };
-
-                    clients.Add(client);
-                }
-
-                return new PagedResults<IEnumerable<Client>>(response.Data.PagedClients.Total, response.Data.PagedClients.PageSize)
-                {
-                    Data = clients
+                    Data = response.Data.Data
                 };
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
             return default;
@@ -102,7 +173,35 @@ namespace Seller.Web.Areas.Clients.Repositories
 
         public async Task<Guid> SaveAsync(string token, string language, Guid? id, string name, string email, string communicationLanguage)
         {
-            throw new NotImplementedException();
+            var requestModel = new SaveClientRequestModel
+            {
+                Id = id,
+                Language = language,
+                Name = name,
+                Email = email,
+                CommunicationLanguage = communicationLanguage
+            };
+
+            var apiRequest = new ApiRequest<SaveClientRequestModel>
+            {
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.PostAsync<ApiRequest<SaveClientRequestModel>, SaveClientRequestModel, BaseResponseModel>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Id != null)
+            {
+                return response.Data.Id.Value;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
         }
     }
 }

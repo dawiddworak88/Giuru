@@ -5,6 +5,7 @@ using Foundation.Extensions.ModelBuilders;
 using System.Threading.Tasks;
 using Seller.Web.Areas.Clients.ViewModels;
 using Foundation.PageContent.ComponentModels;
+using System.Globalization;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -31,6 +32,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         {
             var viewModel = new ClientPageViewModel
             {
+                Locale = CultureInfo.CurrentUICulture.Name,
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
                 ClientForm = await clientFormModelBuilder.BuildModelAsync(componentModel),

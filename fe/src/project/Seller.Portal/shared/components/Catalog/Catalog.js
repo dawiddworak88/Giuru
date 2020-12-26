@@ -23,8 +23,8 @@ function Catalog(props) {
     const [page, setPage] = React.useState(0);
     const [itemsPerPage,] = React.useState(PaginationConstants.defaultRowsPerPage());
     const [searchTerm, setSearchTerm] = React.useState("");
-    const [items, setItems] = React.useState(props.pagedItems.data);
-    const [total, setTotal] = React.useState(props.pagedItems.total);
+    const [items, setItems] = React.useState(props.pagedItems ? props.pagedItems.data : []);
+    const [total, setTotal] = React.useState(props.pagedItems ? props.pagedItems.total : 0);
     const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
     const [entityToDelete, setEntityToDelete] = React.useState(null);
 

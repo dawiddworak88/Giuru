@@ -6,6 +6,6 @@ namespace Identity.Api.v1.Areas.Accounts.Repositories.AppSecrets
 {
     public interface IAppSecretRepository
     {
-        Task<AppSecretOrganisation> GetOrganisationAppSecretAsync(Guid organisationId, string appSecret);
+        Task<OrganisationAppSecret> GetOrganisationAppSecretAsync(Guid organisationId, string appSecret);
     }
 }

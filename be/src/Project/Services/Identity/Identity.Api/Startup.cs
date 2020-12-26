@@ -19,7 +19,10 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.IO;
 using System;
-using Identity.Api.Areas.Accounts.Configurations;
+using Identity.Api.Areas.Accounts.DependencyInjection;
+using Identity.Api.v1.Areas.Accounts.DependencyInjection;
+using Identity.Api.Areas.Home.DependencyInjection;
+using Identity.Api.v1.Areas.Clients.DependencyInjection;
 
 namespace Account
 {
@@ -54,6 +57,14 @@ namespace Account
             services.RegisterAccountDependencies(this.Configuration, this.CurrentEnvironment.EnvironmentName != EnvironmentConstants.DevelopmentEnvironmentName);
 
             services.RegisterGeneralDependencies();
+
+            services.RegisterAccountsViewsDependencies();
+
+            services.RegisterAccountsApiDependencies();
+
+            services.RegisterHomeViewsDependencies();
+            
+            services.RegisterClientsApiDependencies();
 
             services.ConfigureGenericRepositoryOptions(this.Configuration);
 

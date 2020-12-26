@@ -8,10 +8,12 @@ using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
 using Seller.Web.Areas.Clients.ViewModels;
+using Foundation.PageContent.ComponentModels;
+using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
-    public class ClientFormModelBuilder : IModelBuilder<ClientFormViewModel>
+    public class ClientFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientFormViewModel>
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
@@ -30,11 +32,11 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             this.linkGenerator = linkGenerator;
         }
 
-        public ClientFormViewModel BuildModel()
+        public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModelBase)
         {
             var languages = new List<LanguageViewModel>
             { 
-                new LanguageViewModel { Text = this.globalLocalizer["SelectLanguage"] , Value = string.Empty }
+                new LanguageViewModel { Text = this.globalLocalizer.GetString("SelectLanguage") , Value = string.Empty }
             };
 
             foreach (var language in this.localizationOptions.CurrentValue.SupportedCultures)
@@ -44,19 +46,19 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             return new ClientFormViewModel
             {
-                GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"],
-                ClientDetailText = this.clientLocalizer["Client"],
-                NameLabel = this.globalLocalizer["NameLabel"],
-                EmailLabel = this.globalLocalizer["EmailLabel"],
-                LanguageLabel = this.globalLocalizer["CommunicationLanguageLabel"],
-                NameRequiredErrorMessage = this.globalLocalizer["NameRequiredErrorMessage"],
-                EmailRequiredErrorMessage = this.globalLocalizer["EmailRequiredErrorMessage"],
-                EmailFormatErrorMessage = this.globalLocalizer["EmailFormatErrorMessage"],
-                LanguageRequiredErrorMessage = this.globalLocalizer["LanguageRequiredErrorMessage"],
-                EnterNameText = this.globalLocalizer["EnterNameText"],
-                EnterEmailText = this.globalLocalizer["EnterEmailText"],
-                SaveText = this.globalLocalizer["SaveText"],
-                SaveUrl = this.linkGenerator.GetPathByAction("Create", "ClientApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                ClientDetailText = this.clientLocalizer.GetString("Client"),
+                NameLabel = this.globalLocalizer.GetString("NameLabel"),
+                EmailLabel = this.globalLocalizer.GetString("EmailLabel"),
+                LanguageLabel = this.globalLocalizer.GetString("CommunicationLanguageLabel"),
+                NameRequiredErrorMessage = this.globalLocalizer.GetString("NameRequiredErrorMessage"),
+                EmailRequiredErrorMessage = this.globalLocalizer.GetString("EmailRequiredErrorMessage"),
+                EmailFormatErrorMessage = this.globalLocalizer.GetString("EmailFormatErrorMessage"),
+                LanguageRequiredErrorMessage = this.globalLocalizer.GetString("LanguageRequiredErrorMessage"),
+                EnterNameText = this.globalLocalizer.GetString("EnterNameText"),
+                EnterEmailText = this.globalLocalizer.GetString("EnterEmailText"),
+                SaveText = this.globalLocalizer.GetString("SaveText"),
+                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ClientsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 Languages = languages
             };
         }

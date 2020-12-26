@@ -13,8 +13,8 @@ function ClientForm(props) {
 
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
-        email: { value: props.email ? props.email : "", error: "" },
-        communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "" }
+        contactEmail: { value: props.contactEmail ? props.contactEmail : "", error: "" },
+        communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" }
     };
 
     const stateValidatorSchema = {
@@ -25,7 +25,7 @@ function ClientForm(props) {
                 error: props.nameRequiredErrorMessage
             }
         },
-        email: {
+        contactEmail: {
             required: {
                 isRequired: true,
                 error: props.emailRequiredErrorMessage
@@ -40,7 +40,7 @@ function ClientForm(props) {
                 isRequired: true,
                 error: props.languageRequiredErrorMessage
             }
-        },
+        }
     };
 
     function onSubmitForm(state) {
@@ -85,7 +85,7 @@ function ClientForm(props) {
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, email, communicationLanguage } = values;
+    const { id, name, contactEmail, communicationLanguage } = values;
 
     return (
         <section className="section section-small-padding product">
@@ -101,8 +101,8 @@ function ClientForm(props) {
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">
-                            <TextField id="email" name="email" label={props.emailLabel} fullWidth={true}
-                                value={email} onChange={handleOnChange} helperText={dirty.email ? errors.email : ""} error={(errors.email.length > 0) && dirty.email} />
+                            <TextField id="contactEmail" name="contactEmail" label={props.emailLabel} fullWidth={true}
+                                value={contactEmail} onChange={handleOnChange} helperText={dirty.contactEmail ? errors.contactEmail : ""} error={(errors.contactEmail.length > 0) && dirty.contactEmail} />
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage}>

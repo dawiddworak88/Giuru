@@ -85,11 +85,6 @@ namespace Seller.Web.Areas.Products.Repositories
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
             
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
                 var products = new List<Product>();
@@ -116,6 +111,11 @@ namespace Seller.Web.Areas.Products.Repositories
                 }
 
                 return products;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
             return default;

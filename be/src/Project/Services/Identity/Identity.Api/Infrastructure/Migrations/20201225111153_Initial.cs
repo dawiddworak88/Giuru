@@ -34,23 +34,6 @@ namespace Identity.Api.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AppSecretsOrganisations",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    OrganisationId = table.Column<Guid>(nullable: false),
-                    AppSecret = table.Column<string>(nullable: true),
-                    CreatedBy = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppSecretsOrganisations", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -129,23 +112,7 @@ namespace Identity.Api.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Contents",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    IsActive = table.Column<bool>(nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(nullable: false),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    Text = table.Column<string>(nullable: false),
-                    Language = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Contents", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "LinkAddressesOrganisations",
+                name: "OrganisationAddreses",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -158,7 +125,24 @@ namespace Identity.Api.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LinkAddressesOrganisations", x => x.Id);
+                    table.PrimaryKey("PK_OrganisationAddreses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrganisationAppSecrets",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    OrganisationId = table.Column<Guid>(nullable: false),
+                    AppSecret = table.Column<string>(nullable: true),
+                    CreatedBy = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrganisationAppSecrets", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -401,9 +385,6 @@ namespace Identity.Api.Infrastructure.Migrations
                 name: "Addresses");
 
             migrationBuilder.DropTable(
-                name: "AppSecretsOrganisations");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
@@ -425,10 +406,10 @@ namespace Identity.Api.Infrastructure.Migrations
                 name: "Connections");
 
             migrationBuilder.DropTable(
-                name: "Contents");
+                name: "OrganisationAddreses");
 
             migrationBuilder.DropTable(
-                name: "LinkAddressesOrganisations");
+                name: "OrganisationAppSecrets");
 
             migrationBuilder.DropTable(
                 name: "OrganisationFiles");

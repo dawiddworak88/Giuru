@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Identity.Api.Infrastructure.Organisations.Entities
 {
-    public class AddressOrganisation : Entity
+    public class OrganisationAddress : Entity
     {
         [Required]
         public Guid AddressId { get; set; }

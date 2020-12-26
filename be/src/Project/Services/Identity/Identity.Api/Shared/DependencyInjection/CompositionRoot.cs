@@ -13,9 +13,7 @@ using Identity.Api.v1.Areas.Accounts.Repositories.AppSecrets;
 using Identity.Api.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using IdentityServer4.Services;
-using Identity.Api.v1.Areas.Accounts.DependencyInjection;
-using Identity.Api.Areas.Accounts.DependencyInjection;
-using Identity.Api.Areas.Home.DependencyInjection;
+using Foundation.Localization.Services;
 
 namespace Identity.Api.Shared.DependencyInjection
 {
@@ -63,9 +61,7 @@ namespace Identity.Api.Shared.DependencyInjection
 
             services.AddAuthentication();
 
-            services.RegisterAccountsViewsDependencies();
-            services.RegisterAccountsApiDependencies();
-            services.RegisterHomeViewsDependencies();
+            services.AddScoped<ICultureService, CultureService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAppSecretRepository, AppSecretRepository>();
         }

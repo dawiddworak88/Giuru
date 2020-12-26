@@ -166,8 +166,6 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
-
-            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
