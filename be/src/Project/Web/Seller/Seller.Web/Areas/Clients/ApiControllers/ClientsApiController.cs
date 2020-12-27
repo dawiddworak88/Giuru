@@ -21,7 +21,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
         public ClientsApiController(
             IClientsRepository clientsRepository,
-            IStringLocalizer<ProductResources> clientLocalizer)
+            IStringLocalizer<ClientResources> clientLocalizer)
         {
             this.clientsRepository = clientsRepository;
             this.clientLocalizer = clientLocalizer;

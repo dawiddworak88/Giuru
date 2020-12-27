@@ -79,7 +79,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(Client.ContactEmail).ToCamelCase(),
+                        Title = nameof(Client.Email).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel

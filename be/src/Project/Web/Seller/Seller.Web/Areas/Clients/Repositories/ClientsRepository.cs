@@ -71,9 +71,9 @@ namespace Seller.Web.Areas.Clients.Repositories
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
-                var categories = new List<Client>();
+                var clients = new List<Client>();
 
-                categories.AddRange(response.Data.Data);
+                clients.AddRange(response.Data.Data);
 
                 int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
 
@@ -90,11 +90,11 @@ namespace Seller.Web.Areas.Clients.Repositories
 
                     if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Count() > 0)
                     {
-                        categories.AddRange(nextPagesResponse.Data.Data);
+                        clients.AddRange(nextPagesResponse.Data.Data);
                     }
                 }
 
-                return categories;
+                return clients;
             }
 
             if (!response.IsSuccessStatusCode)
