@@ -41,8 +41,6 @@ namespace Api
 
             services.RegisterApiAccountDependencies(this.Configuration);
 
-            services.RegisterBaseAccountDependencies();
-
             services.RegisterDatabaseDependencies(this.Configuration);
 
             services.RegisterCategoryDependencies();
@@ -91,7 +89,9 @@ namespace Api
 
             app.UseRouting();
 
-            app.UseAuthenticationAuthorization();
+            app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -20,7 +20,7 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "IsToken")]
     [ApiController]
     public class ClientsController : BaseApiController
     {

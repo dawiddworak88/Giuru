@@ -4,7 +4,6 @@ using IdentityServer4;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -32,8 +31,6 @@ namespace Foundation.Account.DependencyInjection
 
         public static void RegisterClientAccountDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-            IdentityModelEventSource.ShowPII = true;
-
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
 
             services.AddAuthentication(options =>

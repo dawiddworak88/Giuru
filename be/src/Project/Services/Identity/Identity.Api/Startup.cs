@@ -56,9 +56,7 @@ namespace Account
             services.RegisterBaseAccountDependencies();
 
             services.RegisterAccountDependencies(this.Configuration, this.CurrentEnvironment.EnvironmentName != EnvironmentConstants.DevelopmentEnvironmentName);
-            
-            services.RegisterApiAccountDependencies(this.Configuration);
-            
+                        
             services.RegisterGeneralDependencies();
 
             services.RegisterAccountsViewsDependencies();

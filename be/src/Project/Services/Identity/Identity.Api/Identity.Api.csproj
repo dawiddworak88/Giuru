@@ -48,7 +48,6 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\PageContent\Foundation.PageContent\Foundation.PageContent.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Clients\" />
     <Folder Include="wwwroot\dist\" />
   </ItemGroup>
   <ItemGroup>

@@ -36,8 +36,6 @@ namespace Media.Api
 
             services.RegisterApiAccountDependencies(this.Configuration);
 
-            services.RegisterBaseAccountDependencies();
-
             services.RegisterDatabaseDependencies(this.Configuration);
 
             services.RegisterMediaDependencies(this.Configuration);
@@ -60,7 +58,6 @@ namespace Media.Api
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IChecksumService checksumService)
         {
             IdentityModelEventSource.ShowPII = true;
@@ -81,7 +78,9 @@ namespace Media.Api
 
             app.UseRouting();
 
-            app.UseAuthenticationAuthorization();
+            app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

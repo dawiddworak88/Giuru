@@ -17,6 +17,7 @@ using Foundation.Localization.DependencyInjection;
 using Foundation.Account.DependencyInjection;
 using Foundation.Extensions.Filters;
 using Seller.Web.Areas.Media.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 
 namespace Seller.Portal
 {
@@ -67,6 +68,8 @@ namespace Seller.Portal
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<LocalizationConfiguration> localizationOptions)
         {
+            IdentityModelEventSource.ShowPII = true;
+
             app.UseForwardedHeaders();
 
             app.UseGeneralException();
@@ -77,7 +80,9 @@ namespace Seller.Portal
 
             app.UseRouting();
 
-            app.UseAuthenticationAuthorization();
+            app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
 
