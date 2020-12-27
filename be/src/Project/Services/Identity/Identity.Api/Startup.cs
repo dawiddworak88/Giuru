@@ -23,6 +23,7 @@ using Identity.Api.Areas.Accounts.DependencyInjection;
 using Identity.Api.v1.Areas.Accounts.DependencyInjection;
 using Identity.Api.Areas.Home.DependencyInjection;
 using Identity.Api.v1.Areas.Clients.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 
 namespace Account
 {
@@ -55,7 +56,9 @@ namespace Account
             services.RegisterBaseAccountDependencies();
 
             services.RegisterAccountDependencies(this.Configuration, this.CurrentEnvironment.EnvironmentName != EnvironmentConstants.DevelopmentEnvironmentName);
-
+            
+            services.RegisterApiAccountDependencies(this.Configuration);
+            
             services.RegisterGeneralDependencies();
 
             services.RegisterAccountsViewsDependencies();
@@ -84,6 +87,8 @@ namespace Account
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<LocalizationConfiguration> localizationOptions, IUserService userService)
         {
+            IdentityModelEventSource.ShowPII = true;
+
             app.UseForwardedHeaders();
 
             app.UseGeneralException();

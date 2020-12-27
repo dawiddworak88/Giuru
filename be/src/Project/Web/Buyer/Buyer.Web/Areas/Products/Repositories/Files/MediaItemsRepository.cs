@@ -37,7 +37,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Files
 
             var apiRequest = new ApiRequest<FilesRequestModel>
             {
-                Data = this.apiClientService.InitializeRequestModelContext(filesRequestModel),
+                Data = filesRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.MediaUrl}{ApiConstants.Media.MediaItemsApiEndpoint}"
             };

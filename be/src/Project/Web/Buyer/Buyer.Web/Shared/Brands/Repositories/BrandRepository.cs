@@ -22,11 +22,11 @@ namespace Buyer.Web.Shared.Brands.Repositories
             this.settings = settings;
         }
 
-        public async Task<Brand> GetBrandAsync(Guid? sellerId, string token)
+        public async Task<Brand> GetBrandAsync(Guid? sellerId, string token, string language)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
-                Data = this.apiClientService.InitializeRequestModelContext(new RequestModelBase()),
+                Data = new RequestModelBase { Language = language },
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.SellersApiEndpoint}/{sellerId}"
             };

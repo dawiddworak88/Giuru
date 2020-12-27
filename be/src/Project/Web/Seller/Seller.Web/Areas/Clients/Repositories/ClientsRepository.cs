@@ -51,11 +51,10 @@ namespace Seller.Web.Areas.Clients.Repositories
             }
         }
 
-        public async Task<IEnumerable<Client>> GetAllClientsAsync(string token, string language, Guid? sellerId)
+        public async Task<IEnumerable<Client>> GetAllClientsAsync(string token, string language)
         {
             var categoriesRequestModel = new PagedRequestModelBase
             {
-                SellerId = sellerId,
                 Language = language,
                 PageIndex = PaginationConstants.DefaultPageIndex,
                 ItemsPerPage = PaginationConstants.DefaultPageSize
@@ -106,7 +105,7 @@ namespace Seller.Web.Areas.Clients.Repositories
             return default;
         }
 
-        public async Task<Client> GetClientAsync(string token, string language, Guid? sellerId, Guid? id)
+        public async Task<Client> GetClientAsync(string token, string language, Guid? id)
         {
             var request = new RequestModelBase
             {
@@ -135,11 +134,10 @@ namespace Seller.Web.Areas.Clients.Repositories
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<Client>>> GetClientsAsync(string token, string language, string searchTerm, Guid? sellerId, int pageIndex, int itemsPerPage)
+        public async Task<PagedResults<IEnumerable<Client>>> GetClientsAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage)
         {
             var clientsRequestModel = new PagedRequestModelBase
             {
-                SellerId = sellerId,
                 Language = language,
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
@@ -148,7 +146,7 @@ namespace Seller.Web.Areas.Clients.Repositories
 
             var apiRequest = new ApiRequest<PagedRequestModelBase>
             {
-                Data = this.apiClientService.InitializeRequestModelContext(clientsRequestModel),
+                Data = clientsRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
             };

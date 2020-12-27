@@ -100,7 +100,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.clientsRepository.GetClientsAsync(componentModel.Token, componentModel.Language, null, componentModel.SellerId, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage);
+            viewModel.PagedItems = await this.clientsRepository.GetClientsAsync(componentModel.Token, componentModel.Language, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage);
 
             return viewModel;
         }

@@ -38,7 +38,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
                 LogoUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, LogoConstants.LogoMediaId)
             };
 
-            var brand = await this.brandRepository.GetBrandAsync(componentModel.Id, componentModel.Token);
+            var brand = await this.brandRepository.GetBrandAsync(componentModel.Id, componentModel.Token, componentModel.Language);
 
             if (brand != null)
             {

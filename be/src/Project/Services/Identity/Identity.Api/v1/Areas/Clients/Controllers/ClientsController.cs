@@ -35,18 +35,18 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
         /// Gets list of clients.
         /// </summary>
         /// <param name="language">The language.</param>
-        /// <param name="sellerId">The seller id.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
         /// <returns>The list of clients.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(422)]
-        public async Task<IActionResult> Get(string language, Guid? sellerId, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(string language, string searchTerm, int pageIndex, int itemsPerPage)
         {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
             var serviceModel = new GetClientsModel
             {
                 Language = language,
@@ -54,7 +54,7 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = sellerId
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new GetClientsModelValidator();
@@ -79,17 +79,19 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
         /// <returns>The client.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
-        [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(409)]
         [ProducesResponseType(422)]
         public async Task<IActionResult> Get(string language, Guid? id)
         {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
             var serviceModel = new GetClientModel
             {
                 Id = id,
-                Language = language
+                Language = language,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new GetClientModelValidator();
@@ -187,10 +189,13 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Delete(string language, Guid? id)
         {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
             var serviceModel = new DeleteClientModel
             {
                 Id = id,
-                Language = language
+                Language = language,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new DeleteClientModelValidator();

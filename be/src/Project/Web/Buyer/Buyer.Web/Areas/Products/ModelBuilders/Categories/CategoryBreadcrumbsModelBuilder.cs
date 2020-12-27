@@ -30,7 +30,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
         {
             var viewModel = this.breadcrumbsModelBuilder.BuildModel(componentModel);
 
-            var category = await this.categoryRepository.GetCategoryAsync(componentModel.Id, componentModel.Token);
+            var category = await this.categoryRepository.GetCategoryAsync(componentModel.Id, componentModel.Token, componentModel.Language);
 
             if (category != null)
             {

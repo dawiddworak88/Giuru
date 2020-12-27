@@ -89,6 +89,7 @@ services:
       - ServerSideRenderingEndpoint=http://react-ssr:3000
       - CatalogUrl=http://catalog-api
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - ConnectionString=Server=sqldata;Database=IdentityDb;User Id=sa;Password=Gre@tPassw0rd
       - Clients=663bba90-0036-4a58-8516-39faa8baba87&c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9&${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5104;d9316849-7e98-4c5b-853b-5a322aecdc75&693667b0-545e-48b6-9ef8-02ada81be946&${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - Accounts=seller@user.com&Greg&Salesman&Gre@tPassw0rd&09affcc9-1665-45d6-919f-3d2026106ba1

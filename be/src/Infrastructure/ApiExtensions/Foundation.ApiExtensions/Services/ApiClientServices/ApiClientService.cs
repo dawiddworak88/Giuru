@@ -6,7 +6,6 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -19,12 +18,6 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
 {
     public class ApiClientService : IApiClientService
     {
-        public T InitializeRequestModelContext<T>(T requestModel) where T : RequestModelBase
-        {
-            requestModel.Language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-            return requestModel;
-        }
-
         public async Task<ApiResponse<T>> PostMultipartFormAsync<S, W, T>(S request) where S : ApiRequest<W> where T : BaseResponseModel where W : FileRequestModelBase
         {
             using (var client = new HttpClient())
