@@ -10,29 +10,33 @@ using System.Globalization;
 using Seller.Web.Areas.Clients.ViewModels;
 using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
+using Seller.Web.Areas.Clients.Repositories;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
     public class ClientFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ClientFormViewModel>
     {
+        private readonly IClientsRepository clientsRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
         private readonly IOptionsMonitor<LocalizationConfiguration> localizationOptions;
         private readonly LinkGenerator linkGenerator;
 
         public ClientFormModelBuilder(
+            IClientsRepository clientsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer, 
             IStringLocalizer<ClientResources> clientLocalizer,
             IOptionsMonitor<LocalizationConfiguration> localizationOptions,
             LinkGenerator linkGenerator)
         {
+            this.clientsRepository = clientsRepository;
             this.globalLocalizer = globalLocalizer;
             this.clientLocalizer = clientLocalizer;
             this.localizationOptions = localizationOptions;
             this.linkGenerator = linkGenerator;
         }
 
-        public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModelBase)
+        public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var languages = new List<LanguageViewModel>
             { 
@@ -44,7 +48,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 languages.Add(new LanguageViewModel { Text = language.ToUpperInvariant(), Value = language.ToLowerInvariant() });
             }
 
-            return new ClientFormViewModel
+            var viewModel = new ClientFormViewModel
             {
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 ClientDetailText = this.clientLocalizer.GetString("Client"),
@@ -61,6 +65,24 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ClientsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 Languages = languages
             };
+
+            if (componentModel.Id.HasValue)
+            {
+                var client = await this.clientsRepository.GetClientAsync(
+                    componentModel.Token,
+                    componentModel.Language,
+                    componentModel.Id);
+
+                if (client != null)
+                {
+                    viewModel.Id = client.Id;
+                    viewModel.Name = client.Name;
+                    viewModel.Email = client.Email;
+                    viewModel.CommunicationLanguage = client.CommunicationLanguage;
+                }
+            }
+
+             return viewModel;
         }
     }
 }

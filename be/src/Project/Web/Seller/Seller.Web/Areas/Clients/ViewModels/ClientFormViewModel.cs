@@ -1,10 +1,15 @@
 ﻿using Foundation.PageContent.Components.Languages.ViewModels;
+using System;
 using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Clients.ViewModels
 {
     public class ClientFormViewModel
     {
+        public Guid? Id { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string CommunicationLanguage { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string NameLabel { get; set; }
         public string EmailLabel { get; set; }
