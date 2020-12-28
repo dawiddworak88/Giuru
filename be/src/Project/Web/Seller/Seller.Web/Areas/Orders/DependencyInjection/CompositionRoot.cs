@@ -10,8 +10,8 @@ namespace Seller.Web.Areas.Orders.DependencyInjection
     {
         public static void RegisterOrdersAreaDependencies(this IServiceCollection services)
         {
+            services.AddScoped<IModelBuilder<OrdersPageViewModel>, OrdersPageModelBuilder>();
             services.AddScoped<IModelBuilder<OrderPageViewModel>, OrderPageModelBuilder>();
-            services.AddScoped<IModelBuilder<OrderDetailPageViewModel>, OrderDetailPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ImportOrderPageViewModel>, ImportOrderPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ImportOrderFormViewModel>, ImportOrderFormModelBuilder>();
         }

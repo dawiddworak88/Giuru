@@ -1,7 +1,7 @@
-﻿using Seller.Web.Areas.Orders.ViewModel;
-using Foundation.Extensions.Controllers;
+﻿using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.AspNetCore.Mvc;
+using Seller.Web.Areas.Orders.ViewModel;
 
 namespace Seller.Web.Areas.Orders.Controllers
 {
@@ -10,12 +10,12 @@ namespace Seller.Web.Areas.Orders.Controllers
     {
         private readonly IModelBuilder<OrderPageViewModel> orderPageModelBuilder;
 
-        public OrderController(IModelBuilder<OrderPageViewModel> homePageModelBuilder)
+        public OrderController(IModelBuilder<OrderPageViewModel> orderPageModelBuilder)
         {
-            this.orderPageModelBuilder = homePageModelBuilder;
+            this.orderPageModelBuilder = orderPageModelBuilder;
         }
 
-        public IActionResult Index()
+        public IActionResult Edit()
         {
             var viewModel = this.orderPageModelBuilder.BuildModel();
 
