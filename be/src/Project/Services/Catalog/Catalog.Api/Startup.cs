@@ -17,7 +17,7 @@ using Catalog.Api.DependencyInjection;
 using Catalog.Api.v1.Areas.Categories.DependencyInjection;
 using Foundation.Extensions.Filters;
 
-namespace Api
+namespace Catalog.Api
 {
     public class Startup
     {

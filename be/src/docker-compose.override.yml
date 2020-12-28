@@ -53,8 +53,8 @@ services:
 
   sqldata:
     environment:
-      ACCEPT_EULA: Y
-      SA_PASSWORD: Gre@tPassw0rd
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Gre@tPassw0rd
     ports:
       - "5433:1433"
     volumes:
@@ -107,58 +107,32 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=http://basketdata
-      - identityUrl=http://identity-api
-      - IdentityUrlExternal=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventBusConnection=http://rabbitmq
-      - PATH_BASE=/basket-api
-      - PORT=80
     ports:
       - "5103:80"
 
   ordering-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Password=Gre@tPassw0rd
-      - identityUrl=http://identity-api
-      - IdentityUrlExternal=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventBusConnection=http://rabbitmq
-      - CheckUpdateTime=30000
-      - PATH_BASE=/ordering-api
-      - PORT=80
     ports:
       - "5102:80"
 
-  ordering-backgroundtasks:
+  inventory-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Password=Gre@tPassw0rd
-      - EventBusConnection=http://rabbitmq
-      - CheckUpdateTime=30000
-      - GracePeriodTime=1
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
     ports:
-      - "5111:80"
+      - "5108:80"
 
-  webshoppingagg:
+  content-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - urls__basket=http://basket-api
-      - urls__catalog=http://catalog-api
-      - urls__orders=http://ordering-api
-      - urls__identity=http://identity-api
-      - urls__grpcBasket=http://basket-api:81
-      - urls__grpcCatalog=http://catalog-api:81
-      - urls__grpcOrdering=http://ordering-api:81
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
     ports:
-    - "5203:80"
-    - "15203:8001"
-
-  ordering-signalrhub:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - EventBusConnection=http://rabbitmq
-      - identityUrl=http://identity-api
-    ports:
-      - "5112:80"
+      - "5109:80"
 
   seller-web:
     environment:

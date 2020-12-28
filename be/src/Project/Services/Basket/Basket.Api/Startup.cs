@@ -1,39 +1,75 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.IO;
+using System.Reflection;
+using Basket.Api.v1.Areas.Baskets.DependencyInjection;
+using Foundation.Account.DependencyInjection;
+using Foundation.Extensions.Filters;
+using Foundation.Localization.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.OpenApi.Models;
 
 namespace Basket.Api
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        public Startup(IConfiguration configuration)
         {
+            this.Configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public IConfiguration Configuration { get; }
+
+        public void ConfigureServices(IServiceCollection services)
         {
-            if (env.IsDevelopment())
+            services.AddControllers(options =>
             {
-                app.UseDeveloperExceptionPage();
-            }
+                options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+            }).AddNewtonsoftJson();
+
+            services.AddLocalization();
+
+            services.RegisterBaseLocalizationDependencies();
+
+            services.RegisterApiAccountDependencies(this.Configuration);
+
+            services.RegisterBasketDependencies();
+
+            services.AddApiVersioning();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Basket API", Version = "v1" });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
+        }
+
+        public void Configure(IApplicationBuilder app)
+        {
+            IdentityModelEventSource.ShowPII = true;
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Basket API");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapControllers();
             });
         }
     }

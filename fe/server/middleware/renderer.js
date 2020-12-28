@@ -14,8 +14,8 @@ import SignInPage from "../../src/project/Account/areas/Accounts/pages/SignIn/Si
 import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
 
 // Seller Portal
+import OrdersPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrdersPage/OrdersPage";
 import OrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage";
-import OrderDetailPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderDetailPage/OrderDetailPage";
 import ImportOrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/ImportOrderPage/ImportOrderPage";
 import ClientsPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientsPage/ClientsPage";
 import ClientPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage";
@@ -35,8 +35,8 @@ const Components = {
 	SignInPage,
 	ContentPage,
 
+	OrdersPage,
 	OrderPage,
-	OrderDetailPage,
 	ImportOrderPage,
 	ClientsPage,
 	ClientPage,
