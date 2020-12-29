@@ -22,11 +22,11 @@ namespace Buyer.Web.Areas.Products.Repositories.Categories
             this.settings = settings;
         }
 
-        public async Task<Category> GetCategoryAsync(Guid? categoryId, string token)
+        public async Task<Category> GetCategoryAsync(Guid? categoryId, string token, string language)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
-                Data = this.apiClientService.InitializeRequestModelContext(new RequestModelBase()),
+                Data = new RequestModelBase { Language = language },
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}/{categoryId}"
             };

@@ -80,9 +80,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             var categories = await this.categoriesRepository.GetAllCategoriesAsync(
                 componentModel.Token,
                 componentModel.Language,
-                true,
-                PaginationConstants.DefaultPageIndex,
-                PaginationConstants.DefaultPageSize);
+                true);
 
             if (categories != null)
             {
@@ -92,9 +90,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             var primaryProducts = await this.productsRepository.GetAllPrimaryProductsAsync(
                 componentModel.Token,
                 componentModel.Language,
-                componentModel.SellerId,
-                PaginationConstants.DefaultPageIndex,
-                PaginationConstants.DefaultPageSize);
+                componentModel.SellerId);
 
             if (primaryProducts != null)
             {

@@ -5,7 +5,6 @@ using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Identity.Api.Areas.Home.Services.Contents;
 using Identity.Api.Areas.Home.ViewModels;
-using Identity.Api.Infrastructure.Contents.Definitions;
 using Microsoft.Extensions.Localization;
 using System.Threading.Tasks;
 
@@ -37,8 +36,7 @@ namespace Identity.Api.Areas.Home.ModelBuilders
                 Header = headerModelBuilder.BuildModel(),
                 Content = new ContentPageViewModel
                 {
-                    Title = this.globalLocalizer.GetString("PrivacyPolicy"),
-                    Content = await this.contentService.GetAsync(ContentConstants.PrivacyPolicyId, componentModel.Language)
+                    Title = this.globalLocalizer.GetString("PrivacyPolicy")
                 },
                 Footer = footerModelBuilder.BuildModel()
             };

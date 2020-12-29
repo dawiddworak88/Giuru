@@ -17,7 +17,7 @@ using Catalog.Api.DependencyInjection;
 using Catalog.Api.v1.Areas.Categories.DependencyInjection;
 using Foundation.Extensions.Filters;
 
-namespace Api
+namespace Catalog.Api
 {
     public class Startup
     {
@@ -40,8 +40,6 @@ namespace Api
             services.RegisterBaseLocalizationDependencies();
 
             services.RegisterApiAccountDependencies(this.Configuration);
-
-            services.RegisterBaseAccountDependencies();
 
             services.RegisterDatabaseDependencies(this.Configuration);
 
@@ -91,7 +89,9 @@ namespace Api
 
             app.UseRouting();
 
-            app.UseAuthenticationAuthorization();
+            app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

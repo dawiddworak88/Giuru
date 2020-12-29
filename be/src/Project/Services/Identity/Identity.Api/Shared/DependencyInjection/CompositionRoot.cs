@@ -13,9 +13,9 @@ using Identity.Api.v1.Areas.Accounts.Repositories.AppSecrets;
 using Identity.Api.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using IdentityServer4.Services;
-using Identity.Api.v1.Areas.Accounts.DependencyInjection;
-using Identity.Api.Areas.Accounts.DependencyInjection;
-using Identity.Api.Areas.Home.DependencyInjection;
+using Foundation.Localization.Services;
+using Foundation.ApiExtensions.Definitions;
+using Microsoft.AspNetCore.Builder;
 
 namespace Identity.Api.Shared.DependencyInjection
 {
@@ -61,11 +61,15 @@ namespace Identity.Api.Shared.DependencyInjection
                 builder.AddDeveloperSigningCredential();
             }
 
-            services.AddAuthentication();
+            services.AddAuthentication()
+                .AddIdentityServerAuthentication("IsToken", options =>
+                {
+                    options.Authority = configuration.GetValue<string>("IdentityUrl");
+                    options.RequireHttpsMetadata = false;
+                    options.ApiName = ApiExtensionsConstants.AllScopes;
+                });
 
-            services.RegisterAccountsViewsDependencies();
-            services.RegisterAccountsApiDependencies();
-            services.RegisterHomeViewsDependencies();
+            services.AddScoped<ICultureService, CultureService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAppSecretRepository, AppSecretRepository>();
         }

@@ -46,7 +46,7 @@ namespace Buyer.Web.Shared.Headers.ModelBuilders
 
             if (!this.configuration.Value.IsMarketplace)
             {
-                var brand = await this.brandRepository.GetBrandAsync(this.configuration.Value.OrganisationId, componentModel.Token);
+                var brand = await this.brandRepository.GetBrandAsync(this.configuration.Value.OrganisationId, componentModel.Token, componentModel.Language);
 
                 var brandZoneLink = new LinkViewModel
                 { 

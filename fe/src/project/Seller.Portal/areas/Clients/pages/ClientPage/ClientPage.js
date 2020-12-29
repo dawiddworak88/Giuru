@@ -1,31 +1,28 @@
 import React from "react";
-import { Plus } from "react-feather";
+import { toast } from "react-toastify";
+import { ThemeProvider } from "@material-ui/core/styles";
+import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
 import Header from "../../../../../../shared/components/Header/Header";
+import Store from "../../../../../../shared/stores/Store";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
+import ClientForm from "../../components/ClientForm/ClientForm";
 
 function ClientPage(props) {
+
+  toast.configure();
+
   return (
-    <div>
-      <Header {...props.header}></Header>
-      <MenuTiles {...props.menuTiles} />
-      <section className="section section-small-padding catalog">
-        <h1 className="subtitle is-4">{props.title}</h1>
+    <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
+      <Store>
         <div>
-            {props.newUrl &&
-                <a href={props.newUrl} className="button is-primary">
-                    <span className="icon">
-                        <Plus />
-                    </span>
-                    <span>
-                        {props.newText}
-                    </span>
-                </a>
-            }
+          <Header {...props.header}></Header>
+          <MenuTiles {...props.menuTiles} />
+          <ClientForm {...props.clientForm} />
+          <Footer {...props.footer}></Footer>
         </div>
-      </section>
-      <Footer {...props.footer}></Footer>
-    </div>
+      </Store>
+    </ThemeProvider>
   );
 }
 

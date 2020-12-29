@@ -126,14 +126,14 @@ namespace Seller.Web.Areas.Categories.Repositories
             return default;
         }
 
-        public async Task<IEnumerable<Category>> GetAllCategoriesAsync(string token, string language, bool? leafOnly, int pageIndex, int itemsPerPage)
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync(string token, string language, bool? leafOnly)
         {
             var categoriesRequestModel = new PagedCategoriesRequestModel
             {
                 LeafOnly = leafOnly,
                 Language = language,
-                PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage
+                PageIndex = PaginationConstants.DefaultPageIndex,
+                ItemsPerPage = PaginationConstants.DefaultPageSize
             };
 
             var apiRequest = new ApiRequest<PagedCategoriesRequestModel>
@@ -151,7 +151,7 @@ namespace Seller.Web.Areas.Categories.Repositories
 
                 categories.AddRange(response.Data.Data);
 
-                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)itemsPerPage);
+                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
 
                 for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
                 {

@@ -4,45 +4,37 @@ using Foundation.PageContent.MenuTiles.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Microsoft.Extensions.Localization;
-using Microsoft.AspNetCore.Routing;
-using System.Globalization;
 using Foundation.Localization;
+using Foundation.PageContent.ComponentModels;
+using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Orders.ModelBuilders
 {
-    public class OrderPageModelBuilder : IModelBuilder<OrderPageViewModel>
+    public class OrderPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel>
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
-        private readonly LinkGenerator linkGenerator;
 
         public OrderPageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder,
-            IStringLocalizer<OrderResources> orderLocalizer,
-            LinkGenerator linkGenerator)
+            IStringLocalizer<OrderResources> orderLocalizer)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
             this.orderLocalizer = orderLocalizer;
             this.footerModelBuilder = footerModelBuilder;
-            this.linkGenerator = linkGenerator;
         }
 
-        public OrderPageViewModel BuildModel()
+        public async Task<OrderPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new OrderPageViewModel
             {
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
-                Title = this.orderLocalizer["Orders"],
-                NewText = this.orderLocalizer["NewOrder"],
-                NewUrl = this.linkGenerator.GetPathByAction("Index", "OrderDetail", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                ImportOrderText = this.orderLocalizer["ImportOrder"],
-                ImportOrderUrl = this.linkGenerator.GetPathByAction("Index", "ImportOrder", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 Footer = footerModelBuilder.BuildModel()
             };
 

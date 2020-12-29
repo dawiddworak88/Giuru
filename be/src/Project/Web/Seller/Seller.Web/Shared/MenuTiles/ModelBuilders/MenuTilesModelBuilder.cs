@@ -50,7 +50,7 @@ namespace Seller.Web.Shared.MenuTiles.ModelBuilders
                     {
                         Icon = IconsConstants.Users,
                         Title = this.globalLocalizer.GetString("Clients"),
-                        Url = this.linkGenerator.GetPathByAction("Index", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                        Url = this.linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                     },
                     new MenuTileViewModel
                     {

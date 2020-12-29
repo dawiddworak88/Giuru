@@ -65,13 +65,13 @@ namespace Seller.Web.Areas.Products.Repositories
             return default;
         }
 
-        public async Task<IEnumerable<Product>> GetAllPrimaryProductsAsync(string token, string language, Guid? sellerId, int pageIndex, int itemsPerPage)
+        public async Task<IEnumerable<Product>> GetAllPrimaryProductsAsync(string token, string language, Guid? sellerId)
         {
             var productsRequestModel = new PagedProductsRequestModel
             {
                 Language = language,
-                PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage,
+                PageIndex = PaginationConstants.DefaultPageIndex,
+                ItemsPerPage = PaginationConstants.DefaultPageSize,
                 SellerId = sellerId,
                 IncludeProductVariants = false
             };
@@ -85,18 +85,13 @@ namespace Seller.Web.Areas.Products.Repositories
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
             
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
                 var products = new List<Product>();
 
                 products.AddRange(response.Data.Data);
 
-                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)itemsPerPage);
+                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
 
                 for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
                 {
@@ -116,6 +111,11 @@ namespace Seller.Web.Areas.Products.Repositories
                 }
 
                 return products;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
             return default;

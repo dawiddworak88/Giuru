@@ -12,6 +12,7 @@
         public struct Identity
         {
             public static readonly string SellersApiEndpoint = "/api/v1/sellers";
+            public static readonly string ClientsApiEndpoint = "/api/v1/clients";
         }
 
         public struct Media

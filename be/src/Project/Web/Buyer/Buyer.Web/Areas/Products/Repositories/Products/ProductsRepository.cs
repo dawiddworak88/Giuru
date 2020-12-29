@@ -66,7 +66,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
 
             var apiRequest = new ApiRequest<ProductsRequestModel>
             {
-                Data = this.apiClientService.InitializeRequestModelContext(productsRequestModel),
+                Data = productsRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
             };
@@ -104,7 +104,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
 
             var apiRequest = new ApiRequest<ProductSuggestionsRequestModel>
             {
-                Data = this.apiClientService.InitializeRequestModelContext(productRequestModel),
+                Data = productRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductSuggestionsApiEndpoint}"
             };
