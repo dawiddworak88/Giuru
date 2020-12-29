@@ -1,23 +1,41 @@
-﻿using Seller.Web.Areas.Orders.ViewModel;
+﻿using Foundation.Account.Definitions;
+using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;
+using Foundation.Extensions.Helpers;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.PageContent.ComponentModels;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Seller.Web.Areas.Orders.ViewModel;
+using System;
+using System.Globalization;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Orders.Controllers
 {
     [Area("Orders")]
     public class OrderController : BaseController
     {
-        private readonly IModelBuilder<OrderPageViewModel> orderPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder;
 
-        public OrderController(IModelBuilder<OrderPageViewModel> homePageModelBuilder)
+        public OrderController(IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel> orderPageModelBuilder)
         {
-            this.orderPageModelBuilder = homePageModelBuilder;
+            this.orderPageModelBuilder = orderPageModelBuilder;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Edit(Guid? id)
         {
-            var viewModel = this.orderPageModelBuilder.BuildModel();
+            var componentModel = new ComponentModelBase
+            {
+                Id = id,
+                Language = CultureInfo.CurrentUICulture.Name,
+                Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value)
+            };
+
+            var viewModel = await this.orderPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);
         }

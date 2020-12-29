@@ -6,6 +6,6 @@ namespace Buyer.Web.Shared.Brands.Repositories
 {
     public interface IBrandRepository
     {
-        Task<Brand> GetBrandAsync(Guid? sellerId, string token);
+        Task<Brand> GetBrandAsync(Guid? sellerId, string token, string language);
     }
 }

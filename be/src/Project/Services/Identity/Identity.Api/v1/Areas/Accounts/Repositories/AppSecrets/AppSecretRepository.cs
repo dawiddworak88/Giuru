@@ -15,9 +15,9 @@ namespace Identity.Api.v1.Areas.Accounts.Repositories.AppSecrets
             this.context = context;
         }
 
-        public async Task<AppSecretOrganisation> GetOrganisationAppSecretAsync(Guid organisationId, string appSecret)
+        public async Task<OrganisationAppSecret> GetOrganisationAppSecretAsync(Guid organisationId, string appSecret)
         {
-            return await this.context.AppSecretsOrganisations.FirstOrDefaultAsync(x => x.OrganisationId == organisationId && x.AppSecret == appSecret && x.IsActive);
+            return await this.context.OrganisationAppSecrets.FirstOrDefaultAsync(x => x.OrganisationId == organisationId && x.AppSecret == appSecret && x.IsActive);
         }
     }
 }

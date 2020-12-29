@@ -123,6 +123,12 @@
   <data name="ClientAlreadyExists" xml:space="preserve">
     <value>User with this e-mail address has been already created.</value>
   </data>
+  <data name="ClientDeletedSuccessfully" xml:space="preserve">
+    <value>Client has been deleted successfully.</value>
+  </data>
+  <data name="ClientNotFound" xml:space="preserve">
+    <value>Client has not been found.</value>
+  </data>
   <data name="Clients" xml:space="preserve">
     <value>Clients</value>
   </data>

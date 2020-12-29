@@ -35,7 +35,7 @@ namespace Seller.Web.Shared.Headers.ModelBuilders
             return new LogoViewModel
             {
                 LogoAltLabel = this.globalLocalizer.GetString("Logo"),
-                TargetUrl = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                TargetUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 LogoUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, LogoConstants.LogoMediaId, true)
             };
         }

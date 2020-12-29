@@ -11,6 +11,7 @@ using Foundation.PageContent.DependencyInjection;
 using Foundation.Security.DependencyInjection;
 using Foundation.ApiExtensions.DependencyInjection;
 using Foundation.Account.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
 
 namespace AspNetCore
 {
@@ -55,6 +56,8 @@ namespace AspNetCore
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<LocalizationConfiguration> localizationOptions)
         {
+            IdentityModelEventSource.ShowPII = true;
+
             app.UseForwardedHeaders();
 
             app.UseGeneralException();
@@ -67,7 +70,9 @@ namespace AspNetCore
 
             app.UseRouting();
 
-            app.UseAuthenticationAuthorization();
+            app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
 

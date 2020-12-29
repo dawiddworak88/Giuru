@@ -69,9 +69,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             var parentCategories = await this.categoriesRepository.GetAllCategoriesAsync(
                 componentModel.Token,
                 componentModel.Language,
-                null,
-                PaginationConstants.DefaultPageIndex,
-                PaginationConstants.DefaultPageSize);
+                null);
 
             if (parentCategories != null)
             {

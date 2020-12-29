@@ -6,6 +6,6 @@ namespace Buyer.Web.Areas.Products.Repositories.Categories
 {
     public interface ICategoryRepository
     {
-        Task<Category> GetCategoryAsync(Guid? categoryId, string token);
+        Task<Category> GetCategoryAsync(Guid? categoryId, string token, string language);
     }
 }

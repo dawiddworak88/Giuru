@@ -30,7 +30,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
         {
             var viewModel = this.breadcrumbsModelBuilder.BuildModel(componentModel);
 
-            var brand = await this.brandRepository.GetBrandAsync(componentModel.Id, componentModel.Token);
+            var brand = await this.brandRepository.GetBrandAsync(componentModel.Id, componentModel.Token, componentModel.Language);
 
             if (brand != null)
             {

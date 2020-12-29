@@ -60,14 +60,14 @@ namespace Identity.Api.Infrastructure.Organisations.Seeds
                         context.OrganisationTranslations.Add(EntityHelper.SeedEntity(enOrganisationTranslationEntity));
                         context.OrganisationTranslations.Add(EntityHelper.SeedEntity(deOrganisationTranslationEntity));
 
-                        var appSecretOrganisation = new AppSecretOrganisation
+                        var appSecretOrganisation = new OrganisationAppSecret
                         { 
                             AppSecret = organisationConfiguration[OrganisationsSeedConstants.AppSecretIndex],
                             OrganisationId = organisationEntity.Id,
                             CreatedBy = "admin"
                         };
 
-                        context.AppSecretsOrganisations.Add(EntityHelper.SeedEntity(appSecretOrganisation));
+                        context.OrganisationAppSecrets.Add(EntityHelper.SeedEntity(appSecretOrganisation));
                     }
 
                     context.SaveChanges();

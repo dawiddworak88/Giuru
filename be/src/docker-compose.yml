@@ -93,38 +93,22 @@ services:
       - catalog-api
       - rabbitmq
 
-  ordering-backgroundtasks:
-    image: ${REGISTRY:-giuru}/ordering-backgroundtasks:${PLATFORM:-linux}-${TAG:-latest}
+  inventory-api:
+    image: ${REGISTRY:-giuru}/inventory-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Project/Services/Ordering/Ordering.BackgroundTasks/Dockerfile
+      dockerfile: Project/Services/Inventory/Inventory.Api/Dockerfile
     depends_on:
       - catalog-api
-      - rabbitmq
+      - sqldata
 
-  webshoppingagg:
-    image: ${REGISTRY:-giuru}/webshoppingagg:${PLATFORM:-linux}-${TAG:-latest}
+  content-api:
+    image: ${REGISTRY:-giuru}/content-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Project/ApiGateways/WebShoppingAggregator/WebShoppingAggregator.ApiGateway/Dockerfile
+      dockerfile: Project/Services/Content/Content.Api/Dockerfile
     depends_on:
-      - identity-api
-      - rabbitmq
-      - ordering-api
-      - catalog-api
-      - basket-api
-
-  ordering-signalrhub:
-    image: ${REGISTRY:-giuru}/ordering-signalrhub:${PLATFORM:-linux}-${TAG:-latest}
-    build:
-      context: .
-      dockerfile: Project/Services/Ordering/Ordering.SignalrHub/Dockerfile
-    depends_on:
-      - identity-api
-      - rabbitmq
-      - ordering-api
-      - catalog-api
-      - basket-api
+      - sqldata
 
   seller-web:
     image: ${REGISTRY:-giuru}/seller-web:${PLATFORM:-linux}-${TAG:-latest}
@@ -134,7 +118,6 @@ services:
     restart: always
     depends_on: 
       - react-ssr
-      - webshoppingagg
       - identity-api
 
   buyer-web:
@@ -145,5 +128,4 @@ services:
     restart: always
     depends_on: 
       - react-ssr
-      - webshoppingagg
       - identity-api
