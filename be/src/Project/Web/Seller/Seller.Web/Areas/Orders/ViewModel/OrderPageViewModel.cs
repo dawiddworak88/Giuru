@@ -4,6 +4,6 @@ namespace Seller.Web.Areas.Orders.ViewModel
 {
     public class OrderPageViewModel : BasePageViewModel
     {
-        public string Title { get; set; }
+        public OrderFormViewModel OrderForm { get; set; }
     }
 }

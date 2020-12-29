@@ -92,11 +92,11 @@ namespace Seller.Portal
             {
                 endpoints.MapControllerRoute(
                             name: "localizedAreaRoute",
-                            pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Orders}/{controller=Order}/{action=Index}/{id?}").RequireAuthorization();
+                            pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization();
 
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{area:exists=Orders}/{controller=Order}/{action=Index}/{id?}").RequireAuthorization();
+                    pattern: "{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization();
             });
         }
     }

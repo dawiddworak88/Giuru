@@ -5,10 +5,12 @@ using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
+using Foundation.PageContent.ComponentModels;
+using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Orders.ModelBuilders
 {
-    public class OrderPageModelBuilder : IModelBuilder<OrderPageViewModel>
+    public class OrderPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel>
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
@@ -27,13 +29,12 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             this.footerModelBuilder = footerModelBuilder;
         }
 
-        public OrderPageViewModel BuildModel()
+        public async Task<OrderPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new OrderPageViewModel
             {
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
-                Title = this.orderLocalizer["Order"],
                 Footer = footerModelBuilder.BuildModel()
             };
 

@@ -3,6 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Seller.Web.Areas.Orders.ModelBuilders;
 using Seller.Web.Areas.Orders.ViewModel;
 using Foundation.PageContent.ComponentModels;
+using Seller.Web.Areas.Orders.Repositories;
+using Seller.Web.Shared.ViewModels;
+using Seller.Web.Areas.Orders.DomainModels;
 
 namespace Seller.Web.Areas.Orders.DependencyInjection
 {
@@ -10,10 +13,10 @@ namespace Seller.Web.Areas.Orders.DependencyInjection
     {
         public static void RegisterOrdersAreaDependencies(this IServiceCollection services)
         {
-            services.AddScoped<IModelBuilder<OrdersPageViewModel>, OrdersPageModelBuilder>();
-            services.AddScoped<IModelBuilder<OrderPageViewModel>, OrderPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ImportOrderPageViewModel>, ImportOrderPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ImportOrderFormViewModel>, ImportOrderFormModelBuilder>();
+            services.AddScoped<IOrdersRepository, OrdersRepository>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Order>>, OrdersPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrdersPageViewModel>, OrdersPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel>, OrderPageModelBuilder>();
         }
     }
 }
