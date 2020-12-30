@@ -167,7 +167,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
             {
                 throw new CustomException(this.productLocalizer.GetString("ProductNotFound"), (int)HttpStatusCode.NotFound);
             }
-
+            
             product.IsNew = model.IsNew;
             product.IsProtected = model.IsProtected;
             product.Sku = model.Sku;
@@ -178,11 +178,23 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
             var productTranslation = await this.catalogContext.ProductTranslations.FirstOrDefaultAsync(x => x.ProductId == product.Id && x.Language == model.Language && x.IsActive);
 
-            if (productTranslation != null) 
+            if (productTranslation != null)
             {
                 productTranslation.Name = model.Name;
                 productTranslation.Description = model.Description;
                 productTranslation.FormData = model.FormData;
+            }
+            else
+            {
+                var newProductTranslation = new ProductTranslation
+                {
+                    ProductId = product.Id,
+                    Name = model.Name,
+                    Description = model.Description,
+                    FormData = model.FormData
+                };
+
+                this.catalogContext.ProductTranslations.Add(this.entityService.EnrichEntity(newProductTranslation));
             }
 
             var productImages = this.catalogContext.ProductImages.Where(x => x.ProductId == model.Id && x.IsActive);
