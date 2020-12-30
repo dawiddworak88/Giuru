@@ -13,9 +13,9 @@ using Identity.Api.v1.Areas.Accounts.Repositories.AppSecrets;
 using Identity.Api.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using IdentityServer4.Services;
-using Foundation.Localization.Services;
 using Foundation.ApiExtensions.Definitions;
 using Microsoft.AspNetCore.Builder;
+using Foundation.Localization.Definitions;
 
 namespace Identity.Api.Shared.DependencyInjection
 {
@@ -69,7 +69,6 @@ namespace Identity.Api.Shared.DependencyInjection
                     options.ApiName = ApiExtensionsConstants.AllScopes;
                 });
 
-            services.AddScoped<ICultureService, CultureService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAppSecretRepository, AppSecretRepository>();
         }
@@ -77,6 +76,7 @@ namespace Identity.Api.Shared.DependencyInjection
         public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<AppSettings>(configuration);
+            services.Configure<LocalizationSettings>(configuration);
         }
     }
 }

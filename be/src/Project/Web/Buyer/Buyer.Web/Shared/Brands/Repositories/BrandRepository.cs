@@ -26,7 +26,8 @@ namespace Buyer.Web.Shared.Brands.Repositories
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
-                Data = new RequestModelBase { Language = language },
+                Language = language,
+                Data = new RequestModelBase(),
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.SellersApiEndpoint}/{sellerId}"
             };

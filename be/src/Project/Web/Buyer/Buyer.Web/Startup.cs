@@ -2,16 +2,15 @@ using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
 using Buyer.Web.Shared.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Foundation.Extensions.DependencyInjection;
 using Foundation.PageContent.DependencyInjection;
 using Foundation.Security.DependencyInjection;
 using Foundation.ApiExtensions.DependencyInjection;
 using Foundation.Account.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.Extensions.Options;
 
 namespace AspNetCore
 {
@@ -26,8 +25,6 @@ namespace AspNetCore
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddLocalizationConfiguration(this.Configuration);
-
             services.AddLocalization();
 
             services.AddCultureRouteConstraint();
@@ -54,7 +51,7 @@ namespace AspNetCore
             services.ConfigureOptions(this.Configuration);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<LocalizationConfiguration> localizationOptions)
+        public void Configure(IApplicationBuilder app, IOptionsMonitor<LocalizationSettings> localizationSettings)
         {
             IdentityModelEventSource.ShowPII = true;
 
@@ -74,7 +71,7 @@ namespace AspNetCore
 
             app.UseAuthorization();
 
-            app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
+            app.UseCustomRequestLocalizationProvider(localizationSettings);
 
             app.UseSecurityHeaders(this.Configuration);
 

@@ -31,14 +31,10 @@ namespace Seller.Web.Areas.Clients.Repositories
 
         public async Task DeleteAsync(string token, string language, Guid? id)
         {
-            var deleteRequestModel = new RequestModelBase
-            {
-                Language = language
-            };
-
             var apiRequest = new ApiRequest<RequestModelBase>
             {
-                Data = deleteRequestModel,
+                Language = language,
+                Data = new RequestModelBase(),
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.ClientsApiEndpoint}/{id}"
             };
@@ -55,13 +51,13 @@ namespace Seller.Web.Areas.Clients.Repositories
         {
             var categoriesRequestModel = new PagedRequestModelBase
             {
-                Language = language,
                 PageIndex = PaginationConstants.DefaultPageIndex,
                 ItemsPerPage = PaginationConstants.DefaultPageSize
             };
 
             var apiRequest = new ApiRequest<PagedRequestModelBase>
             {
+                Language = language,
                 Data = categoriesRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
@@ -107,14 +103,10 @@ namespace Seller.Web.Areas.Clients.Repositories
 
         public async Task<Client> GetClientAsync(string token, string language, Guid? id)
         {
-            var request = new RequestModelBase
-            {
-                Language = language
-            };
-
             var apiRequest = new ApiRequest<RequestModelBase>
             {
-                Data = request,
+                Language = language,
+                Data = new RequestModelBase(),
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.ClientsApiEndpoint}/{id}"
             };
@@ -138,7 +130,6 @@ namespace Seller.Web.Areas.Clients.Repositories
         {
             var clientsRequestModel = new PagedRequestModelBase
             {
-                Language = language,
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage
@@ -146,6 +137,7 @@ namespace Seller.Web.Areas.Clients.Repositories
 
             var apiRequest = new ApiRequest<PagedRequestModelBase>
             {
+                Language = language,
                 Data = clientsRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
@@ -174,7 +166,6 @@ namespace Seller.Web.Areas.Clients.Repositories
             var requestModel = new SaveClientRequestModel
             {
                 Id = id,
-                Language = language,
                 Name = name,
                 Email = email,
                 CommunicationLanguage = communicationLanguage
@@ -182,6 +173,7 @@ namespace Seller.Web.Areas.Clients.Repositories
 
             var apiRequest = new ApiRequest<SaveClientRequestModel>
             {
+                Language = language,
                 Data = requestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.ClientsApiEndpoint}"

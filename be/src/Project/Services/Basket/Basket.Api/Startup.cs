@@ -4,7 +4,6 @@ using System.Reflection;
 using Basket.Api.v1.Areas.Baskets.DependencyInjection;
 using Foundation.Account.DependencyInjection;
 using Foundation.Extensions.Filters;
-using Foundation.Localization.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,8 +29,6 @@ namespace Basket.Api
             }).AddNewtonsoftJson();
 
             services.AddLocalization();
-
-            services.RegisterBaseLocalizationDependencies();
 
             services.RegisterApiAccountDependencies(this.Configuration);
 

@@ -28,13 +28,13 @@ namespace Buyer.Web.Shared.Catalogs.Services
         {
             var categoriesRequestModel = new CategoriesRequestModel
             {
-                Language = language,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage
             };
 
             var apiRequest = new ApiRequest<CategoriesRequestModel>
             {
+                Language = language,
                 Data = categoriesRequestModel,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
             };

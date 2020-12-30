@@ -3,7 +3,6 @@ using System.IO;
 using System.Reflection;
 using Foundation.Account.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
-using Foundation.Localization.DependencyInjection;
 using Media.Api.DependencyInjection;
 using Media.Api.Shared.Checksums;
 using Media.Api.v1.Area.Media.DependencyInjection;
@@ -30,8 +29,6 @@ namespace Media.Api
             services.AddControllers();
 
             services.AddLocalization();
-
-            services.RegisterBaseLocalizationDependencies();
 
             services.RegisterApiAccountDependencies(this.Configuration);
 

@@ -10,7 +10,6 @@ using Foundation.Extensions.Exceptions;
 using System.Net;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
-using Foundation.Localization.Services;
 using Catalog.Api.Infrastructure.Categories.Entities;
 using System;
 using Catalog.Api.Infrastructure.Categories.Entites;
@@ -26,7 +25,6 @@ namespace Catalog.Api.v1.Areas.Categories.Services
 
         public CategoriesService(
             CatalogContext context,
-            ICultureService cultureService,
             IStringLocalizer<ProductResources> productLocalizer)
         {
             this.context = context;

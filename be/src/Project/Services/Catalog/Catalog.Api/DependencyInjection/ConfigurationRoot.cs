@@ -1,6 +1,7 @@
 ﻿using Catalog.Api.Configurations;
 using Catalog.Api.Infrastructure;
 using Catalog.Api.v1.Areas.Products.Services;
+using Foundation.Localization.Definitions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -46,6 +47,7 @@ namespace Catalog.Api.DependencyInjection
         public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<AppSettings>(configuration);
+            services.Configure<LocalizationSettings>(configuration);
         }
     }
 }

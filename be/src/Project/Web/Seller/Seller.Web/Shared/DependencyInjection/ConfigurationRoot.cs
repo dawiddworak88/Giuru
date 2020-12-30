@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Foundation.Localization.Definitions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Seller.Web.Shared.Configurations;
 
@@ -9,6 +10,7 @@ namespace Seller.Web.Shared.DependencyInjection
         public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<AppSettings>(configuration);
+            services.Configure<LocalizationSettings>(configuration);
         }
     }
 }

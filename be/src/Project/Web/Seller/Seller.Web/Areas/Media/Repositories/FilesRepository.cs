@@ -27,13 +27,13 @@ namespace Seller.Web.Areas.Media.Repositories
         {
             var requestModel = new FileRequestModelBase
             {
-                Language = language,
                 File = file,
                 Filename = filename
             };
 
             var apiRequest = new ApiRequest<FileRequestModelBase>
             {
+                Language = language,
                 Data = requestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.MediaUrl}{ApiConstants.Media.FilesApiEndpoint}"

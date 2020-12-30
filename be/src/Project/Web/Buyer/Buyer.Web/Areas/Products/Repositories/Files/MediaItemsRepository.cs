@@ -30,13 +30,13 @@ namespace Buyer.Web.Areas.Products.Repositories.Files
             var filesRequestModel = new FilesRequestModel
             {
                 Ids = ids.ToEndpointParameterString(),
-                Language = language,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage
             };
 
             var apiRequest = new ApiRequest<FilesRequestModel>
             {
+                Language = language,
                 Data = filesRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.MediaUrl}{ApiConstants.Media.MediaItemsApiEndpoint}"

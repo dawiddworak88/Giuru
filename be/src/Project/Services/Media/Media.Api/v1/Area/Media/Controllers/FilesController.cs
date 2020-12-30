@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
@@ -80,7 +81,7 @@ namespace Media.Api.v1.Area.Media.Controllers
             {
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
-                Language = model.Language,
+                Language = CultureInfo.CurrentCulture.Name,
                 File = model.File
             };
 

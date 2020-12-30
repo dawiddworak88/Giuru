@@ -33,13 +33,13 @@ namespace Seller.Web.Areas.Products.Repositories
             var mediaItemsRequestModel = new PagedMediaItemsRequestModel
             {
                 Ids = mediaItemIds,
-                Language = language,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage
             };
 
             var apiRequest = new ApiRequest<PagedMediaItemsRequestModel>
             {
+                Language = language,
                 Data = mediaItemsRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.MediaUrl}{ApiConstants.Media.MediaItemsApiEndpoint}"
@@ -85,14 +85,10 @@ namespace Seller.Web.Areas.Products.Repositories
 
         public async Task<MediaItem> GetMediaItemAsync(string token, string language, Guid id)
         {
-            var request = new RequestModelBase
-            {
-                Language = language
-            };
-
             var apiRequest = new ApiRequest<RequestModelBase>
             {
-                Data = request,
+                Language = language,
+                Data = new RequestModelBase(),
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.MediaUrl}{ApiConstants.Media.MediaItemsApiEndpoint}/{id}"
             };

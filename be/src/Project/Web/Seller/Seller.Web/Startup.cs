@@ -3,9 +3,7 @@ using Foundation.Localization.Extensions;
 using Seller.Web.Shared.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Foundation.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
 using Foundation.PageContent.DependencyInjection;
 using Foundation.Security.DependencyInjection;
@@ -13,11 +11,11 @@ using Seller.Web.Areas.Orders.DependencyInjection;
 using Seller.Web.Areas.Clients.DependencyInjection;
 using Seller.Web.Areas.Products.DependencyInjection;
 using Foundation.ApiExtensions.DependencyInjection;
-using Foundation.Localization.DependencyInjection;
 using Foundation.Account.DependencyInjection;
 using Foundation.Extensions.Filters;
 using Seller.Web.Areas.Media.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Seller.Portal
 {
@@ -32,10 +30,6 @@ namespace Seller.Portal
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddLocalizationConfiguration(this.Configuration);
-
-            services.RegisterBaseLocalizationDependencies();
-
             services.AddLocalization();
 
             services.AddCultureRouteConstraint();
@@ -66,7 +60,7 @@ namespace Seller.Portal
             services.ConfigureOptions(this.Configuration);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<LocalizationConfiguration> localizationOptions)
+        public void Configure(IApplicationBuilder app, IOptionsMonitor<LocalizationSettings> localizationSettings)
         {
             IdentityModelEventSource.ShowPII = true;
 
@@ -84,7 +78,7 @@ namespace Seller.Portal
 
             app.UseAuthorization();
 
-            app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
+            app.UseCustomRequestLocalizationProvider(localizationSettings);
 
             app.UseSecurityHeaders(this.Configuration);
 

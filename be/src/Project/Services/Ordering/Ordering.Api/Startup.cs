@@ -1,6 +1,5 @@
 using Foundation.Account.DependencyInjection;
 using Foundation.Extensions.Filters;
-using Foundation.Localization.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,8 +28,6 @@ namespace Ordering.Api
             }).AddNewtonsoftJson();
 
             services.AddLocalization();
-
-            services.RegisterBaseLocalizationDependencies();
 
             services.RegisterApiAccountDependencies(this.Configuration);
 

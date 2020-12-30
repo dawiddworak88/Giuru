@@ -17,6 +17,7 @@ using Buyer.Web.Shared.Files.ComponentModels;
 using Buyer.Web.Shared.Files.ViewModels;
 using Buyer.Web.Shared.Files.ModelBuilders;
 using Buyer.Web.Shared.Breadcrumbs.ModelBuilders;
+using Foundation.Localization.Definitions;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -43,6 +44,7 @@ namespace Buyer.Web.Shared.DependencyInjection
         public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<AppSettings>(configuration);
+            services.Configure<LocalizationSettings>(configuration);
         }
     }
 }

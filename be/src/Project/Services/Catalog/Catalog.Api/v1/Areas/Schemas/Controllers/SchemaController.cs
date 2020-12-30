@@ -14,6 +14,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace Catalog.Api.v1.Areas.Schemas.Controllers
 {
@@ -52,7 +53,7 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
                 UiSchema = !string.IsNullOrWhiteSpace(schemaModel.UiSchema) ? JObject.Parse(schemaModel.UiSchema) : null,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Language = schemaModel.Language
+                Language = CultureInfo.CurrentCulture.Name
             };
 
             var createSchemaResult = await this.schemaService.CreateAsync(createSchemaModel);
@@ -70,14 +71,13 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
         /// <summary>
         /// Gets a schema by id.
         /// </summary>
-        /// <param name="language">The language.</param>
         /// <param name="id">The id.</param>
         /// <returns>The schema.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetById(string language, Guid? id)
+        public async Task<IActionResult> GetById(Guid? id)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
@@ -86,7 +86,7 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
                 Id = id,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Language = language
+                Language = CultureInfo.CurrentCulture.Name
             };
 
             var getSchemaResult = await this.schemaService.GetByIdAsync(getSchemaModel);
@@ -117,7 +117,7 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> GetByEntityTypeId(string language, Guid? id)
+        public async Task<IActionResult> GetByEntityTypeId(Guid? id)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
@@ -126,7 +126,7 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
                 EntityTypeId = id,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Language = language
+                Language = CultureInfo.CurrentCulture.Name
             };
 
             var getSchemaResult = await this.schemaService.GetByEntityTypeIdAsync(getSchemaModel);

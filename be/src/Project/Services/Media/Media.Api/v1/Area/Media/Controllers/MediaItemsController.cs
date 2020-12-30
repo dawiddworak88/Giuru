@@ -8,6 +8,7 @@ using Media.Api.v1.Area.Media.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -32,7 +33,6 @@ namespace Media.Api.v1.Area.Media.Controllers
         /// Gets media items by ids.
         /// </summary>
         /// <param name="ids">Ids of media items.</param>
-        /// <param name="language">The language.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The number of items per page.</param>
         /// <returns>Media items.</returns>
@@ -40,7 +40,7 @@ namespace Media.Api.v1.Area.Media.Controllers
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [AllowAnonymous]
-        public async Task<IActionResult> Get(string ids, string language, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(string ids, int pageIndex, int itemsPerPage)
         {
             var mediaItemsIds = ids.ToEnumerableGuidIds();
 
@@ -50,8 +50,7 @@ namespace Media.Api.v1.Area.Media.Controllers
                 {
                     Ids = mediaItemsIds,
                     PageIndex = pageIndex,
-                    ItemsPerPage = itemsPerPage,
-                    Language = language
+                    ItemsPerPage = itemsPerPage
                 };
 
                 var validator = new GetMediaItemsByIdsModelValidator();
@@ -75,19 +74,18 @@ namespace Media.Api.v1.Area.Media.Controllers
         /// Gets media item by id.
         /// </summary>
         /// <param name="id">The media item id.</param>
-        /// <param name="language">The language.</param>
         /// <returns>The media item.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [Route("{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> Get(Guid? id, string language)
+        public async Task<IActionResult> Get(Guid? id)
         {
             var serviceModel = new GetMediaItemsByIdModel
             {
                 Id = id,
-                Language = language
+                Language = CultureInfo.CurrentCulture.Name
             };
 
             var validator = new GetMediaItemsByIdModelValidator();

@@ -3,7 +3,6 @@ using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.Helpers;
-using Foundation.Localization.Services;
 using Identity.Api.v1.Areas.Clients.Models;
 using Identity.Api.v1.Areas.Clients.RequestModels;
 using Identity.Api.v1.Areas.Clients.Services;
@@ -11,6 +10,7 @@ using Identity.Api.v1.Areas.Clients.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
@@ -27,7 +27,7 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
     {
         private readonly IClientsService clientsService;
 
-        public ClientsController(IClientsService clientsService, ICultureService cultureService) : base(cultureService)
+        public ClientsController(IClientsService clientsService)
         {
             this.clientsService = clientsService;
         }
@@ -35,7 +35,6 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
         /// <summary>
         /// Gets list of clients.
         /// </summary>
-        /// <param name="language">The language.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
@@ -44,15 +43,13 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(422)]
-        public async Task<IActionResult> Get(string language, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage)
         {
-            this.cultureService.SetCulture(language);
-
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
             var serviceModel = new GetClientsModel
             {
-                Language = language,
+                Language = CultureInfo.CurrentCulture.Name,
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
@@ -77,7 +74,6 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
         /// <summary>
         /// Gets client by id.
         /// </summary>
-        /// <param name="language">The language.</param>
         /// <param name="id">The id.</param>
         /// <returns>The client.</returns>
         [HttpGet, MapToApiVersion("1.0")]
@@ -86,16 +82,14 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(409)]
         [ProducesResponseType(422)]
-        public async Task<IActionResult> Get(string language, Guid? id)
+        public async Task<IActionResult> Get(Guid? id)
         {
-            this.cultureService.SetCulture(language);
-
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
             var serviceModel = new GetClientModel
             {
                 Id = id,
-                Language = language,
+                Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -125,8 +119,6 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Save(ClientRequestModel request)
         {
-            this.cultureService.SetCulture(request.Language);
-
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
             if (request.Id.HasValue)
@@ -137,7 +129,7 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
                     Name = request.Name,
                     Email = request.Email,
                     CommunicationLanguage = request.CommunicationLanguage,
-                    Language = request.Language,
+                    Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
@@ -162,7 +154,7 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
                     Name = request.Name,
                     Email = request.Email,
                     CommunicationLanguage = request.CommunicationLanguage,
-                    Language = request.Language,
+                    Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
@@ -185,7 +177,6 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
         /// <summary>
         /// Delete client by id.
         /// </summary>
-        /// <param name="language">The language.</param>
         /// <param name="id">The id.</param>
         /// <returns>OK.</returns>
         [HttpDelete, MapToApiVersion("1.0")]
@@ -194,16 +185,14 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(409)]
         [ProducesResponseType(422)]
-        public async Task<IActionResult> Delete(string language, Guid? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
-            this.cultureService.SetCulture(language);
-
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
             var serviceModel = new DeleteClientModel
             {
                 Id = id,
-                Language = language,
+                Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 

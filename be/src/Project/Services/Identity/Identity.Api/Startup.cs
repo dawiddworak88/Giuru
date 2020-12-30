@@ -40,8 +40,6 @@ namespace Account
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddLocalizationConfiguration(this.Configuration);
-
             services.AddLocalization();
 
             services.AddCultureRouteConstraint();
@@ -80,7 +78,7 @@ namespace Account
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<LocalizationConfiguration> localizationOptions, IUserService userService)
+        public void Configure(IApplicationBuilder app, IOptionsMonitor<LocalizationSettings> localizationOptions, IUserService userService)
         {
             IdentityModelEventSource.ShowPII = true;
 
@@ -102,7 +100,7 @@ namespace Account
 
             app.UseAuthorization();
 
-            app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
+            app.UseCustomRequestLocalizationProvider(localizationOptions);
 
             app.UseSecurityHeaders(this.Configuration);
 
