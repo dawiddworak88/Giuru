@@ -3,6 +3,7 @@ using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.Helpers;
+using Foundation.Localization.Services;
 using Identity.Api.v1.Areas.Clients.Models;
 using Identity.Api.v1.Areas.Clients.RequestModels;
 using Identity.Api.v1.Areas.Clients.Services;
@@ -26,7 +27,7 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
     {
         private readonly IClientsService clientsService;
 
-        public ClientsController(IClientsService clientsService)
+        public ClientsController(IClientsService clientsService, ICultureService cultureService) : base(cultureService)
         {
             this.clientsService = clientsService;
         }
@@ -45,6 +46,8 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Get(string language, string searchTerm, int pageIndex, int itemsPerPage)
         {
+            this.cultureService.SetCulture(language);
+
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
             var serviceModel = new GetClientsModel
@@ -85,6 +88,8 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Get(string language, Guid? id)
         {
+            this.cultureService.SetCulture(language);
+
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
             var serviceModel = new GetClientModel
@@ -120,6 +125,8 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Save(ClientRequestModel request)
         {
+            this.cultureService.SetCulture(request.Language);
+
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
             if (request.Id.HasValue)
@@ -189,6 +196,8 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Delete(string language, Guid? id)
         {
+            this.cultureService.SetCulture(language);
+
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
             var serviceModel = new DeleteClientModel

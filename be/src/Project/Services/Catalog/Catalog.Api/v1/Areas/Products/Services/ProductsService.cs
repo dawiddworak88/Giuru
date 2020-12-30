@@ -15,7 +15,6 @@ using Foundation.Extensions.Exceptions;
 using System.Net;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
-using Foundation.Localization.Services;
 using System;
 using Foundation.GenericRepository.Extensions;
 
@@ -27,20 +26,17 @@ namespace Catalog.Api.v1.Areas.Products.Services
         private readonly IProductSearchRepository productSearchRepository;
         private readonly IProductIndexingRepository productIndexingRepository;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
-        private readonly ICultureService cultureService;
 
         public ProductsService(
             CatalogContext catalogContext,
             IProductSearchRepository productSearchRepository,
             IProductIndexingRepository productIndexingRepository,
-            IStringLocalizer<ProductResources> productLocalizer,
-            ICultureService cultureService)
+            IStringLocalizer<ProductResources> productLocalizer)
         {
             this.catalogContext = catalogContext;
             this.productSearchRepository = productSearchRepository;
             this.productIndexingRepository = productIndexingRepository;
             this.productLocalizer = productLocalizer;
-            this.cultureService = cultureService;
         }
 
         public async Task<ProductResultModel> CreateAsync(CreateUpdateProductModel model)
@@ -257,8 +253,6 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
         public async Task DeleteAsync(DeleteProductModel model)
         {
-            this.cultureService.SetCulture(model.Language);
-
             var product = await this.catalogContext.Products.FirstOrDefaultAsync(x => x.Id == model.Id && x.Brand.SellerId == model.OrganisationId && x.IsActive);
 
             if (product == null)

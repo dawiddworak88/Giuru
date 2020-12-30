@@ -7,6 +7,7 @@ using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.Helpers;
+using Foundation.Localization.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -26,7 +27,9 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
     {
         private readonly ICategoriesService categoryService;
 
-        public CategoriesController(ICategoriesService categoryService)
+        public CategoriesController(
+            ICategoriesService categoryService,
+            ICultureService cultureService) : base(cultureService)
         {
             this.categoryService = categoryService;
         }
@@ -48,6 +51,8 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Get(string language, string searchTerm, int? level, bool? leafOnly, int pageIndex, int itemsPerPage)
         {
+            this.cultureService.SetCulture(language);
+
             var serviceModel = new GetCategoriesModel
             {
                 Level = level,
@@ -87,6 +92,8 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Get(string language, Guid? id)
         {
+            this.cultureService.SetCulture(language);
+
             var serviceModel = new GetCategoryModel
             {
                 Id = id,
@@ -119,6 +126,8 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Save(CategoryRequestModel request)
         {
+            this.cultureService.SetCulture(request.Language);
+
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
             if (request.Id.HasValue)
@@ -188,6 +197,8 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Delete(string language, Guid? id)
         {
+            this.cultureService.SetCulture(language);
+
             var serviceModel = new DeleteCategoryModel
             {
                 Id = id,

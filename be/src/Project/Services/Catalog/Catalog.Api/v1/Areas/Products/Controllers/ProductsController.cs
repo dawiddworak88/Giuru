@@ -15,6 +15,7 @@ using Foundation.Extensions.Helpers;
 using Catalog.Api.v1.Areas.Products.RequestModels;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.Definitions;
+using Foundation.Localization.Services;
 
 namespace Catalog.Api.v1.Areas.Products.Controllers
 {
@@ -27,7 +28,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
     {
         private readonly IProductsService productService;
 
-        public ProductsController(IProductsService productService)
+        public ProductsController(IProductsService productService, ICultureService cultureService) : base(cultureService)
         {
             this.productService = productService;
         }
@@ -50,6 +51,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Get(string ids, string language, Guid? categoryId, Guid? sellerId, bool includeProductVariants, string searchTerm, int pageIndex, int itemsPerPage)
         {
+            this.cultureService.SetCulture(language);
+
             var productIds = ids.ToEnumerableGuidIds();
 
             if (productIds != null)
@@ -115,6 +118,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Save([FromBody] ProductRequestModel request)
         {
+            this.cultureService.SetCulture(request.Language);
+
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
             var serviceModel = new CreateUpdateProductModel
@@ -182,6 +187,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetById(string language, Guid? id)
         {
+            this.cultureService.SetCulture(language);
+
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
             var serviceModel = new GetProductModel
@@ -220,6 +227,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [ProducesResponseType(422)]
         public async Task<IActionResult> Delete(string language, Guid? id)
         {
+            this.cultureService.SetCulture(language);
+
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
             var serviceModel = new DeleteProductModel

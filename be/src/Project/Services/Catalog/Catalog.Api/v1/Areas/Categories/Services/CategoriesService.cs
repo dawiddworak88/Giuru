@@ -22,7 +22,6 @@ namespace Catalog.Api.v1.Areas.Categories.Services
     public class CategoriesService : ICategoriesService
     {
         private readonly CatalogContext context;
-        private readonly ICultureService cultureService;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
 
         public CategoriesService(
@@ -31,7 +30,6 @@ namespace Catalog.Api.v1.Areas.Categories.Services
             IStringLocalizer<ProductResources> productLocalizer)
         {
             this.context = context;
-            this.cultureService = cultureService;
             this.productLocalizer = productLocalizer;
         }
 
@@ -105,8 +103,6 @@ namespace Catalog.Api.v1.Areas.Categories.Services
 
         public async Task DeleteAsync(DeleteCategoryModel model)
         {
-            this.cultureService.SetCulture(model.Language);
-
             var category = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (category == null)
@@ -131,8 +127,6 @@ namespace Catalog.Api.v1.Areas.Categories.Services
 
         public async Task<CategoryResultModel> UpdateAsync(UpdateCategoryModel serviceModel)
         {
-            this.cultureService.SetCulture(serviceModel.Language);
-
             var category = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.IsActive);
 
             if (category == null)
@@ -199,8 +193,6 @@ namespace Catalog.Api.v1.Areas.Categories.Services
 
         public async Task<CategoryResultModel> CreateAsync(CreateCategoryModel serviceModel)
         {
-            this.cultureService.SetCulture(serviceModel.Language);
-
             var category = new Category
             {
                 Parentid = serviceModel.ParentId,
