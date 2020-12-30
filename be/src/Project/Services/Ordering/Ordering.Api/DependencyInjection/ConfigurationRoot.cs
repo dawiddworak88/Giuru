@@ -1,9 +1,9 @@
 ﻿using Foundation.Localization.Definitions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Seller.Web.Shared.Configurations;
+using Ordering.Api.Configurations;
 
-namespace Seller.Web.Shared.DependencyInjection
+namespace Ordering.Api.DependencyInjection
 {
     public static class ConfigurationRoot
     {

@@ -73,7 +73,7 @@ namespace Identity.Api.Shared.DependencyInjection
             services.AddScoped<IAppSecretRepository, AppSecretRepository>();
         }
 
-        public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<AppSettings>(configuration);
             services.Configure<LocalizationSettings>(configuration);

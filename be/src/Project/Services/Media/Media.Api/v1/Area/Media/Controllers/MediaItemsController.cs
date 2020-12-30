@@ -48,6 +48,7 @@ namespace Media.Api.v1.Area.Media.Controllers
             {
                 var serviceModel = new GetMediaItemsByIdsModel
                 {
+                    Language = CultureInfo.CurrentCulture.Name,
                     Ids = mediaItemsIds,
                     PageIndex = pageIndex,
                     ItemsPerPage = itemsPerPage

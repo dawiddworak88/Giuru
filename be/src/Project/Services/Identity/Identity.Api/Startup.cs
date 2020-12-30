@@ -64,7 +64,7 @@ namespace Account
             
             services.RegisterClientsApiDependencies();
 
-            services.ConfigureOptions(this.Configuration);
+            services.ConfigureSettings(this.Configuration);
 
             services.AddApiVersioning();
 

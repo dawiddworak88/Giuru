@@ -48,7 +48,7 @@ namespace AspNetCore
 
             services.RegisterApiExtensionsDependencies();
 
-            services.ConfigureOptions(this.Configuration);
+            services.ConfigureSettings(this.Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IOptionsMonitor<LocalizationSettings> localizationSettings)
