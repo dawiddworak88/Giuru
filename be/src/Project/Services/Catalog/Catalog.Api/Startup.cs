@@ -1,6 +1,5 @@
 using Catalog.Api.v1.Areas.Schemas.DependencyInjection;
 using Catalog.Api.v1.Areas.Products.DependencyInjection;
-using Foundation.GenericRepository.DependencyInjection;
 using Foundation.Localization.DependencyInjection;
 using Foundation.Mailing.DependencyInjection;
 using Catalog.Api.v1.Areas.Taxonomies.DependencyInjection;
@@ -52,8 +51,6 @@ namespace Catalog.Api
             services.RegisterProductDependencies();
 
             services.RegisterMailingDependencies(this.Configuration);
-
-            services.ConfigureGenericRepositoryOptions(this.Configuration);
 
             services.AddApiVersioning();
 

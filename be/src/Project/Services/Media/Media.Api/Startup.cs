@@ -3,7 +3,6 @@ using System.IO;
 using System.Reflection;
 using Foundation.Account.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
-using Foundation.GenericRepository.DependencyInjection;
 using Foundation.Localization.DependencyInjection;
 using Media.Api.DependencyInjection;
 using Media.Api.Shared.Checksums;
@@ -39,8 +38,6 @@ namespace Media.Api
             services.RegisterDatabaseDependencies(this.Configuration);
 
             services.RegisterMediaDependencies(this.Configuration);
-
-            services.ConfigureGenericRepositoryOptions(this.Configuration);
 
             services.ConfigureOptions(this.Configuration);
 

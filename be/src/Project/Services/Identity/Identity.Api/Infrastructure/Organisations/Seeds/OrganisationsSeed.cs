@@ -1,4 +1,4 @@
-﻿using Foundation.GenericRepository.Helpers;
+﻿using Foundation.GenericRepository.Extensions;
 using Identity.Api.Infrastructure.Organisations.Definitions;
 using Identity.Api.Infrastructure.Organisations.Entities;
 using Microsoft.Extensions.Configuration;
@@ -33,7 +33,7 @@ namespace Identity.Api.Infrastructure.Organisations.Seeds
                             ContactEmail = organisationConfiguration[OrganisationsSeedConstants.ContactEmailIndex]
                         };
 
-                        context.Organisations.Add(EntityHelper.SeedEntity(organisationEntity));
+                        context.Organisations.Add(organisationEntity.FillCommonProperties());
 
                         var plOrganisationTranslationEntity = new OrganisationTranslation
                         {
@@ -56,9 +56,9 @@ namespace Identity.Api.Infrastructure.Organisations.Seeds
                             Description = HttpUtility.UrlDecode(organisationConfiguration[OrganisationsSeedConstants.DeDescriptionIndex])
                         };
 
-                        context.OrganisationTranslations.Add(EntityHelper.SeedEntity(plOrganisationTranslationEntity));
-                        context.OrganisationTranslations.Add(EntityHelper.SeedEntity(enOrganisationTranslationEntity));
-                        context.OrganisationTranslations.Add(EntityHelper.SeedEntity(deOrganisationTranslationEntity));
+                        context.OrganisationTranslations.Add(plOrganisationTranslationEntity.FillCommonProperties());
+                        context.OrganisationTranslations.Add(enOrganisationTranslationEntity.FillCommonProperties());
+                        context.OrganisationTranslations.Add(deOrganisationTranslationEntity.FillCommonProperties());
 
                         var appSecretOrganisation = new OrganisationAppSecret
                         { 
@@ -67,7 +67,7 @@ namespace Identity.Api.Infrastructure.Organisations.Seeds
                             CreatedBy = "admin"
                         };
 
-                        context.OrganisationAppSecrets.Add(EntityHelper.SeedEntity(appSecretOrganisation));
+                        context.OrganisationAppSecrets.Add(appSecretOrganisation.FillCommonProperties());
                     }
 
                     context.SaveChanges();

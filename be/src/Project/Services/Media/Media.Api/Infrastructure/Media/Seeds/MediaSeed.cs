@@ -1,5 +1,5 @@
 ﻿using Azure.Storage.Blobs;
-using Foundation.GenericRepository.Helpers;
+using Foundation.GenericRepository.Extensions;
 using Media.Api.Definitions;
 using Media.Api.Infrastructure.Media.Entities;
 using Media.Api.Shared.Checksums;
@@ -75,7 +75,7 @@ namespace Media.Api.Infrastructure.Media.Seeds
                         IsProtected = false
                     };
 
-                    context.MediaItems.Add(EntityHelper.SeedEntity(mediaItem));
+                    context.MediaItems.Add(mediaItem.FillCommonProperties());
 
                     var mediaItemVersion = new MediaItemVersion
                     {
@@ -91,7 +91,7 @@ namespace Media.Api.Infrastructure.Media.Seeds
                         Version = 1
                     };
 
-                    context.MediaItemVersions.Add(EntityHelper.SeedEntity(mediaItemVersion));
+                    context.MediaItemVersions.Add(mediaItemVersion.FillCommonProperties());
 
                     context.SaveChanges();
                 }

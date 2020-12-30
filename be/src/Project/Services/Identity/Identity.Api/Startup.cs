@@ -10,7 +10,6 @@ using Foundation.Extensions.DependencyInjection;
 using Foundation.PageContent.DependencyInjection;
 using Foundation.Security.DependencyInjection;
 using Foundation.Account.DependencyInjection;
-using Foundation.GenericRepository.DependencyInjection;
 using Foundation.Extensions.Definitions;
 using Identity.Api.Infrastructure.DependencyInjection;
 using Identity.Api.Areas.Accounts.Services.UserServices;
@@ -66,8 +65,6 @@ namespace Account
             services.RegisterHomeViewsDependencies();
             
             services.RegisterClientsApiDependencies();
-
-            services.ConfigureGenericRepositoryOptions(this.Configuration);
 
             services.ConfigureOptions(this.Configuration);
 

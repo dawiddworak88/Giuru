@@ -8,7 +8,6 @@ using Catalog.Api.v1.Areas.Products.ResultModels;
 using Catalog.Api.Infrastructure.Products.Entities;
 using Catalog.Api.Infrastructure;
 using Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories;
-using Foundation.GenericRepository.Services;
 using Catalog.Api.v1.Areas.Products.SearchModels;
 using Foundation.Extensions.ExtensionMethods;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +17,13 @@ using Microsoft.Extensions.Localization;
 using Foundation.Localization;
 using Foundation.Localization.Services;
 using System;
+using Foundation.GenericRepository.Extensions;
 
 namespace Catalog.Api.v1.Areas.Products.Services
 {
     public class ProductsService : IProductsService
     {
         private readonly CatalogContext catalogContext;
-        private readonly IEntityService entityService;
         private readonly IProductSearchRepository productSearchRepository;
         private readonly IProductIndexingRepository productIndexingRepository;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
@@ -32,14 +31,12 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
         public ProductsService(
             CatalogContext catalogContext,
-            IEntityService entityService,
             IProductSearchRepository productSearchRepository,
             IProductIndexingRepository productIndexingRepository,
             IStringLocalizer<ProductResources> productLocalizer,
             ICultureService cultureService)
         {
             this.catalogContext = catalogContext;
-            this.entityService = entityService;
             this.productSearchRepository = productSearchRepository;
             this.productIndexingRepository = productIndexingRepository;
             this.productLocalizer = productLocalizer;
@@ -72,7 +69,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
                 PrimaryProductId = model.PrimaryProductId
             };
 
-            await this.catalogContext.Products.AddAsync(this.entityService.EnrichEntity(product));
+            await this.catalogContext.Products.AddAsync(product.FillCommonProperties());
 
             var productTranslation = new ProductTranslation
             {
@@ -83,7 +80,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
                 ProductId = product.Id
             };
 
-            await this.catalogContext.ProductTranslations.AddAsync(this.entityService.EnrichEntity(productTranslation));
+            await this.catalogContext.ProductTranslations.AddAsync(productTranslation.FillCommonProperties());
 
             foreach (var imageId in model.Images.OrEmptyIfNull())
             {
@@ -93,7 +90,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
                     ProductId = product.Id
                 };
 
-                await this.catalogContext.ProductImages.AddAsync(this.entityService.EnrichEntity(productImage));
+                await this.catalogContext.ProductImages.AddAsync(productImage.FillCommonProperties());
             }
 
             foreach (var videoId in model.Videos.OrEmptyIfNull())
@@ -104,7 +101,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
                     ProductId = product.Id
                 };
 
-                await this.catalogContext.ProductVideos.AddAsync(this.entityService.EnrichEntity(productVideo));
+                await this.catalogContext.ProductVideos.AddAsync(productVideo.FillCommonProperties());
             }
 
             foreach (var fileId in model.Files.OrEmptyIfNull())
@@ -115,7 +112,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
                     ProductId = product.Id
                 };
 
-                await this.catalogContext.ProductFiles.AddAsync(this.entityService.EnrichEntity(productFile));
+                await this.catalogContext.ProductFiles.AddAsync(productFile.FillCommonProperties());
             }
 
             await this.catalogContext.SaveChangesAsync();
@@ -194,7 +191,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
                     FormData = model.FormData
                 };
 
-                this.catalogContext.ProductTranslations.Add(this.entityService.EnrichEntity(newProductTranslation));
+                this.catalogContext.ProductTranslations.Add(newProductTranslation.FillCommonProperties());
             }
 
             var productImages = this.catalogContext.ProductImages.Where(x => x.ProductId == model.Id && x.IsActive);
@@ -212,7 +209,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
                     ProductId = product.Id
                 };
 
-                await this.catalogContext.ProductImages.AddAsync(this.entityService.EnrichEntity(productImage));
+                await this.catalogContext.ProductImages.AddAsync(productImage.FillCommonProperties());
             }
 
             var productVideos = this.catalogContext.ProductVideos.Where(x => x.ProductId == model.Id && x.IsActive);
@@ -230,7 +227,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
                     ProductId = product.Id
                 };
 
-                await this.catalogContext.ProductVideos.AddAsync(this.entityService.EnrichEntity(productVideo));
+                await this.catalogContext.ProductVideos.AddAsync(productVideo.FillCommonProperties());
             }
 
             var productFiles = this.catalogContext.ProductFiles.Where(x => x.ProductId == model.Id && x.IsActive);
@@ -248,7 +245,7 @@ namespace Catalog.Api.v1.Areas.Products.Services
                     ProductId = product.Id
                 };
 
-                await this.catalogContext.ProductFiles.AddAsync(this.entityService.EnrichEntity(productFile));
+                await this.catalogContext.ProductFiles.AddAsync(productFile.FillCommonProperties());
             }
 
             await this.catalogContext.SaveChangesAsync();

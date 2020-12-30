@@ -1,11 +1,11 @@
 ﻿using Foundation.GenericRepository.Entities;
 using System;
 
-namespace Foundation.GenericRepository.Helpers
+namespace Foundation.GenericRepository.Extensions
 {
-    public static class EntityHelper
+    public static class EntityExtensions
     {
-        public static T SeedEntity<T>(T entity) where T: Entity
+        public static T FillCommonProperties<T>(this T entity) where T : Entity
         {
             entity.IsActive = true;
             entity.LastModifiedDate = DateTime.UtcNow;

@@ -8,12 +8,12 @@ using System.Net;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
 using Foundation.Localization.Services;
-using Foundation.GenericRepository.Helpers;
 using Identity.Api.Infrastructure;
 using Identity.Api.v1.Areas.Clients.Services;
 using Identity.Api.v1.Areas.Clients.ResultModels;
 using Identity.Api.v1.Areas.Clients.Models;
 using Identity.Api.Infrastructure.Clients.Entities;
+using Foundation.GenericRepository.Extensions;
 
 namespace Identity.Api.v1.Areas.Clients.Services
 {
@@ -120,7 +120,7 @@ namespace Identity.Api.v1.Areas.Clients.Services
                 SellerId = serviceModel.OrganisationId.Value
             };
 
-            this.context.Clients.Add(EntityHelper.SeedEntity(client));
+            this.context.Clients.Add(client.FillCommonProperties());
 
             await this.context.SaveChangesAsync();
 
