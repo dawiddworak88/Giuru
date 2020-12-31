@@ -6,17 +6,43 @@ using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 
 namespace Foundation.Localization.Extensions
 {
     public static class LocalizationApplicationBuilderExtensions
     {
-        public static void UseCustomRequestLocalizationProvider(
+        public static void UseCustomHeaderRequestLocalizationProvider(
+            this IApplicationBuilder app,
+            IOptionsMonitor<LocalizationSettings> localizationConfiguration)
+        {
+            app.Use((context, next) =>
+            {
+                var acceptLanguages = context.Request.Headers["Accept-Language"].ToString();
+
+                if (!string.IsNullOrWhiteSpace(acceptLanguages))
+                {
+                    var lang = acceptLanguages.Split(',').FirstOrDefault();
+
+                    if (lang != null)
+                    {
+                        if (localizationConfiguration.CurrentValue.SupportedCultures.Split(',').Contains(lang))
+                        {
+                            Thread.CurrentThread.CurrentCulture = new CultureInfo(lang);
+                            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
+                        }
+                    }
+                }                
+
+                return next();
+            });
+        }
+
+        public static void UseCustomRouteRequestLocalizationProvider(
             this IApplicationBuilder applicationBuilder,
             IOptionsMonitor<LocalizationSettings> localizationConfiguration)
         {
             const int First = 0;
-            const int Second = 1;
 
             var localizationOptions = new RequestLocalizationOptions
             {
@@ -27,9 +53,6 @@ namespace Foundation.Localization.Extensions
 
             var routeRequestProvider = new RouteDataRequestCultureProvider();
             localizationOptions.RequestCultureProviders.Insert(First, routeRequestProvider);
-
-            var acceptLanguageRequestProvider = new AcceptLanguageHeaderRequestCultureProvider();
-            localizationOptions.RequestCultureProviders.Insert(Second, acceptLanguageRequestProvider);
 
             applicationBuilder.UseRequestLocalization(localizationOptions);
         }

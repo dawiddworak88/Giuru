@@ -78,7 +78,7 @@ namespace Media.Api
 
             app.UseAuthorization();
 
-            app.UseCustomRequestLocalizationProvider(localizationSettings);
+            app.UseCustomHeaderRequestLocalizationProvider(localizationSettings);
 
             app.UseEndpoints(endpoints =>
             {

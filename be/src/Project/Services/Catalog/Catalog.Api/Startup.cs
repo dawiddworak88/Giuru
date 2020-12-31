@@ -56,7 +56,7 @@ namespace Catalog.Api
 
             services.RegisterSearchDependencies(this.Configuration);
 
-            services.ConfigureOptions(this.Configuration);
+            services.ConfigureSettings(this.Configuration);
 
             services.AddSwaggerGen(c =>
             {
@@ -90,7 +90,7 @@ namespace Catalog.Api
 
             app.UseAuthorization();
 
-            app.UseCustomRequestLocalizationProvider(localizationSettings);
+            app.UseCustomHeaderRequestLocalizationProvider(localizationSettings);
 
             app.UseEndpoints(endpoints =>
             {

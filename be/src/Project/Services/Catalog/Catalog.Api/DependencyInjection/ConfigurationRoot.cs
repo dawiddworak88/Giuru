@@ -44,7 +44,7 @@ namespace Catalog.Api.DependencyInjection
             }
         }
 
-        public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<AppSettings>(configuration);
             services.Configure<LocalizationSettings>(configuration);

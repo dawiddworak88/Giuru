@@ -30,6 +30,10 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
                 if (!string.IsNullOrWhiteSpace(request.AccessToken))
                 {
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AccessToken);
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.Language))
+                {
                     client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue(request.Language));
                 }
 
@@ -75,6 +79,10 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
                 if (!string.IsNullOrWhiteSpace(request.AccessToken))
                 {
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AccessToken);
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.Language))
+                {
                     client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue(request.Language));
                 }
 
@@ -113,6 +121,10 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
                 if (!string.IsNullOrWhiteSpace(request.AccessToken))
                 {
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AccessToken);
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.Language))
+                {
                     client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue(request.Language));
                 }
 
@@ -153,6 +165,10 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
                 if (!string.IsNullOrWhiteSpace(request.AccessToken))
                 {
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AccessToken);
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.Language))
+                {
                     client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue(request.Language));
                 }
 

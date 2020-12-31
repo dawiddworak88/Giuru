@@ -71,7 +71,7 @@ namespace AspNetCore
 
             app.UseAuthorization();
 
-            app.UseCustomRequestLocalizationProvider(localizationSettings);
+            app.UseCustomRouteRequestLocalizationProvider(localizationSettings);
 
             app.UseSecurityHeaders(this.Configuration);
 
