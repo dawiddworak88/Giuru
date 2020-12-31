@@ -11,6 +11,7 @@ mediaUrl: "#{MediaUrl}#"
 catalogUrl: "#{CatalogUrl}#"
 elasticsearchUrl: "#{ElasticsearchUrl}#"
 seqUrl: "#{SeqUrl}"
+defaultCulture: "en"
 supportedCultures: "en,de,pl"
 mediaApi:
   connectionString: "#{MediaApi--ConnectionString}#"
