@@ -11,13 +11,13 @@ namespace Foundation.PageContent.Components.LanguageSwitchers.ModelBuilders
 {
     public class LanguageSwitcherModelBuilder : IModelBuilder<LanguageSwitcherViewModel>
     {
-        private readonly IOptionsMonitor<LocalizationConfiguration> localizationOptions;
+        private readonly IOptionsMonitor<LocalizationSettings> localizationOptions;
 
         private readonly IHttpContextAccessor httpContextAccessor;
 
         private readonly LinkGenerator linkGenerator;
 
-        public LanguageSwitcherModelBuilder(IOptionsMonitor<LocalizationConfiguration> localizationOptions, IHttpContextAccessor httpContextAccessor, LinkGenerator linkGenerator)
+        public LanguageSwitcherModelBuilder(IOptionsMonitor<LocalizationSettings> localizationOptions, IHttpContextAccessor httpContextAccessor, LinkGenerator linkGenerator)
         {
             this.localizationOptions = localizationOptions;
             this.httpContextAccessor = httpContextAccessor;
@@ -30,7 +30,7 @@ namespace Foundation.PageContent.Components.LanguageSwitchers.ModelBuilders
 
             var selectedLanguageUrl = string.Empty;
 
-            foreach (var language in this.localizationOptions.CurrentValue.SupportedCultures)
+            foreach (var language in this.localizationOptions.CurrentValue.SupportedCultures.Split(','))
             {
                 var url = this.linkGenerator.GetPathByAction(this.httpContextAccessor.HttpContext.GetRouteValue("action").ToString(), this.httpContextAccessor.HttpContext.GetRouteValue("controller").ToString(), new { area = this.httpContextAccessor.HttpContext.GetRouteValue("area").ToString(), culture = language, id = this.httpContextAccessor.HttpContext.GetRouteValue("id")?.ToString() });
 

@@ -10,7 +10,6 @@ using Foundation.Extensions.DependencyInjection;
 using Foundation.PageContent.DependencyInjection;
 using Foundation.Security.DependencyInjection;
 using Foundation.Account.DependencyInjection;
-using Foundation.GenericRepository.DependencyInjection;
 using Foundation.Extensions.Definitions;
 using Identity.Api.Infrastructure.DependencyInjection;
 using Identity.Api.Areas.Accounts.Services.UserServices;
@@ -41,8 +40,6 @@ namespace Account
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddLocalizationConfiguration(this.Configuration);
-
             services.AddLocalization();
 
             services.AddCultureRouteConstraint();
@@ -67,9 +64,7 @@ namespace Account
             
             services.RegisterClientsApiDependencies();
 
-            services.ConfigureGenericRepositoryOptions(this.Configuration);
-
-            services.ConfigureOptions(this.Configuration);
+            services.ConfigureSettings(this.Configuration);
 
             services.AddApiVersioning();
 
@@ -83,7 +78,7 @@ namespace Account
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IOptionsMonitor<LocalizationConfiguration> localizationOptions, IUserService userService)
+        public void Configure(IApplicationBuilder app, IOptionsMonitor<LocalizationSettings> localizationOptions, IUserService userService)
         {
             IdentityModelEventSource.ShowPII = true;
 
@@ -105,7 +100,9 @@ namespace Account
 
             app.UseAuthorization();
 
-            app.UseRequestLocalizationWithRouteCultureProvider(localizationOptions.CurrentValue);
+            app.UseCustomHeaderRequestLocalizationProvider(localizationOptions);
+
+            app.UseCustomRouteRequestLocalizationProvider(localizationOptions);
 
             app.UseSecurityHeaders(this.Configuration);
 

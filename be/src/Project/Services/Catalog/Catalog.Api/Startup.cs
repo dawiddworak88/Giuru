@@ -1,7 +1,5 @@
 using Catalog.Api.v1.Areas.Schemas.DependencyInjection;
 using Catalog.Api.v1.Areas.Products.DependencyInjection;
-using Foundation.GenericRepository.DependencyInjection;
-using Foundation.Localization.DependencyInjection;
 using Foundation.Mailing.DependencyInjection;
 using Catalog.Api.v1.Areas.Taxonomies.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
@@ -16,6 +14,9 @@ using Foundation.Account.DependencyInjection;
 using Catalog.Api.DependencyInjection;
 using Catalog.Api.v1.Areas.Categories.DependencyInjection;
 using Foundation.Extensions.Filters;
+using Microsoft.Extensions.Options;
+using Foundation.Localization.Definitions;
+using Foundation.Localization.Extensions;
 
 namespace Catalog.Api
 {
@@ -37,8 +38,6 @@ namespace Catalog.Api
 
             services.AddLocalization();
 
-            services.RegisterBaseLocalizationDependencies();
-
             services.RegisterApiAccountDependencies(this.Configuration);
 
             services.RegisterDatabaseDependencies(this.Configuration);
@@ -53,13 +52,11 @@ namespace Catalog.Api
 
             services.RegisterMailingDependencies(this.Configuration);
 
-            services.ConfigureGenericRepositoryOptions(this.Configuration);
-
             services.AddApiVersioning();
 
             services.RegisterSearchDependencies(this.Configuration);
 
-            services.ConfigureOptions(this.Configuration);
+            services.ConfigureSettings(this.Configuration);
 
             services.AddSwaggerGen(c =>
             {
@@ -71,7 +68,7 @@ namespace Catalog.Api
             });
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IOptionsMonitor<LocalizationSettings> localizationSettings)
         {
             IdentityModelEventSource.ShowPII = true;
 
@@ -92,6 +89,8 @@ namespace Catalog.Api
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseCustomHeaderRequestLocalizationProvider(localizationSettings);
 
             app.UseEndpoints(endpoints =>
             {

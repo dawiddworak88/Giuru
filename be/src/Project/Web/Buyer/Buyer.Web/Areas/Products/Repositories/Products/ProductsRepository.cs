@@ -29,14 +29,10 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
 
         public async Task<Product> GetProductAsync(Guid? productId, string language, string token)
         {
-            var productRequestModel = new RequestModelBase
-            {
-                Language = language
-            };
-
             var apiRequest = new ApiRequest<RequestModelBase>
             {
-                Data = productRequestModel,
+                Language = language,
+                Data = new RequestModelBase(),
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}/{productId}"
             };
@@ -58,7 +54,6 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 Ids = ids.ToEndpointParameterString(),
                 CategoryId = categoryId,
                 SellerId = sellerId,
-                Language = language,
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage
@@ -66,6 +61,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
 
             var apiRequest = new ApiRequest<ProductsRequestModel>
             {
+                Language = language,
                 Data = productsRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
@@ -98,12 +94,12 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             var productRequestModel = new ProductSuggestionsRequestModel
             {
                 SearchTerm = searchTerm,
-                Size = size,
-                Language = language
+                Size = size
             };
 
             var apiRequest = new ApiRequest<ProductSuggestionsRequestModel>
             {
+                Language = language,
                 Data = productRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductSuggestionsApiEndpoint}"

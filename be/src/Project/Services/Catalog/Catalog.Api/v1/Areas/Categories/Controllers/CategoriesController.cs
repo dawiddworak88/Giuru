@@ -10,6 +10,7 @@ using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
@@ -34,7 +35,6 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         /// <summary>
         /// Gets list of categories.
         /// </summary>
-        /// <param name="language">The language.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="level">The level.</param>
         /// <param name="leafOnly">Only categories with no subcategories.</param>
@@ -46,12 +46,12 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(422)]
-        public async Task<IActionResult> Get(string language, string searchTerm, int? level, bool? leafOnly, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(string searchTerm, int? level, bool? leafOnly, int pageIndex, int itemsPerPage)
         {
             var serviceModel = new GetCategoriesModel
             {
                 Level = level,
-                Language = language,
+                Language = CultureInfo.CurrentCulture.Name,
                 SearchTerm = searchTerm,
                 LeafOnly = leafOnly,
                 PageIndex = pageIndex,
@@ -75,7 +75,6 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         /// <summary>
         /// Gets category by id.
         /// </summary>
-        /// <param name="language">The language.</param>
         /// <param name="id">The id.</param>
         /// <returns>The category.</returns>
         [HttpGet, MapToApiVersion("1.0")]
@@ -85,12 +84,12 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(409)]
         [ProducesResponseType(422)]
-        public async Task<IActionResult> Get(string language, Guid? id)
+        public async Task<IActionResult> Get(Guid? id)
         {
             var serviceModel = new GetCategoryModel
             {
                 Id = id,
-                Language = language
+                Language = CultureInfo.CurrentCulture.Name
             };
 
             var validator = new GetCategoryModelValidator();
@@ -129,7 +128,7 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
                     Files = request.Files,
                     Name = request.Name,
                     ParentId = request.ParentCategoryId,
-                    Language = request.Language,
+                    Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
@@ -154,7 +153,7 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
                     Name = request.Name,
                     ParentId = request.ParentCategoryId,
                     Files = request.Files,
-                    Language = request.Language,
+                    Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
@@ -177,7 +176,6 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         /// <summary>
         /// Delete category by id.
         /// </summary>
-        /// <param name="language">The language.</param>
         /// <param name="id">The id.</param>
         /// <returns>OK.</returns>
         [HttpDelete, MapToApiVersion("1.0")]
@@ -186,12 +184,12 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(409)]
         [ProducesResponseType(422)]
-        public async Task<IActionResult> Delete(string language, Guid? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             var serviceModel = new DeleteCategoryModel
             {
                 Id = id,
-                Language = language
+                Language = CultureInfo.CurrentCulture.Name
             };
 
             var validator = new DeleteCategoryModelValidator();

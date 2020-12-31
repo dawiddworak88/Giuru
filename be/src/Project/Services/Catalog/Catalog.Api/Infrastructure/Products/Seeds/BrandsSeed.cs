@@ -1,6 +1,6 @@
 ﻿using Catalog.Api.Infrastructure.Products.Definitions;
 using Catalog.Api.Infrastructure.Products.Entities;
-using Foundation.GenericRepository.Helpers;
+using Foundation.GenericRepository.Extensions;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
@@ -35,7 +35,7 @@ namespace Catalog.Api.Infrastructure.Products.Seeds
                     SellerId = sellerId
                 };
 
-                context.Brands.Add(EntityHelper.SeedEntity(brand));
+                context.Brands.Add(brand.FillCommonProperties());
 
                 context.SaveChanges();
             }

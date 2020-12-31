@@ -32,7 +32,6 @@ namespace Seller.Web.Areas.Products.Repositories
         {
             var productsRequestModel = new PagedProductsRequestModel
             {
-                Language = language,
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
@@ -42,6 +41,7 @@ namespace Seller.Web.Areas.Products.Repositories
 
             var apiRequest = new ApiRequest<PagedProductsRequestModel>
             {
+                Language = language,
                 Data = productsRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
@@ -69,7 +69,6 @@ namespace Seller.Web.Areas.Products.Repositories
         {
             var productsRequestModel = new PagedProductsRequestModel
             {
-                Language = language,
                 PageIndex = PaginationConstants.DefaultPageIndex,
                 ItemsPerPage = PaginationConstants.DefaultPageSize,
                 SellerId = sellerId,
@@ -78,6 +77,7 @@ namespace Seller.Web.Areas.Products.Repositories
 
             var apiRequest = new ApiRequest<PagedProductsRequestModel>
             {
+                Language = language,
                 Data = productsRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
@@ -123,14 +123,10 @@ namespace Seller.Web.Areas.Products.Repositories
 
         public async Task DeleteAsync(string token, string language, Guid? id)
         {
-            var deleteRequestModel = new RequestModelBase
-            {
-                Language = language
-            };
-
             var apiRequest = new ApiRequest<RequestModelBase>
             {
-                Data = deleteRequestModel,
+                Language = language,
+                Data = new RequestModelBase(),
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}/{id}"
             };
@@ -145,14 +141,10 @@ namespace Seller.Web.Areas.Products.Repositories
 
         public async Task<Product> GetProductAsync(string token, string language, Guid? id)
         {
-            var request = new RequestModelBase
-            {
-                Language = language
-            };
-
             var apiRequest = new ApiRequest<RequestModelBase>
             {
-                Data = request,
+                Language = language,
+                Data = new RequestModelBase(),
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}/{id}"
             };
@@ -177,7 +169,6 @@ namespace Seller.Web.Areas.Products.Repositories
             var requestModel = new SaveProductApiRequestModel
             {
                 Id = id,
-                Language = language,
                 Name = name,
                 Sku = sku,
                 Description = description,
@@ -190,6 +181,7 @@ namespace Seller.Web.Areas.Products.Repositories
 
             var apiRequest = new ApiRequest<SaveProductApiRequestModel>
             {
+                Language = language,
                 Data = requestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"

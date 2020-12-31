@@ -14,7 +14,7 @@ function ResponsiveImage(props) {
                 </picture>
             }
 
-            {(!props.sources || props.sources.length == 0) &&
+            {(!props.sources || props.sources.length === 0) &&
                 <img src={props.imageSrc} alt={props.imageAlt} title={props.imageTitle} srcset={props.imageSrcset} />
             }
         </Fragment>       

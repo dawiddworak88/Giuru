@@ -34,7 +34,7 @@ namespace Seller.Web.Shared.DrawerMenu.ModelBuilders
                         {
                             Icon = IconsConstants.ShoppingCart,
                             Title = this.globalLocalizer.GetString("Orders"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                            Url = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                         }
                     }
                 },

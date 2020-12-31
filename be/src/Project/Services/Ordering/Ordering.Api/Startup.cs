@@ -1,11 +1,14 @@
 using Foundation.Account.DependencyInjection;
 using Foundation.Extensions.Filters;
-using Foundation.Localization.DependencyInjection;
+using Foundation.Localization.Definitions;
+using Foundation.Localization.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
+using Ordering.Api.DependencyInjection;
 using System;
 using System.IO;
 using System.Reflection;
@@ -30,11 +33,11 @@ namespace Ordering.Api
 
             services.AddLocalization();
 
-            services.RegisterBaseLocalizationDependencies();
-
             services.RegisterApiAccountDependencies(this.Configuration);
 
             services.AddApiVersioning();
+
+            services.ConfigureSettings(this.Configuration);
 
             services.AddSwaggerGen(c =>
             {
@@ -46,7 +49,7 @@ namespace Ordering.Api
             });
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, IOptionsMonitor<LocalizationSettings> localizationSettings)
         {
             IdentityModelEventSource.ShowPII = true;
 
@@ -63,6 +66,8 @@ namespace Ordering.Api
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseCustomHeaderRequestLocalizationProvider(localizationSettings);
 
             app.UseEndpoints(endpoints =>
             {

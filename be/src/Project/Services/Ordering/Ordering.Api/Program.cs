@@ -19,7 +19,14 @@ namespace Ordering.Api
                 config.AddEnvironmentVariables();
             })
             .UseSerilog((hostingContext, loggerConfiguration) =>
-                    loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration))
+            {
+                loggerConfiguration.MinimumLevel.Warning();
+                loggerConfiguration.Enrich.WithProperty("ApplicationContext", typeof(Program).Namespace);
+                loggerConfiguration.Enrich.FromLogContext();
+                loggerConfiguration.WriteTo.Console();
+                loggerConfiguration.WriteTo.Seq(hostingContext.Configuration["SeqUrl"]);
+                loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
+            })
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();

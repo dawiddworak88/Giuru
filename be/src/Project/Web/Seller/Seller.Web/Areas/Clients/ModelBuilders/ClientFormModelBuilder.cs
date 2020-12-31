@@ -19,14 +19,14 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IClientsRepository clientsRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
-        private readonly IOptionsMonitor<LocalizationConfiguration> localizationOptions;
+        private readonly IOptionsMonitor<LocalizationSettings> localizationOptions;
         private readonly LinkGenerator linkGenerator;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer, 
             IStringLocalizer<ClientResources> clientLocalizer,
-            IOptionsMonitor<LocalizationConfiguration> localizationOptions,
+            IOptionsMonitor<LocalizationSettings> localizationOptions,
             LinkGenerator linkGenerator)
         {
             this.clientsRepository = clientsRepository;
@@ -43,7 +43,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 new LanguageViewModel { Text = this.globalLocalizer.GetString("SelectLanguage") , Value = string.Empty }
             };
 
-            foreach (var language in this.localizationOptions.CurrentValue.SupportedCultures)
+            foreach (var language in this.localizationOptions.CurrentValue.SupportedCultures.Split(','))
             {
                 languages.Add(new LanguageViewModel { Text = language.ToUpperInvariant(), Value = language.ToLowerInvariant() });
             }

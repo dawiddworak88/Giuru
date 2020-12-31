@@ -3,15 +3,15 @@ using System.IO;
 using System.Reflection;
 using Foundation.Account.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
-using Foundation.GenericRepository.DependencyInjection;
-using Foundation.Localization.DependencyInjection;
+using Foundation.Localization.Definitions;
+using Foundation.Localization.Extensions;
 using Media.Api.DependencyInjection;
 using Media.Api.Shared.Checksums;
 using Media.Api.v1.Area.Media.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 
@@ -32,17 +32,13 @@ namespace Media.Api
 
             services.AddLocalization();
 
-            services.RegisterBaseLocalizationDependencies();
-
             services.RegisterApiAccountDependencies(this.Configuration);
 
             services.RegisterDatabaseDependencies(this.Configuration);
 
             services.RegisterMediaDependencies(this.Configuration);
 
-            services.ConfigureGenericRepositoryOptions(this.Configuration);
-
-            services.ConfigureOptions(this.Configuration);
+            services.ConfigureSettings(this.Configuration);
 
             services.AddApiVersioning();
 
@@ -58,7 +54,7 @@ namespace Media.Api
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IChecksumService checksumService)
+        public void Configure(IApplicationBuilder app, IOptionsMonitor<LocalizationSettings> localizationSettings, IChecksumService checksumService)
         {
             IdentityModelEventSource.ShowPII = true;
 
@@ -81,6 +77,8 @@ namespace Media.Api
             app.UseAuthentication();
 
             app.UseAuthorization();
+
+            app.UseCustomHeaderRequestLocalizationProvider(localizationSettings);
 
             app.UseEndpoints(endpoints =>
             {
