@@ -7,29 +7,24 @@ using Foundation.Extensions.Exceptions;
 using System.Net;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
-using Foundation.Localization.Services;
-using Foundation.GenericRepository.Helpers;
 using Identity.Api.Infrastructure;
-using Identity.Api.v1.Areas.Clients.Services;
 using Identity.Api.v1.Areas.Clients.ResultModels;
 using Identity.Api.v1.Areas.Clients.Models;
 using Identity.Api.Infrastructure.Clients.Entities;
+using Foundation.GenericRepository.Extensions;
 
 namespace Identity.Api.v1.Areas.Clients.Services
 {
     public class ClientsService : IClientsService
     {
         private readonly IdentityContext context;
-        private readonly ICultureService cultureService;
         private readonly IStringLocalizer clientLocalizer;
 
         public ClientsService(
             IdentityContext context,
-            ICultureService cultureService,
             IStringLocalizer<ClientResources> clientLocalizer)
         {
             this.context = context;
-            this.cultureService = cultureService;
             this.clientLocalizer = clientLocalizer;
         }
 
@@ -74,8 +69,6 @@ namespace Identity.Api.v1.Areas.Clients.Services
 
         public async Task DeleteAsync(DeleteClientModel model)
         {
-            this.cultureService.SetCulture(model.Language);
-
             var client = await this.context.Clients.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
 
             if (client == null)
@@ -90,8 +83,6 @@ namespace Identity.Api.v1.Areas.Clients.Services
 
         public async Task<ClientResultModel> UpdateAsync(UpdateClientModel serviceModel)
         {
-            this.cultureService.SetCulture(serviceModel.Language);
-
             var client = await this.context.Clients.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.SellerId == serviceModel.OrganisationId.Value && x.IsActive);
 
             if (client == null)
@@ -110,8 +101,6 @@ namespace Identity.Api.v1.Areas.Clients.Services
 
         public async Task<ClientResultModel> CreateAsync(CreateClientModel serviceModel)
         {
-            this.cultureService.SetCulture(serviceModel.Language);
-
             var client = new Client
             {
                 Name = serviceModel.Name,
@@ -120,7 +109,7 @@ namespace Identity.Api.v1.Areas.Clients.Services
                 SellerId = serviceModel.OrganisationId.Value
             };
 
-            this.context.Clients.Add(EntityHelper.SeedEntity(client));
+            this.context.Clients.Add(client.FillCommonProperties());
 
             await this.context.SaveChangesAsync();
 

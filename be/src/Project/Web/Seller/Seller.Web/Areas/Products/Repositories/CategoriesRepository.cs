@@ -41,7 +41,6 @@ namespace Seller.Web.Areas.Categories.Repositories
             var requestModel = new SaveCategoryApiRequestModel
             {
                 Id = id,
-                Language = language,
                 ParentCategoryId = parentCategoryId,
                 Name = name,
                 Files = files
@@ -49,6 +48,7 @@ namespace Seller.Web.Areas.Categories.Repositories
 
             var apiRequest = new ApiRequest<SaveCategoryApiRequestModel>
             {
+                Language = language,
                 Data = requestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
@@ -71,14 +71,10 @@ namespace Seller.Web.Areas.Categories.Repositories
 
         public async Task DeleteAsync(string token, string language, Guid? id)
         {
-            var deleteRequestModel = new RequestModelBase
-            {
-                Language = language
-            };
-
             var apiRequest = new ApiRequest<RequestModelBase>
             { 
-                Data = deleteRequestModel,
+                Language = language,
+                Data = new RequestModelBase(),
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}/{id}"
             };
@@ -95,7 +91,6 @@ namespace Seller.Web.Areas.Categories.Repositories
         {
             var categoriesRequestModel = new PagedRequestModelBase
             {
-                Language = language,
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage
@@ -103,6 +98,7 @@ namespace Seller.Web.Areas.Categories.Repositories
 
             var apiRequest = new ApiRequest<PagedRequestModelBase>
             {
+                Language = language,
                 Data = categoriesRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
@@ -131,13 +127,13 @@ namespace Seller.Web.Areas.Categories.Repositories
             var categoriesRequestModel = new PagedCategoriesRequestModel
             {
                 LeafOnly = leafOnly,
-                Language = language,
                 PageIndex = PaginationConstants.DefaultPageIndex,
                 ItemsPerPage = PaginationConstants.DefaultPageSize
             };
 
             var apiRequest = new ApiRequest<PagedCategoriesRequestModel>
             {
+                Language = language,
                 Data = categoriesRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}"
@@ -183,14 +179,10 @@ namespace Seller.Web.Areas.Categories.Repositories
 
         public async Task<Category> GetCategoryAsync(string token, string language, Guid? id)
         {
-            var request = new RequestModelBase
-            {
-                Language = language
-            };
-
             var apiRequest = new ApiRequest<RequestModelBase>
-            { 
-                Data = request,
+            {
+                Language = language,
+                Data = new RequestModelBase(),
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}/{id}"
             };

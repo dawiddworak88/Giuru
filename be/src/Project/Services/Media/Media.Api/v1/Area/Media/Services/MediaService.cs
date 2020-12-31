@@ -6,7 +6,6 @@ using System.Linq;
 using Media.Api.v1.Area.Media.Models;
 using Media.Api.v1.Area.Media.Repositories;
 using Media.Api.Infrastructure.Media.Entities;
-using Foundation.GenericRepository.Helpers;
 using MimeMapping;
 using System.IO;
 using Media.Api.Shared.Checksums;
@@ -16,6 +15,7 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.GenericRepository.Predicates;
 using Foundation.Extensions.ExtensionMethods;
 using Media.Api.Definitions;
+using Foundation.GenericRepository.Extensions;
 
 namespace Media.Api.v1.Area.Media.Services
 {
@@ -54,7 +54,7 @@ namespace Media.Api.v1.Area.Media.Services
                 IsProtected = false
             };
 
-            context.MediaItems.Add(EntityHelper.SeedEntity(mediaItem));
+            context.MediaItems.Add(mediaItem.FillCommonProperties());
 
             var mediaItemVersion = new MediaItemVersion
             {
@@ -69,7 +69,7 @@ namespace Media.Api.v1.Area.Media.Services
                 Version = 1
             };
 
-            context.MediaItemVersions.Add(EntityHelper.SeedEntity(mediaItemVersion));
+            context.MediaItemVersions.Add(mediaItemVersion.FillCommonProperties());
 
             var mediaItemTranslation = new MediaItemTranslation
             {
@@ -78,7 +78,7 @@ namespace Media.Api.v1.Area.Media.Services
                 Name = Path.GetFileNameWithoutExtension(serviceModel.File.FileName)
             };
 
-            context.MediaItemTranslations.Add(EntityHelper.SeedEntity(mediaItemTranslation));
+            context.MediaItemTranslations.Add(mediaItemTranslation.FillCommonProperties());
 
             context.SaveChanges();
 

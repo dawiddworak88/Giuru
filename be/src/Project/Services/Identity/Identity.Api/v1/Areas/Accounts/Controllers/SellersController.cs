@@ -5,6 +5,7 @@ using Identity.Api.v1.Areas.Accounts.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -27,7 +28,6 @@ namespace Identity.Api.v1.Areas.Accounts.Controllers
         /// <summary>
         /// Gets the seller by id.
         /// </summary>
-        /// <param name="language">The language.</param>
         /// <param name="id">The id.</param>
         /// <returns>The seller.</returns>
         [HttpGet, MapToApiVersion("1.0")]
@@ -36,12 +36,12 @@ namespace Identity.Api.v1.Areas.Accounts.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(422)]
-        public async Task<IActionResult> Get(string language, Guid? id)
+        public async Task<IActionResult> Get(Guid? id)
         {
             var serviceModel = new GetSellerModel
             {
                 Id = id,
-                Language = language
+                Language = CultureInfo.CurrentCulture.Name
             };
 
             var validator = new GetSellerModelValidator();

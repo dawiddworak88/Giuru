@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace Catalog.Api.v1.Areas.Taxonomies.Controllers
 {
@@ -48,7 +49,7 @@ namespace Catalog.Api.v1.Areas.Taxonomies.Controllers
                 ParentId = taxonomyModel.ParentId,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Language = taxonomyModel.Language
+                Language = CultureInfo.CurrentCulture.Name
             };
 
             var createTaxonomyResult = await this.taxonomyService.CreateAsync(createTaxonomyModel);
@@ -68,13 +69,12 @@ namespace Catalog.Api.v1.Areas.Taxonomies.Controllers
         /// </summary>
         /// <param name="name">The name of the taxonomy to get.</param>
         /// <param name="rootId">The root id of the taxonomy.</param>
-        /// <param name="language">The language.</param>
         /// <returns></returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(422)]
-        public async Task<IActionResult> Get(string name, Guid? rootId, string language)
+        public async Task<IActionResult> Get(string name, Guid? rootId)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
@@ -84,7 +84,7 @@ namespace Catalog.Api.v1.Areas.Taxonomies.Controllers
                 RootId = rootId,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Language = language
+                Language = CultureInfo.CurrentCulture.Name
             };
 
             var getTaxonomyResult = await this.taxonomyService.GetByName(getTaxonomyModel);

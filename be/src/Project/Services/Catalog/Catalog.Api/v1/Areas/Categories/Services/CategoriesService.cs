@@ -10,28 +10,24 @@ using Foundation.Extensions.Exceptions;
 using System.Net;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
-using Foundation.Localization.Services;
 using Catalog.Api.Infrastructure.Categories.Entities;
 using System;
 using Catalog.Api.Infrastructure.Categories.Entites;
-using Foundation.GenericRepository.Helpers;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Extensions;
 
 namespace Catalog.Api.v1.Areas.Categories.Services
 {
     public class CategoriesService : ICategoriesService
     {
         private readonly CatalogContext context;
-        private readonly ICultureService cultureService;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
 
         public CategoriesService(
             CatalogContext context,
-            ICultureService cultureService,
             IStringLocalizer<ProductResources> productLocalizer)
         {
             this.context = context;
-            this.cultureService = cultureService;
             this.productLocalizer = productLocalizer;
         }
 
@@ -105,8 +101,6 @@ namespace Catalog.Api.v1.Areas.Categories.Services
 
         public async Task DeleteAsync(DeleteCategoryModel model)
         {
-            this.cultureService.SetCulture(model.Language);
-
             var category = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (category == null)
@@ -131,8 +125,6 @@ namespace Catalog.Api.v1.Areas.Categories.Services
 
         public async Task<CategoryResultModel> UpdateAsync(UpdateCategoryModel serviceModel)
         {
-            this.cultureService.SetCulture(serviceModel.Language);
-
             var category = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.IsActive);
 
             if (category == null)
@@ -154,7 +146,21 @@ namespace Catalog.Api.v1.Areas.Categories.Services
 
             var categoryTranslation = await this.context.CategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == serviceModel.Id && x.Language == serviceModel.Language && x.IsActive);
 
-            categoryTranslation.Name = serviceModel.Name;
+            if (categoryTranslation != null)
+            {
+                categoryTranslation.Name = serviceModel.Name;
+            }
+            else
+            {
+                var newCategoryTranslation = new CategoryTranslation
+                {
+                    CategoryId = category.Id,
+                    Name = serviceModel.Name
+                };
+
+                this.context.CategoryTranslations.Add(newCategoryTranslation.FillCommonProperties());
+            }
+            
             categoryTranslation.LastModifiedDate = DateTime.UtcNow;
 
             var categoryImages = this.context.CategoryImages.Where(x => x.CategoryId == serviceModel.Id);
@@ -174,7 +180,7 @@ namespace Catalog.Api.v1.Areas.Categories.Services
                         MediaId = file
                     };
 
-                    this.context.CategoryImages.Add(EntityHelper.SeedEntity(categoryImage));
+                    this.context.CategoryImages.Add(categoryImage.FillCommonProperties());
                 }
             }
 
@@ -185,8 +191,6 @@ namespace Catalog.Api.v1.Areas.Categories.Services
 
         public async Task<CategoryResultModel> CreateAsync(CreateCategoryModel serviceModel)
         {
-            this.cultureService.SetCulture(serviceModel.Language);
-
             var category = new Category
             {
                 Parentid = serviceModel.ParentId,
@@ -196,7 +200,7 @@ namespace Catalog.Api.v1.Areas.Categories.Services
             var parentCategory = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == serviceModel.ParentId && x.IsActive);
             category.Level = parentCategory.Level + 1;
 
-            this.context.Categories.Add(EntityHelper.SeedEntity(category));
+            this.context.Categories.Add(category.FillCommonProperties());
 
             var categoryTranslation = new CategoryTranslation
             { 
@@ -205,7 +209,7 @@ namespace Catalog.Api.v1.Areas.Categories.Services
                 Language = serviceModel.Language
             };
 
-            this.context.CategoryTranslations.Add(EntityHelper.SeedEntity(categoryTranslation));
+            this.context.CategoryTranslations.Add(categoryTranslation.FillCommonProperties());
 
             foreach (var file in serviceModel.Files.OrEmptyIfNull())
             {
@@ -215,7 +219,7 @@ namespace Catalog.Api.v1.Areas.Categories.Services
                     MediaId = file,
                 };
 
-                this.context.CategoryImages.Add(EntityHelper.SeedEntity(categoryImage));
+                this.context.CategoryImages.Add(categoryImage.FillCommonProperties());
             }
 
             await this.context.SaveChangesAsync();

@@ -31,12 +31,18 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
                 {
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AccessToken);
                 }
+
+                if (!string.IsNullOrWhiteSpace(request.Language))
+                {
+                    client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue(request.Language));
+                }
+
                 using (var content = new MultipartFormDataContent())
                 {
                     if (request?.Data.File != null && !string.IsNullOrWhiteSpace(request.Data.Filename))
                     {
                         content.Add(new StreamContent(new MemoryStream(request.Data.File)), ApiConstants.ContentNames.FileContentName, request.Data.Filename);
-                        content.Add(new StringContent(request.Data.Language), ApiConstants.ContentNames.LanguageContentName);
+                        content.Add(new StringContent(request.Language), ApiConstants.ContentNames.LanguageContentName);
 
                         var response = await client.PostAsync(request.EndpointAddress, content);
 
@@ -73,6 +79,11 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
                 if (!string.IsNullOrWhiteSpace(request.AccessToken))
                 {
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AccessToken);
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.Language))
+                {
+                    client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue(request.Language));
                 }
 
                 var response = await client.PostAsync(
@@ -112,6 +123,11 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AccessToken);
                 }
 
+                if (!string.IsNullOrWhiteSpace(request.Language))
+                {
+                    client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue(request.Language));
+                }
+
                 var properties = from p in request.Data.GetType().GetProperties()
                                  where p.GetValue(request.Data, null) != null
                                  select p.Name + "=" + HttpUtility.UrlEncode(p.GetValue(request.Data, null).ToString());
@@ -149,6 +165,11 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
                 if (!string.IsNullOrWhiteSpace(request.AccessToken))
                 {
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.AccessToken);
+                }
+
+                if (!string.IsNullOrWhiteSpace(request.Language))
+                {
+                    client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue(request.Language));
                 }
 
                 var properties = from p in request.Data.GetType().GetProperties()

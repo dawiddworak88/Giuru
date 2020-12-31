@@ -15,6 +15,7 @@ using Foundation.Extensions.Helpers;
 using Catalog.Api.v1.Areas.Products.RequestModels;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.Definitions;
+using System.Globalization;
 
 namespace Catalog.Api.v1.Areas.Products.Controllers
 {
@@ -36,7 +37,6 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         /// Returns products by search term. Returns all products (paginated) if search term is empty.
         /// </summary>
         /// <param name="ids">The list of product ids.</param>
-        /// <param name="language">The language.</param>
         /// <param name="categoryId">The category id.</param>
         /// <param name="sellerId">The brand id.</param>
         /// <param name="includeProductVariants">Includes product variants in the results list.</param>
@@ -48,7 +48,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(422)]
         [AllowAnonymous]
-        public async Task<IActionResult> Get(string ids, string language, Guid? categoryId, Guid? sellerId, bool includeProductVariants, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(string ids, Guid? categoryId, Guid? sellerId, bool includeProductVariants, string searchTerm, int pageIndex, int itemsPerPage)
         {
             var productIds = ids.ToEnumerableGuidIds();
 
@@ -59,7 +59,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                     Ids = productIds,
                     PageIndex = pageIndex,
                     ItemsPerPage = itemsPerPage,
-                    Language = language
+                    Language = CultureInfo.CurrentCulture.Name
                 };
 
                 var validator = new GetProductsByIdsModelValidator();
@@ -84,7 +84,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                     SearchTerm = searchTerm,
                     CategoryId = categoryId,
                     OrganisationId = sellerId,
-                    Language = language,
+                    Language = CultureInfo.CurrentCulture.Name,
                     IncludeProductVariants = includeProductVariants
                 };
 
@@ -133,7 +133,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                 FormData = request.FormData,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Language = request.Language
+                Language = CultureInfo.CurrentCulture.Name
             };
 
             if (request.Id.HasValue)
@@ -171,7 +171,6 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         /// <summary>
         /// Returns a product by id.
         /// </summary>
-        /// <param name="language">The language.</param>
         /// <param name="id">The product id.</param>
         /// <returns>The product.</returns>
         [HttpGet, MapToApiVersion("1.0")]
@@ -180,7 +179,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [AllowAnonymous]
-        public async Task<IActionResult> GetById(string language, Guid? id)
+        public async Task<IActionResult> GetById(Guid? id)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
@@ -189,7 +188,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                 Id = id.Value,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Language = language
+                Language = CultureInfo.CurrentCulture.Name
             };
 
             var validator = new GetProductModelValidator();
@@ -209,7 +208,6 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         /// <summary>
         /// Delete product by id.
         /// </summary>
-        /// <param name="language">The language.</param>
         /// <param name="id">The id.</param>
         /// <returns>OK.</returns>
         [HttpDelete, MapToApiVersion("1.0")]
@@ -218,14 +216,14 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(409)]
         [ProducesResponseType(422)]
-        public async Task<IActionResult> Delete(string language, Guid? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
             var serviceModel = new DeleteProductModel
             {
                 Id = id,
-                Language = language,
+                Language = CultureInfo.CurrentCulture.Name,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };

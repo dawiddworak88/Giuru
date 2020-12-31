@@ -1,4 +1,5 @@
-﻿using Media.Api.Configurations;
+﻿using Foundation.Localization.Definitions;
+using Media.Api.Configurations;
 using Media.Api.Infrastructure;
 using Media.Api.Shared.Checksums;
 using Microsoft.AspNetCore.Builder;
@@ -26,9 +27,10 @@ namespace Media.Api.DependencyInjection
             }
         }
 
-        public static void ConfigureOptions(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<AppSettings>(configuration);
+            services.Configure<LocalizationSettings>(configuration);
         }
     }
 }

@@ -26,6 +26,10 @@ spec:
           value: {{ .Values.mediaApi.storageConnectionString }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
         ports:
         - containerPort: 80
 ---
@@ -63,6 +67,8 @@ spec:
           value: {{ .Values.catalogApi.elasticsearchIndex }}
         - name: Brands
           value: {{ .Values.catalogApi.brands }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
         ports:
@@ -123,6 +129,8 @@ spec:
           value: {{ .Values.catalogUrl }}
         - name: MediaUrl
           value: {{ .Values.mediaUrl }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
         - name: Clients
           value: {{ .Values.identityApi.clients }}
         - name: Accounts
@@ -139,6 +147,10 @@ spec:
           value: {{ .Values.identityApi.azureKeyVaultClientId }}
         - name: AzureKeyVaultClientSecret
           value: {{ .Values.identityApi.azureKeyVaultClientSecret }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
         ports:
         - containerPort: 80
 ---
@@ -180,6 +192,10 @@ spec:
           value: {{ .Values.buyerWeb.clientId }}
         - name: ClientSecret
           value: {{ .Values.buyerWeb.clientSecret }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
         ports:
         - containerPort: 80
 ---
@@ -217,5 +233,9 @@ spec:
           value: {{ .Values.sellerWeb.clientId }}
         - name: ClientSecret
           value: {{ .Values.sellerWeb.clientSecret }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
         ports:
         - containerPort: 80

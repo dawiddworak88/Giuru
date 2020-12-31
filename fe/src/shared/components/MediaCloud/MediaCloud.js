@@ -45,7 +45,7 @@ function MediaCloud(props) {
                         if (response.ok) {
 
                             dispatch({ type: "SET_IS_LOADING", payload: false });
-
+                            
                             props.multiple ? 
                             setFieldValue({ name: props.name, value: [...files, media] }) : 
                             setFieldValue({ name: props.name, value: [ media ] });

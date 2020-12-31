@@ -102,20 +102,18 @@ function CategoryForm(props) {
                             </FormControl>
                         </div>
                         <div className="field">
-                            <MediaCloud
-                                id="images"
-                                name="images"
-                                label={props.categoryPictureLabel}  
-                                state={state}
-                                dispatch={dispatch}
+                        <MediaCloud
+                                id="files"
+                                name="files"
+                                label={props.productPicturesLabel}
                                 accept=".png, .jpg"
                                 multiple={false}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}
                                 dropFilesLabel={props.dropFilesLabel}
                                 dropOrSelectFilesLabel={props.dropOrSelectFilesLabel}
-                                setFieldValue={setFieldValue}
                                 files={files}
+                                setFieldValue={setFieldValue}
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
                         <div className="field">

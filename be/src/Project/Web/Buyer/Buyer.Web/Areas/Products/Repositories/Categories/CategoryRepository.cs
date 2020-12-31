@@ -26,7 +26,8 @@ namespace Buyer.Web.Areas.Products.Repositories.Categories
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
-                Data = new RequestModelBase { Language = language },
+                Data = new RequestModelBase(),
+                Language = language,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategoriesApiEndpoint}/{categoryId}"
             };

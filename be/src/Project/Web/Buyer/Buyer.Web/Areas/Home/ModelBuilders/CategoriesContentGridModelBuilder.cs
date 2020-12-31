@@ -2,6 +2,7 @@
 using Buyer.Web.Areas.Home.ViewModel;
 using Buyer.Web.Shared.Catalogs.Services;
 using Buyer.Web.Shared.Configurations;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Extensions.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
@@ -40,7 +41,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
 
             var categories = await this.catalogService.GetCategoriesAsync(componentModel.Language, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage);
 
-            foreach (var category in categories.Where(x => x.Level == CategoriesConstants.FirstLevel))
+            foreach (var category in categories.OrEmptyIfNull().Where(x => x.Level == CategoriesConstants.FirstLevel))
             {
                 var contentGridCarouselItems = new List<ContentGridCarouselItemViewModel>();
 

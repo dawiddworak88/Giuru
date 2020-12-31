@@ -1,29 +1,21 @@
-﻿using Foundation.GenericRepository.Services;
-using Catalog.Api.v1.Areas.Schemas.Models;
+﻿using Catalog.Api.v1.Areas.Schemas.Models;
 using Catalog.Api.v1.Areas.Schemas.ResultModels;
-using Catalog.Api.Infrastructure.Taxonomies.Entities;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Catalog.Api.Infrastructure;
-using System.Data.SqlClient;
 
 namespace Catalog.Api.v1.Areas.Schemas.Services.SchemaServices
 {
     public class SchemaService : ISchemaService
     {
         private readonly CatalogContext context;
-        private readonly IEntityService entityService;
 
         public SchemaService(
-            CatalogContext context,
-            IEntityService entityService
-            )
+            CatalogContext context)
         {
             this.context = context;
-            this.entityService = entityService;
         }
 
         public async Task<SchemaResultModel> CreateAsync(CreateSchemaModel model)

@@ -1,9 +1,9 @@
 ﻿using Catalog.Api.Infrastructure.Categories.Definitions;
 using Catalog.Api.Infrastructure.Categories.Entities;
-using Foundation.GenericRepository.Helpers;
 using System;
 using System.Linq;
 using Catalog.Api.Infrastructure.Categories.Entites;
+using Foundation.GenericRepository.Extensions;
 
 namespace Catalog.Api.Infrastructure.Categories.Seeds
 {
@@ -65,10 +65,10 @@ namespace Catalog.Api.Infrastructure.Categories.Seeds
                     Name = germanName
                 };
 
-                context.Categories.Add(EntityHelper.SeedEntity(category));
-                context.CategoryTranslations.Add(EntityHelper.SeedEntity(enCategoryTranslation));
-                context.CategoryTranslations.Add(EntityHelper.SeedEntity(plCategoryTranslation));
-                context.CategoryTranslations.Add(EntityHelper.SeedEntity(deCategoryTranslation));
+                context.Categories.Add(category.FillCommonProperties());
+                context.CategoryTranslations.Add(enCategoryTranslation.FillCommonProperties());
+                context.CategoryTranslations.Add(plCategoryTranslation.FillCommonProperties());
+                context.CategoryTranslations.Add(deCategoryTranslation.FillCommonProperties());
 
                 context.SaveChanges();
             }
