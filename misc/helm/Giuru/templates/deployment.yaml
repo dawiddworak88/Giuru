@@ -26,6 +26,8 @@ spec:
           value: {{ .Values.mediaApi.storageConnectionString }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
+        - name: SeqUrl
+          value: {{ .Values.seqUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -61,6 +63,8 @@ spec:
           value: {{ .Values.identityUrl }}
         - name: MediaUrl
           value: {{ .Values.mediaUrl }}
+        - name: SeqUrl
+          value: {{ .Values.seqUrl }}
         - name: ElasticsearchUrl
           value: {{ .Values.elasticsearchUrl }}
         - name: ElasticsearchIndex
@@ -131,6 +135,8 @@ spec:
           value: {{ .Values.mediaUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
+        - name: SeqUrl
+          value: {{ .Values.seqUrl }}
         - name: Clients
           value: {{ .Values.identityApi.clients }}
         - name: Accounts
@@ -188,6 +194,8 @@ spec:
           value: {{ .Values.mediaUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
+        - name: SeqUrl
+          value: {{ .Values.seqUrl }}
         - name: ClientId
           value: {{ .Values.buyerWeb.clientId }}
         - name: ClientSecret
@@ -229,6 +237,8 @@ spec:
           value: {{ .Values.mediaUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
+        - name: SeqUrl
+          value: {{ .Values.seqUrl }}
         - name: ClientId
           value: {{ .Values.sellerWeb.clientId }}
         - name: ClientSecret
