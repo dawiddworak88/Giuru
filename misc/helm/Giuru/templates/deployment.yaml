@@ -123,6 +123,8 @@ spec:
           value: {{ .Values.catalogUrl }}
         - name: MediaUrl
           value: {{ .Values.mediaUrl }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
         - name: Clients
           value: {{ .Values.identityApi.clients }}
         - name: Accounts

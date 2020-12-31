@@ -10,6 +10,7 @@ identityUrl: "#{IdentityUrl}#"
 mediaUrl: "#{MediaUrl}#"
 catalogUrl: "#{CatalogUrl}#"
 elasticsearchUrl: "#{ElasticsearchUrl}#"
+seqUrl: "#{SeqUrl}"
 supportedCultures: "en,de,pl"
 mediaApi:
   connectionString: "#{MediaApi--ConnectionString}#"
