@@ -1,3 +1,15 @@
+@media only screen and (max-width: $tablet) {
+    
+    .navbar-brand {
+        margin-top: 0.75rem;
+    }
+
+    .navbar-burger {
+        width: 63px;
+        height: 84px;
+    }
+}
+
 .is-flex-wrap {
     flex-wrap: wrap;
 }

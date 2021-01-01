@@ -89,7 +89,7 @@ function ClientForm(props) {
     const { id, name, email, communicationLanguage } = values;
 
     return (
-        <section className="section section-small-padding product">
+        <section className="section section-small-padding client">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
