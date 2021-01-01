@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
+import NoSsr from '@material-ui/core/NoSsr';
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
@@ -175,18 +176,20 @@ function ProductForm(props) {
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
                         <div className="field">
-                            <FormControlLabel
-                                control={
-                                <Switch
-                                    onChange={e => {
-                                        setFieldValue({ name: "isNew", value: e.target.checked });
-                                    }}
-                                    checked={isNew}
-                                    id="isNew"
-                                    name="isNew"
-                                    color="secondary" />
-                                }
-                                label={props.isNewLabel} />
+                            <NoSsr>
+                                <FormControlLabel
+                                    control={
+                                    <Switch
+                                        onChange={e => {
+                                            setFieldValue({ name: "isNew", value: e.target.checked });
+                                        }}
+                                        checked={isNew}
+                                        id="isNew"
+                                        name="isNew"
+                                        color="secondary" />
+                                    }
+                                    label={props.isNewLabel} />
+                            </NoSsr>
                         </div>
                         <div className="field">
                             <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
