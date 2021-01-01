@@ -56,7 +56,7 @@ namespace Seller.Web.Shared.MenuTiles.ModelBuilders
                     {
                         Icon = IconsConstants.Settings,
                         Title = this.globalLocalizer.GetString("Settings"),
-                        Url = "#"
+                        Url = this.linkGenerator.GetPathByAction("Index", "Settings", new { Area = "Settings", culture = CultureInfo.CurrentUICulture.Name })
                     }
                 }
             };

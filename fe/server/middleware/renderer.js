@@ -22,6 +22,7 @@ import ProductsPage from "../../src/project/Seller.Portal/areas/Products/pages/P
 import ProductPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage";
 import CategoriesPage from "../../src/project/Seller.Portal/areas/Products/pages/CategoriesPage/CategoriesPage";
 import SellerCategoryPage from "../../src/project/Seller.Portal/areas/Products/pages/CategoryPage/CategoryPage";
+import SettingsPage from "../../src/project/Seller.Portal/areas/Settings/pages/SettingsPage/SettingsPage";
 
 const Components = {
 
@@ -41,7 +42,8 @@ const Components = {
 	ProductsPage,
 	ProductPage,
 	CategoriesPage,
-	SellerCategoryPage
+	SellerCategoryPage,
+	SettingsPage
 };
 
 export default (req, res, next) => {
