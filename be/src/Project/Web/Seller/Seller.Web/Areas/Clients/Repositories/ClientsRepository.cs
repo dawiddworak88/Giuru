@@ -126,13 +126,14 @@ namespace Seller.Web.Areas.Clients.Repositories
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<Client>>> GetClientsAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<PagedResults<IEnumerable<Client>>> GetClientsAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var clientsRequestModel = new PagedRequestModelBase
             {
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy
             };
 
             var apiRequest = new ApiRequest<PagedRequestModelBase>
