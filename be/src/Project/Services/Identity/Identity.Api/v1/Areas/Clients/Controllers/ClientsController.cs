@@ -38,12 +38,13 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
         /// <returns>The list of clients.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(422)]
-        public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
@@ -53,6 +54,7 @@ namespace Catalog.Api.v1.Areas.Clients.Controllers
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };

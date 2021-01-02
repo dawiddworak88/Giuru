@@ -11,5 +11,6 @@ namespace Buyer.Web.Areas.Products.ApiRequestModels
         public string SearchTerm { get; set; }
         public int PageIndex { get; set; }
         public int ItemsPerPage { get; set; }
+        public string OrderBy { get; set; }
     }
 }

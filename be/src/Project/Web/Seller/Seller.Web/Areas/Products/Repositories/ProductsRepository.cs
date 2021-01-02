@@ -28,7 +28,7 @@ namespace Seller.Web.Areas.Products.Repositories
             this.settings = settings;
         }
 
-        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(string token, string language, string searchTerm, Guid? sellerId, int pageIndex, int itemsPerPage)
+        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(string token, string language, string searchTerm, Guid? sellerId, int pageIndex, int itemsPerPage, string orderBy)
         {
             var productsRequestModel = new PagedProductsRequestModel
             {
@@ -36,7 +36,8 @@ namespace Seller.Web.Areas.Products.Repositories
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
                 SellerId = sellerId,
-                IncludeProductVariants = true
+                IncludeProductVariants = true,
+                OrderBy = orderBy
             };
 
             var apiRequest = new ApiRequest<PagedProductsRequestModel>
@@ -65,14 +66,15 @@ namespace Seller.Web.Areas.Products.Repositories
             return default;
         }
 
-        public async Task<IEnumerable<Product>> GetAllPrimaryProductsAsync(string token, string language, Guid? sellerId)
+        public async Task<IEnumerable<Product>> GetAllPrimaryProductsAsync(string token, string language, Guid? sellerId, string orderBy)
         {
             var productsRequestModel = new PagedProductsRequestModel
             {
                 PageIndex = PaginationConstants.DefaultPageIndex,
                 ItemsPerPage = PaginationConstants.DefaultPageSize,
                 SellerId = sellerId,
-                IncludeProductVariants = false
+                IncludeProductVariants = false,
+                OrderBy = orderBy
             };
 
             var apiRequest = new ApiRequest<PagedProductsRequestModel>

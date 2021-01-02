@@ -1,5 +1,6 @@
 ﻿using Catalog.Api.v1.Areas.Products.SearchModels;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Search.Extensions;
 using Nest;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,15 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
             this.elasticClient = elasticClient;
         }
 
-        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? categoryId, Guid? sellerId, bool includeProductVariants, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(
+            string language, 
+            Guid? categoryId, 
+            Guid? sellerId, 
+            bool includeProductVariants, 
+            string searchTerm, 
+            int pageIndex, 
+            int itemsPerPage,
+            string orderBy)
         {
             var query = Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
@@ -45,7 +54,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
                         || Query<ProductSearchModel>.Prefix(x => x.Name.Suffix("keyword"), searchTerm));
             }
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(x => x && query).Sort(s => s.Descending(SortSpecialField.Score).Ascending(x => x.CreatedDate)));
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.From((pageIndex - 1) * itemsPerPage).Size(itemsPerPage).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
 
             if (response.IsValid)
             {
@@ -74,7 +83,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, IEnumerable<Guid> ids)
+        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, IEnumerable<Guid> ids, string orderBy)
         {
             var query = Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
@@ -88,7 +97,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
 
             query = query && idsQuery;
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query).Sort(s => s.Ascending(f => f.CreatedDate)));
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(q => q.Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
 
             if (response.IsValid && response.Hits.Any())
             {
@@ -121,7 +130,12 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
                 && Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query).Sort(s => s.Ascending(x => x.CreatedDate)));
+            var searchRequest = new SearchRequest
+            {
+                Query = query
+            };
+
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(searchRequest);
 
             if (response.IsValid && response.Hits.Any())
             {

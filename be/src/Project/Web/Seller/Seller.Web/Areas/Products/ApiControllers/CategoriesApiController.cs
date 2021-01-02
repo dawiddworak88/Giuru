@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Products.ApiRequestModels;
+using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
 using System;
 using System.Globalization;
@@ -36,7 +37,8 @@ namespace Seller.Web.Areas.Products.ApiControllers
                 CultureInfo.CurrentUICulture.Name,
                 searchTerm,
                 pageIndex,
-                itemsPerPage);
+                itemsPerPage,
+                $"{nameof(Category.CreatedDate)} desc");
 
             return this.StatusCode((int)HttpStatusCode.OK, categories);
         }

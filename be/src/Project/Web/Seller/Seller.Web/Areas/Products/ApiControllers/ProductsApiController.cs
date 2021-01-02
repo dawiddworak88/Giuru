@@ -14,6 +14,7 @@ using Seller.Web.Areas.Products.Repositories;
 using System.Security.Claims;
 using Foundation.Account.Definitions;
 using Foundation.Extensions.Helpers;
+using Seller.Web.Areas.Products.DomainModels;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
@@ -40,7 +41,8 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 searchTerm,
                 GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value),
                 pageIndex,
-                itemsPerPage);
+                itemsPerPage,
+                $"{nameof(Product.CreatedDate)} desc");
 
             return this.StatusCode((int)HttpStatusCode.OK, products);
         }

@@ -12,6 +12,7 @@ using Identity.Api.v1.Areas.Clients.ResultModels;
 using Identity.Api.v1.Areas.Clients.Models;
 using Identity.Api.Infrastructure.Clients.Entities;
 using Foundation.GenericRepository.Extensions;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Identity.Api.v1.Areas.Clients.Services
 {
@@ -30,7 +31,7 @@ namespace Identity.Api.v1.Areas.Clients.Services
 
         public async Task<PagedResults<IEnumerable<ClientResultModel>>> GetAsync(GetClientsModel model)
         {
-            var categories = from c in this.context.Clients
+            var clients = from c in this.context.Clients
                              where c.SellerId == model.OrganisationId.Value && c.IsActive
                              select new ClientResultModel
                              {
@@ -44,10 +45,12 @@ namespace Identity.Api.v1.Areas.Clients.Services
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
-                categories = categories.Where(x => x.Name.StartsWith(model.SearchTerm));
+                clients = clients.Where(x => x.Name.StartsWith(model.SearchTerm));
             }
 
-            return categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage), model.PageIndex);
+            clients.ApplySort(model.OrderBy);
+
+            return clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage), model.PageIndex);
         }
 
         public async Task<ClientResultModel> GetAsync(GetClientModel model)

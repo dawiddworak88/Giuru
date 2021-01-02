@@ -40,13 +40,14 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
         /// <param name="leafOnly">Only categories with no subcategories.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
         /// <returns>The list of categories.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(422)]
-        public async Task<IActionResult> Get(string searchTerm, int? level, bool? leafOnly, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(string searchTerm, int? level, bool? leafOnly, int pageIndex, int itemsPerPage, string orderBy)
         {
             var serviceModel = new GetCategoriesModel
             {
@@ -55,7 +56,8 @@ namespace Catalog.Api.v1.Areas.Categories.Controllers
                 SearchTerm = searchTerm,
                 LeafOnly = leafOnly,
                 PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy
             };
 
             var validator = new GetCategoriesModelValidator();

@@ -87,13 +87,14 @@ namespace Seller.Web.Areas.Categories.Repositories
             }
         }
 
-        public async Task<PagedResults<IEnumerable<Category>>> GetCategoriesAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<PagedResults<IEnumerable<Category>>> GetCategoriesAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var categoriesRequestModel = new PagedRequestModelBase
             {
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy
             };
 
             var apiRequest = new ApiRequest<PagedRequestModelBase>
@@ -122,13 +123,14 @@ namespace Seller.Web.Areas.Categories.Repositories
             return default;
         }
 
-        public async Task<IEnumerable<Category>> GetAllCategoriesAsync(string token, string language, bool? leafOnly)
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync(string token, string language, bool? leafOnly, string orderBy)
         {
             var categoriesRequestModel = new PagedCategoriesRequestModel
             {
                 LeafOnly = leafOnly,
                 PageIndex = PaginationConstants.DefaultPageIndex,
-                ItemsPerPage = PaginationConstants.DefaultPageSize
+                ItemsPerPage = PaginationConstants.DefaultPageSize,
+                OrderBy = orderBy
             };
 
             var apiRequest = new ApiRequest<PagedCategoriesRequestModel>

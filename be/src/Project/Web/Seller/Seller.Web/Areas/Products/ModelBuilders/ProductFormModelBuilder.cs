@@ -17,6 +17,7 @@ using Foundation.GenericRepository.Paginations;
 using System.Linq;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Foundation.Extensions.ExtensionMethods;
+using Seller.Web.Areas.Products.DomainModels;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {
@@ -80,7 +81,8 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             var categories = await this.categoriesRepository.GetAllCategoriesAsync(
                 componentModel.Token,
                 componentModel.Language,
-                true);
+                true,
+                $"{nameof(Category.Level)},{nameof(Category.Name)}");
 
             if (categories != null)
             {
@@ -90,7 +92,8 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             var primaryProducts = await this.productsRepository.GetAllPrimaryProductsAsync(
                 componentModel.Token,
                 componentModel.Language,
-                componentModel.SellerId);
+                componentModel.SellerId,
+                nameof(Product.Name));
 
             if (primaryProducts != null)
             {

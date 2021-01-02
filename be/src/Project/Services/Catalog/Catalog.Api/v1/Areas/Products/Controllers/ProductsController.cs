@@ -43,12 +43,21 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The number of items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
         /// <returns></returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType(200)]
         [ProducesResponseType(422)]
         [AllowAnonymous]
-        public async Task<IActionResult> Get(string ids, Guid? categoryId, Guid? sellerId, bool includeProductVariants, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(
+            string ids, 
+            Guid? categoryId, 
+            Guid? sellerId, 
+            bool includeProductVariants, 
+            string searchTerm, 
+            int pageIndex, 
+            int itemsPerPage,
+            string orderBy)
         {
             var productIds = ids.ToEnumerableGuidIds();
 
@@ -59,6 +68,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                     Ids = productIds,
                     PageIndex = pageIndex,
                     ItemsPerPage = itemsPerPage,
+                    OrderBy = orderBy,
                     Language = CultureInfo.CurrentCulture.Name
                 };
 
@@ -84,6 +94,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                     SearchTerm = searchTerm,
                     CategoryId = categoryId,
                     OrganisationId = sellerId,
+                    OrderBy = orderBy,
                     Language = CultureInfo.CurrentCulture.Name,
                     IncludeProductVariants = includeProductVariants
                 };

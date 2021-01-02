@@ -274,13 +274,21 @@ namespace Catalog.Api.v1.Areas.Products.Services
 
         public async Task<PagedResults<IEnumerable<ProductResultModel>>> GetAsync(GetProductsModel model)
         {
-            var searchResults = await this.productSearchRepository.GetAsync(model.Language, model.CategoryId, model.OrganisationId, model.IncludeProductVariants, model.SearchTerm, model.PageIndex, model.ItemsPerPage);
+            var searchResults = await this.productSearchRepository.GetAsync(
+                model.Language, 
+                model.CategoryId, 
+                model.OrganisationId, 
+                model.IncludeProductVariants, 
+                model.SearchTerm, model.PageIndex, 
+                model.ItemsPerPage,
+                model.OrderBy);
+
             return await this.MapToPageResultsAsync(searchResults, model.Language);
         }
 
         public async Task<PagedResults<IEnumerable<ProductResultModel>>> GetByIdsAsync(GetProductsByIdsModel model)
         {
-            var searchResults = await this.productSearchRepository.GetAsync(model.Language, model.Ids);
+            var searchResults = await this.productSearchRepository.GetAsync(model.Language, model.Ids, model.OrderBy);
             return await this.MapToPageResultsAsync(searchResults, model.Language);
         }
 

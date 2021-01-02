@@ -72,6 +72,8 @@ namespace Catalog.Api.v1.Areas.Categories.Services
                 categories = categories.Where(x => x.IsLeaf == model.LeafOnly.Value);
             }
 
+            categories.ApplySort(model.OrderBy);
+
             return categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage), model.PageIndex);
         }
 

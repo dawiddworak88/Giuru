@@ -47,7 +47,16 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
+        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(
+            IEnumerable<Guid> ids, 
+            Guid? categoryId, 
+            Guid? sellerId, 
+            string language, 
+            string searchTerm, 
+            int pageIndex, 
+            int itemsPerPage, 
+            string token,
+            string orderBy)
         {
             var productsRequestModel = new ProductsRequestModel
             {
@@ -56,7 +65,8 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 SellerId = sellerId,
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy
             };
 
             var apiRequest = new ApiRequest<ProductsRequestModel>
