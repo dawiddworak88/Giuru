@@ -36,9 +36,9 @@ namespace Catalog.Api.v1.Areas.Taxonomies.Controllers
         /// <param name="taxonomyModel">Taxonomy to save.</param>
         /// <returns>Taxonomy creation results.</returns>
         [HttpPost, MapToApiVersion("1.0")]
-        [ProducesResponseType(201)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(422)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Create([FromBody] TaxonomyRequestModel taxonomyModel)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
@@ -71,9 +71,9 @@ namespace Catalog.Api.v1.Areas.Taxonomies.Controllers
         /// <param name="rootId">The root id of the taxonomy.</param>
         /// <returns></returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [ProducesResponseType(201)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(422)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string name, Guid? rootId)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);

@@ -31,7 +31,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         /// <param name="size">The maximum number of items.</param>
         /// <returns>The list of suggestions</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> Get(string searchTerm, int size)
         {

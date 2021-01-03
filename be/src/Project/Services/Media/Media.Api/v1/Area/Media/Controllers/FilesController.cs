@@ -43,7 +43,7 @@ namespace Media.Api.v1.Area.Media.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [Route("{mediaId}")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> Get(Guid? mediaId, bool? o, int? w, int? h)
         {
@@ -65,7 +65,7 @@ namespace Media.Api.v1.Area.Media.Controllers
         /// <param name="model">File contents.</param>
         /// <returns>Created if the file has been uploaded successfully.</returns>
         [HttpPost, MapToApiVersion("1.0")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(400)]
         [DisableRequestSizeLimit]
         public async Task<IActionResult> Create([FromForm] UploadMediaRequestModel model)

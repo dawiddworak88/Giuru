@@ -2,6 +2,7 @@
 using Foundation.ApiExtensions.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Basket.Api.v1.Areas.Baskets.Controllers
@@ -21,8 +22,8 @@ namespace Basket.Api.v1.Areas.Baskets.Controllers
         }
 
         [HttpGet, MapToApiVersion("1.0")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(422)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get()
         {
             return this.Ok();

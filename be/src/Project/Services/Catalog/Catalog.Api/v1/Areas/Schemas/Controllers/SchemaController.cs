@@ -38,9 +38,9 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
         /// <param name="schemaModel">Schema to save.</param>
         /// <returns>Schema creation results.</returns>
         [HttpPost, MapToApiVersion("1.0")]
-        [ProducesResponseType(201)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(422)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Create([FromBody] SchemaRequestModel schemaModel)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
@@ -74,9 +74,9 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
         /// <param name="id">The id.</param>
         /// <returns>The schema.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetById(Guid? id)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
@@ -114,9 +114,9 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
         /// <returns>The schema.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("EntityType")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<IActionResult> GetByEntityTypeId(Guid? id)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);

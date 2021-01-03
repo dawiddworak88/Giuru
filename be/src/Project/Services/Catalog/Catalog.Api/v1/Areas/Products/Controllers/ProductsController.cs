@@ -46,8 +46,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         /// <param name="orderBy">The optional order by.</param>
         /// <returns></returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(422)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         [AllowAnonymous]
         public async Task<IActionResult> Get(
             string ids, 
@@ -120,10 +120,10 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         /// <param name="request">Product to save.</param>
         /// <returns>Product creation result.</returns>
         [HttpPost, MapToApiVersion("1.0")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(201)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(422)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save([FromBody] ProductRequestModel request)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
@@ -186,9 +186,9 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         /// <returns>The product.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(404)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [AllowAnonymous]
         public async Task<IActionResult> GetById(Guid? id)
         {
@@ -223,10 +223,10 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         /// <returns>OK.</returns>
         [HttpDelete, MapToApiVersion("1.0")]
         [Route("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(409)]
-        [ProducesResponseType(422)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);

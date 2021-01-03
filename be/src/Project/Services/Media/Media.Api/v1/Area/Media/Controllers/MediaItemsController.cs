@@ -37,7 +37,7 @@ namespace Media.Api.v1.Area.Media.Controllers
         /// <param name="itemsPerPage">The number of items per page.</param>
         /// <returns>Media items.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [ProducesResponseType(201)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType(400)]
         [AllowAnonymous]
         public async Task<IActionResult> Get(string ids, int pageIndex, int itemsPerPage)
@@ -79,7 +79,7 @@ namespace Media.Api.v1.Area.Media.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [Route("{id}")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> Get(Guid? id)
         {

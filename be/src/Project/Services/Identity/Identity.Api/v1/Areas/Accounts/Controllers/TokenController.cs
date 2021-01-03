@@ -27,7 +27,7 @@ namespace Identity.Api.v1.Areas.Accounts.Controllers
         /// <param name="model">The credentials to obtain the token.</param>
         /// <returns>The token.</returns>
         [HttpPost, MapToApiVersion("1.0")]
-        [ProducesResponseType(200)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(401)]
         public async Task<IActionResult> GenerateToken([FromBody] GetTokenModel model)
         {
