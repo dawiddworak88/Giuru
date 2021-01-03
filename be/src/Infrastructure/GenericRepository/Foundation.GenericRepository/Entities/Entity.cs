@@ -13,6 +13,9 @@ namespace Foundation.GenericRepository.Entities
         [Required]
         public bool IsActive { get; set; }
 
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
+
         [Required]
         public DateTime LastModifiedDate { get; set; }
 
