@@ -1,27 +1,54 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Components.ListItems.ViewModels;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Orders.ViewModel;
+using Seller.Web.Shared.Repositories.Clients;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Orders.ModelBuilders
 {
     public class OrderFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrderFormViewModel>
     {
+        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
+        private readonly LinkGenerator linkGenerator;
+        private readonly IClientsRepository clientsRepository;
 
-        public OrderFormModelBuilder(IStringLocalizer<OrderResources> orderLocalizer)
+        public OrderFormModelBuilder(
+            IStringLocalizer<GlobalResources> globalLocalizer,
+            IStringLocalizer<OrderResources> orderLocalizer,
+            LinkGenerator linkGenerator,
+            IClientsRepository clientsRepository)
         {
+            this.globalLocalizer = globalLocalizer;
             this.orderLocalizer = orderLocalizer;
+            this.linkGenerator = linkGenerator;
+            this.clientsRepository = clientsRepository;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new OrderFormViewModel
-            { 
-                Title = this.orderLocalizer.GetString("EditOrder")
+            {
+                Title = this.orderLocalizer.GetString("EditOrder"),
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                SaveText = this.globalLocalizer.GetString("SaveText"),
+                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                SelectClientLabel = this.orderLocalizer.GetString("SelectClientLabel"),
+                ClientRequiredErrorMessage = this.orderLocalizer.GetString("ClientRequiredErrorMessage")
             };
+
+            var clients = await this.clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);
+
+            if (clients != null)
+            {
+                viewModel.Clients = clients.Select(x => new ListItemViewModel { Id = x.Id , Name = x.Name });
+            }
 
             return viewModel;
         }

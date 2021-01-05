@@ -14,7 +14,7 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.ApiExtensions.Models.Response;
 using System.Linq;
 
-namespace Seller.Web.Areas.Clients.Repositories
+namespace Seller.Web.Shared.Repositories.Clients
 {
     public class ClientsRepository : IClientsRepository
     {
@@ -60,7 +60,7 @@ namespace Seller.Web.Areas.Clients.Repositories
                 Language = language,
                 Data = categoriesRequestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>>(apiRequest);

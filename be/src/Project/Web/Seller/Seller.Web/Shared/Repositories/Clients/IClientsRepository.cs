@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Foundation.GenericRepository.Paginations;
 using Seller.Web.Areas.Clients.DomainModels;
 
-namespace Seller.Web.Areas.Clients.Repositories
+namespace Seller.Web.Shared.Repositories.Clients
 {
     public interface IClientsRepository
     {

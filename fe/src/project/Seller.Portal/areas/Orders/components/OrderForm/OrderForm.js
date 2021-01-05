@@ -1,20 +1,34 @@
 import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Context } from "../../../../../../shared/stores/Store";
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from "@material-ui/core";
+import { TextField, Button, FormControl, InputLabel, Select, FormHelperText, CircularProgress } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 
 function OrderForm(props) {
+
+    const clientsProps = {
+        options: props.clients,
+        getOptionLabel: (option) => option.name
+    };
 
     const [state, dispatch] = useContext(Context);
 
     const stateSchema = {
 
-        id: { value: props.id ? props.id : null, error: "" }
+        id: { value: props.id ? props.id : null, error: "" },
+        client: { value: props.clientId ? props.clients.find((item) => item.id === props.clientId) : null, error: "" }
     };
 
     const stateValidatorSchema = {
+
+        client: {
+            required: {
+                isRequired: true,
+                error: props.clientRequiredErrorMessage
+            }
+        },
     };
 
     function onSubmitForm(state) {
@@ -59,7 +73,7 @@ function OrderForm(props) {
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id } = values;
+    const { id, client } = values;
 
     return (
         <section className="section section-small-padding client">
@@ -69,6 +83,24 @@ function OrderForm(props) {
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                         {id &&
                             <input id="id" name="id" type="hidden" value={id} />
+                        }
+                        <div className="field">
+                            <Autocomplete
+                                {...clientsProps}
+                                id="client"
+                                name="client"
+                                fullWidth={true}
+                                value={client}
+                                onChange={(event, newValue) => {
+                                    setFieldValue({ name: "client", value: newValue });
+                                  }}
+                                autoComplete
+                                renderInput={(params) => <TextField {...params} label={props.selectClientLabel} margin="normal" />}
+                            />
+                        </div>
+                        {client &&
+                            <div>
+                            </div>
                         }
                         <div className="field">
                             <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
@@ -86,23 +118,12 @@ function OrderForm(props) {
 OrderForm.propTypes = {
     title: PropTypes.string.isRequired,
     id: PropTypes.string,
-    name: PropTypes.string,
-    email: PropTypes.string,
-    communicationLanguage: PropTypes.string,
+    selectClientLabel: PropTypes.string.isRequired,
+    clientRequiredErrorMessage: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
-    nameLabel: PropTypes.string.isRequired,
-    emailLabel: PropTypes.string.isRequired,
-    languageLabel: PropTypes.string.isRequired,
-    nameRequiredErrorMessage: PropTypes.string.isRequired,
-    emailRequiredErrorMessage: PropTypes.string.isRequired,
-    languageRequiredErrorMessage: PropTypes.string.isRequired,
-    emailFormatErrorMessage: PropTypes.string.isRequired,
-    clientDetailText: PropTypes.string.isRequired,
-    enterNameText: PropTypes.string.isRequired,
-    enterEmailText: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     saveUrl: PropTypes.string.isRequired,
-    languages: PropTypes.array.isRequired
+    clients: PropTypes.array
 };
 
 export default OrderForm;
