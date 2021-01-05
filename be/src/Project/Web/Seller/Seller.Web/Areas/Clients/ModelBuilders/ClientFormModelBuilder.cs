@@ -50,6 +50,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             var viewModel = new ClientFormViewModel
             {
+                Title = this.clientLocalizer.GetString("EditClient"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 ClientDetailText = this.clientLocalizer.GetString("Client"),
                 NameLabel = this.globalLocalizer.GetString("NameLabel"),

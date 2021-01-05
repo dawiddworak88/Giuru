@@ -6,6 +6,7 @@ namespace Seller.Web.Areas.Clients.ViewModels
 {
     public class ClientFormViewModel
     {
+        public string Title { get; set; }
         public Guid? Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }

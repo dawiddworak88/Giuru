@@ -135,6 +135,9 @@
   <data name="ClientSavedSuccessfully" xml:space="preserve">
     <value>Der Kunde wurde erfolgreich gespeichert.</value>
   </data>
+  <data name="EditClient" xml:space="preserve">
+    <value>Kunde bearbeiten</value>
+  </data>
   <data name="NewClient" xml:space="preserve">
     <value>Neuer Kunde</value>
   </data>
