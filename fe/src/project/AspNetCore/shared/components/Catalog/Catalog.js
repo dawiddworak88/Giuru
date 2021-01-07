@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
 import { Context } from "../../../../../shared/stores/Store";
-import FetchErrorHandler from "../../../../../shared/helpers/errorHandlers/FetchErrorHandler";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import { TablePagination } from "@material-ui/core";
 import CatalogConstants from "./CatalogConstants";
@@ -43,8 +42,6 @@ function Catalog(props) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                FetchErrorHandler.handleUnauthorizedResponse(response);
-
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
@@ -54,7 +51,6 @@ function Catalog(props) {
                         setTotal(() => jsonResponse.total);
                     }
                     else {
-                        FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
                         toast.error(props.generalErrorMessage);
                     }
                 });

@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 import { Button } from "@material-ui/core";
 import LanguageSwitcher from "../../../../../shared/components/LanguageSwitcher/LanguageSwitcher";
 import HeaderConstants from "./HeaderConstants";
-import FetchErrorHandler from "../../../../../shared/helpers/errorHandlers/FetchErrorHandler";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import { Context } from "../../../../../shared/stores/Store";
@@ -55,8 +54,6 @@ function Header(props) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
-                FetchErrorHandler.handleUnauthorizedResponse(response);
-
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
@@ -65,7 +62,6 @@ function Header(props) {
                         setSuggestions(() => jsonResponse);
                     }
                     else {
-                        FetchErrorHandler.consoleLogResponseDetails(searchParameters, response, jsonResponse);
                         toast.error(props.generalErrorMessage);
                     }
                 });
@@ -79,7 +75,7 @@ function Header(props) {
     const onSuggestionSelected = (event, { suggestion }) => {
 
         NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(suggestion));
-    }
+    };
 
     const onSearchSubmit = (e) => {
 

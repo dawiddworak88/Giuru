@@ -36,6 +36,18 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             var viewModel = new OrderFormViewModel
             {
                 Title = this.orderLocalizer.GetString("EditOrder"),
+                AddText = this.orderLocalizer.GetString("Add"),
+                ChangeDeliveryFromLabel = this.orderLocalizer.GetString("ChangeDeliveryFromLabel"),
+                ChangeDeliveryToLabel = this.orderLocalizer.GetString("ChangeDeliveryToLabel"),
+                DeliveryFromLabel = this.orderLocalizer.GetString("DeliveryFromLabel"),
+                DeliveryToLabel = this.orderLocalizer.GetString("DeliveryToLabel"),
+                GetSuggestionsUrl = "#",
+                MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
+                NameLabel = this.orderLocalizer.GetString("NameLabel"),
+                OrderItemsLabel = this.orderLocalizer.GetString("OrderItemsLabel"),
+                QuantityLabel = this.orderLocalizer.GetString("QuantityLabel"),
+                ReferenceIdLabel = this.orderLocalizer.GetString("ReferenceIdLabel"),
+                SkuLabel = this.orderLocalizer.GetString("SkuLabel"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),

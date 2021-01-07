@@ -14,5 +14,17 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string SaveText { get; set; }
         public string SaveUrl { get; set; }
         public IEnumerable<ListItemViewModel> Clients { get; set; }
+        public string SkuLabel { get; set; }
+        public string NameLabel { get; set; }
+        public string QuantityLabel { get; set; }
+        public string ReferenceIdLabel { get; set; }
+        public string DeliveryFromLabel { get; set; }
+        public string DeliveryToLabel { get; set; }
+        public string MoreInfoLabel { get; set; }
+        public string GetSuggestionsUrl { get; set; }
+        public string OrderItemsLabel { get; set; }
+        public string ChangeDeliveryFromLabel { get; set; }
+        public string ChangeDeliveryToLabel { get; set; }
+        public string AddText { get; set; }
     }
 }

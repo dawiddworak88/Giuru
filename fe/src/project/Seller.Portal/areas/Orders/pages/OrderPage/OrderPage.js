@@ -17,7 +17,7 @@ function OrderPage(props) {
 
   return (
 
-      <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
+      <ThemeProvider theme={GlobalHelper.initMuiTheme(props.locale)}>
         <Store>
           <div>
             <Header {...props.header}></Header>

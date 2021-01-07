@@ -1,10 +1,11 @@
 import { createMuiTheme } from "@material-ui/core/styles";
+import * as locales from '@material-ui/core/locale';
 
 export default class GlobalHelper {
 
-  static initMuiTheme() {
+  static initMuiTheme(locale) {
 
-    const theme = createMuiTheme({
+    var themeDefinition = {
       typography: {
         body1: {
           fontFamily: "'Poppins', sans-serif"
@@ -21,8 +22,21 @@ export default class GlobalHelper {
           main: "#5E1916"
         }
       }
-    });
+    };
 
-    return theme;
+    if (locale) {
+
+      const localeMappings = {
+        "pl": "plPL",
+        "de": "deDE",
+        "en": "enUS"
+      };
+
+      return createMuiTheme(themeDefinition, locales[localeMappings[locale]]);
+    }
+    else {
+      
+      return createMuiTheme(themeDefinition);
+    }
   }
 }
