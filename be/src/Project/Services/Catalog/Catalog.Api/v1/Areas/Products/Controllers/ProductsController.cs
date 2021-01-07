@@ -40,6 +40,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         /// <param name="categoryId">The category id.</param>
         /// <param name="sellerId">The brand id.</param>
         /// <param name="includeProductVariants">Includes product variants in the results list.</param>
+        /// <param name="productVariantsOnly">Includes only product variants in the results list.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The number of items per page.</param>
@@ -53,7 +54,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
             string ids, 
             Guid? categoryId, 
             Guid? sellerId, 
-            bool includeProductVariants, 
+            bool includeProductVariants,
+            bool productVariantsOnly,
             string searchTerm, 
             int pageIndex, 
             int itemsPerPage,
@@ -96,7 +98,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                     OrganisationId = sellerId,
                     OrderBy = orderBy,
                     Language = CultureInfo.CurrentCulture.Name,
-                    IncludeProductVariants = includeProductVariants
+                    IncludeProductVariants = includeProductVariants,
+                    ProductVariantsOnly = productVariantsOnly
                 };
 
                 var validator = new GetProductsModelValidator();

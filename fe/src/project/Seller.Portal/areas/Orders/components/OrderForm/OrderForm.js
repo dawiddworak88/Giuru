@@ -1,7 +1,6 @@
 import React, { useContext, useState, Fragment } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-import Grid from '@material-ui/core/Grid';
 import MomentUtils from '@date-io/moment';
 import {
     MuiPickersUtilsProvider,
@@ -16,6 +15,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import {
     Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper } from "@material-ui/core";
+import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 
 function OrderForm(props) {
 
@@ -30,7 +30,7 @@ function OrderForm(props) {
     const [client, setClient] = useState(props.clientId ? props.clients.find((item) => item.id === props.clientId) : null);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
-    const [quantity, setQuantity] = useState([]);
+    const [quantity, setQuantity] = useState(1);
     const [referenceId, setReferenceId] = useState("");
     const [deliveryFrom, setDeliveryFrom] = useState(null);
     const [deliveryTo, setDeliveryTo] = useState(null);
@@ -46,7 +46,8 @@ function OrderForm(props) {
 
             const searchParameters = {
 
-                searchTerm: args.value
+                searchTerm: args.value,
+                productVariantsOnly: true
             };
 
             const requestOptions = {
@@ -81,6 +82,7 @@ function OrderForm(props) {
 
     const onSuggestionSelected = (event, { suggestion }) => {
 
+        console.log(suggestion);
         setProduct(suggestion);
     };
 
@@ -128,7 +130,7 @@ function OrderForm(props) {
     };
 
     return (
-        <section className="section section-small-padding client">
+        <section className="section section-small-padding order">
             <h1 className="subtitle is-4">{props.title}</h1>
             <form className="is-modern-form" method="post">
                 {id &&
@@ -154,8 +156,9 @@ function OrderForm(props) {
                 </div>
                 {client &&
                     <Fragment>
-                        <div className="columns is-desktop">
-                            <div className="column is-3">
+                        <h2 className="subtitle is-5 order__items-subtitle">{props.orderItemsLabel}</h2>
+                        <div className="columns is-desktop is-flex is-align-items-flex-end">
+                            <div className="column is-2">
                                 <Autosuggest
                                     suggestions={suggestions}
                                     onSuggestionsFetchRequested={onSuggestionsFetchRequested}
@@ -173,7 +176,7 @@ function OrderForm(props) {
                                     }}
                                     inputProps={searchInputProps} />
                             </div>
-                            <div className="column is-2">
+                            <div className="column is-1">
                                 <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "1", step: "1" }} 
                                     label={props.quantityLabel} fullWidth={true} value={quantity} onChange={(e) => {
 
@@ -190,22 +193,18 @@ function OrderForm(props) {
                                         setReferenceId(e.target.value);
                                     }} />
                             </div>
-                            <div className="column is-1">
+                            <div className="column is-2">
                                 <MuiPickersUtilsProvider utils={MomentUtils}>
-                                    <Grid container justify="space-around">
                                         <KeyboardDatePicker
-                                            margin="normal"
                                             id="deliveryFrom"
                                             label={props.deliveryFromLabel}
                                             value={deliveryFrom}
-                                            onChange={(e) => {
-
-                                                e.preventDefault();
-                                                setDeliveryFrom(e.target.value);
+                                            onChange={(date) => {
+                                                setDeliveryFrom(date);
                                             }}
                                             InputProps={{
                                                 endAdornment: (
-                                                  <IconButton onClick={() => handleDeliveryFromChange(null)}>
+                                                  <IconButton onClick={() => setDeliveryFrom(null)}>
                                                     <ClearIcon />
                                                   </IconButton>
                                                 )
@@ -216,25 +215,20 @@ function OrderForm(props) {
                                             KeyboardButtonProps={{
                                                 'aria-label': props.changeDeliveryFromLabel,
                                             }} />
-                                    </Grid>
                                 </MuiPickersUtilsProvider>
                             </div>
-                            <div className="column is-1">
+                            <div className="column is-2">
                                 <MuiPickersUtilsProvider utils={MomentUtils}>
-                                    <Grid container justify="space-around">
                                         <KeyboardDatePicker
-                                            margin="normal"
                                             id="deliveryTo"
                                             label={props.deliveryToLabel}
                                             value={deliveryTo}
-                                            onChange={(e) => {
-
-                                                e.preventDefault();
-                                                setDeliveryTo(e.target.value);
+                                            onChange={(date) => {
+                                                setDeliveryTo(date);
                                             }}
                                             InputProps={{
                                                 endAdornment: (
-                                                  <IconButton onClick={() => handleDeliveryToChange(null)}>
+                                                  <IconButton onClick={() => setDeliveryTo(null)}>
                                                     <ClearIcon />
                                                   </IconButton>
                                                 )
@@ -245,26 +239,25 @@ function OrderForm(props) {
                                             KeyboardButtonProps={{
                                                 'aria-label': props.changeDeliveryToLabel,
                                             }} />
-                                    </Grid>
                                 </MuiPickersUtilsProvider>
                             </div>
-                            <div className="column is-2">
+                            <div className="column is-3">
                                 <TextField id="moreInfo" name="moreInfo" type="text" label={props.moreInfoLabel} 
                                 fullWidth={true} value={moreInfo} multiline onChange={(e) => {
 
                                     e.preventDefault();
-                                    setReferenceId(e.target.value);
+                                    setMoreInfo(e.target.value);
                                 }} />
                             </div>
-                            <div className="column is-2">
-                                <Button type="button" variant="contained" color="primary" disabled={state.isLoading || disable}>
+                            <div className="column is-1">
+                                <Button type="button" variant="contained" color="secondary" disabled={state.isLoading || disable}>
                                     {props.addText}
                                 </Button>
                             </div>
                         </div>
-                        <div className="orderItems">
+                        <div className="order__items">
                             {(orderItems && orderItems.length > 0) ?
-                                (<div className="table-container">
+                                (<section className="section">
                                     <div className="orderitems__table">
                                         <TableContainer component={Paper}>
                                             <Table aria-label={props.orderItemsLabel}>
@@ -301,7 +294,7 @@ function OrderForm(props) {
                                             </Table>
                                         </TableContainer>
                                     </div>
-                                </div>) :
+                                </section>) :
                                 (<section className="section is-flex-centered">
                                     <span className="is-title is-5">{props.noOrderItemsLabel}</span>
                                 </section>)
@@ -323,6 +316,7 @@ function OrderForm(props) {
 OrderForm.propTypes = {
     title: PropTypes.string.isRequired,
     id: PropTypes.string,
+    searchPlaceholderLabel: PropTypes.string.isRequired,
     skuLabel: PropTypes.string.isRequired,
     nameLabel: PropTypes.string.isRequired,
     quantityLabel: PropTypes.string.isRequired,
@@ -342,6 +336,7 @@ OrderForm.propTypes = {
     addText: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     saveUrl: PropTypes.string.isRequired,
+    noOrderItemsLabel: PropTypes.string.isRequired,
     clients: PropTypes.array
 };
 

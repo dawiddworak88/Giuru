@@ -8,7 +8,10 @@ namespace Seller.Web.Areas.Orders.ViewModel
     {
         public string Title { get; set; }
         public Guid? Id { get; set; }
+        public string NoOrderItemsLabel { get; set; }
+        public string SearchPlaceholderLabel { get; set; }
         public string SelectClientLabel { get; set; }
+        public string OrderItemLabel { get; set; }
         public string ClientRequiredErrorMessage { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string SaveText { get; set; }

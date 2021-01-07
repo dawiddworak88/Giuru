@@ -279,7 +279,9 @@ namespace Catalog.Api.v1.Areas.Products.Services
                 model.CategoryId, 
                 model.OrganisationId, 
                 model.IncludeProductVariants, 
-                model.SearchTerm, model.PageIndex, 
+                model.ProductVariantsOnly,
+                model.SearchTerm, 
+                model.PageIndex, 
                 model.ItemsPerPage,
                 model.OrderBy);
 
