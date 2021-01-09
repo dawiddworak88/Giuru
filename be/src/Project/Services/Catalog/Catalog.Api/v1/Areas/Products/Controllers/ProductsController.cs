@@ -39,8 +39,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         /// <param name="ids">The list of product ids.</param>
         /// <param name="categoryId">The category id.</param>
         /// <param name="sellerId">The brand id.</param>
-        /// <param name="includeProductVariants">Includes product variants in the results list.</param>
-        /// <param name="productVariantsOnly">Includes only product variants in the results list.</param>
+        /// <param name="hasPrimaryProduct">Set to null to get all products including product variants. Set to false to get primary products only. Set to true to get product variants only.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The number of items per page.</param>
@@ -53,9 +52,8 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
         public async Task<IActionResult> Get(
             string ids, 
             Guid? categoryId, 
-            Guid? sellerId, 
-            bool includeProductVariants,
-            bool productVariantsOnly,
+            Guid? sellerId,
+            bool? hasPrimaryProduct,
             string searchTerm, 
             int pageIndex, 
             int itemsPerPage,
@@ -98,8 +96,7 @@ namespace Catalog.Api.v1.Areas.Products.Controllers
                     OrganisationId = sellerId,
                     OrderBy = orderBy,
                     Language = CultureInfo.CurrentCulture.Name,
-                    IncludeProductVariants = includeProductVariants,
-                    ProductVariantsOnly = productVariantsOnly
+                    HasPrimaryProduct = hasPrimaryProduct
                 };
 
                 var validator = new GetProductsModelValidator();

@@ -22,8 +22,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
             string language, 
             Guid? categoryId, 
             Guid? sellerId, 
-            bool includeProductVariants,
-            bool productVariantsOnly,
+            bool? hasPrimaryProduct,
             string searchTerm, 
             int pageIndex, 
             int itemsPerPage,
@@ -42,14 +41,9 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
                 query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(sellerId.Value));
             }
 
-            if (!includeProductVariants)
+            if (hasPrimaryProduct.HasValue)
             {
-                query = query && Query<ProductSearchModel>.Term(t => t.PrimaryProductIdHasValue, false);
-            }
-
-            if (productVariantsOnly)
-            {
-                query = query && Query<ProductSearchModel>.Term(t => t.PrimaryProductIdHasValue, true);
+                query = query && Query<ProductSearchModel>.Term(t => t.PrimaryProductIdHasValue, hasPrimaryProduct.Value);
             }
 
             if (!string.IsNullOrWhiteSpace(searchTerm))

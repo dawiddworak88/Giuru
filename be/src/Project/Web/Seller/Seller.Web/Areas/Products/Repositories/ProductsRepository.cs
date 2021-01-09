@@ -31,8 +31,8 @@ namespace Seller.Web.Areas.Products.Repositories
         public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(
             string token, 
             string language, 
-            string searchTerm, 
-            bool productVariantsOnly,
+            string searchTerm,
+            bool? hasPrimaryProduct,
             Guid? sellerId, 
             int pageIndex, 
             int itemsPerPage, 
@@ -44,8 +44,7 @@ namespace Seller.Web.Areas.Products.Repositories
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
                 SellerId = sellerId,
-                IncludeProductVariants = true,
-                ProductVariantsOnly = productVariantsOnly,
+                HasPrimaryProduct = hasPrimaryProduct,
                 OrderBy = orderBy
             };
 
@@ -82,7 +81,7 @@ namespace Seller.Web.Areas.Products.Repositories
                 PageIndex = PaginationConstants.DefaultPageIndex,
                 ItemsPerPage = PaginationConstants.DefaultPageSize,
                 SellerId = sellerId,
-                IncludeProductVariants = false,
+                HasPrimaryProduct = false,
                 OrderBy = orderBy
             };
 

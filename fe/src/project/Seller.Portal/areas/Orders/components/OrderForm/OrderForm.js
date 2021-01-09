@@ -16,6 +16,7 @@ import {
     Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper } from "@material-ui/core";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
+import PaginationConstants from "../../../../../../shared/constants/PaginationConstants";
 
 function OrderForm(props) {
 
@@ -47,7 +48,9 @@ function OrderForm(props) {
             const searchParameters = {
 
                 searchTerm: args.value,
-                productVariantsOnly: true
+                hasPrimaryProduct: true,
+                pageIndex: 1,
+                itemsPerPage: PaginationConstants.defaultRowsPerPage()
             };
 
             const requestOptions = {
@@ -67,7 +70,7 @@ function OrderForm(props) {
                         if (response.ok) {
 
                             setSuggestions(() => []);
-                            setSuggestions(() => jsonResponse);
+                            setSuggestions(() => jsonResponse.data);
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -82,7 +85,7 @@ function OrderForm(props) {
 
     const onSuggestionSelected = (event, { suggestion }) => {
 
-        console.log(suggestion);
+        setSearchTerm(suggestion.sku);
         setProduct(suggestion);
     };
 
@@ -132,7 +135,7 @@ function OrderForm(props) {
     return (
         <section className="section section-small-padding order">
             <h1 className="subtitle is-4">{props.title}</h1>
-            <form className="is-modern-form" method="post">
+            <div className="is-modern-form">
                 {id &&
                     <input id="id" name="id" type="hidden" value={id} />
                 }
@@ -170,7 +173,7 @@ function OrderForm(props) {
                                     renderSuggestion={(suggestion) => {
                                         return (
                                             <div className="suggestion">
-                                                {suggestion}
+                                                {suggestion.sku}
                                             </div>
                                         );
                                     }}
@@ -307,7 +310,7 @@ function OrderForm(props) {
                         {props.saveText}
                     </Button>
                 </div>
-            </form>
+            </div>
             {state.isLoading && <CircularProgress className="progressBar" />}
         </section >
     );

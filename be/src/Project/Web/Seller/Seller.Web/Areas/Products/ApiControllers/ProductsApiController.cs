@@ -33,13 +33,13 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string searchTerm, bool productVariantsOnly, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage)
         {
             var products = await this.productsRepository.GetProductsAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 searchTerm,
-                productVariantsOnly,
+                hasPrimaryProduct,
                 GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value),
                 pageIndex,
                 itemsPerPage,

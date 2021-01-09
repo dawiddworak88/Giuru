@@ -12,9 +12,8 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
             string language, 
             Guid? categoryId, 
             Guid? sellerId, 
-            bool includeProductVariants,
-            bool productVariantsOnly,
-            string searchTerm, 
+            bool? hasPrimaryProduct,
+            string searchTerm,
             int pageIndex, 
             int itemsPerPage,
             string orderBy);

@@ -109,7 +109,6 @@ namespace Catalog.Api.v1.Areas.Schemas.Controllers
         /// <summary>
         /// Gets the schema by entity type id.
         /// </summary>
-        /// <param name="language">The language.</param>
         /// <param name="id">The entity type id.</param>
         /// <returns>The schema.</returns>
         [HttpGet, MapToApiVersion("1.0")]

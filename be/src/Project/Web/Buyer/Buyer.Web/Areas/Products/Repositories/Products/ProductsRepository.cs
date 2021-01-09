@@ -64,6 +64,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 CategoryId = categoryId,
                 SellerId = sellerId,
                 SearchTerm = searchTerm,
+                HasPrimaryProduct = false,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
                 OrderBy = orderBy

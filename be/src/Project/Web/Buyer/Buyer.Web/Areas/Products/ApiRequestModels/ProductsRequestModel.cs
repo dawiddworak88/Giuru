@@ -9,6 +9,7 @@ namespace Buyer.Web.Areas.Products.ApiRequestModels
         public Guid? CategoryId { get; set; }
         public Guid? SellerId { get; set; }
         public string SearchTerm { get; set; }
+        public bool? HasPrimaryProduct { get; set; }
         public int PageIndex { get; set; }
         public int ItemsPerPage { get; set; }
         public string OrderBy { get; set; }
