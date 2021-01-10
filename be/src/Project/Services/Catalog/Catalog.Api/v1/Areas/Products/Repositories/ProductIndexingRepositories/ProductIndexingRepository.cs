@@ -71,6 +71,10 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductIndexingRepositories
                                     {
                                         "isActive",
                                         new[] { product.Category.IsActive.ToString() }
+                                    },
+                                    {
+                                        "language",
+                                        new[] { language.ToString() }
                                     }
                                 }
                             },

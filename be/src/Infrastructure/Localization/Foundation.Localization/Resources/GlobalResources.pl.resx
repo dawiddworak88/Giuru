@@ -132,6 +132,9 @@
   <data name="By" xml:space="preserve">
     <value>od</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
   <data name="Cards" xml:space="preserve">
     <value>Karty</value>
   </data>
@@ -269,6 +272,9 @@
   </data>
   <data name="NoResultsLabel" xml:space="preserve">
     <value>Brak wyników.</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Otwórz</value>

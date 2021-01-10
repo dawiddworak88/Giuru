@@ -17,7 +17,7 @@ import {
     Fab, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper } from "@material-ui/core";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
-import PaginationConstants from "../../../../../../shared/constants/PaginationConstants";
+import OrderFormConstants from "../../constants/OrderFormConstants";
 
 function OrderForm(props) {
 
@@ -32,7 +32,6 @@ function OrderForm(props) {
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
-    const [referenceId, setReferenceId] = useState("");
     const [deliveryFrom, setDeliveryFrom] = useState(null);
     const [deliveryTo, setDeliveryTo] = useState(null);
     const [moreInfo, setMoreInfo] = useState("");
@@ -41,7 +40,7 @@ function OrderForm(props) {
 
     const onSuggestionsFetchRequested = (args) => {
 
-        if (args.value) {
+        if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
 
             dispatch({ type: "SET_IS_LOADING", payload: true });
 
@@ -50,7 +49,7 @@ function OrderForm(props) {
                 searchTerm: args.value,
                 hasPrimaryProduct: true,
                 pageIndex: 1,
-                itemsPerPage: PaginationConstants.defaultRowsPerPage()
+                itemsPerPage: OrderFormConstants.productSuggestionsNumber()
             };
 
             const requestOptions = {
@@ -84,8 +83,7 @@ function OrderForm(props) {
     };
 
     const onSuggestionSelected = (event, { suggestion }) => {
-
-        setSearchTerm(suggestion.sku);
+        
         setProduct(suggestion);
     };
 
@@ -167,13 +165,13 @@ function OrderForm(props) {
                                     onSuggestionsFetchRequested={onSuggestionsFetchRequested}
                                     onSuggestionsClearRequested={() => setSuggestions([])}
                                     getSuggestionValue={(suggestion) => {
-                                        return suggestion;
+                                        return "(" + suggestion.sku + ")" + " " + suggestion.name;
                                     }}
                                     onSuggestionSelected={onSuggestionSelected}
                                     renderSuggestion={(suggestion) => {
                                         return (
                                             <div className="suggestion">
-                                                {suggestion.sku}
+                                                { "(" + suggestion.sku + ")" + " " + suggestion.name }
                                             </div>
                                         );
                                     }}
@@ -196,6 +194,8 @@ function OrderForm(props) {
                                             onChange={(date) => {
                                                 setDeliveryFrom(date);
                                             }}
+                                            okLabel={props.okLabel}
+                                            cancelLabel={props.cancelLabel}
                                             InputProps={{
                                                 endAdornment: (
                                                   <IconButton onClick={() => setDeliveryFrom(null)}>
@@ -220,6 +220,8 @@ function OrderForm(props) {
                                             onChange={(date) => {
                                                 setDeliveryTo(date);
                                             }}
+                                            okLabel={props.okLabel}
+                                            cancelLabel={props.cancelLabel}
                                             InputProps={{
                                                 endAdornment: (
                                                   <IconButton onClick={() => setDeliveryTo(null)}>
@@ -261,7 +263,6 @@ function OrderForm(props) {
                                                         <TableCell>{props.skuLabel}</TableCell>
                                                         <TableCell>{props.nameLabel}</TableCell>
                                                         <TableCell>{props.quantityLabel}</TableCell>
-                                                        <TableCell>{props.referenceIdLabel}</TableCell>
                                                         <TableCell>{props.deliveryFromLabel}</TableCell>
                                                         <TableCell>{props.deliveryToLabel}</TableCell>
                                                         <TableCell>{props.moreInfoLabel}</TableCell>
@@ -278,7 +279,6 @@ function OrderForm(props) {
                                                             <TableCell>{item.sku}</TableCell>
                                                             <TableCell>{item.name}</TableCell>
                                                             <TableCell>{item.quantity}</TableCell>
-                                                            <TableCell>{item.referenceId}</TableCell>
                                                             <TableCell>{moment(item.deliveryFrom).local().format("L LT")}</TableCell>
                                                             <TableCell>{moment(item.deliveryTo).local().format("L LT")}</TableCell>
                                                             <TableCell>{item.moreInfo}</TableCell>
@@ -331,6 +331,8 @@ OrderForm.propTypes = {
     saveText: PropTypes.string.isRequired,
     saveUrl: PropTypes.string.isRequired,
     noOrderItemsLabel: PropTypes.string.isRequired,
+    okLabel: PropTypes.string.isRequired,
+    cancelLabel: PropTypes.string.isRequired,
     clients: PropTypes.array
 };
 

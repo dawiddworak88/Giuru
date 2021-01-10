@@ -53,7 +53,9 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 SelectClientLabel = this.orderLocalizer.GetString("SelectClientLabel"),
-                ClientRequiredErrorMessage = this.orderLocalizer.GetString("ClientRequiredErrorMessage")
+                ClientRequiredErrorMessage = this.orderLocalizer.GetString("ClientRequiredErrorMessage"),
+                OkLabel = this.globalLocalizer.GetString("Ok"),
+                CancelLabel = this.globalLocalizer.GetString("Cancel")
             };
 
             var clients = await this.clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);

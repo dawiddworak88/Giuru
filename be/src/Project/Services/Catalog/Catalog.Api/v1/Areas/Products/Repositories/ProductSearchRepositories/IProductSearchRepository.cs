@@ -21,6 +21,6 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
         Task<PagedResults<IEnumerable<ProductSearchModel>>> GetProductVariantsAsync(Guid id, string language);
         Task<ProductSearchModel> GetAsync(Guid id, string language);
         Task<int?> CountAllAsync();
-        IEnumerable<string> GetProductSuggestions(string searchTerm, int size);
+        IEnumerable<string> GetProductSuggestions(string searchTerm, int size, string language);
     }
 }

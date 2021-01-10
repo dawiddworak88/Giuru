@@ -132,6 +132,9 @@
   <data name="By" xml:space="preserve">
     <value>von</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
   <data name="Categories" xml:space="preserve">
     <value>Kategorien</value>
   </data>
@@ -269,6 +272,9 @@
   </data>
   <data name="NoResultsLabel" xml:space="preserve">
     <value>Keine Ergebnisse.</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Öffnen</value>

@@ -50,6 +50,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
             {
                 query = query && 
                     (Query<ProductSearchModel>.QueryString(d => d.Query(searchTerm))
+                        || Query<ProductSearchModel>.Prefix(x => x.Sku, searchTerm.ToLowerInvariant())
                         || Query<ProductSearchModel>.Match(x => x.Field(f => f.CategoryName).Query(searchTerm).Fuzziness(Fuzziness.Auto))
                         || Query<ProductSearchModel>.Prefix(x => x.Name.Suffix("keyword"), searchTerm));
             }
@@ -148,7 +149,7 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
             return default;
         }
 
-        public IEnumerable<string> GetProductSuggestions(string searchTerm, int size)
+        public IEnumerable<string> GetProductSuggestions(string searchTerm, int size, string language)
         {
             var suggestions = new List<string>();
 
@@ -157,6 +158,8 @@ namespace Catalog.Api.v1.Areas.Products.Repositories.ProductSearchRepositories
                     .Completion("categoryName", cs => cs
                         .Contexts(ctx => ctx
                             .Context("isActive", x => x.Context(true.ToString())))
+                        .Contexts(ctx => ctx
+                            .Context("language", x => x.Context(language)))
                         .Field(f => f.CategoryNameSuggest)
                         .Prefix(searchTerm)
                         .Fuzzy(f => f

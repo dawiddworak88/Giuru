@@ -46,7 +46,8 @@ namespace Catalog.Api.DependencyInjection
                             .Completion(cmpl => cmpl
                                 .Name(n => n.CategoryNameSuggest)
                                 .Contexts(ctxs => ctxs
-                                    .Category(ctgr => ctgr.Name("isActive")))))));
+                                    .Category(ctgr => ctgr.Name("isActive"))
+                                    .Category(ctgr => ctgr.Name("language")))))));
             }
 
             services.AddSingleton<IElasticClient>(client);
