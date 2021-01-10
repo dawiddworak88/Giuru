@@ -12,8 +12,9 @@ import { Context } from "../../../../../../shared/stores/Store";
 import { TextField, Button, IconButton, CircularProgress } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ClearIcon from "@material-ui/icons/Clear";
+import AddShoppingCartRounded from "@material-ui/icons/AddShoppingCartRounded";
 import {
-    Table, TableBody, TableCell, TableContainer,
+    Fab, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper } from "@material-ui/core";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import PaginationConstants from "../../../../../../shared/constants/PaginationConstants";
@@ -26,7 +27,6 @@ function OrderForm(props) {
     };
 
     const [state, dispatch] = useContext(Context);
-    const [disable, setDisable] = useState(false);
     const [id, setId] = useState(props.id ? props.id : null);
     const [client, setClient] = useState(props.clientId ? props.clients.find((item) => item.id === props.clientId) : null);
     const [searchTerm, setSearchTerm] = useState("");
@@ -160,8 +160,8 @@ function OrderForm(props) {
                 {client &&
                     <Fragment>
                         <h2 className="subtitle is-5 order__items-subtitle">{props.orderItemsLabel}</h2>
-                        <div className="columns is-desktop is-flex is-align-items-flex-end">
-                            <div className="column is-2">
+                        <div className="columns is-tablet">
+                            <div className="column is-3 is-flex is-align-items-flex-end">
                                 <Autosuggest
                                     suggestions={suggestions}
                                     onSuggestionsFetchRequested={onSuggestionsFetchRequested}
@@ -179,7 +179,7 @@ function OrderForm(props) {
                                     }}
                                     inputProps={searchInputProps} />
                             </div>
-                            <div className="column is-1">
+                            <div className="column is-1 is-flex is-align-items-flex-end">
                                 <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "1", step: "1" }} 
                                     label={props.quantityLabel} fullWidth={true} value={quantity} onChange={(e) => {
 
@@ -187,16 +187,7 @@ function OrderForm(props) {
                                         setQuantity(e.target.value);
                                     }} />
                             </div>
-                            <div className="column is-1">
-                                <TextField id="referenceId" name="referenceId" type="text" 
-                                    label={props.referenceIdLabel} fullWidth={true}
-                                    value={referenceId} onChange={(e) => {
-
-                                        e.preventDefault();
-                                        setReferenceId(e.target.value);
-                                    }} />
-                            </div>
-                            <div className="column is-2">
+                            <div className="column is-2 is-flex is-align-items-flex-end">
                                 <MuiPickersUtilsProvider utils={MomentUtils}>
                                         <KeyboardDatePicker
                                             id="deliveryFrom"
@@ -220,7 +211,7 @@ function OrderForm(props) {
                                             }} />
                                 </MuiPickersUtilsProvider>
                             </div>
-                            <div className="column is-2">
+                            <div className="column is-2 is-flex is-align-items-flex-end">
                                 <MuiPickersUtilsProvider utils={MomentUtils}>
                                         <KeyboardDatePicker
                                             id="deliveryTo"
@@ -244,16 +235,16 @@ function OrderForm(props) {
                                             }} />
                                 </MuiPickersUtilsProvider>
                             </div>
-                            <div className="column is-3">
+                            <div className="column is-3 is-flex is-align-items-flex-end">
                                 <TextField id="moreInfo" name="moreInfo" type="text" label={props.moreInfoLabel} 
-                                fullWidth={true} value={moreInfo} multiline onChange={(e) => {
+                                fullWidth={true} value={moreInfo} onChange={(e) => {
 
                                     e.preventDefault();
                                     setMoreInfo(e.target.value);
                                 }} />
                             </div>
-                            <div className="column is-1">
-                                <Button type="button" variant="contained" color="secondary" disabled={state.isLoading || disable}>
+                            <div className="column is-1 is-flex is-align-items-flex-end">
+                                <Button type="button" variant="contained" color="primary" disabled={state.isLoading || quantity < 1 || product === null}>
                                     {props.addText}
                                 </Button>
                             </div>
@@ -298,7 +289,8 @@ function OrderForm(props) {
                                         </TableContainer>
                                     </div>
                                 </section>) :
-                                (<section className="section is-flex-centered">
+                                (<section className="section is-flex-centered has-text-centered is-flex-direction-column">
+                                    <AddShoppingCartRounded fontSize="large" className="m-2" />
                                     <span className="is-title is-5">{props.noOrderItemsLabel}</span>
                                 </section>)
                             }
@@ -306,7 +298,7 @@ function OrderForm(props) {
                     </Fragment>
                 }
                 <div className="field">
-                    <Button type="button" variant="contained" color="primary" disabled={state.isLoading || disable}>
+                    <Button type="button" variant="contained" color="primary" disabled={ state.isLoading || orderItems.length === 0 }>
                         {props.saveText}
                     </Button>
                 </div>
@@ -323,7 +315,6 @@ OrderForm.propTypes = {
     skuLabel: PropTypes.string.isRequired,
     nameLabel: PropTypes.string.isRequired,
     quantityLabel: PropTypes.string.isRequired,
-    referenceIdLabel: PropTypes.string.isRequired,
     deliveryFromLabel: PropTypes.string.isRequired,
     deliveryToLabel: PropTypes.string.isRequired,
     moreInfoLabel: PropTypes.string.isRequired,

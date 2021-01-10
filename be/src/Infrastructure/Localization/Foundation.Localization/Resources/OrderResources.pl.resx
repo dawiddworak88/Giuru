@@ -117,17 +117,44 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddOrderItem" xml:space="preserve">
+    <value>Dodaj</value>
+  </data>
+  <data name="ChangeDeliveryFrom" xml:space="preserve">
+    <value>Zmień początkową datę dostawy</value>
+  </data>
+  <data name="ChangeDeliveryTo" xml:space="preserve">
+    <value>Zmień końcową datę dostawy</value>
+  </data>
   <data name="ClientRequiredErrorMessage" xml:space="preserve">
     <value>Wybierz klienta</value>
+  </data>
+  <data name="DeliveryFrom" xml:space="preserve">
+    <value>Początkowa data dostawy:</value>
+  </data>
+  <data name="DeliveryTo" xml:space="preserve">
+    <value>Końcowa data dostawy:</value>
   </data>
   <data name="EditOrder" xml:space="preserve">
     <value>Edytuj zamówienie</value>
   </data>
+  <data name="EnterSkuOrName" xml:space="preserve">
+    <value>Wprowadź SKU lub nazwę</value>
+  </data>
   <data name="ImportOrder" xml:space="preserve">
     <value>Import zamówienia</value>
   </data>
+  <data name="MoreInfoLabel" xml:space="preserve">
+    <value>Uwagi:</value>
+  </data>
+  <data name="NameLabel" xml:space="preserve">
+    <value>Nazwa:</value>
+  </data>
   <data name="NewOrder" xml:space="preserve">
     <value>Nowe zamówienie</value>
+  </data>
+  <data name="NoOrderItemsLabel" xml:space="preserve">
+    <value>Koszyk jest pusty. Dodaj pierwszą pozycję zamówienia.</value>
   </data>
   <data name="Order" xml:space="preserve">
     <value>Zamówienie</value>
@@ -135,10 +162,19 @@
   <data name="OrderFileError" xml:space="preserve">
     <value>Plik zamówienia ma niepoprawny format. Prześlij poprawny plik zamówienia.</value>
   </data>
+  <data name="OrderItemsLabel" xml:space="preserve">
+    <value>Pozycje zamówienia</value>
+  </data>
   <data name="Orders" xml:space="preserve">
     <value>Zamówienia</value>
   </data>
+  <data name="QuantityLabel" xml:space="preserve">
+    <value>Ilość:</value>
+  </data>
   <data name="SelectClientLabel" xml:space="preserve">
     <value>Wybierz klienta:</value>
+  </data>
+  <data name="SkuLabel" xml:space="preserve">
+    <value>SKU:</value>
   </data>
 </root>
