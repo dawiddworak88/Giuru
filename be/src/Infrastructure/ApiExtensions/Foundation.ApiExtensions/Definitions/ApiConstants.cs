@@ -21,6 +21,11 @@
             public static readonly string FilesApiEndpoint = "/api/v1/files";
         }
 
+        public struct Baskets
+        {
+            public static readonly string BasketsApiEndpoint = "/api/v1/baskets";
+        }
+
         public struct ContentNames
         {
             public static readonly string FileContentName = "file";

@@ -16,6 +16,7 @@ import AddShoppingCartRounded from "@material-ui/icons/AddShoppingCartRounded";
 import {
     Fab, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper } from "@material-ui/core";
+import moment from "moment";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import OrderFormConstants from "../../constants/OrderFormConstants";
 
@@ -28,6 +29,7 @@ function OrderForm(props) {
 
     const [state, dispatch] = useContext(Context);
     const [id, setId] = useState(props.id ? props.id : null);
+    const [basketId, setBasketId] = useState(null);
     const [client, setClient] = useState(props.clientId ? props.clients.find((item) => item.id === props.clientId) : null);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
@@ -83,7 +85,7 @@ function OrderForm(props) {
     };
 
     const onSuggestionSelected = (event, { suggestion }) => {
-        
+
         setProduct(suggestion);
     };
 
@@ -107,6 +109,67 @@ function OrderForm(props) {
                     if (response.ok) {
 
                         setId(jsonResponse.id);
+                        toast.success(jsonResponse.message);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    };
+
+    const handleAddOrderItemClick = () => {
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const orderItem = {
+
+            productId: product.id,
+            quantity,
+            deliveryFrom: moment.utc(deliveryFrom),
+            deliveryTo: moment.utc(deliveryTo),
+            moreInfo
+        };
+
+        const basket = {
+
+            id: basketId,
+            items: [...orderItems, orderItem]
+        };
+
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(basket)
+        };
+
+        fetch(props.updateBasketUrl, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                return response.json().then(jsonResponse => {
+
+                    if (response.ok) {
+
+                        setBasketId(jsonResponse.id);
+
+                        if (jsonResponse.items && jsonResponse.items.length > 0) {
+
+                            setOrderItems(jsonResponse.items.map((item) => { 
+                                
+                                item.deliveryFrom = moment(item.deliveryFrom).local();  
+                                item.deliveryTo = moment(item.deliveryTo).local();
+                            }));
+                        }
+                        else {
+
+                            setOrderItems([]);
+                        }
+
                         toast.success(jsonResponse.message);
                     }
                     else {
@@ -246,7 +309,7 @@ function OrderForm(props) {
                                 }} />
                             </div>
                             <div className="column is-1 is-flex is-align-items-flex-end">
-                                <Button type="button" variant="contained" color="primary" disabled={state.isLoading || quantity < 1 || product === null}>
+                                <Button type="button" variant="contained" color="primary" onClick={handleAddOrderItemClick} disabled={state.isLoading || quantity < 1 || product === null}>
                                     {props.addText}
                                 </Button>
                             </div>

@@ -5,5 +5,6 @@
         public string CatalogUrl { get; set; }
         public string MediaUrl { get; set; }
         public string IdentityUrl { get; set; }
+        public string BasketUrl { get; set; }
     }
 }

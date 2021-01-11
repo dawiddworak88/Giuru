@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Orders.ApiResponseModels
 {
-    public class ValidateOrderResponseModel : BaseResponseModel
+    public class BasketResponseModel : BaseResponseModel
     {
-        public IEnumerable<string> ValidationMessages { get; set; }
+        public IEnumerable<BasketItemResponseModel> Items { get; set; }
     }
 }

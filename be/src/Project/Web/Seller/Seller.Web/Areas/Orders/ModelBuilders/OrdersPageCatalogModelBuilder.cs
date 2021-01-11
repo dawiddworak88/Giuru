@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Threading.Tasks;
-using Seller.Web.Areas.Orders.Repositories;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Seller.Web.Shared.ViewModels;
 using Seller.Web.Areas.Orders.DomainModels;
 using System.Collections.Generic;
 using Foundation.Extensions.ExtensionMethods;
+using Seller.Web.Areas.Orders.Repositories.Orders;
 
 namespace Seller.Web.Areas.Orders.ModelBuilders
 {

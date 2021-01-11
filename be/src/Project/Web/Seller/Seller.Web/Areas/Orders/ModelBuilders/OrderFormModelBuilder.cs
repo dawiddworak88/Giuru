@@ -55,7 +55,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 SelectClientLabel = this.orderLocalizer.GetString("SelectClientLabel"),
                 ClientRequiredErrorMessage = this.orderLocalizer.GetString("ClientRequiredErrorMessage"),
                 OkLabel = this.globalLocalizer.GetString("Ok"),
-                CancelLabel = this.globalLocalizer.GetString("Cancel")
+                CancelLabel = this.globalLocalizer.GetString("Cancel"),
+                UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
             };
 
             var clients = await this.clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);

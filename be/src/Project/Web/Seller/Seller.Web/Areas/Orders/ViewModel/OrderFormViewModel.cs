@@ -30,5 +30,6 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string AddText { get; set; }
         public string OkLabel { get; set; }
         public string CancelLabel { get; set; }
+        public string UpdateBasketUrl { get; set; }
     }
 }
