@@ -44,8 +44,6 @@ function OrderForm(props) {
 
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
 
-            dispatch({ type: "SET_IS_LOADING", payload: true });
-
             const searchParameters = {
 
                 searchTerm: args.value,
@@ -64,8 +62,6 @@ function OrderForm(props) {
             return fetch(url, requestOptions)
                 .then(function (response) {
 
-                    dispatch({ type: "SET_IS_LOADING", payload: false });
-
                     return response.json().then(jsonResponse => {
 
                         if (response.ok) {
@@ -78,7 +74,6 @@ function OrderForm(props) {
                         }
                     });
                 }).catch(() => {
-                    dispatch({ type: "SET_IS_LOADING", payload: false });
                     toast.error(props.generalErrorMessage);
                 });
         }
@@ -161,8 +156,17 @@ function OrderForm(props) {
 
                             setOrderItems(jsonResponse.items.map((item) => { 
                                 
-                                item.deliveryFrom = moment(item.deliveryFrom).local();  
-                                item.deliveryTo = moment(item.deliveryTo).local();
+                                if (item.deliveryFrom) {
+
+                                    item.deliveryFrom = moment(item.deliveryFrom).local();  
+                                }
+                                
+                                if (item.deliveryTo) {
+
+                                    item.deliveryTo = moment(item.deliveryTo).local();
+                                }                                
+
+                                return item;
                             }));
                         }
                         else {
@@ -332,8 +336,8 @@ function OrderForm(props) {
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
-                                                    {orderItems.map((item) => (
-                                                        <TableRow key={item.id}>
+                                                    {orderItems.map((item, index) => (
+                                                        <TableRow key={index}>
                                                             <TableCell width="11%">
                                                                 <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
                                                                     <DeleteIcon />

@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 
 namespace Basket.Api
 {
@@ -41,6 +42,15 @@ namespace Basket.Api
             services.AddApiVersioning();
 
             services.ConfigureSettings(this.Configuration);
+
+            services.AddSingleton<ConnectionMultiplexer>(sp =>
+            {
+                var configuration = ConfigurationOptions.Parse(this.Configuration["ConnectionString"], true);
+
+                configuration.ResolveDns = true;
+
+                return ConnectionMultiplexer.Connect(configuration);
+            });
 
             services.AddSwaggerGen(c =>
             {

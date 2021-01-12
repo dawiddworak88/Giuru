@@ -18,6 +18,9 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.9.1
     restart: always
 
+  basketdata:
+    image: redis:alpine
+
   kibana:
     image: docker.elastic.co/kibana/kibana:7.9.1
     restart: always
@@ -70,9 +73,6 @@ services:
     depends_on: 
       - sqldata
       - react-ssr
-
-  basketdata:
-    image: redis:alpine
 
   basket-api:
     image: ${REGISTRY:-giuru}/basket-api:${PLATFORM:-linux}-${TAG:-latest}
