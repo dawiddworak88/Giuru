@@ -94,9 +94,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Inventory", "Inventory", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Content", "Content", "{BE3B803A-57A3-4423-A01E-13283F93DBB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory.Api", "Project\Services\Inventory\Inventory.Api\Inventory.Api.csproj", "{0046A804-3751-4F59-9FBF-84677BD100A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inventory.Api", "Project\Services\Inventory\Inventory.Api\Inventory.Api.csproj", "{0046A804-3751-4F59-9FBF-84677BD100A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Content.Api", "Project\Services\Content\Content.Api\Content.Api.csproj", "{A22D6392-5418-435F-B0F0-B35D989B392C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Content.Api", "Project\Services\Content\Content.Api\Content.Api.csproj", "{A22D6392-5418-435F-B0F0-B35D989B392C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventBus", "EventBus", "{0FE33C81-2F12-4233-BF4F-ACF907A5BC61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.EventBus", "Infrastructure\EventBus\Foundation.EventBus\Foundation.EventBus.csproj", "{185EF734-1333-4BC6-BA08-87E13916A179}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.EventBusRabbitMq", "Infrastructure\EventBus\Foundation.EventBusRabbitMq\Foundation.EventBusRabbitMq.csproj", "{9F2A2143-DFA2-40CB-BC44-5A59CD12ACF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.EventBusLogging", "Infrastructure\EventBus\Foundation.EventBusLogging\Foundation.EventBusLogging.csproj", "{EF43A5BD-4EC8-427B-9C71-B6CBB556523A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -188,6 +196,18 @@ Global
 		{A22D6392-5418-435F-B0F0-B35D989B392C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A22D6392-5418-435F-B0F0-B35D989B392C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A22D6392-5418-435F-B0F0-B35D989B392C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{185EF734-1333-4BC6-BA08-87E13916A179}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{185EF734-1333-4BC6-BA08-87E13916A179}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{185EF734-1333-4BC6-BA08-87E13916A179}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{185EF734-1333-4BC6-BA08-87E13916A179}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F2A2143-DFA2-40CB-BC44-5A59CD12ACF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F2A2143-DFA2-40CB-BC44-5A59CD12ACF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F2A2143-DFA2-40CB-BC44-5A59CD12ACF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F2A2143-DFA2-40CB-BC44-5A59CD12ACF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF43A5BD-4EC8-427B-9C71-B6CBB556523A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF43A5BD-4EC8-427B-9C71-B6CBB556523A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF43A5BD-4EC8-427B-9C71-B6CBB556523A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF43A5BD-4EC8-427B-9C71-B6CBB556523A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -235,6 +255,10 @@ Global
 		{BE3B803A-57A3-4423-A01E-13283F93DBB4} = {AA76A57C-E6D8-4329-B285-C2922557FEC2}
 		{0046A804-3751-4F59-9FBF-84677BD100A9} = {440689F0-C518-4B41-B24A-E5C613EF0B0C}
 		{A22D6392-5418-435F-B0F0-B35D989B392C} = {BE3B803A-57A3-4423-A01E-13283F93DBB4}
+		{0FE33C81-2F12-4233-BF4F-ACF907A5BC61} = {89A813A9-9007-46EC-8F17-F2816F9202CC}
+		{185EF734-1333-4BC6-BA08-87E13916A179} = {0FE33C81-2F12-4233-BF4F-ACF907A5BC61}
+		{9F2A2143-DFA2-40CB-BC44-5A59CD12ACF1} = {0FE33C81-2F12-4233-BF4F-ACF907A5BC61}
+		{EF43A5BD-4EC8-427B-9C71-B6CBB556523A} = {0FE33C81-2F12-4233-BF4F-ACF907A5BC61}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0F50684-572D-4B8F-8A02-B5C72CD028EE}

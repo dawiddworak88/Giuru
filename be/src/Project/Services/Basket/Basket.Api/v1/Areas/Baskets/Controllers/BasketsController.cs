@@ -69,5 +69,30 @@ namespace Basket.Api.v1.Areas.Baskets.Controllers
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
+
+        [HttpPost, MapToApiVersion("1.0")]
+        [Route("checkout")]
+        [ProducesResponseType((int)HttpStatusCode.Accepted)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> BasketCheckoutPost(BasketCheckoutRequestModel request)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            var serviceModel = new UpdateBasketServiceModel
+            {
+                
+            };
+
+            var validator = new UpdateBasketModelValidator();
+
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                return this.StatusCode((int)HttpStatusCode.Accepted);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
     }
 }

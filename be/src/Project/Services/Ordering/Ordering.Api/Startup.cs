@@ -2,6 +2,7 @@ using Foundation.Account.DependencyInjection;
 using Foundation.Extensions.Filters;
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +39,8 @@ namespace Ordering.Api
             services.AddApiVersioning();
 
             services.ConfigureSettings(this.Configuration);
+
+            services.AddMediatR(typeof(Startup));
 
             services.AddSwaggerGen(c =>
             {

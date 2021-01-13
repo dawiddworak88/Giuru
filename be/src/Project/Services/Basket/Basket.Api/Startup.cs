@@ -1,15 +1,20 @@
 using System;
 using System.IO;
 using System.Reflection;
+using Autofac;
 using Basket.Api.DependencyInjection;
 using Basket.Api.v1.Areas.Baskets.DependencyInjection;
 using Foundation.Account.DependencyInjection;
+using Foundation.EventBus;
+using Foundation.EventBus.Abstractions;
+using Foundation.EventBusRabbitMq;
 using Foundation.Extensions.Filters;
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
@@ -51,6 +56,19 @@ namespace Basket.Api
 
                 return ConnectionMultiplexer.Connect(configuration);
             });
+
+            services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
+            {
+                var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
+                var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
+                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMq>>();
+                var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+
+                return new EventBusRabbitMq(rabbitMqPersistentConnection, logger, iLifetimeScope, eventBusSubcriptionsManager, typeof(Startup).Namespace, int.Parse(Configuration["EventBusRetryCount"]));
+            });
+
+        services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+
 
             services.AddSwaggerGen(c =>
             {
