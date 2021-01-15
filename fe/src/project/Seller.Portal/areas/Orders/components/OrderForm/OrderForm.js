@@ -209,7 +209,7 @@ function OrderForm(props) {
     const handleDeleteClick = (item) => {
 
         setEntityToDelete(item);
-        setOpenDeleteDialog(false);
+        setOpenDeleteDialog(true);
     };
 
     const handleDeleteDialogClose = () => {
@@ -244,11 +244,11 @@ function OrderForm(props) {
                     if (response.ok) {
 
                         setBasketId(jsonResponse.id);
+                        setOpenDeleteDialog(false);
 
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
 
                             setOrderItems(jsonResponse.items);
-                            setOpenDeleteDialog(false);
                         }
                         else {
 
