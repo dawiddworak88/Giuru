@@ -11,7 +11,6 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string NoOrderItemsLabel { get; set; }
         public string SearchPlaceholderLabel { get; set; }
         public string SelectClientLabel { get; set; }
-        public string OrderItemLabel { get; set; }
         public string ClientRequiredErrorMessage { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string SaveText { get; set; }
@@ -31,5 +30,9 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string OkLabel { get; set; }
         public string CancelLabel { get; set; }
         public string UpdateBasketUrl { get; set; }
+        public string DeleteConfirmationLabel { get; set; }
+        public string AreYouSureLabel { get; set; }
+        public string YesLabel { get; set; }
+        public string NoLabel { get; set; }
     }
 }

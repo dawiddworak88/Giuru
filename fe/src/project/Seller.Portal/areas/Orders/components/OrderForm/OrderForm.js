@@ -19,6 +19,7 @@ import {
 import moment from "moment";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import OrderFormConstants from "../../constants/OrderFormConstants";
+import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
 
 function OrderForm(props) {
 
@@ -39,6 +40,8 @@ function OrderForm(props) {
     const [moreInfo, setMoreInfo] = useState("");
     const [orderItems, setOrderItems] = useState([]);
     const [suggestions, setSuggestions] = useState([]);
+    const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+    const [entityToDelete, setEntityToDelete] = useState(null);
 
     const onSuggestionsFetchRequested = (args) => {
 
@@ -124,15 +127,105 @@ function OrderForm(props) {
 
             productId: product.id,
             quantity,
-            deliveryFrom: moment.utc(deliveryFrom),
-            deliveryTo: moment.utc(deliveryTo),
+            deliveryFrom: moment(deliveryFrom).startOf('day'),
+            deliveryTo: moment(deliveryTo).startOf('day'),
             moreInfo
         };
 
         const basket = {
 
+            id: basketId
+        };
+
+        var existingProductOrderItem = orderItems && orderItems.length > 0 ? orderItems.find((item) => item.productId === orderItem.productId) : null;
+
+        if (existingProductOrderItem) {
+
+            basket.items = orderItems.map((item) => {
+
+                if (item.productId === existingProductOrderItem.productId) {
+
+                    item.quantity += parseInt(orderItem.quantity);
+                }
+
+                return item;
+            });
+        }
+        else {
+            basket.items = [...orderItems, orderItem];
+        }
+
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(basket)
+        };
+
+        fetch(props.updateBasketUrl, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                return response.json().then(jsonResponse => {
+
+                    if (response.ok) {
+
+                        setBasketId(jsonResponse.id);
+
+                        if (jsonResponse.items && jsonResponse.items.length > 0) {
+
+                            setProduct(null);
+                            setSearchTerm("");
+                            setBasketId(jsonResponse.id);
+                            setOrderItems(jsonResponse.items);
+                        }
+                        else {
+
+                            setOrderItems([]);
+                        }
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    };
+
+    const searchInputProps = {
+
+        placeholder: props.searchPlaceholderLabel,
+        className: "search__field",
+        value: searchTerm,
+        onChange: (_, { newValue, method }) => {
+
+            setSearchTerm(newValue);
+        }
+    };
+
+    
+    const handleDeleteClick = (item) => {
+
+        setEntityToDelete(item);
+        setOpenDeleteDialog(false);
+    };
+
+    const handleDeleteDialogClose = () => {
+
+        setOpenDeleteDialog(false);
+        setEntityToDelete(null);
+    };
+
+    const handleDeleteEntity = () => {
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const basket = {
+
             id: basketId,
-            items: [...orderItems, orderItem]
+            items: orderItems.filter((orderItem) => orderItem.productId !== entityToDelete.productId)
         };
 
         const requestOptions = {
@@ -154,27 +247,13 @@ function OrderForm(props) {
 
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
 
-                            setOrderItems(jsonResponse.items.map((item) => { 
-                                
-                                if (item.deliveryFrom) {
-
-                                    item.deliveryFrom = moment(item.deliveryFrom).local();  
-                                }
-                                
-                                if (item.deliveryTo) {
-
-                                    item.deliveryTo = moment(item.deliveryTo).local();
-                                }                                
-
-                                return item;
-                            }));
+                            setOrderItems(jsonResponse.items);
+                            setOpenDeleteDialog(false);
                         }
                         else {
 
                             setOrderItems([]);
                         }
-
-                        toast.success(jsonResponse.message);
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -184,17 +263,6 @@ function OrderForm(props) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
-    };
-
-    const searchInputProps = {
-
-        placeholder: props.searchPlaceholderLabel,
-        className: "search__field",
-        value: searchTerm,
-        onChange: (_, { newValue, method }) => {
-
-            setSearchTerm(newValue);
-        }
     };
 
     return (
@@ -327,6 +395,7 @@ function OrderForm(props) {
                                                 <TableHead>
                                                     <TableRow>
                                                         <TableCell></TableCell>
+                                                        <TableCell></TableCell>
                                                         <TableCell>{props.skuLabel}</TableCell>
                                                         <TableCell>{props.nameLabel}</TableCell>
                                                         <TableCell>{props.quantityLabel}</TableCell>
@@ -343,11 +412,12 @@ function OrderForm(props) {
                                                                     <DeleteIcon />
                                                                 </Fab>
                                                             </TableCell>
+                                                            <TableCell><a href={item.productUrl} target="_blank"><img className="order__basket-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
                                                             <TableCell>{item.sku}</TableCell>
                                                             <TableCell>{item.name}</TableCell>
                                                             <TableCell>{item.quantity}</TableCell>
-                                                            <TableCell>{moment(item.deliveryFrom).local().format("L LT")}</TableCell>
-                                                            <TableCell>{moment(item.deliveryTo).local().format("L LT")}</TableCell>
+                                                            <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
+                                                            <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
                                                             <TableCell>{item.moreInfo}</TableCell>
                                                         </TableRow>
                                                     ))}
@@ -370,6 +440,17 @@ function OrderForm(props) {
                     </Button>
                 </div>
             </div>
+            <ConfirmationDialog
+                open={openDeleteDialog}
+                handleClose={handleDeleteDialogClose}
+                handleConfirm={handleDeleteEntity}
+                titleId="delete-from-basket-title"
+                title={props.deleteConfirmationLabel}
+                textId="delete-from-basket-text"
+                text={props.areYouSureLabel + ((entityToDelete ? (": " + entityToDelete.name) : "") + "?")}
+                noLabel={props.noLabel}
+                yesLabel={props.yesLabel}
+            />
             {state.isLoading && <CircularProgress className="progressBar" />}
         </section >
     );
@@ -400,7 +481,11 @@ OrderForm.propTypes = {
     noOrderItemsLabel: PropTypes.string.isRequired,
     okLabel: PropTypes.string.isRequired,
     cancelLabel: PropTypes.string.isRequired,
-    clients: PropTypes.array
+    clients: PropTypes.array,
+    deleteConfirmationLabel: PropTypes.string.isRequired,
+    areYouSureLabel: PropTypes.string.isRequired,
+    yesLabel: PropTypes.string.isRequired,
+    noLabel: PropTypes.string.isRequired
 };
 
 export default OrderForm;

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Seller.Web.Areas.Orders.DomainModels
+namespace Seller.Web.Areas.Orders.ApiResponseModels
 {
-    public class OrderItem
+    public class BasketItemApiResponseModel
     {
         public Guid? ProductId { get; set; }
         public int Quantity { get; set; }

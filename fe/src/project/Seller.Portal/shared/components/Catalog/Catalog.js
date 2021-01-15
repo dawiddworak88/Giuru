@@ -9,13 +9,13 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, TablePagination, CircularProgress,
-    Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
+    TableHead, TableRow, Paper, TablePagination, CircularProgress
 } from "@material-ui/core";
 import KeyConstants from "../../../../../shared/constants/KeyConstants";
 import { Context } from "../../../../../shared/stores/Store";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import PaginationConstants from "../../../../../shared/constants/PaginationConstants";
+import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 
 function Catalog(props) {
 
@@ -266,26 +266,17 @@ function Catalog(props) {
                         <span className="is-title is-5">{props.noResultsLabel}</span>
                     </section>)
                 }
-                <Dialog
+                <ConfirmationDialog
                     open={openDeleteDialog}
-                    onClose={handleDeleteDialogClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description">
-                    <DialogTitle id="alert-dialog-title">{props.deleteConfirmationLabel}</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            {props.areYouSureLabel}: {entityToDelete ? entityToDelete.name : ""}?
-                    </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleDeleteDialogClose} color="primary">
-                            {props.noLabel}
-                        </Button>
-                        <Button disabled={state.isLoading} onClick={handleDeleteEntity} color="primary" autoFocus>
-                            {props.yesLabel}
-                        </Button>
-                    </DialogActions>
-                </Dialog>
+                    handleClose={handleDeleteDialogClose}
+                    handleConfirm={handleDeleteEntity}
+                    titleId="alert-dialog-title"
+                    title={props.deleteConfirmationLabel}
+                    textId="alert-dialog-description"
+                    text={props.areYouSureLabel + ((entityToDelete ? (": " + entityToDelete.name) : "") + "?")}
+                    noLabel={props.noLabel}
+                    yesLabel={props.yesLabel}
+                />
                 {state.isLoading && <CircularProgress className="progressBar" />}
             </div>
         </section>

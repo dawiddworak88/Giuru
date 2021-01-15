@@ -1,11 +1,15 @@
-﻿using Foundation.ApiExtensions.Models.Response;
-using System;
+﻿using System;
 
 namespace Seller.Web.Areas.Orders.ApiResponseModels
 {
-    public class BasketItemResponseModel : BaseResponseModel
+    public class BasketItemResponseModel
     {
         public Guid? ProductId { get; set; }
+        public string Sku { get; set; }
+        public string Name { get; set; }
+        public string ProductUrl { get; set; }
+        public string ImageSrc { get; set; }
+        public string ImageAlt { get; set; }
         public int Quantity { get; set; }
         public DateTime? DeliveryFrom { get; set; }
         public DateTime? DeliveryTo { get; set; }

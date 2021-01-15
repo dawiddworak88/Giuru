@@ -8,4 +8,9 @@
         border: 1px grey solid;
         border-radius: 4px;
     }
+
+    &__basket-product-image {
+        height: 100px;
+        max-width: 250px;
+    }
 }

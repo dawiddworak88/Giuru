@@ -57,6 +57,10 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 OkLabel = this.globalLocalizer.GetString("Ok"),
                 CancelLabel = this.globalLocalizer.GetString("Cancel"),
                 UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                AreYouSureLabel = this.globalLocalizer.GetString("AreYouSureLabel"),
+                DeleteConfirmationLabel = this.globalLocalizer.GetString("DeleteConfirmationLabel"),
+                YesLabel = this.globalLocalizer.GetString("Yes"),
+                NoLabel = this.globalLocalizer.GetString("No"),
             };
 
             var clients = await this.clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);

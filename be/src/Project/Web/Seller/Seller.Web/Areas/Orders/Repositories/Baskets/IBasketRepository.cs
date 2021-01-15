@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Orders.Repositories.Baskets
 {
-    public interface IBasketsRepository
+    public interface IBasketRepository
     {
-        Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<OrderItem> items);
+        Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items);
     }
 }

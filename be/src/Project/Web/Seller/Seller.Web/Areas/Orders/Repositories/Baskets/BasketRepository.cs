@@ -15,12 +15,12 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Orders.Repositories.Baskets
 {
-    public class BasketsRepository : IBasketsRepository
+    public class BasketRepository : IBasketRepository
     {
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
 
-        public BasketsRepository(
+        public BasketRepository(
             IApiClientService apiClientService,
             IOptions<AppSettings> settings)
         {
@@ -28,7 +28,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             this.settings = settings;
         }
 
-        public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<OrderItem> items)
+        public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items)
         {
             var requestModel = new SaveBasketRequestModel
             {
@@ -51,14 +51,14 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<SaveBasketRequestModel>, SaveBasketRequestModel, BasketResponseModel>(apiRequest);
+            var response = await this.apiClientService.PostAsync<ApiRequest<SaveBasketRequestModel>, SaveBasketRequestModel, BasketApiResponseModel>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return new Basket
                 { 
                     Id = response.Data.Id,
-                    Items = response.Data.Items.OrEmptyIfNull().Select(x => new OrderItem
+                    Items = response.Data.Items.OrEmptyIfNull().Select(x => new BasketItem
                     {
                         ProductId = x.ProductId,
                         Quantity = x.Quantity,

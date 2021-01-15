@@ -15,7 +15,7 @@ namespace Seller.Web.Areas.Orders.DependencyInjection
         public static void RegisterOrdersAreaDependencies(this IServiceCollection services)
         {
             services.AddScoped<IOrdersRepository, OrdersRepository>();
-            services.AddScoped<IBasketsRepository, BasketsRepository>();
+            services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Order>>, OrdersPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrdersPageViewModel>, OrdersPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel>, OrderPageModelBuilder>();
