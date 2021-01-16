@@ -87,36 +87,9 @@ function OrderForm(props) {
         setProduct(suggestion);
     };
 
-    function onSubmitForm() {
+    const getProductSuggestionValue = (suggestion) => {
 
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(state)
-        };
-
-        fetch(props.saveUrl, requestOptions)
-            .then(function (response) {
-
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
-                return response.json().then(jsonResponse => {
-
-                    if (response.ok) {
-
-                        setId(jsonResponse.id);
-                        toast.success(jsonResponse.message);
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
+        return "(" + suggestion.sku + ")" + " " + suggestion.name;
     };
 
     const handleAddOrderItemClick = () => {
@@ -300,13 +273,13 @@ function OrderForm(props) {
                                     onSuggestionsFetchRequested={onSuggestionsFetchRequested}
                                     onSuggestionsClearRequested={() => setSuggestions([])}
                                     getSuggestionValue={(suggestion) => {
-                                        return "(" + suggestion.sku + ")" + " " + suggestion.name;
+                                        return getProductSuggestionValue(suggestion);
                                     }}
                                     onSuggestionSelected={onSuggestionSelected}
                                     renderSuggestion={(suggestion) => {
                                         return (
                                             <div className="suggestion">
-                                                { "(" + suggestion.sku + ")" + " " + suggestion.name }
+                                                { getProductSuggestionValue(suggestion) }
                                             </div>
                                         );
                                     }}

@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Reflection;
-using Autofac;
 using Basket.Api.DependencyInjection;
 using Basket.Api.v1.Areas.Baskets.DependencyInjection;
 using Foundation.Account.DependencyInjection;
@@ -18,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
+using RabbitMQ.Client;
 using StackExchange.Redis;
 
 namespace Basket.Api
@@ -57,18 +57,34 @@ namespace Basket.Api
                 return ConnectionMultiplexer.Connect(configuration);
             });
 
+            services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+
+                var factory = new ConnectionFactory()
+                {
+                    HostName = Configuration["EventBusConnection"],
+                    DispatchConsumersAsync = true
+                };
+
+                if (!string.IsNullOrEmpty(Configuration["EventBusUserName"]))
+                {
+                    factory.UserName = Configuration["EventBusUserName"];
+                }
+
+                return new DefaultRabbitMQPersistentConnection(factory, logger, int.Parse(Configuration["EventBusRetryCount"]));
+            });
+
             services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
             {
                 var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
-                var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
                 var logger = sp.GetRequiredService<ILogger<EventBusRabbitMq>>();
                 var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
-                return new EventBusRabbitMq(rabbitMqPersistentConnection, logger, iLifetimeScope, eventBusSubcriptionsManager, typeof(Startup).Namespace, int.Parse(Configuration["EventBusRetryCount"]));
+                return new EventBusRabbitMq(sp, rabbitMqPersistentConnection, logger, eventBusSubcriptionsManager, typeof(Startup).Namespace, int.Parse(Configuration["EventBusRetryCount"]));
             });
 
-        services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-
+            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
             services.AddSwaggerGen(c =>
             {

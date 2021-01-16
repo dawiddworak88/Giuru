@@ -50,7 +50,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 QuantityLabel = this.orderLocalizer.GetString("QuantityLabel"),
                 SkuLabel = this.orderLocalizer.GetString("SkuLabel"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                SaveText = this.globalLocalizer.GetString("SaveText"),
+                SaveText = this.orderLocalizer.GetString("PlaceOrder"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 SelectClientLabel = this.orderLocalizer.GetString("SelectClientLabel"),
                 ClientRequiredErrorMessage = this.orderLocalizer.GetString("ClientRequiredErrorMessage"),

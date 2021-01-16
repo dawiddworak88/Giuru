@@ -117,7 +117,7 @@ services:
       - ConnectionString=basketdata
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - SeqUrl=http://seq
-      - EventBusConnection=http://rabbitmq
+      - EventBusConnection=rabbitmq
       - EventBusRetryCount=5
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
@@ -129,7 +129,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - SeqUrl=http://seq
-      - EventBusConnection=http://rabbitmq
+      - EventBusConnection=rabbitmq
+      - EventBusRetryCount=5
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
     ports:

@@ -78,17 +78,23 @@ namespace Basket.Api.v1.Areas.Baskets.Controllers
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
-            var serviceModel = new UpdateBasketServiceModel
+            var serviceModel = new CheckoutBasketServiceModel
             {
-                
+                BasketId = request.BasketId,
+                ClientId = request.ClientId,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var validator = new UpdateBasketModelValidator();
+            var validator = new CheckoutBasketServiceModelValidator();
 
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
+                await this.basketService.CheckoutAsync(serviceModel);
+
                 return this.StatusCode((int)HttpStatusCode.Accepted);
             }
 

@@ -1,4 +1,7 @@
 using Foundation.Account.DependencyInjection;
+using Foundation.EventBus;
+using Foundation.EventBus.Abstractions;
+using Foundation.EventBusRabbitMq;
 using Foundation.Extensions.Filters;
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
@@ -6,10 +9,12 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Ordering.Api.DependencyInjection;
+using RabbitMQ.Client;
 using System;
 using System.IO;
 using System.Reflection;
@@ -41,6 +46,30 @@ namespace Ordering.Api
             services.ConfigureSettings(this.Configuration);
 
             services.AddMediatR(typeof(Startup));
+
+            services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+
+                var factory = new ConnectionFactory()
+                {
+                    HostName = Configuration["EventBusConnection"],
+                    DispatchConsumersAsync = true
+                };
+
+                return new DefaultRabbitMQPersistentConnection(factory, logger, int.Parse(Configuration["EventBusRetryCount"]));
+            });
+
+            services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
+            {
+                var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
+                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMq>>();
+                var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+
+                return new EventBusRabbitMq(sp, rabbitMqPersistentConnection, logger, eventBusSubcriptionsManager, typeof(Startup).Namespace, int.Parse(Configuration["EventBusRetryCount"]));
+            });
+
+            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
             services.AddSwaggerGen(c =>
             {
