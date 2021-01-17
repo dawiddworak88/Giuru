@@ -8,5 +8,6 @@ namespace Basket.Api.v1.Areas.Baskets.Repositories
     {
         Task<BasketModel> GetBasketAsync(Guid id);
         Task<BasketModel> UpdateBasketAsync(BasketModel basket);
+        Task<bool> DeleteBasketAsync(Guid? basketId);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Foundation.ApiExtensions.Communications;
+using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
@@ -70,6 +71,30 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             }
 
             throw new CustomException(response.Message, (int)response.StatusCode);
+        }
+
+        public async Task CheckoutBasketAsync(string token, string language, Guid? clientId, Guid? basketId)
+        {
+            var requestModel = new CheckoutBasketRequestModel
+            {
+                ClientId = clientId,
+                BasketId = basketId
+            };
+
+            var apiRequest = new ApiRequest<CheckoutBasketRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsCheckoutApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.PostAsync<ApiRequest<CheckoutBasketRequestModel>, CheckoutBasketRequestModel, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
         }
     }
 }

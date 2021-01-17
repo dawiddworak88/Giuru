@@ -165,6 +165,9 @@
   <data name="OrderItemsLabel" xml:space="preserve">
     <value>Order items</value>
   </data>
+  <data name="OrderPlacedSuccessfully" xml:space="preserve">
+    <value>The order has been placed successfully. Your order is being processed. It will be visible on the list of orders soon.</value>
+  </data>
   <data name="Orders" xml:space="preserve">
     <value>Orders</value>
   </data>

@@ -24,6 +24,7 @@
         public struct Baskets
         {
             public static readonly string BasketsApiEndpoint = "/api/v1/baskets";
+            public static readonly string BasketsCheckoutApiEndpoint = "/api/v1/baskets/checkout";
         }
 
         public struct ContentNames

@@ -1,13 +1,10 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
-using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Services.MediaServices;
-using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Orders.ApiRequestModels;
 using Seller.Web.Areas.Orders.ApiResponseModels;
@@ -31,22 +28,19 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly LinkGenerator linkGenerator;
         private readonly IOptions<AppSettings> options;
         private readonly IMediaHelperService mediaService;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
             IProductsRepository productsRepository,
             LinkGenerator linkGenerator,
             IOptions<AppSettings> options,
-            IMediaHelperService mediaService,
-            IStringLocalizer<GlobalResources> globalLocalizer)
+            IMediaHelperService mediaService)
         {
             this.basketRepository = basketRepository;
             this.productsRepository = productsRepository;
             this.linkGenerator = linkGenerator;
             this.options = options;
             this.mediaService = mediaService;
-            this.globalLocalizer = globalLocalizer;
         }
 
         [HttpPost]

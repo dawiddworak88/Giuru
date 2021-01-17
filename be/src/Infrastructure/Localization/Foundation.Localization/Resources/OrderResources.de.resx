@@ -165,6 +165,9 @@
   <data name="OrderItemsLabel" xml:space="preserve">
     <value>Positionen der Bestellung</value>
   </data>
+  <data name="OrderPlacedSuccessfully" xml:space="preserve">
+    <value>Die Bestellung wurde erfolgreich aufgegeben. Ihre Bestellung wird bearbeitet. Bald wird es auf der Liste der Bestellungen sichtbar sein.</value>
+  </data>
   <data name="Orders" xml:space="preserve">
     <value>Bestellungen</value>
   </data>

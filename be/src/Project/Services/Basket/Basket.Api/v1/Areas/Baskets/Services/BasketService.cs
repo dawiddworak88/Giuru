@@ -46,7 +46,6 @@ namespace Basket.Api.v1.Areas.Baskets.Services
             try
             {
                 this.eventBus.Publish(eventMessage);
-
             }
             catch (Exception exception)
             {

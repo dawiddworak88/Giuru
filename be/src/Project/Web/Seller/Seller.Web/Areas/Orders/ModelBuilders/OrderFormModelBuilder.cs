@@ -61,6 +61,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 DeleteConfirmationLabel = this.globalLocalizer.GetString("DeleteConfirmationLabel"),
                 YesLabel = this.globalLocalizer.GetString("Yes"),
                 NoLabel = this.globalLocalizer.GetString("No"),
+                PlaceOrderUrl = this.linkGenerator.GetPathByAction("Checkout", "BasketCheckoutApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                OrdersUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var clients = await this.clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);

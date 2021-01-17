@@ -8,12 +8,10 @@ namespace Basket.Api.v1.Areas.Baskets.Repositories
 {
     public class RedisBasketRepository : IBasketRepository
     {
-        private readonly ConnectionMultiplexer redis;
         private readonly IDatabase database;
 
         public RedisBasketRepository(ConnectionMultiplexer redis)
         {
-            this.redis = redis;
             this.database = redis.GetDatabase();
         }
 
@@ -39,6 +37,16 @@ namespace Basket.Api.v1.Areas.Baskets.Repositories
             }
 
             return await GetBasketAsync(basket.Id.Value);
+        }
+
+        public async Task<bool> DeleteBasketAsync(Guid? basketId)
+        {
+            if (basketId.HasValue)
+            {
+                return await this.database.KeyDeleteAsync(basketId.Value.ToString());
+            }
+
+            return false;
         }
     }
 }

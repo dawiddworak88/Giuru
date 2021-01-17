@@ -34,5 +34,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string AreYouSureLabel { get; set; }
         public string YesLabel { get; set; }
         public string NoLabel { get; set; }
+        public string PlaceOrderUrl { get; set; }
+        public string OrdersUrl { get; set; }
     }
 }

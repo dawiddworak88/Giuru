@@ -20,6 +20,7 @@ import moment from "moment";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import OrderFormConstants from "../../constants/OrderFormConstants";
 import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function OrderForm(props) {
 
@@ -238,6 +239,41 @@ function OrderForm(props) {
             });
     };
 
+    const handlePlaceOrder = () => {
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        var order = {
+
+            basketId: basketId,
+            clientId: client.id
+        };
+
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(order)
+        };
+
+        fetch(props.placeOrderUrl, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                return response.json().then(jsonResponse => {
+
+                    if (response.ok) {
+
+                        toast.success(jsonResponse.message);
+                        NavigationHelper.redirect(props.ordersUrl);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    }
+
     return (
         <section className="section section-small-padding order">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -408,7 +444,10 @@ function OrderForm(props) {
                     </Fragment>
                 }
                 <div className="field">
-                    <Button type="button" variant="contained" color="primary" disabled={ state.isLoading || orderItems.length === 0 }>
+                    <Button type="button" variant="contained" 
+                        color="primary" 
+                        onClick={handlePlaceOrder}
+                        disabled={ state.isLoading || orderItems.length === 0 }>
                         {props.saveText}
                     </Button>
                 </div>
@@ -458,7 +497,9 @@ OrderForm.propTypes = {
     deleteConfirmationLabel: PropTypes.string.isRequired,
     areYouSureLabel: PropTypes.string.isRequired,
     yesLabel: PropTypes.string.isRequired,
-    noLabel: PropTypes.string.isRequired
+    noLabel: PropTypes.string.isRequired,
+    ordersUrl: PropTypes.string.isRequired,
+    placeOrderUrl: PropTypes.string.isRequired
 };
 
 export default OrderForm;

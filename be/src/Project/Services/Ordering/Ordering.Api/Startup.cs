@@ -14,6 +14,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Ordering.Api.DependencyInjection;
+using Ordering.Api.v1.Areas.Orders.Events;
+using Ordering.Api.v1.Areas.Orders.IntegrationEvents;
 using RabbitMQ.Client;
 using System;
 using System.IO;
@@ -60,6 +62,8 @@ namespace Ordering.Api
                 return new DefaultRabbitMQPersistentConnection(factory, logger, int.Parse(Configuration["EventBusRetryCount"]));
             });
 
+            services.AddScoped<IIntegrationEventHandler<BasketCheckoutAcceptedIntegrationEvent>, BasketCheckoutAcceptedIntegrationEventHandler>();
+
             services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
             {
                 var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
@@ -100,6 +104,10 @@ namespace Ordering.Api
             app.UseAuthorization();
 
             app.UseCustomHeaderRequestLocalizationProvider(localizationSettings);
+
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+
+            eventBus.Subscribe<BasketCheckoutAcceptedIntegrationEvent, IIntegrationEventHandler<BasketCheckoutAcceptedIntegrationEvent>>();
 
             app.UseEndpoints(endpoints =>
             {
