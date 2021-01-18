@@ -43,6 +43,7 @@ function OrderForm(props) {
     const [suggestions, setSuggestions] = useState([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
+    const [showBackToOrdersListButton, setShowBackToOrdersListButton] = useState(false);
 
     const onSuggestionsFetchRequested = (args) => {
 
@@ -265,7 +266,7 @@ function OrderForm(props) {
                     if (response.ok) {
 
                         toast.success(jsonResponse.message);
-                        NavigationHelper.redirect(props.ordersUrl);
+                        setShowBackToOrdersListButton(true);
                     }
                 });
             }).catch(() => {
@@ -273,6 +274,12 @@ function OrderForm(props) {
                 toast.error(props.generalErrorMessage);
             });
     }
+
+    const handleBackToOrdersClick = (e) => {
+
+        e.preventDefault();
+        NavigationHelper.redirect(props.ordersUrl);
+    };
 
     return (
         <section className="section section-small-padding order">
@@ -444,12 +451,16 @@ function OrderForm(props) {
                     </Fragment>
                 }
                 <div className="field">
-                    <Button type="button" variant="contained" 
-                        color="primary" 
-                        onClick={handlePlaceOrder}
-                        disabled={ state.isLoading || orderItems.length === 0 }>
-                        {props.saveText}
-                    </Button>
+                    {showBackToOrdersListButton ?
+                        (<Button type="button" variant="contained" color="primary" onClick={handleBackToOrdersClick}>
+                            {props.navigateToOrdersListText}
+                        </Button>) :
+                        (<Button type="button" variant="contained" 
+                            color="primary" 
+                            onClick={handlePlaceOrder}
+                            disabled={ state.isLoading || orderItems.length === 0 }>
+                            {props.saveText}
+                        </Button>)}
                 </div>
             </div>
             <ConfirmationDialog
@@ -499,7 +510,8 @@ OrderForm.propTypes = {
     yesLabel: PropTypes.string.isRequired,
     noLabel: PropTypes.string.isRequired,
     ordersUrl: PropTypes.string.isRequired,
-    placeOrderUrl: PropTypes.string.isRequired
+    placeOrderUrl: PropTypes.string.isRequired,
+    navigateToOrdersListText: PropTypes.string.isRequired
 };
 
 export default OrderForm;

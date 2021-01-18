@@ -1,5 +1,4 @@
 using Foundation.Account.DependencyInjection;
-using Foundation.EventBus;
 using Foundation.EventBus.Abstractions;
 using Foundation.EventBusRabbitMq;
 using Foundation.Extensions.Filters;
@@ -15,7 +14,6 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Ordering.Api.DependencyInjection;
 using Ordering.Api.v1.Areas.Orders.Events;
-using Ordering.Api.v1.Areas.Orders.IntegrationEvents;
 using RabbitMQ.Client;
 using System;
 using System.IO;
@@ -49,6 +47,8 @@ namespace Ordering.Api
 
             services.AddMediatR(typeof(Startup));
 
+            services.RegisterEventBus(this.Configuration);
+
             services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
@@ -61,19 +61,6 @@ namespace Ordering.Api
 
                 return new DefaultRabbitMQPersistentConnection(factory, logger, int.Parse(Configuration["EventBusRetryCount"]));
             });
-
-            services.AddScoped<IIntegrationEventHandler<BasketCheckoutAcceptedIntegrationEvent>, BasketCheckoutAcceptedIntegrationEventHandler>();
-
-            services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
-            {
-                var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
-                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMq>>();
-                var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-
-                return new EventBusRabbitMq(sp, rabbitMqPersistentConnection, logger, eventBusSubcriptionsManager, typeof(Startup).Namespace, int.Parse(Configuration["EventBusRetryCount"]));
-            });
-
-            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
             services.AddSwaggerGen(c =>
             {

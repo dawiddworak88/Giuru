@@ -150,6 +150,9 @@
   <data name="NameLabel" xml:space="preserve">
     <value>Name:</value>
   </data>
+  <data name="NavigateToOrdersList" xml:space="preserve">
+    <value>Back to orders list</value>
+  </data>
   <data name="NewOrder" xml:space="preserve">
     <value>New order</value>
   </data>
