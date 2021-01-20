@@ -49,6 +49,10 @@ namespace Ordering.Api
 
             services.RegisterEventBus(this.Configuration);
 
+            services.RegisterOrderingDatabaseDependencies(this.Configuration);
+
+            services.RegisterAuditingDatabaseDependencies(this.Configuration);
+
             services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
@@ -83,6 +87,10 @@ namespace Ordering.Api
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ordering API");
                 c.RoutePrefix = string.Empty;
             });
+
+            app.ConfigureOrderingDatabaseMigrations(this.Configuration);
+
+            app.ConfigureAuditingDatabaseMigrations();
 
             app.UseRouting();
 

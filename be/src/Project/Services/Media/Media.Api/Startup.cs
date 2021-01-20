@@ -7,7 +7,7 @@ using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
 using Media.Api.DependencyInjection;
 using Media.Api.Shared.Checksums;
-using Media.Api.v1.Area.Media.DependencyInjection;
+using Media.Api.v1.Areas.Media.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
