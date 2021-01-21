@@ -2,8 +2,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using Basket.Api.DependencyInjection;
-using Basket.Api.v1.Areas.Baskets.DependencyInjection;
-using Basket.Api.v1.Areas.Baskets.IntegrationEvents;
 using Foundation.Account.DependencyInjection;
 using Foundation.EventBus;
 using Foundation.EventBus.Abstractions;
@@ -43,7 +41,7 @@ namespace Basket.Api
 
             services.RegisterApiAccountDependencies(this.Configuration);
 
-            services.RegisterBasketDependencies();
+            services.RegisterBasketApiDependencies();
 
             services.AddApiVersioning();
 

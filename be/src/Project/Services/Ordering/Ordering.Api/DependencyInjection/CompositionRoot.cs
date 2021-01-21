@@ -7,8 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ordering.Api.Infrastructure.Auditing;
 using Ordering.Api.Infrastructure.Ordering;
-using Ordering.Api.v1.Areas.Orders.Events;
-using Ordering.Api.v1.Areas.Orders.IntegrationEvents;
+using Ordering.Api.IntegrationEvents.Events;
+using Ordering.Api.v1.Areas.Orders.IntegrationEvents.EventHandlers;
 
 namespace Ordering.Api.DependencyInjection
 {

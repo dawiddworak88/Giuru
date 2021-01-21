@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.Extensions.Configuration;
 using System.Linq;
 
 namespace Ordering.Api.Infrastructure.Auditing
@@ -18,11 +17,6 @@ namespace Ordering.Api.Infrastructure.Auditing
                 .Select(m => m.Key);
 
             return !total.Except(applied).Any();
-        }
-
-        public static void EnsureSeeded(this AuditingContext context, IConfiguration configuration)
-        {
-
         }
     }
 }
