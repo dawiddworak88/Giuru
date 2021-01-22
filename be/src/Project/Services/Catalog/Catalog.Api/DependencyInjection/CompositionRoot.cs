@@ -1,5 +1,9 @@
 ﻿using Catalog.Api.Infrastructure;
-using Catalog.Api.v1.Areas.Products.SearchModels;
+using Catalog.Api.Repositories.Products.ProductIndexingRepositories;
+using Catalog.Api.Repositories.Products.ProductSearchRepositories;
+using Catalog.Api.Services.Categories;
+using Catalog.Api.Services.Products;
+using Catalog.Api.SearchModels.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +14,15 @@ namespace Catalog.Api.DependencyInjection
 {
     public static class CompositionRoot
     {
+        public static void RegisterCatalogApiDependencies(this IServiceCollection services)
+        {
+            services.AddScoped<ICategoriesService, CategoriesService>();
+
+            services.AddScoped<IProductIndexingRepository, ProductIndexingRepository>();
+            services.AddScoped<IProductSearchRepository, ProductSearchRepository>();
+            services.AddScoped<IProductsService, ProductsService>();
+        }
+
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<CatalogContext>();
