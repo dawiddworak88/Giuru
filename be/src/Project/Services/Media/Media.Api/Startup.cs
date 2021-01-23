@@ -6,8 +6,7 @@ using Foundation.Extensions.DependencyInjection;
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
 using Media.Api.DependencyInjection;
-using Media.Api.Shared.Checksums;
-using Media.Api.v1.Areas.Media.DependencyInjection;
+using Media.Api.Services.Checksums;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,7 +35,7 @@ namespace Media.Api
 
             services.RegisterDatabaseDependencies(this.Configuration);
 
-            services.RegisterMediaDependencies(this.Configuration);
+            services.RegisterMediaApiDependencies();
 
             services.ConfigureSettings(this.Configuration);
 

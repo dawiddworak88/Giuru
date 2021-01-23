@@ -2,7 +2,7 @@
 using Foundation.GenericRepository.Extensions;
 using Media.Api.Definitions;
 using Media.Api.Infrastructure.Media.Entities;
-using Media.Api.Shared.Checksums;
+using Media.Api.Services.Checksums;
 using MimeMapping;
 using System;
 using System.IO;

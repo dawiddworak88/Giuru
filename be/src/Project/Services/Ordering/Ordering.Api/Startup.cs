@@ -13,7 +13,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Ordering.Api.DependencyInjection;
-using Ordering.Api.IntegrationEvents.Events;
+using Ordering.Api.IntegrationEvents;
 using RabbitMQ.Client;
 using System;
 using System.IO;
