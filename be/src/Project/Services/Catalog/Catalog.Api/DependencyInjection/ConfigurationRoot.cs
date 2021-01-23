@@ -1,6 +1,7 @@
 ﻿using Catalog.Api.Configurations;
 using Catalog.Api.Infrastructure;
 using Catalog.Api.Services.Products;
+using Foundation.Catalog.Infrastructure;
 using Foundation.Localization.Definitions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;

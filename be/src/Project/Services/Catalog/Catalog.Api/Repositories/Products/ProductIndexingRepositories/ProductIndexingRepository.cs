@@ -1,6 +1,6 @@
 ﻿using Catalog.Api.Configurations;
-using Catalog.Api.Infrastructure;
 using Catalog.Api.SearchModels.Products;
+using Foundation.Catalog.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Nest;

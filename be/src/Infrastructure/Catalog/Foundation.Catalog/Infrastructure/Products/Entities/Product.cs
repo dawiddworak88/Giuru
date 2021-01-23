@@ -1,10 +1,10 @@
-﻿using Catalog.Api.Infrastructure.Categories.Entities;
+﻿using Foundation.Catalog.Infrastructure.Categories.Entities;
 using Foundation.GenericRepository.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Catalog.Api.Infrastructure.Products.Entities
+namespace Foundation.Catalog.Infrastructure.Products.Entities
 {
     public class Product : Entity
     {

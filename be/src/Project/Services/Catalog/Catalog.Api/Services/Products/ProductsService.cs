@@ -4,8 +4,6 @@ using System.Linq;
 using Foundation.GenericRepository.Paginations;
 using System.Collections.Generic;
 using Catalog.Api.Repositories.Products.ProductSearchRepositories;
-using Catalog.Api.Infrastructure.Products.Entities;
-using Catalog.Api.Infrastructure;
 using Catalog.Api.Repositories.Products.ProductIndexingRepositories;
 using Catalog.Api.SearchModels.Products;
 using Foundation.Extensions.ExtensionMethods;
@@ -16,6 +14,8 @@ using Microsoft.Extensions.Localization;
 using Foundation.Localization;
 using System;
 using Foundation.GenericRepository.Extensions;
+using Foundation.Catalog.Infrastructure;
+using Foundation.Catalog.Infrastructure.Products.Entities;
 
 namespace Catalog.Api.Services.Products
 {

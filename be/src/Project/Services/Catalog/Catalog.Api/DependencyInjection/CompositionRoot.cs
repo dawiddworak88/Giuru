@@ -1,5 +1,4 @@
-﻿using Catalog.Api.Infrastructure;
-using Catalog.Api.Repositories.Products.ProductIndexingRepositories;
+﻿using Catalog.Api.Repositories.Products.ProductIndexingRepositories;
 using Catalog.Api.Repositories.Products.ProductSearchRepositories;
 using Catalog.Api.Services.Categories;
 using Catalog.Api.Services.Products;
@@ -9,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nest;
 using System;
+using Foundation.Catalog.Infrastructure;
 
 namespace Catalog.Api.DependencyInjection
 {
@@ -27,7 +27,7 @@ namespace Catalog.Api.DependencyInjection
         {
             services.AddScoped<CatalogContext>();
 
-            services.AddDbContext<CatalogContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
+            services.AddDbContext<CatalogContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite().MigrationsAssembly("Catalog.Api")));
         }
 
         public static void RegisterSearchDependencies(this IServiceCollection services, IConfiguration configuration)

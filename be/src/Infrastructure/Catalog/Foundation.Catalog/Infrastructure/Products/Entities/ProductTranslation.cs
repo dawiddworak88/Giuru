@@ -1,7 +1,7 @@
 ﻿using Foundation.GenericRepository.Entities;
 using System;
 
-namespace Catalog.Api.Infrastructure.Products.Entities
+namespace Foundation.Catalog.Infrastructure.Products.Entities
 {
     public class ProductTranslation : EntityTranslation
     {

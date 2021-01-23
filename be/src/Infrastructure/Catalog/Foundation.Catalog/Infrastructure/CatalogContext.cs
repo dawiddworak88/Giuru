@@ -1,9 +1,9 @@
-﻿using Catalog.Api.Infrastructure.Categories.Entites;
-using Catalog.Api.Infrastructure.Categories.Entities;
-using Catalog.Api.Infrastructure.Products.Entities;
+﻿using Foundation.Catalog.Infrastructure.Categories.Entites;
+using Foundation.Catalog.Infrastructure.Categories.Entities;
+using Foundation.Catalog.Infrastructure.Products.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Catalog.Api.Infrastructure
+namespace Foundation.Catalog.Infrastructure
 {
     public class CatalogContext : DbContext
     {

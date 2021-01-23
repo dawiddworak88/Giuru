@@ -9,11 +9,12 @@ using Foundation.Extensions.Exceptions;
 using System.Net;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
-using Catalog.Api.Infrastructure.Categories.Entities;
 using System;
-using Catalog.Api.Infrastructure.Categories.Entites;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Extensions;
+using Foundation.Catalog.Infrastructure;
+using Foundation.Catalog.Infrastructure.Categories.Entites;
+using Foundation.Catalog.Infrastructure.Categories.Entities;
 
 namespace Catalog.Api.Services.Categories
 {

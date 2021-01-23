@@ -1,5 +1,6 @@
 ﻿using Catalog.Api.Infrastructure.Categories.Seeds;
 using Catalog.Api.Infrastructure.Products.Seeds;
+using Foundation.Catalog.Infrastructure;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;

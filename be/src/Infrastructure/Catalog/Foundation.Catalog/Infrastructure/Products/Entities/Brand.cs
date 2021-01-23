@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Catalog.Api.Infrastructure.Products.Entities
+namespace Foundation.Catalog.Infrastructure.Products.Entities
 {
     public class Brand : Entity
     {

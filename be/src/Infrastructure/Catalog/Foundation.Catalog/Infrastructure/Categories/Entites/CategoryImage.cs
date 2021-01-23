@@ -1,7 +1,7 @@
 ﻿using Foundation.GenericRepository.Entities;
 using System;
 
-namespace Catalog.Api.Infrastructure.Categories.Entites
+namespace Foundation.Catalog.Infrastructure.Categories.Entites
 {
     public class CategoryImage : EntityMedia
     {

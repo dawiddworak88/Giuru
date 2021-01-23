@@ -1,9 +1,10 @@
 ﻿using Catalog.Api.Infrastructure.Categories.Definitions;
-using Catalog.Api.Infrastructure.Categories.Entities;
 using System;
 using System.Linq;
-using Catalog.Api.Infrastructure.Categories.Entites;
 using Foundation.GenericRepository.Extensions;
+using Foundation.Catalog.Infrastructure;
+using Foundation.Catalog.Infrastructure.Categories.Entities;
+using Foundation.Catalog.Infrastructure.Categories.Entites;
 
 namespace Catalog.Api.Infrastructure.Categories.Seeds
 {
