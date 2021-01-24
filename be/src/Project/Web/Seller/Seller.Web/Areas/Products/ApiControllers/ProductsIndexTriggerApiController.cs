@@ -8,10 +8,6 @@ using System.Net;
 using Foundation.Localization;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Products.Repositories;
-using Foundation.Extensions.Helpers;
-using System.Security.Claims;
-using System.Linq;
-using Foundation.Account.Definitions;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {

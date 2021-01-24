@@ -12,6 +12,8 @@ namespace EventLogging.Api.Infrastructure.Events.Entities
 
         public Guid? EventId { get; set; }
 
+        public string EventName { get; set; }
+
         public string EventState { get; set; }
 
         public string EntityType { get; set; }

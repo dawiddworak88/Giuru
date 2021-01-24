@@ -40,6 +40,9 @@ namespace EventLogging.Api.Infrastructure.Migrations
                     b.Property<Guid?>("EventId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("EventName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("EventState")
                         .HasColumnType("nvarchar(max)");
 

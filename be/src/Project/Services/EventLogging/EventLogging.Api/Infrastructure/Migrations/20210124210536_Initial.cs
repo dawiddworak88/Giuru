@@ -13,6 +13,7 @@ namespace EventLogging.Api.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     EventId = table.Column<Guid>(nullable: true),
+                    EventName = table.Column<string>(nullable: true),
                     EventState = table.Column<string>(nullable: true),
                     EntityType = table.Column<string>(nullable: true),
                     EntityId = table.Column<Guid>(nullable: true),

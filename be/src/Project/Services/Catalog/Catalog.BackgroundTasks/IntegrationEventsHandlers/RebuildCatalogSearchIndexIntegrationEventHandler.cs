@@ -1,6 +1,8 @@
 ﻿using Catalog.BackgroundTasks.IntegrationEvents;
 using Catalog.BackgroundTasks.Services.Products;
 using Foundation.EventBus.Abstractions;
+using Foundation.EventLog.Definitions;
+using Foundation.EventLog.Repositories;
 using System.Threading.Tasks;
 
 namespace Catalog.BackgroundTasks.IntegrationEventsHandlers
@@ -8,11 +10,14 @@ namespace Catalog.BackgroundTasks.IntegrationEventsHandlers
     public class RebuildCatalogSearchIndexIntegrationEventHandler : IIntegrationEventHandler<RebuildCatalogSearchIndexIntegrationEvent>
     {
         private readonly IProductsService productsService;
+        private readonly IEventLogRepository eventLogRepository;
 
         public RebuildCatalogSearchIndexIntegrationEventHandler(
-            IProductsService productsService)
+            IProductsService productsService,
+            IEventLogRepository eventLogRepository)
         {
             this.productsService = productsService;
+            this.eventLogRepository = eventLogRepository;
         }
 
         /// <summary>
@@ -25,10 +30,14 @@ namespace Catalog.BackgroundTasks.IntegrationEventsHandlers
         /// <returns></returns>
         public async Task Handle(RebuildCatalogSearchIndexIntegrationEvent @event)
         {
-            if (@event.SellerId.HasValue)
+            await this.eventLogRepository.SaveAsync(@event, @event.GetType().Name, EventStates.InProgress, null, null);
+
+            if (@event.OrganisationId.HasValue)
             {
-                await this.productsService.IndexAllAsync(@event.SellerId);
+                await this.productsService.IndexAllAsync(@event.OrganisationId);
             }
+
+            await this.eventLogRepository.SaveAsync(@event, @event.GetType().Name, EventStates.Processed, null, null);
         }
     }
 }

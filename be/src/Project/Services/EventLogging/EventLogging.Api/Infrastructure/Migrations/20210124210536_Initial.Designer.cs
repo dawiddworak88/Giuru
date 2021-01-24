@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventLogging.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(EventLoggingContext))]
-    [Migration("20210124194051_Initial")]
+    [Migration("20210124210536_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,9 @@ namespace EventLogging.Api.Infrastructure.Migrations
 
                     b.Property<Guid?>("EventId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("EventName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EventState")
                         .HasColumnType("nvarchar(max)");

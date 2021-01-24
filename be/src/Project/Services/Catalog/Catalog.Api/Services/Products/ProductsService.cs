@@ -18,12 +18,15 @@ using Foundation.Catalog.Repositories.Products.ProductIndexingRepositories;
 using Foundation.Catalog.SearchModels.Products;
 using Foundation.EventBus.Abstractions;
 using Catalog.Api.IntegrationEvents;
+using Foundation.EventLog.Repositories;
+using Foundation.EventLog.Definitions;
 
 namespace Catalog.Api.Services.Products
 {
     public class ProductsService : IProductsService
     {
         private readonly IEventBus eventBus;
+        private readonly IEventLogRepository eventLogRepository;
         private readonly CatalogContext catalogContext;
         private readonly IProductSearchRepository productSearchRepository;
         private readonly IProductIndexingRepository productIndexingRepository;
@@ -31,12 +34,14 @@ namespace Catalog.Api.Services.Products
 
         public ProductsService(
             IEventBus eventBus,
+            IEventLogRepository eventLogRepository,
             CatalogContext catalogContext,
             IProductSearchRepository productSearchRepository,
             IProductIndexingRepository productIndexingRepository,
             IStringLocalizer<ProductResources> productLocalizer)
         {
             this.eventBus = eventBus;
+            this.eventLogRepository = eventLogRepository;
             this.catalogContext = catalogContext;
             this.productSearchRepository = productSearchRepository;
             this.productIndexingRepository = productIndexingRepository;
@@ -369,14 +374,16 @@ namespace Catalog.Api.Services.Products
             };
         }
 
-        public void TriggerCatalogIndexRebuild(RebuildCatalogIndexServiceModel model)
+        public async Task TriggerCatalogIndexRebuildAsync(RebuildCatalogIndexServiceModel model)
         {
             var message = new RebuildCatalogSearchIndexIntegrationEvent
             {
-                SellerId = model.OrganisationId,
+                OrganisationId = model.OrganisationId,
                 Language = model.Language,
                 Username = model.Username
             };
+
+            await this.eventLogRepository.SaveAsync(message, message.GetType().Name, EventStates.New, null, null);
 
             this.eventBus.Publish(message);
         }

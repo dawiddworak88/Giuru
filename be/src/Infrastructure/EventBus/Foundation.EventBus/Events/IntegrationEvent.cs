@@ -22,6 +22,9 @@ namespace Foundation.EventBus.Events
         public Guid Id { get; private set; }
 
         [JsonProperty]
+        public Guid? OrganisationId { get; set; }
+
+        [JsonProperty]
         public string Username { get; set; }
 
         [JsonProperty]

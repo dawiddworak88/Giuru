@@ -54,7 +54,7 @@ namespace Catalog.Api.v1.Products.Controllers
 
             if (validationResult.IsValid)
             {
-                this.productsService.TriggerCatalogIndexRebuild(serviceModel);
+                await this.productsService.TriggerCatalogIndexRebuildAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.Accepted);
             }

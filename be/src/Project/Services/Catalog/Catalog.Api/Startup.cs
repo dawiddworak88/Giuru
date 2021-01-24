@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
 using Foundation.Catalog.DependencyInjection;
+using Foundation.EventLog.DependencyInjection;
 
 namespace Catalog.Api
 {
@@ -50,6 +51,8 @@ namespace Catalog.Api
             services.RegisterSearchDependencies(this.Configuration);
 
             services.RegisterEventBus(this.Configuration);
+
+            services.RegisterEventLogDependencies();
 
             services.ConfigureSettings(this.Configuration);
 

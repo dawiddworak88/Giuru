@@ -3,6 +3,7 @@ using Catalog.BackgroundTasks.IntegrationEvents;
 using Foundation.Catalog.DependencyInjection;
 using Foundation.EventBus.Abstractions;
 using Foundation.EventBusRabbitMq;
+using Foundation.EventLog.DependencyInjection;
 using Foundation.Extensions.Filters;
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
@@ -41,6 +42,8 @@ namespace Catalog.BackgroundTasks
             services.RegisterSearchDependencies(this.Configuration);
 
             services.RegisterEventBus(this.Configuration);
+
+            services.RegisterEventLogDependencies();
 
             services.RegisterCatalogBaseDependencies();
 

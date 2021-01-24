@@ -16,6 +16,7 @@ namespace EventLogging.Api.Services
 
         public async Task LogAsync(
             Guid? eventId, 
+            string eventName,
             string eventState, 
             string content, 
             Guid? entityId, 
@@ -30,6 +31,7 @@ namespace EventLogging.Api.Services
             var eventLog = new EventLog
             {
                 EventId = eventId,
+                EventName = eventName,
                 EventState = eventState,
                 Content = content,
                 EntityId = entityId,

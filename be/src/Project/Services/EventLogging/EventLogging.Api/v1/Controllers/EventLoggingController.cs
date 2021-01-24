@@ -32,6 +32,7 @@ namespace EventLogging.Api.v1.Controllers
         {
             await this.eventLoggingService.LogAsync(
                     request.EventId,
+                    request.EventName,
                     request.EventState,
                     request.Content,
                     request.EntityId,
