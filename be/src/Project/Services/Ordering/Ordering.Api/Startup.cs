@@ -51,8 +51,6 @@ namespace Ordering.Api
 
             services.RegisterOrderingDatabaseDependencies(this.Configuration);
 
-            services.RegisterAuditingDatabaseDependencies(this.Configuration);
-
             services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
@@ -89,8 +87,6 @@ namespace Ordering.Api
             });
 
             app.ConfigureOrderingDatabaseMigrations(this.Configuration);
-
-            app.ConfigureAuditingDatabaseMigrations();
 
             app.UseRouting();
 

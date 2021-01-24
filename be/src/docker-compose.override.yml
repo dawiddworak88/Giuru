@@ -60,6 +60,16 @@ services:
     volumes:
       - mssqldata:/var/opt/mssql
 
+  eventlogging-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sqldata;Database=EventLoggingDb;User Id=sa;Password=Gre@tPassw0rd
+      - SeqUrl=http://seq
+      - SupportedCultures=${SUPPORTED_CULTURES}
+      - DefaultCulture=${DEFAULT_CULTURE}
+    ports:
+      - "5111:80"
+
   media-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -78,6 +88,7 @@ services:
       - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Password=Gre@tPassw0rd
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventLoggingUrl=http://eventlogging-api
       - EventBusConnection=rabbitmq
       - EventBusRetryCount=5
       - ElasticsearchUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:9200
@@ -95,6 +106,7 @@ services:
       - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Password=Gre@tPassw0rd
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventLoggingUrl=http://eventlogging-api
       - EventBusConnection=rabbitmq
       - EventBusRetryCount=5
       - ElasticsearchUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:9200
@@ -133,6 +145,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=basketdata
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventLoggingUrl=http://eventlogging-api
       - SeqUrl=http://seq
       - EventBusConnection=rabbitmq
       - EventBusRetryCount=5
@@ -144,9 +157,9 @@ services:
   ordering-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - OrderingConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Password=Gre@tPassw0rd
-      - AuditingConnectionString=Server=sqldata;Database=OrderAuditingDb;User Id=sa;Password=Gre@tPassw0rd
+      - ConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Password=Gre@tPassw0rd
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventLoggingUrl=http://eventlogging-api
       - SeqUrl=http://seq
       - EventBusConnection=rabbitmq
       - EventBusRetryCount=5
@@ -160,6 +173,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventLoggingUrl=http://eventlogging-api
       - SeqUrl=http://seq
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}

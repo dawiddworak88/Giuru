@@ -4,8 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ordering.Api.Configurations;
-using Ordering.Api.Infrastructure.Auditing;
-using Ordering.Api.Infrastructure.Ordering;
+using Ordering.Api.Infrastructure;
 
 namespace Ordering.Api.DependencyInjection
 {
@@ -23,21 +22,6 @@ namespace Ordering.Api.DependencyInjection
                 {
                     dbContext.Database.Migrate();
                     dbContext.EnsureSeeded(configuration);
-                }
-            }
-        }
-
-        public static void ConfigureAuditingDatabaseMigrations(this IApplicationBuilder app)
-        {
-            var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
-
-            using (var scope = scopeFactory.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetService<AuditingContext>();
-
-                if (!dbContext.AllMigrationsApplied())
-                {
-                    dbContext.Database.Migrate();
                 }
             }
         }

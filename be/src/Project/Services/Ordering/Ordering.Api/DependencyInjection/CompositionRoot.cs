@@ -5,8 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Ordering.Api.Infrastructure.Auditing;
-using Ordering.Api.Infrastructure.Ordering;
+using Ordering.Api.Infrastructure;
 using Ordering.Api.IntegrationEvents;
 using Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers;
 
@@ -18,14 +17,7 @@ namespace Ordering.Api.DependencyInjection
         {
             services.AddScoped<OrderingContext>();
 
-            services.AddDbContext<OrderingContext>(options => options.UseSqlServer(configuration["OrderingConnectionString"], opt => opt.UseNetTopologySuite()));
-        }
-
-        public static void RegisterAuditingDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddScoped<AuditingContext>();
-
-            services.AddDbContext<AuditingContext>(options => options.UseSqlServer(configuration["AuditingConnectionString"], opt => opt.UseNetTopologySuite()));
+            services.AddDbContext<OrderingContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
         }
 
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)
