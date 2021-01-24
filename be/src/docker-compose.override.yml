@@ -78,7 +78,8 @@ services:
       - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Password=Gre@tPassw0rd
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - EventBusConnection=http://rabbitmq
+      - EventBusConnection=rabbitmq
+      - EventBusRetryCount=5
       - ElasticsearchUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:9200
       - SeqUrl=http://seq
       - ElasticsearchIndex=catalog
@@ -87,6 +88,22 @@ services:
       - DefaultCulture=${DEFAULT_CULTURE}
     ports:
       - "5101:80"
+
+  catalog-backgroundtasks:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Password=Gre@tPassw0rd
+      - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventBusConnection=rabbitmq
+      - EventBusRetryCount=5
+      - ElasticsearchUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:9200
+      - SeqUrl=http://seq
+      - ElasticsearchIndex=catalog
+      - SupportedCultures=${SUPPORTED_CULTURES}
+      - DefaultCulture=${DEFAULT_CULTURE}
+    ports:
+      - "5132:80"
 
   identity-api:
     environment:

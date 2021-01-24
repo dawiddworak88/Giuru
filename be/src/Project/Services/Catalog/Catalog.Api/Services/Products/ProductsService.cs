@@ -4,8 +4,6 @@ using System.Linq;
 using Foundation.GenericRepository.Paginations;
 using System.Collections.Generic;
 using Catalog.Api.Repositories.Products.ProductSearchRepositories;
-using Catalog.Api.Repositories.Products.ProductIndexingRepositories;
-using Catalog.Api.SearchModels.Products;
 using Foundation.Extensions.ExtensionMethods;
 using Microsoft.EntityFrameworkCore;
 using Foundation.Extensions.Exceptions;
@@ -16,22 +14,29 @@ using System;
 using Foundation.GenericRepository.Extensions;
 using Foundation.Catalog.Infrastructure;
 using Foundation.Catalog.Infrastructure.Products.Entities;
+using Foundation.Catalog.Repositories.Products.ProductIndexingRepositories;
+using Foundation.Catalog.SearchModels.Products;
+using Foundation.EventBus.Abstractions;
+using Catalog.Api.IntegrationEvents;
 
 namespace Catalog.Api.Services.Products
 {
     public class ProductsService : IProductsService
     {
+        private readonly IEventBus eventBus;
         private readonly CatalogContext catalogContext;
         private readonly IProductSearchRepository productSearchRepository;
         private readonly IProductIndexingRepository productIndexingRepository;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
 
         public ProductsService(
+            IEventBus eventBus,
             CatalogContext catalogContext,
             IProductSearchRepository productSearchRepository,
             IProductIndexingRepository productIndexingRepository,
             IStringLocalizer<ProductResources> productLocalizer)
         {
+            this.eventBus = eventBus;
             this.catalogContext = catalogContext;
             this.productSearchRepository = productSearchRepository;
             this.productIndexingRepository = productIndexingRepository;
@@ -127,14 +132,6 @@ namespace Catalog.Api.Services.Products
             }
 
             return false;
-        }
-
-        public async Task IndexAllAsync()
-        {
-            foreach (var productId in catalogContext.Products.Select(x => x.Id).ToList())
-            {
-                await this.productIndexingRepository.IndexAsync(productId);
-            }
         }
 
         public async Task<ProductServiceModel> UpdateAsync(CreateUpdateProductModel model)
@@ -370,6 +367,18 @@ namespace Catalog.Api.Services.Products
                 LastModifiedDate = searchResultItem.LastModifiedDate,
                 CreatedDate = searchResultItem.CreatedDate
             };
+        }
+
+        public void TriggerCatalogIndexRebuild(RebuildCatalogIndexServiceModel model)
+        {
+            var message = new RebuildCatalogSearchIndexIntegrationEvent
+            {
+                SellerId = model.OrganisationId,
+                Language = model.Language,
+                Username = model.Username
+            };
+
+            this.eventBus.Publish(message);
         }
     }
 }

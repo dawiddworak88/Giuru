@@ -30,7 +30,7 @@ namespace Ordering.Api.DependencyInjection
 
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IIntegrationEventHandler<BasketCheckoutAcceptedIntegrationEvent>, BasketCheckoutAcceptedIntegrationEventHandler>();
+            services.AddScoped<IIntegrationEventHandler<BasketCheckoutAcceptedIntegrationEvent>, BasketCheckoutAcceptedIntegrationEventHandler>();
 
             services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
             {

@@ -1,26 +1,25 @@
-﻿using Catalog.Api.Configurations;
-using Catalog.Api.SearchModels.Products;
-using Foundation.Catalog.Infrastructure;
+﻿using Foundation.Catalog.Infrastructure;
+using Foundation.Catalog.SearchModels.Products;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using Nest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Catalog.Api.Repositories.Products.ProductIndexingRepositories
+namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
 {
     public class ProductIndexingRepository : IProductIndexingRepository
     {
         private readonly CatalogContext catalogContext;
         private readonly IElasticClient elasticClient;
-        private readonly IOptions<AppSettings> configuration;
+        private readonly IConfiguration configuration;
 
         public ProductIndexingRepository(
             CatalogContext catalogContext, 
             IElasticClient elasticClient,
-            IOptions<AppSettings> configuration)
+            IConfiguration configuration)
         {
             this.catalogContext = catalogContext;
             this.elasticClient = elasticClient;
@@ -39,7 +38,7 @@ namespace Catalog.Api.Repositories.Products.ProductIndexingRepositories
 
                 descriptor.DeleteMany<object>(existingProductVersions.Hits.Select(x => x.Id));
 
-                foreach (var language in this.configuration.Value.SupportedCultures.Split(","))
+                foreach (var language in this.configuration["SupportedCultures"].Split(","))
                 {
                     var productTranslations = product.Translations.FirstOrDefault(x => x.Language == language && x.IsActive);
 

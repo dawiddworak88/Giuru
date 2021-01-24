@@ -3,7 +3,8 @@
     public class SettingsFormViewModel 
     { 
         public string Title { get; set; }
-        public string SaveText { get; set; }
+        public string ReindexProductsText { get; set; }
         public string GeneralErrorMessage { get; set; }
+        public string ProductsIndexTriggerUrl { get; set; }
     }
 }

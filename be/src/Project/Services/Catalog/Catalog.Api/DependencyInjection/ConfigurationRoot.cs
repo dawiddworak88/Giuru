@@ -29,22 +29,6 @@ namespace Catalog.Api.DependencyInjection
             }
         }
 
-        public static void ConfigureSearchIndexing(this IApplicationBuilder app)
-        {
-            var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
-
-            using (var scope = scopeFactory.CreateScope())
-            {
-                var productService = scope.ServiceProvider.GetService<IProductsService>();
-
-                if (productService.IsEmptyAsync().Result)
-                {
-                    var task = Task.Run(async () => { await productService.IndexAllAsync(); });
-                    task.Wait();
-                }
-            }
-        }
-
         public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<AppSettings>(configuration);

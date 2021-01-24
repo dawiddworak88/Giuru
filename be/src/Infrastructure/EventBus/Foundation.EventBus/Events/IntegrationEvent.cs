@@ -22,6 +22,12 @@ namespace Foundation.EventBus.Events
         public Guid Id { get; private set; }
 
         [JsonProperty]
+        public string Username { get; set; }
+
+        [JsonProperty]
+        public string Language { get; set; }
+
+        [JsonProperty]
         public DateTime CreationDate { get; private set; }
     }
 }

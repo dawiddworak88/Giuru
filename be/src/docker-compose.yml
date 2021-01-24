@@ -64,6 +64,15 @@ services:
       - rabbitmq
       - media-api
 
+  catalog-backgroundtasks:
+    image: ${REGISTRY:-giuru}/catalog-backgroundtasks:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Catalog/Catalog.BackgroundTasks/Dockerfile
+    restart: always
+    depends_on: 
+      - catalog-api
+
   identity-api:
     image: ${REGISTRY:-giuru}/identity-api:${PLATFORM:-linux}-${TAG:-latest}
     build:

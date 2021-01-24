@@ -267,5 +267,22 @@ namespace Seller.Web.Areas.Products.Repositories
 
             return default;
         }
+
+        public async Task TriggerProductsReindexingAsync(string token, string language)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsSearchIndexApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.PostAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+        }
     }
 }

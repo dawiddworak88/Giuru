@@ -98,7 +98,6 @@ namespace Catalog.Api.v1.Products.Controllers
                                 Files = x.Files,
                                 IsNew = x.IsNew,
                                 IsProtected = x.IsProtected,
-                                Message = x.Message,
                                 Name = x.Name,
                                 PrimaryProductId = x.PrimaryProductId,
                                 SellerId = x.SellerId,
@@ -154,7 +153,6 @@ namespace Catalog.Api.v1.Products.Controllers
                                 Files = x.Files,
                                 IsNew = x.IsNew,
                                 IsProtected = x.IsProtected,
-                                Message = x.Message,
                                 Name = x.Name,
                                 PrimaryProductId = x.PrimaryProductId,
                                 SellerId = x.SellerId,
@@ -183,7 +181,6 @@ namespace Catalog.Api.v1.Products.Controllers
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ProductResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.Created)]
-        [ProducesResponseType(400)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save([FromBody] ProductRequestModel request)
         {
@@ -232,7 +229,6 @@ namespace Catalog.Api.v1.Products.Controllers
                             FormData = product.FormData,
                             IsNew = product.IsNew,
                             IsProtected = product.IsProtected,
-                            Message = product.Message,
                             Name = product.Name,
                             PrimaryProductId = product.PrimaryProductId,
                             ProductVariants = product.ProductVariants,
@@ -273,7 +269,6 @@ namespace Catalog.Api.v1.Products.Controllers
                             FormData = product.FormData,
                             IsNew = product.IsNew,
                             IsProtected = product.IsProtected,
-                            Message = product.Message,
                             Name = product.Name,
                             PrimaryProductId = product.PrimaryProductId,
                             ProductVariants = product.ProductVariants,
@@ -337,7 +332,6 @@ namespace Catalog.Api.v1.Products.Controllers
                         FormData = product.FormData,
                         IsNew = product.IsNew,
                         IsProtected = product.IsProtected,
-                        Message = product.Message,
                         Name = product.Name,
                         PrimaryProductId = product.PrimaryProductId,
                         ProductVariants = product.ProductVariants,

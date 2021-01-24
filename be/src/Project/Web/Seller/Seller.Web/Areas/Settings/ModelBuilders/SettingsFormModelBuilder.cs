@@ -4,6 +4,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Settings.ViewModels;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Settings.ModelBuilders
@@ -26,10 +27,10 @@ namespace Seller.Web.Areas.Settings.ModelBuilders
             var viewModel = new SettingsFormViewModel
             {
                 Title = this.globalLocalizer.GetString("Settings"),
-                SaveText = this.globalLocalizer.GetString("SaveText"),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred")
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                ProductsIndexTriggerUrl = this.linkGenerator.GetPathByAction("Index", "ProductsIndexTriggerApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                ReindexProductsText = this.globalLocalizer.GetString("ReindexProducts")
             };
-
             
             return viewModel;
         }

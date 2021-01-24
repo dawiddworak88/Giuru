@@ -312,6 +312,12 @@
   <data name="Regulations" xml:space="preserve">
     <value>Regulations</value>
   </data>
+  <data name="ReindexingTriggeredSuccessfully" xml:space="preserve">
+    <value>Reindexing of products has been started successfully.</value>
+  </data>
+  <data name="ReindexProducts" xml:space="preserve">
+    <value>Reindex products</value>
+  </data>
   <data name="Results" xml:space="preserve">
     <value>results</value>
   </data>

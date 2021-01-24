@@ -6,6 +6,7 @@
         {
             public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
             public static readonly string ProductsApiEndpoint = "/api/v1/products";
+            public static readonly string ProductsSearchIndexApiEndpoint = "/api/v1/productssearchindex";
             public static readonly string ProductSuggestionsApiEndpoint = "/api/v1/productsuggestions";
         }
 

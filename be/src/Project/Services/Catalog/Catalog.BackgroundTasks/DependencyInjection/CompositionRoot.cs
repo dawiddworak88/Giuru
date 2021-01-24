@@ -1,28 +1,24 @@
-﻿using Catalog.Api.Repositories.Products.ProductSearchRepositories;
-using Catalog.Api.Services.Categories;
-using Catalog.Api.Services.Products;
+﻿using Catalog.BackgroundTasks.IntegrationEvents;
+using Catalog.BackgroundTasks.IntegrationEventsHandlers;
+using Catalog.BackgroundTasks.Services.Products;
+using Foundation.Catalog.Infrastructure;
+using Foundation.EventBus;
+using Foundation.EventBus.Abstractions;
+using Foundation.EventBusRabbitMq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Nest;
-using System;
-using Foundation.Catalog.Infrastructure;
-using Foundation.Catalog.SearchModels.Products;
-using Foundation.EventBus.Abstractions;
-using Foundation.EventBusRabbitMq;
 using Microsoft.Extensions.Logging;
-using Foundation.EventBus;
+using Nest;
 using RabbitMQ.Client;
+using System;
 
-namespace Catalog.Api.DependencyInjection
+namespace Catalog.BackgroundTasks.DependencyInjection
 {
     public static class CompositionRoot
     {
-        public static void RegisterCatalogApiDependencies(this IServiceCollection services)
+        public static void RegisterCatalogBackgroundTasksDependencies(this IServiceCollection services)
         {
-            services.AddScoped<ICategoriesService, CategoriesService>();
-
-            services.AddScoped<IProductSearchRepository, ProductSearchRepository>();
             services.AddScoped<IProductsService, ProductsService>();
         }
 
@@ -30,7 +26,7 @@ namespace Catalog.Api.DependencyInjection
         {
             services.AddScoped<CatalogContext>();
 
-            services.AddDbContext<CatalogContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite().MigrationsAssembly("Catalog.Api")));
+            services.AddDbContext<CatalogContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
         }
 
         public static void RegisterSearchDependencies(this IServiceCollection services, IConfiguration configuration)
@@ -43,34 +39,13 @@ namespace Catalog.Api.DependencyInjection
 
             var client = new ElasticClient(settings);
 
-            if (!client.Indices.Exists(defaultIndex).Exists)
-            {
-                client.Indices.Create(defaultIndex, c => c
-                    .Map<ProductSearchModel>(m => m
-                        .AutoMap()
-                        .Properties(p => p
-                            .Completion(cmpl => cmpl
-                                .Name(n => n.NameSuggest)
-                                .Contexts(ctxs => ctxs
-                                    .Category(ctgr => ctgr.Name("isActive"))
-                                    .Category(ctgr => ctgr.Name("primaryProductIdHasValue"))))
-                            .Completion(cmpl => cmpl
-                                .Name(n => n.BrandNameSuggest)
-                                .Contexts(ctxs => ctxs
-                                    .Category(ctgr => ctgr.Name("isActive"))
-                                    .Category(ctgr => ctgr.Name("primaryProductIdHasValue"))))
-                            .Completion(cmpl => cmpl
-                                .Name(n => n.CategoryNameSuggest)
-                                .Contexts(ctxs => ctxs
-                                    .Category(ctgr => ctgr.Name("isActive"))
-                                    .Category(ctgr => ctgr.Name("language")))))));
-            }
-
             services.AddSingleton<IElasticClient>(client);
         }
 
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<IIntegrationEventHandler<RebuildCatalogSearchIndexIntegrationEvent>, RebuildCatalogSearchIndexIntegrationEventHandler>();
+
             services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
             {
                 var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();

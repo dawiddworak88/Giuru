@@ -8,7 +8,6 @@ namespace Catalog.Api.Services.Products
     public interface IProductsService
     {
         Task<ProductServiceModel> CreateAsync(CreateUpdateProductModel model);
-        Task IndexAllAsync();
         Task<bool> IsEmptyAsync();
         Task<ProductServiceModel> UpdateAsync(CreateUpdateProductModel model);
         Task<ProductServiceModel> GetByIdAsync(GetProductServiceModel getProductModel);
@@ -16,5 +15,6 @@ namespace Catalog.Api.Services.Products
         Task<PagedResults<IEnumerable<ProductServiceModel>>> GetByIdsAsync(GetProductsByIdsServiceModel getProductsModel);
         Task DeleteAsync(DeleteProductServiceModel deleteProductModel);
         IEnumerable<string> GetProductSuggestions(GetProductSuggestionsServiceModel model);
+        void TriggerCatalogIndexRebuild(RebuildCatalogIndexServiceModel model);
     }
 }

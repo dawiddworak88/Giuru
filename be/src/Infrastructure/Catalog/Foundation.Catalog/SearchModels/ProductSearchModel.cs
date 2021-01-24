@@ -3,7 +3,7 @@ using Nest;
 using System;
 using System.Collections.Generic;
 
-namespace Catalog.Api.SearchModels.Products
+namespace Foundation.Catalog.SearchModels.Products
 {
     [ElasticsearchType(RelationName = "product")]
     public class ProductSearchModel : SearchModelBase

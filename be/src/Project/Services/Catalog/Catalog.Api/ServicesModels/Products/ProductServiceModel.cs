@@ -1,11 +1,11 @@
-﻿using Foundation.ApiExtensions.Models.Response;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Catalog.Api.ServicesModels.Products
 {
-    public class ProductServiceModel : BaseResponseModel
+    public class ProductServiceModel
     {
+        public Guid? Id { get; set; }
         public Guid? PrimaryProductId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

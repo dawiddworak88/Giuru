@@ -312,6 +312,12 @@
   <data name="Regulations" xml:space="preserve">
     <value>Geschäftsbedingungen</value>
   </data>
+  <data name="ReindexingTriggeredSuccessfully" xml:space="preserve">
+    <value>Produktindex wird neu erstellt.</value>
+  </data>
+  <data name="ReindexProducts" xml:space="preserve">
+    <value>Produkte neu indizieren</value>
+  </data>
   <data name="Results" xml:space="preserve">
     <value>Ergebnisse</value>
   </data>

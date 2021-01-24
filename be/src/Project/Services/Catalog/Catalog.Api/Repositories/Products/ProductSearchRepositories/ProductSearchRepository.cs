@@ -1,4 +1,4 @@
-﻿using Catalog.Api.SearchModels.Products;
+﻿using Foundation.Catalog.SearchModels.Products;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Search.Extensions;
 using Nest;
