@@ -251,8 +251,8 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<string>("ProductSku")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()

@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Ordering.Api.IntegrationEvents;
-using Serilog.Context;
 using System.Threading.Tasks;
 
 namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
@@ -31,10 +30,6 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
         /// <returns></returns>
         public async Task Handle(BasketCheckoutAcceptedIntegrationEvent @event)
         {
-            using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{typeof(Program).Namespace}"))
-            {
-                this.logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, typeof(Program).Namespace, @event);
-            }
         }
     }
 }

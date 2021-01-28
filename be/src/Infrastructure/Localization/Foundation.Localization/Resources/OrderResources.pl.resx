@@ -169,7 +169,7 @@
     <value>Pozycje zamówienia</value>
   </data>
   <data name="OrderPlacedSuccessfully" xml:space="preserve">
-    <value>Zamówienie zostało pomyślnie złożone. Trwa przetważanie zamówienia. Niedługo będzie widoczne na liście zamówień.</value>
+    <value>Zamówienie zostało pomyślnie złożone. Trwa przetwarzanie zamówienia. Niedługo będzie widoczne na liście zamówień.</value>
   </data>
   <data name="Orders" xml:space="preserve">
     <value>Zamówienia</value>

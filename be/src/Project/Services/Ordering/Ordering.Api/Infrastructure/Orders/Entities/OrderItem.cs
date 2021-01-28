@@ -23,8 +23,7 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
 
         public string ExternalReference { get; set; }
 
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal Quantity { get; set; }
+        public double Quantity { get; set; }
 
         public DateTime? ExpectedDeliveryFrom { get; set; }
 

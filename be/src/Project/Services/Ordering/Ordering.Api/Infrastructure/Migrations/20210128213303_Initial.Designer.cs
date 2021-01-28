@@ -10,7 +10,7 @@ using Ordering.Api.Infrastructure;
 namespace Ordering.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(OrderingContext))]
-    [Migration("20210124194447_Initial")]
+    [Migration("20210128213303_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -253,8 +253,8 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<string>("ProductSku")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()

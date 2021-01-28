@@ -136,7 +136,7 @@ namespace Ordering.Api.Infrastructure.Migrations
                     ProductName = table.Column<string>(nullable: true),
                     ProductAttributes = table.Column<string>(nullable: true),
                     ExternalReference = table.Column<string>(nullable: true),
-                    Quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<double>(nullable: false),
                     ExpectedDeliveryFrom = table.Column<DateTime>(nullable: true),
                     ExpectedDeliveryTo = table.Column<DateTime>(nullable: true),
                     MoreInfo = table.Column<string>(nullable: true)
