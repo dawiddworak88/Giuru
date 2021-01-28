@@ -7,6 +7,7 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Shared.Repositories.Clients;
+using Seller.Web.Shared.Repositories.Organisations;
 using System;
 using System.Globalization;
 using System.Net;
@@ -17,13 +18,16 @@ namespace Seller.Web.Areas.Clients.ApiControllers
     [Area("Clients")]
     public class ClientsApiController : BaseApiController
     {
+        private readonly IOrganisationsRepository organisationsRepository;
         private readonly IClientsRepository clientsRepository;
         private readonly IStringLocalizer clientLocalizer;
 
         public ClientsApiController(
+            IOrganisationsRepository organisationsRepository,
             IClientsRepository clientsRepository,
             IStringLocalizer<ClientResources> clientLocalizer)
         {
+            this.organisationsRepository = organisationsRepository;
             this.clientsRepository = clientsRepository;
             this.clientLocalizer = clientLocalizer;
         }
@@ -45,15 +49,37 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] SaveClientRequestModel model)
         {
-            var categoryId = await this.clientsRepository.SaveAsync(
+            Guid? organisationId;
+
+            var organisation = await this.organisationsRepository.GetAsync(
+                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                CultureInfo.CurrentUICulture.Name,
+                model.Email);
+
+            if (organisation != null)
+            {
+                organisationId = organisation.Id;
+            }
+            else
+            {
+                organisationId = await this.organisationsRepository.SaveAsync(
+                    await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                    CultureInfo.CurrentUICulture.Name,
+                    model.Name,
+                    model.Email,
+                    model.CommunicationLanguage);
+            }
+
+            var clientId = await this.clientsRepository.SaveAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 model.Id,
                 model.Name,
                 model.Email,
-                model.CommunicationLanguage);
+                model.CommunicationLanguage,
+                organisationId.Value);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = categoryId, Message = this.clientLocalizer.GetString("ClientSavedSuccessfully").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Id = clientId, Message = this.clientLocalizer.GetString("ClientSavedSuccessfully").Value });
         }
 
         [HttpDelete]

@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
+import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 
 function ClientForm(props) {
 
@@ -11,10 +12,36 @@ function ClientForm(props) {
 
     const stateSchema = {
 
-        id: { value: props.id ? props.id : null, error: "" }
+        id: { value: props.id ? props.id : null, error: "" },
+        name: { value: props.name ? props.name : "", error: "" },
+        email: { value: props.email ? props.email : "", error: "" },
+        communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" }
     };
 
     const stateValidatorSchema = {
+
+        name: {
+            required: {
+                isRequired: true,
+                error: props.nameRequiredErrorMessage
+            }
+        },
+        email: {
+            required: {
+                isRequired: true,
+                error: props.emailRequiredErrorMessage
+            },
+            validator: {
+                func: value => EmailValidator.validateFormat(value),
+                error: props.emailFormatErrorMessage,
+            }
+        },
+        communicationLanguage: {
+            required: {
+                isRequired: true,
+                error: props.languageRequiredErrorMessage
+            }
+        }
     };
 
     function onSubmitForm(state) {
@@ -59,10 +86,10 @@ function ClientForm(props) {
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id } = values;
+    const { id, name, email, communicationLanguage } = values;
 
     return (
-        <section className="section section-small-padding client">
+        <section className="section section-small-padding product">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
@@ -70,6 +97,34 @@ function ClientForm(props) {
                         {id &&
                             <input id="id" name="id" type="hidden" value={id} />
                         }
+                        <div className="field">
+                            <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
+                                value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
+                        </div>
+                        <div className="field">
+                            <TextField id="email" name="email" label={props.emailLabel} fullWidth={true}
+                                value={email} onChange={handleOnChange} helperText={dirty.email ? errors.email : ""} error={(errors.email.length > 0) && dirty.email} />
+                        </div>
+                        <div className="field">
+                            <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage}>
+                                <InputLabel id="language-label">{props.languageLabel}</InputLabel>
+                                <Select
+                                    labelId="language-label"
+                                    id="communicationLanguage"
+                                    name="communicationLanguage"
+                                    value={communicationLanguage}
+                                    onChange={handleOnChange}>
+                                    {props.languages.map(language => {
+                                        return (
+                                            <MenuItem key={language.value} value={language.value}>{language.text}</MenuItem>
+                                        );
+                                    })}
+                                </Select>
+                                {errors.communicationLanguage && dirty.communicationLanguage && (
+                                    <FormHelperText>{errors.communicationLanguage}</FormHelperText>
+                                )}
+                            </FormControl>
+                        </div>
                         <div className="field">
                             <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
                                 {props.saveText}

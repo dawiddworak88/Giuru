@@ -12,12 +12,6 @@
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="v1\Areas\Accounts\Definitions\**" />
-    <Content Remove="v1\Areas\Accounts\Definitions\**" />
-    <EmbeddedResource Remove="v1\Areas\Accounts\Definitions\**" />
-    <None Remove="v1\Areas\Accounts\Definitions\**" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.11" />

@@ -2,7 +2,6 @@
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Helpers;
-using Media.Api.v1.Areas.Media.ApiRequestModels;
 using Media.Api.ServicesModels;
 using Media.Api.Validators;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +14,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Media.Api.Services.Media;
+using Media.Api.v1.Areas.Media.RequestModels;
 
 namespace Media.Api.v1.Controllers
 {

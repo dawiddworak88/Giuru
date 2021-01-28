@@ -1,4 +1,5 @@
 ﻿using EventLogging.Api.Infrastructure;
+using Foundation.Localization.Definitions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -21,6 +22,11 @@ namespace EventLogging.Api.DependencyInjection
                     dbContext.Database.Migrate();
                 }
             }
+        }
+
+        public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<LocalizationSettings>(configuration);
         }
     }
 }

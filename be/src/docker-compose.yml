@@ -62,6 +62,15 @@ services:
       - azurite
       - sqldata
 
+  client-api:
+    image: ${REGISTRY:-giuru}/client-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Client/Client.Api/Dockerfile
+    restart: always
+    depends_on: 
+      - sqldata
+
   catalog-api:
     image: ${REGISTRY:-giuru}/catalog-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
@@ -84,6 +93,8 @@ services:
     depends_on: 
       - catalog-api
       - eventlogging-api
+      - sqldata
+      - rabbitmq
 
   identity-api:
     image: ${REGISTRY:-giuru}/identity-api:${PLATFORM:-linux}-${TAG:-latest}

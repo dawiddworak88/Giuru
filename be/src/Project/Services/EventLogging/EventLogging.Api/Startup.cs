@@ -27,6 +27,8 @@ namespace EventLogging.Api
 
             services.AddApiVersioning();
 
+            services.ConfigureSettings(this.Configuration);
+
             services.RegisterDatabaseDependencies(this.Configuration);
 
             services.RegisterEventLoggingDependencies();

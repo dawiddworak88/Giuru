@@ -12,6 +12,7 @@ using Seller.Web.Shared.DrawerMenu.ModelBuilders;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Seller.Web.Areas.Products.ModelBuilders;
 using Seller.Web.Shared.Repositories.Clients;
+using Seller.Web.Shared.Repositories.Organisations;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -19,6 +20,7 @@ namespace Seller.Web.Shared.DependencyInjection
     {
         public static void RegisterDependencies(this IServiceCollection services)
         {
+            services.AddScoped<IOrganisationsRepository, OrganisationsRepository>();
             services.AddScoped<IClientsRepository, ClientsRepository>();
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IModelBuilder<MenuTilesViewModel>, MenuTilesModelBuilder>();

@@ -32,7 +32,6 @@ namespace Catalog.Api.v1.Products.Controllers
         /// <summary>
         /// Triggers catalog index rebuild.
         /// </summary>
-        /// <param name="request">Payload of catalog search index rebuild.</param>
         /// <returns>Accepted if the catalog index rebuild has been started correctly.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]

@@ -108,15 +108,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{B073
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.Catalog", "Infrastructure\Catalog\Foundation.Catalog\Foundation.Catalog.csproj", "{79EA0DCD-0EFB-4DB5-8B9B-093CDB03423B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog.BackgroundTasks", "Project\Services\Catalog\Catalog.BackgroundTasks\Catalog.BackgroundTasks.csproj", "{647033AE-5F5C-40BD-BF0E-AC96D8CF5E99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.BackgroundTasks", "Project\Services\Catalog\Catalog.BackgroundTasks\Catalog.BackgroundTasks.csproj", "{647033AE-5F5C-40BD-BF0E-AC96D8CF5E99}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventLogging", "EventLogging", "{9A7E04C9-DF03-4716-AE6D-E868ACDCC8AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventLogging.Api", "Project\Services\EventLogging\EventLogging.Api\EventLogging.Api.csproj", "{9A847FA2-C840-46D3-974F-DCD10B1563C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventLogging.Api", "Project\Services\EventLogging\EventLogging.Api\EventLogging.Api.csproj", "{9A847FA2-C840-46D3-974F-DCD10B1563C6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventLog", "EventLog", "{E66858E2-5577-4AA4-99A9-570E330DBC76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foundation.EventLog", "Infrastructure\EventLog\Foundation.EventLog\Foundation.EventLog.csproj", "{D17B6EB4-A4E7-41E0-BFAD-4DCAF71AFFC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Foundation.EventLog", "Infrastructure\EventLog\Foundation.EventLog\Foundation.EventLog.csproj", "{D17B6EB4-A4E7-41E0-BFAD-4DCAF71AFFC0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{DEB2FD01-D730-4281-BCD1-0C570270477A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Api", "Project\Services\Client\Client.Api\Client.Api.csproj", "{C941FCFD-9527-4EB9-BFAF-C083F8254A2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -232,6 +236,10 @@ Global
 		{D17B6EB4-A4E7-41E0-BFAD-4DCAF71AFFC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D17B6EB4-A4E7-41E0-BFAD-4DCAF71AFFC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D17B6EB4-A4E7-41E0-BFAD-4DCAF71AFFC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C941FCFD-9527-4EB9-BFAF-C083F8254A2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C941FCFD-9527-4EB9-BFAF-C083F8254A2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C941FCFD-9527-4EB9-BFAF-C083F8254A2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C941FCFD-9527-4EB9-BFAF-C083F8254A2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -289,6 +297,8 @@ Global
 		{9A847FA2-C840-46D3-974F-DCD10B1563C6} = {9A7E04C9-DF03-4716-AE6D-E868ACDCC8AA}
 		{E66858E2-5577-4AA4-99A9-570E330DBC76} = {89A813A9-9007-46EC-8F17-F2816F9202CC}
 		{D17B6EB4-A4E7-41E0-BFAD-4DCAF71AFFC0} = {E66858E2-5577-4AA4-99A9-570E330DBC76}
+		{DEB2FD01-D730-4281-BCD1-0C570270477A} = {AA76A57C-E6D8-4329-B285-C2922557FEC2}
+		{C941FCFD-9527-4EB9-BFAF-C083F8254A2C} = {DEB2FD01-D730-4281-BCD1-0C570270477A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B0F50684-572D-4B8F-8A02-B5C72CD028EE}

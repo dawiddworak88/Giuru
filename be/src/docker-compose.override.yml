@@ -82,6 +82,17 @@ services:
     ports:
       - "5131:80"
 
+  client-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sqldata;Database=ClientDb;User Id=sa;Password=Gre@tPassw0rd
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - SeqUrl=http://seq
+      - SupportedCultures=${SUPPORTED_CULTURES}
+      - DefaultCulture=${DEFAULT_CULTURE}
+    ports:
+      - "5133:80"
+
   catalog-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -198,6 +209,7 @@ services:
       - ClientSecret=c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9
       - CatalogUrl=http://catalog-api
       - BasketUrl=http://basket-api
+      - ClientUrl=http://client-api
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - SeqUrl=http://seq

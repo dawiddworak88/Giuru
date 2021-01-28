@@ -36,7 +36,7 @@ namespace Seller.Web.Shared.Repositories.Clients
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.ClientsApiEndpoint}/{id}"
+                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Identity.ClientsApiEndpoint}/{id}"
             };
 
             var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
@@ -60,7 +60,7 @@ namespace Seller.Web.Shared.Repositories.Clients
                 Language = language,
                 Data = categoriesRequestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>>(apiRequest);
@@ -108,7 +108,7 @@ namespace Seller.Web.Shared.Repositories.Clients
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.ClientsApiEndpoint}/{id}"
+                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Identity.ClientsApiEndpoint}/{id}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Client>(apiRequest);
@@ -141,7 +141,7 @@ namespace Seller.Web.Shared.Repositories.Clients
                 Language = language,
                 Data = clientsRequestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>> (apiRequest);
@@ -162,14 +162,15 @@ namespace Seller.Web.Shared.Repositories.Clients
             return default;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string name, string email, string communicationLanguage)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string name, string email, string communicationLanguage, Guid organisationId)
         {
             var requestModel = new SaveClientRequestModel
             {
                 Id = id,
                 Name = name,
                 Email = email,
-                CommunicationLanguage = communicationLanguage
+                CommunicationLanguage = communicationLanguage,
+                OrganisationId = organisationId
             };
 
             var apiRequest = new ApiRequest<SaveClientRequestModel>
@@ -177,7 +178,7 @@ namespace Seller.Web.Shared.Repositories.Clients
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
             };
 
             var response = await this.apiClientService.PostAsync<ApiRequest<SaveClientRequestModel>, SaveClientRequestModel, BaseResponseModel>(apiRequest);
