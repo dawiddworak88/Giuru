@@ -2,7 +2,6 @@
 using Basket.Api.Repositories;
 using Foundation.EventBus.Abstractions;
 using Foundation.Extensions.ExtensionMethods;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,7 +59,7 @@ namespace Basket.Api.Services
                 }
             };
 
-            await this.eventLogRepository.SaveAsync(message, message.GetType().Name, EventStates.New, message.Source, message.IpAddress);
+            await this.eventLogRepository.SaveAsync(message, EventStates.New);
 
             this.eventBus.Publish(message);
         }

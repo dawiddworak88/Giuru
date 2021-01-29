@@ -7,12 +7,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ordering.Api.Infrastructure;
 using Ordering.Api.IntegrationEvents;
+using Ordering.Api.Services;
 using Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers;
 
 namespace Ordering.Api.DependencyInjection
 {
     public static class CompositionRoot
     {
+        public static void RegisterOrderingApiDependencies(this IServiceCollection services)
+        {
+            services.AddScoped<IOrdersService, OrdersService>();
+        }
+
         public static void RegisterOrderingDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<OrderingContext>();

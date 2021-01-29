@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Ordering.Api.Infrastructure.Addresses.Entities;
 using Ordering.Api.Infrastructure.Orders.Entities;
 
 namespace Ordering.Api.Infrastructure
@@ -15,7 +14,6 @@ namespace Ordering.Api.Infrastructure
             optionsBuilder.UseLazyLoadingProxies();
         }
 
-        public DbSet<Address> Addresses { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<OrderComment> OrderComments { get; set; }

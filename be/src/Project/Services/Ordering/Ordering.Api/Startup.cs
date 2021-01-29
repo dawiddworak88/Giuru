@@ -43,6 +43,8 @@ namespace Ordering.Api
 
             services.AddApiVersioning();
 
+            services.RegisterOrderingApiDependencies();
+
             services.ConfigureSettings(this.Configuration);
 
             services.RegisterEventBus(this.Configuration);

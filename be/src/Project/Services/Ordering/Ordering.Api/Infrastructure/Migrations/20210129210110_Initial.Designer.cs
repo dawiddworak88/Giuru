@@ -10,7 +10,7 @@ using Ordering.Api.Infrastructure;
 namespace Ordering.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(OrderingContext))]
-    [Migration("20210128213303_Initial")]
+    [Migration("20210129210110_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,65 +21,6 @@ namespace Ordering.Api.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Ordering.Api.Infrastructure.Addresses.Entities.Address", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Company")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CountryCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhonePrefix")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PostCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Region")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Addresses");
-                });
-
             modelBuilder.Entity("Ordering.Api.Infrastructure.Orders.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
@@ -89,23 +30,8 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<Guid?>("BillingAddressId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ClientCommunicationLanguage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClientCompanyName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClientEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClientFirstName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid?>("ClientId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ClientLastName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -113,17 +39,10 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<DateTime?>("ExpectedDeliveryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ExternalReference")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("IpAddress")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsGuestOrder")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("LastModifiedDate")
@@ -146,17 +65,8 @@ namespace Ordering.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<string>("SellerCompanyName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SellerFirstName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid?>("SellerId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("SellerLastName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("ShippingAddressId")
                         .HasColumnType("uniqueidentifier");
@@ -223,9 +133,6 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<DateTime?>("ExpectedDeliveryTo")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ExternalReference")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -238,20 +145,8 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("PreviewImageMediaId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ProductAttributes")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ProductName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductSku")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Quantity")
                         .HasColumnType("float");

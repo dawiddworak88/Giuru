@@ -8,14 +8,16 @@ namespace Foundation.EventBus.Events
         public IntegrationEvent()
         {
             Id = Guid.NewGuid();
+            EventName = this.GetType().Name;
             CreationDate = DateTime.UtcNow;
         }
 
         [JsonConstructor]
-        public IntegrationEvent(Guid id, DateTime createDate)
+        public IntegrationEvent(Guid id, DateTime createDate, string eventName)
         {
             Id = id;
             CreationDate = createDate;
+            EventName = eventName;
         }
 
         [JsonProperty]
@@ -35,6 +37,9 @@ namespace Foundation.EventBus.Events
 
         [JsonProperty]
         public string IpAddress { get; set; }
+
+        [JsonProperty]
+        public string EventName { get; private set; }
 
         [JsonProperty]
         public DateTime CreationDate { get; private set; }

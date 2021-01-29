@@ -1,4 +1,6 @@
-﻿namespace Ordering.Api.Infrastructure.Orders.Definitions
+﻿using System;
+
+namespace Ordering.Api.Infrastructure.Orders.Definitions
 {
     public static class OrderStatusesConstants
     {
@@ -8,5 +10,7 @@
         public static readonly int EnNameIndex = 3;
         public static readonly int DeNameIndex = 4;
         public static readonly int PlNameIndex = 5;
+
+        public static readonly Guid NewId = Guid.Parse("287ee71a-d87f-4563-833a-8e2771d1e5a5");
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Basket.Api.IntegrationEvents;
 using Basket.Api.Repositories;
 using Foundation.EventBus.Abstractions;
-using Microsoft.Extensions.Logging;
-using Serilog.Context;
+using Foundation.EventLog.Definitions;
+using Foundation.EventLog.Repositories;
 using System.Threading.Tasks;
 
 namespace Basket.Api.IntegrationEventsHandlers
@@ -10,24 +10,23 @@ namespace Basket.Api.IntegrationEventsHandlers
     public class OrderStartedIntegrationEventHandler : IIntegrationEventHandler<OrderStartedIntegrationEvent>
     {
         private readonly IBasketRepository repository;
-        private readonly ILogger<OrderStartedIntegrationEventHandler> logger;
+        private readonly IEventLogRepository eventLogRepository;
 
         public OrderStartedIntegrationEventHandler(
             IBasketRepository repository,
-            ILogger<OrderStartedIntegrationEventHandler> logger)
+            IEventLogRepository eventLogRepository)
         {
             this.repository = repository;
-            this.logger = logger;
+            this.eventLogRepository = eventLogRepository;
         }
 
         public async Task Handle(OrderStartedIntegrationEvent @event)
         {
-            using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-{typeof(Program).Namespace}"))
-            {
-                logger.LogInformation("----- Handling integration event: {IntegrationEventId} at {AppName} - ({@IntegrationEvent})", @event.Id, typeof(Program).Namespace, @event);
+            await this.eventLogRepository.SaveAsync(@event, EventStates.InProgress);
+            
+            await this.repository.DeleteBasketAsync(@event.BasketId);
 
-                await repository.DeleteBasketAsync(@event.BasketId);
-            }
+            await this.eventLogRepository.SaveAsync(@event, EventStates.Processed);
         }
     }
 }

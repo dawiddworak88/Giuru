@@ -23,18 +23,17 @@ namespace Foundation.EventLog.Repositories
             this.configuration = configuration;
         }
 
-        public async Task SaveAsync(IntegrationEvent @event, string eventName, string eventState, string source, string ipAddress)
+        public async Task SaveAsync(IntegrationEvent @event, string eventState)
         {
             var requestModel = new SaveEventApiRequestModel
             {
                 EventId = @event.Id,
-                EventName = eventName,
                 EventState = eventState,
                 Content = JsonConvert.SerializeObject(@event),
                 Username = @event.Username,
                 OrganisationId = @event.OrganisationId,
-                Source = source,
-                IpAddress = ipAddress
+                Source = @event.Source,
+                IpAddress = @event.IpAddress
             };
 
             var apiRequest = new ApiRequest<SaveEventApiRequestModel>

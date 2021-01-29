@@ -1,7 +1,6 @@
 ﻿using Foundation.GenericRepository.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ordering.Api.Infrastructure.Orders.Entities
 {
@@ -12,16 +11,6 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
 
         [Required]
         public Guid ProductId { get; set; }
-
-        public Guid? PreviewImageMediaId { get; set; }
-
-        public string ProductSku { get; set; }
-
-        public string ProductName { get; set; }
-
-        public string ProductAttributes { get; set; }
-
-        public string ExternalReference { get; set; }
 
         public double Quantity { get; set; }
 

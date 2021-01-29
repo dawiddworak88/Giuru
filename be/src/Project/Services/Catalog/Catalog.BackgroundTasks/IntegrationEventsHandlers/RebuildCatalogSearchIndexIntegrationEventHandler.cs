@@ -30,14 +30,14 @@ namespace Catalog.BackgroundTasks.IntegrationEventsHandlers
         /// <returns></returns>
         public async Task Handle(RebuildCatalogSearchIndexIntegrationEvent @event)
         {
-            await this.eventLogRepository.SaveAsync(@event, @event.GetType().Name, EventStates.InProgress, @event.Source, @event.IpAddress);
+            await this.eventLogRepository.SaveAsync(@event, EventStates.InProgress);
 
             if (@event.OrganisationId.HasValue)
             {
                 await this.productsService.IndexAllAsync(@event.OrganisationId);
             }
 
-            await this.eventLogRepository.SaveAsync(@event, @event.GetType().Name, EventStates.Processed, @event.Source, @event.IpAddress);
+            await this.eventLogRepository.SaveAsync(@event, EventStates.Processed);
         }
     }
 }
