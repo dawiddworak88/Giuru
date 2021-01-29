@@ -3,9 +3,8 @@ using System.IO;
 using System.Reflection;
 using Basket.Api.DependencyInjection;
 using Foundation.Account.DependencyInjection;
-using Foundation.EventBus;
-using Foundation.EventBus.Abstractions;
 using Foundation.EventBusRabbitMq;
+using Foundation.EventLog.DependencyInjection;
 using Foundation.Extensions.Filters;
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
@@ -47,7 +46,7 @@ namespace Basket.Api
 
             services.ConfigureSettings(this.Configuration);
 
-            services.AddSingleton<ConnectionMultiplexer>(sp =>
+            services.AddSingleton(sp =>
             {
                 var configuration = ConfigurationOptions.Parse(this.Configuration["ConnectionString"], true);
 
@@ -55,6 +54,10 @@ namespace Basket.Api
 
                 return ConnectionMultiplexer.Connect(configuration);
             });
+
+            services.RegisterEventBus(this.Configuration);
+
+            services.RegisterEventLogDependencies();
 
             services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
             {
@@ -66,24 +69,8 @@ namespace Basket.Api
                     DispatchConsumersAsync = true
                 };
 
-                if (!string.IsNullOrEmpty(Configuration["EventBusUserName"]))
-                {
-                    factory.UserName = Configuration["EventBusUserName"];
-                }
-
                 return new DefaultRabbitMQPersistentConnection(factory, logger, int.Parse(Configuration["EventBusRetryCount"]));
             });
-
-            services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
-            {
-                var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
-                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMq>>();
-                var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
-
-                return new EventBusRabbitMq(sp, rabbitMqPersistentConnection, logger, eventBusSubcriptionsManager, typeof(Startup).Namespace, int.Parse(Configuration["EventBusRetryCount"]));
-            });
-
-            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
             services.AddSwaggerGen(c =>
             {

@@ -1,6 +1,13 @@
-﻿using Basket.Api.Repositories;
+﻿using Basket.Api.IntegrationEvents;
+using Basket.Api.IntegrationEventsHandlers;
+using Basket.Api.Repositories;
 using Basket.Api.Services;
+using Foundation.EventBus;
+using Foundation.EventBus.Abstractions;
+using Foundation.EventBusRabbitMq;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Basket.Api.DependencyInjection
 {
@@ -10,6 +17,22 @@ namespace Basket.Api.DependencyInjection
         {
             services.AddScoped<IBasketRepository, RedisBasketRepository>();
             services.AddScoped<IBasketService, BasketService>();
+        }
+
+        public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddScoped<IIntegrationEventHandler<OrderStartedIntegrationEvent>, OrderStartedIntegrationEventHandler>();
+
+            services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
+            {
+                var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
+                var logger = sp.GetRequiredService<ILogger<EventBusRabbitMq>>();
+                var eventBusSubcriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+
+                return new EventBusRabbitMq(sp, rabbitMqPersistentConnection, logger, eventBusSubcriptionsManager, typeof(Startup).Namespace, int.Parse(configuration["EventBusRetryCount"]));
+            });
+
+            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
         }
     }
 }

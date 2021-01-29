@@ -1,6 +1,6 @@
 ﻿using Foundation.EventBus.Abstractions;
-using MediatR;
-using Microsoft.Extensions.Logging;
+using Foundation.EventLog.Definitions;
+using Foundation.EventLog.Repositories;
 using Ordering.Api.IntegrationEvents;
 using System.Threading.Tasks;
 
@@ -8,15 +8,12 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
 {
     public class BasketCheckoutAcceptedIntegrationEventHandler : IIntegrationEventHandler<BasketCheckoutAcceptedIntegrationEvent>
     {
-        private readonly IMediator mediator;
-        private readonly ILogger<BasketCheckoutAcceptedIntegrationEventHandler> logger;
+        private readonly IEventLogRepository eventLogRepository;
 
         public BasketCheckoutAcceptedIntegrationEventHandler(
-            IMediator mediator,
-            ILogger<BasketCheckoutAcceptedIntegrationEventHandler> logger)
+            IEventLogRepository eventLogRepository)
         {
-            this.mediator = mediator;
-            this.logger = logger;
+            this.eventLogRepository = eventLogRepository;
         }
 
         /// <summary>
@@ -30,6 +27,9 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
         /// <returns></returns>
         public async Task Handle(BasketCheckoutAcceptedIntegrationEvent @event)
         {
+            await this.eventLogRepository.SaveAsync(@event, @event.GetType().Name, EventStates.InProgress, @event.Source, @event.IpAddress);
+
+            await this.eventLogRepository.SaveAsync(@event, @event.GetType().Name, EventStates.Processed, @event.Source, @event.IpAddress);
         }
     }
 }

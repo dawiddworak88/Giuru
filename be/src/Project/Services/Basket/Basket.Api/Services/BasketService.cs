@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Basket.Api.RepositoriesModels;
 using Basket.Api.IntegrationEvents;
 using Basket.Api.IntegrationEventsModels;
+using Foundation.EventLog.Repositories;
+using Foundation.EventLog.Definitions;
 
 namespace Basket.Api.Services
 {
@@ -16,16 +18,16 @@ namespace Basket.Api.Services
     {
         private readonly IBasketRepository basketRepository;
         private readonly IEventBus eventBus;
-        private readonly ILogger<BasketService> logger;
+        private readonly IEventLogRepository eventLogRepository;
 
         public BasketService(
             IBasketRepository basketRepository,
             IEventBus eventBus,
-            ILogger<BasketService> logger)
+            IEventLogRepository eventLogRepository)
         {
             this.basketRepository = basketRepository;
             this.eventBus = eventBus;
-            this.logger = logger;
+            this.eventLogRepository = eventLogRepository;
         }
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel checkoutBasketServiceModel)
@@ -37,8 +39,11 @@ namespace Basket.Api.Services
                 throw new ArgumentNullException();
             }
 
-            var eventMessage = new BasketCheckoutAcceptedIntegrationEvent
+            var message = new BasketCheckoutAcceptedIntegrationEvent
             {
+                Language = checkoutBasketServiceModel.Language,
+                OrganisationId = checkoutBasketServiceModel.OrganisationId,
+                Username = checkoutBasketServiceModel.Username,
                 ClientId = checkoutBasketServiceModel.ClientId,
                 SellerId = checkoutBasketServiceModel.OrganisationId,
                 Basket = new BasketEventModel
@@ -55,16 +60,9 @@ namespace Basket.Api.Services
                 }
             };
 
-            try
-            {
-                this.eventBus.Publish(eventMessage);
-            }
-            catch (Exception exception)
-            {
-                this.logger.LogError(exception, "ERROR Publishing integration event: {IntegrationEventId} from {AppName}", eventMessage.Id, typeof(Program).Namespace);
+            await this.eventLogRepository.SaveAsync(message, message.GetType().Name, EventStates.New, message.Source, message.IpAddress);
 
-                throw;
-            }
+            this.eventBus.Publish(message);
         }
 
         public async Task<BasketServiceModel> UpdateAsync(UpdateBasketServiceModel serviceModel)

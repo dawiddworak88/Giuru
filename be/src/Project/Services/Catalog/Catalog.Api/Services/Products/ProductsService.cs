@@ -383,7 +383,7 @@ namespace Catalog.Api.Services.Products
                 Username = model.Username
             };
 
-            await this.eventLogRepository.SaveAsync(message, message.GetType().Name, EventStates.New, null, null);
+            await this.eventLogRepository.SaveAsync(message, message.GetType().Name, EventStates.New, message.Source, message.IpAddress);
 
             this.eventBus.Publish(message);
         }

@@ -1,10 +1,10 @@
 using Foundation.Account.DependencyInjection;
 using Foundation.EventBus.Abstractions;
 using Foundation.EventBusRabbitMq;
+using Foundation.EventLog.DependencyInjection;
 using Foundation.Extensions.Filters;
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,9 +45,9 @@ namespace Ordering.Api
 
             services.ConfigureSettings(this.Configuration);
 
-            services.AddMediatR(typeof(Startup));
-
             services.RegisterEventBus(this.Configuration);
+
+            services.RegisterEventLogDependencies();
 
             services.RegisterOrderingDatabaseDependencies(this.Configuration);
 

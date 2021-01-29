@@ -31,6 +31,12 @@ namespace Foundation.EventBus.Events
         public string Language { get; set; }
 
         [JsonProperty]
+        public string Source { get; set; }
+
+        [JsonProperty]
+        public string IpAddress { get; set; }
+
+        [JsonProperty]
         public DateTime CreationDate { get; private set; }
     }
 }
