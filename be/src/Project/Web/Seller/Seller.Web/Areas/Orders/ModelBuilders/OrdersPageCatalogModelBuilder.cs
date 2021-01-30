@@ -63,10 +63,6 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     new CatalogActionViewModel
                     {
                         IsEdit = true
-                    },
-                    new CatalogActionViewModel
-                    { 
-                        IsDelete = true
                     }
                 },
                 Properties = new List<CatalogPropertyViewModel>
@@ -89,7 +85,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = new Foundation.GenericRepository.Paginations.PagedResults<IEnumerable<Order>>(0, 25); // await this.ordersRepository.GetOrdersAsync(componentModel.Token, componentModel.Language, null, componentModel.SellerId, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage);
+            viewModel.PagedItems = await this.ordersRepository.GetOrdersAsync(componentModel.Token, componentModel.Language, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, $"{nameof(Order.CreatedDate)}");
 
             return viewModel;
         }

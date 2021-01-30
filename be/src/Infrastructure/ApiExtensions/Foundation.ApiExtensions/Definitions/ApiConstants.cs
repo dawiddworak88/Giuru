@@ -29,6 +29,11 @@
             public static readonly string BasketsCheckoutApiEndpoint = "/api/v1/baskets/checkout";
         }
 
+        public struct Order
+        {
+            public static readonly string OrdersApiEndpoint = "/api/v1/orders";
+        }
+
         public struct ContentNames
         {
             public static readonly string FileContentName = "file";

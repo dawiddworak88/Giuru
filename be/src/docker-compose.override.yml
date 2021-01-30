@@ -210,6 +210,7 @@ services:
       - CatalogUrl=http://catalog-api
       - BasketUrl=http://basket-api
       - ClientUrl=http://client-api
+      - OrderUrl=http://ordering-api
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - SeqUrl=http://seq

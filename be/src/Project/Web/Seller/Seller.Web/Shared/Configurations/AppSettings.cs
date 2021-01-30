@@ -7,5 +7,6 @@
         public string IdentityUrl { get; set; }
         public string BasketUrl { get; set; }
         public string ClientUrl { get; set; }
+        public string OrderUrl { get; set; }
     }
 }
