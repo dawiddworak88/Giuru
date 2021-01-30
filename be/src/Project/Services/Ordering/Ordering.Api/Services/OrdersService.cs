@@ -79,17 +79,38 @@ namespace Ordering.Api.Services
         public async Task<PagedResults<IEnumerable<OrderServiceModel>>> GetAsync(GetOrdersServiceModel model)
         {
             var orders = from c in this.context.Orders
-                          where c.SellerId == model.OrganisationId.Value && c.IsActive
-                          select new OrderServiceModel
-                          {
-                              Id = c.Id,
-                              LastModifiedDate = c.LastModifiedDate,
-                              CreatedDate = c.CreatedDate
-                          };
+                         join os in this.context.OrderStatuses on c.OrderStatusId equals os.Id
+                         join ost in this.context.OrderStatusTranslations on os.Id equals ost.OrderStatusId
+                         where ost.Language == model.Language && c.SellerId == model.OrganisationId.Value && c.IsActive
+                         select new OrderServiceModel
+                         {
+                             Id = c.Id,
+                             ClientId = c.ClientId.Value,
+                             BillingAddressId = c.BillingAddressId,
+                             ShippingAddressId = c.ShippingAddressId,
+                             MoreInfo = c.MoreInfo,
+                             ExpectedDeliveryDate = c.ExpectedDeliveryDate,
+                             Reason = c.Reason,
+                             OrderStateId = c.OrderStateId,
+                             OrderStatusId = c.OrderStatusId,
+                             OrderStatusName = ost.Name,
+                             OrderItems = c.OrderItems.Select(x => new OrderItemServiceModel
+                             {
+                                 ProductId = x.ProductId,
+                                 Quantity = x.Quantity,
+                                 ExpectedDeliveryFrom = x.ExpectedDeliveryFrom,
+                                 ExpectedDeliveryTo = x.ExpectedDeliveryTo,
+                                 MoreInfo = x.MoreInfo,
+                                 LastModifiedDate = x.LastModifiedDate,
+                                 CreatedDate = x.CreatedDate
+                             }),
+                             LastModifiedDate = c.LastModifiedDate,
+                             CreatedDate = c.CreatedDate
+                         };
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
-                orders = orders.Where(x => x.Id.Value.ToString() == model.SearchTerm);
+                orders = orders.Where(x => x.Id.ToString().StartsWith(model.SearchTerm));
             }
 
             orders.ApplySort(model.OrderBy);
@@ -100,10 +121,31 @@ namespace Ordering.Api.Services
         public async Task<OrderServiceModel> GetAsync(GetOrderServiceModel model)
         {
             var orders = from c in this.context.Orders
-                          where c.SellerId == model.OrganisationId.Value && c.IsActive
+                         join os in this.context.OrderStatuses on c.OrderStatusId equals os.Id
+                         join ost in this.context.OrderStatusTranslations on os.Id equals ost.OrderStatusId
+                          where ost.Language == model.Language && c.SellerId == model.OrganisationId.Value && c.IsActive
                           select new OrderServiceModel
                           {
                               Id = c.Id,
+                              ClientId = c.ClientId.Value,
+                              BillingAddressId = c.BillingAddressId,
+                              ShippingAddressId = c.ShippingAddressId,
+                              MoreInfo = c.MoreInfo,
+                              ExpectedDeliveryDate = c.ExpectedDeliveryDate,
+                              Reason = c.Reason,
+                              OrderStateId = c.OrderStateId,
+                              OrderStatusId = c.OrderStatusId,
+                              OrderStatusName = ost.Name,
+                              OrderItems = c.OrderItems.Select(x => new OrderItemServiceModel 
+                              { 
+                                ProductId = x.ProductId,
+                                Quantity = x.Quantity,
+                                ExpectedDeliveryFrom = x.ExpectedDeliveryFrom,
+                                ExpectedDeliveryTo = x.ExpectedDeliveryTo,
+                                MoreInfo = x.MoreInfo,
+                                LastModifiedDate = x.LastModifiedDate,
+                                CreatedDate = x.CreatedDate
+                              }),
                               LastModifiedDate = c.LastModifiedDate,
                               CreatedDate = c.CreatedDate
                           };

@@ -40,8 +40,4 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\Localization\Foundation.Localization\Foundation.Localization.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="v1\RequestModels\" />
-  </ItemGroup>
-
 </Project>

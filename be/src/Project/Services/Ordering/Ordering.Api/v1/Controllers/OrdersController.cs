@@ -77,6 +77,25 @@ namespace Ordering.Api.v1.Controllers
                         Data = orders.Data.OrEmptyIfNull().Select(x => new OrderResponseModel
                         {
                             Id = x.Id,
+                            ClientId = x.ClientId,
+                            BillingAddressId = x.BillingAddressId,
+                            ShippingAddressId = x.ShippingAddressId,
+                            MoreInfo = x.MoreInfo,
+                            ExpectedDeliveryDate = x.ExpectedDeliveryDate,
+                            Reason = x.Reason,
+                            OrderStateId = x.OrderStateId,
+                            OrderStatusId = x.OrderStatusId,
+                            OrderStatusName = x.OrderStatusName,
+                            OrderItems = x.OrderItems.Select(y => new OrderItemResponseModel
+                            {
+                                ProductId = y.ProductId,
+                                Quantity = y.Quantity,
+                                ExpectedDeliveryFrom = y.ExpectedDeliveryFrom,
+                                ExpectedDeliveryTo = y.ExpectedDeliveryTo,
+                                MoreInfo = y.MoreInfo,
+                                LastModifiedDate = y.LastModifiedDate,
+                                CreatedDate = y.CreatedDate
+                            }),
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         })
@@ -124,6 +143,25 @@ namespace Ordering.Api.v1.Controllers
                     var response = new OrderResponseModel
                     {
                         Id = order.Id,
+                        ClientId = order.ClientId,
+                        BillingAddressId = order.BillingAddressId,
+                        ShippingAddressId = order.ShippingAddressId,
+                        MoreInfo = order.MoreInfo,
+                        ExpectedDeliveryDate = order.ExpectedDeliveryDate,
+                        Reason = order.Reason,
+                        OrderStateId = order.OrderStateId,
+                        OrderStatusId = order.OrderStatusId,
+                        OrderStatusName = order.OrderStatusName,
+                        OrderItems = order.OrderItems.Select(x => new OrderItemResponseModel
+                        {
+                            ProductId = x.ProductId,
+                            Quantity = x.Quantity,
+                            ExpectedDeliveryFrom = x.ExpectedDeliveryFrom,
+                            ExpectedDeliveryTo = x.ExpectedDeliveryTo,
+                            MoreInfo = x.MoreInfo,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        }),
                         LastModifiedDate = order.LastModifiedDate,
                         CreatedDate = order.CreatedDate
                     };
