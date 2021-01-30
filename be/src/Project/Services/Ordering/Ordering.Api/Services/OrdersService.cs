@@ -1,12 +1,17 @@
 ﻿using Foundation.EventBus.Abstractions;
 using Foundation.EventLog.Definitions;
 using Foundation.EventLog.Repositories;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Extensions;
+using Foundation.GenericRepository.Paginations;
+using Microsoft.EntityFrameworkCore;
 using Ordering.Api.Infrastructure;
 using Ordering.Api.Infrastructure.Orders.Definitions;
 using Ordering.Api.Infrastructure.Orders.Entities;
 using Ordering.Api.IntegrationEvents;
 using Ordering.Api.ServicesModels;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Ordering.Api.Services
@@ -69,6 +74,41 @@ namespace Ordering.Api.Services
             await this.eventLogRepository.SaveAsync(message, EventStates.New);
 
             this.eventBus.Publish(message);
+        }
+
+        public async Task<PagedResults<IEnumerable<OrderServiceModel>>> GetAsync(GetOrdersServiceModel model)
+        {
+            var orders = from c in this.context.Orders
+                          where c.SellerId == model.OrganisationId.Value && c.IsActive
+                          select new OrderServiceModel
+                          {
+                              Id = c.Id,
+                              LastModifiedDate = c.LastModifiedDate,
+                              CreatedDate = c.CreatedDate
+                          };
+
+            if (!string.IsNullOrWhiteSpace(model.SearchTerm))
+            {
+                orders = orders.Where(x => x.Id.Value.ToString() == model.SearchTerm);
+            }
+
+            orders.ApplySort(model.OrderBy);
+
+            return orders.PagedIndex(new Pagination(orders.Count(), model.ItemsPerPage), model.PageIndex);
+        }
+
+        public async Task<OrderServiceModel> GetAsync(GetOrderServiceModel model)
+        {
+            var orders = from c in this.context.Orders
+                          where c.SellerId == model.OrganisationId.Value && c.IsActive
+                          select new OrderServiceModel
+                          {
+                              Id = c.Id,
+                              LastModifiedDate = c.LastModifiedDate,
+                              CreatedDate = c.CreatedDate
+                          };
+
+            return await orders.FirstOrDefaultAsync();
         }
     }
 }

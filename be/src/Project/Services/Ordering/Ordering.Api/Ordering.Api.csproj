@@ -41,7 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="v1\" />
+    <Folder Include="v1\RequestModels\" />
   </ItemGroup>
 
 </Project>
