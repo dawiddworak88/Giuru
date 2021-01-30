@@ -11,6 +11,6 @@ namespace Ordering.Api.Infrastructure.Orders.Definitions
         public static readonly int DeNameIndex = 4;
         public static readonly int PlNameIndex = 5;
 
-        public static readonly Guid NewId = Guid.Parse("287ee71a-d87f-4563-833a-8e2771d1e5a5");
+        public static readonly Guid NewId = Guid.Parse("56BF671B-306A-41A0-8222-08D8C4A071F2");
     }
 }

@@ -46,7 +46,7 @@ namespace Client.Api.Services
                 clients = clients.Where(x => x.Name.StartsWith(model.SearchTerm));
             }
 
-            clients.ApplySort(model.OrderBy);
+            clients = clients.ApplySort(model.OrderBy);
 
             return clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage), model.PageIndex);
         }

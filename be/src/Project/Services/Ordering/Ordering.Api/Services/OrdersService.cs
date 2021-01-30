@@ -113,7 +113,7 @@ namespace Ordering.Api.Services
                 orders = orders.Where(x => x.Id.ToString().StartsWith(model.SearchTerm));
             }
 
-            orders.ApplySort(model.OrderBy);
+            orders = orders.ApplySort(model.OrderBy);
 
             return orders.PagedIndex(new Pagination(orders.Count(), model.ItemsPerPage), model.PageIndex);
         }
