@@ -39,6 +39,7 @@ namespace Client.Api.v1.Controllers
         /// <summary>
         /// Gets list of clients.
         /// </summary>
+        /// <param name="ids">The client ids.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
@@ -48,49 +49,96 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
-            var serviceModel = new GetClientsServiceModel
+            var clientIds = ids.ToEnumerableGuidIds();
+
+            if (clientIds != null)
             {
-                Language = CultureInfo.CurrentCulture.Name,
-                SearchTerm = searchTerm,
-                PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage,
-                OrderBy = orderBy,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
-            };
-
-            var validator = new GetClientsModelValidator();
-
-            var validationResult = await validator.ValidateAsync(serviceModel);
-
-            if (validationResult.IsValid)
-            {
-                var clients = await this.clientsService.GetAsync(serviceModel);
-
-                if (clients != null)
+                var serviceModel = new GetClientsByIdsServiceModel
                 {
-                    var response = new PagedResults<IEnumerable<ClientResponseModel>>(clients.Total, clients.PageSize)
+                    Ids = clientIds,
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    OrderBy = orderBy,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                };
+
+                var validator = new GeClientsByIdsModelValidator();
+
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var clients = await this.clientsService.GetByIdsAsync(serviceModel);
+
+                    if (clients != null)
                     {
-                        Data = clients.Data.OrEmptyIfNull().Select(x => new ClientResponseModel 
+                        var response = new PagedResults<IEnumerable<ClientResponseModel>>(clients.Total, clients.PageSize)
                         {
-                            Id = x.Id,
-                            Name = x.Name,
-                            Email = x.Email,
-                            CommunicationLanguage = x.CommunicationLanguage,
-                            LastModifiedDate = x.LastModifiedDate,
-                            CreatedDate = x.CreatedDate
-                        })
-                    };
+                            Data = clients.Data.OrEmptyIfNull().Select(x => new ClientResponseModel
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                Email = x.Email,
+                                CommunicationLanguage = x.CommunicationLanguage,
+                                LastModifiedDate = x.LastModifiedDate,
+                                CreatedDate = x.CreatedDate
+                            })
+                        };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
-                }                
+                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                    }
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
+            else
+            {
+                var serviceModel = new GetClientsServiceModel
+                {
+                    Language = CultureInfo.CurrentCulture.Name,
+                    SearchTerm = searchTerm,
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    OrderBy = orderBy,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                };
 
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+                var validator = new GetClientsModelValidator();
+
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var clients = await this.clientsService.GetAsync(serviceModel);
+
+                    if (clients != null)
+                    {
+                        var response = new PagedResults<IEnumerable<ClientResponseModel>>(clients.Total, clients.PageSize)
+                        {
+                            Data = clients.Data.OrEmptyIfNull().Select(x => new ClientResponseModel
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                Email = x.Email,
+                                CommunicationLanguage = x.CommunicationLanguage,
+                                LastModifiedDate = x.LastModifiedDate,
+                                CreatedDate = x.CreatedDate
+                            })
+                        };
+
+                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                    }
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
         }
 
         /// <summary>

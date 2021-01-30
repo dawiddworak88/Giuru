@@ -12,5 +12,6 @@ namespace Client.Api.Services
         Task DeleteAsync(DeleteClientServiceModel model);
         Task<ClientServiceModel> UpdateAsync(UpdateClientServiceModel serviceModel);
         Task<ClientServiceModel> CreateAsync(CreateClientServiceModel serviceModel);
+        Task<PagedResults<IEnumerable<ClientServiceModel>>> GetByIdsAsync(GetClientsByIdsServiceModel model);
     }
 }

@@ -7,6 +7,7 @@ namespace Seller.Web.Areas.Orders.DomainModels
     {
         public Guid Id { get; set; }
         public Guid ClientId { get; set; }
+        public string ClientName { get; set; }
         public Guid? BillingAddressId { get; set; }
         public Guid? ShippingAddressId { get; set; }
         public string MoreInfo { get; set; }

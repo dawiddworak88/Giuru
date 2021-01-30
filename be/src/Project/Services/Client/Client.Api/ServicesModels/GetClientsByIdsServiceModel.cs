@@ -1,11 +1,10 @@
-﻿
-using Foundation.Extensions.Models;
+﻿using Foundation.Extensions.Models;
 using System;
 using System.Collections.Generic;
 
-namespace Catalog.Api.ServicesModels.Products
+namespace Client.Api.ServicesModels
 {
-    public class GetProductsByIdsServiceModel : BaseServiceModel
+    public class GetClientsByIdsServiceModel : BaseServiceModel
     {
         public IEnumerable<Guid> Ids { get; set; }
         public int PageIndex { get; set; }

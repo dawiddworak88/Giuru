@@ -141,6 +141,9 @@
   <data name="ClientHostExistsErrorMessage" xml:space="preserve">
     <value>Der Kunde wurde schon erstellt</value>
   </data>
+  <data name="ClientName" xml:space="preserve">
+    <value>Kundenname</value>
+  </data>
   <data name="Clients" xml:space="preserve">
     <value>Kunden</value>
   </data>
@@ -281,6 +284,9 @@
   </data>
   <data name="Orders" xml:space="preserve">
     <value>Bestellungen</value>
+  </data>
+  <data name="OrderStatus" xml:space="preserve">
+    <value>Status der Bestellung</value>
   </data>
   <data name="OrganisationExistsAlready" xml:space="preserve">
     <value>Die Organisation existiert schon.</value>

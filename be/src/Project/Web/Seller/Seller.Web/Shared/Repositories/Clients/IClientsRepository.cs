@@ -13,5 +13,6 @@ namespace Seller.Web.Shared.Repositories.Clients
         Task<Guid> SaveAsync(string token, string language, Guid? id, string name, string email, string communicationLanguage, Guid organisationId);
         Task<PagedResults<IEnumerable<Client>>> GetClientsAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
         Task<IEnumerable<Client>> GetAllClientsAsync(string token, string language);
+        Task<IEnumerable<Client>> GetClientsAsync(string token, string language, IEnumerable<Guid> clientIds);
     }
 }

@@ -13,6 +13,7 @@ using Foundation.Extensions.Exceptions;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.ApiExtensions.Models.Response;
 using System.Linq;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Seller.Web.Shared.Repositories.Clients
 {
@@ -49,7 +50,7 @@ namespace Seller.Web.Shared.Repositories.Clients
 
         public async Task<IEnumerable<Client>> GetAllClientsAsync(string token, string language)
         {
-            var categoriesRequestModel = new PagedRequestModelBase
+            var clientsRequestModel = new PagedRequestModelBase
             {
                 PageIndex = PaginationConstants.DefaultPageIndex,
                 ItemsPerPage = PaginationConstants.DefaultPageSize
@@ -58,7 +59,7 @@ namespace Seller.Web.Shared.Repositories.Clients
             var apiRequest = new ApiRequest<PagedRequestModelBase>
             {
                 Language = language,
-                Data = categoriesRequestModel,
+                Data = clientsRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
             };
@@ -152,6 +153,61 @@ namespace Seller.Web.Shared.Repositories.Clients
                 {
                     Data = response.Data.Data
                 };
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
+        }
+
+        public async Task<IEnumerable<Client>> GetClientsAsync(string token, string language, IEnumerable<Guid> clientIds)
+        {
+            var clientsRequestModel = new PagedRequestModelBase
+            {
+                Ids = clientIds.ToEndpointParameterString(),
+                PageIndex = PaginationConstants.DefaultPageIndex,
+                ItemsPerPage = PaginationConstants.DefaultPageSize
+            };
+
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Language = language,
+                Data = clientsRequestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Identity.ClientsApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                var clients = new List<Client>();
+
+                clients.AddRange(response.Data.Data);
+
+                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
+
+                for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
+                {
+                    apiRequest.Data.PageIndex = i;
+
+                    var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Client>>>(apiRequest);
+
+                    if (!nextPagesResponse.IsSuccessStatusCode)
+                    {
+                        throw new CustomException(response.Message, (int)response.StatusCode);
+                    }
+
+                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Count() > 0)
+                    {
+                        clients.AddRange(nextPagesResponse.Data.Data);
+                    }
+                }
+
+                return clients;
             }
 
             if (!response.IsSuccessStatusCode)

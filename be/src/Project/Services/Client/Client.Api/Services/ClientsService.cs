@@ -118,5 +118,22 @@ namespace Client.Api.Services
 
             return await this.GetAsync(new GetClientServiceModel { Id = client.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
+
+        public async Task<PagedResults<IEnumerable<ClientServiceModel>>> GetByIdsAsync(GetClientsByIdsServiceModel model)
+        {
+            var clients = from c in this.context.Clients
+                          where model.Ids.Contains(c.Id) && c.SellerId == model.OrganisationId.Value && c.IsActive
+                          select new ClientServiceModel
+                          {
+                              Id = c.Id,
+                              Name = c.Name,
+                              Email = c.Email,
+                              CommunicationLanguage = c.Language,
+                              LastModifiedDate = c.LastModifiedDate,
+                              CreatedDate = c.CreatedDate
+                          };
+
+            return clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage), model.PageIndex);
+        }
     }
 }
