@@ -25,6 +25,20 @@ namespace Seller.Web.Areas.Orders.Controllers
             this.orderPageModelBuilder = orderPageModelBuilder;
         }
 
+        public async Task<IActionResult> Index()
+        {
+            var componentModel = new ComponentModelBase
+            {
+                Language = CultureInfo.CurrentUICulture.Name,
+                Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value)
+            };
+
+            var viewModel = await this.orderPageModelBuilder.BuildModelAsync(componentModel);
+
+            return this.View(viewModel);
+        }
+
         public async Task<IActionResult> Edit(Guid? id)
         {
             var componentModel = new ComponentModelBase
