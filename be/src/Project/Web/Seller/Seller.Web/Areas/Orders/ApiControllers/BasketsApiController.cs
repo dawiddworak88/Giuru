@@ -24,20 +24,17 @@ namespace Seller.Web.Areas.Orders.ApiControllers
     public class BasketsApiController : BaseApiController
     {
         private readonly IBasketRepository basketRepository;
-        private readonly IProductsRepository productsRepository;
         private readonly LinkGenerator linkGenerator;
         private readonly IOptions<AppSettings> options;
         private readonly IMediaHelperService mediaService;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
-            IProductsRepository productsRepository,
             LinkGenerator linkGenerator,
             IOptions<AppSettings> options,
             IMediaHelperService mediaService)
         {
             this.basketRepository = basketRepository;
-            this.productsRepository = productsRepository;
             this.linkGenerator = linkGenerator;
             this.options = options;
             this.mediaService = mediaService;
@@ -53,6 +50,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 model.Items.OrEmptyIfNull().Select(x => new BasketItem
                 {
                     ProductId = x.ProductId,
+                    ProductSku = x.Sku,
+                    ProductName = x.Name,
+                    PictureUrl = !string.IsNullOrWhiteSpace(x.ImageSrc) ? x.ImageSrc : (x.ImageId.HasValue ? this.mediaService.GetFileUrl(this.options.Value.MediaUrl, x.ImageId.Value, OrdersConstants.Basket.BasketProductImageMaxWidth, OrdersConstants.Basket.BasketProductImageMaxHeight, true) : null),
                     Quantity = x.Quantity,
                     ExternalReference = x.ExternalReference,
                     DeliveryFrom = x.DeliveryFrom,
@@ -69,28 +69,20 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             if (productIds.OrEmptyIfNull().Any())
             {
-                var products = await this.productsRepository.GetAllProductsAsync(
-                    await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                    CultureInfo.CurrentUICulture.Name,
-                    productIds);
-
-                if (products.OrEmptyIfNull().Any())
+                basketResponseModel.Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                 {
-                    basketResponseModel.Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
-                    {
-                        ProductId = x.ProductId,
-                        ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
-                        Name = products.First(p => p.Id == x.ProductId).Name,
-                        Sku = products.First(p => p.Id == x.ProductId).Sku,
-                        Quantity = x.Quantity,
-                        ExternalReference = x.ExternalReference,
-                        ImageSrc = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, products.First(p => p.Id == x.ProductId).Images.FirstOrDefault(), OrdersConstants.Basket.BasketProductImageMaxWidth, OrdersConstants.Basket.BasketProductImageMaxHeight, true),
-                        ImageAlt = products.First(p => p.Id == x.ProductId).Name,
-                        DeliveryFrom = x.DeliveryFrom,
-                        DeliveryTo = x.DeliveryTo,
-                        MoreInfo = x.MoreInfo
-                    });
-                }                
+                    ProductId = x.ProductId,
+                    ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
+                    Name = x.ProductName,
+                    Sku = x.ProductSku,
+                    Quantity = x.Quantity,
+                    ExternalReference = x.ExternalReference,
+                    ImageSrc = x.PictureUrl,
+                    ImageAlt = x.ProductName,
+                    DeliveryFrom = x.DeliveryFrom,
+                    DeliveryTo = x.DeliveryTo,
+                    MoreInfo = x.MoreInfo
+                });
             }
 
             return this.StatusCode((int)HttpStatusCode.OK, basketResponseModel);

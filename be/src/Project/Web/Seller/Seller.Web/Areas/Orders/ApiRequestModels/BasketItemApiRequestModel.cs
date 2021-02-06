@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Seller.Web.Areas.Orders.ApiResponseModels
+namespace Seller.Web.Areas.Orders.ApiRequestModels
 {
-    public class BasketItemApiResponseModel
+    public class BasketItemApiRequestModel
     {
         public Guid? ProductId { get; set; }
         public string ProductSku { get; set; }

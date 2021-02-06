@@ -102,35 +102,21 @@ function OrderForm(props) {
         const orderItem = {
 
             productId: product.id,
+            sku: product.sku,
+            name: product.name,
+            imageId: product.images ? product.images[0] : null,
             quantity,
             externalReference,
             deliveryFrom: moment(deliveryFrom).startOf('day'),
             deliveryTo: moment(deliveryTo).startOf('day'),
             moreInfo
         };
-
+        
         const basket = {
 
-            id: basketId
+            id: basketId,
+            items: [...orderItems, orderItem]
         };
-
-        var existingProductOrderItem = orderItems && orderItems.length > 0 ? orderItems.find((item) => item.productId === orderItem.productId) : null;
-
-        if (existingProductOrderItem) {
-
-            basket.items = orderItems.map((item) => {
-
-                if (item.productId === existingProductOrderItem.productId) {
-
-                    item.quantity += parseInt(orderItem.quantity);
-                }
-
-                return item;
-            });
-        }
-        else {
-            basket.items = [...orderItems, orderItem];
-        }
 
         const requestOptions = {
             method: "POST",
@@ -155,7 +141,6 @@ function OrderForm(props) {
                             setSearchTerm("");
                             setExternalReference("");
                             setQuantity(1);
-                            setBasketId(jsonResponse.id);
                             setOrderItems(jsonResponse.items);
                         }
                         else {

@@ -31,12 +31,15 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
 
         public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items)
         {
-            var requestModel = new SaveBasketRequestModel
+            var requestModel = new SaveBasketApiRequestModel
             {
                 Id = id,
-                Items = items.OrEmptyIfNull().Select(x => new BasketItemRequestModel
+                Items = items.OrEmptyIfNull().Select(x => new BasketItemApiRequestModel
                 {
                     ProductId = x.ProductId,
+                    ProductSku = x.ProductSku,
+                    ProductName = x.ProductName,
+                    PictureUrl = x.PictureUrl,
                     Quantity = x.Quantity,
                     ExternalReference = x.ExternalReference,
                     DeliveryFrom = x.DeliveryFrom,
@@ -45,7 +48,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 })
             };
 
-            var apiRequest = new ApiRequest<SaveBasketRequestModel>
+            var apiRequest = new ApiRequest<SaveBasketApiRequestModel>
             {
                 Language = language,
                 Data = requestModel,
@@ -53,7 +56,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<SaveBasketRequestModel>, SaveBasketRequestModel, BasketApiResponseModel>(apiRequest);
+            var response = await this.apiClientService.PostAsync<ApiRequest<SaveBasketApiRequestModel>, SaveBasketApiRequestModel, BasketApiResponseModel>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
@@ -63,6 +66,9 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                     Items = response.Data.Items.OrEmptyIfNull().Select(x => new BasketItem
                     {
                         ProductId = x.ProductId,
+                        ProductSku = x.ProductSku,
+                        ProductName = x.ProductName,
+                        PictureUrl = x.PictureUrl,
                         Quantity = x.Quantity,
                         ExternalReference = x.ExternalReference,
                         DeliveryFrom = x.DeliveryFrom,
