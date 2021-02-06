@@ -30,6 +30,7 @@ namespace Basket.Api.ServicesModels
         public string ShippingPhonePrefix { get; set; }
         public string ShippingPhone { get; set; }
         public string ShippingCountryCode { get; set; }
+        public string ExternalReference { get; set; }
         public string MoreInfo { get; set; }
         public DateTime? ExpectedDeliveryDate { get; set; }
     }

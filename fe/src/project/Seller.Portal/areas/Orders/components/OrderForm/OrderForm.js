@@ -15,7 +15,8 @@ import ClearIcon from "@material-ui/icons/Clear";
 import AddShoppingCartRounded from "@material-ui/icons/AddShoppingCartRounded";
 import {
     Fab, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper } from "@material-ui/core";
+    TableHead, TableRow, Paper
+} from "@material-ui/core";
 import moment from "moment";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import OrderFormConstants from "../../constants/OrderFormConstants";
@@ -111,7 +112,7 @@ function OrderForm(props) {
             deliveryTo: moment(deliveryTo).startOf('day'),
             moreInfo
         };
-        
+
         const basket = {
 
             id: basketId,
@@ -169,7 +170,6 @@ function OrderForm(props) {
         }
     };
 
-    
     const handleDeleteClick = (item) => {
 
         setEntityToDelete(item);
@@ -236,7 +236,8 @@ function OrderForm(props) {
         var order = {
 
             basketId: basketId,
-            clientId: client.id
+            clientId: client.id,
+            clientName: client.name
         };
 
         const requestOptions = {
@@ -311,14 +312,14 @@ function OrderForm(props) {
                                     renderSuggestion={(suggestion) => {
                                         return (
                                             <div className="suggestion">
-                                                { getProductSuggestionValue(suggestion) }
+                                                { getProductSuggestionValue(suggestion)}
                                             </div>
                                         );
                                     }}
                                     inputProps={searchInputProps} />
                             </div>
                             <div className="column is-1 is-flex is-align-items-flex-end">
-                                <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "1", step: "1" }} 
+                                <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "1", step: "1" }}
                                     label={props.quantityLabel} fullWidth={true} value={quantity} onChange={(e) => {
 
                                         e.preventDefault();
@@ -326,72 +327,72 @@ function OrderForm(props) {
                                     }} />
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel} 
-                                fullWidth={true} value={externalReference} onChange={(e) => {
+                                <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel}
+                                    fullWidth={true} value={externalReference} onChange={(e) => {
 
-                                    e.preventDefault();
-                                    setExternalReference(e.target.value);
-                                }} />
+                                        e.preventDefault();
+                                        setExternalReference(e.target.value);
+                                    }} />
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
                                 <MuiPickersUtilsProvider utils={MomentUtils}>
-                                        <KeyboardDatePicker
-                                            id="deliveryFrom"
-                                            label={props.deliveryFromLabel}
-                                            value={deliveryFrom}
-                                            onChange={(date) => {
-                                                setDeliveryFrom(date);
-                                            }}
-                                            okLabel={props.okLabel}
-                                            cancelLabel={props.cancelLabel}
-                                            InputProps={{
-                                                endAdornment: (
-                                                  <IconButton onClick={() => setDeliveryFrom(null)}>
+                                    <KeyboardDatePicker
+                                        id="deliveryFrom"
+                                        label={props.deliveryFromLabel}
+                                        value={deliveryFrom}
+                                        onChange={(date) => {
+                                            setDeliveryFrom(date);
+                                        }}
+                                        okLabel={props.okLabel}
+                                        cancelLabel={props.cancelLabel}
+                                        InputProps={{
+                                            endAdornment: (
+                                                <IconButton onClick={() => setDeliveryFrom(null)}>
                                                     <ClearIcon />
-                                                  </IconButton>
-                                                )
-                                              }}
-                                              InputAdornmentProps={{
-                                                position: "start"
-                                              }}
-                                            KeyboardButtonProps={{
-                                                'aria-label': props.changeDeliveryFromLabel,
-                                            }} />
+                                                </IconButton>
+                                            )
+                                        }}
+                                        InputAdornmentProps={{
+                                            position: "start"
+                                        }}
+                                        KeyboardButtonProps={{
+                                            'aria-label': props.changeDeliveryFromLabel,
+                                        }} />
                                 </MuiPickersUtilsProvider>
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
                                 <MuiPickersUtilsProvider utils={MomentUtils}>
-                                        <KeyboardDatePicker
-                                            id="deliveryTo"
-                                            label={props.deliveryToLabel}
-                                            value={deliveryTo}
-                                            onChange={(date) => {
-                                                setDeliveryTo(date);
-                                            }}
-                                            okLabel={props.okLabel}
-                                            cancelLabel={props.cancelLabel}
-                                            InputProps={{
-                                                endAdornment: (
-                                                  <IconButton onClick={() => setDeliveryTo(null)}>
+                                    <KeyboardDatePicker
+                                        id="deliveryTo"
+                                        label={props.deliveryToLabel}
+                                        value={deliveryTo}
+                                        onChange={(date) => {
+                                            setDeliveryTo(date);
+                                        }}
+                                        okLabel={props.okLabel}
+                                        cancelLabel={props.cancelLabel}
+                                        InputProps={{
+                                            endAdornment: (
+                                                <IconButton onClick={() => setDeliveryTo(null)}>
                                                     <ClearIcon />
-                                                  </IconButton>
-                                                )
-                                              }}
-                                              InputAdornmentProps={{
-                                                position: "start"
-                                              }}
-                                            KeyboardButtonProps={{
-                                                'aria-label': props.changeDeliveryToLabel,
-                                            }} />
+                                                </IconButton>
+                                            )
+                                        }}
+                                        InputAdornmentProps={{
+                                            position: "start"
+                                        }}
+                                        KeyboardButtonProps={{
+                                            'aria-label': props.changeDeliveryToLabel,
+                                        }} />
                                 </MuiPickersUtilsProvider>
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <TextField id="moreInfo" name="moreInfo" type="text" label={props.moreInfoLabel} 
-                                fullWidth={true} value={moreInfo} onChange={(e) => {
+                                <TextField id="moreInfo" name="moreInfo" type="text" label={props.moreInfoLabel}
+                                    fullWidth={true} value={moreInfo} onChange={(e) => {
 
-                                    e.preventDefault();
-                                    setMoreInfo(e.target.value);
-                                }} />
+                                        e.preventDefault();
+                                        setMoreInfo(e.target.value);
+                                    }} />
                             </div>
                             <div className="column is-1 is-flex is-align-items-flex-end">
                                 <Button type="button" variant="contained" color="primary" onClick={handleAddOrderItemClick} disabled={state.isLoading || quantity < 1 || product === null}>
@@ -401,46 +402,48 @@ function OrderForm(props) {
                         </div>
                         <div className="order__items">
                             {(orderItems && orderItems.length > 0) ?
-                                (<section className="section">
-                                    <div className="orderitems__table">
-                                        <TableContainer component={Paper}>
-                                            <Table aria-label={props.orderItemsLabel}>
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableCell></TableCell>
-                                                        <TableCell></TableCell>
-                                                        <TableCell>{props.skuLabel}</TableCell>
-                                                        <TableCell>{props.nameLabel}</TableCell>
-                                                        <TableCell>{props.quantityLabel}</TableCell>
-                                                        <TableCell>{props.externalReferenceLabel}</TableCell>
-                                                        <TableCell>{props.deliveryFromLabel}</TableCell>
-                                                        <TableCell>{props.deliveryToLabel}</TableCell>
-                                                        <TableCell>{props.moreInfoLabel}</TableCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {orderItems.map((item, index) => (
-                                                        <TableRow key={index}>
-                                                            <TableCell width="11%">
-                                                                <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
-                                                                    <DeleteIcon />
-                                                                </Fab>
-                                                            </TableCell>
-                                                            <TableCell><a href={item.productUrl} target="_blank"><img className="order__basket-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
-                                                            <TableCell>{item.sku}</TableCell>
-                                                            <TableCell>{item.name}</TableCell>
-                                                            <TableCell>{item.quantity}</TableCell>
-                                                            <TableCell>{item.externalReference}</TableCell>
-                                                            <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
-                                                            <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
-                                                            <TableCell>{item.moreInfo}</TableCell>
+                                (<Fragment>
+                                    <section className="section">
+                                        <div className="orderitems__table">
+                                            <TableContainer component={Paper}>
+                                                <Table aria-label={props.orderItemsLabel}>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell></TableCell>
+                                                            <TableCell></TableCell>
+                                                            <TableCell>{props.skuLabel}</TableCell>
+                                                            <TableCell>{props.nameLabel}</TableCell>
+                                                            <TableCell>{props.quantityLabel}</TableCell>
+                                                            <TableCell>{props.externalReferenceLabel}</TableCell>
+                                                            <TableCell>{props.deliveryFromLabel}</TableCell>
+                                                            <TableCell>{props.deliveryToLabel}</TableCell>
+                                                            <TableCell>{props.moreInfoLabel}</TableCell>
                                                         </TableRow>
-                                                    ))}
-                                                </TableBody>
-                                            </Table>
-                                        </TableContainer>
-                                    </div>
-                                </section>) :
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        {orderItems.map((item, index) => (
+                                                            <TableRow key={index}>
+                                                                <TableCell width="11%">
+                                                                    <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
+                                                                        <DeleteIcon />
+                                                                    </Fab>
+                                                                </TableCell>
+                                                                <TableCell><a href={item.productUrl} target="_blank"><img className="order__basket-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
+                                                                <TableCell>{item.sku}</TableCell>
+                                                                <TableCell>{item.name}</TableCell>
+                                                                <TableCell>{item.quantity}</TableCell>
+                                                                <TableCell>{item.externalReference}</TableCell>
+                                                                <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
+                                                                <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
+                                                                <TableCell>{item.moreInfo}</TableCell>
+                                                            </TableRow>
+                                                        ))}
+                                                    </TableBody>
+                                                </Table>
+                                            </TableContainer>
+                                        </div>
+                                    </section>
+                                </Fragment>) :
                                 (<section className="section is-flex-centered has-text-centered is-flex-direction-column">
                                     <AddShoppingCartRounded fontSize="large" className="m-2" />
                                     <span className="is-title is-5">{props.noOrderItemsLabel}</span>
@@ -454,10 +457,10 @@ function OrderForm(props) {
                         (<Button type="button" variant="contained" color="primary" onClick={handleBackToOrdersClick}>
                             {props.navigateToOrdersListText}
                         </Button>) :
-                        (<Button type="button" variant="contained" 
-                            color="primary" 
+                        (<Button type="button" variant="contained"
+                            color="primary"
                             onClick={handlePlaceOrder}
-                            disabled={ state.isLoading || orderItems.length === 0 }>
+                            disabled={state.isLoading || orderItems.length === 0}>
                             {props.saveText}
                         </Button>)}
                 </div>
@@ -511,7 +514,8 @@ OrderForm.propTypes = {
     noLabel: PropTypes.string.isRequired,
     ordersUrl: PropTypes.string.isRequired,
     placeOrderUrl: PropTypes.string.isRequired,
-    navigateToOrdersListText: PropTypes.string.isRequired
+    navigateToOrdersListText: PropTypes.string.isRequired,
+    expectedDeliveryabel: PropTypes.string.isRequired
 };
 
 export default OrderForm;

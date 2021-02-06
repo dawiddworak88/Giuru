@@ -65,6 +65,7 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
                 ShippingRegion = @event.ShippingRegion,
                 ShippingStreet = @event.ShippingStreet,
                 ExpectedDeliveryDate = @event.ExpectedDeliveryDate,
+                ExternalReference = @event.ExternalReference,
                 MoreInfo = @event.MoreInfo,
                 IpAddress = @event.IpAddress,
                 Items = @event.Basket?.Items?.Select(x => new CheckoutBasketItemServiceModel

@@ -11,8 +11,6 @@ using Seller.Web.Areas.Orders.DomainModels;
 using System.Collections.Generic;
 using Foundation.Extensions.ExtensionMethods;
 using Seller.Web.Areas.Orders.Repositories.Orders;
-using System.Linq;
-using Seller.Web.Shared.Repositories.Clients;
 
 namespace Seller.Web.Areas.Orders.ModelBuilders
 {
@@ -20,7 +18,6 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
     {
         private readonly ICatalogModelBuilder catalogModelBuilder;
         private readonly IOrdersRepository ordersRepository;
-        private readonly IClientsRepository clientsRepository;
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer orderLocalizer;
         private readonly LinkGenerator linkGenerator;
@@ -28,14 +25,12 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
         public OrdersPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IOrdersRepository ordersRepository,
-            IClientsRepository clientsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             LinkGenerator linkGenerator)
         {
             this.catalogModelBuilder = catalogModelBuilder;
             this.ordersRepository = ordersRepository;
-            this.clientsRepository = clientsRepository;
             this.globalLocalizer = globalLocalizer;
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
@@ -94,21 +89,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 }
             };
 
-            var pagedOrders = await this.ordersRepository.GetOrdersAsync(componentModel.Token, componentModel.Language, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, $"{nameof(Order.CreatedDate)} desc");
-
-            if (pagedOrders.Data.Any())
-            {
-                var clientIds = pagedOrders.Data.Select(x => x.ClientId).Distinct();
-
-                var clients = await this.clientsRepository.GetClientsAsync(componentModel.Token, componentModel.Language, clientIds);
-
-                foreach (var order in pagedOrders.Data)
-                {
-                    order.ClientName = clients.FirstOrDefault(x => x.Id == order.ClientId)?.Name;
-                }
-            }
-
-            viewModel.PagedItems = pagedOrders;
+            viewModel.PagedItems = await this.ordersRepository.GetOrdersAsync(componentModel.Token, componentModel.Language, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, $"{nameof(Order.CreatedDate)} desc");
 
             return viewModel;
         }

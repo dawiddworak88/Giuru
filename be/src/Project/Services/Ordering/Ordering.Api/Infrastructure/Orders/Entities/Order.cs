@@ -57,6 +57,8 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
 
         public string ShippingCountryCode { get; set; }
 
+        public string ExternalReference { get; set; }
+
         public string MoreInfo { get; set; }
 
         [Required]

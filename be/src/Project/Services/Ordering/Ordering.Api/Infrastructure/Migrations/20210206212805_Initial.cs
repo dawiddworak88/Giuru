@@ -61,6 +61,7 @@ namespace Ordering.Api.Infrastructure.Migrations
                     ShippingPhonePrefix = table.Column<string>(nullable: true),
                     ShippingPhone = table.Column<string>(nullable: true),
                     ShippingCountryCode = table.Column<string>(nullable: true),
+                    ExternalReference = table.Column<string>(nullable: true),
                     MoreInfo = table.Column<string>(nullable: true),
                     OrderStatusId = table.Column<Guid>(nullable: false),
                     OrderStateId = table.Column<Guid>(nullable: false),

@@ -33,6 +33,7 @@ namespace Ordering.Api.ServicesModels
         public string ShippingCountryCode { get; set; }
         public string MoreInfo { get; set; }
         public string IpAddress { get; set; }
+        public string ExternalReference { get; set; }
         public DateTime? ExpectedDeliveryDate { get; set; }
         public IEnumerable<CheckoutBasketItemServiceModel> Items { get; set; }
 

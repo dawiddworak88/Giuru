@@ -34,7 +34,9 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 CultureInfo.CurrentUICulture.Name,
                 model.ClientId,
                 model.ClientName,
-                model.BasketId);
+                model.BasketId,
+                model.ExpectedDeliveryDate,
+                model.MoreInfo);
 
             return this.StatusCode((int)HttpStatusCode.Accepted, new { Message = this.orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
         }

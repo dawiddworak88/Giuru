@@ -45,6 +45,7 @@ namespace Ordering.Api.Infrastructure.Orders.Seeds
             {
                 var orderStatus = new OrderStatus
                 {
+                    Id = id,
                     Order = order,
                     OrderStateId = orderStateId
                 };
