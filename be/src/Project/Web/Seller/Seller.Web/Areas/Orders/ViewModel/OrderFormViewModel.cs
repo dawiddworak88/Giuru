@@ -19,6 +19,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string SkuLabel { get; set; }
         public string NameLabel { get; set; }
         public string QuantityLabel { get; set; }
+        public string ExternalReferenceLabel { get; set; }
         public string DeliveryFromLabel { get; set; }
         public string DeliveryToLabel { get; set; }
         public string MoreInfoLabel { get; set; }

@@ -12,7 +12,18 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
         [Required]
         public Guid ProductId { get; set; }
 
+        [Required]
+        public string ProductSku { get; set; }
+
+        [Required]
+        public string ProductName { get; set; }
+
+        [Required]
         public double Quantity { get; set; }
+
+        public string PictureUrl { get; set; }
+
+        public string ExternalReference { get; set; }
 
         public DateTime? ExpectedDeliveryFrom { get; set; }
 

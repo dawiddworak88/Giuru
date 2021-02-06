@@ -54,6 +54,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 {
                     ProductId = x.ProductId,
                     Quantity = x.Quantity,
+                    ExternalReference = x.ExternalReference,
                     DeliveryFrom = x.DeliveryFrom,
                     DeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
@@ -82,6 +83,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                         Name = products.First(p => p.Id == x.ProductId).Name,
                         Sku = products.First(p => p.Id == x.ProductId).Sku,
                         Quantity = x.Quantity,
+                        ExternalReference = x.ExternalReference,
                         ImageSrc = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, products.First(p => p.Id == x.ProductId).Images.FirstOrDefault(), OrdersConstants.Basket.BasketProductImageMaxWidth, OrdersConstants.Basket.BasketProductImageMaxHeight, true),
                         ImageAlt = products.First(p => p.Id == x.ProductId).Name,
                         DeliveryFrom = x.DeliveryFrom,

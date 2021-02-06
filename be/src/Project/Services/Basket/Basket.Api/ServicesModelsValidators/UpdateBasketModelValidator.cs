@@ -22,6 +22,16 @@ namespace Basket.Api.ServicesModelsValidators
                             context.AddFailure("Product id cannot be null or empty");
                         }
 
+                        if (string.IsNullOrWhiteSpace(item.ProductSku))
+                        {
+                            context.AddFailure("Product SKU cannot be null or empty");
+                        }
+
+                        if (string.IsNullOrWhiteSpace(item.ProductName))
+                        {
+                            context.AddFailure("Product name cannot be null or empty");
+                        }
+
                         if (item.Quantity < 0)
                         {
                             context.AddFailure("Qunatity must be equal or greater than 0");

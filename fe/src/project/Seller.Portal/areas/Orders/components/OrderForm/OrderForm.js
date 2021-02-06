@@ -36,6 +36,7 @@ function OrderForm(props) {
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
+    const [externalReference, setExternalReference] = useState("");
     const [deliveryFrom, setDeliveryFrom] = useState(null);
     const [deliveryTo, setDeliveryTo] = useState(null);
     const [moreInfo, setMoreInfo] = useState("");
@@ -102,6 +103,7 @@ function OrderForm(props) {
 
             productId: product.id,
             quantity,
+            externalReference,
             deliveryFrom: moment(deliveryFrom).startOf('day'),
             deliveryTo: moment(deliveryTo).startOf('day'),
             moreInfo
@@ -151,6 +153,8 @@ function OrderForm(props) {
 
                             setProduct(null);
                             setSearchTerm("");
+                            setExternalReference("");
+                            setQuantity(1);
                             setBasketId(jsonResponse.id);
                             setOrderItems(jsonResponse.items);
                         }
@@ -310,7 +314,7 @@ function OrderForm(props) {
                     <Fragment>
                         <h2 className="subtitle is-5 order__items-subtitle">{props.orderItemsLabel}</h2>
                         <div className="columns is-tablet">
-                            <div className="column is-3 is-flex is-align-items-flex-end">
+                            <div className="column is-2 is-flex is-align-items-flex-end">
                                 <Autosuggest
                                     suggestions={suggestions}
                                     onSuggestionsFetchRequested={onSuggestionsFetchRequested}
@@ -335,6 +339,14 @@ function OrderForm(props) {
                                         e.preventDefault();
                                         setQuantity(e.target.value);
                                     }} />
+                            </div>
+                            <div className="column is-2 is-flex is-align-items-flex-end">
+                                <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel} 
+                                fullWidth={true} value={externalReference} onChange={(e) => {
+
+                                    e.preventDefault();
+                                    setExternalReference(e.target.value);
+                                }} />
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
                                 <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -388,7 +400,7 @@ function OrderForm(props) {
                                             }} />
                                 </MuiPickersUtilsProvider>
                             </div>
-                            <div className="column is-3 is-flex is-align-items-flex-end">
+                            <div className="column is-2 is-flex is-align-items-flex-end">
                                 <TextField id="moreInfo" name="moreInfo" type="text" label={props.moreInfoLabel} 
                                 fullWidth={true} value={moreInfo} onChange={(e) => {
 
@@ -415,6 +427,7 @@ function OrderForm(props) {
                                                         <TableCell>{props.skuLabel}</TableCell>
                                                         <TableCell>{props.nameLabel}</TableCell>
                                                         <TableCell>{props.quantityLabel}</TableCell>
+                                                        <TableCell>{props.externalReferenceLabel}</TableCell>
                                                         <TableCell>{props.deliveryFromLabel}</TableCell>
                                                         <TableCell>{props.deliveryToLabel}</TableCell>
                                                         <TableCell>{props.moreInfoLabel}</TableCell>
@@ -432,6 +445,7 @@ function OrderForm(props) {
                                                             <TableCell>{item.sku}</TableCell>
                                                             <TableCell>{item.name}</TableCell>
                                                             <TableCell>{item.quantity}</TableCell>
+                                                            <TableCell>{item.externalReference}</TableCell>
                                                             <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
                                                             <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
                                                             <TableCell>{item.moreInfo}</TableCell>
@@ -486,6 +500,7 @@ OrderForm.propTypes = {
     skuLabel: PropTypes.string.isRequired,
     nameLabel: PropTypes.string.isRequired,
     quantityLabel: PropTypes.string.isRequired,
+    externalReferenceLabel: PropTypes.string.isRequired,
     deliveryFromLabel: PropTypes.string.isRequired,
     deliveryToLabel: PropTypes.string.isRequired,
     moreInfoLabel: PropTypes.string.isRequired,

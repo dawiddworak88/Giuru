@@ -29,6 +29,7 @@ namespace Foundation.EventLog.Repositories
             {
                 EventId = @event.Id,
                 EventState = eventState,
+                EventName = @event.EventName,
                 Content = JsonConvert.SerializeObject(@event),
                 Username = @event.Username,
                 OrganisationId = @event.OrganisationId,

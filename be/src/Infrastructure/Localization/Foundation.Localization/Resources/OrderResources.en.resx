@@ -141,6 +141,9 @@
   <data name="EnterSkuOrName" xml:space="preserve">
     <value>Enter SKU or product name</value>
   </data>
+  <data name="ExternalReferenceLabel" xml:space="preserve">
+    <value>External order number:</value>
+  </data>
   <data name="ImportOrder" xml:space="preserve">
     <value>Import order</value>
   </data>

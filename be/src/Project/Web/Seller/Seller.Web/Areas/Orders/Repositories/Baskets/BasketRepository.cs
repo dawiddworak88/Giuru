@@ -38,6 +38,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                 {
                     ProductId = x.ProductId,
                     Quantity = x.Quantity,
+                    ExternalReference = x.ExternalReference,
                     DeliveryFrom = x.DeliveryFrom,
                     DeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
@@ -63,6 +64,7 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
                     {
                         ProductId = x.ProductId,
                         Quantity = x.Quantity,
+                        ExternalReference = x.ExternalReference,
                         DeliveryFrom = x.DeliveryFrom,
                         DeliveryTo = x.DeliveryTo,
                         MoreInfo = x.MoreInfo
@@ -73,11 +75,12 @@ namespace Seller.Web.Areas.Orders.Repositories.Baskets
             throw new CustomException(response.Message, (int)response.StatusCode);
         }
 
-        public async Task CheckoutBasketAsync(string token, string language, Guid? clientId, Guid? basketId)
+        public async Task CheckoutBasketAsync(string token, string language, Guid? clientId, string clientName, Guid? basketId)
         {
             var requestModel = new CheckoutBasketRequestModel
             {
                 ClientId = clientId,
+                ClientName = clientName,
                 BasketId = basketId
             };
 

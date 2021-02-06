@@ -43,15 +43,18 @@ namespace Basket.Api.Services
                 Language = checkoutBasketServiceModel.Language,
                 OrganisationId = checkoutBasketServiceModel.OrganisationId,
                 Username = checkoutBasketServiceModel.Username,
-                ClientId = checkoutBasketServiceModel.ClientId,
-                SellerId = checkoutBasketServiceModel.OrganisationId,
+                
                 Basket = new BasketEventModel
                 {
                     Id = basket.Id,
                     Items = basket.Items.Select(x => new BasketItemEventModel 
                     {
                         ProductId = x.ProductId,
+                        ProductSku = x.ProductSku,
+                        ProductName = x.ProductName,
+                        PictureUrl = x.PictureUrl,
                         Quantity = x.Quantity,
+                        ExternalReference = x.ExternalReference,
                         DeliveryFrom = x.DeliveryFrom,
                         DeliveryTo = x.DeliveryTo,
                         MoreInfo = x.MoreInfo
@@ -72,7 +75,11 @@ namespace Basket.Api.Services
                 Items = serviceModel.Items.OrEmptyIfNull().Select(x => new BasketItemRepositoryModel 
                 {
                     ProductId = x.ProductId,
+                    ProductSku = x.ProductSku,
+                    ProductName = x.ProductName,
+                    PictureUrl = x.PictureUrl,
                     Quantity = x.Quantity,
+                    ExternalReference = x.ExternalReference,
                     DeliveryFrom = x.DeliveryFrom,
                     DeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
@@ -87,7 +94,11 @@ namespace Basket.Api.Services
                 Items = result.Items.OrEmptyIfNull().Select(x => new BasketItemServiceModel
                 {
                     ProductId = x.ProductId,
+                    ProductSku = x.ProductSku,
+                    ProductName = x.ProductName,
+                    PictureUrl = x.PictureUrl,
                     Quantity = x.Quantity,
+                    ExternalReference = x.ExternalReference,
                     DeliveryFrom = x.DeliveryFrom,
                     DeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo

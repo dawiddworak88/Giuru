@@ -10,6 +10,7 @@ namespace Basket.Api.ServicesModelsValidators
         {
             this.RuleFor(x => x.OrganisationId).NotNull().NotEmpty();
             this.RuleFor(x => x.ClientId).NotNull().NotEmpty();
+            this.RuleFor(x => x.ClientName).NotNull().NotEmpty();
             this.RuleFor(x => x.BasketId).NotNull().NotEmpty();
             this.RuleFor(x => x.Username).NotNull().NotEmpty();
         }

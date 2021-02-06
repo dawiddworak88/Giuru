@@ -47,7 +47,11 @@ namespace Basket.Api.v1.Controllers
                 Items = request.Items.OrEmptyIfNull().Select(x => new UpdateBasketItemServiceModel 
                 { 
                     ProductId = x.ProductId,
+                    ProductSku = x.ProductSku,
+                    ProductName = x.ProductName,
+                    PictureUrl = x.PictureUrl,
                     Quantity = x.Quantity,
+                    ExternalReference = x.ExternalReference,
                     DeliveryFrom = x.DeliveryFrom,
                     DeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
@@ -73,7 +77,11 @@ namespace Basket.Api.v1.Controllers
                         Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                         {
                             ProductId = x.ProductId,
+                            ProductSku = x.ProductSku,
+                            ProductName = x.ProductName,
+                            PictureUrl = x.PictureUrl,
                             Quantity = x.Quantity,
+                            ExternalReference = x.ExternalReference,
                             DeliveryFrom = x.DeliveryFrom,
                             DeliveryTo = x.DeliveryTo,
                             MoreInfo = x.MoreInfo
@@ -99,6 +107,31 @@ namespace Basket.Api.v1.Controllers
             {
                 BasketId = request.BasketId,
                 ClientId = request.ClientId,
+                ClientName = request.ClientName,
+                BillingAddressId = request.BillingAddressId,
+                BillingCity = request.BillingCity,
+                BillingCompany = request.BillingCompany,
+                BillingCountryCode = request.BillingCountryCode,
+                BillingFirstName = request.BillingFirstName,
+                BillingLastName = request.BillingLastName,
+                BillingPhone = request.BillingPhone,
+                BillingPhonePrefix = request.BillingPhonePrefix,
+                BillingPostCode = request.BillingPostCode,
+                BillingRegion = request.BillingRegion,
+                BillingStreet = request.BillingStreet,
+                ShippingAddressId = request.ShippingAddressId,
+                ShippingCity = request.ShippingCity,
+                ShippingCompany= request.ShippingCompany,
+                ShippingCountryCode = request.ShippingCountryCode,
+                ShippingFirstName = request.ShippingFirstName,
+                ShippingLastName = request.ShippingLastName,
+                ShippingPhone = request.ShippingPhone,
+                ShippingPhonePrefix = request.ShippingPhonePrefix,
+                ShippingPostCode = request.ShippingPostCode,
+                ShippingRegion = request.ShippingRegion,
+                ShippingStreet = request.ShippingStreet,
+                ExpectedDeliveryDate = request.ExpectedDeliveryDate,
+                MoreInfo = request.MoreInfo,
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)

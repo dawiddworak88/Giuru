@@ -31,6 +31,16 @@ namespace Ordering.Api.Validators
                         return false;
                     }
 
+                    if (string.IsNullOrWhiteSpace(item.ProductSku))
+                    {
+                        return false;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(item.ProductName))
+                    {
+                        return false;
+                    }
+
                     if (item.Quantity <= 0)
                     {
                         return false;

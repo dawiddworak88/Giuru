@@ -33,6 +33,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 model.ClientId,
+                model.ClientName,
                 model.BasketId);
 
             return this.StatusCode((int)HttpStatusCode.Accepted, new { Message = this.orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
