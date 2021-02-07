@@ -102,6 +102,8 @@ namespace Basket.Api
 
             app.UseCustomHeaderRequestLocalizationProvider(localizationSettings);
 
+            app.ConfigureEventBus();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

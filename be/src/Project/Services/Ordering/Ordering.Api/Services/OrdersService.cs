@@ -162,7 +162,7 @@ namespace Ordering.Api.Services
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
-                orders = orders.Where(x => x.OrderItems.Any(y => y.ExternalReference == model.SearchTerm));
+                orders = orders.Where(x => x.ClientName == model.SearchTerm || x.OrderItems.Any(y => y.ExternalReference == model.SearchTerm));
             }
 
             orders = orders.ApplySort(model.OrderBy);

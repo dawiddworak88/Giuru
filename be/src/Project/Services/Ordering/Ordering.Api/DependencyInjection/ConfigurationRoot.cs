@@ -1,10 +1,12 @@
-﻿using Foundation.Localization.Definitions;
+﻿using Foundation.EventBus.Abstractions;
+using Foundation.Localization.Definitions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ordering.Api.Configurations;
 using Ordering.Api.Infrastructure;
+using Ordering.Api.IntegrationEvents;
 
 namespace Ordering.Api.DependencyInjection
 {
@@ -30,6 +32,13 @@ namespace Ordering.Api.DependencyInjection
         {
             services.Configure<AppSettings>(configuration);
             services.Configure<LocalizationSettings>(configuration);
+        }
+
+        public static void ConfigureEventBus(this IApplicationBuilder app)
+        {
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+
+            eventBus.Subscribe<BasketCheckoutAcceptedIntegrationEvent, IIntegrationEventHandler<BasketCheckoutAcceptedIntegrationEvent>>();
         }
     }
 }

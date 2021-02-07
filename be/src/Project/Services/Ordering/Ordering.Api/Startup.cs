@@ -1,5 +1,4 @@
 using Foundation.Account.DependencyInjection;
-using Foundation.EventBus.Abstractions;
 using Foundation.EventBusRabbitMq;
 using Foundation.EventLog.DependencyInjection;
 using Foundation.Extensions.Filters;
@@ -13,7 +12,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Ordering.Api.DependencyInjection;
-using Ordering.Api.IntegrationEvents;
 using RabbitMQ.Client;
 using System;
 using System.IO;
@@ -98,9 +96,7 @@ namespace Ordering.Api
 
             app.UseCustomHeaderRequestLocalizationProvider(localizationSettings);
 
-            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-
-            eventBus.Subscribe<BasketCheckoutAcceptedIntegrationEvent, IIntegrationEventHandler<BasketCheckoutAcceptedIntegrationEvent>>();
+            app.ConfigureEventBus();
 
             app.UseEndpoints(endpoints =>
             {
