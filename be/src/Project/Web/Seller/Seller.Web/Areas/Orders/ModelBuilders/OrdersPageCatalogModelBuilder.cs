@@ -47,7 +47,9 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
             
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "OrdersApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
-            
+
+            viewModel.OrderBy = $"{nameof(Order.CreatedDate)} desc";
+
             viewModel.Table = new CatalogTableViewModel
             {
                 Labels = new string[] 

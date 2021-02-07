@@ -14,7 +14,6 @@ using Seller.Web.Areas.Products.Repositories;
 using System.Security.Claims;
 using Foundation.Account.Definitions;
 using Foundation.Extensions.Helpers;
-using Seller.Web.Areas.Products.DomainModels;
 
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
@@ -33,7 +32,12 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(
+            string searchTerm, 
+            bool? hasPrimaryProduct, 
+            int pageIndex, 
+            int itemsPerPage,
+            string orderBy)
         {
             var products = await this.productsRepository.GetProductsAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
@@ -43,7 +47,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value),
                 pageIndex,
                 itemsPerPage,
-                $"{nameof(Product.CreatedDate)} desc");
+                orderBy);
 
             return this.StatusCode((int)HttpStatusCode.OK, products);
         }

@@ -21,9 +21,14 @@ namespace Catalog.BackgroundTasks.Services.Products
 
         public async Task IndexAllAsync(Guid? sellerId)
         {
-            foreach (var productId in this.catalogContext.Products.Where(x => x.Brand.SellerId == sellerId).Select(x => x.Id).ToList())
+            if (sellerId.HasValue)
             {
-                await this.productIndexingRepository.IndexAsync(productId);
+                await this.productIndexingRepository.DeleteAsync(sellerId.Value);
+
+                foreach (var productId in this.catalogContext.Products.Where(x => x.Brand.SellerId == sellerId).Select(x => x.Id).ToList())
+                {
+                    await this.productIndexingRepository.IndexAsync(productId);
+                }
             }
         }
     }

@@ -49,6 +49,8 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "CategoriesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
 
+            viewModel.OrderBy = $"{nameof(Category.CreatedDate)} desc";
+
             viewModel.Table = new CatalogTableViewModel
             {
                 Labels = new string[]

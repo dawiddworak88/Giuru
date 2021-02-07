@@ -26,17 +26,20 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
             this.configuration = configuration;
         }
 
+        public async Task DeleteAsync(Guid sellerId)
+        {
+            await this.elasticClient.DeleteByQueryAsync<ProductSearchModel>(q => q.Query(z => z.Term(p => p.SellerId, sellerId)));
+        }
+
         public async Task IndexAsync(Guid productId)
         {
             var product = await this.catalogContext.Products.FirstOrDefaultAsync(x => x.Id == productId);
 
             if (product != null)
             {
-                var existingProductVersions = await this.elasticClient.SearchAsync<ProductSearchModel>(q => q.Query(z => z.Term(p => p.ProductId, product.Id)));
+                await this.elasticClient.DeleteByQueryAsync<ProductSearchModel>(q => q.Query(z => z.Term(p => p.ProductId, product.Id)));
 
                 var descriptor = new BulkDescriptor();
-
-                descriptor.DeleteMany<object>(existingProductVersions.Hits.Select(x => x.Id));
 
                 foreach (var language in this.configuration["SupportedCultures"].Split(","))
                 {

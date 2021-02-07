@@ -13,6 +13,8 @@ function SettingsForm(props) {
 
         e.preventDefault();
 
+        setReindexProductsDisable(true);
+        
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const requestOptions = {
@@ -23,17 +25,16 @@ function SettingsForm(props) {
         fetch(props.productsIndexTriggerUrl, requestOptions)
             .then(function (response) {
 
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
 
                         dispatch({ type: "SET_IS_LOADING", payload: false });
-                        setReindexProductsDisable(true);
                         toast.success(jsonResponse.message);
                     }
                     else {
+
+                        setReindexProductsDisable(false);
                         toast.error(props.generalErrorMessage);
                     }
                 });

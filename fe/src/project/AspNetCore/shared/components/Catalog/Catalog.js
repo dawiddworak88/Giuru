@@ -27,7 +27,8 @@ function Catalog(props) {
             categoryId: props.categoryId,
             brandId: props.brandId,
             pageIndex: newPage + 1,
-            itemsPerPage
+            itemsPerPage,
+            orderBy: props.orderBy
         };
 
         const requestOptions = {
@@ -139,6 +140,7 @@ Catalog.propTypes = {
     generalErrorMessage: PropTypes.string.isRequired,
     productsApiUrl: PropTypes.string.isRequired,
     categoryId: PropTypes.string.isRequired,
+    orderBy: PropTypes.string,
     items: PropTypes.array
 };
 
