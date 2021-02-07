@@ -10,6 +10,7 @@ namespace Seller.Web.Areas.Products.Repositories
     {
         Task DeleteAsync(string token, string language, Guid? id);
         Task<Product> GetProductAsync(string token, string language, Guid? id);
+        Task<Product> GetProductAsync(string token, string language, string sku);
         Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(string token, string language, string searchTerm, bool? hasPrimaryProduct, Guid? sellerId, int pageIndex, int itemsPerPage, string orderBy);
         Task<IEnumerable<Product>> GetAllProductsAsync(string token, string language, IEnumerable<Guid> productIds);
         Task<IEnumerable<Product>> GetAllPrimaryProductsAsync(string token, string language, Guid? sellerId, string orderBy);

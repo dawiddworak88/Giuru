@@ -6,12 +6,15 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
-using Seller.Web.Areas.Orders.ApiRequestModels;
+using Seller.Web.Areas.Media.ApiRequestModels;
 using Seller.Web.Areas.Orders.ApiResponseModels;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
+using Seller.Web.Areas.Orders.Services.OrderFiles;
+using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Shared.Configurations;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -20,19 +23,25 @@ using System.Threading.Tasks;
 namespace Seller.Web.Areas.Orders.ApiControllers
 {
     [Area("Orders")]
-    public class BasketsApiController : BaseApiController
+    public class OrderFileApiController : BaseApiController
     {
+        private readonly IOrderFileService orderFileService;
+        private readonly IProductsRepository productsRepository;
         private readonly IBasketRepository basketRepository;
         private readonly LinkGenerator linkGenerator;
         private readonly IOptions<AppSettings> options;
         private readonly IMediaHelperService mediaService;
 
-        public BasketsApiController(
+        public OrderFileApiController(
+            IOrderFileService orderFileService,
+            IProductsRepository productsRepository,
             IBasketRepository basketRepository,
             LinkGenerator linkGenerator,
             IOptions<AppSettings> options,
             IMediaHelperService mediaService)
         {
+            this.orderFileService = orderFileService;
+            this.productsRepository = productsRepository;
             this.basketRepository = basketRepository;
             this.linkGenerator = linkGenerator;
             this.options = options;
@@ -40,24 +49,43 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index([FromBody] SaveBasketRequestModel model)
+        public async Task<IActionResult> Index([FromForm] UploadMediaRequestModel model)
         {
+            var importedOrderLines = this.orderFileService.ImportOrderLines(model.File);
+
+            var basketItems = new List<BasketItem>();
+
+            foreach (var orderLine in importedOrderLines)
+            {
+                var product = await this.productsRepository.GetProductAsync(
+                    await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                    CultureInfo.CurrentUICulture.Name,
+                    orderLine.Sku);
+
+                if (product != null)
+                {
+                    var basketItem = new BasketItem
+                    {
+                        ProductId = product.Id,
+                        ProductSku = product.Sku,
+                        ProductName = product.Name,
+                        PictureUrl = product.Images.OrEmptyIfNull().Any() ? this.mediaService.GetFileUrl(this.options.Value.MediaUrl, product.Images.First(), OrdersConstants.Basket.BasketProductImageMaxWidth, OrdersConstants.Basket.BasketProductImageMaxHeight, true) : null,
+                        Quantity = orderLine.Quantity,
+                        ExternalReference = orderLine.ExternalReference,
+                        DeliveryFrom = orderLine.DeliveryFrom,
+                        DeliveryTo = orderLine.DeliveryTo,
+                        MoreInfo = orderLine.MoreInfo
+                    };
+
+                    basketItems.Add(basketItem);
+                }
+            }
+
             var basket = await this.basketRepository.SaveAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 model.Id,
-                model.Items.OrEmptyIfNull().Select(x => new BasketItem
-                {
-                    ProductId = x.ProductId,
-                    ProductSku = x.Sku,
-                    ProductName = x.Name,
-                    PictureUrl = !string.IsNullOrWhiteSpace(x.ImageSrc) ? x.ImageSrc : (x.ImageId.HasValue ? this.mediaService.GetFileUrl(this.options.Value.MediaUrl, x.ImageId.Value, OrdersConstants.Basket.BasketProductImageMaxWidth, OrdersConstants.Basket.BasketProductImageMaxHeight, true) : null),
-                    Quantity = x.Quantity,
-                    ExternalReference = x.ExternalReference,
-                    DeliveryFrom = x.DeliveryFrom,
-                    DeliveryTo = x.DeliveryTo,
-                    MoreInfo = x.MoreInfo
-                }));
+                basketItems);
 
             var basketResponseModel = new BasketResponseModel
             {

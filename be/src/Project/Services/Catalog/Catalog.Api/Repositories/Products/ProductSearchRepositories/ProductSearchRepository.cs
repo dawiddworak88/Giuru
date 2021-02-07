@@ -84,6 +84,22 @@ namespace Catalog.Api.Repositories.Products.ProductSearchRepositories
             return default;
         }
 
+        public async Task<ProductSearchModel> GetBySkuAsync(string sku, string language)
+        {
+            var query = Query<ProductSearchModel>.Term(t => t.Field(x => x.Sku).Value(sku))
+                && Query<ProductSearchModel>.Term(t => t.Language, language)
+                && Query<ProductSearchModel>.Term(t => t.IsActive, true);
+
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(s => s.Query(x => x && query));
+
+            if (response.IsValid && response.Hits.Any())
+            {
+                return response.Documents.FirstOrDefault();
+            }
+
+            return default;
+        }
+
         public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, IEnumerable<Guid> ids, string orderBy)
         {
             var query = Query<ProductSearchModel>.Term(t => t.Language, language)

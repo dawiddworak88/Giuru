@@ -124,7 +124,7 @@ namespace Catalog.Api.Services.Products
 
             await this.productIndexingRepository.IndexAsync(product.Id);
 
-            return await this.GetByIdAsync(new GetProductServiceModel { Id = product.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
+            return await this.GetByIdAsync(new GetProductByIdServiceModel { Id = product.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
         public async Task<bool> IsEmptyAsync()
@@ -249,7 +249,7 @@ namespace Catalog.Api.Services.Products
 
             await this.productIndexingRepository.IndexAsync(product.Id);
 
-            return await this.GetByIdAsync(new GetProductServiceModel { Id = product.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
+            return await this.GetByIdAsync(new GetProductByIdServiceModel { Id = product.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
         public async Task DeleteAsync(DeleteProductServiceModel model)
@@ -294,9 +294,29 @@ namespace Catalog.Api.Services.Products
             return await this.MapToPageResultsAsync(searchResults, model.Language);
         }
 
-        public async Task<ProductServiceModel> GetByIdAsync(GetProductServiceModel model)
+        public async Task<ProductServiceModel> GetByIdAsync(GetProductByIdServiceModel model)
         {
             var searchResultItem = await this.productSearchRepository.GetAsync(model.Id.Value, model.Language);
+
+            if (searchResultItem != null)
+            {
+                var productSearchModel = this.MapProductSearchModelToProductResult(searchResultItem);
+
+                if (!searchResultItem.PrimaryProductIdHasValue)
+                {
+                    var productVariants = await this.productSearchRepository.GetProductVariantsAsync(searchResultItem.ProductId, model.Language);
+                    productSearchModel.ProductVariants = productVariants?.Data?.Select(x => x.ProductId);
+                }
+
+                return productSearchModel;
+            }
+
+            return default;
+        }
+
+        public async Task<ProductServiceModel> GetBySkuAsync(GetProductBySkuServiceModel model)
+        {
+            var searchResultItem = await this.productSearchRepository.GetBySkuAsync(model.Sku, model.Language);
 
             if (searchResultItem != null)
             {

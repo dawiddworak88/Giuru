@@ -302,7 +302,7 @@ namespace Catalog.Api.v1.Products.Controllers
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
-            var serviceModel = new GetProductServiceModel
+            var serviceModel = new GetProductByIdServiceModel
             {
                 Id = id.Value,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
@@ -310,13 +310,79 @@ namespace Catalog.Api.v1.Products.Controllers
                 Language = CultureInfo.CurrentCulture.Name
             };
 
-            var validator = new GetProductModelValidator();
+            var validator = new GetProductByIdModelValidator();
 
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
                 var product = await this.productService.GetByIdAsync(serviceModel);
+
+                if (product != null)
+                {
+                    var response = new ProductResponseModel
+                    {
+                        Id = product.Id,
+                        BrandName = product.BrandName,
+                        CategoryId = product.CategoryId,
+                        CategoryName = product.CategoryName,
+                        Description = product.Description,
+                        Files = product.Files,
+                        Images = product.Images,
+                        FormData = product.FormData,
+                        IsNew = product.IsNew,
+                        IsProtected = product.IsProtected,
+                        Name = product.Name,
+                        PrimaryProductId = product.PrimaryProductId,
+                        ProductVariants = product.ProductVariants,
+                        SellerId = product.SellerId,
+                        Sku = product.Sku,
+                        Videos = product.Videos,
+                        LastModifiedDate = product.LastModifiedDate,
+                        CreatedDate = product.CreatedDate
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+                else
+                {
+                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                }
+            }
+
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Returns a product by sku.
+        /// </summary>
+        /// <param name="sku">The product sku.</param>
+        /// <returns>The product.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("sku/{sku}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetBySku(string sku)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            var serviceModel = new GetProductBySkuServiceModel
+            {
+                Sku = sku,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Language = CultureInfo.CurrentCulture.Name
+            };
+
+            var validator = new GetProductBySkuModelValidator();
+
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var product = await this.productService.GetBySkuAsync(serviceModel);
 
                 if (product != null)
                 {

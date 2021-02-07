@@ -10,7 +10,8 @@ namespace Catalog.Api.Services.Products
         Task<ProductServiceModel> CreateAsync(CreateUpdateProductModel model);
         Task<bool> IsEmptyAsync();
         Task<ProductServiceModel> UpdateAsync(CreateUpdateProductModel model);
-        Task<ProductServiceModel> GetByIdAsync(GetProductServiceModel getProductModel);
+        Task<ProductServiceModel> GetByIdAsync(GetProductByIdServiceModel getProductModel);
+        Task<ProductServiceModel> GetBySkuAsync(GetProductBySkuServiceModel serviceModel);
         Task<PagedResults<IEnumerable<ProductServiceModel>>> GetAsync(GetProductsServiceModel getProductsModel);
         Task<PagedResults<IEnumerable<ProductServiceModel>>> GetByIdsAsync(GetProductsByIdsServiceModel getProductsModel);
         Task DeleteAsync(DeleteProductServiceModel deleteProductModel);

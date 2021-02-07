@@ -7,6 +7,7 @@ using Seller.Web.Shared.ViewModels;
 using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
+using Seller.Web.Areas.Orders.Services.OrderFiles;
 
 namespace Seller.Web.Areas.Orders.DependencyInjection
 {
@@ -16,6 +17,7 @@ namespace Seller.Web.Areas.Orders.DependencyInjection
         {
             services.AddScoped<IOrdersRepository, OrdersRepository>();
             services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddScoped<IOrderFileService, OrderFileService>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Order>>, OrdersPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrdersPageViewModel>, OrdersPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OrderPageViewModel>, OrderPageModelBuilder>();

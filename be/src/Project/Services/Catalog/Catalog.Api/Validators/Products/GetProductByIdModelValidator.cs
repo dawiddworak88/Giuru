@@ -4,9 +4,9 @@ using Foundation.Extensions.Validators;
 
 namespace Catalog.Api.Validators.Products
 {
-    public class GetProductModelValidator : BaseServiceModelValidator<GetProductServiceModel>
+    public class GetProductByIdModelValidator : BaseServiceModelValidator<GetProductByIdServiceModel>
     {
-        public GetProductModelValidator()
+        public GetProductByIdModelValidator()
         {
             RuleFor(x => x.Id).NotNull();
         }

@@ -3,7 +3,7 @@ using System;
 
 namespace Catalog.Api.ServicesModels.Products
 {
-    public class GetProductServiceModel : BaseServiceModel
+    public class GetProductByIdServiceModel : BaseServiceModel
     {
         public Guid? Id { get; set; }
     }

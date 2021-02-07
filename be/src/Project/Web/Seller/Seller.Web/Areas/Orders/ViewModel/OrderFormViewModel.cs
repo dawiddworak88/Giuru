@@ -38,5 +38,6 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string PlaceOrderUrl { get; set; }
         public string OrdersUrl { get; set; }
         public string NavigateToOrdersListText { get; set; }
+        public string UploadOrderFileUrl { get; set; }
     }
 }
