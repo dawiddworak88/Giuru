@@ -86,7 +86,7 @@ namespace Catalog.Api.Repositories.Products.ProductSearchRepositories
 
         public async Task<ProductSearchModel> GetBySkuAsync(string sku, string language)
         {
-            var query = Query<ProductSearchModel>.Term(t => t.Field(x => x.Sku).Value(sku))
+            var query = Query<ProductSearchModel>.Term(t => t.Field(x => x.Sku).Value(sku.ToLowerInvariant()))
                 && Query<ProductSearchModel>.Term(t => t.Language, language)
                 && Query<ProductSearchModel>.Term(t => t.IsActive, true);
 

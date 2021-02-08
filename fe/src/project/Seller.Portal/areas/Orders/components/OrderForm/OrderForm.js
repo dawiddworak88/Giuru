@@ -1,5 +1,7 @@
-import React, { useContext, useState, Fragment } from "react";
+import React, { useContext, useCallback, useState, Fragment } from "react";
 import { toast } from "react-toastify";
+import { UploadCloud } from "react-feather";
+import { useDropzone } from "react-dropzone";
 import PropTypes from "prop-types";
 import MomentUtils from '@date-io/moment';
 import {
@@ -22,6 +24,7 @@ import QueryStringSerializer from "../../../../../../shared/helpers/serializers/
 import OrderFormConstants from "../../constants/OrderFormConstants";
 import ConfirmationDialog from "../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
+import IconConstants from "../../../../../../shared/constants/IconConstants";
 
 function OrderForm(props) {
 
@@ -270,6 +273,54 @@ function OrderForm(props) {
         NavigationHelper.redirect(props.ordersUrl);
     };
 
+    
+    const onDrop = useCallback(acceptedFiles => {
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        acceptedFiles.forEach((file) => {
+
+            const formData = new FormData();
+
+            formData.append("file", file);
+
+            const requestOptions = {
+                method: "POST",
+                body: formData
+            };
+
+            fetch(props.uploadOrderFileUrl, requestOptions)
+
+                .then(function (response) {
+
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                    return response.json().then((jsonResponse) => {
+
+                        if (response.ok) {
+
+                            dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                            setBasketId(jsonResponse.id);
+                            setOrderItems([...orderItems, ...jsonResponse.items]);
+                        }
+                        else {
+                            toast.error(props.generalErrorMessage);
+                        }
+                    });
+                }).catch(() => {
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
+                    toast.error(props.generalErrorMessage);
+                });
+        });
+    }, []);
+
+    const { getRootProps, getInputProps, isDragActive } = useDropzone({
+        onDrop,
+        accept: ".xlsx, .xls",
+        multiple: false
+    });
+
     return (
         <section className="section section-small-padding order">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -298,6 +349,20 @@ function OrderForm(props) {
                 {client &&
                     <Fragment>
                         <h2 className="subtitle is-5 order__items-subtitle">{props.orderItemsLabel}</h2>
+                        <div className="container">
+                            <div className="dropzone__pond-container" {...getRootProps()}>
+                                <input id={props.id} name={props.name} {...getInputProps()} />
+                                <div className={isDragActive ? "dropzone__pond dropzone--active" : "dropzone__pond"}>
+                                    <p>
+                                        <UploadCloud size={IconConstants.defaultSize()} />
+                                    </p>
+                                    <p>{isDragActive ? props.dropFilesLabel : props.dropOrSelectFilesLabel}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="container mt-5 mb-5 has-text-centered">
+                            {props.orLabel}
+                        </div>
                         <div className="columns is-tablet">
                             <div className="column is-2 is-flex is-align-items-flex-end">
                                 <Autosuggest
@@ -515,7 +580,10 @@ OrderForm.propTypes = {
     placeOrderUrl: PropTypes.string.isRequired,
     navigateToOrdersListText: PropTypes.string.isRequired,
     expectedDeliveryabel: PropTypes.string.isRequired,
-    uploadOrderFileUrl: PropTypes.string.isRequired
+    uploadOrderFileUrl: PropTypes.string.isRequired,
+    orLabel: PropTypes.string.isRequired,
+    dropOrSelectFilesLabel: PropTypes.string.isRequired,
+    dropFilesLabel: PropTypes.string.isRequired
 };
 
 export default OrderForm;

@@ -297,11 +297,6 @@ namespace Seller.Web.Areas.Products.Repositories
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Product>(apiRequest);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return response.Data;

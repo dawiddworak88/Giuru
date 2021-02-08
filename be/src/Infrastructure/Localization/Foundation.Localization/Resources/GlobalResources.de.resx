@@ -282,6 +282,9 @@
   <data name="Open" xml:space="preserve">
     <value>Öffnen</value>
   </data>
+  <data name="Or" xml:space="preserve">
+    <value>oder</value>
+  </data>
   <data name="Orders" xml:space="preserve">
     <value>Bestellungen</value>
   </data>

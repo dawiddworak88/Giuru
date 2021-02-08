@@ -135,6 +135,9 @@
   <data name="DeliveryTo" xml:space="preserve">
     <value>Delivery to:</value>
   </data>
+  <data name="DropOrSelectOrderFile" xml:space="preserve">
+    <value>Drag and drop here, or click to select an order file</value>
+  </data>
   <data name="EditOrder" xml:space="preserve">
     <value>Edit order</value>
   </data>

@@ -65,7 +65,10 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 PlaceOrderUrl = this.linkGenerator.GetPathByAction("Checkout", "BasketCheckoutApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 UploadOrderFileUrl = this.linkGenerator.GetPathByAction("Index", "OrderFileApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 OrdersUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                NavigateToOrdersListText = this.orderLocalizer.GetString("NavigateToOrdersList")
+                NavigateToOrdersListText = this.orderLocalizer.GetString("NavigateToOrdersList"),
+                DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
+                DropOrSelectFilesLabel = this.orderLocalizer.GetString("DropOrSelectOrderFile"),
+                OrLabel = this.globalLocalizer.GetString("Or")
             };
 
             var clients = await this.clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);

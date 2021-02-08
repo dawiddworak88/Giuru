@@ -135,6 +135,9 @@
   <data name="DeliveryTo" xml:space="preserve">
     <value>Lieferung bis:</value>
   </data>
+  <data name="DropOrSelectOrderFile" xml:space="preserve">
+    <value>Hierher ziehen und ablegen oder klicken, um Bestelldatei auszuwählen</value>
+  </data>
   <data name="EditOrder" xml:space="preserve">
     <value>Bestellung editieren</value>
   </data>
