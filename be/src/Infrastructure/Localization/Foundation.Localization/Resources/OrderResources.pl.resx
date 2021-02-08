@@ -136,7 +136,7 @@
     <value>Końcowa data dostawy:</value>
   </data>
   <data name="DropOrSelectOrderFile" xml:space="preserve">
-    <value>Przeciągnij i upuść lub kliknij, aby wybrać plik z zamówieniami</value>
+    <value>Przeciągnij i upuść lub kliknij, aby wybrać pliki z zamówieniami</value>
   </data>
   <data name="EditOrder" xml:space="preserve">
     <value>Edytuj zamówienie</value>
