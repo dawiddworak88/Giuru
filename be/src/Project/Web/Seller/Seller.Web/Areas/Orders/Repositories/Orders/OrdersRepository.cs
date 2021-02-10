@@ -86,5 +86,30 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
 
             return default;
         }
+
+        public async Task<IEnumerable<OrderStatus>> GetOrderStatusesAsync(string token, string language)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.OrderStatusesApiEndpoint}"
+            };
+
+            var response = await this.apiOrderService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, IEnumerable<OrderStatus>>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
     }
 }

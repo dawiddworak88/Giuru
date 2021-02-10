@@ -10,5 +10,6 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
     {
         Task<Order> GetOrderAsync(string token, string language, Guid? id);
         Task<PagedResults<IEnumerable<Order>>> GetOrdersAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
+        Task<IEnumerable<OrderStatus>> GetOrderStatusesAsync(string token, string language);
     }
 }

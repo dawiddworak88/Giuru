@@ -4,6 +4,7 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.Repositories.Clients;
 using System.Globalization;
@@ -17,18 +18,18 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly LinkGenerator linkGenerator;
-        private readonly IClientsRepository clientsRepository;
+        private readonly IOrdersRepository ordersRepository;
 
         public EditOrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             LinkGenerator linkGenerator,
-            IClientsRepository clientsRepository)
+            IOrdersRepository ordersRepository)
         {
             this.globalLocalizer = globalLocalizer;
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
-            this.clientsRepository = clientsRepository;
+            this.ordersRepository = ordersRepository;
         }
 
         public async Task<EditOrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -71,11 +72,11 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 OrLabel = this.globalLocalizer.GetString("Or")
             };
 
-            var clients = await this.clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);
+            var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
 
-            if (clients != null)
+            if (orderStatuses != null)
             {
-                viewModel.Clients = clients.Select(x => new ListItemViewModel { Id = x.Id , Name = x.Name });
+                viewModel.OrderStatuses = orderStatuses.Select(x => new ListItemViewModel { Id = x.Id , Name = x.Name });
             }
 
             return viewModel;

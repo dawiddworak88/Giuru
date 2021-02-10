@@ -230,5 +230,23 @@ namespace Ordering.Api.Services
 
             return await orders.FirstOrDefaultAsync();
         }
+
+        public async Task<IEnumerable<OrderStatusServiceModel>> GetOrderStatusesAsync(GetOrderStatusesServiceModel serviceModel)
+        {
+            var orderStatuses = from orderstatus in this.context.OrderStatuses
+                                join orderstate in this.context.OrderStates on orderstatus.OrderStateId equals orderstate.Id
+                                join orderstatustranslation in this.context.OrderStatusTranslations on orderstatus.Id equals orderstatustranslation.OrderStatusId
+                                where orderstatustranslation.Language == serviceModel.Language && orderstatus.IsActive
+                                select new OrderStatusServiceModel
+                                {
+                                    Id = orderstatus.Id,
+                                    OrderStateId = orderstate.Id,
+                                    Name = orderstatustranslation.Name,
+                                    LastModifiedDate = orderstatus.LastModifiedDate,
+                                    CreatedDate = orderstatus.CreatedDate
+                                };
+
+            return orderStatuses;
+        }
     }
 }

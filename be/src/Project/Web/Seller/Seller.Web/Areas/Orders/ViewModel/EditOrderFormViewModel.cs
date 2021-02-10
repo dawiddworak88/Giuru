@@ -42,5 +42,6 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string OrLabel { get; set; }
         public string DropOrSelectFilesLabel { get; set; }
         public string DropFilesLabel { get; set; }
+        public IEnumerable<ListItemViewModel> OrderStatuses { get; set; }
     }
 }
