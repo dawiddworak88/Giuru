@@ -237,6 +237,7 @@ namespace Ordering.Api.Services
                                 join orderstate in this.context.OrderStates on orderstatus.OrderStateId equals orderstate.Id
                                 join orderstatustranslation in this.context.OrderStatusTranslations on orderstatus.Id equals orderstatustranslation.OrderStatusId
                                 where orderstatustranslation.Language == serviceModel.Language && orderstatus.IsActive
+                                orderby orderstatus.Order
                                 select new OrderStatusServiceModel
                                 {
                                     Id = orderstatus.Id,

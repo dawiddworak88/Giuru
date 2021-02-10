@@ -180,6 +180,9 @@
   <data name="Orders" xml:space="preserve">
     <value>Zamówienia</value>
   </data>
+  <data name="OrderStatus" xml:space="preserve">
+    <value>Status zamówienia</value>
+  </data>
   <data name="PlaceOrder" xml:space="preserve">
     <value>Złóż zamówienie</value>
   </data>
@@ -191,5 +194,8 @@
   </data>
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
+  </data>
+  <data name="UpdateOrderStatus" xml:space="preserve">
+    <value>Aktualizuj status zamówienia</value>
   </data>
 </root>

@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import { CircularProgress } from "@material-ui/core";
 import {
+    FormControl, InputLabel, Select, MenuItem, Button,
     Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper
 } from "@material-ui/core";
@@ -11,7 +12,7 @@ import moment from "moment";
 function EditOrderForm(props) {
 
     const [state, dispatch] = useContext(Context);
-    const [orderStatusId, setOrderStatusId] = useState(props.statusId);
+    const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
 
     const handleOrderStatusSubmit = () => {
 
@@ -52,7 +53,7 @@ function EditOrderForm(props) {
                 <div className="columns is-desktop">
                     <div className="column is-3">
                         <div className="field">
-                            <FormControl>
+                            <FormControl fullWidth={true}>
                                 <InputLabel id="order-status-label">{props.orderStatusLabel}</InputLabel>
                                 <Select
                                     labelId="order-status-label"
@@ -82,10 +83,10 @@ function EditOrderForm(props) {
                     </div>
                 </div>
             </form>
-            <div>
+            <div className="mt-5">
                 <h2 className="subtitle is-5 edit-order__items-subtitle">{props.clientLabel}</h2>
             </div>
-            <div>
+            <div className="mt-5">
                 <h2 className="subtitle is-5 edit-order__items-subtitle">{props.orderItemsLabel}</h2>
                 <div className="edit-order__items">
                     <section className="section">
