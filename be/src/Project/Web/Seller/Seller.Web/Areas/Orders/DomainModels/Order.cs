@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Foundation.ApiExtensions.Models.Response;
+using System;
 using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Orders.DomainModels
 {
-    public class Order
+    public class Order : BaseResponseModel
     {
-        public Guid Id { get; set; }
         public Guid OrderStatusId { get; set; }
         public Guid ClientId { get; set; }
         public string ClientName { get; set; }

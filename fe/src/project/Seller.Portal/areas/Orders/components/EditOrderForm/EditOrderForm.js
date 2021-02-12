@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import { CircularProgress } from "@material-ui/core";
@@ -14,17 +15,25 @@ function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
 
-    const handleOrderStatusSubmit = () => {
+    const handleOrderStatusSubmit = (e) => {
+
+        e.preventDefault();
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        var orderStatus = {
+
+            orderId: props.id,
+            orderStatusId: orderStatusId
+        };
 
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(state)
+            body: JSON.stringify(orderStatus)
         };
 
-        fetch(props.saveUrl, requestOptions)
+        fetch(props.updateOrderStatusUrl, requestOptions)
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
@@ -33,7 +42,7 @@ function EditOrderForm(props) {
 
                     if (response.ok) {
 
-                        setFieldValue({ name: "id", value: jsonResponse.id });
+                        setOrderStatusId(jsonResponse.orderStatusId);
                         toast.success(jsonResponse.message);
                     }
                     else {
@@ -49,6 +58,7 @@ function EditOrderForm(props) {
     return (
         <section className="section section-small-padding edit-order">
             <h1 className="subtitle is-4">{props.title}</h1>
+            <h2 className="subtitle is-5 edit-order__items-subtitle">{props.orderStatusLabel}</h2>
             <form className="is-modern-form" onSubmit={handleOrderStatusSubmit} method="post">
                 <div className="columns is-desktop">
                     <div className="column is-3">
@@ -85,6 +95,9 @@ function EditOrderForm(props) {
             </form>
             <div className="mt-5">
                 <h2 className="subtitle is-5 edit-order__items-subtitle">{props.clientLabel}</h2>
+                <div>
+                    <a href={props.clientUrl}>{props.clientName}</a>
+                </div>
             </div>
             <div className="mt-5">
                 <h2 className="subtitle is-5 edit-order__items-subtitle">{props.orderItemsLabel}</h2>
@@ -144,7 +157,12 @@ EditOrderForm.propTypes = {
     generalErrorMessage: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     orderStatusLabel: PropTypes.string.isRequired,
-    orderStatuses: PropTypes.array.isRequired
+    orderStatuses: PropTypes.array.isRequired,
+    orderStatusId: PropTypes.string.isRequired,
+    clientLabel: PropTypes.string.isRequired,
+    clientName: PropTypes.string.isRequired,
+    clientUrl: PropTypes.string.isRequired,
+    updateOrderStatusUrl: PropTypes.string.isRequired
 };
 
 export default EditOrderForm;

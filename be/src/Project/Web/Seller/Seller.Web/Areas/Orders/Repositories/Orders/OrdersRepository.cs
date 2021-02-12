@@ -1,10 +1,12 @@
 ﻿using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
+using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
+using Seller.Web.Areas.Orders.ApiRequestModels;
 using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Shared.Configurations;
 using System;
@@ -107,6 +109,35 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return response.Data;
+            }
+
+            return default;
+        }
+
+        public async Task<Guid> SaveOrderStatusAsync(string token, string language, Guid orderId, Guid orderStatusId)
+        {
+            var apiRequest = new ApiRequest<UpdateOrderStatusRequestModel>
+            {
+                Language = language,
+                Data = new UpdateOrderStatusRequestModel
+                { 
+                    OrderId = orderId,
+                    OrderStatusId = orderStatusId
+                },
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.UpdateOrderStatusApiEndpoint}"
+            };
+
+            var response = await this.apiOrderService.PostAsync<ApiRequest<UpdateOrderStatusRequestModel>, UpdateOrderStatusRequestModel, Order>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.OrderStatusId != null)
+            {
+                return response.Data.OrderStatusId;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
             return default;

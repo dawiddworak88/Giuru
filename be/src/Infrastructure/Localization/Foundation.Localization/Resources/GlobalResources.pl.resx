@@ -141,6 +141,9 @@
   <data name="Categories" xml:space="preserve">
     <value>Kategorie</value>
   </data>
+  <data name="Client" xml:space="preserve">
+    <value>Klient</value>
+  </data>
   <data name="ClientHostExistsErrorMessage" xml:space="preserve">
     <value>Klient o podanym hoście został już wcześniej dodany</value>
   </data>

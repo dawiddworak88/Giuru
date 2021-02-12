@@ -45,7 +45,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 SkuLabel = this.orderLocalizer.GetString("SkuLabel"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
-                SaveText = this.orderLocalizer.GetString("UpdateOrderStatus")
+                SaveText = this.orderLocalizer.GetString("UpdateOrderStatus"),
+                ClientLabel = this.globalLocalizer.GetString("Client")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -61,6 +62,9 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             {
                 viewModel.Id = order.Id;
                 viewModel.OrderStatusId = order.OrderStatusId;
+                viewModel.ClientUrl = this.linkGenerator.GetPathByAction("Edit", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
+                viewModel.ClientName = order.ClientName;
+                viewModel.UpdateOrderStatusUrl = this.linkGenerator.GetPathByAction("Index", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
                 viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                 {
                     ProductId = x.ProductId,

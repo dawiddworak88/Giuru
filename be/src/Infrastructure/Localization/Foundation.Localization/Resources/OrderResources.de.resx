@@ -174,6 +174,9 @@
   <data name="OrderItemsLabel" xml:space="preserve">
     <value>Positionen der Bestellung</value>
   </data>
+  <data name="OrderNotFound" xml:space="preserve">
+    <value>Bestellung nicht gefunden</value>
+  </data>
   <data name="OrderPlacedSuccessfully" xml:space="preserve">
     <value>Die Bestellung wurde erfolgreich aufgegeben. Ihre Bestellung wird bearbeitet. Bald wird es auf der Liste der Bestellungen sichtbar sein.</value>
   </data>
@@ -182,6 +185,12 @@
   </data>
   <data name="Orderstatus" xml:space="preserve">
     <value>Bestellstatus</value>
+  </data>
+  <data name="OrderStatusNotFound" xml:space="preserve">
+    <value>Bestellstatus nicht gefunden</value>
+  </data>
+  <data name="OrderStatusUpdatedSuccessfully" xml:space="preserve">
+    <value>Bestellstatus wurde erfolgreich aktualisiert.</value>
   </data>
   <data name="PlaceOrder" xml:space="preserve">
     <value>Bestellung aufgeben</value>

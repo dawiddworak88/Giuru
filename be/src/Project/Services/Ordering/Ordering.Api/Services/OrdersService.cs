@@ -1,10 +1,13 @@
 ﻿using Foundation.EventBus.Abstractions;
 using Foundation.EventLog.Definitions;
 using Foundation.EventLog.Repositories;
+using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Ordering.Api.Infrastructure;
 using Ordering.Api.Infrastructure.Orders.Definitions;
 using Ordering.Api.Infrastructure.Orders.Entities;
@@ -12,6 +15,7 @@ using Ordering.Api.IntegrationEvents;
 using Ordering.Api.ServicesModels;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Ordering.Api.Services
@@ -21,15 +25,18 @@ namespace Ordering.Api.Services
         private readonly OrderingContext context;
         private readonly IEventBus eventBus;
         private readonly IEventLogRepository eventLogRepository;
+        private readonly IStringLocalizer<OrderResources> orderLocalizer;
 
         public OrdersService(
             OrderingContext context,
             IEventBus eventBus,
-            IEventLogRepository eventLogRepository)
+            IEventLogRepository eventLogRepository,
+            IStringLocalizer<OrderResources> orderLocalizer)
         {
             this.context = context;
             this.eventBus = eventBus;
             this.eventLogRepository = eventLogRepository;
+            this.orderLocalizer = orderLocalizer;
         }
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel serviceModel)
@@ -248,6 +255,35 @@ namespace Ordering.Api.Services
                                 };
 
             return orderStatuses;
+        }
+
+        public async Task<OrderServiceModel> SaveOrderStatusAsync(UpdateOrderStatusServiceModel serviceModel)
+        {
+            var order = await this.context.Orders.FirstOrDefaultAsync(x => x.Id == serviceModel.OrderId && x.SellerId == serviceModel.OrganisationId.Value && x.IsActive);
+
+            if (order == null)
+            {
+                throw new CustomException(this.orderLocalizer.GetString("OrderNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            var newOrderOstatus = await this.context.OrderStatuses.FirstOrDefaultAsync(x => x.Id == serviceModel.OrderStatusId && x.IsActive);
+
+            if (newOrderOstatus == null)
+            {
+                throw new CustomException(this.orderLocalizer.GetString("OrderStatusNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            order.OrderStatusId = newOrderOstatus.Id;
+            order.OrderStateId = newOrderOstatus.OrderStateId;
+
+            await this.context.SaveChangesAsync();
+
+            return await this.GetAsync(new GetOrderServiceModel {  
+                Id = serviceModel.OrderId,
+                OrganisationId = serviceModel.OrganisationId,
+                Username = serviceModel.Username,
+                Language = serviceModel.Language
+            });
         }
     }
 }

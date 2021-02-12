@@ -138,6 +138,9 @@
   <data name="Categories" xml:space="preserve">
     <value>Kategorien</value>
   </data>
+  <data name="Client" xml:space="preserve">
+    <value>Kunde</value>
+  </data>
   <data name="ClientHostExistsErrorMessage" xml:space="preserve">
     <value>Der Kunde wurde schon erstellt</value>
   </data>

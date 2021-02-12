@@ -18,6 +18,7 @@ using Ordering.Api.Services;
 using Ordering.Api.ServicesModels;
 using Ordering.Api.Validators;
 using Ordering.Api.v1.ResponseModels;
+using Ordering.Api.v1.RequestModels;
 
 namespace Ordering.Api.v1.Controllers
 {
@@ -162,6 +163,100 @@ namespace Ordering.Api.v1.Controllers
             if (validationResult.IsValid)
             {
                 var order = await this.ordersService.GetAsync(serviceModel);
+
+                if (order != null)
+                {
+                    var response = new OrderResponseModel
+                    {
+                        Id = order.Id,
+                        ClientId = order.ClientId,
+                        ClientName = order.ClientName,
+                        BillingAddressId = order.BillingAddressId,
+                        BillingCity = order.BillingCity,
+                        BillingCompany = order.BillingCompany,
+                        BillingCountryCode = order.BillingCountryCode,
+                        BillingFirstName = order.BillingFirstName,
+                        BillingLastName = order.BillingLastName,
+                        BillingPhone = order.BillingPhone,
+                        BillingPhonePrefix = order.BillingPhonePrefix,
+                        BillingPostCode = order.BillingPostCode,
+                        BillingRegion = order.BillingRegion,
+                        BillingStreet = order.BillingStreet,
+                        ShippingAddressId = order.ShippingAddressId,
+                        ShippingCity = order.ShippingCity,
+                        ShippingCompany = order.ShippingCompany,
+                        ShippingCountryCode = order.ShippingCountryCode,
+                        ShippingFirstName = order.ShippingFirstName,
+                        ShippingLastName = order.ShippingLastName,
+                        ShippingPhone = order.ShippingPhone,
+                        ShippingPhonePrefix = order.ShippingPhonePrefix,
+                        ShippingPostCode = order.ShippingPostCode,
+                        ShippingRegion = order.ShippingRegion,
+                        ShippingStreet = order.ShippingStreet,
+                        ExpectedDeliveryDate = order.ExpectedDeliveryDate,
+                        MoreInfo = order.MoreInfo,
+                        Reason = order.Reason,
+                        OrderStateId = order.OrderStateId,
+                        OrderStatusId = order.OrderStatusId,
+                        OrderStatusName = order.OrderStatusName,
+                        OrderItems = order.OrderItems.Select(x => new OrderItemResponseModel
+                        {
+                            ProductId = x.ProductId,
+                            ProductSku = x.ProductSku,
+                            ProductName = x.ProductName,
+                            PictureUrl = x.PictureUrl,
+                            Quantity = x.Quantity,
+                            ExternalReference = x.ExternalReference,
+                            ExpectedDeliveryFrom = x.ExpectedDeliveryFrom,
+                            ExpectedDeliveryTo = x.ExpectedDeliveryTo,
+                            MoreInfo = x.MoreInfo,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        }),
+                        LastModifiedDate = order.LastModifiedDate,
+                        CreatedDate = order.CreatedDate
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+                else
+                {
+                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                }
+
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        ///  Updates the order status.
+        /// </summary>
+        /// <returns>The updated order status.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [Route("orderstatus")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Post(UpdateOrderStatusRequestModel model)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            var serviceModel = new UpdateOrderStatusServiceModel
+            {
+                OrderId = model.OrderId,
+                OrderStatusId = model.OrderStatusId,
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new UpdateOrderStatusModelValidator();
+
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var order = await this.ordersService.SaveOrderStatusAsync(serviceModel);
 
                 if (order != null)
                 {
