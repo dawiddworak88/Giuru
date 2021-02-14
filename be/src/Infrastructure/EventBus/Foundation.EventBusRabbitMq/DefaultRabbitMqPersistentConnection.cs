@@ -130,7 +130,10 @@ namespace Foundation.EventBusRabbitMq
 
         void OnConnectionShutdown(object sender, ShutdownEventArgs reason)
         {
-            if (_disposed) return;
+            if (_disposed)
+            {
+                return;
+            }
 
             _logger.LogWarning("A RabbitMQ connection is on shutdown. Trying to re-connect...");
 
