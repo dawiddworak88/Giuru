@@ -4,7 +4,11 @@ namespace Foundation.EventLog.ApiRequestModels
 {
     public class SaveEventApiRequestModel
     {
-        public Guid EventId { get; set; }
+        public Guid? EntityId { get; set; }
+        public string EntityType { get; set; }
+        public string OldValue { get; set; }
+        public string NewValue { get; set; }
+        public Guid? EventId { get; set; }
         public string EventName { get; set; }
         public string EventState { get; set; }
         public string Content { get; set; }

@@ -1,6 +1,5 @@
 ﻿using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
-using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;

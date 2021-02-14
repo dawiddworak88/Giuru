@@ -3,6 +3,7 @@ using Foundation.EventLog.Definitions;
 using Foundation.EventLog.Repositories;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.EntitiesLog;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -182,8 +183,8 @@ namespace Ordering.Api.Services
             var orders = from c in this.context.Orders
                          join os in this.context.OrderStatuses on c.OrderStatusId equals os.Id
                          join ost in this.context.OrderStatusTranslations on os.Id equals ost.OrderStatusId
-                          where ost.Language == model.Language && c.SellerId == model.OrganisationId.Value && c.IsActive
-                          select new OrderServiceModel
+                         where c.Id == model.Id && ost.Language == model.Language && c.SellerId == model.OrganisationId.Value && c.IsActive
+                         select new OrderServiceModel
                           {
                               Id = c.Id,
                               ClientId = c.ClientId.Value,
@@ -275,6 +276,13 @@ namespace Ordering.Api.Services
 
             order.OrderStatusId = newOrderOstatus.Id;
             order.OrderStateId = newOrderOstatus.OrderStateId;
+
+            await this.eventLogRepository.SaveAsync(
+                order.Id,
+                order.GetType().Name,
+                this.context.GetModifiedProperties(order.GetType().Name),
+                serviceModel.OrganisationId.Value,
+                serviceModel.Username);
 
             await this.context.SaveChangesAsync();
 

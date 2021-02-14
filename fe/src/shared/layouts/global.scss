@@ -31,11 +31,21 @@
     }
 
     .field {
-        margin-top: 2rem;
+
+        margin-top: 0.5rem;
+
+        @media only screen and (min-width: $desktop) {
+            margin-top: 2rem;
+        }        
     }
 
     .field:last-child {
-        margin-top: 2.5rem;
+
+        margin-top: 0.5rem;
+
+        @media only screen and (min-width: $desktop) {
+            margin-top: 2.5rem;
+        }
     }
 }
 

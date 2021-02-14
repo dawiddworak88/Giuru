@@ -121,7 +121,7 @@ function EditOrderForm(props) {
                                     <TableBody>
                                         {props.orderItems && props.orderItems.map((item, index) => (
                                             <TableRow key={index}>
-                                                <TableCell><a href={item.productUrl} target="_blank"><img className="order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
+                                                <TableCell><a href={item.productUrl} target="_blank"><img className="edit-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
                                                 <TableCell>{item.sku}</TableCell>
                                                 <TableCell>{item.name}</TableCell>
                                                 <TableCell>{item.quantity}</TableCell>

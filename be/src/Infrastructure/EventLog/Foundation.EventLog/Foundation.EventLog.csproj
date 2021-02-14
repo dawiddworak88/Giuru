@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\ApiExtensions\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
     <ProjectReference Include="..\..\EventBus\Foundation.EventBus\Foundation.EventBus.csproj" />
+    <ProjectReference Include="..\..\GenericRepository\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
   </ItemGroup>
 
 </Project>

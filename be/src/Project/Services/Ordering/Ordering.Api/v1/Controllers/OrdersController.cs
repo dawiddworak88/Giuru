@@ -247,7 +247,8 @@ namespace Ordering.Api.v1.Controllers
                 OrderId = model.OrderId,
                 OrderStatusId = model.OrderStatusId,
                 Language = CultureInfo.CurrentCulture.Name,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
             };
 
             var validator = new UpdateOrderStatusModelValidator();
