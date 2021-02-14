@@ -23,7 +23,7 @@ namespace Foundation.Search.Extensions
 
                 var orderDescending = trimmedOrderByClause.EndsWith(" desc");
 
-                var indexOfFirstSpace = trimmedOrderByClause.IndexOf(" ");
+                var indexOfFirstSpace = trimmedOrderByClause.IndexOf(" ", StringComparison.InvariantCulture);
                 var propertyName = indexOfFirstSpace == -1 ?
                     trimmedOrderByClause : trimmedOrderByClause.Remove(indexOfFirstSpace);
 

@@ -31,16 +31,14 @@
     }
 
     .field {
-
         margin-top: 0.5rem;
 
         @media only screen and (min-width: $desktop) {
             margin-top: 2rem;
-        }        
+        }
     }
 
     .field:last-child {
-
         margin-top: 0.5rem;
 
         @media only screen and (min-width: $desktop) {
@@ -121,7 +119,6 @@
 .search__field:hover {
     border-bottom: 2px solid darkgrey;
 }
-
 
 .react-autosuggest__container {
     position: relative;

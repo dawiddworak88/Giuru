@@ -142,8 +142,6 @@ namespace Media.Api.Services.Media
 
         public PagedResults<IEnumerable<MediaItemServiceModel>> GetMediaItemsByIds(GetMediaItemsByIdsServiceModel model)
         {
-            var mediaItemResult = new MediaItemServiceModel();
-
             var mediaItemsResults = new List<MediaItemServiceModel>();
 
             var predicateBuilder = PredicateBuilder.False<MediaItem>();
@@ -157,15 +155,14 @@ namespace Media.Api.Services.Media
 
             foreach (var mediaItem in mediaItems.OrEmptyIfNull())
             {
-                mediaItemResult = this.MapMediaItemToMediaItemResultModel(mediaItem, model.Language);
+                var mediaItemResult = this.MapMediaItemToMediaItemResultModel(mediaItem, model.Language);
 
                 mediaItemsResults.Add(mediaItemResult);
             }
 
             return new PagedResults<IEnumerable<MediaItemServiceModel>>(mediaItemsResults.Count, PaginationConstants.DefaultPageIndex)
             { 
-                Data = mediaItemsResults,
-                
+                Data = mediaItemsResults
             };
         }
 

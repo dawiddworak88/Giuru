@@ -19,7 +19,7 @@ namespace Foundation.EventBusRabbitMq
         IConnection _connection;
         bool _disposed;
 
-        object sync_root = new object();
+        readonly object sync_root = new object();
 
         public DefaultRabbitMQPersistentConnection(IConnectionFactory connectionFactory, ILogger<DefaultRabbitMQPersistentConnection> logger, int retryCount = 5)
         {
@@ -103,7 +103,10 @@ namespace Foundation.EventBusRabbitMq
 
         private void OnConnectionBlocked(object sender, ConnectionBlockedEventArgs e)
         {
-            if (_disposed) return;
+            if (_disposed)
+            {
+                return;
+            }
 
             _logger.LogWarning("A RabbitMQ connection is shutdown. Trying to re-connect...");
 

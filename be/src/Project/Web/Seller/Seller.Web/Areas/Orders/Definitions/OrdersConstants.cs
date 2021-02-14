@@ -4,8 +4,8 @@
     {
         public struct Basket
         {
-            public static int BasketProductImageMaxWidth = 250;
-            public static int BasketProductImageMaxHeight = 100;
+            public static readonly int BasketProductImageMaxWidth = 250;
+            public static readonly int BasketProductImageMaxHeight = 100;
         }
     }
 }

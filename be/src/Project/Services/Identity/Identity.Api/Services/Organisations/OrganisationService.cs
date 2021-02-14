@@ -54,8 +54,6 @@ namespace Identity.Api.Services.Organisations
 
         public async Task<OrganisationServiceModel> GetAsync(GetSellerModel serviceModel)
         {
-            var result = new OrganisationServiceModel();
-
             var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == serviceModel.Id && x.IsSeller && x.IsActive);
 
             return await this.GetOrganisationAsync(organisation, serviceModel.Language);

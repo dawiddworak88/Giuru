@@ -32,7 +32,7 @@ function ConfirmationDialog(props) {
             </DialogActions>
         </Dialog>
     );
-};
+}
 
 ConfirmationDialog.propTypes = {
 

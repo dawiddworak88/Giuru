@@ -144,7 +144,7 @@ namespace Catalog.Api.v1.Categories.Controllers
                         CreatedDate = category.CreatedDate
                     };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, category);
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
                 else
                 {

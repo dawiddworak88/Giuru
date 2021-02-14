@@ -1,5 +1,5 @@
 import { createMuiTheme } from "@material-ui/core/styles";
-import * as locales from '@material-ui/core/locale';
+import * as locales from "@material-ui/core/locale";
 
 export default class GlobalHelper {
 

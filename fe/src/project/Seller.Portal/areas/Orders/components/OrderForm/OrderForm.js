@@ -3,11 +3,11 @@ import { toast } from "react-toastify";
 import { UploadCloud } from "react-feather";
 import { useDropzone } from "react-dropzone";
 import PropTypes from "prop-types";
-import MomentUtils from '@date-io/moment';
+import MomentUtils from "@date-io/moment";
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker,
-} from '@material-ui/pickers';
+} from "@material-ui/pickers";
 import Autosuggest from "react-autosuggest";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -110,8 +110,8 @@ function OrderForm(props) {
             imageId: product.images ? product.images[0] : null,
             quantity,
             externalReference,
-            deliveryFrom: moment(deliveryFrom).startOf('day'),
-            deliveryTo: moment(deliveryTo).startOf('day'),
+            deliveryFrom: moment(deliveryFrom).startOf("day"),
+            deliveryTo: moment(deliveryTo).startOf("day"),
             moreInfo
         };
 
@@ -237,7 +237,7 @@ function OrderForm(props) {
 
         var order = {
 
-            basketId: basketId,
+            basketId,
             clientId: client.id,
             clientName: client.name
         };
@@ -265,7 +265,7 @@ function OrderForm(props) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
-    }
+    };
 
     const handleBackToOrdersClick = (e) => {
 
@@ -420,7 +420,7 @@ function OrderForm(props) {
                                             position: "start"
                                         }}
                                         KeyboardButtonProps={{
-                                            'aria-label': props.changeDeliveryFromLabel,
+                                            "aria-label": props.changeDeliveryFromLabel
                                         }} />
                                 </MuiPickersUtilsProvider>
                             </div>
@@ -446,7 +446,7 @@ function OrderForm(props) {
                                             position: "start"
                                         }}
                                         KeyboardButtonProps={{
-                                            'aria-label': props.changeDeliveryToLabel,
+                                            "aria-label": props.changeDeliveryToLabel
                                         }} />
                                 </MuiPickersUtilsProvider>
                             </div>
@@ -561,8 +561,6 @@ OrderForm.propTypes = {
     orderItemsLabel: PropTypes.string.isRequired,
     changeDeliveryFromLabel: PropTypes.string.isRequired,
     changeDeliveryToLabel: PropTypes.string.isRequired,
-    deliveryToLabel: PropTypes.string.isRequired,
-    moreInfoLabel: PropTypes.string.isRequired,
     clientRequiredErrorMessage: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
     addText: PropTypes.string.isRequired,

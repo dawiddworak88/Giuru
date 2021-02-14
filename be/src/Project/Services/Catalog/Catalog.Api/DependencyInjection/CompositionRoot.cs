@@ -75,7 +75,7 @@ namespace Catalog.Api.DependencyInjection
             {
                 var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
 
-                var factory = new ConnectionFactory()
+                var factory = new ConnectionFactory
                 {
                     HostName = configuration["EventBusConnection"],
                     DispatchConsumersAsync = true
