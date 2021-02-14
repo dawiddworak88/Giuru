@@ -63,7 +63,7 @@ namespace Basket.Api
             {
                 var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
 
-                var factory = new ConnectionFactory()
+                var factory = new ConnectionFactory
                 {
                     HostName = Configuration["EventBusConnection"],
                     DispatchConsumersAsync = true

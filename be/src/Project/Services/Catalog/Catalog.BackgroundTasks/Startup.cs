@@ -2,7 +2,6 @@ using Catalog.BackgroundTasks.DependencyInjection;
 using Catalog.BackgroundTasks.IntegrationEvents;
 using Foundation.Catalog.DependencyInjection;
 using Foundation.EventBus.Abstractions;
-using Foundation.EventBusRabbitMq;
 using Foundation.EventLog.DependencyInjection;
 using Foundation.Extensions.Filters;
 using Foundation.Localization.Definitions;
@@ -10,10 +9,8 @@ using Foundation.Localization.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
-using RabbitMQ.Client;
 
 namespace Catalog.BackgroundTasks
 {
@@ -48,19 +45,6 @@ namespace Catalog.BackgroundTasks
             services.RegisterCatalogBaseDependencies();
 
             services.RegisterCatalogBackgroundTasksDependencies();
-
-            services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
-            {
-                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
-
-                var factory = new ConnectionFactory
-                {
-                    HostName = Configuration["EventBusConnection"],
-                    DispatchConsumersAsync = true
-                };
-
-                return new DefaultRabbitMQPersistentConnection(factory, logger, int.Parse(Configuration["EventBusRetryCount"]));
-            });
         }
 
         public void Configure(IApplicationBuilder app, IOptionsMonitor<LocalizationSettings> localizationSettings)

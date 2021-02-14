@@ -61,8 +61,6 @@ namespace Identity.Api.Services.Organisations
 
         public async Task<OrganisationServiceModel> GetAsync(GetOrganisationModel serviceModel)
         {
-            var result = new OrganisationServiceModel();
-
             var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.ContactEmail == serviceModel.Email && x.IsActive);
 
             return await this.GetOrganisationAsync(organisation, serviceModel.Language);

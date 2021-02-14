@@ -178,6 +178,7 @@ namespace Client.Api.v1.Controllers
                         Id = client.Id,
                         Email = client.Email,
                         Name = client.Name,
+                        CommunicationLanguage = client.CommunicationLanguage,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };

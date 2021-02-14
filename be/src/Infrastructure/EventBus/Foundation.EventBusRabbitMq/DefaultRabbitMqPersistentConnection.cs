@@ -21,7 +21,7 @@ namespace Foundation.EventBusRabbitMq
 
         readonly object sync_root = new object();
 
-        public DefaultRabbitMQPersistentConnection(IConnectionFactory connectionFactory, ILogger<DefaultRabbitMQPersistentConnection> logger, int retryCount = 5)
+        public DefaultRabbitMQPersistentConnection(IConnectionFactory connectionFactory, ILogger<DefaultRabbitMQPersistentConnection> logger, int retryCount)
         {
             _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -115,7 +115,10 @@ namespace Foundation.EventBusRabbitMq
 
         void OnCallbackException(object sender, CallbackExceptionEventArgs e)
         {
-            if (_disposed) return;
+            if (_disposed)
+            {
+                return;
+            }
 
             _logger.LogWarning("A RabbitMQ connection throw exception. Trying to re-connect...");
 

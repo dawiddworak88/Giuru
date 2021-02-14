@@ -24,7 +24,7 @@ function EditOrderForm(props) {
         var orderStatus = {
 
             orderId: props.id,
-            orderStatusId: orderStatusId
+            orderStatusId
         };
 
         const requestOptions = {

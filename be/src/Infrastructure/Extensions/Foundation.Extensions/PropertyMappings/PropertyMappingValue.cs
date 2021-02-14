@@ -8,8 +8,7 @@ namespace Foundation.Extensions.PropertyMappings
         public IEnumerable<string> DestinationProperties { get; private set; }
         public bool Revert { get; private set; }
 
-        public PropertyMappingValue(IEnumerable<string> destinationProperties,
-            bool revert = false)
+        public PropertyMappingValue(IEnumerable<string> destinationProperties, bool revert)
         {
             DestinationProperties = destinationProperties
                 ?? throw new ArgumentNullException(nameof(destinationProperties));

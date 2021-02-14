@@ -274,7 +274,12 @@ namespace Foundation.EventBusRabbitMq
                         if (subscription.IsDynamic)
                         {
                             var handler = scope.ServiceProvider.GetService(subscription.HandlerType) as IDynamicIntegrationEventHandler;
-                            if (handler == null) continue;
+                            
+                            if (handler == null)
+                            {
+                                continue;
+                            }
+
                             dynamic eventData = JObject.Parse(message);
 
                             await Task.Yield();
