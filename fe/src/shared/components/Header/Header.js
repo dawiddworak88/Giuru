@@ -1,22 +1,22 @@
 import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ListItem from '@material-ui/core/ListItem';
+import clsx from "clsx";
+import { makeStyles } from "@material-ui/core/styles";
+import Drawer from "@material-ui/core/Drawer";
+import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import ListItem from "@material-ui/core/ListItem";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 import ColorConstants from "../../constants/ColorConstants";
 import * as Icon from "react-feather";
 
 const useStyles = makeStyles({
     fullList: {
-        width: 'auto'
+        width: "auto"
     },
     darkMenuColor: {
         color: ColorConstants.swampColor()
@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 });
 
 const drawerStyles = {
-    width: '63px',
+    width: "63px",
     borderRadius: 0
 };
 

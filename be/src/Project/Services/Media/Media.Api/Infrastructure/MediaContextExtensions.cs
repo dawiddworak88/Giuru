@@ -1,5 +1,5 @@
 ﻿using Media.Api.Infrastructure.Media.Seeds;
-using Media.Api.Shared.Checksums;
+using Media.Api.Services.Checksums;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;

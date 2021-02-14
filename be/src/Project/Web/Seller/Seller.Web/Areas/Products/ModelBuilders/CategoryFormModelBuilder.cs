@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Products.Definitons;
+using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Areas.Products.ViewModels;
 using Seller.Web.Shared.Configurations;
@@ -69,11 +70,12 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             var parentCategories = await this.categoriesRepository.GetAllCategoriesAsync(
                 componentModel.Token,
                 componentModel.Language,
-                null);
+                null,
+                $"{nameof(Category.Level)},{nameof(Category.Name)}");
 
             if (parentCategories != null)
             {
-                viewModel.ParentCategories = parentCategories.OrderBy(x => x.Level).ThenBy(x => x.Name).Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
+                viewModel.ParentCategories = parentCategories.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
             if (componentModel.Id.HasValue)

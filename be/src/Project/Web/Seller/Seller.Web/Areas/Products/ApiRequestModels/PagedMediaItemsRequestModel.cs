@@ -4,6 +4,5 @@ namespace Seller.Web.Areas.Products.ApiRequestModels
 {
     public class PagedMediaItemsRequestModel : PagedRequestModelBase
     {
-        public string Ids { get; set; }
     }
 }

@@ -132,14 +132,23 @@
   <data name="By" xml:space="preserve">
     <value>od</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anuluj</value>
+  </data>
   <data name="Cards" xml:space="preserve">
     <value>Karty</value>
   </data>
   <data name="Categories" xml:space="preserve">
     <value>Kategorie</value>
   </data>
+  <data name="Client" xml:space="preserve">
+    <value>Klient</value>
+  </data>
   <data name="ClientHostExistsErrorMessage" xml:space="preserve">
     <value>Klient o podanym hoście został już wcześniej dodany</value>
+  </data>
+  <data name="ClientName" xml:space="preserve">
+    <value>Nazwa klienta</value>
   </data>
   <data name="Clients" xml:space="preserve">
     <value>Klienci</value>
@@ -270,11 +279,23 @@
   <data name="NoResultsLabel" xml:space="preserve">
     <value>Brak wyników.</value>
   </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
   <data name="Open" xml:space="preserve">
     <value>Otwórz</value>
   </data>
+  <data name="Or" xml:space="preserve">
+    <value>lub</value>
+  </data>
   <data name="Orders" xml:space="preserve">
     <value>Zamówienia</value>
+  </data>
+  <data name="OrderStatus" xml:space="preserve">
+    <value>Status zamówienia</value>
+  </data>
+  <data name="OrganisationExistsAlready" xml:space="preserve">
+    <value>Organizacja już istnieje.</value>
   </data>
   <data name="ParentCategory" xml:space="preserve">
     <value>Kategoria nadrzędna</value>
@@ -305,6 +326,12 @@
   </data>
   <data name="Regulations" xml:space="preserve">
     <value>Regulamin</value>
+  </data>
+  <data name="ReindexingTriggeredSuccessfully" xml:space="preserve">
+    <value>Proces przebudowywania indeksu rozpoczął się pomyślnie.</value>
+  </data>
+  <data name="ReindexProducts" xml:space="preserve">
+    <value>Przeindeksuj produkty</value>
   </data>
   <data name="Results" xml:space="preserve">
     <value>wyniki</value>

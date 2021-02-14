@@ -16,6 +16,7 @@ using Foundation.Extensions.Filters;
 using Seller.Web.Areas.Media.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.Extensions.Options;
+using Seller.Web.Areas.Settings.DependencyInjection;
 
 namespace Seller.Portal
 {
@@ -54,6 +55,8 @@ namespace Seller.Portal
             services.RegisterClientsAreaDependencies();
 
             services.RegisterProductsAreaDependencies();
+
+            services.RegisterSettingsAreaDependencies();
 
             services.RegisterMediaAreaDependencies();
 

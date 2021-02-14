@@ -9,8 +9,8 @@ namespace Seller.Web.Areas.Products.Repositories
     public interface ICategoriesRepository
     {
         Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? parentCategoryId, string name, IEnumerable<Guid> files);
-        Task<PagedResults<IEnumerable<Category>>> GetCategoriesAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage);
-        Task<IEnumerable<Category>> GetAllCategoriesAsync(string token, string language, bool? leafOnly);
+        Task<PagedResults<IEnumerable<Category>>> GetCategoriesAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
+        Task<IEnumerable<Category>> GetAllCategoriesAsync(string token, string language, bool? leafOnly, string orderBy);
         Task DeleteAsync(string token, string language, Guid? id);
         Task<Category> GetCategoryAsync(string token, string language, Guid? id);
     }

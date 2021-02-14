@@ -60,6 +60,16 @@ services:
     volumes:
       - mssqldata:/var/opt/mssql
 
+  eventlogging-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sqldata;Database=EventLoggingDb;User Id=sa;Password=Gre@tPassw0rd
+      - SeqUrl=http://seq
+      - SupportedCultures=${SUPPORTED_CULTURES}
+      - DefaultCulture=${DEFAULT_CULTURE}
+    ports:
+      - "5111:80"
+
   media-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -72,13 +82,26 @@ services:
     ports:
       - "5131:80"
 
+  client-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sqldata;Database=ClientDb;User Id=sa;Password=Gre@tPassw0rd
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - SeqUrl=http://seq
+      - SupportedCultures=${SUPPORTED_CULTURES}
+      - DefaultCulture=${DEFAULT_CULTURE}
+    ports:
+      - "5133:80"
+
   catalog-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Password=Gre@tPassw0rd
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
-      - EventBusConnection=http://rabbitmq
+      - EventLoggingUrl=http://eventlogging-api
+      - EventBusConnection=rabbitmq
+      - EventBusRetryCount=5
       - ElasticsearchUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:9200
       - SeqUrl=http://seq
       - ElasticsearchIndex=catalog
@@ -87,6 +110,23 @@ services:
       - DefaultCulture=${DEFAULT_CULTURE}
     ports:
       - "5101:80"
+
+  catalog-backgroundtasks:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sqldata;Database=CatalogDb;User Id=sa;Password=Gre@tPassw0rd
+      - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventLoggingUrl=http://eventlogging-api
+      - EventBusConnection=rabbitmq
+      - EventBusRetryCount=5
+      - ElasticsearchUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:9200
+      - SeqUrl=http://seq
+      - ElasticsearchIndex=catalog
+      - SupportedCultures=${SUPPORTED_CULTURES}
+      - DefaultCulture=${DEFAULT_CULTURE}
+    ports:
+      - "5132:80"
 
   identity-api:
     environment:
@@ -114,10 +154,12 @@ services:
   basket-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=http://basketdata
+      - ConnectionString=basketdata
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventLoggingUrl=http://eventlogging-api
       - SeqUrl=http://seq
-      - EventBusConnection=http://rabbitmq
+      - EventBusConnection=rabbitmq
+      - EventBusRetryCount=5
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
     ports:
@@ -126,11 +168,15 @@ services:
   ordering-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sqldata;Database=OrderingDb;User Id=sa;Password=Gre@tPassw0rd
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventLoggingUrl=http://eventlogging-api
       - SeqUrl=http://seq
-      - EventBusConnection=http://rabbitmq
+      - EventBusConnection=rabbitmq
+      - EventBusRetryCount=5
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
+      - OrderStatuses=287ee71a-d87f-4563-833a-8e2771d1e5a5%26a73d4e41-1ff0-4eb5-929d-ed0aa1f52c2a%2610000%26New%26Erstellt%26Nowe%3B578480b3-15ef-492d-9f86-9827789c6804%2677e3aee6-6053-4d95-bbb5-fc2ebfa4f0de%2620000%26Processing%26In%20Bearbeitung%26W%20trakcie%20realizacji%3B3f48aaba-0ea5-4654-b753-4f3109f81bc5%26e071521b-682b-4a69-9070-be5782cbb223%2630000%26Complete%26Fertig%26Zrealizowane%3Bfc24e7e2-020b-4110-9415-7184ec837e71%26877d5f96-871f-406e-8d8b-d32bea48bf40%2640000%26Closed%26Abgeschlossen%26Zamkni%C4%99te%3B4fcdefc0-8181-490c-9378-fe96d234ccc9%265c192db0-af69-49b5-aebd-be1a02fc93ab%2650000%26Canceled%26Storniert%26Anulowane%3Be9fa4fc3-36c7-48ec-bf90-df9901867a38%26b2dc9bd0-444f-4e96-8708-715f7e416e18%2660000%26On%20Hold%26Gehalten%26Wstrzymane
     ports:
       - "5102:80"
 
@@ -138,6 +184,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventLoggingUrl=http://eventlogging-api
       - SeqUrl=http://seq
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
@@ -161,6 +208,9 @@ services:
       - ClientId=663bba90-0036-4a58-8516-39faa8baba87
       - ClientSecret=c61fcb32-cf9b-4cdd-84dc-4a1b173c36e9
       - CatalogUrl=http://catalog-api
+      - BasketUrl=http://basket-api
+      - ClientUrl=http://client-api
+      - OrderUrl=http://ordering-api
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - SeqUrl=http://seq

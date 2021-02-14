@@ -1,5 +1,6 @@
 ﻿using Catalog.Api.Infrastructure.Categories.Definitions;
-using Catalog.Api.Infrastructure.Categories.Entites;
+using Foundation.Catalog.Infrastructure;
+using Foundation.Catalog.Infrastructure.Categories.Entites;
 using Foundation.GenericRepository.Extensions;
 using System;
 using System.Linq;

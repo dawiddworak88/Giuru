@@ -18,6 +18,9 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.9.1
     restart: always
 
+  basketdata:
+    image: redis:alpine
+
   kibana:
     image: docker.elastic.co/kibana/kibana:7.9.1
     restart: always
@@ -39,6 +42,16 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
     restart: always
 
+  eventlogging-api:
+    image: ${REGISTRY:-giuru}/eventlogging-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/EventLogging/EventLogging.Api/Dockerfile
+    restart: always
+    depends_on:
+      - sqldata
+      - seq
+
   media-api:
     image: ${REGISTRY:-giuru}/media-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
@@ -47,6 +60,15 @@ services:
     restart: always
     depends_on:
       - azurite
+      - sqldata
+
+  client-api:
+    image: ${REGISTRY:-giuru}/client-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Client/Client.Api/Dockerfile
+    restart: always
+    depends_on: 
       - sqldata
 
   catalog-api:
@@ -59,7 +81,20 @@ services:
       - sqldata
       - elasticsearch
       - rabbitmq
+      - eventlogging-api
       - media-api
+
+  catalog-backgroundtasks:
+    image: ${REGISTRY:-giuru}/catalog-backgroundtasks:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Catalog/Catalog.BackgroundTasks/Dockerfile
+    restart: always
+    depends_on: 
+      - catalog-api
+      - eventlogging-api
+      - sqldata
+      - rabbitmq
 
   identity-api:
     image: ${REGISTRY:-giuru}/identity-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -71,9 +106,6 @@ services:
       - sqldata
       - react-ssr
 
-  basketdata:
-    image: redis:alpine
-
   basket-api:
     image: ${REGISTRY:-giuru}/basket-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
@@ -83,6 +115,7 @@ services:
       - basketdata
       - identity-api
       - rabbitmq
+      - eventlogging-api
 
   ordering-api:
     image: ${REGISTRY:-giuru}/ordering-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -92,6 +125,7 @@ services:
     depends_on:
       - catalog-api
       - rabbitmq
+      - eventlogging-api
 
   inventory-api:
     image: ${REGISTRY:-giuru}/inventory-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -101,6 +135,7 @@ services:
     depends_on:
       - catalog-api
       - sqldata
+      - eventlogging-api
 
   content-api:
     image: ${REGISTRY:-giuru}/content-api:${PLATFORM:-linux}-${TAG:-latest}
@@ -109,6 +144,7 @@ services:
       dockerfile: Project/Services/Content/Content.Api/Dockerfile
     depends_on:
       - sqldata
+      - eventlogging-api
 
   seller-web:
     image: ${REGISTRY:-giuru}/seller-web:${PLATFORM:-linux}-${TAG:-latest}

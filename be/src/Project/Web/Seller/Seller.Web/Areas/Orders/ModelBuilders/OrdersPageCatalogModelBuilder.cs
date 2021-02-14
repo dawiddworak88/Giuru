@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Threading.Tasks;
-using Seller.Web.Areas.Orders.Repositories;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Seller.Web.Shared.ViewModels;
 using Seller.Web.Areas.Orders.DomainModels;
 using System.Collections.Generic;
 using Foundation.Extensions.ExtensionMethods;
+using Seller.Web.Areas.Orders.Repositories.Orders;
 
 namespace Seller.Web.Areas.Orders.ModelBuilders
 {
@@ -43,18 +43,19 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             viewModel.Title = this.orderLocalizer.GetString("Orders");
 
             viewModel.NewText = this.orderLocalizer.GetString("NewOrder");
-            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
             
-            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "OrdersApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "OrdersApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
-            
+
+            viewModel.OrderBy = $"{nameof(Order.CreatedDate)} desc";
+
             viewModel.Table = new CatalogTableViewModel
             {
                 Labels = new string[] 
                 { 
-                    this.globalLocalizer.GetString("Sku"),
-                    this.globalLocalizer.GetString("Name"),
+                    this.globalLocalizer.GetString("ClientName"),
+                    this.globalLocalizer.GetString("OrderStatus"),
                     this.globalLocalizer.GetString("LastModifiedDate"),
                     this.globalLocalizer.GetString("CreatedDate")
                 },
@@ -63,17 +64,18 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     new CatalogActionViewModel
                     {
                         IsEdit = true
-                    },
-                    new CatalogActionViewModel
-                    { 
-                        IsDelete = true
                     }
                 },
                 Properties = new List<CatalogPropertyViewModel>
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(Order.Id).ToCamelCase(),
+                        Title = nameof(Order.ClientName).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(Order.OrderStatusName).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
@@ -89,7 +91,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = new Foundation.GenericRepository.Paginations.PagedResults<IEnumerable<Order>>(0, 25); // await this.ordersRepository.GetOrdersAsync(componentModel.Token, componentModel.Language, null, componentModel.SellerId, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage);
+            viewModel.PagedItems = await this.ordersRepository.GetOrdersAsync(componentModel.Token, componentModel.Language, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, $"{nameof(Order.CreatedDate)} desc");
 
             return viewModel;
         }

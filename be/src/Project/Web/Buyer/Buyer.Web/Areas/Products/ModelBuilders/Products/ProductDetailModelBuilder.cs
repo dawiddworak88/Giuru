@@ -2,6 +2,7 @@
 using Buyer.Web.Areas.Products.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
+using Buyer.Web.Shared.Brands.DomainModels;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Files.ComponentModels;
 using Buyer.Web.Shared.Files.ViewModels;
@@ -98,7 +99,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 viewModel.Files = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = product.Files });
 
-                var productVariants = await this.productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token);
+                var productVariants = await this.productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token, nameof(Product.CreatedDate));
 
                 if (productVariants != null)
                 {

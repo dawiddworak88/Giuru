@@ -1,5 +1,6 @@
 ﻿using Catalog.Api.Infrastructure.Products.Definitions;
-using Catalog.Api.Infrastructure.Products.Entities;
+using Foundation.Catalog.Infrastructure;
+using Foundation.Catalog.Infrastructure.Products.Entities;
 using Foundation.GenericRepository.Extensions;
 using Microsoft.Extensions.Configuration;
 using System;

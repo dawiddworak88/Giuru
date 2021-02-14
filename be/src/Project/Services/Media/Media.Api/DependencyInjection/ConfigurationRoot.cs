@@ -1,7 +1,7 @@
 ﻿using Foundation.Localization.Definitions;
 using Media.Api.Configurations;
 using Media.Api.Infrastructure;
-using Media.Api.Shared.Checksums;
+using Media.Api.Services.Checksums;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

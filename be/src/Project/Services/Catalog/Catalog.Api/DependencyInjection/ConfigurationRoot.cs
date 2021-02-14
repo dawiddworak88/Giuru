@@ -1,6 +1,7 @@
 ﻿using Catalog.Api.Configurations;
 using Catalog.Api.Infrastructure;
-using Catalog.Api.v1.Areas.Products.Services;
+using Catalog.Api.Services.Products;
+using Foundation.Catalog.Infrastructure;
 using Foundation.Localization.Definitions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -24,22 +25,6 @@ namespace Catalog.Api.DependencyInjection
                 {
                     dbContext.Database.Migrate();
                     dbContext.EnsureSeeded(configuration);
-                }
-            }
-        }
-
-        public static void ConfigureSearchIndexing(this IApplicationBuilder app)
-        {
-            var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
-
-            using (var scope = scopeFactory.CreateScope())
-            {
-                var productService = scope.ServiceProvider.GetService<IProductsService>();
-
-                if (productService.IsEmptyAsync().Result)
-                {
-                    var task = Task.Run(async () => { await productService.IndexAllAsync(); });
-                    task.Wait();
                 }
             }
         }

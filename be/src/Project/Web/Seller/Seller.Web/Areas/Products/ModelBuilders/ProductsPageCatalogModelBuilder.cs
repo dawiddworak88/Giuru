@@ -48,7 +48,9 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-            
+
+            viewModel.OrderBy = $"{nameof(Product.CreatedDate)} desc";
+
             viewModel.Table = new CatalogTableViewModel
             {
                 Labels = new string[] 
@@ -94,7 +96,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.productsRepository.GetProductsAsync(componentModel.Token, componentModel.Language, null, componentModel.SellerId, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage);
+            viewModel.PagedItems = await this.productsRepository.GetProductsAsync(componentModel.Token, componentModel.Language, null, null, componentModel.SellerId, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, $"{nameof(Product.CreatedDate)} desc");
 
             return viewModel;
         }

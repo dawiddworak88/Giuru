@@ -132,11 +132,20 @@
   <data name="By" xml:space="preserve">
     <value>von</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
   <data name="Categories" xml:space="preserve">
     <value>Kategorien</value>
   </data>
+  <data name="Client" xml:space="preserve">
+    <value>Kunde</value>
+  </data>
   <data name="ClientHostExistsErrorMessage" xml:space="preserve">
     <value>Der Kunde wurde schon erstellt</value>
+  </data>
+  <data name="ClientName" xml:space="preserve">
+    <value>Kundenname</value>
   </data>
   <data name="Clients" xml:space="preserve">
     <value>Kunden</value>
@@ -270,11 +279,23 @@
   <data name="NoResultsLabel" xml:space="preserve">
     <value>Keine Ergebnisse.</value>
   </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
   <data name="Open" xml:space="preserve">
     <value>Öffnen</value>
   </data>
+  <data name="Or" xml:space="preserve">
+    <value>oder</value>
+  </data>
   <data name="Orders" xml:space="preserve">
     <value>Bestellungen</value>
+  </data>
+  <data name="OrderStatus" xml:space="preserve">
+    <value>Status der Bestellung</value>
+  </data>
+  <data name="OrganisationExistsAlready" xml:space="preserve">
+    <value>Die Organisation existiert schon.</value>
   </data>
   <data name="ParentCategory" xml:space="preserve">
     <value>Eltern-Kategorie</value>
@@ -305,6 +326,12 @@
   </data>
   <data name="Regulations" xml:space="preserve">
     <value>Geschäftsbedingungen</value>
+  </data>
+  <data name="ReindexingTriggeredSuccessfully" xml:space="preserve">
+    <value>Produktindex wird neu erstellt.</value>
+  </data>
+  <data name="ReindexProducts" xml:space="preserve">
+    <value>Produkte neu indizieren</value>
   </data>
   <data name="Results" xml:space="preserve">
     <value>Ergebnisse</value>

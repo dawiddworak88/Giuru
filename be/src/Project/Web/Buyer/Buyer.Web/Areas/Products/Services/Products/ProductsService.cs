@@ -1,5 +1,6 @@
 ﻿using Buyer.Web.Areas.Products.ModelBuilders.Definitions;
 using Buyer.Web.Areas.Products.Repositories.Products;
+using Buyer.Web.Shared.Brands.DomainModels;
 using Buyer.Web.Shared.Catalogs.ViewModels;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Shared.Definitions;
@@ -38,7 +39,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
         {
             var catalogItemList = new List<CatalogItemViewModel>();
 
-            var pagedProducts = await this.productsRepository.GetProductsAsync(null, categoryId, sellerId, language, searchTerm, pageIndex, itemsPerPage, token);
+            var pagedProducts = await this.productsRepository.GetProductsAsync(null, categoryId, sellerId, language, searchTerm, pageIndex, itemsPerPage, token, nameof(Product.Name));
 
             if (pagedProducts?.Data != null)
             {

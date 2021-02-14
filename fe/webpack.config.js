@@ -195,12 +195,14 @@ var sellerPortalBrowserConfig = {
     entry: {
         orderspage: ["./src/project/Seller.Portal/areas/Orders/pages/OrdersPage/index.js", "./src/project/Seller.Portal/areas/Orders/pages/OrdersPage/OrdersPage.scss"],
         orderpage: ["./src/project/Seller.Portal/areas/Orders/pages/OrderPage/index.js", "./src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage.scss"],
+        editorderpage: ["./src/project/Seller.Portal/areas/Orders/pages/EditOrderPage/index.js", "./src/project/Seller.Portal/areas/Orders/pages/EditOrderPage/EditOrderPage.scss"],
         clientspage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientsPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientsPage/ClientsPage.scss"],
         clientpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage.scss"],
         productspage: ["./src/project/Seller.Portal/areas/Products/pages/ProductsPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/ProductsPage/ProductsPage.scss"],
         productpage: ["./src/project/Seller.Portal/areas/Products/pages/ProductPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage.scss"],
         categoriespage: ["./src/project/Seller.Portal/areas/Products/pages/CategoriesPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/CategoriesPage/CategoriesPage.scss"],
-        categorypage: ["./src/project/Seller.Portal/areas/Products/pages/CategoryPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/CategoryPage/CategoryPage.scss"]
+        categorypage: ["./src/project/Seller.Portal/areas/Products/pages/CategoryPage/index.js", "./src/project/Seller.Portal/areas/Products/pages/CategoryPage/CategoryPage.scss"],
+        settingspage: ["./src/project/Seller.Portal/areas/Settings/pages/SettingsPage/index.js", "./src/project/Seller.Portal/areas/Settings/pages/SettingsPage/SettingsPage.scss"]
     },
     output: {
         publicPath: path.resolve(__dirname, "../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),

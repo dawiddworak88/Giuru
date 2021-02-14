@@ -10,7 +10,7 @@ using System.Globalization;
 using Seller.Web.Areas.Clients.ViewModels;
 using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
-using Seller.Web.Areas.Clients.Repositories;
+using Seller.Web.Shared.Repositories.Clients;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -50,6 +50,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             var viewModel = new ClientFormViewModel
             {
+                Title = this.clientLocalizer.GetString("EditClient"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 ClientDetailText = this.clientLocalizer.GetString("Client"),
                 NameLabel = this.globalLocalizer.GetString("NameLabel"),

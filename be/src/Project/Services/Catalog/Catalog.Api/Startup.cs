@@ -1,7 +1,4 @@
-using Catalog.Api.v1.Areas.Schemas.DependencyInjection;
-using Catalog.Api.v1.Areas.Products.DependencyInjection;
 using Foundation.Mailing.DependencyInjection;
-using Catalog.Api.v1.Areas.Taxonomies.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,11 +9,12 @@ using System.IO;
 using System.Reflection;
 using Foundation.Account.DependencyInjection;
 using Catalog.Api.DependencyInjection;
-using Catalog.Api.v1.Areas.Categories.DependencyInjection;
 using Foundation.Extensions.Filters;
 using Microsoft.Extensions.Options;
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
+using Foundation.Catalog.DependencyInjection;
+using Foundation.EventLog.DependencyInjection;
 
 namespace Catalog.Api
 {
@@ -42,19 +40,19 @@ namespace Catalog.Api
 
             services.RegisterDatabaseDependencies(this.Configuration);
 
-            services.RegisterCategoryDependencies();
+            services.RegisterCatalogBaseDependencies();
 
-            services.RegisteSchemaDependencies();
-
-            services.RegisterTaxonomyDependencies();
-
-            services.RegisterProductDependencies();
+            services.RegisterCatalogApiDependencies();
 
             services.RegisterMailingDependencies(this.Configuration);
 
             services.AddApiVersioning();
 
             services.RegisterSearchDependencies(this.Configuration);
+
+            services.RegisterEventBus(this.Configuration);
+
+            services.RegisterEventLogDependencies();
 
             services.ConfigureSettings(this.Configuration);
 
@@ -75,8 +73,6 @@ namespace Catalog.Api
             app.UseSwagger();
 
             app.ConfigureDatabaseMigrations(this.Configuration);
-
-            app.ConfigureSearchIndexing();
 
             app.UseSwaggerUI(c =>
             {
