@@ -354,9 +354,7 @@ export function getUiOptions(uiSchema) {
             const value = uiSchema[key];
 
             if (key === "ui:widget" && isObject(value)) {
-                console.warn(
-                    "Setting options via ui:widget object is deprecated, use ui:options instead"
-                );
+
                 return {
                     ...options,
                     ...(value.options || {}),
@@ -520,9 +518,6 @@ export function isFixedItems(schema) {
 }
 
 export function allowAdditionalItems(schema) {
-    if (schema.additionalItems === true) {
-        console.warn("additionalItems=true is currently not supported");
-    }
     return isObject(schema.additionalItems);
 }
 
@@ -667,7 +662,6 @@ export function retrieveSchema(schema, rootSchema = {}, formData = {}) {
                 allOf: resolvedSchema.allOf,
             });
         } catch (e) {
-            console.warn("could not merge subschemas in allOf:\n" + e);
             const { allOf, ...resolvedSchemaWithoutAllOf } = resolvedSchema;
             return resolvedSchemaWithoutAllOf;
         }
@@ -821,9 +815,6 @@ function withExactlyOneSubschema(
         return true;
     });
     if (validSubschemas.length !== 1) {
-        console.warn(
-            "ignoring oneOf in dependencies because there isn't exactly one subschema that is valid"
-        );
         return schema;
     }
     const subschema = validSubschemas[0];

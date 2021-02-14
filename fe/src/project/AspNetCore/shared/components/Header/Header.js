@@ -85,7 +85,7 @@ function Header(props) {
 
             NavigationHelper.redirect(props.searchUrl + "?searchTerm=" + encodeURI(searchTerm));
         }
-    }
+    };
 
     const searchInputProps = {
         placeholder: props.searchPlaceholderLabel,

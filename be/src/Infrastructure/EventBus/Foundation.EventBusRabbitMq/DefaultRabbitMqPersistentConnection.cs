@@ -48,7 +48,10 @@ namespace Foundation.EventBusRabbitMq
 
         public void Dispose()
         {
-            if (_disposed) return;
+            if (_disposed)
+            {
+                return;
+            }
 
             _disposed = true;
 

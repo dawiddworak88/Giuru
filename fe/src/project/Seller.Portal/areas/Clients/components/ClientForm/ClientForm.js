@@ -52,7 +52,7 @@ function ClientForm(props) {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(state)
-        };
+        }
 
         fetch(props.saveUrl, requestOptions)
             .then(function (response) {

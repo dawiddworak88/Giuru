@@ -288,7 +288,12 @@ namespace Foundation.EventBusRabbitMq
                         else
                         {
                             var handler = scope.ServiceProvider.GetService(subscription.HandlerType);
-                            if (handler == null) continue;
+
+                            if (handler == null)
+                            {
+                                continue;
+                            }
+
                             var eventType = subsManager.GetEventTypeByName(eventName);
                             var integrationEvent = JsonConvert.DeserializeObject(message, eventType);
                             var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
