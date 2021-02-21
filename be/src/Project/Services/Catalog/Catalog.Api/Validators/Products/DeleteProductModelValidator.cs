@@ -8,7 +8,7 @@ namespace Catalog.Api.Validators.Products
     {
         public DeleteProductModelValidator()
         {
-            RuleFor(x => x.Id).NotNull();
+            RuleFor(x => x.Id).NotNull().NotEmpty();
         }
     }
 }

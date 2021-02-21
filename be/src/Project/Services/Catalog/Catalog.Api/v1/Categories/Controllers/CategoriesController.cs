@@ -84,7 +84,6 @@ namespace Catalog.Api.v1.Categories.Controllers
                             Name = x.Name,
                             Order = x.Order,
                             ParentId = x.ParentId,
-                            SchemaId = x.SchemaId,
                             ThumbnailMediaId = x.ThumbnailMediaId,
                             ParentCategoryName = x.ParentCategoryName,
                             LastModifiedDate = x.LastModifiedDate,
@@ -138,7 +137,6 @@ namespace Catalog.Api.v1.Categories.Controllers
                         Order = category.Order,
                         ParentCategoryName = category.ParentCategoryName,
                         ParentId = category.ParentId,
-                        SchemaId = category.SchemaId,
                         ThumbnailMediaId = category.ThumbnailMediaId,
                         LastModifiedDate = category.LastModifiedDate,
                         CreatedDate = category.CreatedDate
@@ -201,7 +199,6 @@ namespace Catalog.Api.v1.Categories.Controllers
                             Order = category.Order,
                             ParentCategoryName = category.ParentCategoryName,
                             ParentId = category.ParentId,
-                            SchemaId = category.SchemaId,
                             ThumbnailMediaId = category.ThumbnailMediaId,
                             LastModifiedDate = category.LastModifiedDate,
                             CreatedDate = category.CreatedDate
@@ -244,7 +241,6 @@ namespace Catalog.Api.v1.Categories.Controllers
                             Order = category.Order,
                             ParentCategoryName = category.ParentCategoryName,
                             ParentId = category.ParentId,
-                            SchemaId = category.SchemaId,
                             ThumbnailMediaId = category.ThumbnailMediaId,
                             LastModifiedDate = category.LastModifiedDate,
                             CreatedDate = category.CreatedDate

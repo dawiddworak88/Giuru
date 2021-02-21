@@ -295,7 +295,7 @@ namespace Catalog.Api.v1.Products.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [AllowAnonymous]
         public async Task<IActionResult> GetById(Guid? id)
@@ -361,7 +361,7 @@ namespace Catalog.Api.v1.Products.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [Route("sku/{sku}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [AllowAnonymous]
         public async Task<IActionResult> GetBySku(string sku)

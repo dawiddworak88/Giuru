@@ -41,7 +41,6 @@ namespace Catalog.Api.Services.Categories
                              join pct in this.context.CategoryTranslations on c.Parentid equals pct.CategoryId into pctg
                              from w in pctg.DefaultIfEmpty()
                              where x.Language == model.Language && (w.Language == model.Language || w.Language == null) && c.IsActive
-                             orderby c.Order
                              select new CategoryServiceModel
                              {
                                  Id = c.Id,
@@ -49,7 +48,6 @@ namespace Catalog.Api.Services.Categories
                                  Level = c.Level,
                                  IsLeaf = c.IsLeaf,
                                  ParentId = c.Parentid,
-                                 SchemaId = c.SchemaId,
                                  ParentCategoryName = w.Name,
                                  Name = x.Name,
                                  ThumbnailMediaId = y.MediaId,
@@ -93,7 +91,6 @@ namespace Catalog.Api.Services.Categories
                                  Level = c.Level,
                                  IsLeaf = c.IsLeaf,
                                  ParentId = c.Parentid,
-                                 SchemaId = c.SchemaId,
                                  Name = x.Name,
                                  ThumbnailMediaId = y.MediaId
                              };

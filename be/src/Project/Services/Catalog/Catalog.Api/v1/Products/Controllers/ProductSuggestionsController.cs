@@ -33,7 +33,7 @@ namespace Catalog.Api.v1.Products.Controllers
         /// <returns>The list of suggestions</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(IEnumerable<string>))]
-        [ProducesResponseType(400)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Get(string searchTerm, int size)
         {
             var serviceModel = new GetProductSuggestionsServiceModel

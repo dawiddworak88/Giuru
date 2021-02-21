@@ -13,6 +13,7 @@ using Foundation.EventBusRabbitMq;
 using Microsoft.Extensions.Logging;
 using Foundation.EventBus;
 using RabbitMQ.Client;
+using Catalog.Api.Services.ProductAttributes;
 
 namespace Catalog.Api.DependencyInjection
 {
@@ -24,6 +25,7 @@ namespace Catalog.Api.DependencyInjection
 
             services.AddScoped<IProductSearchRepository, ProductSearchRepository>();
             services.AddScoped<IProductsService, ProductsService>();
+            services.AddScoped<IProductAttributesService, ProductAttributesService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)

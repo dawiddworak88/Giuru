@@ -33,7 +33,6 @@ namespace Catalog.Api.Infrastructure.Migrations
                     RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    SchemaId = table.Column<Guid>(nullable: false),
                     Level = table.Column<int>(nullable: false),
                     Order = table.Column<int>(nullable: false),
                     Parentid = table.Column<Guid>(nullable: true),
@@ -60,6 +59,25 @@ namespace Catalog.Api.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CategoryImages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductAttributes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    Key = table.Column<string>(nullable: false),
+                    SellerId = table.Column<Guid>(nullable: false),
+                    Order = table.Column<int>(nullable: true),
+                    Tags = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductAttributes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -114,6 +132,31 @@ namespace Catalog.Api.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductVideos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CategorySchemas",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    Schema = table.Column<string>(nullable: true),
+                    UiSchema = table.Column<string>(nullable: true),
+                    Language = table.Column<string>(nullable: true),
+                    CategoryId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategorySchemas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CategorySchemas_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -174,6 +217,55 @@ namespace Catalog.Api.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductAttributeItems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    ProductAttributeId = table.Column<Guid>(nullable: false),
+                    SellerId = table.Column<Guid>(nullable: false),
+                    Order = table.Column<int>(nullable: true),
+                    Tags = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductAttributeItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductAttributeItems_ProductAttributes_ProductAttributeId",
+                        column: x => x.ProductAttributeId,
+                        principalTable: "ProductAttributes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductAttributeTranslations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    Language = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    ProductAttributeId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductAttributeTranslations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductAttributeTranslations_ProductAttributes_ProductAttributeId",
+                        column: x => x.ProductAttributeId,
+                        principalTable: "ProductAttributes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductTranslations",
                 columns: table => new
                 {
@@ -199,10 +291,55 @@ namespace Catalog.Api.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ProductAttributeItemTranslations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    Language = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    ProductAttribtuteItemId = table.Column<Guid>(nullable: false),
+                    ProductAttributeItemId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductAttributeItemTranslations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductAttributeItemTranslations_ProductAttributeItems_ProductAttributeItemId",
+                        column: x => x.ProductAttributeItemId,
+                        principalTable: "ProductAttributeItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CategorySchemas_CategoryId",
+                table: "CategorySchemas",
+                column: "CategoryId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_CategoryTranslations_CategoryId",
                 table: "CategoryTranslations",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductAttributeItems_ProductAttributeId",
+                table: "ProductAttributeItems",
+                column: "ProductAttributeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductAttributeItemTranslations_ProductAttributeItemId",
+                table: "ProductAttributeItemTranslations",
+                column: "ProductAttributeItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductAttributeTranslations_ProductAttributeId",
+                table: "ProductAttributeTranslations",
+                column: "ProductAttributeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_BrandId",
@@ -226,7 +363,16 @@ namespace Catalog.Api.Infrastructure.Migrations
                 name: "CategoryImages");
 
             migrationBuilder.DropTable(
+                name: "CategorySchemas");
+
+            migrationBuilder.DropTable(
                 name: "CategoryTranslations");
+
+            migrationBuilder.DropTable(
+                name: "ProductAttributeItemTranslations");
+
+            migrationBuilder.DropTable(
+                name: "ProductAttributeTranslations");
 
             migrationBuilder.DropTable(
                 name: "ProductFiles");
@@ -241,7 +387,13 @@ namespace Catalog.Api.Infrastructure.Migrations
                 name: "ProductVideos");
 
             migrationBuilder.DropTable(
+                name: "ProductAttributeItems");
+
+            migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "ProductAttributes");
 
             migrationBuilder.DropTable(
                 name: "Brands");
