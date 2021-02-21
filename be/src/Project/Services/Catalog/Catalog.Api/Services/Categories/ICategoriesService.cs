@@ -10,7 +10,9 @@ namespace Catalog.Api.Services.Categories
         Task<PagedResults<IEnumerable<CategoryServiceModel>>> GetAsync(GetCategoriesServiceModel model);
         Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model);
         Task DeleteAsync(DeleteCategoryServiceModel model);
-        Task<CategoryServiceModel> UpdateAsync(UpdateCategoryServiceModel serviceModel);
-        Task<CategoryServiceModel> CreateAsync(CreateCategoryServiceModel serviceModel);
+        Task<CategoryServiceModel> UpdateAsync(UpdateCategoryServiceModel model);
+        Task<CategoryServiceModel> CreateAsync(CreateCategoryServiceModel model);
+        Task<CategorySchemaServiceModel> UpdateCategorySchemaAsync(UpdateCategorySchemaServiceModel model);
+        Task<CategorySchemaServiceModel> GetCategorySchemaAsync(GetCategorySchemaServiceModel model);
     }
 }
