@@ -25,6 +25,7 @@ namespace Seller.Web.Areas.Products.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Category>>, CategoriesPageCatalogModelBuilder>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductsPageViewModel>, ProductsPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributesPageViewModel>, ProductAttributesPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductFormViewModel>, ProductFormModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel>, ProductPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Product>>, ProductsPageCatalogModelBuilder>();

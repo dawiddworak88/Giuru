@@ -50,6 +50,12 @@ namespace Seller.Web.Shared.DrawerMenu.ModelBuilders
                         },
                         new DrawerMenuItemViewModel
                         {
+                            Icon = IconsConstants.Hexagon,
+                            Title = this.globalLocalizer.GetString("ProductAttributes"),
+                            Url = this.linkGenerator.GetPathByAction("Index", "ProductAttributes", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                        },
+                        new DrawerMenuItemViewModel
+                        {
                             Icon = IconsConstants.Grid,
                             Title = this.globalLocalizer.GetString("Categories"),
                             Url = this.linkGenerator.GetPathByAction("Index", "Categories", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })

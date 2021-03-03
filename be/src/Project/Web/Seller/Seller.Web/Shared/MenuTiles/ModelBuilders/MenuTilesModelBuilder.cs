@@ -42,6 +42,12 @@ namespace Seller.Web.Shared.MenuTiles.ModelBuilders
                     },
                     new MenuTileViewModel
                     {
+                        Icon = IconsConstants.Hexagon,
+                        Title = this.globalLocalizer.GetString("ProductAttributes"),
+                        Url = this.linkGenerator.GetPathByAction("Index", "ProductAttributes", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                    },
+                    new MenuTileViewModel
+                    {
                         Icon = IconsConstants.Grid,
                         Title = this.globalLocalizer.GetString("Categories"),
                         Url = this.linkGenerator.GetPathByAction("Index", "Categories", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
