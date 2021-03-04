@@ -21,6 +21,9 @@ import ClientsPage from "../../src/project/Seller.Portal/areas/Clients/pages/Cli
 import ClientPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage";
 import ProductsPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductsPage/ProductsPage";
 import ProductPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage";
+import ProductAttributesPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductAttributesPage/ProductAttributesPage";
+import ProductAttributePage from "../../src/project/Seller.Portal/areas/Products/pages/ProductAttributePage/ProductAttributePage";
+import ProductAttributeItemPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductAttributeItemPage/ProductAttributeItemPage";
 import CategoriesPage from "../../src/project/Seller.Portal/areas/Products/pages/CategoriesPage/CategoriesPage";
 import SellerCategoryPage from "../../src/project/Seller.Portal/areas/Products/pages/CategoryPage/CategoryPage";
 import SettingsPage from "../../src/project/Seller.Portal/areas/Settings/pages/SettingsPage/SettingsPage";
@@ -43,6 +46,9 @@ const Components = {
 	ClientPage,
 	ProductsPage,
 	ProductPage,
+	ProductAttributesPage,
+	ProductAttributePage,
+	ProductAttributeItemPage,
 	CategoriesPage,
 	SellerCategoryPage,
 	SettingsPage
