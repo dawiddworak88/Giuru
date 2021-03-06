@@ -4,10 +4,13 @@ using Foundation.Catalog.Infrastructure.ProductAttributes.Entities;
 using Foundation.EventBus.Abstractions;
 using Foundation.EventLog.Repositories;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Extensions;
+using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -18,24 +21,50 @@ namespace Catalog.Api.Services.ProductAttributes
     {
         private readonly IEventBus eventBus;
         private readonly IEventLogRepository eventLogRepository;
-        private readonly CatalogContext catalogContext;
+        private readonly CatalogContext context;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
 
         public ProductAttributesService(
             IEventBus eventBus,
             IEventLogRepository eventLogRepository,
-            CatalogContext catalogContext,
+            CatalogContext context,
             IStringLocalizer<ProductResources> productLocalizer)
         {
             this.eventBus = eventBus;
             this.eventLogRepository = eventLogRepository;
-            this.catalogContext = catalogContext;
+            this.context = context;
             this.productLocalizer = productLocalizer;
+        }
+
+        public async Task<PagedResults<IEnumerable<ProductAttributeServiceModel>>> GetAsync(GetProductAttributesServiceModel model)
+        {
+            var productAttributes = from c in this.context.ProductAttributes
+                             join t in this.context.ProductAttributeTranslations on c.Id equals t.ProductAttributeId into ct
+                             from x in ct.DefaultIfEmpty()
+                             where (x.Language == model.Language || model.Language == null) && c.IsActive
+                             select new ProductAttributeServiceModel
+                             {
+                                 Id = c.Id,
+                                 Order = c.Order,
+                                 Key = c.Key,
+                                 Name = x.Name,
+                                 LastModifiedDate = c.LastModifiedDate,
+                                 CreatedDate = c.CreatedDate
+                             };
+
+            if (!string.IsNullOrWhiteSpace(model.SearchTerm))
+            {
+                productAttributes = productAttributes.Where(x => x.Name.StartsWith(model.SearchTerm));
+            }
+
+            productAttributes = productAttributes.ApplySort(model.OrderBy);
+
+            return productAttributes.PagedIndex(new Pagination(productAttributes.Count(), model.ItemsPerPage), model.PageIndex);
         }
 
         public async Task<ProductAttributeServiceModel> CreateProductAttributeAsync(CreateUpdateProductAttributeServiceModel model)
         {
-            var existingProductAttribute = this.catalogContext.ProductAttributes.FirstOrDefault(x => x.Key == model.Key && x.SellerId == model.OrganisationId && x.IsActive);
+            var existingProductAttribute = this.context.ProductAttributes.FirstOrDefault(x => x.Key == model.Key && x.SellerId == model.OrganisationId && x.IsActive);
 
             if (existingProductAttribute != null)
             {
@@ -50,7 +79,7 @@ namespace Catalog.Api.Services.ProductAttributes
                 Tags = model.Tags
             };
 
-            this.catalogContext.ProductAttributes.Add(productAttribute.FillCommonProperties());
+            this.context.ProductAttributes.Add(productAttribute.FillCommonProperties());
 
             var productAttributeTranslation = new ProductAttributeTranslation
             {
@@ -59,9 +88,9 @@ namespace Catalog.Api.Services.ProductAttributes
                 Language = model.Language
             };
 
-            this.catalogContext.ProductAttributeTranslations.Add(productAttributeTranslation.FillCommonProperties());
+            this.context.ProductAttributeTranslations.Add(productAttributeTranslation.FillCommonProperties());
 
-            await this.catalogContext.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
 
             return await this.GetProductAttributeByIdAsync(new GetProductAttributeByIdServiceModel
             { 
@@ -74,7 +103,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task<ProductAttributeItemServiceModel> CreateProductAttributeItemAsync(CreateUpdateProductAttributeItemServiceModel model)
         {
-            var existingProductItemAttribute = this.catalogContext.ProductAttributeItems.FirstOrDefault(x => x.ProductAttributeItemTranslations.Any(y => y.Name == model.Name) && x.SellerId == model.OrganisationId && x.IsActive);
+            var existingProductItemAttribute = this.context.ProductAttributeItems.FirstOrDefault(x => x.ProductAttributeItemTranslations.Any(y => y.Name == model.Name) && x.SellerId == model.OrganisationId && x.IsActive);
 
             if (existingProductItemAttribute != null)
             {
@@ -89,7 +118,7 @@ namespace Catalog.Api.Services.ProductAttributes
                 Tags = model.Tags
             };
 
-            this.catalogContext.ProductAttributeItems.Add(productAttributeItem.FillCommonProperties());
+            this.context.ProductAttributeItems.Add(productAttributeItem.FillCommonProperties());
 
             var productAttributeItemTranslation = new ProductAttributeItemTranslation
             {
@@ -98,9 +127,9 @@ namespace Catalog.Api.Services.ProductAttributes
                 Language = model.Language
             };
 
-            this.catalogContext.ProductAttributeItemTranslations.Add(productAttributeItemTranslation.FillCommonProperties());
+            this.context.ProductAttributeItemTranslations.Add(productAttributeItemTranslation.FillCommonProperties());
 
-            await this.catalogContext.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
 
             return await this.GetProductAttributeItemByIdAsync(new GetProductAttributeItemByIdServiceModel
             { 
@@ -113,7 +142,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task DeleteProductAttributeAsync(DeleteProductAttributeServiceModel model)
         {
-            var existingProductAttribute = this.catalogContext.ProductAttributes.FirstOrDefault(x => x.Id == model.Id.Value && x.SellerId == model.OrganisationId && x.IsActive);
+            var existingProductAttribute = this.context.ProductAttributes.FirstOrDefault(x => x.Id == model.Id.Value && x.SellerId == model.OrganisationId && x.IsActive);
 
             if (existingProductAttribute == null)
             {
@@ -122,12 +151,12 @@ namespace Catalog.Api.Services.ProductAttributes
 
             existingProductAttribute.IsActive = false;
 
-            await this.catalogContext.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
         }
 
         public async Task DeleteProductAttributeItemAsync(DeleteProductAttributeItemServiceModel model)
         {
-            var existingProductAttributeItem = this.catalogContext.ProductAttributeItems.FirstOrDefault(x => x.Id == model.Id && x.SellerId == model.OrganisationId && x.IsActive);
+            var existingProductAttributeItem = this.context.ProductAttributeItems.FirstOrDefault(x => x.Id == model.Id && x.SellerId == model.OrganisationId && x.IsActive);
 
             if (existingProductAttributeItem == null)
             {
@@ -136,13 +165,13 @@ namespace Catalog.Api.Services.ProductAttributes
 
             existingProductAttributeItem.IsActive = false;
 
-            await this.catalogContext.SaveChangesAsync();
+            await this.context.SaveChangesAsync();
         }
 
         public async Task<ProductAttributeServiceModel> GetProductAttributeByIdAsync(GetProductAttributeByIdServiceModel model)
         {
-            var productAttribute = await (from pa in this.catalogContext.ProductAttributes
-                                   join pat in this.catalogContext.ProductAttributeTranslations on pa.Id equals pat.ProductAttributeId into patx
+            var productAttribute = await (from pa in this.context.ProductAttributes
+                                   join pat in this.context.ProductAttributeTranslations on pa.Id equals pat.ProductAttributeId into patx
                                    from x in patx.DefaultIfEmpty()
                                    where pa.Id == model.Id && pa.SellerId == model.OrganisationId && x.Language == model.Language && pa.IsActive
                                    select new ProductAttributeServiceModel
@@ -158,8 +187,8 @@ namespace Catalog.Api.Services.ProductAttributes
 
             if (productAttribute != null)
             {
-                productAttribute.ProductAttributeItems = from pai in this.catalogContext.ProductAttributeItems
-                                                         join pait in this.catalogContext.ProductAttributeItemTranslations on pai.Id equals pait.ProductAttribtuteItemId into paitx
+                productAttribute.ProductAttributeItems = from pai in this.context.ProductAttributeItems
+                                                         join pait in this.context.ProductAttributeItemTranslations on pai.Id equals pait.ProductAttribtuteItemId into paitx
                                                          from x in paitx.DefaultIfEmpty()
                                                          where pai.ProductAttributeId == productAttribute.Id && pai.SellerId == model.OrganisationId && x.Language == model.Language && pai.IsActive
                                                          select new ProductAttributeItemServiceModel
@@ -178,8 +207,8 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task<ProductAttributeItemServiceModel> GetProductAttributeItemByIdAsync(GetProductAttributeItemByIdServiceModel model)
         {
-            var productAttributeItem = await (from pai in this.catalogContext.ProductAttributeItems
-                                       join pait in this.catalogContext.ProductAttributeItemTranslations on pai.Id equals pait.ProductAttribtuteItemId into paitx
+            var productAttributeItem = await (from pai in this.context.ProductAttributeItems
+                                       join pait in this.context.ProductAttributeItemTranslations on pai.Id equals pait.ProductAttribtuteItemId into paitx
                                        from x in paitx.DefaultIfEmpty()
                                        where pai.ProductAttributeId == model.Id && pai.SellerId == model.OrganisationId && x.Language == model.Language && pai.IsActive
                                        select new ProductAttributeItemServiceModel
@@ -197,7 +226,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task<ProductAttributeServiceModel> UpdateProductAttributeAsync(CreateUpdateProductAttributeServiceModel model)
         {
-            var productAttribute = await this.catalogContext.ProductAttributes.FirstOrDefaultAsync(x => x.Id == model.Id.Value && x.SellerId == model.OrganisationId.Value && x.IsActive);
+            var productAttribute = await this.context.ProductAttributes.FirstOrDefaultAsync(x => x.Id == model.Id.Value && x.SellerId == model.OrganisationId.Value && x.IsActive);
 
             if (productAttribute != null)
             {
@@ -219,10 +248,10 @@ namespace Catalog.Api.Services.ProductAttributes
                         Name = model.Name
                     };
 
-                    this.catalogContext.ProductAttributeTranslations.Add(newProductAttributeTranslation);
+                    this.context.ProductAttributeTranslations.Add(newProductAttributeTranslation);
                 }
 
-                await this.catalogContext.SaveChangesAsync();
+                await this.context.SaveChangesAsync();
             }
 
             return await this.GetProductAttributeByIdAsync(new GetProductAttributeByIdServiceModel 
@@ -236,7 +265,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task<ProductAttributeItemServiceModel> UpdateProductAttributeItemAsync(CreateUpdateProductAttributeItemServiceModel model)
         {
-            var productAttributeItem = await this.catalogContext.ProductAttributeItems.FirstOrDefaultAsync(x => x.Id == model.Id.Value && x.SellerId == model.OrganisationId.Value && x.IsActive);
+            var productAttributeItem = await this.context.ProductAttributeItems.FirstOrDefaultAsync(x => x.Id == model.Id.Value && x.SellerId == model.OrganisationId.Value && x.IsActive);
 
             if (productAttributeItem != null)
             {
@@ -257,10 +286,10 @@ namespace Catalog.Api.Services.ProductAttributes
                         Name = model.Name
                     };
 
-                    this.catalogContext.ProductAttributeItemTranslations.Add(newProductAttributeItemTranslation);
+                    this.context.ProductAttributeItemTranslations.Add(newProductAttributeItemTranslation);
                 }
 
-                await this.catalogContext.SaveChangesAsync();
+                await this.context.SaveChangesAsync();
             }
 
             return await this.GetProductAttributeItemByIdAsync(new GetProductAttributeItemByIdServiceModel

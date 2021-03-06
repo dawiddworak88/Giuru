@@ -11,34 +11,33 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {
-    public class ProductAttributesPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributesPageViewModel>
+    public class ProductAttributePageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributePageViewModel>
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductAttribute>> productAttributesCatalogModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductAttributeItem>> productsCatalogModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
-        public ProductAttributesPageModelBuilder(
+        public ProductAttributePageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductAttribute>> productAttributesCatalogModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductAttributeItem>> productCatalogModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
-            this.productAttributesCatalogModelBuilder = productAttributesCatalogModelBuilder;
+            this.productsCatalogModelBuilder = productCatalogModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
         }
 
-        public async Task<ProductAttributesPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<ProductAttributePageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new ProductAttributesPageViewModel
+            var viewModel = new ProductAttributePageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = this.headerModelBuilder.BuildModel(),
-                MenuTiles = this.menuTilesModelBuilder.BuildModel(),
-                Catalog = await this.productAttributesCatalogModelBuilder.BuildModelAsync(componentModel),
-                Footer = this.footerModelBuilder.BuildModel()
+                Header = headerModelBuilder.BuildModel(),
+                MenuTiles = menuTilesModelBuilder.BuildModel(),
+                Footer = footerModelBuilder.BuildModel()
             };
 
             return viewModel;

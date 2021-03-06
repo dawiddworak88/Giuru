@@ -18,6 +18,8 @@ using Catalog.Api.Services.ProductAttributes;
 using Catalog.Api.Validators.ProductAttributes;
 using Catalog.Api.v1.Products.ResponseModels;
 using Catalog.Api.ServicesModels.ProductAttributes;
+using System.Collections.Generic;
+using Foundation.GenericRepository.Paginations;
 
 namespace Catalog.Api.v1.Products.Controllers
 {
@@ -33,6 +35,66 @@ namespace Catalog.Api.v1.Products.Controllers
         public ProductAttributesController(IProductAttributesService productAttributesService)
         {
             this.productAttributesService = productAttributesService;
+        }
+
+        /// <summary>
+        /// Returns product attributes by search term. Returns all products (paginated) if search term is empty.
+        /// </summary>
+        /// <param name="sellerId">The brand id.</param>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The number of items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
+        /// <returns></returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<ProductAttributeResponseModel>>))]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        [AllowAnonymous]
+        public async Task<IActionResult> Get(
+            Guid? sellerId,
+            string searchTerm,
+            int pageIndex,
+            int itemsPerPage,
+            string orderBy)
+        {
+            var serviceModel = new GetProductAttributesServiceModel
+            {
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                SearchTerm = searchTerm,
+                OrganisationId = sellerId,
+                OrderBy = orderBy,
+                Language = CultureInfo.CurrentCulture.Name
+            };
+
+            var validator = new GetProductAttributesModelValidator();
+
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var productAttributes = await this.productAttributesService.GetAsync(serviceModel);
+
+                if (productAttributes != null)
+                {
+                    var response = new PagedResults<IEnumerable<ProductAttributeResponseModel>>(productAttributes.Total, productAttributes.PageSize)
+                    {
+                        Data = productAttributes.Data.OrEmptyIfNull().Select(x => new ProductAttributeResponseModel
+                        {
+                            Id = x.Id,
+                            Key = x.Key,
+                            Name = x.Name,
+                            Order = x.Order,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        })
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>

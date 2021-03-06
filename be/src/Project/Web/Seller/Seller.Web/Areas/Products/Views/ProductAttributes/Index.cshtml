@@ -1,4 +1,4 @@
-﻿<div id="root" asp-prerender-module="ProductsPage" asp-prerender-data="@Model">
+﻿<div id="root" asp-prerender-module="ProductAttributesPage" asp-prerender-data="@Model">
 </div>
 
 <script>
@@ -6,17 +6,17 @@
 </script>
 
 @section MetaTags {
-    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("Products"))</title>
-    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("Products")))
+    <title>@MetaTagsService.GenerateTitle(this.GlobalLocalizer.GetString("ProductAttributes"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.GlobalLocalizer.GetString("ProductAttributes")))
     {
-        <meta name="description" content="@this.Localizer.GetString("Products")" />
+        <meta name="description" content="@this.GlobalLocalizer.GetString("ProductAttributes")" />
     }
 }
 
 @section HeadStyles {
-    <link rel="stylesheet" href="~/dist/css/productspage.css" type="text/css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/dist/css/productattributespage.css" type="text/css" asp-append-version="true" />
 }
 
 @section BodyScripts {
-    <script src="~/dist/js/productspage.js" asp-append-version="true"></script>
+    <script src="~/dist/js/productattributespage.js" asp-append-version="true"></script>
 }
