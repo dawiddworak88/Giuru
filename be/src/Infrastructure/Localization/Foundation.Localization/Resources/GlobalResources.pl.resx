@@ -319,10 +319,13 @@
     <value>Ceny</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Polityka Prywatności</value>
+    <value>Polityka prywatności</value>
+  </data>
+  <data name="ProductAttribute" xml:space="preserve">
+    <value>Atrybut produktu</value>
   </data>
   <data name="ProductAttributes" xml:space="preserve">
-    <value>Atrybuty Produktów</value>
+    <value>Atrybuty produktów</value>
   </data>
   <data name="Products" xml:space="preserve">
     <value>Produkty</value>
