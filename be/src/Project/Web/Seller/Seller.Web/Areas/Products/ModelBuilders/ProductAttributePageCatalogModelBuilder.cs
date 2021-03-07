@@ -41,11 +41,11 @@ namespace Seller.Web.Areas.ProductAttributeItems.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<ProductAttributeItem>, ProductAttributeItem>();
 
             viewModel.NewText = this.productLocalizer.GetString("NewProductAttributeItem");
-            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "ProductAttributeItem", new { Area = "ProductAttributeItems", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "ProductAttributeItem", new { Area = "ProductAttributeItems", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "ProductAttributeItem", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "ProductAttributeItem", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ProductAttributeItemsApi", new { Area = "ProductAttributeItems", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductAttributeItemsApi", new { Area = "ProductAttributeItems", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ProductAttributeItemsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductAttributeItemsApi", new { ProductAttributeId = componentModel.Id, Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(ProductAttributeItem.CreatedDate)} desc";
 

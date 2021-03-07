@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { toast } from "react-toastify";
 import { ThemeProvider } from "@material-ui/core/styles";
 import Store from "../../../../../../shared/stores/Store";
@@ -23,7 +23,12 @@ function ProductAttributePage(props) {
           <Header {...props.header}></Header>
           <MenuTiles {...props.menuTiles} />
           <ProductAttributeForm {...props.productAttributeForm} />
-          <Catalog {...props.catalog}></Catalog>
+          {props.id &&
+            <Fragment>
+              <hr />
+              <Catalog {...props.catalog}></Catalog>
+            </Fragment>
+          }
           <Footer {...props.footer}></Footer>
         </div>
       </Store>

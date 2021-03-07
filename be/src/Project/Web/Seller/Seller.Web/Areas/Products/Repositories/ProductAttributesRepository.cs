@@ -33,13 +33,11 @@ namespace Seller.Web.Areas.ProductAttributes.Repositories
             string token,
             string language,
             Guid? id,
-            string key,
             string name)
         {
             var requestModel = new SaveProductAttributeRequestModel
             {
                 Id = id,
-                Key = key,
                 Name = name
             };
 

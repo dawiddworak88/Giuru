@@ -144,6 +144,9 @@
   <data name="EnterCategoryName" xml:space="preserve">
     <value>Enter category name</value>
   </data>
+  <data name="EnterProductAttributeName" xml:space="preserve">
+    <value>Enter product attribute name</value>
+  </data>
   <data name="EnterSkuText" xml:space="preserve">
     <value>Enter SKU</value>
   </data>
@@ -156,6 +159,9 @@
   <data name="NewProductAttribute" xml:space="preserve">
     <value>New product attribute</value>
   </data>
+  <data name="NewProductAttributeItem" xml:space="preserve">
+    <value>New product attribute item</value>
+  </data>
   <data name="ParentCategory" xml:space="preserve">
     <value>Parent category</value>
   </data>
@@ -167,6 +173,9 @@
   </data>
   <data name="ProductAlreadyExists" xml:space="preserve">
     <value>Product has been already created.</value>
+  </data>
+  <data name="ProductAttributeSavedSuccessfully" xml:space="preserve">
+    <value>Product attribute has been saved successfully.</value>
   </data>
   <data name="ProductDeletedSuccessfully" xml:space="preserve">
     <value>Product has been deleted successfully</value>

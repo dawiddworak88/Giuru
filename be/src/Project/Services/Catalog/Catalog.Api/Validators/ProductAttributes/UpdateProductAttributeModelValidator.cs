@@ -10,7 +10,6 @@ namespace Catalog.Api.Validators.ProductAttributes
         {
             this.RuleFor(x => x.Id).NotNull().NotEmpty();
             this.RuleFor(x => x.Name).NotNull().NotEmpty();
-            this.RuleFor(x => x.Key).NotNull().NotEmpty();
         }
     }
 }

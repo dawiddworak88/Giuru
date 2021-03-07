@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { TextField, Button, CircularProgress } from "@material-ui/core";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function ProductAttributeForm(props) {
 
@@ -44,8 +45,12 @@ function ProductAttributeForm(props) {
 
                     if (response.ok) {
 
-                        setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
+
+                        if (!id) {
+
+                            NavigationHelper.redirect(props.editUrl + "/" + jsonResponse.id);
+                        }
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -100,6 +105,7 @@ ProductAttributeForm.propTypes = {
     name: PropTypes.string,
     nameLabel: PropTypes.string.isRequired,
     nameRequiredErrorMessage: PropTypes.string.isRequired,
+    editUrl: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired
 };

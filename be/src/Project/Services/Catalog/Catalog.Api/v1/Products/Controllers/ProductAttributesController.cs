@@ -169,6 +169,7 @@ namespace Catalog.Api.v1.Products.Controllers
             var serviceModel = new CreateUpdateProductAttributeServiceModel
             {
                 Id = request.Id,
+                Name = request.Name,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
                 Language = CultureInfo.CurrentCulture.Name

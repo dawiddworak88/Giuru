@@ -38,11 +38,12 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             var viewModel = new ProductAttributePageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = headerModelBuilder.BuildModel(),
-                MenuTiles = menuTilesModelBuilder.BuildModel(),
+                Id = componentModel.Id,
+                Header = this.headerModelBuilder.BuildModel(),
+                MenuTiles = this.menuTilesModelBuilder.BuildModel(),
                 ProductAttributeForm = await this.productAttributeFormModelBuilder.BuildModelAsync(componentModel),
                 Catalog = await this.productAttributeItemsCatalogModelBuilder.BuildModelAsync(componentModel),
-                Footer = footerModelBuilder.BuildModel()
+                Footer = this.footerModelBuilder.BuildModel()
             };
 
             return viewModel;

@@ -15,12 +15,12 @@ using System.Threading.Tasks;
 namespace Seller.Web.Areas.Products.ApiControllers
 {
     [Area("Products")]
-    public class ProductAttributesApiController : BaseApiController
+    public class ProductAttributeItemsApiController : BaseApiController
     {
         private readonly IProductAttributesRepository productAttributesRepository;
         private readonly IStringLocalizer productLocalizer;
 
-        public ProductAttributesApiController(
+        public ProductAttributeItemsApiController(
             IProductAttributesRepository productAttributesRepository,
             IStringLocalizer<ProductResources> productLocalizer)
         {
@@ -29,17 +29,19 @@ namespace Seller.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage)
+        [Route("api/[area]/[controller]/{productAttributeId}")]
+        public async Task<IActionResult> Get(Guid? productAttributeId, string searchTerm, int pageIndex, int itemsPerPage)
         {
-            var productAttributes = await this.productAttributesRepository.GetProductAttributesAsync(
+            var productAttributeItems = await this.productAttributesRepository.GetProductAttributeItemsAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
+                productAttributeId,
                 searchTerm,
                 pageIndex,
                 itemsPerPage,
                 $"{nameof(ProductAttribute.CreatedDate)} desc");
 
-            return this.StatusCode((int)HttpStatusCode.OK, productAttributes);
+            return this.StatusCode((int)HttpStatusCode.OK, productAttributeItems);
         }
 
         [HttpPost]
