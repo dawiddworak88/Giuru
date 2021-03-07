@@ -8,14 +8,9 @@ namespace Foundation.Catalog.Infrastructure.ProductAttributes.Entities
     public class ProductAttribute : Entity
     {
         [Required]
-        public string Key { get; set; }
-
-        [Required]
         public Guid SellerId { get; set; }
 
         public int? Order { get; set; }
-
-        public string Tags { get; set; }
 
         public virtual IEnumerable<ProductAttributeItem> ProductAttributeItems { get; set; }
 

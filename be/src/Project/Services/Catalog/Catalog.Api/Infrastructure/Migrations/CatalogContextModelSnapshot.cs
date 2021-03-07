@@ -177,10 +177,6 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Key")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
@@ -194,9 +190,6 @@ namespace Catalog.Api.Infrastructure.Migrations
 
                     b.Property<Guid>("SellerId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Tags")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -231,9 +224,6 @@ namespace Catalog.Api.Infrastructure.Migrations
 
                     b.Property<Guid>("SellerId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Tags")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

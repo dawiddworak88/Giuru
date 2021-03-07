@@ -9,6 +9,5 @@ namespace Catalog.Api.ServicesModels.ProductAttributes
         public string Key { get; set; }
         public string Name { get; set; }
         public int? Order { get; set; }
-        public string Tags { get; set; }
     }
 }

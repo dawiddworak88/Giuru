@@ -70,10 +70,8 @@ namespace Catalog.Api.Infrastructure.Migrations
                     RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    Key = table.Column<string>(nullable: false),
                     SellerId = table.Column<Guid>(nullable: false),
-                    Order = table.Column<int>(nullable: true),
-                    Tags = table.Column<string>(nullable: true)
+                    Order = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -227,8 +225,7 @@ namespace Catalog.Api.Infrastructure.Migrations
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     ProductAttributeId = table.Column<Guid>(nullable: false),
                     SellerId = table.Column<Guid>(nullable: false),
-                    Order = table.Column<int>(nullable: true),
-                    Tags = table.Column<string>(nullable: true)
+                    Order = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {

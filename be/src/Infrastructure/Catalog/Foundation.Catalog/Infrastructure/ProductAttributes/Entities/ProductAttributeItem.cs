@@ -15,8 +15,6 @@ namespace Foundation.Catalog.Infrastructure.ProductAttributes.Entities
 
         public int? Order { get; set; }
 
-        public string Tags { get; set; }
-
         public virtual IEnumerable<ProductAttributeItemTranslation> ProductAttributeItemTranslations { get; set; }
     }
 }

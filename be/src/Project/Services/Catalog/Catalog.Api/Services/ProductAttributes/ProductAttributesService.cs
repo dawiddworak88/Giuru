@@ -46,7 +46,6 @@ namespace Catalog.Api.Services.ProductAttributes
                              {
                                  Id = c.Id,
                                  Order = c.Order,
-                                 Key = c.Key,
                                  Name = x.Name,
                                  LastModifiedDate = c.LastModifiedDate,
                                  CreatedDate = c.CreatedDate
@@ -64,19 +63,10 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task<ProductAttributeServiceModel> CreateProductAttributeAsync(CreateUpdateProductAttributeServiceModel model)
         {
-            var existingProductAttribute = this.context.ProductAttributes.FirstOrDefault(x => x.Key == model.Key && x.SellerId == model.OrganisationId && x.IsActive);
-
-            if (existingProductAttribute != null)
-            {
-                throw new CustomException(this.productLocalizer.GetString("ProductAttributeKeyConflict"), (int)HttpStatusCode.Conflict);
-            }
-
             var productAttribute = new ProductAttribute
             { 
-                Key = model.Key,
                 Order = model.Order,
-                SellerId = model.OrganisationId.Value,
-                Tags = model.Tags
+                SellerId = model.OrganisationId.Value
             };
 
             this.context.ProductAttributes.Add(productAttribute.FillCommonProperties());
@@ -114,8 +104,7 @@ namespace Catalog.Api.Services.ProductAttributes
             {
                 ProductAttributeId = model.ProductAttributeId.Value,
                 Order = model.Order,
-                SellerId = model.OrganisationId.Value,
-                Tags = model.Tags
+                SellerId = model.OrganisationId.Value
             };
 
             this.context.ProductAttributeItems.Add(productAttributeItem.FillCommonProperties());
@@ -179,8 +168,6 @@ namespace Catalog.Api.Services.ProductAttributes
                                        Id = pa.Id,
                                        Name = x.Name,
                                        Order = pa.Order,
-                                       Key = pa.Key,
-                                       Tags = pa.Tags,
                                        LastModifiedDate = pa.LastModifiedDate,
                                        CreatedDate = pa.CreatedDate
                                    }).FirstOrDefaultAsync();
@@ -196,7 +183,6 @@ namespace Catalog.Api.Services.ProductAttributes
                                                             Id = pai.Id,
                                                             Name = x.Name,
                                                             Order = pai.Order,
-                                                            Tags = pai.Tags,
                                                             LastModifiedDate = pai.LastModifiedDate,
                                                             CreatedDate = pai.CreatedDate
                                                          };
@@ -216,7 +202,6 @@ namespace Catalog.Api.Services.ProductAttributes
                                            Id = pai.Id,
                                            Name = x.Name,
                                            Order = pai.Order,
-                                           Tags = pai.Tags,
                                            LastModifiedDate = pai.LastModifiedDate,
                                            CreatedDate = pai.CreatedDate
                                        }).FirstOrDefaultAsync();
@@ -230,7 +215,6 @@ namespace Catalog.Api.Services.ProductAttributes
 
             if (productAttribute != null)
             {
-                productAttribute.Key = model.Key;
                 productAttribute.Order = model.Order;
 
                 var productAttributeTranslation = productAttribute.ProductAttributeTranslations.FirstOrDefault(x => x.Language == model.Language && x.IsActive);

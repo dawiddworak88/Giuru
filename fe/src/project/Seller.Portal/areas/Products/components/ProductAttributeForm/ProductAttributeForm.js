@@ -12,18 +12,11 @@ function ProductAttributeForm(props) {
     const stateSchema = {
 
         id: { value: props.id ? props.id : null, error: "" },
-        key: { value: props.name ? props.name : "", error: "" },
         name: { value: props.name ? props.name : "", error: "" }
     };
 
     const stateValidatorSchema = {
 
-        key: {
-            required: {
-                isRequired: true,
-                error: props.keyRequiredErrorMessage
-            }
-        },
         name: {
             required: {
                 isRequired: true,
@@ -74,7 +67,7 @@ function ProductAttributeForm(props) {
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, key, name } = values;
+    const { id, name } = values;
 
     return (
         <section className="section section-small-padding product-attribute">
@@ -88,10 +81,6 @@ function ProductAttributeForm(props) {
                         <div className="field">
                             <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
-                        </div>
-                        <div className="field">
-                            <TextField id="key" name="key" label={props.keyLabel} fullWidth={true}
-                                value={key} onChange={handleOnChange} helperText={dirty.key ? errors.key : ""} error={(errors.key.length > 0) && dirty.key} />
                         </div>
                         <div className="field">
                             <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
@@ -109,14 +98,9 @@ function ProductAttributeForm(props) {
 ProductAttributeForm.propTypes = {
     id: PropTypes.string,
     name: PropTypes.string,
-    key: PropTypes.string,
-    keyLabel: PropTypes.string.isRequired,
     nameLabel: PropTypes.string.isRequired,
-    keyRequiredErrorMessage: PropTypes.string.isRequired,
     nameRequiredErrorMessage: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
-    editLabel: PropTypes.string.isRequired,
-    deleteLabel: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired
 };
 

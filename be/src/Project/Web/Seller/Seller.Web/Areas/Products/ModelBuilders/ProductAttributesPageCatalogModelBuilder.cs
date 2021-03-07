@@ -55,7 +55,6 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("Key"),
                     this.globalLocalizer.GetString("Name"),
                     this.globalLocalizer.GetString("LastModifiedDate"),
                     this.globalLocalizer.GetString("CreatedDate")
@@ -73,11 +72,6 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 },
                 Properties = new List<CatalogPropertyViewModel>
                 {
-                    new CatalogPropertyViewModel
-                    {
-                        Title = nameof(ProductAttribute.Key).ToCamelCase(),
-                        IsDateTime = false
-                    },
                     new CatalogPropertyViewModel
                     {
                         Title = nameof(ProductAttribute.Name).ToCamelCase(),
