@@ -84,12 +84,11 @@ namespace Seller.Web.Areas.ProductAttributes.Repositories
             }
         }
 
-        public async Task<PagedResults<IEnumerable<ProductAttribute>>> GetProductAttributesAsync(string token, string language, string searchTerm, Guid? sellerId, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<PagedResults<IEnumerable<ProductAttribute>>> GetProductAttributesAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
-            var categoriesRequestModel = new PagedRequestModelBase
+            var productAttributesRequestModel = new PagedRequestModelBase
             {
                 SearchTerm = searchTerm,
-                SellerId = sellerId,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
                 OrderBy = orderBy
@@ -98,7 +97,7 @@ namespace Seller.Web.Areas.ProductAttributes.Repositories
             var apiRequest = new ApiRequest<PagedRequestModelBase>
             {
                 Language = language,
-                Data = categoriesRequestModel,
+                Data = productAttributesRequestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductAttributesApiEndpoint}"
             };
@@ -136,6 +135,42 @@ namespace Seller.Web.Areas.ProductAttributes.Repositories
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return response.Data;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
+        }
+
+        public async Task<PagedResults<IEnumerable<ProductAttributeItem>>> GetProductAttributeItemsAsync(string token, string language, Guid? productAttributeId, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        {
+            var productAttributeItems = new PagedRequestModelBase
+            {
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy
+            };
+
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Language = language,
+                Data = productAttributeItems,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductAttributesApiEndpoint}/{productAttributeId}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ProductAttributeItem>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                return new PagedResults<IEnumerable<ProductAttributeItem>>(response.Data.Total, response.Data.PageSize)
+                {
+                    Data = response.Data.Data
+                };
             }
 
             if (!response.IsSuccessStatusCode)

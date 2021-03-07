@@ -16,5 +16,6 @@ namespace Catalog.Api.Services.ProductAttributes
         Task<ProductAttributeItemServiceModel> GetProductAttributeItemByIdAsync(GetProductAttributeItemByIdServiceModel model);
         Task DeleteProductAttributeAsync(DeleteProductAttributeServiceModel model);
         Task DeleteProductAttributeItemAsync(DeleteProductAttributeItemServiceModel model);
+        Task<PagedResults<IEnumerable<ProductAttributeItemServiceModel>>> GetProductAttributeItemsAsync(GetProductAttributeItemsServiceModel model);
     }
 }

@@ -4,33 +4,33 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Threading.Tasks;
-using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Seller.Web.Shared.ViewModels;
-using Seller.Web.Areas.Products.DomainModels;
 using System.Collections.Generic;
 using Foundation.Extensions.ExtensionMethods;
+using Seller.Web.Areas.Products.DomainModels;
+using Seller.Web.Areas.Products.Repositories;
 
-namespace Seller.Web.Areas.Products.ModelBuilders
+namespace Seller.Web.Areas.ProductAttributeItems.ModelBuilders
 {
     public class ProductAttributePageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductAttributeItem>>
     {
         private readonly ICatalogModelBuilder catalogModelBuilder;
-        private readonly IProductsRepository productsRepository;
+        private readonly IProductAttributesRepository productAttributesRepository;
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer productLocalizer;
         private readonly LinkGenerator linkGenerator;
 
         public ProductAttributePageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
-            IProductsRepository productsRepository,
+            IProductAttributesRepository productAttributesRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             LinkGenerator linkGenerator)
         {
             this.catalogModelBuilder = catalogModelBuilder;
-            this.productsRepository = productsRepository;
+            this.productAttributesRepository = productAttributesRepository;
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
             this.linkGenerator = linkGenerator;
@@ -40,22 +40,19 @@ namespace Seller.Web.Areas.Products.ModelBuilders
         {
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<ProductAttributeItem>, ProductAttributeItem>();
 
-            viewModel.Title = this.productLocalizer.GetString("Products");
+            viewModel.NewText = this.productLocalizer.GetString("NewProductAttributeItem");
+            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "ProductAttributeItem", new { Area = "ProductAttributeItems", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "ProductAttributeItem", new { Area = "ProductAttributeItems", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.NewText = this.productLocalizer.GetString("NewProduct");
-            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ProductAttributeItemsApi", new { Area = "ProductAttributeItems", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductAttributeItemsApi", new { Area = "ProductAttributeItems", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-
-            viewModel.OrderBy = $"{nameof(Product.CreatedDate)} desc";
+            viewModel.OrderBy = $"{nameof(ProductAttributeItem.CreatedDate)} desc";
 
             viewModel.Table = new CatalogTableViewModel
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("Sku"),
                     this.globalLocalizer.GetString("Name"),
                     this.globalLocalizer.GetString("LastModifiedDate"),
                     this.globalLocalizer.GetString("CreatedDate")
@@ -75,28 +72,30 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(Product.Sku).ToCamelCase(),
+                        Title = nameof(ProductAttributeItem.Name).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(Product.Name).ToCamelCase(),
-                        IsDateTime = false
-                    },
-                    new CatalogPropertyViewModel
-                    {
-                        Title = nameof(Product.LastModifiedDate).ToCamelCase(),
+                        Title = nameof(ProductAttributeItem.LastModifiedDate).ToCamelCase(),
                         IsDateTime = true
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(Product.CreatedDate).ToCamelCase(),
+                        Title = nameof(ProductAttributeItem.CreatedDate).ToCamelCase(),
                         IsDateTime = true
                     }
                 }
             };
 
-            viewModel.PagedItems = null; // await this.productsRepository.GetProductsAsync(componentModel.Token, componentModel.Language, null, null, componentModel.SellerId, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, $"{nameof(Product.CreatedDate)} desc");
+            viewModel.PagedItems = await this.productAttributesRepository.GetProductAttributeItemsAsync(
+                componentModel.Token, 
+                componentModel.Language, 
+                componentModel.Id, 
+                null, 
+                Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, 
+                Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, 
+                $"{nameof(ProductAttributeItem.CreatedDate)} desc");
 
             return viewModel;
         }

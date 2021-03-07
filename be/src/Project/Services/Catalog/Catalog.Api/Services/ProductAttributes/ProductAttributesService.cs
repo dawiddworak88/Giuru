@@ -284,5 +284,30 @@ namespace Catalog.Api.Services.ProductAttributes
                 Username = model.Username
             });
         }
+
+        public async Task<PagedResults<IEnumerable<ProductAttributeItemServiceModel>>> GetProductAttributeItemsAsync(GetProductAttributeItemsServiceModel model)
+        {
+            var productAttributesItems = from c in this.context.ProductAttributeItems
+                                        join t in this.context.ProductAttributeItemTranslations on c.Id equals t.ProductAttribtuteItemId into ct
+                                        from x in ct.DefaultIfEmpty()
+                                        where (x.Language == model.Language || model.Language == null) && c.IsActive
+                                        select new ProductAttributeItemServiceModel
+                                        {
+                                            Id = c.Id,
+                                            Order = c.Order,
+                                            Name = x.Name,
+                                            LastModifiedDate = c.LastModifiedDate,
+                                            CreatedDate = c.CreatedDate
+                                        };
+
+            if (!string.IsNullOrWhiteSpace(model.SearchTerm))
+            {
+                productAttributesItems = productAttributesItems.Where(x => x.Name.StartsWith(model.SearchTerm));
+            }
+
+            productAttributesItems = productAttributesItems.ApplySort(model.OrderBy);
+
+            return productAttributesItems.PagedIndex(new Pagination(productAttributesItems.Count(), model.ItemsPerPage), model.PageIndex);
+        }
     }
 }

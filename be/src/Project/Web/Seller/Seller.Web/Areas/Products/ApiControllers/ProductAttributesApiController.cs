@@ -39,7 +39,6 @@ namespace Seller.Web.Areas.Products.ApiControllers
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 searchTerm,
-                GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value),
                 pageIndex,
                 itemsPerPage,
                 $"{nameof(ProductAttribute.CreatedDate)} desc");

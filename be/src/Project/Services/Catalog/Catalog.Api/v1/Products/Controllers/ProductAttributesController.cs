@@ -40,7 +40,6 @@ namespace Catalog.Api.v1.Products.Controllers
         /// <summary>
         /// Returns product attributes by search term. Returns all products (paginated) if search term is empty.
         /// </summary>
-        /// <param name="sellerId">The brand id.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The number of items per page.</param>
@@ -51,7 +50,6 @@ namespace Catalog.Api.v1.Products.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         [AllowAnonymous]
         public async Task<IActionResult> Get(
-            Guid? sellerId,
             string searchTerm,
             int pageIndex,
             int itemsPerPage,
@@ -62,7 +60,6 @@ namespace Catalog.Api.v1.Products.Controllers
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
                 SearchTerm = searchTerm,
-                OrganisationId = sellerId,
                 OrderBy = orderBy,
                 Language = CultureInfo.CurrentCulture.Name
             };
@@ -82,7 +79,66 @@ namespace Catalog.Api.v1.Products.Controllers
                         Data = productAttributes.Data.OrEmptyIfNull().Select(x => new ProductAttributeResponseModel
                         {
                             Id = x.Id,
-                            Key = x.Key,
+                            Name = x.Name,
+                            Order = x.Order,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        })
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Returns product attribute items by product attribute id and search term. Returns all product attributes (paginated) if search term is empty.
+        /// </summary>
+        /// <param name="productAttributeId">The product attribute id.</param>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The number of items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
+        /// <returns></returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("{productAttributeId}/ProductAttributeItems")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<ProductAttributeResponseModel>>))]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetProductAttributeItems(
+            Guid? productAttributeId,
+            string searchTerm,
+            int pageIndex,
+            int itemsPerPage,
+            string orderBy)
+        {
+            var serviceModel = new GetProductAttributeItemsServiceModel
+            {
+                ProductAttributeId = productAttributeId,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                SearchTerm = searchTerm,
+                OrderBy = orderBy,
+                Language = CultureInfo.CurrentCulture.Name
+            };
+
+            var validator = new GetProductAttributeItemsModelValidator();
+
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var productAttributes = await this.productAttributesService.GetProductAttributeItemsAsync(serviceModel);
+
+                if (productAttributes != null)
+                {
+                    var response = new PagedResults<IEnumerable<ProductAttributeItemResponseModel>>(productAttributes.Total, productAttributes.PageSize)
+                    {
+                        Data = productAttributes.Data.OrEmptyIfNull().Select(x => new ProductAttributeItemResponseModel
+                        {
+                            Id = x.Id,
                             Name = x.Name,
                             Order = x.Order,
                             LastModifiedDate = x.LastModifiedDate,
@@ -133,7 +189,6 @@ namespace Catalog.Api.v1.Products.Controllers
                         var response = new ProductAttributeResponseModel
                         {
                             Id = productAttribute.Id,
-                            Key = productAttribute.Key,
                             Name = productAttribute.Name,
                             Order = productAttribute.Order,
                             Items = productAttribute.ProductAttributeItems.OrEmptyIfNull().Select(x => new ProductAttributeItemResponseModel 
@@ -169,7 +224,6 @@ namespace Catalog.Api.v1.Products.Controllers
                         var response = new ProductAttributeResponseModel
                         {
                             Id = productAttribute.Id,
-                            Key = productAttribute.Key,
                             Name = productAttribute.Name,
                             Order = productAttribute.Order,
                             Items = productAttribute.ProductAttributeItems.OrEmptyIfNull().Select(x => new ProductAttributeItemResponseModel
@@ -228,7 +282,6 @@ namespace Catalog.Api.v1.Products.Controllers
                     var response = new ProductAttributeResponseModel
                     {
                         Id = productAttribute.Id,
-                        Key = productAttribute.Key,
                         Name = productAttribute.Name,
                         Order = productAttribute.Order,
                         Items = productAttribute.ProductAttributeItems.OrEmptyIfNull().Select(x => new ProductAttributeItemResponseModel

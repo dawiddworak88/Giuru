@@ -5,6 +5,7 @@ namespace Seller.Web.Areas.Products.ViewModels
 {
     public class ProductAttributePageViewModel : BasePageViewModel
     {
+        public ProductAttributeFormViewModel ProductAttributeForm { get; set; }
         public CatalogViewModel<ProductAttributeItem> Catalog { get; set; }
     }
 }

@@ -9,6 +9,7 @@ using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Shared.ViewModels;
 using Seller.Web.Areas.Categories.Repositories;
 using Seller.Web.Areas.ProductAttributes.Repositories;
+using Seller.Web.Areas.ProductAttributeItems.ModelBuilders;
 
 namespace Seller.Web.Areas.Products.DependencyInjection
 {
@@ -29,6 +30,7 @@ namespace Seller.Web.Areas.Products.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductsPageViewModel>, ProductsPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributesPageViewModel>, ProductAttributesPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributePageViewModel>, ProductAttributePageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributeFormViewModel>, ProductAttributeFormModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributeItemPageViewModel>, ProductAttributeItemPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductAttribute>>, ProductAttributesPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductAttributeItem>>, ProductAttributePageCatalogModelBuilder>();

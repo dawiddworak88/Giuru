@@ -138,6 +138,9 @@
   <data name="EditProduct" xml:space="preserve">
     <value>Produkt bearbeiten</value>
   </data>
+  <data name="EditProductAttribute" xml:space="preserve">
+    <value>Produktattribut bearbeiten</value>
+  </data>
   <data name="EnterCategoryName" xml:space="preserve">
     <value>Bitte den Kategorienamen eingeben</value>
   </data>

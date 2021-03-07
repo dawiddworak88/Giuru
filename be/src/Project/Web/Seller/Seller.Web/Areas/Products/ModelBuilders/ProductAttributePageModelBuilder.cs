@@ -15,18 +15,21 @@ namespace Seller.Web.Areas.Products.ModelBuilders
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductAttributeItem>> productsCatalogModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributeFormViewModel> productAttributeFormModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductAttributeItem>> productAttributeItemsCatalogModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public ProductAttributePageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductAttributeItem>> productCatalogModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributeFormViewModel> productAttributeFormModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductAttributeItem>> productAttributeItemsCatalogModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
-            this.productsCatalogModelBuilder = productCatalogModelBuilder;
+            this.productAttributeFormModelBuilder = productAttributeFormModelBuilder;
+            this.productAttributeItemsCatalogModelBuilder = productAttributeItemsCatalogModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
         }
 
@@ -37,6 +40,8 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 Locale = CultureInfo.CurrentUICulture.Name,
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
+                ProductAttributeForm = await this.productAttributeFormModelBuilder.BuildModelAsync(componentModel),
+                Catalog = await this.productAttributeItemsCatalogModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };
 
