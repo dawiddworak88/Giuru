@@ -76,7 +76,7 @@ namespace Seller.Web.Areas.ProductAttributes.Repositories
 
             var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
 
-            if (!response.IsSuccessStatusCode && response?.Data != null)
+            if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Data.Message, (int)response.StatusCode);
             }
