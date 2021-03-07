@@ -67,7 +67,6 @@ function ProductAttributeForm(props) {
         errors,
         dirty,
         disable,
-        setFieldValue,
         handleOnChange,
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);

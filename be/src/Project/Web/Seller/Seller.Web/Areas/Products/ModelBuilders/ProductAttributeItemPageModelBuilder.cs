@@ -13,15 +13,18 @@ namespace Seller.Web.Areas.Products.ModelBuilders
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributeItemFormViewModel> productAttributeItemFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public ProductAttributeItemPageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributeItemFormViewModel> productAttributeItemFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
+            this.productAttributeItemFormModelBuilder = productAttributeItemFormModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
         }
 
@@ -30,9 +33,10 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             var viewModel = new ProductAttributeItemPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = headerModelBuilder.BuildModel(),
-                MenuTiles = menuTilesModelBuilder.BuildModel(),
-                Footer = footerModelBuilder.BuildModel()
+                Header = this.headerModelBuilder.BuildModel(),
+                MenuTiles = this.menuTilesModelBuilder.BuildModel(),
+                ProductAttributeItemForm = await this.productAttributeItemFormModelBuilder.BuildModelAsync(componentModel),
+                Footer = this.footerModelBuilder.BuildModel()
             };
 
             return viewModel;

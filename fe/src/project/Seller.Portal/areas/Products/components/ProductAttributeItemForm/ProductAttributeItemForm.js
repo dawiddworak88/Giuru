@@ -95,6 +95,12 @@ function ProductAttributeItemForm(props) {
 }
 
 ProductAttributeItemForm.propTypes = {
+    id: PropTypes.string,
+    name: PropTypes.string,
+    nameLabel: PropTypes.string.isRequired,
+    nameRequiredErrorMessage: PropTypes.string.isRequired,
+    saveText: PropTypes.string.isRequired,
+    generalErrorMessage: PropTypes.string.isRequired
 };
 
 export default ProductAttributeItemForm;
