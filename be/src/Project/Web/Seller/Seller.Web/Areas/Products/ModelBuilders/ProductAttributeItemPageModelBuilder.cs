@@ -3,23 +3,24 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.MenuTiles.ViewModels;
+using Seller.Web.Areas.Products.ComponentModels;
 using Seller.Web.Areas.Products.ViewModels;
 using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {
-    public class ProductAttributeItemPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributeItemPageViewModel>
+    public class ProductAttributeItemPageModelBuilder : IAsyncComponentModelBuilder<ProductAttributeItemComponentModel, ProductAttributeItemPageViewModel>
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributeItemFormViewModel> productAttributeItemFormModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ProductAttributeItemComponentModel, ProductAttributeItemFormViewModel> productAttributeItemFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public ProductAttributeItemPageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributeItemFormViewModel> productAttributeItemFormModelBuilder,
+            IAsyncComponentModelBuilder<ProductAttributeItemComponentModel, ProductAttributeItemFormViewModel> productAttributeItemFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
@@ -28,7 +29,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             this.footerModelBuilder = footerModelBuilder;
         }
 
-        public async Task<ProductAttributeItemPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<ProductAttributeItemPageViewModel> BuildModelAsync(ProductAttributeItemComponentModel componentModel)
         {
             var viewModel = new ProductAttributeItemPageViewModel
             {

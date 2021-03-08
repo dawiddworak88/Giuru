@@ -3,6 +3,7 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Products.ComponentModels;
 using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Areas.Products.ViewModels;
 using System.Globalization;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Products.ModelBuilders
 {
-    public class ProductAttributeItemFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributeItemFormViewModel>
+    public class ProductAttributeItemFormModelBuilder : IAsyncComponentModelBuilder<ProductAttributeItemComponentModel, ProductAttributeItemFormViewModel>
     {
         private readonly IProductAttributesRepository productAttributesRepository;
         private readonly IStringLocalizer globalLocalizer;
@@ -29,7 +30,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
             this.linkGenerator = linkGenerator;
         }
 
-        public async Task<ProductAttributeItemFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<ProductAttributeItemFormViewModel> BuildModelAsync(ProductAttributeItemComponentModel componentModel)
         {
             var viewModel = new ProductAttributeItemFormViewModel
             {
@@ -43,6 +44,10 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 
             if (componentModel.Id.HasValue)
             {
+            }
+            else
+            {
+                viewModel.ProductAttributeId = componentModel.ProductAttributeId;
             }
 
             return viewModel;

@@ -17,54 +17,55 @@ namespace Seller.Web.Areas.Products.ApiControllers
     [Area("Products")]
     public class ProductAttributeItemsApiController : BaseApiController
     {
-        private readonly IProductAttributesRepository productAttributesRepository;
+        private readonly IProductAttributeItemsRepository productAttributeItemsRepository;
         private readonly IStringLocalizer productLocalizer;
 
         public ProductAttributeItemsApiController(
-            IProductAttributesRepository productAttributesRepository,
+            IProductAttributeItemsRepository productAttributeItemsRepository,
             IStringLocalizer<ProductResources> productLocalizer)
         {
-            this.productAttributesRepository = productAttributesRepository;
+            this.productAttributeItemsRepository = productAttributeItemsRepository;
             this.productLocalizer = productLocalizer;
         }
 
         [HttpGet]
-        [Route("api/[area]/[controller]/{productAttributeId}")]
+        [Route("[area]/[controller]/{productAttributeId}")]
         public async Task<IActionResult> Get(Guid? productAttributeId, string searchTerm, int pageIndex, int itemsPerPage)
         {
-            var productAttributeItems = await this.productAttributesRepository.GetProductAttributeItemsAsync(
+            var productAttributeItems = await this.productAttributeItemsRepository.GetAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 productAttributeId,
                 searchTerm,
                 pageIndex,
                 itemsPerPage,
-                $"{nameof(ProductAttribute.CreatedDate)} desc");
+                $"{nameof(ProductAttributeItem.CreatedDate)} desc");
 
             return this.StatusCode((int)HttpStatusCode.OK, productAttributeItems);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index([FromBody] SaveProductAttributeRequestModel model)
+        public async Task<IActionResult> Index([FromBody] SaveProductAttributeItemRequestModel model)
         {
-            var productAttributeId = await this.productAttributesRepository.SaveAsync(
+            var productAttributeId = await this.productAttributeItemsRepository.SaveAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 model.Id,
+                model.ProductAttributeId,
                 model.Name);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = productAttributeId, Message = this.productLocalizer.GetString("ProductAttributeSavedSuccessfully").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Id = productAttributeId, Message = this.productLocalizer.GetString("ProductAttributeItemSavedSuccessfully").Value });
         }
 
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            await this.productAttributesRepository.DeleteAsync(
+            await this.productAttributeItemsRepository.DeleteAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 id);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.productLocalizer.GetString("ProductAttributeDeletedSuccessfully").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.productLocalizer.GetString("ProductAttributeItemDeletedSuccessfully").Value });
         }
     }
 }

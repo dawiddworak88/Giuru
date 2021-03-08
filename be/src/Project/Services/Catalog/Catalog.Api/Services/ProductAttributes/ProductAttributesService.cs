@@ -193,10 +193,10 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task<ProductAttributeItemServiceModel> GetProductAttributeItemByIdAsync(GetProductAttributeItemByIdServiceModel model)
         {
-            var productAttributeItem = await (from pai in this.context.ProductAttributeItems
+            var productAttributeItems = from pai in this.context.ProductAttributeItems
                                        join pait in this.context.ProductAttributeItemTranslations on pai.Id equals pait.ProductAttribtuteItemId into paitx
                                        from x in paitx.DefaultIfEmpty()
-                                       where pai.ProductAttributeId == model.Id && pai.SellerId == model.OrganisationId && x.Language == model.Language && pai.IsActive
+                                       where pai.ProductAttributeId == model.Id && pai.SellerId == model.OrganisationId && (x.Language == model.Language || x.Language == null) && pai.IsActive
                                        select new ProductAttributeItemServiceModel
                                        {
                                            Id = pai.Id,
@@ -204,9 +204,9 @@ namespace Catalog.Api.Services.ProductAttributes
                                            Order = pai.Order,
                                            LastModifiedDate = pai.LastModifiedDate,
                                            CreatedDate = pai.CreatedDate
-                                       }).FirstOrDefaultAsync();
+                                       };
 
-            return productAttributeItem;
+            return await productAttributeItems.FirstOrDefaultAsync();
         }
 
         public async Task<ProductAttributeServiceModel> UpdateProductAttributeAsync(CreateUpdateProductAttributeServiceModel model)

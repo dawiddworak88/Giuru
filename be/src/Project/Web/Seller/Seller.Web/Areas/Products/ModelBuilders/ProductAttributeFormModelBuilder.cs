@@ -44,7 +44,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 
             if (componentModel.Id.HasValue)
             {
-                var productAttribute = await this.productAttributesRepository.GetProductAttributeAsync(
+                var productAttribute = await this.productAttributesRepository.GetByIdAsync(
                     componentModel.Token,
                     componentModel.Language,
                     componentModel.Id);

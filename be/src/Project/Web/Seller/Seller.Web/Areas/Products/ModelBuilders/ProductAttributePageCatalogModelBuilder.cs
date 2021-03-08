@@ -18,6 +18,7 @@ namespace Seller.Web.Areas.ProductAttributeItems.ModelBuilders
     {
         private readonly ICatalogModelBuilder catalogModelBuilder;
         private readonly IProductAttributesRepository productAttributesRepository;
+        private readonly IProductAttributeItemsRepository productAttributeItemsRepository;
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer productLocalizer;
         private readonly LinkGenerator linkGenerator;
@@ -25,12 +26,14 @@ namespace Seller.Web.Areas.ProductAttributeItems.ModelBuilders
         public ProductAttributePageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IProductAttributesRepository productAttributesRepository,
+            IProductAttributeItemsRepository productAttributeItemsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             LinkGenerator linkGenerator)
         {
             this.catalogModelBuilder = catalogModelBuilder;
             this.productAttributesRepository = productAttributesRepository;
+            this.productAttributeItemsRepository = productAttributeItemsRepository;
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
             this.linkGenerator = linkGenerator;
@@ -41,7 +44,7 @@ namespace Seller.Web.Areas.ProductAttributeItems.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<ProductAttributeItem>, ProductAttributeItem>();
 
             viewModel.NewText = this.productLocalizer.GetString("NewProductAttributeItem");
-            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "ProductAttributeItem", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewUrl = this.linkGenerator.GetPathByAction("New", "ProductAttributeItem", new { Id = componentModel.Id, Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "ProductAttributeItem", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ProductAttributeItemsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
@@ -88,7 +91,7 @@ namespace Seller.Web.Areas.ProductAttributeItems.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.productAttributesRepository.GetProductAttributeItemsAsync(
+            viewModel.PagedItems = await this.productAttributeItemsRepository.GetAsync(
                 componentModel.Token, 
                 componentModel.Language, 
                 componentModel.Id, 

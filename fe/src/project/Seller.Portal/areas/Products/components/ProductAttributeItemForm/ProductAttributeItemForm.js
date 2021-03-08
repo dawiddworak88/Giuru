@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
@@ -11,7 +12,8 @@ function ProductAttributeItemForm(props) {
     const stateSchema = {
 
         id: { value: props.id ? props.id : null, error: "" },
-        name: { value: props.name ? props.name : "", error: "" }
+        name: { value: props.name ? props.name : "", error: "" },
+        productAttributeId: { value: props.productAttributeId ? props.productAttributeId : null }
     };
 
     const stateValidatorSchema = {
@@ -66,7 +68,7 @@ function ProductAttributeItemForm(props) {
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name } = values;
+    const { id, name, productAttributeId } = values;
 
     return (
         <section className="section section-small-padding product-attribute-item">
@@ -77,6 +79,7 @@ function ProductAttributeItemForm(props) {
                         {id &&
                             <input id="id" name="id" type="hidden" value={id} />
                         }
+                        <input id="productAttributeId" name="productAttributeId" type="hidden" value={productAttributeId} />
                         <div className="field">
                             <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />

@@ -90,7 +90,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.productAttributesRepository.GetProductAttributesAsync(componentModel.Token, componentModel.Language, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, $"{nameof(ProductAttribute.CreatedDate)} desc");
+            viewModel.PagedItems = await this.productAttributesRepository.GetAsync(componentModel.Token, componentModel.Language, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, $"{nameof(ProductAttribute.CreatedDate)} desc");
 
             return viewModel;
         }

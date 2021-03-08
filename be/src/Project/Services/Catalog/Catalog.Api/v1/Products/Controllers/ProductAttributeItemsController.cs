@@ -28,18 +28,19 @@ namespace Catalog.Api.v1.Products.Controllers
     [Produces("application/json")]
     [Authorize]
     [ApiController]
-    public class ProductAttributesController : BaseApiController
+    public class ProductAttributeItemsController : BaseApiController
     {
         private readonly IProductAttributesService productAttributesService;
 
-        public ProductAttributesController(IProductAttributesService productAttributesService)
+        public ProductAttributeItemsController(IProductAttributesService productAttributesService)
         {
             this.productAttributesService = productAttributesService;
         }
 
         /// <summary>
-        /// Returns product attributes by search term. Returns all products (paginated) if search term is empty.
+        /// Returns product attribute items by product attribute id and search term. Returns all product attributes (paginated) if search term is empty.
         /// </summary>
+        /// <param name="productAttributeId">The product attribute id.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The number of items per page.</param>
@@ -50,13 +51,15 @@ namespace Catalog.Api.v1.Products.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         [AllowAnonymous]
         public async Task<IActionResult> Get(
+            Guid? productAttributeId,
             string searchTerm,
             int pageIndex,
             int itemsPerPage,
             string orderBy)
         {
-            var serviceModel = new GetProductAttributesServiceModel
+            var serviceModel = new GetProductAttributeItemsServiceModel
             {
+                ProductAttributeId = productAttributeId,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
                 SearchTerm = searchTerm,
@@ -64,19 +67,19 @@ namespace Catalog.Api.v1.Products.Controllers
                 Language = CultureInfo.CurrentCulture.Name
             };
 
-            var validator = new GetProductAttributesModelValidator();
+            var validator = new GetProductAttributeItemsModelValidator();
 
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var productAttributes = await this.productAttributesService.GetAsync(serviceModel);
+                var productAttributes = await this.productAttributesService.GetProductAttributeItemsAsync(serviceModel);
 
                 if (productAttributes != null)
                 {
-                    var response = new PagedResults<IEnumerable<ProductAttributeResponseModel>>(productAttributes.Total, productAttributes.PageSize)
+                    var response = new PagedResults<IEnumerable<ProductAttributeItemResponseModel>>(productAttributes.Total, productAttributes.PageSize)
                     {
-                        Data = productAttributes.Data.OrEmptyIfNull().Select(x => new ProductAttributeResponseModel
+                        Data = productAttributes.Data.OrEmptyIfNull().Select(x => new ProductAttributeItemResponseModel
                         {
                             Id = x.Id,
                             Name = x.Name,
@@ -94,21 +97,22 @@ namespace Catalog.Api.v1.Products.Controllers
         }
 
         /// <summary>
-        /// Saves the product attribute. Performs create if id is null and update otherwise.
+        /// Saves the product attribute item. Performs create if id is null and update otherwise.
         /// </summary>
-        /// <param name="request">Product attribute to save.</param>
-        /// <returns>Product attribute creation result.</returns>
+        /// <param name="request">Product attribute item to save.</param>
+        /// <returns>Product attribute item creation result.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(ProductResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Save([FromBody] ProductAttributeRequestModel request)
+        public async Task<IActionResult> Save([FromBody] ProductAttributeItemRequestModel request)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
-            var serviceModel = new CreateUpdateProductAttributeServiceModel
+            var serviceModel = new CreateUpdateProductAttributeItemServiceModel
             {
                 Id = request.Id,
+                ProductAttributeId = request.ProductAttributeId,
                 Name = request.Name,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
@@ -117,31 +121,23 @@ namespace Catalog.Api.v1.Products.Controllers
 
             if (request.Id.HasValue)
             {
-                var validator = new UpdateProductAttributeModelValidator();
+                var validator = new UpdateProductAttributeItemModelValidator();
 
                 var validationResult = await validator.ValidateAsync(serviceModel);
 
                 if (validationResult.IsValid)
                 {
-                    var productAttribute = await this.productAttributesService.UpdateProductAttributeAsync(serviceModel);
+                    var productAttributeItem = await this.productAttributesService.UpdateProductAttributeItemAsync(serviceModel);
 
-                    if (productAttribute != null)
+                    if (productAttributeItem != null)
                     {
-                        var response = new ProductAttributeResponseModel
+                        var response = new ProductAttributeItemResponseModel
                         {
-                            Id = productAttribute.Id,
-                            Name = productAttribute.Name,
-                            Order = productAttribute.Order,
-                            Items = productAttribute.ProductAttributeItems.OrEmptyIfNull().Select(x => new ProductAttributeItemResponseModel 
-                            {
-                                Id = x.Id,
-                                Name = x.Name,
-                                Order = x.Order,
-                                LastModifiedDate = x.LastModifiedDate,
-                                CreatedDate = x.CreatedDate
-                            }),
-                            LastModifiedDate = productAttribute.LastModifiedDate,
-                            CreatedDate = productAttribute.CreatedDate
+                            Id = productAttributeItem.Id,
+                            Name = productAttributeItem.Name,
+                            Order = productAttributeItem.Order,
+                            LastModifiedDate = productAttributeItem.LastModifiedDate,
+                            CreatedDate = productAttributeItem.CreatedDate
                         };
 
                         return this.StatusCode((int)HttpStatusCode.OK, response);
@@ -152,31 +148,23 @@ namespace Catalog.Api.v1.Products.Controllers
             }
             else
             {
-                var validator = new CreateProductAttributeModelValidator();
+                var validator = new CreateProductAttributeItemModelValidator();
 
                 var validationResult = await validator.ValidateAsync(serviceModel);
 
                 if (validationResult.IsValid)
                 {
-                    var productAttribute = await this.productAttributesService.CreateProductAttributeAsync(serviceModel);
+                    var productAttributeItem = await this.productAttributesService.CreateProductAttributeItemAsync(serviceModel);
 
-                    if (productAttribute != null)
+                    if (productAttributeItem != null)
                     {
-                        var response = new ProductAttributeResponseModel
+                        var response = new ProductAttributeItemResponseModel
                         {
-                            Id = productAttribute.Id,
-                            Name = productAttribute.Name,
-                            Order = productAttribute.Order,
-                            Items = productAttribute.ProductAttributeItems.OrEmptyIfNull().Select(x => new ProductAttributeItemResponseModel
-                            {
-                                Id = x.Id,
-                                Name = x.Name,
-                                Order = x.Order,
-                                LastModifiedDate = x.LastModifiedDate,
-                                CreatedDate = x.CreatedDate
-                            }),
-                            LastModifiedDate = productAttribute.LastModifiedDate,
-                            CreatedDate = productAttribute.CreatedDate
+                            Id = productAttributeItem.Id,
+                            Name = productAttributeItem.Name,
+                            Order = productAttributeItem.Order,
+                            LastModifiedDate = productAttributeItem.LastModifiedDate,
+                            CreatedDate = productAttributeItem.CreatedDate
                         };
 
                         return this.StatusCode((int)HttpStatusCode.Created, response);
@@ -188,21 +176,21 @@ namespace Catalog.Api.v1.Products.Controllers
         }
 
         /// <summary>
-        /// Returns a product attribute by id.
+        /// Returns a product attribute item by id.
         /// </summary>
-        /// <param name="id">The product attribute id.</param>
-        /// <returns>The product attribute.</returns>
+        /// <param name="id">The product attribute item id.</param>
+        /// <returns>The product attribute item.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [Route("{id}")]
+        [Route("ProductAttributeItems/{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [AllowAnonymous]
-        public async Task<IActionResult> GetById(Guid? id)
+        public async Task<IActionResult> Get(Guid? id)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
-            var serviceModel = new GetProductAttributeByIdServiceModel
+            var serviceModel = new GetProductAttributeItemByIdServiceModel
             {
                 Id = id.Value,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
@@ -210,31 +198,23 @@ namespace Catalog.Api.v1.Products.Controllers
                 Language = CultureInfo.CurrentCulture.Name
             };
 
-            var validator = new GetProductAttributeByIdModelValidator();
+            var validator = new GetProductAttributeItemByIdModelValidator();
 
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
-                var productAttribute = await this.productAttributesService.GetProductAttributeByIdAsync(serviceModel);
+                var productAttributeItem = await this.productAttributesService.GetProductAttributeItemByIdAsync(serviceModel);
 
-                if (productAttribute != null)
+                if (productAttributeItem != null)
                 {
-                    var response = new ProductAttributeResponseModel
+                    var response = new ProductAttributeItemResponseModel
                     {
-                        Id = productAttribute.Id,
-                        Name = productAttribute.Name,
-                        Order = productAttribute.Order,
-                        Items = productAttribute.ProductAttributeItems.OrEmptyIfNull().Select(x => new ProductAttributeItemResponseModel
-                        {
-                            Id = x.Id,
-                            Name = x.Name,
-                            Order = x.Order,
-                            LastModifiedDate = x.LastModifiedDate,
-                            CreatedDate = x.CreatedDate
-                        }),
-                        LastModifiedDate = productAttribute.LastModifiedDate,
-                        CreatedDate = productAttribute.CreatedDate
+                        Id = productAttributeItem.Id,
+                        Name = productAttributeItem.Name,
+                        Order = productAttributeItem.Order,
+                        LastModifiedDate = productAttributeItem.LastModifiedDate,
+                        CreatedDate = productAttributeItem.CreatedDate
                     };
 
                     return this.StatusCode((int)HttpStatusCode.OK, response);
@@ -250,12 +230,12 @@ namespace Catalog.Api.v1.Products.Controllers
 
 
         /// <summary>
-        /// Delete product attribute by id.
+        /// Delete product attribute item by id.
         /// </summary>
-        /// <param name="id">The product attribute id.</param>
+        /// <param name="id">The product attribute item id.</param>
         /// <returns>OK.</returns>
         [HttpDelete, MapToApiVersion("1.0")]
-        [Route("{id}")]
+        [Route("ProductAttributeItems/{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
@@ -264,7 +244,7 @@ namespace Catalog.Api.v1.Products.Controllers
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
-            var serviceModel = new DeleteProductAttributeServiceModel
+            var serviceModel = new DeleteProductAttributeItemServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
@@ -272,13 +252,13 @@ namespace Catalog.Api.v1.Products.Controllers
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var validator = new DeleteProductAttributeModelValidator();
+            var validator = new DeleteProductAttributeItemModelValidator();
 
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
-                await this.productAttributesService.DeleteProductAttributeAsync(serviceModel);
+                await this.productAttributesService.DeleteProductAttributeItemAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }

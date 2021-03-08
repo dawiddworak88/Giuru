@@ -16,12 +16,12 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.ProductAttributes.Repositories
 {
-    public class ProductAttributesRepository : IProductAttributesRepository
+    public class ProductAttributeItemsRepository : IProductAttributeItemsRepository
     {
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
 
-        public ProductAttributesRepository(
+        public ProductAttributeItemsRepository(
             IApiClientService apiClientService,
             IOptions<AppSettings> settings)
         {
@@ -33,23 +33,25 @@ namespace Seller.Web.Areas.ProductAttributes.Repositories
             string token,
             string language,
             Guid? id,
+            Guid? productAttributeId,
             string name)
         {
-            var requestModel = new SaveProductAttributeRequestModel
+            var requestModel = new SaveProductAttributeItemRequestModel
             {
                 Id = id,
+                ProductAttributeId = productAttributeId,
                 Name = name
             };
 
-            var apiRequest = new ApiRequest<SaveProductAttributeRequestModel>
+            var apiRequest = new ApiRequest<SaveProductAttributeItemRequestModel>
             {
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductAttributesApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductAttributeItemsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<SaveProductAttributeRequestModel>, SaveProductAttributeRequestModel, BaseResponseModel>(apiRequest);
+            var response = await this.apiClientService.PostAsync<ApiRequest<SaveProductAttributeItemRequestModel>, SaveProductAttributeItemRequestModel, BaseResponseModel>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Id != null)
             {
@@ -71,7 +73,7 @@ namespace Seller.Web.Areas.ProductAttributes.Repositories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductAttributesApiEndpoint}/{id}"
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductAttributeItemsApiEndpoint}/{id}"
             };
 
             var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
@@ -82,32 +84,21 @@ namespace Seller.Web.Areas.ProductAttributes.Repositories
             }
         }
 
-        public async Task<PagedResults<IEnumerable<ProductAttribute>>> GetAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<ProductAttributeItem> GetByIdAsync(string token, string language, Guid? id)
         {
-            var productAttributesRequestModel = new PagedRequestModelBase
-            {
-                SearchTerm = searchTerm,
-                PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage,
-                OrderBy = orderBy
-            };
-
-            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            var apiRequest = new ApiRequest<RequestModelBase>
             {
                 Language = language,
-                Data = productAttributesRequestModel,
+                Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductAttributesApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductAttributeItemsApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ProductAttribute>>>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ProductAttributeItem>(apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            if (response.IsSuccessStatusCode && response.Data != null)
             {
-                return new PagedResults<IEnumerable<ProductAttribute>>(response.Data.Total, response.Data.PageSize)
-                {
-                    Data = response.Data.Data
-                };
+                return response.Data;
             }
 
             if (!response.IsSuccessStatusCode)
@@ -118,21 +109,33 @@ namespace Seller.Web.Areas.ProductAttributes.Repositories
             return default;
         }
 
-        public async Task<ProductAttribute> GetByIdAsync(string token, string language, Guid? id)
+        public async Task<PagedResults<IEnumerable<ProductAttributeItem>>> GetAsync(string token, string language, Guid? productAttributeId, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
-            var apiRequest = new ApiRequest<RequestModelBase>
+            var productAttributeItems = new PagedProductAttributeItemsRequestModel
             {
-                Language = language,
-                Data = new RequestModelBase(),
-                AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductAttributesApiEndpoint}/{id}"
+                ProductAttributeId = productAttributeId,
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ProductAttribute>(apiRequest);
-
-            if (response.IsSuccessStatusCode && response.Data != null)
+            var apiRequest = new ApiRequest<PagedProductAttributeItemsRequestModel>
             {
-                return response.Data;
+                Language = language,
+                Data = productAttributeItems,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductAttributeItemsApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedProductAttributeItemsRequestModel>, PagedProductAttributeItemsRequestModel, PagedResults<IEnumerable<ProductAttributeItem>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                return new PagedResults<IEnumerable<ProductAttributeItem>>(response.Data.Total, response.Data.PageSize)
+                {
+                    Data = response.Data.Data
+                };
             }
 
             if (!response.IsSuccessStatusCode)

@@ -31,7 +31,7 @@ namespace Seller.Web.Areas.Products.ApiControllers
         [HttpGet]
         public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage)
         {
-            var productAttributes = await this.productAttributesRepository.GetProductAttributesAsync(
+            var productAttributes = await this.productAttributesRepository.GetAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 searchTerm,
