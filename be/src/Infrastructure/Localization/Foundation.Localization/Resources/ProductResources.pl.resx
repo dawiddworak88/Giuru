@@ -183,8 +183,20 @@
   <data name="ProductAttributeDeletedSuccessfully" xml:space="preserve">
     <value>Atrybut produktu został usunięty.</value>
   </data>
+  <data name="ProductAttributeItemDeletedSuccessfully" xml:space="preserve">
+    <value>Wartość atrybutu została usunięta.</value>
+  </data>
+  <data name="ProductAttributeItemNotFound" xml:space="preserve">
+    <value>Wartość atrybutu produktu nie została znaleziona.</value>
+  </data>
   <data name="ProductAttributeItemSavedSuccessfully" xml:space="preserve">
     <value>Wartość atrybutu została pomyślnie zapisana.</value>
+  </data>
+  <data name="ProductAttributeNotEmpty" xml:space="preserve">
+    <value>Usuń wartości przypisane do tego atrybutu.</value>
+  </data>
+  <data name="ProductAttributeNotFound" xml:space="preserve">
+    <value>Atrybut produktu nie został znaleziony.</value>
   </data>
   <data name="ProductAttributeSavedSuccessfully" xml:space="preserve">
     <value>Atrybut produktu został pomyślnie zapisany.</value>

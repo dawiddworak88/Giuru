@@ -183,8 +183,20 @@
   <data name="ProductAttributeDeletedSuccessfully" xml:space="preserve">
     <value>Product attribute has been deleted successfully.</value>
   </data>
+  <data name="ProductAttributeItemDeletedSuccessfully" xml:space="preserve">
+    <value>Product attribute item has been deleted successfully.</value>
+  </data>
+  <data name="ProductAttributeItemNotFound" xml:space="preserve">
+    <value>Product attribute item has not been found.</value>
+  </data>
   <data name="ProductAttributeItemSavedSuccessfully" xml:space="preserve">
     <value>Product attribute item has been saved successfully.</value>
+  </data>
+  <data name="ProductAttributeNotEmpty" xml:space="preserve">
+    <value>Delete product attribute items of this attribute first.</value>
+  </data>
+  <data name="ProductAttributeNotFound" xml:space="preserve">
+    <value>Product attribute has not been found.</value>
   </data>
   <data name="ProductAttributeSavedSuccessfully" xml:space="preserve">
     <value>Product attribute has been saved successfully.</value>

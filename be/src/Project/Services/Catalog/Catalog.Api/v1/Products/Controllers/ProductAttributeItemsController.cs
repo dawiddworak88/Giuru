@@ -235,7 +235,7 @@ namespace Catalog.Api.v1.Products.Controllers
         /// <param name="id">The product attribute item id.</param>
         /// <returns>OK.</returns>
         [HttpDelete, MapToApiVersion("1.0")]
-        [Route("ProductAttributeItems/{id}")]
+        [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]

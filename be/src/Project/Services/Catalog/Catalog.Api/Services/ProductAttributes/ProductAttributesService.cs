@@ -138,6 +138,11 @@ namespace Catalog.Api.Services.ProductAttributes
                 throw new CustomException(this.productLocalizer.GetString("ProductAttributeNotFound"), (int)HttpStatusCode.NotFound);
             }
 
+            if (existingProductAttribute.ProductAttributeItems.Any(x => x.IsActive))
+            {
+                throw new CustomException(this.productLocalizer.GetString("ProductAttributeNotEmpty"), (int)HttpStatusCode.NotFound);
+            }
+
             existingProductAttribute.IsActive = false;
 
             await this.context.SaveChangesAsync();
