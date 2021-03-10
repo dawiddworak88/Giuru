@@ -183,6 +183,9 @@
   <data name="ProductAttributeDeletedSuccessfully" xml:space="preserve">
     <value>Das Produktattribut wurde erfolgreich gelöscht.</value>
   </data>
+  <data name="ProductAttributeItemSavedSuccessfully" xml:space="preserve">
+    <value>Die Wert des Produktattributs wurde erfolgreich gespeichert.</value>
+  </data>
   <data name="ProductAttributeSavedSuccessfully" xml:space="preserve">
     <value>Das Produktattribut wurde erfolgreich gespeichert.</value>
   </data>

@@ -111,7 +111,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
             var productAttributeItemTranslation = new ProductAttributeItemTranslation
             {
-                ProductAttribtuteItemId = productAttributeItem.Id,
+                ProductAttributeItemId = productAttributeItem.Id,
                 Name = model.Name,
                 Language = model.Language
             };
@@ -175,7 +175,7 @@ namespace Catalog.Api.Services.ProductAttributes
             if (productAttribute != null)
             {
                 productAttribute.ProductAttributeItems = from pai in this.context.ProductAttributeItems
-                                                         join pait in this.context.ProductAttributeItemTranslations on pai.Id equals pait.ProductAttribtuteItemId into paitx
+                                                         join pait in this.context.ProductAttributeItemTranslations on pai.Id equals pait.ProductAttributeItemId into paitx
                                                          from x in paitx.DefaultIfEmpty()
                                                          where pai.ProductAttributeId == productAttribute.Id && pai.SellerId == model.OrganisationId && x.Language == model.Language && pai.IsActive
                                                          select new ProductAttributeItemServiceModel
@@ -194,9 +194,9 @@ namespace Catalog.Api.Services.ProductAttributes
         public async Task<ProductAttributeItemServiceModel> GetProductAttributeItemByIdAsync(GetProductAttributeItemByIdServiceModel model)
         {
             var productAttributeItems = from pai in this.context.ProductAttributeItems
-                                       join pait in this.context.ProductAttributeItemTranslations on pai.Id equals pait.ProductAttribtuteItemId into paitx
+                                       join pait in this.context.ProductAttributeItemTranslations on pai.Id equals pait.ProductAttributeItemId into paitx
                                        from x in paitx.DefaultIfEmpty()
-                                       where pai.ProductAttributeId == model.Id && pai.SellerId == model.OrganisationId && (x.Language == model.Language || x.Language == null) && pai.IsActive
+                                       where pai.Id == model.Id && pai.SellerId == model.OrganisationId && x.Language == model.Language && pai.IsActive
                                        select new ProductAttributeItemServiceModel
                                        {
                                            Id = pai.Id,
@@ -265,7 +265,7 @@ namespace Catalog.Api.Services.ProductAttributes
                 {
                     var newProductAttributeItemTranslation = new ProductAttributeItemTranslation
                     {
-                        ProductAttribtuteItemId = productAttributeItem.Id,
+                        ProductAttributeItemId = productAttributeItem.Id,
                         Language = model.Language,
                         Name = model.Name
                     };
@@ -288,9 +288,9 @@ namespace Catalog.Api.Services.ProductAttributes
         public async Task<PagedResults<IEnumerable<ProductAttributeItemServiceModel>>> GetProductAttributeItemsAsync(GetProductAttributeItemsServiceModel model)
         {
             var productAttributesItems = from c in this.context.ProductAttributeItems
-                                        join t in this.context.ProductAttributeItemTranslations on c.Id equals t.ProductAttribtuteItemId into ct
+                                        join t in this.context.ProductAttributeItemTranslations on c.Id equals t.ProductAttributeItemId into ct
                                         from x in ct.DefaultIfEmpty()
-                                        where (x.Language == model.Language || model.Language == null) && c.IsActive
+                                        where c.ProductAttributeId == model.ProductAttributeId && (x.Language == model.Language || model.Language == null) && c.IsActive
                                         select new ProductAttributeItemServiceModel
                                         {
                                             Id = c.Id,

@@ -1,6 +1,5 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
-using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Products.ComponentModels;
@@ -13,18 +12,18 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 {
     public class ProductAttributeItemFormModelBuilder : IAsyncComponentModelBuilder<ProductAttributeItemComponentModel, ProductAttributeItemFormViewModel>
     {
-        private readonly IProductAttributesRepository productAttributesRepository;
+        private readonly IProductAttributeItemsRepository productAttributeItemsRepository;
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer productLocalizer;
         private readonly LinkGenerator linkGenerator;
 
         public ProductAttributeItemFormModelBuilder(
-            IProductAttributesRepository productAttributesRepository,
+            IProductAttributeItemsRepository productAttributeItemsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
             LinkGenerator linkGenerator)
         {
-            this.productAttributesRepository = productAttributesRepository;
+            this.productAttributeItemsRepository = productAttributeItemsRepository;
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
             this.linkGenerator = linkGenerator;
@@ -44,6 +43,16 @@ namespace Seller.Web.Areas.Products.ModelBuilders
 
             if (componentModel.Id.HasValue)
             {
+                var productAttributeItem = await this.productAttributeItemsRepository.GetByIdAsync(
+                    componentModel.Token,
+                    componentModel.Language,
+                    componentModel.Id);
+
+                if (productAttributeItem != null)
+                {
+                    viewModel.Id = productAttributeItem.Id;
+                    viewModel.Name = productAttributeItem.Name;
+                }
             }
             else
             {

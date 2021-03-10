@@ -253,10 +253,7 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ProductAttribtuteItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ProductAttributeItemId")
+                    b.Property<Guid>("ProductAttributeItemId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("RowVersion")
@@ -561,7 +558,9 @@ namespace Catalog.Api.Infrastructure.Migrations
                 {
                     b.HasOne("Foundation.Catalog.Infrastructure.ProductAttributes.Entities.ProductAttributeItem", null)
                         .WithMany("ProductAttributeItemTranslations")
-                        .HasForeignKey("ProductAttributeItemId");
+                        .HasForeignKey("ProductAttributeItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Foundation.Catalog.Infrastructure.ProductAttributes.Entities.ProductAttributeTranslation", b =>

@@ -47,7 +47,7 @@ namespace Catalog.Api.v1.Products.Controllers
         /// <param name="orderBy">The optional order by.</param>
         /// <returns></returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<ProductAttributeResponseModel>>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<ProductAttributeItemResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         [AllowAnonymous]
         public async Task<IActionResult> Get(
@@ -181,7 +181,7 @@ namespace Catalog.Api.v1.Products.Controllers
         /// <param name="id">The product attribute item id.</param>
         /// <returns>The product attribute item.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [Route("ProductAttributeItems/{id}")]
+        [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]

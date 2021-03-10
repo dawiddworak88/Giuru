@@ -42,7 +42,7 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 Header = this.headerModelBuilder.BuildModel(),
                 MenuTiles = this.menuTilesModelBuilder.BuildModel(),
                 ProductAttributeForm = await this.productAttributeFormModelBuilder.BuildModelAsync(componentModel),
-                Catalog = await this.productAttributeItemsCatalogModelBuilder.BuildModelAsync(componentModel),
+                Catalog = componentModel.Id.HasValue ? await this.productAttributeItemsCatalogModelBuilder.BuildModelAsync(componentModel) : null,
                 Footer = this.footerModelBuilder.BuildModel()
             };
 

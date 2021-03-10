@@ -299,8 +299,7 @@ namespace Catalog.Api.Infrastructure.Migrations
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     Language = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
-                    ProductAttribtuteItemId = table.Column<Guid>(nullable: false),
-                    ProductAttributeItemId = table.Column<Guid>(nullable: true)
+                    ProductAttributeItemId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -310,7 +309,7 @@ namespace Catalog.Api.Infrastructure.Migrations
                         column: x => x.ProductAttributeItemId,
                         principalTable: "ProductAttributeItems",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Catalog.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20210307090358_Initial")]
+    [Migration("20210309204413_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -255,10 +255,7 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ProductAttribtuteItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ProductAttributeItemId")
+                    b.Property<Guid>("ProductAttributeItemId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("RowVersion")
@@ -563,7 +560,9 @@ namespace Catalog.Api.Infrastructure.Migrations
                 {
                     b.HasOne("Foundation.Catalog.Infrastructure.ProductAttributes.Entities.ProductAttributeItem", null)
                         .WithMany("ProductAttributeItemTranslations")
-                        .HasForeignKey("ProductAttributeItemId");
+                        .HasForeignKey("ProductAttributeItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Foundation.Catalog.Infrastructure.ProductAttributes.Entities.ProductAttributeTranslation", b =>
