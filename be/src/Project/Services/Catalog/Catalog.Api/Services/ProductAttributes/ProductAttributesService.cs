@@ -93,7 +93,7 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task<ProductAttributeItemServiceModel> CreateProductAttributeItemAsync(CreateUpdateProductAttributeItemServiceModel model)
         {
-            var existingProductItemAttribute = this.context.ProductAttributeItems.FirstOrDefault(x => x.ProductAttributeItemTranslations.Any(y => y.Name == model.Name) && x.SellerId == model.OrganisationId && x.IsActive);
+            var existingProductItemAttribute = this.context.ProductAttributeItems.FirstOrDefault(x => x.ProductAttributeItemTranslations.Any(y => y.Name == model.Name) && x.ProductAttributeId == model.ProductAttributeId && x.SellerId == model.OrganisationId && x.IsActive);
 
             if (existingProductItemAttribute != null)
             {
