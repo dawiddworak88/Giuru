@@ -11,6 +11,7 @@ using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -38,27 +39,44 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task<PagedResults<IEnumerable<ProductAttributeServiceModel>>> GetAsync(GetProductAttributesServiceModel model)
         {
-            var productAttributes = from c in this.context.ProductAttributes
-                             join t in this.context.ProductAttributeTranslations on c.Id equals t.ProductAttributeId into ct
-                             from x in ct.DefaultIfEmpty()
-                             where (x.Language == model.Language || model.Language == null) && c.IsActive
-                             select new ProductAttributeServiceModel
-                             {
-                                 Id = c.Id,
-                                 Order = c.Order,
-                                 Name = x.Name,
-                                 LastModifiedDate = c.LastModifiedDate,
-                                 CreatedDate = c.CreatedDate
-                             };
+            var productAttributes = this.context.ProductAttributes.Where(x => x.IsActive);
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
-                productAttributes = productAttributes.Where(x => x.Name.StartsWith(model.SearchTerm));
+                productAttributes = productAttributes.Where(x => x.ProductAttributeTranslations.Any(x => x.Name.StartsWith(model.SearchTerm) && x.IsActive));
             }
 
             productAttributes = productAttributes.ApplySort(model.OrderBy);
 
-            return productAttributes.PagedIndex(new Pagination(productAttributes.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedProductAttributes = productAttributes.PagedIndex(new Pagination(productAttributes.Count(), model.ItemsPerPage), model.PageIndex);
+
+            var pagedProductAttributeServiceModels = new PagedResults<IEnumerable<ProductAttributeServiceModel>>(pagedProductAttributes.Total, pagedProductAttributes.PageSize);
+
+            var productAttributeServiceModels = new List<ProductAttributeServiceModel>();
+
+            foreach (var pagedProductAttribute in pagedProductAttributes.Data.ToList())
+            {
+                var productAttributeServiceModel = new ProductAttributeServiceModel
+                {
+                    Id = pagedProductAttribute.Id,
+                    Order = pagedProductAttribute.Order,
+                    LastModifiedDate = pagedProductAttribute.LastModifiedDate,
+                    CreatedDate = pagedProductAttribute.CreatedDate
+                };
+
+                productAttributeServiceModel.Name = pagedProductAttribute.ProductAttributeTranslations.FirstOrDefault(x => x.Language == model.Language && x.IsActive)?.Name;
+
+                if (string.IsNullOrWhiteSpace(productAttributeServiceModel.Name))
+                {
+                    productAttributeServiceModel.Name = pagedProductAttribute.ProductAttributeTranslations.FirstOrDefault(x => x.IsActive)?.Name;
+                }
+
+                productAttributeServiceModels.Add(productAttributeServiceModel);
+            }
+
+            pagedProductAttributeServiceModels.Data = productAttributeServiceModels;
+
+            return pagedProductAttributeServiceModels;
         }
 
         public async Task<ProductAttributeServiceModel> CreateProductAttributeAsync(CreateUpdateProductAttributeServiceModel model)
