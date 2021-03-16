@@ -15,6 +15,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Media.Api.Services.Media;
 using Media.Api.v1.Areas.Media.RequestModels;
+using Foundation.ApiExtensions.Shared.Definitions;
 
 namespace Media.Api.v1.Controllers
 {
@@ -67,7 +68,7 @@ namespace Media.Api.v1.Controllers
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Guid))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [DisableRequestSizeLimit]
+        [RequestSizeLimit(ApiConstants.Request.RequestSizeLimit)]
         public async Task<IActionResult> Create([FromForm] UploadMediaRequestModel model)
         {
             if (model.File == null)

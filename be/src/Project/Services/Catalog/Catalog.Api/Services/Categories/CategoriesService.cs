@@ -227,7 +227,7 @@ namespace Catalog.Api.Services.Categories
 
         public async Task<CategorySchemaServiceModel> UpdateCategorySchemaAsync(UpdateCategorySchemaServiceModel model)
         {
-            var categorySchema = await this.context.CategorySchemas.FirstOrDefaultAsync(x => x.CategoryId == model.CategoryId && model.Language == model.Language && x.IsActive);
+            var categorySchema = await this.context.CategorySchemas.FirstOrDefaultAsync(x => x.CategoryId == model.CategoryId && x.Language == model.Language && x.IsActive);
 
             if (categorySchema != null)
             {
