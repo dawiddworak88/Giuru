@@ -43,5 +43,10 @@
             public static readonly string FileContentName = "file";
             public static readonly string LanguageContentName = "language";
         }
+
+        public struct Request
+        {
+            public const long RequestSizeLimit = 200_000_000;
+        }
     }
 }

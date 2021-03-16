@@ -1,5 +1,6 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Services.MediaServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
         }
 
         [HttpPost]
-        [DisableRequestSizeLimit]
+        [RequestSizeLimit(ApiConstants.Request.RequestSizeLimit)]
         public async Task<IActionResult> Post([FromForm] UploadMediaRequestModel model)
         {
             if (model.File == null)
