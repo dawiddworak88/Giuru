@@ -4,7 +4,7 @@ using Foundation.Extensions.Validators;
 
 namespace Catalog.Api.Validators.Categories
 {
-    public class CreateCategoryModelValidator : BaseServiceModelValidator<CreateCategoryServiceModel>
+    public class CreateCategoryModelValidator : BaseAuthorizedServiceModelValidator<CreateCategoryServiceModel>
     {
         public CreateCategoryModelValidator()
         {

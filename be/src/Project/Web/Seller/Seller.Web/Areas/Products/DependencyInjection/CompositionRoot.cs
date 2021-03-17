@@ -8,6 +8,9 @@ using Seller.Web.Areas.Categories.ModelBuilders;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Shared.ViewModels;
 using Seller.Web.Areas.Categories.Repositories;
+using Seller.Web.Areas.ProductAttributes.Repositories;
+using Seller.Web.Areas.ProductAttributeItems.ModelBuilders;
+using Seller.Web.Areas.Products.ComponentModels;
 
 namespace Seller.Web.Areas.Products.DependencyInjection
 {
@@ -17,6 +20,8 @@ namespace Seller.Web.Areas.Products.DependencyInjection
         {
             services.AddScoped<IMediaItemsRepository, MediaItemsRepository>();
             services.AddScoped<IProductsRepository, ProductsRepository>();
+            services.AddScoped<IProductAttributesRepository, ProductAttributesRepository>();
+            services.AddScoped<IProductAttributeItemsRepository, ProductAttributeItemsRepository>();
             services.AddScoped<ICategoriesRepository, CategoriesRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CategoriesPageViewModel>, CategoriesPageModelBuilder> ();
@@ -25,6 +30,13 @@ namespace Seller.Web.Areas.Products.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Category>>, CategoriesPageCatalogModelBuilder>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductsPageViewModel>, ProductsPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributesPageViewModel>, ProductAttributesPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributePageViewModel>, ProductAttributePageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductAttributeFormViewModel>, ProductAttributeFormModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ProductAttributeItemComponentModel, ProductAttributeItemPageViewModel>, ProductAttributeItemPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ProductAttributeItemComponentModel, ProductAttributeItemFormViewModel>, ProductAttributeItemFormModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductAttribute>>, ProductAttributesPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductAttributeItem>>, ProductAttributePageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductFormViewModel>, ProductFormModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel>, ProductPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Product>>, ProductsPageCatalogModelBuilder>();

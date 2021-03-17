@@ -9,9 +9,6 @@ namespace Foundation.Catalog.Infrastructure.Categories.Entities
     public class Category : Entity
     {
         [Required]
-        public Guid SchemaId { get; set; }
-
-        [Required]
         public int Level { get; set; }
 
         [Required]
@@ -23,5 +20,7 @@ namespace Foundation.Catalog.Infrastructure.Categories.Entities
         public bool IsLeaf { get; set; }
 
         public virtual IEnumerable<CategoryTranslation> Translations { get; set; }
+
+        public virtual IEnumerable<CategorySchema> Schemas { get; set; }
     }
 }

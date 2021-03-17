@@ -138,8 +138,20 @@
   <data name="EditProduct" xml:space="preserve">
     <value>Edit product</value>
   </data>
+  <data name="EditProductAttribute" xml:space="preserve">
+    <value>Edit product attribute</value>
+  </data>
+  <data name="EditProductAttributeItem" xml:space="preserve">
+    <value>Edit attribute item</value>
+  </data>
   <data name="EnterCategoryName" xml:space="preserve">
     <value>Enter category name</value>
+  </data>
+  <data name="EnterProductAttributeItemName" xml:space="preserve">
+    <value>Enter attribute item name</value>
+  </data>
+  <data name="EnterProductAttributeName" xml:space="preserve">
+    <value>Enter product attribute name</value>
   </data>
   <data name="EnterSkuText" xml:space="preserve">
     <value>Enter SKU</value>
@@ -149,6 +161,12 @@
   </data>
   <data name="NewProduct" xml:space="preserve">
     <value>New product</value>
+  </data>
+  <data name="NewProductAttribute" xml:space="preserve">
+    <value>New product attribute</value>
+  </data>
+  <data name="NewProductAttributeItem" xml:space="preserve">
+    <value>New product attribute item</value>
   </data>
   <data name="ParentCategory" xml:space="preserve">
     <value>Parent category</value>
@@ -161,6 +179,27 @@
   </data>
   <data name="ProductAlreadyExists" xml:space="preserve">
     <value>Product has been already created.</value>
+  </data>
+  <data name="ProductAttributeDeletedSuccessfully" xml:space="preserve">
+    <value>Product attribute has been deleted successfully.</value>
+  </data>
+  <data name="ProductAttributeItemDeletedSuccessfully" xml:space="preserve">
+    <value>Product attribute item has been deleted successfully.</value>
+  </data>
+  <data name="ProductAttributeItemNotFound" xml:space="preserve">
+    <value>Product attribute item has not been found.</value>
+  </data>
+  <data name="ProductAttributeItemSavedSuccessfully" xml:space="preserve">
+    <value>Product attribute item has been saved successfully.</value>
+  </data>
+  <data name="ProductAttributeNotEmpty" xml:space="preserve">
+    <value>Delete product attribute items of this attribute first.</value>
+  </data>
+  <data name="ProductAttributeNotFound" xml:space="preserve">
+    <value>Product attribute has not been found.</value>
+  </data>
+  <data name="ProductAttributeSavedSuccessfully" xml:space="preserve">
+    <value>Product attribute has been saved successfully.</value>
   </data>
   <data name="ProductDeletedSuccessfully" xml:space="preserve">
     <value>Product has been deleted successfully</value>

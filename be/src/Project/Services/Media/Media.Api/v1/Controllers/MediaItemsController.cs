@@ -41,7 +41,7 @@ namespace Media.Api.v1.Controllers
         /// <returns>Media items.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<MediaItemResponseModel>>))]
-        [ProducesResponseType(400)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [AllowAnonymous]
         public async Task<IActionResult> Get(string ids, int pageIndex, int itemsPerPage)
         {
@@ -104,7 +104,7 @@ namespace Media.Api.v1.Controllers
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(MediaItemResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Get(Guid? id)
         {
             var serviceModel = new GetMediaItemsByIdServiceModel

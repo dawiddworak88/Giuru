@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using Foundation.GenericRepository.Paginations;
 using Catalog.Api.v1.Categories.ResultModels;
 using Foundation.Extensions.ExtensionMethods;
+using Catalog.Api.v1.Categories.ResponseModels;
 
 namespace Catalog.Api.v1.Categories.Controllers
 {
@@ -84,7 +85,6 @@ namespace Catalog.Api.v1.Categories.Controllers
                             Name = x.Name,
                             Order = x.Order,
                             ParentId = x.ParentId,
-                            SchemaId = x.SchemaId,
                             ThumbnailMediaId = x.ThumbnailMediaId,
                             ParentCategoryName = x.ParentCategoryName,
                             LastModifiedDate = x.LastModifiedDate,
@@ -138,7 +138,6 @@ namespace Catalog.Api.v1.Categories.Controllers
                         Order = category.Order,
                         ParentCategoryName = category.ParentCategoryName,
                         ParentId = category.ParentId,
-                        SchemaId = category.SchemaId,
                         ThumbnailMediaId = category.ThumbnailMediaId,
                         LastModifiedDate = category.LastModifiedDate,
                         CreatedDate = category.CreatedDate
@@ -201,7 +200,6 @@ namespace Catalog.Api.v1.Categories.Controllers
                             Order = category.Order,
                             ParentCategoryName = category.ParentCategoryName,
                             ParentId = category.ParentId,
-                            SchemaId = category.SchemaId,
                             ThumbnailMediaId = category.ThumbnailMediaId,
                             LastModifiedDate = category.LastModifiedDate,
                             CreatedDate = category.CreatedDate
@@ -244,7 +242,6 @@ namespace Catalog.Api.v1.Categories.Controllers
                             Order = category.Order,
                             ParentCategoryName = category.ParentCategoryName,
                             ParentId = category.ParentId,
-                            SchemaId = category.SchemaId,
                             ThumbnailMediaId = category.ThumbnailMediaId,
                             LastModifiedDate = category.LastModifiedDate,
                             CreatedDate = category.CreatedDate
@@ -286,6 +283,108 @@ namespace Catalog.Api.v1.Categories.Controllers
                 await this.categoryService.DeleteAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Updates category schema.
+        /// </summary>
+        /// <param name="request">The model.</param>
+        /// <returns>The category schema.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [Route("CategorySchemas")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemaResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> SaveCategorySchema(CategorySchemaRequestModel request)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
+            var serviceModel = new UpdateCategorySchemaServiceModel
+            {
+                CategoryId = request.CategoryId,
+                Schema = request.Schema,
+                UiSchema = request.UiSchema,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new UpdateCategorySchemaModelValidator();
+
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var categorySchema = await this.categoryService.UpdateCategorySchemaAsync(serviceModel);
+
+                if (categorySchema != null)
+                {
+                    var response = new CategorySchemaResponseModel
+                    {
+                        Id = categorySchema.Id,
+                        CategoryId = categorySchema.CategoryId,
+                        Schema = categorySchema.Schema,
+                        UiSchema = categorySchema.UiSchema,
+                        LastModifiedDate = categorySchema.LastModifiedDate,
+                        CreatedDate = categorySchema.CreatedDate
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Gets schema by category id.
+        /// </summary>
+        /// <param name="categoryId">The category id.</param>
+        /// <returns>The category schema.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("CategorySchemas/{categoryId}")]
+        [AllowAnonymous]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(CategorySchemaResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetCategorySchemaByCategoryId(Guid? categoryId)
+        {
+            var serviceModel = new GetCategorySchemaServiceModel
+            {
+                CategoryId = categoryId,
+                Language = CultureInfo.CurrentCulture.Name
+            };
+
+            var validator = new GetCategorySchemaModelValidator();
+
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var categorySchema = await this.categoryService.GetCategorySchemaAsync(serviceModel);
+
+                if (categorySchema != null)
+                {
+                    var response = new CategorySchemaResponseModel
+                    {
+                        Id = categorySchema.Id,
+                        CategoryId = categorySchema.CategoryId,
+                        Schema = categorySchema.Schema,
+                        UiSchema = categorySchema.UiSchema,
+                        LastModifiedDate = categorySchema.LastModifiedDate,
+                        CreatedDate = categorySchema.CreatedDate
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+                else
+                {
+                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                }
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);

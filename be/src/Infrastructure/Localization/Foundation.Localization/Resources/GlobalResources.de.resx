@@ -321,6 +321,9 @@
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Datenschutz-Bestimmungen</value>
   </data>
+  <data name="ProductAttributes" xml:space="preserve">
+    <value>Produktattribute</value>
+  </data>
   <data name="Products" xml:space="preserve">
     <value>Produkte</value>
   </data>

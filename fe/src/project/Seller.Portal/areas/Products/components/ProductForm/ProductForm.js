@@ -7,8 +7,13 @@ import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { TextField, Button, CircularProgress, FormControlLabel, Switch } from "@material-ui/core";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
+import DynamicForm from "../../../../../../shared/components/DynamicForm/DynamicForm";
 
 function ProductForm(props) {
+
+    const uiSchema = {};
+
+    const jsonSchema = {};
 
     const categoriesProps = {
         options: props.categories,
@@ -32,7 +37,8 @@ function ProductForm(props) {
         primaryProduct: { value: props.primaryProductId ? props.primaryProducts.find((item) => item.id === props.primaryProductId) : null },
         images: { value: props.images ? props.images : [] },
         files: { value: props.files ? props.files : [] },
-        isNew: { value: props.isNew ? props.isNew : false }
+        isNew: { value: props.isNew ? props.isNew : false },
+        formData: { value: props.formData ? JSON.parse(props.formData) : {} }
     };
 
     const stateValidatorSchema = {
@@ -51,7 +57,38 @@ function ProductForm(props) {
         }
     };
 
-    function onSubmitForm(state) {
+    const onCategoryChange = (event, newValue) => {
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        setFieldValue({ name: "category", value: newValue });
+
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newValue)
+        };
+
+        fetch(props.getCategorySchemaUrl, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                return response.json().then(jsonResponse => {
+
+                    if (response.ok) {
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    };
+
+    const onSubmitForm = (state) => {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
@@ -93,7 +130,7 @@ function ProductForm(props) {
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, category, sku, name, description, primaryProduct, images, files, isNew } = values;
+    const { id, category, sku, name, description, primaryProduct, images, files, isNew, formData } = values;
 
     return (
         <section className="section section-small-padding product">
@@ -111,9 +148,7 @@ function ProductForm(props) {
                                 name="category"
                                 fullWidth={true}
                                 value={category}
-                                onChange={(event, newValue) => {
-                                    setFieldValue({ name: "category", value: newValue });
-                                  }}
+                                onChange={onCategoryChange}
                                 autoComplete
                                 renderInput={(params) => <TextField {...params} label={props.selectCategoryLabel} margin="normal" />}
                             />
@@ -191,6 +226,11 @@ function ProductForm(props) {
                                     label={props.isNewLabel} />
                             </NoSsr>
                         </div>
+                        <DynamicForm 
+                            jsonSchema={jsonSchema} 
+                            uiSchema={uiSchema} 
+                            formData={formData} 
+                            onChange={handleOnChange} />
                         <div className="field">
                             <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
                                 {props.saveText}
@@ -227,6 +267,7 @@ ProductForm.propTypes = {
     dropFilesLabel: PropTypes.string.isRequired,
     saveMediaUrl: PropTypes.string.isRequired,
     deleteLabel: PropTypes.string.isRequired,
+    getCategorySchemaUrl: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired
 };
 

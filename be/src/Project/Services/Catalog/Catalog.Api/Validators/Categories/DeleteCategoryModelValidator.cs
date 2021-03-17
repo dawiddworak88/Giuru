@@ -4,11 +4,11 @@ using Foundation.Extensions.Validators;
 
 namespace Catalog.Api.Validators.Categories
 {
-    public class DeleteCategoryModelValidator : BaseServiceModelValidator<DeleteCategoryServiceModel>
+    public class DeleteCategoryModelValidator : BaseAuthorizedServiceModelValidator<DeleteCategoryServiceModel>
     {
         public DeleteCategoryModelValidator()
         {
-            this.RuleFor(x => x.Id).NotNull();
+            this.RuleFor(x => x.Id).NotNull().NotEmpty();
         }
     }
 }
