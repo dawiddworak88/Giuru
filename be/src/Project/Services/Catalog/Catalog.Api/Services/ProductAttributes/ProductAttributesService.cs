@@ -64,12 +64,14 @@ namespace Catalog.Api.Services.ProductAttributes
                     CreatedDate = pagedProductAttribute.CreatedDate
                 };
 
-                productAttributeServiceModel.Name = pagedProductAttribute.ProductAttributeTranslations.FirstOrDefault(x => x.Language == model.Language && x.IsActive)?.Name;
+                var productAttributeTranslations = pagedProductAttribute.ProductAttributeTranslations.FirstOrDefault(x => x.Language == model.Language && x.IsActive);
 
-                if (string.IsNullOrWhiteSpace(productAttributeServiceModel.Name))
+                if (productAttributeTranslations == null)
                 {
-                    productAttributeServiceModel.Name = pagedProductAttribute.ProductAttributeTranslations.FirstOrDefault(x => x.IsActive)?.Name;
+                    productAttributeTranslations = pagedProductAttribute.ProductAttributeTranslations.FirstOrDefault(x => x.IsActive);
                 }
+
+                productAttributeServiceModel.Name = productAttributeTranslations?.Name;
 
                 productAttributeServiceModels.Add(productAttributeServiceModel);
             }
@@ -330,7 +332,37 @@ namespace Catalog.Api.Services.ProductAttributes
 
             productAttributesItems = productAttributesItems.ApplySort(model.OrderBy);
 
-            return productAttributesItems.PagedIndex(new Pagination(productAttributesItems.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedProductAttributeItems = productAttributesItems.PagedIndex(new Pagination(productAttributesItems.Count(), model.ItemsPerPage), model.PageIndex);
+
+            var pagedProductAttributeItemServiceModels = new PagedResults<IEnumerable<ProductAttributeItemServiceModel>>(pagedProductAttributeItems.Total, pagedProductAttributeItems.PageSize);
+
+            var productAttributeItemServiceModels = new List<ProductAttributeItemServiceModel>();
+
+            foreach (var pagedProductAttributeItem in pagedProductAttributeItems.Data.ToList())
+            {
+                var productAttributeItemServiceModel = new ProductAttributeItemServiceModel
+                {
+                    Id = pagedProductAttributeItem.Id,
+                    Order = pagedProductAttributeItem.Order,
+                    LastModifiedDate = pagedProductAttributeItem.LastModifiedDate,
+                    CreatedDate = pagedProductAttributeItem.CreatedDate
+                };
+
+                var productAttributeItemTranslations = this.context.ProductAttributeItemTranslations.FirstOrDefault(x => x.ProductAttributeItemId == pagedProductAttributeItem.Id &&  x.Language == model.Language && x.IsActive);
+
+                if (productAttributeItemTranslations == null)
+                {
+                    productAttributeItemTranslations = this.context.ProductAttributeItemTranslations.FirstOrDefault(x => x.ProductAttributeItemId == pagedProductAttributeItem.Id && x.IsActive);
+                }
+
+                productAttributeItemServiceModel.Name = productAttributeItemTranslations?.Name;
+
+                productAttributeItemServiceModels.Add(productAttributeItemServiceModel);
+            }
+
+            pagedProductAttributeItemServiceModels.Data = productAttributeItemServiceModels;
+
+            return pagedProductAttributeItemServiceModels;
         }
     }
 }
