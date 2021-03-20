@@ -56,6 +56,9 @@
     <Content Include="Infrastructure\Media\Seeds\Images\Categories\Couches.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\Mattresses.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Infrastructure\Media\Seeds\Images\Categories\Poufs.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

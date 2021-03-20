@@ -30,6 +30,7 @@ namespace Catalog.Api.Infrastructure.Categories.Seeds
 
             // Level 2 Bedroom
             SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.Bedroom.BedsId, 2, CategoryConstants.CategoryGuids.Furniture.BedroomFurnitureId, 0, true, "Beds & Box Springs", "Łóżka & Box Spring", "Betten & Box Springs");
+            SeedCategory(context, CategoryConstants.CategoryGuids.Furniture.Bedroom.MattressesId, 2, CategoryConstants.CategoryGuids.Furniture.BedroomFurnitureId, 0, true, "Mattresses", "Materace", "Matratzen");
         }
 
         private static void SeedCategory(CatalogContext context, Guid id, int level, Guid? parentId, int order, bool isLeaf, string englishName, string polishName, string germanName)
