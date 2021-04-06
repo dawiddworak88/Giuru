@@ -213,33 +213,11 @@ namespace Catalog.Api.v1.Products.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var product = await this.productService.UpdateAsync(serviceModel);
+                    var productId = await this.productService.UpdateAsync(serviceModel);
 
-                    if (product != null)
+                    if (productId != null)
                     {
-                        var response = new ProductResponseModel
-                        { 
-                            Id = product.Id,
-                            BrandName = product.BrandName,
-                            CategoryId = product.CategoryId,
-                            CategoryName = product.CategoryName,
-                            Description = product.Description,
-                            Files = product.Files,
-                            Images = product.Images,
-                            FormData = product.FormData,
-                            IsNew = product.IsNew,
-                            IsProtected = product.IsProtected,
-                            Name = product.Name,
-                            PrimaryProductId = product.PrimaryProductId,
-                            ProductVariants = product.ProductVariants,
-                            SellerId = product.SellerId,
-                            Sku = product.Sku,
-                            Videos = product.Videos,
-                            LastModifiedDate = product.LastModifiedDate,
-                            CreatedDate = product.CreatedDate
-                        };
-
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                        return this.StatusCode((int)HttpStatusCode.OK, new { Id = productId });
                     }
                 }
 
@@ -253,33 +231,11 @@ namespace Catalog.Api.v1.Products.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var product = await this.productService.CreateAsync(serviceModel);
+                    var productId = await this.productService.CreateAsync(serviceModel);
 
-                    if (product != null)
+                    if (productId != null)
                     {
-                        var response = new ProductResponseModel
-                        {
-                            Id = product.Id,
-                            BrandName = product.BrandName,
-                            CategoryId = product.CategoryId,
-                            CategoryName = product.CategoryName,
-                            Description = product.Description,
-                            Files = product.Files,
-                            Images = product.Images,
-                            FormData = product.FormData,
-                            IsNew = product.IsNew,
-                            IsProtected = product.IsProtected,
-                            Name = product.Name,
-                            PrimaryProductId = product.PrimaryProductId,
-                            ProductVariants = product.ProductVariants,
-                            SellerId = product.SellerId,
-                            Sku = product.Sku,
-                            Videos = product.Videos,
-                            LastModifiedDate = product.LastModifiedDate,
-                            CreatedDate = product.CreatedDate
-                        };
-
-                        return this.StatusCode((int)HttpStatusCode.Created, response);
+                        return this.StatusCode((int)HttpStatusCode.Created, new { Id = productId });
                     }
                 }
 
