@@ -79,7 +79,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 CultureInfo.CurrentUICulture.Name,
                 id);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.productLocalizer.GetString("CategoryDeletedSuccessfully").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.productLocalizer.GetString("ProductDeletedSuccessfully").Value });
         }
     }
 }
