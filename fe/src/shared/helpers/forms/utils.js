@@ -19,7 +19,7 @@ export function get_prop_values(stateSchema, prop) {
     return Object.keys(stateSchema).reduce((field, key) => {
 
         if (key === "formData") {
-            field[key] = stateSchema[key];
+            field[key] = stateSchema[key][prop];
         }
         else {
             field[key] = is_bool(prop) ? prop : stateSchema[key][prop];

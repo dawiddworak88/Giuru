@@ -11,10 +11,6 @@ import DynamicForm from "../../../../../../shared/components/DynamicForm/Dynamic
 
 function ProductForm(props) {
 
-    const uiSchema = {};
-
-    const jsonSchema = {};
-
     const categoriesProps = {
         options: props.categories,
         getOptionLabel: (option) => option.name
@@ -38,8 +34,12 @@ function ProductForm(props) {
         images: { value: props.images ? props.images : [] },
         files: { value: props.files ? props.files : [] },
         isNew: { value: props.isNew ? props.isNew : false },
+        schema: { value: props.schema ? JSON.parse(props.schema) : {} },
+        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : {} },
         formData: { value: props.formData ? JSON.parse(props.formData) : {} }
     };
+
+    console.log(stateSchema);
 
     const stateValidatorSchema = {
 
@@ -130,7 +130,21 @@ function ProductForm(props) {
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, category, sku, name, description, primaryProduct, images, files, isNew, formData } = values;
+    const { 
+        id, 
+        category, 
+        sku, 
+        name, 
+        description, 
+        primaryProduct, 
+        images, 
+        files, 
+        isNew, 
+        schema, 
+        uiSchema, 
+        formData } = values;
+
+    console.log(formData);
 
     return (
         <section className="section section-small-padding product">
@@ -227,7 +241,7 @@ function ProductForm(props) {
                             </NoSsr>
                         </div>
                         <DynamicForm 
-                            jsonSchema={jsonSchema} 
+                            jsonSchema={schema} 
                             uiSchema={uiSchema} 
                             formData={formData} 
                             onChange={handleOnChange} />
@@ -252,6 +266,9 @@ ProductForm.propTypes = {
     primaryProductId: PropTypes.string,
     images: PropTypes.array,
     files: PropTypes.array,
+    formData: PropTypes.string,
+    schema: PropTypes.string,
+    uiSchema: PropTypes.string,
     isNewLabel: PropTypes.string.isRequired,
     selectCategoryLabel: PropTypes.string.isRequired,
     selectPrimaryProductLabel: PropTypes.string.isRequired,

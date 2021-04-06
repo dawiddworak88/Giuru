@@ -11,6 +11,8 @@ namespace Catalog.Api.v1.Products.ResultModels
         public string Description { get; set; }
         public bool IsNew { get; set; }
         public bool IsProtected { get; set; }
+        public string Schema { get; set; }
+        public string UiSchema { get; set; }
         public string FormData { get; set; }
         public Guid SellerId { get; set; }
         public string BrandName { get; set; }

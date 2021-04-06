@@ -388,6 +388,8 @@ namespace Catalog.Api.Services.Products
                 Sku = searchResultItem.Sku,
                 Name = searchResultItem.Name,
                 Description = searchResultItem.Description,
+                Schema = searchResultItem.Schema,
+                UiSchema = searchResultItem.UiSchema,
                 FormData = searchResultItem.FormData,
                 LastModifiedDate = searchResultItem.LastModifiedDate,
                 CreatedDate = searchResultItem.CreatedDate

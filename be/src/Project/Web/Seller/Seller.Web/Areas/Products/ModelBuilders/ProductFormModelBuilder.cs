@@ -116,6 +116,9 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                     viewModel.IsNew = product.IsNew;
                     viewModel.CategoryId = product.CategoryId;
                     viewModel.PrimaryProductId = product.PrimaryProductId;
+                    viewModel.Schema = product.Schema;
+                    viewModel.UiSchema = product.UiSchema;
+                    viewModel.FormData = product.FormData;
 
                     if (product.Images != null && product.Images.Any())
                     {

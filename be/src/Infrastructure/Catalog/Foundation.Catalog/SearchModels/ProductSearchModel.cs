@@ -13,6 +13,8 @@ namespace Foundation.Catalog.SearchModels.Products
         public string Name { get; set; }
         public CompletionField NameSuggest { get; set; }
         public string Description { get; set; }
+        public string Schema { get; set; }
+        public string UiSchema { get; set; }
         public string FormData { get; set; }
         public Guid CategoryId { get; set; }
         public string CategoryName { get; set; }
