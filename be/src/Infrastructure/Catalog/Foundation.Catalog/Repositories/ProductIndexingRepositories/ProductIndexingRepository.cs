@@ -57,13 +57,6 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
                         categoryTranslations = product.Category.Translations.FirstOrDefault(x => x.IsActive);
                     }
 
-                    var categorySchemaTranslations = this.catalogContext.CategorySchemas.FirstOrDefault(x => x.CategoryId == product.Category.Id && x.Language == language && x.IsActive);
-
-                    if (categorySchemaTranslations == null)
-                    {
-                        categorySchemaTranslations = this.catalogContext.CategorySchemas.FirstOrDefault(x => x.CategoryId == product.Category.Id && x.IsActive);
-                    }
-
                     if (productTranslations != null)
                     {
                         var document = new ProductSearchModel
