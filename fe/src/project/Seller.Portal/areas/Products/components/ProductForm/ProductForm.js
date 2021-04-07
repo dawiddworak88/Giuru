@@ -8,12 +8,9 @@ import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { TextField, Button, CircularProgress, FormControlLabel, Switch } from "@material-ui/core";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import DynamicForm from "../../../../../../shared/components/DynamicForm/DynamicForm";
+import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 
 function ProductForm(props) {
-
-    const uiSchema = {};
-
-    const jsonSchema = {};
 
     const categoriesProps = {
         options: props.categories,
@@ -38,6 +35,8 @@ function ProductForm(props) {
         images: { value: props.images ? props.images : [] },
         files: { value: props.files ? props.files : [] },
         isNew: { value: props.isNew ? props.isNew : false },
+        schema: { value: props.schema ? JSON.parse(props.schema) : {} },
+        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : {} },
         formData: { value: props.formData ? JSON.parse(props.formData) : {} }
     };
 
@@ -63,20 +62,26 @@ function ProductForm(props) {
 
         setFieldValue({ name: "category", value: newValue });
 
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newValue)
+        var payload = {
+            categoryId: newValue.id
         };
 
-        fetch(props.getCategorySchemaUrl, requestOptions)
+        const requestOptions = {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+        };
+
+        const getCategorySchemaUrl = props.getCategorySchemaUrl + "?" + QueryStringSerializer.serialize(payload);
+
+        fetch(getCategorySchemaUrl, requestOptions)
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 return response.json().then(jsonResponse => {
-
                     if (response.ok) {
+                        setFieldValue({ name: "schema", value: jsonResponse.schema ? JSON.parse(jsonResponse.schema) : {} });
+                        setFieldValue({ name: "uiSchema", value: jsonResponse.uiSchema ? JSON.parse(jsonResponse.uiSchema) : {} });
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -92,10 +97,23 @@ function ProductForm(props) {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        var product = {
+            id,
+            categoryId: category.id,
+            sku,
+            name,
+            description,
+            primaryProductId: primaryProduct.id,
+            images,
+            files,
+            isNew,
+            formData: JSON.stringify(formData)
+        };
+
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(state)
+            body: JSON.stringify(product)
         };
 
         fetch(props.saveUrl, requestOptions)
@@ -130,7 +148,19 @@ function ProductForm(props) {
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, category, sku, name, description, primaryProduct, images, files, isNew, formData } = values;
+    const { 
+        id, 
+        category, 
+        sku, 
+        name, 
+        description, 
+        primaryProduct, 
+        images, 
+        files, 
+        isNew, 
+        schema, 
+        uiSchema, 
+        formData } = values;
 
     return (
         <section className="section section-small-padding product">
@@ -227,7 +257,7 @@ function ProductForm(props) {
                             </NoSsr>
                         </div>
                         <DynamicForm 
-                            jsonSchema={jsonSchema} 
+                            jsonSchema={schema} 
                             uiSchema={uiSchema} 
                             formData={formData} 
                             onChange={handleOnChange} />
@@ -252,6 +282,9 @@ ProductForm.propTypes = {
     primaryProductId: PropTypes.string,
     images: PropTypes.array,
     files: PropTypes.array,
+    formData: PropTypes.string,
+    schema: PropTypes.string,
+    uiSchema: PropTypes.string,
     isNewLabel: PropTypes.string.isRequired,
     selectCategoryLabel: PropTypes.string.isRequired,
     selectPrimaryProductLabel: PropTypes.string.isRequired,

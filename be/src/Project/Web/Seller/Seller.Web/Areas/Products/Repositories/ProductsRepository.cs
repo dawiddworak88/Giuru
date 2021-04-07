@@ -230,7 +230,19 @@ namespace Seller.Web.Areas.Products.Repositories
             return default;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string name, string sku, string description, bool isNew, Guid? primaryProductId, Guid? categoryId, IEnumerable<Guid> images, IEnumerable<Guid> files)
+        public async Task<Guid> SaveAsync(
+            string token, 
+            string language, 
+            Guid? id, 
+            string name, 
+            string sku, 
+            string description, 
+            bool isNew, 
+            Guid? primaryProductId, 
+            Guid? categoryId, 
+            IEnumerable<Guid> images, 
+            IEnumerable<Guid> files,
+            string formData)
         {
             var requestModel = new SaveProductApiRequestModel
             {
@@ -242,7 +254,8 @@ namespace Seller.Web.Areas.Products.Repositories
                 PrimaryProductId = primaryProductId,
                 CategoryId = categoryId,
                 Images = images,
-                Files = files
+                Files = files,
+                FormData = formData
             };
 
             var apiRequest = new ApiRequest<SaveProductApiRequestModel>

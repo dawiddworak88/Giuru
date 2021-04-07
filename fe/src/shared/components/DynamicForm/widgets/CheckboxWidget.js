@@ -30,12 +30,11 @@ const CheckboxWidget = (props) => {
                         <Switch
                             id={id}
                             name={id}
-                            checked={typeof value === "undefined" ? false : value}
+                            checked={(typeof value === "undefined" || value === "false") ? false : value}
                             required={required}
                             disabled={disabled || readonly}
                             autoFocus={autofocus}
                             onChange={(event, checked) => {
-
                                 event.target.value = checked;
                                 onChange(event);
                             }} />

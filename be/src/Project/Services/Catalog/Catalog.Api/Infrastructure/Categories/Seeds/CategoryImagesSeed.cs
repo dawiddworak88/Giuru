@@ -21,16 +21,7 @@ namespace Catalog.Api.Infrastructure.Categories.Seeds
             SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.LivingRoom.LivingRoomSetsId, CategoryImageConstants.LivingRoomSetsMediaId);
 
             SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.Bedroom.BedsId, CategoryImageConstants.BedsImageMediaId);
-            SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.Bedroom.WardrobesId, CategoryImageConstants.WardrobesImageMediaId);
-            SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.Bedroom.ChestsId, CategoryImageConstants.ChestsImageMediaId);
-
-            SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.KitchenDiningRoom.DiningTablesSeatingId, CategoryImageConstants.DiningTablesSeatingImageMediaId);
-
-            SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.Bathroom.BathroomVanitiesCabinetsId, CategoryImageConstants.BathroomVanitiesCabinetsImageMediaId);
-
-            SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.KidsFurniture.KidsBedsId, CategoryImageConstants.KidsBedsImageMediaId);
-            SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.KidsFurniture.KidsBunkBedsId, CategoryImageConstants.KidsBunkBedsImageMediaId);
-            SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.KidsFurniture.KidsDesksId, CategoryImageConstants.KidsDesksImageMediaId);
+            SeedCategoryImage(context, CategoryConstants.CategoryGuids.Furniture.Bedroom.MattressesId, CategoryImageConstants.MattressesImageMediaId);
         }
 
         private static void SeedCategoryImage(CatalogContext context, Guid categoryId, Guid mediaId)

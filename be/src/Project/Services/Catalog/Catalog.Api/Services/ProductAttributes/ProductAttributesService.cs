@@ -64,12 +64,14 @@ namespace Catalog.Api.Services.ProductAttributes
                     CreatedDate = pagedProductAttribute.CreatedDate
                 };
 
-                productAttributeServiceModel.Name = pagedProductAttribute.ProductAttributeTranslations.FirstOrDefault(x => x.Language == model.Language && x.IsActive)?.Name;
+                var productAttributeTranslations = pagedProductAttribute.ProductAttributeTranslations.FirstOrDefault(x => x.Language == model.Language && x.IsActive);
 
-                if (string.IsNullOrWhiteSpace(productAttributeServiceModel.Name))
+                if (productAttributeTranslations == null)
                 {
-                    productAttributeServiceModel.Name = pagedProductAttribute.ProductAttributeTranslations.FirstOrDefault(x => x.IsActive)?.Name;
+                    productAttributeTranslations = pagedProductAttribute.ProductAttributeTranslations.FirstOrDefault(x => x.IsActive);
                 }
+
+                productAttributeServiceModel.Name = productAttributeTranslations?.Name;
 
                 productAttributeServiceModels.Add(productAttributeServiceModel);
             }
@@ -182,54 +184,91 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task<ProductAttributeServiceModel> GetProductAttributeByIdAsync(GetProductAttributeByIdServiceModel model)
         {
-            var productAttribute = await (from pa in this.context.ProductAttributes
-                                   join pat in this.context.ProductAttributeTranslations on pa.Id equals pat.ProductAttributeId into patx
-                                   from x in patx.DefaultIfEmpty()
-                                   where pa.Id == model.Id && pa.SellerId == model.OrganisationId && x.Language == model.Language && pa.IsActive
-                                   select new ProductAttributeServiceModel
-                                   {
-                                       Id = pa.Id,
-                                       Name = x.Name,
-                                       Order = pa.Order,
-                                       LastModifiedDate = pa.LastModifiedDate,
-                                       CreatedDate = pa.CreatedDate
-                                   }).FirstOrDefaultAsync();
+            var productAttribute = await this.context.ProductAttributes.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId && x.IsActive);
 
             if (productAttribute != null)
             {
-                productAttribute.ProductAttributeItems = from pai in this.context.ProductAttributeItems
-                                                         join pait in this.context.ProductAttributeItemTranslations on pai.Id equals pait.ProductAttributeItemId into paitx
-                                                         from x in paitx.DefaultIfEmpty()
-                                                         where pai.ProductAttributeId == productAttribute.Id && pai.SellerId == model.OrganisationId && x.Language == model.Language && pai.IsActive
-                                                         select new ProductAttributeItemServiceModel
-                                                         {
-                                                            Id = pai.Id,
-                                                            Name = x.Name,
-                                                            Order = pai.Order,
-                                                            LastModifiedDate = pai.LastModifiedDate,
-                                                            CreatedDate = pai.CreatedDate
-                                                         };
+                var productAttributeServiceModel = new ProductAttributeServiceModel
+                {
+                    Id = productAttribute.Id,
+                    Order = productAttribute.Order,
+                    LastModifiedDate = productAttribute.LastModifiedDate,
+                    CreatedDate = productAttribute.CreatedDate
+                };
+
+                var productAttributeTranslations = productAttribute.ProductAttributeTranslations.FirstOrDefault(x => x.Language == model.Language && x.IsActive);
+
+                if (productAttributeTranslations == null)
+                {
+                    productAttributeTranslations = productAttribute.ProductAttributeTranslations.FirstOrDefault(x => x.IsActive);
+                }
+
+                productAttributeServiceModel.Name = productAttributeTranslations?.Name;
+
+                var productAttributeItems = await this.context.ProductAttributeItems.Where(x => x.ProductAttributeId == productAttribute.Id && x.IsActive).ToListAsync();
+
+                if (productAttributeItems != null)
+                {
+                    var productAttributeItemServiceModels = new List<ProductAttributeItemServiceModel>();
+
+                    foreach (var productAttributeItem in productAttributeItems)
+                    {
+                        var productAttributeItemServiceModel = new ProductAttributeItemServiceModel
+                        { 
+                            Id = productAttributeItem.Id,
+                            Order = productAttributeItem.Order,
+                            LastModifiedDate = productAttributeItem.LastModifiedDate,
+                            CreatedDate = productAttributeItem.CreatedDate
+                        };
+
+                        var productAttributeItemTranslations = await this.context.ProductAttributeItemTranslations.FirstOrDefaultAsync(x => x.ProductAttributeItemId == productAttributeItem.Id && x.Language == model.Language && x.IsActive);
+
+                        if (productAttributeItemTranslations == null)
+                        {
+                            productAttributeItemTranslations = await this.context.ProductAttributeItemTranslations.FirstOrDefaultAsync(x => x.ProductAttributeItemId == productAttributeItem.Id && x.IsActive);
+                        }
+
+                        productAttributeItemServiceModel.Name = productAttributeItemTranslations?.Name;
+
+                        productAttributeItemServiceModels.Add(productAttributeItemServiceModel);
+                    }
+
+                    productAttributeServiceModel.ProductAttributeItems = productAttributeItemServiceModels;
+                }
+
+                return productAttributeServiceModel;
             }
 
-            return productAttribute;
+            return default;
         }
 
         public async Task<ProductAttributeItemServiceModel> GetProductAttributeItemByIdAsync(GetProductAttributeItemByIdServiceModel model)
         {
-            var productAttributeItems = from pai in this.context.ProductAttributeItems
-                                       join pait in this.context.ProductAttributeItemTranslations on pai.Id equals pait.ProductAttributeItemId into paitx
-                                       from x in paitx.DefaultIfEmpty()
-                                       where pai.Id == model.Id && pai.SellerId == model.OrganisationId && x.Language == model.Language && pai.IsActive
-                                       select new ProductAttributeItemServiceModel
-                                       {
-                                           Id = pai.Id,
-                                           Name = x.Name,
-                                           Order = pai.Order,
-                                           LastModifiedDate = pai.LastModifiedDate,
-                                           CreatedDate = pai.CreatedDate
-                                       };
+            var productAttributeItem = await this.context.ProductAttributeItems.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId && x.IsActive);
 
-            return await productAttributeItems.FirstOrDefaultAsync();
+            if (productAttributeItem != null)
+            {
+                var productAttributeItemServiceModel = new ProductAttributeItemServiceModel
+                {
+                    Id = productAttributeItem.Id,
+                    Order = productAttributeItem.Order,
+                    LastModifiedDate = productAttributeItem.LastModifiedDate,
+                    CreatedDate = productAttributeItem.CreatedDate
+                };
+
+                var productAttributeTranslations = this.context.ProductAttributeItemTranslations.FirstOrDefault(x => x.ProductAttributeItemId ==productAttributeItem.Id && x.Language == model.Language && x.IsActive);
+
+                if (productAttributeTranslations == null)
+                {
+                    productAttributeTranslations = this.context.ProductAttributeItemTranslations.FirstOrDefault(x => x.ProductAttributeItemId == productAttributeItem.Id && x.IsActive);
+                }
+
+                productAttributeItemServiceModel.Name = productAttributeTranslations?.Name;
+                
+                return productAttributeItemServiceModel;
+            }
+
+            return default;
         }
 
         public async Task<ProductAttributeServiceModel> UpdateProductAttributeAsync(CreateUpdateProductAttributeServiceModel model)
@@ -255,7 +294,7 @@ namespace Catalog.Api.Services.ProductAttributes
                         Name = model.Name
                     };
 
-                    this.context.ProductAttributeTranslations.Add(newProductAttributeTranslation);
+                    this.context.ProductAttributeTranslations.Add(newProductAttributeTranslation.FillCommonProperties());
                 }
 
                 await this.context.SaveChangesAsync();
@@ -293,7 +332,7 @@ namespace Catalog.Api.Services.ProductAttributes
                         Name = model.Name
                     };
 
-                    this.context.ProductAttributeItemTranslations.Add(newProductAttributeItemTranslation);
+                    this.context.ProductAttributeItemTranslations.Add(newProductAttributeItemTranslation.FillCommonProperties());
                 }
 
                 await this.context.SaveChangesAsync();
@@ -310,27 +349,46 @@ namespace Catalog.Api.Services.ProductAttributes
 
         public async Task<PagedResults<IEnumerable<ProductAttributeItemServiceModel>>> GetProductAttributeItemsAsync(GetProductAttributeItemsServiceModel model)
         {
-            var productAttributesItems = from c in this.context.ProductAttributeItems
-                                        join t in this.context.ProductAttributeItemTranslations on c.Id equals t.ProductAttributeItemId into ct
-                                        from x in ct.DefaultIfEmpty()
-                                        where c.ProductAttributeId == model.ProductAttributeId && (x.Language == model.Language || model.Language == null) && c.IsActive
-                                        select new ProductAttributeItemServiceModel
-                                        {
-                                            Id = c.Id,
-                                            Order = c.Order,
-                                            Name = x.Name,
-                                            LastModifiedDate = c.LastModifiedDate,
-                                            CreatedDate = c.CreatedDate
-                                        };
+            var productAttributesItems = this.context.ProductAttributeItems.Where(x => x.ProductAttributeId == model.ProductAttributeId && x.IsActive);
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
-                productAttributesItems = productAttributesItems.Where(x => x.Name.StartsWith(model.SearchTerm));
+                productAttributesItems = productAttributesItems.Where(x => x.ProductAttributeItemTranslations.Any(y => y.Name.StartsWith(model.SearchTerm)));
             }
 
             productAttributesItems = productAttributesItems.ApplySort(model.OrderBy);
 
-            return productAttributesItems.PagedIndex(new Pagination(productAttributesItems.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedProductAttributeItems = productAttributesItems.PagedIndex(new Pagination(productAttributesItems.Count(), model.ItemsPerPage), model.PageIndex);
+
+            var pagedProductAttributeItemServiceModels = new PagedResults<IEnumerable<ProductAttributeItemServiceModel>>(pagedProductAttributeItems.Total, pagedProductAttributeItems.PageSize);
+
+            var productAttributeItemServiceModels = new List<ProductAttributeItemServiceModel>();
+
+            foreach (var pagedProductAttributeItem in pagedProductAttributeItems.Data.ToList())
+            {
+                var productAttributeItemServiceModel = new ProductAttributeItemServiceModel
+                {
+                    Id = pagedProductAttributeItem.Id,
+                    Order = pagedProductAttributeItem.Order,
+                    LastModifiedDate = pagedProductAttributeItem.LastModifiedDate,
+                    CreatedDate = pagedProductAttributeItem.CreatedDate
+                };
+
+                var productAttributeItemTranslations = this.context.ProductAttributeItemTranslations.FirstOrDefault(x => x.ProductAttributeItemId == pagedProductAttributeItem.Id &&  x.Language == model.Language && x.IsActive);
+
+                if (productAttributeItemTranslations == null)
+                {
+                    productAttributeItemTranslations = this.context.ProductAttributeItemTranslations.FirstOrDefault(x => x.ProductAttributeItemId == pagedProductAttributeItem.Id && x.IsActive);
+                }
+
+                productAttributeItemServiceModel.Name = productAttributeItemTranslations?.Name;
+
+                productAttributeItemServiceModels.Add(productAttributeItemServiceModel);
+            }
+
+            pagedProductAttributeItemServiceModels.Data = productAttributeItemServiceModels;
+
+            return pagedProductAttributeItemServiceModels;
         }
     }
 }

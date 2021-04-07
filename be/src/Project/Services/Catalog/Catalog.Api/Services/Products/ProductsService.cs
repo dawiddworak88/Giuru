@@ -48,7 +48,7 @@ namespace Catalog.Api.Services.Products
             this.productLocalizer = productLocalizer;
         }
 
-        public async Task<ProductServiceModel> CreateAsync(CreateUpdateProductModel model)
+        public async Task<Guid> CreateAsync(CreateUpdateProductModel model)
         {
             var brand = catalogContext.Brands.FirstOrDefault(x => x.SellerId == model.OrganisationId.Value && x.IsActive);
 
@@ -124,7 +124,7 @@ namespace Catalog.Api.Services.Products
 
             await this.productIndexingRepository.IndexAsync(product.Id);
 
-            return await this.GetByIdAsync(new GetProductByIdServiceModel { Id = product.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
+            return product.Id;
         }
 
         public async Task<bool> IsEmptyAsync()
@@ -139,7 +139,7 @@ namespace Catalog.Api.Services.Products
             return false;
         }
 
-        public async Task<ProductServiceModel> UpdateAsync(CreateUpdateProductModel model)
+        public async Task<Guid> UpdateAsync(CreateUpdateProductModel model)
         {
             var brand = catalogContext.Brands.FirstOrDefault(x => x.SellerId == model.OrganisationId.Value && x.IsActive);
 
@@ -249,7 +249,7 @@ namespace Catalog.Api.Services.Products
 
             await this.productIndexingRepository.IndexAsync(product.Id);
 
-            return await this.GetByIdAsync(new GetProductByIdServiceModel { Id = product.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
+            return product.Id;
         }
 
         public async Task DeleteAsync(DeleteProductServiceModel model)

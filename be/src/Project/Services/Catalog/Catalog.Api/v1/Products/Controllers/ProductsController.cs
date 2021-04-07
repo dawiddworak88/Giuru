@@ -87,27 +87,7 @@ namespace Catalog.Api.v1.Products.Controllers
                     {
                         var response = new PagedResults<IEnumerable<ProductResponseModel>>(products.Total, products.PageSize)
                         { 
-                            Data = products.Data.OrEmptyIfNull().Select(x => new ProductResponseModel
-                            {
-                                Id = x.Id,
-                                BrandName = x.BrandName,
-                                CategoryId = x.CategoryId,
-                                CategoryName = x.CategoryName,
-                                Description = x.Description,
-                                Images = x.Images,
-                                Files = x.Files,
-                                IsNew = x.IsNew,
-                                IsProtected = x.IsProtected,
-                                Name = x.Name,
-                                PrimaryProductId = x.PrimaryProductId,
-                                SellerId = x.SellerId,
-                                FormData = x.FormData,
-                                ProductVariants = x.ProductVariants,
-                                Sku = x.Sku,
-                                Videos = x.Videos,
-                                LastModifiedDate = x.LastModifiedDate,
-                                CreatedDate = x.CreatedDate
-                            })
+                            Data = products.Data.OrEmptyIfNull().Select(x => this.MapProductServiceModelToProductResponseModel(x))
                         };
 
                         return this.StatusCode((int)HttpStatusCode.OK, response);
@@ -142,27 +122,7 @@ namespace Catalog.Api.v1.Products.Controllers
                     {
                         var response = new PagedResults<IEnumerable<ProductResponseModel>>(products.Total, products.PageSize)
                         {
-                            Data = products.Data.OrEmptyIfNull().Select(x => new ProductResponseModel
-                            {
-                                Id = x.Id,
-                                BrandName = x.BrandName,
-                                CategoryId = x.CategoryId,
-                                CategoryName = x.CategoryName,
-                                Description = x.Description,
-                                Images = x.Images,
-                                Files = x.Files,
-                                IsNew = x.IsNew,
-                                IsProtected = x.IsProtected,
-                                Name = x.Name,
-                                PrimaryProductId = x.PrimaryProductId,
-                                SellerId = x.SellerId,
-                                FormData = x.FormData,
-                                ProductVariants = x.ProductVariants,
-                                Sku = x.Sku,
-                                Videos = x.Videos,
-                                LastModifiedDate = x.LastModifiedDate,
-                                CreatedDate = x.CreatedDate
-                            })
+                            Data = products.Data.OrEmptyIfNull().Select(x => this.MapProductServiceModelToProductResponseModel(x))
                         };
 
                         return this.StatusCode((int)HttpStatusCode.OK, response);
@@ -213,33 +173,11 @@ namespace Catalog.Api.v1.Products.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var product = await this.productService.UpdateAsync(serviceModel);
+                    var productId = await this.productService.UpdateAsync(serviceModel);
 
-                    if (product != null)
+                    if (productId != null)
                     {
-                        var response = new ProductResponseModel
-                        { 
-                            Id = product.Id,
-                            BrandName = product.BrandName,
-                            CategoryId = product.CategoryId,
-                            CategoryName = product.CategoryName,
-                            Description = product.Description,
-                            Files = product.Files,
-                            Images = product.Images,
-                            FormData = product.FormData,
-                            IsNew = product.IsNew,
-                            IsProtected = product.IsProtected,
-                            Name = product.Name,
-                            PrimaryProductId = product.PrimaryProductId,
-                            ProductVariants = product.ProductVariants,
-                            SellerId = product.SellerId,
-                            Sku = product.Sku,
-                            Videos = product.Videos,
-                            LastModifiedDate = product.LastModifiedDate,
-                            CreatedDate = product.CreatedDate
-                        };
-
-                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                        return this.StatusCode((int)HttpStatusCode.OK, new { Id = productId });
                     }
                 }
 
@@ -253,33 +191,11 @@ namespace Catalog.Api.v1.Products.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    var product = await this.productService.CreateAsync(serviceModel);
+                    var productId = await this.productService.CreateAsync(serviceModel);
 
-                    if (product != null)
+                    if (productId != null)
                     {
-                        var response = new ProductResponseModel
-                        {
-                            Id = product.Id,
-                            BrandName = product.BrandName,
-                            CategoryId = product.CategoryId,
-                            CategoryName = product.CategoryName,
-                            Description = product.Description,
-                            Files = product.Files,
-                            Images = product.Images,
-                            FormData = product.FormData,
-                            IsNew = product.IsNew,
-                            IsProtected = product.IsProtected,
-                            Name = product.Name,
-                            PrimaryProductId = product.PrimaryProductId,
-                            ProductVariants = product.ProductVariants,
-                            SellerId = product.SellerId,
-                            Sku = product.Sku,
-                            Videos = product.Videos,
-                            LastModifiedDate = product.LastModifiedDate,
-                            CreatedDate = product.CreatedDate
-                        };
-
-                        return this.StatusCode((int)HttpStatusCode.Created, response);
+                        return this.StatusCode((int)HttpStatusCode.Created, new { Id = productId });
                     }
                 }
 
@@ -320,29 +236,7 @@ namespace Catalog.Api.v1.Products.Controllers
 
                 if (product != null)
                 {
-                    var response = new ProductResponseModel
-                    {
-                        Id = product.Id,
-                        BrandName = product.BrandName,
-                        CategoryId = product.CategoryId,
-                        CategoryName = product.CategoryName,
-                        Description = product.Description,
-                        Files = product.Files,
-                        Images = product.Images,
-                        FormData = product.FormData,
-                        IsNew = product.IsNew,
-                        IsProtected = product.IsProtected,
-                        Name = product.Name,
-                        PrimaryProductId = product.PrimaryProductId,
-                        ProductVariants = product.ProductVariants,
-                        SellerId = product.SellerId,
-                        Sku = product.Sku,
-                        Videos = product.Videos,
-                        LastModifiedDate = product.LastModifiedDate,
-                        CreatedDate = product.CreatedDate
-                    };
-
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return this.StatusCode((int)HttpStatusCode.OK, this.MapProductServiceModelToProductResponseModel(product));
                 }
                 else
                 {
@@ -386,29 +280,7 @@ namespace Catalog.Api.v1.Products.Controllers
 
                 if (product != null)
                 {
-                    var response = new ProductResponseModel
-                    {
-                        Id = product.Id,
-                        BrandName = product.BrandName,
-                        CategoryId = product.CategoryId,
-                        CategoryName = product.CategoryName,
-                        Description = product.Description,
-                        Files = product.Files,
-                        Images = product.Images,
-                        FormData = product.FormData,
-                        IsNew = product.IsNew,
-                        IsProtected = product.IsProtected,
-                        Name = product.Name,
-                        PrimaryProductId = product.PrimaryProductId,
-                        ProductVariants = product.ProductVariants,
-                        SellerId = product.SellerId,
-                        Sku = product.Sku,
-                        Videos = product.Videos,
-                        LastModifiedDate = product.LastModifiedDate,
-                        CreatedDate = product.CreatedDate
-                    };
-
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                    return this.StatusCode((int)HttpStatusCode.OK, this.MapProductServiceModelToProductResponseModel(product));
                 }
                 else
                 {
@@ -454,6 +326,31 @@ namespace Catalog.Api.v1.Products.Controllers
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        private ProductResponseModel MapProductServiceModelToProductResponseModel(ProductServiceModel product)
+        {
+            return new ProductResponseModel
+            {
+                Id = product.Id,
+                BrandName = product.BrandName,
+                CategoryId = product.CategoryId,
+                CategoryName = product.CategoryName,
+                Description = product.Description,
+                Files = product.Files,
+                Images = product.Images,
+                FormData = product.FormData,
+                IsNew = product.IsNew,
+                IsProtected = product.IsProtected,
+                Name = product.Name,
+                PrimaryProductId = product.PrimaryProductId,
+                ProductVariants = product.ProductVariants,
+                SellerId = product.SellerId,
+                Sku = product.Sku,
+                Videos = product.Videos,
+                LastModifiedDate = product.LastModifiedDate,
+                CreatedDate = product.CreatedDate
+            };
         }
     }
 }
