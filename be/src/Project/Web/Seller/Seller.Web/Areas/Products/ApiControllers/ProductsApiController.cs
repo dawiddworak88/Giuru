@@ -63,10 +63,11 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 model.Sku,
                 model.Description,
                 model.IsNew,
-                model.PrimaryProduct?.Id,
-                model.Category?.Id,
+                model.PrimaryProductId,
+                model.CategoryId,
                 model.Images?.Select(x => x.Id),
-                model.Files?.Select(x => x.Id));
+                model.Files?.Select(x => x.Id),
+                model.FormData);
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Id = productId, Message = this.productLocalizer.GetString("ProductSavedSuccessfully").Value });
         }

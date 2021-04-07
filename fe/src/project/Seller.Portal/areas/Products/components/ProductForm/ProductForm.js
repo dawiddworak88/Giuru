@@ -8,6 +8,7 @@ import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { TextField, Button, CircularProgress, FormControlLabel, Switch } from "@material-ui/core";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import DynamicForm from "../../../../../../shared/components/DynamicForm/DynamicForm";
+import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 
 function ProductForm(props) {
 
@@ -39,8 +40,6 @@ function ProductForm(props) {
         formData: { value: props.formData ? JSON.parse(props.formData) : {} }
     };
 
-    console.log(stateSchema);
-
     const stateValidatorSchema = {
 
         sku: {
@@ -63,20 +62,26 @@ function ProductForm(props) {
 
         setFieldValue({ name: "category", value: newValue });
 
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newValue)
+        var payload = {
+            categoryId: newValue.id
         };
 
-        fetch(props.getCategorySchemaUrl, requestOptions)
+        const requestOptions = {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+        };
+
+        const getCategorySchemaUrl = props.getCategorySchemaUrl + "?" + QueryStringSerializer.serialize(payload);
+
+        fetch(getCategorySchemaUrl, requestOptions)
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 return response.json().then(jsonResponse => {
-
                     if (response.ok) {
+                        setFieldValue({ name: "schema", value: jsonResponse.schema ? JSON.parse(jsonResponse.schema) : {} });
+                        setFieldValue({ name: "uiSchema", value: jsonResponse.uiSchema ? JSON.parse(jsonResponse.uiSchema) : {} });
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -92,10 +97,23 @@ function ProductForm(props) {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        var product = {
+            id,
+            categoryId: category.id,
+            sku,
+            name,
+            description,
+            primaryProductId: primaryProduct.id,
+            images,
+            files,
+            isNew,
+            formData: JSON.stringify(formData)
+        };
+
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(state)
+            body: JSON.stringify(product)
         };
 
         fetch(props.saveUrl, requestOptions)
@@ -143,8 +161,6 @@ function ProductForm(props) {
         schema, 
         uiSchema, 
         formData } = values;
-
-    console.log(formData);
 
     return (
         <section className="section section-small-padding product">

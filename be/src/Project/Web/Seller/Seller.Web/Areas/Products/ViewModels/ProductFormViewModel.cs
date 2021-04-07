@@ -41,5 +41,6 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string SkuRequiredErrorMessage { get; set; }
         public string SaveUrl { get; set; }
         public string GeneralErrorMessage { get; set; }
+        public string GetCategorySchemaUrl { get; set; }
     }
 }

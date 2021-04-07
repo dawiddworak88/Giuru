@@ -339,8 +339,6 @@ namespace Catalog.Api.v1.Products.Controllers
                 Description = product.Description,
                 Files = product.Files,
                 Images = product.Images,
-                Schema = product.Schema,
-                UiSchema = product.UiSchema,
                 FormData = product.FormData,
                 IsNew = product.IsNew,
                 IsProtected = product.IsProtected,

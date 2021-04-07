@@ -294,7 +294,7 @@ namespace Catalog.Api.Services.ProductAttributes
                         Name = model.Name
                     };
 
-                    this.context.ProductAttributeTranslations.Add(newProductAttributeTranslation);
+                    this.context.ProductAttributeTranslations.Add(newProductAttributeTranslation.FillCommonProperties());
                 }
 
                 await this.context.SaveChangesAsync();
@@ -332,7 +332,7 @@ namespace Catalog.Api.Services.ProductAttributes
                         Name = model.Name
                     };
 
-                    this.context.ProductAttributeItemTranslations.Add(newProductAttributeItemTranslation);
+                    this.context.ProductAttributeItemTranslations.Add(newProductAttributeItemTranslation.FillCommonProperties());
                 }
 
                 await this.context.SaveChangesAsync();

@@ -14,5 +14,6 @@ namespace Seller.Web.Areas.Products.ApiRequestModels
         public IEnumerable<Guid> Images { get; set; }
         public IEnumerable<Guid> Files { get; set; }
         public bool IsNew { get; set; }
+        public string FormData { get; set; }
     }
 }

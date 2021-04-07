@@ -111,8 +111,6 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
                             Files = this.catalogContext.ProductFiles.Where(x => x.ProductId == product.Id && x.IsActive).Select(x => x.MediaId),
                             IsActive = product.IsActive,
                             Sku = product.Sku,
-                            Schema = categorySchemaTranslations.Schema,
-                            UiSchema = categorySchemaTranslations.UiSchema,
                             FormData = productTranslations.FormData,
                             Name = productTranslations.Name,
                             NameSuggest = new CompletionField

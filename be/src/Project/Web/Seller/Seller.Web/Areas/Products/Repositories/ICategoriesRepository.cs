@@ -13,5 +13,6 @@ namespace Seller.Web.Areas.Products.Repositories
         Task<IEnumerable<Category>> GetAllCategoriesAsync(string token, string language, bool? leafOnly, string orderBy);
         Task DeleteAsync(string token, string language, Guid? id);
         Task<Category> GetCategoryAsync(string token, string language, Guid? id);
+        Task<CategorySchema> GetCategorySchemaAsync(string token, string language, Guid? categoryId);
     }
 }

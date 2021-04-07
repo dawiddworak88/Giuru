@@ -75,7 +75,8 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                 ProductFilesLabel = this.productLocalizer.GetString("ProductFilesLabel"),
                 SelectCategoryLabel = this.productLocalizer.GetString("SelectCategory"),
                 SelectPrimaryProductLabel = this.productLocalizer.GetString("SelectPrimaryProduct"),
-                IsNewLabel = this.productLocalizer.GetString("IsNew")
+                IsNewLabel = this.productLocalizer.GetString("IsNew"),
+                GetCategorySchemaUrl = this.linkGenerator.GetPathByAction("Get", "CategorySchemasApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var categories = await this.categoriesRepository.GetAllCategoriesAsync(
@@ -116,9 +117,18 @@ namespace Seller.Web.Areas.Products.ModelBuilders
                     viewModel.IsNew = product.IsNew;
                     viewModel.CategoryId = product.CategoryId;
                     viewModel.PrimaryProductId = product.PrimaryProductId;
-                    viewModel.Schema = product.Schema;
-                    viewModel.UiSchema = product.UiSchema;
                     viewModel.FormData = product.FormData;
+
+                    var categorySchema = await this.categoriesRepository.GetCategorySchemaAsync(
+                        componentModel.Token,
+                        componentModel.Language,
+                        product.CategoryId);
+
+                    if (categorySchema != null)
+                    {
+                        viewModel.Schema = categorySchema.Schema;
+                        viewModel.UiSchema = categorySchema.UiSchema;
+                    }
 
                     if (product.Images != null && product.Images.Any())
                     {
