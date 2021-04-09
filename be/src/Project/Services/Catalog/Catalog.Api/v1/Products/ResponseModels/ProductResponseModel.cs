@@ -1,4 +1,5 @@
-﻿using Foundation.ApiExtensions.Models.Response;
+﻿using Catalog.Api.v1.Products.ResponseModels;
+using Foundation.ApiExtensions.Models.Response;
 using System;
 using System.Collections.Generic;
 
@@ -21,6 +22,7 @@ namespace Catalog.Api.v1.Products.ResultModels
         public IEnumerable<Guid> Videos { get; set; }
         public IEnumerable<Guid> Files { get; set; }
         public string Sku { get; set; }
+        public IEnumerable<ProductAttributeValuesResponseModel> ProductAttributes { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

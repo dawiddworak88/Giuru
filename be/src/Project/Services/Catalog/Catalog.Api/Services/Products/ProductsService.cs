@@ -371,7 +371,21 @@ namespace Catalog.Api.Services.Products
         }
 
         private ProductServiceModel MapProductSearchModelToProductResult(ProductSearchModel searchResultItem)
-        { 
+        {
+            var productAttributes = new List<ProductAttributeServiceModel>();
+
+            foreach (var productAttributeSearchModel in searchResultItem.ProductAttributes.OrEmptyIfNull())
+            {
+                var productAttribute = new ProductAttributeServiceModel
+                {
+                    Key = productAttributeSearchModel.Key,
+                    Name = productAttributeSearchModel.Name,
+                    Values = productAttributeSearchModel.Values.OrEmptyIfNull().Select(x => x.Value)
+                };
+
+                productAttributes.Add(productAttribute);
+            }
+
             return new ProductServiceModel
             {
                 Id = searchResultItem.ProductId,
@@ -389,6 +403,7 @@ namespace Catalog.Api.Services.Products
                 Name = searchResultItem.Name,
                 Description = searchResultItem.Description,
                 FormData = searchResultItem.FormData,
+                ProductAttributes = productAttributes,
                 LastModifiedDate = searchResultItem.LastModifiedDate,
                 CreatedDate = searchResultItem.CreatedDate
             };
