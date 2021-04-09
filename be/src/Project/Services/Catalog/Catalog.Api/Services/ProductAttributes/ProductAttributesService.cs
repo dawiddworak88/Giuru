@@ -1,7 +1,9 @@
-﻿using Catalog.Api.ServicesModels.ProductAttributes;
+﻿using Catalog.Api.IntegrationEvents;
+using Catalog.Api.ServicesModels.ProductAttributes;
 using Foundation.Catalog.Infrastructure;
 using Foundation.Catalog.Infrastructure.ProductAttributes.Entities;
 using Foundation.EventBus.Abstractions;
+using Foundation.EventLog.Definitions;
 using Foundation.EventLog.Repositories;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
@@ -10,8 +12,8 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -102,6 +104,11 @@ namespace Catalog.Api.Services.ProductAttributes
 
             await this.context.SaveChangesAsync();
 
+            await this.RebuildCategorySchemasAsync(
+                model.OrganisationId.Value,
+                model.Language,
+                model.Username);
+
             return await this.GetProductAttributeByIdAsync(new GetProductAttributeByIdServiceModel
             { 
                 Id = productAttribute.Id,
@@ -140,6 +147,11 @@ namespace Catalog.Api.Services.ProductAttributes
 
             await this.context.SaveChangesAsync();
 
+            await this.RebuildCategorySchemasAsync(
+                model.OrganisationId.Value,
+                model.Language,
+                model.Username);
+
             return await this.GetProductAttributeItemByIdAsync(new GetProductAttributeItemByIdServiceModel
             { 
                 Id = productAttributeItem.Id,
@@ -166,6 +178,11 @@ namespace Catalog.Api.Services.ProductAttributes
             existingProductAttribute.IsActive = false;
 
             await this.context.SaveChangesAsync();
+
+            await this.RebuildCategorySchemasAsync(
+                model.OrganisationId.Value,
+                model.Language,
+                model.Username);
         }
 
         public async Task DeleteProductAttributeItemAsync(DeleteProductAttributeItemServiceModel model)
@@ -180,6 +197,11 @@ namespace Catalog.Api.Services.ProductAttributes
             existingProductAttributeItem.IsActive = false;
 
             await this.context.SaveChangesAsync();
+
+            await this.RebuildCategorySchemasAsync(
+                model.OrganisationId.Value,
+                model.Language,
+                model.Username);
         }
 
         public async Task<ProductAttributeServiceModel> GetProductAttributeByIdAsync(GetProductAttributeByIdServiceModel model)
@@ -300,6 +322,11 @@ namespace Catalog.Api.Services.ProductAttributes
                 await this.context.SaveChangesAsync();
             }
 
+            await this.RebuildCategorySchemasAsync(
+                model.OrganisationId.Value,
+                model.Language,
+                model.Username);
+
             return await this.GetProductAttributeByIdAsync(new GetProductAttributeByIdServiceModel 
             {
                 Id = model.Id,
@@ -337,6 +364,11 @@ namespace Catalog.Api.Services.ProductAttributes
 
                 await this.context.SaveChangesAsync();
             }
+
+            await this.RebuildCategorySchemasAsync(
+                model.OrganisationId.Value,
+                model.Language,
+                model.Username);
 
             return await this.GetProductAttributeItemByIdAsync(new GetProductAttributeItemByIdServiceModel
             {
@@ -389,6 +421,23 @@ namespace Catalog.Api.Services.ProductAttributes
             pagedProductAttributeItemServiceModels.Data = productAttributeItemServiceModels;
 
             return pagedProductAttributeItemServiceModels;
+        }
+
+        private async Task RebuildCategorySchemasAsync(
+            Guid? organisationId,
+            string language,
+            string username)
+        {
+            var message = new RebuildCategorySchemasIntegrationEvent
+            {
+                OrganisationId = organisationId,
+                Language = language,
+                Username = username
+            };
+
+            await this.eventLogRepository.SaveAsync(message, EventStates.New);
+
+            this.eventBus.Publish(message);
         }
     }
 }

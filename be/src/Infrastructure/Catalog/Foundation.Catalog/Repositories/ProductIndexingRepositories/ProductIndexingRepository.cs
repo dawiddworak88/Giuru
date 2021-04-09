@@ -1,8 +1,10 @@
 ﻿using Foundation.Catalog.Infrastructure;
+using Foundation.Catalog.SearchModels;
 using Foundation.Catalog.SearchModels.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Nest;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -127,6 +129,100 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
                             LastModifiedDate = product.LastModifiedDate,
                             CreatedDate = product.CreatedDate
                         };
+
+                        if (!string.IsNullOrWhiteSpace(productTranslations.FormData))
+                        {
+                            var categorySchema = this.catalogContext.CategorySchemas.FirstOrDefault(x => x.CategoryId == product.CategoryId && x.Language == language && x.IsActive);
+
+                            if (categorySchema == null)
+                            {
+                                categorySchema = this.catalogContext.CategorySchemas.FirstOrDefault(x => x.CategoryId == product.CategoryId && x.IsActive);
+                            }
+
+                            if (!string.IsNullOrWhiteSpace(categorySchema.Schema))
+                            {
+                                var formDataObject = JObject.Parse(productTranslations.FormData);
+
+                                var formDataProperties = formDataObject.Children();
+
+                                var productAttributes = new List<ProductAttributeSearchModel>();
+
+                                foreach (JProperty formDataProperty in formDataProperties)
+                                {
+                                    var categorySchemaObject = JObject.Parse(categorySchema.Schema);
+
+                                    if (categorySchemaObject != null)
+                                    {
+                                        var propertyObject = (JObject)categorySchemaObject["properties"][formDataProperty.Name];
+
+                                        var productAttributeSearchModel = new ProductAttributeSearchModel
+                                        {
+                                            Key = formDataProperty.Name
+                                        };
+
+                                        if (propertyObject != null)
+                                        {
+                                            productAttributeSearchModel.Name = propertyObject["title"].Value<string>();
+                                        }
+
+                                        if (formDataProperty.Value.Type != JTokenType.Array)
+                                        {
+                                            if (Guid.TryParse(formDataProperty.Value.ToString(), out var id))
+                                            {
+                                                JValue title = (JValue)categorySchemaObject.SelectToken($"$.definitions...anyOf[?(@.enum[0] == '{id}')].title");
+
+                                                productAttributeSearchModel.Values = new List<ProductAttributeValueSearchModel>
+                                                {
+                                                    new ProductAttributeValueSearchModel
+                                                    {
+                                                        Id = id,
+                                                        Value = title.Value<string>()
+                                                    }
+                                                };
+                                            }
+                                            else
+                                            {
+                                                productAttributeSearchModel.Values = new List<ProductAttributeValueSearchModel>
+                                                {
+                                                    new ProductAttributeValueSearchModel
+                                                    {
+                                                        Value = formDataProperty.Value.ToString()
+                                                    }
+                                                };
+                                            }
+                                        }
+                                        else
+                                        {
+                                            var productAttributeValueSearchModels = new List<ProductAttributeValueSearchModel>();
+
+                                            var valueIdsArray = (JArray)formDataProperty.Value;
+
+                                            foreach (JValue valueId in valueIdsArray)
+                                            {
+                                                if (Guid.TryParse(valueId.ToString(), out var id))
+                                                {
+                                                    JValue title = (JValue)categorySchemaObject.SelectToken($"$.definitions...anyOf[?(@.enum[0] == '{id}')].title");
+
+                                                    var productAttributeValueSearchModel = new ProductAttributeValueSearchModel
+                                                    { 
+                                                        Id = id,
+                                                        Value = title.Value<string>()
+                                                    };
+
+                                                    productAttributeValueSearchModels.Add(productAttributeValueSearchModel);
+                                                }
+                                            }
+
+                                            productAttributeSearchModel.Values = productAttributeValueSearchModels;
+                                        }
+
+                                        productAttributes.Add(productAttributeSearchModel);
+                                    }
+                                }
+
+                                document.ProductAttributes = productAttributes;
+                            }
+                        }
 
                         descriptor.Index<ProductSearchModel>(i => i
                             .Document(document));

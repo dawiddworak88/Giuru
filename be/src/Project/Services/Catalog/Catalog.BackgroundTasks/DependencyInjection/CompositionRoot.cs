@@ -1,5 +1,6 @@
 ﻿using Catalog.BackgroundTasks.IntegrationEvents;
 using Catalog.BackgroundTasks.IntegrationEventsHandlers;
+using Catalog.BackgroundTasks.Services.CategorySchemas;
 using Catalog.BackgroundTasks.Services.Products;
 using Foundation.Catalog.Infrastructure;
 using Foundation.EventBus;
@@ -20,6 +21,7 @@ namespace Catalog.BackgroundTasks.DependencyInjection
         public static void RegisterCatalogBackgroundTasksDependencies(this IServiceCollection services)
         {
             services.AddScoped<IProductsService, ProductsService>();
+            services.AddScoped<ICategorySchemaService, CategorySchemaService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
@@ -45,6 +47,7 @@ namespace Catalog.BackgroundTasks.DependencyInjection
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IIntegrationEventHandler<RebuildCatalogSearchIndexIntegrationEvent>, RebuildCatalogSearchIndexIntegrationEventHandler>();
+            services.AddScoped<IIntegrationEventHandler<RebuildCategorySchemasIntegrationEvent>, RebuildCategorySchemasIntegrationEventHandler>();
 
             services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
             {
