@@ -62,6 +62,7 @@ namespace Catalog.BackgroundTasks
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
             eventBus.Subscribe<RebuildCatalogSearchIndexIntegrationEvent, IIntegrationEventHandler<RebuildCatalogSearchIndexIntegrationEvent>>();
+            eventBus.Subscribe<RebuildCategorySchemasIntegrationEvent, IIntegrationEventHandler<RebuildCategorySchemasIntegrationEvent>>();
 
             app.UseEndpoints(endpoints =>
             {
