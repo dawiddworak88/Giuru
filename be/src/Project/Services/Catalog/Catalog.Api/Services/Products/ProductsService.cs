@@ -20,6 +20,7 @@ using Foundation.EventBus.Abstractions;
 using Catalog.Api.IntegrationEvents;
 using Foundation.EventLog.Repositories;
 using Foundation.EventLog.Definitions;
+using Newtonsoft.Json.Linq;
 
 namespace Catalog.Api.Services.Products
 {
@@ -30,6 +31,7 @@ namespace Catalog.Api.Services.Products
         private readonly CatalogContext catalogContext;
         private readonly IProductSearchRepository productSearchRepository;
         private readonly IProductIndexingRepository productIndexingRepository;
+        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
 
         public ProductsService(
@@ -38,6 +40,7 @@ namespace Catalog.Api.Services.Products
             CatalogContext catalogContext,
             IProductSearchRepository productSearchRepository,
             IProductIndexingRepository productIndexingRepository,
+            IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer)
         {
             this.eventBus = eventBus;
@@ -45,6 +48,7 @@ namespace Catalog.Api.Services.Products
             this.catalogContext = catalogContext;
             this.productSearchRepository = productSearchRepository;
             this.productIndexingRepository = productIndexingRepository;
+            this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
         }
 
@@ -376,14 +380,52 @@ namespace Catalog.Api.Services.Products
 
             foreach (var productAttributeSearchModel in searchResultItem.ProductAttributes.OrEmptyIfNull())
             {
-                var productAttribute = new ProductAttributeServiceModel
-                {
-                    Key = productAttributeSearchModel.Key,
-                    Name = productAttributeSearchModel.Name,
-                    Values = productAttributeSearchModel.Values.OrEmptyIfNull().Select(x => x.Value)
-                };
+                var productAttributeObject = JObject.FromObject(productAttributeSearchModel.Value);
 
-                productAttributes.Add(productAttribute);
+                if (productAttributeObject != null)
+                {
+                    var productAttribute = new ProductAttributeServiceModel
+                    { 
+                        Key = productAttributeSearchModel.Key,
+                        Name = productAttributeObject["name"].Value<string>()
+                    };
+
+                    if (productAttributeObject["value"].Type == JTokenType.Array)
+                    {
+                        var valuesArray = (JArray)productAttributeObject["value"];
+
+                        if (valuesArray != null)
+                        {
+                            productAttribute.Values = valuesArray.Children().Select(x => ((JObject)x)["name"].Value<string>());
+                        }
+                    }
+                    else if (productAttributeObject["value"].Type == JTokenType.Object)
+                    {
+                        var valueObject = (JObject)productAttributeObject["value"];
+
+                        if (valueObject != null)
+                        {
+                            productAttribute.Values = new string[] { valueObject["name"].Value<string>() };
+                        }
+                    }
+                    else if (productAttributeObject["value"].Type == JTokenType.Boolean)
+                    {
+                        if (productAttributeObject["value"].Value<bool>())
+                        {
+                            productAttribute.Values = new string[] { this.globalLocalizer.GetString("Yes") };
+                        }
+                        else
+                        {
+                            productAttribute.Values = new string[] { this.globalLocalizer.GetString("No") };
+                        }
+                    }
+                    else
+                    {
+                        productAttribute.Values = new string[] { productAttributeObject["value"].Value<string>() };
+                    }
+
+                    productAttributes.Add(productAttribute);
+                }
             }
 
             return new ProductServiceModel
