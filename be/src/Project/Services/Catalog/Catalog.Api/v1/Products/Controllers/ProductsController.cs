@@ -19,6 +19,7 @@ using System.Globalization;
 using Foundation.GenericRepository.Paginations;
 using System.Collections.Generic;
 using Catalog.Api.v1.Products.ResultModels;
+using Catalog.Api.v1.Products.ResponseModels;
 
 namespace Catalog.Api.v1.Products.Controllers
 {
@@ -348,6 +349,12 @@ namespace Catalog.Api.v1.Products.Controllers
                 SellerId = product.SellerId,
                 Sku = product.Sku,
                 Videos = product.Videos,
+                ProductAttributes = product.ProductAttributes.OrEmptyIfNull().Select(x => new ProductAttributeValuesResponseModel
+                {
+                    Key = x.Key,
+                    Name = x.Name,
+                    Values = x.Values.OrEmptyIfNull().Select(x => x)
+                }),
                 LastModifiedDate = product.LastModifiedDate,
                 CreatedDate = product.CreatedDate
             };

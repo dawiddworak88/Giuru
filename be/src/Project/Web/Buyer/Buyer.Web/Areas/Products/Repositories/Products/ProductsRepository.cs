@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Buyer.Web.Areas.Products.DomainModels;
 
 namespace Buyer.Web.Areas.Products.Repositories.Products
 {
@@ -145,7 +146,12 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 ProductVariants = productResponse.ProductVariants,
                 Images = productResponse.Images,
                 Files = productResponse.Files,
-                Videos = productResponse.Videos
+                Videos = productResponse.Videos,
+                ProductAttributes = productResponse.ProductAttributes?.Select(x => new ProductAttribute 
+                { 
+                    Name = x.Name,
+                    Values = x.Values.OrEmptyIfNull().Select(y => y)
+                })
             };
         }
     }

@@ -1,5 +1,4 @@
 ﻿using Foundation.Catalog.Infrastructure;
-using Foundation.Catalog.SearchModels;
 using Foundation.Catalog.SearchModels.Products;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -145,7 +144,7 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
 
                                 var formDataProperties = formDataObject.Children();
 
-                                var productAttributes = new List<ProductAttributeSearchModel>();
+                                var productAttributes = new Dictionary<string, object>();
 
                                 foreach (JProperty formDataProperty in formDataProperties)
                                 {
@@ -153,17 +152,9 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
 
                                     if (categorySchemaObject != null)
                                     {
+                                        string key = formDataProperty.Name;
+
                                         var propertyObject = (JObject)categorySchemaObject["properties"][formDataProperty.Name];
-
-                                        var productAttributeSearchModel = new ProductAttributeSearchModel
-                                        {
-                                            Key = formDataProperty.Name
-                                        };
-
-                                        if (propertyObject != null)
-                                        {
-                                            productAttributeSearchModel.Name = propertyObject["title"].Value<string>();
-                                        }
 
                                         if (formDataProperty.Value.Type != JTokenType.Array)
                                         {
@@ -171,52 +162,78 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
                                             {
                                                 JValue title = (JValue)categorySchemaObject.SelectToken($"$.definitions...anyOf[?(@.enum[0] == '{id}')].title");
 
-                                                productAttributeSearchModel.Values = new List<ProductAttributeValueSearchModel>
+                                                var value = new
                                                 {
-                                                    new ProductAttributeValueSearchModel
+                                                    Name = propertyObject["title"].Value<string>(),
+                                                    Value = new
                                                     {
                                                         Id = id,
-                                                        Value = title.Value<string>()
+                                                        Name = title.Value<string>()
                                                     }
                                                 };
+
+                                                productAttributes.Add(key, value);
                                             }
                                             else
                                             {
-                                                productAttributeSearchModel.Values = new List<ProductAttributeValueSearchModel>
+                                                if (formDataProperty.Value.Type == JTokenType.Boolean)
                                                 {
-                                                    new ProductAttributeValueSearchModel
+                                                    var value = new
                                                     {
-                                                        Value = formDataProperty.Value.ToString()
-                                                    }
-                                                };
+                                                        Name = propertyObject["title"].Value<string>(),
+                                                        Value = Convert.ToBoolean(formDataProperty.Value)
+                                                    };
+
+                                                    productAttributes.Add(key, value);
+                                                }
+                                                else if (formDataProperty.Value.Type == JTokenType.Float)
+                                                {
+                                                    var value = new
+                                                    {
+                                                        Name = propertyObject["title"].Value<string>(),
+                                                        Value = (float)Convert.ToDouble(formDataProperty.Value)
+                                                    };
+
+                                                    productAttributes.Add(key, value);
+                                                }
+                                                else if (formDataProperty.Value.Type == JTokenType.Integer)
+                                                {
+                                                    var value = new
+                                                    {
+                                                        Name = propertyObject["title"].Value<string>(),
+                                                        Value = Convert.ToInt32(formDataProperty.Value)
+                                                    };
+
+                                                    productAttributes.Add(key, value);
+                                                }
+                                                else
+                                                {
+                                                    var value = new
+                                                    {
+                                                        Name = propertyObject["title"].Value<string>(),
+                                                        Value = Convert.ToString(formDataProperty.Value)
+                                                    };
+
+                                                    productAttributes.Add(key, value);
+                                                }
                                             }
                                         }
                                         else
                                         {
-                                            var productAttributeValueSearchModels = new List<ProductAttributeValueSearchModel>();
-
                                             var valueIdsArray = (JArray)formDataProperty.Value;
 
-                                            foreach (JValue valueId in valueIdsArray)
+                                            var value = new
                                             {
-                                                if (Guid.TryParse(valueId.ToString(), out var id))
+                                                Name = propertyObject["title"].Value<string>(),
+                                                Value = valueIdsArray.Select(x => new
                                                 {
-                                                    JValue title = (JValue)categorySchemaObject.SelectToken($"$.definitions...anyOf[?(@.enum[0] == '{id}')].title");
+                                                    Id = x,
+                                                    Name = ((JValue)categorySchemaObject.SelectToken($"$.definitions...anyOf[?(@.enum[0] == '{x}')].title")).Value<string>()
+                                                })
+                                            };
 
-                                                    var productAttributeValueSearchModel = new ProductAttributeValueSearchModel
-                                                    { 
-                                                        Id = id,
-                                                        Value = title.Value<string>()
-                                                    };
-
-                                                    productAttributeValueSearchModels.Add(productAttributeValueSearchModel);
-                                                }
-                                            }
-
-                                            productAttributeSearchModel.Values = productAttributeValueSearchModels;
+                                            productAttributes.Add(key, value);
                                         }
-
-                                        productAttributes.Add(productAttributeSearchModel);
                                     }
                                 }
 
