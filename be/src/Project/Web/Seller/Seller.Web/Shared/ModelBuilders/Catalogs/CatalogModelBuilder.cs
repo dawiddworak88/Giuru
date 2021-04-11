@@ -3,7 +3,7 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Seller.Web.Shared.ViewModels;
 
-namespace Seller.Web.Areas.Products.ModelBuilders
+namespace Seller.Web.Areas.ModelBuilders.Products
 {
     public class CatalogModelBuilder : ICatalogModelBuilder
     {

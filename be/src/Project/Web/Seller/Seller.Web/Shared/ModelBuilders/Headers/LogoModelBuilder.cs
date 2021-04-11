@@ -9,7 +9,7 @@ using Foundation.Extensions.Services.MediaServices;
 using Foundation.PageContent.Components.Headers.Definitions;
 using System.Globalization;
 
-namespace Seller.Web.Shared.Headers.ModelBuilders
+namespace Seller.Web.Shared.ModelBuilders.Headers
 {
     public class LogoModelBuilder : IModelBuilder<LogoViewModel>
     {

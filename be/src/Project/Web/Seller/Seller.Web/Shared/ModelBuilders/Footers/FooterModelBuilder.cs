@@ -10,7 +10,7 @@ using Foundation.Security.Definitions;
 using System;
 using System.Collections.Generic;
 
-namespace Seller.Web.Shared.Footers.ModelBuilders
+namespace Seller.Web.Shared.ModelBuilders.Footers
 {
     public class FooterModelBuilder : IModelBuilder<FooterViewModel>
     {

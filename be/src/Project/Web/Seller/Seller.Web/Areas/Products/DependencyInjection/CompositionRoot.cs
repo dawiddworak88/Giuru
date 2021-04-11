@@ -1,6 +1,6 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Microsoft.Extensions.DependencyInjection;
-using Seller.Web.Areas.Products.ModelBuilders;
+using Seller.Web.Areas.ModelBuilders.Products;
 using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Areas.Products.ViewModels;
 using Foundation.PageContent.ComponentModels;

@@ -8,7 +8,7 @@ using Seller.Web.Areas.Products.ViewModels;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Products.ModelBuilders
+namespace Seller.Web.Areas.ModelBuilders.Products
 {
     public class ProductAttributeItemFormModelBuilder : IAsyncComponentModelBuilder<ProductAttributeItemComponentModel, ProductAttributeItemFormViewModel>
     {

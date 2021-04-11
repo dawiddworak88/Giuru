@@ -7,7 +7,7 @@ using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Seller.Web.Shared.DrawerMenu.ModelBuilders
+namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
 {
     public class DrawerMenuModelBuilder : IModelBuilder<IEnumerable<DrawerMenuViewModel>>
     {

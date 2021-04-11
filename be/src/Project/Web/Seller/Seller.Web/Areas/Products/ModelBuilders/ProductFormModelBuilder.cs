@@ -19,7 +19,7 @@ using Foundation.PageContent.Components.ListItems.ViewModels;
 using Foundation.Extensions.ExtensionMethods;
 using Seller.Web.Areas.Products.DomainModels;
 
-namespace Seller.Web.Areas.Products.ModelBuilders
+namespace Seller.Web.Areas.ModelBuilders.Products
 {
     public class ProductFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductFormViewModel>
     {

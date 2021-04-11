@@ -10,7 +10,7 @@ using Foundation.PageContent.Components.LanguageSwitchers.ViewModels;
 using Foundation.PageContent.Components.DrawerMenu.ViewModels;
 using Foundation.Presentation.Definitions;
 
-namespace Seller.Web.Shared.Headers.ModelBuilders
+namespace Seller.Web.Shared.ModelBuilders.Headers
 {
     public class HeaderModelBuilder : IModelBuilder<HeaderViewModel>
     {
