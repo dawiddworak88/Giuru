@@ -23,6 +23,7 @@ namespace Catalog.Api.Repositories.Products.ProductSearchRepositories
             Guid? categoryId, 
             Guid? sellerId, 
             bool? hasPrimaryProduct,
+            bool? isNew,
             string searchTerm, 
             int pageIndex, 
             int itemsPerPage,
@@ -44,6 +45,11 @@ namespace Catalog.Api.Repositories.Products.ProductSearchRepositories
             if (hasPrimaryProduct.HasValue)
             {
                 query = query && Query<ProductSearchModel>.Term(t => t.PrimaryProductIdHasValue, hasPrimaryProduct.Value);
+            }
+
+            if (isNew.HasValue)
+            {
+                query = query && Query<ProductSearchModel>.Term(t => t.IsNew, isNew.Value);
             }
 
             if (!string.IsNullOrWhiteSpace(searchTerm))

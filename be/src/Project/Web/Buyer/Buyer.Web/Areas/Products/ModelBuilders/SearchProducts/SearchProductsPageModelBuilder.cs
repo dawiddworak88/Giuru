@@ -1,6 +1,6 @@
 ﻿using Buyer.Web.Areas.Products.ComponentModels;
 using Buyer.Web.Areas.Products.ViewModels.SearchProducts;
-using Buyer.Web.Shared.Headers.ViewModels;
+using Buyer.Web.Shared.ViewModels.Headers;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Footers.ViewModels;

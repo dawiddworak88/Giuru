@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Shared.Brands.DomainModels;
+﻿using Buyer.Web.Areas.Products.DomainModels;
 using System;
 using System.Threading.Tasks;
 

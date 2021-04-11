@@ -1,23 +1,24 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Buyer.Web.Shared.Headers.ModelBuilders;
 using Foundation.Extensions.ModelBuilders;
-using Buyer.Web.Shared.Footers.ModelBuilders;
 using Microsoft.Extensions.Configuration;
 using Buyer.Web.Shared.Configurations;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
-using Buyer.Web.Shared.Headers.ViewModels;
+using Buyer.Web.Shared.ViewModels.Headers;
 using Buyer.Web.Areas.Home.DependencyInjection;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;
 using Buyer.Web.Areas.Products.DependencyInjection;
-using Buyer.Web.Shared.Catalogs.Services;
-using Buyer.Web.Shared.Catalogs.ModelBuilders;
-using Buyer.Web.Shared.Files.ComponentModels;
-using Buyer.Web.Shared.Files.ViewModels;
-using Buyer.Web.Shared.Files.ModelBuilders;
-using Buyer.Web.Shared.Breadcrumbs.ModelBuilders;
+using Buyer.Web.Shared.Services.Catalogs;
+using Buyer.Web.Shared.ModelBuilders.Catalogs;
+using Buyer.Web.Shared.ComponentModels.Files;
+using Buyer.Web.Shared.ModelBuilders.Breadcrumbs;
 using Foundation.Localization.Definitions;
+using Buyer.Web.Shared.ModelBuilders.MainNavigations;
+using Buyer.Web.Shared.ModelBuilders.Footers;
+using Buyer.Web.Shared.ModelBuilders.Headers;
+using Buyer.Web.Shared.ViewModels.Files;
+using Buyer.Web.Shared.ModelBuilders.Files;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {

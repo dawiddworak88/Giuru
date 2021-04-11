@@ -1,8 +1,8 @@
-﻿using Buyer.Web.Shared.Brands.Repositories;
+﻿using Buyer.Web.Shared.Repositories.Brands;
 using Buyer.Web.Areas.Products.ViewModels.Brands;
 using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Files.ComponentModels;
-using Buyer.Web.Shared.Files.ViewModels;
+using Buyer.Web.Shared.ComponentModels.Files;
+using Buyer.Web.Shared.ViewModels.Files;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Extensions.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;

@@ -13,6 +13,7 @@ namespace Catalog.Api.Repositories.Products.ProductSearchRepositories
             Guid? categoryId, 
             Guid? sellerId, 
             bool? hasPrimaryProduct,
+            bool? isNew,
             string searchTerm,
             int pageIndex, 
             int itemsPerPage,

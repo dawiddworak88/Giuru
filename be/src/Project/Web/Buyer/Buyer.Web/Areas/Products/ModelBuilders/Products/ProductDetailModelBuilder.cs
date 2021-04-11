@@ -1,12 +1,12 @@
-﻿using Buyer.Web.Areas.Products.ModelBuilders.Definitions;
+﻿using Buyer.Web.Areas.Products.DomainModels;
+using Buyer.Web.Areas.Products.ModelBuilders.Definitions;
 using Buyer.Web.Areas.Products.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
-using Buyer.Web.Shared.Brands.DomainModels;
 using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Files.ComponentModels;
-using Buyer.Web.Shared.Files.ViewModels;
-using Buyer.Web.Shared.Images.ViewModels;
+using Buyer.Web.Shared.ComponentModels.Files;
+using Buyer.Web.Shared.ViewModels.Files;
+using Buyer.Web.Shared.ViewModels.Images;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Extensions.Services.MediaServices;

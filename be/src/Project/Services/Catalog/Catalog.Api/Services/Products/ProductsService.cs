@@ -284,6 +284,7 @@ namespace Catalog.Api.Services.Products
                 model.CategoryId, 
                 model.OrganisationId, 
                 model.HasPrimaryProduct,
+                model.IsNew,
                 model.SearchTerm,
                 model.PageIndex, 
                 model.ItemsPerPage,

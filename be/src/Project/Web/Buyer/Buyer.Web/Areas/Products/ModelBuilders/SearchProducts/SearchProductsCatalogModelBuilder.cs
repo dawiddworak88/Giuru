@@ -2,7 +2,7 @@
 using Buyer.Web.Areas.Products.ModelBuilders.Definitions;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.SearchProducts;
-using Buyer.Web.Shared.Catalogs.ModelBuilders;
+using Buyer.Web.Shared.ModelBuilders.Catalogs;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Paginations;
 using System.Threading.Tasks;
