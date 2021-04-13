@@ -1,5 +1,4 @@
 ﻿using Buyer.Web.Areas.Products.ApiResponseModels;
-using Buyer.Web.Shared.Brands.DomainModels;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.ApiExtensions.Communications;
@@ -8,6 +7,7 @@ using Foundation.ApiExtensions.Services.ApiClientServices;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
+using Buyer.Web.Areas.Products.DomainModels;
 
 namespace Buyer.Web.Areas.Products.Repositories.Categories
 {

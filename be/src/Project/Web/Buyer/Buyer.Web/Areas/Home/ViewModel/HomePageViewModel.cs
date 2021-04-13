@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Shared.Headers.ViewModels;
+﻿using Buyer.Web.Shared.ViewModels.Headers;
 using Foundation.PageContent.Components.ContentGrids.ViewModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.HeroSliders.ViewModels;

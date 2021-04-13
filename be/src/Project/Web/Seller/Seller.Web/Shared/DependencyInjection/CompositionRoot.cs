@@ -1,16 +1,16 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Seller.Web.Shared.Headers.ModelBuilders;
+using Seller.Web.Shared.ModelBuilders.Headers;
 using Foundation.Extensions.ModelBuilders;
-using Seller.Web.Shared.Footers.ModelBuilders;
-using Seller.Web.Shared.MenuTiles.ModelBuilders;
+using Seller.Web.Shared.ModelBuilders.Footers;
+using Seller.Web.Shared.ModelBuilders.MenuTiles;
 using Foundation.PageContent.MenuTiles.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using System.Collections.Generic;
 using Foundation.PageContent.Components.DrawerMenu.ViewModels;
-using Seller.Web.Shared.DrawerMenu.ModelBuilders;
+using Seller.Web.Shared.ModelBuilders.DrawerMenu;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
-using Seller.Web.Areas.Products.ModelBuilders;
+using Seller.Web.Areas.ModelBuilders.Products;
 using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.Repositories.Organisations;
 

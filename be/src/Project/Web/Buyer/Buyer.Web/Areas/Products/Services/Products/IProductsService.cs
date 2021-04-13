@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Shared.Catalogs.ViewModels;
+﻿using Buyer.Web.Shared.ViewModels.Catalogs;
 using Foundation.GenericRepository.Paginations;
 using System;
 using System.Collections.Generic;

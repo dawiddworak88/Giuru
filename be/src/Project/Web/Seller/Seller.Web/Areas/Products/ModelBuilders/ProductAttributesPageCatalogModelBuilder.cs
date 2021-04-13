@@ -12,7 +12,7 @@ using Seller.Web.Areas.Products.DomainModels;
 using System.Collections.Generic;
 using Foundation.Extensions.ExtensionMethods;
 
-namespace Seller.Web.Areas.Products.ModelBuilders
+namespace Seller.Web.Areas.ModelBuilders.Products
 {
     public class ProductAttributesPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ProductAttribute>>
     {

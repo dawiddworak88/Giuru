@@ -18,7 +18,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Products.ModelBuilders
+namespace Seller.Web.Areas.ModelBuilders.Products
 {
     public class CategoryFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CategoryFormViewModel>
     {

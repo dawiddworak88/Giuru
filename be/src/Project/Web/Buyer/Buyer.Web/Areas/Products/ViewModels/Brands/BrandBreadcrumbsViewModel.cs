@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Shared.Breadcrumbs.ViewModels;
+﻿using Buyer.Web.Shared.ViewModels.Breadcrumbs;
 
 namespace Buyer.Web.Areas.Products.ViewModels.Brands
 {

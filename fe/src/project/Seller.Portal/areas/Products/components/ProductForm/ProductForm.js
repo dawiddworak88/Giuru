@@ -99,11 +99,11 @@ function ProductForm(props) {
 
         var product = {
             id,
-            categoryId: category.id,
+            categoryId: category ? category.id : null,
             sku,
             name,
             description,
-            primaryProductId: primaryProduct.id,
+            primaryProductId: primaryProduct ? primaryProduct.id : null,
             images,
             files,
             isNew,

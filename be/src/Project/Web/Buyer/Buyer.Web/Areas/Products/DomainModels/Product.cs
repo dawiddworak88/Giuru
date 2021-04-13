@@ -1,8 +1,7 @@
-﻿using Buyer.Web.Areas.Products.DomainModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
-namespace Buyer.Web.Shared.Brands.DomainModels
+namespace Buyer.Web.Areas.Products.DomainModels
 {
     public class Product
     {

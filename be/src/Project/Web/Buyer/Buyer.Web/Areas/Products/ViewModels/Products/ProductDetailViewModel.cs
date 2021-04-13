@@ -1,5 +1,5 @@
-﻿using Buyer.Web.Shared.Files.ViewModels;
-using Buyer.Web.Shared.Images.ViewModels;
+﻿using Buyer.Web.Shared.ViewModels.Files;
+using Buyer.Web.Shared.ViewModels.Images;
 using Foundation.PageContent.Components.ContentGrids.ViewModels;
 using System.Collections.Generic;
 

@@ -44,6 +44,7 @@ namespace Catalog.Api.v1.Products.Controllers
         /// <param name="categoryId">The category id.</param>
         /// <param name="sellerId">The brand id.</param>
         /// <param name="hasPrimaryProduct">Set to null to get all products including product variants. Set to false to get primary products only. Set to true to get product variants only.</param>
+        /// <param name="isNew">Set to null to get all products. Set to true to get new products only.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The number of items per page.</param>
@@ -58,6 +59,7 @@ namespace Catalog.Api.v1.Products.Controllers
             Guid? categoryId, 
             Guid? sellerId,
             bool? hasPrimaryProduct,
+            bool? isNew,
             string searchTerm, 
             int pageIndex, 
             int itemsPerPage,
@@ -108,7 +110,8 @@ namespace Catalog.Api.v1.Products.Controllers
                     OrganisationId = sellerId,
                     OrderBy = orderBy,
                     Language = CultureInfo.CurrentCulture.Name,
-                    HasPrimaryProduct = hasPrimaryProduct
+                    HasPrimaryProduct = hasPrimaryProduct,
+                    IsNew = isNew
                 };
 
                 var validator = new GetProductsModelValidator();
