@@ -393,4 +393,7 @@
   <data name="Yes" xml:space="preserve">
     <value>Tak</value>
   </data>
+  <data name="ProductAttributeItem" xml:space="preserve">
+    <value>Wartość atrybutu produktu</value>
+  </data>
 </root>
