@@ -1,4 +1,5 @@
-﻿using Foundation.Catalog.SearchModels.Products;
+﻿using Catalog.Api.Definitions;
+using Foundation.Catalog.SearchModels.Products;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Search.Extensions;
 using Nest;
@@ -120,7 +121,7 @@ namespace Catalog.Api.Repositories.Products.ProductSearchRepositories
 
             query = query && idsQuery;
 
-            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(q => q.Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(q => q.From(ProductSearchConstants.Pagination.BeginningPage).Size(ProductSearchConstants.Pagination.ProductsMaxSize).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
 
             if (response.IsValid && response.Hits.Any())
             {
@@ -155,6 +156,8 @@ namespace Catalog.Api.Repositories.Products.ProductSearchRepositories
 
             var searchRequest = new SearchRequest
             {
+                From = ProductSearchConstants.Pagination.BeginningPage,
+                Size = ProductSearchConstants.Pagination.ProductsMaxSize,
                 Query = query
             };
 
