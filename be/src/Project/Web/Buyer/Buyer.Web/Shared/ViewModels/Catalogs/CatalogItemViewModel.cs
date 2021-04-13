@@ -10,6 +10,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string Title { get; set; }
         public string ImageUrl { get; set; }
         public string ImageAlt { get; set; }
+        public bool IsNew { get; set; }
         public bool InStock { get; set; }
         public string BrandName { get; set; }
         public string BrandUrl { get; set; }

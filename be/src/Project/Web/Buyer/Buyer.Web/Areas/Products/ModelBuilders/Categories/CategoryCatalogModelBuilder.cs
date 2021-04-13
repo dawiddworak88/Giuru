@@ -1,5 +1,5 @@
 ﻿using Buyer.Web.Areas.Products.ComponentModels;
-using Buyer.Web.Areas.Products.ModelBuilders.Definitions;
+using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Areas.Products.Repositories.Categories;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Areas.Products.ViewModels.Categories;

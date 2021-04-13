@@ -1,4 +1,4 @@
-﻿namespace Buyer.Web.Areas.Products.ModelBuilders.Definitions
+﻿namespace Buyer.Web.Areas.Shared.Definitions.Products
 {
     public static class ProductConstants
     {

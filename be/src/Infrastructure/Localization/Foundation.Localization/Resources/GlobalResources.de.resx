@@ -166,7 +166,7 @@
     <value>Link kopieren</value>
   </data>
   <data name="Copyright" xml:space="preserve">
-    <value>Copyright © [year] Giuru</value>
+    <value>Copyright © [year] ELTAP</value>
   </data>
   <data name="CreatedDate" xml:space="preserve">
     <value>Erstellungsdatum</value>
@@ -249,8 +249,8 @@
   <data name="Logo" xml:space="preserve">
     <value>Logo</value>
   </data>
-  <data name="MakeTheFuture" xml:space="preserve">
-    <value>Machen Sie die Zukunft mit Giuru</value>
+  <data name="SiteTitle" xml:space="preserve">
+    <value>ELTAP. Die besten Möbel in Polen</value>
   </data>
   <data name="Media" xml:space="preserve">
     <value>Media</value>
@@ -278,6 +278,9 @@
   </data>
   <data name="NoResultsLabel" xml:space="preserve">
     <value>Keine Ergebnisse.</value>
+  </data>
+  <data name="Novelties" xml:space="preserve">
+    <value>Neuigkeiten</value>
   </data>
   <data name="Ok" xml:space="preserve">
     <value>OK</value>

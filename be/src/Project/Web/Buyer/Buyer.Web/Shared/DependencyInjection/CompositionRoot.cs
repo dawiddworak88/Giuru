@@ -19,6 +19,8 @@ using Buyer.Web.Shared.ModelBuilders.Footers;
 using Buyer.Web.Shared.ModelBuilders.Headers;
 using Buyer.Web.Shared.ViewModels.Files;
 using Buyer.Web.Shared.ModelBuilders.Files;
+using Buyer.Web.Shared.Repositories.Brands;
+using Buyer.Web.Shared.Repositories.Products;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -37,6 +39,10 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>, MainNavigationModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
+
+            // Repositories
+            services.AddScoped<IBrandRepository, BrandRepository>();
+            services.AddScoped<ICatalogProductsRepository, CatalogProductsRepository>();
 
             // Services
             services.AddScoped<ICatalogService, CatalogService>();

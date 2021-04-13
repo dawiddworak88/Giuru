@@ -10,29 +10,112 @@ using Foundation.GenericRepository.Paginations;
 using System.Linq;
 using Buyer.Web.Shared.DomainModels.Categories;
 using System;
+using Buyer.Web.Shared.ViewModels.Catalogs;
+using System.Globalization;
+using Foundation.Extensions.Services.MediaServices;
+using Microsoft.AspNetCore.Routing;
+using Buyer.Web.Areas.Shared.Definitions.Products;
+using Buyer.Web.Shared.Repositories.Products;
+using Buyer.Web.Shared.DomainModels.CatalogProducts;
 
 namespace Buyer.Web.Shared.Services.Catalogs
 {
     public class CatalogService : ICatalogService
     {
+        private readonly ICatalogProductsRepository catalogProductsRepository;
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
+        private readonly IMediaHelperService mediaService;
+        private readonly IOptions<AppSettings> options;
+        private readonly LinkGenerator linkGenerator;
 
-        public CatalogService(IApiClientService apiClientService, IOptions<AppSettings> settings)
+        public CatalogService(
+            ICatalogProductsRepository catalogProductsRepository,
+            IApiClientService apiClientService, 
+            IOptions<AppSettings> settings,
+            IMediaHelperService mediaService,
+            IOptions<AppSettings> options,
+            LinkGenerator linkGenerator)
         {
+            this.catalogProductsRepository = catalogProductsRepository;
             this.apiClientService = apiClientService;
             this.settings = settings;
+            this.mediaService = mediaService;
+            this.options = options;
+            this.linkGenerator = linkGenerator;
         }
 
-        //public async Task<IEnumerable<Product>> GetNewProductsAsync(
-        //    string language,
-        //    int pageIndex,
-        //    int itemsPerPage)
-        //{
+        public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetCatalogProductsAsync(
+            string token,
+            string language,
+            Guid? sellerId,
+            bool? hasPrimaryProduct,
+            bool? isNew,
+            string searchTerm, 
+            int pageIndex, 
+            int itemsPerPage)
+        {
+            var catalogItemList = new List<CatalogItemViewModel>();
 
-        //}
+            var pagedProducts = await this.catalogProductsRepository.GetProductsAsync(
+                    token,
+                    language,
+                    searchTerm,
+                    hasPrimaryProduct,
+                    isNew,
+                    null,
+                    pageIndex,
+                    itemsPerPage,
+                    nameof(CatalogProduct.LastModifiedDate)
+                );
 
-        public async Task<IEnumerable<CatalogCategory>> GetCategoriesAsync(string language, int pageIndex, int itemsPerPage)
+            if (pagedProducts?.Data != null)
+            {
+                foreach (var product in pagedProducts.Data)
+                {
+                    var catalogItem = new CatalogItemViewModel
+                    {
+                        Id = product.Id,
+                        Sku = product.Sku,
+                        Title = product.Name,
+                        Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
+                        BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId }),
+                        BrandName = product.BrandName,
+                        IsNew = product.IsNew,
+                        InStock = false
+                    };
+
+                    if (product.Images != null)
+                    {
+                        var imageGuid = product.Images.FirstOrDefault();
+
+                        catalogItem.ImageAlt = product.Name;
+                        catalogItem.ImageUrl = this.mediaService.GetFileUrl(
+                            this.options.Value.MediaUrl, 
+                            imageGuid, 
+                            ProductConstants.ProductsCatalogItemImageWidth, 
+                            ProductConstants.ProductsCatalogItemImageHeight);
+                    }
+
+                    catalogItemList.Add(catalogItem);
+                }
+
+                return new PagedResults<IEnumerable<CatalogItemViewModel>>(pagedProducts.Total, pagedProducts.PageSize)
+                {
+                    Data = catalogItemList
+                };
+            }
+
+            return new PagedResults<IEnumerable<CatalogItemViewModel>>(catalogItemList.Count, PaginationConstants.DefaultPageIndex)
+            {
+                Data = catalogItemList
+            };
+        }
+
+        public async Task<IEnumerable<CatalogCategory>> GetCatalogCategoriesAsync(
+            string language, 
+            int pageIndex, 
+            int itemsPerPage)
         {
             var categoriesRequestModel = new CategoriesRequestModel
             {

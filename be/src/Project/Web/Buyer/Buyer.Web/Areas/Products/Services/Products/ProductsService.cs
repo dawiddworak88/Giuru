@@ -1,5 +1,5 @@
 ﻿using Buyer.Web.Areas.Products.DomainModels;
-using Buyer.Web.Areas.Products.ModelBuilders.Definitions;
+using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.Configurations;

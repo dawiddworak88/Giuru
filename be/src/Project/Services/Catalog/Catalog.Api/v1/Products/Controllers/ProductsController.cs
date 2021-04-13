@@ -59,7 +59,7 @@ namespace Catalog.Api.v1.Products.Controllers
             Guid? categoryId, 
             Guid? sellerId,
             bool? hasPrimaryProduct,
-            bool isNew,
+            bool? isNew,
             string searchTerm, 
             int pageIndex, 
             int itemsPerPage,
