@@ -9,5 +9,6 @@ namespace Buyer.Web.Shared.Configurations
         public string IdentityUrl { get; set; }
         public bool IsMarketplace { get; set; }
         public Guid? OrganisationId { get; set; }
+        public string GoogleTagManagerIdentifier { get; set; }
     }
 }

@@ -54,7 +54,7 @@ const Components = {
 	SettingsPage
 };
 
-export default (req, res, next) => {
+const serverRenderer = (req, res, next) => {
 
 	let Component = Components[req.body.moduleName];
 
@@ -85,3 +85,5 @@ export default (req, res, next) => {
 
 	res.status(400).end();
 };
+
+export default serverRenderer;
