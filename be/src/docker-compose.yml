@@ -2,10 +2,6 @@ version: '3.8'
 
 services:
 
-  seq:
-    image: datalust/seq:latest
-    restart: always
-
   rabbitmq:
     image: rabbitmq
     restart: always
@@ -15,19 +11,24 @@ services:
     restart: always
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
     restart: always
 
   basketdata:
     image: redis:alpine
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.9.1
+    image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
     restart: always
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-    ports:
-      - 5601:5601
+    depends_on:
+      - elasticsearch
+
+  logstash:
+    build:
+      context: DockerServices/logstash/
+      args:
+        ELK_VERSION: ${ELK_VERSION}
+    restart: always
     depends_on:
       - elasticsearch
 
@@ -50,7 +51,6 @@ services:
     restart: always
     depends_on:
       - sqldata
-      - seq
 
   media-api:
     image: ${REGISTRY:-giuru}/media-api:${PLATFORM:-linux}-${TAG:-latest}
