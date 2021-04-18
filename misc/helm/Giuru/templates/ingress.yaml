@@ -34,6 +34,27 @@ spec:
           serviceName: media-api-service
           servicePort: 80
         path: /
+  - host: {{ .Values.ingress.clientapidomain }}
+    http:
+      paths:
+      - backend:
+          serviceName: client-api-service
+          servicePort: 80
+        path: /
+  - host: {{ .Values.ingress.basketapidomain }}
+    http:
+      paths:
+      - backend:
+          serviceName: basket-api-service
+          servicePort: 80
+        path: /
+  - host: {{ .Values.ingress.orderingapidomain }}
+    http:
+      paths:
+      - backend:
+          serviceName: ordering-api-service
+          servicePort: 80
+        path: /
   - host: {{ .Values.ingress.identityapidomain }}
     http:
       paths:
