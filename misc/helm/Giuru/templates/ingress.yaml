@@ -17,12 +17,14 @@ metadata:
 spec:
   tls:
   - hosts:
+    - {{ .Values.ingress.clientapidomain }}
+    - {{ .Values.ingress.basketapidomain }}
+    - {{ .Values.ingress.orderingapidomain }}
     - {{ .Values.ingress.mediaapidomain }}
     - {{ .Values.ingress.identityapidomain }}
     - {{ .Values.ingress.catalogapidomain }}
     - {{ .Values.ingress.buyerapidomain }}
     - {{ .Values.ingress.sellerapidomain }}
-    - {{ .Values.ingress.seqdomain }}
     secretName: tls-secret
   rules:
   - host: {{ .Values.ingress.mediaapidomain }}
@@ -58,12 +60,5 @@ spec:
       paths:
       - backend:
           serviceName: seller-web-service
-          servicePort: 80
-        path: /
-  - host: {{ .Values.ingress.seqdomain }}
-    http:
-      paths:
-      - backend:
-          serviceName: seq
           servicePort: 80
         path: /

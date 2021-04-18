@@ -9,10 +9,20 @@ serverSideRenderingEndpoint: "#{ServerSideRenderingEndpoint}#"
 identityUrl: "#{IdentityUrl}#"
 mediaUrl: "#{MediaUrl}#"
 catalogUrl: "#{CatalogUrl}#"
+basketUrl: "#{BasketUrl}#"
+orderUrl: "#{OrderUrl}#"
+clientUrl: "#{ClientUrl}#"
+eventLoggingUrl: "#{EventLoggingUrl}#"
 elasticsearchUrl: "#{ElasticsearchUrl}#"
-seqUrl: "#{SeqUrl}#"
+logstashUrl: "#{LogstashUrl}#"
+eventBusConnection: "#{EventBusConnection}#"
+eventBusRetryCount: "#{EventBusRetryCount}#"
 defaultCulture: "en"
 supportedCultures: "en,de,pl"
+eventLoggingApi:
+  connectionString: "#{EventLoggingApi--ConnectionString}#"
+clientApi:
+  connectionString: "#{ClientApi--ConnectionString}#"
 mediaApi:
   connectionString: "#{MediaApi--ConnectionString}#"
   storageConnectionString: "#{MediaApi--StorageConnectionString}#"
@@ -30,6 +40,10 @@ identityApi:
   organisations: "#{IdentityApi--Organisations}#"
   privacyPolicy: "#{IdentityApi--PrivacyPolicy}#"
   regulations: "#{IdentityApi--Regulations}#"
+basketApi:
+  connectionString: "#{BasketApi--ConnectionString}#"
+orderingApi:
+  connectionString: "#{OrderingApi--ConnectionString}#"
 buyerWeb:
   clientId: "#{BuyerWeb--ClientId}#"
   clientSecret: "#{BuyerWeb--ClientSecret}#"
