@@ -73,6 +73,39 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: eventlogging-api-deployment
+  labels:
+    app: eventlogging-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: eventlogging-api
+  template:
+    metadata:
+      labels:
+        app: eventlogging-api
+    spec:
+      containers:
+      - name: eventlogging-api-container
+        image: {{ .Values.image.registry }}/eventlogging-api:{{ .Values.image.tag }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: ConnectionString
+          value: {{ .Values.eventloggingapi.connectionString }}
+        - name: LogstashUrl
+          value: {{ .Values.logstashUrl }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: catalog-api-deployment
   labels:
     app: catalog-api
