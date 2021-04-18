@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Shared.Files.ViewModels;
+﻿using Buyer.Web.Shared.ViewModels.Files;
 
 namespace Buyer.Web.Areas.Products.ViewModels.Brands
 {

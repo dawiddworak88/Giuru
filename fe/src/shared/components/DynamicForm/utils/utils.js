@@ -153,6 +153,36 @@ export function hasWidget(schema, widget, registeredWidgets = {}) {
     }
 }
 
+export function schemaRequiresTrueValue(schema) {
+    // Check if const is a truthy value
+    if (schema.const) {
+      return true;
+    }
+  
+    // Check if an enum has a single value of true
+    if (schema.enum && schema.enum.length === 1 && schema.enum[0] === true) {
+      return true;
+    }
+  
+    // If anyOf has a single value, evaluate the subschema
+    if (schema.anyOf && schema.anyOf.length === 1) {
+      return schemaRequiresTrueValue(schema.anyOf[0]);
+    }
+  
+    // If oneOf has a single value, evaluate the subschema
+    if (schema.oneOf && schema.oneOf.length === 1) {
+      return schemaRequiresTrueValue(schema.oneOf[0]);
+    }
+  
+    // Evaluate each subschema in allOf, to see if one of them requires a true
+    // value
+    if (schema.allOf) {
+      return schema.allOf.some(schemaRequiresTrueValue);
+    }
+  
+    return false;
+  }
+
 function computeDefaults(
     _schema,
     parentDefaults,
@@ -354,9 +384,7 @@ export function getUiOptions(uiSchema) {
             const value = uiSchema[key];
 
             if (key === "ui:widget" && isObject(value)) {
-                console.warn(
-                    "Setting options via ui:widget object is deprecated, use ui:options instead"
-                );
+
                 return {
                     ...options,
                     ...(value.options || {}),
@@ -520,9 +548,6 @@ export function isFixedItems(schema) {
 }
 
 export function allowAdditionalItems(schema) {
-    if (schema.additionalItems === true) {
-        console.warn("additionalItems=true is currently not supported");
-    }
     return isObject(schema.additionalItems);
 }
 
@@ -667,7 +692,6 @@ export function retrieveSchema(schema, rootSchema = {}, formData = {}) {
                 allOf: resolvedSchema.allOf,
             });
         } catch (e) {
-            console.warn("could not merge subschemas in allOf:\n" + e);
             const { allOf, ...resolvedSchemaWithoutAllOf } = resolvedSchema;
             return resolvedSchemaWithoutAllOf;
         }
@@ -821,9 +845,6 @@ function withExactlyOneSubschema(
         return true;
     });
     if (validSubschemas.length !== 1) {
-        console.warn(
-            "ignoring oneOf in dependencies because there isn't exactly one subschema that is valid"
-        );
         return schema;
     }
     const subschema = validSubschemas[0];

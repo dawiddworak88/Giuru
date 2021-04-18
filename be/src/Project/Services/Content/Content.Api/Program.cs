@@ -29,7 +29,7 @@ namespace Content.Api
                 loggerConfiguration.Enrich.WithProperty("ApplicationContext", typeof(Program).Namespace);
                 loggerConfiguration.Enrich.FromLogContext();
                 loggerConfiguration.WriteTo.Console();
-                loggerConfiguration.WriteTo.Seq(hostingContext.Configuration["SeqUrl"]);
+                loggerConfiguration.WriteTo.Http(hostingContext.Configuration["LogstashUrl"]);
                 loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
             })
             .ConfigureWebHostDefaults(webBuilder =>

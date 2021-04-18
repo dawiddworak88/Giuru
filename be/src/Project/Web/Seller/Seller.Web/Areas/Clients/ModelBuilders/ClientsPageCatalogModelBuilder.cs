@@ -5,8 +5,8 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.DomainModels;
-using Seller.Web.Areas.Clients.Repositories;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
+using Seller.Web.Shared.Repositories.Clients;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
 using System.Globalization;
@@ -48,6 +48,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ClientsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ClientsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+
+            viewModel.OrderBy = $"{nameof(Client.CreatedDate)} desc";
 
             viewModel.Table = new CatalogTableViewModel
             {
@@ -100,7 +102,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.clientsRepository.GetClientsAsync(componentModel.Token, componentModel.Language, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage);
+            viewModel.PagedItems = await this.clientsRepository.GetClientsAsync(componentModel.Token, componentModel.Language, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, $"{nameof(Client.CreatedDate)}");
 
             return viewModel;
         }

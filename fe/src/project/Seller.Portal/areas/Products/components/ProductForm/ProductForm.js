@@ -7,6 +7,8 @@ import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { TextField, Button, CircularProgress, FormControlLabel, Switch } from "@material-ui/core";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
+import DynamicForm from "../../../../../../shared/components/DynamicForm/DynamicForm";
+import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 
 function ProductForm(props) {
 
@@ -32,7 +34,10 @@ function ProductForm(props) {
         primaryProduct: { value: props.primaryProductId ? props.primaryProducts.find((item) => item.id === props.primaryProductId) : null },
         images: { value: props.images ? props.images : [] },
         files: { value: props.files ? props.files : [] },
-        isNew: { value: props.isNew ? props.isNew : false }
+        isNew: { value: props.isNew ? props.isNew : false },
+        schema: { value: props.schema ? JSON.parse(props.schema) : {} },
+        uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : {} },
+        formData: { value: props.formData ? JSON.parse(props.formData) : {} }
     };
 
     const stateValidatorSchema = {
@@ -51,14 +56,64 @@ function ProductForm(props) {
         }
     };
 
-    function onSubmitForm(state) {
+    const onCategoryChange = (event, newValue) => {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        setFieldValue({ name: "category", value: newValue });
+
+        var payload = {
+            categoryId: newValue.id
+        };
+
+        const requestOptions = {
+            method: "GET",
+            headers: { "Content-Type": "application/json" }
+        };
+
+        const getCategorySchemaUrl = props.getCategorySchemaUrl + "?" + QueryStringSerializer.serialize(payload);
+
+        fetch(getCategorySchemaUrl, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setFieldValue({ name: "schema", value: jsonResponse.schema ? JSON.parse(jsonResponse.schema) : {} });
+                        setFieldValue({ name: "uiSchema", value: jsonResponse.uiSchema ? JSON.parse(jsonResponse.uiSchema) : {} });
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    };
+
+    const onSubmitForm = (state) => {
+
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        var product = {
+            id,
+            categoryId: category ? category.id : null,
+            sku,
+            name,
+            description,
+            primaryProductId: primaryProduct ? primaryProduct.id : null,
+            images,
+            files,
+            isNew,
+            formData: JSON.stringify(formData)
+        };
 
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(state)
+            body: JSON.stringify(product)
         };
 
         fetch(props.saveUrl, requestOptions)
@@ -93,7 +148,19 @@ function ProductForm(props) {
         handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, category, sku, name, description, primaryProduct, images, files, isNew } = values;
+    const { 
+        id, 
+        category, 
+        sku, 
+        name, 
+        description, 
+        primaryProduct, 
+        images, 
+        files, 
+        isNew, 
+        schema, 
+        uiSchema, 
+        formData } = values;
 
     return (
         <section className="section section-small-padding product">
@@ -111,9 +178,7 @@ function ProductForm(props) {
                                 name="category"
                                 fullWidth={true}
                                 value={category}
-                                onChange={(event, newValue) => {
-                                    setFieldValue({ name: "category", value: newValue });
-                                  }}
+                                onChange={onCategoryChange}
                                 autoComplete
                                 renderInput={(params) => <TextField {...params} label={props.selectCategoryLabel} margin="normal" />}
                             />
@@ -191,6 +256,11 @@ function ProductForm(props) {
                                     label={props.isNewLabel} />
                             </NoSsr>
                         </div>
+                        <DynamicForm 
+                            jsonSchema={schema} 
+                            uiSchema={uiSchema} 
+                            formData={formData} 
+                            onChange={handleOnChange} />
                         <div className="field">
                             <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
                                 {props.saveText}
@@ -212,6 +282,9 @@ ProductForm.propTypes = {
     primaryProductId: PropTypes.string,
     images: PropTypes.array,
     files: PropTypes.array,
+    formData: PropTypes.string,
+    schema: PropTypes.string,
+    uiSchema: PropTypes.string,
     isNewLabel: PropTypes.string.isRequired,
     selectCategoryLabel: PropTypes.string.isRequired,
     selectPrimaryProductLabel: PropTypes.string.isRequired,
@@ -227,6 +300,7 @@ ProductForm.propTypes = {
     dropFilesLabel: PropTypes.string.isRequired,
     saveMediaUrl: PropTypes.string.isRequired,
     deleteLabel: PropTypes.string.isRequired,
+    getCategorySchemaUrl: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired
 };
 

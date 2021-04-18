@@ -32,15 +32,22 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(
+            string searchTerm, 
+            bool? hasPrimaryProduct, 
+            int pageIndex, 
+            int itemsPerPage,
+            string orderBy)
         {
             var products = await this.productsRepository.GetProductsAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name,
                 searchTerm,
+                hasPrimaryProduct,
                 GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value),
                 pageIndex,
-                itemsPerPage);
+                itemsPerPage,
+                orderBy);
 
             return this.StatusCode((int)HttpStatusCode.OK, products);
         }
@@ -56,10 +63,11 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 model.Sku,
                 model.Description,
                 model.IsNew,
-                model.PrimaryProduct?.Id,
-                model.Category?.Id,
+                model.PrimaryProductId,
+                model.CategoryId,
                 model.Images?.Select(x => x.Id),
-                model.Files?.Select(x => x.Id));
+                model.Files?.Select(x => x.Id),
+                model.FormData);
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Id = productId, Message = this.productLocalizer.GetString("ProductSavedSuccessfully").Value });
         }
@@ -72,7 +80,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 CultureInfo.CurrentUICulture.Name,
                 id);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.productLocalizer.GetString("CategoryDeletedSuccessfully").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.productLocalizer.GetString("ProductDeletedSuccessfully").Value });
         }
     }
 }

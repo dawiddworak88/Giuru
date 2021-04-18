@@ -16,12 +16,17 @@ import ContentPage from "../../src/project/Account/areas/Home/pages/Content/Cont
 // Seller Portal
 import OrdersPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrdersPage/OrdersPage";
 import OrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage";
+import EditOrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/EditOrderPage/EditOrderPage";
 import ClientsPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientsPage/ClientsPage";
 import ClientPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientPage/ClientPage";
 import ProductsPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductsPage/ProductsPage";
 import ProductPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductPage/ProductPage";
+import ProductAttributesPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductAttributesPage/ProductAttributesPage";
+import ProductAttributePage from "../../src/project/Seller.Portal/areas/Products/pages/ProductAttributePage/ProductAttributePage";
+import ProductAttributeItemPage from "../../src/project/Seller.Portal/areas/Products/pages/ProductAttributeItemPage/ProductAttributeItemPage";
 import CategoriesPage from "../../src/project/Seller.Portal/areas/Products/pages/CategoriesPage/CategoriesPage";
 import SellerCategoryPage from "../../src/project/Seller.Portal/areas/Products/pages/CategoryPage/CategoryPage";
+import SettingsPage from "../../src/project/Seller.Portal/areas/Settings/pages/SettingsPage/SettingsPage";
 
 const Components = {
 
@@ -36,15 +41,20 @@ const Components = {
 
 	OrdersPage,
 	OrderPage,
+	EditOrderPage,
 	ClientsPage,
 	ClientPage,
 	ProductsPage,
 	ProductPage,
+	ProductAttributesPage,
+	ProductAttributePage,
+	ProductAttributeItemPage,
 	CategoriesPage,
-	SellerCategoryPage
+	SellerCategoryPage,
+	SettingsPage
 };
 
-export default (req, res, next) => {
+const serverRenderer = (req, res, next) => {
 
 	let Component = Components[req.body.moduleName];
 
@@ -75,3 +85,5 @@ export default (req, res, next) => {
 
 	res.status(400).end();
 };
+
+export default serverRenderer;

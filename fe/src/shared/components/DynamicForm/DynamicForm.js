@@ -13,12 +13,12 @@ function DynamicForm(props) {
         return {
             fields: { ...fields },
             widgets: { ...widgets },
-            definitions: props.jsonSchema.definitions || {},
+            definitions: (props.jsonSchema && props.jsonSchema.definitions) ? props.jsonSchema.definitions : {},
             rootSchema: props.jsonSchema,
             formContext: props.formContext || {},
         };
     }
-
+    
     return (
         <div>
             <SchemaField
@@ -33,6 +33,7 @@ function DynamicForm(props) {
 
 DynamicForm.propTypes = {
     jsonSchema: PropTypes.object.isRequired,
+    uiSchema: PropTypes.object,
     formData: PropTypes.object
 };
 

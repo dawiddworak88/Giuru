@@ -2,6 +2,9 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Basket.Api.Configurations;
+using Microsoft.AspNetCore.Builder;
+using Foundation.EventBus.Abstractions;
+using Basket.Api.IntegrationEvents;
 
 namespace Basket.Api.DependencyInjection
 {
@@ -11,6 +14,13 @@ namespace Basket.Api.DependencyInjection
         {
             services.Configure<AppSettings>(configuration);
             services.Configure<LocalizationSettings>(configuration);
+        }
+
+        public static void ConfigureEventBus(this IApplicationBuilder app)
+        {
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+
+            eventBus.Subscribe<OrderStartedIntegrationEvent, IIntegrationEventHandler<OrderStartedIntegrationEvent>>();
         }
     }
 }

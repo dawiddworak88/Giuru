@@ -36,29 +36,7 @@ namespace Catalog.Api.Infrastructure.Categories.Definitions
                 public static class Bedroom
                 {
                     public static readonly Guid BedsId = Guid.Parse("1b4a61fb-cdda-45b2-a4d6-92a27acdf833");
-                    public static readonly Guid WardrobesId = Guid.Parse("2cf5e97c-49ae-4679-90b9-734dfa2751c4");
-                    public static readonly Guid ChestsId = Guid.Parse("505f8cee-abb8-4915-aad9-0964d6560385");
                     public static readonly Guid MattressesId = Guid.Parse("d396d9e6-fdbc-409f-a3f1-765101f97672");
-                }
-
-                public static class KitchenDiningRoom
-                {
-                    public static readonly Guid DiningTablesSeatingId = Guid.Parse("32655256-e121-4749-a78e-00578c4b45e4");
-                    public static readonly Guid KitchenCabinetsId = Guid.Parse("2a8f1365-ea7b-4f6f-8e81-0a7903610d88");
-                    public static readonly Guid ChinaCabinetsId = Guid.Parse("1cd61cd8-9543-4151-9702-3094a1dbca9f");
-                }
-
-                public static class Bathroom
-                {
-                    public static readonly Guid BathroomVanitiesCabinetsId = Guid.Parse("92bc8fca-2edb-4d68-9940-cd8c0816f95a");
-                }
-
-                public static class KidsFurniture
-                {
-                    public static readonly Guid KidsBedsId = Guid.Parse("ed0a4b80-75c1-4cc8-b6be-1ac21fcb7889");
-                    public static readonly Guid KidsBunkBedsId = Guid.Parse("b2349e95-bf76-45f6-9ace-d4a002d96e12");
-                    public static readonly Guid KidsTablesId = Guid.Parse("71597da0-7941-49c5-bcbe-1c551779ed0a");
-                    public static readonly Guid KidsDesksId = Guid.Parse("edb2081c-9bc3-4fc9-b6b4-c7fe9e223f75");
                 }
             }
         }

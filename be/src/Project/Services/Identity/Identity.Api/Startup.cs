@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Identity.Api.Shared.DependencyInjection;
 using Foundation.Extensions.DependencyInjection;
 using Foundation.PageContent.DependencyInjection;
 using Foundation.Security.DependencyInjection;
@@ -19,10 +18,9 @@ using System.Reflection;
 using System.IO;
 using System;
 using Identity.Api.Areas.Accounts.DependencyInjection;
-using Identity.Api.v1.Areas.Accounts.DependencyInjection;
 using Identity.Api.Areas.Home.DependencyInjection;
-using Identity.Api.v1.Areas.Clients.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
+using Identity.Api.DependencyInjection;
 
 namespace Account
 {
@@ -62,8 +60,6 @@ namespace Account
 
             services.RegisterHomeViewsDependencies();
             
-            services.RegisterClientsApiDependencies();
-
             services.ConfigureSettings(this.Configuration);
 
             services.AddApiVersioning();

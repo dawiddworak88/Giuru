@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Shared.Catalogs.ViewModels;
+﻿using Buyer.Web.Shared.ViewModels.Catalogs;
 using System;
 
 namespace Buyer.Web.Areas.Products.ViewModels.Categories

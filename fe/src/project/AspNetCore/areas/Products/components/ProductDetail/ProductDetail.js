@@ -38,7 +38,7 @@ function ProductDetail(props) {
                             <div className="product-detail__product-information-list">
                                 <dl>
                                     {props.features.map((item, index) =>
-                                        <Fragment key={index}>
+                                        <Fragment key={item.key}>
                                             <dt>{item.key}</dt>
                                             <dd>{item.value}</dd>
                                         </Fragment>

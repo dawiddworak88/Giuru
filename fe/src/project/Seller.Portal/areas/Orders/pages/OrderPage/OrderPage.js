@@ -7,6 +7,7 @@ import LocaleHelper from "../../../../../../shared/helpers/globals/LocaleHelper"
 import Header from "../../../../../../shared/components/Header/Header";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
+import OrderForm from "../../components/OrderForm/OrderForm";
 
 function OrderPage(props) {
 
@@ -16,11 +17,12 @@ function OrderPage(props) {
 
   return (
 
-      <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
+      <ThemeProvider theme={GlobalHelper.initMuiTheme(props.locale)}>
         <Store>
           <div>
             <Header {...props.header}></Header>
             <MenuTiles {...props.menuTiles} />
+            <OrderForm {...props.orderForm} />
             <Footer {...props.footer}></Footer>
           </div>
         </Store>

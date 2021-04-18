@@ -83,7 +83,7 @@ function MediaCloud(props) {
                     <p>
                         <UploadCloud size={IconConstants.defaultSize()} />
                     </p>
-                    <p>{isDragActive ? props.dropOrSelectFilesLabel : props.dropFilesLabel}</p>
+                    <p>{isDragActive ? props.dropFilesLabel : props.dropOrSelectFilesLabel}</p>
                 </div>
             </div>
             {files && files.length > 0 &&

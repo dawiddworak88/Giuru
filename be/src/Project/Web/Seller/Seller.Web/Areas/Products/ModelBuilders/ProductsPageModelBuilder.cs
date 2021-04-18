@@ -9,7 +9,7 @@ using Foundation.PageContent.ComponentModels;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Shared.ViewModels;
 
-namespace Seller.Web.Areas.Products.ModelBuilders
+namespace Seller.Web.Areas.ModelBuilders.Products
 {
     public class ProductsPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductsPageViewModel>
     {

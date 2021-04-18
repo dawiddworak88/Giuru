@@ -1,6 +1,5 @@
 ﻿using Identity.Api.Infrastructure.Accounts.Entities;
 using Identity.Api.Infrastructure.Addresses.Entities;
-using Identity.Api.Infrastructure.Clients.Entities;
 using Identity.Api.Infrastructure.Organisations.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +27,5 @@ namespace Identity.Api.Infrastructure
         public DbSet<Address> Addresses { get; set; }
         public DbSet<OrganisationAddress> OrganisationAddreses { get; set; }
         public DbSet<OrganisationAppSecret> OrganisationAppSecrets { get; set; }
-        public DbSet<Client> Clients { get; set; }
     }
 }

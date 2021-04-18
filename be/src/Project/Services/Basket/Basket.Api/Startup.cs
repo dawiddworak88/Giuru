@@ -2,17 +2,21 @@ using System;
 using System.IO;
 using System.Reflection;
 using Basket.Api.DependencyInjection;
-using Basket.Api.v1.Areas.Baskets.DependencyInjection;
 using Foundation.Account.DependencyInjection;
+using Foundation.EventBusRabbitMq;
+using Foundation.EventLog.DependencyInjection;
 using Foundation.Extensions.Filters;
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
+using RabbitMQ.Client;
+using StackExchange.Redis;
 
 namespace Basket.Api
 {
@@ -36,11 +40,37 @@ namespace Basket.Api
 
             services.RegisterApiAccountDependencies(this.Configuration);
 
-            services.RegisterBasketDependencies();
+            services.RegisterBasketApiDependencies();
 
             services.AddApiVersioning();
 
             services.ConfigureSettings(this.Configuration);
+
+            services.AddSingleton(sp =>
+            {
+                var configuration = ConfigurationOptions.Parse(this.Configuration["ConnectionString"], true);
+
+                configuration.ResolveDns = true;
+
+                return ConnectionMultiplexer.Connect(configuration);
+            });
+
+            services.RegisterEventBus(this.Configuration);
+
+            services.RegisterEventLogDependencies();
+
+            services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+
+                var factory = new ConnectionFactory
+                {
+                    HostName = Configuration["EventBusConnection"],
+                    DispatchConsumersAsync = true
+                };
+
+                return new DefaultRabbitMQPersistentConnection(factory, logger, int.Parse(Configuration["EventBusRetryCount"]));
+            });
 
             services.AddSwaggerGen(c =>
             {
@@ -71,6 +101,8 @@ namespace Basket.Api
             app.UseAuthorization();
 
             app.UseCustomHeaderRequestLocalizationProvider(localizationSettings);
+
+            app.ConfigureEventBus();
 
             app.UseEndpoints(endpoints =>
             {

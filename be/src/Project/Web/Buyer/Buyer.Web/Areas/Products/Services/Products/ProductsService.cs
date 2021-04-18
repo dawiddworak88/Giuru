@@ -1,8 +1,8 @@
-﻿using Buyer.Web.Areas.Products.ModelBuilders.Definitions;
+﻿using Buyer.Web.Areas.Products.DomainModels;
+using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Areas.Products.Repositories.Products;
-using Buyer.Web.Shared.Catalogs.ViewModels;
+using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.Configurations;
-using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Routing;
@@ -38,7 +38,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
         {
             var catalogItemList = new List<CatalogItemViewModel>();
 
-            var pagedProducts = await this.productsRepository.GetProductsAsync(null, categoryId, sellerId, language, searchTerm, pageIndex, itemsPerPage, token);
+            var pagedProducts = await this.productsRepository.GetProductsAsync(null, categoryId, sellerId, language, searchTerm, pageIndex, itemsPerPage, token, nameof(Product.Name));
 
             if (pagedProducts?.Data != null)
             {

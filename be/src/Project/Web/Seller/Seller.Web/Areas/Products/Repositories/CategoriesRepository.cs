@@ -87,13 +87,14 @@ namespace Seller.Web.Areas.Categories.Repositories
             }
         }
 
-        public async Task<PagedResults<IEnumerable<Category>>> GetCategoriesAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage)
+        public async Task<PagedResults<IEnumerable<Category>>> GetCategoriesAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var categoriesRequestModel = new PagedRequestModelBase
             {
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy
             };
 
             var apiRequest = new ApiRequest<PagedRequestModelBase>
@@ -122,13 +123,14 @@ namespace Seller.Web.Areas.Categories.Repositories
             return default;
         }
 
-        public async Task<IEnumerable<Category>> GetAllCategoriesAsync(string token, string language, bool? leafOnly)
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync(string token, string language, bool? leafOnly, string orderBy)
         {
             var categoriesRequestModel = new PagedCategoriesRequestModel
             {
                 LeafOnly = leafOnly,
                 PageIndex = PaginationConstants.DefaultPageIndex,
-                ItemsPerPage = PaginationConstants.DefaultPageSize
+                ItemsPerPage = PaginationConstants.DefaultPageSize,
+                OrderBy = orderBy
             };
 
             var apiRequest = new ApiRequest<PagedCategoriesRequestModel>
@@ -188,6 +190,31 @@ namespace Seller.Web.Areas.Categories.Repositories
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Category>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
+        }
+
+        public async Task<CategorySchema> GetCategorySchemaAsync(string token, string language, Guid? categoryId)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.CategorySchemasApiEndpoint}/{categoryId}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, CategorySchema>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {

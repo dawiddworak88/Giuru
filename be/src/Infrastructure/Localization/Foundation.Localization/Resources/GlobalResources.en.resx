@@ -132,14 +132,23 @@
   <data name="By" xml:space="preserve">
     <value>by</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="Cards" xml:space="preserve">
     <value>Cards</value>
   </data>
   <data name="Categories" xml:space="preserve">
     <value>Categories</value>
   </data>
+  <data name="Client" xml:space="preserve">
+    <value>Client</value>
+  </data>
   <data name="ClientHostExistsErrorMessage" xml:space="preserve">
     <value>Client has been already added</value>
+  </data>
+  <data name="ClientName" xml:space="preserve">
+    <value>Client name</value>
   </data>
   <data name="Clients" xml:space="preserve">
     <value>Clients</value>
@@ -160,7 +169,7 @@
     <value>Copy link</value>
   </data>
   <data name="Copyright" xml:space="preserve">
-    <value>Copyright © [year] Giuru</value>
+    <value>Copyright © [year] ELTAP</value>
   </data>
   <data name="CreatedDate" xml:space="preserve">
     <value>Created Date</value>
@@ -240,8 +249,8 @@
   <data name="Logo" xml:space="preserve">
     <value>Logo</value>
   </data>
-  <data name="MakeTheFuture" xml:space="preserve">
-    <value>Create the future with Giuru</value>
+  <data name="SiteTitle" xml:space="preserve">
+    <value>ELTAP. The best furniture in Poland.</value>
   </data>
   <data name="Media" xml:space="preserve">
     <value>Media</value>
@@ -270,11 +279,26 @@
   <data name="NoResultsLabel" xml:space="preserve">
     <value>No results have been found.</value>
   </data>
+  <data name="Novelties" xml:space="preserve">
+    <value>Novelties</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
   <data name="Open" xml:space="preserve">
     <value>Open</value>
   </data>
+  <data name="Or" xml:space="preserve">
+    <value>or</value>
+  </data>
   <data name="Orders" xml:space="preserve">
     <value>Orders</value>
+  </data>
+  <data name="OrderStatus" xml:space="preserve">
+    <value>Order status</value>
+  </data>
+  <data name="OrganisationExistsAlready" xml:space="preserve">
+    <value>Organisation already exists.</value>
   </data>
   <data name="ParentCategory" xml:space="preserve">
     <value>Parent category</value>
@@ -300,11 +324,20 @@
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Privacy Policy</value>
   </data>
+  <data name="ProductAttributes" xml:space="preserve">
+    <value>Product Attributes</value>
+  </data>
   <data name="Products" xml:space="preserve">
     <value>Products</value>
   </data>
   <data name="Regulations" xml:space="preserve">
     <value>Regulations</value>
+  </data>
+  <data name="ReindexingTriggeredSuccessfully" xml:space="preserve">
+    <value>Reindexing of products has been started successfully.</value>
+  </data>
+  <data name="ReindexProducts" xml:space="preserve">
+    <value>Reindex products</value>
   </data>
   <data name="Results" xml:space="preserve">
     <value>results</value>
@@ -356,5 +389,11 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
+  </data>
+  <data name="ProductAttribute" xml:space="preserve">
+    <value>Product Attribute</value>
+  </data>
+  <data name="ProductAttributeItem" xml:space="preserve">
+    <value>Product Attribute Value</value>
   </data>
 </root>

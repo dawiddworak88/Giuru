@@ -1,6 +1,5 @@
 ﻿using Buyer.Web.Areas.Products.ApiRequestModels;
 using Buyer.Web.Areas.Products.ApiResponseModels;
-using Buyer.Web.Shared.Brands.DomainModels;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.ApiExtensions.Communications;
@@ -13,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Buyer.Web.Areas.Products.DomainModels;
 
 namespace Buyer.Web.Areas.Products.Repositories.Products
 {
@@ -47,7 +47,16 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
+        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(
+            IEnumerable<Guid> ids, 
+            Guid? categoryId, 
+            Guid? sellerId, 
+            string language, 
+            string searchTerm, 
+            int pageIndex, 
+            int itemsPerPage, 
+            string token,
+            string orderBy)
         {
             var productsRequestModel = new ProductsRequestModel
             {
@@ -55,8 +64,10 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 CategoryId = categoryId,
                 SellerId = sellerId,
                 SearchTerm = searchTerm,
+                HasPrimaryProduct = false,
                 PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy
             };
 
             var apiRequest = new ApiRequest<ProductsRequestModel>
@@ -134,7 +145,12 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 ProductVariants = productResponse.ProductVariants,
                 Images = productResponse.Images,
                 Files = productResponse.Files,
-                Videos = productResponse.Videos
+                Videos = productResponse.Videos,
+                ProductAttributes = productResponse.ProductAttributes?.Select(x => new ProductAttribute 
+                { 
+                    Name = x.Name,
+                    Values = x.Values.OrEmptyIfNull().Select(y => y)
+                })
             };
         }
     }

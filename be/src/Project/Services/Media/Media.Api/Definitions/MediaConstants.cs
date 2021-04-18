@@ -117,10 +117,6 @@ namespace Media.Api.Definitions
             public static readonly Guid BedsMediaVersionId = Guid.Parse("c6a71890-c424-40b3-adad-6d98388566b3");
             public static readonly string BedsMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/Beds.jpg";
 
-            public static readonly Guid WardrobesMediaId = Guid.Parse("f593f89d-354f-4e00-9cb5-50a32462cf9e");
-            public static readonly Guid WardrobesMediaVersionId = Guid.Parse("c14b7541-8f41-4040-9c3c-0a04743eefeb");
-            public static readonly string WardrobesMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/Wardrobes.jpg";
-
             public static readonly Guid MattressesMediaId = Guid.Parse("ce5f8282-e6a0-44c4-bb1e-e186f2f8c1da");
             public static readonly Guid MattressesMediaVersionId = Guid.Parse("23beeaec-8a7e-4397-83a6-7bf450b9e491");
             public static readonly string MattressesMediaUrl = "./Infrastructure/Media/Seeds/Images/Categories/Mattresses.jpg";

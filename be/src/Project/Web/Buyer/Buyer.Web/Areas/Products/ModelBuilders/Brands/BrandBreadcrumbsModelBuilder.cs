@@ -1,7 +1,7 @@
 ﻿using Buyer.Web.Areas.Products.ViewModels.Brands;
-using Buyer.Web.Shared.Brands.Repositories;
-using Buyer.Web.Shared.Breadcrumbs.ModelBuilders;
-using Buyer.Web.Shared.Breadcrumbs.ViewModels;
+using Buyer.Web.Shared.Repositories.Brands;
+using Buyer.Web.Shared.ModelBuilders.Breadcrumbs;
+using Buyer.Web.Shared.ViewModels.Breadcrumbs;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;

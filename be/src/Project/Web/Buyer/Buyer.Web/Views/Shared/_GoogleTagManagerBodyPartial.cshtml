@@ -1,0 +1,13 @@
+﻿@using Microsoft.Extensions.Options;
+@using Buyer.Web.Shared.Configurations
+@inject IOptions<AppSettings> Options
+
+@if (!string.IsNullOrWhiteSpace(this.Options.Value.GoogleTagManagerIdentifier))
+{
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=@this.Options.Value.GoogleTagManagerIdentifier"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+}

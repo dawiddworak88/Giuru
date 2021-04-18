@@ -117,11 +117,53 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddOrderItem" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="ChangeDeliveryFrom" xml:space="preserve">
+    <value>Change delivery from date</value>
+  </data>
+  <data name="ChangeDeliveryTo" xml:space="preserve">
+    <value>Change delivery to date</value>
+  </data>
+  <data name="ClientRequiredErrorMessage" xml:space="preserve">
+    <value>Select a client</value>
+  </data>
+  <data name="DeliveryFrom" xml:space="preserve">
+    <value>Delivery from:</value>
+  </data>
+  <data name="DeliveryTo" xml:space="preserve">
+    <value>Delivery to:</value>
+  </data>
+  <data name="DropOrSelectOrderFile" xml:space="preserve">
+    <value>Drag and drop here, or click to select an order file</value>
+  </data>
+  <data name="EditOrder" xml:space="preserve">
+    <value>Edit order</value>
+  </data>
+  <data name="EnterSkuOrName" xml:space="preserve">
+    <value>Enter SKU or product name</value>
+  </data>
+  <data name="ExternalReferenceLabel" xml:space="preserve">
+    <value>External order number:</value>
+  </data>
   <data name="ImportOrder" xml:space="preserve">
     <value>Import order</value>
   </data>
+  <data name="MoreInfoLabel" xml:space="preserve">
+    <value>More info:</value>
+  </data>
+  <data name="NameLabel" xml:space="preserve">
+    <value>Name:</value>
+  </data>
+  <data name="NavigateToOrdersList" xml:space="preserve">
+    <value>Back to orders list</value>
+  </data>
   <data name="NewOrder" xml:space="preserve">
     <value>New order</value>
+  </data>
+  <data name="NoOrderItemsLabel" xml:space="preserve">
+    <value>The cart is empty. Add first order item.</value>
   </data>
   <data name="Order" xml:space="preserve">
     <value>Order</value>
@@ -129,10 +171,40 @@
   <data name="OrderFileError" xml:space="preserve">
     <value>The order file is incorrect. Upload the correct order file.</value>
   </data>
+  <data name="OrderItemsLabel" xml:space="preserve">
+    <value>Order items</value>
+  </data>
+  <data name="OrderNotFound" xml:space="preserve">
+    <value>Order has not been found</value>
+  </data>
+  <data name="OrderPlacedSuccessfully" xml:space="preserve">
+    <value>The order has been placed successfully. Your order is being processed. It will be visible on the list of orders soon.</value>
+  </data>
   <data name="Orders" xml:space="preserve">
     <value>Orders</value>
   </data>
-  <data name="SelectClient" xml:space="preserve">
-    <value>Select a client</value>
+  <data name="OrderStatus" xml:space="preserve">
+    <value>Order status</value>
+  </data>
+  <data name="OrderStatusNotFound" xml:space="preserve">
+    <value>Order status has not been found</value>
+  </data>
+  <data name="OrderStatusUpdatedSuccessfully" xml:space="preserve">
+    <value>Order status has been updated successfully.</value>
+  </data>
+  <data name="PlaceOrder" xml:space="preserve">
+    <value>Place order</value>
+  </data>
+  <data name="QuantityLabel" xml:space="preserve">
+    <value>Quantity:</value>
+  </data>
+  <data name="SelectClientLabel" xml:space="preserve">
+    <value>Select a client:</value>
+  </data>
+  <data name="SkuLabel" xml:space="preserve">
+    <value>SKU:</value>
+  </data>
+  <data name="UpdateOrderStatus" xml:space="preserve">
+    <value>Update order status</value>
   </data>
 </root>

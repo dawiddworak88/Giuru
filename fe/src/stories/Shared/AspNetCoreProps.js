@@ -49,7 +49,7 @@ export var breadcrumbs = {
       isActive: true
     }
   ]
-}
+};
 
 export var mainNavigation = {
   links: [

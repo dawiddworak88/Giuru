@@ -16,6 +16,9 @@ namespace Seller.Web.Areas.Products.ViewModels
         public Guid? PrimaryProductId { get; set; }
         public IEnumerable<FileViewModel> Images { get; set; }
         public IEnumerable<FileViewModel> Files  { get; set; }
+        public string Schema { get; set; }
+        public string UiSchema { get; set; }
+        public string FormData { get; set; }
         public bool IsNew { get; set; }
         public string SelectCategoryLabel { get; set; }
         public string SelectPrimaryProductLabel { get; set; }
@@ -38,5 +41,6 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string SkuRequiredErrorMessage { get; set; }
         public string SaveUrl { get; set; }
         public string GeneralErrorMessage { get; set; }
+        public string GetCategorySchemaUrl { get; set; }
     }
 }

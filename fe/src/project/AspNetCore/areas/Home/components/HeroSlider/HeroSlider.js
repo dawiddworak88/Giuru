@@ -26,7 +26,7 @@ function HeroSlider(props) {
                                         </div>
                                         {item.ctaUrl &&
                                             <div className="field">
-                                                <p className="control">
+                                                <p className="control is-flex">
                                                     <a href={item.ctaUrl} className="button is-primary hero-slider__teaser-link">{item.ctaText}</a>
                                                 </p>
                                             </div>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Buyer.Web.Shared.Brands.DomainModels
+namespace Buyer.Web.Areas.Products.DomainModels
 {
     public class Product
     {
@@ -21,5 +21,7 @@ namespace Buyer.Web.Shared.Brands.DomainModels
         public IEnumerable<Guid> Images { get; set; }
         public IEnumerable<Guid> Videos { get; set; }
         public IEnumerable<Guid> Files { get; set; }
+        public IEnumerable<ProductAttribute> ProductAttributes { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

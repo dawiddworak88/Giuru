@@ -52,7 +52,7 @@ function ClientForm(props) {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(state)
-        };
+        }
 
         fetch(props.saveUrl, requestOptions)
             .then(function (response) {
@@ -74,7 +74,7 @@ function ClientForm(props) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
-    };
+    }
 
     const {
         values,
@@ -89,7 +89,7 @@ function ClientForm(props) {
     const { id, name, email, communicationLanguage } = values;
 
     return (
-        <section className="section section-small-padding client">
+        <section className="section section-small-padding product">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">

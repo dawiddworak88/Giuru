@@ -2,7 +2,7 @@
 using Foundation.GenericRepository.Extensions;
 using Media.Api.Definitions;
 using Media.Api.Infrastructure.Media.Entities;
-using Media.Api.Shared.Checksums;
+using Media.Api.Services.Checksums;
 using MimeMapping;
 using System;
 using System.IO;
@@ -50,6 +50,7 @@ namespace Media.Api.Infrastructure.Media.Seeds
             SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.PoufsMediaId, MediaConstants.Categories.PoufsMediaVersionId, MediaConstants.Categories.PoufsMediaUrl);
             SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.SetsMediaId, MediaConstants.Categories.SetsMediaVersionId, MediaConstants.Categories.SetsMediaUrl);
             SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.BedsMediaId, MediaConstants.Categories.BedsMediaVersionId, MediaConstants.Categories.BedsMediaUrl);
+            SeedMedia(context, checksumService, storageConnectionString, MediaConstants.Categories.MattressesMediaId, MediaConstants.Categories.MattressesMediaVersionId, MediaConstants.Categories.MattressesMediaUrl);
         }
 
         private static void SeedMedia(MediaContext context, IChecksumService checksumService, string storageConnectionString, Guid mediaId, Guid mediaVersionId, string mediaUrl)

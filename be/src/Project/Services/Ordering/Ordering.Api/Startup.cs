@@ -1,14 +1,18 @@
 using Foundation.Account.DependencyInjection;
+using Foundation.EventBusRabbitMq;
+using Foundation.EventLog.DependencyInjection;
 using Foundation.Extensions.Filters;
 using Foundation.Localization.Definitions;
 using Foundation.Localization.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Ordering.Api.DependencyInjection;
+using RabbitMQ.Client;
 using System;
 using System.IO;
 using System.Reflection;
@@ -37,7 +41,28 @@ namespace Ordering.Api
 
             services.AddApiVersioning();
 
+            services.RegisterOrderingApiDependencies();
+
             services.ConfigureSettings(this.Configuration);
+
+            services.RegisterEventBus(this.Configuration);
+
+            services.RegisterEventLogDependencies();
+
+            services.RegisterOrderingDatabaseDependencies(this.Configuration);
+
+            services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
+            {
+                var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+
+                var factory = new ConnectionFactory
+                {
+                    HostName = Configuration["EventBusConnection"],
+                    DispatchConsumersAsync = true
+                };
+
+                return new DefaultRabbitMQPersistentConnection(factory, logger, int.Parse(Configuration["EventBusRetryCount"]));
+            });
 
             services.AddSwaggerGen(c =>
             {
@@ -61,6 +86,8 @@ namespace Ordering.Api
                 c.RoutePrefix = string.Empty;
             });
 
+            app.ConfigureOrderingDatabaseMigrations(this.Configuration);
+
             app.UseRouting();
 
             app.UseAuthentication();
@@ -68,6 +95,8 @@ namespace Ordering.Api
             app.UseAuthorization();
 
             app.UseCustomHeaderRequestLocalizationProvider(localizationSettings);
+
+            app.ConfigureEventBus();
 
             app.UseEndpoints(endpoints =>
             {

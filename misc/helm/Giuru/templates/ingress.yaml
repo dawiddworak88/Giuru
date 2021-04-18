@@ -17,12 +17,14 @@ metadata:
 spec:
   tls:
   - hosts:
+    - {{ .Values.ingress.clientapidomain }}
+    - {{ .Values.ingress.basketapidomain }}
+    - {{ .Values.ingress.orderingapidomain }}
     - {{ .Values.ingress.mediaapidomain }}
     - {{ .Values.ingress.identityapidomain }}
     - {{ .Values.ingress.catalogapidomain }}
     - {{ .Values.ingress.buyerapidomain }}
     - {{ .Values.ingress.sellerapidomain }}
-    - {{ .Values.ingress.seqdomain }}
     secretName: tls-secret
   rules:
   - host: {{ .Values.ingress.mediaapidomain }}
@@ -30,6 +32,27 @@ spec:
       paths:
       - backend:
           serviceName: media-api-service
+          servicePort: 80
+        path: /
+  - host: {{ .Values.ingress.clientapidomain }}
+    http:
+      paths:
+      - backend:
+          serviceName: client-api-service
+          servicePort: 80
+        path: /
+  - host: {{ .Values.ingress.basketapidomain }}
+    http:
+      paths:
+      - backend:
+          serviceName: basket-api-service
+          servicePort: 80
+        path: /
+  - host: {{ .Values.ingress.orderingapidomain }}
+    http:
+      paths:
+      - backend:
+          serviceName: ordering-api-service
           servicePort: 80
         path: /
   - host: {{ .Values.ingress.identityapidomain }}
@@ -58,12 +81,5 @@ spec:
       paths:
       - backend:
           serviceName: seller-web-service
-          servicePort: 80
-        path: /
-  - host: {{ .Values.ingress.seqdomain }}
-    http:
-      paths:
-      - backend:
-          serviceName: seq
           servicePort: 80
         path: /

@@ -5,7 +5,7 @@ metadata:
   labels:
     app: media-api
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: media-api
@@ -26,8 +26,43 @@ spec:
           value: {{ .Values.mediaApi.storageConnectionString }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
-        - name: SeqUrl
-          value: {{ .Values.seqUrl }}
+        - name: LogstashUrl
+          value: {{ .Values.logstashUrl }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-api-deployment
+  labels:
+    app: client-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: client-api
+  template:
+    metadata:
+      labels:
+        app: client-api
+    spec:
+      containers:
+      - name: client-api-container
+        image: {{ .Values.image.registry }}/client-api:{{ .Values.image.tag }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: ConnectionString
+          value: {{ .Values.client.connectionString }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: LogstashUrl
+          value: {{ .Values.logstashUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -42,7 +77,7 @@ metadata:
   labels:
     app: catalog-api
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: catalog-api
@@ -61,16 +96,149 @@ spec:
           value: {{ .Values.catalogApi.connectionString }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
+        - name: EventLoggingUrl
+          value: {{ .Values.eventLoggingUrl }}
+        - name: EventBusConnection
+          value: {{ .Values.eventBusConnection }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
         - name: MediaUrl
           value: {{ .Values.mediaUrl }}
-        - name: SeqUrl
-          value: {{ .Values.seqUrl }}
         - name: ElasticsearchUrl
           value: {{ .Values.elasticsearchUrl }}
         - name: ElasticsearchIndex
           value: {{ .Values.catalogApi.elasticsearchIndex }}
         - name: Brands
           value: {{ .Values.catalogApi.brands }}
+        - name: LogstashUrl
+          value: {{ .Values.logstashUrl }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-backgroundtasks-deployment
+  labels:
+    app: catalog-backgroundtasks
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: catalog-backgroundtasks
+  template:
+    metadata:
+      labels:
+        app: catalog-backgroundtasks
+    spec:
+      containers:
+      - name: catalog-backgroundtasks-container
+        image: {{ .Values.image.registry }}/catalog-backgroundtasks:{{ .Values.image.tag }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: ConnectionString
+          value: {{ .Values.catalogApi.connectionString }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: EventLoggingUrl
+          value: {{ .Values.eventLoggingUrl }}
+        - name: EventBusConnection
+          value: {{ .Values.eventBusConnection }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: ElasticsearchUrl
+          value: {{ .Values.elasticsearchUrl }}
+        - name: ElasticsearchIndex
+          value: {{ .Values.catalogApi.elasticsearchIndex }}
+        - name: LogstashUrl
+          value: {{ .Values.logstashUrl }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: basket-api-deployment
+  labels:
+    app: basket-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: basket-api
+  template:
+    metadata:
+      labels:
+        app: basket-api
+    spec:
+      containers:
+      - name: basket-api-container
+        image: {{ .Values.image.registry }}/basket-api:{{ .Values.image.tag }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: ConnectionString
+          value: {{ .Values.basketApi.connectionString }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: EventLoggingUrl
+          value: {{ .Values.eventLoggingUrl }}
+        - name: EventBusConnection
+          value: {{ .Values.eventBusConnection }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: LogstashUrl
+          value: {{ .Values.logstashUrl }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ordering-api-deployment
+  labels:
+    app: ordering-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ordering-api
+  template:
+    metadata:
+      labels:
+        app: ordering-api
+    spec:
+      containers:
+      - name: ordering-api-container
+        image: {{ .Values.image.registry }}/ordering-api:{{ .Values.image.tag }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: ConnectionString
+          value: {{ .Values.orderingApi.connectionString }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: EventLoggingUrl
+          value: {{ .Values.eventLoggingUrl }}
+        - name: EventBusConnection
+          value: {{ .Values.eventBusConnection }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: LogstashUrl
+          value: {{ .Values.logstashUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -85,7 +253,7 @@ metadata:
   labels:
     app: react-ssr-web
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: react-ssr-web
@@ -110,7 +278,7 @@ metadata:
   labels:
     app: identity-api
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: identity-api
@@ -135,8 +303,6 @@ spec:
           value: {{ .Values.mediaUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
-        - name: SeqUrl
-          value: {{ .Values.seqUrl }}
         - name: Clients
           value: {{ .Values.identityApi.clients }}
         - name: Accounts
@@ -153,6 +319,8 @@ spec:
           value: {{ .Values.identityApi.azureKeyVaultClientId }}
         - name: AzureKeyVaultClientSecret
           value: {{ .Values.identityApi.azureKeyVaultClientSecret }}
+        - name: LogstashUrl
+          value: {{ .Values.logstashUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -167,7 +335,7 @@ metadata:
   labels:
     app: buyer-web
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: buyer-web
@@ -194,12 +362,12 @@ spec:
           value: {{ .Values.mediaUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
-        - name: SeqUrl
-          value: {{ .Values.seqUrl }}
         - name: ClientId
           value: {{ .Values.buyerWeb.clientId }}
         - name: ClientSecret
           value: {{ .Values.buyerWeb.clientSecret }}
+        - name: LogstashUrl
+          value: {{ .Values.logstashUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -214,7 +382,7 @@ metadata:
   labels:
     app: seller-web
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: seller-web
@@ -237,12 +405,18 @@ spec:
           value: {{ .Values.mediaUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
-        - name: SeqUrl
-          value: {{ .Values.seqUrl }}
+        - name: OrderUrl
+          value: {{ .Values.orderUrl }}
+        - name: BasketUrl
+          value: {{ .Values.basketUrl }}
+        - name: ClientUrl
+          value: {{ .Values.clientUrl }}
         - name: ClientId
           value: {{ .Values.sellerWeb.clientId }}
         - name: ClientSecret
           value: {{ .Values.sellerWeb.clientSecret }}
+        - name: LogstashUrl
+          value: {{ .Values.logstashUrl }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
