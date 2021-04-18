@@ -58,7 +58,7 @@ spec:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
         - name: ConnectionString
-          value: {{ .Values.clientapi.connectionString }}
+          value: {{ .Values.clientApi.connectionString }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: LogstashUrl
@@ -93,7 +93,7 @@ spec:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
         - name: ConnectionString
-          value: {{ .Values.eventloggingapi.connectionString }}
+          value: {{ .Values.eventLoggingApi.connectionString }}
         - name: LogstashUrl
           value: {{ .Values.logstashUrl }}
         - name: DefaultCulture
