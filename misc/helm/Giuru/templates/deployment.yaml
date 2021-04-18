@@ -58,7 +58,7 @@ spec:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
         - name: ConnectionString
-          value: {{ .Values.client.connectionString }}
+          value: {{ .Values.clientapi.connectionString }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
         - name: LogstashUrl
