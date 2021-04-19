@@ -55,7 +55,7 @@ namespace Catalog.BackgroundTasks.DependencyInjection
 
                 var factory = new ConnectionFactory
                 {
-                    HostName = configuration["EventBusConnection"],
+                    Uri = new Uri(configuration["EventBusConnection"]),
                     DispatchConsumersAsync = true
                 };
 

@@ -100,7 +100,7 @@ services:
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventLoggingUrl=http://eventlogging-api
-      - EventBusConnection=rabbitmq
+      - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - ElasticsearchUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:9200
       - LogstashUrl=http://logstash:31311
@@ -118,7 +118,7 @@ services:
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventLoggingUrl=http://eventlogging-api
-      - EventBusConnection=rabbitmq
+      - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - ElasticsearchUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:9200
       - LogstashUrl=http://logstash:31311
@@ -158,7 +158,7 @@ services:
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventLoggingUrl=http://eventlogging-api
       - LogstashUrl=http://logstash:31311
-      - EventBusConnection=rabbitmq
+      - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
@@ -172,7 +172,7 @@ services:
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventLoggingUrl=http://eventlogging-api
       - LogstashUrl=http://logstash:31311
-      - EventBusConnection=rabbitmq
+      - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}

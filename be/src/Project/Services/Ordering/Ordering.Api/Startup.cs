@@ -57,7 +57,7 @@ namespace Ordering.Api
 
                 var factory = new ConnectionFactory
                 {
-                    HostName = Configuration["EventBusConnection"],
+                    Uri = new Uri(Configuration["EventBusConnection"]),
                     DispatchConsumersAsync = true
                 };
 
