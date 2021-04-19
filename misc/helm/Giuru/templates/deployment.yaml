@@ -5,7 +5,7 @@ metadata:
   labels:
     app: media-api
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: media-api
@@ -46,7 +46,7 @@ metadata:
   labels:
     app: client-api
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: client-api
@@ -85,7 +85,7 @@ metadata:
   labels:
     app: eventlogging-api
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: eventlogging-api
@@ -122,7 +122,7 @@ metadata:
   labels:
     app: catalog-api
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: catalog-api
@@ -175,7 +175,7 @@ metadata:
   labels:
     app: catalog-backgroundtasks
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: catalog-backgroundtasks
@@ -224,7 +224,7 @@ metadata:
   labels:
     app: basket-api
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: basket-api
@@ -269,7 +269,7 @@ metadata:
   labels:
     app: ordering-api
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: ordering-api
@@ -314,7 +314,7 @@ metadata:
   labels:
     app: react-ssr-web
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: react-ssr-web
@@ -339,7 +339,7 @@ metadata:
   labels:
     app: identity-api
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: identity-api
@@ -400,7 +400,7 @@ metadata:
   labels:
     app: buyer-web
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: buyer-web
@@ -451,7 +451,7 @@ metadata:
   labels:
     app: seller-web
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: seller-web
