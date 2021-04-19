@@ -437,6 +437,8 @@ spec:
           value: {{ .Values.logzIoType }}
         - name: LogzIoDataCenterSubDomain
           value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: GoogleTagManagerIdentifier
+          value: {{ .Values.googleTagManagerIdentifier }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
