@@ -17,6 +17,7 @@ using Seller.Web.Areas.Media.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Settings.DependencyInjection;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace Seller.Portal
 {
@@ -67,7 +68,10 @@ namespace Seller.Portal
         {
             IdentityModelEventSource.ShowPII = true;
 
-            app.UseForwardedHeaders();
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedProto
+            });
 
             app.UseGeneralException();
 

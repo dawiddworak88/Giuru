@@ -11,6 +11,7 @@ using Foundation.ApiExtensions.DependencyInjection;
 using Foundation.Account.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace AspNetCore
 {
@@ -55,7 +56,10 @@ namespace AspNetCore
         {
             IdentityModelEventSource.ShowPII = true;
 
-            app.UseForwardedHeaders();
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedProto
+            });
 
             app.UseGeneralException();
 

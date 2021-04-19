@@ -41,7 +41,7 @@ namespace Identity.Api.Areas.Accounts.Configurations
                 new ApiScope(ApiExtensionsConstants.AllScopes, ApiExtensionsConstants.AllScopes)
             };
 
-        public static IEnumerable<Client> GetClients(IConfiguration configuration, bool isProduction)
+        public static IEnumerable<Client> GetClients(IConfiguration configuration)
         {
             var clientsList = new List<Client>();
 
@@ -53,16 +53,6 @@ namespace Identity.Api.Areas.Accounts.Configurations
                 {
                     var clientParameters = clientConfiguration.Split("&");
 
-                    var redirectUris = new List<string>
-                    {
-                        $"{AccountConstants.HttpsScheme}://{clientParameters[2]}/signin-oidc"
-                    };
-
-                    if (!isProduction)
-                    {
-                        redirectUris.Add($"{AccountConstants.HttpScheme}://{clientParameters[2]}/signin-oidc");
-                    }
-
                     var client = new Client
                     {
                         ClientId = clientParameters[0],
@@ -70,7 +60,11 @@ namespace Identity.Api.Areas.Accounts.Configurations
                         AllowedGrantTypes = GrantTypes.Code,
                         RequireConsent = false,
                         RequirePkce = true,
-                        RedirectUris = redirectUris,
+                        RedirectUris = 
+                        { 
+                            $"{AccountConstants.HttpsScheme}://{clientParameters[2]}/signin-oidc",
+                            $"{AccountConstants.HttpScheme}://{clientParameters[2]}/signin-oidc"
+                        },
                         PostLogoutRedirectUris = { $"{clientParameters[2]}//signout-callback-oidc" },
                         AllowedScopes = new List<string>
                         {

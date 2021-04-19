@@ -42,7 +42,7 @@ namespace Identity.Api.DependencyInjection
             .AddInMemoryIdentityResources(IdentityServerConfig.Ids)
             .AddInMemoryApiScopes(IdentityServerConfig.ApiScopes)
             .AddInMemoryApiResources(IdentityServerConfig.Apis)
-            .AddInMemoryClients(IdentityServerConfig.GetClients(configuration, isProduction))
+            .AddInMemoryClients(IdentityServerConfig.GetClients(configuration))
             .AddAspNetIdentity<ApplicationUser>();
 
             builder.Services.AddScoped<IProfileService, ProfileService>();

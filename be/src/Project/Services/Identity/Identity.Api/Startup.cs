@@ -21,6 +21,7 @@ using Identity.Api.Areas.Accounts.DependencyInjection;
 using Identity.Api.Areas.Home.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
 using Identity.Api.DependencyInjection;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace Account
 {
@@ -78,7 +79,10 @@ namespace Account
         {
             IdentityModelEventSource.ShowPII = true;
 
-            app.UseForwardedHeaders();
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedProto
+            });
 
             app.UseGeneralException();
 
