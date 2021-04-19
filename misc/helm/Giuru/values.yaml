@@ -19,6 +19,7 @@ logzIoType: "#{LogzIoType}#"
 logzIoDataCenterSubDomain: "#{LogzIoDataCenterSubDomain}#"
 eventBusConnection: "#{EventBusConnection}#"
 eventBusRetryCount: "#{EventBusRetryCount}#"
+googleTagManagerIdentifier: "#{GoogleTagManagerIdentifier}#"
 defaultCulture: "en"
 supportedCultures: "en,de,pl"
 eventLoggingApi:
