@@ -5,7 +5,7 @@ metadata:
   labels:
     app: media-api
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: media-api
@@ -26,8 +26,12 @@ spec:
           value: {{ .Values.mediaApi.storageConnectionString }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
-        - name: LogstashUrl
-          value: {{ .Values.logstashUrl }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -42,7 +46,7 @@ metadata:
   labels:
     app: client-api
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: client-api
@@ -61,8 +65,12 @@ spec:
           value: {{ .Values.clientApi.connectionString }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
-        - name: LogstashUrl
-          value: {{ .Values.logstashUrl }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -77,7 +85,7 @@ metadata:
   labels:
     app: eventlogging-api
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: eventlogging-api
@@ -94,8 +102,12 @@ spec:
           value: {{ .Values.environment }}
         - name: ConnectionString
           value: {{ .Values.eventLoggingApi.connectionString }}
-        - name: LogstashUrl
-          value: {{ .Values.logstashUrl }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -110,7 +122,7 @@ metadata:
   labels:
     app: catalog-api
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: catalog-api
@@ -143,8 +155,12 @@ spec:
           value: {{ .Values.catalogApi.elasticsearchIndex }}
         - name: Brands
           value: {{ .Values.catalogApi.brands }}
-        - name: LogstashUrl
-          value: {{ .Values.logstashUrl }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -159,7 +175,7 @@ metadata:
   labels:
     app: catalog-backgroundtasks
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: catalog-backgroundtasks
@@ -188,8 +204,12 @@ spec:
           value: {{ .Values.elasticsearchUrl }}
         - name: ElasticsearchIndex
           value: {{ .Values.catalogApi.elasticsearchIndex }}
-        - name: LogstashUrl
-          value: {{ .Values.logstashUrl }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -204,7 +224,7 @@ metadata:
   labels:
     app: basket-api
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: basket-api
@@ -229,8 +249,12 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
-        - name: LogstashUrl
-          value: {{ .Values.logstashUrl }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -245,7 +269,7 @@ metadata:
   labels:
     app: ordering-api
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: ordering-api
@@ -270,8 +294,12 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
-        - name: LogstashUrl
-          value: {{ .Values.logstashUrl }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -286,7 +314,7 @@ metadata:
   labels:
     app: react-ssr-web
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: react-ssr-web
@@ -311,7 +339,7 @@ metadata:
   labels:
     app: identity-api
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: identity-api
@@ -352,8 +380,12 @@ spec:
           value: {{ .Values.identityApi.azureKeyVaultClientId }}
         - name: AzureKeyVaultClientSecret
           value: {{ .Values.identityApi.azureKeyVaultClientSecret }}
-        - name: LogstashUrl
-          value: {{ .Values.logstashUrl }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -368,7 +400,7 @@ metadata:
   labels:
     app: buyer-web
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: buyer-web
@@ -399,8 +431,12 @@ spec:
           value: {{ .Values.buyerWeb.clientId }}
         - name: ClientSecret
           value: {{ .Values.buyerWeb.clientSecret }}
-        - name: LogstashUrl
-          value: {{ .Values.logstashUrl }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
@@ -415,7 +451,7 @@ metadata:
   labels:
     app: seller-web
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: seller-web
@@ -448,8 +484,12 @@ spec:
           value: {{ .Values.sellerWeb.clientId }}
         - name: ClientSecret
           value: {{ .Values.sellerWeb.clientSecret }}
-        - name: LogstashUrl
-          value: {{ .Values.logstashUrl }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
         - name: DefaultCulture
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
