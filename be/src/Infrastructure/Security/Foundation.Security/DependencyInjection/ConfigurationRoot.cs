@@ -21,7 +21,7 @@ namespace Foundation.Security.DependencyInjection
                     .CustomSources("https:")
                     .CustomSources("http:"))
                 .StyleSources(s => s.Self()
-                    .CustomSources("www.google.com", "fonts.googleapis.com")
+                    .CustomSources("www.google.com", "fonts.googleapis.com", "www.googletagmanager.com")
                     .UnsafeInline()
                 )
                 .ScriptSources(s => s.Self()
