@@ -156,83 +156,86 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
 
                                         var propertyObject = (JObject)categorySchemaObject["properties"][formDataProperty.Name];
 
-                                        if (formDataProperty.Value.Type != JTokenType.Array)
+                                        if (propertyObject != null)
                                         {
-                                            if (Guid.TryParse(formDataProperty.Value.ToString(), out var id))
+                                            if (formDataProperty.Value.Type != JTokenType.Array)
                                             {
-                                                JValue title = (JValue)categorySchemaObject.SelectToken($"$.definitions...anyOf[?(@.enum[0] == '{id}')].title");
-
-                                                var value = new
+                                                if (Guid.TryParse(formDataProperty.Value.ToString(), out var id))
                                                 {
-                                                    Name = propertyObject["title"].Value<string>(),
-                                                    Value = new
-                                                    {
-                                                        Id = id,
-                                                        Name = title.Value<string>()
-                                                    }
-                                                };
+                                                    JValue title = (JValue)categorySchemaObject.SelectToken($"$.definitions...anyOf[?(@.enum[0] == '{id}')].title");
 
-                                                productAttributes.Add(key, value);
-                                            }
-                                            else
-                                            {
-                                                if (formDataProperty.Value.Type == JTokenType.Boolean)
-                                                {
                                                     var value = new
                                                     {
                                                         Name = propertyObject["title"].Value<string>(),
-                                                        Value = Convert.ToBoolean(formDataProperty.Value)
-                                                    };
-
-                                                    productAttributes.Add(key, value);
-                                                }
-                                                else if (formDataProperty.Value.Type == JTokenType.Float)
-                                                {
-                                                    var value = new
-                                                    {
-                                                        Name = propertyObject["title"].Value<string>(),
-                                                        Value = (float)Convert.ToDouble(formDataProperty.Value)
-                                                    };
-
-                                                    productAttributes.Add(key, value);
-                                                }
-                                                else if (formDataProperty.Value.Type == JTokenType.Integer)
-                                                {
-                                                    var value = new
-                                                    {
-                                                        Name = propertyObject["title"].Value<string>(),
-                                                        Value = Convert.ToInt32(formDataProperty.Value)
+                                                        Value = new
+                                                        {
+                                                            Id = id,
+                                                            Name = title.Value<string>()
+                                                        }
                                                     };
 
                                                     productAttributes.Add(key, value);
                                                 }
                                                 else
                                                 {
-                                                    var value = new
+                                                    if (formDataProperty.Value.Type == JTokenType.Boolean)
                                                     {
-                                                        Name = propertyObject["title"].Value<string>(),
-                                                        Value = Convert.ToString(formDataProperty.Value)
-                                                    };
+                                                        var value = new
+                                                        {
+                                                            Name = propertyObject["title"].Value<string>(),
+                                                            Value = Convert.ToBoolean(formDataProperty.Value)
+                                                        };
 
-                                                    productAttributes.Add(key, value);
+                                                        productAttributes.Add(key, value);
+                                                    }
+                                                    else if (formDataProperty.Value.Type == JTokenType.Float)
+                                                    {
+                                                        var value = new
+                                                        {
+                                                            Name = propertyObject["title"].Value<string>(),
+                                                            Value = (float)Convert.ToDouble(formDataProperty.Value)
+                                                        };
+
+                                                        productAttributes.Add(key, value);
+                                                    }
+                                                    else if (formDataProperty.Value.Type == JTokenType.Integer)
+                                                    {
+                                                        var value = new
+                                                        {
+                                                            Name = propertyObject["title"].Value<string>(),
+                                                            Value = Convert.ToInt32(formDataProperty.Value)
+                                                        };
+
+                                                        productAttributes.Add(key, value);
+                                                    }
+                                                    else
+                                                    {
+                                                        var value = new
+                                                        {
+                                                            Name = propertyObject["title"].Value<string>(),
+                                                            Value = Convert.ToString(formDataProperty.Value)
+                                                        };
+
+                                                        productAttributes.Add(key, value);
+                                                    }
                                                 }
                                             }
-                                        }
-                                        else
-                                        {
-                                            var valueIdsArray = (JArray)formDataProperty.Value;
-
-                                            var value = new
+                                            else
                                             {
-                                                Name = propertyObject["title"].Value<string>(),
-                                                Value = valueIdsArray.Select(x => new
-                                                {
-                                                    Id = x,
-                                                    Name = ((JValue)categorySchemaObject.SelectToken($"$.definitions...anyOf[?(@.enum[0] == '{x}')].title")).Value<string>()
-                                                })
-                                            };
+                                                var valueIdsArray = (JArray)formDataProperty.Value;
 
-                                            productAttributes.Add(key, value);
+                                                var value = new
+                                                {
+                                                    Name = propertyObject["title"].Value<string>(),
+                                                    Value = valueIdsArray.Select(x => new
+                                                    {
+                                                        Id = x,
+                                                        Name = ((JValue)categorySchemaObject.SelectToken($"$.definitions...anyOf[?(@.enum[0] == '{x}')].title")).Value<string>()
+                                                    })
+                                                };
+
+                                                productAttributes.Add(key, value);
+                                            }
                                         }
                                     }
                                 }
