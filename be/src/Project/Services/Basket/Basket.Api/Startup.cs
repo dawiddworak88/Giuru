@@ -100,7 +100,7 @@ namespace Basket.Api
 
             app.UseAuthorization();
 
-            app.UseCustomHeaderRequestLocalizationProvider(localizationSettings);
+            app.UseCustomHeaderRequestLocalizationProvider(this.Configuration, localizationSettings);
 
             app.ConfigureEventBus();
 

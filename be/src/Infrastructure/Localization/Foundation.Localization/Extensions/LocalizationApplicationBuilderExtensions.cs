@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Localization.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,6 +15,7 @@ namespace Foundation.Localization.Extensions
     {
         public static void UseCustomHeaderRequestLocalizationProvider(
             this IApplicationBuilder app,
+            IConfiguration configuration,
             IOptionsMonitor<LocalizationSettings> localizationConfiguration)
         {
             app.Use((context, next) =>
@@ -32,7 +34,12 @@ namespace Foundation.Localization.Extensions
                             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
                         }
                     }
-                }                
+                }
+                else
+                {
+                    Thread.CurrentThread.CurrentCulture = new CultureInfo(configuration["DefaultCulture"]);
+                    Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
+                }
 
                 return next();
             });

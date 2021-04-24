@@ -67,7 +67,7 @@ namespace Content.Api
 
             app.UseAuthorization();
 
-            app.UseCustomHeaderRequestLocalizationProvider(localizationSettings);
+            app.UseCustomHeaderRequestLocalizationProvider(this.Configuration, localizationSettings);
 
             app.UseEndpoints(endpoints =>
             {

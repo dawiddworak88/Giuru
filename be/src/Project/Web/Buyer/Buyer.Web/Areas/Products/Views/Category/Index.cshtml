@@ -6,10 +6,14 @@
 </script>
 
 @section MetaTags {
-    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("SiteTitle"), false)</title>
-    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("SiteTitle")))
+    @if (!string.IsNullOrWhiteSpace(((CategoryPageViewModel)Model)?.Catalog?.Title))
     {
-        <meta name="description" content="@this.Localizer.GetString("SiteTitle")" />
+        <title>@MetaTagsService.GenerateTitle($"{((CategoryPageViewModel)Model)?.Catalog?.Title}", true)</title>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(((CategoryPageViewModel)Model)?.Catalog?.Title))
+    {
+        <meta name="description" content="@(((CategoryPageViewModel)Model)?.Catalog?.Title)" />
     }
 }
 

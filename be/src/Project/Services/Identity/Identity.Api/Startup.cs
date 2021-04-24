@@ -100,7 +100,7 @@ namespace Account
 
             app.UseAuthorization();
 
-            app.UseCustomHeaderRequestLocalizationProvider(localizationOptions);
+            app.UseCustomHeaderRequestLocalizationProvider(this.Configuration, localizationOptions);
 
             app.UseCustomRouteRequestLocalizationProvider(localizationOptions);
 
