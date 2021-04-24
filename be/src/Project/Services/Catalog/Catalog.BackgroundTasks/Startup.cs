@@ -57,7 +57,7 @@ namespace Catalog.BackgroundTasks
 
             app.UseAuthorization();
 
-            app.UseCustomHeaderRequestLocalizationProvider(localizationSettings);
+            app.UseCustomHeaderRequestLocalizationProvider(this.Configuration, localizationSettings);
 
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
