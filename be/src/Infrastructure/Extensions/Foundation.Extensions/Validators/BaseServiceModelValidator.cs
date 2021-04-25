@@ -7,7 +7,6 @@ namespace Foundation.Extensions.Validators
     {
         public BaseServiceModelValidator()
         {
-            RuleFor(x => x.Language).NotNull().NotEmpty();
         }
     }
 }
