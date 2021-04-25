@@ -8,7 +8,6 @@ namespace Foundation.Extensions.Validators
         public BaseAuthorizedServiceModelValidator()
         {
             RuleFor(x => x.Username).NotNull().NotEmpty();
-            RuleFor(x => x.Language).NotNull().NotEmpty();
             RuleFor(x => x.OrganisationId).NotNull();
         }
     }
