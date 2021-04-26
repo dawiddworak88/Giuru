@@ -115,12 +115,14 @@ namespace Buyer.Web.Shared.Services.Catalogs
         public async Task<IEnumerable<CatalogCategory>> GetCatalogCategoriesAsync(
             string language, 
             int pageIndex, 
-            int itemsPerPage)
+            int itemsPerPage,
+            string orderBy)
         {
             var categoriesRequestModel = new CategoriesRequestModel
             {
                 PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy
             };
 
             var apiRequest = new ApiRequest<CategoriesRequestModel>
