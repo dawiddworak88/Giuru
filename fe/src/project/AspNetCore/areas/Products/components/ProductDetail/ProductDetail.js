@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import ImageGallery from "react-image-gallery";
 import Files from "../../../../shared/components/Files/Files";
-import ContentGrid from "../../../../shared/components/ContentGrid/ContentGrid";
+import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 
 function ProductDetail(props) {
 
@@ -49,7 +49,7 @@ function ProductDetail(props) {
                     }
                 </div>
             </div>
-            <ContentGrid items={props.productVariants} />
+            <CarouselGrid items={props.productVariants} />
             <Files {...props.files} />
         </section>
     );

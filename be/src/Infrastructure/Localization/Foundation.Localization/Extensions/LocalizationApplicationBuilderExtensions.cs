@@ -28,9 +28,19 @@ namespace Foundation.Localization.Extensions
 
                     if (lang != null)
                     {
+                        if (lang.Contains("-"))
+                        {
+                            lang = lang.Split("-").FirstOrDefault();
+                        }
+
                         if (localizationConfiguration.CurrentValue.SupportedCultures.Split(',').Contains(lang))
                         {
                             Thread.CurrentThread.CurrentCulture = new CultureInfo(lang);
+                            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
+                        }
+                        else
+                        {
+                            Thread.CurrentThread.CurrentCulture = new CultureInfo(configuration["DefaultCulture"]);
                             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
                         }
                     }

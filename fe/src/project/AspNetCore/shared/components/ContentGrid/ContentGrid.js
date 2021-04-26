@@ -1,55 +1,42 @@
-import React, { Fragment } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import Carousel from "react-multi-carousel";
 import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
-import CarouselConstants from "../Carousel/CarouselConstants";
 
 function ContentGrid(props) {
 
     return (
 
-        <Fragment>
-            {props.items && props.items.map((item) =>
-                <section className="section content-grid">
-                    {item.carouselItems && item.carouselItems.length > 0 && 
-                        <div key={item.id} className="content-grid__item">
-                            <p className="title is-4">{item.title}</p>
-                            <Carousel responsive={CarouselConstants.defaultCarouselResponsive()}>
-                                {item.carouselItems.map((carouselItem) =>
-                                    <div key={carouselItem.id} className="card">
-                                        <a href={carouselItem.url}>
-                                            <div className="card-image">
-                                                <figure className="image is-4by3">
-                                                    <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
-                                                        <img src={carouselItem.imageUrl} alt={carouselItem.imageAlt} />
-                                                    </LazyLoad>
-                                                </figure>
-                                            </div>
-                                        </a>
-                                        <div className="card-content">
-                                            <a href={carouselItem.url}>
-                                                {carouselItem.title &&
-                                                    <p className="title is-5 has-text-centered">{carouselItem.title}</p>
-                                                }
-
-                                                {carouselItem.subtitle &&
-                                                    <p className="subtitle is-6 has-text-centered">{carouselItem.subtitle}</p>
-                                                }
-                                            </a>
+        <section className="content-grid section">
+            <h1 className="title is-3">{props.title}</h1>
+            {props.items && props.items.length > 0 &&
+                <div>
+                    <div className="columns is-tablet is-multiline">
+                        {props.items.map((item, index) =>
+                            <div key={item.id} className="column is-4">
+                                <div className="content-grid-item card">
+                                    <a href={item.url}>
+                                        <div className="card-image">
+                                            <figure className="image is-4by3">
+                                                <LazyLoad offset={LazyLoadConstants.contentGridOffset()}>
+                                                    <img src={item.imageUrl} alt={item.imageAlt} />
+                                                </LazyLoad>
+                                            </figure>
                                         </div>
+                                    </a>
+                                    <div className="media-content is-flex-centered">
+                                        <h2 className="content-grid-item__title"><a href={item.url}>{item.title}</a></h2>
                                     </div>
-                                    )}
-                            </Carousel>
-                        </div> 
-                    }
-                </section>
-            )}
-        </Fragment>
+                                </div>
+                            </div>)}
+                    </div>
+                </div>}
+        </section>
     );
 }
 
 ContentGrid.propTypes = {
+    title: PropTypes.string.isRequired,
     items: PropTypes.array
 };
 

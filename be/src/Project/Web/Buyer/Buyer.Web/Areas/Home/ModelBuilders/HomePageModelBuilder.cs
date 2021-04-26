@@ -14,6 +14,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
         private readonly IModelBuilder<BuyerHeaderViewModel> headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, HeroSliderViewModel> heroSliderModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, HomePageCarouselGridViewModel> carouselGridModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, HomePageContentGridViewModel> contentGridModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
@@ -21,12 +22,14 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             IModelBuilder<BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, HeroSliderViewModel> heroSliderModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, HomePageCarouselGridViewModel> carouselGridModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, HomePageContentGridViewModel> contentGridModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.mainNavigationModelBuilder = mainNavigationModelBuilder;
             this.heroSliderModelBuilder = heroSliderModelBuilder;
+            this.carouselGridModelBuilder = carouselGridModelBuilder;
             this.contentGridModelBuilder = contentGridModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
         }
@@ -39,6 +42,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                 Header = headerModelBuilder.BuildModel(),
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
                 HeroSlider = await this.heroSliderModelBuilder.BuildModelAsync(componentModel),
+                CarouselGrid = await this.carouselGridModelBuilder.BuildModelAsync(componentModel),
                 ContentGrid = await this.contentGridModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };
