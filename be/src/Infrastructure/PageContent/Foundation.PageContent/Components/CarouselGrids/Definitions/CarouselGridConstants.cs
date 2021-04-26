@@ -1,6 +1,6 @@
-﻿namespace Foundation.PageContent.Components.ContentGrids.Definitions
+﻿namespace Foundation.PageContent.Components.CarouselGrids.Definitions
 {
-    public static class ContentGridConstants
+    public static class CarouselGridConstants
     {
         public static readonly int CarouselItemImageMaxWidth = 220;
         public static readonly int CarouselItemImageMaxHeight = 210;

@@ -13,6 +13,7 @@ namespace Buyer.Web.Areas.Home.DependencyInjection
         {
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, HomePageViewModel>, HomePageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, HeroSliderViewModel>, HeroSliderModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, HomePageCarouselGridViewModel>, HomePageCarouselGridModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, HomePageContentGridViewModel>, HomePageContentGridModelBuilder>();
         }
     }

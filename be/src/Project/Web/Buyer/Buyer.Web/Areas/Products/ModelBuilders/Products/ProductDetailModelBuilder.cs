@@ -13,8 +13,8 @@ using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
-using Foundation.PageContent.Components.ContentGrids.Definitions;
-using Foundation.PageContent.Components.ContentGrids.ViewModels;
+using Foundation.PageContent.Components.CarouselGrids.Definitions;
+using Foundation.PageContent.Components.CarouselGrids.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Localization;
@@ -106,11 +106,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                     if (productVariants != null)
                     {
-                        var carouselItems = new List<ContentGridCarouselItemViewModel>();
+                        var carouselItems = new List<CarouselGridCarouselItemViewModel>();
 
                         foreach (var productVariant in productVariants.Data.OrEmptyIfNull())
                         {
-                            var carouselItem = new ContentGridCarouselItemViewModel
+                            var carouselItem = new CarouselGridCarouselItemViewModel
                             {
                                 Id = productVariant.Id,
                                 Title = productVariant.Name,
@@ -121,15 +121,15 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                             if (productVariant.Images != null && productVariant.Images.Any())
                             {
-                                carouselItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), ContentGridConstants.CarouselItemImageMaxWidth, ContentGridConstants.CarouselItemImageMaxHeight, true);
+                                carouselItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), CarouselGridConstants.CarouselItemImageMaxWidth, CarouselGridConstants.CarouselItemImageMaxHeight, true);
                             }
 
                             carouselItems.Add(carouselItem);
                         }
 
-                        viewModel.ProductVariants = new List<ContentGridItemViewModel>
+                        viewModel.ProductVariants = new List<CarouselGridItemViewModel>
                         {
-                            new ContentGridItemViewModel
+                            new CarouselGridItemViewModel
                             {
                                 Id = product.Id,
                                 Title = this.productLocalizer.GetString("ProductVariants"),

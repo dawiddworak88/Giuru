@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Foundation.PageContent.Components.ContentGrids.ViewModels
+namespace Foundation.PageContent.Components.CarouselGrids.ViewModels
 {
-    public class ContentGridCarouselItemViewModel
+    public class CarouselGridCarouselItemViewModel
     {
         public Guid Id { get; set; }
         public string Url { get; set; }

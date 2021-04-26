@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Shared.ViewModels.Headers;
+using Foundation.PageContent.Components.CarouselGrids.ViewModels;
 using Foundation.PageContent.Components.ContentGrids.ViewModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.HeroSliders.ViewModels;
@@ -11,6 +12,7 @@ namespace Buyer.Web.Areas.Home.ViewModel
         public BuyerHeaderViewModel Header { get; set; }
         public MainNavigationViewModel MainNavigation { get; set; }
         public HeroSliderViewModel HeroSlider { get; set; }
+        public CarouselGridViewModel CarouselGrid { get; set; }
         public ContentGridViewModel ContentGrid { get; set; }
         public FooterViewModel Footer { get; set; }
     }
