@@ -19,6 +19,6 @@ namespace Buyer.Web.Shared.Services.Catalogs
             int pageIndex,
             int itemsPerPage);
 
-        Task<IEnumerable<CatalogCategory>> GetCatalogCategoriesAsync(string language, int pageIndex, int itemsPerPage);
+        Task<IEnumerable<CatalogCategory>> GetCatalogCategoriesAsync(string language, int pageIndex, int itemsPerPage, string orderBy);
     }
 }
