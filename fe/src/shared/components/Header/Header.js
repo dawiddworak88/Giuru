@@ -118,11 +118,9 @@ function Header(props) {
                     <div className="navbar-end">
                         {props.isLoggedIn && props.signOutLink &&
                             <div className="navbar-item">
-                                <form action={props.signOutLink.url} method="post">
-                                    <Button type="submit" variant="contained" color="primary">
-                                        {props.signOutLink.text}
-                                    </Button>
-                                </form>
+                                <a className="button is-dark" href={props.signOutLink.url}>
+                                    {props.signOutLink.text}
+                                </a>
                             </div>
                         }
                         <div className="navbar-item">
