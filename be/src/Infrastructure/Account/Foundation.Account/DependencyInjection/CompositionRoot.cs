@@ -44,6 +44,7 @@ namespace Foundation.Account.DependencyInjection
                 options.NonceCookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
                 options.CorrelationCookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Lax;
 
+                options.SignInScheme = "Cookies";
                 options.Authority = configuration["IdentityUrl"];
                 options.RequireHttpsMetadata = false;
 
@@ -54,6 +55,7 @@ namespace Foundation.Account.DependencyInjection
                 options.TokenValidationParameters = new TokenValidationParameters { NameClaimType = "email" };
                 options.SaveTokens = true;
 
+                options.Scope.Add(IdentityServerConstants.StandardScopes.OfflineAccess);
                 options.Scope.Add(IdentityServerConstants.StandardScopes.OpenId);
                 options.Scope.Add(IdentityServerConstants.StandardScopes.Profile);
                 options.Scope.Add(IdentityServerConstants.StandardScopes.Email);

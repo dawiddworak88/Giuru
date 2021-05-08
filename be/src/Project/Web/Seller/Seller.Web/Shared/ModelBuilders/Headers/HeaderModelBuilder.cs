@@ -9,6 +9,7 @@ using Foundation.PageContent.Components.Headers.ViewModels;
 using Foundation.PageContent.Components.LanguageSwitchers.ViewModels;
 using Foundation.PageContent.Components.DrawerMenu.ViewModels;
 using Foundation.Presentation.Definitions;
+using Microsoft.AspNetCore.Http;
 
 namespace Seller.Web.Shared.ModelBuilders.Headers
 {
@@ -18,6 +19,7 @@ namespace Seller.Web.Shared.ModelBuilders.Headers
         private readonly IModelBuilder<IEnumerable<DrawerMenuViewModel>> drawerMenuModelBuilder;
         private readonly IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel;
         private readonly LinkGenerator linkGenerator;
+        private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
 
         public HeaderModelBuilder(
@@ -25,12 +27,14 @@ namespace Seller.Web.Shared.ModelBuilders.Headers
             IModelBuilder<IEnumerable<DrawerMenuViewModel>> drawerMenuModelBuilder,
             IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel,
             LinkGenerator linkGenerator,
+            IHttpContextAccessor httpContextAccessor,
             IStringLocalizer<GlobalResources> globalLocalizer)
         {
             this.logoModelBuilder = logoModelBuilder;
             this.drawerMenuModelBuilder = drawerMenuModelBuilder;
             this.languageSwitcherViewModel = languageSwitcherViewModel;
             this.linkGenerator = linkGenerator;
+            this.httpContextAccessor = httpContextAccessor;
             this.globalLocalizer = globalLocalizer;
         }
 
@@ -38,16 +42,17 @@ namespace Seller.Web.Shared.ModelBuilders.Headers
         {
             return new HeaderViewModel
             {
+                IsLoggedIn = this.httpContextAccessor.HttpContext.User.Identity.IsAuthenticated,
+                SignOutLink = new LinkViewModel
+                { 
+                    Url = this.linkGenerator.GetPathByAction("SignOut", "Account", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
+                    Text = this.globalLocalizer.GetString("SignOut")
+                },
                 DrawerBackLabel = this.globalLocalizer.GetString("Back"),
                 DrawerBackIcon = IconsConstants.ArrowLeft,
                 Logo = this.logoModelBuilder.BuildModel(),
                 DrawerMenuCategories = this.drawerMenuModelBuilder.BuildModel(),
                 LanguageSwitcher = this.languageSwitcherViewModel.BuildModel(),
-                LoginLink = new LinkViewModel
-                {
-                    Url = linkGenerator.GetPathByAction("Index2", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
-                    Text = this.globalLocalizer["SignIn"]
-                },
                 Links = new List<LinkViewModel>()
             };
         }
