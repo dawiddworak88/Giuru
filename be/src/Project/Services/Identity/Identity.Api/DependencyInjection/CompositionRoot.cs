@@ -34,6 +34,7 @@ namespace Identity.Api.DependencyInjection
 
                 options.IssuerUri = "null";
                 options.UserInteraction.LoginUrl = "/Accounts/SignIn";
+                options.UserInteraction.LogoutUrl = "/Accounts/SignOut";
                 options.Events.RaiseErrorEvents = true;
                 options.Events.RaiseInformationEvents = true;
                 options.Events.RaiseFailureEvents = true;

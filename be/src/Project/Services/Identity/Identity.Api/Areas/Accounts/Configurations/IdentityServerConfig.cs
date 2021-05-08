@@ -65,12 +65,16 @@ namespace Identity.Api.Areas.Accounts.Configurations
                             $"{AccountConstants.HttpsScheme}://{clientParameters[2]}/signin-oidc",
                             $"{AccountConstants.HttpScheme}://{clientParameters[2]}/signin-oidc"
                         },
-                        PostLogoutRedirectUris = { $"{clientParameters[2]}//signout-callback-oidc" },
+                        PostLogoutRedirectUris = {
+                            $"{AccountConstants.HttpsScheme}://{clientParameters[2]}/signout-callback-oidc",
+                            $"{AccountConstants.HttpScheme}://{clientParameters[2]}/signout-callback-oidc"                        
+                        },
                         AllowedScopes = new List<string>
                         {
                             IdentityServerConstants.StandardScopes.OpenId,
                             IdentityServerConstants.StandardScopes.Profile,
                             IdentityServerConstants.StandardScopes.Email,
+                            IdentityServerConstants.StandardScopes.OfflineAccess,
                             ApiExtensionsConstants.AllScopes
                         },
                         AllowOfflineAccess = true,

@@ -42,11 +42,6 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers
             {
                 Logo = this.logoModelBuilder.BuildModel(),
                 LanguageSwitcher = this.languageSwitcherViewModel.BuildModel(),
-                LoginLink = new LinkViewModel
-                {
-                    Url = "/",
-                    Text = this.globalLocalizer.GetString("Portal")
-                },
                 SearchLabel = this.globalLocalizer.GetString("Search"),
                 SearchPlaceholderLabel = this.globalLocalizer.GetString("Search"),
                 SearchUrl = this.linkGenerator.GetPathByAction("Index", "SearchProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),

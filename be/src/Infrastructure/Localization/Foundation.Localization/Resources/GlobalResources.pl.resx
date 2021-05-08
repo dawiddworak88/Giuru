@@ -396,4 +396,7 @@
   <data name="ProductAttributeItem" xml:space="preserve">
     <value>Wartość atrybutu produktu</value>
   </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Wyloguj</value>
+  </data>
 </root>

@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
+import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ListItem from "@material-ui/core/ListItem";
@@ -115,6 +116,13 @@ function Header(props) {
                         {links}
                     </div>
                     <div className="navbar-end">
+                        {props.isLoggedIn && props.signOutLink &&
+                            <div className="navbar-item">
+                                <a className="button is-dark" href={props.signOutLink.url}>
+                                    {props.signOutLink.text}
+                                </a>
+                            </div>
+                        }
                         <div className="navbar-item">
                             <LanguageSwitcher {...props.languageSwitcher} />
                         </div>
@@ -130,7 +138,9 @@ Header.propTypes = {
     drawerBackIcon: PropTypes.string.isRequired,
     logo: PropTypes.object.isRequired,
     links: PropTypes.array.isRequired,
-    drawerMenuCategories: PropTypes.array.isRequired
+    drawerMenuCategories: PropTypes.array.isRequired,
+    isLoggedIn: PropTypes.bool,
+    signOutLink: PropTypes.object
 };
 
 export default Header;
