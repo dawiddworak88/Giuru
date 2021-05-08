@@ -47,5 +47,10 @@ namespace Identity.Api.Areas.Accounts.Services.UserServices
 
             return false;
         }
+
+        public async Task SignOutAsync()
+        {
+            await this.signInManager.SignOutAsync();
+        }
     }
 }

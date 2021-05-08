@@ -1,4 +1,5 @@
 ﻿using Foundation.Extensions.Controllers;
+using Identity.Api.Areas.Accounts.Services.UserServices;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
 using IdentityServer4.Services;
@@ -14,13 +15,16 @@ namespace Identity.Api.Areas.Accounts.Controllers
     [AllowAnonymous]
     public class SignOutController : BaseController
     {
+        private readonly IUserService userService;
         private readonly IIdentityServerInteractionService interaction;
         private readonly IEventService events;
 
         public SignOutController(
+            IUserService userService,
             IIdentityServerInteractionService interaction,
             IEventService events)
         {
+            this.userService = userService;
             this.interaction = interaction;
             this.events = events;
         }
@@ -30,7 +34,7 @@ namespace Identity.Api.Areas.Accounts.Controllers
         {
             if (this.User?.Identity.IsAuthenticated == true)
             {
-                await this.HttpContext.SignOutAsync();
+                await this.userService.SignOutAsync();
 
                 await this.events.RaiseAsync(new UserLogoutSuccessEvent(this.User.GetSubjectId(), this.User.GetDisplayName()));
             }
