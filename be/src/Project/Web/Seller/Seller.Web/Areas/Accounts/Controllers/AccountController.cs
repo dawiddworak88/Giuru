@@ -8,10 +8,6 @@ namespace Seller.Web.Areas.Accounts.Controllers
     {
         public IActionResult SignOut()
         {
-            this.Response.Cookies.Delete(".AspNetCore.Identity.Application");
-            this.Response.Cookies.Delete("idserv.external");
-            this.Response.Cookies.Delete("idserv.session");
-
             return this.SignOut("Cookies", "oidc");
         }
     }

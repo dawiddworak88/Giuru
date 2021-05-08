@@ -7,5 +7,6 @@ namespace Identity.Api.Areas.Accounts.Services.UserServices
     {
         string GeneratePasswordHash(ApplicationUser user, string password);
         Task<bool> SignInAsync(string email, string password, string redirectUrl);
+        Task SignOutAsync();
     }
 }
