@@ -66,7 +66,7 @@ namespace Buyer.Web.Shared.Services.Catalogs
                     null,
                     pageIndex,
                     itemsPerPage,
-                    nameof(CatalogProduct.LastModifiedDate)
+                    $"{nameof(CatalogProduct.LastModifiedDate)} desc"
                 );
 
             if (pagedProducts?.Data != null)
