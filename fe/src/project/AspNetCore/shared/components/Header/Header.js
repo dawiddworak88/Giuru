@@ -11,7 +11,7 @@ import { Context } from "../../../../../shared/stores/Store";
 
 function Header(props) {
 
-    const [searchTerm, setSearchTerm] = useState(props.searchTerm);
+    const [searchTerm, setSearchTerm] = useState(props.searchTerm ? props.searchTerm : "");
     const [suggestions, setSuggestions] = useState([]);
     const [, dispatch] = useContext(Context);
 
