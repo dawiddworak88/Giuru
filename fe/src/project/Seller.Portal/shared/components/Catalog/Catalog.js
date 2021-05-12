@@ -7,6 +7,7 @@ import Fab from "@material-ui/core/Fab";
 import { Plus } from "react-feather";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
+import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, TablePagination, CircularProgress
@@ -227,6 +228,10 @@ function Catalog(props) {
                                                                 <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
                                                                     <DeleteIcon />
                                                                 </Fab>)
+                                                            else if (actionItem.isDuplicate) return (
+                                                                <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary" aria-label={props.duplicateLabel}>
+                                                                    <FileCopyOutlinedIcon />
+                                                                </Fab>)
                                                             else return (
                                                                 <div></div>)})}
                                                     </TableCell>
@@ -296,12 +301,14 @@ Catalog.propTypes = {
     searchApiUrl: PropTypes.string.isRequired,
     editLabel: PropTypes.string,
     deleteLabel: PropTypes.string,
+    duplicateLabel: PropTypes.string,
     displayedRowsLabel: PropTypes.string.isRequired,
     rowsPerPageLabel: PropTypes.string.isRequired,
     backIconButtonText: PropTypes.string.isRequired,
     nextIconButtonText: PropTypes.string.isRequired,
     editUrl: PropTypes.string,
     deleteUrl: PropTypes.string,
+    duplicateUrl: PropTypes.string,
     noResultsLabel: PropTypes.string.isRequired,
     table: PropTypes.object.isRequired
 }

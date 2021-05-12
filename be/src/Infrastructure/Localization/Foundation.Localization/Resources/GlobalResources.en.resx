@@ -399,4 +399,10 @@
   <data name="SignOut" xml:space="preserve">
     <value>Sign out</value>
   </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>Duplicate</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
 </root>

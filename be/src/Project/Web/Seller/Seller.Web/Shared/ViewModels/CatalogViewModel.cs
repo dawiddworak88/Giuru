@@ -11,6 +11,7 @@ namespace Seller.Web.Shared.ViewModels
         public string SearchApiUrl { get; set; }
         public string EditLabel { get; set; }
         public string DeleteLabel { get; set; }
+        public string DuplicateLabel { get; set; }
         public string SearchLabel { get; set; }
         public string SearchTerm { get; set; }
         public string DisplayedRowsLabel { get; set; }
@@ -24,6 +25,7 @@ namespace Seller.Web.Shared.ViewModels
         public string AreYouSureLabel { get; set; }
         public string DeleteApiUrl { get; set; }
         public string EditUrl { get; set; }
+        public string DuplicateUrl { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string OrderBy { get; set; }
         public CatalogTableViewModel Table { get; set; }
