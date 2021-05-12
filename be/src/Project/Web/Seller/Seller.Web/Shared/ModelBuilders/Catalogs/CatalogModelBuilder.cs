@@ -26,6 +26,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 SearchLabel = this.globalLocalizer.GetString("Search"),
                 EditLabel = this.globalLocalizer.GetString("Edit"),
                 DeleteLabel = this.globalLocalizer.GetString("Delete"),
+                DuplicateLabel = this.globalLocalizer.GetString("Duplicate"),
                 DisplayedRowsLabel = this.globalLocalizer.GetString("DisplayedRows"),
                 RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage"),
                 BackIconButtonText = this.globalLocalizer.GetString("Previous"),

@@ -45,7 +45,8 @@ namespace Seller.Web.Areas.ModelBuilders.Products
             viewModel.NewText = this.productLocalizer.GetString("NewProduct");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
-            
+            viewModel.DuplicateUrl = this.linkGenerator.GetPathByAction("Duplicate", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
+
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name });
 
@@ -69,6 +70,10 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                     new CatalogActionViewModel
                     { 
                         IsDelete = true
+                    },
+                    new CatalogActionViewModel
+                    {
+                        IsDuplicate = true
                     }
                 },
                 Properties = new List<CatalogPropertyViewModel>
