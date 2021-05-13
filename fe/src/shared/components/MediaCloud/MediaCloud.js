@@ -24,11 +24,12 @@ function MediaCloud(props) {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        acceptedFiles.forEach((file) => {
-
+        if (props.multiple) {
             const formData = new FormData();
 
-            formData.append("file", file);
+            acceptedFiles.forEach((file) => {
+                formData.append("files", file);
+            });
 
             const requestOptions = {
                 method: "POST",
@@ -45,10 +46,7 @@ function MediaCloud(props) {
                         if (response.ok) {
 
                             dispatch({ type: "SET_IS_LOADING", payload: false });
-                            
-                            props.multiple ? 
-                            setFieldValue({ name: props.name, value: [...files, media] }) : 
-                            setFieldValue({ name: props.name, value: [ media ] });
+                            setFieldValue({ name: props.name, value: [...files, ...media ] });
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -58,7 +56,40 @@ function MediaCloud(props) {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
                     toast.error(props.generalErrorMessage);
                 });
-        });
+        }
+        else {
+            acceptedFiles.forEach((file) => {
+                const formData = new FormData();
+    
+                formData.append("file", file);
+    
+                const requestOptions = {
+                    method: "POST",
+                    body: formData
+                };
+    
+                fetch(props.saveMediaUrl, requestOptions)
+                    .then(function (response) {
+    
+                        dispatch({ type: "SET_IS_LOADING", payload: false });
+    
+                        return response.json().then((media) => {
+    
+                            if (response.ok) {
+    
+                                dispatch({ type: "SET_IS_LOADING", payload: false });
+                                setFieldValue({ name: props.name, value: [ media ] });
+                            }
+                            else {
+                                toast.error(props.generalErrorMessage);
+                            }
+                        });
+                    }).catch(() => {
+                        dispatch({ type: "SET_IS_LOADING", payload: false });
+                        toast.error(props.generalErrorMessage);
+                    });
+            });
+        }
     }, [files]);
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
