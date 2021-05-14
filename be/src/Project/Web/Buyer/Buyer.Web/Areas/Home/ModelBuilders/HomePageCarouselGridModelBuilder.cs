@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
+using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 
 namespace Buyer.Web.Areas.Home.ModelBuilders
 {
@@ -18,15 +19,18 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
         private readonly ICatalogService catalogService;
         private readonly LinkGenerator linkGenerator;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly ICdnService cdnService;
 
         public HomePageCarouselGridModelBuilder(
             ICatalogService catalogService,
             LinkGenerator linkGenerator,
-            IStringLocalizer<GlobalResources> globalLocalizer)
+            IStringLocalizer<GlobalResources> globalLocalizer,
+            ICdnService cdnService)
         {
             this.catalogService = catalogService;
             this.linkGenerator = linkGenerator;
             this.globalLocalizer = globalLocalizer;
+            this.cdnService = cdnService;
         }
 
         public async Task<HomePageCarouselGridViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -54,7 +58,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                         Id = newProduct.Id,
                         Title = newProduct.Title,
                         ImageAlt = newProduct.ImageAlt,
-                        ImageUrl = newProduct.ImageUrl,
+                        ImageUrl = this.cdnService.GetCdnUrl(newProduct.ImageUrl),
                         Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, newProduct.Id })
                     };
 

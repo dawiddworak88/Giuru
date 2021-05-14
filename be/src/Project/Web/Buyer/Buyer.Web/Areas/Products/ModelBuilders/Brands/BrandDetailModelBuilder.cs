@@ -9,6 +9,7 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Headers.Definitions;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
+using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
 {
@@ -18,24 +19,27 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
         private readonly IBrandRepository brandRepository;
         private readonly IMediaHelperService mediaService;
         private readonly IOptions<AppSettings> options;
+        private readonly ICdnService cdnService;
 
         public BrandDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
             IBrandRepository brandRepository,
             IOptions<AppSettings> options,
-            IMediaHelperService mediaService)
+            IMediaHelperService mediaService,
+            ICdnService cdnService)
         {
             this.filesModelBuilder = filesModelBuilder;
             this.brandRepository = brandRepository;
             this.options = options;
             this.mediaService = mediaService;
+            this.cdnService = cdnService;
         }
 
         public async Task<BrandDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new BrandDetailViewModel
             {
-                LogoUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, LogoConstants.LogoMediaId)
+                LogoUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, LogoConstants.LogoMediaId))
             };
 
             var brand = await this.brandRepository.GetBrandAsync(componentModel.Id, componentModel.Token, componentModel.Language);
