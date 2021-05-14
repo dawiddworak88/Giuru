@@ -21,6 +21,7 @@ using Buyer.Web.Shared.ViewModels.Files;
 using Buyer.Web.Shared.ModelBuilders.Files;
 using Buyer.Web.Shared.Repositories.Brands;
 using Buyer.Web.Shared.Repositories.Products;
+using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -45,6 +46,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<ICatalogProductsRepository, CatalogProductsRepository>();
 
             // Services
+            services.AddScoped<ICdnService, CdnService>();
             services.AddScoped<ICatalogService, CatalogService>();
         }
 

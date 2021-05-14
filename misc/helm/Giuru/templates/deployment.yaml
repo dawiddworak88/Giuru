@@ -427,6 +427,8 @@ spec:
           value: {{ .Values.mediaUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
+        - name: CdnUrl
+          value: {{ .Values.cdnUrl }}
         - name: ClientId
           value: {{ .Values.buyerWeb.clientId }}
         - name: ClientSecret
