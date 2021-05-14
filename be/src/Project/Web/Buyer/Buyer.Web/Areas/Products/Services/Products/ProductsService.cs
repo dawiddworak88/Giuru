@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -21,17 +22,20 @@ namespace Buyer.Web.Areas.Products.Services.Products
         private readonly IMediaHelperService mediaService;
         private readonly IOptions<AppSettings> options;
         private readonly LinkGenerator linkGenerator;
+        private readonly ICdnService cdnService;
 
         public ProductsService(
             IProductsRepository productsRepository,
             IMediaHelperService mediaService,
             IOptions<AppSettings> options,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            ICdnService cdnService)
         {
             this.productsRepository = productsRepository;
             this.mediaService = mediaService;
             this.options = options;
             this.linkGenerator = linkGenerator;
+            this.cdnService = cdnService;
         }
 
         public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(Guid? categoryId, Guid? sellerId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
@@ -60,7 +64,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         var imageGuid = product.Images.FirstOrDefault();
 
                         catalogItem.ImageAlt = product.Name;
-                        catalogItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, ProductConstants.ProductsCatalogItemImageWidth, ProductConstants.ProductsCatalogItemImageHeight);
+                        catalogItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, ProductConstants.ProductsCatalogItemImageWidth, ProductConstants.ProductsCatalogItemImageHeight));
                     }
 
                     catalogItemList.Add(catalogItem);

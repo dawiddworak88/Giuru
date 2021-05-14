@@ -2,6 +2,7 @@
 using Buyer.Web.Areas.Home.ViewModel;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Services.Catalogs;
+using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Extensions.Services.MediaServices;
@@ -25,19 +26,22 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
         private readonly IMediaHelperService mediaService;
         private readonly LinkGenerator linkGenerator;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly ICdnService cdnService;
 
         public HomePageContentGridModelBuilder(
             ICatalogService catalogService,
             IOptions<AppSettings> options,
             IMediaHelperService mediaService,
             LinkGenerator linkGenerator,
-            IStringLocalizer<GlobalResources> globalLocalizer)
+            IStringLocalizer<GlobalResources> globalLocalizer,
+            ICdnService cdnService)
         {
             this.catalogService = catalogService;
             this.options = options;
             this.mediaService = mediaService;
             this.linkGenerator = linkGenerator;
             this.globalLocalizer = globalLocalizer;
+            this.cdnService = cdnService;
         }
 
         public async Task<HomePageContentGridViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -62,7 +66,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
 
                 if (category.ThumbnailMediaId.HasValue)
                 {
-                    contentItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, category.ThumbnailMediaId.Value, true);
+                    contentItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, category.ThumbnailMediaId.Value, true));
                 }
 
                 items.Add(contentItem);

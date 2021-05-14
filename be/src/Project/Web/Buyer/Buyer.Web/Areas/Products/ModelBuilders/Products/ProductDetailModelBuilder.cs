@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -36,6 +37,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IOptions<AppSettings> options;
         private readonly IMediaHelperService mediaService;
         private readonly LinkGenerator linkGenerator;
+        private readonly ICdnService cdnService;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -45,7 +47,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IStringLocalizer<ProductResources> productLocalizer,
             IOptions<AppSettings> options,
             IMediaHelperService mediaService,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            ICdnService cdnService)
         {
             this.filesModelBuilder = filesModelBuilder;
             this.mediaRepository = filesRepository;
@@ -55,6 +58,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             this.options = options;
             this.mediaService = mediaService;
             this.linkGenerator = linkGenerator;
+            this.cdnService = cdnService;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -89,8 +93,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 {
                     var imageViewModel = new ImageViewModel
                     { 
-                        Original = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.OriginalMaxWidth, ProductConstants.OriginalMaxHeight, true),
-                        Thumbnail = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.ThumbnailMaxWidth, ProductConstants.ThumbnailMaxHeight, true)
+                        Original = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.OriginalMaxWidth, ProductConstants.OriginalMaxHeight, true)),
+                        Thumbnail = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.ThumbnailMaxWidth, ProductConstants.ThumbnailMaxHeight, true))
                     };
 
                     images.Add(imageViewModel);
@@ -121,7 +125,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                             if (productVariant.Images != null && productVariant.Images.Any())
                             {
-                                carouselItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), CarouselGridConstants.CarouselItemImageMaxWidth, CarouselGridConstants.CarouselItemImageMaxHeight, true);
+                                carouselItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), CarouselGridConstants.CarouselItemImageMaxWidth, CarouselGridConstants.CarouselItemImageMaxHeight, true));
                             }
 
                             carouselItems.Add(carouselItem);
