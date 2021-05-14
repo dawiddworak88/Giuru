@@ -1,7 +1,6 @@
 ﻿using Foundation.Security.Definitions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
-using System;
 
 namespace Foundation.Security.DependencyInjection
 {
@@ -28,10 +27,7 @@ namespace Foundation.Security.DependencyInjection
                        .CustomSources("*")
                     .UnsafeInline()
                     .UnsafeEval()
-                )
-                .ImageSources(s => s.Self()
-                       .CustomSources($"{configuration["MediaUrl"]}")
-            ));
+                ));
 
             app.Use(async (context, next) =>
             {
