@@ -1,5 +1,6 @@
 ﻿using Buyer.Web.Areas.Home.Definitions;
 using Buyer.Web.Areas.Home.ViewModel;
+using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Services.Catalogs;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
@@ -66,7 +67,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
 
                 if (category.ThumbnailMediaId.HasValue)
                 {
-                    contentItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, category.ThumbnailMediaId.Value, true));
+                    contentItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, category.ThumbnailMediaId.Value, ProductConstants.ProductsCatalogItemImageWidth, ProductConstants.ProductsCatalogItemImageHeight, true));
                 }
 
                 items.Add(contentItem);
