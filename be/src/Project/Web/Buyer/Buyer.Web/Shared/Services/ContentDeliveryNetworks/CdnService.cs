@@ -15,9 +15,8 @@ namespace Buyer.Web.Shared.Services.ContentDeliveryNetworks
 
         public string GetCdnUrl(string url)
         {
-            if (!string.IsNullOrWhiteSpace(this.options.Value.CdnUrl))
+            if (!string.IsNullOrWhiteSpace(this.options.Value.CdnUrl) && !string.IsNullOrWhiteSpace(url) && Uri.TryCreate(url, UriKind.RelativeOrAbsolute, out Uri uri))
             {
-                var uri = new Uri(url);
                 return $"{this.options.Value.CdnUrl}{uri.AbsolutePath}{uri.Query}";
             }
 
