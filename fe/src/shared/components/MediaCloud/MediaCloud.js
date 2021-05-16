@@ -110,31 +110,18 @@ function MediaCloud(props) {
         return result;
     };
 
-    const grid = 8;
-
     const getItemStyle = (isDragging, draggableStyle) => ({
-        // some basic styles to make the items look a bit nicer
-        userSelect: 'none',
-        padding: grid * 2,
-        margin: `0 ${grid}px 0 0`,
-
-        // change background colour if dragging
-        background: isDragging ? 'lightgreen' : 'grey',
-
-        // styles we need to apply on draggables
+        opacity: isDragging ? 0.5 : 1,
         ...draggableStyle,
     });
 
     const getListStyle = isDraggingOver => ({
-        background: isDraggingOver ? 'lightblue' : 'lightgrey',
-        display: 'flex',
-        padding: grid,
-        overflow: 'auto',
+        background: isDraggingOver ? "lightgray" : "white",
+        display: "flex",
+        overflow: "auto"
     });
 
     const onDragEnd = (result) => {
-        console.log(result);
-
         if (!result.destination) {
             return;
         }
