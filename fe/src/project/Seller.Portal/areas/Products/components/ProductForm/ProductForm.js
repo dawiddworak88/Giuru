@@ -109,7 +109,7 @@ function ProductForm(props) {
             isNew,
             formData: JSON.stringify(formData)
         };
-
+        
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
