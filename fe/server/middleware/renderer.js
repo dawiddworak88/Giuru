@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
+import { resetServerContext } from 'react-beautiful-dnd';
 import { ServerStyleSheets } from "@material-ui/core/styles";
 
 // AspNetCore
@@ -69,6 +70,8 @@ const serverRenderer = (req, res, next) => {
 		);
 
 		const css = sheets.toString();
+
+		resetServerContext();
 
 		return res.send(
 			ReactDOMServer.renderToString(

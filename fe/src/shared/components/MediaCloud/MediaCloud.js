@@ -6,6 +6,7 @@ import { Button } from "@material-ui/core";
 import { useDropzone } from "react-dropzone";
 import { Context } from "../../../shared/stores/Store";
 import IconConstants from "../../constants/IconConstants";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 function MediaCloud(props) {
 
@@ -15,9 +16,9 @@ function MediaCloud(props) {
 
     function deleteMedia(e, id) {
 
-        e.preventDefault(); 
+        e.preventDefault();
 
-        setFieldValue({ name: props.name, value: files.filter((item) => item.id !== id) }); 
+        setFieldValue({ name: props.name, value: files.filter((item) => item.id !== id) });
     }
 
     const onDrop = useCallback(acceptedFiles => {
@@ -46,7 +47,7 @@ function MediaCloud(props) {
                         if (response.ok) {
 
                             dispatch({ type: "SET_IS_LOADING", payload: false });
-                            setFieldValue({ name: props.name, value: [...files, ...media ] });
+                            setFieldValue({ name: props.name, value: [...files, ...media] });
                         }
                         else {
                             toast.error(props.generalErrorMessage);
@@ -60,25 +61,25 @@ function MediaCloud(props) {
         else {
             acceptedFiles.forEach((file) => {
                 const formData = new FormData();
-    
+
                 formData.append("file", file);
-    
+
                 const requestOptions = {
                     method: "POST",
                     body: formData
                 };
-    
+
                 fetch(props.saveMediaUrl, requestOptions)
                     .then(function (response) {
-    
+
                         dispatch({ type: "SET_IS_LOADING", payload: false });
-    
+
                         return response.json().then((media) => {
-    
+
                             if (response.ok) {
-    
+
                                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                                setFieldValue({ name: props.name, value: [ media ] });
+                                setFieldValue({ name: props.name, value: [media] });
                             }
                             else {
                                 toast.error(props.generalErrorMessage);
@@ -100,10 +101,54 @@ function MediaCloud(props) {
 
     useEffect(() => () => {
         files.forEach(file => URL.revokeObjectURL(file.url));
-      }, [files]);
+    }, [files]);
+
+    const reorder = (list, startIndex, endIndex) => {
+        const result = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+        return result;
+    };
+
+    const grid = 8;
+
+    const getItemStyle = (isDragging, draggableStyle) => ({
+        // some basic styles to make the items look a bit nicer
+        userSelect: 'none',
+        padding: grid * 2,
+        margin: `0 ${grid}px 0 0`,
+
+        // change background colour if dragging
+        background: isDragging ? 'lightgreen' : 'grey',
+
+        // styles we need to apply on draggables
+        ...draggableStyle,
+    });
+
+    const getListStyle = isDraggingOver => ({
+        background: isDraggingOver ? 'lightblue' : 'lightgrey',
+        display: 'flex',
+        padding: grid,
+        overflow: 'auto',
+    });
+
+    const onDragEnd = (result) => {
+        console.log(result);
+
+        if (!result.destination) {
+            return;
+        }
+
+        const items = reorder(
+            props.files,
+            result.source.index,
+            result.destination.index
+        );
+
+        props.setFieldValue({ name: props.name, value: items });
+    }
 
     return (
-        
         <div className="dropzone">
             {props.label &&
                 <label className="dropzone__title" for={props.id}>{props.label}</label>
@@ -118,25 +163,45 @@ function MediaCloud(props) {
                 </div>
             </div>
             {files && files.length > 0 &&
-                <aside className="dropzone__preview">
-                    {files.map((file) =>
-                        <div className="dropzone__preview-thumbnail">
-                            <div>
-                                {file.mimeType === "image/jpeg" || file.mimeType === "image/png" ?
-                                    <img src={file.url} /> :
-                                    <div className="dropzone__preview-tile">
-                                        <a href={file.url} alt={file.name}>{file.filename}</a>
-                                    </div>
-                                }
-                            </div>
-                            <div className="is-flex is-flex-centered has-text-cenetered">
-                                <Button type="button" type="contained" color="primary" onClick={(e) => deleteMedia(e, file.id)}>
-                                    {props.deleteLabel}
-                                </Button>
-                            </div>
-                        </div>
-                    )}
-                </aside>
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <Droppable droppableId={props.name}>
+                        {(provided, snapshot) => (
+                            <aside className="dropzone__preview"
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}
+                                style={getListStyle(snapshot.isDraggingOver)}>
+                                {files.map((file, index) =>
+                                    <Draggable key={file.id} draggableId={file.id} index={index}>
+                                        {(provided, snapshot) => (
+                                            <div className="dropzone__preview-thumbnail"
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                                style={getItemStyle(
+                                                    snapshot.isDragging,
+                                                    provided.draggableProps.style
+                                                )}>
+                                                <div>
+                                                    {file.mimeType === "image/jpeg" || file.mimeType === "image/png" ?
+                                                        <img src={file.url} alt={file.name} /> :
+                                                        <div className="dropzone__preview-tile">
+                                                            <a href={file.url} alt={file.name}>{file.filename}</a>
+                                                        </div>
+                                                    }
+                                                </div>
+                                                <div className="is-flex is-flex-centered has-text-cenetered">
+                                                    <Button type="button" color="primary" onClick={(e) => deleteMedia(e, file.id)}>
+                                                        {props.deleteLabel}
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                )}
+                                {provided.placeholder}
+                            </aside>)}
+                    </Droppable>
+                </DragDropContext>
             }
         </div>
     );
