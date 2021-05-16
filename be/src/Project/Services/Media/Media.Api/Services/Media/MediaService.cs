@@ -142,6 +142,7 @@ namespace Media.Api.Services.Media
 
         public PagedResults<IEnumerable<MediaItemServiceModel>> GetMediaItemsByIds(GetMediaItemsByIdsServiceModel model)
         {
+            var randomMediaItemsResults = new List<MediaItemServiceModel>();
             var mediaItemsResults = new List<MediaItemServiceModel>();
 
             var predicateBuilder = PredicateBuilder.False<MediaItem>();
@@ -157,10 +158,20 @@ namespace Media.Api.Services.Media
             {
                 var mediaItemResult = this.MapMediaItemToMediaItemResultModel(mediaItem, model.Language);
 
-                mediaItemsResults.Add(mediaItemResult);
+                randomMediaItemsResults.Add(mediaItemResult);
             }
 
-            return new PagedResults<IEnumerable<MediaItemServiceModel>>(mediaItemsResults.Count, PaginationConstants.DefaultPageIndex)
+            foreach(var id in model.Ids.OrEmptyIfNull())
+            {
+                var mediaItemResult = randomMediaItemsResults.OrEmptyIfNull().FirstOrDefault(x => x.Id == id);
+
+                if (mediaItemResult != null)
+                {
+                    mediaItemsResults.Add(mediaItemResult);
+                }
+            }
+
+            return new PagedResults<IEnumerable<MediaItemServiceModel>>(randomMediaItemsResults.Count, PaginationConstants.DefaultPageIndex)
             { 
                 Data = mediaItemsResults
             };
