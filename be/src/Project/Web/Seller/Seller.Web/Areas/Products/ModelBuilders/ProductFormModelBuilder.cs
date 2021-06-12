@@ -135,7 +135,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                         var imageMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(
                             componentModel.Token,
                             componentModel.Language,
-                            product.Images.Distinct().ToEndpointParameterString(),
+                            product.Images.ToEndpointParameterString(),
                             PaginationConstants.DefaultPageIndex,
                             PaginationConstants.DefaultPageSize);
 
@@ -162,7 +162,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                         var fileMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(
                             componentModel.Token,
                             componentModel.Language,
-                            product.Files.Distinct().ToEndpointParameterString(),
+                            product.Files.ToEndpointParameterString(),
                             PaginationConstants.DefaultPageIndex,
                             PaginationConstants.DefaultPageSize);
 
