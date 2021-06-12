@@ -151,7 +151,7 @@ function MediaCloud(props) {
             </div>
             {files && files.length > 0 &&
                 <DragDropContext onDragEnd={onDragEnd}>
-                    <Droppable droppableId={props.name}>
+                    <Droppable droppableId={props.name} direction="horizontal">
                         {(provided, snapshot) => (
                             <aside className="dropzone__preview"
                                 {...provided.droppableProps}
