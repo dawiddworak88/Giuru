@@ -18,6 +18,7 @@ using System.Linq;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Foundation.Extensions.ExtensionMethods;
 using Seller.Web.Areas.Products.DomainModels;
+using System;
 
 namespace Seller.Web.Areas.ModelBuilders.Products
 {
@@ -135,7 +136,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                         var imageMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(
                             componentModel.Token,
                             componentModel.Language,
-                            product.Images.ToEndpointParameterString(),
+                            product.Images.Select(x => x.ToString()).Distinct().Select(x => Guid.Parse(x)).ToEndpointParameterString(),
                             PaginationConstants.DefaultPageIndex,
                             PaginationConstants.DefaultPageSize);
 
