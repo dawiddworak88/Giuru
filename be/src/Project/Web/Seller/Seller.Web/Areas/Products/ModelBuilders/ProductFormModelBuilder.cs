@@ -18,6 +18,7 @@ using System.Linq;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Foundation.Extensions.ExtensionMethods;
 using Seller.Web.Areas.Products.DomainModels;
+using System;
 
 namespace Seller.Web.Areas.ModelBuilders.Products
 {
@@ -132,10 +133,20 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
                     if (product.Images != null && product.Images.Any())
                     {
+                        var uniqueImages = new List<Guid>();
+
+                        foreach (var image in product.Images)
+                        {
+                            if (!uniqueImages.Contains(image))
+                            {
+                                uniqueImages.Add(image);
+                            }
+                        }
+
                         var imageMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(
                             componentModel.Token,
                             componentModel.Language,
-                            product.Images.Distinct().ToEndpointParameterString(),
+                            uniqueImages.ToEndpointParameterString(),
                             PaginationConstants.DefaultPageIndex,
                             PaginationConstants.DefaultPageSize);
 
@@ -159,10 +170,20 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
                     if (product.Files != null && product.Files.Any())
                     {
+                        var uniqueFiles = new List<Guid>();
+
+                        foreach (var file in product.Files)
+                        {
+                            if (!uniqueFiles.Contains(file))
+                            {
+                                uniqueFiles.Add(file);
+                            }
+                        }
+
                         var fileMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(
                             componentModel.Token,
                             componentModel.Language,
-                            product.Files.Distinct().ToEndpointParameterString(),
+                            uniqueFiles.ToEndpointParameterString(),
                             PaginationConstants.DefaultPageIndex,
                             PaginationConstants.DefaultPageSize);
 
