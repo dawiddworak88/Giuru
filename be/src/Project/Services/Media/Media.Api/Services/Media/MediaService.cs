@@ -142,12 +142,12 @@ namespace Media.Api.Services.Media
 
         public PagedResults<IEnumerable<MediaItemServiceModel>> GetMediaItemsByIds(GetMediaItemsByIdsServiceModel model)
         {
-            var randomMediaItemsResults = new List<MediaItemServiceModel>();
+            var unorderedMediaItemsResults = new List<MediaItemServiceModel>();
             var mediaItemsResults = new List<MediaItemServiceModel>();
 
             var predicateBuilder = PredicateBuilder.False<MediaItem>();
 
-            foreach (var id in model.Ids)
+            foreach (var id in model.Ids.Skip((model.PageIndex - 1) * model.ItemsPerPage).Take(model.ItemsPerPage))
             {
                 predicateBuilder = predicateBuilder.Or(x => x.Id == id);
             }
@@ -158,12 +158,12 @@ namespace Media.Api.Services.Media
             {
                 var mediaItemResult = this.MapMediaItemToMediaItemResultModel(mediaItem, model.Language);
 
-                randomMediaItemsResults.Add(mediaItemResult);
+                unorderedMediaItemsResults.Add(mediaItemResult);
             }
 
             foreach(var id in model.Ids.OrEmptyIfNull())
             {
-                var mediaItemResult = randomMediaItemsResults.OrEmptyIfNull().FirstOrDefault(x => x.Id == id);
+                var mediaItemResult = unorderedMediaItemsResults.OrEmptyIfNull().FirstOrDefault(x => x.Id == id);
 
                 if (mediaItemResult != null)
                 {
@@ -171,7 +171,7 @@ namespace Media.Api.Services.Media
                 }
             }
 
-            return new PagedResults<IEnumerable<MediaItemServiceModel>>(randomMediaItemsResults.Count, PaginationConstants.DefaultPageIndex)
+            return new PagedResults<IEnumerable<MediaItemServiceModel>>(unorderedMediaItemsResults.Count, model.ItemsPerPage)
             { 
                 Data = mediaItemsResults
             };

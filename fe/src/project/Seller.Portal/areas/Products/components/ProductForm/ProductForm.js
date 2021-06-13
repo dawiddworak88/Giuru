@@ -12,10 +12,6 @@ import QueryStringSerializer from "../../../../../../shared/helpers/serializers/
 
 function ProductForm(props) {
 
-    console.log(props);
-    console.log(props.images);
-    console.log(props.files);
-
     const categoriesProps = {
         options: props.categories,
         getOptionLabel: (option) => option.name

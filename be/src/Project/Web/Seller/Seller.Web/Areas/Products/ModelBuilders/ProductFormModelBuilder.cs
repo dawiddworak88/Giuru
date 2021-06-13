@@ -133,20 +133,10 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
                     if (product.Images != null && product.Images.Any())
                     {
-                        var uniqueImages = new List<Guid>();
-
-                        foreach (var image in product.Images)
-                        {
-                            if (!uniqueImages.Contains(image))
-                            {
-                                uniqueImages.Add(image);
-                            }
-                        }
-
                         var imageMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(
                             componentModel.Token,
                             componentModel.Language,
-                            uniqueImages.ToEndpointParameterString(),
+                            product.Images.Distinct().ToEndpointParameterString(),
                             PaginationConstants.DefaultPageIndex,
                             PaginationConstants.DefaultPageSize);
 
@@ -170,20 +160,10 @@ namespace Seller.Web.Areas.ModelBuilders.Products
 
                     if (product.Files != null && product.Files.Any())
                     {
-                        var uniqueFiles = new List<Guid>();
-
-                        foreach (var file in product.Files)
-                        {
-                            if (!uniqueFiles.Contains(file))
-                            {
-                                uniqueFiles.Add(file);
-                            }
-                        }
-
                         var fileMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(
                             componentModel.Token,
                             componentModel.Language,
-                            uniqueFiles.ToEndpointParameterString(),
+                            product.Files.Distinct().ToEndpointParameterString(),
                             PaginationConstants.DefaultPageIndex,
                             PaginationConstants.DefaultPageSize);
 
