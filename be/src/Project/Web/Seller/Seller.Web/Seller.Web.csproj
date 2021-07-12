@@ -10,8 +10,8 @@
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="4.1.0" />
     <PackageReference Include="ClosedXML" Version="0.95.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.15" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.15">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.16" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.16">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
