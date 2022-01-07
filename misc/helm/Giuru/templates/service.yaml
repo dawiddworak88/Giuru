@@ -1,0 +1,130 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-api-service
+spec:
+  type: ClusterIP
+  selector:
+    app: client-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: basket-api-service
+spec:
+  type: ClusterIP
+  selector:
+    app: basket-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ordering-api-service
+spec:
+  type: ClusterIP
+  selector:
+    app: ordering-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: media-api-service
+spec:
+  type: ClusterIP
+  selector:
+    app: media-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog-api-service
+spec:
+  type: ClusterIP
+  selector:
+    app: catalog-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: react-ssr-web-service
+spec:
+  type: ClusterIP
+  selector:
+    app: react-ssr-web
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: identity-api-service
+spec:
+  type: ClusterIP
+  selector:
+    app: identity-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-api-service
+spec:
+  type: ClusterIP
+  selector:
+    app: inventory-api
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: buyer-web-service
+spec:
+  type: ClusterIP
+  selector:
+    app: buyer-web
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: seller-web-service
+spec:
+  type: ClusterIP
+  selector:
+    app: seller-web
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80

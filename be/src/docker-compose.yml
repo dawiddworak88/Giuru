@@ -1,0 +1,146 @@
+version: '3.8'
+
+services:
+
+  rabbitmq:
+    image: rabbitmq
+    restart: always
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    restart: always
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
+    restart: always
+
+  basketdata:
+    image: redis:alpine
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
+    restart: always
+    depends_on:
+      - elasticsearch
+
+  logstash:
+    build:
+      context: DockerServices/logstash/
+      args:
+        ELK_VERSION: ${ELK_VERSION}
+    restart: always
+    depends_on:
+      - elasticsearch
+
+  react-ssr:
+    image: ${REGISTRY:-giuru}/react-ssr:${PLATFORM:-linux}-${TAG:-latest}
+    build: 
+      context: ../../fe
+      dockerfile: Dockerfile-ssr-local
+    restart: always
+
+  sqldata:
+    image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+    restart: always
+
+  media-api:
+    image: ${REGISTRY:-giuru}/media-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Media/Media.Api/Dockerfile
+    restart: always
+    depends_on:
+      - azurite
+      - sqldata
+
+  client-api:
+    image: ${REGISTRY:-giuru}/client-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Client/Client.Api/Dockerfile
+    restart: always
+    depends_on: 
+      - sqldata
+
+  inventory-api:
+    image: ${REGISTRY:-giuru}/inventory-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Inventory/Inventory.Api/Dockerfile
+    restart: always
+    depends_on: 
+      - sqldata
+      - catalog-api
+      - rabbitmq
+
+  catalog-api:
+    image: ${REGISTRY:-giuru}/catalog-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Catalog/Catalog.Api/Dockerfile
+    restart: always
+    depends_on: 
+      - sqldata
+      - elasticsearch
+      - rabbitmq
+      - media-api
+
+  catalog-backgroundtasks:
+    image: ${REGISTRY:-giuru}/catalog-backgroundtasks:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Catalog/Catalog.BackgroundTasks/Dockerfile
+    restart: always
+    depends_on: 
+      - catalog-api
+      - sqldata
+      - rabbitmq
+
+  identity-api:
+    image: ${REGISTRY:-giuru}/identity-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Identity/Identity.Api/Dockerfile
+    restart: always
+    depends_on: 
+      - sqldata
+      - react-ssr
+
+  basket-api:
+    image: ${REGISTRY:-giuru}/basket-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Basket/Basket.Api/Dockerfile
+    depends_on:
+      - basketdata
+      - identity-api
+      - rabbitmq
+
+  ordering-api:
+    image: ${REGISTRY:-giuru}/ordering-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Ordering/Ordering.Api/Dockerfile
+    depends_on:
+      - catalog-api
+      - rabbitmq
+
+  seller-web:
+    image: ${REGISTRY:-giuru}/seller-web:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Web/Seller/Seller.Web/Dockerfile
+    restart: always
+    depends_on: 
+      - react-ssr
+      - identity-api
+
+  buyer-web:
+    image: ${REGISTRY:-giuru}/buyer-web:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Web/Buyer/Buyer.Web/Dockerfile
+    restart: always
+    depends_on: 
+      - react-ssr
+      - identity-api

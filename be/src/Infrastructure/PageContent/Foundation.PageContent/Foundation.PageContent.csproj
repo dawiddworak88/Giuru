@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Localization\Foundation.Localization\Foundation.Localization.csproj" />
+  </ItemGroup>
+
+</Project>

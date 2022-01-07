@@ -1,0 +1,21 @@
+.content-grid {
+    .content-grid-item {
+        .media-content {
+            padding: 1rem;
+        }
+
+        &__title a {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        &__title a:hover {
+            color: $primary;
+        }
+    }
+}

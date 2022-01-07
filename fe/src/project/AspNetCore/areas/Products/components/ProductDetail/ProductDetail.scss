@@ -1,0 +1,88 @@
+@import "../../../../shared/components/CarouselGrid/CarouselGrid.scss";
+
+.product-detail {
+    &__feature-title {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    &__image-gallery {
+        position: sticky;
+        top: 8px;
+    }
+
+    &__sku {
+        font-size: 0.9rem;
+    }
+
+    &__expected-delivery {
+        font-size: 0.8rem;
+    }
+
+    &__restockable-in-days {
+        font-size: 0.8rem;
+    }
+
+    &__head {
+        min-height: 630px;
+    }
+
+    &__price {
+        margin-top: 1rem;
+
+        a {
+            color: $primary;
+        }
+    }
+
+    &__brand {
+        a:hover {
+            color: $primary;
+        }
+    }
+
+    &__in-stock {
+        margin-top: 1rem;
+        color: darkgreen;
+        font-size: 1.1rem;
+        font-weight: 700;
+    }
+
+    &__product-information {
+        margin-top: 1.5rem;
+
+        h3 {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        dl {
+            display: flex;
+            flex-flow: wrap;
+            border-top: 1px solid $swamp;
+        }
+
+        dt {
+            padding: 1rem;
+            background-color: $lightgrey;
+            border-bottom: 1px solid $swamp;
+            width: 50%;
+        }
+
+        dd {
+            border-bottom: 1px solid $swamp;
+            padding: 1rem;
+            width: 50%;
+        }
+    }
+}
+
+.image-gallery-image {
+    min-height: 446px;
+
+    @media only screen and (max-width: $tablet) {
+        min-height: 300px;
+    }
+}

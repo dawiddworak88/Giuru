@@ -1,0 +1,36 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+  branches:
+    include:
+      - develop
+      - release/*
+
+pr:
+  branches:
+    include:
+      - develop
+      - release/*
+    
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+
+- task: UseDotNet@2
+  displayName: 'Use .NET 6'
+  inputs:
+    packageType: 'sdk'
+    version: '6.0.100'
+    includePreviewVersions: false
+
+- script: dotnet build --configuration $(buildConfiguration) be/src/AspNetCore.sln
+  displayName: 'Build solution'
+
+- task: WhiteSource Bolt@20

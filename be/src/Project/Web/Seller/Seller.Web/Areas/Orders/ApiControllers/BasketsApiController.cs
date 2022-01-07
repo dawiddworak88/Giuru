@@ -1,0 +1,90 @@
+﻿using Foundation.ApiExtensions.Controllers;
+using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.Services.MediaServices;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Options;
+using Seller.Web.Areas.Orders.ApiRequestModels;
+using Seller.Web.Areas.Orders.ApiResponseModels;
+using Seller.Web.Areas.Orders.Definitions;
+using Seller.Web.Areas.Orders.DomainModels;
+using Seller.Web.Areas.Orders.Repositories.Baskets;
+using Seller.Web.Shared.Configurations;
+using System.Globalization;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+
+namespace Seller.Web.Areas.Orders.ApiControllers
+{
+    [Area("Orders")]
+    public class BasketsApiController : BaseApiController
+    {
+        private readonly IBasketRepository basketRepository;
+        private readonly LinkGenerator linkGenerator;
+        private readonly IOptions<AppSettings> options;
+        private readonly IMediaHelperService mediaService;
+
+        public BasketsApiController(
+            IBasketRepository basketRepository,
+            LinkGenerator linkGenerator,
+            IOptions<AppSettings> options,
+            IMediaHelperService mediaService)
+        {
+            this.basketRepository = basketRepository;
+            this.linkGenerator = linkGenerator;
+            this.options = options;
+            this.mediaService = mediaService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index([FromBody] SaveBasketRequestModel model)
+        {
+            var basket = await this.basketRepository.SaveAsync(
+                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                CultureInfo.CurrentUICulture.Name,
+                model.Id,
+                model.Items.OrEmptyIfNull().Select(x => new BasketItem
+                {
+                    ProductId = x.ProductId,
+                    ProductSku = x.Sku,
+                    ProductName = x.Name,
+                    PictureUrl = !string.IsNullOrWhiteSpace(x.ImageSrc) ? x.ImageSrc : (x.ImageId.HasValue ? this.mediaService.GetFileUrl(this.options.Value.MediaUrl, x.ImageId.Value, OrdersConstants.Basket.BasketProductImageMaxWidth, OrdersConstants.Basket.BasketProductImageMaxHeight, true) : null),
+                    Quantity = x.Quantity,
+                    ExternalReference = x.ExternalReference,
+                    DeliveryFrom = x.DeliveryFrom,
+                    DeliveryTo = x.DeliveryTo,
+                    MoreInfo = x.MoreInfo
+                }));
+
+            var basketResponseModel = new BasketResponseModel
+            {
+                Id = basket.Id
+            };
+
+            var productIds = basket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
+
+            if (productIds.OrEmptyIfNull().Any())
+            {
+                basketResponseModel.Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
+                {
+                    ProductId = x.ProductId,
+                    ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
+                    Name = x.ProductName,
+                    Sku = x.ProductSku,
+                    Quantity = x.Quantity,
+                    ExternalReference = x.ExternalReference,
+                    ImageSrc = x.PictureUrl,
+                    ImageAlt = x.ProductName,
+                    DeliveryFrom = x.DeliveryFrom,
+                    DeliveryTo = x.DeliveryTo,
+                    MoreInfo = x.MoreInfo
+                });
+            }
+
+            return this.StatusCode((int)HttpStatusCode.OK, basketResponseModel);
+        }
+    }
+}

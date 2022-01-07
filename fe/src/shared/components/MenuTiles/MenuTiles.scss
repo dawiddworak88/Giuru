@@ -1,0 +1,37 @@
+.menu-tiles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 1.5rem 1.5rem;
+
+    .tile {
+        margin-right: 1rem;
+        margin-bottom: 1rem;
+        width: 7.5rem;
+        height: 7.5rem;
+        box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.02);
+        transition: all 0.5s ease;
+        transform: scale(1);
+        min-width: 7.5rem;
+
+        &:hover {
+            cursor: pointer;
+            transform: scale(1.15) perspective(1px);
+        }
+
+        &__icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: $swamp;
+            height: 5rem;
+        }
+
+        &__title {
+            color: $swamp;
+            font-size: 0.8rem;
+            text-align: center;
+            padding: 0 0.3rem;
+        }
+    }
+}

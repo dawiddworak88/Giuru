@@ -1,0 +1,91 @@
+using Foundation.Localization.Extensions;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
+using Serilog;
+using Serilog.Sinks.Logz.Io;
+using Foundation.Extensions.Filters;
+using Catalog.BackgroundTasks.DependencyInjection;
+using Foundation.Catalog.DependencyInjection;
+using Foundation.EventBus.Abstractions;
+using Catalog.BackgroundTasks.IntegrationEvents;
+using Microsoft.Extensions.Options;
+using Foundation.Localization.Definitions;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.ConfigureAppConfiguration((_, config) =>
+{
+    config.AddEnvironmentVariables();
+});
+
+builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+{
+    loggerConfiguration.MinimumLevel.Warning();
+    loggerConfiguration.Enrich.WithProperty("ApplicationContext", typeof(Program).Namespace);
+    loggerConfiguration.Enrich.FromLogContext();
+    loggerConfiguration.WriteTo.Console();
+
+    if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogstashUrl"]))
+    {
+        loggerConfiguration.WriteTo.Http(hostingContext.Configuration["LogstashUrl"]);
+    }
+
+    if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoToken"])
+        && !string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoType"])
+        && !string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoDataCenterSubDomain"]))
+    {
+        loggerConfiguration.WriteTo.LogzIo(hostingContext.Configuration["LogzIoToken"],
+            hostingContext.Configuration["LogzIoType"],
+            new LogzioOptions
+            {
+                DataCenterSubDomain = hostingContext.Configuration["LogzIoDataCenterSubDomain"]
+            });
+    }
+
+    loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
+});
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+}).AddNewtonsoftJson();
+
+builder.Services.AddLocalization();
+
+builder.Services.AddApiVersioning();
+
+builder.Services.RegisterDatabaseDependencies(builder.Configuration);
+
+builder.Services.RegisterSearchDependencies(builder.Configuration);
+
+builder.Services.RegisterEventBus(builder.Configuration);
+
+builder.Services.RegisterCatalogBaseDependencies();
+
+builder.Services.RegisterCatalogBackgroundTasksDependencies();
+
+var app = builder.Build();
+
+IdentityModelEventSource.ShowPII = true;
+
+app.UseRouting();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.UseCustomHeaderRequestLocalizationProvider(builder.Configuration, app.Services.GetService<IOptionsMonitor<LocalizationSettings>>());
+
+var eventBus = app.Services.GetService<IEventBus>();
+
+eventBus.Subscribe<RebuildCatalogSearchIndexIntegrationEvent, IIntegrationEventHandler<RebuildCatalogSearchIndexIntegrationEvent>>();
+eventBus.Subscribe<RebuildCategorySchemasIntegrationEvent, IIntegrationEventHandler<RebuildCategorySchemasIntegrationEvent>>();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
+
+app.Run();

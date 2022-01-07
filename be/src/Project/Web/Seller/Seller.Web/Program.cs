@@ -1,0 +1,133 @@
+using Foundation.Localization.Definitions;
+using Foundation.Localization.Extensions;
+using Seller.Web.Shared.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Foundation.Extensions.DependencyInjection;
+using Foundation.PageContent.DependencyInjection;
+using Foundation.Security.DependencyInjection;
+using Foundation.ApiExtensions.DependencyInjection;
+using Foundation.Account.DependencyInjection;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.HttpOverrides;
+using Serilog;
+using Serilog.Sinks.Logz.Io;
+using Seller.Web.Areas.Orders.DependencyInjection;
+using Seller.Web.Areas.Clients.DependencyInjection;
+using Seller.Web.Areas.Products.DependencyInjection;
+using Seller.Web.Areas.Settings.DependencyInjection;
+using Seller.Web.Areas.Media.DependencyInjection;
+using Foundation.Extensions.Filters;
+using Microsoft.AspNetCore.Http;
+using Seller.Web.Areas.Inventory.DependencyInjection;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.ConfigureAppConfiguration((_, config) =>
+{
+    config.AddEnvironmentVariables();
+});
+
+builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+{
+    loggerConfiguration.MinimumLevel.Warning();
+    loggerConfiguration.Enrich.WithProperty("ApplicationContext", typeof(Program).Namespace);
+    loggerConfiguration.Enrich.FromLogContext();
+    loggerConfiguration.WriteTo.Console();
+
+    if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogstashUrl"]))
+    {
+        loggerConfiguration.WriteTo.Http(hostingContext.Configuration["LogstashUrl"]);
+    }
+
+    if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoToken"])
+        && !string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoType"])
+        && !string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoDataCenterSubDomain"]))
+    {
+        loggerConfiguration.WriteTo.LogzIo(hostingContext.Configuration["LogzIoToken"],
+            hostingContext.Configuration["LogzIoType"],
+            new LogzioOptions
+            {
+                DataCenterSubDomain = hostingContext.Configuration["LogzIoDataCenterSubDomain"]
+            });
+    }
+
+    loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
+});
+
+builder.Services.AddRazorPages();
+
+builder.Services.AddLocalization();
+
+builder.Services.AddCultureRouteConstraint();
+
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+}).AddNewtonsoftJson();
+
+builder.Services.RegisterClientAccountDependencies(builder.Configuration);
+
+builder.Services.RegisterApiExtensionsDependencies();
+
+builder.Services.RegisterLocalizationDependencies();
+
+builder.Services.RegisterGeneralDependencies();
+
+builder.Services.RegisterDependencies();
+
+builder.Services.RegisterOrdersAreaDependencies();
+
+builder.Services.RegisterClientsAreaDependencies();
+
+builder.Services.RegisterInventoryAreaDependencies();
+
+builder.Services.RegisterProductsAreaDependencies();
+
+builder.Services.RegisterSettingsAreaDependencies();
+
+builder.Services.RegisterMediaAreaDependencies();
+
+builder.Services.ConfigureSettings(builder.Configuration);
+
+var app = builder.Build();
+
+IdentityModelEventSource.ShowPII = true;
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedProto
+});
+
+app.UseGeneralException();
+
+app.UseResponseCompression();
+
+app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
+
+app.UseGeneralStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.UseCustomRouteRequestLocalizationProvider(app.Services.GetService<IOptionsMonitor<LocalizationSettings>>());
+
+app.UseSecurityHeaders(builder.Configuration);
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+                name: "localizedAreaRoute",
+                pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization();
+
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization();
+});
+
+app.Run();

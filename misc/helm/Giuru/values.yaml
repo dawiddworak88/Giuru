@@ -1,0 +1,57 @@
+# Default values for helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+environment: "#{Environment}#"
+nodeEnvironment: "#{NodeEnvironment}#"
+isMarketplace: "#{IsMarketplace}#"
+organisationId: "#{OrganisationId}#"
+serverSideRenderingEndpoint: "#{ServerSideRenderingEndpoint}#"
+identityUrl: "#{IdentityUrl}#"
+mediaUrl: "#{MediaUrl}#"
+catalogUrl: "#{CatalogUrl}#"
+basketUrl: "#{BasketUrl}#"
+orderUrl: "#{OrderUrl}#"
+clientUrl: "#{ClientUrl}#"
+inventoryUrl: "#{InventoryUrl}#"
+cdnUrl: "#{CdnUrl}#"
+elasticsearchUrl: "#{ElasticsearchUrl}#"
+logzIoToken: "#{LogzIoToken}#"
+logzIoType: "#{LogzIoType}#"
+logzIoDataCenterSubDomain: "#{LogzIoDataCenterSubDomain}#"
+eventBusConnection: "#{EventBusConnection}#"
+eventBusRetryCount: "#{EventBusRetryCount}#"
+googleTagManagerIdentifier: "#{GoogleTagManagerIdentifier}#"
+defaultCulture: "en"
+supportedCultures: "en,de,pl"
+inventoryApi:
+  connectionString: "#{InventoryApi--ConnectionString}#"
+clientApi:
+  connectionString: "#{ClientApi--ConnectionString}#"
+mediaApi:
+  connectionString: "#{MediaApi--ConnectionString}#"
+  storageConnectionString: "#{MediaApi--StorageConnectionString}#"
+catalogApi:
+  connectionString: "#{CatalogApi--ConnectionString}#"
+  elasticsearchIndex: "catalog"
+  brands: "#{CatalogApi--Brands}#"
+identityApi:
+  azureKeyVaultGiuruIdentityServer4Certificate: "#{IdentityApi--AzureKeyVaultGiuruIdentityServer4Certificate}#"
+  azureKeyVaultGiuruIdentityServer4CertificatePassword: "#{IdentityApi--AzureKeyVaultGiuruIdentityServer4CertificatePassword}#"
+  azureKeyVaultClientId: "#{IdentityApi--AzureKeyVaultClientId}#"
+  azureKeyVaultClientSecret: "#{IdentityApi--AzureKeyVaultClientSecret}#"
+  connectionString: "#{IdentityApi--ConnectionString}#"
+  clients: "#{IdentityApi--Clients}#"
+  accounts: "#{IdentityApi--Accounts}#"
+  organisations: "#{IdentityApi--Organisations}#"
+  privacyPolicy: "#{IdentityApi--PrivacyPolicy}#"
+  regulations: "#{IdentityApi--Regulations}#"
+basketApi:
+  connectionString: "#{BasketApi--ConnectionString}#"
+orderingApi:
+  connectionString: "#{OrderingApi--ConnectionString}#"
+buyerWeb:
+  clientId: "#{BuyerWeb--ClientId}#"
+  clientSecret: "#{BuyerWeb--ClientSecret}#"
+sellerWeb:
+  clientId: "#{SellerWeb--ClientId}#"
+  clientSecret: "#{SellerWeb--ClientSecret}#"

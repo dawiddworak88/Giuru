@@ -1,0 +1,18 @@
+.carousel-grid {
+    background-color: $grey;
+
+    &__item {
+        background-color: white;
+        margin-top: 2rem;
+        padding: 2rem;
+    }
+
+    &__item:first-child {
+        margin-top: 0;
+    }
+
+    .card {
+        max-width: 270px;
+        margin: 2rem;
+    }
+}

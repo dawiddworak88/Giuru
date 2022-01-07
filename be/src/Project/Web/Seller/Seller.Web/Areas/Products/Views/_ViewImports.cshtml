@@ -1,0 +1,9 @@
+﻿@using Microsoft.Extensions.Localization
+@using Seller.Web
+@using Foundation.Localization
+@using Foundation.PageContent.Services.MetaTags
+@inject IStringLocalizer<GlobalResources> GlobalLocalizer
+@inject IStringLocalizer<ProductResources> Localizer
+@inject IMetaTagsService MetaTagsService
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, Foundation.Prerendering

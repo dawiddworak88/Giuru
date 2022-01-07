@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddCategory" xml:space="preserve">
+    <value>Kategorie hinzufügen</value>
+  </data>
+  <data name="CategoryDeletedSuccessfully" xml:space="preserve">
+    <value>Kategorie wurde erfolgreich gelöscht.</value>
+  </data>
+  <data name="CategoryNotFound" xml:space="preserve">
+    <value>Kategorie nicht gefunden.</value>
+  </data>
+  <data name="CategoryPicture" xml:space="preserve">
+    <value>Kategorie Bild</value>
+  </data>
+  <data name="CategorySavedSuccessfully" xml:space="preserve">
+    <value>Kategorie wurde erfolgreich gespeichert.</value>
+  </data>
+  <data name="EditCategory" xml:space="preserve">
+    <value>Kategorie bearbeiten</value>
+  </data>
+  <data name="EditProduct" xml:space="preserve">
+    <value>Produkt bearbeiten</value>
+  </data>
+  <data name="EditProductAttribute" xml:space="preserve">
+    <value>Produktattribut bearbeiten</value>
+  </data>
+  <data name="EditProductAttributeItem" xml:space="preserve">
+    <value>Wert des Attributs bearbeiten</value>
+  </data>
+  <data name="EnterCategoryName" xml:space="preserve">
+    <value>Bitte den Kategorienamen eingeben</value>
+  </data>
+  <data name="EnterProductAttributeItemName" xml:space="preserve">
+    <value>Biite den Wert des Attributs eingeben</value>
+  </data>
+  <data name="EnterProductAttributeName" xml:space="preserve">
+    <value>Bitte Produktattributname eingeben</value>
+  </data>
+  <data name="EnterSkuText" xml:space="preserve">
+    <value>Bitte SKU eingeben</value>
+  </data>
+  <data name="IsNew" xml:space="preserve">
+    <value>Neu</value>
+  </data>
+  <data name="IsPublished" xml:space="preserve">
+    <value>Veröffentlicht</value>
+  </data>
+  <data name="NewProduct" xml:space="preserve">
+    <value>Neues Produkt</value>
+  </data>
+  <data name="NewProductAttribute" xml:space="preserve">
+    <value>Neues Produktattribut</value>
+  </data>
+  <data name="NewProductAttributeItem" xml:space="preserve">
+    <value>Neue Wert des Produktattributs</value>
+  </data>
+  <data name="ParentCategory" xml:space="preserve">
+    <value>Eltern-Kategorie</value>
+  </data>
+  <data name="ParentCategoryNotFound" xml:space="preserve">
+    <value>Eltern Kategorie nicht gefunden </value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>Produkt</value>
+  </data>
+  <data name="ProductAlreadyExists" xml:space="preserve">
+    <value>Das Produkt wurde schon erstellt.</value>
+  </data>
+  <data name="ProductAttributeDeletedSuccessfully" xml:space="preserve">
+    <value>Das Produktattribut wurde erfolgreich gelöscht.</value>
+  </data>
+  <data name="ProductAttributeItemDeletedSuccessfully" xml:space="preserve">
+    <value>Der Wert des Produktattributs wurde erfolgreich gelöscht.</value>
+  </data>
+  <data name="ProductAttributeItemNotFound" xml:space="preserve">
+    <value>Der Wert des Produktattributs nicht gefunden.</value>
+  </data>
+  <data name="ProductAttributeItemSavedSuccessfully" xml:space="preserve">
+    <value>Die Wert des Produktattributs wurde erfolgreich gespeichert.</value>
+  </data>
+  <data name="ProductAttributeNotEmpty" xml:space="preserve">
+    <value>Bitte zuerst die Werte des Produktattributs löschen.</value>
+  </data>
+  <data name="ProductAttributeNotFound" xml:space="preserve">
+    <value>Produktattribut nicht gefunden.</value>
+  </data>
+  <data name="ProductAttributeSavedSuccessfully" xml:space="preserve">
+    <value>Das Produktattribut wurde erfolgreich gespeichert.</value>
+  </data>
+  <data name="ProductDeletedSuccessfully" xml:space="preserve">
+    <value>Produkt wurde erfolgreich gelöscht.</value>
+  </data>
+  <data name="ProductDetailText" xml:space="preserve">
+    <value>Produkt</value>
+  </data>
+  <data name="ProductFilesLabel" xml:space="preserve">
+    <value>Produkt Dateien</value>
+  </data>
+  <data name="ProductInformation" xml:space="preserve">
+    <value>Produktinformation</value>
+  </data>
+  <data name="ProductPicturesLabel" xml:space="preserve">
+    <value>Produkt Bilder</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>Produkte</value>
+  </data>
+  <data name="ProductSavedSuccessfully" xml:space="preserve">
+    <value>Das Produkt wurde erfolgreich gespeichert.</value>
+  </data>
+  <data name="ProductsDeleteCategoryConflict" xml:space="preserve">
+    <value>Löschen Sie sie zuerst Produkte, die zu dieser Kategorie gehören. </value>
+  </data>
+  <data name="ProductVariants" xml:space="preserve">
+    <value>Produktvarianten</value>
+  </data>
+  <data name="ProductVariantsDeleteProductConflict" xml:space="preserve">
+    <value>Bitte zuerst die Varianten des Produkts löschen.</value>
+  </data>
+  <data name="SelectCategory" xml:space="preserve">
+    <value>Kategorie wählen</value>
+  </data>
+  <data name="SelectPrimaryProduct" xml:space="preserve">
+    <value>Bitte Primärprodukt auswählen</value>
+  </data>
+  <data name="Sku" xml:space="preserve">
+    <value>SKU</value>
+  </data>
+  <data name="SkuLabel" xml:space="preserve">
+    <value>SKU:</value>
+  </data>
+  <data name="SkuRequiredErrorMessage" xml:space="preserve">
+    <value>Bitte SKU eingeben</value>
+  </data>
+  <data name="SubcategoriesDeleteCategoryConflict" xml:space="preserve">
+    <value>Bitte zuerst die Unterkategorien löschen, die zu dieser Kategorie gehören.</value>
+  </data>
+</root>

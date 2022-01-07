@@ -1,0 +1,8 @@
+@import "../../../../../../shared/layouts/index.scss";
+@import "../../../../../../shared/layouts/main.scss";
+
+.settings {
+    @media only screen and (max-width: $tablet) {
+        margin-top: 1.5rem;
+    }
+}

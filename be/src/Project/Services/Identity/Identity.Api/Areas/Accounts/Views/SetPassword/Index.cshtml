@@ -1,0 +1,22 @@
+﻿<div id="root" asp-prerender-module="SetPasswordPage" asp-prerender-data="@Model">
+</div>
+
+<script>
+    window.data = @Html.Raw(Json.Serialize(@Model));
+</script>
+
+@section MetaTags {
+    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("SetPassword"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("SetPassword")))
+    {
+        <meta name="description" content="@this.Localizer.GetString("SetPassword")" />
+    }
+}
+
+@section HeadStyles {
+    <link rel="stylesheet" href="~/dist/css/setpasswordpage.css" type="text/css" asp-append-version="true" />
+}
+
+@section BodyScripts {
+    <script src="~/dist/js/setpasswordpage.js" asp-append-version="true"></script>
+}

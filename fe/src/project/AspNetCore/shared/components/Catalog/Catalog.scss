@@ -1,0 +1,45 @@
+.catalog {
+    .catalog-item {
+        .media-content {
+            padding: 1rem;
+        }
+
+        &__title a {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            font-size: 1.25rem;
+        }
+
+        &__title a:hover {
+            color: $primary;
+        }
+
+        &__brand {
+            a:hover {
+                color: $primary;
+            }
+        }
+
+        &__in-stock {
+            margin-top: 0.5rem;
+            color: darkgreen;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        &__price {
+            margin-top: 0.5rem;
+
+            a {
+                color: $primary;
+            }
+        }
+
+        &__sku {
+            font-size: 0.9rem;
+        }
+    }
+}

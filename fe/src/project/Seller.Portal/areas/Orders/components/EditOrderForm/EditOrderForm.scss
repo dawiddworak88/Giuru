@@ -1,0 +1,16 @@
+.edit-order {
+    &__items-subtitle {
+        margin-bottom: 0.5rem !important;
+    }
+
+    &__items {
+        border: 1px grey solid;
+        border-radius: 4px;
+        margin-top: 0.5rem;
+    }
+
+    &__item-product-image {
+        height: 100px;
+        max-width: 250px;
+    }
+}

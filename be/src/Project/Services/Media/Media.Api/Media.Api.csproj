@@ -1,0 +1,160 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
+    <UserSecretsId>053514f2-d3f9-4922-b2fc-448cecc879d2</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\Armchairs.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\Beds.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\BoxSprings.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\CoffeeTables.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\Couches.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\Mattresses.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\Poufs.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\Sectionals.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Categories\Sets.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Headers\favicon.png" />
+    <None Remove="Infrastructure\Media\Seeds\Images\Headers\logo.png" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings_1024x400.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings_1600x400.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings_414x286.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs_1024x400.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs_1600x400.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs_414x286.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Corners.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Corners_1024x400.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Corners_1600x400.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Corners_414x286.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Sets.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Sets_1024x400.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Sets_1600x400.jpg" />
+    <None Remove="Infrastructure\Media\Seeds\Images\HeroSliderItems\Sets_414x286.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\Armchairs.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\Beds.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\CoffeeTables.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\Couches.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\Mattresses.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\Poufs.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\Sectionals.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Categories\Sets.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Headers\favicon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\Headers\logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings_1024x400.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings_1600x400.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Boxsprings_414x286.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs_1024x400.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs_1600x400.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Chairs_414x286.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Corners.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Corners_1024x400.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Corners_1600x400.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Corners_414x286.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Sets.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Sets_1024x400.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Sets_1600x400.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Infrastructure\Media\Seeds\Images\HeroSliderItems\Sets_414x286.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.6.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.1" />
+    <PackageReference Include="FluentValidation" Version="9.2.2" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="4.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="6.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+    <PackageReference Include="MimeMapping" Version="1.0.1.30" />
+    <PackageReference Include="SkiaSharp" Version="2.80.2" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.80.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.Http" Version="7.2.0" />
+    <PackageReference Include="Serilog.Sinks.Logz.Io" Version="2.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Infrastructure\Account\Foundation.Account\Foundation.Account.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\ApiExtensions\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
+  </ItemGroup>
+
+</Project>

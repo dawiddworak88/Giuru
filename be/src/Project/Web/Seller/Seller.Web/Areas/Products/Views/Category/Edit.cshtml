@@ -1,0 +1,22 @@
+﻿<div id="root" asp-prerender-module="SellerCategoryPage" asp-prerender-data="@Model">
+</div>
+
+<script>
+    window.data = @Html.Raw(Json.Serialize(@Model));
+</script>
+
+@section MetaTags {
+    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("Category"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("Category")))
+    {
+        <meta name="description" content="@this.Localizer.GetString("Category")" />
+    }
+}
+
+@section HeadStyles {
+    <link rel="stylesheet" href="~/dist/css/categorypage.css" type="text/css" asp-append-version="true" />
+}
+
+@section BodyScripts {
+    <script src="~/dist/js/categorypage.js" asp-append-version="true"></script>
+}

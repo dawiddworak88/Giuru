@@ -1,0 +1,90 @@
+{
+  "name": "aspnetcore-react-ssr",
+  "version": "0.1.0",
+  "private": false,
+  "dependencies": {
+    "@date-io/moment": "1.3.13",
+    "@material-ui/core": "4.11.2",
+    "@material-ui/icons": "4.11.2",
+    "@material-ui/lab": "4.0.0-alpha.57",
+    "@material-ui/pickers": "3.2.10",
+    "@testing-library/jest-dom": "5.1.1",
+    "@testing-library/react": "10.0.1",
+    "@testing-library/user-event": "10.0.0",
+    "ajv": "6.12.6",
+    "bulma": "0.9.1",
+    "express": "4.17.1",
+    "html-react-parser": "0.14.2",
+    "json-schema-merge-allof": "0.7.0",
+    "jsonpointer": "5.0.0",
+    "lodash.topath": "4.5.2",
+    "lodash.union": "4.6.0",
+    "moment": "2.29.1",
+    "react": "17.0.1",
+    "react-autosuggest": "10.0.4",
+    "react-beautiful-dnd": "13.1.0",
+    "react-dom": "17.0.1",
+    "react-dropzone": "11.2.4",
+    "react-feather": "2.0.9",
+    "react-image-gallery": "1.0.8",
+    "react-lazyload": "3.1.0",
+    "react-multi-carousel": "2.5.5",
+    "react-responsive-carousel": "3.2.11",
+    "react-scripts": "4.0.1",
+    "react-toastify": "6.1.0",
+    "shortid": "2.2.16",
+    "whatwg-fetch": "3.5.0"
+  },
+  "scripts": {
+    "storybook": "SET NODE_ENV=development&&start-storybook -p 9009 -s public",
+    "build-storybook": "SET NODE_ENV=development&&build-storybook -s public",
+    "build-fe-dev": "SET NODE_ENV=development&&webpack --mode development",
+    "build-fe": "SET NODE_ENV=production&&webpack --mode production",
+    "watch-fe": "SET NODE_ENV=development&&webpack --mode development -w",
+    "ssr": "node server/bootstrap.js"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "7.9.0",
+    "@babel/plugin-proposal-class-properties": "7.10.1",
+    "@babel/preset-env": "7.9.0",
+    "@babel/register": "7.9.0",
+    "@storybook/addon-actions": "5.3.17",
+    "@storybook/addon-links": "5.3.17",
+    "@storybook/addons": "5.3.17",
+    "@storybook/preset-create-react-app": "2.1.0",
+    "@storybook/react": "5.3.17",
+    "autoprefixer": "<10.0.0",
+    "babel-plugin-file-loader": "2.0.0",
+    "babel-preset-react-app": "9.1.2",
+    "clean-webpack-plugin": "3.0.0",
+    "copy-webpack-plugin": "5.1.1",
+    "css-loader": "3.4.2",
+    "file-loader": "6.0.0",
+    "ignore-styles": "5.0.1",
+    "mini-css-extract-plugin": "0.9.0",
+    "node-sass": "4.13.1",
+    "optimize-css-assets-webpack-plugin": "5.0.3",
+    "postcss": "8.2.10",
+    "postcss-loader": "3.0.0",
+    "sass-loader": "8.0.2",
+    "style-loader": "1.1.3",
+    "url-loader": "4.0.0",
+    "webpack": "4.44.2",
+    "webpack-cli": "3.3.12"
+  }
+}
