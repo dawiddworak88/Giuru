@@ -32,6 +32,8 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 ResultsLabel = this.globalLocalizer.GetString("Results"),
                 ByLabel = this.globalLocalizer.GetString("By"),
                 InStockLabel = this.globalLocalizer.GetString("InStock"),
+                BasketLabel = this.globalLocalizer.GetString("BasketLabel"),
+                PrimaryFabricLabel = this.globalLocalizer.GetString("PrimaryFabricLabel"),
                 NoResultsLabel = this.globalLocalizer.GetString("NoResults"),
                 GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"],
                 DisplayedRowsLabel = this.globalLocalizer["DisplayedRows"],

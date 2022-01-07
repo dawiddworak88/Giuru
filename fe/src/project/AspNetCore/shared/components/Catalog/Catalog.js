@@ -5,8 +5,9 @@ import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
 import { Context } from "../../../../../shared/stores/Store";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
-import { TablePagination } from "@material-ui/core";
+import { TablePagination, Button,  } from "@material-ui/core";
 import CatalogConstants from "./CatalogConstants";
+import { ShoppingCart } from "@material-ui/icons";
 
 function Catalog(props) {
 
@@ -62,7 +63,6 @@ function Catalog(props) {
     };
 
     return (
-
         <section className="catalog section">
             <h1 className="title is-3">{props.title}</h1>
             {items && items.length > 0 ?
@@ -87,9 +87,9 @@ function Catalog(props) {
                                         <div className="media-content">
                                             <p className="catalog-item__sku">{props.skuLabel} {item.sku}</p>
                                             <h2 className="catalog-item__title"><a href={item.url}>{item.title}</a></h2>
-                                            {item.brandName &&
-                                                <div className="catalog-item__brand">
-                                                    <h3>{props.byLabel} <a href={item.brandUrl}>{item.brandName}</a></h3>
+                                            {item.productAttributes && item.productAttributes.find(x => x.key == "primaryFabrics") &&
+                                                <div className="catalog-item__fabric">
+                                                    <h3>{props.primaryFabricLabel} {item.productAttributes.find(x => x.key === "primaryFabrics").values[0]}</h3>
                                                 </div>
                                             }
                                             {item.inStock && item.availableQuantity && item.availableQuantity >  0 &&
@@ -98,6 +98,11 @@ function Catalog(props) {
                                                 </div>
                                             }
                                         </div>
+                                        {props.isLoggedIn && 
+                                            <Button variant="contained" startIcon={<ShoppingCart />}>
+                                                {props.basketLabel}
+                                            </Button>
+                                        }
                                     </div>
                                 </div>
                             )}

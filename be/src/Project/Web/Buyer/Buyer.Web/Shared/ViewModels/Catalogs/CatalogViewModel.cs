@@ -12,6 +12,9 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string SkuLabel { get; set; }
         public string ByLabel { get; set; }
         public string InStockLabel { get; set; }
+        public string BasketLabel { get; set; }
+        public string BasketUrl { get; set; }
+        public string PrimaryFabricLabel { get; set; }
         public bool IsAuthenticated { get; set; }
         public string SignInUrl { get; set; }
         public string SignInToSeePricesLabel { get; set; }

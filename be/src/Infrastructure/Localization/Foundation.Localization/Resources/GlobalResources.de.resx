@@ -423,4 +423,10 @@
   <data name="LastName" xml:space="preserve">
     <value>Nachname</value>
   </data>
+  <data name="BasketLabel" xml:space="preserve">
+    <value>Zum Warenkorb hinzufügen</value>
+  </data>
+  <data name="PrimaryFabricLabel" xml:space="preserve">
+    <value>Stoff</value>
+  </data>
 </root>
