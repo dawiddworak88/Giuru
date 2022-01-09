@@ -117,15 +117,12 @@ function Header(props) {
                             </div>
                         </form>
                     </div>
-                    
                     <div className="navbar-end">
                         {props.isLoggedIn ? (
                             props.signOutLink &&
                                 <div className="navbar-item">
-                                    <div className="client-login">
-                                        <span>{props.welcomeText} {props.name}, </span>
-                                        <a href={props.signOutLink.url} className="is-text">{props.signOutLink.out}</a>
-                                    </div>
+                                    <span>{props.welcomeText} {props.name}, </span>
+                                    <a href={props.signOutLink.url} className="button is-text">{props.signOutLink.text}</a>
                                 </div>
                         ) : (
                             props.signInLink &&

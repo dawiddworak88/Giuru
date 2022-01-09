@@ -14,21 +14,18 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
 {
     public class OrdersPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OrdersPageViewModel>
     {
-        private readonly IModelBuilder<BuyerHeaderViewModel> headerModelBuilder;
-        private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogOrderViewModel<Order>> ordersCatalogModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public OrdersPageModelBuilder(
-            IModelBuilder<BuyerHeaderViewModel> headerModelBuilder,
-            IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, CatalogOrderViewModel<Order>> ordersCatalogModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
-            this.menuTilesModelBuilder = menuTilesModelBuilder;
             this.ordersCatalogModelBuilder = ordersCatalogModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
             this.mainNavigationModelBuilder = mainNavigationModelBuilder;
@@ -39,9 +36,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             var viewModel = new OrdersPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
-                Header = this.headerModelBuilder.BuildModel(),
+                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
-                MenuTiles = this.menuTilesModelBuilder.BuildModel(),
                 Catalog = await this.ordersCatalogModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };

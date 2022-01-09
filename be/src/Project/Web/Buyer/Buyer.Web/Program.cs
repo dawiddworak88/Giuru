@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
 using Serilog.Sinks.Logz.Io;
 using Buyer.Web.Areas.Orders.DependencyInjection;
+using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -91,6 +92,8 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 app.UseGeneralException();
 
 app.UseResponseCompression();
+
+app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
 
 app.UseGeneralStaticFiles();
 

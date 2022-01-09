@@ -23,7 +23,8 @@ namespace Buyer.Web.Areas.Products.Controllers
             var componentModel = new ComponentModelBase
             {
                 Language = CultureInfo.CurrentUICulture.Name,
-                IsAuthenticated = this.User.Identity.IsAuthenticated
+                IsAuthenticated = this.User.Identity.IsAuthenticated,
+                Name = this.User.Identity.Name
             };
 
             var viewModel = await this.availableProductsPageModelBuilder.BuildModelAsync(componentModel);

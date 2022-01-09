@@ -49,7 +49,7 @@ namespace Identity.Api.Services.Users
 
         public async Task<UserServiceModel> CreateAsync(CreateUserServiceModel serviceModel)
         {
-            var timeNow = DateTime.Now;
+            var timeNow = DateTime.UtcNow;
             var timeExpiration = timeNow.AddHours(5);
 
             var existingOrganisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.ContactEmail == serviceModel.Email && x.IsActive);
@@ -89,7 +89,8 @@ namespace Identity.Api.Services.Users
                 });
 
                 await this.identityContext.SaveChangesAsync();
-                return await this.GetAsync(new GetUserServiceModel { Id = user.Id, Language = serviceModel.Language,  Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId});
+
+                return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(user.Id), Language = serviceModel.Language,  Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId});
             }
 
             var userAccount = new ApplicationUser
@@ -125,12 +126,32 @@ namespace Identity.Api.Services.Users
 
             });
 
-            return await this.GetAsync(new GetUserServiceModel { Id = userAccount.Id, Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
+            return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(userAccount.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
         }
 
-        public async Task<UserServiceModel> GetAsync(GetUserServiceModel serviceModel)
+        public async Task<UserServiceModel> GetById(GetUserServiceModel serviceModel)
         {
-            var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Id == serviceModel.Id || x.ExpirationId == Guid.Parse(serviceModel.Id));
+            var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Id == serviceModel.Id.ToString());
+
+            return new UserServiceModel
+            {
+                Id = user.Id,
+                Email = user.Email,
+                UserName = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                OrganisationId = user.OrganisationId,
+                TwoFactorEnabled = user.TwoFactorEnabled,
+                EmailConfirmed = user.EmailConfirmed,
+                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+                PhoneNumber = user.PhoneNumber
+            };
+        }
+
+        public async Task<UserServiceModel> GetByExpierationId(GetUserServiceModel serviceModel)
+        {
+            var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.ExpirationId == serviceModel.Id);
+
             return new UserServiceModel
             {
                 Id = user.Id,
@@ -149,6 +170,7 @@ namespace Identity.Api.Services.Users
         public async Task<UserServiceModel> SetPasswordAsync(SetUserPasswordServiceModel serviceModel)
         {
             var existingUser = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.ExpirationId == serviceModel.ExpirationId.Value);
+
             if (existingUser is null)
             {
                 throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NotFound);
@@ -156,14 +178,12 @@ namespace Identity.Api.Services.Users
 
             if (!existingUser.EmailConfirmed)
             {
-                var timeNow = DateTime.Now;
-                if (existingUser.VerifyExpirationDate >= timeNow)
+                if (existingUser.VerifyExpirationDate >= DateTime.UtcNow)
                 {
                     existingUser.EmailConfirmed = true;
                     existingUser.PasswordHash = userService.GeneratePasswordHash(existingUser, serviceModel.Password);
-
                     await this.identityContext.SaveChangesAsync();
-                    return await this.GetAsync(new GetUserServiceModel { Id = existingUser.Id, Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
+                    return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(existingUser.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
                 }
                 else
                 {
@@ -176,7 +196,7 @@ namespace Identity.Api.Services.Users
 
         public async Task<UserServiceModel> UpdateAsync(UpdateUserServiceModel serviceModel)
         {
-            var existingUser = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Id == serviceModel.Id);
+            var existingUser = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Id == serviceModel.Id.ToString());
             if (existingUser == null)
             {
                 throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NotFound);
@@ -190,7 +210,7 @@ namespace Identity.Api.Services.Users
 
             await this.identityContext.SaveChangesAsync();
 
-            return await this.GetAsync(new GetUserServiceModel { Id = serviceModel.Id, Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
+            return await this.GetById(new GetUserServiceModel { Id = serviceModel.Id.Value, Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
         }
     }
 }

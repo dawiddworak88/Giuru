@@ -9,9 +9,10 @@ import { toast } from "react-toastify";
 function SetPasswordForm(props) {
 
     const [state, dispatch] = useContext(Context);
+    
     const stateSchema = {
         id: {value: props.id ? props.id : null, error: ""},
-        password: { value: null, error: "" },
+        password: { value: null, error: "" }
     };
 
     const stateValidatorSchema = {

@@ -6,6 +6,7 @@ using Foundation.Extensions.Helpers;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;
@@ -16,6 +17,7 @@ using System.Threading.Tasks;
 namespace Buyer.Web.Areas.Orders.Controllers
 {
     [Area("Orders")]
+    [Authorize]
     public class OrderController : BaseController
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, StatusOrderPageViewModel> editOrderPageModelBuilder;
@@ -35,7 +37,9 @@ namespace Buyer.Web.Areas.Orders.Controllers
             {
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value)
+                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value),
+                IsAuthenticated = this.User.Identity.IsAuthenticated,
+                Name = this.User.Identity.Name
             };
 
             var viewModel = await this.orderPageModelBuilder.BuildModelAsync(componentModel);

@@ -6,7 +6,6 @@ import Store from "../../../../../../shared/stores/Store";
 import Header from "../../../../shared/components/Header/Header";
 import MainNavigation from "../../../../shared/components/MainNavigation/MainNavigation";
 import Footer from "../../../../../../shared/components/Footer/Footer";
-import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
 import StatusOrder from "../../components/StatusOrder/StatusOrder";
 import LocaleHelper from "../../../../../../shared/helpers/globals/LocaleHelper";
 
@@ -18,13 +17,10 @@ const StatusOrderPage = (props) => {
     return (
         <ThemeProvider theme={GlobalHelper.initMuiTheme(props.locale)}>
             <Store>
-                <div>
                 <Header {...props.header}></Header>
                 <MainNavigation {...props.mainNavigation}></MainNavigation>
-                <MenuTiles {...props.menuTiles} />
                 <StatusOrder {...props.statusOrder} />
                 <Footer {...props.footer}></Footer>
-                </div>
             </Store>
         </ThemeProvider>
     );

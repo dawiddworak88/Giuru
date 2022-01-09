@@ -24,7 +24,8 @@ namespace Buyer.Web.Areas.Products.Controllers
             {
                 SearchTerm = searchTerm,
                 Language = CultureInfo.CurrentUICulture.Name,
-                IsAuthenticated = this.User.Identity.IsAuthenticated
+                IsAuthenticated = this.User.Identity.IsAuthenticated,
+                Name = this.User.Identity.Name
             };
 
             var viewModel = await this.searchProductsPageModelBuilder.BuildModelAsync(componentModel);

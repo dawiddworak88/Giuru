@@ -5,6 +5,6 @@ namespace Identity.Api.ServicesModels.Users
 {
     public class GetUserServiceModel : BaseServiceModel
     {
-        public string Id { get; set; }
+        public Guid? Id { get; set; }
     }
 }

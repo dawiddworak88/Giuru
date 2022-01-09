@@ -9,6 +9,7 @@ using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Services.MediaServices;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
@@ -20,6 +21,7 @@ using System.Threading.Tasks;
 namespace Buyer.Web.Areas.Orders.ApiControllers
 {
     [Area("Orders")]
+    [Authorize]
     public class BasketsApiController : BaseApiController
     {
         private readonly IBasketRepository basketRepository;

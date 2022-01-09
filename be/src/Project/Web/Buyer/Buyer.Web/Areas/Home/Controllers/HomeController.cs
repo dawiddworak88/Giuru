@@ -22,7 +22,9 @@ namespace Buyer.Web.Areas.Home.Controllers
         {
             var componentModel = new ComponentModelBase
             {
-                Language = CultureInfo.CurrentUICulture.Name
+                Language = CultureInfo.CurrentUICulture.Name,
+                IsAuthenticated = this.User.Identity.IsAuthenticated,
+                Name = this.User.Identity.Name
             };
             
             var viewModel = await this.homePageModelBuilder.BuildModelAsync(componentModel);

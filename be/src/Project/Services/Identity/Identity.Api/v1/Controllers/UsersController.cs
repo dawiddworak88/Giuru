@@ -9,6 +9,7 @@ using Identity.Api.v1.ResponseModels;
 using Identity.Api.Validators.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -46,7 +47,7 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string id)
+        public async Task<IActionResult> Get(Guid? id)
         {
             var serviceModel = new GetUserServiceModel
             {
@@ -57,7 +58,7 @@ namespace Identity.Api.v1.Controllers
             var validationResult = await validator.ValidateAsync(serviceModel);
             if (validationResult != null)
             {
-                var user = await this.userService.GetAsync(serviceModel);
+                var user = await this.userService.GetById(serviceModel);
                 if (user != null)
                 {
                     var response = new UserResponseModel
