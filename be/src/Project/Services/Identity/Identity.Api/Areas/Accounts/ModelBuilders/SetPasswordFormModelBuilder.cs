@@ -49,12 +49,13 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
 
             if (componentModel.Id.HasValue)
             {
-                var user = await this.usersService.GetByExpierationId(new GetUserServiceModel
+                var serviceModel = new GetUserServiceModel
                 {
                     Id = componentModel.Id.Value,
                     Language = componentModel.Language
-                });
+                };
 
+                var user = await this.usersService.GetByExpierationId(serviceModel);
                 if (user is not null)
                 {
                     viewModel.Id = componentModel.Id.Value;

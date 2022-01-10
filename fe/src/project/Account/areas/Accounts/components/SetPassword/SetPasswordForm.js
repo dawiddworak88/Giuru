@@ -5,6 +5,7 @@ import { TextField, Button, CircularProgress } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import PasswordValidator from "../../../../../../shared/helpers/validators/PasswordValidator";
 import { toast } from "react-toastify";
+import { FALSE } from "node-sass";
 
 function SetPasswordForm(props) {
 
@@ -38,7 +39,7 @@ function SetPasswordForm(props) {
 
         fetch(props.submitUrl, requestOptions)
             .then(async (response) => {
-                dispatch({ type: "SET_IS_LOADING", payload: true });
+                dispatch({ type: "SET_IS_LOADING", payload: false });
                 const jsonResponse = await response.json();
                 if (response.ok) {
                     setFieldValue({ name: "id", value: jsonResponse.id });
@@ -57,7 +58,6 @@ function SetPasswordForm(props) {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
     const { password } = values;
-    console.log(disable)
     return (
         <section className="section is-flex-centered">
             <div className="account-card">
