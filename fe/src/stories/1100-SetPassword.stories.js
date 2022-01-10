@@ -5,6 +5,7 @@ import { header, footer } from "./Shared/Props";
 
 var setPasswordForm = {
   submitUrl: "#",
+  generalErrorMessage: "An error has occurred.",
   setPasswordText: "Set password",
   passwordLabel: "Password",
   passwordRequiredErrorMessage: "Enter password",

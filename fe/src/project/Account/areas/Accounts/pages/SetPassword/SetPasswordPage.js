@@ -8,8 +8,9 @@ import Store from "../../../../../../shared/stores/Store";
 import SetPasswordForm from "../../components/SetPassword/SetPasswordForm";
 
 function SetPasswordPage(props) {
-    toast.configure();
     
+    toast.configure();
+
     return (
         <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
             <Store>
