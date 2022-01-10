@@ -12,7 +12,7 @@ function SetPasswordForm(props) {
     
     const stateSchema = {
         id: {value: props.id ? props.id : null, error: ""},
-        password: { value: null, error: "" },
+        password: { value: "", error: "" },
         isValid: { value: false, error: "" }
     };
 
@@ -56,13 +56,10 @@ function SetPasswordForm(props) {
     };
 
     const {
-        values, errors, dirty,
-        disable, setFieldValue, 
-        handleOnChange, handleOnSubmit
+        values, errors, dirty, setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const { password, isValid } = values;
-    console.log(values)
     return (
         <section className="section is-flex-centered">
             <div className="account-card">
@@ -84,7 +81,7 @@ function SetPasswordForm(props) {
                             error={(errors.password.length > 0) && dirty.password} />
                     </div>
                     <div className="field">
-                        <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || isValid} fullWidth={true}>
+                        <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || !isValid} fullWidth={true}>
                             {props.setPasswordText}
                         </Button>
                     </div>
@@ -96,12 +93,8 @@ function SetPasswordForm(props) {
 }
 
 SetPasswordForm.propTypes = {
-    emailRequiredErrorMessage: PropTypes.string.isRequired,
     passwordRequiredErrorMessage: PropTypes.string.isRequired,
-    emailFormatErrorMessage: PropTypes.string.isRequired,
     passwordFormatErrorMessage: PropTypes.string.isRequired,
-    signInText: PropTypes.string.isRequired,
-    enterEmailText: PropTypes.string.isRequired,
     enterPasswordText: PropTypes.string.isRequired,
     submitUrl: PropTypes.string.isRequired,
 };

@@ -7,12 +7,12 @@ import {
     TableHead, TableRow, Paper
 } from "@material-ui/core";
 import moment from "moment";
+import { toast } from "react-toastify";
 
 function StatusOrder(props) {
 
     const [state,] = useContext(Context);
     const [orderStatuses, setOrderStatuses] = useState([]);
-    const [orderStatus, setOrderStatus] = useState("");
 
     const getOrderStatuses = (e) => {
         const requestOptions = {
@@ -25,19 +25,14 @@ function StatusOrder(props) {
                 return response.json().then(jsonResponse => {
                     setOrderStatuses(jsonResponse);
                 });
+            }).catch(() => {
+                toast.error(props.generalErrorMessage);
             });
     };
 
     useEffect(() => {
         getOrderStatuses();
     }, []);
-
-    // const getOrderStatus = () => {
-    //     const status = orderStatuses.find((item) => item.id === props.orderStatusId);
-    //     if (status){
-    //         setOrderStatus(status.name);
-    //     };
-    // };
 
     const status = orderStatuses.find((item) => item.id === props.orderStatusId);
     return (

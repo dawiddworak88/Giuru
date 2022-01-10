@@ -86,7 +86,7 @@ namespace Identity.Api.Services.Users
                     TemplateId = this.mailingOptions.CurrentValue.ActionSendGridResetTemplateId,
                     DynamicTemplateData = new Dictionary<string, string>
                     {
-                        {"resetAccountLink", this.linkGenerator.GetPathByAction("Index", "SetPassword", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name, Id = user.ExpirationId }) }
+                        {"resetAccountLink", this.linkGenerator.GetPathByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language , Id = user.ExpirationId }) }
                     }
                 });
 
@@ -123,7 +123,7 @@ namespace Identity.Api.Services.Users
                 TemplateId = this.mailingOptions.CurrentValue.ActionSendGridCreateTemplateId,
                 DynamicTemplateData = new Dictionary<string, string>
                 {
-                    {"signAccountLink", this.linkGenerator.GetPathByAction("Index", "SetPassword", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name, Id = userAccount.ExpirationId }) }
+                    {"signAccountLink", this.linkGenerator.GetPathByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = userAccount.ExpirationId }) }
                 }
 
             });

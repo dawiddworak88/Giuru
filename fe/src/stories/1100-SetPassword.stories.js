@@ -4,11 +4,11 @@ import SetPasswordPage from "../project/Account/areas/Accounts/pages/SetPassword
 import { header, footer } from "./Shared/Props";
 
 var setPasswordForm = {
-  emailRequiredErrorMessage: "Enter e-mail address",
+  submitUrl: "#",
+  setPasswordText: "Set password",
+  passwordLabel: "Password",
   passwordRequiredErrorMessage: "Enter password",
-  emailFormatErrorMessage: "Enter e-mail in a correct format, e.g. your@email.com",
   passwordFormatErrorMessage: "Password must be at least 8 characters long, consist of at least one capital letter, one small letter, a digit and a special character, e.g. P@ssw0rd",
-  signInText: "Sign in",
   enterPasswordText: "Enter password"
 };
 
