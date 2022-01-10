@@ -5,6 +5,7 @@ using Foundation.Mailing.Configurations;
 using Foundation.Mailing.Models;
 using Foundation.Mailing.Services;
 using Identity.Api.Areas.Accounts.Services.UserServices;
+using Identity.Api.Definitions;
 using Identity.Api.Infrastructure;
 using Identity.Api.Infrastructure.Accounts.Entities;
 using Identity.Api.Infrastructure.Organisations.Entities;
@@ -50,7 +51,7 @@ namespace Identity.Api.Services.Users
         public async Task<UserServiceModel> CreateAsync(CreateUserServiceModel serviceModel)
         {
             var timeNow = DateTime.UtcNow;
-            var timeExpiration = timeNow.AddHours(5);
+            var timeExpiration = timeNow.AddHours(IdentityConstants.VerifiTimeExpiration);
 
             var existingOrganisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.ContactEmail == serviceModel.Email && x.IsActive);
             if (existingOrganisation == null)
