@@ -86,7 +86,7 @@ function NewOrderForm(props) {
         const orderItem = {
             productId: product.id,
             sku: product.sku,
-            name: product.name,
+            name: product.title,
             imageId: product.images ? product.images[0] : null,
             quantity,
             externalReference,
@@ -269,6 +269,7 @@ function NewOrderForm(props) {
         multiple: false
     });
 
+    console.log(props);
     return (
         <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>
