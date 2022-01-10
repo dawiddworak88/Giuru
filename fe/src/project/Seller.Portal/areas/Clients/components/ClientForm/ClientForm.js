@@ -92,6 +92,7 @@ function ClientForm(props) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
+                        setFieldValue({ name: "id", value: null });
                         toast.success(jsonResponse.message);
                     }
                     else {
