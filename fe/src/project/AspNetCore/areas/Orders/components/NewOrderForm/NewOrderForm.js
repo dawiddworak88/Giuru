@@ -269,7 +269,6 @@ function NewOrderForm(props) {
         multiple: false
     });
 
-    console.log(props);
     return (
         <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>
