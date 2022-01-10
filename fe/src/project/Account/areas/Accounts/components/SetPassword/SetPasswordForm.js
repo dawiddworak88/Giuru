@@ -11,7 +11,7 @@ function SetPasswordForm(props) {
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: {value: props.id ? props.id : null, error: ""},
-        password: { value: "", error: "" },
+        password: { value: null, error: "" },
     };
 
     const stateValidatorSchema = {
@@ -54,9 +54,10 @@ function SetPasswordForm(props) {
 
     const {
         disable, values, errors, dirty, setFieldValue, handleOnChange, handleOnSubmit
-    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
+    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
     const { password } = values;
+    console.log(disable)
     return (
         <section className="section is-flex-centered">
             <div className="account-card">

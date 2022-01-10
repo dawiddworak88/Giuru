@@ -10,6 +10,7 @@ using Identity.Api.Infrastructure;
 using Identity.Api.Infrastructure.Accounts.Entities;
 using Identity.Api.Infrastructure.Organisations.Entities;
 using Identity.Api.ServicesModels.Users;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -32,6 +33,7 @@ namespace Identity.Api.Services.Users
         private readonly IStringLocalizer accountLocalizer;
         private readonly IUserService userService;
         private readonly LinkGenerator linkGenerator;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         public UsersService(
             IdentityContext identityContext,
@@ -39,6 +41,7 @@ namespace Identity.Api.Services.Users
             IMailingService mailingService,
             IStringLocalizer<AccountResources> accountLocalizer,
             IUserService userService,
+            IHttpContextAccessor httpContextAccessor,
             LinkGenerator linkGenerator)
         {
             this.identityContext = identityContext;
@@ -47,6 +50,7 @@ namespace Identity.Api.Services.Users
             this.accountLocalizer = accountLocalizer;
             this.userService = userService;
             this.linkGenerator = linkGenerator;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<UserServiceModel> CreateAsync(CreateUserServiceModel serviceModel)
@@ -77,6 +81,7 @@ namespace Identity.Api.Services.Users
                 user.EmailConfirmed = false;
                 user.VerifyExpirationDate = timeExpiration;
                 user.ExpirationId = Guid.NewGuid();
+                
                 await this.mailingService.SendTemplateAsync(new TemplateEmail
                 {
                     RecipientEmailAddress = user.Email,
@@ -86,7 +91,7 @@ namespace Identity.Api.Services.Users
                     TemplateId = this.mailingOptions.CurrentValue.ActionSendGridResetTemplateId,
                     DynamicTemplateData = new Dictionary<string, string>
                     {
-                        {"resetAccountLink", this.linkGenerator.GetPathByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language , Id = user.ExpirationId }) }
+                        {"resetAccountLink", this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = user.ExpirationId }, this.httpContextAccessor.HttpContext.Request.Scheme, this.httpContextAccessor.HttpContext.Request.Host)}
                     }
                 });
 
@@ -111,8 +116,8 @@ namespace Identity.Api.Services.Users
                 TwoFactorEnabled = false,
                 LockoutEnabled = false,
             };
-
             this.identityContext.Accounts.Add(userAccount);
+
             await this.identityContext.SaveChangesAsync();
             await this.mailingService.SendTemplateAsync(new TemplateEmail
             {
@@ -123,7 +128,7 @@ namespace Identity.Api.Services.Users
                 TemplateId = this.mailingOptions.CurrentValue.ActionSendGridCreateTemplateId,
                 DynamicTemplateData = new Dictionary<string, string>
                 {
-                    {"signAccountLink", this.linkGenerator.GetPathByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = userAccount.ExpirationId }) }
+                    {"signAccountLink", this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = user.ExpirationId }, this.httpContextAccessor.HttpContext.Request.Scheme, this.httpContextAccessor.HttpContext.Request.Host)}
                 }
 
             });
