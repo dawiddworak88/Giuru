@@ -15,7 +15,7 @@ var setPasswordForm = {
 export const SetPasswordPageStory = () => <SetPasswordPage header={header} setPasswordForm={setPasswordForm} footer={footer} />;
 
 SetPasswordPageStory.story = {
-  name: "Sign Password Page",
+  name: "Set Password Page",
 };
 
 const SetPasswordStories = {

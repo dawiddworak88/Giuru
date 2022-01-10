@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "react-toastify";
 import { ThemeProvider } from "@material-ui/core/styles";
 import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
 import Header from "../../../../../../shared/components/Header/Header";
@@ -7,6 +8,8 @@ import Store from "../../../../../../shared/stores/Store";
 import SetPasswordForm from "../../components/SetPassword/SetPasswordForm";
 
 function SetPasswordPage(props) {
+    toast.configure();
+    
     return (
         <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
             <Store>

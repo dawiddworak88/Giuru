@@ -12,7 +12,8 @@ function SetPasswordForm(props) {
     
     const stateSchema = {
         id: {value: props.id ? props.id : null, error: ""},
-        password: { value: null, error: "" }
+        password: { value: null, error: "" },
+        isValid: { value: false, error: "" }
     };
 
     const stateValidatorSchema = {
@@ -43,6 +44,7 @@ function SetPasswordForm(props) {
                 const jsonResponse = await response.json();
                 if (response.ok) {
                     setFieldValue({ name: "id", value: jsonResponse.id });
+                    setFieldValue({ name: "isValid", value: true });
                     toast.success(jsonResponse.message);
                 } else {
                     toast.error(props.generalErrorMessage);
@@ -59,7 +61,8 @@ function SetPasswordForm(props) {
         handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { password } = values;
+    const { password, isValid } = values;
+    console.log(values)
     return (
         <section className="section is-flex-centered">
             <div className="account-card">
@@ -81,7 +84,7 @@ function SetPasswordForm(props) {
                             error={(errors.password.length > 0) && dirty.password} />
                     </div>
                     <div className="field">
-                        <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable} fullWidth={true}>
+                        <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || isValid} fullWidth={true}>
                             {props.setPasswordText}
                         </Button>
                     </div>

@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
 using Identity.Api.Areas.Accounts.Models;
+using Identity.Api.ServicesModels.Users;
 
 namespace Identity.Api.Areas.Accounts.Validators
 {

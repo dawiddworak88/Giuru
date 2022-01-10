@@ -7,6 +7,7 @@ using Identity.Api.ServicesModels.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Newtonsoft.Json;
 using System;
 using System.Globalization;
 using System.Net;
@@ -61,7 +62,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
 
                 return this.StatusCode((int)HttpStatusCode.OK, new { Id = user.Id, Message = this.accountLocalizer.GetString("PasswordUpdated").Value });
             }
-            return this.StatusCode((int)HttpStatusCode.BadRequest, null);
+            return this.StatusCode((int)HttpStatusCode.BadRequest, "asd");
         }
     }
 }
