@@ -37,35 +37,36 @@ function SignInForm(props) {
     };
 
     const {
-        values,
-        errors,
-        dirty,
-        disable,
-        handleOnChange
+        values, errors, dirty,
+        disable, handleOnChange
     } = useForm(stateSchema, stateValidatorSchema);
 
     const { email, password } = values;
 
     return (
-        <form className="is-modern-form has-text-centered" action={props.submitUrl} method="post">
-            <input type="hidden" name="returnUrl" value={props.returnUrl} />
-            <div>
-                <h1 className="subtitle is-4">{props.signInText}</h1>
+        <section className="section is-flex-centered">
+            <div className="account-card">
+                <form className="is-modern-form has-text-centered" action={props.submitUrl} method="post">
+                    <input type="hidden" name="returnUrl" value={props.returnUrl} />
+                    <div>
+                        <h1 className="subtitle is-4">{props.signInText}</h1>
+                    </div>
+                    <div className="field">
+                        <TextField id="email" name="email" label={props.enterEmailText} fullWidth={true} 
+                            value={email} onChange={handleOnChange} helperText={dirty.email ? errors.email : ""} error={(errors.email.length > 0) && dirty.email} />
+                    </div>
+                    <div className="field">
+                        <TextField id="password" name="password" type="password" label={props.enterPasswordText} fullWidth={true} 
+                            value={password} onChange={handleOnChange} helperText={dirty.password ? errors.password : ""} error={(errors.password.length > 0) && dirty.password} />
+                    </div>
+                    <div className="field">
+                        <Button type="submit" variant="contained" color="primary" disabled={disable} fullWidth={true}>
+                            {props.signInText}
+                        </Button>
+                    </div>
+                </form>
             </div>
-            <div className="field">
-                <TextField id="email" name="email" label={props.enterEmailText} fullWidth={true} 
-                    value={email} onChange={handleOnChange} helperText={dirty.email ? errors.email : ""} error={(errors.email.length > 0) && dirty.email} />
-            </div>
-            <div className="field">
-                <TextField id="password" name="password" type="password" label={props.enterPasswordText} fullWidth={true} 
-                    value={password} onChange={handleOnChange} helperText={dirty.password ? errors.password : ""} error={(errors.password.length > 0) && dirty.password} />
-            </div>
-            <div className="field">
-                <Button type="submit" variant="contained" color="primary" disabled={disable} fullWidth={true}>
-                    {props.signInText}
-                </Button>
-            </div>
-        </form>
+        </section>
     );
 }
 
