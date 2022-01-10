@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -169,9 +170,8 @@ namespace Identity.Api.Services.Users
         }
 
         public async Task<UserServiceModel> SetPasswordAsync(SetUserPasswordServiceModel serviceModel)
-        {
+        { 
             var existingUser = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.ExpirationId == serviceModel.ExpirationId.Value);
-
             if (existingUser is null)
             {
                 throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NotFound);
@@ -188,11 +188,11 @@ namespace Identity.Api.Services.Users
                 }
                 else
                 {
-                    throw new CustomException(this.accountLocalizer.GetString("VerifyDateExpired"), (int)HttpStatusCode.NotFound);
+                    throw new CustomException(this.accountLocalizer.GetString("VerifyDateExpired"), (int)HttpStatusCode.BadRequest);
                 }
             }
 
-            return default;
+            throw new CustomException(this.accountLocalizer.GetString("EmailIsConfirmed"), (int)HttpStatusCode.BadRequest);
         }
 
         public async Task<UserServiceModel> UpdateAsync(UpdateUserServiceModel serviceModel)
