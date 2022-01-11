@@ -86,7 +86,7 @@ function NewOrderForm(props) {
         const orderItem = {
             productId: product.id,
             sku: product.sku,
-            name: product.name,
+            name: product.title,
             imageId: product.images ? product.images[0] : null,
             quantity,
             externalReference,
