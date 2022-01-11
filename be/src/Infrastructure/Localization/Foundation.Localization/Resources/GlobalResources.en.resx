@@ -429,4 +429,7 @@
   <data name="PrimaryFabricLabel" xml:space="preserve">
     <value>Fabric:</value>
   </data>
+  <data name="SuccessfullyAddedProduct" xml:space="preserve">
+    <value>Successfully added product</value>
+  </data>
 </root>

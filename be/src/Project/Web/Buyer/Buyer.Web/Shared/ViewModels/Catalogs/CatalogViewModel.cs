@@ -23,6 +23,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string RowsPerPageLabel { get; set; }
         public string BackIconButtonText { get; set; }
         public string NextIconButtonText { get; set; }
+        public string SuccessfullyAddedProduct { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string ProductsApiUrl { get; set; }
         public string UpdateBasketUrl { get; set; }

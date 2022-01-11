@@ -68,8 +68,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 IsAuthenticated = componentModel.IsAuthenticated,
                 ProductInformationLabel = this.productLocalizer.GetString("ProductInformation"),
                 PricesLabel = this.globalLocalizer.GetString("Prices"),
+                SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct"),
                 SignInToSeePricesLabel = this.globalLocalizer.GetString("SignInToSeePrices"),
                 SignInUrl = "#",
+                UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                BasketLabel = this.globalLocalizer.GetString("BasketLabel"),
                 SkuLabel = this.productLocalizer.GetString("Sku"),
                 InStockLabel = this.globalLocalizer.GetString("InStock")
             };
@@ -78,6 +81,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
             if (product != null)
             {
+                viewModel.ProductId = product.Id;
                 viewModel.Title = product.Name;
                 viewModel.BrandName = product.BrandName;
                 viewModel.BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId });

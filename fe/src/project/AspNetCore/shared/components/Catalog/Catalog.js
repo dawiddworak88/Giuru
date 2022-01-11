@@ -93,7 +93,7 @@ function Catalog(props) {
                         setBasketId(jsonResponse.id);
 
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            toast.success(jsonResponse.message)
+                            toast.success(props.successfullyAddedProduct)
                             setOrderItems(jsonResponse.items);
                         }
                         else {
@@ -204,6 +204,7 @@ Catalog.propTypes = {
     productsApiUrl: PropTypes.string.isRequired,
     categoryId: PropTypes.string.isRequired,
     orderBy: PropTypes.string,
+    successfullyAddedProduct: PropTypes.string,
     inStock: PropTypes.bool.isRequired,
     availableQuantity: PropTypes.number,
     items: PropTypes.array

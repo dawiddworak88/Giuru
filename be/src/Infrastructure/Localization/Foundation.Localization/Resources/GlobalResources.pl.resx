@@ -432,4 +432,7 @@
   <data name="PrimaryFabricLabel" xml:space="preserve">
     <value>Tkanina: </value>
   </data>
+  <data name="SuccessfullyAddedProduct" xml:space="preserve">
+    <value>Pomyślnie dodano produkt do koszyka</value>
+  </data>
 </root>

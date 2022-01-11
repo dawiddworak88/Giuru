@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Routing;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.Extensions.Options;
+using Buyer.Web.Shared.Configurations;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
@@ -24,12 +26,14 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
         private readonly IProductsService productsService;
         private readonly IInventoryRepository inventoryRepository;
         private readonly LinkGenerator linkGenerator;
+        private readonly IOptions<AppSettings> settings;
 
         public AvailableProductsCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             ICatalogModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel> availableProductsCatalogModelBuilder,
             IProductsService productsService,
             IInventoryRepository inventoryRepository,
+            IOptions<AppSettings> settings,
             LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
@@ -37,13 +41,18 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             this.productsService = productsService;
             this.inventoryRepository = inventoryRepository;
             this.linkGenerator = linkGenerator;
+            this.settings = settings;
         }
 
         public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = this.availableProductsCatalogModelBuilder.BuildModel(componentModel);
 
-            viewModel.ShowBrand = true;
+            if (this.settings.Value.IsMarketplace)
+            {
+                viewModel.ShowBrand = true;
+            }
+            viewModel.SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct");
             viewModel.UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.Title = this.globalLocalizer.GetString("AvailableProducts");
             viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "AvailableProductsApi", new { Area = "Products" });
@@ -58,14 +67,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             if (inventories?.Data is not null && inventories.Data.Any())
             {
                 var products = await this.productsService.GetProductsAsync(
-                    inventories.Data.Select(x => x.ProductId),
-                    null,
-                    null,
-                    componentModel.Language,
-                    null,
-                    PaginationConstants.DefaultPageIndex,
-                    ProductConstants.ProductsCatalogPaginationPageSize,
-                    componentModel.Token);
+                    inventories.Data.Select(x => x.ProductId), null, null, componentModel.Language,
+                    null, PaginationConstants.DefaultPageIndex, ProductConstants.ProductsCatalogPaginationPageSize, componentModel.Token);
 
                 if (products is not null)
                 {

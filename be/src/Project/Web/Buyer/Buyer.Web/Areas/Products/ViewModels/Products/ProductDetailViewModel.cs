@@ -9,6 +9,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
     public class ProductDetailViewModel
     {
         public string Title { get; set; }
+        public Guid? ProductId { get; set; }
         public bool IsAuthenticated { get; set; }
         public string SignInUrl { get; set; }
         public string SkuLabel { get; set; }
@@ -19,6 +20,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string PricesLabel { get; set; }
         public string ProductInformationLabel { get; set; }
         public string SignInToSeePricesLabel { get; set; }
+        public string SuccessfullyAddedProduct { get; set; }
         public bool InStock { get; set; }
         public int? AvailableQuantity { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
@@ -28,6 +30,8 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string DescriptionLabel { get; set; }
         public string Description { get; set; }
         public string InStockLabel { get; set; }
+        public string BasketLabel { get; set; }
+        public string UpdateBasketUrl { get; set; }
         public IEnumerable<CarouselGridItemViewModel> ProductVariants { get; set; }
         public FilesViewModel Files { get; set; }
         public IEnumerable<ImageViewModel> Images { get; set; }
