@@ -17,7 +17,11 @@
             color: $primary;
         }
 
-        &__fabric {
+        &__brand-text {
+            font-size: 0.9rem;
+        }
+
+        &__fabric, &__brand {
             a:hover {
                 color: $primary;
             }

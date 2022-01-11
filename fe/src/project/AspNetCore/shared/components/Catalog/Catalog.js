@@ -13,6 +13,8 @@ function Catalog(props) {
 
     const [, dispatch] = useContext(Context);
     const [page, setPage] = React.useState(0);
+    const [orderItems, setOrderItems] = React.useState([]);
+    const [basketId, setBasketId] = React.useState(null);
     const [itemsPerPage,] = React.useState(CatalogConstants.defaultCatalogItemsPerPage());
     const [items, setItems] = React.useState(props.pagedItems.data);
     const [total, setTotal] = React.useState(props.pagedItems.total);
@@ -47,10 +49,56 @@ function Catalog(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-
+                        
                         setItems(() => []);
                         setItems(() => jsonResponse.data);
                         setTotal(() => jsonResponse.total);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    };
+
+    const handleAddOrderItemClick = (item) => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const orderItem = {
+            productId: item.id, sku: item.sku, name: item.title, 
+            pictureUrl: item.imageUrl ? item.imageUrl : null, quantity: parseInt(1), 
+            externalReference: "", deliveryFrom: null, deliveryTo: null, moreInfo: ""
+        };
+
+        const basket = {
+            id: basketId,
+            items: [...orderItems, orderItem]
+        };
+
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(basket)
+        };
+
+        fetch(props.updateBasketUrl, requestOptions)
+            .then(function (response) {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setBasketId(jsonResponse.id);
+
+                        if (jsonResponse.items && jsonResponse.items.length > 0) {
+                            toast.success(jsonResponse.message)
+                            setOrderItems(jsonResponse.items);
+                        }
+                        else {
+                            setOrderItems([]);
+                        }
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -87,6 +135,11 @@ function Catalog(props) {
                                         <div className="media-content">
                                             <p className="catalog-item__sku">{props.skuLabel} {item.sku}</p>
                                             <h2 className="catalog-item__title"><a href={item.url}>{item.title}</a></h2>
+                                            {props.showBrand && item.brandName &&
+                                                <div className="catalog-item__brand">
+                                                    <h2 className="catalog-item__brand-text">{props.byLabel} <a href={item.brandUrl}>{item.brandName}</a></h2>
+                                                </div>
+                                            }
                                             {item.productAttributes && item.productAttributes.find(x => x.key == "primaryFabrics") &&
                                                 <div className="catalog-item__fabric">
                                                     <h3>{props.primaryFabricLabel} {item.productAttributes.find(x => x.key === "primaryFabrics").values[0]}</h3>
@@ -99,7 +152,7 @@ function Catalog(props) {
                                             }
                                         </div>
                                         {props.isLoggedIn && 
-                                            <Button variant="contained" startIcon={<ShoppingCart />}>
+                                            <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => handleAddOrderItemClick(item)}>
                                                 {props.basketLabel}
                                             </Button>
                                         }

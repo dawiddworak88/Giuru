@@ -216,6 +216,7 @@ services:
       - InventoryUrl=http://inventory-api
       - OrderUrl=http://ordering-api
       - BasketUrl=http://basket-api
+      - ClientUrl=http://client-api
       - IsMarketplace=${IS_MARKETPLACE}
       - OrganisationId=${ORGANISATION_ID}
       - SupportedCultures=${SUPPORTED_CULTURES}

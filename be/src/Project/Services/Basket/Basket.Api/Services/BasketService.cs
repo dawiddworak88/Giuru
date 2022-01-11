@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Basket.Api.RepositoriesModels;
 using Basket.Api.IntegrationEvents;
 using Basket.Api.IntegrationEventsModels;
+using Newtonsoft.Json;
 
 namespace Basket.Api.Services
 {
@@ -89,6 +90,7 @@ namespace Basket.Api.Services
 
         public async Task<BasketServiceModel> UpdateAsync(UpdateBasketServiceModel serviceModel)
         {
+            Console.WriteLine(JsonConvert.SerializeObject(serviceModel));
             var basketModel = new BasketRepositoryModel
             { 
                 Id = serviceModel.Id,

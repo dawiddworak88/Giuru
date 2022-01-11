@@ -15,7 +15,8 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string BasketLabel { get; set; }
         public string BasketUrl { get; set; }
         public string PrimaryFabricLabel { get; set; }
-        public bool IsAuthenticated { get; set; }
+        public bool ShowBrand { get; set; }
+        public bool IsLoggedIn { get; set; }
         public string SignInUrl { get; set; }
         public string SignInToSeePricesLabel { get; set; }
         public string DisplayedRowsLabel { get; set; }
@@ -24,6 +25,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string NextIconButtonText { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string ProductsApiUrl { get; set; }
+        public string UpdateBasketUrl { get; set; }
         public PagedResults<IEnumerable<CatalogItemViewModel>> PagedItems { get; set; }
     }
 }

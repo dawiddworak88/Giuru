@@ -13,6 +13,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Routing;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
@@ -42,6 +43,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
         {
             var viewModel = this.availableProductsCatalogModelBuilder.BuildModel(componentModel);
 
+            viewModel.ShowBrand = true;
+            viewModel.UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.Title = this.globalLocalizer.GetString("AvailableProducts");
             viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "AvailableProductsApi", new { Area = "Products" });
             viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);

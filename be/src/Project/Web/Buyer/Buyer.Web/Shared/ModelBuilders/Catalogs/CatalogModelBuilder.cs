@@ -40,7 +40,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 RowsPerPageLabel = this.globalLocalizer["RowsPerPage"],
                 BackIconButtonText = this.globalLocalizer["Previous"],
                 NextIconButtonText = this.globalLocalizer["Next"],
-                IsAuthenticated = componentModel.IsAuthenticated,
+                IsLoggedIn = componentModel.IsAuthenticated,
                 ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products" })
             };
         }
