@@ -196,6 +196,53 @@ namespace Client.Api.v1.Controllers
         }
 
         /// <summary>
+        /// Gets client by id.
+        /// </summary>
+        /// <returns>The client.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("organisation")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetByOrganisation()
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var serviceModel = new GetClientByOrganisationServiceModel
+            {
+                Id = GuidHelper.ParseNullable(sellerClaim?.Value),
+            };
+
+            var validator = new GetClientByOrganisationModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+            if (validationResult.IsValid)
+            {
+                var client = await this.clientsService.GetByOrganisationAsync(serviceModel);
+                if (client != null)
+                {
+                    var response = new ClientResponseModel
+                    {
+                        Id = client.Id,
+                        Email = client.Email,
+                        Name = client.Name,
+                        CommunicationLanguage = client.CommunicationLanguage,
+                        LastModifiedDate = client.LastModifiedDate,
+                        CreatedDate = client.CreatedDate
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+                else
+                {
+                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                }
+
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
         /// Creates or updates client (if client id is set).
         /// </summary>
         /// <param name="request">The model.</param>

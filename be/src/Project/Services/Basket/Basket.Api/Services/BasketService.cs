@@ -90,7 +90,6 @@ namespace Basket.Api.Services
 
         public async Task<BasketServiceModel> UpdateAsync(UpdateBasketServiceModel serviceModel)
         {
-            Console.WriteLine(JsonConvert.SerializeObject(serviceModel));
             var basketModel = new BasketRepositoryModel
             { 
                 Id = serviceModel.Id,

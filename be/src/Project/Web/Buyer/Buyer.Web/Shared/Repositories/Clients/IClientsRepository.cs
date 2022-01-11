@@ -6,6 +6,6 @@ namespace Buyer.Web.Shared.Repositories.Clients
 {
     public interface IClientsRepository
     {
-        Task<Client> GetClientAsync(string token, string language, Guid? organisationId);
+        Task<Client> GetClientAsync(string token, string language);
     }
 }

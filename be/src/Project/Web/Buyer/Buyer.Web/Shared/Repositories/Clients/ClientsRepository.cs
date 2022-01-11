@@ -24,7 +24,7 @@ namespace Buyer.Web.Shared.Repositories.Clients
             this.settings = settings;
         }
 
-        public async Task<Client> GetClientAsync(string token, string language, Guid? organisationId)
+        public async Task<Client> GetClientAsync(string token, string language)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
