@@ -2,8 +2,9 @@
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Identity.Api.Areas.Accounts.ComponentModels;
-using Identity.Api.Areas.Accounts.Repositories;
 using Identity.Api.Areas.Accounts.ViewModels;
+using Identity.Api.Services.Users;
+using Identity.Api.ServicesModels.Users;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
@@ -13,21 +14,21 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
 {
     public class SetPasswordFormModelBuilder : IAsyncComponentModelBuilder<SetPasswordFormComponentModel, SetPasswordFormViewModel>
     {
+        private readonly IUsersService usersService;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<AccountResources> accountLocalizer;
         private readonly LinkGenerator linkGenerator;
-        private readonly IIdentityRepository identityRepository;
 
         public SetPasswordFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer, 
             IStringLocalizer<AccountResources> accountLocalizer, 
             LinkGenerator linkGenerator,
-            IIdentityRepository identityRepository)
+            IUsersService usersService)
         {
             this.globalLocalizer = globalLocalizer;
             this.accountLocalizer = accountLocalizer;
             this.linkGenerator = linkGenerator;
-            this.identityRepository = identityRepository;
+            this.usersService = usersService;
         }
 
         public async Task<SetPasswordFormViewModel> BuildModelAsync(SetPasswordFormComponentModel componentModel)
@@ -48,8 +49,13 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
 
             if (componentModel.Id.HasValue)
             {
-                var user = await this.identityRepository.GetUserAsync(componentModel.Id, componentModel.Token, componentModel.Language);
-                if (user != null)
+                var user = await this.usersService.GetByExpierationId(new GetUserServiceModel
+                {
+                    Id = componentModel.Id.Value,
+                    Language = componentModel.Language
+                });
+
+                if (user is not null)
                 {
                     viewModel.Id = componentModel.Id.Value;
                     viewModel.EmailConfirmed = user.EmailConfirmed;

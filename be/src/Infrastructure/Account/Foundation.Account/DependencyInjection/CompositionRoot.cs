@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Foundation.Account.DependencyInjection
 {
@@ -49,7 +50,7 @@ namespace Foundation.Account.DependencyInjection
                 options.ClientSecret = configuration["ClientSecret"];
                 options.ResponseType = "code";
 
-                options.TokenValidationParameters = new TokenValidationParameters { NameClaimType = "email" };
+                options.TokenValidationParameters = new TokenValidationParameters { NameClaimType = ClaimTypes.Name };
                 options.SaveTokens = true;
 
                 options.Scope.Add(IdentityServerConstants.StandardScopes.OpenId);

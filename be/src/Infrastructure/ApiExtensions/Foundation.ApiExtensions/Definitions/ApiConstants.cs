@@ -19,7 +19,6 @@
             public static readonly string SellersApiEndpoint = "/api/v1/sellers";
             public static readonly string ClientsApiEndpoint = "/api/v1/clients";
             public static readonly string UsersApiEndpoint = "/api/v1/users";
-            public static readonly string UsersSetPasswordApiEndpoint = "/api/v1/users/password";
         }
 
         public struct Inventory

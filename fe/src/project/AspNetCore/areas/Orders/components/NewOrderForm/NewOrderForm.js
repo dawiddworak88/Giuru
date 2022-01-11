@@ -270,7 +270,7 @@ function NewOrderForm(props) {
     });
 
     return (
-        <section className="section section-small-padding order">
+        <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="is-modern-form">
                 {id && <input id="id" name="id" type="hidden" value={id} /> }

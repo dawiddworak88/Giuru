@@ -22,11 +22,6 @@ using Buyer.Web.Shared.ModelBuilders.Files;
 using Buyer.Web.Shared.Repositories.Brands;
 using Buyer.Web.Shared.Repositories.Products;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
-using Foundation.PageContent.MenuTiles.ViewModels;
-using Buyer.Web.Shared.MenuTiles;
-using System.Collections.Generic;
-using Foundation.PageContent.Components.DrawerMenu.ViewModels;
-using Buyer.Web.Shared.ModelBuilders.DrawerMenu;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -41,7 +36,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped(typeof(ICatalogModelBuilder<,>), typeof(CatalogModelBuilder<,>));
             services.AddScoped(typeof(IBreadcrumbsModelBuilder<,>), typeof(BreadcrumbsModelBuilder<,>));
             services.AddScoped<IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel>, FilesModelBuilder>();
-            services.AddScoped<IModelBuilder<BuyerHeaderViewModel>, HeaderModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>, MainNavigationModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
@@ -56,9 +51,6 @@ namespace Buyer.Web.Shared.DependencyInjection
 
             // Client
             services.AddScoped<ICatalogOrderModelBuilder, CatalogOrderModelBuilder>();
-            services.AddScoped<IModelBuilder<MenuTilesViewModel>, MenuTilesModelBuilder>();
-            services.AddScoped<IModelBuilder<IEnumerable<DrawerMenuViewModel>>, DrawerMenuModelBuilder>();
-
         }
 
         public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)

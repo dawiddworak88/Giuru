@@ -25,7 +25,8 @@ namespace Buyer.Web.Areas.Brands.Controllers
             {
                 Id = id,
                 Language = CultureInfo.CurrentUICulture.Name,
-                IsAuthenticated = this.User.Identity.IsAuthenticated
+                IsAuthenticated = this.User.Identity.IsAuthenticated,
+                Name = this.User.Identity.Name
             };
 
             var viewModel = await this.brandPageModelBuilder.BuildModelAsync(componentModel);

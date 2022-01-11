@@ -40,7 +40,7 @@ function StatusOrder(props) {
     };
 
     return (
-        <section className="section section-small-padding status-order">
+        <section className="section status-order">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 {getOrderStatus() &&

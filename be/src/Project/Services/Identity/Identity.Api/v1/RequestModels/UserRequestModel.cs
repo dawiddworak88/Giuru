@@ -1,12 +1,11 @@
-﻿using Foundation.ApiExtensions.Models.Request;
-using System;
+﻿using System;
 
 namespace Identity.Api.v1.RequestModels
 {
     public class UserRequestModel
     {
         #nullable enable
-        public string? Id { get; set; }
+        public Guid? Id { get; set; }
         public string? PhoneNumber { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
@@ -19,7 +18,6 @@ namespace Identity.Api.v1.RequestModels
         public DateTimeOffset? LockoutEnd { get; set; }
         public string? Name { get; set; }
         public string? Email { get; set; }
-
-#nullable disable
+        #nullable disable
     }
 }
