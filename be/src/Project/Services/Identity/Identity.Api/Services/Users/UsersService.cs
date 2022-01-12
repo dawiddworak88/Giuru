@@ -81,7 +81,7 @@ namespace Identity.Api.Services.Users
                 user.EmailConfirmed = false;
                 user.VerifyExpirationDate = timeExpiration;
                 user.ExpirationId = Guid.NewGuid();
-                
+
                 await this.mailingService.SendTemplateAsync(new TemplateEmail
                 {
                     RecipientEmailAddress = user.Email,
@@ -97,7 +97,7 @@ namespace Identity.Api.Services.Users
 
                 await this.identityContext.SaveChangesAsync();
 
-                return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(user.Id), Language = serviceModel.Language,  Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId});
+                return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(user.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
             }
 
             var userAccount = new ApplicationUser
@@ -126,11 +126,16 @@ namespace Identity.Api.Services.Users
                 SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
                 SenderName = this.mailingOptions.CurrentValue.SenderName,
                 TemplateId = this.mailingOptions.CurrentValue.ActionSendGridCreateTemplateId,
-                DynamicTemplateData = new Dictionary<string, string>
+                DynamicTemplateData = new
                 {
-                    {"signAccountLink", this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = user.ExpirationId }, this.httpContextAccessor.HttpContext.Request.Scheme, this.httpContextAccessor.HttpContext.Request.Host)}
+                    nc_subject = this.accountLocalizer.GetString("nc_subject").Value,
+                    nc_preHeader = this.accountLocalizer.GetString("nc_preHeader").Value,
+                    nc_buttonLabel = this.accountLocalizer.GetString("nc_buttonLabel").Value,
+                    nc_headOne = this.accountLocalizer.GetString("nc_headOne").Value,
+                    nc_headTwo = this.accountLocalizer.GetString("nc_headTwo").Value,
+                    nc_lineOne = this.accountLocalizer.GetString("nc_lineOne").Value,
+                    nc_lineTwo = this.accountLocalizer.GetString("nc_lineTwo").Value
                 }
-
             });
 
             return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(userAccount.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });

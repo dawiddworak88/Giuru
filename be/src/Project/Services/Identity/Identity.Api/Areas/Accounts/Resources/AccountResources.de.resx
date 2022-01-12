@@ -129,6 +129,27 @@
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Geben Sie Ihren Nachnamen ein</value>
   </data>
+  <data name="nc_buttonLabel" xml:space="preserve">
+    <value>Bestätigen und ein Passwort festlegen</value>
+  </data>
+  <data name="nc_headOne" xml:space="preserve">
+    <value>NEUES KUNDENKONTO</value>
+  </data>
+  <data name="nc_headTwo" xml:space="preserve">
+    <value>Willkommen in unserem Team!</value>
+  </data>
+  <data name="nc_lineOne" xml:space="preserve">
+    <value>Wir haben für Sie ein Kundenkonto angelegt, welches auf unserer B2B-Plattform in erster Linie zur einfacheren Zusammenarbeit zwischen uns verwendet wird. Indem Sie eine schnellere Bestellung und Statusverfolgung ermöglichen.</value>
+  </data>
+  <data name="nc_lineTwo" xml:space="preserve">
+    <value>Um das Erstellen eines neuen Kontos abzuschließen. Bitte gehen Sie auf den untenstehenden Link, um Ihre Daten zu überprüfen und zu vervollständigen.</value>
+  </data>
+  <data name="nc_preHeader" xml:space="preserve">
+    <value>Wir haben für Sie ein Kundenkonto angelegt, welches auf unserer B2B-Plattform in erster Linie zur einfacheren Zusammenarbeit zwischen uns verwendet wird.</value>
+  </data>
+  <data name="nc_subject" xml:space="preserve">
+    <value>Wir haben ein neues Kundenkonto erstellt</value>
+  </data>
   <data name="PasswordUpdated" xml:space="preserve">
     <value>Passwort wurde erfolgreich gesetzt</value>
   </data>

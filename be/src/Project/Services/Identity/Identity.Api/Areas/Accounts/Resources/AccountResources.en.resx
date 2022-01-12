@@ -129,6 +129,27 @@
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Enter your last name</value>
   </data>
+  <data name="nc_buttonLabel" xml:space="preserve">
+    <value>Confirm and set a password</value>
+  </data>
+  <data name="nc_headOne" xml:space="preserve">
+    <value>NEW CUSTOMER ACCOUNT</value>
+  </data>
+  <data name="nc_headTwo" xml:space="preserve">
+    <value>Welcome to our team!</value>
+  </data>
+  <data name="nc_lineOne" xml:space="preserve">
+    <value>We have created a customer account for you, which will be used on our B2B platform primarily for easier cooperation between us. By enabling faster ordering and status tracking.</value>
+  </data>
+  <data name="nc_lineTwo" xml:space="preserve">
+    <value>To finish creating a new account. Please go to the link below to verify and complete your data.</value>
+  </data>
+  <data name="nc_preHeader" xml:space="preserve">
+    <value>We have created a customer account for you, which will be used on our B2B platform primarily for easier cooperation between us.</value>
+  </data>
+  <data name="nc_subject" xml:space="preserve">
+    <value>We have created a new customer account</value>
+  </data>
   <data name="PasswordUpdated" xml:space="preserve">
     <value>Password has been successfully set</value>
   </data>
