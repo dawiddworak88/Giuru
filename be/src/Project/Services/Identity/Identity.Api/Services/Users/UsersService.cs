@@ -55,10 +55,12 @@ namespace Identity.Api.Services.Users
 
         public async Task<UserServiceModel> CreateAsync(CreateUserServiceModel serviceModel)
         {
+            Console.WriteLine(JsonConvert.SerializeObject(serviceModel));
             var timeNow = DateTime.UtcNow;
             var timeExpiration = timeNow.AddHours(IdentityConstants.VerifiTimeExpiration);
 
             var existingOrganisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.ContactEmail == serviceModel.Email && x.IsActive);
+            Console.WriteLine(JsonConvert.SerializeObject(existingOrganisation));
             if (existingOrganisation == null)
             {
                 var organisation = new Organisation
@@ -73,6 +75,7 @@ namespace Identity.Api.Services.Users
 
                 existingOrganisation = organisation;
                 this.identityContext.Organisations.Add(organisation.FillCommonProperties());
+                Console.WriteLine(JsonConvert.SerializeObject(existingOrganisation));
             }
 
             var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
@@ -117,6 +120,7 @@ namespace Identity.Api.Services.Users
                 LockoutEnabled = false,
             };
             this.identityContext.Accounts.Add(userAccount);
+            Console.WriteLine(JsonConvert.SerializeObject(userAccount));
 
             await this.identityContext.SaveChangesAsync();
             await this.mailingService.SendTemplateAsync(new TemplateEmail

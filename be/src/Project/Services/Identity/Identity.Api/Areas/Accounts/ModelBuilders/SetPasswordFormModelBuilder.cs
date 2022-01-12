@@ -43,8 +43,8 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 ConfirmPasswordLabel = this.globalLocalizer["EnterConfirmPasswordText"],
                 SetPasswordText = this.accountLocalizer["SetPassword"],
                 SubmitUrl = this.linkGenerator.GetPathByAction("Index", "IdentityApi", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
-                FirstNameRequiredErrorMessage = this.accountLocalizer.GetString("FirstNameRequiredErrorMessage"),
-                LastNameRequiredErrorMessage = this.accountLocalizer.GetString("LastNameRequiredErrorMessage"),
+                EmailIsConfirmedText = this.accountLocalizer["EmailIsConfirmedText"],
+                BackToLoginText = this.accountLocalizer["BackToLoginText"],
             };
 
             if (componentModel.Id.HasValue)
