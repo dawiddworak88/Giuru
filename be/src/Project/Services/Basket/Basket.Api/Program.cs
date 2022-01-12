@@ -72,7 +72,7 @@ builder.Services.ConfigureSettings(builder.Configuration);
 
 builder.Services.AddSingleton(sp =>
 {
-    var configuration = ConfigurationOptions.Parse(builder.Configuration["ConnectionString"], true);
+    var configuration = ConfigurationOptions.Parse(builder.Configuration["RedisConnectionString"], true);
 
     configuration.ResolveDns = true;
 

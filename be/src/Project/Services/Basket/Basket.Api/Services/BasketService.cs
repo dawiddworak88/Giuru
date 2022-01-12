@@ -9,6 +9,7 @@ using Basket.Api.RepositoriesModels;
 using Basket.Api.IntegrationEvents;
 using Basket.Api.IntegrationEventsModels;
 using Newtonsoft.Json;
+using Basket.Api.Infrastructure;
 
 namespace Basket.Api.Services
 {
@@ -16,9 +17,11 @@ namespace Basket.Api.Services
     {
         private readonly IBasketRepository basketRepository;
         private readonly IEventBus eventBus;
+        private readonly BasketContext basketContext;
 
         public BasketService(
             IBasketRepository basketRepository,
+            BasketContext basketContext,
             IEventBus eventBus)
         {
             this.basketRepository = basketRepository;
@@ -106,6 +109,8 @@ namespace Basket.Api.Services
                     MoreInfo = x.MoreInfo
                 })
             };
+
+
 
             var result = await this.basketRepository.UpdateBasketAsync(basketModel);
 
