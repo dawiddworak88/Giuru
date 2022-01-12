@@ -160,7 +160,7 @@ services:
   basket-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionString=basketdata
+      - ConnectionString=Server=sqldata;Database=BasketDb;User Id=sa;Password=Gre@tPassw0rd
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311
       - EventBusConnection=amqp://rabbitmq
