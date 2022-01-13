@@ -1,8 +1,10 @@
 ﻿using Buyer.Web.Areas.Orders.ApiRequestModels;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Orders.DomainModels;
+using Buyer.Web.Areas.Orders.DomainModels.BasketOrder;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Communications;
+using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
@@ -101,7 +103,44 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             };
 
             var response = await this.apiClientService.PostAsync<ApiRequest<CheckoutBasketRequestModel>, CheckoutBasketRequestModel, BaseResponseModel>(apiRequest);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+        }
 
+        public async Task<BasketOrder> GetBasketByOrganisation(string token, string language)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, BasketOrder>(apiRequest);
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
+
+        public async Task DeleteAsync(string token, string language)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}"
+            };
+
+            Console.WriteLine(JsonConvert.SerializeObject(apiRequest));
+
+            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);

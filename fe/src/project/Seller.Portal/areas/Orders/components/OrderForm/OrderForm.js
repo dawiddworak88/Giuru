@@ -114,6 +114,9 @@ function OrderForm(props) {
             moreInfo
         };
 
+        console.log(orderItem);
+        console.log(product);
+
         const basket = {
 
             id: basketId,

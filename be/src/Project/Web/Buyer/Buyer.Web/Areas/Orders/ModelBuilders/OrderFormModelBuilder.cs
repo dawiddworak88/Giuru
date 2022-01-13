@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Orders.Repositories;
+﻿using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Areas.Orders.ViewModel;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
@@ -15,18 +15,18 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly LinkGenerator linkGenerator;
-        private readonly IOrdersRepository ordersRepository;
+        private readonly IBasketRepository basketRepositry;
 
         public OrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
-            LinkGenerator linkGenerator,
-            IOrdersRepository ordersRepository)
+            IBasketRepository basketRepositry,
+            LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
-            this.ordersRepository = ordersRepository;
+            this.basketRepositry = basketRepositry;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -65,7 +65,16 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 OrdersUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 UploadOrderFileUrl = this.linkGenerator.GetPathByAction("Index", "OrderFileApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                ClearBasketText = this.orderLocalizer.GetString("ClearBasketText"),
+                ClearBasketUrl = this.linkGenerator.GetPathByAction("Delete", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
+
+            var existingBasket = await this.basketRepositry.GetBasketByOrganisation(componentModel.Token, componentModel.Language);
+            if (existingBasket != null)
+            {
+                viewModel.BasketId = existingBasket.Id;
+                viewModel.OrderItems = existingBasket.Items;
+            }
 
             return viewModel;
         }

@@ -17,6 +17,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Basket.Api.ServicesModels;
 using Basket.Api.v1.ResponseModels;
+using Newtonsoft.Json;
 
 namespace Basket.Api.v1.Controllers
 {
@@ -40,10 +41,12 @@ namespace Basket.Api.v1.Controllers
         public async Task<IActionResult> Post(BasketRequestModel request)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var isSellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.IsSellerClaim)?.Value;
 
             var serviceModel = new UpdateBasketServiceModel
             {
                 Id = request.Id ?? Guid.NewGuid(),
+                IsSeller = bool.Parse(isSellerClaim),
                 Items = request.Items.OrEmptyIfNull().Select(x => new UpdateBasketItemServiceModel 
                 { 
                     ProductId = x.ProductId,
@@ -80,6 +83,73 @@ namespace Basket.Api.v1.Controllers
                             ProductSku = x.ProductSku,
                             ProductName = x.ProductName,
                             PictureUrl = x.PictureUrl,
+                            Quantity = x.Quantity,
+                            ExternalReference = x.ExternalReference,
+                            DeliveryFrom = x.DeliveryFrom,
+                            DeliveryTo = x.DeliveryTo,
+                            MoreInfo = x.MoreInfo
+                        })
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        [HttpDelete, MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Delete()
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var serviceModel = new DeleteBasketServiceModel
+            {
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+            var validator = new DeleteBasketModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+            if (validationResult.IsValid)
+            {
+                await this.basketService.DeleteAsync(serviceModel);
+
+                this.StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        [HttpGet, MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(BasketResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Get()
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var serviceModel = new GetBasketByOrganisationServiceModel
+            {
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new GetBasketByOrganisationModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+            if (validationResult.IsValid)
+            {
+                var basket = await this.basketService.GetByOrganisation(serviceModel);
+                if (basket != null)
+                {
+                    var response = new BasketOrderResponseModel
+                    {
+                        Id = basket.Id,
+                        OwnerId = basket.OwnerId,
+                        Items = basket.Items.OrEmptyIfNull().Select(x => new BasketOrderItemResponseModel
+                        {
+                            ProductId = x.ProductId,
+                            Sku = x.Sku,
+                            Name = x.Name,
+                            ImageSrc = x.ImageSrc,
+                            ImageAlt = x.ImageAlt,
                             Quantity = x.Quantity,
                             ExternalReference = x.ExternalReference,
                             DeliveryFrom = x.DeliveryFrom,

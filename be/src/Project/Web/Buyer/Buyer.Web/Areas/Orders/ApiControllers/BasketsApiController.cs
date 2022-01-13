@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -86,6 +87,17 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             }
 
             return this.StatusCode((int)HttpStatusCode.OK, basketResponseModel);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete()
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            await this.basketRepository.DeleteAsync(token, language);
+
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = "asd" });
         }
     }
 }
