@@ -1,6 +1,7 @@
 ﻿using Feature.Account;
 using Foundation.ApiExtensions.Controllers;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
+using Identity.Api.Areas.Accounts.Validators;
 using Identity.Api.Services.Users;
 using Identity.Api.ServicesModels.Users;
 using Microsoft.AspNetCore.Authentication;
@@ -44,16 +45,24 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] SetUserPasswordRequestModel model)
         {
-            var language = CultureInfo.CurrentUICulture.Name;
+            var validator = new SetPasswordModelValidator();
+            var result = await validator.ValidateAsync(model);
+            if (result.IsValid)
+            {
+                var language = CultureInfo.CurrentUICulture.Name;
+                var serviceModel = new SetUserPasswordServiceModel
+                {
+                    ExpirationId = model.Id.Value,
+                    Password = model.Password,
+                    Language = language
+                };
 
-            var user = await this.userService.SetPasswordAsync(new SetUserPasswordServiceModel
-            { 
-                ExpirationId = model.Id,
-                Password = model.Password,
-                Language = language
-            });
+                var user = await this.userService.SetPasswordAsync(serviceModel);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = user.Id, Message = this.accountLocalizer.GetString("PasswordUpdated").Value });
+                return this.StatusCode((int)HttpStatusCode.OK, new { Id = user.Id, Message = this.accountLocalizer.GetString("PasswordUpdated").Value });
+
+            }
+            return this.StatusCode((int)HttpStatusCode.BadRequest, "asd");
         }
     }
 }

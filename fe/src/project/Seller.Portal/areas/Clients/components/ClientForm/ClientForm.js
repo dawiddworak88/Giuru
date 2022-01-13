@@ -92,6 +92,7 @@ function ClientForm(props) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
+                        setFieldValue({ name: "id", value: null });
                         toast.success(jsonResponse.message);
                     }
                     else {
@@ -149,7 +150,7 @@ function ClientForm(props) {
                         </div>
                         <div className="field client-form__field-row">
                             <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>{props.saveText}</Button>
-                            <Button className="client-form__create-button" color="secondary" variant="contained" onClick={createAccount} disabled={!id}>{props.accountText}</Button>
+                            <Button className="client-form__create-button" color="secondary" variant="contained" onClick={createAccount} disabled={state.isLoading || !id}>{props.accountText}</Button>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}

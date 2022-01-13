@@ -89,7 +89,6 @@ function OrderForm(props) {
     };
 
     const onSuggestionSelected = (event, { suggestion }) => {
-
         setProduct(suggestion);
     };
 

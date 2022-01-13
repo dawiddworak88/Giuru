@@ -4,22 +4,21 @@ import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper"
 import Header from "../../../../../../shared/components/Header/Header";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 import SignInForm from "../../components/SignIn/SignInForm";
+import { toast } from "react-toastify";
 
 function SignInPage(props) {
-  return (
-    <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
-      <div>
-        <Header {...props.header}></Header>
-        <section className="section is-flex-centered">
-          <div className="account-card">
-            <SignInForm {...props.signInForm} />
-          </div>
-        </section>
-        <Footer {...props.footer}></Footer>
-      </div>
-    </ThemeProvider>
-    
-  );
+
+    toast.configure();
+
+    return (
+        <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
+            <div>
+                <Header {...props.header}></Header>
+                <SignInForm {...props.signInForm} />
+                <Footer {...props.footer}></Footer>
+            </div>
+        </ThemeProvider>
+    );
 }
 
 export default SignInPage;
