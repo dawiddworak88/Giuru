@@ -74,6 +74,8 @@ function NewOrderForm(props) {
 
     const onSuggestionSelected = (event, { suggestion }) => {
         setProduct(suggestion);
+        console.log(suggestion);
+        console.log(suggestion.data);
     };
 
     const getProductSuggestionValue = (suggestion) => {
@@ -94,6 +96,8 @@ function NewOrderForm(props) {
             deliveryTo: moment(deliveryTo).startOf("day"),
             moreInfo
         };
+
+        console.log(product);
 
         const basket = {
             id: basketId,

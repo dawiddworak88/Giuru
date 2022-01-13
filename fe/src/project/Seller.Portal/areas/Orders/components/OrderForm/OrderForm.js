@@ -90,6 +90,7 @@ function OrderForm(props) {
 
     const onSuggestionSelected = (event, { suggestion }) => {
         setProduct(suggestion);
+        console.log(suggestion);
     };
 
     const getProductSuggestionValue = (suggestion) => {

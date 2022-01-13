@@ -109,7 +109,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             }
         }
 
-        public async Task<BasketOrder> GetBasketByOrganisation(string token, string language)
+        public async Task<Basket> GetBasketByOrganisation(string token, string language)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
@@ -119,7 +119,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, BasketOrder>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Basket>(apiRequest);
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return response.Data;

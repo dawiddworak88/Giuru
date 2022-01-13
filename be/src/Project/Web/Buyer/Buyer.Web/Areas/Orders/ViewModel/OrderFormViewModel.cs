@@ -36,7 +36,7 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string ClearBasketText { get; set; }
         public string ClearBasketUrl { get; set; }
         public Guid? BasketId { get; set; }
-        public IEnumerable<BasketItems> OrderItems { get; set; }
+        public IEnumerable<BasketItem> OrderItems { get; set; }
         public string PlaceOrderUrl { get; set; }
         public string OrdersUrl { get; set; }
         public string NavigateToOrdersListText { get; set; }

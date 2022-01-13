@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Buyer.Web.Areas.Products.DomainModels;
 using Foundation.Extensions.Exceptions;
 using System.Net;
+using Buyer.Web.Areas.Products.Repositories.Products;
 
 namespace Buyer.Web.Areas.Products.Repositories.Products
 {

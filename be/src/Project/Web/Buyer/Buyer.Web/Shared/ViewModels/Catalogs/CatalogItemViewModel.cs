@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Buyer.Web.Shared.ViewModels.Catalogs
 {
@@ -15,5 +16,6 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public int? AvailableQuantity { get; set; }
         public string BrandName { get; set; }
         public string BrandUrl { get; set; }
+        public IEnumerable<Guid> Images { get; set; }
     }
 }
