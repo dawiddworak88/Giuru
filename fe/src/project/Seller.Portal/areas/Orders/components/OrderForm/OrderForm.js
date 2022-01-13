@@ -90,7 +90,6 @@ function OrderForm(props) {
 
     const onSuggestionSelected = (event, { suggestion }) => {
         setProduct(suggestion);
-        console.log(suggestion);
     };
 
     const getProductSuggestionValue = (suggestion) => {
@@ -115,8 +114,6 @@ function OrderForm(props) {
             moreInfo
         };
 
-        console.log(orderItem);
-        console.log(product);
 
         const basket = {
 
