@@ -89,9 +89,15 @@ namespace Identity.Api.Services.Users
                     SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
                     SenderName = this.mailingOptions.CurrentValue.SenderName,
                     TemplateId = this.mailingOptions.CurrentValue.ActionSendGridResetTemplateId,
-                    DynamicTemplateData = new Dictionary<string, string>
+                    DynamicTemplateData = new
                     {
-                        {"resetAccountLink", this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = user.ExpirationId }, this.httpContextAccessor.HttpContext.Request.Scheme, this.httpContextAccessor.HttpContext.Request.Host)}
+                        ap_subject = this.accountLocalizer.GetString("ap_subject").Value,
+                        ap_preHeader = this.accountLocalizer.GetString("ap_preHeader").Value,
+                        ap_buttonLabel = this.accountLocalizer.GetString("ap_buttonLabel").Value,
+                        ap_headOne = this.accountLocalizer.GetString("ap_headOne").Value,
+                        ap_headTwo = this.accountLocalizer.GetString("ap_headTwo").Value,
+                        ap_lineOne = this.accountLocalizer.GetString("ap_lineOne").Value,
+                        resetAccountLink = this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = user.ExpirationId }, this.httpContextAccessor.HttpContext.Request.Scheme, this.httpContextAccessor.HttpContext.Request.Host)
                     }
                 });
 
@@ -134,7 +140,8 @@ namespace Identity.Api.Services.Users
                     nc_headOne = this.accountLocalizer.GetString("nc_headOne").Value,
                     nc_headTwo = this.accountLocalizer.GetString("nc_headTwo").Value,
                     nc_lineOne = this.accountLocalizer.GetString("nc_lineOne").Value,
-                    nc_lineTwo = this.accountLocalizer.GetString("nc_lineTwo").Value
+                    nc_lineTwo = this.accountLocalizer.GetString("nc_lineTwo").Value,
+                    signAccountLink = this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = user.ExpirationId }, this.httpContextAccessor.HttpContext.Request.Scheme, this.httpContextAccessor.HttpContext.Request.Host)
                 }
             });
 

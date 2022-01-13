@@ -117,6 +117,24 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ap_buttonLabel" xml:space="preserve">
+    <value>Zresetuj Hasło</value>
+  </data>
+  <data name="ap_headOne" xml:space="preserve">
+    <value>RESETOWANIE HASŁA</value>
+  </data>
+  <data name="ap_headTwo" xml:space="preserve">
+    <value>Witaj</value>
+  </data>
+  <data name="ap_lineOne" xml:space="preserve">
+    <value>Otrzymujesz tę wiadomość ponieważ została rozpoczęta procedura resetowania hasła. Aby zmienić hasło do swojego konta, otwórz poniższy link.</value>
+  </data>
+  <data name="ap_preHeader" xml:space="preserve">
+    <value>Otrzymujesz tę wiadomość ponieważ została rozpoczęta procedura resetowania hasła.</value>
+  </data>
+  <data name="ap_subject" xml:space="preserve">
+    <value>Resetowanie hasła konta</value>
+  </data>
   <data name="BackToLoginText" xml:space="preserve">
     <value>Powróć do logowania</value>
   </data>

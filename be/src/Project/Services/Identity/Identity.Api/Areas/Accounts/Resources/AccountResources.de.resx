@@ -117,6 +117,24 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ap_buttonLabel" xml:space="preserve">
+    <value>Setze dein Passwort zurück</value>
+  </data>
+  <data name="ap_headOne" xml:space="preserve">
+    <value>PASSWORT ZURÜCKSETZEN</value>
+  </data>
+  <data name="ap_headTwo" xml:space="preserve">
+    <value>Hallo</value>
+  </data>
+  <data name="ap_lineOne" xml:space="preserve">
+    <value>Sie erhalten diese Nachricht, weil das Verfahren zum Zurücksetzen des Kennworts gestartet wurde. Um Ihr Kontopasswort zu ändern, besuchen Sie bitte den unten stehenden Link.</value>
+  </data>
+  <data name="ap_preHeader" xml:space="preserve">
+    <value>Sie erhalten diese Nachricht, weil das Verfahren zum Zurücksetzen des Kennworts gestartet wurde.</value>
+  </data>
+  <data name="ap_subject" xml:space="preserve">
+    <value>Setzen Sie Ihr Kontopasswort zurück</value>
+  </data>
   <data name="BackToLoginText" xml:space="preserve">
     <value>Zurück zur Anmeldung</value>
   </data>

@@ -117,6 +117,24 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ap_buttonLabel" xml:space="preserve">
+    <value>Reset your password</value>
+  </data>
+  <data name="ap_headOne" xml:space="preserve">
+    <value>PASSWORD RESET</value>
+  </data>
+  <data name="ap_headTwo" xml:space="preserve">
+    <value>Hi</value>
+  </data>
+  <data name="ap_lineOne" xml:space="preserve">
+    <value>You are receiving this message because the password reset procedure has started. To change your account password, please visit the link below.</value>
+  </data>
+  <data name="ap_preHeader" xml:space="preserve">
+    <value>You are receiving this message because the password reset procedure has started.</value>
+  </data>
+  <data name="ap_subject" xml:space="preserve">
+    <value>Reset your account password</value>
+  </data>
   <data name="BackToLoginText" xml:space="preserve">
     <value>Back to login</value>
   </data>
