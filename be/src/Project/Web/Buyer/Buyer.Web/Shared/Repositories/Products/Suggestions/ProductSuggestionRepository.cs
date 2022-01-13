@@ -1,20 +1,14 @@
-﻿using Buyer.Web.Areas.Products.ApiRequestModels;
-using Buyer.Web.Areas.Products.ApiResponseModels;
-using Buyer.Web.Shared.Configurations;
+﻿using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.ApiExtensions.Communications;
-using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
-using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Buyer.Web.Areas.Products.DomainModels;
 using Foundation.Extensions.Exceptions;
-using System.Net;
 using Buyer.Web.Areas.Orders.ApiRequestModels;
 
 namespace Buyer.Web.Shared.Repositories.Products.Suggestions
