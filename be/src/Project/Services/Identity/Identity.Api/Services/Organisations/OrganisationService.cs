@@ -42,7 +42,7 @@ namespace Identity.Api.Services.Organisations
                 IsSeller = false,
                 Domain = new MailAddress(serviceModel.Email).Host,
                 Key = new MailAddress(serviceModel.Email).Host.Split('.')[0],
-                Language = serviceModel.Language
+                Language = serviceModel.CommunicationsLanguage
             };
 
             this.identityContext.Organisations.Add(organisation.FillCommonProperties());
