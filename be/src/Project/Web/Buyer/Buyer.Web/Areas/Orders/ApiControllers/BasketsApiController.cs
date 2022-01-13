@@ -62,9 +62,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     MoreInfo = x.MoreInfo
                 }));
 
-            Console.WriteLine("BASKET OUTPUT");
-            Console.WriteLine(JsonConvert.SerializeObject(basket));
-
             var basketResponseModel = new BasketResponseModel
             {
                 Id = basket.Id

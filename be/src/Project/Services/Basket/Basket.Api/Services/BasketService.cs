@@ -92,6 +92,12 @@ namespace Basket.Api.Services
                 }
             };
 
+            var deleteModel = new DeleteBasketServiceModel
+            {
+                OrganisationId = checkoutBasketServiceModel.OrganisationId
+            };
+
+            await this.DeleteAsync(deleteModel);
             this.eventBus.Publish(message);
         }
 

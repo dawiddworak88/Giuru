@@ -122,7 +122,7 @@ namespace Basket.Api.v1.Controllers
         }
 
         [HttpGet, MapToApiVersion("1.0")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(BasketResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(BasketOrderResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get()
         {

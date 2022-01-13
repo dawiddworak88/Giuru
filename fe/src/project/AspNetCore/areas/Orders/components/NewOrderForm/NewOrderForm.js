@@ -429,7 +429,7 @@ function NewOrderForm(props) {
                             {(orderItems && orderItems.length > 0) ? (
                                 <Fragment>
                                     <section className="section">
-                                        <div className="orderitems__table">
+                                        <div className="order__items-table">
                                             <TableContainer component={Paper}>
                                                 <Table aria-label={props.orderItemsLabel}>
                                                     <TableHead>

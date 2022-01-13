@@ -126,6 +126,9 @@
   <data name="ChangeDeliveryTo" xml:space="preserve">
     <value>Zmień końcową datę dostawy</value>
   </data>
+  <data name="ClearBasketText" xml:space="preserve">
+    <value>Wyczyść kosz</value>
+  </data>
   <data name="ClientRequiredErrorMessage" xml:space="preserve">
     <value>Wybierz klienta</value>
   </data>
