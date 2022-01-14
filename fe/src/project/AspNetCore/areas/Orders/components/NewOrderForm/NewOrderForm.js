@@ -100,9 +100,6 @@ function NewOrderForm(props) {
             items: [...orderItems, orderItem]
         };
 
-        const test = orderItems.filter((orderItem) => orderItem.productId !== entityToDelete.productId);
-        console.log(test)
-
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -155,45 +152,6 @@ function NewOrderForm(props) {
     const handleDeleteDialogClose = () => {
         setOpenDeleteDialog(false);
         setEntityToDelete(null);
-    };
-
-    const handleDeleteEntity = () => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const basket = {
-            id: basketId,
-            items: orderItems.filter((orderItem) => orderItem.productId !== entityToDelete.productId)
-        };
-
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(basket)
-        };
-
-        fetch(props.updateBasketUrl, requestOptions)
-            .then(function (response) {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setBasketId(jsonResponse.id);
-                        setOpenDeleteDialog(false);
-
-                        if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            setOrderItems(jsonResponse.items);
-                        }
-                        else {
-                            setOrderItems([]);
-                        }
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
     };
 
     const handlePlaceOrder = () => {
@@ -276,7 +234,7 @@ function NewOrderForm(props) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
         
         const payload = {
-            id: entityToDelete.id
+            id: entityToDelete.productId
         }
 
         const requestOptions = {
@@ -328,7 +286,6 @@ function NewOrderForm(props) {
             });
     }
 
-    console.log(orderItems);
     return (
         <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>

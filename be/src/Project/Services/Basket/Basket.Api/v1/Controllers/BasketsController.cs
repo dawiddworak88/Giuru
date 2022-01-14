@@ -170,7 +170,7 @@ namespace Basket.Api.v1.Controllers
                     {
                         Id = serviceModel.Id.Value,
                         OwnerId = serviceModel.OrganisationId.Value,
-                        Items = null
+                        Items = Array.Empty<BasketOrderItemResponseModel>()
                     };
 
                     return this.StatusCode((int)HttpStatusCode.OK, response);

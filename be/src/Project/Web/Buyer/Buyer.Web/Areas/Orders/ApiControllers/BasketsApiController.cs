@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -109,7 +108,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             var basket = await this.basketRepository.DeleteItemAsync(token, language, id);
-            Console.WriteLine(JsonConvert.SerializeObject(basket));
 
             return this.StatusCode((int)HttpStatusCode.OK, basket);
         }

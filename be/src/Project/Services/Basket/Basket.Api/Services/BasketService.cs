@@ -124,7 +124,7 @@ namespace Basket.Api.Services
                 throw new CustomException("InventoryNotFound", (int)HttpStatusCode.NotFound);
             }
 
-            var basketItem = basket.FirstOrDefault(x => x.Id == serviceModel.Id.Value);
+            var basketItem = basket.FirstOrDefault(x => x.ProductId == serviceModel.Id.Value);
             var message = new BasketProductBookingIntegrationEvent
             {
                 ProductId = basketItem.ProductId.Value,
