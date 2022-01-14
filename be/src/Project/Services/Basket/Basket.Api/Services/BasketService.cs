@@ -12,6 +12,7 @@ using Basket.Api.Infrastructure;
 using Basket.Api.Infrastructure.Entities;
 using Foundation.Extensions.Exceptions;
 using System.Net;
+using Newtonsoft.Json;
 
 namespace Basket.Api.Services
 {
@@ -109,10 +110,22 @@ namespace Basket.Api.Services
             var basket = from b in this.basketContext.Baskets where b.OwnerId == serviceModel.OrganisationId.Value select b;
             if (basket == null)
             {
-                throw new CustomException("InventoryNotFound", (int)HttpStatusCode.NotFound);
+                throw new CustomException("ItemNotFound", (int)HttpStatusCode.NotFound);
             }
 
-            this.basketContext.RemoveRange(basket);
+            var basketItemGroup = basket.GroupBy(g => g.ProductId).Select(x => new BasketItems { Quantity = x.Sum(x => x.Quantity), ProductId = x.FirstOrDefault().ProductId} );
+            foreach (var item in basket)
+            {
+                var message = new BasketProductBookingIntegrationEvent
+                {
+                    ProductId = item.ProductId.Value,
+                    BookedQuantity = item.Quantity,
+                };
+
+                this.eventBus.Publish(message);
+            }
+
+            this.basketContext.Baskets.RemoveRange(basket);
             await this.basketContext.SaveChangesAsync();
         }
 
@@ -121,19 +134,18 @@ namespace Basket.Api.Services
             var basket = from b in this.basketContext.Baskets where b.OwnerId == serviceModel.OrganisationId.Value select b;
             if (basket == null)
             {
-                throw new CustomException("InventoryNotFound", (int)HttpStatusCode.NotFound);
+                throw new CustomException("ItemNotFound", (int)HttpStatusCode.NotFound);
             }
 
-            var basketItem = basket.FirstOrDefault(x => x.ProductId == serviceModel.Id.Value);
+            var basketItem = basket.Where(x => x.ProductId == serviceModel.Id.Value).ToList();
             var message = new BasketProductBookingIntegrationEvent
             {
-                ProductId = basketItem.ProductId.Value,
-                ProductSku = basketItem.ProductSku,
-                BookedQuantity = -basketItem.Quantity
+                ProductId = basketItem.FirstOrDefault().ProductId.Value,
+                BookedQuantity = basketItem.Sum(x => x.Quantity),
             };
 
             this.eventBus.Publish(message);
-            this.basketContext.Baskets.Remove(basketItem);
+            this.basketContext.Baskets.RemoveRange(basketItem);
             await this.basketContext.SaveChangesAsync();
 
             if (basket.OrEmptyIfNull().Any())
@@ -248,8 +260,7 @@ namespace Basket.Api.Services
                 var message = new BasketProductBookingIntegrationEvent
                 {
                     ProductId = serviceModel.Items.LastOrDefault().ProductId.Value,
-                    ProductSku = serviceModel.Items.LastOrDefault().ProductSku,
-                    BookedQuantity = (int)serviceModel.Items.LastOrDefault().Quantity
+                    BookedQuantity = (int)-serviceModel.Items.LastOrDefault().Quantity
                 };
 
                 this.basketContext.Baskets.Add(basketItem);

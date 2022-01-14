@@ -153,6 +153,9 @@
   <data name="ImportOrder" xml:space="preserve">
     <value>Bestellung importieren</value>
   </data>
+  <data name="ItemNotFound" xml:space="preserve">
+    <value>Produkt nicht gefunden</value>
+  </data>
   <data name="MoreInfoLabel" xml:space="preserve">
     <value>Zusätzliche Information:</value>
   </data>
