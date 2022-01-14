@@ -100,6 +100,9 @@ function NewOrderForm(props) {
             items: [...orderItems, orderItem]
         };
 
+        const test = orderItems.filter((orderItem) => orderItem.productId !== entityToDelete.productId);
+        console.log(test)
+
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },

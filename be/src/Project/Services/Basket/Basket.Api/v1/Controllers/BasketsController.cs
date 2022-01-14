@@ -17,7 +17,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Basket.Api.ServicesModels;
 using Basket.Api.v1.ResponseModels;
-using Newtonsoft.Json;
 
 namespace Basket.Api.v1.Controllers
 {

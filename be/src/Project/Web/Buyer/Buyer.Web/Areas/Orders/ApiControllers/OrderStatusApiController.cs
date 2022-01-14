@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Orders.DomainModels;
-using Buyer.Web.Areas.Orders.Repositories;
+﻿using Buyer.Web.Areas.Orders.Repositories;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Microsoft.AspNetCore.Authentication;

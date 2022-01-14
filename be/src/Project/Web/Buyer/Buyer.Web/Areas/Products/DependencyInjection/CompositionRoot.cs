@@ -14,7 +14,6 @@ using Buyer.Web.Areas.Products.ViewModels.Brands;
 using Buyer.Web.Areas.Products.ViewModels.Categories;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Areas.Products.ViewModels.SearchProducts;
-using Buyer.Web.Shared.Repositories.Products.Suggestions;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +26,6 @@ namespace Buyer.Web.Areas.Products.DependencyInjection
         {
             services.AddScoped<IMediaItemsRepository, MediaItemsRepository>();
             services.AddScoped<IProductsRepository, ProductsRepository>();
-            services.AddScoped<IProductSuggestionRepository, ProductSuggestionRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
 
