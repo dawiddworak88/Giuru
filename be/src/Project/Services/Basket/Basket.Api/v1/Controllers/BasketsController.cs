@@ -41,7 +41,7 @@ namespace Basket.Api.v1.Controllers
         public async Task<IActionResult> Post(BasketRequestModel request)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
-            var isSellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.IsSellerClaim)?.Value
+            var isSellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.IsSellerClaim)?.Value;
             var serviceModel = new UpdateBasketServiceModel
             {
                 Id = request.Id ?? Guid.NewGuid(),
