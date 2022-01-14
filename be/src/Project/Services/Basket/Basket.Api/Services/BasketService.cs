@@ -125,7 +125,16 @@ namespace Basket.Api.Services
                 throw new CustomException("InventoryNotFound", (int)HttpStatusCode.NotFound);
             }
 
-            this.basketContext.Baskets.Remove(basket.FirstOrDefault(x => x.Id == serviceModel.Id.Value));
+            var basketItem = basket.FirstOrDefault(x => x.Id == serviceModel.Id.Value);
+            var message = new BasketProductBookingIntegrationEvent
+            {
+                ProductId = basketItem.ProductId.Value,
+                ProductSku = basketItem.ProductSku,
+                BookedQuantity = -basketItem.Quantity
+            };
+
+            this.eventBus.Publish(message);
+            this.basketContext.Baskets.Remove(basketItem);
             await this.basketContext.SaveChangesAsync();
 
             if (basket.OrEmptyIfNull().Any())
@@ -237,7 +246,15 @@ namespace Basket.Api.Services
                     MoreInfo = serviceModel.Items.LastOrDefault().MoreInfo
                 };
 
+                var message = new BasketProductBookingIntegrationEvent
+                {
+                    ProductId = serviceModel.Items.LastOrDefault().ProductId.Value,
+                    ProductSku = serviceModel.Items.LastOrDefault().ProductSku,
+                    BookedQuantity = (int)serviceModel.Items.LastOrDefault().Quantity
+                };
+
                 this.basketContext.Baskets.Add(basketItem);
+                this.eventBus.Publish(message);
                 await this.basketContext.SaveChangesAsync();
             }
             var result = await this.basketRepository.UpdateBasketAsync(basketModel);
