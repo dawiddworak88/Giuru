@@ -111,11 +111,12 @@ namespace Basket.Api.v1.Controllers
             };
             var validator = new DeleteBasketModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
+            Console.WriteLine(JsonConvert.SerializeObject(validationResult));
             if (validationResult.IsValid)
             {
                 await this.basketService.DeleteAsync(serviceModel);
 
-                this.StatusCode((int)HttpStatusCode.OK);
+                return this.StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -145,6 +146,7 @@ namespace Basket.Api.v1.Controllers
                         OwnerId = basket.OwnerId,
                         Items = basket.Items.OrEmptyIfNull().Select(x => new BasketOrderItemResponseModel
                         {
+                            Id = x.Id,
                             ProductId = x.ProductId,
                             Sku = x.Sku,
                             Name = x.Name,

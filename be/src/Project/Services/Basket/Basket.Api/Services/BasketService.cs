@@ -140,6 +140,7 @@ namespace Basket.Api.Services
                     OwnerId = basket.FirstOrDefault().OwnerId,
                     Items = basket.Select(x => new BasketOrderItemServiceModel
                     {
+                        Id = x.Id,
                         ProductId = x.ProductId,
                         Name = x.ProductName,
                         Sku = x.ProductSku,

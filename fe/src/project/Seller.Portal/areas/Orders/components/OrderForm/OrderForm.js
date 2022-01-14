@@ -34,7 +34,7 @@ function OrderForm(props) {
     };
 
     const [state, dispatch] = useContext(Context);
-    const [id, setId] = useState(props.id ? props.id : null);
+    const [id,] = useState(props.id ? props.id : null);
     const [basketId, setBasketId] = useState(null);
     const [client, setClient] = useState(props.clientId ? props.clients.find((item) => item.id === props.clientId) : null);
     const [searchTerm, setSearchTerm] = useState("");

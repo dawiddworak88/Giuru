@@ -4,6 +4,7 @@ namespace Basket.Api.v1.ResponseModels
 {
     public class BasketOrderItemResponseModel
     {
+        public Guid? Id { get; set; }
         public Guid? ProductId { get; set; }
         public string Sku { get; set; }
         public string Name { get; set; }

@@ -271,11 +271,39 @@ function NewOrderForm(props) {
 
     const deleteItem = () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
+        
+        const payload = {
+            id: entityToDelete.id
+        }
 
-        const basket = {
-            id: basketId,
-            item: orderItems.filter((orderItem) => orderItem.productId !== entityToDelete.productId)
+        const requestOptions = {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" }
         };
+
+        const url = props.deleteItemBasketUrl + "?" + QueryStringSerializer.serialize(payload);
+        return fetch(url, requestOptions)
+            .then(function (response) {
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setOpenDeleteDialog(false);
+
+                        if (jsonResponse.items && jsonResponse.items.length > 0) {
+                            setOrderItems(jsonResponse.items);
+                        }
+                        else {
+                            setOrderItems([]);
+                        }
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                toast.error(props.generalErrorMessage);
+            });
+        
     }
 
     const clearBasket = () => {
@@ -296,7 +324,7 @@ function NewOrderForm(props) {
                         setBasketId(null);
                     }
                 });
-            }).catch((er) => {
+            }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
@@ -494,7 +522,7 @@ function NewOrderForm(props) {
                                 className="order__clear-button" 
                                 color="secondary" variant="contained" 
                                 onClick={clearBasket} 
-                                disabled={state.isLoading || !orderItems}>
+                                disabled={state.isLoading || orderItems.length === 0}>
                                     {props.clearBasketText}
                             </Button>
                         </>
@@ -504,7 +532,7 @@ function NewOrderForm(props) {
             <ConfirmationDialog
                 open={openDeleteDialog}
                 handleClose={handleDeleteDialogClose}
-                handleConfirm={handleDeleteEntity}
+                handleConfirm={deleteItem}
                 titleId="delete-from-basket-title"
                 title={props.deleteConfirmationLabel}
                 textId="delete-from-basket-text"

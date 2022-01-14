@@ -3,8 +3,8 @@
 namespace Buyer.Web.Areas.Orders.DomainModels.BasketOrder
 {
     public class BasketItems
-    {
-        public Guid? BasketItemId { get; set; }
+    { 
+        public Guid? Id { get; set; }
         public Guid? ProductId { get; set; }
         public string Sku { get; set; }
         public string Name { get; set; }

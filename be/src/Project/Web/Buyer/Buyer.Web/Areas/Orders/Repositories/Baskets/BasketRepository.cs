@@ -138,8 +138,6 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}"
             };
 
-            Console.WriteLine(JsonConvert.SerializeObject(apiRequest));
-
             var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
             if (!response.IsSuccessStatusCode)
             {
