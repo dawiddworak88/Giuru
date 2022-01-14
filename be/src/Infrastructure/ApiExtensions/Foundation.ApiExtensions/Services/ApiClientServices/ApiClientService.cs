@@ -153,7 +153,7 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
             }
         }
 
-        public async Task<ApiResponse<T>> DeleteAsync<S, W, T>(S request) where S : ApiRequest<W> where T : BaseResponseModel
+        public async Task<ApiResponse<T>> DeleteAsync<S, W, T>(S request) where S : ApiRequest<W> where T : class
         {
             using (var client = new HttpClient())
             {

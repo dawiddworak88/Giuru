@@ -59,6 +59,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 PlaceOrderUrl = this.linkGenerator.GetPathByAction("Checkout", "BasketCheckoutApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 NoLabel = this.globalLocalizer.GetString("No"),
+                DeleteItemBasketUrl = this.linkGenerator.GetPathByAction("DeleteItem", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 AreYouSureLabel = this.globalLocalizer.GetString("AreYouSureLabel"),
                 NavigateToOrdersListText = this.orderLocalizer.GetString("NavigateToOrdersList"),
                 NoOrderItemsLabel = this.orderLocalizer.GetString("NoOrderItemsLabel"),

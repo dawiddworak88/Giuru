@@ -284,23 +284,18 @@ function NewOrderForm(props) {
         const url = props.deleteItemBasketUrl + "?" + QueryStringSerializer.serialize(payload);
         return fetch(url, requestOptions)
             .then(function (response) {
-
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         setOpenDeleteDialog(false);
-
-                        if (jsonResponse.items && jsonResponse.items.length > 0) {
-                            setOrderItems(jsonResponse.items);
-                        }
-                        else {
-                            setOrderItems([]);
-                        }
+                        dispatch({ type: "SET_IS_LOADING", payload: false });
+                        setOrderItems(jsonResponse.items);
                     }
                     else {
                         toast.error(props.generalErrorMessage);
                     }
                 });
             }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
         
@@ -330,6 +325,7 @@ function NewOrderForm(props) {
             });
     }
 
+    console.log(orderItems);
     return (
         <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>

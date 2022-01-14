@@ -67,6 +67,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                     Id = response.Data.Id,
                     Items = response.Data.Items.OrEmptyIfNull().Select(x => new BasketItem
                     {
+                        Id = x.Id,
                         ProductId = x.ProductId,
                         ProductSku = x.ProductSku,
                         ProductName = x.ProductName,
@@ -143,6 +144,31 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
+        }
+
+        public async Task<BasketOrder> DeleteItemAsync(string token, string language, Guid? id)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsItemDeleteApiEndpoint}/{id}"
+            };
+            
+            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BasketOrder>(apiRequest);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                return response.Data;
+            }
+
+            return default;
+
         }
     }
 }

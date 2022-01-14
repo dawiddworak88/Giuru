@@ -97,7 +97,11 @@ namespace Basket.Api.Services
                 OrganisationId = checkoutBasketServiceModel.OrganisationId
             };
 
-            await this.DeleteAsync(deleteModel);
+            if (!checkoutBasketServiceModel.isSeller)
+            {
+                await this.DeleteAsync(deleteModel);
+            }
+
             this.eventBus.Publish(message);
         }
 
@@ -111,6 +115,44 @@ namespace Basket.Api.Services
 
             this.basketContext.RemoveRange(basket);
             await this.basketContext.SaveChangesAsync();
+        }
+
+        public async Task<BasketOrderServiceModel> DelteItemAsync(DeleteBasketItemServiceModel serviceModel)
+        {
+            var basket = from b in this.basketContext.Baskets where b.OwnerId == serviceModel.OrganisationId.Value select b;
+            if (basket == null)
+            {
+                throw new CustomException("InventoryNotFound", (int)HttpStatusCode.NotFound);
+            }
+
+            this.basketContext.Baskets.Remove(basket.FirstOrDefault(x => x.Id == serviceModel.Id.Value));
+            await this.basketContext.SaveChangesAsync();
+
+            if (basket.OrEmptyIfNull().Any())
+            {
+                var basketItems = new BasketOrderServiceModel
+                {
+                    Id = basket.FirstOrDefault().Id,
+                    OwnerId = basket.FirstOrDefault().OwnerId,
+                    Items = basket.Select(x => new BasketOrderItemServiceModel
+                    {
+                        Id = x.Id,
+                        ProductId = x.ProductId,
+                        Name = x.ProductName,
+                        Sku = x.ProductSku,
+                        ImageSrc = x.PictureUrl,
+                        ImageAlt = x.ProductName,
+                        Quantity = x.Quantity,
+                        ExternalReference = x.ExternalReference,
+                        DeliveryFrom = x.DeliveryFrom,
+                        DeliveryTo = x.DeliveryTo,
+                        MoreInfo = x.MoreInfo
+                    })
+                };
+
+                return basketItems;
+            }
+            return default;
         }
 
         public async Task<BasketOrderServiceModel> GetByOrganisation(GetBasketByOrganisationServiceModel serviceModel)

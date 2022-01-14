@@ -39,6 +39,7 @@
         {
             public static readonly string BasketsApiEndpoint = "/api/v1/baskets";
             public static readonly string BasketsCheckoutApiEndpoint = "/api/v1/baskets/checkout";
+            public static readonly string BasketsItemDeleteApiEndpoint = "/api/v1/baskets/item";
         }
 
         public struct Order

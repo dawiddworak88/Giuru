@@ -73,6 +73,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             {
                 basketResponseModel.Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                 {
+                    Id = x.Id,
                     ProductId = x.ProductId,
                     ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
                     Name = x.ProductName,
@@ -99,6 +100,18 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             await this.basketRepository.DeleteAsync(token, language);
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Message = "asd" });
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteItem(Guid? id)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            var basket = await this.basketRepository.DeleteItemAsync(token, language, id);
+            Console.WriteLine(JsonConvert.SerializeObject(basket));
+
+            return this.StatusCode((int)HttpStatusCode.OK, basket);
         }
     }
 }
