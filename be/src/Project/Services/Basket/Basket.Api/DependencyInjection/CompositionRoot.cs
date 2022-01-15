@@ -1,12 +1,10 @@
-﻿using Basket.Api.Infrastructure;
-using Basket.Api.IntegrationEvents;
+﻿using Basket.Api.IntegrationEvents;
 using Basket.Api.IntegrationEventsHandlers;
 using Basket.Api.Repositories;
 using Basket.Api.Services;
 using Foundation.EventBus;
 using Foundation.EventBus.Abstractions;
 using Foundation.EventBusRabbitMq;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -36,11 +34,6 @@ namespace Basket.Api.DependencyInjection
             });
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-        }
-        public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddScoped<BasketContext>();
-            services.AddDbContext<BasketContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
         }
     }
 }

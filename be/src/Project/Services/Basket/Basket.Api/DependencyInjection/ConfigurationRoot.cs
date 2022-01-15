@@ -5,8 +5,6 @@ using Basket.Api.Configurations;
 using Microsoft.AspNetCore.Builder;
 using Foundation.EventBus.Abstractions;
 using Basket.Api.IntegrationEvents;
-using Basket.Api.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 
 namespace Basket.Api.DependencyInjection
 {
@@ -23,19 +21,6 @@ namespace Basket.Api.DependencyInjection
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
             eventBus.Subscribe<OrderStartedIntegrationEvent, IIntegrationEventHandler<OrderStartedIntegrationEvent>>();
-        }
-
-        public static void ConfigureDatabaseMigrations(this IApplicationBuilder app)
-        {
-            var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
-
-            using var scope = scopeFactory.CreateScope();
-            var dbContext = scope.ServiceProvider.GetService<BasketContext>();
-
-            if (!dbContext.AllMigrationsApplied())
-            {
-                dbContext.Database.Migrate();
-            }
         }
     }
 }

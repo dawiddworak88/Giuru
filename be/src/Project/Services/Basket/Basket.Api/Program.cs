@@ -64,8 +64,6 @@ builder.Services.RegisterApiAccountDependencies(builder.Configuration);
 
 builder.Services.RegisterBasketApiDependencies();
 
-builder.Services.RegisterDatabaseDependencies(builder.Configuration);
-
 builder.Services.AddApiVersioning();
 
 builder.Services.ConfigureSettings(builder.Configuration);
@@ -117,8 +115,6 @@ app.UseSwaggerUI(c =>
 app.UseRouting();
 
 app.UseAuthentication();
-
-app.ConfigureDatabaseMigrations();
 
 app.UseAuthorization();
 

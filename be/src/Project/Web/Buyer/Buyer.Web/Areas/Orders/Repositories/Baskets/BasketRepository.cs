@@ -1,7 +1,6 @@
 ﻿using Buyer.Web.Areas.Orders.ApiRequestModels;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Orders.DomainModels;
-using Buyer.Web.Areas.Orders.DomainModels.BasketOrder;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
@@ -31,7 +30,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             this.settings = settings;
         }
 
-        public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items)
+        public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<DomainModels.BasketItem> items)
         {
             var requestModel = new SaveBasketApiRequestModel
             {
@@ -64,7 +63,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 return new Basket
                 {
                     Id = response.Data.Id,
-                    Items = response.Data.Items.OrEmptyIfNull().Select(x => new BasketItem
+                    Items = response.Data.Items.OrEmptyIfNull().Select(x => new DomainModels.BasketItem
                     {
                         Id = x.Id,
                         ProductId = x.ProductId,
@@ -109,7 +108,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             }
         }
 
-        public async Task<BasketOrder> GetBasketByOrganisation(string token, string language)
+        public async Task<Basket> GetBasketByOrganisation(string token, string language)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
@@ -119,7 +118,8 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, BasketOrder>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Basket>(apiRequest);
+
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return response.Data;
@@ -145,7 +145,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             }
         }
 
-        public async Task<BasketOrder> DeleteItemAsync(string token, string language, Guid? id)
+        public async Task<Basket> DeleteItemAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
@@ -155,7 +155,8 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsItemDeleteApiEndpoint}/{id}"
             };
             
-            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BasketOrder>(apiRequest);
+            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BasketApiResponseModel>(apiRequest);
+
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
@@ -163,7 +164,23 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
 
             if (response.IsSuccessStatusCode)
             {
-                return response.Data;
+                return new Basket
+                {
+                    Id = response.Data.Id,
+                    Items = response.Data.Items.Select(x => new BasketItem
+                    {
+                        Id = x.Id,
+                        ProductId = x.ProductId,
+                        ProductSku = x.ProductSku,
+                        ProductName = x.ProductName,
+                        PictureUrl = x.PictureUrl,
+                        Quantity = x.Quantity,
+                        ExternalReference = x.ExternalReference,
+                        DeliveryFrom = x.DeliveryFrom,
+                        DeliveryTo = x.DeliveryTo,
+                        MoreInfo = x.MoreInfo
+                    })
+                };
             }
 
             return default;

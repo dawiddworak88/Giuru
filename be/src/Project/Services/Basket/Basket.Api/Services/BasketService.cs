@@ -8,11 +8,6 @@ using System.Threading.Tasks;
 using Basket.Api.RepositoriesModels;
 using Basket.Api.IntegrationEvents;
 using Basket.Api.IntegrationEventsModels;
-using Basket.Api.Infrastructure;
-using Basket.Api.Infrastructure.Entities;
-using Foundation.Extensions.Exceptions;
-using System.Net;
-using Newtonsoft.Json;
 
 namespace Basket.Api.Services
 {
@@ -20,16 +15,13 @@ namespace Basket.Api.Services
     {
         private readonly IBasketRepository basketRepository;
         private readonly IEventBus eventBus;
-        private readonly BasketContext basketContext;
 
         public BasketService(
             IBasketRepository basketRepository,
-            BasketContext basketContext,
             IEventBus eventBus)
         {
             this.basketRepository = basketRepository;
             this.eventBus = eventBus;
-            this.basketContext = basketContext;
         }
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel checkoutBasketServiceModel)
@@ -77,7 +69,7 @@ namespace Basket.Api.Services
                 Basket = new BasketEventModel
                 {
                     Id = basket.Id,
-                    Items = basket.Items.Select(x => new BasketItemEventModel 
+                    Items = basket.Items.Select(x => new BasketItemEventModel
                     {
                         ProductId = x.ProductId,
                         ProductSku = x.ProductSku,
@@ -92,133 +84,22 @@ namespace Basket.Api.Services
                 }
             };
 
-            var deleteModel = new DeleteBasketServiceModel
-            {
-                OrganisationId = checkoutBasketServiceModel.OrganisationId
-            };
-
-            if (!checkoutBasketServiceModel.isSeller)
-            {
-                await this.DeleteAsync(deleteModel);
-            }
-
             this.eventBus.Publish(message);
         }
 
-        public async Task DeleteAsync(DeleteBasketServiceModel serviceModel)
+        public Task DeleteAsync(DeleteBasketServiceModel serviceModel)
         {
-            var basket = from b in this.basketContext.Baskets where b.OwnerId == serviceModel.OrganisationId.Value select b;
-            if (basket == null)
-            {
-                throw new CustomException("ItemNotFound", (int)HttpStatusCode.NotFound);
-            }
-
-            var basketItemGroup = basket.GroupBy(g => g.ProductId).Select(x => new BasketItems { Quantity = x.Sum(x => x.Quantity), ProductId = x.FirstOrDefault().ProductId} );
-            foreach (var item in basket)
-            {
-                var message = new BasketProductBookingIntegrationEvent
-                {
-                    ProductId = item.ProductId.Value,
-                    BookedQuantity = item.Quantity,
-                };
-
-                this.eventBus.Publish(message);
-            }
-
-            this.basketContext.Baskets.RemoveRange(basket);
-            await this.basketContext.SaveChangesAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task<BasketOrderServiceModel> DelteItemAsync(DeleteBasketItemServiceModel serviceModel)
+        public Task<BasketOrderServiceModel> DelteItemAsync(DeleteBasketItemServiceModel serviceModel)
         {
-            var basket = from b in this.basketContext.Baskets where b.OwnerId == serviceModel.OrganisationId.Value select b;
-            if (basket == null)
-            {
-                throw new CustomException("ItemNotFound", (int)HttpStatusCode.NotFound);
-            }
-
-            var basketItem = basket.Where(x => x.ProductId == serviceModel.Id.Value).ToList();
-            var message = new BasketProductBookingIntegrationEvent
-            {
-                ProductId = basketItem.FirstOrDefault().ProductId.Value,
-                BookedQuantity = basketItem.Sum(x => x.Quantity),
-            };
-
-            this.eventBus.Publish(message);
-            this.basketContext.Baskets.RemoveRange(basketItem);
-            await this.basketContext.SaveChangesAsync();
-
-            if (basket.OrEmptyIfNull().Any())
-            {
-                var basketItems = new BasketOrderServiceModel
-                {
-                    Id = basket.FirstOrDefault().Id,
-                    OwnerId = basket.FirstOrDefault().OwnerId,
-                    Items = basket.Select(x => new BasketOrderItemServiceModel
-                    {
-                        Id = x.Id,
-                        ProductId = x.ProductId,
-                        Name = x.ProductName,
-                        Sku = x.ProductSku,
-                        ImageSrc = x.PictureUrl,
-                        ImageAlt = x.ProductName,
-                        Quantity = x.Quantity,
-                        ExternalReference = x.ExternalReference,
-                        DeliveryFrom = x.DeliveryFrom,
-                        DeliveryTo = x.DeliveryTo,
-                        MoreInfo = x.MoreInfo
-                    })
-                };
-
-                return basketItems;
-            }
-            return default;
+            throw new NotImplementedException();
         }
 
-        public async Task<BasketOrderServiceModel> GetByOrganisation(GetBasketByOrganisationServiceModel serviceModel)
+        public Task<BasketOrderServiceModel> GetByOrganisation(GetBasketByOrganisationServiceModel serviceModel)
         {
-            var basket = from b in this.basketContext.Baskets
-                         where b.OwnerId == serviceModel.OrganisationId.Value
-                         select new
-                         {
-                             Id = b.Id,
-                             OwnerId = b.OwnerId,
-                             ProductId = b.ProductId,
-                             ProductName = b.ProductName,
-                             ProductSku = b.ProductSku,
-                             PictureUrl = b.PictureUrl,
-                             Quantity = b.Quantity,
-                             ExternalReference = b.ExternalReference,
-                             DeliveryFrom = b.DeliveryFrom,
-                             DeliveryTo = b.DeliveryTo,
-                             MoreInfo = b.MoreInfo
-                         };
-
-            if (basket.OrEmptyIfNull().Any())
-            {
-                var basketItems = new BasketOrderServiceModel
-                {
-                    Id = basket.FirstOrDefault().Id,
-                    OwnerId = basket.FirstOrDefault().OwnerId,
-                    Items = basket.Select(x => new BasketOrderItemServiceModel
-                    {
-                        Id = x.Id,
-                        ProductId = x.ProductId,
-                        Name = x.ProductName,
-                        Sku = x.ProductSku,
-                        ImageSrc = x.PictureUrl,
-                        ImageAlt = x.ProductName,
-                        Quantity = x.Quantity,
-                        ExternalReference = x.ExternalReference,
-                        DeliveryFrom = x.DeliveryFrom,
-                        DeliveryTo = x.DeliveryTo,
-                        MoreInfo = x.MoreInfo
-                    })
-                };
-
-                return basketItems;
-            }
-            return default;
+            throw new NotImplementedException();
         }
 
         public async Task<BasketServiceModel> UpdateAsync(UpdateBasketServiceModel serviceModel)
@@ -240,37 +121,10 @@ namespace Basket.Api.Services
                 })
             };
 
-            if (!serviceModel.IsSeller)
-            {
-                var basketItem = new BasketItems
-                {
-                    BasketId = serviceModel.Id,
-                    OwnerId = serviceModel.OrganisationId.Value,
-                    ProductId = serviceModel.Items.LastOrDefault().ProductId,
-                    ProductSku = serviceModel.Items.LastOrDefault().ProductSku,
-                    ProductName = serviceModel.Items.LastOrDefault().ProductName,
-                    PictureUrl = serviceModel.Items.LastOrDefault().PictureUrl,
-                    Quantity = (int)serviceModel.Items.LastOrDefault().Quantity,
-                    ExternalReference = serviceModel.Items.LastOrDefault().ExternalReference,
-                    DeliveryFrom = serviceModel.Items.LastOrDefault().DeliveryFrom,
-                    DeliveryTo = serviceModel.Items.LastOrDefault().DeliveryTo,
-                    MoreInfo = serviceModel.Items.LastOrDefault().MoreInfo
-                };
-
-                var message = new BasketProductBookingIntegrationEvent
-                {
-                    ProductId = serviceModel.Items.LastOrDefault().ProductId.Value,
-                    BookedQuantity = (int)-serviceModel.Items.LastOrDefault().Quantity
-                };
-
-                this.basketContext.Baskets.Add(basketItem);
-                this.eventBus.Publish(message);
-                await this.basketContext.SaveChangesAsync();
-            }
             var result = await this.basketRepository.UpdateBasketAsync(basketModel);
 
             return new BasketServiceModel
-            { 
+            {
                 Id = result.Id,
                 Items = result.Items.OrEmptyIfNull().Select(x => new BasketItemServiceModel
                 {
