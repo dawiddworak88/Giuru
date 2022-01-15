@@ -65,12 +65,19 @@ function Catalog(props) {
     };
 
     const handleAddOrderItemClick = (item) => {
+
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const orderItem = {
-            productId: item.id, sku: item.sku, name: item.title, 
-            pictureUrl: item.imageUrl ? item.imageUrl : null, quantity: parseInt(1), 
-            externalReference: "", deliveryFrom: null, deliveryTo: null, moreInfo: ""
+            productId: item.id, 
+            sku: item.sku, 
+            name: item.title, 
+            pictureUrl: item.imageUrl ? item.imageUrl : null, 
+            quantity: parseInt(1), 
+            externalReference: null, 
+            deliveryFrom: null, 
+            deliveryTo: null, 
+            moreInfo: null
         };
 
         const basket = {
@@ -152,9 +159,11 @@ function Catalog(props) {
                                             }
                                         </div>
                                         {props.isLoggedIn && 
-                                            <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => handleAddOrderItemClick(item)}>
-                                                {props.basketLabel}
-                                            </Button>
+                                            <div className="catalog-item__add-to-cart-button-container">
+                                                <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => handleAddOrderItemClick(item)} color="primary">
+                                                    {props.basketLabel}
+                                                </Button>
+                                            </div>
                                         }
                                     </div>
                                 </div>

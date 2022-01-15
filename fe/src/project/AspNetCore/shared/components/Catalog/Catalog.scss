@@ -45,5 +45,12 @@
         &__sku {
             font-size: 0.9rem;
         }
+
+        &__add-to-cart-button-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
     }
 }
