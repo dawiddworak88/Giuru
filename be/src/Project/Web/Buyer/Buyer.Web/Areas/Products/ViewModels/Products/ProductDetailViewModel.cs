@@ -11,6 +11,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string Title { get; set; }
         public Guid? ProductId { get; set; }
         public bool IsAuthenticated { get; set; }
+        public bool IsProductVariant { get; set; }
         public string SignInUrl { get; set; }
         public string SkuLabel { get; set; }
         public string Sku { get; set; }

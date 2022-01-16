@@ -158,7 +158,7 @@ function Catalog(props) {
                                                 </div>
                                             }
                                         </div>
-                                        {props.isLoggedIn && 
+                                        {props.isLoggedIn && props.showAddToCartButton &&
                                             <div className="catalog-item__add-to-cart-button-container">
                                                 <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => handleAddOrderItemClick(item)} color="primary">
                                                     {props.basketLabel}
@@ -216,6 +216,7 @@ Catalog.propTypes = {
     successfullyAddedProduct: PropTypes.string,
     inStock: PropTypes.bool.isRequired,
     availableQuantity: PropTypes.number,
+    showAddToCartButton: PropTypes.bool,
     items: PropTypes.array
 };
 

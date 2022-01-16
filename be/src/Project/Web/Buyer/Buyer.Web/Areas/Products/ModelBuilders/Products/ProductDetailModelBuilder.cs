@@ -87,6 +87,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 viewModel.BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId });
                 viewModel.Description = product.Description;
                 viewModel.Sku = product.Sku;
+                viewModel.IsProductVariant = product.PrimaryProductId.HasValue;
                 viewModel.Features = product.ProductAttributes?.Select(x => new ProductFeatureViewModel { Key = x.Name, Value = string.Join(", ", x.Values.OrEmptyIfNull()) });
 
                 var images = new List<ImageViewModel>();

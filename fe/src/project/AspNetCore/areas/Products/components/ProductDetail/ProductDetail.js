@@ -86,19 +86,19 @@ function ProductDetail(props) {
                             }
                         </div>
                     }
+                    {props.isAuthenticated && props.isProductVariant &&
+                        <div className="product-detail__add-to-cart-button">
+                            <Button type="submit" startIcon={<ShoppingCart />} variant="contained" color="primary" onClick={() => handleAddOrderItemClick()}>
+                                {props.basketLabel}
+                            </Button>
+                        </div>
+                    }
                     {props.description &&
                         <div className="product-detail__product-description">
                             <h3 className="product-detail__feature-title">{props.descriptionLabel}</h3>
                             <p>{props.description}</p>
                         </div>
                     }
-
-                    {props.isAuthenticated && 
-                        <Button type="submit" startIcon={<ShoppingCart />} variant="contained" color="primary" onClick={() => handleAddOrderItemClick()}>
-                            {props.basketLabel}
-                        </Button>
-                    }
-
                     {props.features &&
                         <div className="product-detail__product-information">
                             <h3 className="product-detail__feature-title">{props.productInformationLabel}</h3>
@@ -139,6 +139,8 @@ ProductDetail.propTypes = {
     descriptionLabel: PropTypes.string.isRequired,
     productDescription: PropTypes.string,
     productVariants: PropTypes.array,
+    isProductVariant: PropTypes.bool,
+    isAuthenticated: PropTypes.bool,
     images: PropTypes.array,
     files: PropTypes.object
 };

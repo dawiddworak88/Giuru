@@ -52,6 +52,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             {
                 viewModel.ShowBrand = true;
             }
+
+            viewModel.ShowAddToCartButton = true;
             viewModel.SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct");
             viewModel.UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.Title = this.globalLocalizer.GetString("AvailableProducts");
