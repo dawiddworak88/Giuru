@@ -9,6 +9,7 @@ using Basket.Api.RepositoriesModels;
 using Basket.Api.IntegrationEvents;
 using Basket.Api.IntegrationEventsModels;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Basket.Api.Services
 {
@@ -85,8 +86,29 @@ namespace Basket.Api.Services
                 }
             };
 
+            var itemGroups = basket.Items.OrEmptyIfNull().GroupBy(g => g.ProductId);
+            var item = new List<BasketCheckoutProductEventModel>();
+
+            foreach (var group in itemGroups)
+            {
+                item.Add(new BasketCheckoutProductEventModel
+                {
+                    ProductId = group.FirstOrDefault().ProductId,
+                    BookedQuantity = (int)-group.Sum(x => x.Quantity)
+                });
+            }
+
+            var bookedItems = new BasketCheckoutProductsIntegrationEvent
+            {
+                Items = item.Select(x => new BasketCheckoutProductEventModel
+                {
+                    ProductId= x.ProductId,
+                    BookedQuantity = x.BookedQuantity,
+                })
+            };
+
+            this.eventBus.Publish(bookedItems);
             this.eventBus.Publish(message);
-            await this.basketRepository.DeleteBasketAsync(checkoutBasketServiceModel.BasketId.Value);
         }
 
         public async Task DeleteAsync(DeleteBasketServiceModel serviceModel)

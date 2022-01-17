@@ -196,7 +196,6 @@ function NewOrderForm(props) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         var order = {
-            id,
             basketId,
         };
 

@@ -24,8 +24,6 @@ using System.Threading.Tasks;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
-using System;
-using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {

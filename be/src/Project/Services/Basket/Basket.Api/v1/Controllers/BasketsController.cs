@@ -155,8 +155,6 @@ namespace Basket.Api.v1.Controllers
                         })
                     };
 
-                    Console.WriteLine(response.Id);
-
                     return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
             }
