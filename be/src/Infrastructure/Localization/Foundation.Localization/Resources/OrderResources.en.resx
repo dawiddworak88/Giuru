@@ -120,6 +120,9 @@
   <data name="AddOrderItem" xml:space="preserve">
     <value>Add</value>
   </data>
+  <data name="BasketDeletedSuccessfully" xml:space="preserve">
+    <value>The basket has been cleared successfully</value>
+  </data>
   <data name="ChangeDeliveryFrom" xml:space="preserve">
     <value>Change delivery from date</value>
   </data>
@@ -197,6 +200,9 @@
   </data>
   <data name="OrderStatusUpdatedSuccessfully" xml:space="preserve">
     <value>Order status has been updated successfully.</value>
+  </data>
+  <data name="OrganisationNotFound:" xml:space="preserve">
+    <value>Customer organization does not exist</value>
   </data>
   <data name="PlaceOrder" xml:space="preserve">
     <value>Place order</value>

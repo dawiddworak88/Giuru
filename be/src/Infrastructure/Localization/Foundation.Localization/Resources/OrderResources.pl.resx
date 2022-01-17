@@ -120,6 +120,9 @@
   <data name="AddOrderItem" xml:space="preserve">
     <value>Dodaj</value>
   </data>
+  <data name="BasketDeletedSuccessfully" xml:space="preserve">
+    <value>Koszyk został pomyślnie wyczyszczony</value>
+  </data>
   <data name="ChangeDeliveryFrom" xml:space="preserve">
     <value>Zmień początkową datę dostawy</value>
   </data>
@@ -197,6 +200,9 @@
   </data>
   <data name="OrderStatusUpdatedSuccessfully" xml:space="preserve">
     <value>Status zamówienia został pomyślnie zaktualizowany.</value>
+  </data>
+  <data name="OrganisationNotFound:" xml:space="preserve">
+    <value>Organizacja klienta nie istnieje</value>
   </data>
   <data name="PlaceOrder" xml:space="preserve">
     <value>Złóż zamówienie</value>
