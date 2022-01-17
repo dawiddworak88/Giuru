@@ -32,7 +32,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             var viewModel = new AvailableProductsPageViewModel
             {
                 Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
-                MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(new ComponentModelBase { Id = componentModel.Id, Token = componentModel.Token, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language }),
+                MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
                 Catalog = await this.searchProductsCatalogModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };

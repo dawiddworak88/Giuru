@@ -24,6 +24,8 @@ using System.Threading.Tasks;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
+using System;
+using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -82,7 +84,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 InStockLabel = this.globalLocalizer.GetString("InStock")
             };
 
-            var product = await this.productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, componentModel.Token);
+            var product = await this.productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
 
             if (product != null)
             {
@@ -125,28 +127,31 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     viewModel.RestockableInDaysLabel = this.inventoryResources.GetString("RestockableInDaysLabel");
                 }
 
-                var existingBasket = await this.basketRepository.GetBasketByOrganisation(componentModel.Token, componentModel.Language);
-                if (existingBasket != null)
+                if (viewModel.IsAuthenticated)
                 {
-                    var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
-                    if (productIds.OrEmptyIfNull().Any())
+                    var existingBasket = await this.basketRepository.GetBasketByOrganisation(componentModel.Token, componentModel.Language);
+                    if (existingBasket != null)
                     {
-                        var basketResponseModel = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
-                        {
-                            ProductId = x.ProductId,
-                            ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
-                            Name = x.ProductName,
-                            Sku = x.ProductSku,
-                            Quantity = x.Quantity,
-                            ExternalReference = x.ExternalReference,
-                            ImageSrc = x.PictureUrl,
-                            ImageAlt = x.ProductName,
-                            DeliveryFrom = x.DeliveryFrom,
-                            DeliveryTo = x.DeliveryTo,
-                            MoreInfo = x.MoreInfo
-                        });
                         viewModel.Id = existingBasket.Id.Value;
-                        viewModel.OrderItems = basketResponseModel;
+                        var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
+                        if (productIds.OrEmptyIfNull().Any())
+                        {
+                            var basketResponseModel = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
+                            {
+                                ProductId = x.ProductId,
+                                ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
+                                Name = x.ProductName,
+                                Sku = x.ProductSku,
+                                Quantity = x.Quantity,
+                                ExternalReference = x.ExternalReference,
+                                ImageSrc = x.PictureUrl,
+                                ImageAlt = x.ProductName,
+                                DeliveryFrom = x.DeliveryFrom,
+                                DeliveryTo = x.DeliveryTo,
+                                MoreInfo = x.MoreInfo
+                            });
+                            viewModel.OrderItems = basketResponseModel;
+                        }
                     }
                 }
 

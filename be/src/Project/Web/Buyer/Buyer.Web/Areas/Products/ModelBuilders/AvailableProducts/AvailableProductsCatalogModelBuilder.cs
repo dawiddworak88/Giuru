@@ -66,36 +66,39 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "AvailableProductsApi", new { Area = "Products" });
             viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
 
+            if (viewModel.IsLoggedIn)
+            {
+                var existingBasket = await this.basketRepository.GetBasketByOrganisation(componentModel.Token, componentModel.Language);
+                if (existingBasket != null)
+                {
+                    viewModel.Id = existingBasket.Id.Value;
+                    var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
+                    if (productIds.OrEmptyIfNull().Any())
+                    {
+                        var basketResponseModel = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
+                        {
+                            ProductId = x.ProductId,
+                            ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
+                            Name = x.ProductName,
+                            Sku = x.ProductSku,
+                            Quantity = x.Quantity,
+                            ExternalReference = x.ExternalReference,
+                            ImageSrc = x.PictureUrl,
+                            ImageAlt = x.ProductName,
+                            DeliveryFrom = x.DeliveryFrom,
+                            DeliveryTo = x.DeliveryTo,
+                            MoreInfo = x.MoreInfo
+                        });
+                        viewModel.OrderItems = basketResponseModel;
+                    }
+                }
+            }
+
             var inventories = await this.inventoryRepository.GetAvailbleProductsInventory(
                 componentModel.Language,
                 PaginationConstants.DefaultPageIndex,
                 ProductConstants.ProductsCatalogPaginationPageSize,
                 componentModel.Token);
-
-            var existingBasket = await this.basketRepository.GetBasketByOrganisation(componentModel.Token, componentModel.Language);
-            if (existingBasket != null)
-            {
-                var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
-                if (productIds.OrEmptyIfNull().Any())
-                {
-                    var basketResponseModel = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
-                    {
-                        ProductId = x.ProductId,
-                        ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
-                        Name = x.ProductName,
-                        Sku = x.ProductSku,
-                        Quantity = x.Quantity,
-                        ExternalReference = x.ExternalReference,
-                        ImageSrc = x.PictureUrl,
-                        ImageAlt = x.ProductName,
-                        DeliveryFrom = x.DeliveryFrom,
-                        DeliveryTo = x.DeliveryTo,
-                        MoreInfo = x.MoreInfo
-                    });
-                    viewModel.Id = existingBasket.Id.Value;
-                    viewModel.OrderItems = basketResponseModel;
-                }
-            }
 
             if (inventories?.Data is not null && inventories.Data.Any())
             {

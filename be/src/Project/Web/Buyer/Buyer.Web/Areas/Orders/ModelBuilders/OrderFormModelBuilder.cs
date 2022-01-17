@@ -78,6 +78,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             var existingBasket = await this.basketRepository.GetBasketByOrganisation(componentModel.Token, componentModel.Language);
             if (existingBasket != null)
             {
+                viewModel.Id = existingBasket.Id.Value;
+
                 var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
                 if (productIds.OrEmptyIfNull().Any())
                 {
@@ -95,7 +97,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         DeliveryTo = x.DeliveryTo,
                         MoreInfo = x.MoreInfo
                     });
-                    viewModel.Id = existingBasket.Id.Value;
                     viewModel.OrderItems = basketResponseModel;
                 }
             }

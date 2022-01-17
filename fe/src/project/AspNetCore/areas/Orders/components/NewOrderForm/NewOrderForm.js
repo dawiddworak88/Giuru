@@ -23,10 +23,8 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 import IconConstants from "../../../../../../shared/constants/IconConstants";
 
 function NewOrderForm(props) {
-
     const [state, dispatch] = useContext(Context);
-    const [id, ] = useState(props.id ? props.id : null);
-    const [basketId, setBasketId] = useState(null);
+    const [basketId, setBasketId] = useState(props.id ? props.id : null);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
@@ -298,7 +296,6 @@ function NewOrderForm(props) {
         <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="is-modern-form">
-                {id && <input id="id" name="id" type="hidden" value={id} /> }
                 <Fragment>
                     <div className="container">
                         <div className="dropzone__pond-container" {...getRootProps()}>

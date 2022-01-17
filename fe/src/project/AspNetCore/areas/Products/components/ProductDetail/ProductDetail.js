@@ -10,11 +10,9 @@ import { Context } from "../../../../../../shared/stores/Store";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 
 function ProductDetail(props) {
-
     const [, dispatch] = useContext(Context);
-    const [id, ] = React.useState(props.id ? props.id : null);
     const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
-    const [basketId, setBasketId] = React.useState(null);
+    const [basketId, setBasketId] = React.useState(props.id ? props.id : null);
 
     const handleAddOrderItemClick = () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });

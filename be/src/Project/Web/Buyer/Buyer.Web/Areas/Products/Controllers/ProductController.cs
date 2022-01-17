@@ -1,7 +1,9 @@
 ﻿using Buyer.Web.Areas.Products.ViewModels.Products;
+using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;
@@ -26,6 +28,7 @@ namespace Buyer.Web.Areas.Products.Controllers
                 Id = id,
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
+                Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 Name = this.User.Identity.Name
             };
 

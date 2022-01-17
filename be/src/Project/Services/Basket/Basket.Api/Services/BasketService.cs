@@ -104,7 +104,6 @@ namespace Basket.Api.Services
                     Id = serviceModel.OrganisationId.Value,
                     Items = Array.Empty<BasketItemServiceModel>()
                 };
-
                 return emptyBasket;
             }
 
