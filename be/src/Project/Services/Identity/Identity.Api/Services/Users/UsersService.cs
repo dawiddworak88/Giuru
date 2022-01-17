@@ -55,6 +55,10 @@ namespace Identity.Api.Services.Users
             var timeExpiration = timeNow.AddHours(IdentityConstants.VerifiTimeExpiration);
 
             var existingOrganisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.ContactEmail == serviceModel.Email && x.IsActive);
+            if (existingOrganisation == null)
+            {
+                throw new CustomException(this.accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NotFound);
+            }
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo(existingOrganisation.Language);
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;

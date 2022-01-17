@@ -10,12 +10,13 @@ using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Helpers;
 using Foundation.Extensions.Services.MediaServices;
+using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -32,17 +33,20 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly LinkGenerator linkGenerator;
         private readonly IOptions<AppSettings> options;
         private readonly IMediaHelperService mediaService;
+        private readonly IStringLocalizer<OrderResources> orderLocalizer;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
             LinkGenerator linkGenerator,
             IOptions<AppSettings> options,
-            IMediaHelperService mediaService)
+            IMediaHelperService mediaService,
+            IStringLocalizer<OrderResources> orderLocalizer)
         {
             this.basketRepository = basketRepository;
             this.linkGenerator = linkGenerator;
             this.options = options;
             this.mediaService = mediaService;
+            this.orderLocalizer = orderLocalizer;
         }
 
         [HttpPost]
@@ -102,18 +106,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             await this.basketRepository.DeleteAsync(token, language);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = "asd" });
-        }
-
-        [HttpDelete]
-        public async Task<IActionResult> DeleteItem(Guid? id)
-        {
-            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
-            var language = CultureInfo.CurrentUICulture.Name;
-
-            var basket = await this.basketRepository.DeleteItemAsync(token, language, id);
-
-            return this.StatusCode((int)HttpStatusCode.OK, basket);
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.orderLocalizer.GetString("BasketDeletedSuccessfully").Value });
         }
     }
 }

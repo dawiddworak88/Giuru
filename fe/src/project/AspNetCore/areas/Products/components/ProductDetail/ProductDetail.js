@@ -18,9 +18,15 @@ function ProductDetail(props) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const orderItem = {
-            productId: props.productId, sku: props.sku, name: props.title, 
-            imageId: props.images ? props.images[0].id : null, quantity: parseInt(1), 
-            externalReference: "", deliveryFrom: null, deliveryTo: null, moreInfo: ""
+            productId: props.productId, 
+            sku: props.sku, 
+            name: props.title, 
+            imageId: props.images ? props.images[0].id : null, 
+            quantity: parseInt(1), 
+            externalReference: "", 
+            deliveryFrom: null, 
+            deliveryTo: null, 
+            moreInfo: ""
         };
 
         const basket = {

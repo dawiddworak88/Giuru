@@ -39,7 +39,7 @@ function StatusOrder(props) {
         <section className="section status-order">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
-                {status && status != null &&
+                {status &&
                     <div className="column is-3">
                         <div className="status-ordder__details">{props.orderStatusLabel}: {status.name}</div>
                         {props.expectedDelivery && 

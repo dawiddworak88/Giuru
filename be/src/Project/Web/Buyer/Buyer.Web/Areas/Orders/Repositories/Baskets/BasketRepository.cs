@@ -10,7 +10,6 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +30,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             this.settings = settings;
         }
 
-        public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<DomainModels.BasketItem> items)
+        public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items)
         {
             var requestModel = new SaveBasketApiRequestModel
             {
@@ -64,7 +63,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 return new Basket
                 {
                     Id = response.Data.Id,
-                    Items = response.Data.Items.OrEmptyIfNull().Select(x => new DomainModels.BasketItem
+                    Items = response.Data.Items.OrEmptyIfNull().Select(x => new BasketItem
                     {
                         Id = x.Id,
                         ProductId = x.ProductId,
@@ -118,9 +117,6 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}"
             };
-
-            Console.WriteLine(apiRequest.AccessToken);
-
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Basket>(apiRequest);
             if (response.IsSuccessStatusCode && response.Data != null)

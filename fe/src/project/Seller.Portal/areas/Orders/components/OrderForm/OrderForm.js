@@ -114,7 +114,6 @@ function OrderForm(props) {
             moreInfo
         };
 
-
         const basket = {
 
             id: basketId,
