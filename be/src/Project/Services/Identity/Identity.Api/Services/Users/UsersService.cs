@@ -1,6 +1,5 @@
 ﻿using Feature.Account;
 using Foundation.Extensions.Exceptions;
-using Foundation.GenericRepository.Extensions;
 using Foundation.Mailing.Configurations;
 using Foundation.Mailing.Models;
 using Foundation.Mailing.Services;
@@ -8,7 +7,6 @@ using Identity.Api.Areas.Accounts.Services.UserServices;
 using Identity.Api.Definitions;
 using Identity.Api.Infrastructure;
 using Identity.Api.Infrastructure.Accounts.Entities;
-using Identity.Api.Infrastructure.Organisations.Entities;
 using Identity.Api.ServicesModels.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -18,7 +16,6 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Globalization;
 using System.Net;
-using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -58,21 +55,6 @@ namespace Identity.Api.Services.Users
             var timeExpiration = timeNow.AddHours(IdentityConstants.VerifiTimeExpiration);
 
             var existingOrganisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.ContactEmail == serviceModel.Email && x.IsActive);
-            if (existingOrganisation == null)
-            {
-                var organisation = new Organisation
-                {
-                    Name = serviceModel.Name,
-                    ContactEmail = serviceModel.Email,
-                    IsSeller = false,
-                    Domain = new MailAddress(serviceModel.Email).Host,
-                    Key = new MailAddress(serviceModel.Email).Host.Split('.')[0],
-                    Language = serviceModel.CommunicationsLanguage
-                };
-
-                existingOrganisation = organisation;
-                this.identityContext.Organisations.Add(organisation.FillCommonProperties());
-            }
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo(existingOrganisation.Language);
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
@@ -124,6 +106,7 @@ namespace Identity.Api.Services.Users
                 TwoFactorEnabled = false,
                 LockoutEnabled = false,
             };
+
             this.identityContext.Accounts.Add(userAccount);
             await this.identityContext.SaveChangesAsync();
             await this.mailingService.SendTemplateAsync(new TemplateEmail
