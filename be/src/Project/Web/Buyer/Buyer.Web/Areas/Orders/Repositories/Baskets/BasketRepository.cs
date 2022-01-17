@@ -143,47 +143,5 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
         }
-
-        public async Task<Basket> DeleteItemAsync(string token, string language, Guid? id)
-        {
-            var apiRequest = new ApiRequest<RequestModelBase>
-            {
-                Language = language,
-                Data = new RequestModelBase(),
-                AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsItemDeleteApiEndpoint}/{id}"
-            };
-            
-            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BasketApiResponseModel>(apiRequest);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
-            if (response.IsSuccessStatusCode)
-            {
-                return new Basket
-                {
-                    Id = response.Data.Id,
-                    Items = response.Data.Items.Select(x => new BasketItem
-                    {
-                        Id = x.Id,
-                        ProductId = x.ProductId,
-                        ProductSku = x.ProductSku,
-                        ProductName = x.ProductName,
-                        PictureUrl = x.PictureUrl,
-                        Quantity = x.Quantity,
-                        ExternalReference = x.ExternalReference,
-                        DeliveryFrom = x.DeliveryFrom,
-                        DeliveryTo = x.DeliveryTo,
-                        MoreInfo = x.MoreInfo
-                    })
-                };
-            }
-
-            return default;
-
-        }
     }
 }

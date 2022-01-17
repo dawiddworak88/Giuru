@@ -55,6 +55,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+
             var id = GuidHelper.ParseNullable(sellerClaim?.Value);
             var basket = await this.basketRepository.SaveAsync(token, language, id,
                 model.Items.OrEmptyIfNull().Select(x => new BasketItem
