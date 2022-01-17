@@ -117,7 +117,7 @@ function Catalog(props) {
                 toast.error(props.generalErrorMessage);
             });
     };
-    console.log(items);
+
     return (
         <section className="catalog section">
             <h1 className="title is-3">{props.title}</h1>
