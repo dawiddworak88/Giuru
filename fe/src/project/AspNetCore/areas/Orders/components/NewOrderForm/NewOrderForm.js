@@ -26,7 +26,7 @@ function NewOrderForm(props) {
 
     const [state, dispatch] = useContext(Context);
     const [id, ] = useState(props.id ? props.id : null);
-    const [basketId, setBasketId] = useState(props.basketId ? props.basketId : null);
+    const [basketId, setBasketId] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
@@ -154,6 +154,46 @@ function NewOrderForm(props) {
         setEntityToDelete(null);
     };
 
+    const handleDeleteEntity = () => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const basket = {
+            id: basketId,
+            items: orderItems.filter((orderItem) => orderItem.productId !== entityToDelete.productId)
+        };
+
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(basket)
+        };
+
+        fetch(props.updateBasketUrl, requestOptions)
+            .then(function (response) {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                return response.json().then(jsonResponse => {
+
+                    if (response.ok) {
+                        setBasketId(jsonResponse.id);
+                        setOpenDeleteDialog(false);
+
+                        if (jsonResponse.items && jsonResponse.items.length > 0) {
+                            setOrderItems(jsonResponse.items);
+                        }
+                        else {
+                            setOrderItems([]);
+                        }
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    };
+
     const handlePlaceOrder = () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
@@ -229,38 +269,6 @@ function NewOrderForm(props) {
         accept: ".xlsx, .xls",
         multiple: false
     });
-
-    const deleteItem = () => {
-        dispatch({ type: "SET_IS_LOADING", payload: true });
-        
-        const payload = {
-            id: entityToDelete.productId
-        }
-
-        const requestOptions = {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" }
-        };
-
-        const url = props.deleteItemBasketUrl + "?" + QueryStringSerializer.serialize(payload);
-        return fetch(url, requestOptions)
-            .then(function (response) {
-                return response.json().then(jsonResponse => {
-                    if (response.ok) {
-                        setOpenDeleteDialog(false);
-                        dispatch({ type: "SET_IS_LOADING", payload: false });
-                        setOrderItems(jsonResponse.items);
-                    }
-                    else {
-                        toast.error(props.generalErrorMessage);
-                    }
-                });
-            }).catch(() => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                toast.error(props.generalErrorMessage);
-            });
-        
-    }
 
     const clearBasket = () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -488,7 +496,7 @@ function NewOrderForm(props) {
             <ConfirmationDialog
                 open={openDeleteDialog}
                 handleClose={handleDeleteDialogClose}
-                handleConfirm={deleteItem}
+                handleConfirm={handleDeleteEntity}
                 titleId="delete-from-basket-title"
                 title={props.deleteConfirmationLabel}
                 textId="delete-from-basket-text"

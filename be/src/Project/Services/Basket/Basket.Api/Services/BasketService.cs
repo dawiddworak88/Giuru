@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Basket.Api.RepositoriesModels;
 using Basket.Api.IntegrationEvents;
 using Basket.Api.IntegrationEventsModels;
+using Newtonsoft.Json;
 
 namespace Basket.Api.Services
 {
@@ -85,21 +86,46 @@ namespace Basket.Api.Services
             };
 
             this.eventBus.Publish(message);
+            await this.basketRepository.DeleteBasketAsync(checkoutBasketServiceModel.BasketId.Value);
         }
 
-        public Task DeleteAsync(DeleteBasketServiceModel serviceModel)
+        public async Task DeleteAsync(DeleteBasketServiceModel serviceModel)
         {
-            throw new NotImplementedException();
+            await this.basketRepository.DeleteBasketAsync(serviceModel.OrganisationId.Value);
         }
 
-        public Task<BasketOrderServiceModel> DelteItemAsync(DeleteBasketItemServiceModel serviceModel)
+        public async Task<BasketServiceModel> GetByOrganisation(GetBasketByOrganisationServiceModel serviceModel)
         {
-            throw new NotImplementedException();
-        }
+            var basket = await this.basketRepository.GetBasketAsync(serviceModel.OrganisationId.Value);
+            if (basket == null)
+            {
+                var emptyBasket = new BasketServiceModel()
+                {
+                    Id = serviceModel.OrganisationId.Value,
+                    Items = Array.Empty<BasketItemServiceModel>()
+                };
 
-        public Task<BasketOrderServiceModel> GetByOrganisation(GetBasketByOrganisationServiceModel serviceModel)
-        {
-            throw new NotImplementedException();
+                return emptyBasket;
+            }
+
+            var response = new BasketServiceModel
+            {
+                Id = basket.Id.Value,
+                Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemServiceModel
+                {
+                    ProductId = x.ProductId,
+                    ProductSku = x.ProductSku,
+                    ProductName = x.ProductName,
+                    PictureUrl = x.PictureUrl,
+                    Quantity = x.Quantity,
+                    ExternalReference = x.ExternalReference,
+                    DeliveryFrom = x.DeliveryFrom,
+                    DeliveryTo = x.DeliveryTo,
+                    MoreInfo = x.MoreInfo
+                })
+            };
+
+            return response;
         }
 
         public async Task<BasketServiceModel> UpdateAsync(UpdateBasketServiceModel serviceModel)

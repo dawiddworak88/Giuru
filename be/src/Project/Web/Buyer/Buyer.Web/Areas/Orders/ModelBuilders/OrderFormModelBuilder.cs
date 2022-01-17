@@ -1,11 +1,16 @@
-﻿using Buyer.Web.Areas.Orders.Repositories.Baskets;
+﻿using Buyer.Web.Areas.Orders.ApiResponseModels;
+using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Areas.Orders.ViewModel;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Newtonsoft.Json;
+using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Orders.ModelBuilders
@@ -73,8 +78,27 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             var existingBasket = await this.basketRepositry.GetBasketByOrganisation(componentModel.Token, componentModel.Language);
             if (existingBasket != null)
             {
-                viewModel.BasketId = existingBasket.Id;
-                viewModel.OrderItems = existingBasket.Items;
+                var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
+                if (productIds.OrEmptyIfNull().Any())
+                {
+                    var basketResponseModel = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
+                    {
+                        Id = x.Id,
+                        ProductId = x.ProductId,
+                        ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
+                        Name = x.ProductName,
+                        Sku = x.ProductSku,
+                        Quantity = x.Quantity,
+                        ExternalReference = x.ExternalReference,
+                        ImageSrc = x.PictureUrl,
+                        ImageAlt = x.ProductName,
+                        DeliveryFrom = x.DeliveryFrom,
+                        DeliveryTo = x.DeliveryTo,
+                        MoreInfo = x.MoreInfo
+                    });
+                    viewModel.Id = existingBasket.Id.Value;
+                    viewModel.OrderItems = basketResponseModel;
+                }
             }
 
             return viewModel;

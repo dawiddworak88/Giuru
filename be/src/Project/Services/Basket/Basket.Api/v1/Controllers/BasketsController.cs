@@ -17,6 +17,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Basket.Api.ServicesModels;
 using Basket.Api.v1.ResponseModels;
+using Newtonsoft.Json;
 
 namespace Basket.Api.v1.Controllers
 {
@@ -119,69 +120,8 @@ namespace Basket.Api.v1.Controllers
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
-        /// <param name="id">The id.</param>
-        [HttpDelete, MapToApiVersion("1.0")]
-        [Route("item/{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(BasketOrderResponseModel))]
-        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> DeleteItem(Guid? id)
-        {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
-            var serviceModel = new DeleteBasketItemServiceModel
-            {
-                Id = id,
-                Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
-            };
-
-            var validator = new DeleteBasketItemModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
-            if (validationResult.IsValid)
-            {
-                var remainingItems = await this.basketService.DelteItemAsync(serviceModel);
-                if (remainingItems != null)
-                {
-                    var response = new BasketOrderResponseModel
-                    {
-                        Id = remainingItems.Id,
-                        OwnerId = remainingItems.OwnerId,
-                        Items = remainingItems.Items.OrEmptyIfNull().Select(x => new BasketOrderItemResponseModel
-                        {
-                            Id = x.Id,
-                            ProductId = x.ProductId,
-                            Sku = x.Sku,
-                            Name = x.Name,
-                            ImageSrc = x.ImageSrc,
-                            ImageAlt = x.ImageAlt,
-                            Quantity = x.Quantity,
-                            ExternalReference = x.ExternalReference,
-                            DeliveryFrom = x.DeliveryFrom,
-                            DeliveryTo = x.DeliveryTo,
-                            MoreInfo = x.MoreInfo
-                        })
-                    };
-
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
-                }
-                else
-                {
-                    var response = new BasketOrderResponseModel()
-                    {
-                        Id = serviceModel.Id.Value,
-                        OwnerId = serviceModel.OrganisationId.Value,
-                        Items = Array.Empty<BasketOrderItemResponseModel>()
-                    };
-
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
-                }
-            }
-
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
-        }
-
         [HttpGet, MapToApiVersion("1.0")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(BasketOrderResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(BasketResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get()
         {
@@ -198,18 +138,15 @@ namespace Basket.Api.v1.Controllers
                 var basket = await this.basketService.GetByOrganisation(serviceModel);
                 if (basket != null)
                 {
-                    var response = new BasketOrderResponseModel
+                    var response = new BasketResponseModel
                     {
                         Id = basket.Id,
-                        OwnerId = basket.OwnerId,
-                        Items = basket.Items.OrEmptyIfNull().Select(x => new BasketOrderItemResponseModel
+                        Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                         {
-                            Id = x.Id,
                             ProductId = x.ProductId,
-                            Sku = x.Sku,
-                            Name = x.Name,
-                            ImageSrc = x.ImageSrc,
-                            ImageAlt = x.ImageAlt,
+                            ProductSku = x.ProductSku,
+                            ProductName = x.ProductName,
+                            PictureUrl = x.PictureUrl,
                             Quantity = x.Quantity,
                             ExternalReference = x.ExternalReference,
                             DeliveryFrom = x.DeliveryFrom,

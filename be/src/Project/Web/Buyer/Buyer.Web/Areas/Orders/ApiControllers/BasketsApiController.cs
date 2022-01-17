@@ -4,15 +4,18 @@ using Buyer.Web.Areas.Orders.Definitions;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Shared.Configurations;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.Helpers;
 using Foundation.Extensions.Services.MediaServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -47,7 +50,9 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
-            var basket = await this.basketRepository.SaveAsync(token, language, model.Id,
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var id = GuidHelper.ParseNullable(sellerClaim?.Value);
+            var basket = await this.basketRepository.SaveAsync(token, language, id,
                 model.Items.OrEmptyIfNull().Select(x => new BasketItem
                 {
                     ProductId = x.ProductId,

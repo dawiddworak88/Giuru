@@ -520,15 +520,19 @@ function OrderForm(props) {
                 }
                 <div className="field">
                     {showBackToOrdersListButton ?
-                        (<Button type="button" variant="contained" color="primary" onClick={handleBackToOrdersClick}>
-                            {props.navigateToOrdersListText}
-                        </Button>) :
-                        (<Button type="button" variant="contained"
-                            color="primary"
-                            onClick={handlePlaceOrder}
-                            disabled={state.isLoading || orderItems.length === 0}>
-                            {props.saveText}
-                        </Button>)}
+                        (
+                            <Button type="button" variant="contained" color="primary" onClick={handleBackToOrdersClick}>
+                                {props.navigateToOrdersListText}
+                            </Button>
+                        ) :
+                        (
+                            <Button type="button" variant="contained"
+                                color="primary"
+                                onClick={handlePlaceOrder}
+                                disabled={state.isLoading || orderItems.length === 0}>
+                                {props.saveText}
+                            </Button>
+                        )}
                 </div>
             </div>
             <ConfirmationDialog
