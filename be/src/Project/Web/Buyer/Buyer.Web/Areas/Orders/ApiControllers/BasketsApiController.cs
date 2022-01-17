@@ -77,7 +77,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             {
                 basketResponseModel.Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                 {
-                    Id = x.Id,
                     ProductId = x.ProductId,
                     ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
                     Name = x.ProductName,

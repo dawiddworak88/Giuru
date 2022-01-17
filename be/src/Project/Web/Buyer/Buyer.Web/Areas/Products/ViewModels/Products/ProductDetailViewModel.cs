@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Shared.ViewModels.Files;
+﻿using Buyer.Web.Areas.Orders.ApiResponseModels;
+using Buyer.Web.Shared.ViewModels.Files;
 using Buyer.Web.Shared.ViewModels.Images;
 using Foundation.PageContent.Components.CarouselGrids.ViewModels;
 using System;
@@ -8,6 +9,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
 {
     public class ProductDetailViewModel
     {
+        public Guid? Id { get; set; }
         public string Title { get; set; }
         public Guid? ProductId { get; set; }
         public bool IsAuthenticated { get; set; }
@@ -35,6 +37,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string UpdateBasketUrl { get; set; }
         public IEnumerable<CarouselGridItemViewModel> ProductVariants { get; set; }
         public FilesViewModel Files { get; set; }
+        public IEnumerable<BasketItemResponseModel> OrderItems { get; set; }
         public IEnumerable<ImageViewModel> Images { get; set; }
         public IEnumerable<ProductFeatureViewModel> Features { get; set; }
     }

@@ -12,7 +12,8 @@ import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGri
 function ProductDetail(props) {
 
     const [, dispatch] = useContext(Context);
-    const [orderItems, setOrderItems] = React.useState([]);
+    const [id, ] = React.useState(props.id ? props.id : null);
+    const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
     const [basketId, setBasketId] = React.useState(null);
 
     const handleAddOrderItemClick = () => {
@@ -20,7 +21,7 @@ function ProductDetail(props) {
 
         const orderItem = {
             productId: props.productId, sku: props.sku, name: props.title, 
-            pictureUrl: props.images ? props.images[0] : null, quantity: parseInt(1), 
+            imageId: props.images ? props.images[0].id : null, quantity: parseInt(1), 
             externalReference: "", deliveryFrom: null, deliveryTo: null, moreInfo: ""
         };
 
