@@ -12,8 +12,9 @@ import { ShoppingCart } from "@material-ui/icons";
 function Catalog(props) {
 
     const [, dispatch] = useContext(Context);
+    const [id, ] = React.useState(props.id ? props.id : null);
+    const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
     const [page, setPage] = React.useState(0);
-    const [orderItems, setOrderItems] = React.useState([]);
     const [basketId, setBasketId] = React.useState(null);
     const [itemsPerPage,] = React.useState(CatalogConstants.defaultCatalogItemsPerPage());
     const [items, setItems] = React.useState(props.pagedItems.data);
@@ -72,7 +73,7 @@ function Catalog(props) {
             productId: item.id, 
             sku: item.sku, 
             name: item.title, 
-            pictureUrl: item.imageUrl ? item.imageUrl : null, 
+            imageId: item.images ? item.images[0] : null,
             quantity: parseInt(1), 
             externalReference: null, 
             deliveryFrom: null, 
@@ -92,7 +93,7 @@ function Catalog(props) {
         };
 
         fetch(props.updateBasketUrl, requestOptions)
-            .then(function (response) {
+            .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 return response.json().then(jsonResponse => {

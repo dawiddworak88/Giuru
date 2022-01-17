@@ -20,18 +20,18 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly LinkGenerator linkGenerator;
-        private readonly IBasketRepository basketRepositry;
+        private readonly IBasketRepository basketRepository;
 
         public OrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
-            IBasketRepository basketRepositry,
+            IBasketRepository basketRepository,
             LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
-            this.basketRepositry = basketRepositry;
+            this.basketRepository = basketRepository;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -75,7 +75,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 ClearBasketUrl = this.linkGenerator.GetPathByAction("Delete", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
 
-            var existingBasket = await this.basketRepositry.GetBasketByOrganisation(componentModel.Token, componentModel.Language);
+            var existingBasket = await this.basketRepository.GetBasketByOrganisation(componentModel.Token, componentModel.Language);
             if (existingBasket != null)
             {
                 var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
@@ -83,7 +83,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 {
                     var basketResponseModel = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                     {
-                        Id = x.Id,
                         ProductId = x.ProductId,
                         ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
                         Name = x.ProductName,
