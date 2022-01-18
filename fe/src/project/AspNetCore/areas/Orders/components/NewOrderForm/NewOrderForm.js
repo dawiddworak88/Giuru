@@ -24,7 +24,7 @@ import IconConstants from "../../../../../../shared/constants/IconConstants";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
-    const [basketId, setBasketId] = useState(props.id ? props.id : null);
+    const [basketId, setBasketId] = useState(props.basketId ? props.basketId : null);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
@@ -174,7 +174,6 @@ function NewOrderForm(props) {
                     if (response.ok) {
                         setBasketId(jsonResponse.id);
                         setOpenDeleteDialog(false);
-
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
                             setOrderItems(jsonResponse.items);
                         }
@@ -275,12 +274,17 @@ function NewOrderForm(props) {
             headers: { "Content-Type": "application/json" },
         };
 
-        fetch(props.clearBasketUrl, requestOptions)
+        const requestData = {
+            id: basketId
+        }
+
+        const url = props.clearBasketUrl + "?" + QueryStringSerializer.serialize(requestData);
+        fetch(url, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        toast.success(props.successfullyClearBasket);
+                        toast.success(jsonResponse.message);
                         setOrderItems([]);
                         setBasketId(null);
                     }

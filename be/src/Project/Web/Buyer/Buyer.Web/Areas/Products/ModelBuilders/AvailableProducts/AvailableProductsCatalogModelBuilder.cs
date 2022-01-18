@@ -59,6 +59,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                 viewModel.ShowBrand = true;
             }
 
+            viewModel.BasketId = componentModel.BasketId;
             viewModel.ShowAddToCartButton = true;
             viewModel.SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct");
             viewModel.UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
@@ -68,10 +69,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 
             if (viewModel.IsLoggedIn)
             {
-                var existingBasket = await this.basketRepository.GetBasketByOrganisation(componentModel.Token, componentModel.Language);
+                var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
                 if (existingBasket != null)
                 {
-                    viewModel.Id = existingBasket.Id.Value;
                     var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
                     if (productIds.OrEmptyIfNull().Any())
                     {
@@ -89,6 +89,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                             DeliveryTo = x.DeliveryTo,
                             MoreInfo = x.MoreInfo
                         });
+
                         viewModel.OrderItems = basketResponseModel;
                     }
                 }

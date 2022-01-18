@@ -7,7 +7,7 @@ namespace Basket.Api.Services
     {
         Task<BasketServiceModel> UpdateAsync(UpdateBasketServiceModel serviceModel);
         Task DeleteAsync(DeleteBasketServiceModel serviceModel);
-        Task<BasketServiceModel> GetByOrganisation(GetBasketByOrganisationServiceModel serviceModel);
+        Task<BasketServiceModel> GetBasketById(GetBasketByIdServiceModel serviceModel);
         Task CheckoutAsync(CheckoutBasketServiceModel checkoutBasketServiceModel);
     }
 }

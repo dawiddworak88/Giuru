@@ -95,13 +95,15 @@ namespace Basket.Api.v1.Controllers
         }
 
         [HttpDelete, MapToApiVersion("1.0")]
+        [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Delete()
+        public async Task<IActionResult> Delete(Guid id)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
             var serviceModel = new DeleteBasketServiceModel
             {
+                Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -119,22 +121,27 @@ namespace Basket.Api.v1.Controllers
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
+        /// <param name="id">The user id</param>
         [HttpGet, MapToApiVersion("1.0")]
+        [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(BasketResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(Guid id)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
-            var serviceModel = new GetBasketByOrganisationServiceModel
+            var serviceModel = new GetBasketByIdServiceModel
             {
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var validator = new GetBasketByOrganisationModelValidator();
+            var validator = new GetBasketByIdModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
             if (validationResult.IsValid)
             {
-                var basket = await this.basketService.GetByOrganisation(serviceModel);
+                var basket = await this.basketService.GetBasketById(serviceModel);
                 if (basket != null)
                 {
                     var response = new BasketResponseModel

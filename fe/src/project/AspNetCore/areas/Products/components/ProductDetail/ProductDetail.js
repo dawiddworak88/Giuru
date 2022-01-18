@@ -12,7 +12,7 @@ import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGri
 function ProductDetail(props) {
     const [, dispatch] = useContext(Context);
     const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
-    const [basketId, setBasketId] = React.useState(props.id ? props.id : null);
+    const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
 
     const handleAddOrderItemClick = () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });

@@ -38,6 +38,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         {
             var viewModel = new OrderFormViewModel
             {
+                BasketId = componentModel.BasketId,
                 Title = this.orderLocalizer.GetString("Order"),
                 AddText = this.orderLocalizer.GetString("AddOrderItem"),
                 SearchPlaceholderLabel = this.orderLocalizer.GetString("EnterSkuOrName"),
@@ -75,11 +76,9 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 ClearBasketUrl = this.linkGenerator.GetPathByAction("Delete", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
 
-            var existingBasket = await this.basketRepository.GetBasketByOrganisation(componentModel.Token, componentModel.Language);
+            var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
             if (existingBasket != null)
             {
-                viewModel.Id = existingBasket.Id.Value;
-
                 var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
                 if (productIds.OrEmptyIfNull().Any())
                 {
@@ -97,6 +96,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                         DeliveryTo = x.DeliveryTo,
                         MoreInfo = x.MoreInfo
                     });
+
                     viewModel.OrderItems = basketResponseModel;
                 }
             }

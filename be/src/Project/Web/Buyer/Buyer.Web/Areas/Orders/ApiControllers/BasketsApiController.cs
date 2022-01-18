@@ -13,10 +13,12 @@ using Foundation.Extensions.Services.MediaServices;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -54,9 +56,19 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
 
-            var id = GuidHelper.ParseNullable(sellerClaim?.Value);
+            var reqCookie = this.Request.Cookies["basket"];
+            if (reqCookie is null)
+            {
+                reqCookie = Guid.NewGuid().ToString();
+                var cookieOption = new CookieOptions()
+                {
+                    MaxAge = TimeSpan.FromDays(1)
+                };
+                this.Response.Cookies.Append("basket", reqCookie, cookieOption);
+            }
+
+            var id = Guid.Parse(reqCookie);
             var basket = await this.basketRepository.SaveAsync(token, language, id,
                 model.Items.OrEmptyIfNull().Select(x => new BasketItem
                 {
@@ -77,7 +89,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             };
 
             var productIds = basket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
-
             if (productIds.OrEmptyIfNull().Any())
             {
                 basketResponseModel.Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
@@ -100,12 +111,14 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete()
+        public async Task<IActionResult> Delete(Guid? id)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await this.basketRepository.DeleteAsync(token, language);
+            await this.basketRepository.DeleteAsync(token, language, id);
+
+            this.Response.Cookies.Delete("basket");
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.orderLocalizer.GetString("BasketDeletedSuccessfully").Value });
         }

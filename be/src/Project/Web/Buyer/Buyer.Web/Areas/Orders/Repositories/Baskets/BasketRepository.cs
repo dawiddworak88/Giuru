@@ -108,14 +108,14 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             }
         }
 
-        public async Task<Basket> GetBasketByOrganisation(string token, string language)
+        public async Task<Basket> GetBasketById(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}/{id}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Basket>(apiRequest);
@@ -127,14 +127,14 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             return default;
         }
 
-        public async Task DeleteAsync(string token, string language)
+        public async Task DeleteAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}/{id}"
             };
 
             var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);

@@ -113,17 +113,17 @@ namespace Basket.Api.Services
 
         public async Task DeleteAsync(DeleteBasketServiceModel serviceModel)
         {
-            await this.basketRepository.DeleteBasketAsync(serviceModel.OrganisationId.Value);
+            await this.basketRepository.DeleteBasketAsync(serviceModel.Id.Value);
         }
 
-        public async Task<BasketServiceModel> GetByOrganisation(GetBasketByOrganisationServiceModel serviceModel)
+        public async Task<BasketServiceModel> GetBasketById(GetBasketByIdServiceModel serviceModel)
         {
-            var basket = await this.basketRepository.GetBasketAsync(serviceModel.OrganisationId.Value);
+            var basket = await this.basketRepository.GetBasketAsync(serviceModel.Id.Value);
             if (basket == null)
             {
                 var emptyBasket = new BasketServiceModel()
                 {
-                    Id = serviceModel.OrganisationId.Value,
+                    Id = serviceModel.Id.Value,
                     Items = Array.Empty<BasketItemServiceModel>()
                 };
                 return emptyBasket;

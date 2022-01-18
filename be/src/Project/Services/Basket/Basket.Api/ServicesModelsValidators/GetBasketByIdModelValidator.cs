@@ -4,9 +4,9 @@ using Foundation.Extensions.Validators;
 
 namespace Basket.Api.ServicesModelsValidators
 {
-    public class DeleteBasketModelValidator : BaseServiceModelValidator<DeleteBasketServiceModel>
+    public class GetBasketByIdModelValidator : BaseServiceModelValidator<GetBasketByIdServiceModel>
     {
-        public DeleteBasketModelValidator()
+        public GetBasketByIdModelValidator()
         {
             this.RuleFor(x => x.Id).NotNull().NotEmpty();
         }

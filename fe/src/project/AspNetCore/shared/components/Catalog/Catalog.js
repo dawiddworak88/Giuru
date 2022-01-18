@@ -14,7 +14,7 @@ function Catalog(props) {
     const [, dispatch] = useContext(Context);
     const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
     const [page, setPage] = React.useState(0);
-    const [basketId, setBasketId] = React.useState(props.id ? props.id : null);
+    const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
     const [itemsPerPage,] = React.useState(CatalogConstants.defaultCatalogItemsPerPage());
     const [items, setItems] = React.useState(props.pagedItems.data);
     const [total, setTotal] = React.useState(props.pagedItems.total);

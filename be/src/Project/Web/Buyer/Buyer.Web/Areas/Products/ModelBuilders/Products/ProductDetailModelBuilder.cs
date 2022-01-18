@@ -79,7 +79,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 BasketLabel = this.globalLocalizer.GetString("BasketLabel"),
                 SkuLabel = this.productLocalizer.GetString("Sku"),
-                InStockLabel = this.globalLocalizer.GetString("InStock")
+                InStockLabel = this.globalLocalizer.GetString("InStock"),
+                BasketId = componentModel.BasketId,
             };
 
             var product = await this.productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
@@ -127,10 +128,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 if (viewModel.IsAuthenticated)
                 {
-                    var existingBasket = await this.basketRepository.GetBasketByOrganisation(componentModel.Token, componentModel.Language);
+                    var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
                     if (existingBasket != null)
                     {
-                        viewModel.Id = existingBasket.Id.Value;
                         var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
                         if (productIds.OrEmptyIfNull().Any())
                         {

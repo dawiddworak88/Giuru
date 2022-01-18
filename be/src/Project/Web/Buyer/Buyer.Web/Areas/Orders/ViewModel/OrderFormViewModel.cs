@@ -7,7 +7,7 @@ namespace Buyer.Web.Areas.Orders.ViewModel
     public class OrderFormViewModel
     {
         public string Title { get; set; }
-        public Guid? Id { get; set; }
+        public Guid? BasketId { get; set; }
         public string NoOrderItemsLabel { get; set; }
         public string SearchPlaceholderLabel { get; set; }
         public string GeneralErrorMessage { get; set; }
