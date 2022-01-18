@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Basket.Api.RepositoriesModels;
 using Basket.Api.IntegrationEvents;
 using Basket.Api.IntegrationEventsModels;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace Basket.Api.Services
