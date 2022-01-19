@@ -424,7 +424,7 @@
     <value>Nachname</value>
   </data>
   <data name="BasketLabel" xml:space="preserve">
-    <value>Zum Warenkorb hinzufügen</value>
+    <value>zum Warenkorb hinzufügen</value>
   </data>
   <data name="PrimaryFabricLabel" xml:space="preserve">
     <value>Stoff</value>

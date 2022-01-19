@@ -133,7 +133,7 @@
     <value>Otrzymujesz tę wiadomość ponieważ została rozpoczęta procedura resetowania hasła.</value>
   </data>
   <data name="ap_subject" xml:space="preserve">
-    <value>Resetowanie hasła konta</value>
+    <value>Resetowanie hasła</value>
   </data>
   <data name="BackToLoginText" xml:space="preserve">
     <value>Powróć do logowania</value>

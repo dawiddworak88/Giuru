@@ -7,8 +7,6 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Newtonsoft.Json;
-using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
