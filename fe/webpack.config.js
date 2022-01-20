@@ -198,6 +198,7 @@ var sellerPortalBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
+        mediapage: ["./src/project/Seller.Portal/areas/Media/pages/MediaPage/index.js", "./src/project/Seller.Portal/areas/Media/pages/MediaPage/MediaPage.scss"],
         inventorypage: ["./src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/InventoryPage.scss"],
         warehousepage: ["./src/project/Seller.Portal/areas/Warehouse/pages/WarehousePage/index.js", "./src/project/Seller.Portal/areas/Warehouse/pages/WarehousePage/WarehousePage.scss"],
         inventoryaddpage: ["./src/project/Seller.Portal/areas/Inventory/pages/InventoryAddPage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/InventoryPage.scss"],
