@@ -12,6 +12,7 @@ namespace Media.Api.v1.Areas.Media.ResultModels
         public string MimeType { get; set; }
         public long Size { get; set; }
         public bool IsProtected { get; set; }
+        public Guid? MediaItemId { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

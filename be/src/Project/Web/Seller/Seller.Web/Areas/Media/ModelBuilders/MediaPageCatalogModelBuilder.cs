@@ -1,10 +1,12 @@
 ﻿using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Media.DomainModels;
+using Seller.Web.Areas.Media.Repositories.Media;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
@@ -19,17 +21,20 @@ namespace Seller.Web.Areas.Media.ModelBuilders
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer mediaLocalizer;
         private readonly LinkGenerator linkGenerator;
+        private readonly IMediaRepository mediaRepository;
 
         public MediaPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<MediaResources> mediaLocalizer,
+            IMediaRepository mediaRepository,
             LinkGenerator linkGenerator)
         {
             this.catalogModelBuilder = catalogModelBuilder;
             this.globalLocalizer = globalLocalizer;
             this.mediaLocalizer = mediaLocalizer;
             this.linkGenerator = linkGenerator;
+            this.mediaRepository = mediaRepository;
         }
 
         public async Task<CatalogViewModel<MediaItem>> BuildModelAsync(ComponentModelBase componentModel)
@@ -42,7 +47,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Warehouse", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "WarehousesApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "WarehousesApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "MediaApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(MediaItem.CreatedDate)} desc";
 
@@ -69,7 +74,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(MediaItem.Id).ToCamelCase(),
+                        Title = nameof(MediaItem.FileName).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
@@ -84,6 +89,8 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                     }
                 }
             };
+
+            viewModel.PagedItems = await this.mediaRepository.GetMediaItemsAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(MediaItem.CreatedDate)} desc");
 
             return viewModel;
         }

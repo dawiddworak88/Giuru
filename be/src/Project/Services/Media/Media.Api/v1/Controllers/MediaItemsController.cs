@@ -2,9 +2,11 @@
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.Helpers;
 using Foundation.GenericRepository.Paginations;
 using Media.Api.Services.Media;
 using Media.Api.ServicesModels;
+using Media.Api.v1.Areas.Media.ResultModels;
 using Media.Api.v1.ResponseModels;
 using Media.Api.Validators;
 using Microsoft.AspNetCore.Authorization;
@@ -36,17 +38,18 @@ namespace Media.Api.v1.Controllers
         /// Gets media items by ids.
         /// </summary>
         /// <param name="ids">Ids of media items.</param>
+        /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The number of items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
         /// <returns>Media items.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<MediaItemResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [AllowAnonymous]
-        public async Task<IActionResult> Get(string ids, int pageIndex, int itemsPerPage)
+        public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy )
         {
             var mediaItemsIds = ids.ToEnumerableGuidIds();
-
             if (mediaItemsIds != null)
             {
                 var serviceModel = new GetMediaItemsByIdsServiceModel
@@ -54,17 +57,14 @@ namespace Media.Api.v1.Controllers
                     Language = CultureInfo.CurrentCulture.Name,
                     Ids = mediaItemsIds,
                     PageIndex = pageIndex,
-                    ItemsPerPage = itemsPerPage
+                    ItemsPerPage = itemsPerPage,
                 };
 
                 var validator = new GetMediaItemsByIdsModelValidator();
-
                 var validationResult = await validator.ValidateAsync(serviceModel);
-
                 if (validationResult.IsValid)
                 {
                     var mediaItems = this.mediaService.GetMediaItemsByIds(serviceModel);
-
                     if (mediaItems != null)
                     {
                         var response = new PagedResults<IEnumerable<MediaItemResponseModel>>(mediaItems.Total, mediaItems.PageSize)
@@ -73,11 +73,11 @@ namespace Media.Api.v1.Controllers
                             {
                                 Id = x.Id,
                                 Description = x.Description,
-                                Extension = x.Extension,
-                                Filename = x.Filename,
-                                IsProtected = x.IsProtected,
-                                MimeType = x.MimeType,
                                 Name = x.Name,
+                                Extension = x.Extension,
+                                MediaItemId = x.MediaItemId,    
+                                Filename = x.Filename,
+                                MimeType = x.MimeType,
                                 Size = x.Size,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
@@ -89,6 +89,41 @@ namespace Media.Api.v1.Controllers
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
+            else
+            {
+                var serviceModel = new GetMediaItemsServiceModel
+                {
+                    Language = CultureInfo.CurrentCulture.Name,
+                    SearchTerm = searchTerm,
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    OrderBy = orderBy,
+                };
+
+                var mediaItems = this.mediaService.GetAsync(serviceModel);
+                if (mediaItems != null)
+                {
+                    var response = new PagedResults<IEnumerable<MediaItemResponseModel>>(mediaItems.Result.Total, mediaItems.Result.PageSize)
+                    {
+                        Data = mediaItems.Result.Data.OrEmptyIfNull().Select(x => new MediaItemResponseModel
+                        {
+                            Id = x.Id,
+                            Description = x.Description,
+                            Extension = x.Extension,
+                            Filename = x.Filename,
+                            MimeType = x.MimeType,
+                            MediaItemId = x.MediaItemId,
+                            Name = x.Name,
+                            Size = x.Size,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        })
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+                throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
             }
 
             return this.BadRequest();

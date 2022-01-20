@@ -16,6 +16,7 @@ using Foundation.GenericRepository.Predicates;
 using Foundation.Extensions.ExtensionMethods;
 using Media.Api.Definitions;
 using Foundation.GenericRepository.Extensions;
+using Newtonsoft.Json;
 
 namespace Media.Api.Services.Media
 {
@@ -173,7 +174,7 @@ namespace Media.Api.Services.Media
 
             return new PagedResults<IEnumerable<MediaItemServiceModel>>(unorderedMediaItemsResults.Count, model.ItemsPerPage)
             { 
-                Data = mediaItemsResults
+                   Data = mediaItemsResults
             };
         }
 
@@ -235,6 +236,33 @@ namespace Media.Api.Services.Media
             };
 
             return imageContentTypes.Contains(contentType);
+        }
+
+        public async Task<PagedResults<IEnumerable<MediaItemServiceModel>>> GetAsync(GetMediaItemsServiceModel serviceModel)
+        {
+            var mediaItems = from media in this.context.MediaItemVersions
+                             where media.IsActive
+                             select new MediaItemServiceModel
+                             {
+                                 Id = media.Id,
+                                 MediaItemId = media.MediaItemId,
+                                 Filename = media.Filename,
+                                 Size = media.Size,
+                                 Extension = media.Extension,
+                                 MimeType = media.MimeType,
+                                 LastModifiedDate = media.LastModifiedDate,
+                                 CreatedDate = media.CreatedDate,
+                             };
+
+
+            if (!string.IsNullOrWhiteSpace(serviceModel.SearchTerm))
+            {
+                mediaItems = mediaItems.Where(x => x.Filename.StartsWith(serviceModel.SearchTerm));
+            }
+
+            mediaItems.ApplySort(serviceModel.OrderBy);
+
+            return mediaItems.PagedIndex(new Pagination(mediaItems.Count(), serviceModel.ItemsPerPage), serviceModel.PageIndex);
         }
     }
 }

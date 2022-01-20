@@ -120,4 +120,7 @@
   <data name="Media" xml:space="preserve">
     <value>Media</value>
   </data>
+  <data name="NewText" xml:space="preserve">
+    <value>Dodaj media</value>
+  </data>
 </root>
