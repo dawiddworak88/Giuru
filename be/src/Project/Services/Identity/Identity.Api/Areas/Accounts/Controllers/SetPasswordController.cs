@@ -33,8 +33,6 @@ namespace Identity.Api.Areas.Accounts.Controllers
                 ReturnUrl = model.ReturnUrl,
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                Host = this.Request.Host.ToString(),
-                Scheme = this.Request.Scheme
             };
 
             var viewModel = await this.setPasswordModelBuilder.BuildModelAsync(componentModel);

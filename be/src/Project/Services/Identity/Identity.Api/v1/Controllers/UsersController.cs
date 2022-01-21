@@ -97,6 +97,7 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(UserRequestModel request)
         {
+            var url = this.Request.Scheme + "://" + this.Request.Host.ToString();
             if (request.Id == null)
             {
                 var serviceModel = new CreateUserServiceModel
@@ -104,6 +105,7 @@ namespace Identity.Api.v1.Controllers
                     Name = request.Name,
                     Email = request.Email,
                     CommunicationsLanguage = request.CommunicationLanguage,
+                    Url = url
                 };
 
                 var validator = new CreateUserModelValidator();
@@ -127,6 +129,7 @@ namespace Identity.Api.v1.Controllers
                     TwoFactorEnabled = request.TwoFactorEnabled,
                     AccessFailedCount = request.AccessFailedCount,
                     LockoutEnd = request.LockoutEnd,
+                    Url = url
                 };
 
                 var validator = new UpdateUserModelValidator();

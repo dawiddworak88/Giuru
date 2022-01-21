@@ -29,7 +29,6 @@ namespace Identity.Api.Services.Users
         private readonly IStringLocalizer accountLocalizer;
         private readonly IUserService userService;
         private readonly LinkGenerator linkGenerator;
-        private readonly IHttpContextAccessor httpContextAccessor;
 
         public UsersService(
             IdentityContext identityContext,
@@ -37,7 +36,6 @@ namespace Identity.Api.Services.Users
             IMailingService mailingService,
             IStringLocalizer<AccountResources> accountLocalizer,
             IUserService userService,
-            IHttpContextAccessor httpContextAccessor,
             LinkGenerator linkGenerator)
         {
             this.identityContext = identityContext;
@@ -46,7 +44,6 @@ namespace Identity.Api.Services.Users
             this.accountLocalizer = accountLocalizer;
             this.userService = userService;
             this.linkGenerator = linkGenerator;
-            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<UserServiceModel> CreateAsync(CreateUserServiceModel serviceModel)
@@ -87,7 +84,7 @@ namespace Identity.Api.Services.Users
                         ap_headOne = this.accountLocalizer.GetString("ap_headOne").Value,
                         ap_headTwo = this.accountLocalizer.GetString("ap_headTwo").Value,
                         ap_lineOne = this.accountLocalizer.GetString("ap_lineOne").Value,
-                        resetAccountLink = this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = user.ExpirationId }, this.httpContextAccessor.HttpContext.Request.Scheme, this.httpContextAccessor.HttpContext.Request.Host)
+                        resetAccountLink = serviceModel.Url + this.linkGenerator.GetPathByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = user.ExpirationId })
                     }
                 });
 
@@ -130,7 +127,7 @@ namespace Identity.Api.Services.Users
                     nc_headTwo = this.accountLocalizer.GetString("nc_headTwo").Value,
                     nc_lineOne = this.accountLocalizer.GetString("nc_lineOne").Value,
                     nc_lineTwo = this.accountLocalizer.GetString("nc_lineTwo").Value,
-                    signAccountLink = this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = userAccount.ExpirationId }, this.httpContextAccessor.HttpContext.Request.Scheme, this.httpContextAccessor.HttpContext.Request.Host)
+                    signAccountLink = serviceModel.Url + this.linkGenerator.GetPathByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = userAccount.ExpirationId })
                 }
             });
 
