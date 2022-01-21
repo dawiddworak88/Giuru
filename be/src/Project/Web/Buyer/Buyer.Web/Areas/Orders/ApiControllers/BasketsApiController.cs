@@ -4,15 +4,20 @@ using Buyer.Web.Areas.Orders.Definitions;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Definitions.Basket;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Services.MediaServices;
+using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -28,17 +33,20 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly LinkGenerator linkGenerator;
         private readonly IOptions<AppSettings> options;
         private readonly IMediaHelperService mediaService;
+        private readonly IStringLocalizer<OrderResources> orderLocalizer;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
             LinkGenerator linkGenerator,
             IOptions<AppSettings> options,
-            IMediaHelperService mediaService)
+            IMediaHelperService mediaService,
+            IStringLocalizer<OrderResources> orderLocalizer)
         {
             this.basketRepository = basketRepository;
             this.linkGenerator = linkGenerator;
             this.options = options;
             this.mediaService = mediaService;
+            this.orderLocalizer = orderLocalizer;
         }
 
         [HttpPost]
@@ -46,7 +54,20 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
-            var basket = await this.basketRepository.SaveAsync(token, language, model.Id,
+
+            var reqCookie = this.Request.Cookies[BasketConstants.BasketCookieName];
+            if (reqCookie is null)
+            {
+                reqCookie = Guid.NewGuid().ToString();
+                var cookieOptions = new CookieOptions
+                {
+                    MaxAge = TimeSpan.FromDays(BasketConstants.BasketCookieMaxAge)
+                };
+                this.Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
+            }
+
+            var id = Guid.Parse(reqCookie);
+            var basket = await this.basketRepository.SaveAsync(token, language, id,
                 model.Items.OrEmptyIfNull().Select(x => new BasketItem
                 {
                     ProductId = x.ProductId,
@@ -66,7 +87,6 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             };
 
             var productIds = basket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
-
             if (productIds.OrEmptyIfNull().Any())
             {
                 basketResponseModel.Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
@@ -86,6 +106,19 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             }
 
             return this.StatusCode((int)HttpStatusCode.OK, basketResponseModel);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            await this.basketRepository.DeleteAsync(token, language, id);
+
+            this.Response.Cookies.Delete(BasketConstants.BasketCookieName);
+
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.orderLocalizer.GetString("BasketDeletedSuccessfully").Value });
         }
     }
 }

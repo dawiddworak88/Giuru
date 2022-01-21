@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Orders.ViewModel;
+using Buyer.Web.Shared.Definitions.Basket;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;
@@ -33,6 +34,7 @@ namespace Buyer.Web.Areas.Orders.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var reqCookie = this.Request.Cookies[BasketConstants.BasketCookieName];
             var componentModel = new ComponentModelBase
             {
                 Language = CultureInfo.CurrentUICulture.Name,
@@ -41,6 +43,11 @@ namespace Buyer.Web.Areas.Orders.Controllers
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Name = this.User.Identity.Name
             };
+
+            if (reqCookie != null)
+            {
+                componentModel.BasketId = Guid.Parse(reqCookie);
+            }
 
             var viewModel = await this.orderPageModelBuilder.BuildModelAsync(componentModel);
 
@@ -53,8 +60,10 @@ namespace Buyer.Web.Areas.Orders.Controllers
             {
                 Id = id,
                 Language = CultureInfo.CurrentUICulture.Name,
+                IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value)
+                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value),
+                Name = this.User.Identity.Name
             };
 
             var viewModel = await this.editOrderPageModelBuilder.BuildModelAsync(componentModel);

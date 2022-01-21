@@ -120,11 +120,17 @@
   <data name="AddOrderItem" xml:space="preserve">
     <value>Hinzufügen</value>
   </data>
+  <data name="BasketDeletedSuccessfully" xml:space="preserve">
+    <value>Der Warenkorb wurde erfolgreich geleert</value>
+  </data>
   <data name="ChangeDeliveryFrom" xml:space="preserve">
     <value>Lieferung ab Datum ändern</value>
   </data>
   <data name="ChangeDeliveryTo" xml:space="preserve">
     <value>Lieferung bis Datum ändern</value>
+  </data>
+  <data name="ClearBasketText" xml:space="preserve">
+    <value>Korb klaren</value>
   </data>
   <data name="ClientRequiredErrorMessage" xml:space="preserve">
     <value>Wählen Sie einen Kunde aus</value>
@@ -149,6 +155,9 @@
   </data>
   <data name="ImportOrder" xml:space="preserve">
     <value>Bestellung importieren</value>
+  </data>
+  <data name="ItemNotFound" xml:space="preserve">
+    <value>Produkt nicht gefunden</value>
   </data>
   <data name="MoreInfoLabel" xml:space="preserve">
     <value>Zusätzliche Information:</value>
@@ -191,6 +200,9 @@
   </data>
   <data name="OrderStatusUpdatedSuccessfully" xml:space="preserve">
     <value>Bestellstatus wurde erfolgreich aktualisiert.</value>
+  </data>
+  <data name="OrganisationNotFound:" xml:space="preserve">
+    <value>Kundenorganisation existiert nicht</value>
   </data>
   <data name="PlaceOrder" xml:space="preserve">
     <value>Bestellung aufgeben</value>

@@ -10,10 +10,11 @@ namespace Identity.Api.Areas.Accounts.ViewModels
         public string SetPasswordText { get; set; }
         public string PasswordLabel { get; set; }
         public string ConfirmPasswordLabel { get; set; }
+        public string EmailIsConfirmedText { get; set; }
+        public string BackToLoginText { get; set; }
+        public string OrdersUrl { get; set; }
         public bool EmailConfirmed { get; set; }
         public string PasswordFormatErrorMessage { get; set; }
         public string PasswordRequiredErrorMessage { get; set; }
-        public string FirstNameRequiredErrorMessage { get; set; }
-        public string LastNameRequiredErrorMessage { get; set; }
     }
 }

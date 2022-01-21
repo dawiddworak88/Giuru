@@ -423,4 +423,13 @@
   <data name="LastName" xml:space="preserve">
     <value>Last name</value>
   </data>
+  <data name="BasketLabel" xml:space="preserve">
+    <value>Add to cart</value>
+  </data>
+  <data name="PrimaryFabricLabel" xml:space="preserve">
+    <value>Fabric:</value>
+  </data>
+  <data name="SuccessfullyAddedProduct" xml:space="preserve">
+    <value>The product has beed added successfully</value>
+  </data>
 </root>

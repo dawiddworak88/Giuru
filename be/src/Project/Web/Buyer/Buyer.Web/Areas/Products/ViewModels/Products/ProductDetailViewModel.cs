@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Shared.ViewModels.Files;
+﻿using Buyer.Web.Areas.Orders.ApiResponseModels;
+using Buyer.Web.Shared.ViewModels.Files;
 using Buyer.Web.Shared.ViewModels.Images;
 using Foundation.PageContent.Components.CarouselGrids.ViewModels;
 using System;
@@ -8,8 +9,11 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
 {
     public class ProductDetailViewModel
     {
+        public Guid? BasketId { get; set; }
         public string Title { get; set; }
+        public Guid? ProductId { get; set; }
         public bool IsAuthenticated { get; set; }
+        public bool IsProductVariant { get; set; }
         public string SignInUrl { get; set; }
         public string SkuLabel { get; set; }
         public string Sku { get; set; }
@@ -19,6 +23,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string PricesLabel { get; set; }
         public string ProductInformationLabel { get; set; }
         public string SignInToSeePricesLabel { get; set; }
+        public string SuccessfullyAddedProduct { get; set; }
         public bool InStock { get; set; }
         public int? AvailableQuantity { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
@@ -28,8 +33,11 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string DescriptionLabel { get; set; }
         public string Description { get; set; }
         public string InStockLabel { get; set; }
+        public string BasketLabel { get; set; }
+        public string UpdateBasketUrl { get; set; }
         public IEnumerable<CarouselGridItemViewModel> ProductVariants { get; set; }
         public FilesViewModel Files { get; set; }
+        public IEnumerable<BasketItemResponseModel> OrderItems { get; set; }
         public IEnumerable<ImageViewModel> Images { get; set; }
         public IEnumerable<ProductFeatureViewModel> Features { get; set; }
     }

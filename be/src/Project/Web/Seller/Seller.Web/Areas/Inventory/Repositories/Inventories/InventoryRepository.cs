@@ -207,7 +207,6 @@ namespace Seller.Web.Areas.Inventory.Repositories.Inventories
             };
 
             var response = await this.apiInventoryService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
-
             if (!response.IsSuccessStatusCode && response?.Data != null)
             {
                 throw new CustomException(response.Data.Message, (int)response.StatusCode);

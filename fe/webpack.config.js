@@ -140,7 +140,8 @@ var accountBrowserConfig = {
         publicPath: path.resolve(__dirname, "../be/src/Project/Services/Identity/Identity.Api/wwwroot/dist/js"),
         path: path.resolve(__dirname, "../be/src/Project/Services/Identity/Identity.Api/wwwroot/dist/js"),
         filename: "[name].js"
-    }
+    },
+    target: "node"
 };
 
 var sellerPortalBrowserConfig = {

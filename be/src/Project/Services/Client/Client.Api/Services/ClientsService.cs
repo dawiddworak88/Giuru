@@ -135,5 +135,22 @@ namespace Client.Api.Services
 
             return clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage), model.PageIndex);
         }
+
+        public async Task<ClientServiceModel> GetByOrganisationAsync(GetClientByOrganisationServiceModel model)
+        {
+            var clients = from c in this.context.Clients
+                          where c.OrganisationId == model.Id.Value && c.IsActive
+                          select new ClientServiceModel
+                          {
+                              Id = c.Id,
+                              Name = c.Name,
+                              Email = c.Email,
+                              CommunicationLanguage = c.Language,
+                              LastModifiedDate = c.LastModifiedDate,
+                              CreatedDate = c.CreatedDate
+                          };
+
+            return await clients.FirstOrDefaultAsync();
+        }
     }
 }

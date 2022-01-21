@@ -228,3 +228,6 @@ log-*.txt
 
 # RSA Keys
 *.rsa
+
+# BE
+be/src/.env

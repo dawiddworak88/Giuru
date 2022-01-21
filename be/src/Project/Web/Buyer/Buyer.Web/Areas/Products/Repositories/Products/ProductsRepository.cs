@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using Buyer.Web.Areas.Products.DomainModels;
 using Foundation.Extensions.Exceptions;
 using System.Net;
+using Buyer.Web.Areas.Products.Repositories.Products;
+using Buyer.Web.Areas.Orders.ApiRequestModels;
 
 namespace Buyer.Web.Areas.Products.Repositories.Products
 {
@@ -44,6 +46,45 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return MapProductResponseToProduct(response.Data);
+            }
+
+            return default;
+        }
+
+        public async Task<PagedResults<IEnumerable<Product>>> GetProductsAsync(
+            string token, string language, string searchTerm, bool? hasPrimaryProduct, Guid? sellerId, int pageIndex, int itemsPerPage, string orderBy)
+        {
+            var productsRequestModel = new PagedProductsRequestModel
+            {
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                SellerId = sellerId,
+                HasPrimaryProduct = hasPrimaryProduct,
+                OrderBy = orderBy
+            };
+
+            var apiRequest = new ApiRequest<PagedProductsRequestModel>
+            {
+                Language = language,
+                Data = productsRequestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.CatalogUrl}{ApiConstants.Catalog.ProductsApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedProductsRequestModel>, PagedProductsRequestModel, PagedResults<IEnumerable<Product>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                return new PagedResults<IEnumerable<Product>>(response.Data.Total, response.Data.PageSize)
+                {
+                    Data = response.Data.Data
+                };
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
             return default;

@@ -117,11 +117,59 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ap_buttonLabel" xml:space="preserve">
+    <value>Zresetuj Hasło</value>
+  </data>
+  <data name="ap_headOne" xml:space="preserve">
+    <value>RESETOWANIE HASŁA</value>
+  </data>
+  <data name="ap_headTwo" xml:space="preserve">
+    <value>Witaj</value>
+  </data>
+  <data name="ap_lineOne" xml:space="preserve">
+    <value>Otrzymujesz tę wiadomość ponieważ została rozpoczęta procedura resetowania hasła. Aby zmienić hasło do swojego konta, otwórz poniższy link.</value>
+  </data>
+  <data name="ap_preHeader" xml:space="preserve">
+    <value>Otrzymujesz tę wiadomość ponieważ została rozpoczęta procedura resetowania hasła.</value>
+  </data>
+  <data name="ap_subject" xml:space="preserve">
+    <value>Resetowanie hasła</value>
+  </data>
+  <data name="BackToLoginText" xml:space="preserve">
+    <value>Powróć do logowania</value>
+  </data>
+  <data name="EmailIsConfirmedText" xml:space="preserve">
+    <value>Konto Potwierdzone</value>
+  </data>
   <data name="FirstNameRequiredErrorMessage" xml:space="preserve">
     <value>Wprowadź swoje imię</value>
   </data>
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Wprowadź swoje nazwisko</value>
+  </data>
+  <data name="nc_buttonLabel" xml:space="preserve">
+    <value>Potwierdź i ustaw hasło</value>
+  </data>
+  <data name="nc_headOne" xml:space="preserve">
+    <value>NOWE KONTO KLIENTA</value>
+  </data>
+  <data name="nc_headTwo" xml:space="preserve">
+    <value>Witajcie w naszej drużynie!</value>
+  </data>
+  <data name="nc_lineOne" xml:space="preserve">
+    <value>Utworzyliśmy dla Was konto klienta, które posłuży na naszej platformie B2B przede wszystkim do łatwiejszej współpracy pomiędzy nami. Poprzez umożliwienie szybszego składania zamówień zarówno jak śledzenia statusów.</value>
+  </data>
+  <data name="nc_lineTwo" xml:space="preserve">
+    <value>Aby zakończyć tworzenie nowego konta. Prosimy o przejście na poniższy link w celach dokonania weryfikacji i uzupełnienia przez Państwa danych.</value>
+  </data>
+  <data name="nc_preHeader" xml:space="preserve">
+    <value>Utworzyliśmy dla Was konto klienta, które posłuży na naszej platformie B2B przede wszystkim do łatwiejszej współpracy pomiędzy nami.</value>
+  </data>
+  <data name="nc_subject" xml:space="preserve">
+    <value>Utworzyliśmy nowe konto klienta</value>
+  </data>
+  <data name="PasswordUpdated" xml:space="preserve">
+    <value>Hasło zostało pomyślnie ustawione</value>
   </data>
   <data name="SetPassword" xml:space="preserve">
     <value>Ustaw hasło</value>

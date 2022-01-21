@@ -41,7 +41,6 @@ namespace Buyer.Web.Areas.Products.Services.Products
         public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
         {
             var catalogItemList = new List<CatalogItemViewModel>();
-
             var pagedProducts = await this.productsRepository.GetProductsAsync(ids, categoryId, sellerId, language, searchTerm, pageIndex, itemsPerPage, token, nameof(Product.Name));
 
             if (pagedProducts?.Data != null)
@@ -56,6 +55,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
                         BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId }),
                         BrandName = product.BrandName,
+                        Images = product.Images,
                         InStock = false
                     };
 

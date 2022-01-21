@@ -16,6 +16,7 @@ using Foundation.Localization.Definitions;
 using Inventory.Api.DependencyInjection;
 using Foundation.EventBus.Abstractions;
 using Inventory.Api.IntegrationEvents;
+using Inventory.Api.IntegrationEventsHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -103,6 +104,7 @@ app.UseCustomHeaderRequestLocalizationProvider(builder.Configuration, app.Servic
 var eventBus = app.Services.GetService<IEventBus>();
 
 eventBus.Subscribe<UpdatedProductIntegrationEvent, IIntegrationEventHandler<UpdatedProductIntegrationEvent>>();
+eventBus.Subscribe<BasketCheckoutProductsIntegrationEvent, IIntegrationEventHandler<BasketCheckoutProductsIntegrationEvent>>();
 
 app.UseEndpoints(endpoints =>
 {

@@ -40,10 +40,11 @@ namespace Basket.Api.v1.Controllers
         public async Task<IActionResult> Post(BasketRequestModel request)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
-
+            var isSellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.IsSellerClaim)?.Value;
             var serviceModel = new UpdateBasketServiceModel
             {
                 Id = request.Id ?? Guid.NewGuid(),
+                IsSeller = bool.Parse(isSellerClaim),
                 Items = request.Items.OrEmptyIfNull().Select(x => new UpdateBasketItemServiceModel 
                 { 
                     ProductId = x.ProductId,
@@ -62,13 +63,85 @@ namespace Basket.Api.v1.Controllers
             };
 
             var validator = new UpdateBasketModelValidator();
-
             var validationResult = await validator.ValidateAsync(serviceModel);
-
             if (validationResult.IsValid)
             {
                 var basket = await this.basketService.UpdateAsync(serviceModel);
 
+                if (basket != null)
+                {
+                    var response = new BasketResponseModel
+                    {
+                        Id = basket.Id,
+                        Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
+                        {
+                            ProductId = x.ProductId,
+                            ProductSku = x.ProductSku,
+                            ProductName = x.ProductName,
+                            PictureUrl = x.PictureUrl,
+                            Quantity = x.Quantity,
+                            ExternalReference = x.ExternalReference,
+                            DeliveryFrom = x.DeliveryFrom,
+                            DeliveryTo = x.DeliveryTo,
+                            MoreInfo = x.MoreInfo
+                        })
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        [HttpDelete, MapToApiVersion("1.0")]
+        [Route("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var serviceModel = new DeleteBasketServiceModel
+            {
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new DeleteBasketModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+            if (validationResult.IsValid)
+            {
+                await this.basketService.DeleteAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <param name="id">The user id</param>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(BasketResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var serviceModel = new GetBasketByIdServiceModel
+            {
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new GetBasketByIdModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+            if (validationResult.IsValid)
+            {
+                var basket = await this.basketService.GetBasketById(serviceModel);
                 if (basket != null)
                 {
                     var response = new BasketResponseModel
@@ -102,10 +175,11 @@ namespace Basket.Api.v1.Controllers
         public async Task<IActionResult> BasketCheckoutPost(BasketCheckoutRequestModel request)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
-
+            var isSellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.IsSellerClaim)?.Value;
             var serviceModel = new CheckoutBasketServiceModel
             {
                 BasketId = request.BasketId,
+                IsSeller = bool.Parse(isSellerClaim),
                 ClientId = request.ClientId,
                 ClientName = request.ClientName,
                 BillingAddressId = request.BillingAddressId,

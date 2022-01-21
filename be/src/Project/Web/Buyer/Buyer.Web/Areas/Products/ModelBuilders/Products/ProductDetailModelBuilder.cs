@@ -22,6 +22,8 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
+using Buyer.Web.Areas.Orders.ApiResponseModels;
+using Buyer.Web.Areas.Orders.Repositories.Baskets;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -36,6 +38,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IMediaHelperService mediaService;
         private readonly LinkGenerator linkGenerator;
         private readonly ICdnService cdnService;
+        private readonly IBasketRepository basketRepository;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -45,6 +48,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IStringLocalizer<InventoryResources> inventoryResources,
             IOptions<AppSettings> options,
             IMediaHelperService mediaService,
+            IBasketRepository basketRepository,
             LinkGenerator linkGenerator,
             ICdnService cdnService)
         {
@@ -56,6 +60,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             this.mediaService = mediaService;
             this.inventoryResources = inventoryResources;
             this.linkGenerator = linkGenerator;
+            this.basketRepository = basketRepository;
             this.cdnService = cdnService;
         }
 
@@ -68,21 +73,27 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 IsAuthenticated = componentModel.IsAuthenticated,
                 ProductInformationLabel = this.productLocalizer.GetString("ProductInformation"),
                 PricesLabel = this.globalLocalizer.GetString("Prices"),
+                SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct"),
                 SignInToSeePricesLabel = this.globalLocalizer.GetString("SignInToSeePrices"),
                 SignInUrl = "#",
+                UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                BasketLabel = this.globalLocalizer.GetString("BasketLabel"),
                 SkuLabel = this.productLocalizer.GetString("Sku"),
-                InStockLabel = this.globalLocalizer.GetString("InStock")
+                InStockLabel = this.globalLocalizer.GetString("InStock"),
+                BasketId = componentModel.BasketId,
             };
 
-            var product = await this.productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, componentModel.Token);
+            var product = await this.productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
 
             if (product != null)
             {
+                viewModel.ProductId = product.Id;
                 viewModel.Title = product.Name;
                 viewModel.BrandName = product.BrandName;
                 viewModel.BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId });
                 viewModel.Description = product.Description;
                 viewModel.Sku = product.Sku;
+                viewModel.IsProductVariant = product.PrimaryProductId.HasValue;
                 viewModel.Features = product.ProductAttributes?.Select(x => new ProductFeatureViewModel { Key = x.Name, Value = string.Join(", ", x.Values.OrEmptyIfNull()) });
 
                 var images = new List<ImageViewModel>();
@@ -91,6 +102,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 {
                     var imageViewModel = new ImageViewModel
                     { 
+                        Id = image,
                         Original = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.OriginalMaxWidth, ProductConstants.OriginalMaxHeight, true)),
                         Thumbnail = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.ThumbnailMaxWidth, ProductConstants.ThumbnailMaxHeight, true))
                     };
@@ -113,7 +125,34 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     viewModel.RestockableInDays = inventory.RestockableInDays;
                     viewModel.RestockableInDaysLabel = this.inventoryResources.GetString("RestockableInDaysLabel");
                 }
-                
+
+                if (viewModel.IsAuthenticated)
+                {
+                    var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
+                    if (existingBasket != null)
+                    {
+                        var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
+                        if (productIds.OrEmptyIfNull().Any())
+                        {
+                            var basketResponseModel = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
+                            {
+                                ProductId = x.ProductId,
+                                ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
+                                Name = x.ProductName,
+                                Sku = x.ProductSku,
+                                Quantity = x.Quantity,
+                                ExternalReference = x.ExternalReference,
+                                ImageSrc = x.PictureUrl,
+                                ImageAlt = x.ProductName,
+                                DeliveryFrom = x.DeliveryFrom,
+                                DeliveryTo = x.DeliveryTo,
+                                MoreInfo = x.MoreInfo
+                            });
+                            viewModel.OrderItems = basketResponseModel;
+                        }
+                    }
+                }
+
                 if (product.ProductVariants != null)
                 {
                     var productVariants = await this.productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token, nameof(Product.CreatedDate));

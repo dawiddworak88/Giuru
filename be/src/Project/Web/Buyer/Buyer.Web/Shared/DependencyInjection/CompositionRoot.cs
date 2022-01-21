@@ -22,6 +22,7 @@ using Buyer.Web.Shared.ModelBuilders.Files;
 using Buyer.Web.Shared.Repositories.Brands;
 using Buyer.Web.Shared.Repositories.Products;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
+using Buyer.Web.Shared.Repositories.Clients;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -51,6 +52,7 @@ namespace Buyer.Web.Shared.DependencyInjection
 
             // Client
             services.AddScoped<ICatalogOrderModelBuilder, CatalogOrderModelBuilder>();
+            services.AddScoped<IClientsRepository, ClientsRepository>();
         }
 
         public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)

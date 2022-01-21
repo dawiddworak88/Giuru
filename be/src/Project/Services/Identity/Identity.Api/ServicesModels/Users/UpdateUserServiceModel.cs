@@ -14,5 +14,6 @@ namespace Identity.Api.ServicesModels.Users
         public DateTimeOffset? LockoutEnd { get; set; }
         #nullable disable
         public int? AccessFailedCount { get; set; }
+        public string Url { get; set; }
     }
 }

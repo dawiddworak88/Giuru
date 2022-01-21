@@ -1,14 +1,72 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
+import { toast } from "react-toastify";
+import { Button } from "@material-ui/core";
 import ImageGallery from "react-image-gallery";
 import Files from "../../../../shared/components/Files/Files";
+import { ShoppingCart } from "@material-ui/icons";
+import { Context } from "../../../../../../shared/stores/Store";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 
 function ProductDetail(props) {
+    const [, dispatch] = useContext(Context);
+    const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
+    const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
+
+    const handleAddOrderItemClick = () => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const orderItem = {
+            productId: props.productId, 
+            sku: props.sku, 
+            name: props.title, 
+            imageId: props.images ? props.images[0].id : null, 
+            quantity: parseInt(1), 
+            externalReference: "", 
+            deliveryFrom: null, 
+            deliveryTo: null, 
+            moreInfo: ""
+        };
+
+        const basket = {
+            id: basketId,
+            items: [...orderItems, orderItem]
+        };
+
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(basket)
+        };
+
+        fetch(props.updateBasketUrl, requestOptions)
+            .then(function (response) {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setBasketId(jsonResponse.id);
+
+                        if (jsonResponse.items && jsonResponse.items.length > 0) {
+                            toast.success(props.successfullyAddedProduct)
+                            setOrderItems(jsonResponse.items);
+                        }
+                        else {
+                            setOrderItems([]);
+                        }
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    };
 
     return (
-
         <section className="product-detail section">
             <div className="product-detail__head columns is-tablet">
                 <div className="column is-6">
@@ -31,6 +89,13 @@ function ProductDetail(props) {
                             {props.restockableInDays && 
                                 <div className="product-detail__restockable-in-days">{props.restockableInDaysLabel} {props.restockableInDays}</div>
                             }
+                        </div>
+                    }
+                    {props.isAuthenticated && props.isProductVariant &&
+                        <div className="product-detail__add-to-cart-button">
+                            <Button type="submit" startIcon={<ShoppingCart />} variant="contained" color="primary" onClick={() => handleAddOrderItemClick()}>
+                                {props.basketLabel}
+                            </Button>
                         </div>
                     }
                     {props.description &&
@@ -79,6 +144,8 @@ ProductDetail.propTypes = {
     descriptionLabel: PropTypes.string.isRequired,
     productDescription: PropTypes.string,
     productVariants: PropTypes.array,
+    isProductVariant: PropTypes.bool,
+    isAuthenticated: PropTypes.bool,
     images: PropTypes.array,
     files: PropTypes.object
 };

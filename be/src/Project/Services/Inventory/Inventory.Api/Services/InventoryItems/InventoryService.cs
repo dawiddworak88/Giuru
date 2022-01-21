@@ -364,5 +364,23 @@ namespace Inventory.Api.Services
 
                 return inventories.PagedIndex(new Pagination(inventories.Count(), model.ItemsPerPage), model.PageIndex);
         }
+
+        public async Task UpdateInventoryBasket(Guid? ProductId, int BookedQuantity)
+        {
+            var inventoryProduct = this.context.Inventory.FirstOrDefault(x => x.ProductId == ProductId.Value && x.IsActive);
+            if (inventoryProduct != null)
+            {
+                var productQuantity = inventoryProduct.Quantity + BookedQuantity;
+                if (productQuantity < 0)
+                {
+                    throw new CustomException(this.inventortLocalizer.GetString("NullAvailability"), (int)HttpStatusCode.BadRequest);
+                }
+                inventoryProduct.Quantity = productQuantity;
+                inventoryProduct.AvailableQuantity = productQuantity;
+                inventoryProduct.LastModifiedDate = DateTime.UtcNow;
+
+                await this.context.SaveChangesAsync();
+            }
+        }
     }
 }

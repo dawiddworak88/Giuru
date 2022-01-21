@@ -32,13 +32,15 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 ResultsLabel = this.globalLocalizer.GetString("Results"),
                 ByLabel = this.globalLocalizer.GetString("By"),
                 InStockLabel = this.globalLocalizer.GetString("InStock"),
+                BasketLabel = this.globalLocalizer.GetString("BasketLabel"),
+                PrimaryFabricLabel = this.globalLocalizer.GetString("PrimaryFabricLabel"),
                 NoResultsLabel = this.globalLocalizer.GetString("NoResults"),
                 GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"],
                 DisplayedRowsLabel = this.globalLocalizer["DisplayedRows"],
                 RowsPerPageLabel = this.globalLocalizer["RowsPerPage"],
                 BackIconButtonText = this.globalLocalizer["Previous"],
                 NextIconButtonText = this.globalLocalizer["Next"],
-                IsAuthenticated = componentModel.IsAuthenticated,
+                IsLoggedIn = componentModel.IsAuthenticated,
                 ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products" })
             };
         }

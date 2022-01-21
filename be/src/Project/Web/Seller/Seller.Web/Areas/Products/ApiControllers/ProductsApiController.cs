@@ -33,9 +33,9 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
         [HttpGet]
         public async Task<IActionResult> Get(
-            string searchTerm, 
-            bool? hasPrimaryProduct, 
-            int pageIndex, 
+            string searchTerm,
+            bool? hasPrimaryProduct,
+            int pageIndex,
             int itemsPerPage,
             string orderBy)
         {

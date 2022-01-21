@@ -34,7 +34,7 @@ function OrderForm(props) {
     };
 
     const [state, dispatch] = useContext(Context);
-    const [id, setId] = useState(props.id ? props.id : null);
+    const [id,] = useState(props.id ? props.id : null);
     const [basketId, setBasketId] = useState(null);
     const [client, setClient] = useState(props.clientId ? props.clients.find((item) => item.id === props.clientId) : null);
     const [searchTerm, setSearchTerm] = useState("");
@@ -89,7 +89,6 @@ function OrderForm(props) {
     };
 
     const onSuggestionSelected = (event, { suggestion }) => {
-
         setProduct(suggestion);
     };
 
@@ -520,15 +519,19 @@ function OrderForm(props) {
                 }
                 <div className="field">
                     {showBackToOrdersListButton ?
-                        (<Button type="button" variant="contained" color="primary" onClick={handleBackToOrdersClick}>
-                            {props.navigateToOrdersListText}
-                        </Button>) :
-                        (<Button type="button" variant="contained"
-                            color="primary"
-                            onClick={handlePlaceOrder}
-                            disabled={state.isLoading || orderItems.length === 0}>
-                            {props.saveText}
-                        </Button>)}
+                        (
+                            <Button type="button" variant="contained" color="primary" onClick={handleBackToOrdersClick}>
+                                {props.navigateToOrdersListText}
+                            </Button>
+                        ) :
+                        (
+                            <Button type="button" variant="contained"
+                                color="primary"
+                                onClick={handlePlaceOrder}
+                                disabled={state.isLoading || orderItems.length === 0}>
+                                {props.saveText}
+                            </Button>
+                        )}
                 </div>
             </div>
             <ConfirmationDialog
