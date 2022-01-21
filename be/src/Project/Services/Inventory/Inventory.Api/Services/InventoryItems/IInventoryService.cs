@@ -18,6 +18,7 @@ namespace Inventory.Api.Services
         Task<InventorySumServiceModel> GetInventoryByProductSku(GetInventoryByProductSkuServiceModel model);
         Task<UpdateInventoryProductsServiceModel> SyncInventoryProducts(UpdateInventoryProductsServiceModel model);
         Task DeleteAsync(DeleteInventoryServiceModel model);
+        Task UpdateInventoryBasket(Guid? ProductId, int BookedQuantity);
         Task UpdateInventoryProduct(Guid? ProductId, string ProductName, string ProductSku, Guid? OrganisationId);
         Task<PagedResults<IEnumerable<InventorySumServiceModel>>> GetAvailableProductsInventoriesAsync(GetInventoriesServiceModel serviceModel);
     }

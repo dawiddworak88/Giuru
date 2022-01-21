@@ -5,7 +5,6 @@
         public static readonly string HttpsScheme = "https";
         public static readonly string HttpScheme = "http";
         public static readonly string OrganisationIdClaim = "OrganisationId";
-        public static readonly string ClientIdClaim = "ClientId";
         public static readonly string IsSellerClaim = "IsSeller";
         public static readonly int DefaultTokenLifetimeInDays = 1;
         public static readonly int DefaultTokenLifetimeInSeconds = 1 * 24 * 60 * 60;

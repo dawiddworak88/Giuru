@@ -430,6 +430,6 @@
     <value>Fabric:</value>
   </data>
   <data name="SuccessfullyAddedProduct" xml:space="preserve">
-    <value>Successfully added product</value>
+    <value>The product has beed added successfully</value>
   </data>
 </root>

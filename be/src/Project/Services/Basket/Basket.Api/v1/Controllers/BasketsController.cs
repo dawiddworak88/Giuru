@@ -179,7 +179,7 @@ namespace Basket.Api.v1.Controllers
             var serviceModel = new CheckoutBasketServiceModel
             {
                 BasketId = request.BasketId,
-                isSeller = bool.Parse(isSellerClaim),
+                IsSeller = bool.Parse(isSellerClaim),
                 ClientId = request.ClientId,
                 ClientName = request.ClientName,
                 BillingAddressId = request.BillingAddressId,

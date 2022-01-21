@@ -75,7 +75,7 @@ function NewOrderForm(props) {
     };
 
     const getProductSuggestionValue = (suggestion) => {
-        return `(${suggestion.sku}) ${suggestion.title}`;
+        return `(${suggestion.sku}) ${suggestion.name}`;
     };
 
     const handleAddOrderItemClick = () => {
@@ -84,7 +84,7 @@ function NewOrderForm(props) {
         const orderItem = {
             productId: product.id,
             sku: product.sku,
-            name: product.title,
+            name: product.name,
             imageId: product.images ? product.images[0] : null,
             quantity,
             externalReference,

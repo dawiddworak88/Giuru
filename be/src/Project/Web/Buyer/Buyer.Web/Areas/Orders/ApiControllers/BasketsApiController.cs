@@ -4,6 +4,7 @@ using Buyer.Web.Areas.Orders.Definitions;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Definitions.Basket;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
@@ -57,15 +58,15 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var reqCookie = this.Request.Cookies["basket"];
+            var reqCookie = this.Request.Cookies[BasketConstants.BasketCookieName];
             if (reqCookie is null)
             {
                 reqCookie = Guid.NewGuid().ToString();
-                var cookieOption = new CookieOptions()
+                var cookieOptions = new CookieOptions
                 {
-                    MaxAge = TimeSpan.FromDays(1)
+                    MaxAge = TimeSpan.FromDays(BasketConstants.BasketCookieMaxAge)
                 };
-                this.Response.Cookies.Append("basket", reqCookie, cookieOption);
+                this.Response.Cookies.Append(BasketConstants.BasketCookieName, reqCookie, cookieOptions);
             }
 
             var id = Guid.Parse(reqCookie);
@@ -118,7 +119,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             await this.basketRepository.DeleteAsync(token, language, id);
 
-            this.Response.Cookies.Delete("basket");
+            this.Response.Cookies.Delete(BasketConstants.BasketCookieName);
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.orderLocalizer.GetString("BasketDeletedSuccessfully").Value });
         }

@@ -6,7 +6,7 @@ namespace Basket.Api.ServicesModels
     public class CheckoutBasketServiceModel : BaseServiceModel
     {
         public Guid? BasketId { get; set; }
-        public bool isSeller { get; set; }
+        public bool IsSeller { get; set; }
         public Guid? ClientId { get; set; }
         public string ClientName { get; set; }
         public Guid? BillingAddressId { get; set; }

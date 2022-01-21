@@ -52,7 +52,7 @@ namespace Identity.Api.Services.Users
         public async Task<UserServiceModel> CreateAsync(CreateUserServiceModel serviceModel)
         {
             var timeNow = DateTime.UtcNow;
-            var timeExpiration = timeNow.AddHours(IdentityConstants.VerifiTimeExpiration);
+            var timeExpiration = timeNow.AddHours(IdentityConstants.VerifyTimeExpiration);
 
             var existingOrganisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.ContactEmail == serviceModel.Email && x.IsActive);
             if (existingOrganisation == null)
@@ -156,7 +156,7 @@ namespace Identity.Api.Services.Users
             };
         }
 
-        public async Task<UserServiceModel> GetByExpierationId(GetUserServiceModel serviceModel)
+        public async Task<UserServiceModel> GetByExpirationId(GetUserServiceModel serviceModel)
         {
             var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.ExpirationId == serviceModel.Id);
 

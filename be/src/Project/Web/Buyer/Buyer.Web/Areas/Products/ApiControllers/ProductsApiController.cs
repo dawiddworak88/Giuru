@@ -1,11 +1,16 @@
-﻿using Buyer.Web.Areas.Products.Services.Products;
+﻿using Buyer.Web.Areas.Products.Repositories.Products;
+using Buyer.Web.Areas.Products.Services.Products;
+using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.ApiControllers
@@ -14,11 +19,14 @@ namespace Buyer.Web.Areas.Products.ApiControllers
     public class ProductsApiController : BaseApiController
     {
         private readonly IProductsService productsService;
+        private readonly IProductsRepository productsRepository;
 
         public ProductsApiController(
-            IProductsService productsService)
+            IProductsService productsService,
+            IProductsRepository productsRepository)
         {
             this.productsService = productsService;
+            this.productsRepository = productsRepository;
         }
 
         [HttpGet]
@@ -37,5 +45,22 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             return this.StatusCode((int)HttpStatusCode.OK, products);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetSuggestion(string searchTerm, Guid? brandId, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage, string orderBy)
+        {
+            var language = CultureInfo.CurrentUICulture.Name;
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var products = await this.productsRepository.GetProductsAsync(
+                token,
+                language,
+                searchTerm,
+                hasPrimaryProduct,
+                brandId,
+                pageIndex,
+                itemsPerPage,
+                orderBy);
+
+            return this.StatusCode((int)HttpStatusCode.OK, products);
+        }
     }
 }

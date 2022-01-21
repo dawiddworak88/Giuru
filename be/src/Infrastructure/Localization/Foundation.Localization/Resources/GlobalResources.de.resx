@@ -430,6 +430,6 @@
     <value>Stoff</value>
   </data>
   <data name="SuccessfullyAddedProduct" xml:space="preserve">
-    <value>Erfolgreich hinzugefügtes Produkt</value>
+    <value>Das Produkt wurde erfolgreich hinzugefügt</value>
   </data>
 </root>

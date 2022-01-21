@@ -120,7 +120,7 @@ namespace Basket.Api.Services
             var basket = await this.basketRepository.GetBasketAsync(serviceModel.Id.Value);
             if (basket == null)
             {
-                var emptyBasket = new BasketServiceModel()
+                var emptyBasket = new BasketServiceModel
                 {
                     Id = serviceModel.Id.Value,
                     Items = Array.Empty<BasketItemServiceModel>()

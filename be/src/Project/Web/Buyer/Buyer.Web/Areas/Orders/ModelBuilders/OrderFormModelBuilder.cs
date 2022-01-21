@@ -40,7 +40,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 Title = this.orderLocalizer.GetString("Order"),
                 AddText = this.orderLocalizer.GetString("AddOrderItem"),
                 SearchPlaceholderLabel = this.orderLocalizer.GetString("EnterSkuOrName"),
-                GetSuggestionsUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                GetSuggestionsUrl = this.linkGenerator.GetPathByAction("GetSuggestion", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 OrLabel = this.globalLocalizer.GetString("Or"),
                 DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
                 DropOrSelectFilesLabel = this.orderLocalizer.GetString("DropOrSelectOrderFile"),

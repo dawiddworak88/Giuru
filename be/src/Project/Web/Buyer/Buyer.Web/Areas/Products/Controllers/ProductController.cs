@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Products.ViewModels.Products;
+using Buyer.Web.Shared.Definitions.Basket;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
@@ -23,7 +24,7 @@ namespace Buyer.Web.Areas.Products.Controllers
 
         public async Task<IActionResult> Index(Guid? id)
         {
-            var reqCookie = this.Request.Cookies["basket"];
+            var reqCookie = this.Request.Cookies[BasketConstants.BasketCookieName];
             var componentModel = new ComponentModelBase
             {
                 Id = id,

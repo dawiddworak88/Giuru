@@ -62,7 +62,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                 return this.StatusCode((int)HttpStatusCode.OK, new { Id = user.Id, Message = this.accountLocalizer.GetString("PasswordUpdated").Value });
 
             }
-            return this.StatusCode((int)HttpStatusCode.BadRequest, "asd");
+            return this.StatusCode((int)HttpStatusCode.BadRequest);
         }
     }
 }
