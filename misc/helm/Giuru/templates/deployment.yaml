@@ -5,7 +5,7 @@ metadata:
   labels:
     app: media-api
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: media-api
@@ -429,6 +429,8 @@ spec:
           value: {{ .Values.identityUrl }}
         - name: InventoryUrl
           value: {{ .Values.inventoryUrl }}
+        - name: ClientUrl
+          value: {{ .Values.clientUrl }}
         - name: CdnUrl
           value: {{ .Values.cdnUrl }}
         - name: ClientId

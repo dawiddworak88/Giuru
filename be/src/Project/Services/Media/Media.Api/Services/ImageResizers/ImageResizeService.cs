@@ -7,56 +7,84 @@ namespace Media.Api.Services.ImageResizers
 {
     public class ImageResizeService : IImageResizeService
     {
-        public byte[] Resize(byte[] fileContents, int maxWidth, int maxHeight, bool optimize, string mimeType)
+        public byte[] Compress(byte[] fileContents, string mimeType, int quality, int? maxWidth, int? maxHeight, string? extension)
         {
-            using MemoryStream ms = new MemoryStream(fileContents);
-            using SKBitmap sourceBitmap = SKBitmap.Decode(ms);
+            using var ms = new MemoryStream(fileContents);
+            using var sourceBitmap = SKBitmap.Decode(ms);
 
-            var ratioX = (double)maxWidth / sourceBitmap.Width;
-            var ratioY = (double)maxHeight / sourceBitmap.Height;
-            var ratio = Math.Min(ratioX, ratioY);
-
-            var newWidth = (int)(sourceBitmap.Width * ratio);
-            var newHeight = (int)(sourceBitmap.Height * ratio);
-
-            using SKBitmap scaledBitmap = sourceBitmap.Resize(new SKImageInfo(newWidth, newHeight), SKFilterQuality.Medium);
-            using SKImage scaledImage = SKImage.FromBitmap(scaledBitmap);
-
-            if (optimize)
+            if (maxWidth.HasValue || maxHeight.HasValue)
             {
-                return this.OptimizeImage(mimeType, scaledImage);
+                var ratioX = (double)maxWidth / sourceBitmap.Width;
+                var ratioY = (double)maxHeight / sourceBitmap.Height;
+                var ratio = Math.Min(ratioX, ratioY);
+
+                var newWidth = (int)(sourceBitmap.Width * ratio);
+                var newHeight = (int)(sourceBitmap.Height * ratio);
+
+                using SKBitmap scaledBitmap = sourceBitmap.Resize(new SKImageInfo(newWidth, newHeight), SKFilterQuality.High);
+                using var scaledImage = SKImage.FromBitmap(scaledBitmap);
+
+                return this.Encode(scaledBitmap, mimeType, quality, extension);
             }
 
-            using SKData data = scaledImage.Encode();
-            return data.ToArray();
+            return this.Encode(sourceBitmap, mimeType, quality, extension);
         }
 
-        public byte[] Optimize(byte[] fileContents, string mimeType)
+        private byte[] Encode(SKBitmap bitmap, string mimeType, int quality, string extension)
         {
-            using MemoryStream ms = new MemoryStream(fileContents);
-            using SKBitmap sourceBitmap = SKBitmap.Decode(ms);
-            using SKImage image = SKImage.FromBitmap(sourceBitmap);
-
-            return this.OptimizeImage(mimeType, image);
-        }
-
-        private byte[] OptimizeImage(string mimeType, SKImage image)
-        {
-            switch (mimeType)
+            if (string.IsNullOrWhiteSpace(extension) is false)
             {
-                case MediaConstants.MimeTypes.Jpeg:
+                switch (extension)
                 {
-                    return image.Encode(SKEncodedImageFormat.Jpeg, MediaConstants.ImageConversion.ImageQuality).ToArray();
-                }
+                    case MediaConstants.Extensions.Jpeg:
+                        {
+                            return bitmap.Encode(SKEncodedImageFormat.Jpeg, quality).ToArray();
+                        }
 
-                case MediaConstants.MimeTypes.Png:
-                {
-                    return image.Encode(SKEncodedImageFormat.Png, MediaConstants.ImageConversion.ImageQuality).ToArray();
-                }
+                    case MediaConstants.Extensions.Jpg:
+                        {
+                            return bitmap.Encode(SKEncodedImageFormat.Jpeg, quality).ToArray();
+                        }
 
-                default:
+                    case MediaConstants.Extensions.Png:
+                        {
+                            return bitmap.Encode(SKEncodedImageFormat.Png, quality).ToArray();
+                        }
+
+                    case MediaConstants.Extensions.Webp:
+                        {
+                            return bitmap.Encode(SKEncodedImageFormat.Webp, quality).ToArray();
+                        }
+
+                    default:
+                        {
+                            throw new NotSupportedException();
+                        }
+                }
+            }
+            else
+            {
+                switch (mimeType)
                 {
-                    return image.Encode().ToArray();
+                    case MediaConstants.MimeTypes.Jpeg:
+                        {
+                            return bitmap.Encode(SKEncodedImageFormat.Jpeg, quality).ToArray();
+                        }
+
+                    case MediaConstants.MimeTypes.Png:
+                        {
+                            return bitmap.Encode(SKEncodedImageFormat.Png, quality).ToArray();
+                        }
+
+                    case MediaConstants.MimeTypes.Webp:
+                        {
+                            return bitmap.Encode(SKEncodedImageFormat.Webp, quality).ToArray();
+                        }
+
+                    default:
+                        {
+                            throw new NotSupportedException();
+                        }
                 }
             }
         }

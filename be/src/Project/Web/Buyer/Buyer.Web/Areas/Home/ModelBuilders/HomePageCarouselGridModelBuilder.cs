@@ -11,6 +11,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
+using Foundation.PageContent.Components.Images;
+using Foundation.PageContent.Definitions;
+using Microsoft.Extensions.Options;
+using Foundation.Extensions.Services.MediaServices;
+using Buyer.Web.Shared.Configurations;
 
 namespace Buyer.Web.Areas.Home.ModelBuilders
 {
@@ -20,17 +25,23 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
         private readonly LinkGenerator linkGenerator;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly ICdnService cdnService;
+        private readonly IOptions<AppSettings> options;
+        private readonly IMediaHelperService mediaService;
 
         public HomePageCarouselGridModelBuilder(
             ICatalogService catalogService,
             LinkGenerator linkGenerator,
             IStringLocalizer<GlobalResources> globalLocalizer,
-            ICdnService cdnService)
+            ICdnService cdnService,
+            IOptions<AppSettings> options,
+            IMediaHelperService mediaService)
         {
             this.catalogService = catalogService;
             this.linkGenerator = linkGenerator;
             this.globalLocalizer = globalLocalizer;
             this.cdnService = cdnService;
+            this.options = options;
+            this.mediaService = mediaService;
         }
 
         public async Task<HomePageCarouselGridViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -59,7 +70,19 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                         Title = newProduct.Title,
                         ImageAlt = newProduct.ImageAlt,
                         ImageUrl = this.cdnService.GetCdnUrl(newProduct.ImageUrl),
-                        Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, newProduct.Id })
+                        Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, newProduct.Id }),
+                        Sources = new List<SourceViewModel>
+                        {
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(newProduct.ImageUrl, 1024, 1024, MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(newProduct.ImageUrl, 352, 352,MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(newProduct.ImageUrl, 608, 608, MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(newProduct.ImageUrl, 768, 768, MediaConstants.WebpExtension)) },
+
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(newProduct.ImageUrl, 1024, 1024)) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(newProduct.ImageUrl, 352, 352)) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(newProduct.ImageUrl, 608, 608)) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(newProduct.ImageUrl, 768, 768)) }
+                        }
                     };
 
                     contentGridCarouselItems.Add(carouselItem);

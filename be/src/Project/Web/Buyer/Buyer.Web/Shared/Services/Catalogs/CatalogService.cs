@@ -93,9 +93,7 @@ namespace Buyer.Web.Shared.Services.Catalogs
                         catalogItem.ImageAlt = product.Name;
                         catalogItem.ImageUrl = this.mediaService.GetFileUrl(
                             this.options.Value.MediaUrl, 
-                            imageGuid, 
-                            ProductConstants.ProductsCatalogItemImageWidth, 
-                            ProductConstants.ProductsCatalogItemImageHeight);
+                            imageGuid);
                     }
 
                     catalogItemList.Add(catalogItem);

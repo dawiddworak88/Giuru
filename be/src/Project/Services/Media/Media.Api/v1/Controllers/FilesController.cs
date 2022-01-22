@@ -37,18 +37,18 @@ namespace Media.Api.v1.Controllers
         /// Gets a file by media id. Provide width and height to resize the image files.
         /// </summary>
         /// <param name="mediaId">The media id to get.</param>
-        /// <param name="o">The flag that indicates whether image file should be optimized.</param>
-        /// <param name="w">The image width.</param>
-        /// <param name="h">The image height.</param>
+        /// <param name="w">The image max width.</param>
+        /// <param name="h">The image max height.</param>
+        /// <param name="extension">The extension to convert an image to: webp, jpg or png.</param>
         /// <returns>The file.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [Route("{mediaId}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof (FileContentResult))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Get(Guid? mediaId, bool? o, int? w, int? h)
+        public async Task<IActionResult> Get(Guid? mediaId, int? w, int? h, string? extension)
         {
-            var mediaFile = await this.mediaService.GetFileAsync(mediaId, o, w, h);
+            var mediaFile = await this.mediaService.GetFileAsync(mediaId, w, h, extension);
 
             if (mediaFile != null)
             {

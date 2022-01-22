@@ -124,7 +124,7 @@ namespace Media.Api.Definitions
 
         public struct ImageConversion
         {
-            public static readonly int ImageQuality = 75;
+            public static readonly int ImageQuality = 100;
         }
 
         public struct MimeTypes
@@ -132,6 +132,16 @@ namespace Media.Api.Definitions
             public const string Jpeg = "image/jpeg";
             public const string Png = "image/png";
             public const string Svg = "image/svg+xml";
+            public const string Webp = "image/webp";
+        }
+
+        public struct Extensions
+        {
+            public const string Jpeg = "jpeg";
+            public const string Jpg = "jpg";
+            public const string Png = "png";
+            public const string Svg = "svg";
+            public const string Webp = "webp";
         }
     }
 }

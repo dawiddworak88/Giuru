@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import Carousel from "react-multi-carousel";
+import ResponsiveImage from "../../../../../shared/components/Picture/ResponsiveImage";
 import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
 import CarouselConstants from "../Carousel/CarouselConstants";
@@ -22,7 +23,7 @@ function CarouselGrid(props) {
                                             <div className="card-image">
                                                 <figure className="image is-4by3">
                                                     <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
-                                                        <img src={carouselItem.imageUrl} alt={carouselItem.imageAlt} />
+                                                        <ResponsiveImage sources={carouselItem.sources} imageSrc={carouselItem.imageUrl} imageAlt={carouselItem.imageAlt} />
                                                     </LazyLoad>
                                                 </figure>
                                             </div>

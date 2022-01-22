@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
+import ResponsiveImage from "../../../../../shared/components/Picture/ResponsiveImage";
 import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
 
 function ContentGrid(props) {
@@ -19,7 +20,7 @@ function ContentGrid(props) {
                                         <div className="card-image">
                                             <figure className="image is-4by3">
                                                 <LazyLoad offset={LazyLoadConstants.contentGridOffset()}>
-                                                    <img src={item.imageUrl} alt={item.imageAlt} />
+                                                    <ResponsiveImage imageAlt={item.imageAlt} imageSrc={item.imageUrl} sources={item.sources} />
                                                 </LazyLoad>
                                             </figure>
                                         </div>
