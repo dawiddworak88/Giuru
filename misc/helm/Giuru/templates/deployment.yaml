@@ -337,6 +337,12 @@ spec:
           value: {{ .Values.identityApi.azureKeyVaultClientId }}
         - name: AzureKeyVaultClientSecret
           value: {{ .Values.identityApi.azureKeyVaultClientSecret }}
+        - name: SendGridApiKey
+          value: {{ .Values.sendGridApiKey }}
+        - name: ActionSendGridCreateTemplateId
+          value: {{ .Values.identityApi.actionSendGridCreateTemplateId }}
+        - name: ActionSendGridResetTemplateId
+          value: {{ .Values.identityApi.actionSendGridResetTemplateId }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType
