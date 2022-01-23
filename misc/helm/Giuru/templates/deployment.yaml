@@ -441,6 +441,10 @@ spec:
           value: {{ .Values.inventoryUrl }}
         - name: ClientUrl
           value: {{ .Values.clientUrl }}
+        - name: BasketUrl
+          value: {{ .Values.basketUrl }}
+        - name: OrderUrl
+          value: {{ .Values.orderUrl }}
         - name: CdnUrl
           value: {{ .Values.cdnUrl }}
         - name: ClientId
