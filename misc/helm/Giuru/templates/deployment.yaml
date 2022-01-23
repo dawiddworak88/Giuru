@@ -339,6 +339,10 @@ spec:
           value: {{ .Values.identityApi.azureKeyVaultClientSecret }}
         - name: SendGridApiKey
           value: {{ .Values.sendGridApiKey }}
+        - name: SenderEmail
+          value: {{ .Values.senderEmail }}
+        - name: SenderName
+          value: {{ .Values.senderName }}
         - name: ActionSendGridCreateTemplateId
           value: {{ .Values.identityApi.actionSendGridCreateTemplateId }}
         - name: ActionSendGridResetTemplateId
