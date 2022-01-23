@@ -13,6 +13,8 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
+using Foundation.PageContent.Components.Images;
+using Foundation.PageContent.Definitions;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -65,6 +67,18 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
                         catalogItem.ImageAlt = product.Name;
                         catalogItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, ProductConstants.ProductsCatalogItemImageWidth, ProductConstants.ProductsCatalogItemImageHeight));
+                        catalogItem.Sources = new List<SourceViewModel>
+                        {
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 1024, 1024, true, MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 352, 352, true,MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 256, 256, true, MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 768, 768, true, MediaConstants.WebpExtension)) },
+
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 1024, 1024, true)) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 352, 352, true)) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 256, 256, true)) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 768, 768, true)) }
+                        };
                     }
 
                     catalogItemList.Add(catalogItem);

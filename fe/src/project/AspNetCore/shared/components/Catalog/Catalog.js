@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
+import ResponsiveImage from "../../../../../shared/components/Picture/ResponsiveImage";
 import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
 import { Context } from "../../../../../shared/stores/Store";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
@@ -15,7 +16,7 @@ function Catalog(props) {
     const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
     const [page, setPage] = React.useState(0);
     const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
-    const [itemsPerPage,] = React.useState(CatalogConstants.defaultCatalogItemsPerPage());
+    const [itemsPerPage,] = React.useState(props.itemsPerPage ? props.itemsPerPage : CatalogConstants.defaultCatalogItemsPerPage());
     const [items, setItems] = React.useState(props.pagedItems.data);
     const [total, setTotal] = React.useState(props.pagedItems.total);
 
@@ -26,7 +27,6 @@ function Catalog(props) {
         setPage(() => newPage);
 
         const searchParameters = {
-
             categoryId: props.categoryId,
             brandId: props.brandId,
             pageIndex: newPage + 1,
@@ -134,7 +134,7 @@ function Catalog(props) {
                                             <div className="card-image">
                                                 <figure className="image is-4by3">
                                                     <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
-                                                        <img src={item.imageUrl} alt={item.imageAlt} />
+                                                        <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} />
                                                     </LazyLoad>
                                                 </figure>
                                             </div>
@@ -175,12 +175,12 @@ function Catalog(props) {
                                 labelRowsPerPage={props.rowsPerPageLabel}
                                 backIconButtonText={props.backIconButtonText}
                                 nextIconButtonText={props.nextIconButtonText}
-                                rowsPerPageOptions={[CatalogConstants.defaultCatalogItemsPerPage()]}
+                                rowsPerPageOptions={[itemsPerPage]}
                                 component="div"
                                 count={total}
                                 page={page}
                                 onChangePage={handleChangePage}
-                                rowsPerPage={CatalogConstants.defaultCatalogItemsPerPage()}
+                                rowsPerPage={itemsPerPage}
                             />
                         </div>
                     </div>

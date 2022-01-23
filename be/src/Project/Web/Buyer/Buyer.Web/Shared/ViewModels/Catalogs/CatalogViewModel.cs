@@ -8,6 +8,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
     public class CatalogViewModel
     {
         public Guid? BasketId { get; set; }
+        public int? ItemsPerPage { get; set; }
         public string Title { get; set; }
         public string ResultsLabel { get; set; }
         public string NoResultsLabel { get; set; }

@@ -19,6 +19,7 @@ using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Foundation.Extensions.ExtensionMethods;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
+using Buyer.Web.Areas.Products.Definitions;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
@@ -65,6 +66,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             viewModel.UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.Title = this.globalLocalizer.GetString("AvailableProducts");
             viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "AvailableProductsApi", new { Area = "Products" });
+            viewModel.ItemsPerPage = AvailableProductsConstants.Pagination.ItemsPerPage;
             viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
 
             if (viewModel.IsLoggedIn)
@@ -98,14 +100,14 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             var inventories = await this.inventoryRepository.GetAvailbleProductsInventory(
                 componentModel.Language,
                 PaginationConstants.DefaultPageIndex,
-                ProductConstants.ProductsCatalogPaginationPageSize,
+                AvailableProductsConstants.Pagination.ItemsPerPage,
                 componentModel.Token);
 
             if (inventories?.Data is not null && inventories.Data.Any())
             {
                 var products = await this.productsService.GetProductsAsync(
                     inventories.Data.Select(x => x.ProductId), null, null, componentModel.Language,
-                    null, PaginationConstants.DefaultPageIndex, ProductConstants.ProductsCatalogPaginationPageSize, componentModel.Token);
+                    null, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token);
 
                 if (products is not null)
                 {
@@ -115,7 +117,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                         product.AvailableQuantity = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
                     }
 
-                    viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(inventories.Total, ProductConstants.ProductsCatalogPaginationPageSize)
+                    viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(inventories.Total, AvailableProductsConstants.Pagination.ItemsPerPage)
                     {
                         Data = products.Data.OrderByDescending(x => x.AvailableQuantity)
                     };
