@@ -432,4 +432,7 @@
   <data name="SuccessfullyAddedProduct" xml:space="preserve">
     <value>Das Produkt wurde erfolgreich hinzugefügt</value>
   </data>
+  <data name="Catalog" xml:space="preserve">
+    <value>Katalog</value>
+  </data>
 </root>
