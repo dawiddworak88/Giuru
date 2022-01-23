@@ -7,7 +7,11 @@ namespace Foundation.Extensions.Services.MediaServices
         string GetFileUrl(string baseUrl, Guid mediaId, string extension);
         string GetFileUrl(string baseUrl, Guid mediaId, int maxWidth, int maxHeight, string extension);
         string GetFileUrl(string baseUrl, int maxWidth, int maxHeight, string extension);
+        string GetFileUrl(string baseUrl, Guid mediaId, bool optimize, string extension);
+        string GetFileUrl(string baseUrl, Guid mediaId, int maxWidth, int maxHeight, bool optimize, string extension);
+        string GetFileUrl(string baseUrl, int maxWidth, int maxHeight, bool optimize, string extension);
         string GetFileUrl(string baseUrl, int maxWidth, int maxHeight);
+        string GetFileUrl(string baseUrl, int maxWidth, int maxHeight, bool optimize);
         public string GetFileUrl(string baseUrl, Guid mediaId);
         string GetFileUrl(string baseUrl, Guid mediaId, bool optimizeImage);
         public string GetFileUrl(string baseUrl, Guid mediaId, int maxWidth, int maxHeight);

@@ -125,6 +125,7 @@ namespace Media.Api.Definitions
         public struct ImageConversion
         {
             public static readonly int ImageQuality = 100;
+            public static readonly int ReducedImageQuality = 75;
         }
 
         public struct MimeTypes

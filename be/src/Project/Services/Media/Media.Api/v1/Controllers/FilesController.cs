@@ -39,6 +39,7 @@ namespace Media.Api.v1.Controllers
         /// <param name="mediaId">The media id to get.</param>
         /// <param name="w">The image max width.</param>
         /// <param name="h">The image max height.</param>
+        /// <param name="o">Decrease the image quality to 50 percent and file size.</param>
         /// <param name="extension">The extension to convert an image to: webp, jpg or png.</param>
         /// <returns>The file.</returns>
         [HttpGet, MapToApiVersion("1.0")]
@@ -46,9 +47,9 @@ namespace Media.Api.v1.Controllers
         [Route("{mediaId}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof (FileContentResult))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Get(Guid? mediaId, int? w, int? h, string? extension)
+        public async Task<IActionResult> Get(Guid? mediaId, int? w, int? h, bool o, string? extension)
         {
-            var mediaFile = await this.mediaService.GetFileAsync(mediaId, w, h, extension);
+            var mediaFile = await this.mediaService.GetFileAsync(mediaId, w, h, o, extension);
 
             if (mediaFile != null)
             {

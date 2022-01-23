@@ -88,5 +88,77 @@ namespace Foundation.Extensions.Services.MediaServices
         {
             return $"{baseUrl}?w={maxWidth}&h={maxHeight}";
         }
+
+        public string GetFileUrl(string baseUrl, int maxWidth, int maxHeight, bool optimize)
+        {
+            var url = this.GetFileUrl(baseUrl, maxWidth, maxHeight);
+
+            if (optimize)
+            {
+                url += "&o=true";
+            }
+
+            return url;
+        }
+
+        public string GetFileUrl(string baseUrl, Guid mediaId, bool optimize, string extension)
+        {
+            var url = this.GetFileUrl(baseUrl, mediaId);
+
+            if (optimize)
+            {
+                url += $"?o=true";
+            }
+
+            if (string.IsNullOrWhiteSpace(extension) is false)
+            {
+                if (url.Contains('?'))
+                {
+                    url += "&";
+                }
+                else
+                {
+                    url += "?";
+                }
+
+                url += $"extension={extension}";
+            }
+
+            return url;
+        }
+
+        public string GetFileUrl(string baseUrl, int maxWidth, int maxHeight, bool optimize, string extension)
+        {
+            var url = this.GetFileUrl(baseUrl, maxWidth, maxHeight);
+
+            if (optimize)
+            {
+                url += $"&o=true";
+            }
+
+            if (string.IsNullOrWhiteSpace(extension) is false)
+            {
+                url += $"&extension={extension}";
+            }
+
+            return url;
+        }
+
+        public string GetFileUrl(string baseUrl, Guid mediaId, int maxWidth, int maxHeight, bool optimize, string extension)
+        {
+            var url = this.GetFileUrl(baseUrl, mediaId, maxWidth, maxHeight);
+
+            if (optimize)
+            {
+                url += $"&o=true";
+            }
+
+            if (string.IsNullOrWhiteSpace(extension) is false)
+            {
+                url += $"&extension={extension}";
+            }
+
+            return url;
+        }
     }
 }

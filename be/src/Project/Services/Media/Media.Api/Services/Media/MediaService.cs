@@ -87,7 +87,7 @@ namespace Media.Api.Services.Media
             return mediaItem.Id;
         }
 
-        public async Task<MediaFileServiceModel> GetFileAsync(Guid? mediaId, int? width, int? height, string? extension)
+        public async Task<MediaFileServiceModel> GetFileAsync(Guid? mediaId, int? width, int? height, bool optimize, string? extension)
         {
             if (mediaId.HasValue)
             {
@@ -115,7 +115,14 @@ namespace Media.Api.Services.Media
                     {
                         if (this.IsImage(mediaItem.ContentType) && (width.HasValue || height.HasValue || string.IsNullOrWhiteSpace(extension) is false))
                         {
-                            file = this.imageResizeService.Compress(file, mediaItem.ContentType, MediaConstants.ImageConversion.ImageQuality, width, height, extension);
+                            if (optimize)
+                            {
+                                file = this.imageResizeService.Compress(file, mediaItem.ContentType, MediaConstants.ImageConversion.ReducedImageQuality, width, height, extension);
+                            }
+                            else
+                            {
+                                file = this.imageResizeService.Compress(file, mediaItem.ContentType, MediaConstants.ImageConversion.ImageQuality, width, height, extension);
+                            }
 
                             if (string.IsNullOrWhiteSpace(extension) is false)
                             {
