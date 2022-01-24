@@ -117,11 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BackToMediaText" xml:space="preserve">
+    <value>Powróć do mediów</value>
+  </data>
   <data name="Media" xml:space="preserve">
     <value>Media</value>
   </data>
   <data name="MediaDeletedSuccessfully" xml:space="preserve">
     <value>Pomyślnie usunięto media</value>
+  </data>
+  <data name="MediaItemsLabel" xml:space="preserve">
+    <value>Prześlij pliki</value>
   </data>
   <data name="MediaNotFound" xml:space="preserve">
     <value>Media nie znalezione</value>

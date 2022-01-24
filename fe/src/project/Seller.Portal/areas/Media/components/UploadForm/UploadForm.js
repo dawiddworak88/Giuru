@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-import { Context } from "../../../../../../shared/stores/Store";
-import { Button, CircularProgress } from "@material-ui/core";
-import useForm from "../../../../../../shared/helpers/forms/useForm";
+import { Button } from "@material-ui/core";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function UploadForm(props) {
     const [images, setImages] = useState([]);
-    const setFieldValue = (value) => {
-        setImages(value)
+    const backToMediaList = (e) => {
+        e.preventDefault();
+        NavigationHelper.redirect(props.mediaUrl);
     }
-    console.log(images)
+    
     const buttonDisable = images.length == 0 ? true : false;
     return (
         <section className="section section-small-padding product client-form">
@@ -31,12 +30,12 @@ function UploadForm(props) {
                                 dropFilesLabel={props.dropFilesLabel}
                                 dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
                                 files={images}
-                                setFieldValue={({value}) => setFieldValue(value)}
+                                setFieldValue={({value}) => setImages(value)}
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
                         <div className="field">
-                            <Button type="submit" variant="contained" color="primary" disabled={buttonDisable}>
-                                {props.saveMediaText}
+                            <Button type="submit" variant="contained" color="primary" onClick={backToMediaList} disabled={buttonDisable}>
+                                {props.backToMediaText}
                             </Button>
                         </div>
                     </form>
@@ -54,7 +53,8 @@ UploadForm.propTypes = {
     dropFilesLabel: PropTypes.string.isRequired,
     dropOrSelectImagesLabel: PropTypes.string.isRequired,
     saveMediaUrl: PropTypes.string.isRequired,
-    saveMediaText: PropTypes.string.isRequired
+    backToMediaText: PropTypes.string.isRequired,
+    mediaUrl: PropTypes.string.isRequired
 }
 
 export default UploadForm;

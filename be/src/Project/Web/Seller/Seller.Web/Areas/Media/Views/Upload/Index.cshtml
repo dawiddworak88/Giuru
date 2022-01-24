@@ -6,10 +6,10 @@
 </script>
 
 @section MetaTags {
-    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("UploadMedia"))</title>
-    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("UploadMedia")))
+    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("Media"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("Media")))
     {
-        <meta name="description" content="@this.Localizer.GetString("UploadMedia")" />
+        <meta name="description" content="@this.Localizer.GetString("Media")" />
     }
 }
 

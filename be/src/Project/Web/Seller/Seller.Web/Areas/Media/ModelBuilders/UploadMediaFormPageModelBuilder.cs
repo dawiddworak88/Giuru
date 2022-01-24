@@ -29,13 +29,14 @@ namespace Seller.Web.Areas.Media.ModelBuilders
         {
             var viewModel = new UploadMediaFormViewModel
             {
-                Title = this.mediaResources.GetString("UploadMedia"),
+                Title = this.mediaResources.GetString("Media"),
                 SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
-                DropFilesLabel = "asdasd",
-                DropOrSelectImagesLabel = "Drop or select",
-                MediaItemsLabel = "Media items lable",
-                SaveMediaText = "AAA",
-                GeneralErrorMessage = this.globalLocalizer.GetString("GeneralErrorMessage"),
+                DropFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
+                DropOrSelectImagesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
+                MediaItemsLabel = this.mediaResources.GetString("MediaItemsLabel"),
+                BackToMediaText = this.mediaResources.GetString("BackToMediaText"),
+                MediaUrl = this.linkGenerator.GetPathByAction("Index", "Media", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 DeleteLabel = this.globalLocalizer.GetString("Delete")
             };
 
