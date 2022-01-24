@@ -121,7 +121,7 @@
     <value>Media</value>
   </data>
   <data name="MediaNotFound" xml:space="preserve">
-    <value />
+    <value>Media nie znalezione</value>
   </data>
   <data name="NewText" xml:space="preserve">
     <value>Dodaj media</value>
