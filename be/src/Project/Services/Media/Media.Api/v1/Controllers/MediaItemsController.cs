@@ -1,4 +1,5 @@
-﻿using Foundation.ApiExtensions.Controllers;
+﻿using Foundation.Account.Definitions;
+using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
@@ -16,6 +17,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Media.Api.v1.Controllers
@@ -49,6 +51,7 @@ namespace Media.Api.v1.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy )
         {
+            var sellerClaims = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
             var mediaItemsIds = ids.ToEnumerableGuidIds();
             if (mediaItemsIds != null)
             {
@@ -58,6 +61,8 @@ namespace Media.Api.v1.Controllers
                     Ids = mediaItemsIds,
                     PageIndex = pageIndex,
                     ItemsPerPage = itemsPerPage,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaims?.Value)
                 };
 
                 var validator = new GetMediaItemsByIdsModelValidator();
@@ -75,7 +80,6 @@ namespace Media.Api.v1.Controllers
                                 Description = x.Description,
                                 Name = x.Name,
                                 Extension = x.Extension,
-                                MediaItemId = x.MediaItemId,    
                                 Filename = x.Filename,
                                 MimeType = x.MimeType,
                                 Size = x.Size,
@@ -94,6 +98,8 @@ namespace Media.Api.v1.Controllers
             {
                 var serviceModel = new GetMediaItemsServiceModel
                 {
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaims?.Value),
                     Language = CultureInfo.CurrentCulture.Name,
                     SearchTerm = searchTerm,
                     PageIndex = pageIndex,
@@ -113,7 +119,6 @@ namespace Media.Api.v1.Controllers
                             Extension = x.Extension,
                             Filename = x.Filename,
                             MimeType = x.MimeType,
-                            MediaItemId = x.MediaItemId,
                             Name = x.Name,
                             Size = x.Size,
                             LastModifiedDate = x.LastModifiedDate,

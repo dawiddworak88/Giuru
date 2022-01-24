@@ -5,7 +5,6 @@ namespace Media.Api.v1.ResponseModels
     public class MediaItemResponseModel
     {
         public Guid Id { get; set; }
-        public Guid? MediaItemId { get; set; }
         public string Filename { get; set; }
         public string Extension { get; set; }
         public string Name { get; set; }

@@ -248,28 +248,19 @@ namespace Media.Api.Services.Media
         public async Task<PagedResults<IEnumerable<MediaItemServiceModel>>> GetAsync(GetMediaItemsServiceModel serviceModel)
         {
             var mediaItems = from media in this.context.MediaItems
-                              where media.IsActive && media.OrganisationId == serviceModel.OrganisationId.Value
+                              where media.IsActive == true && media.OrganisationId == serviceModel.OrganisationId.Value
                               select new MediaItemServiceModel
                               {
                                   Id = media.Id,
                                   Filename = media.Versions.FirstOrDefault().Filename,
+                                  Extension = media.Versions.FirstOrDefault().Extension,
+                                  MimeType = media.Versions.FirstOrDefault().MimeType,
+                                  Size = media.Versions.FirstOrDefault().Size,
+                                  Name = media.Versions.FirstOrDefault().Filename,
+                                  Description = media.Versions.FirstOrDefault().Translations.FirstOrDefault().Description,
                                   LastModifiedDate = media.LastModifiedDate,
                                   CreatedDate = media.CreatedDate,
                               };
-            /*var mediaItems = from media in this.context.MediaItemVersions
-                             where media.IsActive
-                             select new MediaItemServiceModel
-                             {
-                                 Id = media.Id,
-                                 MediaItemId = media.MediaItemId,
-                                 Filename = media.Filename,
-                                 Size = media.Size,
-                                 Extension = media.Extension,
-                                 MimeType = media.MimeType,
-                                 LastModifiedDate = media.LastModifiedDate,
-                                 CreatedDate = media.CreatedDate,
-                             };
-
 
             if (!string.IsNullOrWhiteSpace(serviceModel.SearchTerm))
             {
@@ -278,7 +269,6 @@ namespace Media.Api.Services.Media
 
             mediaItems.ApplySort(serviceModel.OrderBy);
 
-            return mediaItems.PagedIndex(new Pagination(mediaItems.Count(), serviceModel.ItemsPerPage), serviceModel.PageIndex);*/
             return mediaItems.PagedIndex(new Pagination(mediaItems.Count(), serviceModel.ItemsPerPage), serviceModel.PageIndex);
         }
 
@@ -291,6 +281,8 @@ namespace Media.Api.Services.Media
             }
 
             mediaItem.IsActive = false;
+            mediaItem.LastModifiedDate = DateTime.UtcNow;
+
             await this.context.SaveChangesAsync();
         }
     }

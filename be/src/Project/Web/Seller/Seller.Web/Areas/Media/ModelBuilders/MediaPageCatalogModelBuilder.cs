@@ -60,7 +60,8 @@ namespace Seller.Web.Areas.Media.ModelBuilders
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("Name"),
+                    this.globalLocalizer.GetString("Miniature"),
+                    this.globalLocalizer.GetString("Filename"),
                     this.globalLocalizer.GetString("LastModifiedDate"),
                     this.globalLocalizer.GetString("CreatedDate")
                 },
@@ -84,6 +85,11 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                     },
                     new CatalogPropertyViewModel
                     {
+                        Title = nameof(MediaItem.FileName).ToCamelCase(),
+                        IsDateTime = false,
+                    },
+                    new CatalogPropertyViewModel
+                    {
                         Title = nameof(MediaItem.LastModifiedDate).ToCamelCase(),
                         IsDateTime = true
                     },
@@ -96,8 +102,6 @@ namespace Seller.Web.Areas.Media.ModelBuilders
             };
 
             viewModel.PagedItems = await this.mediaRepository.GetMediaItemsAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(MediaItem.CreatedDate)} desc");
-            Console.WriteLine(JsonConvert.SerializeObject(viewModel.PagedItems));
-
 
             return viewModel;
         }
