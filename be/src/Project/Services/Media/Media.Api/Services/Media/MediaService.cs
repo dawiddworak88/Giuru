@@ -247,7 +247,16 @@ namespace Media.Api.Services.Media
 
         public async Task<PagedResults<IEnumerable<MediaItemServiceModel>>> GetAsync(GetMediaItemsServiceModel serviceModel)
         {
-            var mediaItems = from media in this.context.MediaItemVersions
+            var mediaItems = from media in this.context.MediaItems
+                              where media.IsActive && media.OrganisationId == serviceModel.OrganisationId.Value
+                              select new MediaItemServiceModel
+                              {
+                                  Id = media.Id,
+                                  Filename = media.Versions.FirstOrDefault().Filename,
+                                  LastModifiedDate = media.LastModifiedDate,
+                                  CreatedDate = media.CreatedDate,
+                              };
+            /*var mediaItems = from media in this.context.MediaItemVersions
                              where media.IsActive
                              select new MediaItemServiceModel
                              {
@@ -269,6 +278,7 @@ namespace Media.Api.Services.Media
 
             mediaItems.ApplySort(serviceModel.OrderBy);
 
+            return mediaItems.PagedIndex(new Pagination(mediaItems.Count(), serviceModel.ItemsPerPage), serviceModel.PageIndex);*/
             return mediaItems.PagedIndex(new Pagination(mediaItems.Count(), serviceModel.ItemsPerPage), serviceModel.PageIndex);
         }
 

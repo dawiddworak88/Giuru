@@ -28,16 +28,12 @@ namespace Seller.Web.Areas.Media.ModelBuilders
         private readonly IStringLocalizer mediaLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly IMediaRepository mediaRepository;
-        private readonly IOptions<AppSettings> options;
-        private readonly IMediaHelperService mediaService;
 
         public MediaPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<MediaResources> mediaLocalizer,
             IMediaRepository mediaRepository,
-            IOptions<AppSettings> options,
-            IMediaHelperService mediaService,
             LinkGenerator linkGenerator)
         {
             this.catalogModelBuilder = catalogModelBuilder;
@@ -45,8 +41,6 @@ namespace Seller.Web.Areas.Media.ModelBuilders
             this.mediaLocalizer = mediaLocalizer;
             this.linkGenerator = linkGenerator;
             this.mediaRepository = mediaRepository;
-            this.mediaService = mediaService;
-            this.options = options;
         }
 
         public async Task<CatalogViewModel<MediaItem>> BuildModelAsync(ComponentModelBase componentModel)
@@ -85,7 +79,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(MediaItem.FileName).ToCamelCase(),
+                        Title = nameof(MediaItem.ImageUrl).ToCamelCase(),
                         IsPicture = true
                     },
                     new CatalogPropertyViewModel
@@ -102,6 +96,8 @@ namespace Seller.Web.Areas.Media.ModelBuilders
             };
 
             viewModel.PagedItems = await this.mediaRepository.GetMediaItemsAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(MediaItem.CreatedDate)} desc");
+            Console.WriteLine(JsonConvert.SerializeObject(viewModel.PagedItems));
+
 
             return viewModel;
         }
