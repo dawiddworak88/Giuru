@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using Media.Api.Services.Media;
 using Media.Api.v1.Areas.Media.RequestModels;
 using Foundation.ApiExtensions.Shared.Definitions;
+using Foundation.Extensions.Exceptions;
 
 namespace Media.Api.v1.Controllers
 {
@@ -59,6 +60,36 @@ namespace Media.Api.v1.Controllers
 
             return this.BadRequest();
         }
+
+        /// <param name = "mediaId" > The media id</param>
+        /// /// <returns>OK</returns>
+        [HttpDelete, MapToApiVersion("1.0")]
+        [Route("{mediaId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Delete(Guid? mediaId)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var serviceModel = new DeleteFileServiceModel
+            {
+                MediaId = mediaId,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new DeleteFileModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+            if(validationResult.IsValid)
+            {
+                await this.mediaService.DeleteAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
+            }
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
 
         /// <summary>
         /// Uploads a file.

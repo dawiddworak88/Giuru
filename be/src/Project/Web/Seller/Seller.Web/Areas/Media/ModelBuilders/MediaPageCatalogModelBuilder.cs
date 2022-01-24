@@ -1,14 +1,20 @@
 ﻿using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Seller.Web.Areas.Media.DomainModels;
 using Seller.Web.Areas.Media.Repositories.Media;
+using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
+using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -22,12 +28,16 @@ namespace Seller.Web.Areas.Media.ModelBuilders
         private readonly IStringLocalizer mediaLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly IMediaRepository mediaRepository;
+        private readonly IOptions<AppSettings> options;
+        private readonly IMediaHelperService mediaService;
 
         public MediaPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<MediaResources> mediaLocalizer,
             IMediaRepository mediaRepository,
+            IOptions<AppSettings> options,
+            IMediaHelperService mediaService,
             LinkGenerator linkGenerator)
         {
             this.catalogModelBuilder = catalogModelBuilder;
@@ -35,6 +45,8 @@ namespace Seller.Web.Areas.Media.ModelBuilders
             this.mediaLocalizer = mediaLocalizer;
             this.linkGenerator = linkGenerator;
             this.mediaRepository = mediaRepository;
+            this.mediaService = mediaService;
+            this.options = options;
         }
 
         public async Task<CatalogViewModel<MediaItem>> BuildModelAsync(ComponentModelBase componentModel)
@@ -63,7 +75,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                 {
                     new CatalogActionViewModel
                     {
-                        IsEdit = true
+                        IsEdit = false
                     },
                     new CatalogActionViewModel
                     {
@@ -75,7 +87,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                     new CatalogPropertyViewModel
                     {
                         Title = nameof(MediaItem.FileName).ToCamelCase(),
-                        IsDateTime = false
+                        IsPicture = true
                     },
                     new CatalogPropertyViewModel
                     {

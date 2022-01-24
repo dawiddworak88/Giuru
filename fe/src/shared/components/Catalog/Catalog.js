@@ -171,7 +171,7 @@ function Catalog(props) {
                 toast.error(props.generalErrorMessage);
             });
     };
-    
+    console.log(props)
     return (
         <section className="section section-small-padding catalog">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -236,9 +236,16 @@ function Catalog(props) {
 
                                                 {props.table.properties && props.table.properties.map((property) => {
 
-                                                    if (property.isDateTime) return (
-                                                        <TableCell>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
-                                                    )
+                                                    if (property.isDateTime) {
+                                                        return (
+                                                            <TableCell>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
+                                                        )
+                                                    }
+                                                    else if (property.isPicture) {
+                                                        return (
+                                                            <TableCell><img src={item[property.title]} /></TableCell>
+                                                        )
+                                                    }
                                                     else {
                                                         return (
                                                             <TableCell>{item[property.title] !== null ? item[property.title] : "-"}</TableCell>

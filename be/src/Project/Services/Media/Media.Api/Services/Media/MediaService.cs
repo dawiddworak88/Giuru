@@ -17,6 +17,10 @@ using Foundation.Extensions.ExtensionMethods;
 using Media.Api.Definitions;
 using Foundation.GenericRepository.Extensions;
 using Newtonsoft.Json;
+using Foundation.Extensions.Exceptions;
+using System.Net;
+using Microsoft.Extensions.Localization;
+using Foundation.Localization;
 
 namespace Media.Api.Services.Media
 {
@@ -26,14 +30,17 @@ namespace Media.Api.Services.Media
         private readonly IMediaRepository mediaRepository;
         private readonly IChecksumService checksumService;
         private readonly IImageResizeService imageResizeService;
+        private readonly IStringLocalizer mediaResources;
 
         public MediaService(MediaContext context, 
             IMediaRepository mediaRepository, 
             IChecksumService checksumService,
-            IImageResizeService imageResizeService)
+            IImageResizeService imageResizeService,
+            IStringLocalizer<MediaResources> mediaResources)
         {
             this.context = context;
             this.mediaRepository = mediaRepository;
+            this.mediaResources = mediaResources;
             this.checksumService = checksumService;
             this.imageResizeService = imageResizeService;
         }
@@ -263,6 +270,23 @@ namespace Media.Api.Services.Media
             mediaItems.ApplySort(serviceModel.OrderBy);
 
             return mediaItems.PagedIndex(new Pagination(mediaItems.Count(), serviceModel.ItemsPerPage), serviceModel.PageIndex);
+        }
+
+        public async Task DeleteAsync(DeleteFileServiceModel model)
+        {
+            var mediaItem = this.context.MediaItems.FirstOrDefault(x => x.Id == model.MediaId.Value && x.IsActive);
+            if (mediaItem == null)
+            {
+                throw new CustomException(this.mediaResources.GetString("MediaNotFound"), (int)HttpStatusCode.NotFound);
+            }
+            var mediaItemVersion = this.context.MediaItemVersions.FirstOrDefault(x => x.Id == model.MediaId.Value);
+            if (mediaItemVersion != null)
+            {
+                mediaItemVersion.IsActive = false;
+            }
+
+            mediaItem.IsActive = false;
+            await this.context.SaveChangesAsync();
         }
     }
 }
