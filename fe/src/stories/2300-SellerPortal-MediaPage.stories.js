@@ -83,9 +83,9 @@ MediaPageStory.story = {
   name: "Media Page",
 };
 
-const SellerInventoryStories = {
+const SellerMediaStories = {
   title: "SellerPortal.Media",
   component: MediaPageStory,
 };
 
-export default SellerInventoryStories;
+export default SellerMediaStories;

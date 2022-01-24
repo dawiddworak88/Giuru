@@ -19,6 +19,8 @@ namespace Seller.Web.Areas.Media.DependencyInjection
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<MediaItem>>, MediaPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel>, MediaPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, UploadMediaPageViewModel>, UploadMediaPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, UploadMediaFormViewModel>, UploadMediaFormPageModelBuilder>();
         }
     }
 }

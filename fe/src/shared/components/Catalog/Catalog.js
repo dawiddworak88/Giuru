@@ -242,7 +242,7 @@ function Catalog(props) {
                                                     }
                                                     else if (property.isPicture) {
                                                         return (
-                                                            <TableCell><img src={item[property.title]} /></TableCell>
+                                                            <TableCell><img src={item[property.title]} alt=""/></TableCell>
                                                         )
                                                     }
                                                     else {

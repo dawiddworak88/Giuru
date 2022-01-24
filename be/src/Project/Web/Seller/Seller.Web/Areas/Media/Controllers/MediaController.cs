@@ -18,12 +18,15 @@ namespace Seller.Web.Areas.Media.Controllers
     public class MediaController : BaseController
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel> mediaPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, UploadMediaPageViewModel> uploadMediaPageModelBuilder;
 
         public MediaController(
-            IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel> mediaPageModelBuilder
+            IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel> mediaPageModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, UploadMediaPageViewModel> uploadMediaPageModelBuilder
         )
         {
             this.mediaPageModelBuilder = mediaPageModelBuilder;
+            this.uploadMediaPageModelBuilder = uploadMediaPageModelBuilder;
         }
 
         public async Task<IActionResult> Index()
