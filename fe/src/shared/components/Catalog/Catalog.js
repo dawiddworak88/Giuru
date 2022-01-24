@@ -135,10 +135,9 @@ function Catalog(props) {
     const handleDeleteEntity = () => {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
-
-        const property = props.table.properties.filter(property => property.isPicture == true)
+        
         const deleteParameters = {
-            id: property[0] ? entityToDelete.mediaItemId : entityToDelete.id
+            id: entityToDelete.id
         };
 
         const requestOptions = {
