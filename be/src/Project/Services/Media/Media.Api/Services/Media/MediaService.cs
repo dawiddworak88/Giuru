@@ -279,11 +279,6 @@ namespace Media.Api.Services.Media
             {
                 throw new CustomException(this.mediaResources.GetString("MediaNotFound"), (int)HttpStatusCode.NotFound);
             }
-            var mediaItemVersion = this.context.MediaItemVersions.FirstOrDefault(x => x.Id == model.MediaId.Value);
-            if (mediaItemVersion != null)
-            {
-                mediaItemVersion.IsActive = false;
-            }
 
             mediaItem.IsActive = false;
             await this.context.SaveChangesAsync();

@@ -1,14 +1,18 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Services.MediaServices;
+using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Media.Repositories;
+using Seller.Web.Areas.Media.Repositories.Media;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Shared.Configurations;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -25,16 +29,22 @@ namespace Seller.Web.Areas.Media.ApiControllers
         private readonly IMediaHelperService mediaHelperService;
         private readonly IOptionsMonitor<AppSettings> settings;
         private readonly IMediaItemsRepository mediaItemsRepository;
+        private readonly IMediaRepository mediaRepository;
+        private readonly IStringLocalizer mediaResources;
 
         public FilesApiController(
             IFilesRepository filesRepository,
             IMediaHelperService mediaHelperService,
             IOptionsMonitor<AppSettings> settings,
-            IMediaItemsRepository mediaItemsRepository)
+            IMediaItemsRepository mediaItemsRepository,
+            IMediaRepository mediaRepository,
+            IStringLocalizer<MediaResources> mediaResources)
         {
             this.filesRepository = filesRepository;
             this.mediaHelperService = mediaHelperService;
             this.settings = settings;
+            this.mediaRepository = mediaRepository;
+            this.mediaResources = mediaResources;
             this.mediaItemsRepository = mediaItemsRepository;
         }
 
@@ -122,6 +132,17 @@ namespace Seller.Web.Areas.Media.ApiControllers
                                 Extension = mediaItem.Extension
                             }));
             }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+
+            await this.mediaRepository.DeleteAsync(token, language, id);
+
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.mediaResources.GetString("MediaDeletedSuccessfully").Value });
         }
     }
 }

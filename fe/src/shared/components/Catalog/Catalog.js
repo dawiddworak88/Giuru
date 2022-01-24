@@ -136,9 +136,9 @@ function Catalog(props) {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        const property = props.table.properties.filter(property => property.isPicture == true)
         const deleteParameters = {
-
-            id: entityToDelete.id
+            id: property[0] ? entityToDelete.mediaItemId : entityToDelete.id
         };
 
         const requestOptions = {
@@ -171,7 +171,7 @@ function Catalog(props) {
                 toast.error(props.generalErrorMessage);
             });
     };
-    console.log(props)
+    
     return (
         <section className="section section-small-padding catalog">
             <h1 className="subtitle is-4">{props.title}</h1>

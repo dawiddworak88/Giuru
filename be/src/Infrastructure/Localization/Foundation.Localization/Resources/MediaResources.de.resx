@@ -120,6 +120,9 @@
   <data name="Media" xml:space="preserve">
     <value>Medien</value>
   </data>
+  <data name="MediaDeletedSuccessfully" xml:space="preserve">
+    <value>Medien erfolgreich gelöscht</value>
+  </data>
   <data name="MediaNotFound" xml:space="preserve">
     <value>Medien nicht gefunden</value>
   </data>
