@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
+using Buyer.Web.Areas.Products.ApiResponseModels;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -58,7 +59,12 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId }),
                         BrandName = product.BrandName,
                         Images = product.Images,
-                        InStock = false
+                        InStock = false,
+                        ProductAttributes = product.ProductAttributes.Select(x => new ProductAttributeResponseModel
+                        {
+                            Key = x.Key,
+                            Values = x.Values,
+                        })
                     };
 
                     if (product.Images != null)

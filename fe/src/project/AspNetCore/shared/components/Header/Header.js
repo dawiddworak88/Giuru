@@ -8,6 +8,7 @@ import HeaderConstants from "./HeaderConstants";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import { Context } from "../../../../../shared/stores/Store";
+import {AddShoppingCart} from '@material-ui/icons';
 
 function Header(props) {
 
@@ -135,6 +136,11 @@ function Header(props) {
                         <div className="navbar-item">
                             <LanguageSwitcher {...props.languageSwitcher} />
                         </div>
+                        {props.isLoggedIn &&
+                            <div className="navbar-item">
+                                <a href={props.basketUrl} className="button"><AddShoppingCart/></a>
+                            </div>
+                        }
                     </div>
                 </div>
             </nav>

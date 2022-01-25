@@ -147,7 +147,7 @@ function Catalog(props) {
                                                     <h2 className="catalog-item__brand-text">{props.byLabel} <a href={item.brandUrl}>{item.brandName}</a></h2>
                                                 </div>
                                             }
-                                            {item.productAttributes && item.productAttributes.find(x => x.key == "primaryFabrics") &&
+                                            {item.productAttributes && item.productAttributes.find(x => x.key === "primaryFabrics") &&
                                                 <div className="catalog-item__fabric">
                                                     <h3>{props.primaryFabricLabel} {item.productAttributes.find(x => x.key === "primaryFabrics").values[0]}</h3>
                                                 </div>

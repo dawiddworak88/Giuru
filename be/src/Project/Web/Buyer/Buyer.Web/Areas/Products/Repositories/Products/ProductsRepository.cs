@@ -244,6 +244,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 Videos = productResponse.Videos,
                 ProductAttributes = productResponse.ProductAttributes?.Select(x => new ProductAttribute 
                 { 
+                    Key = x.Key,
                     Name = x.Name,
                     Values = x.Values.OrEmptyIfNull().Select(y => y)
                 })
