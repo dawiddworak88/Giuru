@@ -38,7 +38,7 @@ const catalogForm = {
                   key: "primaryFabrics",
                   name: "Tkanina podstawowa",
                   values: [
-                    "Kronos 19"
+                    "Kronos 19", "Kronos 20"
                   ]
                 },
             ],
