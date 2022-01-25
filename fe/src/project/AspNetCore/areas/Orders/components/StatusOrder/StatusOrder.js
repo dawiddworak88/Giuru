@@ -14,9 +14,7 @@ function StatusOrder(props) {
     const [state,] = useContext(Context);
     const [orderStatuses, setOrderStatuses] = useState([]);
 
-
-
-    useEffect((props) => {
+    const getOrderStatuses = (e) => {
         const requestOptions = {
             method: "GET",
             headers: { "Content-Type": "application/json" }
@@ -30,6 +28,10 @@ function StatusOrder(props) {
             }).catch(() => {
                 toast.error(props.generalErrorMessage);
             });
+    };
+
+    useEffect(() => {
+        getOrderStatuses();
     }, []);
 
     const status = orderStatuses.find((item) => item.id === props.orderStatusId);
