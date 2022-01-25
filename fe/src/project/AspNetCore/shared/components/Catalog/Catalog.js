@@ -141,15 +141,15 @@ function Catalog(props) {
                                         </a>
                                         <div className="media-content">
                                             <p className="catalog-item__sku">{props.skuLabel} {item.sku}</p>
+                                            {item.productAttributes && item.productAttributes.find(x => x.key === "primaryFabrics") &&
+                                                <div className="catalog-item__fabric">
+                                                    <h3>{props.primaryFabricLabel} {item.productAttributes.find(x => x.key === "primaryFabrics").values[0]}</h3>
+                                                </div>
+                                            }
                                             <h2 className="catalog-item__title"><a href={item.url}>{item.title}</a></h2>
                                             {props.showBrand && item.brandName &&
                                                 <div className="catalog-item__brand">
                                                     <h2 className="catalog-item__brand-text">{props.byLabel} <a href={item.brandUrl}>{item.brandName}</a></h2>
-                                                </div>
-                                            }
-                                            {item.productAttributes && item.productAttributes.find(x => x.key === "primaryFabrics") &&
-                                                <div className="catalog-item__fabric">
-                                                    <h3>{props.primaryFabricLabel} {item.productAttributes.find(x => x.key === "primaryFabrics").values[0]}</h3>
                                                 </div>
                                             }
                                             {item.inStock && item.availableQuantity && item.availableQuantity >  0 &&
