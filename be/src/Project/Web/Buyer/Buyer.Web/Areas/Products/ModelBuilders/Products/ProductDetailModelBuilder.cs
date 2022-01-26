@@ -24,6 +24,8 @@ using System.Threading.Tasks;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
+using System;
+using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -156,11 +158,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 if (product.ProductVariants != null)
                 {
                     var productVariants = await this.productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token, nameof(Product.CreatedDate));
-
                     if (productVariants != null)
                     {
                         var carouselItems = new List<CarouselGridCarouselItemViewModel>();
-
                         foreach (var productVariant in productVariants.Data.OrEmptyIfNull())
                         {
                             var carouselItem = new CarouselGridCarouselItemViewModel
@@ -169,11 +169,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                                 Title = productVariant.Name,
                                 Subtitle = productVariant.Sku,
                                 ImageAlt = productVariant.Name,
-                                Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id })
+                                Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id }),
+                                Attributes = productVariant.ProductAttributes.Select(x => new CarouselGridProductAttributesViewModel
+                                {
+                                    Key = x.Key,
+                                    Value = string.Join(", ", x.Values.OrEmptyIfNull())
+                                })
                             };
 
                             if (productVariant.Images != null && productVariant.Images.Any())
                             {
+                                carouselItem.ImageId = productVariant.Images.FirstOrDefault();
                                 carouselItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), CarouselGridConstants.CarouselItemImageMaxWidth, CarouselGridConstants.CarouselItemImageMaxHeight, true));
                             }
 

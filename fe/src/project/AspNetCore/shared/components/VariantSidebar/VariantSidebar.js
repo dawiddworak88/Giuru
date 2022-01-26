@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from "react";
+import { Close, AddShoppingCart, ExpandMore } from "@material-ui/icons";
+import PropTypes from "prop-types";
 import { 
     Button, SwipeableDrawer, List, ListItem, 
 } from "@material-ui/core";
-import { Close, AddShoppingCart, ExpandMore } from "@material-ui/icons";
 
 const VariantSidebar = (props) => {
+    console.log(props)
     const [sideBar, setSideBar] = useState(props.value);
     const toggleDrawer = (open) => (e) => {
         if (e && e.type === 'keydown' && (e.key === 'Tab' || e.key === 'Shift')) {
@@ -44,14 +46,19 @@ const VariantSidebar = (props) => {
                             <ListItem className="sidebar-item">
                                 <div className="sidebar-item__row">
                                     <div className="sidebar-item__image">
-                                        <img src="https://eltap-media-cdn.azureedge.net/api/v1/files/432f201b-893c-4bfc-3102-08d907684408?w=1024&h=1024&o=true&extension=webp" />
+                                        <img src={carouselItem.imageUrl} alt={carouselItem.imageAlt}/>
                                     </div>
                                     <div className="sidebar-item__details">
-                                        <h1 className="title">anton</h1>
-                                        <span className="sku">Sku: An01</span>
+                                        <h1 className="title">{carouselItem.title}</h1>
+                                        <span className="sku">Sku: {carouselItem.subtitle}</span>
                                         <div className="fabrics">
                                             <span>Tkaniny</span>
-                                            <p>Kronos 19, Kronos 20, Kronos 21</p>
+                                            {carouselItem.attributes.find(x => x.Key === "primaryFabrics") ? (
+                                                <p>Kronos 19, Kronos 20, Kronos 21</p>
+                                            ) : (
+                                                <div>Brak informacji</div>
+                                            )}
+                                            
                                         </div>
                                     </div>
                                     <div className="sidebar-item__buttons">
@@ -67,6 +74,10 @@ const VariantSidebar = (props) => {
             </List>
         </SwipeableDrawer>
     )
+}
+VariantSidebar.propTypes = {
+    items: PropTypes.array,
+    setValue: PropTypes.func.isRequired
 }
 
 export default VariantSidebar;
