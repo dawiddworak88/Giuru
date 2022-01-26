@@ -34,6 +34,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IProductsRepository productsRepository;
         private readonly IStringLocalizer<InventoryResources> inventoryResources;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IStringLocalizer<OrderResources> orderResources;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly IOptions<AppSettings> options;
         private readonly IMediaHelperService mediaService;
@@ -47,6 +48,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IStringLocalizer<GlobalResources> globalLocalizer, 
             IStringLocalizer<ProductResources> productLocalizer,
             IStringLocalizer<InventoryResources> inventoryResources,
+            IStringLocalizer<OrderResources> orderResources,
             IOptions<AppSettings> options,
             IMediaHelperService mediaService,
             IBasketRepository basketRepository,
@@ -63,6 +65,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             this.linkGenerator = linkGenerator;
             this.basketRepository = basketRepository;
             this.cdnService = cdnService;
+            this.orderResources = orderResources;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -82,6 +85,13 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 SkuLabel = this.productLocalizer.GetString("Sku"),
                 InStockLabel = this.globalLocalizer.GetString("InStock"),
                 BasketId = componentModel.BasketId,
+                AddedProduct = this.orderResources.GetString("AddedProduct"),
+                SidebarTitle = this.orderResources.GetString("SidebarTitle"),
+                BasketUrl = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                ToBasketLabel = this.orderResources.GetString("ToBasketLabel"),
+                NotFound = this.orderResources.GetString("NotFound"),
+                FabricsLabel = this.orderResources.GetString("FabricsLabel"),
+                LackInformation = this.orderResources.GetString("LackInformation")
             };
 
             var product = await this.productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);

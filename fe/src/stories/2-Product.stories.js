@@ -57,6 +57,14 @@ var productDetail = {
     description: "With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families. With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families. With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families.",
     features: getFeatures(11),
     files,
+    addedProduct: "Added",
+    sidebarTitle: "Dodaj wybrany wariant produktu do koszyka",
+    basketUrl: "#",
+    toBasketLabel: "Zobacz koszyk",
+    notFound: "Brak dostępnych wariantów",
+    lackInformation: "Brak informacji",
+    fabricsLabel: "Fabrics",
+    variantLabel: "Wybierz swój wariant",
     productVariants: [
       {
         id: "5dddbdfb-2a79-412b-7d5f-08d907687b6a",

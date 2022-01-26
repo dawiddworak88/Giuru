@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddedProduct" xml:space="preserve">
+    <value>Dodano</value>
+  </data>
   <data name="AddOrderItem" xml:space="preserve">
     <value>Dodaj</value>
   </data>
@@ -153,11 +156,17 @@
   <data name="ExternalReferenceLabel" xml:space="preserve">
     <value>Zewn. numer zamówienia:</value>
   </data>
+  <data name="FabricsLabel" xml:space="preserve">
+    <value>Tkaniny</value>
+  </data>
   <data name="ImportOrder" xml:space="preserve">
     <value>Import zamówienia</value>
   </data>
   <data name="ItemNotFound" xml:space="preserve">
     <value>Nie znaleziono produktu</value>
+  </data>
+  <data name="LackInformation" xml:space="preserve">
+    <value>Brak informacji</value>
   </data>
   <data name="MoreInfoLabel" xml:space="preserve">
     <value>Uwagi:</value>
@@ -173,6 +182,9 @@
   </data>
   <data name="NoOrderItemsLabel" xml:space="preserve">
     <value>Koszyk jest pusty. Dodaj pierwszą pozycję zamówienia.</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Brak dostępnych wariantów</value>
   </data>
   <data name="Order" xml:space="preserve">
     <value>Zamówienie</value>
@@ -213,8 +225,14 @@
   <data name="SelectClientLabel" xml:space="preserve">
     <value>Wybierz klienta:</value>
   </data>
+  <data name="SidebarTitle" xml:space="preserve">
+    <value>Dodaj wybrany wariant produktu do koszyka</value>
+  </data>
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
+  </data>
+  <data name="ToBasketLabel" xml:space="preserve">
+    <value>Zobacz koszyk</value>
   </data>
   <data name="UpdateOrderStatus" xml:space="preserve">
     <value>Aktualizuj status zamówienia</value>

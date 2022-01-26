@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { Button, SwipeableDrawer, List, ListItem, ListItemIcon, ListItemText, Box } from "@material-ui/core";
 import ImageGallery from "react-image-gallery";
 import Files from "../../../../shared/components/Files/Files";
-import { ShoppingCart, Close, AddShoppingCart, ExpandMore } from "@material-ui/icons";
+import { ShoppingCart, Close, AddShoppingCart, ExpandMore, Done } from "@material-ui/icons";
 import { Context } from "../../../../../../shared/stores/Store";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
@@ -14,6 +14,7 @@ function ProductDetail(props) {
     const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
     const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
     const [sideBar, setSideBar] = React.useState(false);
+    const [orderedProduct, setOrderedProduct] = React.useState(false);
     const toggleDrawer = (open) => (e) => {
         if (e && e.type === 'keydown' && (e.key === 'Tab' || e.key === 'Shift')) {
           return;
@@ -74,6 +75,7 @@ function ProductDetail(props) {
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
                             toast.success(props.successfullyAddedProduct)
                             setOrderItems(jsonResponse.items);
+                            setOrderedProduct(true)
                         }
                         else {
                             setOrderItems([]);
@@ -122,8 +124,8 @@ function ProductDetail(props) {
                     {props.isAuthenticated &&
                         props.isProductVariant ? (
                             <div className="product-detail__add-to-cart-button">
-                                <Button type="submit" startIcon={<ShoppingCart />} variant="contained" color="primary" onClick={() => handleAddOrderItemClick()}>
-                                    {props.basketLabel}
+                                <Button type="submit" startIcon={orderedProduct ? <Done/> : <ShoppingCart />} variant="contained" color="primary" onClick={() => handleAddOrderItemClick()}>
+                                    {orderedProduct ? props.addedProduct : props.basketLabel}
                                 </Button>
                             </div>
                         ) : (
@@ -170,11 +172,11 @@ function ProductDetail(props) {
                     </div>
                     <List className="sidebar-list">
                         <div className="sidebar-list__info">
-                            <h2 className="title">Dodaj wybrany produkt do koszyka</h2>
-                            <a href="#" className="link">Zobacz koszyk</a>
+                            <h2 className="title">{props.sidebarTitle}</h2>
+                            <a href={props.basketUrl} className="link">{props.toBasketLabel}</a>
                         </div>
                         {!props.productVariants ? (
-                            <div>brak</div>
+                            <div className="not-found">{props.notFound}</div>
                         ) : (
                             props.productVariants.map((item) => 
                                 item.carouselItems.map((carouselItem) => 
@@ -185,13 +187,13 @@ function ProductDetail(props) {
                                             </div>
                                             <div className="sidebar-item__details">
                                                 <h1 className="title">{carouselItem.title}</h1>
-                                                <span className="sku">Sku: {carouselItem.sku}</span>
+                                                <span className="sku">{props.skuLabel} {carouselItem.sku}</span>
                                                 <div className="fabrics">
-                                                    <span>Tkaniny</span>
+                                                    <span>{props.fabricsLabel}</span>
                                                     {carouselItem.attributes.find(x => x.key === "primaryFabrics") ? (
                                                         <p>{carouselItem.attributes.find(x => x.key === "primaryFabrics").value}</p>
                                                     ) : (
-                                                        <div>Brak informacji</div>
+                                                        <div>{props.lackInformation}</div>
                                                     )}
                                                     
                                                 </div>
@@ -234,7 +236,16 @@ ProductDetail.propTypes = {
     isProductVariant: PropTypes.bool,
     isAuthenticated: PropTypes.bool,
     images: PropTypes.array,
-    files: PropTypes.object
+    files: PropTypes.object,
+    sidebarTitle: PropTypes.string,
+    basketUrl: PropTypes.string,
+    basketLabel: PropTypes.string,
+    toBasketLabel: PropTypes.string,
+    notFound: PropTypes.string,
+    fabricsLabel: PropTypes.string,
+    lackInformation: PropTypes.string,
+    variantLabel: PropTypes.string,
+    addedProduct: PropTypes.string
 };
 
 export default ProductDetail;

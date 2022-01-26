@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddedProduct" xml:space="preserve">
+    <value>Hinzugefügt</value>
+  </data>
   <data name="AddOrderItem" xml:space="preserve">
     <value>Hinzufügen</value>
   </data>
@@ -153,11 +156,17 @@
   <data name="ExternalReferenceLabel" xml:space="preserve">
     <value>Externe Bestellnummer:</value>
   </data>
+  <data name="FabricsLabel" xml:space="preserve">
+    <value>Stoffe</value>
+  </data>
   <data name="ImportOrder" xml:space="preserve">
     <value>Bestellung importieren</value>
   </data>
   <data name="ItemNotFound" xml:space="preserve">
     <value>Produkt nicht gefunden</value>
+  </data>
+  <data name="LackInformation" xml:space="preserve">
+    <value>Informationsmangel</value>
   </data>
   <data name="MoreInfoLabel" xml:space="preserve">
     <value>Zusätzliche Information:</value>
@@ -173,6 +182,9 @@
   </data>
   <data name="NoOrderItemsLabel" xml:space="preserve">
     <value>Der Warenkorb ist leer. Fügen Sie die erste Position der Bestellung hinzu.</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Keine Varianten verfügbar</value>
   </data>
   <data name="Order" xml:space="preserve">
     <value>Bestellung</value>
@@ -213,8 +225,14 @@
   <data name="SelectClientLabel" xml:space="preserve">
     <value>Kunde auswählen</value>
   </data>
+  <data name="SidebarTitle" xml:space="preserve">
+    <value>Fügen Sie die ausgewählte Produktvariante dem Warenkorb hinzu</value>
+  </data>
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
+  </data>
+  <data name="ToBasketLabel" xml:space="preserve">
+    <value>Warenkorb ansehen</value>
   </data>
   <data name="UpdateOrderStatus" xml:space="preserve">
     <value>Bestellstatus aktualisieren</value>
