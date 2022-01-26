@@ -7,27 +7,44 @@ import ImageGallery from "react-image-gallery";
 import Files from "../../../../shared/components/Files/Files";
 import { ShoppingCart, Close, AddShoppingCart, ExpandMore } from "@material-ui/icons";
 import { Context } from "../../../../../../shared/stores/Store";
-import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
-import VariantSidebar from "../../../../shared/components/VariantSidebar/VariantSidebar";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function ProductDetail(props) {
     const [, dispatch] = useContext(Context);
     const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
     const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
     const [sideBar, setSideBar] = React.useState(false);
-    console.log(sideBar)
+    const toggleDrawer = (open) => (e) => {
+        if (e && e.type === 'keydown' && (e.key === 'Tab' || e.key === 'Shift')) {
+          return;
+        }
+    
+        setSideBar(open)
+    };
 
-    const handleAddOrderItemClick = () => {
+    const handleAddOrderItemClick = (item) => {
+        let product = props;
         if (!props.isProductVariant){
-            return setSideBar(true);
+            product = {
+                productId: item.id,
+                sku: item.sku,
+                title: item.title,
+                images: item.images,
+                quantity: parseInt(1),
+                externalReference: "", 
+                deliveryFrom: null, 
+                deliveryTo: null, 
+                moreInfo: ""
+
+            };
         }
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
         const orderItem = {
-            productId: props.productId, 
-            sku: props.sku, 
-            name: props.title, 
-            imageId: props.images ? props.images[0].id : null, 
+            productId: product.productId, 
+            sku: product.sku, 
+            name: product.title, 
+            imageId: product.images ? product.images[0].id : null, 
             quantity: parseInt(1), 
             externalReference: "", 
             deliveryFrom: null, 
@@ -72,6 +89,11 @@ function ProductDetail(props) {
             });
     };
 
+    const variantDetails = (item) => (e) => {
+        e.preventDefault()
+        NavigationHelper.redirect(item.url)
+    }
+
     return (
         <section className="product-detail section">
             <div className="product-detail__head columns is-tablet">
@@ -98,11 +120,19 @@ function ProductDetail(props) {
                         </div>
                     }
                     {props.isAuthenticated &&
-                        <div className="product-detail__add-to-cart-button">
-                            <Button type="submit" startIcon={<ShoppingCart />} variant="contained" color="primary" onClick={() => handleAddOrderItemClick()}>
-                                {props.basketLabel}
-                            </Button>
-                        </div>
+                        props.isProductVariant ? (
+                            <div className="product-detail__add-to-cart-button">
+                                <Button type="submit" startIcon={<ShoppingCart />} variant="contained" color="primary" onClick={() => handleAddOrderItemClick()}>
+                                    {props.basketLabel}
+                                </Button>
+                            </div>
+                        ) : (
+                            <div className="product-detail__add-to-cart-button">
+                                <Button type="text" variant="contained" color="primary" onClick={toggleDrawer(true)}>
+                                    {props.basketLabel}
+                                </Button>
+                            </div>
+                        )
                     }
                     {props.description &&
                         <div className="product-detail__product-description">
@@ -126,12 +156,59 @@ function ProductDetail(props) {
                         </div>
                     }
                 </div>
-                <VariantSidebar 
-                    items={props.productVariants} 
-                    value={sideBar}
-                    setValue={setSideBar} />
+                <SwipeableDrawer
+                    anchor="right"
+                    open={sideBar}
+                    onClose={toggleDrawer(false)}
+                >
+                <div className="sidebar-content">
+                        <div className="sidebar-content__close">
+                            <div className="icon">
+                                <Close/>
+                            </div>
+                        </div>
+                    </div>
+                    <List className="sidebar-list">
+                        <div className="sidebar-list__info">
+                            <h2 className="title">Dodaj wybrany produkt do koszyka</h2>
+                            <a href="#" className="link">Zobacz koszyk</a>
+                        </div>
+                        {!props.productVariants ? (
+                            <div>brak</div>
+                        ) : (
+                            props.productVariants.map((item) => 
+                                item.carouselItems.map((carouselItem) => 
+                                    <ListItem className="sidebar-item">
+                                        <div className="sidebar-item__row">
+                                            <div className="sidebar-item__image">
+                                                <img src={carouselItem.imageUrl} alt={carouselItem.imageAlt}/>
+                                            </div>
+                                            <div className="sidebar-item__details">
+                                                <h1 className="title">{carouselItem.title}</h1>
+                                                <span className="sku">Sku: {carouselItem.sku}</span>
+                                                <div className="fabrics">
+                                                    <span>Tkaniny</span>
+                                                    {carouselItem.attributes.find(x => x.key === "primaryFabrics") ? (
+                                                        <p>{carouselItem.attributes.find(x => x.key === "primaryFabrics").value}</p>
+                                                    ) : (
+                                                        <div>Brak informacji</div>
+                                                    )}
+                                                    
+                                                </div>
+                                            </div>
+                                            <div className="sidebar-item__buttons">
+                                                <Button type="text" color="primary" variant="contained" className="cart-button" onClick={() => handleAddOrderItemClick(carouselItem)}><AddShoppingCart /></Button>
+                                                <Button type="text" color="primary" variant="contained" className="cart-button" onClick={variantDetails(carouselItem)}><ExpandMore /></Button>
+                                            </div>
+                                        </div>
+                                        <div className="divider"></div>
+                                    </ListItem>
+                                )
+                            )
+                        )}
+                    </List>
+                </SwipeableDrawer>
             </div>
-            {/* <CarouselGrid items={props.productVariants} /> */}
             <Files {...props.files} />
         </section>
     );

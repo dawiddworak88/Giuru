@@ -30,12 +30,12 @@ function CarouselGrid(props) {
                                         </a>
                                         <div className="card-content">
                                             <a href={carouselItem.url}>
-                                                {carouselItem.title &&
+                                                {carouselItem.name &&
                                                     <p className="title is-5 has-text-centered">{carouselItem.title}</p>
                                                 }
 
-                                                {carouselItem.subtitle &&
-                                                    <p className="subtitle is-6 has-text-centered">{carouselItem.subtitle}</p>
+                                                {carouselItem.sku &&
+                                                    <p className="subtitle is-6 has-text-centered">{carouselItem.sku}</p>
                                                 }
                                             </a>
                                         </div>

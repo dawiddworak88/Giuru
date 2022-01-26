@@ -63,12 +63,24 @@ var productDetail = {
         title: "Warianty produktu",
         carouselItems: [
           {
+            name: "Aderito",
+            sku: "Adr05",
             id: "5c5682ad-1d18-407c-e76f-08d9db1eef9f",
-            imageAlt: "Aderito 140X200"
+            imageAlt: "Aderito 140X200",
+            attributes: [
+              {
+                key: "primaryFabrics",
+                name: "Tkanina",
+                value: "Kronos 15, Kronos 19"
+              }
+            ]
           },
           {
+            name: "Anton",
+            sku: "An27",
             id: "5c5682ad-1d18-407c-e76f-08d9db1eef9f",
-            imageAlt: "Aderito 140X200"
+            imageAlt: "Aderito 140X200",
+            attributes: []
           }
         ]
       }

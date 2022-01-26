@@ -24,8 +24,7 @@ using System.Threading.Tasks;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
-using System;
-using Newtonsoft.Json;
+using Foundation.PageContent.Components.Images;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -98,11 +97,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 viewModel.IsProductVariant = product.PrimaryProductId.HasValue;
                 viewModel.Features = product.ProductAttributes?.Select(x => new ProductFeatureViewModel { Key = x.Name, Value = string.Join(", ", x.Values.OrEmptyIfNull()) });
 
-                var images = new List<ImageViewModel>();
+                var images = new List<Web.Shared.ViewModels.Images.ImageViewModel>();
 
                 foreach (var image in product.Images.OrEmptyIfNull())
                 {
-                    var imageViewModel = new ImageViewModel
+                    var imageViewModel = new Web.Shared.ViewModels.Images.ImageViewModel
                     { 
                         Id = image,
                         Original = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.OriginalMaxWidth, ProductConstants.OriginalMaxHeight, true)),
@@ -167,7 +166,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                             {
                                 Id = productVariant.Id,
                                 Title = productVariant.Name,
-                                Subtitle = productVariant.Sku,
+                                Sku = productVariant.Sku,
                                 ImageAlt = productVariant.Name,
                                 Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id }),
                                 Attributes = productVariant.ProductAttributes.Select(x => new CarouselGridProductAttributesViewModel
@@ -179,7 +178,16 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                             if (productVariant.Images != null && productVariant.Images.Any())
                             {
-                                carouselItem.ImageId = productVariant.Images.FirstOrDefault();
+                                var variantImages = new List<ImageVariantViewModel>();
+                                foreach (var image in productVariant.Images)
+                                {
+                                    var imageVariantViewModel = new ImageVariantViewModel
+                                    {
+                                        Id = image
+                                    };
+                                    variantImages.Add(imageVariantViewModel);
+                                }
+                                carouselItem.Images = variantImages;
                                 carouselItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), CarouselGridConstants.CarouselItemImageMaxWidth, CarouselGridConstants.CarouselItemImageMaxHeight, true));
                             }
 
