@@ -46,6 +46,7 @@ var productDetail = {
     byLabel: "by",
     brandName: "eltap",
     brandUrl: "#",
+    isProductVariant: true,
     pricesLabel: "Prices:",
     productInformationLabel: "Product and Packagig Information:",
     signInToSeePricesLabel: "Log in to see prices",

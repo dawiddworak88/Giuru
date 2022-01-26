@@ -121,20 +121,20 @@ function ProductDetail(props) {
                             }
                         </div>
                     }
-                    {props.isAuthenticated &&
-                        props.isProductVariant ? (
-                            <div className="product-detail__add-to-cart-button">
+                    {props.isAuthenticated && 
+                        <div className="product-detail__add-to-cart-button">
+                            {props.isProductVariant ? (
                                 <Button type="submit" startIcon={orderedProduct ? <Done/> : <ShoppingCart />} variant="contained" color="primary" onClick={() => handleAddOrderItemClick()}>
                                     {orderedProduct ? props.addedProduct : props.basketLabel}
                                 </Button>
-                            </div>
-                        ) : (
-                            <div className="product-detail__add-to-cart-button">
+                            ) : (
+                                <div className="product-detail__add-to-cart-button">
                                 <Button type="text" variant="contained" color="primary" onClick={toggleDrawer(true)}>
                                     {props.basketLabel}
                                 </Button>
                             </div>
-                        )
+                            )}
+                        </div>
                     }
                     {props.description &&
                         <div className="product-detail__product-description">
