@@ -8,24 +8,14 @@ import Files from "../../../../shared/components/Files/Files";
 import { ShoppingCart, Close, AddShoppingCart, ExpandMore } from "@material-ui/icons";
 import { Context } from "../../../../../../shared/stores/Store";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
+import VariantSidebar from "../../../../shared/components/VariantSidebar/VariantSidebar";
 
 function ProductDetail(props) {
     const [, dispatch] = useContext(Context);
     const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
     const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
-    const [sideBar, setSideBar] = React.useState(true);
-
-    const toggleDrawer = (open) => (event) => {
-        if (
-          event &&
-          event.type === 'keydown' &&
-          (event.key === 'Tab' || event.key === 'Shift')
-        ) {
-          return;
-        }
-    
-        setSideBar(open)
-      };
+    const [sideBar, setSideBar] = React.useState(false);
+    console.log(sideBar)
 
     const handleAddOrderItemClick = () => {
         if (!props.isProductVariant){
@@ -82,7 +72,6 @@ function ProductDetail(props) {
             });
     };
 
-    const variants = props.productVariants;
     return (
         <section className="product-detail section">
             <div className="product-detail__head columns is-tablet">
@@ -137,81 +126,12 @@ function ProductDetail(props) {
                         </div>
                     }
                 </div>
-                <SwipeableDrawer
-                    anchor="right"
-                    open={sideBar}
-                    onClose={toggleDrawer("", false)}
-                >
-                 <div className="sidebar-content">
-                        <div className="sidebar-content__close">
-                            <div className="icon">
-                                <Close/>
-                            </div>
-                        </div>
-                    </div>
-                    <List className="sidebar-list">
-                        <div className="sidebar-list__info">
-                            <h2 className="title">Dodaj wybrany produkt do koszyka</h2>
-                            <a href="#" className="link">Zobacz koszyk</a>
-                        </div>
-                        {!variants ? (
-                            <div>brak</div>
-                        ) : (
-                            variants.map((items) => 
-                                items.carouselItems.map((carouselItem) => 
-                                    <ListItem className="sidebar-item">
-                                        <div className="sidebar-item__row">
-                                            <div className="sidebar-item__image">
-                                                <img src="https://eltap-media-cdn.azureedge.net/api/v1/files/432f201b-893c-4bfc-3102-08d907684408?w=1024&h=1024&o=true&extension=webp" />
-                                            </div>
-                                            <div className="sidebar-item__details">
-                                                <h1 className="title">anton</h1>
-                                                <span className="sku">Sku: An01</span>
-                                                <div className="fabrics">
-                                                    <span>Tkaniny</span>
-                                                    <p>Kronos 19, Kronos 20, Kronos 21</p>
-                                                </div>
-                                            </div>
-                                            <div className="sidebar-item__buttons">
-                                                <Button type="text" color="primary" variant="contained" className="cart-button"><AddShoppingCart /></Button>
-                                                <Button type="text" color="primary" variant="contained" className="cart-button"><ExpandMore /></Button>
-                                            </div>
-                                        </div>
-                                        <div className="divider"></div>
-                                    </ListItem>
-                                )
-                            )
-                        )}
-                        {/* {!variants ? (
-                            <div>Brak</div>
-                        ) : (
-                            variants.map((variant, index) => 
-                                <ListItem className="sidebar-item">
-                                    <div className="sidebar-item__row">
-                                        <div className="sidebar-item__image">
-                                            <img src="https://eltap-media-cdn.azureedge.net/api/v1/files/432f201b-893c-4bfc-3102-08d907684408?w=1024&h=1024&o=true&extension=webp" />
-                                        </div>
-                                        <div className="sidebar-item__details">
-                                            <h1 className="title">anton</h1>
-                                            <span className="sku">Sku: An01</span>
-                                            <div className="fabrics">
-                                                <span>Tkaniny</span>
-                                                <p>Kronos 19, Kronos 20, Kronos 21</p>
-                                            </div>
-                                        </div>
-                                        <div className="sidebar-item__buttons">
-                                            <Button type="text" color="primary" variant="contained" className="cart-button"><AddShoppingCart /></Button>
-                                            <Button type="text" color="primary" variant="contained" className="cart-button"><ExpandMore /></Button>
-                                        </div>
-                                    </div>
-                                    <div className="divider"></div>
-                                </ListItem>
-                            )
-                        )} */}
-                    </List>
-                </SwipeableDrawer>
+                <VariantSidebar 
+                    items={props.productVariants} 
+                    value={sideBar}
+                    setValue={setSideBar} />
             </div>
-            <CarouselGrid items={props.productVariants} />
+            {/* <CarouselGrid items={props.productVariants} /> */}
             <Files {...props.files} />
         </section>
     );
