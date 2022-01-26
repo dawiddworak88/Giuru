@@ -70,7 +70,7 @@ function StatusOrder(props) {
                                     </TableHead>
                                     <TableBody>
                                         {props.orderItems && props.orderItems.map((item, index) => {
-                                            const statement = item.fabrics
+                                            const statement = item.fabrics;
                                             let fabrics = null;
                                             if (statement.length > 0) {
                                                 fabrics = item.fabrics.find(x => x.key === "primaryFabrics").values.join(", ");

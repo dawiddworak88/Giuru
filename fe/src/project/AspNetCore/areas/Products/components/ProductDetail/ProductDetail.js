@@ -179,32 +179,35 @@ function ProductDetail(props) {
                             <div className="not-found">{props.notFound}</div>
                         ) : (
                             props.productVariants.map((item) => 
-                                item.carouselItems.map((carouselItem) => 
-                                    <ListItem className="sidebar-item">
-                                        <div className="sidebar-item__row">
-                                            <div className="sidebar-item__image">
-                                                <img src={carouselItem.imageUrl} alt={carouselItem.imageAlt}/>
-                                            </div>
-                                            <div className="sidebar-item__details">
-                                                <h1 className="title">{carouselItem.title}</h1>
-                                                <span className="sku">{props.skuLabel} {carouselItem.sku}</span>
-                                                <div className="fabrics">
-                                                    <span>{props.fabricsLabel}</span>
-                                                    {carouselItem.attributes.find(x => x.key === "primaryFabrics") ? (
-                                                        <p>{carouselItem.attributes.find(x => x.key === "primaryFabrics").value}</p>
-                                                    ) : (
-                                                        <div>{props.lackInformation}</div>
-                                                    )}
-                                                    
+                                item.carouselItems.map((carouselItem) => {
+                                        const statement = carouselItem.attributes;
+                                        let fabrics = props.lackInformation;
+                                        if (statement.length > 0) {
+                                            fabrics = carouselItem.attributes.find(x => x.key === "primaryFabrics").value;
+                                        }
+                                        return (
+                                            <ListItem className="sidebar-item">
+                                                <div className="sidebar-item__row">
+                                                    <div className="sidebar-item__image">
+                                                        <img src={carouselItem.imageUrl} alt={carouselItem.imageAlt}/>
+                                                    </div>
+                                                    <div className="sidebar-item__details">
+                                                        <h1 className="title">{carouselItem.title}</h1>
+                                                        <span className="sku">{props.skuLabel} {carouselItem.sku}</span>
+                                                        <div className="fabrics">
+                                                            <span>{props.fabricsLabel}</span>
+                                                            <p>{fabrics}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="sidebar-item__buttons">
+                                                        <Button type="text" color="primary" variant="contained" className="cart-button" onClick={() => handleAddOrderItemClick(carouselItem)}><AddShoppingCart /></Button>
+                                                        <Button type="text" color="primary" variant="contained" className="cart-button" onClick={variantDetails(carouselItem)}><ExpandMore /></Button>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="sidebar-item__buttons">
-                                                <Button type="text" color="primary" variant="contained" className="cart-button" onClick={() => handleAddOrderItemClick(carouselItem)}><AddShoppingCart /></Button>
-                                                <Button type="text" color="primary" variant="contained" className="cart-button" onClick={variantDetails(carouselItem)}><ExpandMore /></Button>
-                                            </div>
-                                        </div>
-                                        <div className="divider"></div>
-                                    </ListItem>
+                                                <div className="divider"></div>
+                                            </ListItem>
+                                        )
+                                    }
                                 )
                             )
                         )}
