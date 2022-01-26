@@ -163,7 +163,7 @@ function ProductDetail(props) {
                 >
                 <div className="sidebar-content">
                         <div className="sidebar-content__close">
-                            <div className="icon">
+                            <div className="icon" onClick={toggleDrawer(false)}>
                                 <Close/>
                             </div>
                         </div>
