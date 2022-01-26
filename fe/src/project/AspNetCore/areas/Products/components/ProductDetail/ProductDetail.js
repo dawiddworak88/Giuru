@@ -82,7 +82,7 @@ function ProductDetail(props) {
             });
     };
 
-
+    const variants = props.productVariants;
     return (
         <section className="product-detail section">
             <div className="product-detail__head columns is-tablet">
@@ -115,20 +115,6 @@ function ProductDetail(props) {
                             </Button>
                         </div>
                     }
-                    {/* {props.isAuthenticated && props.isProductVariant ? (
-                            <div className="product-detail__add-to-cart-button">
-                                <Button type="submit" startIcon={<ShoppingCart />} variant="contained" color="primary" onClick={() => handleAddOrderItemClick()}>
-                                    {props.basketLabel}
-                                </Button>
-                            </div>
-                        ) : (
-                            <div className="product-detail__add-to-cart-button">
-                                <Button type="submit" startIcon={<ShoppingCart />} variant="contained" color="primary" onClick={() => selectVariant()}>
-                                    {props.basketLabel}
-                                </Button>
-                            </div>
-                        )
-                    } */}
                     {props.description &&
                         <div className="product-detail__product-description">
                             <h3 className="product-detail__feature-title">{props.descriptionLabel}</h3>
@@ -168,146 +154,60 @@ function ProductDetail(props) {
                             <h2 className="title">Dodaj wybrany produkt do koszyka</h2>
                             <a href="#" className="link">Zobacz koszyk</a>
                         </div>
-                        <ListItem className="sidebar-item">
-                            <div className="sidebar-item__row">
-                                <div className="sidebar-item__image">
-                                    <img src="https://eltap-media-cdn.azureedge.net/api/v1/files/432f201b-893c-4bfc-3102-08d907684408?w=1024&h=1024&o=true&extension=webp" />
-                                </div>
-                                <div className="sidebar-item__details">
-                                    <h1 className="title">anton</h1>
-                                    <span className="sku">Sku: An01</span>
-                                    <div className="fabrics">
-                                        <span>Tkaniny</span>
-                                        <p>Kronos 19, Kronos 20, Kronos 21</p>
+                        {!variants ? (
+                            <div>brak</div>
+                        ) : (
+                            variants.map((items) => 
+                                items.carouselItems.map((carouselItem) => 
+                                    <ListItem className="sidebar-item">
+                                        <div className="sidebar-item__row">
+                                            <div className="sidebar-item__image">
+                                                <img src="https://eltap-media-cdn.azureedge.net/api/v1/files/432f201b-893c-4bfc-3102-08d907684408?w=1024&h=1024&o=true&extension=webp" />
+                                            </div>
+                                            <div className="sidebar-item__details">
+                                                <h1 className="title">anton</h1>
+                                                <span className="sku">Sku: An01</span>
+                                                <div className="fabrics">
+                                                    <span>Tkaniny</span>
+                                                    <p>Kronos 19, Kronos 20, Kronos 21</p>
+                                                </div>
+                                            </div>
+                                            <div className="sidebar-item__buttons">
+                                                <Button type="text" color="primary" variant="contained" className="cart-button"><AddShoppingCart /></Button>
+                                                <Button type="text" color="primary" variant="contained" className="cart-button"><ExpandMore /></Button>
+                                            </div>
+                                        </div>
+                                        <div className="divider"></div>
+                                    </ListItem>
+                                )
+                            )
+                        )}
+                        {/* {!variants ? (
+                            <div>Brak</div>
+                        ) : (
+                            variants.map((variant, index) => 
+                                <ListItem className="sidebar-item">
+                                    <div className="sidebar-item__row">
+                                        <div className="sidebar-item__image">
+                                            <img src="https://eltap-media-cdn.azureedge.net/api/v1/files/432f201b-893c-4bfc-3102-08d907684408?w=1024&h=1024&o=true&extension=webp" />
+                                        </div>
+                                        <div className="sidebar-item__details">
+                                            <h1 className="title">anton</h1>
+                                            <span className="sku">Sku: An01</span>
+                                            <div className="fabrics">
+                                                <span>Tkaniny</span>
+                                                <p>Kronos 19, Kronos 20, Kronos 21</p>
+                                            </div>
+                                        </div>
+                                        <div className="sidebar-item__buttons">
+                                            <Button type="text" color="primary" variant="contained" className="cart-button"><AddShoppingCart /></Button>
+                                            <Button type="text" color="primary" variant="contained" className="cart-button"><ExpandMore /></Button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="sidebar-item__buttons">
-                                    <Button type="text" color="primary" variant="contained" className="cart-button"><AddShoppingCart /></Button>
-                                    <Button type="text" color="primary" variant="contained" className="cart-button"><ExpandMore /></Button>
-                                </div>
-                            </div>
-                            <div className="divider"></div>
-                        </ListItem>
-                        <ListItem className="sidebar-item">
-                            <div className="sidebar-item__row">
-                                <div className="sidebar-item__image">
-                                    <img src="https://eltap-media-cdn.azureedge.net/api/v1/files/432f201b-893c-4bfc-3102-08d907684408?w=1024&h=1024&o=true&extension=webp" />
-                                </div>
-                                <div className="sidebar-item__details">
-                                    <h1 className="title">anton</h1>
-                                    <span className="sku">Sku: An01</span>
-                                    <div className="fabrics">
-                                        <span>Tkaniny</span>
-                                        <p>Kronos 19, Kronos 20, Kronos 21</p>
-                                    </div>
-                                </div>
-                                <div className="sidebar-item__buttons">
-                                    <Button type="text" color="primary" variant="contained" className="cart-button"><AddShoppingCart /></Button>
-                                    <Button type="text" color="primary" variant="contained" className="cart-button"><ExpandMore /></Button>
-                                </div>
-                            </div>
-                            <div className="divider"></div>
-                        </ListItem>
-                        <ListItem className="sidebar-item">
-                            <div className="sidebar-item__row">
-                                <div className="sidebar-item__image">
-                                    <img src="https://eltap-media-cdn.azureedge.net/api/v1/files/432f201b-893c-4bfc-3102-08d907684408?w=1024&h=1024&o=true&extension=webp" />
-                                </div>
-                                <div className="sidebar-item__details">
-                                    <h1 className="title">anton</h1>
-                                    <span className="sku">Sku: An01</span>
-                                    <div className="fabrics">
-                                        <span>Tkaniny</span>
-                                        <p>Kronos 19, Kronos 20, Kronos 21</p>
-                                    </div>
-                                </div>
-                                <div className="sidebar-item__buttons">
-                                    <Button type="text" color="primary" variant="contained" className="cart-button"><AddShoppingCart /></Button>
-                                    <Button type="text" color="primary" variant="contained" className="cart-button"><ExpandMore /></Button>
-                                </div>
-                            </div>
-                            <div className="divider"></div>
-                        </ListItem>
-                        <ListItem className="sidebar-item">
-                            <div className="sidebar-item__row">
-                                <div className="sidebar-item__image">
-                                    <img src="https://eltap-media-cdn.azureedge.net/api/v1/files/432f201b-893c-4bfc-3102-08d907684408?w=1024&h=1024&o=true&extension=webp" />
-                                </div>
-                                <div className="sidebar-item__details">
-                                    <h1 className="title">anton</h1>
-                                    <span className="sku">Sku: An01</span>
-                                    <div className="fabrics">
-                                        <span>Tkaniny</span>
-                                        <p>Kronos 19, Kronos 20, Kronos 21</p>
-                                    </div>
-                                </div>
-                                <div className="sidebar-item__buttons">
-                                    <Button type="text" color="primary" variant="contained" className="cart-button"><AddShoppingCart /></Button>
-                                    <Button type="text" color="primary" variant="contained" className="cart-button"><ExpandMore /></Button>
-                                </div>
-                            </div>
-                            <div className="divider"></div>
-                        </ListItem>
-                        <ListItem className="sidebar-item">
-                            <div className="sidebar-item__row">
-                                <div className="sidebar-item__image">
-                                    <img src="https://eltap-media-cdn.azureedge.net/api/v1/files/432f201b-893c-4bfc-3102-08d907684408?w=1024&h=1024&o=true&extension=webp" />
-                                </div>
-                                <div className="sidebar-item__details">
-                                    <h1 className="title">anton</h1>
-                                    <span className="sku">Sku: An01</span>
-                                    <div className="fabrics">
-                                        <span>Tkaniny</span>
-                                        <p>Kronos 19, Kronos 20, Kronos 21</p>
-                                    </div>
-                                </div>
-                                <div className="sidebar-item__buttons">
-                                    <Button type="text" color="primary" variant="contained" className="cart-button"><AddShoppingCart /></Button>
-                                    <Button type="text" color="primary" variant="contained" className="cart-button"><ExpandMore /></Button>
-                                </div>
-                            </div>
-                            <div className="divider"></div>
-                        </ListItem>
-                        <ListItem className="sidebar-item">
-                            <div className="sidebar-item__row">
-                                <div className="sidebar-item__image">
-                                    <img src="https://eltap-media-cdn.azureedge.net/api/v1/files/432f201b-893c-4bfc-3102-08d907684408?w=1024&h=1024&o=true&extension=webp" />
-                                </div>
-                                <div className="sidebar-item__details">
-                                    <h1 className="title">anton</h1>
-                                    <span className="sku">Sku: An01</span>
-                                    <div className="fabrics">
-                                        <span>Tkaniny</span>
-                                        <p>Kronos 19, Kronos 20, Kronos 21</p>
-                                    </div>
-                                </div>
-                                <div className="sidebar-item__buttons">
-                                    <Button type="text" color="primary" variant="contained" className="cart-button"><AddShoppingCart /></Button>
-                                    <Button type="text" color="primary" variant="contained" className="cart-button"><ExpandMore /></Button>
-                                </div>
-                            </div>
-                            <div className="divider"></div>
-                        </ListItem>
-                        <ListItem className="sidebar-item">
-                            <div className="sidebar-item__row">
-                                <div className="sidebar-item__image">
-                                    <img src="https://eltap-media-cdn.azureedge.net/api/v1/files/432f201b-893c-4bfc-3102-08d907684408?w=1024&h=1024&o=true&extension=webp" />
-                                </div>
-                                <div className="sidebar-item__details">
-                                    <h1 className="title">anton</h1>
-                                    <span className="sku">Sku: An01</span>
-                                    <div className="fabrics">
-                                        <span>Tkaniny</span>
-                                        <p>Kronos 19, Kronos 20, Kronos 21</p>
-                                    </div>
-                                </div>
-                                <div className="sidebar-item__buttons">
-                                    <Button type="text" color="primary" variant="contained" className="cart-button"><AddShoppingCart /></Button>
-                                    <Button type="text" color="primary" variant="contained" className="cart-button"><ExpandMore /></Button>
-                                </div>
-                            </div>
-                            <div className="divider"></div>
-                        </ListItem>
+                                    <div className="divider"></div>
+                                </ListItem>
+                            )
+                        )} */}
                     </List>
                 </SwipeableDrawer>
             </div>

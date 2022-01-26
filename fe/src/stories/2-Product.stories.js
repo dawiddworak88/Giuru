@@ -15,7 +15,7 @@ const images = [
   {
     original: "https://eltap.pl/upload/gallery/66/beg-04jpg9238.jpg",
     thumbnail: "https://eltap.pl/upload/gallery/66/beg-04jpg9238.jpg",
-  }
+  },
 ];
 
 function getFeatures(count) {
@@ -56,7 +56,23 @@ var productDetail = {
     descriptionLabel: "Description:",
     description: "With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families. With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families. With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families.",
     features: getFeatures(11),
-    files
+    files,
+    productVariants: [
+      {
+        id: "5dddbdfb-2a79-412b-7d5f-08d907687b6a",
+        title: "Warianty produktu",
+        carouselItems: [
+          {
+            id: "5c5682ad-1d18-407c-e76f-08d9db1eef9f",
+            imageAlt: "Aderito 140X200"
+          },
+          {
+            id: "5c5682ad-1d18-407c-e76f-08d9db1eef9f",
+            imageAlt: "Aderito 140X200"
+          }
+        ]
+      }
+    ]
 };
 
 export const ProductPageStory = () => <ProductPage header={header} breadcrumbs={breadcrumbs} mainNavigation={mainNavigation} productDetail={productDetail} footer={footer} />
