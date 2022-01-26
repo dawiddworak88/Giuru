@@ -59,17 +59,16 @@ var productDetail = {
     features: getFeatures(11),
     files,
     addedProduct: "Added",
-    sidebarTitle: "Dodaj wybrany wariant produktu do koszyka",
+    sidebarTitle: "Add the selected product variant to the cart",
     basketUrl: "#",
-    toBasketLabel: "Zobacz koszyk",
-    notFound: "Brak dostępnych wariantów",
-    lackInformation: "Brak informacji",
+    toBasketLabel: "View cart",
+    notFound: "No variants",
+    lackInformation: "Lack of information",
     fabricsLabel: "Fabrics",
-    variantLabel: "Wybierz swój wariant",
     productVariants: [
       {
         id: "5dddbdfb-2a79-412b-7d5f-08d907687b6a",
-        title: "Warianty produktu",
+        title: "Product variants",
         carouselItems: [
           {
             name: "Aderito",
