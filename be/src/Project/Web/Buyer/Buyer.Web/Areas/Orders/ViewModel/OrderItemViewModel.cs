@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Buyer.Web.Areas.Products.DomainModels;
+using System;
+using System.Collections.Generic;
 
 namespace Buyer.Web.Areas.Orders.ViewModel
 {
@@ -15,5 +17,7 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public DateTime? DeliveryFrom { get; set; }
         public DateTime? DeliveryTo { get; set; }
         public string MoreInfo { get; set; }
+        public IEnumerable<ProductAttribute> Fabrics { get; set; }
+
     }
 }

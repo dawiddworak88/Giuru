@@ -10,7 +10,7 @@ import moment from "moment";
 import { toast } from "react-toastify";
 
 function StatusOrder(props) {
-
+   
     const [state,] = useContext(Context);
     const [orderStatuses, setOrderStatuses] = useState([]);
 
@@ -60,6 +60,7 @@ function StatusOrder(props) {
                                             <TableCell></TableCell>
                                             <TableCell>{props.skuLabel}</TableCell>
                                             <TableCell>{props.nameLabel}</TableCell>
+                                            <TableCell>{props.fabricsLabel}</TableCell>
                                             <TableCell>{props.quantityLabel}</TableCell>
                                             <TableCell>{props.externalReferenceLabel}</TableCell>
                                             <TableCell>{props.deliveryFromLabel}</TableCell>
@@ -68,18 +69,26 @@ function StatusOrder(props) {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {props.orderItems && props.orderItems.map((item, index) => (
-                                            <TableRow key={index}>
-                                                <TableCell><a href={item.productUrl}><img className="status-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
-                                                <TableCell>{item.sku}</TableCell>
-                                                <TableCell>{item.name}</TableCell>
-                                                <TableCell>{item.quantity}</TableCell>
-                                                <TableCell>{item.externalReference}</TableCell>
-                                                <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
-                                                <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
-                                                <TableCell>{item.moreInfo}</TableCell>
-                                            </TableRow>
-                                        ))}
+                                        {props.orderItems && props.orderItems.map((item, index) => {
+                                            const statement = item.fabrics
+                                            let fabrics = null;
+                                            if (statement.length > 0) {
+                                                fabrics = item.fabrics.find(x => x.key === "primaryFabrics").values.join(", ");
+                                            }
+                                            return (
+                                                <TableRow key={index}>
+                                                    <TableCell><a href={item.productUrl}><img className="status-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
+                                                    <TableCell>{item.sku}</TableCell>
+                                                    <TableCell>{item.name}</TableCell>
+                                                    <TableCell>{fabrics}</TableCell>
+                                                    <TableCell>{item.quantity}</TableCell>
+                                                    <TableCell>{item.externalReference}</TableCell>
+                                                    <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
+                                                    <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
+                                                    <TableCell>{item.moreInfo}</TableCell>
+                                                </TableRow>
+                                            )
+                                        })}
                                     </TableBody>
                                 </Table>
                             </TableContainer>

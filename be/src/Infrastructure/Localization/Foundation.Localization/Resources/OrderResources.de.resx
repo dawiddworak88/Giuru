@@ -154,7 +154,7 @@
     <value>SKU oder den Namen eingeben</value>
   </data>
   <data name="ExternalReferenceLabel" xml:space="preserve">
-    <value>Externe Bestellnummer:</value>
+    <value>Eigene Nummer des Kunden:</value>
   </data>
   <data name="FabricsLabel" xml:space="preserve">
     <value>Stoffe</value>
