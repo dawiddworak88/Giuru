@@ -8,7 +8,7 @@ import HeaderConstants from "./HeaderConstants";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import { Context } from "../../../../../shared/stores/Store";
-import {AddShoppingCart} from '@material-ui/icons';
+import {ShoppingCart} from '@material-ui/icons';
 
 function Header(props) {
 
@@ -138,7 +138,7 @@ function Header(props) {
                         </div>
                         {props.isLoggedIn &&
                             <div className="navbar-item">
-                                <a href={props.basketUrl} className="button"><AddShoppingCart/></a>
+                                <a href={props.basketUrl} className="button is-text"><ShoppingCart/></a>
                             </div>
                         }
                     </div>
