@@ -1,3 +1,5 @@
+@import "../../../../shared/components/Inputs/Quantity/QuantityInput.scss";
+
 .product-detail {
     &__feature-title {
         font-size: 1.1rem;
@@ -52,8 +54,16 @@
         margin-bottom: 0.5rem;
     }
 
-    &____add-to-cart-button {
-        margin-top: 21rem !important;
+    &__add-to-cart-button {
+        margin-top: 0.8rem !important;
+
+        button.cart-action {
+            min-height: 42px;
+        }
+
+        .row {
+            display: flex;
+        }
     }
 
     &__product-information {

@@ -2,18 +2,20 @@ import React, { Fragment, useContext } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { Button, SwipeableDrawer, List, ListItem, ListItemIcon, ListItemText, Box } from "@material-ui/core";
+import { Button, SwipeableDrawer, List, ListItem } from "@material-ui/core";
 import ImageGallery from "react-image-gallery";
 import Files from "../../../../shared/components/Files/Files";
 import { ShoppingCart, Close, AddShoppingCart, ExpandMore, Done } from "@material-ui/icons";
 import { Context } from "../../../../../../shared/stores/Store";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
+import QuantityInput from "../../../../shared/components/Inputs/Quantity/QuantityInput";
 
 function ProductDetail(props) {
     const [, dispatch] = useContext(Context);
     const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
     const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
     const [sideBar, setSideBar] = React.useState(false);
+    const [quantity, setQuantity] = React.useState(1);
     const [orderedProduct, setOrderedProduct] = React.useState(false);
     const toggleDrawer = (open) => (e) => {
         if (e && e.type === 'keydown' && (e.key === 'Tab' || e.key === 'Shift')) {
@@ -31,7 +33,7 @@ function ProductDetail(props) {
                 sku: item.sku,
                 title: item.title,
                 images: item.images,
-                quantity: parseInt(1),
+                quantity: parseInt(quantity),
                 externalReference: "", 
                 deliveryFrom: null, 
                 deliveryTo: null, 
@@ -46,7 +48,7 @@ function ProductDetail(props) {
             sku: product.sku, 
             name: product.title, 
             imageId: product.images ? product.images[0].id : null, 
-            quantity: parseInt(1), 
+            quantity: parseInt(quantity), 
             externalReference: "", 
             deliveryFrom: null, 
             deliveryTo: null, 
@@ -124,9 +126,18 @@ function ProductDetail(props) {
                     {props.isAuthenticated && 
                         <div className="product-detail__add-to-cart-button">
                             {props.isProductVariant ? (
-                                <Button type="submit" startIcon={orderedProduct ? <Done/> : <ShoppingCart />} variant="contained" color="primary" onClick={() => handleAddOrderItemClick()}>
-                                    {orderedProduct ? props.addedProduct : props.basketLabel}
-                                </Button>
+                                <div className="row">
+                                    <QuantityInput 
+                                        value={quantity}
+                                        minValue={1}
+                                        maxValue={10}
+                                        stepValue={1}
+                                        setValue={setQuantity}
+                                    />
+                                    <Button type="submit" startIcon={orderedProduct ? <Done/> : <ShoppingCart />} variant="contained" color="primary" className="cart-action" onClick={() => handleAddOrderItemClick()}>
+                                        {orderedProduct ? props.addedProduct : props.basketLabel}
+                                    </Button>
+                                </div>
                             ) : (
                                 <div className="product-detail__add-to-cart-button">
                                 <Button type="text" variant="contained" color="primary" onClick={toggleDrawer(true)}>
