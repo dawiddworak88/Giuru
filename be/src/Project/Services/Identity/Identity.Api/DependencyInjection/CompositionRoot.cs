@@ -10,7 +10,10 @@ using Identity.Api.Repositories.AppSecrets;
 using Identity.Api.Services.Organisations;
 using Identity.Api.Services.Tokens;
 using Identity.Api.Services.Users;
+using Identity.Api.Validators.Authorization;
+using Identity.Api.Validators.Tokens;
 using IdentityServer4.Services;
+using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.KeyVault;
@@ -41,6 +44,8 @@ namespace Identity.Api.DependencyInjection
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
             })
+            .AddCustomTokenRequestValidator<TokenRequestValidator>()
+            .AddCustomAuthorizeRequestValidator<AuthorizeRequestValidator>()
             .AddInMemoryIdentityResources(IdentityServerConfig.Ids)
             .AddInMemoryApiScopes(IdentityServerConfig.ApiScopes)
             .AddInMemoryApiResources(IdentityServerConfig.Apis)
@@ -86,6 +91,8 @@ namespace Identity.Api.DependencyInjection
 
         public static void RegisterAccountsApiDependencies(this IServiceCollection services)
         {
+            services.AddScoped<ICustomTokenRequestValidator, TokenRequestValidator>();
+            services.AddScoped<ICustomAuthorizeRequestValidator, AuthorizeRequestValidator>();
             services.AddScoped<IOrganisationService, OrganisationService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUsersService, UsersService>();
