@@ -438,4 +438,10 @@
   <data name="Catalog" xml:space="preserve">
     <value>Katalog</value>
   </data>
+  <data name="ErrorOccurred" xml:space="preserve">
+    <value>Wystąpił błąd. Prosimy o kontakt z administratorem.</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Nieautoryzowany</value>
+  </data>
 </root>

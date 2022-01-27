@@ -107,7 +107,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
     ForwardedHeaders = ForwardedHeaders.XForwardedProto
 });
 
-app.UseGeneralException();
+app.UseExceptionHandler("/Home/Content/Error");
 
 app.UseResponseCompression();
 

@@ -435,4 +435,10 @@
   <data name="Catalog" xml:space="preserve">
     <value>Catalog</value>
   </data>
+  <data name="ErrorOccurred" xml:space="preserve">
+    <value>An error has occurred. Please contact an administrator.</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Unauthorized</value>
+  </data>
 </root>
