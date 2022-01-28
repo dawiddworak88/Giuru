@@ -1,16 +1,28 @@
-﻿using Buyer.Web.Areas.Products.Repositories.Products;
+﻿using Buyer.Web.Areas.Products.DomainModels;
+using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.Services.Products;
-using Foundation.Account.Definitions;
+using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
-using Foundation.Extensions.Helpers;
+using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.Services.MediaServices;
+using Foundation.GenericRepository.Paginations;
+using Foundation.Localization;
+using Foundation.PageContent.Components.CarouselGrids.Definitions;
+using Foundation.PageContent.Components.CarouselGrids.ViewModels;
+using Foundation.PageContent.Components.Images;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Products.ApiControllers
@@ -19,14 +31,29 @@ namespace Buyer.Web.Areas.Products.ApiControllers
     public class ProductsApiController : BaseApiController
     {
         private readonly IProductsService productsService;
+        private readonly IOptions<AppSettings> options;
+        private readonly ICdnService cdnService;
+        private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly IProductsRepository productsRepository;
+        private readonly IMediaHelperService mediaService;
+        private readonly LinkGenerator linkGenerator;
 
         public ProductsApiController(
             IProductsService productsService,
-            IProductsRepository productsRepository)
+            IProductsRepository productsRepository,
+            ICdnService cdnService,
+            IStringLocalizer<ProductResources> productLocalizer,
+            IMediaHelperService mediaService,
+            IOptions<AppSettings> options,
+            LinkGenerator linkGenerator)
         {
             this.productsService = productsService;
             this.productsRepository = productsRepository;
+            this.linkGenerator = linkGenerator;
+            this.productLocalizer = productLocalizer;
+            this.mediaService = mediaService;
+            this.productLocalizer = productLocalizer;
+            this.options = options;
         }
 
         [HttpGet]
@@ -62,5 +89,67 @@ namespace Buyer.Web.Areas.Products.ApiControllers
 
             return this.StatusCode((int)HttpStatusCode.OK, products);
         }
-    }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProductVariants(Guid? id)
+        {
+            var language = CultureInfo.CurrentUICulture.Name;
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var product = await this.productsRepository.GetProductAsync(id, language, null);
+
+            var productVariants = await this.productsRepository.GetProductsAsync(
+                product.ProductVariants, null, null, language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, $"{nameof(Product.Name)} ASC");
+
+            if (productVariants != null)
+            {
+                var carouselItems = new List<CarouselGridCarouselItemViewModel>();
+                foreach (var productVariant in productVariants.Data.OrEmptyIfNull())
+                {
+                    var carouselItem = new CarouselGridCarouselItemViewModel
+                    {
+                        Id = productVariant.Id,
+                        Title = productVariant.Name,
+                        Sku = productVariant.Sku,
+                        ImageAlt = productVariant.Name,
+                        Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id }),
+                        Attributes = productVariant.ProductAttributes.Select(x => new CarouselGridProductAttributesViewModel
+                        {
+                            Key = x.Key,
+                            Value = string.Join(", ", x.Values.OrEmptyIfNull())
+                        })
+                    };
+
+                    if (productVariant.Images != null && productVariant.Images.Any())
+                    {
+                        var variantImages = new List<ImageVariantViewModel>();
+                        foreach (var image in productVariant.Images)
+                        {
+                            var imageVariantViewModel = new ImageVariantViewModel
+                            {
+                                Id = image
+                            };
+                            variantImages.Add(imageVariantViewModel);
+                        }
+                        carouselItem.Images = variantImages;
+                        carouselItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), CarouselGridConstants.CarouselItemImageMaxWidth, CarouselGridConstants.CarouselItemImageMaxHeight, true);
+                    }
+                    carouselItems.Add(carouselItem);
+                }
+
+                var response = new List<CarouselGridItemViewModel>
+                        {
+                            new CarouselGridItemViewModel
+                            {
+                                Id = product.Id,
+                                Title = this.productLocalizer.GetString("ProductVariants"),
+                                CarouselItems = carouselItems
+                            }
+                        };
+
+                return this.StatusCode((int)HttpStatusCode.OK, response);
+            }
+
+            return default;
+        }
+    } 
 }

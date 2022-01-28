@@ -2,13 +2,13 @@ import React, { Fragment, useContext } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { Button, SwipeableDrawer, List, ListItem } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import ImageGallery from "react-image-gallery";
 import Files from "../../../../shared/components/Files/Files";
-import { ShoppingCart, Close, AddShoppingCart, ExpandMore, Done } from "@material-ui/icons";
+import { ShoppingCart, Done } from "@material-ui/icons";
 import { Context } from "../../../../../../shared/stores/Store";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import QuantityInput from "../../../../shared/components/Inputs/Quantity/QuantityInput";
+import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 
 function ProductDetail(props) {
     const [, dispatch] = useContext(Context);
@@ -17,15 +17,14 @@ function ProductDetail(props) {
     const [sideBar, setSideBar] = React.useState(false);
     const [quantity, setQuantity] = React.useState(1);
     const [orderedProduct, setOrderedProduct] = React.useState(false);
-    const toggleDrawer = (open) => (e) => {
-        if (e && e.type === 'keydown' && (e.key === 'Tab' || e.key === 'Shift')) {
-          return;
-        }
-    
-        setSideBar(open)
-    };
+
+    const toggleSidebar = () => {
+        setSideBar(true)
+    }
 
     const handleAddOrderItemClick = (item) => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
         let product = props;
         if (!props.isProductVariant){
             product = {
@@ -42,7 +41,6 @@ function ProductDetail(props) {
             };
         }
 
-        dispatch({ type: "SET_IS_LOADING", payload: true });
         const orderItem = {
             productId: product.productId, 
             sku: product.sku, 
@@ -93,11 +91,12 @@ function ProductDetail(props) {
             });
     };
 
-    const variantDetails = (item) => (e) => {
-        e.preventDefault()
-        NavigationHelper.redirect(item.url)
-    }
+    const labels = {
+        sidebarTitle: props.sidebarTitle,
+        lackInformation: props.lackInformation,
+        basketUrl: props.basketUrl,
 
+    }
     return (
         <section className="product-detail section">
             <div className="product-detail__head columns is-tablet">
@@ -130,7 +129,7 @@ function ProductDetail(props) {
                                     <QuantityInput 
                                         value={quantity}
                                         minValue={1}
-                                        maxValue={10}
+                                        maxValue={props.availableQuantity}
                                         stepValue={1}
                                         setValue={setQuantity}
                                     />
@@ -140,7 +139,7 @@ function ProductDetail(props) {
                                 </div>
                             ) : (
                                 <div className="product-detail__add-to-cart-button">
-                                <Button type="text" variant="contained" color="primary" onClick={toggleDrawer(true)}>
+                                <Button type="text" variant="contained" color="primary" onClick={toggleSidebar}>
                                     {props.basketLabel}
                                 </Button>
                             </div>
@@ -169,61 +168,13 @@ function ProductDetail(props) {
                         </div>
                     }
                 </div>
-                <SwipeableDrawer
-                    anchor="right"
+                <Sidebar 
+                    productId={props.productId}
                     open={sideBar}
-                    onClose={toggleDrawer(false)}
-                >
-                <div className="sidebar-content">
-                        <div className="sidebar-content__close">
-                            <div className="icon" onClick={toggleDrawer(false)}>
-                                <Close/>
-                            </div>
-                        </div>
-                    </div>
-                    <List className="sidebar-list">
-                        <div className="sidebar-list__info">
-                            <h2 className="title">{props.sidebarTitle}</h2>
-                            <a href={props.basketUrl} className="link">{props.toBasketLabel}</a>
-                        </div>
-                        {!props.productVariants ? (
-                            <div className="not-found">{props.notFound}</div>
-                        ) : (
-                            props.productVariants.map((item) => 
-                                item.carouselItems.map((carouselItem) => {
-                                        const statement = carouselItem.attributes;
-                                        let fabrics = props.lackInformation;
-                                        if (statement.length > 0) {
-                                            fabrics = carouselItem.attributes.find(x => x.key === "primaryFabrics").value;
-                                        }
-                                        return (
-                                            <ListItem className="sidebar-item">
-                                                <div className="sidebar-item__row">
-                                                    <div className="sidebar-item__image">
-                                                        <img src={carouselItem.imageUrl} alt={carouselItem.imageAlt}/>
-                                                    </div>
-                                                    <div className="sidebar-item__details">
-                                                        <h1 className="title">{carouselItem.title}</h1>
-                                                        <span className="sku">{props.skuLabel} {carouselItem.sku}</span>
-                                                        <div className="fabrics">
-                                                            <span>{props.fabricsLabel}</span>
-                                                            <p>{fabrics}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="sidebar-item__buttons">
-                                                        <Button type="text" color="primary" variant="contained" className="cart-button" onClick={() => handleAddOrderItemClick(carouselItem)}><AddShoppingCart /></Button>
-                                                        <Button type="text" color="primary" variant="contained" className="cart-button" onClick={variantDetails(carouselItem)}><ExpandMore /></Button>
-                                                    </div>
-                                                </div>
-                                                <div className="divider"></div>
-                                            </ListItem>
-                                        )
-                                    }
-                                )
-                            )
-                        )}
-                    </List>
-                </SwipeableDrawer>
+                    setOpen={setSideBar}
+                    handleOrder={handleAddOrderItemClick}
+                    labels={props.sidebar}
+                />
             </div>
             <Files {...props.files} />
         </section>
@@ -251,14 +202,7 @@ ProductDetail.propTypes = {
     isAuthenticated: PropTypes.bool,
     images: PropTypes.array,
     files: PropTypes.object,
-    sidebarTitle: PropTypes.string,
-    basketUrl: PropTypes.string,
-    basketLabel: PropTypes.string,
-    toBasketLabel: PropTypes.string,
-    notFound: PropTypes.string,
-    fabricsLabel: PropTypes.string,
-    lackInformation: PropTypes.string,
-    variantLabel: PropTypes.string,
+    sidebar: PropTypes.object,
     addedProduct: PropTypes.string
 };
 

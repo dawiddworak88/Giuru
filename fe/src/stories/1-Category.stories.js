@@ -46,7 +46,10 @@ var catalog = {
   generalErrorMessage: "An Error Occurred",
   productsApiUrl: "#",
   id: "11",
-  pagedItems: getItems(100)
+  pagedItems: getItems(100),
+  sidebar: {
+    basketUrl: "#"
+  }
 };
  
 export const CategoryPageStory = () => <CategoryPage header={header} mainNavigation={mainNavigation} breadcrumbs={breadcrumbs} catalog={catalog} footer={footer} />

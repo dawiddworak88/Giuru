@@ -7,21 +7,26 @@ using Buyer.Web.Shared.ModelBuilders.Catalogs;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Paginations;
 using System.Threading.Tasks;
+using Foundation.PageContent.ComponentModels;
+using Buyer.Web.Shared.ViewModels.Sidebar;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
 {
     public class CategoryCatalogModelBuilder : IAsyncComponentModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel>
     {
         private readonly ICatalogModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel> catalogModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder;
         private readonly IProductsService productsService;
         private readonly ICategoryRepository categoryRepository;
 
         public CategoryCatalogModelBuilder(
             ICatalogModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel> catalogModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
             IProductsService productsService,
             ICategoryRepository categoryRepository)
         {
             this.catalogModelBuilder = catalogModelBuilder;
+            this.sidebarModelBuilder = sidebarModelBuilder;
             this.productsService = productsService;
             this.categoryRepository = categoryRepository;
         }
@@ -36,6 +41,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
             {
                 viewModel.Title = category.Name;
                 viewModel.CategoryId = category.Id;
+                viewModel.Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel);
 
                 viewModel.PagedItems = await this.productsService.GetProductsAsync(
                     null,

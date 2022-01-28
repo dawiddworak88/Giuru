@@ -9,11 +9,8 @@ using Buyer.Web.Shared.ViewModels.Images;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Extensions.Services.MediaServices;
-using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
-using Foundation.PageContent.Components.CarouselGrids.Definitions;
-using Foundation.PageContent.Components.CarouselGrids.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -24,13 +21,14 @@ using System.Threading.Tasks;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
-using Foundation.PageContent.Components.Images;
+using Buyer.Web.Shared.ViewModels.Sidebar;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
     public class ProductDetailModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel>
     {
         private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder;
         private readonly IProductsRepository productsRepository;
         private readonly IStringLocalizer<InventoryResources> inventoryResources;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
@@ -44,6 +42,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
             IProductsRepository productsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer, 
             IStringLocalizer<ProductResources> productLocalizer,
@@ -61,6 +60,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             this.productLocalizer = productLocalizer;
             this.options = options;
             this.mediaService = mediaService;
+            this.sidebarModelBuilder = sidebarModelBuilder;
             this.inventoryResources = inventoryResources;
             this.linkGenerator = linkGenerator;
             this.basketRepository = basketRepository;
@@ -86,12 +86,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 InStockLabel = this.globalLocalizer.GetString("InStock"),
                 BasketId = componentModel.BasketId,
                 AddedProduct = this.orderResources.GetString("AddedProduct"),
-                SidebarTitle = this.orderResources.GetString("SidebarTitle"),
-                BasketUrl = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                ToBasketLabel = this.orderResources.GetString("ToBasketLabel"),
-                NotFound = this.orderResources.GetString("NotFound"),
-                FabricsLabel = this.orderResources.GetString("FabricsLabel"),
-                LackInformation = this.orderResources.GetString("LackInformation")
+                Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel)
             };
 
             var product = await this.productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
@@ -112,7 +107,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 foreach (var image in product.Images.OrEmptyIfNull())
                 {
                     var imageViewModel = new Web.Shared.ViewModels.Images.ImageViewModel
-                    { 
+                    {
                         Id = image,
                         Original = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.OriginalMaxWidth, ProductConstants.OriginalMaxHeight, true)),
                         Thumbnail = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.ThumbnailMaxWidth, ProductConstants.ThumbnailMaxHeight, true))
@@ -163,60 +158,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         }
                     }
                 }
-
-                if (product.ProductVariants != null)
-                {
-                    var productVariants = await this.productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token, nameof(Product.CreatedDate));
-                    if (productVariants != null)
-                    {
-                        var carouselItems = new List<CarouselGridCarouselItemViewModel>();
-                        foreach (var productVariant in productVariants.Data.OrEmptyIfNull())
-                        {
-                            var carouselItem = new CarouselGridCarouselItemViewModel
-                            {
-                                Id = productVariant.Id,
-                                Title = productVariant.Name,
-                                Sku = productVariant.Sku,
-                                ImageAlt = productVariant.Name,
-                                Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id }),
-                                Attributes = productVariant.ProductAttributes.Select(x => new CarouselGridProductAttributesViewModel
-                                {
-                                    Key = x.Key,
-                                    Value = string.Join(", ", x.Values.OrEmptyIfNull())
-                                })
-                            };
-
-                            if (productVariant.Images != null && productVariant.Images.Any())
-                            {
-                                var variantImages = new List<ImageVariantViewModel>();
-                                foreach (var image in productVariant.Images)
-                                {
-                                    var imageVariantViewModel = new ImageVariantViewModel
-                                    {
-                                        Id = image
-                                    };
-                                    variantImages.Add(imageVariantViewModel);
-                                }
-                                carouselItem.Images = variantImages;
-                                carouselItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), CarouselGridConstants.CarouselItemImageMaxWidth, CarouselGridConstants.CarouselItemImageMaxHeight, true));
-                            }
-
-                            carouselItems.Add(carouselItem);
-                        }
-
-                        viewModel.ProductVariants = new List<CarouselGridItemViewModel>
-                        {
-                            new CarouselGridItemViewModel
-                            {
-                                Id = product.Id,
-                                Title = this.productLocalizer.GetString("ProductVariants"),
-                                CarouselItems = carouselItems
-                            }
-                        };
-                    }
-                }
             }
-
             return viewModel;
         }
     }

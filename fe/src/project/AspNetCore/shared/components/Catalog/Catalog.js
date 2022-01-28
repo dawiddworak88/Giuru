@@ -9,6 +9,7 @@ import QueryStringSerializer from "../../../../../shared/helpers/serializers/Que
 import { TablePagination, Button,  } from "@material-ui/core";
 import CatalogConstants from "./CatalogConstants";
 import { ShoppingCart } from "@material-ui/icons";
+import Sidebar from "../Sidebar/Sidebar";
 
 function Catalog(props) {
     
@@ -19,6 +20,15 @@ function Catalog(props) {
     const [itemsPerPage,] = React.useState(props.itemsPerPage ? props.itemsPerPage : CatalogConstants.defaultCatalogItemsPerPage());
     const [items, setItems] = React.useState(props.pagedItems.data);
     const [total, setTotal] = React.useState(props.pagedItems.total);
+    const [sideBar, setSideBar] = React.useState(false);
+    const [product, setProduct] = React.useState(null)
+
+    const toggleSidebar = (item) => {
+        console.log(item)
+        setProduct(item.id);
+        console.log(product)
+        setSideBar(true)
+    }
 
     const handleChangePage = (event, newPage) => {
 
@@ -158,14 +168,21 @@ function Catalog(props) {
                                                 </div>
                                             }
                                         </div>
-                                        {props.isLoggedIn && props.showAddToCartButton &&
+                                        {props.isLoggedIn &&
                                             <div className="catalog-item__add-to-cart-button-container">
-                                                <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => handleAddOrderItemClick(item)} color="primary">
-                                                    {props.basketLabel}
-                                                </Button>
+                                                {props.showAddToCartButton ? (
+                                                    <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => handleAddOrderItemClick(item)} color="primary">
+                                                        {props.basketLabel}
+                                                    </Button>
+                                                ) : (
+                                                    <Button variant="contained" onClick={() => toggleSidebar(item)} color="primary">
+                                                        {props.basketLabel}
+                                                    </Button>
+                                                )}
                                             </div>
                                         }
                                     </div>
+                                    
                                 </div>
                             )}
                         </div>
@@ -186,10 +203,19 @@ function Catalog(props) {
                     </div>
                 ) :
                 (
-                    <section className="section is-flex-centered">
-                        <span className="is-title is-5">{props.noResultsLabel}</span>
-                    </section>
-                )}
+                <section className="section is-flex-centered">
+                    <span className="is-title is-5">{props.noResultsLabel}</span>
+                </section>
+            )}
+            {props.sidebar &&  
+                <Sidebar 
+                    productId={product}
+                    open={sideBar}
+                    setOpen={setSideBar}
+                    handleOrder={handleAddOrderItemClick}
+                    labels={props.sidebar}
+                />
+            }
         </section>
     );
 }
@@ -217,7 +243,8 @@ Catalog.propTypes = {
     inStock: PropTypes.bool.isRequired,
     availableQuantity: PropTypes.number,
     showAddToCartButton: PropTypes.bool,
-    items: PropTypes.array
+    items: PropTypes.array,
+    sidebar: PropTypes.object
 };
 
 export default Catalog;

@@ -20,6 +20,7 @@ using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Foundation.Extensions.ExtensionMethods;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Products.Definitions;
+using Buyer.Web.Shared.ViewModels.Sidebar;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
@@ -119,7 +120,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 
                     viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(inventories.Total, AvailableProductsConstants.Pagination.ItemsPerPage)
                     {
-                        Data = products.Data.OrderByDescending(x => x.AvailableQuantity)
+                        Data = products.Data.OrderBy(x => x.Title)
                     };
                 }
             }
