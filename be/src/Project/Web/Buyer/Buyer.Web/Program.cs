@@ -111,11 +111,11 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
                 name: "localizedAreaRoute",
-                pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Home}/{controller=Home}/{action=Index}/{id?}");
+                pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
 
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{area:exists=Home}/{controller=Home}/{action=Index}/{id?}");
+        pattern: "{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
 });
 
 app.Run();
