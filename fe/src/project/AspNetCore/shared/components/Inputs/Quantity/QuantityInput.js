@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {
     ArrowDropUp, ArrowDropDown
 } from "@material-ui/icons"
@@ -35,6 +36,14 @@ const QuantityInput = (props) => {
             </div>
         </div>
     )
+}
+
+QuantityInput.propTypes = {
+    value: PropTypes.number.isRequired,
+    maxValue: PropTypes.number.isRequired,
+    minValue: PropTypes.number.isRequired,
+    stepValue: PropTypes.number.isRequired,
+    setValue: PropTypes.func.isRequired
 }
 
 export default QuantityInput;
