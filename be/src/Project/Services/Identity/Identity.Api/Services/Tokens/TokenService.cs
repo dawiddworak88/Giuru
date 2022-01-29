@@ -9,6 +9,7 @@ using Identity.Api.Infrastructure.Accounts.Entities;
 using System.Collections.Generic;
 using System.Security.Claims;
 using Identity.Api.Repositories.AppSecrets;
+using Identity.Api.Services.Organisations;
 
 namespace Identity.Api.Services.Tokens
 {
@@ -17,12 +18,18 @@ namespace Identity.Api.Services.Tokens
         private readonly IAppSecretRepository appSecretRepository;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IdentityServerTools tools;
+        private readonly IOrganisationService organisationService;
 
-        public TokenService(IAppSecretRepository appSecretRepository, UserManager<ApplicationUser> userManager, IdentityServerTools tools)
+        public TokenService(
+            IAppSecretRepository appSecretRepository, 
+            UserManager<ApplicationUser> userManager, 
+            IdentityServerTools tools,
+            IOrganisationService organisationService)
         {
             this.appSecretRepository = appSecretRepository;
             this.userManager = userManager;
             this.tools = tools;
+            this.organisationService = organisationService;
         }
 
         public async Task<string> GetTokenAsync(string email, Guid organisationId, string appSecret)
@@ -41,6 +48,15 @@ namespace Identity.Api.Services.Tokens
                         new Claim(ClaimTypes.Email, user.Email),
                         new Claim(JwtClaimTypes.Audience, ApiExtensionsConstants.AllScopes)
                     };
+
+                    if (await this.organisationService.IsSellerAsync(user.OrganisationId))
+                    {
+                        claims.Add(new Claim(AccountConstants.IsSellerClaim, true.ToString()));
+                    }
+                    else
+                    {
+                        claims.Add(new Claim(AccountConstants.IsSellerClaim, false.ToString()));
+                    }
 
                     var token = await this.tools.IssueJwtAsync(AccountConstants.DefaultTokenLifetimeInSeconds, claims);
 

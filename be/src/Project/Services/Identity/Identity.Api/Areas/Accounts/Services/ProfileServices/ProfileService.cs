@@ -45,9 +45,13 @@ namespace Identity.Api.Areas.Accounts.Services.ProfileServices
 
                     var organisation = await this.context.Organisations.FirstOrDefaultAsync(x => x.Id == user.OrganisationId);
 
-                    if (organisation is not null)
+                    if (organisation is not null && organisation.IsSeller)
                     {
                         context.IssuedClaims.Add(new Claim(AccountConstants.IsSellerClaim, organisation.IsSeller.ToString()));
+                    }
+                    else
+                    {
+                        context.IssuedClaims.Add(new Claim(AccountConstants.IsSellerClaim, false.ToString()));
                     }
 
                     if (string.IsNullOrWhiteSpace(user.FirstName) is false && string.IsNullOrWhiteSpace(user.LastName) is false)

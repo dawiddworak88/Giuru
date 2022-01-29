@@ -26,12 +26,12 @@ namespace Identity.Api.Validators.Authorization
         {
             var isSellerClaim = context.Result.ValidatedRequest.Subject.Claims.FirstOrDefault(x => x.Type == AccountConstants.IsSellerClaim);
 
-            if (context.Result.ValidatedRequest.Subject.Identity.IsAuthenticated && context.Result.ValidatedRequest.ClientId == this.options.Value.SellerClientId.ToString() && (string.IsNullOrWhiteSpace(isSellerClaim?.Value) || isSellerClaim.Value != "true"))
+            if (context.Result.ValidatedRequest.Subject.Identity.IsAuthenticated && context.Result.ValidatedRequest.ClientId == this.options.Value.SellerClientId.ToString() && isSellerClaim != null && isSellerClaim.Value != "true")
             {
                 context.Result.IsError = true;
                 context.Result.Error = this.globalLocalizer.GetString("Unauthorized");
                 context.Result.ErrorDescription = this.globalLocalizer.GetString("ErrorOccurred");
             }
-        }
+       }
     }
 }
