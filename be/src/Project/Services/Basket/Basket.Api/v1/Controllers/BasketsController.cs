@@ -41,11 +41,11 @@ namespace Basket.Api.v1.Controllers
         public async Task<IActionResult> Post(BasketRequestModel request)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-            var isSellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role && x.Value == AccountConstants.Roles.Seller)?.Value;
+            var isSellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role && x.Value == AccountConstants.Roles.Seller);
             var serviceModel = new UpdateBasketServiceModel
             {
                 Id = request.Id ?? Guid.NewGuid(),
-                IsSeller = bool.Parse(isSellerClaim),
+                IsSeller = isSellerClaim != null,
                 Items = request.Items.OrEmptyIfNull().Select(x => new UpdateBasketItemServiceModel 
                 { 
                     ProductId = x.ProductId,
@@ -176,11 +176,11 @@ namespace Basket.Api.v1.Controllers
         public async Task<IActionResult> BasketCheckoutPost(BasketCheckoutRequestModel request)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-            var isSellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role && x.Value == AccountConstants.Roles.Seller)?.Value;
+            var isSellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role && x.Value == AccountConstants.Roles.Seller);
             var serviceModel = new CheckoutBasketServiceModel
             {
                 BasketId = request.BasketId,
-                IsSeller = bool.Parse(isSellerClaim),
+                IsSeller = isSellerClaim != null,
                 ClientId = request.ClientId,
                 ClientName = request.ClientName,
                 BillingAddressId = request.BillingAddressId,
