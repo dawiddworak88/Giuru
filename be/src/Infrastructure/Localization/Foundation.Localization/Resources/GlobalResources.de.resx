@@ -435,4 +435,10 @@
   <data name="Catalog" xml:space="preserve">
     <value>Katalog</value>
   </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Unbefugt</value>
+  </data>
+  <data name="ErrorOccurred" xml:space="preserve">
+    <value>Ein Fehler ist aufgetreten. Bitte wenden Sie sich an einen Administrator.</value>
+  </data>
 </root>

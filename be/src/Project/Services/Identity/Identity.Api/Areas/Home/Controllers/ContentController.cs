@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace Identity.Api.Areas.Home.Controllers
 {
-    [Area("Home")]
     [AllowAnonymous]
     public class ContentController : BaseController
     {

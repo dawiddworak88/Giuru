@@ -22,6 +22,7 @@ using Seller.Web.Areas.Media.DependencyInjection;
 using Foundation.Extensions.Filters;
 using Microsoft.AspNetCore.Http;
 using Seller.Web.Areas.Inventory.DependencyInjection;
+using Foundation.Account.Definitions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,6 +93,11 @@ builder.Services.RegisterMediaAreaDependencies();
 
 builder.Services.ConfigureSettings(builder.Configuration);
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("SellerOnly", policy => policy.RequireRole(AccountConstants.Roles.Seller));
+});
+
 var app = builder.Build();
 
 IdentityModelEventSource.ShowPII = true;
@@ -123,11 +129,11 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
                 name: "localizedAreaRoute",
-                pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization();
+                pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization("SellerOnly");
 
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization();
+        pattern: "{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization("SellerOnly");
 });
 
 app.Run();

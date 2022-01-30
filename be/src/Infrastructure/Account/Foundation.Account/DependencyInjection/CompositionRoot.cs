@@ -1,6 +1,8 @@
-﻿using Foundation.Account.Services;
-using Foundation.ApiExtensions.Definitions;
+﻿using Foundation.Account.Definitions;
+using Foundation.Account.Services;
+using IdentityModel;
 using IdentityServer4;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,13 +28,14 @@ namespace Foundation.Account.DependencyInjection
                     options.Authority = configuration.GetValue<string>("IdentityUrl");
                     options.RequireHttpsMetadata = false;
 
-                    options.Audience = ApiExtensionsConstants.AllScopes;
+                    options.Audience = AccountConstants.Audiences.All;
                 });
         }
 
         public static void RegisterClientAccountDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddAuthentication(options =>
             {
@@ -50,13 +53,20 @@ namespace Foundation.Account.DependencyInjection
                 options.ClientSecret = configuration["ClientSecret"];
                 options.ResponseType = "code";
 
-                options.TokenValidationParameters = new TokenValidationParameters { NameClaimType = ClaimTypes.Name };
+                options.TokenValidationParameters = new TokenValidationParameters 
+                { 
+                    NameClaimType = ClaimTypes.Name,
+                    RoleClaimType = JwtClaimTypes.Role
+                };
                 options.SaveTokens = true;
 
                 options.Scope.Add(IdentityServerConstants.StandardScopes.OpenId);
                 options.Scope.Add(IdentityServerConstants.StandardScopes.Profile);
                 options.Scope.Add(IdentityServerConstants.StandardScopes.Email);
-                options.Scope.Add(ApiExtensionsConstants.AllScopes);
+                options.Scope.Add(AccountConstants.Scopes.All);
+                options.Scope.Add(AccountConstants.Scopes.Roles);
+
+                options.ClaimActions.MapJsonKey(JwtClaimTypes.Role, JwtClaimTypes.Role, JwtClaimTypes.Role);
             });
         }
     }

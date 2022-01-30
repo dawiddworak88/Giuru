@@ -148,6 +148,10 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{area:exists=Accounts}/{controller=SignIn}/{action=Index}/{id?}");
+
+    endpoints.MapControllerRoute(
+        name: "error",
+        pattern: "{controller=Content}/{action=Error}/{errorId?}");
 });
 
 app.Run();
