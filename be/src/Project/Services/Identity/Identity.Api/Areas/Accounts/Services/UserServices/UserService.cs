@@ -51,7 +51,7 @@ namespace Identity.Api.Areas.Accounts.Services.UserServices
                     var properties = new AuthenticationProperties
                     {
                         AllowRefresh = false,
-                        ExpiresUtc = DateTimeOffset.UtcNow.AddDays(AccountConstants.DefaultTokenLifetimeInDays),
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddDays(AccountConstants.TokenLifetimes.DefaultTokenLifetimeInDays),
                         IsPersistent = true,
                         RedirectUri = redirectUrl,
                         IssuedUtc = DateTime.UtcNow

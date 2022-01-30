@@ -77,7 +77,7 @@ namespace Media.Api.v1.Controllers
                 return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
 
-            var organisationClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var organisationClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new CreateMediaItemServiceModel
             {

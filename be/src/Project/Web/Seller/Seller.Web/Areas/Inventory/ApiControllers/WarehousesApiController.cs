@@ -46,7 +46,7 @@ namespace Seller.Web.Areas.Inventory.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] SaveWarehouseRequestModel model)
         {
-            var OrganisationId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value);
+            var OrganisationId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value);
             var warehouseId = await this.warehousesRepository.SaveAsync(
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name, model.Id, model.Name, model.Location, OrganisationId);

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Foundation.Account.Definitions;
 using System;
-using Foundation.ApiExtensions.Definitions;
 using IdentityModel;
 using Microsoft.AspNetCore.Identity;
 using Identity.Api.Infrastructure.Accounts.Entities;
@@ -44,21 +43,17 @@ namespace Identity.Api.Services.Tokens
                 {
                     var claims = new HashSet<Claim>(new ClaimComparer())
                     {
-                        new Claim(AccountConstants.OrganisationIdClaim, user.OrganisationId.ToString()),
+                        new Claim(AccountConstants.Claims.OrganisationIdClaim, user.OrganisationId.ToString()),
                         new Claim(ClaimTypes.Email, user.Email),
-                        new Claim(JwtClaimTypes.Audience, ApiExtensionsConstants.AllScopes)
+                        new Claim(JwtClaimTypes.Audience, AccountConstants.Audiences.All)
                     };
 
                     if (await this.organisationService.IsSellerAsync(user.OrganisationId))
                     {
-                        claims.Add(new Claim(AccountConstants.IsSellerClaim, true.ToString()));
-                    }
-                    else
-                    {
-                        claims.Add(new Claim(AccountConstants.IsSellerClaim, false.ToString()));
+                        claims.Add(new Claim(JwtClaimTypes.Role, AccountConstants.Roles.Seller));
                     }
 
-                    var token = await this.tools.IssueJwtAsync(AccountConstants.DefaultTokenLifetimeInSeconds, claims);
+                    var token = await this.tools.IssueJwtAsync(AccountConstants.TokenLifetimes.DefaultTokenLifetimeInSeconds, claims);
 
                     return token;
                 }

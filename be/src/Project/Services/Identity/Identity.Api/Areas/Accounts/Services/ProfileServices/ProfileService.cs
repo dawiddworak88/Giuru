@@ -1,6 +1,7 @@
 ﻿using Foundation.Account.Definitions;
 using Identity.Api.Infrastructure;
 using Identity.Api.Infrastructure.Accounts.Entities;
+using IdentityModel;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -37,7 +38,7 @@ namespace Identity.Api.Areas.Accounts.Services.ProfileServices
                 {
                     var claims = new List<Claim>
                     {
-                        new Claim(AccountConstants.OrganisationIdClaim, user.OrganisationId.ToString()),
+                        new Claim(AccountConstants.Claims.OrganisationIdClaim, user.OrganisationId.ToString()),
                         new Claim(ClaimTypes.Email, user.Email)
                     };
 
@@ -47,11 +48,7 @@ namespace Identity.Api.Areas.Accounts.Services.ProfileServices
 
                     if (organisation is not null && organisation.IsSeller)
                     {
-                        context.IssuedClaims.Add(new Claim(AccountConstants.IsSellerClaim, organisation.IsSeller.ToString()));
-                    }
-                    else
-                    {
-                        context.IssuedClaims.Add(new Claim(AccountConstants.IsSellerClaim, false.ToString()));
+                        context.IssuedClaims.Add(new Claim(JwtClaimTypes.Role, AccountConstants.Roles.Seller));
                     }
 
                     if (string.IsNullOrWhiteSpace(user.FirstName) is false && string.IsNullOrWhiteSpace(user.LastName) is false)

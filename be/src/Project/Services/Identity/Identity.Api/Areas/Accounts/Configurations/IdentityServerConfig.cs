@@ -1,5 +1,4 @@
 ﻿using Foundation.Account.Definitions;
-using Foundation.ApiExtensions.Definitions;
 using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
@@ -15,21 +14,23 @@ namespace Identity.Api.Areas.Accounts.Configurations
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
-                new IdentityResources.Email()
+                new IdentityResources.Email(),
+                new IdentityResource(AccountConstants.IdentityResources.Roles, new[] { JwtClaimTypes.Role })
             };
 
         public static IEnumerable<ApiResource> Apis =>
             new List<ApiResource>
             {
-                new ApiResource(ApiExtensionsConstants.AllScopes)
+                new ApiResource(AccountConstants.ApiResources.All)
                 {
                     UserClaims =
                     {
-                        JwtClaimTypes.Audience
+                        JwtClaimTypes.Audience,
+                        JwtClaimTypes.Role
                     },
                     Scopes = new List<string>
                     {
-                        ApiExtensionsConstants.AllScopes
+                        AccountConstants.Scopes.All
                     }
                 }
             };
@@ -38,7 +39,7 @@ namespace Identity.Api.Areas.Accounts.Configurations
         public static IEnumerable<ApiScope> ApiScopes =>
             new[]
             {
-                new ApiScope(ApiExtensionsConstants.AllScopes, ApiExtensionsConstants.AllScopes)
+                new ApiScope(AccountConstants.Scopes.All, AccountConstants.Scopes.All)
             };
 
         public static IEnumerable<Client> GetClients(IConfiguration configuration)
@@ -62,19 +63,20 @@ namespace Identity.Api.Areas.Accounts.Configurations
                         RequirePkce = true,
                         RedirectUris = 
                         { 
-                            $"{AccountConstants.HttpsScheme}://{clientParameters[2]}/signin-oidc",
-                            $"{AccountConstants.HttpScheme}://{clientParameters[2]}/signin-oidc"
+                            $"{AccountConstants.Schemes.HttpsScheme}://{clientParameters[2]}/signin-oidc",
+                            $"{AccountConstants.Schemes.HttpScheme}://{clientParameters[2]}/signin-oidc"
                         },
                         PostLogoutRedirectUris = {
-                            $"{AccountConstants.HttpsScheme}://{clientParameters[2]}/signout-callback-oidc",
-                            $"{AccountConstants.HttpScheme}://{clientParameters[2]}/signout-callback-oidc"                        
+                            $"{AccountConstants.Schemes.HttpsScheme}://{clientParameters[2]}/signout-callback-oidc",
+                            $"{AccountConstants.Schemes.HttpScheme}://{clientParameters[2]}/signout-callback-oidc"                        
                         },
                         AllowedScopes = new List<string>
                         {
                             IdentityServerConstants.StandardScopes.OpenId,
                             IdentityServerConstants.StandardScopes.Profile,
                             IdentityServerConstants.StandardScopes.Email,
-                            ApiExtensionsConstants.AllScopes
+                            AccountConstants.Scopes.Roles,
+                            AccountConstants.Scopes.All
                         },
                         AllowOfflineAccess = false,
                         AlwaysIncludeUserClaimsInIdToken = true

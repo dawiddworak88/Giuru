@@ -17,6 +17,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Basket.Api.ServicesModels;
 using Basket.Api.v1.ResponseModels;
+using IdentityModel;
 
 namespace Basket.Api.v1.Controllers
 {
@@ -39,8 +40,8 @@ namespace Basket.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Post(BasketRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
-            var isSellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.IsSellerClaim)?.Value;
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var isSellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role && x.Value == AccountConstants.Roles.Seller)?.Value;
             var serviceModel = new UpdateBasketServiceModel
             {
                 Id = request.Id ?? Guid.NewGuid(),
@@ -100,7 +101,7 @@ namespace Basket.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new DeleteBasketServiceModel
             {
                 Id = id,
@@ -128,7 +129,7 @@ namespace Basket.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetBasketByIdServiceModel
             {
                 Id = id,
@@ -174,8 +175,8 @@ namespace Basket.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> BasketCheckoutPost(BasketCheckoutRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
-            var isSellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.IsSellerClaim)?.Value;
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var isSellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Role && x.Value == AccountConstants.Roles.Seller)?.Value;
             var serviceModel = new CheckoutBasketServiceModel
             {
                 BasketId = request.BasketId,
