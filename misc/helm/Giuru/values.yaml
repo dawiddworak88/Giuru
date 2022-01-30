@@ -46,6 +46,7 @@ identityApi:
   actionSendGridCreateTemplateId: "#{IdentityApi--ActionSendGridCreateTemplateId}#"
   actionSendGridResetTemplateId: "#{IdentityApi--ActionSendGridResetTemplateId}#"
   clients: "#{IdentityApi--Clients}#"
+  sellerClientId: "#{IdentityApi--SellerClientId}#"
   accounts: "#{IdentityApi--Accounts}#"
   organisations: "#{IdentityApi--Organisations}#"
   privacyPolicy: "#{IdentityApi--PrivacyPolicy}#"
