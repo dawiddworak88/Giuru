@@ -11,7 +11,7 @@ function UploadForm(props) {
         NavigationHelper.redirect(props.mediaUrl);
     }
     
-    const buttonDisable = images.length == 0 ? true : false;
+    const buttonDisable = images.length === 0 ? true : false;
     return (
         <section className="section section-small-padding product client-form">
             <h1 className="subtitle is-4">{props.title}</h1>
