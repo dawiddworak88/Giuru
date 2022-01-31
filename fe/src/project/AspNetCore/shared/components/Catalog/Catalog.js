@@ -172,7 +172,7 @@ function Catalog(props) {
                                                     </Button>
                                                 ) : (
                                                     <Button variant="contained" onClick={() => toggleSidebar(item)} color="primary">
-                                                        {props.basketLabel}
+                                                        {props.variantLabel}
                                                     </Button>
                                                 )}
                                             </div>

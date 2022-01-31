@@ -12,14 +12,17 @@ namespace Buyer.Web.Shared.ModelBuilders.Sidebar
     public class SidebarModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel>
     {
         private readonly IStringLocalizer<OrderResources> orderResources;
+        private readonly IStringLocalizer<GlobalResources> globalResources;
         private readonly LinkGenerator linkGenerator;
 
         public SidebarModelBuilder(
             IStringLocalizer<OrderResources> orderResources,
+            IStringLocalizer<GlobalResources> globalResources,
             LinkGenerator linkGenerator)
         {
             this.orderResources = orderResources;
             this.linkGenerator = linkGenerator;
+            this.globalResources = globalResources;
         }
 
         public async Task<SidebarViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -31,6 +34,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Sidebar
                 ToBasketLabel = this.orderResources.GetString("ToBasketLabel"),
                 NotFound = this.orderResources.GetString("NotFound"),
                 FabricsLabel = this.orderResources.GetString("FabricsLabel"),
+                SkuLabel = this.globalResources.GetString("Sku"),
                 LackInformation = this.orderResources.GetString("LackInformation"),
                 ProductsApiUrl = this.linkGenerator.GetPathByAction("GetProductVariants", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             };

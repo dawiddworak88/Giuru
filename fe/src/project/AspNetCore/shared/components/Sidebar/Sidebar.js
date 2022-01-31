@@ -32,7 +32,7 @@ const Sidebar = (props) => {
         NavigationHelper.redirect(item.url)
     }
 
-    const fetchProductVariants = (id) => {
+    const fetchProductVariants = () => {
         if (productVariants.length === 0){
             const requestOptions = {
                 method: "GET",
@@ -40,7 +40,7 @@ const Sidebar = (props) => {
             };
 
             const requestQuery = {
-                id: id ? id : productId
+                id: productId
             }
 
             const url = labels.productsApiUrl + "?" + QueryStringSerializer.serialize(requestQuery);
@@ -83,7 +83,7 @@ const Sidebar = (props) => {
                     <h2 className="title">{labels.sidebarTitle}</h2>
                     <a href={labels.basketUrl} className="link">{labels.toBasketLabel}</a>
                 </div>
-                {!productVariants ? (
+                {productVariants.length === 0 ? (
                     <div className="not-found">{labels.notFound}</div>
                 ) : (
                     productVariants.map((item) => 

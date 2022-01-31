@@ -142,7 +142,6 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<ProductsRequestModel>, ProductsRequestModel, PagedResults<IEnumerable<ProductResponseModel>>>(apiRequest);
-
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
                 var products = new List<Product>();

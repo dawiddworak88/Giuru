@@ -97,11 +97,11 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var product = await this.productsRepository.GetProductAsync(id, language, null);
 
-            var productVariants = await this.productsRepository.GetProductsAsync(
-                product.ProductVariants, null, null, language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, $"{nameof(Product.Name)} ASC");
-
-            if (productVariants != null)
+            if (product.ProductVariants != null)
             {
+                var productVariants = await this.productsRepository.GetProductsAsync(
+                    product.ProductVariants, null, null, language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, $"{nameof(Product.Name)} ASC");
+
                 var carouselItems = new List<CarouselGridCarouselItemViewModel>();
                 foreach (var productVariant in productVariants.Data.OrEmptyIfNull())
                 {
@@ -137,19 +137,19 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 }
 
                 var response = new List<CarouselGridItemViewModel>
-                        {
-                            new CarouselGridItemViewModel
-                            {
-                                Id = product.Id,
-                                Title = this.productLocalizer.GetString("ProductVariants"),
-                                CarouselItems = carouselItems
-                            }
-                        };
+                {
+                    new CarouselGridItemViewModel
+                    {
+                        Id = product.Id,
+                        Title = this.productLocalizer.GetString("ProductVariants"),
+                        CarouselItems = carouselItems
+                    }
+                };
 
                 return this.StatusCode((int)HttpStatusCode.OK, response);
             }
 
-            return default;
+            return this.StatusCode((int)HttpStatusCode.OK);
         }
     } 
 }
