@@ -9,9 +9,12 @@ const formData = {
   dropFilesLabel: "Drop files",
   deleteLabel: "Delete",
   generalErrorMessage: "An error has occurred",
+  imagesRequiredErrorMessage: "Images are required",
   mediaItemsLabel: "Upload media",
   saveMediaText: "Upload images",
-  saveMediaUrl: "#"
+  saveMediaUrl: "#",
+  nameLabel: "Name: ",
+  descriptionLabel: "Description:"
 };
 
 export const EditMediaPageStory = () => <EditMediaPage header={header} menuTiles={menuTiles} footer={footer} editForm={formData} />;
