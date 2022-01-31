@@ -12,6 +12,7 @@ using Seller.Web.Areas.Media.Repositories.Media;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Shared.Configurations;
+using Seller.Web.Shared.Services.ContentDeliveryNetworks;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -31,6 +32,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
         private readonly IMediaItemsRepository mediaItemsRepository;
         private readonly IMediaRepository mediaRepository;
         private readonly IStringLocalizer mediaResources;
+        private readonly ICdnService cdnService;
 
         public FilesApiController(
             IFilesRepository filesRepository,
@@ -38,7 +40,8 @@ namespace Seller.Web.Areas.Media.ApiControllers
             IOptionsMonitor<AppSettings> settings,
             IMediaItemsRepository mediaItemsRepository,
             IMediaRepository mediaRepository,
-            IStringLocalizer<MediaResources> mediaResources)
+            IStringLocalizer<MediaResources> mediaResources,
+            ICdnService cdnService)
         {
             this.filesRepository = filesRepository;
             this.mediaHelperService = mediaHelperService;
@@ -46,6 +49,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
             this.mediaRepository = mediaRepository;
             this.mediaResources = mediaResources;
             this.mediaItemsRepository = mediaItemsRepository;
+            this.cdnService = cdnService;
         }
 
         [HttpPost]
@@ -95,7 +99,6 @@ namespace Seller.Web.Areas.Media.ApiControllers
             else
             {
                 var media = new List<MediaItem>();
-
                 foreach (var fileItem in files)
                 {
                     using (var ms = new MemoryStream())
@@ -125,7 +128,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
                             media.Select(mediaItem => new
                             {
                                 Id = mediaItem.Id,
-                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, mediaItem.Id, true),
+                                Url = this.cdnService.GetCdnUrl(this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, mediaItem.Id, true)),
                                 Name = mediaItem.Name,
                                 MimeType = mediaItem.MimeType,
                                 Filename = mediaItem.Filename,
