@@ -29,12 +29,10 @@ const EditForm = (props) => {
 
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
-
-
     }
 
     const {
-        values, errors, dirty, disable, setFieldValue,
+        values, disable, setFieldValue,
         handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
@@ -59,10 +57,6 @@ const EditForm = (props) => {
                                 files={images}
                                 setFieldValue={setFieldValue}
                                 saveMediaUrl={props.saveMediaUrl} />
-
-                                {errors.images && dirty.images && (
-                                    <FormHelperText>{errors.images}</FormHelperText>
-                                )}
                         </div>
                         <div className="field">
                             <TextField 

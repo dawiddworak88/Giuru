@@ -4,7 +4,6 @@
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public string Name { get; set; }
         public string MediaItemsLabel { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string DeleteLabel { get; set; }

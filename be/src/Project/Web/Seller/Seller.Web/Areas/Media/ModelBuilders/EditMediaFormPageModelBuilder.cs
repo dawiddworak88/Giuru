@@ -4,6 +4,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Media.ViewModel;
+using System;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -35,10 +36,17 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                 DropOrSelectImagesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
                 MediaItemsLabel = this.mediaResources.GetString("MediaItemsLabel"),
                 BackToMediaText = this.mediaResources.GetString("BackToMediaText"),
-                //MediaUrl = this.linkGenerator.GetPathByAction("Index", "Media", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                DeleteLabel = this.globalLocalizer.GetString("Delete")
+                DeleteLabel = this.globalLocalizer.GetString("Delete"),
+                NameLabel = this.globalLocalizer.GetString("Name"),
+                Description = this.globalLocalizer.GetString("Description"),
+                SaveMediaText = this.globalLocalizer.GetString("SaveText")
             };
+
+            if (componentModel.Id.HasValue)
+            {
+                Console.WriteLine("HAS VALUE");
+            }
 
             return viewModel;
         }
