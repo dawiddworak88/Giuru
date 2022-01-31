@@ -30,7 +30,7 @@ const EditForm = (props) => {
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        
+
     }
 
     const {
@@ -101,6 +101,20 @@ const EditForm = (props) => {
             </div>
         </section>
     )
+}
+
+EditForm.propTypes = {
+    title: PropTypes.string.isRequired,
+    descriptionLabel: PropTypes.string,
+    nameLabel: PropTypes.string,
+    generalErrorMessage: PropTypes.string,
+    mediaItemsLabel: PropTypes.string,
+    deleteLabel: PropTypes.string,
+    dropFilesLabel: PropTypes.string,
+    dropOrSelectImagesLabel: PropTypes.string,
+    saveMediaUrl: PropTypes.string,
+    backToMediaText: PropTypes.string,
+    saveMediaText: PropTypes.string
 }
 
 export default EditForm;
