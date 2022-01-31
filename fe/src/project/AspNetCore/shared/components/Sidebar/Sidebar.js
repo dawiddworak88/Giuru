@@ -8,14 +8,11 @@ import QueryStringSerializer from "../../../../../shared/helpers/serializers/Que
 import {CircularProgress } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../shared/stores/Store";
-import usePrevious from "../../../../../shared/hooks/usePrevious";
 
 const Sidebar = (props) => {
     const [state, dispatch] = useContext(Context);
     const [productVariants, setProductVariants] = useState([])
-    const [productId2, setProductId] = useState(props.productId)
     const {productId, open, setOpen, handleOrder, labels} = props;
-    const prevProductId = usePrevious({productId2, productId})
 
     const toggleDrawer = (open) => (e) => {
         if (e && e.type === 'keydown' && (e.key === 'Tab' || e.key === 'Shift')) {
@@ -30,7 +27,7 @@ const Sidebar = (props) => {
         NavigationHelper.redirect(item.url)
     }
 
-    const fetchProductVariants = () => {
+    const fetchProductVariants = (id) => {
         if (productVariants.length === 0){
             const requestOptions = {
                 method: "GET",
@@ -38,7 +35,7 @@ const Sidebar = (props) => {
             };
 
             const requestQuery = {
-                id: productId
+                id: id ? id : productId
             }
 
             const url = labels.productsApiUrl + "?" + QueryStringSerializer.serialize(requestQuery);
@@ -57,19 +54,9 @@ const Sidebar = (props) => {
         }
     }
 
-    const useHasChanged= (val) => {
-        const prevVal = usePrevious(val)
-        return prevVal !== val
-    }
-    const hasVal1Changed = useHasChanged(productId)
-
     useEffect(() => {
         if (open){
             fetchProductVariants();
-        }
-        if (hasVal1Changed ) {
-            setProductId(productId)
-            setProductVariants([])
         }
     }, [open, productId])
 

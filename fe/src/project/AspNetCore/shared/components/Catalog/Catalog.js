@@ -24,14 +24,11 @@ function Catalog(props) {
     const [product, setProduct] = React.useState(null)
 
     const toggleSidebar = (item) => {
-        console.log(item)
         setProduct(item.id);
-        console.log(product)
         setSideBar(true)
     }
 
     const handleChangePage = (event, newPage) => {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         setPage(() => newPage);
@@ -50,7 +47,6 @@ function Catalog(props) {
         };
 
         const url = props.productsApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
-
         return fetch(url, requestOptions)
             .then(function (response) {
 
