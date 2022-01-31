@@ -12,11 +12,16 @@ import { Context } from "../../../../../shared/stores/Store";
 const Sidebar = (props) => {
     const [state, dispatch] = useContext(Context);
     const [productVariants, setProductVariants] = useState([])
-    const {productId, open, setOpen, handleOrder, labels} = props;
+    const {productId, open, manyUses, setOpen, handleOrder, labels} = props;
 
     const toggleDrawer = (open) => (e) => {
-        if (e && e.type === 'keydown' && (e.key === 'Tab' || e.key === 'Shift')) {
-          return;
+        if (e && e.type === 'keydown' && 
+           (e.key === 'Tab' || e.key === 'Shift')) {
+                return;
+        }
+
+        if (!open && manyUses){
+            setProductVariants([])
         }
 
         setOpen(open)

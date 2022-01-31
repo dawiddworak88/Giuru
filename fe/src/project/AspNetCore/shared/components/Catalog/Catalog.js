@@ -204,9 +204,10 @@ function Catalog(props) {
                 </section>
             )}
             {props.sidebar &&  
-                <Sidebar 
+                <Sidebar
                     productId={product}
                     open={sideBar}
+                    manyUses={true}
                     setOpen={setSideBar}
                     handleOrder={handleAddOrderItemClick}
                     labels={props.sidebar}

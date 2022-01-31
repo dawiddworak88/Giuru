@@ -171,6 +171,7 @@ function ProductDetail(props) {
                 <Sidebar 
                     productId={props.productId}
                     open={sideBar}
+                    manyUses={false}
                     setOpen={setSideBar}
                     handleOrder={handleAddOrderItemClick}
                     labels={props.sidebar}
