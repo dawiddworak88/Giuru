@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { Plus } from "react-feather";
 import {
-    Delete, Edit
+    Delete, Edit, Link
 } from "@material-ui/icons";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 import {
@@ -17,6 +17,7 @@ import { Context } from "../../stores/Store";
 import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializer";
 import PaginationConstants from "../../constants/PaginationConstants";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
+import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
 
 function Catalog(props) {
 
@@ -170,6 +171,10 @@ function Catalog(props) {
                 toast.error(props.generalErrorMessage);
             });
     };
+
+    const copyToClipboard = (text) => {
+        ClipboardHelper.copyToClipboard(text);
+    }
     
     return (
         <section className="section section-small-padding catalog">
@@ -227,6 +232,10 @@ function Catalog(props) {
                                                             else if (actionItem.isDuplicate) return (
                                                                 <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary" aria-label={props.duplicateLabel}>
                                                                     <FileCopyOutlinedIcon />
+                                                                </Fab>)
+                                                            else if (actionItem.isPicture) return (
+                                                                <Fab onClick={() => copyToClipboard(item.imageUrl)} size="small" color="secondary" aria-label={props.duplicateLabel}>
+                                                                    <Link />
                                                                 </Fab>)
                                                             else return (
                                                                 <div></div>)})}

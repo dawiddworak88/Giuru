@@ -69,11 +69,15 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                 {
                     new CatalogActionViewModel
                     {
-                        IsEdit = false
+                        IsEdit = true
                     },
                     new CatalogActionViewModel
                     {
                         IsDelete = true
+                    },
+                    new CatalogActionViewModel
+                    {
+                        isPicture = true
                     }
                 },
                 Properties = new List<CatalogPropertyViewModel>
