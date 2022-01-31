@@ -285,5 +285,10 @@ namespace Media.Api.Services.Media
 
             await this.context.SaveChangesAsync();
         }
+
+        public Task<Guid> UpdateFileAsync(UpdateMediaItemServiceModel serviceModel)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

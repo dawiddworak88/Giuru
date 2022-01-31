@@ -108,27 +108,50 @@ namespace Media.Api.v1.Controllers
             }
 
             var organisationClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
-
-            var serviceModel = new CreateMediaItemServiceModel
+            if (!model.Id.HasValue)
             {
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
-                Language = CultureInfo.CurrentCulture.Name,
-                File = model.File
-            };
+                var serviceModel = new CreateMediaItemServiceModel
+                {
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
+                    Language = CultureInfo.CurrentCulture.Name,
+                    File = model.File
+                };
 
-            var validator = new CreateMediaItemModelValidator();
+                var validator = new CreateMediaItemModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+                if (validationResult.IsValid)
+                {
+                    var mediaItemId = await this.mediaService.CreateFileAsync(serviceModel);
 
-            var validationResult = await validator.ValidateAsync(serviceModel);
+                    return this.StatusCode((int)HttpStatusCode.Created, new { Id = mediaItemId });
+                }
 
-            if (validationResult.IsValid)
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            } 
+            else
             {
-                var mediaItemId = await this.mediaService.CreateFileAsync(serviceModel);
+                var serviceModel = new UpdateMediaItemServiceModel
+                {
+                    Id = model.Id,
+                    File = model.File,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
+                    Language = CultureInfo.CurrentCulture.Name
+                };
 
-                return this.StatusCode((int)HttpStatusCode.Created, new { Id = mediaItemId });
+                var validator = new UpdateMediaItemModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+                if (validationResult.IsValid)
+                {
+                    var mediaItemId = await this.mediaService.UpdateFileAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = mediaItemId });
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
 
-            return this.StatusCode((int)HttpStatusCode.BadRequest);
         }
     }
 }
