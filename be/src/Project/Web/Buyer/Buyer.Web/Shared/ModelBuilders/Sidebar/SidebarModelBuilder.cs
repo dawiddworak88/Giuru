@@ -11,32 +11,32 @@ namespace Buyer.Web.Shared.ModelBuilders.Sidebar
 {
     public class SidebarModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel>
     {
-        private readonly IStringLocalizer<OrderResources> orderResources;
-        private readonly IStringLocalizer<GlobalResources> globalResources;
+        private readonly IStringLocalizer<OrderResources> orderLocalizer;
+        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly LinkGenerator linkGenerator;
 
         public SidebarModelBuilder(
             IStringLocalizer<OrderResources> orderResources,
-            IStringLocalizer<GlobalResources> globalResources,
+            IStringLocalizer<GlobalResources> globalLocalizer,
             LinkGenerator linkGenerator)
         {
-            this.orderResources = orderResources;
+            this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
-            this.globalResources = globalResources;
+            this.globalLocalizer = globalLocalizer;
         }
 
         public async Task<SidebarViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new SidebarViewModel
             {
-                SidebarTitle = this.orderResources.GetString("SidebarTitle"),
+                SidebarTitle = this.orderLocalizer.GetString("SidebarTitle"),
                 BasketUrl = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                ToBasketLabel = this.orderResources.GetString("ToBasketLabel"),
-                NotFound = this.orderResources.GetString("NotFound"),
-                FabricsLabel = this.orderResources.GetString("FabricsLabel"),
-                SkuLabel = this.globalResources.GetString("Sku"),
-                LackInformation = this.orderResources.GetString("LackInformation"),
-                ProductsApiUrl = this.linkGenerator.GetPathByAction("GetProductVariants", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                ToBasketLabel = this.orderLocalizer.GetString("ToBasketLabel"),
+                NotFound = this.orderLocalizer.GetString("NotFound"),
+                FabricsLabel = this.orderLocalizer.GetString("FabricsLabel"),
+                SkuLabel = this.globalLocalizer.GetString("Sku"),
+                LackInformation = this.orderLocalizer.GetString("LackInformation"),
+                ProductsApiUrl = this.linkGenerator.GetPathByAction("GetProductVariantsAsync", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             };
            
             return viewModel;

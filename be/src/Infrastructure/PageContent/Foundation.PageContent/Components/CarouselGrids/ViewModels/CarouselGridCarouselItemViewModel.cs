@@ -11,7 +11,7 @@ namespace Foundation.PageContent.Components.CarouselGrids.ViewModels
         public string ImageUrl { get; set; }
         public string ImageAlt { get; set; }
         public string Title { get; set; }
-        public string Sku { get; set; }
+        public string Subtitle { get; set; }
         public IEnumerable<SourceViewModel> Sources { get; set; }
         public IEnumerable<CarouselGridProductAttributesViewModel> Attributes { get; set; }
         public IEnumerable<ImageVariantViewModel> Images { get; set; }

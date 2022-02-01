@@ -1,6 +1,7 @@
 ﻿using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.ViewModel;
 using Buyer.Web.Areas.Products.DomainModels;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
@@ -73,11 +74,11 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     Quantity = x.Quantity,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo,
-                    Fabrics = x.ProductAttributes.Select(x => new ProductAttribute
+                    Fabrics = x.ProductAttributes.OrEmptyIfNull().Select(x => new ProductAttribute
                     {
                         Key = x.Key,
                         Values = x.Values,
-                        Name = x.Name,
+                        Name = x.Name
                     }),
                     DeliveryFrom = x.ExpectedDeliveryFrom,
                     DeliveryTo = x.ExpectedDeliveryTo,

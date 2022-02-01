@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -54,6 +53,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             this.mediaService = mediaService;
             this.productLocalizer = productLocalizer;
             this.options = options;
+            this.cdnService = cdnService;
         }
 
         [HttpGet]
@@ -91,14 +91,14 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProductVariants(Guid? id)
+        public async Task<IActionResult> GetProductVariantsAsync(Guid? id)
         {
             var language = CultureInfo.CurrentUICulture.Name;
-            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var product = await this.productsRepository.GetProductAsync(id, language, null);
 
-            if (product.ProductVariants != null)
+            if (product?.ProductVariants is not null)
             {
+                var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
                 var productVariants = await this.productsRepository.GetProductsAsync(
                     product.ProductVariants, null, null, language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, $"{nameof(Product.Name)} ASC");
 
@@ -109,7 +109,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     {
                         Id = productVariant.Id,
                         Title = productVariant.Name,
-                        Sku = productVariant.Sku,
+                        Subtitle = productVariant.Sku,
                         ImageAlt = productVariant.Name,
                         Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id }),
                         Attributes = productVariant.ProductAttributes.Select(x => new CarouselGridProductAttributesViewModel
@@ -131,7 +131,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             variantImages.Add(imageVariantViewModel);
                         }
                         carouselItem.Images = variantImages;
-                        carouselItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), CarouselGridConstants.CarouselItemImageMaxWidth, CarouselGridConstants.CarouselItemImageMaxHeight, true);
+                        carouselItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), CarouselGridConstants.CarouselItemImageMaxWidth, CarouselGridConstants.CarouselItemImageMaxHeight, true));
                     }
                     carouselItems.Add(carouselItem);
                 }

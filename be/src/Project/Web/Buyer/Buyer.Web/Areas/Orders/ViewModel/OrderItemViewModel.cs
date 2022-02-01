@@ -18,6 +18,5 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public DateTime? DeliveryTo { get; set; }
         public string MoreInfo { get; set; }
         public IEnumerable<ProductAttribute> Fabrics { get; set; }
-
     }
 }

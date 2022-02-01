@@ -60,7 +60,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         BrandName = product.BrandName,
                         Images = product.Images,
                         InStock = false,
-                        ProductAttributes = product.ProductAttributes.Select(x => new ProductAttributeResponseModel
+                        ProductAttributes = product.ProductAttributes.Select(x => new CatalogItemProductAttributesViewModel
                         {
                             Key = x.Key,
                             Values = x.Values,

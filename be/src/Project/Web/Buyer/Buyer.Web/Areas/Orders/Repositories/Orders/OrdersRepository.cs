@@ -41,27 +41,30 @@ namespace Buyer.Web.Areas.Orders.Repositories
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Order>(apiRequest);
-            if (response.IsSuccessStatusCode && response.Data != null)
+            if (response.IsSuccessStatusCode && response.Data?.OrderItems is not null)
             {
-                var orderItem = new List<OrderItem>();
+                var orderItems = new List<OrderItem>();
                 foreach (var item in response.Data.OrderItems)
                 {
-                    var productAttributes = this.productsRepository.GetProductAsync(item.ProductId, null, null).Result.ProductAttributes;
-                    orderItem.Add(new OrderItem
+                    var product = await this.productsRepository.GetProductAsync(item.ProductId, null, null);
+                    if (product is not null)
                     {
-                        ProductId = item.ProductId,
-                        ProductName = item.ProductName,
-                        ProductSku = item.ProductSku,
-                        PictureUrl = item.PictureUrl,
-                        Quantity = item.Quantity,
-                        ExternalReference = item.ExternalReference,
-                        ExpectedDeliveryFrom = item.ExpectedDeliveryFrom,
-                        ProductAttributes = productAttributes,
-                        ExpectedDeliveryTo = item.ExpectedDeliveryTo,
-                        MoreInfo = item.MoreInfo,
-                        LastModifiedDate = item.LastModifiedDate,
-                        CreatedDate = item.CreatedDate,
-                    });
+                        orderItems.Add(new OrderItem
+                        {
+                            ProductId = item.ProductId,
+                            ProductName = item.ProductName,
+                            ProductSku = item.ProductSku,
+                            PictureUrl = item.PictureUrl,
+                            Quantity = item.Quantity,
+                            ExternalReference = item.ExternalReference,
+                            ExpectedDeliveryFrom = item.ExpectedDeliveryFrom,
+                            ProductAttributes = product.ProductAttributes,
+                            ExpectedDeliveryTo = item.ExpectedDeliveryTo,
+                            MoreInfo = item.MoreInfo,
+                            LastModifiedDate = item.LastModifiedDate,
+                            CreatedDate = item.CreatedDate
+                        });
+                    }
                 }
 
                 var order = new Order
@@ -71,10 +74,10 @@ namespace Buyer.Web.Areas.Orders.Repositories
                     ClientId = response.Data.ClientId,
                     ClientName = response.Data.ClientName,
                     OrderStatusName = response.Data.OrderStatusName,
-                    OrderItems = orderItem,
+                    OrderItems = orderItems,
                     LastModifiedDate = response.Data.LastModifiedDate,
                     CreatedDate = response.Data.CreatedDate,
-                    Id = response.Data.Id,
+                    Id = response.Data.Id
                 };
 
                 return order;

@@ -43,6 +43,5 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public IEnumerable<ImageViewModel> Images { get; set; }
         public IEnumerable<ProductFeatureViewModel> Features { get; set; }
         public IEnumerable<CarouselGridItemViewModel> ProductVariants { get; set; }
-
     }
 }

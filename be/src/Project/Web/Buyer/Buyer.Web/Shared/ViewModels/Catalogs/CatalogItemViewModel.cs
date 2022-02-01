@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Products.ApiResponseModels;
-using Foundation.PageContent.Components.Images;
+﻿using Foundation.PageContent.Components.Images;
 using System;
 using System.Collections.Generic;
 
@@ -20,6 +19,6 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string BrandUrl { get; set; }
         public IEnumerable<Guid> Images { get; set; }
         public IEnumerable<SourceViewModel> Sources { get; set; }
-        public IEnumerable<ProductAttributeResponseModel> ProductAttributes { get; set; }
+        public IEnumerable<CatalogItemProductAttributesViewModel> ProductAttributes { get; set; }
     }
 }

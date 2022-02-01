@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Products.DomainModels;
-using Buyer.Web.Areas.Shared.Definitions.Products;
+﻿using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Configurations;
@@ -102,11 +101,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 viewModel.IsProductVariant = product.PrimaryProductId.HasValue;
                 viewModel.Features = product.ProductAttributes?.Select(x => new ProductFeatureViewModel { Key = x.Name, Value = string.Join(", ", x.Values.OrEmptyIfNull()) });
 
-                var images = new List<Web.Shared.ViewModels.Images.ImageViewModel>();
+                var images = new List<ImageViewModel>();
 
                 foreach (var image in product.Images.OrEmptyIfNull())
                 {
-                    var imageViewModel = new Web.Shared.ViewModels.Images.ImageViewModel
+                    var imageViewModel = new ImageViewModel
                     {
                         Id = image,
                         Original = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.OriginalMaxWidth, ProductConstants.OriginalMaxHeight, true)),
