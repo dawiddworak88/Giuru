@@ -12,7 +12,6 @@ import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 
 function ProductDetail(props) {
-    console.log(props)
     const [, dispatch] = useContext(Context);
     const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
     const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
@@ -34,7 +33,7 @@ function ProductDetail(props) {
                 sku: item.subtitle,
                 title: item.title,
                 images: item.images,
-                quantity: parseInt(quantity),
+                quantity: parseInt(item.quantity),
                 externalReference: null, 
                 deliveryFrom: null, 
                 deliveryTo: null, 

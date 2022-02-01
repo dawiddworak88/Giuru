@@ -11,7 +11,8 @@ import { Context } from "../../../../../shared/stores/Store";
 
 const Sidebar = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [productVariants, setProductVariants] = useState([])
+    const [productVariants, setProductVariants] = useState([]);
+    const [quantities, setQuantities] = useState([]);
     const {productId, isOpen, manyUses, setIsOpen, handleOrder, labels} = props;
 
     const toggleDrawer = (open) => (e) => {
@@ -46,17 +47,38 @@ const Sidebar = (props) => {
             const url = labels.productsApiUrl + "?" + QueryStringSerializer.serialize(requestQuery);
             return fetch(url, requestOptions)
                 .then(function (response) {
-                    // dispatch({ type: "SET_IS_LOADING", payload: false });
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
 
                     return response.json().then(jsonResponse => {
                         if (response.ok) {
                             setProductVariants(() => jsonResponse)
-                        }
+                            
+                            let res = [];
+                            jsonResponse[0].carouselItems.forEach((item, i) => {
+                                const data = {
+                                    id: item.id,
+                                    quantity: 1
+                                }
+
+                                res.push(data);
+                            });
+
+                            setQuantities(res)
+                        }   
                     });
                 }).catch(() => {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
                 });
         }
+    }
+
+    const handleAddOrderItemClick = (item) => {
+        const orderItem = {
+            quantity: quantities.find(x => x.id === item.id).quantity,
+            ...item
+        }
+
+        handleOrder(orderItem);
     }
 
     useEffect(() => {
@@ -92,6 +114,7 @@ const Sidebar = (props) => {
                                 if (carouselItem.attributes.length > 0) {
                                     fabrics = carouselItem.attributes.find(x => x.key === "primaryFabrics").value;
                                 }
+
                                 return (
                                     <ListItem className="sidebar-item">
                                         <div className="sidebar-item__row">
@@ -107,7 +130,7 @@ const Sidebar = (props) => {
                                                 </div>
                                             </div>
                                             <div className="sidebar-item__buttons">
-                                                <Button type="text" color="primary" variant="contained" className="cart-button" onClick={() => handleOrder(carouselItem)}><AddShoppingCart /></Button>
+                                                <Button type="text" color="primary" variant="contained" className="cart-button" onClick={() => handleAddOrderItemClick(carouselItem)}><AddShoppingCart /></Button>
                                                 <Button type="text" color="primary" variant="contained" className="cart-button" onClick={variantDetails(carouselItem)}><ArrowRight /></Button>
                                             </div>
                                         </div>

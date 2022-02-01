@@ -207,7 +207,7 @@ function Catalog(props) {
                     productId={product}
                     isOpen={isSidebarOpen}
                     manyUses={true}
-                    setOpen={setIsSidebarOpen}
+                    setIsOpen={setIsSidebarOpen}
                     handleOrder={handleAddOrderItemClick}
                     labels={props.sidebar}
                 />
