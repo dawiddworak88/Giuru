@@ -9,17 +9,19 @@ import { ShoppingCart, Done } from "@material-ui/icons";
 import { Context } from "../../../../../../shared/stores/Store";
 import QuantityInput from "../../../../shared/components/Inputs/Quantity/QuantityInput";
 import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
+import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 
 function ProductDetail(props) {
+    console.log(props)
     const [, dispatch] = useContext(Context);
     const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
     const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
-    const [sideBar, setSideBar] = React.useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
     const [quantity, setQuantity] = React.useState(1);
-    const [orderedProduct, setOrderedProduct] = React.useState(false);
+    const [isProductOrdered, setIsProductOrdered] = React.useState(false);
 
     const toggleSidebar = () => {
-        setSideBar(true)
+        setIsSidebarOpen(true)
     }
 
     const handleAddOrderItemClick = (item) => {
@@ -29,15 +31,14 @@ function ProductDetail(props) {
         if (!props.isProductVariant){
             product = {
                 productId: item.id,
-                sku: item.sku,
+                sku: item.subtitle,
                 title: item.title,
                 images: item.images,
                 quantity: parseInt(quantity),
-                externalReference: "", 
+                externalReference: null, 
                 deliveryFrom: null, 
                 deliveryTo: null, 
-                moreInfo: ""
-
+                moreInfo: null
             };
         }
 
@@ -47,10 +48,10 @@ function ProductDetail(props) {
             name: product.title, 
             imageId: product.images ? product.images[0].id : null, 
             quantity: parseInt(quantity), 
-            externalReference: "", 
+            externalReference: null, 
             deliveryFrom: null, 
             deliveryTo: null, 
-            moreInfo: ""
+            moreInfo: null
         };
 
         const basket = {
@@ -75,7 +76,7 @@ function ProductDetail(props) {
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
                             toast.success(props.successfullyAddedProduct)
                             setOrderItems(jsonResponse.items);
-                            setOrderedProduct(true)
+                            setIsProductOrdered(true)
                         }
                         else {
                             setOrderItems([]);
@@ -91,12 +92,6 @@ function ProductDetail(props) {
             });
     };
 
-    const labels = {
-        sidebarTitle: props.sidebarTitle,
-        lackInformation: props.lackInformation,
-        basketUrl: props.basketUrl,
-
-    }
     return (
         <section className="product-detail section">
             <div className="product-detail__head columns is-tablet">
@@ -133,7 +128,7 @@ function ProductDetail(props) {
                                         stepValue={1}
                                         setValue={setQuantity}
                                     />
-                                    <Button type="submit" startIcon={orderedProduct ? <Done/> : <ShoppingCart />} variant="contained" color="primary" className="cart-action" onClick={() => handleAddOrderItemClick()}>
+                                    <Button type="submit" startIcon={isProductOrdered ? <Done/> : <ShoppingCart />} variant="contained" color="primary" className="cart-action" onClick={() => handleAddOrderItemClick()}>
                                         {orderedProduct ? props.addedProduct : props.basketLabel}
                                     </Button>
                                 </div>
@@ -170,13 +165,14 @@ function ProductDetail(props) {
                 </div>
                 <Sidebar 
                     productId={props.productId}
-                    open={sideBar}
+                    isOpen={isSidebarOpen}
                     manyUses={false}
-                    setOpen={setSideBar}
+                    setIsOpen={setIsSidebarOpen}
                     handleOrder={handleAddOrderItemClick}
                     labels={props.sidebar}
                 />
             </div>
+            <CarouselGrid items={props.productVariants} />
             <Files {...props.files} />
         </section>
     );

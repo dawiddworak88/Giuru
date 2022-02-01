@@ -61,16 +61,14 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                 viewModel.ShowBrand = true;
             }
 
-            viewModel.BasketId = componentModel.BasketId;
             viewModel.ShowAddToCartButton = true;
             viewModel.SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct");
-            viewModel.UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.Title = this.globalLocalizer.GetString("AvailableProducts");
             viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "AvailableProductsApi", new { Area = "Products" });
             viewModel.ItemsPerPage = AvailableProductsConstants.Pagination.ItemsPerPage;
             viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
 
-            if (viewModel.IsLoggedIn)
+            if (componentModel.IsAuthenticated)
             {
                 var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
                 if (existingBasket != null)

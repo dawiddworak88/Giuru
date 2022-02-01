@@ -1,40 +1,14 @@
-import React, { useContext, useState, useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { Context } from "../../../../../../shared/stores/Store";
-import { CircularProgress } from "@material-ui/core";
 import {
     Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper
 } from "@material-ui/core";
 import moment from "moment";
-import { toast } from "react-toastify";
 
 function StatusOrder(props) {
-   
-    const [state,] = useContext(Context);
-    const [orderStatuses, setOrderStatuses] = useState([]);
 
-    const getOrderStatuses = (e) => {
-        const requestOptions = {
-            method: "GET",
-            headers: { "Content-Type": "application/json" }
-        };
-
-        fetch(props.orderStatusesUrl, requestOptions)
-            .then((response) => {
-                return response.json().then(jsonResponse => {
-                    setOrderStatuses(jsonResponse);
-                });
-            }).catch(() => {
-                toast.error(props.generalErrorMessage);
-            });
-    };
-
-    useEffect(() => {
-        getOrderStatuses();
-    }, []);
-
-    const status = orderStatuses.find((item) => item.id === props.orderStatusId);
+    const status = props.orderStatuses.find((item) => item.id === props.orderStatusId);
     return (
         <section className="section status-order">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -70,9 +44,8 @@ function StatusOrder(props) {
                                     </TableHead>
                                     <TableBody>
                                         {props.orderItems && props.orderItems.map((item, index) => {
-                                            const statement = item.fabrics;
                                             let fabrics = null;
-                                            if (statement.length > 0) {
+                                            if (item.fabrics.length > 0) {
                                                 fabrics = item.fabrics.find(x => x.key === "primaryFabrics").values.join(", ");
                                             }
                                             return (
@@ -96,7 +69,6 @@ function StatusOrder(props) {
                     </section>
                 </div>
             </div>
-            {state.isLoading && <CircularProgress className="progressBar" />}
         </section >
     );
 }
@@ -114,7 +86,6 @@ StatusOrder.propTypes = {
     orderItemsLabel: PropTypes.string.isRequired,
     orderStatusLabel: PropTypes.string.isRequired,
     orderStatusId: PropTypes.string.isRequired,
-    orderStatusesUrl: PropTypes.string.isRequired
 };
 
 export default StatusOrder;

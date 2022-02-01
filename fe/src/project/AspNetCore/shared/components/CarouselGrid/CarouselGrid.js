@@ -34,8 +34,8 @@ function CarouselGrid(props) {
                                                     <p className="title is-5 has-text-centered">{carouselItem.title}</p>
                                                 }
 
-                                                {carouselItem.sku &&
-                                                    <p className="subtitle is-6 has-text-centered">{carouselItem.sku}</p>
+                                                {carouselItem.subtitle &&
+                                                    <p className="subtitle is-6 has-text-centered">{carouselItem.subtitle}</p>
                                                 }
                                             </a>
                                         </div>

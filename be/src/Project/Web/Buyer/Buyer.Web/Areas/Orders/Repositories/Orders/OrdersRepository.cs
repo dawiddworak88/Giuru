@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Orders.ApiResponseModels;
-using Buyer.Web.Areas.Orders.DomainModels;
+﻿using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Communications;

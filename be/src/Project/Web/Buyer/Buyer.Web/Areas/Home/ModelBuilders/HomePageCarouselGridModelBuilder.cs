@@ -68,6 +68,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                     {
                         Id = newProduct.Id,
                         Title = newProduct.Title,
+                        Subtitle = newProduct.Sku,
                         ImageAlt = newProduct.ImageAlt,
                         ImageUrl = this.cdnService.GetCdnUrl(newProduct.ImageUrl),
                         Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, newProduct.Id }),

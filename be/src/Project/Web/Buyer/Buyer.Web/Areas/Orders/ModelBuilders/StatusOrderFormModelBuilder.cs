@@ -64,7 +64,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 viewModel.Id = order.Id;
                 viewModel.OrderStatusId = order.OrderStatusId;
                 viewModel.ExpectedDelivery = order.ExpectedDeliveryDate;
-                viewModel.OrderStatusesUrl = this.linkGenerator.GetPathByAction("Index", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
                 viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                 {
                     ProductId = x.ProductId,

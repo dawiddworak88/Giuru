@@ -15,7 +15,7 @@ const images = [
   {
     original: "https://eltap.pl/upload/gallery/66/beg-04jpg9238.jpg",
     thumbnail: "https://eltap.pl/upload/gallery/66/beg-04jpg9238.jpg",
-  },
+  }
 ];
 
 function getFeatures(count) {

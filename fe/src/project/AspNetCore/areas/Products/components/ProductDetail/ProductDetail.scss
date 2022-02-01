@@ -1,3 +1,4 @@
+@import "../../../../shared/components/CarouselGrid/CarouselGrid.scss";
 @import "../../../../shared/components/Inputs/Quantity/QuantityInput.scss";
 @import "../../../../shared/components/Sidebar/Sidebar.scss";
 
@@ -15,7 +16,7 @@
     }
 
     &__sku {
-        font-size: 0.750rem;
+        font-size: 0.75rem;
     }
 
     &__expected-delivery {

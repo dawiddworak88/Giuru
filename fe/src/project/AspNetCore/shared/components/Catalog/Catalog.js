@@ -20,12 +20,12 @@ function Catalog(props) {
     const [itemsPerPage,] = React.useState(props.itemsPerPage ? props.itemsPerPage : CatalogConstants.defaultCatalogItemsPerPage());
     const [items, setItems] = React.useState(props.pagedItems.data);
     const [total, setTotal] = React.useState(props.pagedItems.total);
-    const [sideBar, setSideBar] = React.useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
     const [product, setProduct] = React.useState(null)
 
     const toggleSidebar = (item) => {
         setProduct(item.id);
-        setSideBar(true)
+        setIsSidebarOpen(true)
     }
 
     const handleChangePage = (event, newPage) => {
@@ -71,14 +71,13 @@ function Catalog(props) {
     };
 
     const handleAddOrderItemClick = (item) => {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const orderItem = {
             productId: item.id, 
-            sku: item.sku, 
+            sku: item.subtitle ? item.subtitle : item.sku, 
             name: item.title, 
-            imageId: item.images ? item.images[0] : null,
+            imageId: item.images ? item.images[0].id : null,
             quantity: parseInt(1), 
             externalReference: null, 
             deliveryFrom: null, 
@@ -172,7 +171,7 @@ function Catalog(props) {
                                                     </Button>
                                                 ) : (
                                                     <Button variant="contained" onClick={() => toggleSidebar(item)} color="primary">
-                                                        {props.variantLabel}
+                                                        {props.basketLabel}
                                                     </Button>
                                                 )}
                                             </div>
@@ -206,9 +205,9 @@ function Catalog(props) {
             {props.sidebar &&  
                 <Sidebar
                     productId={product}
-                    open={sideBar}
+                    isOpen={isSidebarOpen}
                     manyUses={true}
-                    setOpen={setSideBar}
+                    setOpen={setIsSidebarOpen}
                     handleOrder={handleAddOrderItemClick}
                     labels={props.sidebar}
                 />

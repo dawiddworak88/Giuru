@@ -16,7 +16,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Sidebar
         private readonly LinkGenerator linkGenerator;
 
         public SidebarModelBuilder(
-            IStringLocalizer<OrderResources> orderResources,
+            IStringLocalizer<OrderResources> orderLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
             LinkGenerator linkGenerator)
         {
@@ -36,7 +36,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Sidebar
                 FabricsLabel = this.orderLocalizer.GetString("FabricsLabel"),
                 SkuLabel = this.globalLocalizer.GetString("Sku"),
                 LackInformation = this.orderLocalizer.GetString("LackInformation"),
-                ProductsApiUrl = this.linkGenerator.GetPathByAction("GetProductVariantsAsync", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                ProductsApiUrl = this.linkGenerator.GetPathByAction("GetProductVariants", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
             };
            
             return viewModel;

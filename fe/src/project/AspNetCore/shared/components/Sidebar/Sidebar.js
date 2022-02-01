@@ -1,8 +1,8 @@
-import React, {useState, useContext, useEffect, useRef} from "react";
+import React, {useState, useContext, useEffect} from "react";
 import { 
     Button, SwipeableDrawer, List, ListItem 
 } from "@material-ui/core";
-import { Close, AddShoppingCart, ExpandMore } from "@material-ui/icons";
+import { Close, AddShoppingCart, ArrowRight } from "@material-ui/icons";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import {CircularProgress } from "@material-ui/core";
@@ -12,7 +12,7 @@ import { Context } from "../../../../../shared/stores/Store";
 const Sidebar = (props) => {
     const [state, dispatch] = useContext(Context);
     const [productVariants, setProductVariants] = useState([])
-    const {productId, open, manyUses, setOpen, handleOrder, labels} = props;
+    const {productId, isOpen, manyUses, setIsOpen, handleOrder, labels} = props;
 
     const toggleDrawer = (open) => (e) => {
         if (e && e.type === 'keydown' && 
@@ -20,11 +20,11 @@ const Sidebar = (props) => {
                 return;
         }
 
-        if (!open && manyUses){
+        if (!isOpen && manyUses){
             setProductVariants([])
         }
 
-        setOpen(open)
+        setIsOpen(open)
     };
 
     const variantDetails = (item) => (e) => {
@@ -46,7 +46,7 @@ const Sidebar = (props) => {
             const url = labels.productsApiUrl + "?" + QueryStringSerializer.serialize(requestQuery);
             return fetch(url, requestOptions)
                 .then(function (response) {
-                    dispatch({ type: "SET_IS_LOADING", payload: false });
+                    // dispatch({ type: "SET_IS_LOADING", payload: false });
 
                     return response.json().then(jsonResponse => {
                         if (response.ok) {
@@ -60,15 +60,15 @@ const Sidebar = (props) => {
     }
 
     useEffect(() => {
-        if (open){
+        if (isOpen){
             fetchProductVariants();
         }
-    }, [open, productId])
+    }, [isOpen, productId])
 
     return (
         <SwipeableDrawer
             anchor="right"
-            open={open}
+            open={isOpen}
             onClose={toggleDrawer(false)}
         >
         <div className="sidebar-content">
@@ -88,9 +88,8 @@ const Sidebar = (props) => {
                 ) : (
                     productVariants.map((item) => 
                         item.carouselItems.map((carouselItem) => {
-                                const statement = carouselItem.attributes;
                                 let fabrics = labels.lackInformation;
-                                if (statement.length > 0) {
+                                if (carouselItem.attributes.length > 0) {
                                     fabrics = carouselItem.attributes.find(x => x.key === "primaryFabrics").value;
                                 }
                                 return (
@@ -101,7 +100,7 @@ const Sidebar = (props) => {
                                             </div>
                                             <div className="sidebar-item__details">
                                                 <h1 className="title">{carouselItem.title}</h1>
-                                                <span className="sku">{labels.skuLabel} {carouselItem.sku}</span>
+                                                <span className="sku">{labels.skuLabel} {carouselItem.subtitle}</span>
                                                 <div className="fabrics">
                                                     <span>{labels.fabricsLabel}</span>
                                                     <p>{fabrics}</p>
@@ -109,10 +108,10 @@ const Sidebar = (props) => {
                                             </div>
                                             <div className="sidebar-item__buttons">
                                                 <Button type="text" color="primary" variant="contained" className="cart-button" onClick={() => handleOrder(carouselItem)}><AddShoppingCart /></Button>
-                                                <Button type="text" color="primary" variant="contained" className="cart-button" onClick={variantDetails(carouselItem)}><ExpandMore /></Button>
+                                                <Button type="text" color="primary" variant="contained" className="cart-button" onClick={variantDetails(carouselItem)}><ArrowRight /></Button>
                                             </div>
                                         </div>
-                                        <div className="divider"></div>
+                                        <hr className="divider"></hr>
                                     </ListItem>
                                 )
                             }
@@ -136,10 +135,9 @@ Sidebar.propTypes = {
     productsApiUrl: PropTypes.string.isRequired,
     productId: PropTypes.string.isRequired,
     labels: PropTypes.object,
-    setOpen: PropTypes.func.isRequired,
-    open: PropTypes.bool.isRequired,
+    setIsOpen: PropTypes.func.isRequired,
+    isOpen: PropTypes.bool.isRequired,
     handleOrder: PropTypes.func.isRequired
 }
-
 
 export default Sidebar;

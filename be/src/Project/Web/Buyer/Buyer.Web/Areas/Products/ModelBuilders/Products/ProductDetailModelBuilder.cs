@@ -21,6 +21,10 @@ using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Shared.ViewModels.Sidebar;
+using Foundation.PageContent.Components.CarouselGrids.ViewModels;
+using Foundation.GenericRepository.Paginations;
+using Buyer.Web.Areas.Products.DomainModels;
+using Foundation.PageContent.Components.CarouselGrids.Definitions;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -131,7 +135,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     viewModel.RestockableInDaysLabel = this.inventoryResources.GetString("RestockableInDaysLabel");
                 }
 
-                if (viewModel.IsAuthenticated)
+                if (componentModel.IsAuthenticated)
                 {
                     var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
                     if (existingBasket != null)
@@ -157,7 +161,47 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                         }
                     }
                 }
+
+                if (product.ProductVariants is not null)
+                {
+                    var productVariants = await this.productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token, nameof(Product.CreatedDate));
+
+                    if (productVariants != null)
+                    {
+                        var carouselItems = new List<CarouselGridCarouselItemViewModel>();
+
+                        foreach (var productVariant in productVariants.Data.OrEmptyIfNull())
+                        {
+                            var carouselItem = new CarouselGridCarouselItemViewModel
+                            {
+                                Id = productVariant.Id,
+                                Title = productVariant.Name,
+                                Subtitle = productVariant.Sku,
+                                ImageAlt = productVariant.Name,
+                                Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id })
+                            };
+
+                            if (productVariant.Images != null && productVariant.Images.Any())
+                            {
+                                carouselItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), CarouselGridConstants.CarouselItemImageMaxWidth, CarouselGridConstants.CarouselItemImageMaxHeight, true));
+                            }
+
+                            carouselItems.Add(carouselItem);
+                        }
+
+                        viewModel.ProductVariants = new List<CarouselGridItemViewModel>
+                        {
+                            new CarouselGridItemViewModel
+                            {
+                                Id = product.Id,
+                                Title = this.productLocalizer.GetString("ProductVariants"),
+                                CarouselItems = carouselItems
+                            }
+                        };
+                    }
+                }
             }
+
             return viewModel;
         }
     }
