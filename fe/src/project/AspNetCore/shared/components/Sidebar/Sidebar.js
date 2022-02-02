@@ -124,8 +124,8 @@ const Sidebar = (props) => {
                         item.carouselItems.map((carouselItem) => {
                                 let fabrics = labels.lackInformation;
                                 if (carouselItem.attributes.length > 0) {
-                                    fabrics = item.productAttributes.find(x => x.key === "primaryFabrics") ? item.productAttributes.find(x => x.key === "primaryFabrics").value : "";
-                                    fabrics += item.productAttributes.find(x => x.key === "secondaryFabrics") ? item.productAttributes.find(x => x.key === "secondaryFabrics").value : "";
+                                    fabrics = carouselItem.attributes.find(x => x.key === "primaryFabrics") ? carouselItem.attributes.find(x => x.key === "primaryFabrics").value : "";
+                                    fabrics += carouselItem.attributes.find(x => x.key === "secondaryFabrics") ? carouselItem.attributes.find(x => x.key === "secondaryFabrics").value : "";
                                 }
 
                                 let quantity = 1;
