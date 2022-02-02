@@ -1,5 +1,4 @@
 @import "../../../../shared/components/CarouselGrid/CarouselGrid.scss";
-@import "../../../../shared/components/Inputs/Quantity/QuantityInput.scss";
 @import "../../../../shared/components/Sidebar/Sidebar.scss";
 
 .product-detail {
@@ -59,8 +58,10 @@
     &__add-to-cart-button {
         margin-top: 0.8rem !important;
 
-        button.cart-action {
-            min-height: 42px;
+        .quantity-input{
+            min-height: 2.625rem;
+            width: 4rem;
+            margin-right: 0.3125rem;
         }
 
         .row {

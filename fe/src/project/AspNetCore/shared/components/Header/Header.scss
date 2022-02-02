@@ -5,5 +5,11 @@
 
     @media only screen and (max-width: $tablet) {
         width: 15rem;
+
+        .navbar-brand{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
     }
 }

@@ -5,7 +5,7 @@ import {
 import { Close, AddShoppingCart, ArrowRight } from "@material-ui/icons";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
-import {CircularProgress } from "@material-ui/core";
+import { CircularProgress, TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../shared/stores/Store";
 
@@ -81,6 +81,18 @@ const Sidebar = (props) => {
         handleOrder(orderItem);
     }
 
+    const onQuantityChange = (id) => (e) => {
+        const itemQuantityIndex = quantities.findIndex(x => x.id === id);
+        let prevQuantities = [...quantities];
+
+        let item = prevQuantities.find(x => x.id === id);
+        item.quantity = parseInt(e.target.value);
+
+        prevQuantities[itemQuantityIndex] = item;
+
+        setQuantities(prevQuantities)
+    }
+
     useEffect(() => {
         if (isOpen){
             fetchProductVariants();
@@ -115,6 +127,11 @@ const Sidebar = (props) => {
                                     fabrics = carouselItem.attributes.find(x => x.key === "primaryFabrics").value;
                                 }
 
+                                let quantity = 1;
+                                if (quantities.length !== 0){
+                                    quantity = quantities.find(x => x.id === carouselItem.id).quantity;
+                                }
+
                                 return (
                                     <ListItem className="sidebar-item">
                                         <div className="sidebar-item__row">
@@ -130,6 +147,18 @@ const Sidebar = (props) => {
                                                 </div>
                                             </div>
                                             <div className="sidebar-item__buttons">
+                                                <TextField 
+                                                    id={carouselItem.id} 
+                                                    name="quantity" 
+                                                    type="number" 
+                                                    inputProps={{ 
+                                                        min: 1, 
+                                                        step: 1 
+                                                    }}
+                                                    value={quantity} 
+                                                    onChange={onQuantityChange(carouselItem.id)}
+                                                    className="quantity-input"
+                                                />
                                                 <Button type="text" color="primary" variant="contained" className="cart-button" onClick={() => handleAddOrderItemClick(carouselItem)}><AddShoppingCart /></Button>
                                                 <Button type="text" color="primary" variant="contained" className="cart-button" onClick={variantDetails(carouselItem)}><ArrowRight /></Button>
                                             </div>

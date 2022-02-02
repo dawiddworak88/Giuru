@@ -2,12 +2,11 @@ import React, { Fragment, useContext } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { Button } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import ImageGallery from "react-image-gallery";
 import Files from "../../../../shared/components/Files/Files";
 import { ShoppingCart, Done } from "@material-ui/icons";
 import { Context } from "../../../../../../shared/stores/Store";
-import QuantityInput from "../../../../shared/components/Inputs/Quantity/QuantityInput";
 import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 
@@ -46,7 +45,7 @@ function ProductDetail(props) {
             sku: product.sku, 
             name: product.title, 
             imageId: product.images ? product.images[0].id : null, 
-            quantity: parseInt(quantity), 
+            quantity: product.quantity ? product.quantity : parseInt(quantity), 
             externalReference: null, 
             deliveryFrom: null, 
             deliveryTo: null, 
@@ -120,15 +119,22 @@ function ProductDetail(props) {
                         <div className="product-detail__add-to-cart-button">
                             {props.isProductVariant ? (
                                 <div className="row">
-                                    <QuantityInput 
-                                        value={quantity}
-                                        minValue={1}
-                                        maxValue={props.availableQuantity}
-                                        stepValue={1}
-                                        setValue={setQuantity}
+                                    <TextField 
+                                        id={props.productId} 
+                                        name="quantity" 
+                                        type="number" 
+                                        inputProps={{ 
+                                            min: 1, 
+                                            step: 1 
+                                        }}
+                                        value={quantity} 
+                                        onChange={(e) => {
+                                            setQuantity(e.target.value);
+                                        }}
+                                        className="quantity-input"
                                     />
-                                    <Button type="submit" startIcon={isProductOrdered ? <Done/> : <ShoppingCart />} variant="contained" color="primary" className="cart-action" onClick={() => handleAddOrderItemClick()}>
-                                        {orderedProduct ? props.addedProduct : props.basketLabel}
+                                    <Button type="submit" startIcon={isProductOrdered ? <Done/> : <ShoppingCart />} variant="contained" color="primary" onClick={() => handleAddOrderItemClick()}>
+                                        {isProductOrdered ? props.addedProduct : props.basketLabel}
                                     </Button>
                                 </div>
                             ) : (

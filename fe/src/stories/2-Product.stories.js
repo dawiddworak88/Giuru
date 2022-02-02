@@ -38,7 +38,7 @@ function getFeatures(count) {
 
 var productDetail = {
     title: "Mounting Dream Tilt TV Wall Mount Bracket for Most 37-70 Inches TVs, TV Mount with VESA up to 600x400mm, Fits 16",
-    isAuthenticated: false,
+    isAuthenticated: true,
     images,
     signInUrl: "#",
     skuLabel: "SKU:",
@@ -46,7 +46,7 @@ var productDetail = {
     byLabel: "by",
     brandName: "eltap",
     brandUrl: "#",
-    isProductVariant: true,
+    isProductVariant: false,
     pricesLabel: "Prices:",
     productInformationLabel: "Product and Packagig Information:",
     signInToSeePricesLabel: "Log in to see prices",
@@ -60,12 +60,15 @@ var productDetail = {
     files,
     basketLabel: "Add to cart",
     addedProduct: "Added",
-    sidebarTitle: "Add the selected product variant to the cart",
     basketUrl: "#",
-    toBasketLabel: "View cart",
-    notFound: "No variants",
-    lackInformation: "Lack of information",
-    fabricsLabel: "Fabrics",
+    sidebar: {
+      lackInformation: "Lack of information",
+      toBasketLabel: "View cart",
+      fabricsLabel: "Fabrics",
+      notFound: "No variants",
+      sidebarTitle: "Add the selected product variant to the cart",
+
+    },
     productVariants: [
       {
         id: "5dddbdfb-2a79-412b-7d5f-08d907687b6a",
@@ -81,6 +84,11 @@ var productDetail = {
                 key: "primaryFabrics",
                 name: "Tkanina",
                 value: "Kronos 15, Kronos 19"
+              },
+              {
+                key: "secondaryFabrics",
+                name: "Tkanina",
+                value: "Kronos 15, Kronos 219"
               }
             ]
           },

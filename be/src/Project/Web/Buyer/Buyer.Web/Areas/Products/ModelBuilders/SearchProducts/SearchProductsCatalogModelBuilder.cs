@@ -62,7 +62,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
                 if (existingBasket != null)
                 {
-                    Console.WriteLine(JsonConvert.SerializeObject(existingBasket));
                     var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
                     if (productIds.OrEmptyIfNull().Any())
                     {
