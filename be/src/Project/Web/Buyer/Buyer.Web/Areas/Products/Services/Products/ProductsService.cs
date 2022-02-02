@@ -16,6 +16,7 @@ using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Buyer.Web.Areas.Products.ApiResponseModels;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -63,7 +64,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         ProductAttributes = product.ProductAttributes.Select(x => new CatalogItemProductAttributesViewModel
                         {
                             Key = x.Key,
-                            Values = x.Values,
+                            Value = string.Join(", ", x.Values.OrEmptyIfNull())
                         })
                     };
 

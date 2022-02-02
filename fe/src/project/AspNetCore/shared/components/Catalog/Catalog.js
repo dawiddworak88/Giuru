@@ -176,6 +176,12 @@ function Catalog(props) {
                                     quantity = quantities.find(x => x.id === item.id).quantity;
                                 }
 
+                                let fabrics = null;
+                                if (item.productAttributes.length > 0) {
+                                    fabrics = item.productAttributes.find(x => x.key === "primaryFabrics") ? item.productAttributes.find(x => x.key === "primaryFabrics").value : "";
+                                    fabrics += item.productAttributes.find(x => x.key === "secondaryFabrics") ? item.productAttributes.find(x => x.key === "secondaryFabrics").value : "";
+                                }
+
                                 return (
                                     <div key={item.id} className="column is-3">
                                         <div className="catalog-item card">
@@ -196,9 +202,9 @@ function Catalog(props) {
                                                         <h2 className="catalog-item__brand-text">{props.byLabel} <a href={item.brandUrl}>{item.brandName}</a></h2>
                                                     </div>
                                                 }
-                                                {item.productAttributes && item.productAttributes.find(x => x.key === "primaryFabrics") &&
+                                                {item.productAttributes && fabrics &&
                                                     <div className="catalog-item__fabric">
-                                                        <h3>{props.primaryFabricLabel} {item.productAttributes.find(x => x.key === "primaryFabrics").values.map(fabric => fabric + ", ")}</h3>
+                                                        <h3>{props.primaryFabricLabel} {fabrics}</h3>
                                                     </div>
                                                 }
                                                 {item.inStock && item.availableQuantity && item.availableQuantity >  0 &&
