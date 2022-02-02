@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
@@ -6,13 +6,13 @@ import ResponsiveImage from "../../../../../shared/components/Picture/Responsive
 import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
 import { Context } from "../../../../../shared/stores/Store";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
-import { TablePagination, Button,  } from "@material-ui/core";
+import { TablePagination, Button, TextField } from "@material-ui/core";
 import CatalogConstants from "./CatalogConstants";
 import { ShoppingCart } from "@material-ui/icons";
 import Sidebar from "../Sidebar/Sidebar";
 
 function Catalog(props) {
-    
+    console.log(props)
     const [, dispatch] = useContext(Context);
     const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
     const [page, setPage] = React.useState(0);
@@ -20,6 +20,7 @@ function Catalog(props) {
     const [itemsPerPage,] = React.useState(props.itemsPerPage ? props.itemsPerPage : CatalogConstants.defaultCatalogItemsPerPage());
     const [items, setItems] = React.useState(props.pagedItems.data);
     const [total, setTotal] = React.useState(props.pagedItems.total);
+    const [quantities, setQuantities] = React.useState([]);
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
     const [product, setProduct] = React.useState(null)
 
@@ -70,6 +71,15 @@ function Catalog(props) {
             });
     };
 
+    const handleOrder = (item) => {
+        const orderItem = {
+            quantity: quantities.find(x => x.id === item.id).quantity,
+            ...item
+        }
+
+        handleAddOrderItemClick(orderItem);
+    }
+
     const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
@@ -77,8 +87,8 @@ function Catalog(props) {
             productId: item.id, 
             sku: item.subtitle ? item.subtitle : item.sku, 
             name: item.title, 
-            imageId: item.images ? item.images[0].id : null,
-            quantity: parseInt(1), 
+            imageId: item.images ? item.images[0].id ? item.images[0].id : item.images[0] : null,
+            quantity: parseInt(item.quantity), 
             externalReference: null, 
             deliveryFrom: null, 
             deliveryTo: null, 
@@ -122,6 +132,34 @@ function Catalog(props) {
             });
     };
 
+    const onQuantityChange = (id) => (e) => {
+        const itemQuantityIndex = quantities.findIndex(x => x.id === id);
+        let prevQuantities = [...quantities];
+
+        let item = prevQuantities.find(x => x.id === id);
+        item.quantity = parseInt(e.target.value);
+
+        prevQuantities[itemQuantityIndex] = item;
+
+        setQuantities(prevQuantities)
+    }
+
+    useEffect(() => {
+        if (items){
+            let quantities = []
+            items.forEach((item) => {
+                const itemQuantity = {
+                    id: item.id,
+                    quantity: 1
+                }
+
+                quantities.push(itemQuantity);
+            })
+
+            setQuantities(quantities);
+        }
+    }, [items])
+
     return (
         <section className="catalog section">
             <h1 className="title is-3">{props.title}</h1>
@@ -132,54 +170,75 @@ function Catalog(props) {
                             <p className="subtitle is-6">{total} {props.resultsLabel}</p>
                         }
                         <div className="columns is-tablet is-multiline">
-                            {items.map((item, index) =>
-                                <div key={item.id} className="column is-3">
-                                    <div className="catalog-item card">
-                                        <a href={item.url}>
-                                            <div className="card-image">
-                                                <figure className="image is-4by3">
-                                                    <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
-                                                        <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} />
-                                                    </LazyLoad>
-                                                </figure>
+                            {items.map((item, index) => {
+                                let quantity = 1;
+                                if (quantities.length !== 0){
+                                    quantity = quantities.find(x => x.id === item.id).quantity;
+                                }
+
+                                return (
+                                    <div key={item.id} className="column is-3">
+                                        <div className="catalog-item card">
+                                            <a href={item.url}>
+                                                <div className="card-image">
+                                                    <figure className="image is-4by3">
+                                                        <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
+                                                            <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} />
+                                                        </LazyLoad>
+                                                    </figure>
+                                                </div>
+                                            </a>
+                                            <div className="media-content">
+                                                <p className="catalog-item__sku">{props.skuLabel} {item.sku}</p>
+                                                <h2 className="catalog-item__title"><a href={item.url}>{item.title}</a></h2>
+                                                {props.showBrand && item.brandName &&
+                                                    <div className="catalog-item__brand">
+                                                        <h2 className="catalog-item__brand-text">{props.byLabel} <a href={item.brandUrl}>{item.brandName}</a></h2>
+                                                    </div>
+                                                }
+                                                {item.productAttributes && item.productAttributes.find(x => x.key === "primaryFabrics") &&
+                                                    <div className="catalog-item__fabric">
+                                                        <h3>{props.primaryFabricLabel} {item.productAttributes.find(x => x.key === "primaryFabrics").values.map(fabric => fabric + ", ")}</h3>
+                                                    </div>
+                                                }
+                                                {item.inStock && item.availableQuantity && item.availableQuantity >  0 &&
+                                                    <div className="catalog-item__in-stock">
+                                                        {props.inStockLabel} {item.availableQuantity}
+                                                    </div>
+                                                }
                                             </div>
-                                        </a>
-                                        <div className="media-content">
-                                            <p className="catalog-item__sku">{props.skuLabel} {item.sku}</p>
-                                            <h2 className="catalog-item__title"><a href={item.url}>{item.title}</a></h2>
-                                            {props.showBrand && item.brandName &&
-                                                <div className="catalog-item__brand">
-                                                    <h2 className="catalog-item__brand-text">{props.byLabel} <a href={item.brandUrl}>{item.brandName}</a></h2>
-                                                </div>
-                                            }
-                                            {item.productAttributes && item.productAttributes.find(x => x.key === "primaryFabrics") &&
-                                                <div className="catalog-item__fabric">
-                                                    <h3>{props.primaryFabricLabel} {item.productAttributes.find(x => x.key === "primaryFabrics").values.map(fabric => fabric + ", ")}</h3>
-                                                </div>
-                                            }
-                                            {item.inStock && item.availableQuantity && item.availableQuantity >  0 &&
-                                                <div className="catalog-item__in-stock">
-                                                    {props.inStockLabel} {item.availableQuantity}
+                                            {props.isLoggedIn &&
+                                                <div className="catalog-item__add-to-cart-button-container">
+                                                    {props.showAddToCartButton ? (
+                                                        <div className="row">
+                                                            <TextField 
+                                                                id={item.id} 
+                                                                name="quantity" 
+                                                                type="number" 
+                                                                inputProps={{ 
+                                                                    min: 1, 
+                                                                    step: 1 
+                                                                }}
+                                                                value={quantity} 
+                                                                onChange={onQuantityChange(item.id)}
+                                                                className="quantity-input"
+                                                            />
+                                                            <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => handleOrder(item)} color="primary">
+                                                                {props.basketLabel}
+                                                            </Button>
+                                                        </div>
+                                                    ) : (
+                                                        <Button variant="contained" onClick={() => toggleSidebar(item)} color="primary">
+                                                            {props.basketLabel}
+                                                        </Button>
+                                                    )}
                                                 </div>
                                             }
                                         </div>
-                                        {props.isLoggedIn &&
-                                            <div className="catalog-item__add-to-cart-button-container">
-                                                {props.showAddToCartButton ? (
-                                                    <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => handleAddOrderItemClick(item)} color="primary">
-                                                        {props.basketLabel}
-                                                    </Button>
-                                                ) : (
-                                                    <Button variant="contained" onClick={() => toggleSidebar(item)} color="primary">
-                                                        {props.basketLabel}
-                                                    </Button>
-                                                )}
-                                            </div>
-                                        }
+                                        
                                     </div>
-                                    
-                                </div>
-                            )}
+                                )
+                            })}
                         </div>
                         <div className="catalog__pagination is-flex-centered">
                             <TablePagination

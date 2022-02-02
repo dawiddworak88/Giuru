@@ -53,17 +53,17 @@ const Sidebar = (props) => {
                         if (response.ok) {
                             setProductVariants(() => jsonResponse)
                             
-                            let res = [];
+                            let quantities = [];
                             jsonResponse[0].carouselItems.forEach((item, i) => {
-                                const data = {
+                                const itemQuantity = {
                                     id: item.id,
                                     quantity: 1
                                 }
 
-                                res.push(data);
+                                quantities.push(itemQuantity);
                             });
 
-                            setQuantities(res)
+                            setQuantities(quantities)
                         }   
                     });
                 }).catch(() => {

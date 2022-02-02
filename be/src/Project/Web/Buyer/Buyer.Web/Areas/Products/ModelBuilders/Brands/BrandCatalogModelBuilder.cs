@@ -15,6 +15,8 @@ using System.Linq;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using System.Globalization;
 using Microsoft.AspNetCore.Routing;
+using System;
+using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
 {
@@ -49,7 +51,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
         public async Task<BrandCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = this.catalogModelBuilder.BuildModel(componentModel);
-
             viewModel.Sidebar = await sidebarModelBuilder.BuildModelAsync(componentModel);
             viewModel.BrandId = componentModel.Id;
             viewModel.Title = this.productLocalizer.GetString("Products");

@@ -61,6 +61,12 @@
             .row {
                 display: flex;
             }
+
+            .quantity-input{
+                min-height: 2.625rem;
+                width: 4rem;
+                margin-right: 0.3125rem;
+            }
         }
     }
 }

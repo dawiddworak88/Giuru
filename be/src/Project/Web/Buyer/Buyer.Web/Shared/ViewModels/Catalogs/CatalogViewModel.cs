@@ -17,7 +17,6 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string ByLabel { get; set; }
         public string InStockLabel { get; set; }
         public string BasketLabel { get; set; }
-        public string BasketUrl { get; set; }
         public string PrimaryFabricLabel { get; set; }
         public bool ShowBrand { get; set; }
         public bool ShowAddToCartButton { get; set; }

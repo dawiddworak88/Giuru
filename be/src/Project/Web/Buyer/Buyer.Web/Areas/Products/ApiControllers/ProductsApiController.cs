@@ -91,7 +91,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProductVariantsAsync(Guid? id)
+        public async Task<IActionResult> GetProductVariants(Guid? id)
         {
             var language = CultureInfo.CurrentUICulture.Name;
             var product = await this.productsRepository.GetProductAsync(id, language, null);
