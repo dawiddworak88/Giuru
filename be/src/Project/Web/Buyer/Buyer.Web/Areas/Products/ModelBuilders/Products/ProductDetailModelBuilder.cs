@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Products.DomainModels;
-using Buyer.Web.Areas.Shared.Definitions.Products;
+﻿using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
 using Buyer.Web.Shared.Configurations;
@@ -9,11 +8,8 @@ using Buyer.Web.Shared.ViewModels.Images;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Extensions.Services.MediaServices;
-using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
-using Foundation.PageContent.Components.CarouselGrids.Definitions;
-using Foundation.PageContent.Components.CarouselGrids.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -24,15 +20,22 @@ using System.Threading.Tasks;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
+using Buyer.Web.Shared.ViewModels.Sidebar;
+using Foundation.PageContent.Components.CarouselGrids.ViewModels;
+using Foundation.GenericRepository.Paginations;
+using Buyer.Web.Areas.Products.DomainModels;
+using Foundation.PageContent.Components.CarouselGrids.Definitions;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
     public class ProductDetailModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel>
     {
         private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder;
         private readonly IProductsRepository productsRepository;
         private readonly IStringLocalizer<InventoryResources> inventoryResources;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IStringLocalizer<OrderResources> orderResources;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly IOptions<AppSettings> options;
         private readonly IMediaHelperService mediaService;
@@ -42,10 +45,12 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
             IProductsRepository productsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer, 
             IStringLocalizer<ProductResources> productLocalizer,
             IStringLocalizer<InventoryResources> inventoryResources,
+            IStringLocalizer<OrderResources> orderResources,
             IOptions<AppSettings> options,
             IMediaHelperService mediaService,
             IBasketRepository basketRepository,
@@ -58,10 +63,12 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             this.productLocalizer = productLocalizer;
             this.options = options;
             this.mediaService = mediaService;
+            this.sidebarModelBuilder = sidebarModelBuilder;
             this.inventoryResources = inventoryResources;
             this.linkGenerator = linkGenerator;
             this.basketRepository = basketRepository;
             this.cdnService = cdnService;
+            this.orderResources = orderResources;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -81,6 +88,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 SkuLabel = this.productLocalizer.GetString("Sku"),
                 InStockLabel = this.globalLocalizer.GetString("InStock"),
                 BasketId = componentModel.BasketId,
+                AddedProduct = this.orderResources.GetString("AddedProduct"),
+                Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel)
             };
 
             var product = await this.productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
@@ -101,7 +110,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 foreach (var image in product.Images.OrEmptyIfNull())
                 {
                     var imageViewModel = new ImageViewModel
-                    { 
+                    {
                         Id = image,
                         Original = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.OriginalMaxWidth, ProductConstants.OriginalMaxHeight, true)),
                         Thumbnail = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.ThumbnailMaxWidth, ProductConstants.ThumbnailMaxHeight, true))
@@ -126,7 +135,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     viewModel.RestockableInDaysLabel = this.inventoryResources.GetString("RestockableInDaysLabel");
                 }
 
-                if (viewModel.IsAuthenticated)
+                if (componentModel.IsAuthenticated)
                 {
                     var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
                     if (existingBasket != null)
@@ -153,7 +162,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     }
                 }
 
-                if (product.ProductVariants != null)
+                if (product.ProductVariants is not null)
                 {
                     var productVariants = await this.productsRepository.GetProductsAsync(product.ProductVariants, null, null, componentModel.Language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token, nameof(Product.CreatedDate));
 

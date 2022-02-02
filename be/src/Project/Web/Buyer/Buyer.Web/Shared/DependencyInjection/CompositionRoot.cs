@@ -23,6 +23,8 @@ using Buyer.Web.Shared.Repositories.Brands;
 using Buyer.Web.Shared.Repositories.Products;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Buyer.Web.Shared.Repositories.Clients;
+using Buyer.Web.Shared.ViewModels.Sidebar;
+using Buyer.Web.Shared.ModelBuilders.Sidebar;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -37,6 +39,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped(typeof(ICatalogModelBuilder<,>), typeof(CatalogModelBuilder<,>));
             services.AddScoped(typeof(IBreadcrumbsModelBuilder<,>), typeof(BreadcrumbsModelBuilder<,>));
             services.AddScoped<IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel>, FilesModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel>, SidebarModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>, MainNavigationModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();

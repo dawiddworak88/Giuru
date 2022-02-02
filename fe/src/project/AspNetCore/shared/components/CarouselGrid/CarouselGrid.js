@@ -30,7 +30,7 @@ function CarouselGrid(props) {
                                         </a>
                                         <div className="card-content">
                                             <a href={carouselItem.url}>
-                                                {carouselItem.title &&
+                                                {carouselItem.name &&
                                                     <p className="title is-5 has-text-centered">{carouselItem.title}</p>
                                                 }
 

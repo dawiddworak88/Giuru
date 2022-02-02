@@ -16,11 +16,11 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string DeliveryFromLabel { get; set; }
         public string DeliveryToLabel { get; set; }
         public string ExpectedDeliveryLabel { get; set; }
+        public string FabricsLabel { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
         public string MoreInfoLabel { get; set; }
         public string OrderItemsLabel { get; set; }
         public string OrderStatusLabel { get; set; }
-        public string OrderStatusesUrl { get; set; }
         public IEnumerable<ListItemViewModel> OrderStatuses { get; set; }
         public IEnumerable<OrderItemViewModel> OrderItems { get; set; }
     }

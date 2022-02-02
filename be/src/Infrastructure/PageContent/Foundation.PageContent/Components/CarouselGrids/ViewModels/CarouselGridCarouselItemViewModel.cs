@@ -13,5 +13,7 @@ namespace Foundation.PageContent.Components.CarouselGrids.ViewModels
         public string Title { get; set; }
         public string Subtitle { get; set; }
         public IEnumerable<SourceViewModel> Sources { get; set; }
+        public IEnumerable<CarouselGridProductAttributesViewModel> Attributes { get; set; }
+        public IEnumerable<ImageVariantViewModel> Images { get; set; }
     }
 }

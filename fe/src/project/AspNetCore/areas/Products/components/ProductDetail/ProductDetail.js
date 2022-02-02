@@ -2,31 +2,54 @@ import React, { Fragment, useContext } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { Button } from "@material-ui/core";
+import { Button, TextField } from "@material-ui/core";
 import ImageGallery from "react-image-gallery";
 import Files from "../../../../shared/components/Files/Files";
-import { ShoppingCart } from "@material-ui/icons";
+import { ShoppingCart, Done } from "@material-ui/icons";
 import { Context } from "../../../../../../shared/stores/Store";
+import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 
 function ProductDetail(props) {
     const [, dispatch] = useContext(Context);
     const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
     const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
+    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+    const [quantity, setQuantity] = React.useState(1);
+    const [isProductOrdered, setIsProductOrdered] = React.useState(false);
 
-    const handleAddOrderItemClick = () => {
+    const toggleSidebar = () => {
+        setIsSidebarOpen(true)
+    }
+
+    const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        let product = props;
+        if (!props.isProductVariant){
+            product = {
+                productId: item.id,
+                sku: item.subtitle,
+                title: item.title,
+                images: item.images,
+                quantity: parseInt(item.quantity),
+                externalReference: null, 
+                deliveryFrom: null, 
+                deliveryTo: null, 
+                moreInfo: null
+            };
+        }
+
         const orderItem = {
-            productId: props.productId, 
-            sku: props.sku, 
-            name: props.title, 
-            imageId: props.images ? props.images[0].id : null, 
-            quantity: parseInt(1), 
-            externalReference: "", 
+            productId: product.productId, 
+            sku: product.sku, 
+            name: product.title, 
+            imageId: product.images ? product.images[0].id : null, 
+            quantity: product.quantity ? product.quantity : parseInt(quantity), 
+            externalReference: null, 
             deliveryFrom: null, 
             deliveryTo: null, 
-            moreInfo: ""
+            moreInfo: null
         };
 
         const basket = {
@@ -51,6 +74,7 @@ function ProductDetail(props) {
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
                             toast.success(props.successfullyAddedProduct)
                             setOrderItems(jsonResponse.items);
+                            setIsProductOrdered(true)
                         }
                         else {
                             setOrderItems([]);
@@ -91,11 +115,35 @@ function ProductDetail(props) {
                             }
                         </div>
                     }
-                    {props.isAuthenticated && props.isProductVariant &&
+                    {props.isAuthenticated && 
                         <div className="product-detail__add-to-cart-button">
-                            <Button type="submit" startIcon={<ShoppingCart />} variant="contained" color="primary" onClick={() => handleAddOrderItemClick()}>
-                                {props.basketLabel}
-                            </Button>
+                            {props.isProductVariant ? (
+                                <div className="row">
+                                    <TextField 
+                                        id={props.productId} 
+                                        name="quantity" 
+                                        type="number" 
+                                        inputProps={{ 
+                                            min: 1, 
+                                            step: 1 
+                                        }}
+                                        value={quantity} 
+                                        onChange={(e) => {
+                                            setQuantity(e.target.value);
+                                        }}
+                                        className="quantity-input"
+                                    />
+                                    <Button type="submit" startIcon={isProductOrdered ? <Done/> : <ShoppingCart />} variant="contained" color="primary" onClick={() => handleAddOrderItemClick()}>
+                                        {isProductOrdered ? props.addedProduct : props.basketLabel}
+                                    </Button>
+                                </div>
+                            ) : (
+                                <div className="product-detail__add-to-cart-button">
+                                <Button type="text" variant="contained" color="primary" onClick={toggleSidebar}>
+                                    {props.basketLabel}
+                                </Button>
+                            </div>
+                            )}
                         </div>
                     }
                     {props.description &&
@@ -120,6 +168,14 @@ function ProductDetail(props) {
                         </div>
                     }
                 </div>
+                <Sidebar 
+                    productId={props.productId}
+                    isOpen={isSidebarOpen}
+                    manyUses={false}
+                    setIsOpen={setIsSidebarOpen}
+                    handleOrder={handleAddOrderItemClick}
+                    labels={props.sidebar}
+                />
             </div>
             <CarouselGrid items={props.productVariants} />
             <Files {...props.files} />
@@ -147,7 +203,9 @@ ProductDetail.propTypes = {
     isProductVariant: PropTypes.bool,
     isAuthenticated: PropTypes.bool,
     images: PropTypes.array,
-    files: PropTypes.object
+    files: PropTypes.object,
+    sidebar: PropTypes.object,
+    addedProduct: PropTypes.string
 };
 
 export default ProductDetail;

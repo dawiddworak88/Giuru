@@ -1,5 +1,6 @@
 ﻿using Buyer.Web.Areas.Products.ComponentModels;
 using Buyer.Web.Areas.Products.ViewModels.Categories;
+using Buyer.Web.Shared.Definitions.Basket;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,7 @@ namespace Buyer.Web.Areas.Products.Controllers
 
         public async Task<IActionResult> Index(Guid? id, string searchTerm)
         {
+            var reqCookie = this.Request.Cookies[BasketConstants.BasketCookieName];
             var componentModel = new SearchProductsComponentModel
             {
                 Id = id,
@@ -29,6 +31,11 @@ namespace Buyer.Web.Areas.Products.Controllers
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Name = this.User.Identity.Name
             };
+
+            if (reqCookie != null)
+            {
+                componentModel.BasketId = Guid.Parse(reqCookie);
+            }
 
             var viewModel = await this.categoryPageModelBuilder.BuildModelAsync(componentModel);
 

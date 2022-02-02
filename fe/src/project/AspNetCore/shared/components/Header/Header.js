@@ -8,6 +8,7 @@ import HeaderConstants from "./HeaderConstants";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import { Context } from "../../../../../shared/stores/Store";
+import {ShoppingCart} from '@material-ui/icons';
 
 function Header(props) {
 
@@ -98,7 +99,7 @@ function Header(props) {
                         <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} />
                     </a>
                 </div>
-                <div className="navbar-menu is-flex is-flex-wrap">
+                <div className="navbar-menu">
                     <div className="navbar-start">
                         <form action={props.searchUrl} method="get" role="search" onSubmit={onSearchSubmit}>
                             <div className="field is-flex is-flex-centered search">
@@ -121,7 +122,7 @@ function Header(props) {
                         {props.isLoggedIn ? (
                             props.signOutLink &&
                                 <div className="navbar-item">
-                                    <span>{props.welcomeText} {props.name}, </span>
+                                    <span className="welcome-text">{props.welcomeText} {props.name}, </span>
                                     <a href={props.signOutLink.url} className="button is-text">{props.signOutLink.text}</a>
                                 </div>
                         ) : (
@@ -135,6 +136,11 @@ function Header(props) {
                         <div className="navbar-item">
                             <LanguageSwitcher {...props.languageSwitcher} />
                         </div>
+                        {props.isLoggedIn &&
+                            <div className="navbar-item">
+                                <a href={props.basketUrl} className="button is-text"><ShoppingCart/></a>
+                            </div>
+                        }
                     </div>
                 </div>
             </nav>

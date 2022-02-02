@@ -3,6 +3,7 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using System.Globalization;
 
 namespace Buyer.Web.Shared.ModelBuilders.Catalogs
 {
@@ -41,7 +42,10 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 BackIconButtonText = this.globalLocalizer["Previous"],
                 NextIconButtonText = this.globalLocalizer["Next"],
                 IsLoggedIn = componentModel.IsAuthenticated,
-                ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products" })
+                BasketId = componentModel.BasketId,
+                SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct"),
+                ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products" }),
+                UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
         }
     }

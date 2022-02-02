@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Orders.ApiResponseModels;
+using Buyer.Web.Shared.ViewModels.Sidebar;
 using Foundation.GenericRepository.Paginations;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,6 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string ByLabel { get; set; }
         public string InStockLabel { get; set; }
         public string BasketLabel { get; set; }
-        public string BasketUrl { get; set; }
         public string PrimaryFabricLabel { get; set; }
         public bool ShowBrand { get; set; }
         public bool ShowAddToCartButton { get; set; }
@@ -31,6 +31,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string GeneralErrorMessage { get; set; }
         public string ProductsApiUrl { get; set; }
         public string UpdateBasketUrl { get; set; }
+        public SidebarViewModel Sidebar { get; set; }
         public IEnumerable<BasketItemResponseModel> OrderItems { get; set; }
         public PagedResults<IEnumerable<CatalogItemViewModel>> PagedItems { get; set; }
     }

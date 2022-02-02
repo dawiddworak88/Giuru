@@ -1,10 +1,10 @@
 ﻿using Buyer.Web.Areas.Orders.DomainModels;
+using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
-using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
 using System;
@@ -16,13 +16,16 @@ namespace Buyer.Web.Areas.Orders.Repositories
     public class OrdersRepository : IOrdersRepository
     {
         private readonly IApiClientService apiClientService;
+        private readonly IProductsRepository productsRepository;
         private readonly IOptions<AppSettings> settings;
 
         public OrdersRepository(
-            IApiClientService apiClientService, 
+            IApiClientService apiClientService,
+            IProductsRepository productsRepository,
             IOptions<AppSettings> settings)
         {
             this.settings = settings;
+            this.productsRepository = productsRepository;
             this.apiClientService = apiClientService;
         }
 
@@ -37,9 +40,46 @@ namespace Buyer.Web.Areas.Orders.Repositories
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Order>(apiRequest);
-            if (response.IsSuccessStatusCode && response.Data != null)
+            if (response.IsSuccessStatusCode && response.Data?.OrderItems is not null)
             {
-                return response.Data;
+                var orderItems = new List<OrderItem>();
+                foreach (var item in response.Data.OrderItems)
+                {
+                    var product = await this.productsRepository.GetProductAsync(item.ProductId, null, null);
+                    if (product is not null)
+                    {
+                        orderItems.Add(new OrderItem
+                        {
+                            ProductId = item.ProductId,
+                            ProductName = item.ProductName,
+                            ProductSku = item.ProductSku,
+                            PictureUrl = item.PictureUrl,
+                            Quantity = item.Quantity,
+                            ExternalReference = item.ExternalReference,
+                            ExpectedDeliveryFrom = item.ExpectedDeliveryFrom,
+                            ProductAttributes = product.ProductAttributes,
+                            ExpectedDeliveryTo = item.ExpectedDeliveryTo,
+                            MoreInfo = item.MoreInfo,
+                            LastModifiedDate = item.LastModifiedDate,
+                            CreatedDate = item.CreatedDate
+                        });
+                    }
+                }
+
+                var order = new Order
+                {
+                    OrderStatusId = response.Data.OrderStatusId,
+                    OrderStateId = response.Data.OrderStateId,
+                    ClientId = response.Data.ClientId,
+                    ClientName = response.Data.ClientName,
+                    OrderStatusName = response.Data.OrderStatusName,
+                    OrderItems = orderItems,
+                    LastModifiedDate = response.Data.LastModifiedDate,
+                    CreatedDate = response.Data.CreatedDate,
+                    Id = response.Data.Id
+                };
+
+                return order;
             }
 
             return default;

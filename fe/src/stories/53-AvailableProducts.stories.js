@@ -21,6 +21,7 @@ const catalogForm = {
             imageUrl: "https://eltap-media-cdn.azureedge.net/api/v1/files/2aca7117-811d-45bf-3cb4-08d907684408?w=710&h=520",
             imageAlt: "image",
             sku: "An",
+            title: "Aderito",
             inStock: true,
             availableQuantity: 10,
             brandName: "Eltap",
@@ -36,9 +37,12 @@ const catalogForm = {
                 {
                   key: "primaryFabrics",
                   name: "Tkanina podstawowa",
-                  values: [
-                    "Kronos 19"
-                  ]
+                  value: "Kronos 19, Kronos 20",
+                },
+                {
+                  key: "secondaryFabrics",
+                  name: "Tkanina podstawowa",
+                  value: "Kronos 19, Kronos 22",
                 },
             ],
           } 

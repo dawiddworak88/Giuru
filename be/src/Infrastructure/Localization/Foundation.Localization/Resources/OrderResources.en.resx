@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddedProduct" xml:space="preserve">
+    <value>Added</value>
+  </data>
   <data name="AddOrderItem" xml:space="preserve">
     <value>Add</value>
   </data>
@@ -151,13 +154,19 @@
     <value>Enter SKU or product name</value>
   </data>
   <data name="ExternalReferenceLabel" xml:space="preserve">
-    <value>External order number:</value>
+    <value>Customer's own number:</value>
+  </data>
+  <data name="FabricsLabel" xml:space="preserve">
+    <value>Fabrics</value>
   </data>
   <data name="ImportOrder" xml:space="preserve">
     <value>Import order</value>
   </data>
   <data name="ItemNotFound" xml:space="preserve">
     <value>Product not found</value>
+  </data>
+  <data name="LackInformation" xml:space="preserve">
+    <value>Lack of information</value>
   </data>
   <data name="MoreInfoLabel" xml:space="preserve">
     <value>More info:</value>
@@ -169,10 +178,13 @@
     <value>Back to orders list</value>
   </data>
   <data name="NewOrder" xml:space="preserve">
-    <value>New order</value>
+    <value>Cart</value>
   </data>
   <data name="NoOrderItemsLabel" xml:space="preserve">
     <value>The cart is empty. Add first order item.</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>No variants available</value>
   </data>
   <data name="Order" xml:space="preserve">
     <value>Order</value>
@@ -213,8 +225,14 @@
   <data name="SelectClientLabel" xml:space="preserve">
     <value>Select a client:</value>
   </data>
+  <data name="SidebarTitle" xml:space="preserve">
+    <value>Add the selected product variant to the cart</value>
+  </data>
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
+  </data>
+  <data name="ToBasketLabel" xml:space="preserve">
+    <value>View cart</value>
   </data>
   <data name="UpdateOrderStatus" xml:space="preserve">
     <value>Update order status</value>

@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Products.ViewModels.Brands;
+using Buyer.Web.Shared.Definitions.Basket;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
@@ -21,6 +22,7 @@ namespace Buyer.Web.Areas.Brands.Controllers
 
         public async Task<IActionResult> Index(Guid? id)
         {
+            var reqCookie = this.Request.Cookies[BasketConstants.BasketCookieName];
             var componentModel = new ComponentModelBase
             {
                 Id = id,
@@ -28,6 +30,11 @@ namespace Buyer.Web.Areas.Brands.Controllers
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Name = this.User.Identity.Name
             };
+
+            if (reqCookie != null)
+            {
+                componentModel.BasketId = Guid.Parse(reqCookie);
+            }
 
             var viewModel = await this.brandPageModelBuilder.BuildModelAsync(componentModel);
 

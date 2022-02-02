@@ -1,6 +1,7 @@
 ﻿using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Shared.ViewModels.Files;
 using Buyer.Web.Shared.ViewModels.Images;
+using Buyer.Web.Shared.ViewModels.Sidebar;
 using Foundation.PageContent.Components.CarouselGrids.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -35,10 +36,12 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string InStockLabel { get; set; }
         public string BasketLabel { get; set; }
         public string UpdateBasketUrl { get; set; }
-        public IEnumerable<CarouselGridItemViewModel> ProductVariants { get; set; }
+        public string AddedProduct { get; set; }
+        public SidebarViewModel Sidebar { get; set; }
         public FilesViewModel Files { get; set; }
         public IEnumerable<BasketItemResponseModel> OrderItems { get; set; }
         public IEnumerable<ImageViewModel> Images { get; set; }
         public IEnumerable<ProductFeatureViewModel> Features { get; set; }
+        public IEnumerable<CarouselGridItemViewModel> ProductVariants { get; set; }
     }
 }

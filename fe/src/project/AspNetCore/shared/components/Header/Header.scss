@@ -2,8 +2,41 @@
     width: 25rem;
     margin-left: 2rem;
     height: 56px;
+}
 
-    @media only screen and (max-width: $tablet) {
+.navbar-menu {
+    display: flex;;
+}
+
+@media only screen and (max-width: $tablet) {
+    .search {
         width: 15rem;
+        margin-left: 0;
+        align-items: center;
+    }
+
+    .navbar-brand{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .navbar-menu {
+        flex-direction: column;
+
+        .navbar-start {
+            display: flex;
+            justify-content: center;
+        }
+
+        .navbar-end {
+            padding: 0 0.5rem;
+            justify-content: space-between;
+            display: flex;
+        }
+    }
+
+    .welcome-text {
+        display: none;
     }
 }
