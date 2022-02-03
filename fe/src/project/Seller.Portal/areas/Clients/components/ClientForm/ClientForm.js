@@ -5,6 +5,7 @@ import { Context } from "../../../../../../shared/stores/Store";
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function ClientForm(props) {
 
@@ -50,13 +51,14 @@ function ClientForm(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(state)
         }
 
         fetch(props.saveUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+                AuthenticationHelper.HandleResponse(response);
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         setFieldValue({ name: "id", value: jsonResponse.id });
@@ -83,13 +85,14 @@ function ClientForm(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(payload)
         };
 
         fetch(props.accountUrl, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+                AuthenticationHelper.HandleResponse(response);
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         setFieldValue({ name: "id", value: null });

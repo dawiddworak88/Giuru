@@ -8,6 +8,7 @@ import QueryStringSerializer from "../../../../../shared/helpers/serializers/Que
 import { CircularProgress, TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../shared/stores/Store";
+import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
 
 const Sidebar = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -37,7 +38,7 @@ const Sidebar = (props) => {
         if (productVariants.length === 0){
             const requestOptions = {
                 method: "GET",
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
             };
 
             const requestQuery = {
@@ -48,6 +49,8 @@ const Sidebar = (props) => {
             return fetch(url, requestOptions)
                 .then(function (response) {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                    AuthenticationHelper.HandleResponse(response);
 
                     return response.json().then(jsonResponse => {
                         if (response.ok) {

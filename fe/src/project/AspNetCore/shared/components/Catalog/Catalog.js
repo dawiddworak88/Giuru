@@ -10,6 +10,7 @@ import { TablePagination, Button, TextField } from "@material-ui/core";
 import CatalogConstants from "./CatalogConstants";
 import { ShoppingCart } from "@material-ui/icons";
 import Sidebar from "../Sidebar/Sidebar";
+import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function Catalog(props) {
     const [, dispatch] = useContext(Context);
@@ -43,7 +44,7 @@ function Catalog(props) {
 
         const requestOptions = {
             method: "GET",
-            headers: { "Content-Type": "application/json" }
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
         };
 
         const url = props.productsApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
@@ -51,6 +52,8 @@ function Catalog(props) {
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
 
@@ -101,13 +104,15 @@ function Catalog(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(basket)
         };
 
         fetch(props.updateBasketUrl, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {

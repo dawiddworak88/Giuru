@@ -21,6 +21,7 @@ import OrderFormConstants from "../../../../../../shared/constants/OrderFormCons
 import ConfirmationDialog from "../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import IconConstants from "../../../../../../shared/constants/IconConstants";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -48,12 +49,14 @@ function NewOrderForm(props) {
 
             const requestOptions = {
                 method: "GET",
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
             };
 
             const url = props.getSuggestionsUrl + "?" + QueryStringSerializer.serialize(searchParameters);
             return fetch(url, requestOptions)
                 .then(function (response) {
+
+                    AuthenticationHelper.HandleResponse(response);
 
                     return response.json().then(jsonResponse => {
                         if (response.ok) {
@@ -100,13 +103,15 @@ function NewOrderForm(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(basket)
         };
 
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
@@ -162,13 +167,14 @@ function NewOrderForm(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(basket)
         };
 
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+                AuthenticationHelper.HandleResponse(response);
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
@@ -200,13 +206,14 @@ function NewOrderForm(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(order)
         };
 
         fetch(props.placeOrderUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+                AuthenticationHelper.HandleResponse(response);
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
@@ -271,7 +278,7 @@ function NewOrderForm(props) {
 
         const requestOptions = {
             method: "DELETE",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
         };
 
         const requestData = {
@@ -282,6 +289,7 @@ function NewOrderForm(props) {
         fetch(url, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+                AuthenticationHelper.HandleResponse(response);
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);

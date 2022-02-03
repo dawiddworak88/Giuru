@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Button, CircularProgress } from "@material-ui/core";
 import { Context } from "../../../../../../shared/stores/Store";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function SettingsForm(props) {
 
@@ -19,11 +20,13 @@ function SettingsForm(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" }
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
         };
 
         fetch(props.productsIndexTriggerUrl, requestOptions)
             .then(function (response) {
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
 
