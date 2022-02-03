@@ -66,7 +66,7 @@ builder.Services.AddCultureRouteConstraint();
 
 builder.Services.AddControllersWithViews(options =>
 {
-    options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+    options.Filters.Add(typeof(HttpWebGlobalExceptionFilter));
 }).AddNewtonsoftJson();
 
 builder.Services.RegisterClientAccountDependencies(builder.Configuration);

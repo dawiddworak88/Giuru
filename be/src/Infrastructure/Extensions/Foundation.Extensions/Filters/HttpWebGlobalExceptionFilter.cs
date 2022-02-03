@@ -3,14 +3,15 @@ using Foundation.Extensions.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Net;
 
 namespace Foundation.Extensions.Filters
 {
-    public class HttpGlobalExceptionFilter : IExceptionFilter
+    public class HttpWebGlobalExceptionFilter : IExceptionFilter
     {
         private readonly IWebHostEnvironment env;
 
-        public HttpGlobalExceptionFilter(IWebHostEnvironment env)
+        public HttpWebGlobalExceptionFilter(IWebHostEnvironment env)
         {
             this.env = env;
         }
@@ -29,17 +30,27 @@ namespace Foundation.Extensions.Filters
                     response.DeveloperMessage = context.Exception;
                 }
 
+                var statusCode = (int?)context.Exception.Data[FilterConstants.StatusCodeKeyName];
+
                 if (((int?)context.Exception.Data[FilterConstants.StatusCodeKeyName]).HasValue)
                 {
-                    context.Result = new ObjectResult(response);
-                    context.HttpContext.Response.StatusCode = ((int?)context.Exception.Data[FilterConstants.StatusCodeKeyName]).Value;
+                    if (statusCode.Value == (int)HttpStatusCode.Unauthorized)
+                    {
+                        context.Result = new RedirectResult("/Accounts/Account/SignOutNow");
+                        context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    }
+                    else
+                    {
+                        context.Result = new ObjectResult(response);
+                        context.HttpContext.Response.StatusCode = statusCode.Value;
+                    }
                 }
             }
         }
 
         private class ErrorResponse
         {
-            public string Message{ get; set; }
+            public string Message { get; set; }
             public object DeveloperMessage { get; set; }
         }
     }
