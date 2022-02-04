@@ -12,9 +12,9 @@ namespace Identity.Api.Areas.Accounts.ViewModels
         public string ConfirmPasswordLabel { get; set; }
         public string EmailIsConfirmedText { get; set; }
         public string BackToLoginText { get; set; }
-        public string OrdersUrl { get; set; }
-        public bool EmailConfirmed { get; set; }
         public string PasswordFormatErrorMessage { get; set; }
         public string PasswordRequiredErrorMessage { get; set; }
+        public string GeneralErrorMessage { get; set; }
+        public string PasswordSetSuccessMessage { get; set; }
     }
 }

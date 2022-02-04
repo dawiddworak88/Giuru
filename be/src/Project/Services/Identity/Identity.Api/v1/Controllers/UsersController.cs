@@ -1,7 +1,6 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
-using Identity.Api.Services.Organisations;
 using Identity.Api.Services.Users;
 using Identity.Api.ServicesModels.Users;
 using Identity.Api.v1.RequestModels;
@@ -23,14 +22,11 @@ namespace Identity.Api.v1.Controllers
     [ApiController]
     public class UsersController : BaseApiController
     {
-        private readonly IOrganisationService organisationService;
         private readonly IUsersService userService;
 
         public UsersController(
-            IOrganisationService organisationService,
             IUsersService userService)
         {
-            this.organisationService = organisationService;
             this.userService = userService;
         }
 
@@ -97,7 +93,6 @@ namespace Identity.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(UserRequestModel request)
         {
-            var url = this.Request.Scheme + "://" + this.Request.Host.ToString();
             if (request.Id == null)
             {
                 var serviceModel = new CreateUserServiceModel
@@ -105,7 +100,9 @@ namespace Identity.Api.v1.Controllers
                     Name = request.Name,
                     Email = request.Email,
                     CommunicationsLanguage = request.CommunicationLanguage,
-                    Url = url
+                    ReturnUrl = request.ReturnUrl,
+                    Scheme = this.HttpContext.Request.Scheme,
+                    Host = this.HttpContext.Request.Host
                 };
 
                 var validator = new CreateUserModelValidator();
@@ -129,7 +126,9 @@ namespace Identity.Api.v1.Controllers
                     TwoFactorEnabled = request.TwoFactorEnabled,
                     AccessFailedCount = request.AccessFailedCount,
                     LockoutEnd = request.LockoutEnd,
-                    Url = url
+                    ReturnUrl = request.ReturnUrl,
+                    Scheme = this.HttpContext.Request.Scheme,
+                    Host = this.HttpContext.Request.Host
                 };
 
                 var validator = new UpdateUserModelValidator();

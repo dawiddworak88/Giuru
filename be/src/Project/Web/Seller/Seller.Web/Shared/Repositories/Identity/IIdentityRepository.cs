@@ -5,6 +5,6 @@ namespace Seller.Web.Shared.Repositories.Identity
 {
     public interface IIdentityRepository
     {
-        Task<Guid> SaveAsync(string token, string language, string name, string email, string communicationLanguage);
+        Task<Guid> SaveAsync(string token, string language, string name, string email, string communicationLanguage, string returnUrl);
     }
 }

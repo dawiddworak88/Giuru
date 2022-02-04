@@ -8,6 +8,7 @@ using Seller.Web.Shared.ApiRequestModels;
 using Seller.Web.Shared.Configurations;
 using System;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Seller.Web.Shared.Repositories.Identity
 {
@@ -25,7 +26,7 @@ namespace Seller.Web.Shared.Repositories.Identity
             this.settings = settings;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, string name, string email, string communicationLanguage)
+        public async Task<Guid> SaveAsync(string token, string language, string name, string email, string communicationLanguage, string returnUrl)
         {
             var apiRequest = new ApiRequest<SaveUserRequestModel>
             {
@@ -34,7 +35,8 @@ namespace Seller.Web.Shared.Repositories.Identity
                 {
                     Email = email,
                     Name = name,
-                    CommunicationLanguage = communicationLanguage
+                    CommunicationLanguage = communicationLanguage,
+                    ReturnUrl = returnUrl
                 },
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.UsersApiEndpoint}"
