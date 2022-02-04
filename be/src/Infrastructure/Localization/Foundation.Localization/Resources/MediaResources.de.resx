@@ -132,6 +132,9 @@
   <data name="MediaNotFound" xml:space="preserve">
     <value>Medien nicht gefunden</value>
   </data>
+  <data name="MediaUpdatedSuccessfully" xml:space="preserve">
+    <value>Medien erfolgreich aktualisiert</value>
+  </data>
   <data name="NewText" xml:space="preserve">
     <value>Medien hinzufügen</value>
   </data>

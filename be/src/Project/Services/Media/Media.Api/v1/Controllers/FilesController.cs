@@ -17,6 +17,7 @@ using Media.Api.Services.Media;
 using Media.Api.v1.Areas.Media.RequestModels;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
+using Newtonsoft.Json;
 
 namespace Media.Api.v1.Controllers
 {
@@ -151,7 +152,6 @@ namespace Media.Api.v1.Controllers
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
-
         }
     }
 }

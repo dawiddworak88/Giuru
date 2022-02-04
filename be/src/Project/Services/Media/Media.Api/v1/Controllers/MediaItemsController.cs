@@ -8,6 +8,7 @@ using Foundation.GenericRepository.Paginations;
 using Media.Api.Services.Media;
 using Media.Api.ServicesModels;
 using Media.Api.v1.Areas.Media.ResultModels;
+using Media.Api.v1.RequestModels;
 using Media.Api.v1.ResponseModels;
 using Media.Api.Validators;
 using Microsoft.AspNetCore.Authorization;
@@ -185,6 +186,80 @@ namespace Media.Api.v1.Controllers
                 }                
             }
 
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Updates media item version data
+        /// </summary>
+        /// <param name="request">The model.</param>
+        /// <returns>Created if the file has been uploaded successfully.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [Route("versions")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Guid))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> UpdateVersion(UpdateMediaItemVersionRequestModel request)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var serviceModel = new UpdateMediaItemVersionServiceModel
+            {
+                Id = request.Id,
+                Name = request.Name,
+                Description = request.Description,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new UpdateMediaItemVersionModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+            if (validationResult.IsValid)
+            {
+                await this.mediaService.UpdateMediaItemVersionAsync(serviceModel);
+                
+                return this.StatusCode((int)HttpStatusCode.OK);
+            }
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Gets media item versions by media item id.
+        /// </summary>
+        /// <param name="id">The media item id.</param>
+        /// <returns>The media item versions.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [AllowAnonymous]
+        [Route("versions/{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(MediaItemResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetVersions(Guid? id)
+        {
+            var serviceModel = new GetMediaItemsByIdServiceModel
+            {
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name
+            };
+
+            var validator = new GetMediaItemsByIdModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+            if (validationResult.IsValid)
+            {
+                var mediaItemVersions = await this.mediaService.GetMediaItemVerionsByIdAsync(serviceModel);
+                if (mediaItemVersions is not null)
+                {
+                    var response = new MediaItemVerionsByIdServiceModel
+                    {
+                        Id = mediaItemVersions.Id,
+                        Name = mediaItemVersions.Name,
+                        Description = mediaItemVersions.Description,
+                        Versions = mediaItemVersions.Versions,
+                    };
+                    return this.StatusCode((int)HttpStatusCode.OK, mediaItemVersions);
+                }
+                return this.StatusCode((int)HttpStatusCode.NotFound);
+            }
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
     }

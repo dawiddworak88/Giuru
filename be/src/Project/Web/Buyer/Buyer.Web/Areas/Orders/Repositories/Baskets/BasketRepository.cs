@@ -57,7 +57,6 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             };
 
             var response = await this.apiClientService.PostAsync<ApiRequest<SaveBasketApiRequestModel>, SaveBasketApiRequestModel, BasketApiResponseModel>(apiRequest);
-
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return new Basket

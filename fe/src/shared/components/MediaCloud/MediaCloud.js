@@ -11,8 +11,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 function MediaCloud(props) {
 
     const [, dispatch] = useContext(Context);
-
-    const { setFieldValue, files } = props;
+    const { setFieldValue, files, mediaId } = props;
 
     function deleteMedia(e, id) {
 
@@ -27,6 +26,9 @@ function MediaCloud(props) {
 
         if (props.multiple) {
             const formData = new FormData();
+            if (props.mediaId){
+                formData.append("id", mediaId)
+            }
 
             acceptedFiles.forEach((file) => {
                 formData.append("files", file);
@@ -63,6 +65,9 @@ function MediaCloud(props) {
                 const formData = new FormData();
 
                 formData.append("file", file);
+                if (props.mediaId){
+                    formData.append("id", mediaId)
+                }
 
                 const requestOptions = {
                     method: "POST",

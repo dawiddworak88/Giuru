@@ -14,7 +14,21 @@ const formData = {
   saveMediaText: "Upload images",
   saveMediaUrl: "#",
   nameLabel: "Name: ",
-  descriptionLabel: "Description:"
+  descriptionLabel: "Description:",
+  versions: [
+    {
+      id: "849eab28-b92e-43d9-0458-08d9e0a8a954",
+      url: "http://host.docker.internal:5131/api/v1/files/49371bde-77b0-4c98-0eca-08d9e0a8a949?w=200&h=120&o=true",
+      mimeType: "image/jpeg",
+      version: 1
+    },
+    {
+      id: "849eab28-b92e-43d9-0458-08d9e0a8a954",
+      url: null,
+      mimeType: "application/pdf",
+      version: 1
+    },
+  ]
 };
 
 export const EditMediaPageStory = () => <EditMediaPage header={header} menuTiles={menuTiles} footer={footer} editForm={formData} />;

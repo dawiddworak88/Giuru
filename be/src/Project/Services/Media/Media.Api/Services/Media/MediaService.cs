@@ -95,6 +95,43 @@ namespace Media.Api.Services.Media
             return mediaItem.Id;
         }
 
+        public async Task<Guid> UpdateFileAsync(UpdateMediaItemServiceModel serviceModel)
+        {
+            var existingMediaItemVersion = this.context.MediaItemVersions.Where(x => x.MediaItemId == serviceModel.Id.Value && x.IsActive);
+            if (existingMediaItemVersion is not null)
+            {
+                var checksum = this.checksumService.GetMd5(serviceModel.File);
+                var version = existingMediaItemVersion.Count() + 1;
+                var mediaItemVersion = new MediaItemVersion
+                {
+                    MediaItemId = serviceModel.Id.Value,
+                    Filename = Path.GetFileNameWithoutExtension(serviceModel.File.FileName),
+                    Extension = Path.GetExtension(serviceModel.File.FileName),
+                    Folder = serviceModel.OrganisationId.ToString(),
+                    MimeType = MimeUtility.GetMimeMapping(Path.GetExtension(serviceModel.File.FileName)),
+                    Size = serviceModel.File.Length,
+                    Checksum = checksum,
+                    CreatedBy = serviceModel.Username,
+                    Version = version
+                };
+
+                this.context.MediaItemVersions.Add(mediaItemVersion.FillCommonProperties());
+                var mediaItemTranslation = new MediaItemTranslation
+                {
+                    MediaItemVersionId = mediaItemVersion.Id,
+                    Language = serviceModel.Language,
+                    Name = Path.GetFileNameWithoutExtension(serviceModel.File.FileName)
+                };
+
+                this.context.MediaItemTranslations.Add(mediaItemTranslation.FillCommonProperties());
+                await this.context.SaveChangesAsync();
+
+                await this.mediaRepository.CreateFileAsync(mediaItemVersion.Id, serviceModel.OrganisationId.ToString(), serviceModel.File, serviceModel.File.FileName);
+            }
+
+            return existingMediaItemVersion.FirstOrDefault().Id;
+        }
+
         public async Task<MediaFileServiceModel> GetFileAsync(Guid? mediaId, bool? optimize, int? width, int? height)
         {
             if (mediaId.HasValue)
@@ -103,7 +140,7 @@ namespace Media.Api.Services.Media
                                  join mv in this.context.MediaItemVersions on m.Id equals mv.MediaItemId
                                  join t in this.context.MediaItemTranslations on mv.Id equals t.MediaItemVersionId into ct
                                  from x in ct.DefaultIfEmpty()
-                                 where m.Id == mediaId && m.IsActive == true && mv.IsActive && m.IsProtected == false
+                                 where (m.Id == mediaId || mv.Id == mediaId) && m.IsActive == true && mv.IsActive && m.IsProtected == false
                                  orderby mv.Version descending
                                  select new MediaFileItemServiceModel
                                  {
@@ -286,9 +323,49 @@ namespace Media.Api.Services.Media
             await this.context.SaveChangesAsync();
         }
 
-        public Task<Guid> UpdateFileAsync(UpdateMediaItemServiceModel serviceModel)
+        public async Task<MediaItemVerionsByIdServiceModel> GetMediaItemVerionsByIdAsync(GetMediaItemsByIdServiceModel model)
         {
-            throw new NotImplementedException();
+            var mediaItemVersions = this.context.MediaItemVersions
+                .Where(x => x.MediaItemId == model.Id.Value)
+                .Select(x => new MediaItemServiceModel
+                {
+                    Id = x.Id,
+                    Filename = x.Filename,
+                    Extension = x.Extension,
+                    MimeType = x.MimeType,
+                    Size = x.Size,
+                    MediaItemId = x.MediaItemId,
+                    Name = x.Translations.FirstOrDefault(x => x.Language == model.Language).Name,
+                    Description = x.Translations.FirstOrDefault(x => x.Language == model.Language).Description,
+                    LastModifiedDate = x.LastModifiedDate,
+                    CreatedDate = x.CreatedDate,
+                });
+
+            if (mediaItemVersions.OrEmptyIfNull().Any())
+            {
+                var mediaItems = new MediaItemVerionsByIdServiceModel
+                {
+                    Id = model.Id.Value,
+                    Name = mediaItemVersions.FirstOrDefault().Name,
+                    Description = mediaItemVersions.FirstOrDefault().Description,
+                    Versions = mediaItemVersions
+                };
+
+                return mediaItems;
+            }
+
+            return default;
+        }
+
+        public async Task UpdateMediaItemVersionAsync(UpdateMediaItemVersionServiceModel model)
+        {
+            var mediaVersion = this.context.MediaItemVersions.LastOrDefault(x => x.MediaItemId == model.Id.Value && x.IsActive);
+            if (mediaVersion is not null)
+            {
+                var mediaVersionTranslation = this.context.MediaItemTranslations.LastOrDefault(x => x.MediaItemVersionId == mediaVersion.Id);
+
+                Console.WriteLine(JsonConvert.SerializeObject(mediaVersionTranslation));
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Seller.Web.Shared.Configurations;
 using System;
 using System.Threading.Tasks;
@@ -23,12 +24,13 @@ namespace Seller.Web.Areas.Media.Repositories
             this.settings = settings;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, byte[] file, string filename)
+        public async Task<Guid> SaveAsync(string token, string language, byte[] file, string filename, Guid? id)
         {
             var requestModel = new FileRequestModelBase
             {
                 File = file,
-                Filename = filename
+                Filename = filename,
+                Id = id
             };
 
             var apiRequest = new ApiRequest<FileRequestModelBase>
@@ -39,8 +41,8 @@ namespace Seller.Web.Areas.Media.Repositories
                 EndpointAddress = $"{this.settings.Value.MediaUrl}{ApiConstants.Media.FilesApiEndpoint}"
             };
 
+            Console.WriteLine(token);
             var response = await this.apiClientService.PostMultipartFormAsync<ApiRequest<FileRequestModelBase>, FileRequestModelBase, BaseResponseModel>(apiRequest);
-
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Data.Message, (int)response.StatusCode);

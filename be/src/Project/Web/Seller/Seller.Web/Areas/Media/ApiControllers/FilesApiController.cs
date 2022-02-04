@@ -54,7 +54,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
 
         [HttpPost]
         [DisableRequestSizeLimit]
-        public async Task<IActionResult> Post([FromForm] IFormFile file, List<IFormFile> files)
+        public async Task<IActionResult> Post([FromForm] IFormFile file, List<IFormFile> files, Guid? id)
         {
             if (file == null && (files == null || !files.Any()))
             {
@@ -71,7 +71,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
                         await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                         CultureInfo.CurrentUICulture.Name,
                         ms.ToArray(),
-                        file.FileName);
+                        file.FileName, id);
 
                     var mediaItem = await this.mediaItemsRepository.GetMediaItemAsync(
                         await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
@@ -109,7 +109,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
                             await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                             CultureInfo.CurrentUICulture.Name,
                             ms.ToArray(),
-                            fileItem.FileName);
+                            fileItem.FileName, id);
 
                         var mediaItem = await this.mediaItemsRepository.GetMediaItemAsync(
                             await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),

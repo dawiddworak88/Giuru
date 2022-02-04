@@ -86,7 +86,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(MediaItem.ImageUrl).ToCamelCase(),
+                        Title = nameof(MediaItem.Url).ToCamelCase(),
                         IsPicture = true
                     },
                     new CatalogPropertyViewModel
