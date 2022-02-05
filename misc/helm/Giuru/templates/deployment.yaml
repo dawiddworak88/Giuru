@@ -506,6 +506,8 @@ spec:
           value: {{ .Values.clientUrl }}
         - name: InventoryUrl
           value: {{ .Values.inventoryUrl }}
+        - name: BuyerUrl
+          value: {{ .Values.buyerUrl }}
         - name: ClientId
           value: {{ .Values.sellerWeb.clientId }}
         - name: ClientSecret
