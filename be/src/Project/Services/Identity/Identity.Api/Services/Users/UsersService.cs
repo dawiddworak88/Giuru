@@ -18,6 +18,7 @@ using System.Globalization;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Identity.Api.Services.Users
 {
@@ -84,7 +85,7 @@ namespace Identity.Api.Services.Users
                         ap_headOne = this.accountLocalizer.GetString("ap_headOne").Value,
                         ap_headTwo = this.accountLocalizer.GetString("ap_headTwo").Value,
                         ap_lineOne = this.accountLocalizer.GetString("ap_lineOne").Value,
-                        resetAccountLink = serviceModel.Url + this.linkGenerator.GetPathByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = user.ExpirationId })
+                        resetAccountLink = this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = user.ExpirationId, ReturnUrl = string.IsNullOrWhiteSpace(serviceModel.ReturnUrl) ? null : HttpUtility.UrlEncode(serviceModel.ReturnUrl) }, serviceModel.Scheme, serviceModel.Host)
                     }
                 });
 
@@ -127,7 +128,7 @@ namespace Identity.Api.Services.Users
                     nc_headTwo = this.accountLocalizer.GetString("nc_headTwo").Value,
                     nc_lineOne = this.accountLocalizer.GetString("nc_lineOne").Value,
                     nc_lineTwo = this.accountLocalizer.GetString("nc_lineTwo").Value,
-                    signAccountLink = serviceModel.Url + this.linkGenerator.GetPathByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = userAccount.ExpirationId })
+                    signAccountLink = this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = existingOrganisation.Language, Id = userAccount.ExpirationId, ReturnUrl = string.IsNullOrWhiteSpace(serviceModel.ReturnUrl) ? null : HttpUtility.UrlEncode(serviceModel.ReturnUrl) }, serviceModel.Scheme, serviceModel.Host)
                 }
             });
 

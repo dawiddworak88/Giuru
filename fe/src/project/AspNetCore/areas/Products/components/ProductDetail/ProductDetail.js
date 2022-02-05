@@ -9,6 +9,7 @@ import { ShoppingCart, Done } from "@material-ui/icons";
 import { Context } from "../../../../../../shared/stores/Store";
 import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function ProductDetail(props) {
     const [, dispatch] = useContext(Context);
@@ -59,13 +60,15 @@ function ProductDetail(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(basket)
         };
 
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
@@ -125,11 +128,14 @@ function ProductDetail(props) {
                                         type="number" 
                                         inputProps={{ 
                                             min: 1, 
-                                            step: 1 
+                                            step: 1,
+                                            style: { textAlign: 'center' }
                                         }}
                                         value={quantity} 
                                         onChange={(e) => {
-                                            setQuantity(e.target.value);
+                                            if (e.target.value > 0) {
+                                                setQuantity(e.target.value);
+                                            }
                                         }}
                                         className="quantity-input"
                                     />

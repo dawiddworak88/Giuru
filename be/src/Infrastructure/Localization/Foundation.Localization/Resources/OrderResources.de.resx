@@ -123,6 +123,9 @@
   <data name="AddOrderItem" xml:space="preserve">
     <value>Hinzufügen</value>
   </data>
+  <data name="AddToCart" xml:space="preserve">
+    <value>In den Warenkorb legen</value>
+  </data>
   <data name="BasketDeletedSuccessfully" xml:space="preserve">
     <value>Der Warenkorb wurde erfolgreich geleert</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="FabricsLabel" xml:space="preserve">
     <value>Stoffe</value>
+  </data>
+  <data name="GoToDetails" xml:space="preserve">
+    <value>Zu den Details gehen</value>
   </data>
   <data name="ImportOrder" xml:space="preserve">
     <value>Bestellung importieren</value>

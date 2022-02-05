@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Identity.Api.Areas.Accounts.Controllers
 {
@@ -30,7 +31,7 @@ namespace Identity.Api.Areas.Accounts.Controllers
             var componentModel = new SetPasswordComponentModel
             {
                 Id = model.Id,
-                ReturnUrl = model.ReturnUrl,
+                ReturnUrl = string.IsNullOrWhiteSpace(model.ReturnUrl) ? null : HttpUtility.UrlDecode(model.ReturnUrl),
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
             };

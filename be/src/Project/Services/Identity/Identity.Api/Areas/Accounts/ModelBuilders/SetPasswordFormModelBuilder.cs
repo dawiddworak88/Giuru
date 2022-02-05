@@ -45,6 +45,8 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 SubmitUrl = this.linkGenerator.GetPathByAction("Index", "IdentityApi", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
                 EmailIsConfirmedText = this.accountLocalizer["EmailIsConfirmedText"],
                 BackToLoginText = this.accountLocalizer["BackToLoginText"],
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                PasswordSetSuccessMessage = this.accountLocalizer.GetString("PasswordUpdated")
             };
 
             if (componentModel.Id.HasValue)
@@ -59,7 +61,6 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 if (user is not null)
                 {
                     viewModel.Id = componentModel.Id.Value;
-                    viewModel.EmailConfirmed = user.EmailConfirmed;
                 }
             }
 

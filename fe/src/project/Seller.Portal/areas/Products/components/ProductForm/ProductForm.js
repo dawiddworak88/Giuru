@@ -9,6 +9,7 @@ import { TextField, Button, CircularProgress, FormControlLabel, Switch } from "@
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import DynamicForm from "../../../../../../shared/components/DynamicForm/DynamicForm";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function ProductForm(props) {
 
@@ -68,7 +69,7 @@ function ProductForm(props) {
 
         const requestOptions = {
             method: "GET",
-            headers: { "Content-Type": "application/json" }
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
         };
 
         const getCategorySchemaUrl = props.getCategorySchemaUrl + "?" + QueryStringSerializer.serialize(payload);
@@ -77,6 +78,8 @@ function ProductForm(props) {
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
@@ -113,7 +116,7 @@ function ProductForm(props) {
         
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(product)
         };
 
@@ -121,6 +124,8 @@ function ProductForm(props) {
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
 

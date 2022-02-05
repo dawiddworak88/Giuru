@@ -196,6 +196,7 @@ services:
       - ClientUrl=http://client-api
       - OrderUrl=http://ordering-api
       - InventoryUrl=http://inventory-api
+      - BuyerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - LogstashUrl=http://logstash:31311

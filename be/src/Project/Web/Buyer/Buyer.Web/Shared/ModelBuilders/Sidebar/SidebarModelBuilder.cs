@@ -37,6 +37,8 @@ namespace Buyer.Web.Shared.ModelBuilders.Sidebar
                 SkuLabel = this.globalLocalizer.GetString("Sku"),
                 LackInformation = this.orderLocalizer.GetString("LackInformation"),
                 ProductsApiUrl = this.linkGenerator.GetPathByAction("GetProductVariants", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                AddToCartLabel = this.orderLocalizer.GetString("AddToCart"),
+                GoToDetailsLabel = this.orderLocalizer.GetString("GoToDetails")
             };
            
             return viewModel;

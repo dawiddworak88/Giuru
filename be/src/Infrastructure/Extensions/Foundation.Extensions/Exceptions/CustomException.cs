@@ -9,11 +9,5 @@ namespace Foundation.Extensions.Exceptions
         {
             this.Data.Add(FilterConstants.StatusCodeKeyName, statusCode);
         }
-
-        public CustomException(string message, int statusCode, string redirectUrl) : base(message)
-        {
-            this.Data.Add(FilterConstants.StatusCodeKeyName, statusCode);
-            this.Data.Add(FilterConstants.RedirectUrlKeyName, redirectUrl);
-        }
     }
 }

@@ -151,25 +151,25 @@
     <value>Confirm and set a password</value>
   </data>
   <data name="nc_headOne" xml:space="preserve">
-    <value>NEW CUSTOMER ACCOUNT</value>
+    <value>NEW CLIENT ACCOUNT</value>
   </data>
   <data name="nc_headTwo" xml:space="preserve">
-    <value>Welcome to our team!</value>
+    <value>Welcome to our Team</value>
   </data>
   <data name="nc_lineOne" xml:space="preserve">
-    <value>We have created a customer account for you, which will be used on our B2B platform primarily for easier cooperation between us. By enabling faster ordering and status tracking.</value>
+    <value>Welcome on board of our B2B platform. We have created an account for you. You will get an early access to our latest and greatest products and marketing materials. The platform will enable you to placer orders faster and track their statuses.</value>
   </data>
   <data name="nc_lineTwo" xml:space="preserve">
-    <value>To finish creating a new account. Please go to the link below to verify and complete your data.</value>
+    <value>Go to the link below to verify and complete your data.</value>
   </data>
   <data name="nc_preHeader" xml:space="preserve">
-    <value>We have created a customer account for you, which will be used on our B2B platform primarily for easier cooperation between us.</value>
+    <value>We have created a client account for you.</value>
   </data>
   <data name="nc_subject" xml:space="preserve">
-    <value>We have created a new customer account</value>
+    <value>We have created an account for you on our B2B Platform</value>
   </data>
   <data name="PasswordUpdated" xml:space="preserve">
-    <value>Password has been successfully set</value>
+    <value>Password has been set successfully</value>
   </data>
   <data name="SetPassword" xml:space="preserve">
     <value>Set password</value>

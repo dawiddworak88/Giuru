@@ -9,6 +9,7 @@ import QueryStringSerializer from "../../../../../shared/helpers/serializers/Que
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import { Context } from "../../../../../shared/stores/Store";
 import {ShoppingCart} from '@material-ui/icons';
+import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function Header(props) {
 
@@ -43,7 +44,7 @@ function Header(props) {
 
             const requestOptions = {
                 method: "GET",
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
             };
 
             const url = props.getSuggestionsUrl + "?" + QueryStringSerializer.serialize(searchParameters);
@@ -51,6 +52,8 @@ function Header(props) {
             return fetch(url, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
 

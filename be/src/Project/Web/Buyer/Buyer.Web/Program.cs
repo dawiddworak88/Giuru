@@ -16,6 +16,7 @@ using Serilog;
 using Serilog.Sinks.Logz.Io;
 using Buyer.Web.Areas.Orders.DependencyInjection;
 using Microsoft.AspNetCore.Http;
+using Foundation.Extensions.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,7 +65,10 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
 });
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(typeof(HttpWebGlobalExceptionFilter));
+}).AddNewtonsoftJson();
 
 builder.Services.RegisterClientAccountDependencies(builder.Configuration);
 

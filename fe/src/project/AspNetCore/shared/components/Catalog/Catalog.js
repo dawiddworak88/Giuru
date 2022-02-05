@@ -10,6 +10,7 @@ import { TablePagination, Button, TextField } from "@material-ui/core";
 import CatalogConstants from "./CatalogConstants";
 import { ShoppingCart } from "@material-ui/icons";
 import Sidebar from "../Sidebar/Sidebar";
+import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function Catalog(props) {
     const [, dispatch] = useContext(Context);
@@ -43,7 +44,7 @@ function Catalog(props) {
 
         const requestOptions = {
             method: "GET",
-            headers: { "Content-Type": "application/json" }
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
         };
 
         const url = props.productsApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
@@ -51,6 +52,8 @@ function Catalog(props) {
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
 
@@ -101,13 +104,15 @@ function Catalog(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(basket)
         };
 
         fetch(props.updateBasketUrl, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
@@ -132,15 +137,17 @@ function Catalog(props) {
     };
 
     const onQuantityChange = (id) => (e) => {
-        const itemQuantityIndex = quantities.findIndex(x => x.id === id);
-        let prevQuantities = [...quantities];
+        if (e.target.value > 0) {
+            const itemQuantityIndex = quantities.findIndex(x => x.id === id);
+            let prevQuantities = [...quantities];
 
-        let item = prevQuantities.find(x => x.id === id);
-        item.quantity = parseInt(e.target.value);
+            let item = prevQuantities.find(x => x.id === id);
+            item.quantity = parseInt(e.target.value);
 
-        prevQuantities[itemQuantityIndex] = item;
+            prevQuantities[itemQuantityIndex] = item;
 
-        setQuantities(prevQuantities)
+            setQuantities(prevQuantities)
+        }
     }
 
     useEffect(() => {
@@ -178,7 +185,11 @@ function Catalog(props) {
                                 let fabrics = null;
                                 if (item.productAttributes.length > 0) {
                                     fabrics = item.productAttributes.find(x => x.key === "primaryFabrics") ? item.productAttributes.find(x => x.key === "primaryFabrics").value : "";
-                                    fabrics += item.productAttributes.find(x => x.key === "secondaryFabrics") ? item.productAttributes.find(x => x.key === "secondaryFabrics").value : "";
+                                    var secondaryFabrics = item.productAttributes.find(x => x.key === "secondaryFabrics") ? item.productAttributes.find(x => x.key === "secondaryFabrics").value : "";
+
+                                    if (secondaryFabrics) {
+                                        fabrics += ", " + secondaryFabrics;
+                                    }
                                 }
 
                                 return (
@@ -215,14 +226,15 @@ function Catalog(props) {
                                             {props.isLoggedIn &&
                                                 <div className="catalog-item__add-to-cart-button-container">
                                                     {props.showAddToCartButton ? (
-                                                        <div className="row">
+                                                        <div className="row is-flex is-flex-centered">
                                                             <TextField 
                                                                 id={item.id} 
                                                                 name="quantity" 
                                                                 type="number" 
                                                                 inputProps={{ 
                                                                     min: 1, 
-                                                                    step: 1 
+                                                                    step: 1,
+                                                                    style: { textAlign: 'center' }
                                                                 }}
                                                                 value={quantity} 
                                                                 onChange={onQuantityChange(item.id)}

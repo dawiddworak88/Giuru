@@ -2,7 +2,6 @@
 using Identity.Api.Configurations;
 using Identity.Api.Infrastructure.Accounts.Entities;
 using Identity.Api.Services.Organisations;
-using Identity.Api.ServicesModels.Organisations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -39,7 +38,7 @@ namespace Identity.Api.Areas.Accounts.Services.UserServices
         {
             var user = await this.userManager.FindByEmailAsync(email);
 
-            if (user != null)
+            if (user is not null && user.EmailConfirmed)
             {
                 if (clientId == this.options.Value.SellerClientId.ToString() && !await this.organisationService.IsSellerAsync(user.OrganisationId))
                 {
