@@ -10,5 +10,7 @@
         public string SkuLabel { get; set; }
         public string FabricsLabel { get; set; }
         public string ProductsApiUrl { get; set; }
+        public string AddToCartLabel { get; set; }
+        public string GoToDetailsLabel { get; set; }
     }
 }

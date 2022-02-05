@@ -11,6 +11,9 @@ import { Context } from "../../../../../shared/stores/Store";
 import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
 
 const Sidebar = (props) => {
+
+    console.log(props);
+
     const [state, dispatch] = useContext(Context);
     const [productVariants, setProductVariants] = useState([]);
     const [quantities, setQuantities] = useState([]);
@@ -85,15 +88,17 @@ const Sidebar = (props) => {
     }
 
     const onQuantityChange = (id) => (e) => {
-        const itemQuantityIndex = quantities.findIndex(x => x.id === id);
-        let prevQuantities = [...quantities];
+        if (e.target.value > 0) {
+            const itemQuantityIndex = quantities.findIndex(x => x.id === id);
+            let prevQuantities = [...quantities];
 
-        let item = prevQuantities.find(x => x.id === id);
-        item.quantity = parseInt(e.target.value);
+            let item = prevQuantities.find(x => x.id === id);
+            item.quantity = parseInt(e.target.value);
 
-        prevQuantities[itemQuantityIndex] = item;
+            prevQuantities[itemQuantityIndex] = item;
 
-        setQuantities(prevQuantities)
+            setQuantities(prevQuantities)
+        }
     }
 
     useEffect(() => {
@@ -128,7 +133,10 @@ const Sidebar = (props) => {
                                 let fabrics = labels.lackInformation;
                                 if (carouselItem.attributes.length > 0) {
                                     fabrics = carouselItem.attributes.find(x => x.key === "primaryFabrics") ? carouselItem.attributes.find(x => x.key === "primaryFabrics").value : "";
-                                    fabrics += carouselItem.attributes.find(x => x.key === "secondaryFabrics") ? carouselItem.attributes.find(x => x.key === "secondaryFabrics").value : "";
+                                    var secondaryfabrics = carouselItem.attributes.find(x => x.key === "secondaryFabrics") ? carouselItem.attributes.find(x => x.key === "secondaryFabrics").value : "";
+                                    if (secondaryfabrics) {
+                                        fabrics += ", " + secondaryfabrics;
+                                    }
                                 }
 
                                 let quantity = 1;
@@ -150,22 +158,22 @@ const Sidebar = (props) => {
                                                     <p>{fabrics}</p>
                                                 </div>
                                             </div>
-                                            <div className="sidebar-item__buttons">
-                                                <TextField 
-                                                    id={carouselItem.id} 
-                                                    name="quantity" 
-                                                    type="number" 
-                                                    inputProps={{ 
-                                                        min: 1, 
-                                                        step: 1 
-                                                    }}
-                                                    value={quantity} 
-                                                    onChange={onQuantityChange(carouselItem.id)}
-                                                    className="quantity-input"
-                                                />
-                                                <Button type="text" color="primary" variant="contained" className="cart-button" onClick={() => handleAddOrderItemClick(carouselItem)}><AddShoppingCart /></Button>
-                                                <Button type="text" color="primary" variant="contained" className="cart-button" onClick={variantDetails(carouselItem)}><ArrowRight /></Button>
-                                            </div>
+                                        </div>
+                                        <div className="sidebar-item__buttons">
+                                            <TextField 
+                                                id={carouselItem.id} 
+                                                name="quantity" 
+                                                type="number" 
+                                                inputProps={{ 
+                                                    min: 1, 
+                                                    step: 1,
+                                                    style: { textAlign: 'center' }
+                                                }}
+                                                value={quantity} 
+                                                onChange={onQuantityChange(carouselItem.id)}
+                                                className="quantity-input" />
+                                            <Button title={props.labels.addToCartLabel} aria-label={props.labels.addToCartLabel} type="text" color="primary" variant="contained" className="cart-button" onClick={() => handleAddOrderItemClick(carouselItem)}><AddShoppingCart /></Button>
+                                            <Button title={props.labels.goToDetailsLabel} aria-label={props.labels.goToDetailsLabel} type="text" color="primary" variant="contained" className="cart-button" onClick={variantDetails(carouselItem)}><ArrowRight /></Button>
                                         </div>
                                         <hr className="divider"></hr>
                                     </ListItem>

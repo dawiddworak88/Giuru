@@ -128,11 +128,14 @@ function ProductDetail(props) {
                                         type="number" 
                                         inputProps={{ 
                                             min: 1, 
-                                            step: 1 
+                                            step: 1,
+                                            style: { textAlign: 'center' }
                                         }}
                                         value={quantity} 
                                         onChange={(e) => {
-                                            setQuantity(e.target.value);
+                                            if (e.target.value > 0) {
+                                                setQuantity(e.target.value);
+                                            }
                                         }}
                                         className="quantity-input"
                                     />
