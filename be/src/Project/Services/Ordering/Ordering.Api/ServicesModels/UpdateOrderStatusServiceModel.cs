@@ -7,5 +7,6 @@ namespace Ordering.Api.ServicesModels
     {
         public Guid? OrderId { get; set; }
         public Guid? OrderStatusId { get; set; }
+        public bool IsSeller { get; set; }
     }
 }
