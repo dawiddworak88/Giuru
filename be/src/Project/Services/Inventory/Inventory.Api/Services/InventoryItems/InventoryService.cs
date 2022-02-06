@@ -371,10 +371,12 @@ namespace Inventory.Api.Services
             if (inventoryProduct != null)
             {
                 var productQuantity = inventoryProduct.Quantity + BookedQuantity;
+
                 if (productQuantity < 0)
                 {
-                    throw new CustomException(this.inventortLocalizer.GetString("NullAvailability"), (int)HttpStatusCode.BadRequest);
+                    productQuantity = 0;
                 }
+
                 inventoryProduct.Quantity = productQuantity;
                 inventoryProduct.AvailableQuantity = productQuantity;
                 inventoryProduct.LastModifiedDate = DateTime.UtcNow;

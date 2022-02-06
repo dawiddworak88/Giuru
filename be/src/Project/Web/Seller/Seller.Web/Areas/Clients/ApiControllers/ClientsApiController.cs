@@ -41,7 +41,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 searchTerm,
                 pageIndex,
                 itemsPerPage,
-                $"{nameof(Client.CreatedDate)}");
+                $"{nameof(Client.CreatedDate)} desc");
 
             return this.StatusCode((int)HttpStatusCode.OK, clients);
         }
