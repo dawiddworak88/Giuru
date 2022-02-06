@@ -9,8 +9,6 @@ using Foundation.GenericRepository.Paginations;
 using System.Threading.Tasks;
 using Foundation.PageContent.ComponentModels;
 using Buyer.Web.Shared.ViewModels.Sidebar;
-using Microsoft.Extensions.Localization;
-using Foundation.Localization;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Foundation.Extensions.ExtensionMethods;
 using System.Linq;
