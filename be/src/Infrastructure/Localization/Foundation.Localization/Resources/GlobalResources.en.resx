@@ -412,7 +412,7 @@
     <value>Warehouses</value>
   </data>
   <data name="AvailableProducts" xml:space="preserve">
-    <value>Available Products</value>
+    <value>Available products</value>
   </data>
   <data name="EnterConfirmPasswordText" xml:space="preserve">
     <value>Confirm password</value>

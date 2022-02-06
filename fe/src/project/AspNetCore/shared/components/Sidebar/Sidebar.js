@@ -12,8 +12,6 @@ import AuthenticationHelper from "../../../../../shared/helpers/globals/Authenti
 
 const Sidebar = (props) => {
 
-    console.log(props);
-
     const [state, dispatch] = useContext(Context);
     const [productVariants, setProductVariants] = useState([]);
     const [quantities, setQuantities] = useState([]);
@@ -38,7 +36,7 @@ const Sidebar = (props) => {
     }
 
     const fetchProductVariants = () => {
-        if (productVariants.length === 0){
+        if (productVariants.length === 0) {
             const requestOptions = {
                 method: "GET",
                 headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
@@ -102,8 +100,13 @@ const Sidebar = (props) => {
     }
 
     useEffect(() => {
+        
         if (isOpen){
             fetchProductVariants();
+        }
+        else {
+            setProductVariants(() => []);
+            setQuantities(() => []);
         }
     }, [isOpen, productId])
 

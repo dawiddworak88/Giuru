@@ -177,6 +177,9 @@
   <data name="MoreInfoLabel" xml:space="preserve">
     <value>Uwagi:</value>
   </data>
+  <data name="MyOrders" xml:space="preserve">
+    <value>Moje zamówienia</value>
+  </data>
   <data name="NameLabel" xml:space="preserve">
     <value>Nazwa:</value>
   </data>

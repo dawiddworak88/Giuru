@@ -51,13 +51,13 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
             {
                 links.Add(new LinkViewModel
                 {
-                    Text = this.orderLocalizer.GetString("Orders").Value,
+                    Text = this.orderLocalizer.GetString("MyOrders").Value,
                     Url = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
                 });
 
                 links.Add(new LinkViewModel
                 {
-                    Text = this.orderLocalizer.GetString("NewOrder").Value,
+                    Text = this.orderLocalizer.GetString("PlaceOrder").Value,
                     Url = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
                 });
             }
@@ -74,7 +74,7 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
 
                 var brandZoneLink = new LinkViewModel
                 { 
-                    Text = this.globalLocalizer.GetString("Catalog").Value,
+                    Text = this.globalLocalizer.GetString("Products").Value,
                     Url = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = this.configuration.Value.OrganisationId })
                 };
 

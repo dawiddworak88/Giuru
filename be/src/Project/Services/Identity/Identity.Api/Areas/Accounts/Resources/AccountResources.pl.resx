@@ -154,16 +154,16 @@
     <value>NOWE KONTO KLIENTA</value>
   </data>
   <data name="nc_headTwo" xml:space="preserve">
-    <value>Witajcie w naszej drużynie!</value>
+    <value>Witajcie w naszej drużynie</value>
   </data>
   <data name="nc_lineOne" xml:space="preserve">
-    <value>Utworzyliśmy dla Was konto klienta, które posłuży na naszej platformie B2B przede wszystkim do łatwiejszej współpracy pomiędzy nami. Poprzez umożliwienie szybszego składania zamówień zarówno jak śledzenia statusów.</value>
+    <value>Utworzyliśmy dla Państwa konto klienta, które pozwoli Państwu szybko składać zamówienia o każdej porze dnia i nocy, śledzić statusy, zdobywać informacje o nowych produktach i materiałach marketingowych.</value>
   </data>
   <data name="nc_lineTwo" xml:space="preserve">
-    <value>Aby zakończyć tworzenie nowego konta. Prosimy o przejście na poniższy link w celach dokonania weryfikacji i uzupełnienia przez Państwa danych.</value>
+    <value>Prosimy o przejście na poniższy link w celach dokonania weryfikacji i uzupełnienia danych.</value>
   </data>
   <data name="nc_preHeader" xml:space="preserve">
-    <value>Utworzyliśmy dla Was konto klienta, które posłuży na naszej platformie B2B przede wszystkim do łatwiejszej współpracy pomiędzy nami.</value>
+    <value>Utworzyliśmy dla Państwa konto klienta, które pozwoli Państwu szybko składać zamówienia o każdej porze dnia i nocy, śledzić statusy, zdobywać informacje o nowych produktach i materiałach marketingowych.</value>
   </data>
   <data name="nc_subject" xml:space="preserve">
     <value>Utworzyliśmy nowe konto klienta</value>
