@@ -135,9 +135,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     viewModel.RestockableInDaysLabel = this.inventoryResources.GetString("RestockableInDaysLabel");
                 }
 
-                if (componentModel.IsAuthenticated)
+                if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
                 {
                     var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
+
                     if (existingBasket != null)
                     {
                         var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);

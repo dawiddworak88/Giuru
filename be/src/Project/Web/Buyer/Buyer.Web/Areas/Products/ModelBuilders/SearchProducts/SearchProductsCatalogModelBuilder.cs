@@ -14,8 +14,6 @@ using Foundation.Extensions.ExtensionMethods;
 using System.Linq;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using System.Globalization;
-using System;
-using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 {
@@ -57,9 +55,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 ProductConstants.ProductsCatalogPaginationPageSize,
                 componentModel.Token);
 
-            if (componentModel.IsAuthenticated)
+            if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
             {
                 var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
+
                 if (existingBasket != null)
                 {
                     var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);

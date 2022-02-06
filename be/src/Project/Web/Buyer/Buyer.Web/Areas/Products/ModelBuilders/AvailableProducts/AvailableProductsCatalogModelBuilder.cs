@@ -68,9 +68,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             viewModel.ItemsPerPage = AvailableProductsConstants.Pagination.ItemsPerPage;
             viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
 
-            if (componentModel.IsAuthenticated)
+            if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
             {
                 var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
+
                 if (existingBasket != null)
                 {
                     var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);

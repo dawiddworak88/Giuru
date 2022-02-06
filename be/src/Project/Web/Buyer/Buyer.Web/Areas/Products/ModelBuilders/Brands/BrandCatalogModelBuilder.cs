@@ -57,7 +57,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
             viewModel.PagedItems = await this.productsService.GetProductsAsync(
                 null, null, componentModel.Id, componentModel.Language, null, PaginationConstants.DefaultPageIndex, ProductConstants.ProductsCatalogPaginationPageSize, componentModel.Token);
 
-            if (componentModel.IsAuthenticated)
+            if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
             {
                 var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
                 if (existingBasket != null)

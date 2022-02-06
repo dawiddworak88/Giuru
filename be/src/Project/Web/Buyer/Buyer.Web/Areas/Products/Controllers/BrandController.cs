@@ -1,8 +1,10 @@
 ﻿using Buyer.Web.Areas.Products.ViewModels.Brands;
 using Buyer.Web.Shared.Definitions.Basket;
+using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;
@@ -28,7 +30,8 @@ namespace Buyer.Web.Areas.Brands.Controllers
                 Id = id,
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
-                Name = this.User.Identity.Name
+                Name = this.User.Identity.Name,
+                Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName)
             };
 
             if (reqCookie != null)

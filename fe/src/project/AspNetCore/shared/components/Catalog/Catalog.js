@@ -252,7 +252,6 @@ function Catalog(props) {
                                                 </div>
                                             }
                                         </div>
-                                        
                                     </div>
                                 )
                             })}

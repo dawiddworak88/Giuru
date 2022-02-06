@@ -17,8 +17,6 @@ using System.Linq;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using System.Globalization;
 using Microsoft.AspNetCore.Routing;
-using System;
-using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
 {
@@ -28,7 +26,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder;
         private readonly IProductsService productsService;
         private readonly ICategoryRepository categoryRepository;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IBasketRepository basketRepository;
         private readonly LinkGenerator linkGenerator;
 
@@ -36,7 +33,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
             ICatalogModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel> catalogModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
             IProductsService productsService,
-            IStringLocalizer<GlobalResources> globalLocalizer,
             IBasketRepository basketRepository,
             LinkGenerator linkGenerator,
             ICategoryRepository categoryRepository)
@@ -46,7 +42,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
             this.sidebarModelBuilder = sidebarModelBuilder;
             this.productsService = productsService;
             this.categoryRepository = categoryRepository;
-            this.globalLocalizer = globalLocalizer;
             this.linkGenerator = linkGenerator;
         }
 
@@ -71,9 +66,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
                     ProductConstants.ProductsCatalogPaginationPageSize,
                     componentModel.Token);
 
-                if (componentModel.IsAuthenticated)
+                if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
                 {
                     var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId.Value);
+                    
                     if (existingBasket != null)
                     {
                         var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);

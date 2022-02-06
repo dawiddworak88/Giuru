@@ -74,28 +74,32 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 ClearBasketUrl = this.linkGenerator.GetPathByAction("Delete", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
 
-            var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
-            if (existingBasket != null)
+            if (componentModel.BasketId.HasValue)
             {
-                var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
-                if (productIds.OrEmptyIfNull().Any())
-                {
-                    var basketResponseModel = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
-                    {
-                        ProductId = x.ProductId,
-                        ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
-                        Name = x.ProductName,
-                        Sku = x.ProductSku,
-                        Quantity = x.Quantity,
-                        ExternalReference = x.ExternalReference,
-                        ImageSrc = x.PictureUrl,
-                        ImageAlt = x.ProductName,
-                        DeliveryFrom = x.DeliveryFrom,
-                        DeliveryTo = x.DeliveryTo,
-                        MoreInfo = x.MoreInfo
-                    });
+                var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
 
-                    viewModel.OrderItems = basketResponseModel;
+                if (existingBasket != null)
+                {
+                    var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
+                    if (productIds.OrEmptyIfNull().Any())
+                    {
+                        var basketResponseModel = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
+                        {
+                            ProductId = x.ProductId,
+                            ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
+                            Name = x.ProductName,
+                            Sku = x.ProductSku,
+                            Quantity = x.Quantity,
+                            ExternalReference = x.ExternalReference,
+                            ImageSrc = x.PictureUrl,
+                            ImageAlt = x.ProductName,
+                            DeliveryFrom = x.DeliveryFrom,
+                            DeliveryTo = x.DeliveryTo,
+                            MoreInfo = x.MoreInfo
+                        });
+
+                        viewModel.OrderItems = basketResponseModel;
+                    }
                 }
             }
 
