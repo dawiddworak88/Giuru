@@ -5,7 +5,6 @@ using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Seller.Web.Shared.Configurations;
 using System;
 using System.Threading.Tasks;
