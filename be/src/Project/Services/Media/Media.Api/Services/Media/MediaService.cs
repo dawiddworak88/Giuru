@@ -116,11 +116,14 @@ namespace Media.Api.Services.Media
                 };
 
                 this.context.MediaItemVersions.Add(mediaItemVersion.FillCommonProperties());
+                
+                var translation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == existingMediaItemVersion.FirstOrDefault().Id);
                 var mediaItemTranslation = new MediaItemTranslation
                 {
                     MediaItemVersionId = mediaItemVersion.Id,
                     Language = serviceModel.Language,
-                    Name = Path.GetFileNameWithoutExtension(serviceModel.File.FileName)
+                    Name = translation.Name,
+                    Description = translation.Description,
                 };
 
                 this.context.MediaItemTranslations.Add(mediaItemTranslation.FillCommonProperties());
@@ -359,12 +362,15 @@ namespace Media.Api.Services.Media
 
         public async Task UpdateMediaItemVersionAsync(UpdateMediaItemVersionServiceModel model)
         {
-            var mediaVersion = this.context.MediaItemVersions.LastOrDefault(x => x.MediaItemId == model.Id.Value && x.IsActive);
+            var mediaVersion = this.context.MediaItemVersions.FirstOrDefault(x => x.MediaItemId == model.Id.Value && x.IsActive);
             if (mediaVersion is not null)
             {
-                var mediaVersionTranslation = this.context.MediaItemTranslations.LastOrDefault(x => x.MediaItemVersionId == mediaVersion.Id);
+                var mediaVersionTranslation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaVersion.Id);
 
-                Console.WriteLine(JsonConvert.SerializeObject(mediaVersionTranslation));
+                mediaVersionTranslation.Name = model.Name;
+                mediaVersionTranslation.Description = model.Description;
+
+                await this.context.SaveChangesAsync();
             }
         }
     }

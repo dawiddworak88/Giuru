@@ -2,8 +2,7 @@ import React, {useState, useContext} from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types"; 
 import {
-    TextField, Button,  CircularProgress, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, TablePagination, Fab
+    TextField, Button,  CircularProgress
 } from "@material-ui/core";
 import {
     PictureAsPdf, Attachment
@@ -13,17 +12,18 @@ import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { Context } from "../../../../../../shared/stores/Store";
 
 const EditForm = (props) => {
+    console.log(props)
     const [state, dispatch] = useContext(Context);
+    const [images, setImages] = useState([]);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         versions: { value: props.versions ? props.versions : null, error: ""},
-        images: { value: props.images ? props.images : null, error: "" },
         name: {value: props.name ? props.name : null, error: ""},
         description: {value: props.description ? props.description : null, error: ""}
     };
 
     const stateValidatorSchema = {
-        images: {
+        id: {
             required: {
                 isRequired: true,
                 error: props.imagesRequiredErrorMessage
@@ -61,11 +61,10 @@ const EditForm = (props) => {
     }
 
     const {
-        values, disable, setFieldValue,
-        handleOnChange, handleOnSubmit
-    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
+        values, disable, handleOnChange, handleOnSubmit
+    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
-    const {images, versions, name, description} = values;
+    const {versions, name, description} = values;
     return (
         <section className="section section-small-padding product client-form media-edit">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -117,7 +116,7 @@ const EditForm = (props) => {
                                 dropFilesLabel={props.dropFilesLabel}
                                 dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
                                 files={images}
-                                setFieldValue={setFieldValue}
+                                setFieldValue={({value}) => setImages(value)}
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
                         <div className="field">
