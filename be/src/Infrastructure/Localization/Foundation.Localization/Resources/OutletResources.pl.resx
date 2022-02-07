@@ -117,7 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="NavigateToOutletListText" xml:space="preserve">
+    <value>Powróć do wyprzedaży</value>
+  </data>
   <data name="NewText" xml:space="preserve">
     <value>Nowa wyprzedaż</value>
+  </data>
+  <data name="OrderNameLabel" xml:space="preserve">
+    <value>Numer zamówienia</value>
+  </data>
+  <data name="OrderNameRequiredErrorMessage" xml:space="preserve">
+    <value>Wprowadź numer zamówienia</value>
+  </data>
+  <data name="ProductRequiredErrorMessage" xml:space="preserve">
+    <value>Wybierz produkt</value>
   </data>
 </root>

@@ -20,6 +20,7 @@ import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetP
 import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
 
 // Seller Portal
+import NewOutletPage from "../../src/project/Seller.Portal/areas/Outlet/pages/NewOutletPage/NewOutletPage";
 import OutletPage from "../../src/project/Seller.Portal/areas/Outlet/pages/OutletPage/OutletPage";
 import WarehouseAddPage from "../../src/project/Seller.Portal/areas/Warehouse/pages/WarehouseAddPage/WarehouseAddPage";
 import WarehousePage from "../../src/project/Seller.Portal/areas/Warehouse/pages/WarehousePage/WarehousePage";
@@ -54,6 +55,7 @@ const Components = {
 	SetPasswordPage,
 	ContentPage,
 
+	NewOutletPage,
 	OutletPage,
 	WarehouseAddPage,
 	WarehousePage,

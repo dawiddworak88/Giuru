@@ -14,6 +14,8 @@ namespace Seller.Web.Areas.Outlet.DependencyInjection
         {
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<OutletItem>>, OutletPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OutletPageViewModel>, OutletPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, NewOutletPageViewModel>, NewOutletPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, NewOutletFormViewModel>, NewOutletFormModelBuilder>();
         }
     }
 }

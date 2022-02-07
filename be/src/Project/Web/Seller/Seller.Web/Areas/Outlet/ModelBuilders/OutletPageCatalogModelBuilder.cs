@@ -38,8 +38,8 @@ namespace Seller.Web.Areas.Outlet.ModelBuilders
 
             viewModel.Title = this.globalLocalizer.GetString("Outlet");
             viewModel.NewText = this.outletLocalizer.GetString("NewText");
-            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Warehouse", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Warehouse", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Outlet", new { Area = "Outlet", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Outlet", new { Area = "Outlet", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "WarehousesApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "WarehousesApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });

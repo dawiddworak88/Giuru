@@ -106,11 +106,11 @@ const InventoryAddForm = (props) => {
                                     label={props.selectWarehouseLabel}
                                     onChange={handleOnChange}>
                                         <MenuItem key={0} value={""}>{props.selectWarehouse}</MenuItem>
-                                    {props.warehouses && props.warehouses.map((item, i) => {
-                                        return (
-                                            <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
-                                        );
-                                    })}
+                                        {props.warehouses && props.warehouses.map((item, i) => {
+                                            return (
+                                                <MenuItem key={item.id} value={item.id}>{item.name}</MenuItem>
+                                            );
+                                        })}
                                 </Select>
                                 {errors.warehouseId && dirty.warehouseId && (
                                     <FormHelperText>{errors.warehouseId}</FormHelperText>
