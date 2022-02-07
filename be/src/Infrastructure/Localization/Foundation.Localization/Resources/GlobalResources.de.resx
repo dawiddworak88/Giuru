@@ -441,4 +441,7 @@
   <data name="ErrorOccurred" xml:space="preserve">
     <value>Ein Fehler ist aufgetreten. Bitte wenden Sie sich an einen Administrator.</value>
   </data>
+  <data name="Outlet" xml:space="preserve">
+    <value>Auslauf</value>
+  </data>
 </root>
