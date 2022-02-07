@@ -17,7 +17,6 @@ using Media.Api.Services.Media;
 using Media.Api.v1.Areas.Media.RequestModels;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
-using Newtonsoft.Json;
 
 namespace Media.Api.v1.Controllers
 {

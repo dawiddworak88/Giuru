@@ -16,7 +16,6 @@ using Foundation.GenericRepository.Predicates;
 using Foundation.Extensions.ExtensionMethods;
 using Media.Api.Definitions;
 using Foundation.GenericRepository.Extensions;
-using Newtonsoft.Json;
 using Foundation.Extensions.Exceptions;
 using System.Net;
 using Microsoft.Extensions.Localization;
@@ -87,7 +86,6 @@ namespace Media.Api.Services.Media
             };
 
             context.MediaItemTranslations.Add(mediaItemTranslation.FillCommonProperties());
-
             context.SaveChanges();
 
             await this.mediaRepository.CreateFileAsync(mediaItemVersion.Id, serviceModel.OrganisationId.ToString(), serviceModel.File, serviceModel.File.FileName);
@@ -342,7 +340,7 @@ namespace Media.Api.Services.Media
                     Description = x.Translations.FirstOrDefault(x => x.Language == model.Language).Description,
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate,
-                });
+                }).OrderByDescending(x => x.CreatedDate);
 
             if (mediaItemVersions.OrEmptyIfNull().Any())
             {
@@ -353,7 +351,7 @@ namespace Media.Api.Services.Media
                     Description = mediaItemVersions.FirstOrDefault().Description,
                     Versions = mediaItemVersions
                 };
-
+                
                 return mediaItems;
             }
 
@@ -369,6 +367,7 @@ namespace Media.Api.Services.Media
 
                 mediaVersionTranslation.Name = model.Name;
                 mediaVersionTranslation.Description = model.Description;
+                mediaVersionTranslation.LastModifiedDate = DateTime.UtcNow;
 
                 await this.context.SaveChangesAsync();
             }

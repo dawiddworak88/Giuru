@@ -41,7 +41,6 @@ namespace Seller.Web.Areas.Media.Repositories
                 EndpointAddress = $"{this.settings.Value.MediaUrl}{ApiConstants.Media.FilesApiEndpoint}"
             };
 
-            Console.WriteLine(token);
             var response = await this.apiClientService.PostMultipartFormAsync<ApiRequest<FileRequestModelBase>, FileRequestModelBase, BaseResponseModel>(apiRequest);
             if (!response.IsSuccessStatusCode)
             {

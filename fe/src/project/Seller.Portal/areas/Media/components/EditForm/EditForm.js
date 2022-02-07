@@ -12,7 +12,6 @@ import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { Context } from "../../../../../../shared/stores/Store";
 
 const EditForm = (props) => {
-    console.log(props)
     const [state, dispatch] = useContext(Context);
     const [images, setImages] = useState([]);
     const stateSchema = {

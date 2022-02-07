@@ -55,7 +55,7 @@ function MediaCloud(props) {
                             toast.error(props.generalErrorMessage);
                         }
                     });
-                }).catch((error) => {
+                }).catch(() => {
                     dispatch({ type: "SET_IS_LOADING", payload: false });
                     toast.error(props.generalErrorMessage);
                 });
