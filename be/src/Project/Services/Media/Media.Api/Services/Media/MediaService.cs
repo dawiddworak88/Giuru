@@ -95,7 +95,7 @@ namespace Media.Api.Services.Media
 
         public async Task<Guid> UpdateFileAsync(UpdateMediaItemServiceModel serviceModel)
         {
-            var existingMediaItemVersion = this.context.MediaItemVersions.Where(x => x.MediaItemId == serviceModel.Id.Value && x.IsActive);
+            var existingMediaItemVersion = this.context.MediaItemVersions.Where(x => x.MediaItemId == serviceModel.Id.Value && x.IsActive).OrderBy(o => o.Version);
             if (existingMediaItemVersion is not null)
             {
                 var checksum = this.checksumService.GetMd5(serviceModel.File);
@@ -115,18 +115,22 @@ namespace Media.Api.Services.Media
 
                 this.context.MediaItemVersions.Add(mediaItemVersion.FillCommonProperties());
                 
-                var translation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == existingMediaItemVersion.FirstOrDefault().Id);
-                var mediaItemTranslation = new MediaItemTranslation
+                var translations = this.context.MediaItemTranslations.Where(x => x.MediaItemVersionId == existingMediaItemVersion.LastOrDefault().Id);
+                foreach(var translation in translations)
                 {
-                    MediaItemVersionId = mediaItemVersion.Id,
-                    Language = serviceModel.Language,
-                    Name = translation.Name,
-                    Description = translation.Description,
-                };
+                    var mediaItemTranslation = new MediaItemTranslation
+                    {
+                        MediaItemVersionId = mediaItemVersion.Id,
+                        Language = translation.Language,
+                        Name = translation.Name,
+                        Description = translation.Description,
+                        Metadata = translation.Metadata,
+                    };
 
-                this.context.MediaItemTranslations.Add(mediaItemTranslation.FillCommonProperties());
+                    this.context.MediaItemTranslations.Add(mediaItemTranslation.FillCommonProperties());
+                }
+
                 await this.context.SaveChangesAsync();
-
                 await this.mediaRepository.CreateFileAsync(mediaItemVersion.Id, serviceModel.OrganisationId.ToString(), serviceModel.File, serviceModel.File.FileName);
             }
 
@@ -360,14 +364,28 @@ namespace Media.Api.Services.Media
 
         public async Task UpdateMediaItemVersionAsync(UpdateMediaItemVersionServiceModel model)
         {
-            var mediaVersion = this.context.MediaItemVersions.FirstOrDefault(x => x.MediaItemId == model.Id.Value && x.IsActive);
+            var mediaVersion = this.context.MediaItemVersions.OrderBy(o => o.Version).LastOrDefault(x => x.MediaItemId == model.Id.Value && x.IsActive);
             if (mediaVersion is not null)
             {
-                var mediaVersionTranslation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaVersion.Id);
+                var mediaVersionTranslation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaVersion.Id && x.Language == model.Language);
+                if (mediaVersionTranslation is not null)
+                {
+                    mediaVersionTranslation.Name = model.Name;
+                    mediaVersionTranslation.Description = model.Description;
+                    mediaVersionTranslation.LastModifiedDate = DateTime.UtcNow;
+                    mediaVersion.LastModifiedDate = DateTime.UtcNow;
+                } else
+                {
+                    var mediaItemTranslation = new MediaItemTranslation
+                    {
+                        MediaItemVersionId = mediaVersion.Id,
+                        Name = model.Name,
+                        Description = model.Description,
+                        Language = model.Language,
+                    };
 
-                mediaVersionTranslation.Name = model.Name;
-                mediaVersionTranslation.Description = model.Description;
-                mediaVersionTranslation.LastModifiedDate = DateTime.UtcNow;
+                    this.context.Add(mediaItemTranslation.FillCommonProperties());
+                }
 
                 await this.context.SaveChangesAsync();
             }

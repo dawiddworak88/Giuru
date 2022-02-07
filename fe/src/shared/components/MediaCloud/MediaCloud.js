@@ -9,7 +9,6 @@ import IconConstants from "../../constants/IconConstants";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 function MediaCloud(props) {
-
     const [, dispatch] = useContext(Context);
     const { setFieldValue, files, mediaId } = props;
 

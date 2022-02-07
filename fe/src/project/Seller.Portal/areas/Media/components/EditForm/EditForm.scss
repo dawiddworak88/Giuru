@@ -14,7 +14,8 @@
     &__versions {
         display: flex;
         max-height: 12.5rem;
-        overflow: auto;
+        overflow-x: auto;
+        overflow-y: hidden;
         padding: 0.5rem 0;
 
         .version {

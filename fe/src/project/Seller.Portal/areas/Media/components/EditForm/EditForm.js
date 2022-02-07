@@ -8,15 +8,16 @@ import {
     PictureAsPdf, Attachment
 } from "@material-ui/icons";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { Context } from "../../../../../../shared/stores/Store";
 
 const EditForm = (props) => {
     const [state, dispatch] = useContext(Context);
+    const [versions,] = useState(props.versions);
     const [images, setImages] = useState([]);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
-        versions: { value: props.versions ? props.versions : null, error: ""},
         name: {value: props.name ? props.name : null, error: ""},
         description: {value: props.description ? props.description : null, error: ""}
     };
@@ -59,11 +60,15 @@ const EditForm = (props) => {
             });
     }
 
+    const mediaHandle = (url) => {
+        NavigationHelper.redirect(url)
+    }
+
     const {
         values, disable, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
-    const {versions, name, description} = values;
+    const {name, description} = values;
     return (
         <section className="section section-small-padding product client-form media-edit">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -74,6 +79,7 @@ const EditForm = (props) => {
                             <h2>Ostatnie wersje pliku</h2>
                             <div className="media-edit__versions">
                                 {versions.map((version) => {
+                                    const url = version.url;
                                     if (version.mimeType.includes("pdf")) {
                                         return (
                                             <div className="version icon-version" key={version.id}>
@@ -84,7 +90,7 @@ const EditForm = (props) => {
                                         )
                                     } else if (version.mimeType.startsWith("image")) {
                                         return (
-                                            <div className="version" key={version.id}>
+                                            <div className="version" key={version.id} onClick={() => mediaHandle(url)}>
                                                 <img src={version.url} alt={version.filename} />
                                             </div>
                                         )
