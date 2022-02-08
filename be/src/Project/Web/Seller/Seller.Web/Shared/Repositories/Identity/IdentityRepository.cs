@@ -8,13 +8,11 @@ using Seller.Web.Shared.ApiRequestModels;
 using Seller.Web.Shared.Configurations;
 using System;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace Seller.Web.Shared.Repositories.Identity
 {
     public class IdentityRepository : IIdentityRepository
     {
-
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
 
