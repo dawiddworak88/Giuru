@@ -13,7 +13,6 @@ namespace Catalog.Api.v1.Products.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Produces("application/json")]
     [AllowAnonymous]
     [ApiController]
     public class ProductSuggestionsController : BaseApiController
