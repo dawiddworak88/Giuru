@@ -14,5 +14,7 @@ namespace Inventory.Api.Infrastructure.Entities
 
         [Required]
         public string ProductSku { get; set; }
+
+        public int? Quantity { get; set; }
     }
 }

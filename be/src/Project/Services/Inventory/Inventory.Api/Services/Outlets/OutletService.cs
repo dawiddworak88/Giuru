@@ -36,33 +36,30 @@ namespace Inventory.Api.Services.Outlets
                 ProductId = x.ProductId,
                 ProductName = x.ProductName,
                 ProductSku = x.ProductSku,
+                Quantity = x.Quantity,
             });
 
             foreach (var item in model.OutletItems.OrEmptyIfNull())
             {
                 var outletItem = outletItems.FirstOrDefault(x => x.ProductId == item.ProductId);
-                if (outletItem is null)
+                if (outletItem is not null)
+                {
+                    outletItem.ProductId = item.ProductId;
+                    outletItem.ProductName = item.ProductName;
+                    outletItem.Quantity = item.Quantity;
+                    outletItem.LastModifiedDate = DateTime.UtcNow;
+                } else
                 {
                     var outlet = new Outlet
                     {
                         ProductId = item.ProductId,
                         ProductName = item.ProductName,
                         ProductSku = item.ProductSku,
+                        Quantity = item.Quantity
                     };
 
                     this.context.Outlet.Add(outlet.FillCommonProperties());
                 }
-                else
-                {
-                    foreach (var item2 in outletItems)
-                    {
-                        if (item2.ProductId.Value != item.ProductId)
-                        {
-                            Console.WriteLine("TAKI ITEM NIE ZOSTAŁ PRZESŁANY");
-                        }
-                    }
-                }
-
             }
 
             await this.context.SaveChangesAsync();
@@ -82,6 +79,7 @@ namespace Inventory.Api.Services.Outlets
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
                     ProductSku = x.ProductSku,
+                    Quantity= x.Quantity,
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
                 });
@@ -133,6 +131,7 @@ namespace Inventory.Api.Services.Outlets
                                  ProductId = o.ProductId,
                                  ProductName= o.ProductName,
                                  ProductSku= o.ProductSku,
+                                 Quantity = o.Quantity,
                                  LastModifiedDate = o.LastModifiedDate,
                                  CreatedDate = o.CreatedDate
                              };
@@ -151,6 +150,7 @@ namespace Inventory.Api.Services.Outlets
             outletItem.ProductId = model.ProductId.Value;
             outletItem.ProductName = model.ProductName;
             outletItem.ProductSku = model.ProductSku;
+            outletItem.Quantity = model.Quantity;
             outletItem.LastModifiedDate = DateTime.UtcNow;
 
             await this.context.SaveChangesAsync();

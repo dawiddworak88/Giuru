@@ -60,7 +60,8 @@ namespace Inventory.Api.v1.Controllers
                 {
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
-                    ProductSku = x.ProductSku
+                    ProductSku = x.ProductSku,
+                    Quantity = x.Quantity
                 })
             };
 
@@ -119,6 +120,7 @@ namespace Inventory.Api.v1.Controllers
                     ProductId = request.ProductId,
                     ProductName = request.ProductName,
                     ProductSku = request.ProductSku,
+                    Quantity = request.Quantity
                 };
 
                 var validator = new UpdateOutletModelValidator();
@@ -170,6 +172,7 @@ namespace Inventory.Api.v1.Controllers
                         ProductId = x.ProductId,
                         ProductName = x.ProductName,
                         ProductSku = x.ProductSku,
+                        Quantity = x.Quantity,
                         LastModifiedDate = x.LastModifiedDate,
                         CreatedDate = x.CreatedDate,
                     })
@@ -215,6 +218,7 @@ namespace Inventory.Api.v1.Controllers
                         ProductId = outletItem.ProductId,
                         ProductName = outletItem.ProductName,
                         ProductSku = outletItem.ProductSku,
+                        Quantity = outletItem.Quantity,
                         LastModifiedDate = outletItem.LastModifiedDate,
                         CreatedDate = outletItem.CreatedDate,
                     };
