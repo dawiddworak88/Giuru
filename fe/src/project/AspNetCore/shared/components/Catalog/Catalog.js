@@ -183,7 +183,7 @@ function Catalog(props) {
                                 }
 
                                 let fabrics = null;
-                                if (item.productAttributes.length > 0) {
+                                if (item.productAttributes && item.productAttributes.length > 0) {
                                     fabrics = item.productAttributes.find(x => x.key === "primaryFabrics") ? item.productAttributes.find(x => x.key === "primaryFabrics").value : "";
                                     var secondaryFabrics = item.productAttributes.find(x => x.key === "secondaryFabrics") ? item.productAttributes.find(x => x.key === "secondaryFabrics").value : "";
 

@@ -1,6 +1,5 @@
 ﻿using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Areas.Products.Services.Products;
-using Buyer.Web.Areas.Products.ViewModels.AvailableProducts;
 using Buyer.Web.Shared.ModelBuilders.Catalogs;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Paginations;
@@ -20,40 +19,43 @@ using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Foundation.Extensions.ExtensionMethods;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Products.Definitions;
+using Buyer.Web.Areas.Outlet.ViewModels;
+using Buyer.Web.Areas.Outlet.Repositories;
+using Buyer.Web.Areas.Outlet.Definitions;
 
-namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
+namespace Buyer.Web.Areas.Outlet.ModelBuilders
 {
-    public class AvailableProductsCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel>
+    public class OutletCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OutletPageCatalogViewModel>
     {
         private readonly IStringLocalizer globalLocalizer;
-        private readonly ICatalogModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel> availableProductsCatalogModelBuilder;
+        private readonly ICatalogModelBuilder<ComponentModelBase, OutletPageCatalogViewModel> outletCatalogModelBuilder;
         private readonly IProductsService productsService;
         private readonly IBasketRepository basketRepository;
-        private readonly IInventoryRepository inventoryRepository;
         private readonly LinkGenerator linkGenerator;
         private readonly IOptions<AppSettings> settings;
+        private readonly IOutletRepository outletRepository;
 
-        public AvailableProductsCatalogModelBuilder(
+        public OutletCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
-            ICatalogModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel> availableProductsCatalogModelBuilder,
+            ICatalogModelBuilder<ComponentModelBase, OutletPageCatalogViewModel> outletCatalogModelBuilder,
             IProductsService productsService,
-            IInventoryRepository inventoryRepository,
             IOptions<AppSettings> settings,
             IBasketRepository basketRepository,
+            IOutletRepository outletRepository,
             LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
-            this.availableProductsCatalogModelBuilder = availableProductsCatalogModelBuilder;
+            this.outletCatalogModelBuilder = outletCatalogModelBuilder;
             this.productsService = productsService;
-            this.inventoryRepository = inventoryRepository;
             this.linkGenerator = linkGenerator;
             this.settings = settings;
             this.basketRepository = basketRepository;
+            this.outletRepository = outletRepository;
         }
 
-        public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<OutletPageCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = this.availableProductsCatalogModelBuilder.BuildModel(componentModel);
+            var viewModel = this.outletCatalogModelBuilder.BuildModel(componentModel);
 
             if (this.settings.Value.IsMarketplace)
             {
@@ -62,7 +64,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 
             viewModel.ShowAddToCartButton = true;
             viewModel.SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct");
-            viewModel.Title = this.globalLocalizer.GetString("AvailableProducts");
+            viewModel.Title = this.globalLocalizer.GetString("Outlet");
             viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "AvailableProductsApi", new { Area = "Products" });
             viewModel.ItemsPerPage = AvailableProductsConstants.Pagination.ItemsPerPage;
             viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
@@ -96,31 +98,27 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                 }
             }
 
-            var inventories = await this.inventoryRepository.GetAvailbleProductsInventory(
-                componentModel.Language,
-                PaginationConstants.DefaultPageIndex,
-                AvailableProductsConstants.Pagination.ItemsPerPage,
-                componentModel.Token);
+            var outletItems = await this.outletRepository.GetOutletProductsAsync(
+                componentModel.Language, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);
 
-            if (inventories?.Data is not null && inventories.Data.Any())
+            if (outletItems?.Data is not null && outletItems.Data.Any())
             {
                 var products = await this.productsService.GetProductsAsync(
-                    inventories.Data.Select(x => x.ProductId), null, null, componentModel.Language,
-                    null, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token);
+                    outletItems.Data.Select(x => x.ProductId.Value), null, null, componentModel.Language, null, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);
 
                 if (products is not null)
                 {
                     foreach (var product in products.Data)
                     {
                         product.InStock = true;
-                        product.AvailableQuantity = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
+                        product.AvailableQuantity = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.Quantity;
                     }
-
-                    viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(products.Total, AvailableProductsConstants.Pagination.ItemsPerPage)
-                    {
-                        Data = products.Data.OrderBy(x => x.Title)
-                    };
                 }
+                    
+                viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(products.Total, OutletConstants.Catalog.DefaultItemsPerPage)
+                {
+                    Data = products.Data.OrderBy(x => x.Title)
+                };
             }
 
             return viewModel;

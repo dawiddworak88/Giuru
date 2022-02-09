@@ -47,20 +47,23 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
                 }
             };
 
-            if (componentModel.IsAuthenticated)
+            links.Add(new LinkViewModel
             {
-                links.Add(new LinkViewModel
-                {
-                    Text = this.orderLocalizer.GetString("MyOrders").Value,
-                    Url = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
-                });
+                Text = this.orderLocalizer.GetString("MyOrders").Value,
+                Url = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+            });
 
-                links.Add(new LinkViewModel
-                {
-                    Text = this.orderLocalizer.GetString("PlaceOrder").Value,
-                    Url = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
-                });
-            }
+            links.Add(new LinkViewModel
+            {
+                Text = this.orderLocalizer.GetString("PlaceOrder").Value,
+                Url = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+            });
+
+            links.Add(new LinkViewModel
+            {
+                Text = this.globalLocalizer.GetString("Outlet").Value,
+                Url = this.linkGenerator.GetPathByAction("Index", "Outlet", new { Area = "Outlet", culture = CultureInfo.CurrentUICulture.Name })
+            });
 
             links.Add(new LinkViewModel
             {
