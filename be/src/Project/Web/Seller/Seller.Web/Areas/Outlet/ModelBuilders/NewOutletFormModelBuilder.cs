@@ -4,6 +4,7 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Outlet.Repositories;
 using Seller.Web.Areas.Outlet.ViewModel;
 using Seller.Web.Areas.Shared.Repositories.Products;
 using System.Globalization;
@@ -18,16 +19,19 @@ namespace Seller.Web.Areas.Outlet.ModelBuilders
         private readonly IStringLocalizer<OutletResources> outletLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly IProductsRepository productsRepository;
+        private readonly IOutletRepository outletRepository;
 
         public NewOutletFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OutletResources> outletLocalizer,
             LinkGenerator linkGenerator,
+            IOutletRepository outletRepository,
             IProductsRepository productsRepository)
         {
             this.globalLocalizer = globalLocalizer;
             this.outletLocalizer = outletLocalizer;
             this.linkGenerator = linkGenerator;
+            this.outletRepository = outletRepository;
             this.productsRepository = productsRepository;
         }
 
@@ -47,7 +51,7 @@ namespace Seller.Web.Areas.Outlet.ModelBuilders
 
             };
             var products = await this.productsRepository.GetAllProductsAsync(componentModel.Token, componentModel.Language, null);
-            if (products != null)
+            if (products is not null)
             {
                 viewModel.Products = products.Select(x => new ListInventoryItemViewModel { Id = x.Id, Name = x.Name, Sku = x.Sku });
             }
@@ -55,6 +59,12 @@ namespace Seller.Web.Areas.Outlet.ModelBuilders
             if (componentModel.Id.HasValue)
             {
                 viewModel.Id = componentModel.Id.Value;
+                var outletItem = await this.outletRepository.GetOutletItemAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                if (outletItem is not null)
+                {
+                    viewModel.ProductId = outletItem.ProductId;
+                }
+
             }
 
             return viewModel;

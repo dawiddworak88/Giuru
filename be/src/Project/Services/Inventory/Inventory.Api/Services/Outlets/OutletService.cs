@@ -75,15 +75,16 @@ namespace Inventory.Api.Services.Outlets
 
         public async Task<PagedResults<IEnumerable<SyncOutletItemServiceModel>>> GetAsync(GetOutletsServiceModel model)
         {
-            var outletItems = this.context.Outlet.Select(x => new SyncOutletItemServiceModel
-            {
-                Id = x.Id,
-                ProductId = x.ProductId,
-                ProductName = x.ProductName,
-                ProductSku = x.ProductSku,
-                LastModifiedDate = x.LastModifiedDate,
-                CreatedDate = x.CreatedDate
-            });
+            var outletItems = this.context.Outlet.Where(x => x.IsActive)
+                .Select(x => new SyncOutletItemServiceModel
+                {
+                    Id = x.Id,
+                    ProductId = x.ProductId,
+                    ProductName = x.ProductName,
+                    ProductSku = x.ProductSku,
+                    LastModifiedDate = x.LastModifiedDate,
+                    CreatedDate = x.CreatedDate
+                });
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
@@ -137,6 +138,24 @@ namespace Inventory.Api.Services.Outlets
                              };
 
             return await outletItem.FirstOrDefaultAsync();
+        }
+
+        public async Task<Guid> UpdateAsync(UpdateOutletServiceModel model)
+        {
+            var outletItem = await this.context.Outlet.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            if (outletItem is null)
+            {
+                throw new CustomException(this.inventortLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            outletItem.ProductId = model.ProductId.Value;
+            outletItem.ProductName = model.ProductName;
+            outletItem.ProductSku = model.ProductSku;
+            outletItem.LastModifiedDate = DateTime.UtcNow;
+
+            await this.context.SaveChangesAsync();
+            
+            return outletItem.Id;
         }
     }
 }

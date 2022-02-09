@@ -89,26 +89,49 @@ namespace Inventory.Api.v1.Controllers
         public async Task<IActionResult> Save(OutletRequestModel request)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-            var serviceModel = new OutletServiceModel
+            if (request.Id is null)
             {
-                ProductId = request.ProductId,
-                ProductName = request.ProductName,
-                ProductSku = request.ProductSku,
-                Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-            };
+                var serviceModel = new OutletServiceModel
+                {
+                    ProductId = request.ProductId,
+                    ProductName = request.ProductName,
+                    ProductSku = request.ProductSku,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                };
 
-            var validator = new OutletModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
-            if (validationResult.IsValid)
+                var validator = new OutletModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+                if (validationResult.IsValid)
+                {
+                    var outletId = await this.outletService.CreateAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = outletId });
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            } else
             {
-                var outletId = await this.outletService.CreateAsync(serviceModel);
+                var serviceModel = new UpdateOutletServiceModel
+                {
+                    Id = request.Id,
+                    ProductId = request.ProductId,
+                    ProductName = request.ProductName,
+                    ProductSku = request.ProductSku,
+                };
 
-                return this.StatusCode((int)HttpStatusCode.OK, new { Id = outletId });
+                var validator = new UpdateOutletModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+                if (validationResult.IsValid)
+                {
+                    var outletId = await this.outletService.UpdateAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = outletId });
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
-
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
@@ -202,7 +225,6 @@ namespace Inventory.Api.v1.Controllers
                 {
                     return this.StatusCode((int)HttpStatusCode.NotFound);
                 }
-
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -232,7 +254,6 @@ namespace Inventory.Api.v1.Controllers
 
             var validator = new DeleteOutletModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
-
             if (validationResult.IsValid)
             {
                 await this.outletService.DeleteAsync(serviceModel);

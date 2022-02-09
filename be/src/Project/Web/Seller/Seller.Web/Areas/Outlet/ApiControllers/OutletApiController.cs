@@ -58,6 +58,7 @@ namespace Seller.Web.Areas.Outlet.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Save([FromBody] OutletRequestModel model)
         {
+            Console.WriteLine(model.Id);
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 

@@ -113,5 +113,29 @@ namespace Seller.Web.Areas.Outlet.Repositories
 
             return default;
         }
+
+        public async Task<OutletItem> GetOutletItemAsync(string token, string language, Guid? id)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, OutletItem>(apiRequest);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
     }
 }

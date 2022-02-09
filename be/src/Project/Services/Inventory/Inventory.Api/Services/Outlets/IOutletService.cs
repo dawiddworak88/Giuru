@@ -12,6 +12,7 @@ namespace Inventory.Api.Services.Outlets
         Task<PagedResults<IEnumerable<SyncOutletItemServiceModel>>> GetAsync(GetOutletsServiceModel model);
         Task DeleteAsync(DeleteOutletServiceModel model);
         Task<Guid> CreateAsync(OutletServiceModel model);
+        Task<Guid> UpdateAsync(UpdateOutletServiceModel model);
         Task<OutletServiceModel> GetAsync(GetOutletServiceModel model);
     }
 }
