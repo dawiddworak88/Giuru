@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace Inventory.Api.ServicesModels.OutletServices
+namespace Inventory.Api.v1.ResponseModels
 {
-    public class OutletItemServiceModel
+    public class OutletItemResponseModel
     {
         public Guid? Id { get; set; }
         public Guid? ProductId { get; set; }
-        public string ProductSku { get; set; }
         public string ProductName { get; set; }
+        public string ProductSku { get; set; }
         public DateTime? LastModifiedDate { get; set; }
         public DateTime? CreatedDate { get; set; }
     }

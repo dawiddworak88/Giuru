@@ -2,13 +2,17 @@
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Helpers;
-using Inventory.Api.Services.Outlet;
+using Foundation.GenericRepository.Paginations;
+using Inventory.Api.Services.Outlets;
 using Inventory.Api.ServicesModels.OutletServices;
 using Inventory.Api.v1.RequestModels;
+using Inventory.Api.v1.ResponseModels;
 using Inventory.Api.Validators.OutletValidators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -42,7 +46,7 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Save(OutletRequestModel request)
+        public async Task<IActionResult> SyncOutlet(OutletRequestModel request)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new OutletServiceModel
@@ -62,10 +66,58 @@ namespace Inventory.Api.v1.Controllers
             var validationResult = await validator.ValidateAsync(serviceModel);
             if (validationResult.IsValid)
             {
-                return this.StatusCode((int)HttpStatusCode.OK);
+                var outletItems = await this.outletService.SyncOutletAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK, outletItems);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Gets list of products from outlet.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
+        /// <returns>The list of outlet products.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [AllowAnonymous]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var serviceModel = new GetOutletsServiceModel
+            {
+                Language = CultureInfo.CurrentCulture.Name,
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy,
+            };
+
+            var outletItems = await this.outletService.GetAsync(serviceModel);
+            if (outletItems is not null)
+            {
+                var response = new PagedResults<IEnumerable<OutletItemResponseModel>>(outletItems.Total, outletItems.PageSize)
+                {
+                    Data = outletItems.Data.OrEmptyIfNull().Select(x => new OutletItemResponseModel
+                    {
+                        Id = x.Id,
+                        ProductId = x.ProductId,
+                        ProductName = x.ProductName,
+                        ProductSku = x.ProductSku,
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate,
+                    })
+                };
+
+                return this.StatusCode((int)HttpStatusCode.OK, response);
+            }
+            throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }

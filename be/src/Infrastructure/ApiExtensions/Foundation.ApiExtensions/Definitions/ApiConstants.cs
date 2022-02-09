@@ -29,6 +29,11 @@
             public static readonly string AvailableProductsApiEndpoint = "/api/v1/inventory/availableproducts";
         }
 
+        public struct Outlet
+        {
+            public static readonly string OutletApiEndpoint = "/api/v1/outlet";
+        }
+
         public struct Media
         {
             public static readonly string MediaItemsApiEndpoint = "/api/v1/mediaitems";
