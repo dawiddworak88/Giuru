@@ -12,6 +12,7 @@ using Inventory.Api.v1.ResponseModels;
 using Inventory.Api.Validators.OutletValidators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -118,6 +119,40 @@ namespace Inventory.Api.v1.Controllers
                 return this.StatusCode((int)HttpStatusCode.OK, response);
             }
             throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Delete outlet product by id.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <returns>OK.</returns>
+        [HttpDelete, MapToApiVersion("1.0")]
+        [Route("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var serviceModel = new DeleteOutletServiceModel
+            {
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new DeleteOutletModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                await this.outletService.DeleteAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
+            }
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }

@@ -1,14 +1,17 @@
-﻿using Foundation.Extensions.ExtensionMethods;
+﻿using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Inventory.Api.Infrastructure;
 using Inventory.Api.Infrastructure.Entities;
 using Inventory.Api.ServicesModels.OutletServices;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Inventory.Api.Services.Outlets
@@ -90,6 +93,18 @@ namespace Inventory.Api.Services.Outlets
             outletItems = outletItems.ApplySort(model.OrderBy);
 
             return outletItems.PagedIndex(new Pagination(outletItems.Count(), model.ItemsPerPage), model.PageIndex);
+        }
+
+        public async Task DeleteAsync(DeleteOutletServiceModel model)
+        {
+            var outletItem = await this.context.Outlet.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            if (outletItem == null)
+            {
+                throw new CustomException(this.inventortLocalizer.GetString("OutletNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            outletItem.IsActive = false;
+            await this.context.SaveChangesAsync();
         }
     }
 }
