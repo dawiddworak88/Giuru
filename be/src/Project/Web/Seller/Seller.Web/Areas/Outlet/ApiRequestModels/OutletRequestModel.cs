@@ -1,9 +1,10 @@
 ﻿using System;
 
-namespace Inventory.Api.v1.RequestModels
+namespace Seller.Web.Areas.Outlet.ApiRequestModels
 {
-    public class OutletItemRequestModel
+    public class OutletRequestModel
     {
+        public Guid? Id { get; set; }
         public Guid? ProductId { get; set; }
         public string ProductName { get; set; }
         public string ProductSku { get; set; }

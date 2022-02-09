@@ -38,7 +38,46 @@ namespace Inventory.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Creates outlet.
+        /// Sync outlet (if skus and productId are set)
+        /// </summary>
+        /// <param name="request">The model.</param>
+        /// <returns>The outlet id.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [Route("productoutlets")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> SyncOutlet(SyncOutletRequestModel request)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var serviceModel = new SyncOutletServiceModel
+            {
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                OutletItems = request.OutletItems.Select(x => new SyncOutletItemServiceModel
+                {
+                    ProductId = x.ProductId,
+                    ProductName = x.ProductName,
+                    ProductSku = x.ProductSku
+                })
+            };
+
+            var validator = new SyncOutletModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+            if (validationResult.IsValid)
+            {
+                var outletItems = await this.outletService.SyncOutletAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK, outletItems);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Creates or updates outlet product.
         /// </summary>
         /// <param name="request">The model.</param>
         /// <returns>The outlet id.</returns>
@@ -47,29 +86,26 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> SyncOutlet(OutletRequestModel request)
+        public async Task<IActionResult> Save(OutletRequestModel request)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new OutletServiceModel
             {
+                ProductId = request.ProductId,
+                ProductName = request.ProductName,
+                ProductSku = request.ProductSku,
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                OutletItems = request.OutletItems.Select(x => new OutletItemServiceModel
-                {
-                    ProductId = x.ProductId,
-                    ProductName = x.ProductName,
-                    ProductSku = x.ProductSku
-                })
             };
 
             var validator = new OutletModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
             if (validationResult.IsValid)
             {
-                var outletItems = await this.outletService.SyncOutletAsync(serviceModel);
+                var outletId = await this.outletService.CreateAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK, outletItems);
+                return this.StatusCode((int)HttpStatusCode.OK, new { Id = outletId });
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -119,6 +155,57 @@ namespace Inventory.Api.v1.Controllers
                 return this.StatusCode((int)HttpStatusCode.OK, response);
             }
             throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Gets outlet product by id.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <returns>The outlet product.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("{id}")]
+        [AllowAnonymous]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetById(Guid? id)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var serviceModel = new GetOutletServiceModel
+            {
+                Id = id.Value,
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new GetOutletModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+            if (validationResult.IsValid)
+            {
+                var outletItem = await this.outletService.GetAsync(serviceModel);
+                if (outletItem is not null)
+                {
+                    var response = new OutletItemResponseModel
+                    {
+                        Id = outletItem.Id,
+                        ProductId = outletItem.ProductId,
+                        ProductName = outletItem.ProductName,
+                        ProductSku = outletItem.ProductSku,
+                        LastModifiedDate = outletItem.LastModifiedDate,
+                        CreatedDate = outletItem.CreatedDate,
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+                else
+                {
+                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                }
+
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>

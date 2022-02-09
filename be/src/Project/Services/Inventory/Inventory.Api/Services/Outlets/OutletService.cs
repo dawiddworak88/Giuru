@@ -29,9 +29,9 @@ namespace Inventory.Api.Services.Outlets
             this.inventortLocalizer = inventortLocalizer;
         }
 
-        public async Task<OutletServiceModel> SyncOutletAsync(OutletServiceModel model)
+        public async Task<SyncOutletServiceModel> SyncOutletAsync(SyncOutletServiceModel model)
         {
-            var outletItems = this.context.Outlet.Select(x => new OutletItemServiceModel
+            var outletItems = this.context.Outlet.Select(x => new SyncOutletItemServiceModel
             {
                 ProductId = x.ProductId,
                 ProductName = x.ProductName,
@@ -67,15 +67,15 @@ namespace Inventory.Api.Services.Outlets
 
             await this.context.SaveChangesAsync();
 
-            return new OutletServiceModel
+            return new SyncOutletServiceModel
             {
                 OutletItems = model.OutletItems,
             };
         }
 
-        public async Task<PagedResults<IEnumerable<OutletItemServiceModel>>> GetAsync(GetOutletsServiceModel model)
+        public async Task<PagedResults<IEnumerable<SyncOutletItemServiceModel>>> GetAsync(GetOutletsServiceModel model)
         {
-            var outletItems = this.context.Outlet.Select(x => new OutletItemServiceModel
+            var outletItems = this.context.Outlet.Select(x => new SyncOutletItemServiceModel
             {
                 Id = x.Id,
                 ProductId = x.ProductId,
@@ -105,6 +105,38 @@ namespace Inventory.Api.Services.Outlets
 
             outletItem.IsActive = false;
             await this.context.SaveChangesAsync();
+        }
+
+        public async Task<Guid> CreateAsync(OutletServiceModel model)
+        {
+            var outletItem = new Outlet
+            {
+                ProductId = model.ProductId,
+                ProductName = model.ProductName,
+                ProductSku = model.ProductSku,
+            };
+
+            this.context.Outlet.Add(outletItem.FillCommonProperties());
+            await this.context.SaveChangesAsync();
+
+            return outletItem.Id;
+        }
+
+        public async Task<OutletServiceModel> GetAsync(GetOutletServiceModel model)
+        {
+            var outletItem = from o in this.context.Outlet
+                             where o.Id == model.Id.Value && o.IsActive
+                             select new OutletServiceModel
+                             {
+                                 Id = model.Id.Value,
+                                 ProductId = o.ProductId,
+                                 ProductName= o.ProductName,
+                                 ProductSku= o.ProductSku,
+                                 LastModifiedDate = o.LastModifiedDate,
+                                 CreatedDate = o.CreatedDate
+                             };
+
+            return await outletItem.FirstOrDefaultAsync();
         }
     }
 }

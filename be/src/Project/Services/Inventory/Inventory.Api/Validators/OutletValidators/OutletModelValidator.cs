@@ -8,7 +8,9 @@ namespace Inventory.Api.Validators.OutletValidators
     {
         public OutletModelValidator()
         {
-            this.RuleFor(x => x.OutletItems).NotNull().NotEmpty();
+            this.RuleFor(x => x.ProductId).NotEmpty().NotNull();
+            this.RuleFor(x => x.ProductName).NotEmpty().NotNull();
+            this.RuleFor(x => x.ProductSku).NotEmpty().NotNull();
         }
     }
 }

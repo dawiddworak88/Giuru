@@ -145,7 +145,7 @@
     <value>Produkt nicht auf lagerhaus gefunden</value>
   </data>
   <data name="InventorySavedSuccessfully" xml:space="preserve">
-    <value>Das Inventar wurde erfolgreich gespeichert</value>
+    <value>Produkt wurde erfolgreich gespeichert</value>
   </data>
   <data name="LocationLabel" xml:space="preserve">
     <value>Standort</value>

@@ -1,9 +1,8 @@
-﻿using Foundation.ApiExtensions.Models.Request;
-using System;
+﻿using System;
 
 namespace Inventory.Api.v1.RequestModels
 {
-    public class OutletRequestModel : RequestModelBase
+    public class SyncOutletItemRequestModel
     {
         public Guid? ProductId { get; set; }
         public string ProductName { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Inventory.Api.ServicesModels.OutletServices
 {
-    public class OutletItemServiceModel
+    public class SyncOutletItemServiceModel
     {
         public Guid? Id { get; set; }
         public Guid? ProductId { get; set; }

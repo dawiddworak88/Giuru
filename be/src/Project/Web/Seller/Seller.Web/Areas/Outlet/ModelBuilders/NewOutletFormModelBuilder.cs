@@ -43,7 +43,7 @@ namespace Seller.Web.Areas.Outlet.ModelBuilders
                 NavigateToOutletListText = this.outletLocalizer.GetString("NavigateToOutletListText"),
                 OutletUrl = this.linkGenerator.GetPathByAction("Index", "Outlet", new { Area = "Outlet", culture = CultureInfo.CurrentUICulture.Name }),
                 OrderNameRequiredErrorMessage = this.outletLocalizer.GetString("OrderNameRequiredErrorMessage"),
-                SaveUrl = this.linkGenerator.GetPathByAction("Index", "OutletApi", new { Area = "Outlet", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveUrl = this.linkGenerator.GetPathByAction("Save", "OutletApi", new { Area = "Outlet", culture = CultureInfo.CurrentUICulture.Name }),
 
             };
             var products = await this.productsRepository.GetAllProductsAsync(componentModel.Token, componentModel.Language, null);

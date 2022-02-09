@@ -33,7 +33,9 @@ const OutletForm = (props) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const requestBody = {
-            id, productId: state.product.id, orderName
+            id, productId: state.product.id,
+            productName: state.product.name,
+            productSku: state.product.sku
         }
 
         const requestOptions = {

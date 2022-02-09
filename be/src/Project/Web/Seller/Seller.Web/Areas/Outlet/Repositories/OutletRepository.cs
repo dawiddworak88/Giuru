@@ -6,6 +6,7 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
+using Seller.Web.Areas.Outlet.ApiRequestModels;
 using Seller.Web.Areas.Outlet.DomainModels;
 using Seller.Web.Shared.Configurations;
 using System;
@@ -78,6 +79,39 @@ namespace Seller.Web.Areas.Outlet.Repositories
             {
                 throw new CustomException(response.Data.Message, (int)response.StatusCode);
             }
+        }
+
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id,  Guid? ProductId, string ProductName, string ProductSku)
+        {
+            var requestModel = new OutletRequestModel
+            {
+                Id = id,
+                ProductId = ProductId,
+                ProductName = ProductName,
+                ProductSku = ProductSku,
+            };
+
+            var apiRequest = new ApiRequest<OutletRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletApiEndpoint}"
+            };
+
+            var response = await this.apiService.PostAsync<ApiRequest<OutletRequestModel>, OutletRequestModel, BaseResponseModel>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Id != null)
+            {
+                return response.Data.Id.Value;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
         }
     }
 }
