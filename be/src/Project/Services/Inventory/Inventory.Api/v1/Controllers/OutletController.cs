@@ -62,7 +62,6 @@ namespace Inventory.Api.v1.Controllers
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
                     ProductSku = x.ProductSku,
-                    Quantity = x.Quantity
                 })
             };
 
@@ -173,7 +172,6 @@ namespace Inventory.Api.v1.Controllers
                         ProductId = x.ProductId,
                         ProductName = x.ProductName,
                         ProductSku = x.ProductSku,
-                        Quantity = x.Quantity,
                         LastModifiedDate = x.LastModifiedDate,
                         CreatedDate = x.CreatedDate,
                     })
@@ -219,7 +217,6 @@ namespace Inventory.Api.v1.Controllers
                         ProductId = outletItem.ProductId,
                         ProductName = outletItem.ProductName,
                         ProductSku = outletItem.ProductSku,
-                        Quantity = outletItem.Quantity,
                         LastModifiedDate = outletItem.LastModifiedDate,
                         CreatedDate = outletItem.CreatedDate,
                     };

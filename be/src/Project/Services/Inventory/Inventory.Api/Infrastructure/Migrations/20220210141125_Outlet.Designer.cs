@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(InventoryContext))]
-    [Migration("20220209122232_AddedOutlet")]
-    partial class AddedOutlet
+    [Migration("20220210141125_Outlet")]
+    partial class Outlet
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -106,9 +106,6 @@ namespace Inventory.Api.Infrastructure.Migrations
                     b.Property<string>("ProductSku")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Quantity")
-                        .HasColumnType("int");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()

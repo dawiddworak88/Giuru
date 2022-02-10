@@ -11,8 +11,7 @@ const OutletForm = (props) => {
     const [showBackToOutletListButton, setShowBackToOutletListButton] = useState(false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
-        product: { value: props.productId ? props.products.find((item) => item.id === props.productId) : null, error: "" },
-        orderName: { value: props.orderName ? props.orderName : null, error: ""}
+        product: { value: props.productId ? props.products.find((item) => item.id === props.productId) : null, error: "" }
     };
 
     const productsProps = {
@@ -21,12 +20,7 @@ const OutletForm = (props) => {
     };
 
     const stateValidatorSchema = {
-        orderName: {
-            required: {
-                isRequired: true,
-                error: props.orderNameRequiredErrorMessage
-            },
-        }
+        
     };
 
     const onSubmitForm = (state) => {
@@ -63,11 +57,10 @@ const OutletForm = (props) => {
     }
     
     const {
-        values, errors, dirty, disable, setFieldValue,
-        handleOnChange, handleOnSubmit
+        values, setFieldValue, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, orderName, product } = values;
+    const { id, product } = values;
     return (
         <section className="section section-small-padding inventory-add">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -76,16 +69,6 @@ const OutletForm = (props) => {
                     {id &&
                         <input id="id" name="id" type="hidden" value={id} />
                     }
-                    <div className="field">
-                        <TextField 
-                            id="orderName" 
-                            name="orderName" 
-                            type="text" 
-                            label={props.orderNameLabel} 
-                            fullWidth={true} 
-                            value={orderName} 
-                            onChange={handleOnChange}/>
-                    </div>
                     <div className="field">
                         <Autocomplete
                             {...productsProps}
@@ -121,7 +104,7 @@ const OutletForm = (props) => {
                                 type="subbmit" 
                                 variant="contained"
                                 color="primary"
-                                disabled={state.isLoading || disable || !product}>
+                                disabled={state.isLoading || !product}>
                                 {props.saveText}
                             </Button>
                         )}

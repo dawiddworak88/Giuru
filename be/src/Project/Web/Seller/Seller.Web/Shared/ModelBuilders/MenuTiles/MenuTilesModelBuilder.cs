@@ -54,15 +54,15 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                     },
                     new MenuTileViewModel
                     {
-                        Icon = IconsConstants.Outlet,
-                        Title = this.globalLocalizer.GetString("Outlet"),
-                        Url = this.linkGenerator.GetPathByAction("Index", "Outlet", new { Area = "Outlet", culture = CultureInfo.CurrentUICulture.Name })
-                    },
-                    new MenuTileViewModel
-                    {
                         Icon = IconsConstants.Inventory,
                         Title = this.globalLocalizer.GetString("Inventory"),
                         Url = this.linkGenerator.GetPathByAction("Index", "Inventories", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name })
+                    },
+                    new MenuTileViewModel
+                    {
+                        Icon = IconsConstants.Outlet,
+                        Title = this.globalLocalizer.GetString("Outlet"),
+                        Url = this.linkGenerator.GetPathByAction("Index", "Outlet", new { Area = "Outlet", culture = CultureInfo.CurrentUICulture.Name })
                     },
                     new MenuTileViewModel
                     {

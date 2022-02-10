@@ -8,6 +8,7 @@ using Inventory.Api.Infrastructure.Entities;
 using Inventory.Api.ServicesModels.OutletServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,37 +32,35 @@ namespace Inventory.Api.Services.Outlets
 
         public async Task<SyncOutletServiceModel> SyncOutletAsync(SyncOutletServiceModel model)
         {
-            var outletItems = this.context.Outlet.Select(x => new SyncOutletItemServiceModel
+            var outletItems = this.context.Outlet.Select(x => new Outlet
             {
                 ProductId = x.ProductId,
                 ProductName = x.ProductName,
                 ProductSku = x.ProductSku,
-                Quantity = x.Quantity,
             });
 
+            var syncItems = new List<Outlet>();
             foreach (var item in model.OutletItems.OrEmptyIfNull())
             {
-                var outletItem = outletItems.FirstOrDefault(x => x.ProductId == item.ProductId);
-                if (outletItem is not null)
+                var outletItem = new Outlet
                 {
-                    outletItem.ProductId = item.ProductId;
-                    outletItem.ProductName = item.ProductName;
-                    outletItem.Quantity = item.Quantity;
-                    outletItem.LastModifiedDate = DateTime.UtcNow;
-                } else
-                {
-                    var outlet = new Outlet
-                    {
-                        ProductId = item.ProductId,
-                        ProductName = item.ProductName,
-                        ProductSku = item.ProductSku,
-                        Quantity = item.Quantity
-                    };
+                    ProductId = item.ProductId,
+                    ProductName = item.ProductName,
+                    ProductSku = item.ProductSku,
+                };
 
-                    this.context.Outlet.Add(outlet.FillCommonProperties());
+                var existingItem = outletItems.FirstOrDefault(x => x.ProductId == item.ProductId);
+                if (existingItem is null)
+                {
+                    this.context.Outlet.Add(outletItem.FillCommonProperties());
                 }
+
+                syncItems.Add(outletItem);
             }
 
+            var soldItems = outletItems.ToList().Where(x => !syncItems.Any(s => s.ProductId == x.ProductId));
+
+            this.context.RemoveRange(soldItems);
             await this.context.SaveChangesAsync();
 
             return new SyncOutletServiceModel
@@ -79,7 +78,6 @@ namespace Inventory.Api.Services.Outlets
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
                     ProductSku = x.ProductSku,
-                    Quantity= x.Quantity,
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate
                 });
@@ -131,7 +129,6 @@ namespace Inventory.Api.Services.Outlets
                                  ProductId = o.ProductId,
                                  ProductName= o.ProductName,
                                  ProductSku= o.ProductSku,
-                                 Quantity = o.Quantity,
                                  LastModifiedDate = o.LastModifiedDate,
                                  CreatedDate = o.CreatedDate
                              };
@@ -150,7 +147,6 @@ namespace Inventory.Api.Services.Outlets
             outletItem.ProductId = model.ProductId.Value;
             outletItem.ProductName = model.ProductName;
             outletItem.ProductSku = model.ProductSku;
-            outletItem.Quantity = model.Quantity;
             outletItem.LastModifiedDate = DateTime.UtcNow;
 
             await this.context.SaveChangesAsync();
