@@ -4,7 +4,7 @@ import { resetServerContext } from 'react-beautiful-dnd';
 import { ServerStyleSheets } from "@material-ui/core/styles";
 
 // AspNetCore
-import OutletPage from "../../src/project/AspNetCore/areas/Products/pages/OutletPage/OutletPage";
+import OutletCatalogPage from "../../src/project/AspNetCore/areas/Products/pages/OutletPage/OutletPage";
 import NewOrderPage from "../../src/project/AspNetCore/areas/Orders/pages/NewOrder/NewOrderPage";
 import ListOrdersPage from "../../src/project/AspNetCore/areas/Orders/pages/ListOrders/ListOrdersPage";
 import StatusOrderPage from "../../src/project/AspNetCore/areas/Orders/pages/StatusOrder/StatusOrderPage";
@@ -42,7 +42,7 @@ import SellerCategoryPage from "../../src/project/Seller.Portal/areas/Products/p
 import SettingsPage from "../../src/project/Seller.Portal/areas/Settings/pages/SettingsPage/SettingsPage";
 
 const Components = {
-	OutletPage,
+	OutletCatalogPage,
 	ListOrdersPage,
 	NewOrderPage,
 	StatusOrderPage,

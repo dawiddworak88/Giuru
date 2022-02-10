@@ -47,7 +47,6 @@ namespace Seller.Web.Areas.Outlet.Repositories
             };
 
             var response = await this.apiService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<OutletItem>>>(apiRequest);
-
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
                 return new PagedResults<IEnumerable<OutletItem>>(response.Data.Total, response.Data.PageSize)

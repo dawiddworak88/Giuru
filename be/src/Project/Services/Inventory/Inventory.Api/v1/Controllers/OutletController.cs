@@ -12,6 +12,7 @@ using Inventory.Api.v1.ResponseModels;
 using Inventory.Api.Validators.OutletValidators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -43,7 +44,7 @@ namespace Inventory.Api.v1.Controllers
         /// <param name="request">The model.</param>
         /// <returns>The outlet id.</returns>
         [HttpPost, MapToApiVersion("1.0")]
-        [Route("productoutlets")]
+        [Route("outlets")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
