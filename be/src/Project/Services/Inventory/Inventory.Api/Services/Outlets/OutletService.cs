@@ -8,7 +8,6 @@ using Inventory.Api.Infrastructure.Entities;
 using Inventory.Api.ServicesModels.OutletServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
