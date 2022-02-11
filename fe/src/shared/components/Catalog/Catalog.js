@@ -20,7 +20,6 @@ import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
 
 function Catalog(props) {
-
     const [state, dispatch] = useContext(Context);
     const [page, setPage] = React.useState(0);
     const [itemsPerPage,] = React.useState(PaginationConstants.defaultRowsPerPage());
@@ -234,7 +233,7 @@ function Catalog(props) {
                                                                     <FileCopyOutlinedIcon />
                                                                 </Fab>)
                                                             else if (actionItem.isPicture) return (
-                                                                <Fab onClick={() => copyToClipboard(item.imageUrl)} size="small" color="secondary" aria-label={props.duplicateLabel}>
+                                                                <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary" aria-label={props.duplicateLabel}>
                                                                     <Link />
                                                                 </Fab>)
                                                             else return (
