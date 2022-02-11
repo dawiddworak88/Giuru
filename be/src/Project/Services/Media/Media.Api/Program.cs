@@ -50,8 +50,10 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
 });
 
-builder.Services.AddControllers();
-
+builder.Services.AddControllers(options =>
+{
+    options.RespectBrowserAcceptHeader = true;
+}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 builder.Services.AddLocalization();
 
 builder.Services.RegisterApiAccountDependencies(builder.Configuration);
