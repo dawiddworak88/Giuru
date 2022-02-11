@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Products.DomainModels;
+using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.Configurations;
@@ -34,6 +35,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly ICdnService cdnService;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly IProductsRepository productsRepository;
+        private readonly IInventoryRepository inventoryRepository;
         private readonly IMediaHelperService mediaService;
         private readonly LinkGenerator linkGenerator;
 
@@ -44,6 +46,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             IStringLocalizer<ProductResources> productLocalizer,
             IMediaHelperService mediaService,
             IOptions<AppSettings> options,
+            IInventoryRepository inventoryRepository,
             LinkGenerator linkGenerator)
         {
             this.productsService = productsService;
@@ -54,6 +57,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             this.productLocalizer = productLocalizer;
             this.options = options;
             this.cdnService = cdnService;
+            this.inventoryRepository = inventoryRepository;
         }
 
         [HttpGet]

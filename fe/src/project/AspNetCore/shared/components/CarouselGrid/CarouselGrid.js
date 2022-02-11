@@ -7,9 +7,7 @@ import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants
 import CarouselConstants from "../Carousel/CarouselConstants";
 
 function CarouselGrid(props) {
-
     return (
-
         <Fragment>
             {props.items && props.items.map((item) =>
                 <section className="section carousel-grid">
@@ -30,7 +28,7 @@ function CarouselGrid(props) {
                                         </a>
                                         <div className="card-content">
                                             <a href={carouselItem.url}>
-                                                {carouselItem.name &&
+                                                {carouselItem.title &&
                                                     <p className="title is-5 has-text-centered">{carouselItem.title}</p>
                                                 }
 
