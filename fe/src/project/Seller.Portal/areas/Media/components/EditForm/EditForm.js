@@ -82,7 +82,7 @@ const EditForm = (props) => {
                                     const url = version.url;
                                     if (version.mimeType.includes("pdf")) {
                                         return (
-                                            <div className="version icon-version" key={version.id}>
+                                            <div className="version icon-version" key={version.id} onClick={() => mediaHandle(url)}>
                                                 <div className="icon">
                                                     <PictureAsPdf />
                                                 </div>
@@ -96,7 +96,7 @@ const EditForm = (props) => {
                                         )
                                     } else  {
                                         return (
-                                            <div className="version icon-version" key={version.id}>
+                                            <div className="version icon-version" key={version.id} onClick={() => mediaHandle(url)}>
                                                 <div className="icon">
                                                     <Attachment/>
                                                 </div>

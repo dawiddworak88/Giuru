@@ -13,9 +13,6 @@
 
     &__versions {
         display: flex;
-        max-height: 12.5rem;
-        overflow-x: auto;
-        overflow-y: hidden;
         padding: 0.5rem 0;
 
         .version {
@@ -30,8 +27,6 @@
 
             img {
                 max-width: 100% ;
-                height: 100% !important;
-                object-fit: cover;
             }
 
             .icon {
@@ -60,7 +55,5 @@
                 font-size: 3rem;
             }
         }
-
-        
     }
 }

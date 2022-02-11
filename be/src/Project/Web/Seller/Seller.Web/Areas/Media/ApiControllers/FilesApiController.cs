@@ -78,8 +78,6 @@ namespace Seller.Web.Areas.Media.ApiControllers
                         CultureInfo.CurrentUICulture.Name,
                         fileId);
 
-                    Console.WriteLine(fileId);
-
                     if (mediaItem != null)
                     {
                         return this.StatusCode(
