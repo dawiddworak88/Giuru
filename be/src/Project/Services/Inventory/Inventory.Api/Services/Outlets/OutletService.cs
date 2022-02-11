@@ -31,13 +31,6 @@ namespace Inventory.Api.Services.Outlets
 
         public async Task<SyncOutletServiceModel> SyncOutletAsync(SyncOutletServiceModel model)
         {
-            var outletItems = this.context.Outlet.Select(x => new Outlet
-            {
-                ProductId = x.ProductId,
-                ProductName = x.ProductName,
-                ProductSku = x.ProductSku,
-            });
-
             var syncItems = new List<Outlet>();
             foreach (var item in model.OutletItems.OrEmptyIfNull())
             {
@@ -48,23 +41,29 @@ namespace Inventory.Api.Services.Outlets
                     ProductSku = item.ProductSku,
                 };
 
-                var existingItem = outletItems.FirstOrDefault(x => x.ProductId == item.ProductId);
+                var existingItem = this.context.Outlet.FirstOrDefault(x => x.ProductId == item.ProductId);
                 if (existingItem is null)
                 {
                     this.context.Outlet.Add(outletItem.FillCommonProperties());
                 }
 
                 syncItems.Add(outletItem);
+                await this.context.SaveChangesAsync();
             }
 
-            var soldItems = outletItems.ToList().Where(x => !syncItems.Any(s => s.ProductId == x.ProductId));
+            var soldItems = this.context.Outlet.Where(x => !syncItems.Contains(x));
 
             this.context.RemoveRange(soldItems);
             await this.context.SaveChangesAsync();
 
             return new SyncOutletServiceModel
             {
-                OutletItems = model.OutletItems,
+                OutletItems = model.OutletItems.Select(x => new SyncOutletItemServiceModel
+                {
+                    ProductId = x.ProductId,
+                    ProductName = x.ProductName,
+                    ProductSku = x.ProductSku,
+                }),
             };
         }
 

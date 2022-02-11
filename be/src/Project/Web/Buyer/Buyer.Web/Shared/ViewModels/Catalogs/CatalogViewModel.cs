@@ -20,6 +20,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string PrimaryFabricLabel { get; set; }
         public bool ShowBrand { get; set; }
         public bool ShowAddToCartButton { get; set; }
+        public bool HideQuantityInput { get; set; }
         public bool IsLoggedIn { get; set; }
         public string SignInUrl { get; set; }
         public string SignInToSeePricesLabel { get; set; }

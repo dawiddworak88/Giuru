@@ -62,6 +62,7 @@ namespace Buyer.Web.Areas.Outlet.ModelBuilders
                 viewModel.ShowBrand = true;
             }
 
+            viewModel.HideQuantityInput = true;
             viewModel.ShowAddToCartButton = true;
             viewModel.SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct");
             viewModel.Title = this.globalLocalizer.GetString("Outlet");

@@ -227,19 +227,21 @@ function Catalog(props) {
                                                 <div className="catalog-item__add-to-cart-button-container">
                                                     {props.showAddToCartButton ? (
                                                         <div className="row is-flex is-flex-centered">
-                                                            <TextField 
-                                                                id={item.id} 
-                                                                name="quantity" 
-                                                                type="number" 
-                                                                inputProps={{ 
-                                                                    min: 1, 
-                                                                    step: 1,
-                                                                    style: { textAlign: 'center' }
-                                                                }}
-                                                                value={quantity} 
-                                                                onChange={onQuantityChange(item.id)}
-                                                                className="quantity-input"
-                                                            />
+                                                            {!props.hideQuantityInput &&
+                                                                <TextField 
+                                                                    id={item.id} 
+                                                                    name="quantity" 
+                                                                    type="number" 
+                                                                    inputProps={{ 
+                                                                        min: 1, 
+                                                                        step: 1,
+                                                                        style: { textAlign: 'center' }
+                                                                    }}
+                                                                    value={quantity} 
+                                                                    onChange={onQuantityChange(item.id)}
+                                                                    className="quantity-input"
+                                                                />
+                                                            }
                                                             <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => handleOrder(item)} color="primary">
                                                                 {props.basketLabel}
                                                             </Button>
