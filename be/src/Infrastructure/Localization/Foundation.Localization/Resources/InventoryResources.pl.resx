@@ -190,7 +190,7 @@
     <value>Wprowadź ilość</value>
   </data>
   <data name="RestockableInDaysLabel" xml:space="preserve">
-    <value>Uzupełniany w magazynie w ciągu dni:</value>
+    <value>Dostępne za dni:</value>
   </data>
   <data name="SaveText" xml:space="preserve">
     <value>Zapisz</value>
