@@ -23,7 +23,7 @@ namespace Seller.Web.Areas.Media.Repositories
             this.settings = settings;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, byte[] file, string filename, Guid? id)
+        public async Task<Guid> SaveAsync(string token, string language, byte[] file, string filename, string id)
         {
             var requestModel = new FileRequestModelBase
             {
@@ -31,7 +31,7 @@ namespace Seller.Web.Areas.Media.Repositories
                 Filename = filename,
                 Id = id
             };
-
+            
             var apiRequest = new ApiRequest<FileRequestModelBase>
             {
                 Language = language,

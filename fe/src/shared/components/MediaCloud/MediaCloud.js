@@ -25,9 +25,6 @@ function MediaCloud(props) {
 
         if (props.multiple) {
             const formData = new FormData();
-            if (props.mediaId){
-                formData.append("id", mediaId)
-            }
 
             acceptedFiles.forEach((file) => {
                 formData.append("files", file);
@@ -60,13 +57,13 @@ function MediaCloud(props) {
                 });
         }
         else {
-            acceptedFiles.forEach((file) => {
-                const formData = new FormData();
+            const formData = new FormData();
+            if (props.mediaId){
+                formData.append("id", mediaId)
+            }
 
+            acceptedFiles.forEach((file) => {
                 formData.append("file", file);
-                if (props.mediaId){
-                    formData.append("id", mediaId)
-                }
 
                 const requestOptions = {
                     method: "POST",

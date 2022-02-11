@@ -53,6 +53,7 @@
         {
             public static readonly string FileContentName = "file";
             public static readonly string LanguageContentName = "language";
+            public static readonly string GuidContentName = "id";
         }
 
         public struct Request

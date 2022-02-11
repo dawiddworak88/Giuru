@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace Foundation.ApiExtensions.Models.Request
+﻿namespace Foundation.ApiExtensions.Models.Request
 {
     public class FileRequestModelBase
     {
         public byte[] File { get; set; }
         public string Filename { get; set; }
-        public Guid? Id { get; set; }
+        public string Id { get; set; }
     }
 }

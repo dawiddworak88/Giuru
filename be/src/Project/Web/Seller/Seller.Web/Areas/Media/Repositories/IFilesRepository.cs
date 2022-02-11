@@ -5,6 +5,6 @@ namespace Seller.Web.Areas.Media.Repositories
 {
     public interface IFilesRepository
     {
-        Task<Guid> SaveAsync(string token, string language, byte[] file, string filename, Guid? id);
+        Task<Guid> SaveAsync(string token, string language, byte[] file, string filename, string id);
     }
 }

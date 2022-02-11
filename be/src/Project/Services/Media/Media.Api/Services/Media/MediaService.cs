@@ -134,7 +134,7 @@ namespace Media.Api.Services.Media
                 await this.mediaRepository.CreateFileAsync(mediaItemVersion.Id, serviceModel.OrganisationId.ToString(), serviceModel.File, serviceModel.File.FileName);
             }
 
-            return existingMediaItemVersion.FirstOrDefault().Id;
+            return existingMediaItemVersion.FirstOrDefault().MediaItemId;
         }
 
         public async Task<MediaFileServiceModel> GetFileAsync(Guid? mediaId, bool? optimize, int? width, int? height)
@@ -145,7 +145,7 @@ namespace Media.Api.Services.Media
                                  join mv in this.context.MediaItemVersions on m.Id equals mv.MediaItemId
                                  join t in this.context.MediaItemTranslations on mv.Id equals t.MediaItemVersionId into ct
                                  from x in ct.DefaultIfEmpty()
-                                 where (m.Id == mediaId || mv.Id == mediaId) && m.IsActive == true && mv.IsActive && m.IsProtected == false
+                                 where m.Id == mediaId.Value || mv.Id == mediaId.Value && m.IsActive == true && mv.IsActive && m.IsProtected == false
                                  orderby mv.Version descending
                                  select new MediaFileItemServiceModel
                                  {
@@ -344,7 +344,7 @@ namespace Media.Api.Services.Media
                     Description = x.Translations.FirstOrDefault(x => x.Language == model.Language).Description,
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate,
-                }).OrderByDescending(x => x.CreatedDate);
+                }).OrderByDescending(x => x.CreatedDate).Take(5);
 
             if (mediaItemVersions.OrEmptyIfNull().Any())
             {

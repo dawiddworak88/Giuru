@@ -54,13 +54,13 @@ namespace Seller.Web.Areas.Media.ApiControllers
 
         [HttpPost]
         [DisableRequestSizeLimit]
-        public async Task<IActionResult> Post([FromForm] IFormFile file, List<IFormFile> files, Guid? id)
+        public async Task<IActionResult> Post([FromForm] IFormFile file, List<IFormFile> files, string id)
         {
             if (file == null && (files == null || !files.Any()))
             {
                 return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
             }
-
+            
             if (file != null)
             {
                 using (var ms = new MemoryStream())
@@ -77,6 +77,8 @@ namespace Seller.Web.Areas.Media.ApiControllers
                         await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                         CultureInfo.CurrentUICulture.Name,
                         fileId);
+
+                    Console.WriteLine(fileId);
 
                     if (mediaItem != null)
                     {

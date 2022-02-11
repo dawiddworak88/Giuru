@@ -108,7 +108,7 @@ namespace Media.Api.v1.Controllers
             }
 
             var organisationClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
-            if (!model.Id.HasValue)
+            if (model.Id is null)
             {
                 var serviceModel = new CreateMediaItemServiceModel
                 {
@@ -133,7 +133,7 @@ namespace Media.Api.v1.Controllers
             {
                 var serviceModel = new UpdateMediaItemServiceModel
                 {
-                    Id = model.Id,
+                    Id = Guid.Parse(model.Id),
                     File = model.File,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(organisationClaim?.Value),
