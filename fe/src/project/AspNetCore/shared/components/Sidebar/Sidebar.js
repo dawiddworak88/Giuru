@@ -11,7 +11,6 @@ import { Context } from "../../../../../shared/stores/Store";
 import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
 
 const Sidebar = (props) => {
-
     const [state, dispatch] = useContext(Context);
     const [productVariants, setProductVariants] = useState([]);
     const [quantities, setQuantities] = useState([]);
@@ -100,7 +99,6 @@ const Sidebar = (props) => {
     }
 
     useEffect(() => {
-        
         if (isOpen){
             fetchProductVariants();
         }
@@ -156,6 +154,16 @@ const Sidebar = (props) => {
                                             <div className="sidebar-item__details">
                                                 <h1 className="title">{carouselItem.title}</h1>
                                                 <span className="sku">{labels.skuLabel} {carouselItem.subtitle}</span>
+                                                {carouselItem.availableQuantity && carouselItem.availableQuantity >  0 ? (
+                                                    <div className="stock">
+                                                        {labels.inStockLabel} {carouselItem.availableQuantity}
+                                                    </div>
+                                                ) : (
+                                                    carouselItem.restockableInDays && carouselItem.restockableInDays > 0 &&
+                                                        <div className="stock">
+                                                            {labels.restockableInDaysLabel} {carouselItem.restockableInDays}
+                                                        </div>
+                                                )}
                                                 <div className="fabrics">
                                                     <span>{labels.fabricsLabel}</span>
                                                     <p>{fabrics}</p>

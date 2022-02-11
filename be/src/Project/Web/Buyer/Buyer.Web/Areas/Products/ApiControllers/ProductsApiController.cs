@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Products.DomainModels;
+﻿using Buyer.Web.Areas.Products.Definitions;
+using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.Services.Products;
@@ -106,6 +107,9 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 var productVariants = await this.productsRepository.GetProductsAsync(
                     product.ProductVariants, null, null, language, null, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, token, $"{nameof(Product.Name)} ASC");
 
+                var availableProducts = await this.inventoryRepository.GetAvailbleProductsInventory(
+                    language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, null);
+
                 var carouselItems = new List<CarouselGridCarouselItemViewModel>();
                 foreach (var productVariant in productVariants.Data.OrEmptyIfNull())
                 {
@@ -136,6 +140,13 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         }
                         carouselItem.Images = variantImages;
                         carouselItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), CarouselGridConstants.CarouselItemImageMaxWidth, CarouselGridConstants.CarouselItemImageMaxHeight, true));
+                    }
+
+                    var availableProduct = availableProducts.Data.FirstOrDefault(x => x.ProductSku == productVariant.Sku);
+                    if (availableProduct is not null)
+                    {
+                        carouselItem.AvailableQuantity = availableProduct.Quantity;
+                        carouselItem.RestockableInDays = availableProduct.RestockableInDays;
                     }
                     carouselItems.Add(carouselItem);
                 }

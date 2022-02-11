@@ -20,7 +20,6 @@ using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Foundation.Extensions.ExtensionMethods;
 using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Products.Definitions;
-using Buyer.Web.Shared.ViewModels.Sidebar;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {

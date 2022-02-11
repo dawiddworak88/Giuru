@@ -3,7 +3,7 @@
 namespace Foundation.GenericRepository.Paginations
 {
     public class PagedResults<T>
-    { 
+    {
         public PagedResults()
         { }
 
