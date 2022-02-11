@@ -38,7 +38,7 @@ namespace Inventory.Api.Services.Outlets
                 {
                     ProductId = item.ProductId,
                     ProductName = item.ProductName,
-                    ProductSku = item.ProductSku,
+                    ProductSku = item.ProductSku
                 };
 
                 var existingItem = this.context.Outlet.FirstOrDefault(x => x.ProductId == item.ProductId);
@@ -62,7 +62,7 @@ namespace Inventory.Api.Services.Outlets
                 {
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
-                    ProductSku = x.ProductSku,
+                    ProductSku = x.ProductSku
                 }),
             };
         }
