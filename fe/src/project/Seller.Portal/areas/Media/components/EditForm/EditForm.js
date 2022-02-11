@@ -113,7 +113,7 @@ const EditForm = (props) => {
                                 id="images"
                                 name="images"
                                 label={props.mediaItemsLabel}
-                                accept=".png, .jpg, .pdf"
+                                accept=".png, .jpg, .pdf, .zip"
                                 multiple={false}
                                 mediaId={props.id}
                                 generalErrorMessage={props.generalErrorMessage}
