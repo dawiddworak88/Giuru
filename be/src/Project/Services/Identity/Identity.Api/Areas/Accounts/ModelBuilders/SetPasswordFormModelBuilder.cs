@@ -58,6 +58,7 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 };
 
                 var user = await this.usersService.GetByExpirationId(serviceModel);
+
                 if (user is not null)
                 {
                     viewModel.Id = componentModel.Id.Value;
