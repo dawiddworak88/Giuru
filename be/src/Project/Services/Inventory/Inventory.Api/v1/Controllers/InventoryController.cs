@@ -36,14 +36,14 @@ namespace Inventory.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Gets list of products from inventory.
+        /// Gets a list of product inventories..
         /// </summary>
-        /// <param name="ids">The list of inv ids.</param>
+        /// <param name="ids">The list of inventory ids.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
         /// <param name="orderBy">The optional order by.</param>
-        /// <returns>The list of products from inventory.</returns>
+        /// <returns>The list of product inventories.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -133,11 +133,11 @@ namespace Inventory.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Gets inventories of available products ordered by the available quantity.
+        /// Gets a list of products available on stock.
         /// </summary>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
-        /// <returns>The list of inventory details for products.</returns>
+        /// <returns>The list of products available on stock..</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [Route("availableproducts")]
@@ -185,8 +185,8 @@ namespace Inventory.Api.v1.Controllers
         /// <summary>
         /// Creates or updates inventory (if inventory skus are set).
         /// </summary>
-        /// <param name="request">The model.</param>
-        /// <returns>The inventory ids.</returns>
+        /// <param name="request">The list of inventory items.</param>
+        /// <returns>The successfully saved inventory ids.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [Route("productinventories")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -215,9 +215,9 @@ namespace Inventory.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Creates or updates inventory (if inventory id is set).
+        /// Creates or updates an inventory.
         /// </summary>
-        /// <param name="request">The model.</param>
+        /// <param name="request">The inventory details to save.</param>
         /// <returns>The inventory id.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -285,10 +285,10 @@ namespace Inventory.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Gets inventory product by id.
+        /// Gets a product inventory by id.
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <returns>The inventory product.</returns>
+        /// <returns>The inventory.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
         [AllowAnonymous]
@@ -343,10 +343,10 @@ namespace Inventory.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Get product from inventory by product id
+        /// Gets a product inventory by product id.
         /// </summary>
         /// <param name="id">The product id.</param>
-        /// <returns>Product inventory.</returns>
+        /// <returns>The product inventory.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("product/{id}")]
         [AllowAnonymous]
@@ -409,10 +409,10 @@ namespace Inventory.Api.v1.Controllers
 
 
         /// <summary>
-        /// Get product from inventory by product sku
+        /// Gets a product inventory by product sku.
         /// </summary>
         /// <param name="sku">The product sku.</param>
-        /// <returns>Product inventory.</returns>
+        /// <returns>The product inventory.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("product/sku/{sku}")]
         [AllowAnonymous]
@@ -475,7 +475,7 @@ namespace Inventory.Api.v1.Controllers
 
 
         /// <summary>
-        /// Delete inventory product by id.
+        /// Deletes a product inventory by id.
         /// </summary>
         /// <param name="id">The id.</param>
         /// <returns>OK.</returns>
