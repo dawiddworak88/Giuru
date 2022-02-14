@@ -12,6 +12,8 @@ using System.Linq;
 using Foundation.Account.Definitions;
 using Buyer.Web.Areas.Orders.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Buyer.Web.Shared.Definitions.Basket;
+using System;
 
 namespace Buyer.Web.Areas.Orders.Controllers
 {
@@ -28,6 +30,7 @@ namespace Buyer.Web.Areas.Orders.Controllers
 
         public async Task<IActionResult> Index()
         {
+            var reqCookie = this.Request.Cookies[BasketConstants.BasketCookieName];
             var componentModel = new ComponentModelBase
             {
                 Language = CultureInfo.CurrentUICulture.Name,
@@ -36,6 +39,11 @@ namespace Buyer.Web.Areas.Orders.Controllers
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Name = this.User.Identity.Name
             };
+
+            if (reqCookie is not null)
+            {
+                componentModel.BasketId = Guid.Parse(reqCookie);
+            }
 
             var viewModel = await this.ordersPageModelBuilder.BuildModelAsync(componentModel);
 

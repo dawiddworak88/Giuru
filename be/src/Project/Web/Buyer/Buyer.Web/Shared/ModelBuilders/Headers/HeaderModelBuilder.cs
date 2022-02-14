@@ -11,6 +11,11 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Http;
 using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
+using Buyer.Web.Areas.Orders.Repositories.Baskets;
+using Foundation.Extensions.ExtensionMethods;
+using System.Linq;
+using Newtonsoft.Json;
+using System;
 
 namespace Buyer.Web.Shared.ModelBuilders.Headers
 {
@@ -20,17 +25,20 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers
         private readonly IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly LinkGenerator linkGenerator;
+        private readonly IBasketRepository basketRepository;
 
         public HeaderModelBuilder(
             IModelBuilder<LogoViewModel> logoModelBuilder,
             IModelBuilder<LanguageSwitcherViewModel> languageSwitcherViewModel,
             IStringLocalizer<GlobalResources> globalLocalizer,
+            IBasketRepository basketRepository,
             LinkGenerator linkGenerator)
         {
             this.logoModelBuilder = logoModelBuilder;
             this.languageSwitcherViewModel = languageSwitcherViewModel;
             this.globalLocalizer = globalLocalizer;
             this.linkGenerator = linkGenerator;
+            this.basketRepository = basketRepository;
         }
 
         public async Task<BuyerHeaderViewModel> BuildModelAsync(ComponentModelBase model)
@@ -40,10 +48,11 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers
                 new LinkViewModel { Text = this.globalLocalizer["PriceList"], Url = "#price-list" },
                 new LinkViewModel { Text = this.globalLocalizer["Contact"], Url = "#contact" }
             };
-            
-            return new BuyerHeaderViewModel
+
+            var viewModel = new BuyerHeaderViewModel
             {
                 WelcomeText = this.globalLocalizer.GetString("Welcome").Value,
+                GoToCartLabel = this.globalLocalizer.GetString("Basket"),
                 Name = model.Name,
                 IsLoggedIn = model.IsAuthenticated,
                 SearchUrl = this.linkGenerator.GetPathByAction("Index", "SearchProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
@@ -67,6 +76,27 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers
                 },
                 Links = links
             };
+
+            if (model.IsAuthenticated && model.BasketId.HasValue)
+            {
+                var existingBasket = await this.basketRepository.GetBasketById(model.Token, model.Language, model.BasketId);
+                if (existingBasket is not null)
+                {
+                    var basketItems = existingBasket.Items.OrEmptyIfNull();
+                    if (basketItems.Any())
+                    {
+                        var sum = 0;
+                        foreach (var item in basketItems)
+                        {
+                            sum += 1;
+                        }
+       
+                        viewModel.TotalBasketItems = sum;
+                    }
+                }
+            }
+
+            return viewModel;
         }
     }
 }

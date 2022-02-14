@@ -141,7 +141,12 @@ function Header(props) {
                         </div>
                         {props.isLoggedIn &&
                             <div className="navbar-item">
-                                <a href={props.basketUrl} className="button is-text"><ShoppingCart/></a>
+                                <a href={props.basketUrl} className="button is-text" title={props.goToCartLabel} aria-label={props.goToCartLabel}>
+                                    <ShoppingCart />
+                                    {props.totalBasketItems > 0 &&
+                                        <span className="count">{props.totalBasketItems}</span>
+                                    }
+                                </a>
                             </div>
                         }
                     </div>

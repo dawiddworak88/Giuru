@@ -44,7 +44,7 @@ namespace Buyer.Web.Areas.Orders.Controllers
                 Name = this.User.Identity.Name
             };
 
-            if (reqCookie != null)
+            if (reqCookie is not null)
             {
                 componentModel.BasketId = Guid.Parse(reqCookie);
             }

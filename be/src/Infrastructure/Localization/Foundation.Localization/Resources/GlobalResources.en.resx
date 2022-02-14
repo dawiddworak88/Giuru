@@ -441,4 +441,7 @@
   <data name="Unauthorized" xml:space="preserve">
     <value>Unauthorized</value>
   </data>
+  <data name="Basket" xml:space="preserve">
+    <value>Cart</value>
+  </data>
 </root>
