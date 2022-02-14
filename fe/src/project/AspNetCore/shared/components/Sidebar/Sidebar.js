@@ -7,8 +7,11 @@ import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHe
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import { CircularProgress, TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
+import LazyLoad from "react-lazyload";
 import { Context } from "../../../../../shared/stores/Store";
+import ResponsiveImage from "../../../../../shared/components/Picture/ResponsiveImage";
 import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
+import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
 
 const Sidebar = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -148,9 +151,11 @@ const Sidebar = (props) => {
                                 return (
                                     <ListItem className="sidebar-item">
                                         <div className="sidebar-item__row">
-                                            <div className="sidebar-item__image">
-                                                <img src={carouselItem.imageUrl} alt={carouselItem.imageAlt}/>
-                                            </div>
+                                            <figure className="sidebar-item__image">
+                                                <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
+                                                    <ResponsiveImage sources={carouselItem.sources} imageSrc={carouselItem.imageUrl} imageAlt={carouselItem.imageAlt} />
+                                                </LazyLoad>
+                                            </figure>
                                             <div className="sidebar-item__details">
                                                 <h1 className="title">{carouselItem.title}</h1>
                                                 <span className="sku">{labels.skuLabel} {carouselItem.subtitle}</span>
@@ -200,6 +205,7 @@ const Sidebar = (props) => {
 }
 
 Sidebar.propTypes = {
+    sources: PropTypes.array,
     sidebarTitle: PropTypes.string,
     basketUrl: PropTypes.string,
     basketLabel: PropTypes.string,
