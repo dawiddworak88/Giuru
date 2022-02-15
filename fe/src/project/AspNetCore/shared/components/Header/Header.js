@@ -15,7 +15,7 @@ function Header(props) {
 
     const [searchTerm, setSearchTerm] = useState(props.searchTerm ? props.searchTerm : "");
     const [suggestions, setSuggestions] = useState([]);
-    const [, dispatch] = useContext(Context);
+    const [state, dispatch] = useContext(Context);
 
     const getSuggestionValue = (suggestion) => {
         return suggestion;

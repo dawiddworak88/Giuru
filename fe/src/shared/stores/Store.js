@@ -2,7 +2,8 @@ import React, {createContext, useReducer} from "react";
 import Reducer from "../reducers/Reducer";
 
 const initialState = {
-    isLoading: false
+    isLoading: false,
+    totalBasketItems: 0
 };
 
 const Store = ({children}) => {

@@ -187,7 +187,7 @@
     <value>Back to orders list</value>
   </data>
   <data name="NewOrder" xml:space="preserve">
-    <value>Cart</value>
+    <value>Place order</value>
   </data>
   <data name="NoOrderItemsLabel" xml:space="preserve">
     <value>The cart is empty. Add first order item.</value>

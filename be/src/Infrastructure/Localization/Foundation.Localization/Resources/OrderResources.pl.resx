@@ -187,7 +187,7 @@
     <value>Wróć do listy zamówień</value>
   </data>
   <data name="NewOrder" xml:space="preserve">
-    <value>Koszyk</value>
+    <value>Złóż zamówienie</value>
   </data>
   <data name="NoOrderItemsLabel" xml:space="preserve">
     <value>Koszyk jest pusty. Dodaj pierwszą pozycję zamówienia.</value>

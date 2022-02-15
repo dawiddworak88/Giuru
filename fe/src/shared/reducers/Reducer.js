@@ -5,6 +5,11 @@ const Reducer = (state, action) => {
                 ...state,
                 isLoading: action.payload
             };
+        case "SET_TOTAL_BASKET":
+            return {
+                ...state,
+                totalBasketItems: action.payload
+            }
         default:
             return state;
     }

@@ -12,7 +12,7 @@ import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGri
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function ProductDetail(props) {
-    const [, dispatch] = useContext(Context);
+    const [state, dispatch] = useContext(Context);
     const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
     const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
@@ -64,6 +64,9 @@ function ProductDetail(props) {
             body: JSON.stringify(basket)
         };
 
+        dispatch({ type: "SET_TOTAL_BASKET", payload: state.totalBasketItems + quantity })
+        const a = product.quantity;
+        console.log(a)
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });

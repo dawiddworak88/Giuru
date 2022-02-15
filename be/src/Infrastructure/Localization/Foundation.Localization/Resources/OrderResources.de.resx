@@ -187,7 +187,7 @@
     <value>Zurück zur Bestellliste</value>
   </data>
   <data name="NewOrder" xml:space="preserve">
-    <value>Warenkorb</value>
+    <value>Bestellung absenden</value>
   </data>
   <data name="NoOrderItemsLabel" xml:space="preserve">
     <value>Der Warenkorb ist leer. Fügen Sie die erste Position der Bestellung hinzu.</value>
