@@ -85,10 +85,10 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers
                     var basketItems = existingBasket.Items.OrEmptyIfNull();
                     if (basketItems.Any())
                     {
-                        var sum = 0;
+                        double sum = 0;
                         foreach (var item in basketItems)
-                        {
-                            sum += 1;
+                        { 
+                            sum += item.Quantity;
                         }
        
                         viewModel.TotalBasketItems = sum;

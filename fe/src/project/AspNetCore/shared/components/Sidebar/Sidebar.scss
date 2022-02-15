@@ -106,11 +106,15 @@
         max-width: 15.625rem;
         flex-direction: column;
 
-        .stock {
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
+        .stock-details{
+            margin-bottom: 0.5rem;
 
+            .stock {
+                font-size: 0.8rem;
+                font-weight: 600;
+            }
+        }
+        
         .sku {
             text-transform: capitalize;
             font-size: 0.7rem;
