@@ -50,7 +50,7 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-}).AddNewtonsoftJson().AddXmlSerializerFormatters();
+}).AddNewtonsoftJson();
 
 builder.Services.AddLocalization();
 
