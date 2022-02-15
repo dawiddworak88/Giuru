@@ -64,9 +64,6 @@ function ProductDetail(props) {
             body: JSON.stringify(basket)
         };
 
-        dispatch({ type: "SET_TOTAL_BASKET", payload: state.totalBasketItems + quantity })
-        const a = product.quantity;
-        console.log(a)
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
@@ -74,6 +71,8 @@ function ProductDetail(props) {
                 AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
+                    dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
+                    
                     if (response.ok) {
                         setBasketId(jsonResponse.id);
 

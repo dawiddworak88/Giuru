@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { toast } from "react-toastify";
 import Autosuggest from "react-autosuggest";
 import PropTypes from "prop-types";
@@ -12,10 +12,10 @@ import {ShoppingCart} from '@material-ui/icons';
 import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function Header(props) {
-
+    const [state, dispatch] = useContext(Context);
     const [searchTerm, setSearchTerm] = useState(props.searchTerm ? props.searchTerm : "");
     const [suggestions, setSuggestions] = useState([]);
-    const [state, dispatch] = useContext(Context);
+    const [totalBasketItems, setTotalBasketItems] = useState(0);
 
     const getSuggestionValue = (suggestion) => {
         return suggestion;
@@ -93,6 +93,15 @@ function Header(props) {
             setSearchTerm(newValue);
         }
     };
+
+    useEffect(() => {
+        if (state.totalBasketItems === 0){
+            state.totalBasketItems = props.totalBasketItems;
+        }
+
+        setTotalBasketItems(state.totalBasketItems);
+
+    }, [state])
     
     return (
         <header>
@@ -143,8 +152,8 @@ function Header(props) {
                             <div className="navbar-item">
                                 <a href={props.basketUrl} className="button is-text" title={props.goToCartLabel} aria-label={props.goToCartLabel}>
                                     <ShoppingCart />
-                                    {props.totalBasketItems > 0 &&
-                                        <span className="count">{props.totalBasketItems}</span>
+                                    {totalBasketItems > 0 &&
+                                        <span className="count">{totalBasketItems}</span>
                                     }
                                 </a>
                             </div>

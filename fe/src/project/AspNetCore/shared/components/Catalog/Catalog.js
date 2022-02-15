@@ -13,7 +13,7 @@ import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function Catalog(props) {
-    const [, dispatch] = useContext(Context);
+    const [state, dispatch] = useContext(Context);
     const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
     const [page, setPage] = React.useState(0);
     const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
@@ -111,6 +111,7 @@ function Catalog(props) {
         fetch(props.updateBasketUrl, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
 
                 AuthenticationHelper.HandleResponse(response);
 
