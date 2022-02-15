@@ -196,9 +196,19 @@ namespace Inventory.Api.v1.Controllers
         public async Task<IActionResult> SaveProductInventories(SaveInventoriesBySkusRequestModel request)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-            var serviceModel = new UpdateInventoryProductsServiceModel
+            var serviceModel = new UpdateProductsInventoryServiceModel
             {
-                InventoryItems = request.InventoryItems,
+                InventoryItems = request.InventoryItems.OrEmptyIfNull().Select(x => new UpdateProductInventoryServiceModel
+                { 
+                    AvailableQuantity = x.AvailableQuantity,
+                    Quantity = x.Quantity,
+                    ExpectedDelivery = x.ExpectedDelivery,
+                    ProductId = x.ProductId,
+                    ProductName = x.ProductName,
+                    ProductSku = x.ProductSku,
+                    RestockableInDays = x.RestockableInDays,
+                    WarehouseName = x.WarehouseName
+                }),
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -206,9 +216,9 @@ namespace Inventory.Api.v1.Controllers
             var validationResult = await validator.ValidateAsync(serviceModel);
             if (validationResult.IsValid)
             {
-                var SaveInventoryProducts = await this.inventoriesService.SyncInventoryProducts(serviceModel);
+                await this.inventoriesService.SyncInventoryProducts(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK, new { SaveInventoryProducts.InventoryItems });
+                return this.StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);

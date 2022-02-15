@@ -3,10 +3,9 @@ using System;
 
 namespace Inventory.Api.ServicesModels.InventoryServices
 {
-    public class UpdateInventoryProductServiceModel : BaseServiceModel
+    public class UpdateBasketInventoryServiceModel : BaseServiceModel
     {
         public Guid? ProductId { get; set; }
-        public string ProductName { get; set; }
-        public string ProductSku { get; set; }
+        public int BookedQuantity { get; set; }
     }
 }
