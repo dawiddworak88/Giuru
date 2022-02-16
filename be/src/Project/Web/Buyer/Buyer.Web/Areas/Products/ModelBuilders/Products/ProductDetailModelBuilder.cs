@@ -18,13 +18,13 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
-using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Foundation.PageContent.Components.CarouselGrids.ViewModels;
 using Foundation.GenericRepository.Paginations;
 using Buyer.Web.Areas.Products.DomainModels;
 using Foundation.PageContent.Components.CarouselGrids.Definitions;
+using Buyer.Web.Shared.Services.Baskets;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -41,7 +41,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IMediaHelperService mediaService;
         private readonly LinkGenerator linkGenerator;
         private readonly ICdnService cdnService;
-        private readonly IBasketRepository basketRepository;
+        private readonly IBasketService basketService;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -53,7 +53,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IStringLocalizer<OrderResources> orderResources,
             IOptions<AppSettings> options,
             IMediaHelperService mediaService,
-            IBasketRepository basketRepository,
+            IBasketService basketService,
             LinkGenerator linkGenerator,
             ICdnService cdnService)
         {
@@ -66,7 +66,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             this.sidebarModelBuilder = sidebarModelBuilder;
             this.inventoryResources = inventoryResources;
             this.linkGenerator = linkGenerator;
-            this.basketRepository = basketRepository;
+            this.basketService = basketService;
             this.cdnService = cdnService;
             this.orderResources = orderResources;
         }
@@ -137,29 +137,10 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
                 {
-                    var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
-
-                    if (existingBasket != null)
+                    var basketItems = await this.basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
+                    if (basketItems is not null)
                     {
-                        var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
-                        if (productIds.OrEmptyIfNull().Any())
-                        {
-                            var basketResponseModel = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
-                            {
-                                ProductId = x.ProductId,
-                                ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
-                                Name = x.ProductName,
-                                Sku = x.ProductSku,
-                                Quantity = x.Quantity,
-                                ExternalReference = x.ExternalReference,
-                                ImageSrc = x.PictureUrl,
-                                ImageAlt = x.ProductName,
-                                DeliveryFrom = x.DeliveryFrom,
-                                DeliveryTo = x.DeliveryTo,
-                                MoreInfo = x.MoreInfo
-                            });
-                            viewModel.OrderItems = basketResponseModel;
-                        }
+                        viewModel.OrderItems = basketItems;
                     }
                 }
 

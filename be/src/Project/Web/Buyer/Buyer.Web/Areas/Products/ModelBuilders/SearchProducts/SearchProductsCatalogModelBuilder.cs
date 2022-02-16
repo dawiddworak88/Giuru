@@ -22,21 +22,15 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
         private readonly ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> searchProductsCatalogModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder;
         private readonly IProductsService productsService;
-        private readonly IBasketRepository basketRepository;
-        private readonly LinkGenerator linkGenerator;
 
         public SearchProductsCatalogModelBuilder(
             ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> searchProductsCatalogModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
-            IBasketRepository basketRepository,
-            LinkGenerator linkGenerator,
             IProductsService productsService)
         {
             this.searchProductsCatalogModelBuilder = searchProductsCatalogModelBuilder;
             this.productsService = productsService;
             this.sidebarModelBuilder = sidebarModelBuilder;
-            this.basketRepository = basketRepository;
-            this.linkGenerator = linkGenerator;
         }
 
         public async Task<SearchProductsCatalogViewModel> BuildModelAsync(SearchProductsComponentModel componentModel)
@@ -54,34 +48,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
                 PaginationConstants.DefaultPageIndex,
                 ProductConstants.ProductsCatalogPaginationPageSize,
                 componentModel.Token);
-
-            if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
-            {
-                var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
-
-                if (existingBasket != null)
-                {
-                    var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
-                    if (productIds.OrEmptyIfNull().Any())
-                    {
-                        var basketResponseModel = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
-                        {
-                            ProductId = x.ProductId,
-                            ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
-                            Name = x.ProductName,
-                            Sku = x.ProductSku,
-                            Quantity = x.Quantity,
-                            ExternalReference = x.ExternalReference,
-                            ImageSrc = x.PictureUrl,
-                            ImageAlt = x.ProductName,
-                            DeliveryFrom = x.DeliveryFrom,
-                            DeliveryTo = x.DeliveryTo,
-                            MoreInfo = x.MoreInfo
-                        });
-                        viewModel.OrderItems = basketResponseModel;
-                    }
-                }
-            }
 
             return viewModel;
         }

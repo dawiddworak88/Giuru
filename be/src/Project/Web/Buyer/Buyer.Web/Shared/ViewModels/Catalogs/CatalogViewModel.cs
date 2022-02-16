@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Orders.ApiResponseModels;
+﻿using Buyer.Web.Shared.DomainModels.Baskets;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Foundation.GenericRepository.Paginations;
 using System;
@@ -32,7 +32,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string ProductsApiUrl { get; set; }
         public string UpdateBasketUrl { get; set; }
         public SidebarViewModel Sidebar { get; set; }
-        public IEnumerable<BasketItemResponseModel> OrderItems { get; set; }
+        public IEnumerable<Basket> OrderItems { get; set; }
         public PagedResults<IEnumerable<CatalogItemViewModel>> PagedItems { get; set; }
     }
 }
