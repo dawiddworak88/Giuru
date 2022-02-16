@@ -29,7 +29,7 @@ namespace Inventory.Api.Services.Outlets
             this.inventortLocalizer = inventortLocalizer;
         }
 
-        public async Task<SyncOutletServiceModel> SyncOutletAsync(SyncOutletServiceModel model)
+        public async Task SyncOutletAsync(SyncOutletServiceModel model)
         {
             var syncItems = new List<Outlet>();
             foreach (var item in model.OutletItems.OrEmptyIfNull())
@@ -55,16 +55,6 @@ namespace Inventory.Api.Services.Outlets
 
             this.context.RemoveRange(soldItems);
             await this.context.SaveChangesAsync();
-
-            return new SyncOutletServiceModel
-            {
-                OutletItems = model.OutletItems.Select(x => new SyncOutletItemServiceModel
-                {
-                    ProductId = x.ProductId,
-                    ProductName = x.ProductName,
-                    ProductSku = x.ProductSku
-                }),
-            };
         }
 
         public async Task<PagedResults<IEnumerable<SyncOutletItemServiceModel>>> GetAsync(GetOutletsServiceModel model)
@@ -150,6 +140,19 @@ namespace Inventory.Api.Services.Outlets
             await this.context.SaveChangesAsync();
             
             return outletItem.Id;
+        }
+
+        public async Task UpdateOutletProduct(Guid? ProductId, string ProductName, string ProductSku)
+        {
+            var outletProduct = await this.context.Outlet.FirstOrDefaultAsync(x => x.ProductId == ProductId.Value && x.IsActive);
+            if (outletProduct is not null)
+            {
+                outletProduct.ProductName = ProductName;
+                outletProduct.ProductSku = ProductSku;
+                outletProduct.LastModifiedDate = DateTime.UtcNow;
+
+                await this.context.SaveChangesAsync();
+            }
         }
     }
 }

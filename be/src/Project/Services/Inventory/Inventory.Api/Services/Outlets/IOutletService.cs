@@ -8,11 +8,12 @@ namespace Inventory.Api.Services.Outlets
 {
     public interface IOutletService
     {
-        Task<SyncOutletServiceModel> SyncOutletAsync(SyncOutletServiceModel model);
+        Task SyncOutletAsync(SyncOutletServiceModel model);
         Task<PagedResults<IEnumerable<SyncOutletItemServiceModel>>> GetAsync(GetOutletsServiceModel model);
         Task DeleteAsync(DeleteOutletServiceModel model);
         Task<Guid> CreateAsync(OutletServiceModel model);
         Task<Guid> UpdateAsync(UpdateOutletServiceModel model);
         Task<OutletServiceModel> GetAsync(GetOutletServiceModel model);
+        Task UpdateOutletProduct(Guid? ProductId, string ProductName, string ProductSku);
     }
 }

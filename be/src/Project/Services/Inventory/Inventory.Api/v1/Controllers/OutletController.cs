@@ -68,9 +68,9 @@ namespace Inventory.Api.v1.Controllers
             var validationResult = await validator.ValidateAsync(serviceModel);
             if (validationResult.IsValid)
             {
-                var outletItems = await this.outletService.SyncOutletAsync(serviceModel);
+                await this.outletService.SyncOutletAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK, outletItems);
+                return this.StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
-using Buyer.Web.Areas.Products.Repositories.Inventories;
 using System.Linq;
 using Microsoft.AspNetCore.Routing;
 using Buyer.Web.Shared.ViewModels.Catalogs;
@@ -112,10 +111,10 @@ namespace Buyer.Web.Areas.Outlet.ModelBuilders
                     foreach (var product in products.Data)
                     {
                         product.InStock = true;
-                        product.AvailableQuantity = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.Quantity;
+                        product.AvailableQuantity = OutletConstants.Catalog.DefaultQuantityValue;
                     }
                 }
-                    
+
                 viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(products.Total, OutletConstants.Catalog.DefaultItemsPerPage)
                 {
                     Data = products.Data.OrderBy(x => x.Title)
