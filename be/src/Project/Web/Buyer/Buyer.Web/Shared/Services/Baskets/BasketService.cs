@@ -23,7 +23,7 @@ namespace Buyer.Web.Shared.Services.Baskets
             this.basketRepository = basketRepository;
         }
 
-        public async Task<IEnumerable<Basket>> GetBasketAsync(Guid? basketId, string token, string language)
+        public async Task<IEnumerable<BasketItem>> GetBasketAsync(Guid? basketId, string token, string language)
         {
             var existingBasket = await this.basketRepository.GetBasketById(token, language, basketId);
             if (existingBasket is not null)
@@ -31,7 +31,7 @@ namespace Buyer.Web.Shared.Services.Baskets
                 var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
                 if (productIds.OrEmptyIfNull().Any())
                 {
-                    var basketResponseModel = existingBasket.Items.OrEmptyIfNull().Select(x => new Basket
+                    var basketItems = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItem
                     {
                         ProductId = x.ProductId,
                         ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
@@ -46,7 +46,7 @@ namespace Buyer.Web.Shared.Services.Baskets
                         MoreInfo = x.MoreInfo
                     });
 
-                    return basketResponseModel;
+                    return basketItems;
                 }
             }
 

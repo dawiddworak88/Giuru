@@ -40,7 +40,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string AddedProduct { get; set; }
         public SidebarViewModel Sidebar { get; set; }
         public FilesViewModel Files { get; set; }
-        public IEnumerable<Basket> OrderItems { get; set; }
+        public IEnumerable<BasketItem> OrderItems { get; set; }
         public IEnumerable<ImageViewModel> Images { get; set; }
         public IEnumerable<ProductFeatureViewModel> Features { get; set; }
         public IEnumerable<CarouselGridItemViewModel> ProductVariants { get; set; }

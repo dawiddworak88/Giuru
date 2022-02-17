@@ -24,20 +24,14 @@ namespace Buyer.Web.Areas.Brands.Controllers
 
         public async Task<IActionResult> Index(Guid? id)
         {
-            var reqCookie = this.Request.Cookies[BasketConstants.BasketCookieName];
             var componentModel = new ComponentModelBase
             {
-                Id = id,
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Name = this.User.Identity.Name,
-                Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName)
+                Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName])
             };
-
-            if (reqCookie != null)
-            {
-                componentModel.BasketId = Guid.Parse(reqCookie);
-            }
 
             var viewModel = await this.brandPageModelBuilder.BuildModelAsync(componentModel);
 

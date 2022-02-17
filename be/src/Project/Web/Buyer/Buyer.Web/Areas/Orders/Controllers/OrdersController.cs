@@ -30,20 +30,14 @@ namespace Buyer.Web.Areas.Orders.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var reqCookie = this.Request.Cookies[BasketConstants.BasketCookieName];
             var componentModel = new ComponentModelBase
             {
                 Language = CultureInfo.CurrentUICulture.Name,
-                Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
-                Name = this.User.Identity.Name
+                Name = this.User.Identity.Name,
+                Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
+                BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName])
             };
-
-            if (reqCookie is not null)
-            {
-                componentModel.BasketId = Guid.Parse(reqCookie);
-            }
 
             var viewModel = await this.ordersPageModelBuilder.BuildModelAsync(componentModel);
 

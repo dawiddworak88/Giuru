@@ -33,7 +33,7 @@ function NewOrderForm(props) {
     const [deliveryFrom, setDeliveryFrom] = useState(null);
     const [deliveryTo, setDeliveryTo] = useState(null);
     const [moreInfo, setMoreInfo] = useState("");
-    const [orderItems, setOrderItems] = useState(props.orderItems ? props.orderItems : []);
+    const [orderItems, setOrderItems] = useState(props.basketItems ? props.basketItems : []);
     const [suggestions, setSuggestions] = useState([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);

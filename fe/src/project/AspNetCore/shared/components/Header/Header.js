@@ -15,7 +15,7 @@ function Header(props) {
     const [state, dispatch] = useContext(Context);
     const [searchTerm, setSearchTerm] = useState(props.searchTerm ? props.searchTerm : "");
     const [suggestions, setSuggestions] = useState([]);
-    const [totalBasketItems, setTotalBasketItems] = useState(0);
+    const [totalBasketItems, setTotalBasketItems] = useState(props.totalBasketItems ? props.totalBasketItems : 0);
 
     const getSuggestionValue = (suggestion) => {
         return suggestion;
@@ -96,7 +96,7 @@ function Header(props) {
 
     useEffect(() => {
         if (state.totalBasketItems === 0){
-            state.totalBasketItems = props.totalBasketItems;
+            state.totalBasketItems = totalBasketItems;
         }
 
         setTotalBasketItems(state.totalBasketItems);

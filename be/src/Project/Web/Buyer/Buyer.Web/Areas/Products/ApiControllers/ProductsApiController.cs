@@ -125,7 +125,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         {
                             Key = x.Key,
                             Value = string.Join(", ", x.Values.OrEmptyIfNull())
-                        }),
+                        })
                     };
 
                     if (productVariant.Images != null && productVariant.Images.Any())

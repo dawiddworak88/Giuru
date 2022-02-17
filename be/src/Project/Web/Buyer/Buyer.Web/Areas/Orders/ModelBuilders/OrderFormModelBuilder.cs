@@ -77,7 +77,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 var basketItems = await this.basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
                 if (basketItems is not null)
                 {
-                    viewModel.OrderItems = basketItems;
+                    viewModel.BasketItems = basketItems;
                 }
             }
 

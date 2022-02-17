@@ -32,7 +32,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string ProductsApiUrl { get; set; }
         public string UpdateBasketUrl { get; set; }
         public SidebarViewModel Sidebar { get; set; }
-        public IEnumerable<Basket> OrderItems { get; set; }
+        public IEnumerable<BasketItem> BasketItems { get; set; }
         public PagedResults<IEnumerable<CatalogItemViewModel>> PagedItems { get; set; }
     }
 }

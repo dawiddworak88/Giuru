@@ -7,6 +7,6 @@ namespace Buyer.Web.Shared.Services.Baskets
 {
     public interface IBasketService
     {
-        Task<IEnumerable<Basket>> GetBasketAsync(Guid? basketId, string token, string language);
+        Task<IEnumerable<BasketItem>> GetBasketAsync(Guid? basketId, string token, string language);
     }
 }

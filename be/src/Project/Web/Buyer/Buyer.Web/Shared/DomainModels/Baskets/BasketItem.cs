@@ -2,7 +2,7 @@
 
 namespace Buyer.Web.Shared.DomainModels.Baskets
 {
-    public class Basket
+    public class BasketItem
     {
         public Guid? Id { get; set; }
         public Guid? ProductId { get; set; }

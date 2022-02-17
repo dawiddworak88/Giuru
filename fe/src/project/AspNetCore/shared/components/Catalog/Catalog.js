@@ -14,7 +14,7 @@ import AuthenticationHelper from "../../../../../shared/helpers/globals/Authenti
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
-    const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
+    const [orderItems, setOrderItems] = React.useState(props.basketItems ? props.basketItems : []);
     const [page, setPage] = React.useState(0);
     const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
     const [itemsPerPage,] = React.useState(props.itemsPerPage ? props.itemsPerPage : CatalogConstants.defaultCatalogItemsPerPage());

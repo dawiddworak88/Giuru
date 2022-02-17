@@ -57,7 +57,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 var basketItems = this.basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language).Result;
                 if (basketItems is not null)
                 {
-                    viewModel.OrderItems = basketItems;
+                    viewModel.BasketItems = basketItems;
                 }
             }
 
