@@ -94,7 +94,7 @@ const Sidebar = (props) => {
             let prevQuantities = [...quantities];
 
             let item = prevQuantities.find(x => x.id === id);
-            item.quantity = parseInt(e.target.value);
+            item.quantity = e.target.value;
 
             prevQuantities[itemQuantityIndex] = item;
 

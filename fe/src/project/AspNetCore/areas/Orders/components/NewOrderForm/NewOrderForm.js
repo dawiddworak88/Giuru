@@ -89,7 +89,7 @@ function NewOrderForm(props) {
             sku: product.sku,
             name: product.name,
             imageId: product.images ? product.images[0] : null,
-            quantity: parseInt(quantity),
+            quantity: quantity,
             externalReference,
             deliveryFrom: moment(deliveryFrom).startOf("day"),
             deliveryTo: moment(deliveryTo).startOf("day"),
@@ -215,7 +215,7 @@ function NewOrderForm(props) {
         fetch(props.placeOrderUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(0) })
+                dispatch({ type: "SET_TOTAL_BASKET", payload: 0 })
                 
                 AuthenticationHelper.HandleResponse(response);
                 
@@ -294,7 +294,7 @@ function NewOrderForm(props) {
         fetch(url, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(0) })
+                dispatch({ type: "SET_TOTAL_BASKET", payload: 0 });
                 
                 AuthenticationHelper.HandleResponse(response);
                 

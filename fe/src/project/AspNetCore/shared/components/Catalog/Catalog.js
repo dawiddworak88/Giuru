@@ -91,7 +91,7 @@ function Catalog(props) {
             sku: item.subtitle ? item.subtitle : item.sku, 
             name: item.title, 
             imageId: item.images ? item.images[0].id ? item.images[0].id : item.images[0] : null,
-            quantity: parseInt(item.quantity), 
+            quantity: item.quantity, 
             externalReference: null, 
             deliveryFrom: null, 
             deliveryTo: null, 
@@ -144,7 +144,7 @@ function Catalog(props) {
             let prevQuantities = [...quantities];
 
             let item = prevQuantities.find(x => x.id === id);
-            item.quantity = parseInt(e.target.value);
+            item.quantity = e.target.value;
 
             prevQuantities[itemQuantityIndex] = item;
 
