@@ -15,6 +15,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public bool IsNew { get; set; }
         public bool InStock { get; set; }
         public int? AvailableQuantity { get; set; }
+        public DateTime? ExpectedDelivery { get; set; }
         public string BrandName { get; set; }
         public string BrandUrl { get; set; }
         public IEnumerable<Guid> Images { get; set; }

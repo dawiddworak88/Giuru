@@ -12,12 +12,14 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
+        private readonly IStringLocalizer<InventoryResources> inventoryLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly IBasketService basketService;
 
         public CatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
+            IStringLocalizer<InventoryResources> inventoryLocalizer,
             IBasketService basketService,
             LinkGenerator linkGenerator)
         {
@@ -25,6 +27,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
             this.productLocalizer = productLocalizer;
             this.linkGenerator = linkGenerator;
             this.basketService = basketService;
+            this.inventoryLocalizer = inventoryLocalizer;
         }
 
         public T BuildModel(S componentModel)
@@ -49,7 +52,8 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 BasketId = componentModel.BasketId,
                 SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct"),
                 ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products" }),
-                UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                ExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ExpectedDeliveryLabel")
             };
 
             if (componentModel.IsAuthenticated)

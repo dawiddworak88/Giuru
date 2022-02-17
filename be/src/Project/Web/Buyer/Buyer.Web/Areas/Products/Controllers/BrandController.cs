@@ -26,6 +26,7 @@ namespace Buyer.Web.Areas.Brands.Controllers
         {
             var componentModel = new ComponentModelBase
             {
+                Id = id,
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Name = this.User.Identity.Name,

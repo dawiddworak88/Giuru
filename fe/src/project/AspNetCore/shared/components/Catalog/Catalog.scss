@@ -33,11 +33,14 @@
             font-size: 0.750rem;
         }
 
-        &__in-stock {
+        &__in-stock-details {
             margin-top: 0.5rem;
-            color: darkgreen;
-            font-size: 1.1rem;
-            font-weight: 600;
+
+            .stock {
+                color: darkgreen;
+                font-weight: 600;
+                font-size: 0.9rem;
+            }
         }
 
         &__price {

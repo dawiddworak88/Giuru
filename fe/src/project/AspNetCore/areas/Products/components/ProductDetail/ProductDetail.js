@@ -113,10 +113,7 @@ function ProductDetail(props) {
                         <div className="product-detail__in-stock">
                             {props.inStockLabel} {props.availableQuantity}
                             {props.expectedDelivery && 
-                                <div className="product-detail__expected-delivery">{props.expectedDeliveryLabel} {moment.utc(props.expectedDelivery).local().format("L")}</div>
-                            }
-                            {props.restockableInDays && 
-                                <div className="product-detail__restockable-in-days">{props.restockableInDaysLabel} {props.restockableInDays}</div>
+                                <div className="product-detail__expected-delivery">{props.expectedDeliveryLabel} {moment.utc(props.expectedDelivery).local().format("MM/DD/YYYY")}</div>
                             }
                         </div>
                     }

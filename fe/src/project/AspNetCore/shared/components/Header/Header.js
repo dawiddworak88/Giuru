@@ -98,7 +98,7 @@ function Header(props) {
         if (state.totalBasketItems === 0){
             state.totalBasketItems = totalBasketItems;
         }
-
+        console.log("a")
         setTotalBasketItems(state.totalBasketItems);
 
     }, [state])

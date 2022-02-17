@@ -136,7 +136,7 @@
     <value>Magazyn</value>
   </data>
   <data name="ExpectedDeliveryLabel" xml:space="preserve">
-    <value>Termin dostawy</value>
+    <value>Przewidywana dostawa:</value>
   </data>
   <data name="Inventory" xml:space="preserve">
     <value>Stany magazynowe</value>

@@ -11,6 +11,7 @@ import CatalogConstants from "./CatalogConstants";
 import { ShoppingCart } from "@material-ui/icons";
 import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
+import moment from "moment";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -218,9 +219,18 @@ function Catalog(props) {
                                                         <h3>{props.primaryFabricLabel} {fabrics}</h3>
                                                     </div>
                                                 }
-                                                {item.inStock && item.availableQuantity && item.availableQuantity >  0 &&
-                                                    <div className="catalog-item__in-stock">
-                                                        {props.inStockLabel} {item.availableQuantity}
+                                                {item.inStock &&
+                                                    <div className="catalog-item__in-stock-details">
+                                                        {item.availableQuantity && item.availableQuantity > 0 && 
+                                                            <div className="stock">
+                                                                {props.inStockLabel} {item.availableQuantity}
+                                                            </div>
+                                                        }
+                                                        {item.expectedDelivery &&
+                                                            <div className="stock">
+                                                                {props.expectedDeliveryLabel} {moment.utc(item.expectedDelivery).local().format("MM/DD/YYYY")}
+                                                            </div>
+                                                        }
                                                     </div>
                                                 }
                                             </div>

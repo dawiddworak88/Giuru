@@ -161,7 +161,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     if (availableProduct is not null)
                     {
                         carouselItem.AvailableQuantity = availableProduct.Quantity;
-                        carouselItem.RestockableInDays = availableProduct.RestockableInDays;
+                        carouselItem.ExpectedDelivery = availableProduct.ExpectedDelivery;
                     }
                     carouselItems.Add(carouselItem);
                 }

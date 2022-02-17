@@ -26,6 +26,8 @@ namespace Buyer.Web.Areas.Products.Controllers
         {
             var componentModel = new SearchProductsComponentModel
             {
+                Id = id,
+                SearchTerm = searchTerm,
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Name = this.User.Identity.Name,

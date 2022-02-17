@@ -12,6 +12,7 @@ import { Context } from "../../../../../shared/stores/Store";
 import ResponsiveImage from "../../../../../shared/components/Picture/ResponsiveImage";
 import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
 import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
+import moment from "moment";
 
 const Sidebar = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -165,9 +166,9 @@ const Sidebar = (props) => {
                                                             {labels.inStockLabel} {carouselItem.availableQuantity}
                                                         </div>
                                                     }
-                                                    {carouselItem.restockableInDays && carouselItem.restockableInDays > 0 &&
+                                                    {carouselItem.expectedDelivery &&
                                                         <div className="stock">
-                                                            {labels.restockableInDaysLabel} {carouselItem.restockableInDays}
+                                                            {labels.expectedDeliveryLabel} {moment(carouselItem.expectedDelivery).format("DD/MM/YYYY")}
                                                         </div>
                                                     }
                                                 </div>

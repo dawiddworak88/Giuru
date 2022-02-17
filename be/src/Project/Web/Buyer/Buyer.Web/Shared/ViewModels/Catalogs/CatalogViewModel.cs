@@ -31,6 +31,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string GeneralErrorMessage { get; set; }
         public string ProductsApiUrl { get; set; }
         public string UpdateBasketUrl { get; set; }
+        public string ExpectedDeliveryLabel { get; set; }
         public SidebarViewModel Sidebar { get; set; }
         public IEnumerable<BasketItem> BasketItems { get; set; }
         public PagedResults<IEnumerable<CatalogItemViewModel>> PagedItems { get; set; }

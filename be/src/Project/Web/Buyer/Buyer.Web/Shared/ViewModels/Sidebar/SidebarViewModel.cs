@@ -13,6 +13,6 @@
         public string AddToCartLabel { get; set; }
         public string GoToDetailsLabel { get; set; }
         public string InStockLabel { get; set; }
-        public string RestockableInDaysLabel { get; set; }
+        public string ExpectedDeliveryLabel { get; set; }
     }
 }
