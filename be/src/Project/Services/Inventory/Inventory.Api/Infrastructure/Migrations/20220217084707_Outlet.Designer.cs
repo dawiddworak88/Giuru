@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(InventoryContext))]
-    [Migration("20220210141125_Outlet")]
+    [Migration("20220217084707_Outlet")]
     partial class Outlet
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -95,8 +95,7 @@ namespace Inventory.Api.Infrastructure.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("ProductId")
-                        .IsRequired()
+                    b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ProductName")
