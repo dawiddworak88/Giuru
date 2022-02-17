@@ -31,7 +31,7 @@ namespace Inventory.Api.IntegrationEventsHandlers
         {
             if (@event.OrganisationId.HasValue)
             {
-                await this.outletService.UpdateOutletProduct(@event.ProductId, @event.ProductName, @event.ProductSku);
+                await this.outletService.UpdateProductOutlet(@event.ProductId, @event.ProductName, @event.ProductSku);
                 await this.inventoryService.UpdateInventoryProduct(@event.ProductId, @event.ProductName, @event.ProductSku, @event.OrganisationId);
             }
         }

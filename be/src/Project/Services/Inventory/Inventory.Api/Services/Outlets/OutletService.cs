@@ -19,14 +19,14 @@ namespace Inventory.Api.Services.Outlets
     public class OutletService : IOutletService
     {
         private readonly InventoryContext context;
-        private readonly IStringLocalizer inventortLocalizer;
+        private readonly IStringLocalizer inventoryLocalizer;
 
         public OutletService(
             InventoryContext context,
-            IStringLocalizer<InventoryResources> inventortLocalizer)
+            IStringLocalizer<InventoryResources> inventoryLocalizer)
         {
             this.context = context;
-            this.inventortLocalizer = inventortLocalizer;
+            this.inventoryLocalizer = inventoryLocalizer;
         }
 
         public async Task SyncOutletAsync(SyncOutletServiceModel model)
@@ -85,7 +85,7 @@ namespace Inventory.Api.Services.Outlets
             var outletItem = await this.context.Outlet.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
             if (outletItem == null)
             {
-                throw new CustomException(this.inventortLocalizer.GetString("OutletNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.inventoryLocalizer.GetString("OutletNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             outletItem.IsActive = false;
@@ -129,7 +129,7 @@ namespace Inventory.Api.Services.Outlets
             var outletItem = await this.context.Outlet.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
             if (outletItem is null)
             {
-                throw new CustomException(this.inventortLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             outletItem.ProductId = model.ProductId.Value;
@@ -142,7 +142,7 @@ namespace Inventory.Api.Services.Outlets
             return outletItem.Id;
         }
 
-        public async Task UpdateOutletProduct(Guid? ProductId, string ProductName, string ProductSku)
+        public async Task UpdateProductOutlet(Guid? ProductId, string ProductName, string ProductSku)
         {
             var outletProduct = await this.context.Outlet.FirstOrDefaultAsync(x => x.ProductId == ProductId.Value && x.IsActive);
             if (outletProduct is not null)

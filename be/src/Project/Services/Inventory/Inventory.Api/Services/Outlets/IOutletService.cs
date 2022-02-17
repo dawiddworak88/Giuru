@@ -14,6 +14,6 @@ namespace Inventory.Api.Services.Outlets
         Task<Guid> CreateAsync(OutletServiceModel model);
         Task<Guid> UpdateAsync(UpdateOutletServiceModel model);
         Task<OutletServiceModel> GetAsync(GetOutletServiceModel model);
-        Task UpdateOutletProduct(Guid? ProductId, string ProductName, string ProductSku);
+        Task UpdateProductOutlet(Guid? ProductId, string ProductName, string ProductSku);
     }
 }
