@@ -287,5 +287,41 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
             return suggestions.Take(size);
         }
+
+        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? organisationId, IEnumerable<string> skus, string orderBy)
+        {
+            var query = Query<ProductSearchModel>.Term(t => t.Language, language)
+                && Query<ProductSearchModel>.Term(t => t.IsActive, true);
+
+            if (organisationId.HasValue)
+            {
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(organisationId.Value));
+            }
+            else
+            {
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsPublished).Value(true));
+            }
+
+            var idsQuery = Query<ProductSearchModel>.MatchNone();
+
+            foreach (var sku in skus)
+            {
+                idsQuery = idsQuery || Query<ProductSearchModel>.Term(t => t.Field(x => x.Sku).Value(sku));
+            }
+
+            query = query && idsQuery;
+
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(q => q.From(ProductSearchConstants.Pagination.BeginningPage).Size(ProductSearchConstants.Pagination.ProductsMaxSize).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
+
+            if (response.IsValid && response.Hits.Any())
+            {
+                return new PagedResults<IEnumerable<ProductSearchModel>>(response.Total, (int)response.Total)
+                {
+                    Data = response.Documents
+                };
+            }
+
+            return default;
+        }
     }
 }

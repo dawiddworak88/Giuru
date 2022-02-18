@@ -19,6 +19,7 @@ using Foundation.EventBus.Abstractions;
 using Catalog.Api.IntegrationEvents;
 using Newtonsoft.Json.Linq;
 using Foundation.Catalog.Repositories.ProductSearchRepositories;
+using Newtonsoft.Json;
 
 namespace Catalog.Api.Services.Products
 {
@@ -352,6 +353,13 @@ namespace Catalog.Api.Services.Products
         public IEnumerable<string> GetProductSuggestions(GetProductSuggestionsServiceModel model)
         {
             return this.productSearchRepository.GetProductSuggestions(model.SearchTerm, model.Size, model.Language, model.OrganisationId);
+        }
+
+        public async Task<PagedResults<IEnumerable<ProductServiceModel>>> GetBySkusAsync(GetProductsBySkusServiceModel model)
+        {
+            var products = await this.productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Skus, model.OrderBy);
+
+            return await this.MapToPageResultsAsync(products, model.Language, model.OrganisationId);
         }
 
         private async Task<PagedResults<IEnumerable<ProductServiceModel>>> MapToPageResultsAsync(PagedResults<IEnumerable<ProductSearchModel>> searchResults, string language, Guid? organisationId)
