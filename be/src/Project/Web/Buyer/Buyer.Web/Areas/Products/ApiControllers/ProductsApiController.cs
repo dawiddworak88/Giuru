@@ -160,7 +160,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     var availableProduct = availableProducts.Data.FirstOrDefault(x => x.ProductSku == productVariant.Sku);
                     if (availableProduct is not null)
                     {
-                        carouselItem.AvailableQuantity = availableProduct.Quantity;
+                        carouselItem.AvailableQuantity = availableProduct.AvailableQuantity;
                         carouselItem.ExpectedDelivery = availableProduct.ExpectedDelivery;
                     }
                     carouselItems.Add(carouselItem);

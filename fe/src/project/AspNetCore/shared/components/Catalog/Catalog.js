@@ -91,7 +91,7 @@ function Catalog(props) {
             sku: item.subtitle ? item.subtitle : item.sku, 
             name: item.title, 
             imageId: item.images ? item.images[0].id ? item.images[0].id : item.images[0] : null,
-            quantity: item.quantity, 
+            quantity: parseInt(item.quantity), 
             externalReference: null, 
             deliveryFrom: null, 
             deliveryTo: null, 
