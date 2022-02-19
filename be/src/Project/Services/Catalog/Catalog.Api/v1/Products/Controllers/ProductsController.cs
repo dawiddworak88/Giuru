@@ -53,12 +53,12 @@ namespace Catalog.Api.v1.Products.Controllers
         public async Task<IActionResult> GetBySkus(string skus, int pageIndex, int itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-            var inventorySkus = skus.ToEnumerableString();
-            if (inventorySkus is not null)
+            var productSkus = skus.ToEnumerableString();
+            if (productSkus is not null)
             {
                 var serviceModel = new GetProductsBySkusServiceModel
                 {
-                    Skus = inventorySkus,
+                    Skus = productSkus,
                     PageIndex = pageIndex,
                     ItemsPerPage = itemsPerPage,
                     OrderBy = orderBy,

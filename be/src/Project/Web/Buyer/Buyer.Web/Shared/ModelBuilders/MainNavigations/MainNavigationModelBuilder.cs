@@ -61,14 +61,14 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
 
             links.Add(new LinkViewModel
             {
-                Text = this.globalLocalizer.GetString("Outlet").Value,
-                Url = this.linkGenerator.GetPathByAction("Index", "Outlet", new { Area = "Outlet", culture = CultureInfo.CurrentUICulture.Name })
+                Text = this.globalLocalizer.GetString("AvailableProducts"),
+                Url = this.linkGenerator.GetPathByAction("Index", "AvailableProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             });
 
             links.Add(new LinkViewModel
             {
-                Text = this.globalLocalizer.GetString("AvailableProducts"),
-                Url = this.linkGenerator.GetPathByAction("Index", "AvailableProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                Text = this.globalLocalizer.GetString("Outlet").Value,
+                Url = this.linkGenerator.GetPathByAction("Index", "Outlet", new { Area = "Outlet", culture = CultureInfo.CurrentUICulture.Name })
             });
 
             if (!this.configuration.Value.IsMarketplace)
