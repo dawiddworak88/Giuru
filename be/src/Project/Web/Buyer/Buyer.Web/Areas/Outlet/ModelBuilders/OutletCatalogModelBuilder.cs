@@ -11,8 +11,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Routing;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using System.Collections.Generic;
-using Microsoft.Extensions.Options;
-using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Areas.Products.Definitions;
 using Buyer.Web.Areas.Outlet.ViewModels;
 using Buyer.Web.Areas.Outlet.Repositories;
@@ -26,14 +24,12 @@ namespace Buyer.Web.Areas.Outlet.ModelBuilders
         private readonly ICatalogModelBuilder<ComponentModelBase, OutletPageCatalogViewModel> outletCatalogModelBuilder;
         private readonly IProductsService productsService;
         private readonly LinkGenerator linkGenerator;
-        private readonly IOptions<AppSettings> settings;
         private readonly IOutletRepository outletRepository;
 
         public OutletCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             ICatalogModelBuilder<ComponentModelBase, OutletPageCatalogViewModel> outletCatalogModelBuilder,
             IProductsService productsService,
-            IOptions<AppSettings> settings,
             IOutletRepository outletRepository,
             LinkGenerator linkGenerator)
         {
@@ -41,18 +37,12 @@ namespace Buyer.Web.Areas.Outlet.ModelBuilders
             this.outletCatalogModelBuilder = outletCatalogModelBuilder;
             this.productsService = productsService;
             this.linkGenerator = linkGenerator;
-            this.settings = settings;
             this.outletRepository = outletRepository;
         }
 
         public async Task<OutletPageCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = this.outletCatalogModelBuilder.BuildModel(componentModel);
-
-            if (this.settings.Value.IsMarketplace)
-            {
-                viewModel.ShowBrand = true;
-            }
 
             viewModel.HideQuantityInput = true;
             viewModel.ShowAddToCartButton = true;

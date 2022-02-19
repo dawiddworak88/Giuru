@@ -209,11 +209,6 @@ function Catalog(props) {
                                             <div className="media-content">
                                                 <p className="catalog-item__sku">{props.skuLabel} {item.sku}</p>
                                                 <h2 className="catalog-item__title"><a href={item.url}>{item.title}</a></h2>
-                                                {props.showBrand && item.brandName &&
-                                                    <div className="catalog-item__brand">
-                                                        <h2 className="catalog-item__brand-text">{props.byLabel} <a href={item.brandUrl}>{item.brandName}</a></h2>
-                                                    </div>
-                                                }
                                                 {item.productAttributes && fabrics &&
                                                     <div className="catalog-item__fabric">
                                                         <h3>{props.primaryFabricLabel} {fabrics}</h3>
