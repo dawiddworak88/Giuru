@@ -106,11 +106,18 @@
         max-width: 15.625rem;
         flex-direction: column;
 
-        .stock-details{
+        .stock-details {
             margin-bottom: 0.5rem;
 
             .stock {
+                color: darkgreen;
                 font-size: 0.8rem;
+                font-weight: 600;
+            }
+
+            .expected-delivery {
+                color: darkgreen;
+                font-size: 0.7rem;
                 font-weight: 600;
             }
         }

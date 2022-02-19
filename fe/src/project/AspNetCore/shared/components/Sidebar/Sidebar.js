@@ -7,11 +7,9 @@ import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHe
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import { CircularProgress, TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
-import LazyLoad from "react-lazyload";
 import { Context } from "../../../../../shared/stores/Store";
 import ResponsiveImage from "../../../../../shared/components/Picture/ResponsiveImage";
 import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
-import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
 import moment from "moment";
 
 const Sidebar = (props) => {
@@ -153,9 +151,7 @@ const Sidebar = (props) => {
                                     <ListItem className="sidebar-item">
                                         <div className="sidebar-item__row">
                                             <figure className="sidebar-item__image">
-                                                <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
-                                                    <ResponsiveImage sources={carouselItem.sources} imageSrc={carouselItem.imageUrl} imageAlt={carouselItem.imageAlt} />
-                                                </LazyLoad>
+                                                <ResponsiveImage sources={carouselItem.sources} imageSrc={carouselItem.imageUrl} imageAlt={carouselItem.imageAlt} />
                                             </figure>
                                             <div className="sidebar-item__details">
                                                 <h1 className="title">{carouselItem.title}</h1>
@@ -167,7 +163,7 @@ const Sidebar = (props) => {
                                                         </div>
                                                     }
                                                     {carouselItem.expectedDelivery &&
-                                                        <div className="stock">
+                                                        <div className="expected-delivery">
                                                             {labels.expectedDeliveryLabel} {moment(carouselItem.expectedDelivery).format("DD/MM/YYYY")}
                                                         </div>
                                                     }

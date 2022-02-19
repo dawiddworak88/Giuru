@@ -227,7 +227,7 @@ function Catalog(props) {
                                                             </div>
                                                         }
                                                         {item.expectedDelivery &&
-                                                            <div className="stock">
+                                                            <div className="expected-delivery">
                                                                 {props.expectedDeliveryLabel} {moment.utc(item.expectedDelivery).local().format("L")}
                                                             </div>
                                                         }
