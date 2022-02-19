@@ -228,7 +228,7 @@ function Catalog(props) {
                                                         }
                                                         {item.expectedDelivery &&
                                                             <div className="stock">
-                                                                {props.expectedDeliveryLabel} {moment.utc(item.expectedDelivery).local().format("MM/DD/YYYY")}
+                                                                {props.expectedDeliveryLabel} {moment.utc(item.expectedDelivery).local().format("L")}
                                                             </div>
                                                         }
                                                     </div>
