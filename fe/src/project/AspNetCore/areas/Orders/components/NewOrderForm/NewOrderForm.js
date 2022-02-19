@@ -33,7 +33,7 @@ function NewOrderForm(props) {
     const [deliveryFrom, setDeliveryFrom] = useState(null);
     const [deliveryTo, setDeliveryTo] = useState(null);
     const [moreInfo, setMoreInfo] = useState("");
-    const [orderItems, setOrderItems] = useState(props.orderItems ? props.orderItems : []);
+    const [orderItems, setOrderItems] = useState(props.basketItems ? props.basketItems : []);
     const [suggestions, setSuggestions] = useState([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
@@ -89,7 +89,7 @@ function NewOrderForm(props) {
             sku: product.sku,
             name: product.name,
             imageId: product.images ? product.images[0] : null,
-            quantity,
+            quantity: quantity,
             externalReference,
             deliveryFrom: moment(deliveryFrom).startOf("day"),
             deliveryTo: moment(deliveryTo).startOf("day"),
@@ -110,6 +110,7 @@ function NewOrderForm(props) {
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
 
                 AuthenticationHelper.HandleResponse(response);
 
@@ -174,9 +175,10 @@ function NewOrderForm(props) {
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+                
                 AuthenticationHelper.HandleResponse(response);
+                
                 return response.json().then(jsonResponse => {
-
                     if (response.ok) {
                         setBasketId(jsonResponse.id);
                         setOpenDeleteDialog(false);
@@ -213,7 +215,10 @@ function NewOrderForm(props) {
         fetch(props.placeOrderUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+                dispatch({ type: "SET_TOTAL_BASKET", payload: 0 })
+                
                 AuthenticationHelper.HandleResponse(response);
+                
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
@@ -289,8 +294,13 @@ function NewOrderForm(props) {
         fetch(url, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+                dispatch({ type: "SET_TOTAL_BASKET", payload: 0 });
+                
                 AuthenticationHelper.HandleResponse(response);
+                
                 return response.json().then(jsonResponse => {
+                    
+
                     if (response.ok) {
                         toast.success(jsonResponse.message);
                         setOrderItems([]);

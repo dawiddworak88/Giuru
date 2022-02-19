@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Shared.ViewModels.Catalogs;
+﻿using Buyer.Web.Shared.Services.Baskets;
+using Buyer.Web.Shared.ViewModels.Catalogs;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
@@ -11,21 +12,27 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
+        private readonly IStringLocalizer<InventoryResources> inventoryLocalizer;
         private readonly LinkGenerator linkGenerator;
+        private readonly IBasketService basketService;
 
         public CatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
+            IStringLocalizer<InventoryResources> inventoryLocalizer,
+            IBasketService basketService,
             LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
             this.linkGenerator = linkGenerator;
+            this.basketService = basketService;
+            this.inventoryLocalizer = inventoryLocalizer;
         }
 
         public T BuildModel(S componentModel)
         {
-            return new T
+            var viewModel = new T
             {
                 SkuLabel = this.productLocalizer.GetString("Sku"),
                 SignInUrl = "#",
@@ -45,8 +52,20 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 BasketId = componentModel.BasketId,
                 SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct"),
                 ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products" }),
-                UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                ExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ExpectedDeliveryLabel")
             };
+
+            if (componentModel.IsAuthenticated)
+            {
+                var basketItems = this.basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language).Result;
+                if (basketItems is not null)
+                {
+                    viewModel.BasketItems = basketItems;
+                }
+            }
+
+            return viewModel;
         }
     }
 }

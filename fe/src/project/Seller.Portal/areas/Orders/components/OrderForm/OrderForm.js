@@ -105,7 +105,6 @@ function OrderForm(props) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const orderItem = {
-
             productId: product.id,
             sku: product.sku,
             name: product.name,
@@ -242,7 +241,6 @@ function OrderForm(props) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         var order = {
-
             basketId,
             clientId: client.id,
             clientName: client.name

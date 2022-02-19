@@ -13,7 +13,9 @@ namespace Buyer.Web.Shared.ViewModels.Headers
         public string SearchPlaceholderLabel { get; set; }
         public string GetSuggestionsUrl { get; set; }
         public string BasketUrl { get; set; }
+        public double TotalBasketItems { get; set; }
         public string GeneralErrorMessage { get; set; }
+        public string GoToCartLabel { get; set; }
         public LinkViewModel SignInLink { get; set; }
     }
 }

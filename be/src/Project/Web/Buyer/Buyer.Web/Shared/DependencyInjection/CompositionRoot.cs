@@ -25,6 +25,7 @@ using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Buyer.Web.Shared.ModelBuilders.Sidebar;
+using Buyer.Web.Shared.Services.Baskets;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -52,6 +53,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             // Services
             services.AddScoped<ICdnService, CdnService>();
             services.AddScoped<ICatalogService, CatalogService>();
+            services.AddScoped<IBasketService, BasketService>();
 
             // Client
             services.AddScoped<ICatalogOrderModelBuilder, CatalogOrderModelBuilder>();

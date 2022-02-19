@@ -7,11 +7,14 @@ import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHe
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import { CircularProgress, TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
+import LazyLoad from "react-lazyload";
 import { Context } from "../../../../../shared/stores/Store";
+import ResponsiveImage from "../../../../../shared/components/Picture/ResponsiveImage";
 import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
+import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
+import moment from "moment";
 
 const Sidebar = (props) => {
-
     const [state, dispatch] = useContext(Context);
     const [productVariants, setProductVariants] = useState([]);
     const [quantities, setQuantities] = useState([]);
@@ -91,7 +94,7 @@ const Sidebar = (props) => {
             let prevQuantities = [...quantities];
 
             let item = prevQuantities.find(x => x.id === id);
-            item.quantity = parseInt(e.target.value);
+            item.quantity = e.target.value;
 
             prevQuantities[itemQuantityIndex] = item;
 
@@ -100,7 +103,6 @@ const Sidebar = (props) => {
     }
 
     useEffect(() => {
-        
         if (isOpen){
             fetchProductVariants();
         }
@@ -150,12 +152,26 @@ const Sidebar = (props) => {
                                 return (
                                     <ListItem className="sidebar-item">
                                         <div className="sidebar-item__row">
-                                            <div className="sidebar-item__image">
-                                                <img src={carouselItem.imageUrl} alt={carouselItem.imageAlt}/>
-                                            </div>
+                                            <figure className="sidebar-item__image">
+                                                <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
+                                                    <ResponsiveImage sources={carouselItem.sources} imageSrc={carouselItem.imageUrl} imageAlt={carouselItem.imageAlt} />
+                                                </LazyLoad>
+                                            </figure>
                                             <div className="sidebar-item__details">
                                                 <h1 className="title">{carouselItem.title}</h1>
                                                 <span className="sku">{labels.skuLabel} {carouselItem.subtitle}</span>
+                                                <div className="stock-details">
+                                                    {carouselItem.availableQuantity && carouselItem.availableQuantity > 0 &&
+                                                        <div className="stock">
+                                                            {labels.inStockLabel} {carouselItem.availableQuantity}
+                                                        </div>
+                                                    }
+                                                    {carouselItem.expectedDelivery &&
+                                                        <div className="stock">
+                                                            {labels.expectedDeliveryLabel} {moment(carouselItem.expectedDelivery).format("DD/MM/YYYY")}
+                                                        </div>
+                                                    }
+                                                </div>
                                                 <div className="fabrics">
                                                     <span>{labels.fabricsLabel}</span>
                                                     <p>{fabrics}</p>
@@ -192,6 +208,7 @@ const Sidebar = (props) => {
 }
 
 Sidebar.propTypes = {
+    sources: PropTypes.array,
     sidebarTitle: PropTypes.string,
     basketUrl: PropTypes.string,
     basketLabel: PropTypes.string,
