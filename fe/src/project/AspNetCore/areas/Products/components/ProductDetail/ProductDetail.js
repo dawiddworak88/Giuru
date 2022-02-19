@@ -12,7 +12,7 @@ import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGri
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function ProductDetail(props) {
-    const [, dispatch] = useContext(Context);
+    const [state, dispatch] = useContext(Context);
     const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
     const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
@@ -33,7 +33,7 @@ function ProductDetail(props) {
                 sku: item.subtitle,
                 title: item.title,
                 images: item.images,
-                quantity: parseInt(item.quantity),
+                quantity: item.quantity,
                 externalReference: null, 
                 deliveryFrom: null, 
                 deliveryTo: null, 
@@ -46,7 +46,7 @@ function ProductDetail(props) {
             sku: product.sku, 
             name: product.title, 
             imageId: product.images ? product.images[0].id : null, 
-            quantity: product.quantity ? product.quantity : parseInt(quantity), 
+            quantity: product.quantity ? product.quantity : quantity, 
             externalReference: null, 
             deliveryFrom: null, 
             deliveryTo: null, 
@@ -71,6 +71,8 @@ function ProductDetail(props) {
                 AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
+                    dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
+                    
                     if (response.ok) {
                         setBasketId(jsonResponse.id);
 
@@ -112,9 +114,6 @@ function ProductDetail(props) {
                             {props.inStockLabel} {props.availableQuantity}
                             {props.expectedDelivery && 
                                 <div className="product-detail__expected-delivery">{props.expectedDeliveryLabel} {moment.utc(props.expectedDelivery).local().format("L")}</div>
-                            }
-                            {props.restockableInDays && 
-                                <div className="product-detail__restockable-in-days">{props.restockableInDaysLabel} {props.restockableInDays}</div>
                             }
                         </div>
                     }

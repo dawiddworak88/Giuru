@@ -13,16 +13,19 @@ namespace Buyer.Web.Shared.ModelBuilders.Sidebar
     {
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IStringLocalizer<InventoryResources> inventoryLocalizer;
         private readonly LinkGenerator linkGenerator;
 
         public SidebarModelBuilder(
             IStringLocalizer<OrderResources> orderLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
+            IStringLocalizer<InventoryResources> inventoryLocalizer,
             LinkGenerator linkGenerator)
         {
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
             this.globalLocalizer = globalLocalizer;
+            this.inventoryLocalizer = inventoryLocalizer;
         }
 
         public async Task<SidebarViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -38,7 +41,9 @@ namespace Buyer.Web.Shared.ModelBuilders.Sidebar
                 LackInformation = this.orderLocalizer.GetString("LackInformation"),
                 ProductsApiUrl = this.linkGenerator.GetPathByAction("GetProductVariants", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 AddToCartLabel = this.orderLocalizer.GetString("AddToCart"),
-                GoToDetailsLabel = this.orderLocalizer.GetString("GoToDetails")
+                GoToDetailsLabel = this.orderLocalizer.GetString("GoToDetails"),
+                InStockLabel = this.globalLocalizer.GetString("InStock"),
+                ExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ExpectedDeliveryLabel")
             };
            
             return viewModel;

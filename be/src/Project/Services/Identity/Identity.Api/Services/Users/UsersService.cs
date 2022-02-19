@@ -49,10 +49,10 @@ namespace Identity.Api.Services.Users
 
         public async Task<UserServiceModel> CreateAsync(CreateUserServiceModel serviceModel)
         {
-            var timeNow = DateTime.UtcNow;
-            var timeExpiration = timeNow.AddHours(IdentityConstants.VerifyTimeExpiration);
+            var timeExpiration = DateTime.UtcNow.AddHours(IdentityConstants.VerifyTimeExpiration);
 
             var existingOrganisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.ContactEmail == serviceModel.Email && x.IsActive);
+            
             if (existingOrganisation == null)
             {
                 throw new CustomException(this.accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NotFound);
@@ -158,19 +158,24 @@ namespace Identity.Api.Services.Users
         {
             var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.ExpirationId == serviceModel.Id);
 
-            return new UserServiceModel
+            if (user is not null)
             {
-                Id = user.Id,
-                Email = user.Email,
-                UserName = user.UserName,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                OrganisationId = user.OrganisationId,
-                TwoFactorEnabled = user.TwoFactorEnabled,
-                EmailConfirmed = user.EmailConfirmed,
-                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
-                PhoneNumber = user.PhoneNumber
-            };
+                return new UserServiceModel
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    UserName = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    OrganisationId = user.OrganisationId,
+                    TwoFactorEnabled = user.TwoFactorEnabled,
+                    EmailConfirmed = user.EmailConfirmed,
+                    PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+                    PhoneNumber = user.PhoneNumber
+                };
+            }
+
+            return default;
         }
 
         public async Task<UserServiceModel> SetPasswordAsync(SetUserPasswordServiceModel serviceModel)

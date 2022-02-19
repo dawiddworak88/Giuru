@@ -444,4 +444,7 @@
   <data name="Outlet" xml:space="preserve">
     <value>Outlet</value>
   </data>
+  <data name="Basket" xml:space="preserve">
+    <value>Cart</value>
+  </data>
 </root>

@@ -54,8 +54,9 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 
 builder.Services.AddControllers(options =>
 {
+    options.RespectBrowserAcceptHeader = true;
     options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-}).AddNewtonsoftJson();
+}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 
 builder.Services.AddLocalization();
 
@@ -74,7 +75,6 @@ builder.Services.RegisterOrderingDatabaseDependencies(builder.Configuration);
 builder.Services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
 {
     var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
-
     var factory = new ConnectionFactory
     {
         Uri = new Uri(builder.Configuration["EventBusConnection"]),

@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Orders.ApiResponseModels;
+using Buyer.Web.Shared.DomainModels.Baskets;
 using Buyer.Web.Shared.ViewModels.Files;
 using Buyer.Web.Shared.ViewModels.Images;
 using Buyer.Web.Shared.ViewModels.Sidebar;
@@ -39,7 +40,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string AddedProduct { get; set; }
         public SidebarViewModel Sidebar { get; set; }
         public FilesViewModel Files { get; set; }
-        public IEnumerable<BasketItemResponseModel> OrderItems { get; set; }
+        public IEnumerable<BasketItem> OrderItems { get; set; }
         public IEnumerable<ImageViewModel> Images { get; set; }
         public IEnumerable<ProductFeatureViewModel> Features { get; set; }
         public IEnumerable<CarouselGridItemViewModel> ProductVariants { get; set; }

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Foundation.Extensions.Models;
+using System;
 
-namespace Inventory.Api.v1.RequestModels
+namespace Inventory.Api.ServicesModels.InventoryServices
 {
-    public class UpdateInventoryProductRequestModel
+    public class UpdateProductInventoryServiceModel : BaseServiceModel
     {
         public string WarehouseName { get; set; }
         public Guid? ProductId { get; set; }

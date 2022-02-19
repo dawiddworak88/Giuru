@@ -299,7 +299,8 @@ namespace Ordering.Api.Services
                 Id = serviceModel.OrderId,
                 OrganisationId = serviceModel.OrganisationId,
                 Username = serviceModel.Username,
-                Language = serviceModel.Language
+                Language = serviceModel.Language,
+                IsSeller = serviceModel.IsSeller
             });
         }
     }

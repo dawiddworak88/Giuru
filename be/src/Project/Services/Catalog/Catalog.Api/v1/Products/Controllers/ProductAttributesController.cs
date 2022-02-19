@@ -25,7 +25,6 @@ namespace Catalog.Api.v1.Products.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Produces("application/json")]
     [Authorize]
     [ApiController]
     public class ProductAttributesController : BaseApiController

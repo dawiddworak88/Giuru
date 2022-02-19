@@ -2,6 +2,6 @@
 {
     public static class IdentityConstants
     {
-        public static readonly int VerifyTimeExpiration = 5;
+        public static readonly int VerifyTimeExpiration = 72;
     }
 }

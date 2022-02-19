@@ -9,12 +9,6 @@ using Foundation.GenericRepository.Paginations;
 using System.Threading.Tasks;
 using Foundation.PageContent.ComponentModels;
 using Buyer.Web.Shared.ViewModels.Sidebar;
-using Buyer.Web.Areas.Orders.Repositories.Baskets;
-using Foundation.Extensions.ExtensionMethods;
-using System.Linq;
-using Buyer.Web.Areas.Orders.ApiResponseModels;
-using System.Globalization;
-using Microsoft.AspNetCore.Routing;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
 {
@@ -24,23 +18,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder;
         private readonly IProductsService productsService;
         private readonly ICategoryRepository categoryRepository;
-        private readonly IBasketRepository basketRepository;
-        private readonly LinkGenerator linkGenerator;
 
         public CategoryCatalogModelBuilder(
             ICatalogModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel> catalogModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
             IProductsService productsService,
-            IBasketRepository basketRepository,
-            LinkGenerator linkGenerator,
             ICategoryRepository categoryRepository)
         {
-            this.basketRepository = basketRepository;
             this.catalogModelBuilder = catalogModelBuilder;
             this.sidebarModelBuilder = sidebarModelBuilder;
             this.productsService = productsService;
             this.categoryRepository = categoryRepository;
-            this.linkGenerator = linkGenerator;
         }
 
         public async Task<CategoryCatalogViewModel> BuildModelAsync(SearchProductsComponentModel componentModel)
@@ -63,35 +51,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
                     PaginationConstants.DefaultPageIndex,
                     ProductConstants.ProductsCatalogPaginationPageSize,
                     componentModel.Token);
-
-                if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
-                {
-                    var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId.Value);
-                    
-                    if (existingBasket != null)
-                    {
-                        var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
-                        if (productIds.OrEmptyIfNull().Any())
-                        {
-                            var basketResponseModel = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
-                            {
-                                ProductId = x.ProductId,
-                                ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
-                                Name = x.ProductName,
-                                Sku = x.ProductSku,
-                                Quantity = x.Quantity,
-                                ExternalReference = x.ExternalReference,
-                                ImageSrc = x.PictureUrl,
-                                ImageAlt = x.ProductName,
-                                DeliveryFrom = x.DeliveryFrom,
-                                DeliveryTo = x.DeliveryTo,
-                                MoreInfo = x.MoreInfo
-                            });
-
-                            viewModel.OrderItems = basketResponseModel;
-                        }
-                    }
-                }
             }
 
             return viewModel;

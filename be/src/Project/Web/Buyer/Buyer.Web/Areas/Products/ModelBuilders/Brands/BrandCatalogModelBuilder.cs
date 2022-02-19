@@ -57,34 +57,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
             viewModel.PagedItems = await this.productsService.GetProductsAsync(
                 null, null, componentModel.Id, componentModel.Language, null, PaginationConstants.DefaultPageIndex, ProductConstants.ProductsCatalogPaginationPageSize, componentModel.Token);
 
-            if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
-            {
-                var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
-                if (existingBasket != null)
-                {
-                    var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
-                    if (productIds.OrEmptyIfNull().Any())
-                    {
-                        var basketResponseModel = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
-                        {
-                            ProductId = x.ProductId,
-                            ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
-                            Name = x.ProductName,
-                            Sku = x.ProductSku,
-                            Quantity = x.Quantity,
-                            ExternalReference = x.ExternalReference,
-                            ImageSrc = x.PictureUrl,
-                            ImageAlt = x.ProductName,
-                            DeliveryFrom = x.DeliveryFrom,
-                            DeliveryTo = x.DeliveryTo,
-                            MoreInfo = x.MoreInfo
-                        });
-
-                        viewModel.OrderItems = basketResponseModel;
-                    }
-                }
-            }
-
             return viewModel;
         }
     }

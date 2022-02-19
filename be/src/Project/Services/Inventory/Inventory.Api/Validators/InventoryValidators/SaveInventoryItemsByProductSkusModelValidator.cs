@@ -4,7 +4,7 @@ using Inventory.Api.ServicesModels.InventoryServices;
 
 namespace Inventory.Api.Validators.InventoryValidators
 {
-    public class SaveInventoryItemsByProductSkusModelValidator : BaseServiceModelValidator<UpdateInventoryProductsServiceModel>
+    public class SaveInventoryItemsByProductSkusModelValidator : BaseServiceModelValidator<UpdateProductsInventoryServiceModel>
     {
         public SaveInventoryItemsByProductSkusModelValidator()
         {

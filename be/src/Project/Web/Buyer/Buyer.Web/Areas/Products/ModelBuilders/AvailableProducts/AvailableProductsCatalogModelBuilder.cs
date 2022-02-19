@@ -13,12 +13,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Routing;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using System.Collections.Generic;
-using System.Globalization;
 using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Areas.Orders.Repositories.Baskets;
-using Foundation.Extensions.ExtensionMethods;
-using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Products.Definitions;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
@@ -28,7 +24,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
         private readonly IStringLocalizer globalLocalizer;
         private readonly ICatalogModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel> availableProductsCatalogModelBuilder;
         private readonly IProductsService productsService;
-        private readonly IBasketRepository basketRepository;
         private readonly IInventoryRepository inventoryRepository;
         private readonly LinkGenerator linkGenerator;
         private readonly IOptions<AppSettings> settings;
@@ -39,7 +34,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             IProductsService productsService,
             IInventoryRepository inventoryRepository,
             IOptions<AppSettings> settings,
-            IBasketRepository basketRepository,
             LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
@@ -48,7 +42,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             this.inventoryRepository = inventoryRepository;
             this.linkGenerator = linkGenerator;
             this.settings = settings;
-            this.basketRepository = basketRepository;
         }
 
         public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -66,35 +59,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "AvailableProductsApi", new { Area = "Products" });
             viewModel.ItemsPerPage = AvailableProductsConstants.Pagination.ItemsPerPage;
             viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
-
-            if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)
-            {
-                var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
-
-                if (existingBasket != null)
-                {
-                    var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
-                    if (productIds.OrEmptyIfNull().Any())
-                    {
-                        var basketResponseModel = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
-                        {
-                            ProductId = x.ProductId,
-                            ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
-                            Name = x.ProductName,
-                            Sku = x.ProductSku,
-                            Quantity = x.Quantity,
-                            ExternalReference = x.ExternalReference,
-                            ImageSrc = x.PictureUrl,
-                            ImageAlt = x.ProductName,
-                            DeliveryFrom = x.DeliveryFrom,
-                            DeliveryTo = x.DeliveryTo,
-                            MoreInfo = x.MoreInfo
-                        });
-
-                        viewModel.OrderItems = basketResponseModel;
-                    }
-                }
-            }
 
             var inventories = await this.inventoryRepository.GetAvailbleProductsInventory(
                 componentModel.Language,
@@ -114,6 +78,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                     {
                         product.InStock = true;
                         product.AvailableQuantity = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
+                        product.ExpectedDelivery = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
                     }
 
                     viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(products.Total, AvailableProductsConstants.Pagination.ItemsPerPage)

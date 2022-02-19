@@ -11,10 +11,11 @@ import CatalogConstants from "./CatalogConstants";
 import { ShoppingCart } from "@material-ui/icons";
 import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
+import moment from "moment";
 
 function Catalog(props) {
-    const [, dispatch] = useContext(Context);
-    const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
+    const [state, dispatch] = useContext(Context);
+    const [orderItems, setOrderItems] = React.useState(props.basketItems ? props.basketItems : []);
     const [page, setPage] = React.useState(0);
     const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
     const [itemsPerPage,] = React.useState(props.itemsPerPage ? props.itemsPerPage : CatalogConstants.defaultCatalogItemsPerPage());
@@ -111,6 +112,7 @@ function Catalog(props) {
         fetch(props.updateBasketUrl, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
 
                 AuthenticationHelper.HandleResponse(response);
 
@@ -142,7 +144,7 @@ function Catalog(props) {
             let prevQuantities = [...quantities];
 
             let item = prevQuantities.find(x => x.id === id);
-            item.quantity = parseInt(e.target.value);
+            item.quantity = e.target.value;
 
             prevQuantities[itemQuantityIndex] = item;
 
@@ -217,9 +219,18 @@ function Catalog(props) {
                                                         <h3>{props.primaryFabricLabel} {fabrics}</h3>
                                                     </div>
                                                 }
-                                                {item.inStock && item.availableQuantity && item.availableQuantity >  0 &&
-                                                    <div className="catalog-item__in-stock">
-                                                        {props.inStockLabel} {item.availableQuantity}
+                                                {item.inStock &&
+                                                    <div className="catalog-item__in-stock-details">
+                                                        {item.availableQuantity && item.availableQuantity > 0 && 
+                                                            <div className="stock">
+                                                                {props.inStockLabel} {item.availableQuantity}
+                                                            </div>
+                                                        }
+                                                        {item.expectedDelivery &&
+                                                            <div className="expected-delivery">
+                                                                {props.expectedDeliveryLabel} {moment.utc(item.expectedDelivery).local().format("L")}
+                                                            </div>
+                                                        }
                                                     </div>
                                                 }
                                             </div>

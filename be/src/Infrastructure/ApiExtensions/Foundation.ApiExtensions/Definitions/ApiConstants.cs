@@ -61,7 +61,7 @@
 
         public struct Request
         {
-            public const long RequestSizeLimit = 200_000_000;
+            public const long RequestSizeLimit = 500_000_000;
         }
     }
 }

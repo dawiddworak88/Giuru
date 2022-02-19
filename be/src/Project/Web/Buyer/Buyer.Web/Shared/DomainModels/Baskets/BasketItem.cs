@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Buyer.Web.Shared.ApiResponseModels
+namespace Buyer.Web.Shared.DomainModels.Baskets
 {
-    public class BasketItemResponseModel
+    public class BasketItem
     {
         public Guid? Id { get; set; }
         public Guid? ProductId { get; set; }

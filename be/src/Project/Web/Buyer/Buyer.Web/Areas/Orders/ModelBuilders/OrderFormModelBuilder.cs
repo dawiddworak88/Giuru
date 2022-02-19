@@ -1,14 +1,12 @@
-﻿using Buyer.Web.Areas.Orders.ApiResponseModels;
-using Buyer.Web.Areas.Orders.Repositories.Baskets;
+﻿using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Areas.Orders.ViewModel;
-using Foundation.Extensions.ExtensionMethods;
+using Buyer.Web.Shared.Services.Baskets;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Orders.ModelBuilders
@@ -18,18 +16,18 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly LinkGenerator linkGenerator;
-        private readonly IBasketRepository basketRepository;
+        private readonly IBasketService basketService;
 
         public OrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
-            IBasketRepository basketRepository,
+            IBasketService basketService,
             LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
-            this.basketRepository = basketRepository;
+            this.basketService = basketService;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -76,30 +74,10 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
 
             if (componentModel.BasketId.HasValue)
             {
-                var existingBasket = await this.basketRepository.GetBasketById(componentModel.Token, componentModel.Language, componentModel.BasketId);
-
-                if (existingBasket != null)
+                var basketItems = await this.basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
+                if (basketItems is not null)
                 {
-                    var productIds = existingBasket.Items.OrEmptyIfNull().Select(x => x.ProductId.Value);
-                    if (productIds.OrEmptyIfNull().Any())
-                    {
-                        var basketResponseModel = existingBasket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
-                        {
-                            ProductId = x.ProductId,
-                            ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
-                            Name = x.ProductName,
-                            Sku = x.ProductSku,
-                            Quantity = x.Quantity,
-                            ExternalReference = x.ExternalReference,
-                            ImageSrc = x.PictureUrl,
-                            ImageAlt = x.ProductName,
-                            DeliveryFrom = x.DeliveryFrom,
-                            DeliveryTo = x.DeliveryTo,
-                            MoreInfo = x.MoreInfo
-                        });
-
-                        viewModel.OrderItems = basketResponseModel;
-                    }
+                    viewModel.BasketItems = basketItems;
                 }
             }
 

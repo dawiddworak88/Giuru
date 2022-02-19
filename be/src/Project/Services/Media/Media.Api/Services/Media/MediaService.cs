@@ -175,7 +175,7 @@ namespace Media.Api.Services.Media
                 }
             }
 
-            return new PagedResults<IEnumerable<MediaItemServiceModel>>(unorderedMediaItemsResults.Count, model.ItemsPerPage)
+            return new PagedResults<IEnumerable<MediaItemServiceModel>>(model.Ids.Count(), model.ItemsPerPage)
             { 
                 Data = mediaItemsResults
             };
