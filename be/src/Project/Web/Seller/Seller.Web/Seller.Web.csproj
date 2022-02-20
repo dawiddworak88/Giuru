@@ -35,8 +35,6 @@
 		<ProjectReference Include="..\..\..\..\Infrastructure\PageContent\Foundation.PageContent\Foundation.PageContent.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Areas\Inventory\Views\Inventory\" />
-		<Folder Include="Areas\Inventory\Views\Warehouse\" />
 		<Folder Include="wwwroot\dist\" />
 	</ItemGroup>
 	<ItemGroup>

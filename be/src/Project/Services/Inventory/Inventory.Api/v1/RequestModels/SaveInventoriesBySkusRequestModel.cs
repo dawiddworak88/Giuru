@@ -5,6 +5,6 @@ namespace Inventory.Api.v1.RequestModels
 {
     public class SaveInventoriesBySkusRequestModel
     {
-        public IEnumerable<UpdateInventoryProductRequestModel> InventoryItems { get; set; }
+        public IEnumerable<UpdateProductInventoryRequestModel> InventoryItems { get; set; }
     }
 }

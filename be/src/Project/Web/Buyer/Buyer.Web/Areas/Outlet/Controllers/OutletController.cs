@@ -25,19 +25,14 @@ namespace Buyer.Web.Areas.Outlet.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var reqCookie = this.Request.Cookies[BasketConstants.BasketCookieName];
             var componentModel = new ComponentModelBase
             {
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
-                Name = this.User.Identity.Name
+                Name = this.User.Identity.Name,
+                BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName])
             };
-
-            if (reqCookie != null)
-            {
-                componentModel.BasketId = Guid.Parse(reqCookie);
-            }
 
             var viewModel = await this.outletPageModelBuilder.BuildModelAsync(componentModel);
 

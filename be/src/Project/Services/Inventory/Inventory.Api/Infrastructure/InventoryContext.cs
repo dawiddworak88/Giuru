@@ -18,6 +18,6 @@ namespace Inventory.Api.Infrastructure
 
         public DbSet<InventoryItem> Inventory { get; set; }
 
-        public DbSet<Outlet> Outlet { get; set; }
+        public DbSet<OutletItem> Outlet { get; set; }
     }
 }

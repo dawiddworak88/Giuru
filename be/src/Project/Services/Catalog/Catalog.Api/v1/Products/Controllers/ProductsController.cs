@@ -37,13 +37,13 @@ namespace Catalog.Api.v1.Products.Controllers
         }
 
         /// <summary>
-        /// Gets list of products from inventory.
+        /// Gets list of products by Skus.
         /// </summary>
-        /// <param name="skus">The list of inv skus.</param>
+        /// <param name="skus">The list of skus.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
         /// <param name="orderBy">The optional order by.</param>
-        /// <returns>The list of products from inventory.</returns>
+        /// <returns>The list of products.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [Route("skus")]

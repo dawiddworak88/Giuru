@@ -17,7 +17,7 @@ namespace Inventory.Api.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -28,7 +28,7 @@ namespace Inventory.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("AvailableQuantity")
+                    b.Property<int>("AvailableQuantity")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
@@ -78,11 +78,14 @@ namespace Inventory.Api.Infrastructure.Migrations
                     b.ToTable("Inventory");
                 });
 
-            modelBuilder.Entity("Inventory.Api.Infrastructure.Entities.Outlet", b =>
+            modelBuilder.Entity("Inventory.Api.Infrastructure.Entities.OutletItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AvailableQuantity")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -104,12 +107,23 @@ namespace Inventory.Api.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
+                    b.Property<Guid>("SellerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WarehouseId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("Outlet");
                 });
@@ -151,6 +165,17 @@ namespace Inventory.Api.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("Inventory.Api.Infrastructure.Entities.InventoryItem", b =>
+                {
+                    b.HasOne("Inventory.Api.Infrastructure.Entities.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("Inventory.Api.Infrastructure.Entities.OutletItem", b =>
                 {
                     b.HasOne("Inventory.Api.Infrastructure.Entities.Warehouse", "Warehouse")
                         .WithMany()

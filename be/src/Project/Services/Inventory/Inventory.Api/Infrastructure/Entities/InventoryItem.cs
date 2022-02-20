@@ -20,8 +20,9 @@ namespace Inventory.Api.Infrastructure.Entities
 
         [Required]
         public int Quantity { get; set; }
-        
-        public int? AvailableQuantity { get; set; }
+
+        [Required]
+        public int AvailableQuantity { get; set; }
 
         public int? RestockableInDays { get; set; }
 

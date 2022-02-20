@@ -21,12 +21,12 @@ import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetP
 import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
 
 // Seller Portal
-import NewOutletPage from "../../src/project/Seller.Portal/areas/Outlet/pages/NewOutletPage/NewOutletPage";
-import OutletPage from "../../src/project/Seller.Portal/areas/Outlet/pages/OutletPage/OutletPage";
-import WarehouseAddPage from "../../src/project/Seller.Portal/areas/Warehouse/pages/WarehouseAddPage/WarehouseAddPage";
-import WarehousePage from "../../src/project/Seller.Portal/areas/Warehouse/pages/WarehousePage/WarehousePage";
+import OutletPage from "../../src/project/Seller.Portal/areas/Inventory/pages/OutletPage/OutletPage";
+import OutletsPage from "../../src/project/Seller.Portal/areas/Inventory/pages/OutletsPage/OutletsPage";
 import InventoryPage from "../../src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/InventoryPage";
-import InventoryAddPage from "../../src/project/Seller.Portal/areas/Inventory/pages/InventoryAddPage/InventoryAddPage";
+import InventoriesPage from "../../src/project/Seller.Portal/areas/Inventory/pages/InventoriesPage/InventoriesPage";
+import WarehousePage from "../../src/project/Seller.Portal/areas/Inventory/pages/WarehousePage/WarehousePage";
+import WarehousesPage from "../../src/project/Seller.Portal/areas/Inventory/pages/WarehousesPage/WarehousesPage";
 import OrdersPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrdersPage/OrdersPage";
 import OrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage";
 import EditOrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/EditOrderPage/EditOrderPage";
@@ -57,12 +57,12 @@ const Components = {
 	SetPasswordPage,
 	ContentPage,
 
-	NewOutletPage,
 	OutletPage,
-	WarehouseAddPage,
-	WarehousePage,
+	OutletsPage,
 	InventoryPage,
-	InventoryAddPage,
+	InventoriesPage,
+	WarehousePage,
+	WarehousesPage,
 	OrdersPage,
 	OrderPage,
 	EditOrderPage,

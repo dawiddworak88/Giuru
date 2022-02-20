@@ -9,9 +9,10 @@ namespace Inventory.Api.Validators.OutletValidators
         public UpdateOutletModelValidator()
         {
             this.RuleFor(x => x.Id).NotNull().NotEmpty();
+            this.RuleFor(x => x.WarehouseId).NotNull().NotEmpty();
             this.RuleFor(x => x.ProductId).NotNull().NotEmpty();
-            this.RuleFor(x => x.ProductName).NotNull().NotEmpty();
-            this.RuleFor(x => x.ProductSku).NotNull().NotEmpty();
+            this.RuleFor(x => x.Quantity).NotNull().NotEmpty().GreaterThanOrEqualTo(0);
+            this.RuleFor(x => x.AvailableQuantity).NotNull().NotEmpty().GreaterThanOrEqualTo(0);
         }
     }
 }

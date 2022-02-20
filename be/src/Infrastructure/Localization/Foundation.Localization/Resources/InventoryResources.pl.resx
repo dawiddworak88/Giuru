@@ -165,8 +165,14 @@
   <data name="NavigateToInventoryListText" xml:space="preserve">
     <value>Powróć do stanów magazynowych</value>
   </data>
+  <data name="NavigateToOutletListText" xml:space="preserve">
+    <value>Powróć do wyprzedaży</value>
+  </data>
   <data name="NavigateToWarehouseListText" xml:space="preserve">
     <value>Powróć do magazynów</value>
+  </data>
+  <data name="NewOutletText" xml:space="preserve">
+    <value>Nowy element wyprzedaży</value>
   </data>
   <data name="NewText" xml:space="preserve">
     <value>Nowy magazyn</value>
@@ -176,6 +182,21 @@
   </data>
   <data name="NullAvailability" xml:space="preserve">
     <value>Produkt przekroczy stan magazynowy mniejszy od zera</value>
+  </data>
+  <data name="OrderNameLabel" xml:space="preserve">
+    <value>Numer zamówienia</value>
+  </data>
+  <data name="OrderNameRequiredErrorMessage" xml:space="preserve">
+    <value>Wprowadź numer zamówienia</value>
+  </data>
+  <data name="OutletItem" xml:space="preserve">
+    <value>Element wyprzedaży</value>
+  </data>
+  <data name="OutletItemDeletedSuccessfully" xml:space="preserve">
+    <value>Element wyprzedaży został usunięty pomyślnie.</value>
+  </data>
+  <data name="OutletItemSavedSuccessfully" xml:space="preserve">
+    <value>Element wyprzedaży został zapisany pomyślnie.</value>
   </data>
   <data name="ProductRequiredErrorMessage" xml:space="preserve">
     <value>Wprowadź produkt</value>

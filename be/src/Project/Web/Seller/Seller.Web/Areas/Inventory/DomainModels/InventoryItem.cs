@@ -13,7 +13,7 @@ namespace Seller.Web.Areas.Inventory.DomainModels
         public Guid SellerId { get; set; }
         public int Quantity { get; set; }
         public int? RestockableInDays { get; set; }
-        public int? AvailableQuantity { get; set; }
+        public int AvailableQuantity { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }

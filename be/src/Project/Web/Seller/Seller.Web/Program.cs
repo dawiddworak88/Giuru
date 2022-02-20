@@ -23,7 +23,6 @@ using Foundation.Extensions.Filters;
 using Microsoft.AspNetCore.Http;
 using Seller.Web.Areas.Inventory.DependencyInjection;
 using Foundation.Account.Definitions;
-using Seller.Web.Areas.Outlet.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,8 +84,6 @@ builder.Services.RegisterOrdersAreaDependencies();
 builder.Services.RegisterClientsAreaDependencies();
 
 builder.Services.RegisterInventoryAreaDependencies();
-
-builder.Services.RegisterOutletAreaDependencies();
 
 builder.Services.RegisterProductsAreaDependencies();
 

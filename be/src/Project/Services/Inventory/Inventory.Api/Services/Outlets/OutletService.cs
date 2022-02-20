@@ -31,10 +31,10 @@ namespace Inventory.Api.Services.Outlets
 
         public async Task SyncOutletAsync(SyncOutletServiceModel model)
         {
-            var syncItems = new List<Outlet>();
+            var syncItems = new List<OutletItem>();
             foreach (var item in model.OutletItems.OrEmptyIfNull())
             {
-                var outletItem = new Outlet
+                var outletItem = new OutletItem
                 {
                     ProductId = item.ProductId,
                     ProductName = item.ProductName,
@@ -92,11 +92,11 @@ namespace Inventory.Api.Services.Outlets
             await this.context.SaveChangesAsync();
         }
 
-        public async Task<Guid> CreateAsync(OutletServiceModel model)
+        public async Task<Guid> CreateAsync(CreateOutletServiceModel model)
         {
-            var outletItem = new Outlet
+            var outletItem = new OutletItem
             {
-                ProductId = model.ProductId,
+                ProductId = model.ProductId.Value,
                 ProductName = model.ProductName,
                 ProductSku = model.ProductSku,
             };
