@@ -152,7 +152,6 @@ namespace Media.Api.Services.Media
                 if (mediaItem != null)
                 {
                     var file = await this.mediaRepository.GetFileAsync(mediaItem.Folder, $"{mediaItem.VersionId}{mediaItem.Extension}");
-
                     if (file != null)
                     {
                         if (this.IsImage(mediaItem.ContentType))
