@@ -242,7 +242,6 @@ function Catalog(props) {
                                                 }
 
                                                 {props.table.properties && props.table.properties.map((property) => {
-
                                                     if (property.isDateTime) {
                                                         return (
                                                             <TableCell>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
@@ -250,7 +249,7 @@ function Catalog(props) {
                                                     }
                                                     else if (property.isPicture) {
                                                         return (
-                                                            <TableCell><img src={item[property.title]} alt=""/></TableCell>
+                                                            <TableCell><img src={item[property.title]} alt={props.isAttachmentLabel}/></TableCell>
                                                         )
                                                     }
                                                     else {

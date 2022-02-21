@@ -139,7 +139,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                     {
                         Id = x.Id,
                         FileName = x.FileName,
-                        Url = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, x.Id, 200, 120, true)),
+                        Url = this.cdnService.GetCdnUrl(x.MimeType.StartsWith("image") ? this.mediaService.GetFileUrl(this.options.Value.MediaUrl, x.Id, 200, 120, true) : this.mediaService.GetFileUrl(this.options.Value.MediaUrl, x.Id)),
                         MimeType = x.MimeType,
                         LastModifiedDate = x.LastModifiedDate,
                         CreatedDate = x.CreatedDate,

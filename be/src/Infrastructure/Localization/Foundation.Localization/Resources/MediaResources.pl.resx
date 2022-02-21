@@ -120,6 +120,9 @@
   <data name="BackToMediaText" xml:space="preserve">
     <value>Powróć do mediów</value>
   </data>
+  <data name="IsAttachmentLabel" xml:space="preserve">
+    <value>Załącznik</value>
+  </data>
   <data name="Media" xml:space="preserve">
     <value>Media</value>
   </data>
