@@ -215,7 +215,7 @@ function NewOrderForm(props) {
         fetch(props.placeOrderUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: 0 })
+                dispatch({ type: "SET_TOTAL_BASKET", payload: null })
                 
                 AuthenticationHelper.HandleResponse(response);
                 
@@ -294,13 +294,11 @@ function NewOrderForm(props) {
         fetch(url, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: 0 });
+                dispatch({ type: "SET_TOTAL_BASKET", payload: null });
                 
                 AuthenticationHelper.HandleResponse(response);
                 
                 return response.json().then(jsonResponse => {
-                    
-
                     if (response.ok) {
                         toast.success(jsonResponse.message);
                         setOrderItems([]);

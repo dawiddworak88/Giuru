@@ -95,7 +95,8 @@ function Header(props) {
     };
 
     useEffect(() => {
-        if (state.totalBasketItems === 0){
+        const totalItems = state.totalBasketItems;
+        if (totalItems != null && totalItems < props.totalBasketItems){
             state.totalBasketItems = props.totalBasketItems;
         }
 
