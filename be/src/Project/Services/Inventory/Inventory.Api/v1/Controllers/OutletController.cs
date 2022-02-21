@@ -14,12 +14,11 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Inventory.Api.Services.Outlets;
 using Inventory.Api.v1.ResponseModels;
 using Inventory.Api.Validators.OutletValidators;
-using Inventory.Api.ServicesModels.OutletServices;
+using Inventory.Api.ServicesModels.OutletServiceModels;
 using Inventory.Api.v1.RequestModels;
-using Inventory.Api.Validators.InventoryValidators;
+using Inventory.Api.Services.OutletItems;
 
 namespace Outlet.Api.v1.Controllers
 {
@@ -37,14 +36,14 @@ namespace Outlet.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Gets a list of outlet items.
+        /// Gets a list of outlet products.
         /// </summary>
         /// <param name="ids">The list of outlet ids.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
         /// <param name="orderBy">The optional order by.</param>
-        /// <returns>The list of product outlets.</returns>
+        /// <returns>The list of product outlet items.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -85,8 +84,6 @@ namespace Outlet.Api.v1.Controllers
                                 WarehouseName = x.WarehouseName,
                                 Quantity = x.Quantity,
                                 AvailableQuantity = x.AvailableQuantity,
-                                RestockableInDays = x.RestockableInDays,
-                                ExpectedDelivery = x.ExpectedDelivery,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -100,7 +97,7 @@ namespace Outlet.Api.v1.Controllers
             }
             else
             {
-                var serviceModel = new GetOutletItemsServiceModel
+                var serviceModel = new GetOutletsServiceModel
                 {
                     Language = CultureInfo.CurrentCulture.Name,
                     SearchTerm = searchTerm,
@@ -113,9 +110,9 @@ namespace Outlet.Api.v1.Controllers
                 var outlets = await this.outletsService.GetAsync(serviceModel);
                 if (outlets != null)
                 {
-                    var response = new PagedResults<IEnumerable<OutletItemResponseModel>>(outlets.Total, outlets.PageSize)
+                    var response = new PagedResults<IEnumerable<OutletResponseModel>>(outlets.Total, outlets.PageSize)
                     {
-                        Data = outlets.Data.OrEmptyIfNull().Select(x => new OutletItemResponseModel
+                        Data = outlets.Data.OrEmptyIfNull().Select(x => new OutletResponseModel
                         {
                             Id = x.Id,
                             WarehouseId = x.WarehouseId,
@@ -125,8 +122,6 @@ namespace Outlet.Api.v1.Controllers
                             ProductSku = x.ProductSku,
                             Quantity = x.Quantity,
                             AvailableQuantity = x.AvailableQuantity,
-                            RestockableInDays = x.RestockableInDays,
-                            ExpectedDelivery = x.ExpectedDelivery,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         })
@@ -177,9 +172,7 @@ namespace Outlet.Api.v1.Controllers
                         AvailableQuantity = outletProduct.AvailableQuantity,
                         Quantity = outletProduct.Quantity,
                         ProductName = outletProduct.ProductName,
-                        ProductSku = outletProduct.ProductSku,
-                        RestockableInDays = outletProduct.RestockableInDays,
-                        ExpectedDelivery = outletProduct.ExpectedDelivery
+                        ProductSku = outletProduct.ProductSku
                     })
                 };
 
@@ -204,9 +197,9 @@ namespace Outlet.Api.v1.Controllers
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var serviceModel = new UpdateProductsOutletServiceModel
+            var serviceModel = new UpdateOutletProductsServiceModel
             {
-                OutletItems = request.OutletItems.OrEmptyIfNull().Select(x => new UpdateProductOutletServiceModel
+                OutletItems = request.OutletItems.OrEmptyIfNull().Select(x => new UpdateOutletProductServiceModel
                 {
                     AvailableQuantity = x.AvailableQuantity,
                     Quantity = x.Quantity,
@@ -333,7 +326,7 @@ namespace Outlet.Api.v1.Controllers
 
                 if (outletProduct != null)
                 {
-                    var response = new OutletItemResponseModel
+                    var response = new OutletResponseModel
                     {
                         Id = outletProduct.Id,
                         ProductId = outletProduct.ProductId,
@@ -395,8 +388,6 @@ namespace Outlet.Api.v1.Controllers
                         Quantity = outletProduct.Quantity,
                         ProductName = outletProduct.ProductName,
                         ProductSku = outletProduct.ProductSku,
-                        RestockableInDays = outletProduct.RestockableInDays,
-                        ExpectedDelivery = outletProduct.ExpectedDelivery,
                         Details = outletProduct.Details.Select(item => new OutletDetailsResponseModel
                         {
                             Id = item.Id,
@@ -404,11 +395,9 @@ namespace Outlet.Api.v1.Controllers
                             ProductName = item.ProductName,
                             Quantity = item.Quantity,
                             AvailableQuantity = item.AvailableQuantity,
-                            ExpectedDelivery = item.ExpectedDelivery,
                             ProductSku = item.ProductSku,
                             WarehouseId = item.WarehouseId,
                             WarehouseName = item.WarehouseName,
-                            RestockableInDays = item.RestockableInDays,
                             LastModifiedDate = item.LastModifiedDate,
                             CreatedDate = item.CreatedDate
                         })
@@ -427,7 +416,7 @@ namespace Outlet.Api.v1.Controllers
 
 
         /// <summary>
-        /// Gets a product outlet by product sku.
+        /// Gets an outlet item by product sku.
         /// </summary>
         /// <param name="sku">The product sku.</param>
         /// <returns>The product outlet.</returns>
@@ -461,8 +450,6 @@ namespace Outlet.Api.v1.Controllers
                         Quantity = outletProduct.Quantity,
                         ProductName = outletProduct.ProductName,
                         ProductSku = outletProduct.ProductSku,
-                        RestockableInDays = outletProduct.RestockableInDays,
-                        ExpectedDelivery = outletProduct.ExpectedDelivery,
                         Details = outletProduct.Details.Select(item => new OutletDetailsResponseModel
                         {
                             Id = item.Id,
@@ -470,11 +457,9 @@ namespace Outlet.Api.v1.Controllers
                             ProductName = item.ProductName,
                             Quantity = item.Quantity,
                             AvailableQuantity = item.AvailableQuantity,
-                            ExpectedDelivery = item.ExpectedDelivery,
                             ProductSku = item.ProductSku,
                             WarehouseId = item.WarehouseId,
                             WarehouseName = item.WarehouseName,
-                            RestockableInDays = item.RestockableInDays,
                             LastModifiedDate = item.LastModifiedDate,
                             CreatedDate = item.CreatedDate
                         })
@@ -494,7 +479,7 @@ namespace Outlet.Api.v1.Controllers
 
 
         /// <summary>
-        /// Deletes a product outlet by id.
+        /// Deletes an outlet item by id.
         /// </summary>
         /// <param name="id">The id.</param>
         /// <returns>OK.</returns>

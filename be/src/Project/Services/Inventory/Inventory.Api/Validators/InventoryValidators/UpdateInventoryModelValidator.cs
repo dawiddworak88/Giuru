@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Foundation.Extensions.Validators;
-using Inventory.Api.ServicesModels.InventoryServices;
+using Inventory.Api.ServicesModels.InventoryServiceModels;
 
 namespace Inventory.Api.Validators.InventoryValidators
 {

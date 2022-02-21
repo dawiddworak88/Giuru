@@ -1,5 +1,7 @@
-﻿using Foundation.ApiExtensions.Controllers;
+﻿using Foundation.Account.Definitions;
+using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Helpers;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +12,9 @@ using Seller.Web.Areas.Inventory.Repositories;
 using Seller.Web.Areas.Shared.Repositories.Products;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Inventory.ApiControllers
@@ -20,7 +24,7 @@ namespace Seller.Web.Areas.Inventory.ApiControllers
     {
         private readonly IOutletRepository outletRepository;
         private readonly IStringLocalizer inventoryLocalizer;
-        private readonly IProductsRepository productsRespository;
+        private readonly IProductsRepository productsRepository;
 
         public OutletsApiController(
             IOutletRepository outletRepository,
@@ -29,7 +33,7 @@ namespace Seller.Web.Areas.Inventory.ApiControllers
         {
             this.outletRepository = outletRepository;
             this.inventoryLocalizer = inventoryLocalizer;
-            this.productsRespository = productsRespository;
+            this.productsRepository = productsRespository;
         }
 
         [HttpGet]
@@ -61,11 +65,14 @@ namespace Seller.Web.Areas.Inventory.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language    = CultureInfo.CurrentUICulture.Name;
 
-            var product = await this.productsRespository.GetProductAsync(token, language, model.ProductId);
+            var OrganisationId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value);
+            var product = await this.productsRepository.GetProductAsync(token, language, model.ProductId);
+
             if (product != null)
             {
                 var outletitemId = await this.outletRepository.SaveAsync(
-                    token, language, model.Id, model.ProductId, model.ProductName, model.ProductSku);
+                    token, language, model.Id, model.WarehouseId, model.ProductId,
+                    product.Name, product.Sku, model.Quantity, model.AvailableQuantity, OrganisationId);
 
                 return this.StatusCode((int)HttpStatusCode.OK, new { Id = outletitemId, Message = this.inventoryLocalizer.GetString("OutletItemSavedSuccessfully").Value });
             }

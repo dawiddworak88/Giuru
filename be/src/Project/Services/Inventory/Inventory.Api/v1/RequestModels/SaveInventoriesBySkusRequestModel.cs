@@ -1,10 +1,10 @@
-﻿using Inventory.Api.ServicesModels.InventoryServices;
+﻿using Inventory.Api.ServicesModels.InventoryServiceModels;
 using System.Collections.Generic;
 
 namespace Inventory.Api.v1.RequestModels
 {
     public class SaveInventoriesBySkusRequestModel
     {
-        public IEnumerable<UpdateProductInventoryRequestModel> InventoryItems { get; set; }
+        public IEnumerable<UpdateInventoryProductRequestModel> InventoryItems { get; set; }
     }
 }

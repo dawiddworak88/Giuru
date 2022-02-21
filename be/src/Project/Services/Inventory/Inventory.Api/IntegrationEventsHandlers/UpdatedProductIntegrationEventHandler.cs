@@ -1,7 +1,7 @@
 ﻿using Foundation.EventBus.Abstractions;
 using Inventory.Api.IntegrationEvents;
-using Inventory.Api.Services;
-using Inventory.Api.Services.Outlets;
+using Inventory.Api.Services.InventoryItems;
+using Inventory.Api.Services.OutletItems;
 using System.Threading.Tasks;
 
 namespace Inventory.Api.IntegrationEventsHandlers
@@ -31,7 +31,7 @@ namespace Inventory.Api.IntegrationEventsHandlers
         {
             if (@event.OrganisationId.HasValue)
             {
-                await this.outletService.UpdateProductOutlet(@event.ProductId, @event.ProductName, @event.ProductSku);
+                await this.outletService.UpdateOutletProduct(@event.ProductId, @event.ProductName, @event.ProductSku, @event.OrganisationId);
                 await this.inventoryService.UpdateInventoryProduct(@event.ProductId, @event.ProductName, @event.ProductSku, @event.OrganisationId);
             }
         }
