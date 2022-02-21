@@ -118,16 +118,8 @@ namespace Media.Api.Services.Media
                 var translations = this.context.MediaItemTranslations.Where(x => x.MediaItemVersionId == existingMediaItemVersion.LastOrDefault().Id);
                 foreach(var translation in translations)
                 {
-                    var mediaItemTranslation = new MediaItemTranslation
-                    {
-                        MediaItemVersionId = mediaItemVersion.Id,
-                        Language = translation.Language,
-                        Name = translation.Name,
-                        Description = translation.Description,
-                        Metadata = translation.Metadata,
-                    };
-
-                    this.context.MediaItemTranslations.Add(mediaItemTranslation.FillCommonProperties());
+                    translation.MediaItemVersionId = mediaItemVersion.Id;
+                    translation.LastModifiedDate = DateTime.UtcNow;
                 }
 
                 await this.context.SaveChangesAsync();
