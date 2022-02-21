@@ -16,7 +16,8 @@ namespace Seller.Web.Areas.Media.Repositories
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
 
-        public FilesRepository(IApiClientService apiClientService,
+        public FilesRepository(
+            IApiClientService apiClientService,
             IOptions<AppSettings> settings)
         {
             this.apiClientService = apiClientService;

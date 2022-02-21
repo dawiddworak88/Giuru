@@ -290,26 +290,26 @@ namespace Media.Api.Services.Media
         public async Task<PagedResults<IEnumerable<MediaItemServiceModel>>> GetAsync(GetMediaItemsServiceModel serviceModel)
         {
             var mediaItems = from media in this.context.MediaItems
-                              where media.IsActive == true && media.OrganisationId == serviceModel.OrganisationId.Value
-                              select new MediaItemServiceModel
-                              {
-                                  Id = media.Id,
-                                  Filename = media.Versions.FirstOrDefault().Filename,
-                                  Extension = media.Versions.FirstOrDefault().Extension,
-                                  MimeType = media.Versions.FirstOrDefault().MimeType,
-                                  Size = media.Versions.FirstOrDefault().Size,
-                                  Name = media.Versions.FirstOrDefault().Filename,
-                                  Description = media.Versions.FirstOrDefault().Translations.FirstOrDefault().Description,
-                                  LastModifiedDate = media.LastModifiedDate,
-                                  CreatedDate = media.CreatedDate,
-                              };
+                             where media.IsActive == true && media.OrganisationId == serviceModel.OrganisationId.Value
+                             select new MediaItemServiceModel
+                             {
+                                Id = media.Id,
+                                Filename = media.Versions.FirstOrDefault().Filename,
+                                Extension = media.Versions.FirstOrDefault().Extension,
+                                MimeType = media.Versions.FirstOrDefault().MimeType,
+                                Size = media.Versions.FirstOrDefault().Size,
+                                Name = media.Versions.FirstOrDefault().Filename,
+                                Description = media.Versions.FirstOrDefault().Translations.FirstOrDefault().Description,
+                                LastModifiedDate = media.LastModifiedDate,
+                                CreatedDate = media.CreatedDate,
+                             };
 
             if (!string.IsNullOrWhiteSpace(serviceModel.SearchTerm))
             {
                 mediaItems = mediaItems.Where(x => x.Filename.StartsWith(serviceModel.SearchTerm));
             }
 
-            mediaItems.ApplySort(serviceModel.OrderBy);
+            mediaItems = mediaItems.ApplySort(serviceModel.OrderBy);
 
             return mediaItems.PagedIndex(new Pagination(mediaItems.Count(), serviceModel.ItemsPerPage), serviceModel.PageIndex);
         }

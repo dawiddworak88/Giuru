@@ -19,7 +19,6 @@ namespace Seller.Web.Areas.Media.Controllers
     public class MediaController : BaseController
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel> mediaPageModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, UploadMediaPageViewModel> uploadMediaPageModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, EditMediaPageViewModel> editMediaPageModelBuilder;
 
         public MediaController(
@@ -29,7 +28,6 @@ namespace Seller.Web.Areas.Media.Controllers
         )
         {
             this.mediaPageModelBuilder = mediaPageModelBuilder;
-            this.uploadMediaPageModelBuilder = uploadMediaPageModelBuilder;
             this.editMediaPageModelBuilder = editMediaPageModelBuilder;
         }
 
