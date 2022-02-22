@@ -87,7 +87,6 @@ namespace Inventory.Api.Services.InventoryItems
                     WarehouseName = warehouse.Name,
                 });
 
-
             foreach (var item in model.InventoryItems.OrEmptyIfNull())
             {
                 var inventory = await inventoryProducts.FirstOrDefaultAsync(x => x.ProductSku == item.ProductSku && x.WarehouseName == item.WarehouseName);
