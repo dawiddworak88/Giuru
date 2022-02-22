@@ -20,9 +20,9 @@ import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetP
 import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
 
 // Seller Portal
-import EditMediaPage from "../../src/project/Seller.Portal/areas/Media/pages/EditMediaPage/EditMediaPage";
-import UploadMediaPage from "../../src/project/Seller.Portal/areas/Media/pages/UploadMediaPage/UploadMediaPage";
-import MediaPage from "../../src/project/Seller.Portal/areas/Media/pages/MediaPage/MediaPage"
+import MediaPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage";
+import MediaItemPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage";
+import MediasPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediasPage/MediasPage"
 import WarehouseAddPage from "../../src/project/Seller.Portal/areas/Warehouse/pages/WarehouseAddPage/WarehouseAddPage";
 import WarehousePage from "../../src/project/Seller.Portal/areas/Warehouse/pages/WarehousePage/WarehousePage";
 import InventoryPage from "../../src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/InventoryPage";
@@ -56,9 +56,9 @@ const Components = {
 	SetPasswordPage,
 	ContentPage,
 
-	EditMediaPage,
-	UploadMediaPage,
 	MediaPage,
+	MediaItemPage,
+	MediasPage,
 	WarehouseAddPage,
 	WarehousePage,
 	InventoryPage,

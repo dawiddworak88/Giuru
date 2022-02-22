@@ -17,12 +17,12 @@ namespace Seller.Web.Areas.Media.DependencyInjection
             services.AddScoped<IFilesRepository, FilesRepository>();
             services.AddScoped<IMediaRepository, MediaRepository>();
 
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<MediaItem>>, MediaPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<MediaItem>>, MediasPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MediasPageViewModel>, MediasPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel>, MediaPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, UploadMediaPageViewModel>, UploadMediaPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, UploadMediaFormViewModel>, UploadMediaFormPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, EditMediaPageViewModel>, EditMediaPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, EditMediaFormViewModel>, EditMediaFormPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MediaFormViewModel>, MediaFormPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MediaItemPageViewModel>, MediaItemPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MediaItemFormViewModel>, MediaItemFormPageModelBuilder>();
         }
     }
 }

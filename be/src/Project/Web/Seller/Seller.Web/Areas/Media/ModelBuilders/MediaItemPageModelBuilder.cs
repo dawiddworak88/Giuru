@@ -9,33 +9,33 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Media.ModelBuilders
 {
-    public class MediaPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel>
+    public class MediaItemPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, MediaItemPageViewModel>
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MediaFormViewModel> mediaFormModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MediaItemFormViewModel> mediaItemFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
-        public MediaPageModelBuilder(
+        public MediaItemPageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, MediaFormViewModel> mediaFormModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, MediaItemFormViewModel> mediaItemFormModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
-            this.mediaFormModelBuilder = mediaFormModelBuilder;
+            this.mediaItemFormModelBuilder = mediaItemFormModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
         }
 
-        public async Task<MediaPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<MediaItemPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new MediaPageViewModel
+            var viewModel = new MediaItemPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
                 Header = this.headerModelBuilder.BuildModel(),
                 MenuTiles = this.menuTilesModelBuilder.BuildModel(),
-                MediaForm = await this.mediaFormModelBuilder.BuildModelAsync(componentModel),
+                MediaItemForm = await this.mediaItemFormModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };
 

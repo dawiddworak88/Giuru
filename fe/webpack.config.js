@@ -198,9 +198,9 @@ var sellerPortalBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
-        editmediapage: ["./src/project/Seller.Portal/areas/Media/pages/EditMediaPage/index.js", "./src/project/Seller.Portal/areas/Media/pages/EditMediaPage/EditMediaPage.scss"],
-        uploadmediapage: ["./src/project/Seller.Portal/areas/Media/pages/UploadMediaPage/index.js", "./src/project/Seller.Portal/areas/Media/pages/UploadMediaPage/UploadMediaPage.scss"],
-        mediapage: ["./src/project/Seller.Portal/areas/Media/pages/MediaPage/index.js", "./src/project/Seller.Portal/areas/Media/pages/MediaPage/MediaPage.scss"],
+        mediapage: ["./src/project/Seller.Portal/areas/Medias/pages/MediaPage/index.js", "./src/project/Seller.Portal/areas/Medias/pages/MediaPage/MediaPage.scss"],
+        mediaitempage: ["./src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/index.js", "./src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage.scss"],
+        mediaspage: ["./src/project/Seller.Portal/areas/Medias/pages/MediasPage/index.js", "./src/project/Seller.Portal/areas/Medias/pages/MediasPage/MediasPage.scss"],
         inventorypage: ["./src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/InventoryPage.scss"],
         warehousepage: ["./src/project/Seller.Portal/areas/Warehouse/pages/WarehousePage/index.js", "./src/project/Seller.Portal/areas/Warehouse/pages/WarehousePage/WarehousePage.scss"],
         inventoryaddpage: ["./src/project/Seller.Portal/areas/Inventory/pages/InventoryAddPage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/InventoryPage.scss"],

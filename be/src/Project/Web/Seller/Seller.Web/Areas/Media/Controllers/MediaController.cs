@@ -7,7 +7,6 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Seller.Web.Areas.Media.ViewModel;
-using System;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -18,17 +17,13 @@ namespace Seller.Web.Areas.Media.Controllers
     [Area("Media")]
     public class MediaController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel> mediaPageModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, EditMediaPageViewModel> editMediaPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel> uploadMediaPageModelBuilder;
 
         public MediaController(
-            IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel> mediaPageModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, UploadMediaPageViewModel> uploadMediaPageModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, EditMediaPageViewModel> editMediaPageModelBuilder
+            IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel> uploadMediaPageModelBuilder
         )
         {
-            this.mediaPageModelBuilder = mediaPageModelBuilder;
-            this.editMediaPageModelBuilder = editMediaPageModelBuilder;
+            this.uploadMediaPageModelBuilder = uploadMediaPageModelBuilder;
         }
 
         public async Task<IActionResult> Index()
@@ -40,22 +35,7 @@ namespace Seller.Web.Areas.Media.Controllers
                 SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value)
             };
 
-            var viewModel = await this.mediaPageModelBuilder.BuildModelAsync(componentModel);
-
-            return this.View(viewModel);
-        }
-
-        public async Task<IActionResult> Edit(Guid? id)
-        {
-            var componentModel = new ComponentModelBase
-            {
-                Id = id,
-                Language = CultureInfo.CurrentUICulture.Name,
-                Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value)
-            };
-
-            var viewModel = await this.editMediaPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await this.uploadMediaPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);
         }
