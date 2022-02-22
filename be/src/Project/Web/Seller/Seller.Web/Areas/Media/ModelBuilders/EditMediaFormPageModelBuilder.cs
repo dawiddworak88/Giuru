@@ -45,7 +45,8 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                 NameLabel = this.globalLocalizer.GetString("Name"),
                 DescriptionLabel = this.globalLocalizer.GetString("Description"),
                 SaveMediaText = this.globalLocalizer.GetString("SaveText"),
-                UpdateMediaVersionUrl = this.linkGenerator.GetPathByAction("UpdateVersion", "MediaApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name })
+                UpdateMediaVersionUrl = this.linkGenerator.GetPathByAction("UpdateVersion", "MediaApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                LatestVersionsLabel = this.mediaResources.GetString("LatestVersionsLabel")
             };
 
             if (componentModel.Id.HasValue)

@@ -21,6 +21,7 @@ namespace Seller.Web.Areas.Media.ViewModel
         public string DescriptionLabel { get; set; }
         public string BackToMediaText { get; set; }
         public string SaveMediaText { get; set; } 
+        public string LatestVersionsLabel { get; set; }
         public IEnumerable<MediaItem> Versions { get; set; }
     }
 }

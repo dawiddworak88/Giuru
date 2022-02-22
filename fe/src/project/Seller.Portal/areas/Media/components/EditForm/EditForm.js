@@ -94,7 +94,7 @@ const EditForm = (props) => {
                         </div>
                         {versions &&
                             <div className="media-edit__last-files">
-                                <h2>Ostatnie wersje pliku</h2>
+                                <h2>{props.latestVersionsLabel}</h2>
                                 <div className="media-edit__versions">
                                     {versions.map((version) => {
                                         const url = version.url;
@@ -170,7 +170,8 @@ EditForm.propTypes = {
     dropOrSelectImagesLabel: PropTypes.string,
     saveMediaUrl: PropTypes.string,
     backToMediaText: PropTypes.string,
-    saveMediaText: PropTypes.string
+    saveMediaText: PropTypes.string,
+    latestVersionsLabel: PropTypes.string
 }
 
 export default EditForm;

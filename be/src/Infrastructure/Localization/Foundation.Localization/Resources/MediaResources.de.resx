@@ -123,6 +123,9 @@
   <data name="IsAttachmentLabel" xml:space="preserve">
     <value>Anhang</value>
   </data>
+  <data name="LatestVersionsLabel" xml:space="preserve">
+    <value>Vorherige Versionen</value>
+  </data>
   <data name="Media" xml:space="preserve">
     <value>Medien</value>
   </data>
