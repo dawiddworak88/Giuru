@@ -170,7 +170,7 @@ function MediaCloud(props) {
                                                     provided.draggableProps.style
                                                 )}>
                                                 <div>
-                                                    {file.mimeType === "image/jpeg" || file.mimeType === "image/png" ?
+                                                    {file.mimeType.startsWith("image") ?
                                                         <img src={file.url} alt={file.name} /> :
                                                         <div className="dropzone__preview-tile">
                                                             <a href={file.url} alt={file.name}>{file.filename}</a>

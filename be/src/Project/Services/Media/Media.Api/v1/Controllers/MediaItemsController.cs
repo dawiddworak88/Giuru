@@ -173,6 +173,7 @@ namespace Media.Api.v1.Controllers
                         IsProtected = mediaItem.IsProtected,
                         MimeType = mediaItem.MimeType,
                         Name = mediaItem.Name,
+                        MetaData = mediaItem.MetaData,
                         Size = mediaItem.Size,
                         LastModifiedDate = mediaItem.LastModifiedDate,
                         CreatedDate = mediaItem.CreatedDate
@@ -208,6 +209,7 @@ namespace Media.Api.v1.Controllers
                 Name = request.Name,
                 Description = request.Description,
                 Language = CultureInfo.CurrentCulture.Name,
+                MetaData = request.MetaData,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
@@ -254,6 +256,7 @@ namespace Media.Api.v1.Controllers
                         Id = mediaItemVersions.Id,
                         Name = mediaItemVersions.Name,
                         Description = mediaItemVersions.Description,
+                        MetaData = mediaItemVersions.MetaData,
                         Versions = mediaItemVersions.Versions,
                     };
                     return this.StatusCode((int)HttpStatusCode.OK, mediaItemVersions);

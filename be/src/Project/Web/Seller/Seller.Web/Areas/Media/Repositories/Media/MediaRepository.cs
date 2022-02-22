@@ -135,6 +135,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                     Id = response.Data.Id.Value,
                     Name = response.Data.Name,
                     Description = response.Data.Description,
+                    MetaData = response.Data.MetaData,
                     Versions = response.Data.Versions.OrEmptyIfNull().Select(x => new MediaItem
                     {
                         Id = x.Id,
@@ -150,13 +151,14 @@ namespace Seller.Web.Areas.Media.Repositories.Media
             return default;
         }
 
-        public async Task UpdateMediaItemVersionAsync(Guid? mediaId, string name, string description, string token, string language)
+        public async Task UpdateMediaItemVersionAsync(Guid? mediaId, string name, string description, string metadata, string token, string language)
         {
             var requestModel = new UpdateMediaItemVersionRequestModel
             {
                 Id = mediaId,
                 Name = name,
                 Description = description,
+                MetaData = metadata,
             };
 
             var apiRequest = new ApiRequest<UpdateMediaItemVersionRequestModel>

@@ -8,6 +8,7 @@ namespace Seller.Web.Areas.Media.ApiResponseModels
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public string MetaData { get; set; }
         public IEnumerable<MediaItemResponseModel> Versions { get; set; }
     }
 }

@@ -141,6 +141,9 @@
   <data name="MediaUpdatedSuccessfully" xml:space="preserve">
     <value>Pomyślnie zaktualizowano</value>
   </data>
+  <data name="MetaDataLabel" xml:space="preserve">
+    <value>Metadane</value>
+  </data>
   <data name="NewText" xml:space="preserve">
     <value>Dodaj media</value>
   </data>

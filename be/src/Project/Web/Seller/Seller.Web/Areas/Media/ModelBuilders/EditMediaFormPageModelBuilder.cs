@@ -46,7 +46,8 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                 DescriptionLabel = this.globalLocalizer.GetString("Description"),
                 SaveMediaText = this.globalLocalizer.GetString("SaveText"),
                 UpdateMediaVersionUrl = this.linkGenerator.GetPathByAction("UpdateVersion", "MediaApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
-                LatestVersionsLabel = this.mediaResources.GetString("LatestVersionsLabel")
+                LatestVersionsLabel = this.mediaResources.GetString("LatestVersionsLabel"),
+                MetaDataLabel = this.mediaResources.GetString("MetaDataLabel")
             };
 
             if (componentModel.Id.HasValue)
@@ -59,6 +60,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                     viewModel.Name = itemVersions.Name;
                     viewModel.Description = itemVersions.Description;
                     viewModel.Versions = itemVersions.Versions;
+                    viewModel.MetaData = itemVersions.MetaData;
                 }
             }
 

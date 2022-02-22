@@ -9,6 +9,7 @@ namespace Media.Api.v1.ResponseModels
         public string Extension { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string MetaData { get; set; }
         public string MimeType { get; set; }
         public long Size { get; set; }
         public bool IsProtected { get; set; }

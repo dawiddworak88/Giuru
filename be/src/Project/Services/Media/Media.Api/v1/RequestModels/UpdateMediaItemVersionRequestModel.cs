@@ -6,5 +6,6 @@ namespace Media.Api.v1.RequestModels
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public string MetaData { get; set; }
     }
 }

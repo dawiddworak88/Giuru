@@ -289,8 +289,9 @@ namespace Media.Api.Services.Media
                                 Extension = media.Versions.FirstOrDefault().Extension,
                                 MimeType = media.Versions.FirstOrDefault().MimeType,
                                 Size = media.Versions.FirstOrDefault().Size,
-                                Name = media.Versions.FirstOrDefault().Filename,
+                                Name = media.Versions.FirstOrDefault().Translations.FirstOrDefault().Name,
                                 Description = media.Versions.FirstOrDefault().Translations.FirstOrDefault().Description,
+                                MetaData = media.Versions.FirstOrDefault().Translations.FirstOrDefault().Metadata,
                                 LastModifiedDate = media.LastModifiedDate,
                                 CreatedDate = media.CreatedDate,
                              };
@@ -333,6 +334,7 @@ namespace Media.Api.Services.Media
                     MediaItemId = x.MediaItemId,
                     Name = x.Translations.FirstOrDefault(x => x.Language == model.Language).Name,
                     Description = x.Translations.FirstOrDefault(x => x.Language == model.Language).Description,
+                    MetaData = x.Translations.FirstOrDefault(x => x.Language == model.Language).Metadata,
                     LastModifiedDate = x.LastModifiedDate,
                     CreatedDate = x.CreatedDate,
                 }).OrderByDescending(x => x.CreatedDate).Take(5);
@@ -344,6 +346,7 @@ namespace Media.Api.Services.Media
                     Id = model.Id.Value,
                     Name = mediaItemVersions.FirstOrDefault().Name,
                     Description = mediaItemVersions.FirstOrDefault().Description,
+                    MetaData = mediaItemVersions.FirstOrDefault().MetaData,
                     Versions = mediaItemVersions
                 };
                 
@@ -363,6 +366,7 @@ namespace Media.Api.Services.Media
                 {
                     mediaVersionTranslation.Name = model.Name;
                     mediaVersionTranslation.Description = model.Description;
+                    mediaVersionTranslation.Metadata = model.MetaData;
                     mediaVersionTranslation.LastModifiedDate = DateTime.UtcNow;
                     mediaVersion.LastModifiedDate = DateTime.UtcNow;
                 } else
@@ -372,6 +376,7 @@ namespace Media.Api.Services.Media
                         MediaItemVersionId = mediaVersion.Id,
                         Name = model.Name,
                         Description = model.Description,
+                        Metadata = model.MetaData,
                         Language = model.Language,
                     };
 

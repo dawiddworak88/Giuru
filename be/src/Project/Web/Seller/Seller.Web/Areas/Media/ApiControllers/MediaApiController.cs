@@ -47,7 +47,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             await this.mediaRepository.UpdateMediaItemVersionAsync(
-                model.Id, model.Name, model.Description, token, language);
+                model.Id, model.Name, model.Description, model.MetaData, token, language);
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.mediaLocalizer.GetString("MediaUpdatedSuccessfully").Value });
         }

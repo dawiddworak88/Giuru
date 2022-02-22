@@ -8,6 +8,7 @@ namespace Seller.Web.Areas.Media.DomainModels
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string MetaData { get; set; }
         public IEnumerable<MediaItem> Versions { get; set; }
     }
 }

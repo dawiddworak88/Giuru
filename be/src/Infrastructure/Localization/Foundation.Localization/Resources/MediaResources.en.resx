@@ -141,6 +141,9 @@
   <data name="MediaUpdatedSuccessfully" xml:space="preserve">
     <value>Succesfully updated media</value>
   </data>
+  <data name="MetaDataLabel" xml:space="preserve">
+    <value>Metadata</value>
+  </data>
   <data name="NewText" xml:space="preserve">
     <value>Add media</value>
   </data>

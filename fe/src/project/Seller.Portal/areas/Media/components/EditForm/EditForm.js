@@ -18,8 +18,9 @@ const EditForm = (props) => {
     const [images, setImages] = useState(props.versions ? props.versions.slice(0, 1) : []);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
-        name: {value: props.name ? props.name : null, error: ""},
-        description: {value: props.description ? props.description : null, error: ""}
+        name: { value: props.name ? props.name : null, error: "" },
+        description: { value: props.description ? props.description : null, error: "" },
+        metadata: { value: props.metaData ? props.metaData : null, error: "" },
     };
 
     const stateValidatorSchema = {
@@ -34,16 +35,10 @@ const EditForm = (props) => {
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        const requestBody = {
-            id: state.id,
-            name: state.name,
-            description: state.description
-        };
-
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(requestBody)
+            body: JSON.stringify(state)
         };
 
         fetch(props.updateMediaVersionUrl, requestOptions)
@@ -68,8 +63,7 @@ const EditForm = (props) => {
         values, disable, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
-    const {name, description} = values;
-    console.log(JSON.stringify(versions))
+    const {name, description, metadata} = values;
     return (
         <section className="section section-small-padding product client-form media-edit">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -143,6 +137,16 @@ const EditForm = (props) => {
                                 label={props.descriptionLabel} 
                                 fullWidth={true} 
                                 value={description} 
+                                onChange={handleOnChange} />
+                        </div>
+                        <div className="field">
+                            <TextField 
+                                id="metadata" 
+                                name="metadata" 
+                                type="text" 
+                                label={props.metaDataLabel} 
+                                fullWidth={true} 
+                                value={metadata} 
                                 onChange={handleOnChange} />
                         </div>
                         <div className="field">

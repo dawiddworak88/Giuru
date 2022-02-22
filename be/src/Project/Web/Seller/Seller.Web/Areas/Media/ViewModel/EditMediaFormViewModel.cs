@@ -9,6 +9,7 @@ namespace Seller.Web.Areas.Media.ViewModel
         public Guid? Id { get; set; }
         public string Title { get; set; }
         public string Name { get; set; }
+        public string MetaData { get; set; }
         public string Description { get; set; }
         public string MediaItemsLabel { get; set; }
         public string GeneralErrorMessage { get; set; }
@@ -22,6 +23,7 @@ namespace Seller.Web.Areas.Media.ViewModel
         public string BackToMediaText { get; set; }
         public string SaveMediaText { get; set; } 
         public string LatestVersionsLabel { get; set; }
+        public string MetaDataLabel { get; set; }
         public IEnumerable<MediaItem> Versions { get; set; }
     }
 }
