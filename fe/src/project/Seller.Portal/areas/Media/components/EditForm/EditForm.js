@@ -14,8 +14,8 @@ import { Context } from "../../../../../../shared/stores/Store";
 
 const EditForm = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [versions,] = useState(props.versions);
-    const [images, setImages] = useState([]);
+    const [versions] = useState(props.versions ? props.versions.slice(1) : []);
+    const [images, setImages] = useState(props.versions ? props.versions.slice(0, 1) : []);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: {value: props.name ? props.name : null, error: ""},
@@ -69,51 +69,19 @@ const EditForm = (props) => {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
     const {name, description} = values;
+    console.log(JSON.stringify(versions))
     return (
         <section className="section section-small-padding product client-form media-edit">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
-                    {versions &&
-                        <div className="media-edit__last-files">
-                            <h2>Ostatnie wersje pliku</h2>
-                            <div className="media-edit__versions">
-                                {versions.map((version) => {
-                                    const url = version.url;
-                                    if (version.mimeType.includes("pdf")) {
-                                        return (
-                                            <div className="version icon-version" key={version.id} onClick={() => mediaHandle(url)}>
-                                                <div className="icon">
-                                                    <PictureAsPdf />
-                                                </div>
-                                            </div>
-                                        )
-                                    } else if (version.mimeType.startsWith("image")) {
-                                        return (
-                                            <div className="version" key={version.id} onClick={() => mediaHandle(url)}>
-                                                <img src={version.url} alt={version.filename} />
-                                            </div>
-                                        )
-                                    } else  {
-                                        return (
-                                            <div className="version icon-version" key={version.id} onClick={() => mediaHandle(url)}>
-                                                <div className="icon">
-                                                    <Attachment/>
-                                                </div>
-                                            </div>
-                                        )
-                                    }
-                                })}
-                            </div>
-                        </div>
-                    }
                     <form className="is-modern-form" onSubmit={handleOnSubmit}>
                         <div className="field">
                             <MediaCloud
                                 id="images"
                                 name="images"
                                 label={props.mediaItemsLabel}
-                                accept=".png, .jpg, .pdf, .zip"
+                                accept=".png, .jpg, .pdf, .zip, .webp"
                                 multiple={false}
                                 mediaId={props.id}
                                 generalErrorMessage={props.generalErrorMessage}
@@ -124,6 +92,39 @@ const EditForm = (props) => {
                                 setFieldValue={({value}) => setImages(value)}
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
+                        {versions &&
+                            <div className="media-edit__last-files">
+                                <h2>Ostatnie wersje pliku</h2>
+                                <div className="media-edit__versions">
+                                    {versions.map((version) => {
+                                        const url = version.url;
+                                        if (version.mimeType.includes("pdf")) {
+                                            return (
+                                                <div className="version icon-version" key={version.id} onClick={() => mediaHandle(url)}>
+                                                    <div className="icon">
+                                                        <PictureAsPdf />
+                                                    </div>
+                                                </div>
+                                            )
+                                        } else if (version.mimeType.startsWith("image")) {
+                                            return (
+                                                <div className="version" key={version.id} onClick={() => mediaHandle(url)}>
+                                                    <img src={version.url} alt={version.filename} />
+                                                </div>
+                                            )
+                                        } else  {
+                                            return (
+                                                <div className="version icon-version" key={version.id} onClick={() => mediaHandle(url)}>
+                                                    <div className="icon">
+                                                        <Attachment/>
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
+                                    })}
+                                </div>
+                            </div>
+                        }
                         <div className="field">
                             <TextField 
                                 id="name" 
