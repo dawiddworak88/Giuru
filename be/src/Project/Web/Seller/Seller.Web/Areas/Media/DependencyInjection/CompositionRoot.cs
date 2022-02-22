@@ -15,7 +15,7 @@ namespace Seller.Web.Areas.Media.DependencyInjection
         public static void RegisterMediaAreaDependencies(this IServiceCollection services)
         {
             services.AddScoped<IFilesRepository, FilesRepository>();
-            services.AddScoped<IMediaRepository, MediaRepository>();
+            services.AddScoped<IMediasRepository, MediasRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<MediaItem>>, MediasPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MediasPageViewModel>, MediasPageModelBuilder>();

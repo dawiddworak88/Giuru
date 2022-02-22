@@ -23,7 +23,7 @@ function UploadForm(props) {
                                 id="images"
                                 name="images"
                                 label={props.mediaItemsLabel}
-                                accept=".png, .jpg, .pdf, .zip, .webp"
+                                accept=".png, .jpg, .pdf, .zip, .webp, .docx"
                                 multiple={true}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}

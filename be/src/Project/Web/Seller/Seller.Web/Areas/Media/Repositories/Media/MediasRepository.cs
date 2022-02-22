@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Media.Repositories.Media
 {
-    public class MediaRepository : IMediaRepository
+    public class MediasRepository : IMediasRepository
     {
         private readonly IApiClientService apiService;
         private readonly IOptions<AppSettings> settings;
@@ -28,7 +28,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
         private readonly IOptions<AppSettings> options;
         private readonly ICdnService cdnService;
 
-        public MediaRepository(
+        public MediasRepository(
             IApiClientService apiService,
             IOptions<AppSettings> settings,
             IMediaHelperService mediaService,

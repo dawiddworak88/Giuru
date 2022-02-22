@@ -21,13 +21,13 @@ namespace Seller.Web.Areas.Media.ModelBuilders
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer mediaLocalizer;
         private readonly LinkGenerator linkGenerator;
-        private readonly IMediaRepository mediaRepository;
+        private readonly IMediasRepository mediaRepository;
 
         public MediasPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<MediaResources> mediaLocalizer,
-            IMediaRepository mediaRepository,
+            IMediasRepository mediaRepository,
             LinkGenerator linkGenerator)
         {
             this.catalogModelBuilder = catalogModelBuilder;

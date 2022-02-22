@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types"; 
 import {
@@ -14,7 +14,7 @@ import { Context } from "../../../../../../shared/stores/Store";
 
 const MediaItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [versions] = useState(props.versions ? props.versions.slice(1) : []);
+    const [versions, setVersions] = useState(props.versions ? props.versions.slice(1) : []);
     const [images, setImages] = useState(props.versions ? props.versions.slice(0, 1) : []);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -75,7 +75,7 @@ const MediaItemForm = (props) => {
                                 id="images"
                                 name="images"
                                 label={props.mediaItemsLabel}
-                                accept=".png, .jpg, .pdf, .zip, .webp"
+                                accept=".png, .jpg, .pdf, .zip, .webp, .docx"
                                 multiple={false}
                                 mediaId={props.id}
                                 generalErrorMessage={props.generalErrorMessage}
@@ -86,7 +86,7 @@ const MediaItemForm = (props) => {
                                 setFieldValue={({value}) => setImages(value)}
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
-                        {versions &&
+                        {versions && versions.length > 0 &&
                             <div className="media-edit__last-files">
                                 <h2>{props.latestVersionsLabel}</h2>
                                 <div className="media-edit__versions">

@@ -232,7 +232,7 @@ function ProductForm(props) {
                                 id="files"
                                 name="files"
                                 label={props.productFilesLabel}
-                                accept=".png, .jpg, .pdf, .docx, .zip"
+                                accept=".png, .jpg, .pdf, .docx, .zip, .webp"
                                 multiple={true}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}

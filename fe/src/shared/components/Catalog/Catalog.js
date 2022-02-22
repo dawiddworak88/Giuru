@@ -242,6 +242,7 @@ function Catalog(props) {
                                                 }
 
                                                 {props.table.properties && props.table.properties.map((property) => {
+                                                    console.log(property)
                                                     if (property.isDateTime) {
                                                         return (
                                                             <TableCell>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
