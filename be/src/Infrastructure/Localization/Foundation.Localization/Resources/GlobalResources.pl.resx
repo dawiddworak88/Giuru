@@ -447,4 +447,10 @@
   <data name="Basket" xml:space="preserve">
     <value>Koszyk</value>
   </data>
+  <data name="NewsCategories" xml:space="preserve">
+    <value>Kategorie newsów</value>
+  </data>
+  <data name="News" xml:space="preserve">
+    <value>Aktualności</value>
+  </data>
 </root>

@@ -444,4 +444,10 @@
   <data name="Basket" xml:space="preserve">
     <value>Korb</value>
   </data>
+  <data name="NewsCategories" xml:space="preserve">
+    <value>News Kategorien</value>
+  </data>
+  <data name="News" xml:space="preserve">
+    <value>Nachrichten</value>
+  </data>
 </root>

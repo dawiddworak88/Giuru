@@ -37,6 +37,7 @@
 	<ItemGroup>
 		<Folder Include="Areas\Inventory\Views\Inventory\" />
 		<Folder Include="Areas\Inventory\Views\Warehouse\" />
+		<Folder Include="Areas\News\Views\Category\" />
 		<Folder Include="wwwroot\dist\" />
 	</ItemGroup>
 	<ItemGroup>
