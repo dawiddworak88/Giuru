@@ -11,33 +11,33 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.News.ModelBuilders
 {
-    public class CategoriesPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CategoriesPageViewModel>
+    public class NewsPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, NewsPageViewModel>
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Category>> categoriesCatalogModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<NewsItem>> newsCatalogModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
-        public CategoriesPageModelBuilder(
+        public NewsPageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
-            IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Category>> categoriesCatalogModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<NewsItem>> newsCatalogModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.menuTilesModelBuilder = menuTilesModelBuilder;
-            this.categoriesCatalogModelBuilder = categoriesCatalogModelBuilder;
+            this.newsCatalogModelBuilder = newsCatalogModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
         }
 
-        public async Task<CategoriesPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<NewsPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new CategoriesPageViewModel
+            var viewModel = new NewsPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
                 Header = this.headerModelBuilder.BuildModel(),
                 MenuTiles = this.menuTilesModelBuilder.BuildModel(),
-                Catalog = await this.categoriesCatalogModelBuilder.BuildModelAsync(componentModel),
+                Catalog = await this.newsCatalogModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };
 

@@ -28,7 +28,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
         {
             var viewModel = new CategoryFormViewModel
             {
-                Title = this.newsLocalizer.GetString("Category"),
+                Title = this.newsLocalizer.GetString("EditCategory"),
                 NameLabel = this.newsLocalizer.GetString("NameLabel"),
                 NameRequiredErrorMessage = this.newsLocalizer.GetString("NameRequiredErrorMessage"),
                 ParentCategoryLabel = this.newsLocalizer.GetString("ParentCategoryLabel"),
