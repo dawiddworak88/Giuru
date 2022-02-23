@@ -120,7 +120,22 @@
   <data name="Categories" xml:space="preserve">
     <value>Categories</value>
   </data>
+  <data name="Category" xml:space="preserve">
+    <value>Edit category</value>
+  </data>
+  <data name="NameLabel" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="NameRequiredErrorMessage" xml:space="preserve">
+    <value>Enter name</value>
+  </data>
   <data name="NewText" xml:space="preserve">
     <value>Add category</value>
+  </data>
+  <data name="ParentCategoryLabel" xml:space="preserve">
+    <value>Parent category</value>
+  </data>
+  <data name="SelectCategoryLabel" xml:space="preserve">
+    <value>Choose categories</value>
   </data>
 </root>

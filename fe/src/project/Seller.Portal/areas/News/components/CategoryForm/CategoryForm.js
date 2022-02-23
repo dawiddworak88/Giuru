@@ -53,8 +53,7 @@ const CategoryForm = (props) => {
                                 value={name} 
                                 onChange={handleOnChange} 
                                 helperText={dirty.name ? errors.name : ""} 
-                                error={(errors.name.length > 0) 
-                                && dirty.name} 
+                                error={(errors.name.length > 0) && dirty.name} 
                             />
                         </div>
                         <div className="field">
@@ -66,7 +65,7 @@ const CategoryForm = (props) => {
                                     name="parentCategoryId"
                                     value={parentCategoryId}
                                     onChange={handleOnChange}>
-                                    <MenuItem value="">&nbsp;</MenuItem>
+                                    <MenuItem key={0} value="">{props.selectCategoryLabel}</MenuItem>
                                     {props.parentCategories && props.parentCategories.map(category =>
                                         <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
                                     )}
