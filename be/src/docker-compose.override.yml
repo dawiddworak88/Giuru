@@ -96,6 +96,19 @@ services:
     ports:
       - "5134:80"
 
+  news-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sqldata;Database=NewsDb;User Id=sa;Password=Gre@tPassw0rd
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - LogstashUrl=http://logstash:31311
+      - SupportedCultures=${SUPPORTED_CULTURES}
+      - DefaultCulture=${DEFAULT_CULTURE}
+      - EventBusConnection=amqp://rabbitmq
+      - EventBusRetryCount=5
+    ports:
+      - "5135:80"
+
   catalog-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

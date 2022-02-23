@@ -72,6 +72,17 @@ services:
       - sqldata
       - catalog-api
       - rabbitmq
+  
+  news-api:
+    image: ${REGISTRY:-giuru}/news-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/News/News.Api/Dockerfile
+    restart: always
+    depends_on: 
+      - sqldata
+      - rabbitmq
+
 
   catalog-api:
     image: ${REGISTRY:-giuru}/catalog-api:${PLATFORM:-linux}-${TAG:-latest}
