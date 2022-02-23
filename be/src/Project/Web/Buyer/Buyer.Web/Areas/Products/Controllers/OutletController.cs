@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Outlet.ViewModels;
+﻿using Buyer.Web.Areas.Products.ViewModels;
 using Buyer.Web.Shared.Definitions.Basket;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;
@@ -10,9 +10,9 @@ using System;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Outlet.Controllers
+namespace Buyer.Web.Areas.Products.Controllers
 {
-    [Area("Outlet")]
+    [Area("Products")]
     public class OutletController : BaseController
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, OutletPageViewModel> outletPageModelBuilder;

@@ -10,7 +10,5 @@ namespace Inventory.Api.v1.RequestModels
         public string ProductSku { get; set; }
         public int Quantity { get; set; }
         public int AvailableQuantity { get; set; }
-        public int? RestockableInDays { get; set; }
-        public DateTime? ExpectedDelivery { get; set; }
     }
 }

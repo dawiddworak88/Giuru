@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Outlet.DomainModels;
+﻿using Buyer.Web.Areas.Products.DomainModels;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Outlet.Repositories
+namespace Buyer.Web.Areas.Products.Repositories
 {
     public class OutletRepository : IOutletRepository
     {
@@ -23,7 +23,7 @@ namespace Buyer.Web.Areas.Outlet.Repositories
             this.settings = settgins;
         }
 
-        public async Task<PagedResults<IEnumerable<OutletItem>>> GetOutletProductsAsync(string language, int pageIndex, int itemsPerPage, string token)
+        public async Task<PagedResults<IEnumerable<OutletSum>>> GetOutletProductsAsync(string language, int pageIndex, int itemsPerPage, string token)
         {
             var requestModel = new PagedRequestModelBase
             {
@@ -36,13 +36,13 @@ namespace Buyer.Web.Areas.Outlet.Repositories
                 Data = requestModel,
                 Language = language,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.InventoryUrl}{ApiConstants.Outlet.OutletApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.InventoryUrl}{ApiConstants.Outlet.AvailableOutletProductsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, PagedResults<IEnumerable<OutletItem>>>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, PagedResults<IEnumerable<OutletSum>>>(apiRequest);
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
-                return new PagedResults<IEnumerable<OutletItem>>(response.Data.Total, response.Data.PageSize)
+                return new PagedResults<IEnumerable<OutletSum>>(response.Data.Total, response.Data.PageSize)
                 {
                     Data = response.Data.Data
                 };

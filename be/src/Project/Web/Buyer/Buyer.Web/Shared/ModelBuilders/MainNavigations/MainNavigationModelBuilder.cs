@@ -64,7 +64,7 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
             links.Add(new LinkViewModel
             {
                 Text = this.globalLocalizer.GetString("Outlet").Value,
-                Url = this.linkGenerator.GetPathByAction("Index", "Outlet", new { Area = "Outlet", culture = CultureInfo.CurrentUICulture.Name })
+                Url = this.linkGenerator.GetPathByAction("Index", "Outlet", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             });
 
             var brandZoneLink = new LinkViewModel

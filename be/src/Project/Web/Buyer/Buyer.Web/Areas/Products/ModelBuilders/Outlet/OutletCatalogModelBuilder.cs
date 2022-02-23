@@ -12,11 +12,10 @@ using Microsoft.AspNetCore.Routing;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using System.Collections.Generic;
 using Buyer.Web.Areas.Products.Definitions;
-using Buyer.Web.Areas.Outlet.ViewModels;
-using Buyer.Web.Areas.Outlet.Repositories;
-using Buyer.Web.Areas.Outlet.Definitions;
+using Buyer.Web.Areas.Products.ViewModels;
+using Buyer.Web.Areas.Products.Repositories;
 
-namespace Buyer.Web.Areas.Outlet.ModelBuilders
+namespace Buyer.Web.Areas.Products.ModelBuilders
 {
     public class OutletCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OutletPageCatalogViewModel>
     {
@@ -48,8 +47,8 @@ namespace Buyer.Web.Areas.Outlet.ModelBuilders
             viewModel.ShowAddToCartButton = true;
             viewModel.SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct");
             viewModel.Title = this.globalLocalizer.GetString("Outlet");
-            viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "AvailableProductsApi", new { Area = "Products" });
-            viewModel.ItemsPerPage = AvailableProductsConstants.Pagination.ItemsPerPage;
+            viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "OutletApi", new { Area = "Products" });
+            viewModel.ItemsPerPage = OutletConstants.Catalog.DefaultItemsPerPage;
             viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
 
             var outletItems = await this.outletRepository.GetOutletProductsAsync(
@@ -58,7 +57,7 @@ namespace Buyer.Web.Areas.Outlet.ModelBuilders
             if (outletItems?.Data is not null && outletItems.Data.Any())
             {
                 var products = await this.productsService.GetProductsAsync(
-                    outletItems.Data.Select(x => x.ProductId.Value), null, null, componentModel.Language, null, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);
+                    outletItems.Data.Select(x => x.ProductId), null, null, componentModel.Language, null, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);
 
                 if (products is not null)
                 {

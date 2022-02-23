@@ -9,14 +9,6 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.Localization;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.ViewModels.Sidebar;
-using Buyer.Web.Areas.Orders.Repositories.Baskets;
-using Foundation.Extensions.ExtensionMethods;
-using System.Linq;
-using Buyer.Web.Areas.Orders.ApiResponseModels;
-using System.Globalization;
-using Microsoft.AspNetCore.Routing;
-using System;
-using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
 {
@@ -26,26 +18,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder;
         private readonly IProductsService productsService;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IBasketRepository basketRepository;
-        private readonly LinkGenerator linkGenerator;
 
         public BrandCatalogModelBuilder(
             ICatalogModelBuilder<ComponentModelBase, BrandCatalogViewModel> catalogModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
             IProductsService productsService,
-            IStringLocalizer<ProductResources> productLocalizer,
-            IBasketRepository basketRepository,
-            LinkGenerator linkGenerator,
-            IStringLocalizer<GlobalResources> globalLocalizer)
+            IStringLocalizer<ProductResources> productLocalizer)
         {
             this.catalogModelBuilder = catalogModelBuilder;
             this.productsService = productsService;
             this.productLocalizer = productLocalizer;
             this.sidebarModelBuilder = sidebarModelBuilder;
-            this.globalLocalizer = globalLocalizer;
-            this.basketRepository = basketRepository;
-            this.linkGenerator = linkGenerator;
         }
 
         public async Task<BrandCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)

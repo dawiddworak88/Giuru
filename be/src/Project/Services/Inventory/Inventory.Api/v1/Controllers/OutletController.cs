@@ -188,12 +188,12 @@ namespace Outlet.Api.v1.Controllers
         /// <param name="request">The list of outlet items.</param>
         /// <returns>The successfully saved outlet ids.</returns>
         [HttpPost, MapToApiVersion("1.0")]
-        [Route("productoutlets")]
+        [Route("outletitems")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> SaveProductOutlets(SaveOutletsBySkusRequestModel request)
+        public async Task<IActionResult> SaveProductOutletItems(SaveOutletsBySkusRequestModel request)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -203,11 +203,9 @@ namespace Outlet.Api.v1.Controllers
                 {
                     AvailableQuantity = x.AvailableQuantity,
                     Quantity = x.Quantity,
-                    ExpectedDelivery = x.ExpectedDelivery,
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
                     ProductSku = x.ProductSku,
-                    RestockableInDays = x.RestockableInDays,
                     WarehouseName = x.WarehouseName
                 }),
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -296,7 +294,7 @@ namespace Outlet.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Gets a product outlet by id.
+        /// Gets an outlet item by id.
         /// </summary>
         /// <param name="id">The id.</param>
         /// <returns>The outlet.</returns>
@@ -353,7 +351,7 @@ namespace Outlet.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Gets a product outlet by product id.
+        /// Gets an outlet item by product id.
         /// </summary>
         /// <param name="id">The product id.</param>
         /// <returns>The product outlet.</returns>

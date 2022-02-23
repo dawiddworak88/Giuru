@@ -17,7 +17,6 @@ using Serilog.Sinks.Logz.Io;
 using Buyer.Web.Areas.Orders.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using Foundation.Extensions.Filters;
-using Buyer.Web.Areas.Outlet.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,8 +75,6 @@ builder.Services.RegisterClientAccountDependencies(builder.Configuration);
 builder.Services.RegisterLocalizationDependencies();
 
 builder.Services.RegisterOrdersAreaDependencies();
-
-builder.Services.RegisterOutletDependencies();
 
 builder.Services.RegisterGeneralDependencies();
 

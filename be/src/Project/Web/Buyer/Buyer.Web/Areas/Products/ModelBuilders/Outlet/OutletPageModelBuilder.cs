@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Outlet.ViewModels;
+﻿using Buyer.Web.Areas.Products.ViewModels;
 using Buyer.Web.Shared.ViewModels.Headers;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
@@ -6,7 +6,7 @@ using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Outlet.ModelBuilders
+namespace Buyer.Web.Areas.Products.ModelBuilders
 {
     public class OutletPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, OutletPageViewModel>
     {

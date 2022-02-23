@@ -46,8 +46,8 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Outlet", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Outlet", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "OutletApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "OutletApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "OutletsApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "OutletsApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(OutletItem.CreatedDate)} desc";
 
@@ -55,8 +55,11 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("Sku"),
-                    this.globalLocalizer.GetString("Name"),
+                    this.inventoryLocalizer.GetString("Warehouse"),
+                    this.inventoryLocalizer.GetString("SelectProductLabel"),
+                    this.inventoryLocalizer.GetString("Sku"),
+                    this.inventoryLocalizer.GetString("QuantityLabel"),
+                    this.inventoryLocalizer.GetString("AvailableQuantityLabel"),
                     this.globalLocalizer.GetString("LastModifiedDate"),
                     this.globalLocalizer.GetString("CreatedDate")
                 },
@@ -75,12 +78,27 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(OutletItem.ProductSku).ToCamelCase(),
+                        Title = nameof(OutletItem.WarehouseName).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
                         Title = nameof(OutletItem.ProductName).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(OutletItem.ProductSku).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(OutletItem.Quantity).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(OutletItem.AvailableQuantity).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel

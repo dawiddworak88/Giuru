@@ -60,7 +60,7 @@ namespace Seller.Web.Areas.Inventory.ApiControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Save([FromBody] SaveOutletRequestModel model)
+        public async Task<IActionResult> Index([FromBody] SaveOutletRequestModel model)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language    = CultureInfo.CurrentUICulture.Name;

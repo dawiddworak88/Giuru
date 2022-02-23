@@ -32,6 +32,7 @@
         public struct Outlet
         {
             public static readonly string OutletApiEndpoint = "/api/v1/outlet";
+            public static readonly string AvailableOutletProductsApiEndpoint = "/api/v1/outlet/availableproducts";
         }
 
         public struct Media

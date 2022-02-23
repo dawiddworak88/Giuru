@@ -2,7 +2,7 @@
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;
 
-namespace Buyer.Web.Areas.Outlet.ViewModels
+namespace Buyer.Web.Areas.Products.ViewModels
 {
     public class OutletPageViewModel
     {

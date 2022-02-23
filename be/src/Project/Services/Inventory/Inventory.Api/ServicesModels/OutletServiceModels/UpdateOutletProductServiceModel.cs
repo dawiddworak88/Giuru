@@ -11,7 +11,5 @@ namespace Inventory.Api.ServicesModels.OutletServiceModels
         public string ProductSku { get; set; }
         public int Quantity { get; set; }
         public int AvailableQuantity { get; set; }
-        public int? RestockableInDays { get; set; }
-        public DateTime? ExpectedDelivery { get; set; }
     }
 }
