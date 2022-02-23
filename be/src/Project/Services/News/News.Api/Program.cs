@@ -74,7 +74,7 @@ IdentityModelEventSource.ShowPII = true;
 
 app.UseSwagger();
 
-//app.ConfigureDatabaseMigrations();
+app.ConfigureDatabaseMigrations(builder.Configuration);
 
 app.UseSwaggerUI(c =>
 {
