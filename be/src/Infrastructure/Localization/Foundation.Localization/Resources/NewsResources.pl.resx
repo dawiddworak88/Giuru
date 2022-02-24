@@ -123,8 +123,14 @@
   <data name="Category" xml:space="preserve">
     <value>Kategoria</value>
   </data>
+  <data name="CategoryDeletedSuccessfully" xml:space="preserve">
+    <value>Kategoria została pomyślnie usunięta</value>
+  </data>
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Nie odnaleziono kategorii</value>
+  </data>
+  <data name="CategorySavedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie utworzono kategorię</value>
   </data>
   <data name="EditCategory" xml:space="preserve">
     <value>Edytuj kategorię</value>

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Localization;
 using News.Api.Infrastructure;
 using News.Api.Infrastructure.Entities;
 using News.Api.ServicesModels.Categories;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,11 +32,12 @@ namespace News.Api.Services.Categories
 
         public async Task<CategoryServiceModel> CreateAsync(CreateCategoryServiceModel model)
         {
-            var category = new Infrastructure.Entities.Categories
+            var category = new Category
             {
                 ParentCategoryId = model.ParentCategoryId
             };
 
+            this.newsContext.Categories.Add(category.FillCommonProperties());
             var categoryTranslation = new CategoryTranslation
             {
                 Name = model.Name,
@@ -43,9 +45,7 @@ namespace News.Api.Services.Categories
                 CategoryId = category.Id
             };
 
-            this.newsContext.Categories.Add(category.FillCommonProperties());
             this.newsContext.CategoryTranslations.Add(categoryTranslation.FillCommonProperties());
-
             await this.newsContext.SaveChangesAsync();
 
             return await this.GetAsync(new GetCategoryServiceModel { Id = category.Id, Language = model.Language, Username = model.Username, OrganisationId = model.OrganisationId });
@@ -76,7 +76,7 @@ namespace News.Api.Services.Categories
         {
             var category = from c in this.newsContext.Categories
                            join t in this.newsContext.CategoryTranslations on c.Id equals t.CategoryId
-                           where t.Language == model.Language && c.Id == model.Id.Value && c.IsActive
+                           where t.Language == model.Language && c.Id == model.Id && c.IsActive
                            select new CategoryServiceModel
                            {
                                Id = c.Id,

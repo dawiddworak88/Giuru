@@ -49,7 +49,6 @@ namespace News.Api.v1.Categories.Controllers
         public async Task<IActionResult> Save(CategoryRequestModel request)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-
             if (request.Id.HasValue)
             {
                 var serviceModel = new UpdateCategoryServiceModel
@@ -140,12 +139,16 @@ namespace News.Api.v1.Categories.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetCategoriesServiceModel
             {
                 SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
-                OrderBy = orderBy
+                OrderBy = orderBy,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new GetCategoriesModelValidator();

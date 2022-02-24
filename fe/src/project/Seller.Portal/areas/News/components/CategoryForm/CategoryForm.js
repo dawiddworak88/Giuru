@@ -9,15 +9,38 @@ import {
 } from "@material-ui/core";
 
 const CategoryForm = (props) => {
+    console.log(props)
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
-        parentCategoryId: { value: props.parentCategoryId ? props.parentCategoryId : "" },
+        parentCategoryId: { value: props.parentCategoryId ? props.parentCategoryId : null, error: "" },
     };
 
     const onSubmitForm = (state) => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        const requestOptions = {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json" 
+            },
+            body: JSON.stringify(state)
+        };
+
+        fetch(props.saveUrl, requestOptions)
+            .then((res) => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                return res.json().then(jsonRes => {
+                    if (res.ok) {
+                        toast.success(jsonRes.message);
+                        // setShowBackToInventoryListButton(true);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            });
     }
 
     const stateValidatorSchema = {
