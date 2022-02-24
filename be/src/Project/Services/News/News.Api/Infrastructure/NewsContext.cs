@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using News.Api.Infrastructure.Entities;
+using News.Api.Infrastructure.Entities.News;
 
 namespace News.Api.Infrastructure
 {
@@ -16,5 +17,11 @@ namespace News.Api.Infrastructure
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<CategoryTranslation> CategoryTranslations { get; set; }
+        public DbSet<NewsItem> NewsItems { get; set; }
+        public DbSet<NewsItemTranslation> NewsItemTranslations { get; set; }
+        public DbSet<NewsItemImage> NewsItemImages { get; set; }
+        public DbSet<NewsItemFile> NewsItemFIles { get; set; }
+        public DbSet<NewsItemTag> NewsItemTags { get; set; }
+        public DbSet<NewsItemTagTranslation> NewsItemTagTranslations { get; set; }
     }
 }
