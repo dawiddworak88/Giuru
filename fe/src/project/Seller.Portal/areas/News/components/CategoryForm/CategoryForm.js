@@ -1,16 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import { 
     TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress 
 } from "@material-ui/core";
 
 const CategoryForm = (props) => {
-    console.log(props)
     const [state, dispatch] = useContext(Context);
+    const [showBackToCategoriesListButton, setShowBackToCategoriesListButton] = useState(false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
@@ -31,10 +32,13 @@ const CategoryForm = (props) => {
         fetch(props.saveUrl, requestOptions)
             .then((res) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+                
+                AuthenticationHelper.HandleResponse(response);
+                
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
-                        // setShowBackToInventoryListButton(true);
+                        setShowBackToCategoriesListButton(true);
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -96,9 +100,26 @@ const CategoryForm = (props) => {
                             </FormControl>
                         </div>
                         <div className="field">
-                            <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
-                                {props.saveText}
-                            </Button>
+                            {showBackToCategoriesListButton ? (
+                                <Button 
+                                    type="button" 
+                                    variant="contained" 
+                                    color="primary" 
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        NavigationHelper.redirect(props.categoriesUrl);
+                                    }}>
+                                    {props.navigateToCategoriesLabel}
+                                </Button> 
+                            ) : (
+                                <Button 
+                                    type="submit" 
+                                    variant="contained" 
+                                    color="primary"
+                                    disabled={state.isLoading || disable}>
+                                    {props.saveText}
+                                </Button>
+                            )}
                         </div>
                     </form>
                 </div>

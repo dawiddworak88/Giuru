@@ -43,7 +43,9 @@ namespace Seller.Web.Areas.News.ModelBuilders
                 ParentCategoryLabel = this.newsLocalizer.GetString("ParentCategoryLabel"),
                 SelectCategoryLabel = this.newsLocalizer.GetString("SelectCategoryLabel"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
-                SaveUrl = this.linkGenerator.GetPathByAction("Post", "CategoriesApi", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
+                SaveUrl = this.linkGenerator.GetPathByAction("Post", "CategoriesApi", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name }),
+                NavigateToCategoriesLabel = this.newsLocalizer.GetString("NavigateToCategoriesLabel"),
+                CategoriesUrl = this.linkGenerator.GetPathByAction("Index", "Categories", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var categories = await this.categoriesRepository.GetAllCategoriesAsync(componentModel.Token, componentModel.Language);

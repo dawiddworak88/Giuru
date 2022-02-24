@@ -17,6 +17,7 @@ namespace Seller.Web.Areas.News.ViewModel
         public string NameRequiredErrorMessage { get; set; }
         public string NavigateToCategoriesLabel { get; set; }
         public string SaveUrl { get; set; }
+        public string CategoriesUrl { get; set; }
         public string SaveText { get; set; }
         public IEnumerable<ListItemViewModel> ParentCategories { get; set; }
     }

@@ -141,6 +141,9 @@
   <data name="NameRequiredErrorMessage" xml:space="preserve">
     <value>Name eingeben</value>
   </data>
+  <data name="NavigateToCategoriesLabel" xml:space="preserve">
+    <value>Zurück zu den Kategorien</value>
+  </data>
   <data name="News" xml:space="preserve">
     <value>Nachrichten</value>
   </data>
