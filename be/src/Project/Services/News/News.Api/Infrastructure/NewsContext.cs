@@ -14,7 +14,7 @@ namespace News.Api.Infrastructure
             optionsBuilder.UseLazyLoadingProxies();
         }
 
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Categories> Categories { get; set; }
         public DbSet<CategoryTranslation> CategoryTranslations { get; set; }
     }
 }

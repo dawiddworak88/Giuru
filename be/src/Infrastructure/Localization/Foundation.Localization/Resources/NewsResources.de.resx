@@ -123,6 +123,9 @@
   <data name="Category" xml:space="preserve">
     <value>Kategorie</value>
   </data>
+  <data name="CategoryNotFound" xml:space="preserve">
+    <value>Kategorie nicht gefunden</value>
+  </data>
   <data name="EditCategory" xml:space="preserve">
     <value>Kategorie bearbeiten</value>
   </data>
@@ -144,8 +147,14 @@
   <data name="ParentCategoryLabel" xml:space="preserve">
     <value>Eltern-Kategorie</value>
   </data>
+  <data name="ParentCategoryNotFound" xml:space="preserve">
+    <value>Übergeordnete Kategorie nicht gefunden</value>
+  </data>
   <data name="SelectCategoryLabel" xml:space="preserve">
     <value>Kategorien auswählen</value>
+  </data>
+  <data name="SubcategoriesDeleteCategoryConflict" xml:space="preserve">
+    <value>Zu dieser Kategorie gehörende Unterkategorien löschen.</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Titel</value>

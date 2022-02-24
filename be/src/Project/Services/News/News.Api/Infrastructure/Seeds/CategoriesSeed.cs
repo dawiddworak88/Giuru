@@ -18,7 +18,7 @@ namespace News.Api.Infrastructure.Seeds
         {
             if (!context.Categories.Any(x => x.Id == id))
             {
-                var category = new Category
+                var category = new Categories
                 {
                     Id = id,
                     ParentCategoryId = parentCategoryId,

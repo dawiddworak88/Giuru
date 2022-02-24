@@ -58,6 +58,10 @@ builder.Services.AddLocalization();
 
 builder.Services.AddApiVersioning();
 
+builder.Services.RegisterNewsApiDependencies();
+
+builder.Services.RegisterDatabaseDependencies(builder.Configuration);
+
 builder.Services.ConfigureSettings(builder.Configuration);
 
 builder.Services.AddSwaggerGen(c =>
