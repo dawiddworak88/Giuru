@@ -46,7 +46,7 @@ namespace Seller.Web.Areas.News.Repositories.Categories
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.NewsUrl}{ApiConstants.News.CategoriesApiEndpoint}"
             };
-            Console.WriteLine(token);
+
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Category>>>(apiRequest);
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {

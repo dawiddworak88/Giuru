@@ -42,7 +42,6 @@ namespace News.Api.v1.News.Controllers
         /// <param name="request">The model.</param>
         /// <returns>The news id.</returns>
         [HttpPost, MapToApiVersion("1.0")]
-        [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
@@ -66,8 +65,7 @@ namespace News.Api.v1.News.Controllers
                     Images = request.Images,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = Guid.Parse("2E2D35E8-D8C6-4AB9-2883-08D9EF8EA2FD")
-                    //OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
                 var validator = new UpdateNewsItemModelValidator();
@@ -96,7 +94,7 @@ namespace News.Api.v1.News.Controllers
                     Images = request.Images,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = Guid.Parse("2E2D35E8-D8C6-4AB9-2883-08D9EF8EA2FD")
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
                 var validator = new CreateNewsItemModelValidator();
