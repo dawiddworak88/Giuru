@@ -86,6 +86,7 @@ namespace News.Api.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    NewsItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -125,7 +126,6 @@ namespace News.Api.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -154,8 +154,7 @@ namespace News.Api.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NewsItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    NewsItemTagId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    NewsItemTagId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -168,7 +167,8 @@ namespace News.Api.Infrastructure.Migrations
                         name: "FK_NewsItemTagTranslations_NewsItemTags_NewsItemTagId",
                         column: x => x.NewsItemTagId,
                         principalTable: "NewsItemTags",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

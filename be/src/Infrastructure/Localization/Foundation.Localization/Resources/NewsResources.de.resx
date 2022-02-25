@@ -126,6 +126,9 @@
   <data name="CategoryDeletedSuccessfully" xml:space="preserve">
     <value>Kategorie erfolgreich gelöscht</value>
   </data>
+  <data name="CategoryDeleteNewsConflict" xml:space="preserve">
+    <value>Entfernen Sie die erste Nachricht, die der Kategorie zugeordnet ist</value>
+  </data>
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Kategorie nicht gefunden</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="NewsNewText" xml:space="preserve">
     <value>Neuigkeiten hinzufügen</value>
+  </data>
+  <data name="NewsNotFound" xml:space="preserve">
+    <value>Nachrichten nicht gefunden</value>
   </data>
   <data name="NewText" xml:space="preserve">
     <value>Kategorie hinzufügen</value>

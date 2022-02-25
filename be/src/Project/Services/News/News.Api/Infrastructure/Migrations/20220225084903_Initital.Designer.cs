@@ -12,7 +12,7 @@ using News.Api.Infrastructure;
 namespace News.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(NewsContext))]
-    [Migration("20220224133245_Initital")]
+    [Migration("20220225084903_Initital")]
     partial class Initital
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -213,6 +213,9 @@ namespace News.Api.Infrastructure.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("NewsItemId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -246,10 +249,7 @@ namespace News.Api.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("NewsItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("NewsItemTagId")
+                    b.Property<Guid>("NewsItemTagId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<byte[]>("RowVersion")
@@ -303,10 +303,6 @@ namespace News.Api.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("NewsItemId");
@@ -327,7 +323,9 @@ namespace News.Api.Infrastructure.Migrations
                 {
                     b.HasOne("News.Api.Infrastructure.Entities.News.NewsItemTag", null)
                         .WithMany("Translations")
-                        .HasForeignKey("NewsItemTagId");
+                        .HasForeignKey("NewsItemTagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("News.Api.Infrastructure.Entities.News.NewsItemTranslation", b =>

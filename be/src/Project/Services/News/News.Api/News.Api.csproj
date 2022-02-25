@@ -37,7 +37,6 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <Folder Include="v1\News\ResponseModels\" />
     <Folder Include="v1\News\RequestModels\" />
   </ItemGroup>
 	

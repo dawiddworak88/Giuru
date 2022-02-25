@@ -13,6 +13,6 @@ namespace News.Api.Infrastructure.Entities.News
         public string Language { get; set; }
 
         [Required]
-        public Guid NewsItemId { get; set; }
+        public Guid NewsItemTagId { get; set; }
     }
 }

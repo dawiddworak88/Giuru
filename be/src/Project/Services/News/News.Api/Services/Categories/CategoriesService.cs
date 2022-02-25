@@ -65,7 +65,10 @@ namespace News.Api.Services.Categories
                 throw new CustomException(this.newsLocalizer.GetString("SubcategoriesDeleteCategoryConflict"), (int)HttpStatusCode.Conflict);
             }
 
-            //Add news
+            if (await this.newsContext.NewsItems.AnyAsync(x => x.CategoryId == category.Id && x.IsActive))
+            {
+                throw new CustomException(this.newsLocalizer.GetString("CategoryDeleteNewsConflict"), (int)HttpStatusCode.Conflict);
+            }
 
             category.IsActive = false;
 

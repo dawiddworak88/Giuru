@@ -7,9 +7,6 @@ namespace News.Api.Infrastructure.Entities.News
     public class NewsItemTranslation : Entity
     {
         [Required]
-        public string Url { get; set; }
-
-        [Required]
         public string Title { get; set; }
 
         [Required]
