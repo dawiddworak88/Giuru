@@ -21,6 +21,7 @@ import ContentPage from "../../src/project/Account/areas/Home/pages/Content/Cont
 
 // Seller Portal
 import NewsPage from "../../src/project/Seller.Portal/areas/News/pages/NewsPage/NewsPage";
+import NewsItemPage from "../../src/project/Seller.Portal/areas/News/pages/NewsItemPage/NewsItemPage";
 import NewsCategoriesPage from "../../src/project/Seller.Portal/areas/News/pages/CategoriesPage/CategoriesPage";
 import NewsCategoryPage from "../../src/project/Seller.Portal/areas/News/pages/CategoryPage/CategoryPage";
 import WarehouseAddPage from "../../src/project/Seller.Portal/areas/Warehouse/pages/WarehouseAddPage/WarehouseAddPage";
@@ -57,6 +58,7 @@ const Components = {
 	ContentPage,
 
 	NewsPage,
+	NewsItemPage,
 	NewsCategoriesPage,
 	NewsCategoryPage,
 	WarehouseAddPage,

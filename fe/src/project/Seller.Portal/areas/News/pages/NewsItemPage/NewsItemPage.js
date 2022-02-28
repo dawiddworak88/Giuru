@@ -7,9 +7,9 @@ import Header from "../../../../../../shared/components/Header/Header";
 import Store from "../../../../../../shared/stores/Store";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
-import CategoryForm from "../../components/CategoryForm/CategoryForm";
+import NewsItemForm from "../../components/NewsItemForm/NewsItemForm";
 
-const CategoryPage = (props) => {
+const NewsItemPage = (props) => {
 
     toast.configure();
     LocaleHelper.setMomentLocale(props.locale);
@@ -19,11 +19,11 @@ const CategoryPage = (props) => {
             <Store>
                 <Header {...props.header}></Header>
                 <MenuTiles {...props.menuTiles} />
-                <CategoryForm {...props.categoryForm} />
+                <NewsItemForm {...props.newsItemForm} />
                 <Footer {...props.footer}></Footer>
             </Store>
         </ThemeProvider>
     );
 }
 
-export default CategoryPage;
+export default NewsItemPage;

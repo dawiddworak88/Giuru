@@ -22,6 +22,8 @@ namespace Seller.Web.Areas.News.DependencyInjection
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<NewsItem>>, NewsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, NewsPageViewModel>, NewsPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, NewsItemPageViewModel>, NewsItemPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, NewsItemFormViewModel>, NewsItemFormModelBuilder>();
         }
     }
 }
