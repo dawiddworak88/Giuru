@@ -13,6 +13,7 @@ using Foundation.Extensions.Filters;
 using Foundation.Localization.Extensions;
 using Foundation.Localization.Definitions;
 using News.Api.DependencyInjection;
+using Foundation.Account.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +62,8 @@ builder.Services.AddApiVersioning();
 builder.Services.RegisterNewsApiDependencies();
 
 builder.Services.RegisterDatabaseDependencies(builder.Configuration);
+
+builder.Services.RegisterApiAccountDependencies(builder.Configuration);
 
 builder.Services.ConfigureSettings(builder.Configuration);
 

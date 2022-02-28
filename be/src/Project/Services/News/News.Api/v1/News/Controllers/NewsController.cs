@@ -139,7 +139,6 @@ namespace News.Api.v1.News.Controllers
 
             var validator = new GetNewsItemsModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
-
             if (validationResult.IsValid)
             {
                 var newsItems = await this.newsService.GetAsync(serviceModel);
@@ -193,7 +192,6 @@ namespace News.Api.v1.News.Controllers
 
             var validator = new GetNewsItemModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
-
             if (validationResult.IsValid)
             {
                 var newsItem = await this.newsService.GetAsync(serviceModel);

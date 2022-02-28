@@ -22,6 +22,5 @@ namespace News.Api.Infrastructure
         public DbSet<NewsItemImage> NewsItemImages { get; set; }
         public DbSet<NewsItemFile> NewsItemFIles { get; set; }
         public DbSet<NewsItemTag> NewsItemTags { get; set; }
-        public DbSet<NewsItemTagTranslation> NewsItemTagTranslations { get; set; }
     }
 }

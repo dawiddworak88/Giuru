@@ -2,9 +2,9 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace News.Api.Infrastructure.Entities.News
+namespace News.Api.Infrastructure.Entities.Tags
 {
-    public class NewsItemTagTranslation : Entity
+    public class TagTranslation : Entity
     {
         [Required]
         public string Name { get; set; }
@@ -13,6 +13,6 @@ namespace News.Api.Infrastructure.Entities.News
         public string Language { get; set; }
 
         [Required]
-        public Guid NewsItemTagId { get; set; }
+        public Guid TagId { get; set; }
     }
 }

@@ -60,7 +60,7 @@ namespace News.Api.Services.News
 
             await this.newsContext.NewsItemTranslations.AddAsync(newsItemTranslation.FillCommonProperties());
 
-            foreach (var tagString in model.Tags.OrEmptyIfNull())
+            /*foreach (var tagString in model.Tags.OrEmptyIfNull())
             {
                 var tag = new NewsItemTag
                 {
@@ -77,7 +77,7 @@ namespace News.Api.Services.News
                 };
 
                 await this.newsContext.NewsItemTagTranslations.AddAsync(tagTranslation.FillCommonProperties());
-            }
+            }*/
 
             foreach (var fileId in model.Images.OrEmptyIfNull())
             {
@@ -146,7 +146,7 @@ namespace News.Api.Services.News
             var news = from n in this.newsContext.NewsItems
                        join nt in this.newsContext.NewsItemTranslations on n.Id equals nt.NewsItemId
                        join t in this.newsContext.NewsItemTags on n.Id equals t.NewsItemId
-                       join tt in this.newsContext.NewsItemTagTranslations on t.Id equals tt.NewsItemTagId
+                       //join tt in this.newsContext.NewsItemTagTranslations on t.Id equals tt.NewsItemTagId
                        join f in this.newsContext.NewsItemFIles on n.Id equals f.NewsItemId
                        where n.Id == model.Id
                        select new
@@ -157,7 +157,7 @@ namespace News.Api.Services.News
                            Description = nt.Description,
                            Content = nt.Content,
                            IsNew = n.IsNew,
-                           Tags = tt.Name,
+                           /*Tags = tt.Name,*/
                            Files = f.MediaId,
                            IsPublished = n.IsPublished,
                            LastModifiedDate = n.LastModifiedDate,
@@ -173,7 +173,7 @@ namespace News.Api.Services.News
                     Title = news.FirstOrDefault().Title,
                     Description = news.FirstOrDefault().Description,
                     Content = news.FirstOrDefault().Content,
-                    Tags = news.Select(tag => tag.Tags.ToString()),
+                    //Tags = news.Select(tag => tag.Tags.ToString()),
                     Files = news.Select(x => x.Files),
                     IsNew = news.FirstOrDefault().IsNew,
                     IsPublished = news.FirstOrDefault().IsPublished,
@@ -246,7 +246,7 @@ namespace News.Api.Services.News
                 await this.newsContext.NewsItemFIles.AddAsync(file.FillCommonProperties());
             }
 
-            var newsTags = this.newsContext.NewsItemTags.Where(x => x.NewsItemId == news.Id);
+            /*var newsTags = this.newsContext.NewsItemTags.Where(x => x.NewsItemId == news.Id);
 
             foreach(var newsTag in newsTags.OrEmptyIfNull())
             {
@@ -257,7 +257,7 @@ namespace News.Api.Services.News
                 }
 
                 this.newsContext.NewsItemTags.Remove(newsTag);
-            }
+            }*/
             
             //dodaj tagi
 
