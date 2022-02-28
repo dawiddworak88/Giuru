@@ -17,14 +17,12 @@ import {
 const NewsItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [showBackToNewsListButton, setShowBackToNewsListButton] = useState(false);
-    const [editorState, setEditorState] = useState(() => {
-        EditorState.createEmpty()
-    })
-    // const [editorState] = useState(props.content ? EditorState.createWithContent(
-    //     ContentState.createFromText(
-    //         convertFromHTML(props.content)
-    //     )
-    // ) : EditorState.createEmpty());
+    const [convertedToRaw, setConvertedToRaw] = useState(null);
+    const [editorState, setEditorState] = useState(props.content ? EditorState.createWithContent(
+        ContentState.createFromText(
+            convertFromHTML(props.content)
+        )
+    ) : EditorState.createEmpty());
     
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -38,7 +36,8 @@ const NewsItemForm = (props) => {
 
         const requestData = {
             heroImage:  state.heroImage[0].id,
-            title: state.title
+            title: state.title,
+            content: convertedToRaw
         }
 
         const requestOptions = {
@@ -46,24 +45,26 @@ const NewsItemForm = (props) => {
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(requestData)
         };
-
-        console.log(JSON.stringify(requestData))
     }
 
     const stateValidatorSchema = () => {
 
     }
 
-    const test = (test) => {
-        setFieldValue({name: "content", value: test})
+    const handleEditorChange = (state) => {
+        setEditorState(state);
+
+        const converted = draftToHtml(convertToRaw(editorState.getCurrentContent()))
+        
+        setConvertedToRaw(converted);
     }
 
     const {
         values, errors, dirty, disable,
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
-
-    const { title, heroImage, content } = values;
+    
+    const { title, heroImage } = values;
     return (
         <section className="section section-small-padding category">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -95,16 +96,11 @@ const NewsItemForm = (props) => {
                                 onChange={handleOnChange} 
                             />
                         </div>
-                        <div className="field" id="text-editor">
-                            <Editor editorState={editorState} />
-                            {/* <Editor
-                                editorState={content}
-                                toolbarClassName="toolbarClassName"
-                                wrapperClassName="wrapperClassName"
-                                editorClassName="editorClassName"
-                                onEditorStateChange={test}
+                        <div className="field">
+                            <Editor 
+                                editorState={editorState} 
+                                onEditorStateChange={handleEditorChange}
                             />
-                            <textarea style={{display:'none'}} disabled value={draftToHtml(convertToRaw(content.getCurrentContent())) } /> */}
                         </div>
                         <div className="field">
                             {showBackToNewsListButton ? (
@@ -139,6 +135,16 @@ const NewsItemForm = (props) => {
 NewsItemForm.propTypes = {
     id: PropTypes.string,
     title: PropTypes.string.isRequired,
+    newsUrl: PropTypes.string,
+    saveText: PropTypes.string,
+    titleLabel: PropTypes.string,
+    heroImageLabel: PropTypes.string,
+    generalErrorMessage: PropTypes.string,
+    deleteLabel: PropTypes.string,
+    dropFilesLabel: PropTypes.string,
+    dropOrSelectImagesLabel: PropTypes.string,
+    saveMediaUrl: PropTypes.string,
+    navigateToNewsLabel: PropTypes.string
 }
 
 export default NewsItemForm;
