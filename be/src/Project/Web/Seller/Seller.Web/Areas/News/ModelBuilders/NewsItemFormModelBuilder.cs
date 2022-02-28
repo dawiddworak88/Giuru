@@ -32,10 +32,15 @@ namespace Seller.Web.Areas.News.ModelBuilders
                 Title = this.newsLocalizer.GetString("NewsItem"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Post", "NewsItemApi", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 DeleteLabel = this.globalLocalizer.GetString("Delete"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 DropOrSelectImagesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
-                DropFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile")
+                DropFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
+                NewsUrl = this.linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name }),
+                NavigateToNewsLabel = this.newsLocalizer.GetString("NavigateToNewsLabel"),
+                HeroImageLabel = this.newsLocalizer.GetString("HeroImageLabel"),
+                TitleLabel = this.newsLocalizer.GetString("TitleLabel")
             };
 
             return viewModel;

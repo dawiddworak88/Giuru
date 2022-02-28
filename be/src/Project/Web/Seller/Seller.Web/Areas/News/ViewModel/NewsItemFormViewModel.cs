@@ -10,7 +10,12 @@ namespace Seller.Web.Areas.News.ViewModel
         public string DropFilesLabel { get; set; }
         public string DropOrSelectImagesLabel { get; set; }
         public string DeleteLabel { get; set; }
+        public string TitleLabel { get; set; }
+        public string HeroImageLabel { get; set; }
+        public string NewsUrl { get; set; }
+        public string NavigateToNewsLabel { get; set; }
         public string SaveUrl { get; set; }
+        public string SaveMediaUrl { get; set; }
         public string SaveText { get; set; }
     }
 }
