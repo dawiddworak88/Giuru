@@ -25,6 +25,7 @@
         public struct News
         {
             public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
+            public static readonly string NewsApiEndpoint = "/api/v1/news";
         }
 
         public struct Inventory

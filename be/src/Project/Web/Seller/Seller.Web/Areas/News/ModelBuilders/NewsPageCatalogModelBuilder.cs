@@ -1,10 +1,12 @@
 ﻿using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.News.DomainModels;
+using Seller.Web.Areas.News.Repositories.News;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
@@ -19,17 +21,20 @@ namespace Seller.Web.Areas.News.ModelBuilders
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer newsLocalizer;
         private readonly LinkGenerator linkGenerator;
+        private readonly INewsRepository newsRepository;
 
         public NewsPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<NewsResources> newsLocalizer,
+            INewsRepository newsRepository,
             LinkGenerator linkGenerator)
         {
             this.catalogModelBuilder = catalogModelBuilder;
             this.globalLocalizer = globalLocalizer;
             this.newsLocalizer = newsLocalizer;
             this.linkGenerator = linkGenerator;
+            this.newsRepository = newsRepository;
         }
 
         public async Task<CatalogViewModel<NewsItem>> BuildModelAsync(ComponentModelBase componentModel)
@@ -50,8 +55,8 @@ namespace Seller.Web.Areas.News.ModelBuilders
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("Title"),
-                    this.globalLocalizer.GetString("Category"),
+                    this.newsLocalizer.GetString("TitleLabel"),
+                    this.newsLocalizer.GetString("Category"),
                     this.globalLocalizer.GetString("LastModifiedDate"),
                     this.globalLocalizer.GetString("CreatedDate")
                 },
@@ -70,6 +75,16 @@ namespace Seller.Web.Areas.News.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
+                        Title = nameof(NewsItem.Title).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(NewsItem.CategoryName).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
                         Title = nameof(NewsItem.LastModifiedDate).ToCamelCase(),
                         IsDateTime = true
                     },
@@ -80,6 +95,8 @@ namespace Seller.Web.Areas.News.ModelBuilders
                     }
                 }
             };
+
+            viewModel.PagedItems = await this.newsRepository.GetNewsItemsAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(NewsItem.CreatedDate)} desc");
 
             return viewModel;
         }

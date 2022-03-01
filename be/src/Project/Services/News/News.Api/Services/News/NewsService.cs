@@ -41,6 +41,7 @@ namespace News.Api.Services.News
 
             var newsItem = new NewsItem
             {
+                HeroImageId = model.HeroImageId.Value,
                 OrganisationId = model.OrganisationId.Value,
                 CategoryId = model.CategoryId.Value,
                 IsNew = model.IsNew,
@@ -60,33 +61,26 @@ namespace News.Api.Services.News
 
             await this.newsContext.NewsItemTranslations.AddAsync(newsItemTranslation.FillCommonProperties());
 
-            /*foreach (var tagString in model.Tags.OrEmptyIfNull())
+            foreach (var fileId in model.Files.OrEmptyIfNull())
             {
-                var tag = new NewsItemTag
+                var file = new NewsItemFile
                 {
-                    NewsItemId = newsItem.Id
+                    NewsItemId = newsItem.Id,
+                    MediaId = fileId,
                 };
 
-                await this.newsContext.NewsItemTags.AddAsync(tag.FillCommonProperties());
+                await this.newsContext.NewsItemFIles.AddAsync(file.FillCommonProperties());
+            }
 
-                var tagTranslation = new NewsItemTagTranslation
-                {
-                    Name = tagString,
-                    Language = model.Language,
-                    NewsItemTagId = tag.Id
-                };
-
-                await this.newsContext.NewsItemTagTranslations.AddAsync(tagTranslation.FillCommonProperties());
-            }*/
-
-            foreach (var fileId in model.Images.OrEmptyIfNull())
+            foreach (var imageId in model.Images.OrEmptyIfNull())
             {
-                var image = new NewsItemFile
+                var image = new NewsItemImage
                 {
-                    NewsItemId = newsItem.Id
+                    NewsItemId = newsItem.Id,
+                    MediaId = imageId,
                 };
 
-                await this.newsContext.NewsItemFIles.AddAsync(image.FillCommonProperties());
+                await this.newsContext.NewsItemImages.AddAsync(image.FillCommonProperties());
             }
 
             await this.newsContext.SaveChangesAsync();
@@ -109,79 +103,85 @@ namespace News.Api.Services.News
 
         public async Task<PagedResults<IEnumerable<NewsItemServiceModel>>> GetAsync(GetNewsItemsServiceModel model)
         {
-            var news = from n in this.newsContext.NewsItems
+            var existingNews = from n in this.newsContext.NewsItems
                        join nt in this.newsContext.NewsItemTranslations on n.Id equals nt.NewsItemId
-                       join t in this.newsContext.NewsItemTags on n.Id equals t.NewsItemId
-                       where nt.Language == model.Language && n.IsActive
+                       join c in this.newsContext.CategoryTranslations on n.CategoryId equals c.CategoryId
+                       where nt.Language == model.Language && n.IsActive && c.Language == model.Language
                        select new NewsItemServiceModel
                        {
                            Id = n.Id,
                            CategoryId = n.CategoryId,
+                           CategoryName = c.Name,
                            Title = nt.Title,
                            Description = nt.Description,
                            Content = nt.Content,
                            IsPublished = n.IsPublished,
                            IsNew = n.IsNew,
-                           LastModifiedDate = DateTime.UtcNow,
-                           CreatedDate = DateTime.UtcNow,
-                       };
-
-            foreach(var newsItem in news)
-            {
-
-            }
-
-            if (!string.IsNullOrWhiteSpace(model.SearchTerm))
-            {
-                news = news.Where(x => x.Title.StartsWith(model.SearchTerm));
-            }
-
-            news = news.ApplySort(model.OrderBy);
-
-            return news.PagedIndex(new Pagination(news.Count(), model.ItemsPerPage), model.PageIndex);
-        }
-
-        public async Task<NewsItemServiceModel> GetAsync(GetNewsItemServiceModel model)
-        {
-            var news = from n in this.newsContext.NewsItems
-                       join nt in this.newsContext.NewsItemTranslations on n.Id equals nt.NewsItemId
-                       join t in this.newsContext.NewsItemTags on n.Id equals t.NewsItemId
-                       //join tt in this.newsContext.NewsItemTagTranslations on t.Id equals tt.NewsItemTagId
-                       join f in this.newsContext.NewsItemFIles on n.Id equals f.NewsItemId
-                       where n.Id == model.Id
-                       select new
-                       {
-                           Id = n.Id,
-                           CategoryId = n.CategoryId,
-                           Title = nt.Title,
-                           Description = nt.Description,
-                           Content = nt.Content,
-                           IsNew = n.IsNew,
-                           /*Tags = tt.Name,*/
-                           Files = f.MediaId,
-                           IsPublished = n.IsPublished,
                            LastModifiedDate = n.LastModifiedDate,
                            CreatedDate = n.CreatedDate
                        };
 
-            if (news.OrEmptyIfNull().Any())
+            foreach(var newsItem in existingNews)
             {
-                var newsItem = new NewsItemServiceModel
+                var files = this.newsContext.NewsItemFIles.Where(x => x.NewsItemId == newsItem.Id);
+                if (files is not null)
                 {
-                    Id = model.Id,
-                    CategoryId = news.FirstOrDefault().CategoryId,
-                    Title = news.FirstOrDefault().Title,
-                    Description = news.FirstOrDefault().Description,
-                    Content = news.FirstOrDefault().Content,
-                    //Tags = news.Select(tag => tag.Tags.ToString()),
-                    Files = news.Select(x => x.Files),
-                    IsNew = news.FirstOrDefault().IsNew,
-                    IsPublished = news.FirstOrDefault().IsPublished,
-                    LastModifiedDate = news.FirstOrDefault().LastModifiedDate,
-                    CreatedDate = news.FirstOrDefault().CreatedDate
-                };
+                    newsItem.Files = files.Select(x => x.MediaId);
+                }
 
-                return newsItem;
+                var images = this.newsContext.NewsItemImages.Where(x => x.NewsItemId == newsItem.Id);
+                if (images is not null)
+                {
+                    newsItem.Images = images.Select(x => x.MediaId);
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.SearchTerm))
+            {
+                existingNews.Where(x => x.Title.StartsWith(model.SearchTerm));
+            }
+
+            existingNews.ApplySort(model.OrderBy);
+
+            return existingNews.PagedIndex(new Pagination(existingNews.Count(), model.ItemsPerPage), model.PageIndex);
+        }
+
+        public async Task<NewsItemServiceModel> GetAsync(GetNewsItemServiceModel model)
+        {
+            var existingNews = from n in this.newsContext.NewsItems
+                               join nt in this.newsContext.NewsItemTranslations on n.Id equals nt.NewsItemId
+                               join c in this.newsContext.CategoryTranslations on n.CategoryId equals c.CategoryId
+                               where n.Id == model.Id && n.IsActive && nt.Language == model.Language && c.Language == model.Language
+                               select new NewsItemServiceModel
+                               {
+                                   Id = n.Id,
+                                   CategoryId = n.CategoryId,
+                                   CategoryName = c.Name,
+                                   Title = nt.Title,
+                                   Description = nt.Description,
+                                   Content = nt.Content,
+                                   IsNew = n.IsNew,
+                                   IsPublished = n.IsPublished,
+                                   LastModifiedDate = n.LastModifiedDate,
+                                   CreatedDate = n.CreatedDate
+                               };
+
+            var news = existingNews.FirstOrDefault();
+            if (news is not null)
+            {
+                var files = this.newsContext.NewsItemFIles.Where(x => x.NewsItemId == model.Id);
+                if (files is not null)
+                {
+                    news.Files = files.Select(x => x.MediaId);
+                }
+
+                var images = this.newsContext.NewsItemImages.Where(x => x.NewsItemId == model.Id);
+                if (images is not null)
+                {
+                    news.Images = images.Select(x => x.MediaId);
+                }
+
+                return news;
             }
 
             return default;
@@ -202,6 +202,7 @@ namespace News.Api.Services.News
                 throw new CustomException(this.newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NotFound);
             }
 
+            news.HeroImageId = model.HeroImageId.Value;
             news.CategoryId = category.Id;
             news.IsNew = model.IsNew;
             news.IsPublished = model.IsPublished;

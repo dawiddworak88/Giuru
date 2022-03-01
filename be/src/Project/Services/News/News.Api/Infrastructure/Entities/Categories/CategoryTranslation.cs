@@ -3,7 +3,7 @@ using Foundation.GenericRepository.Entities;
 using System.ComponentModel.DataAnnotations;
 using System;
 
-namespace News.Api.Infrastructure.Entities
+namespace News.Api.Infrastructure.Entities.Categories
 {
     public class CategoryTranslation : Entity
     {

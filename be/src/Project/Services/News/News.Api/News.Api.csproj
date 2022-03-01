@@ -37,7 +37,6 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <Folder Include="Infrastructure\Entities\Categories\" />
     <Folder Include="v1\News\RequestModels\" />
   </ItemGroup>
 	

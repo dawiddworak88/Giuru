@@ -1,6 +1,6 @@
 ﻿using Foundation.GenericRepository.Extensions;
 using News.Api.Definitions;
-using News.Api.Infrastructure.Entities;
+using News.Api.Infrastructure.Entities.Categories;
 using System;
 using System.Linq;
 

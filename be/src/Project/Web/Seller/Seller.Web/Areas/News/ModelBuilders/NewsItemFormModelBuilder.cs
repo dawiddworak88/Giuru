@@ -1,10 +1,13 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.News.Repositories.Categories;
 using Seller.Web.Areas.News.ViewModel;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.News.ModelBuilders
@@ -14,15 +17,18 @@ namespace Seller.Web.Areas.News.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<NewsResources> newsLocalizer;
         private readonly LinkGenerator linkGenerator;
+        private readonly ICategoriesRepository categoriesRepository;
 
         public NewsItemFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<NewsResources> newsLocalizer,
+            ICategoriesRepository categoriesRepository,
             LinkGenerator linkGenerator)
         {
             this.linkGenerator = linkGenerator;
             this.globalLocalizer = globalLocalizer;
             this.newsLocalizer = newsLocalizer;
+            this.categoriesRepository = categoriesRepository;
         }
 
         public async Task<NewsItemFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -31,7 +37,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
             {
                 Title = this.newsLocalizer.GetString("NewsItem"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
-                SaveUrl = this.linkGenerator.GetPathByAction("Post", "NewsItemApi", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveUrl = this.linkGenerator.GetPathByAction("Post", "NewsApi", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 DeleteLabel = this.globalLocalizer.GetString("Delete"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
@@ -45,8 +51,16 @@ namespace Seller.Web.Areas.News.ModelBuilders
                 IsNewLabel = this.newsLocalizer.GetString("IsNewLabel"),
                 IsPublishedLabel = this.newsLocalizer.GetString("IsPublishedLabel"),
                 ImagesLabel = this.newsLocalizer.GetString("ImagesLabel"),
-                FilesLabel = this.newsLocalizer.GetString("FilesLabel")
+                FilesLabel = this.newsLocalizer.GetString("FilesLabel"),
+                CategoryLabel = this.newsLocalizer.GetString("Category"),
+                SelectCategoryLabel = this.newsLocalizer.GetString("SelectCategoryLabel")
             };
+
+            var categories = await this.categoriesRepository.GetAllCategoriesAsync(componentModel.Token, componentModel.Language);
+            if (categories is not null)
+            {
+                viewModel.Categories = categories.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
+            }
 
             return viewModel;
         }

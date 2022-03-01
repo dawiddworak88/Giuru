@@ -15,7 +15,6 @@ const CategoryForm = (props) => {
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
-        //parentCategoryId: { value: props.parentCategoryId ? props.parentCategories.find((item) => item.id === props.parentCategoryId) : null, error: "" },
         parentCategoryId: { value: props.parentCategoryId ? props.parentCategoryId : null, error: "" },
     };
 

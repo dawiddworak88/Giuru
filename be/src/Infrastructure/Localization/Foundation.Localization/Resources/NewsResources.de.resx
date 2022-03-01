@@ -180,6 +180,9 @@
   <data name="NewsNotFound" xml:space="preserve">
     <value>Nachrichten nicht gefunden</value>
   </data>
+  <data name="NewsSavedSuccessfully" xml:space="preserve">
+    <value>News wurde erfolgreich erstellt</value>
+  </data>
   <data name="NewText" xml:space="preserve">
     <value>Kategorie hinzufügen</value>
   </data>

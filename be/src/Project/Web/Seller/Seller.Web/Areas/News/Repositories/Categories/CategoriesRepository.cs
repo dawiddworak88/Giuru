@@ -119,14 +119,14 @@ namespace Seller.Web.Areas.News.Repositories.Categories
 
         public async Task<Guid> SaveAsync(string token, string language, Guid? id, string name, Guid? parentCategoryId)
         {
-            var requestModel = new CreateCategoryRequestModel
+            var requestModel = new CategoryRequestModel
             {
                 Id = id,
                 Name = name,
                 ParentCategoryId = parentCategoryId
             };
 
-            var apiRequest = new ApiRequest<CreateCategoryRequestModel>
+            var apiRequest = new ApiRequest<CategoryRequestModel>
             {
                 Language = language,
                 Data = requestModel,
@@ -134,7 +134,7 @@ namespace Seller.Web.Areas.News.Repositories.Categories
                 EndpointAddress = $"{this.settings.Value.NewsUrl}{ApiConstants.News.CategoriesApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<CreateCategoryRequestModel>, CreateCategoryRequestModel, BaseResponseModel>(apiRequest);
+            var response = await this.apiClientService.PostAsync<ApiRequest<CategoryRequestModel>, CategoryRequestModel, BaseResponseModel>(apiRequest);
             if (response.IsSuccessStatusCode && response.Data?.Id != null)
             {
                 return response.Data.Id.Value;

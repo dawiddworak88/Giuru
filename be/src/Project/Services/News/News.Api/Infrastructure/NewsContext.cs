@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using News.Api.Infrastructure.Entities;
+using News.Api.Infrastructure.Entities.Categories;
 using News.Api.Infrastructure.Entities.News;
 
 namespace News.Api.Infrastructure

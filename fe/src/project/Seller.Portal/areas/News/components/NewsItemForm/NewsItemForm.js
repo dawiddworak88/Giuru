@@ -28,8 +28,9 @@ const NewsItemForm = (props) => {
     
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
+        categoryId: { value: props.categoryId ? props.categoryId : null, error: ""},
         title: { value: props.newsTitle ? props.newsTitle : "", error: "" },
-        heroImage: { value: props.images ? props.images : null },
+        heroImageId: { value: props.images ? props.images : null },
         description: { value: props.description ? props.description : null },
         content: { value: props.content, error: "" },
         images: { value: props.images ? props.images : [] },
@@ -42,7 +43,8 @@ const NewsItemForm = (props) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const requestData = {
-            heroImage: state.heroImage ? state.heroImage[0].id : null,
+            heroImageId: state.heroImageId ? state.heroImageId[0].id : null,
+            categoryId: state.categoryId,
             title: state.title,
             description: state.description,
             content: convertedToRaw,
@@ -58,6 +60,24 @@ const NewsItemForm = (props) => {
             body: JSON.stringify(requestData)
         };
 
+        console.log(JSON.stringify(requestData))
+
+        fetch(props.saveUrl, requestOptions)
+            .then((res) => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                
+                AuthenticationHelper.HandleResponse(res);
+                
+                return res.json().then(jsonRes => {
+                    if (res.ok) {
+                        toast.success(jsonRes.message);
+                        setShowBackToNewsListButton(true);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            });
 
     }
 
@@ -98,7 +118,7 @@ const NewsItemForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
     
-    const { title, heroImage, description, isNew, isPublished, files, images } = values;
+    const { title, heroImage, description, isNew, isPublished, files, images, categoryId } = values;
     return (
         <section className="section section-small-padding news-item">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -107,8 +127,8 @@ const NewsItemForm = (props) => {
                     <form className="is-modern-form" onSubmit={handleOnSubmit}>
                         <div className="field">
                             <MediaCloud
-                                id="heroImage"
-                                name="heroImage"
+                                id="heroImageId"
+                                name="heroImageId"
                                 label={props.heroImageLabel}
                                 accept=".png, .jpg, .webp"
                                 multiple={false}
@@ -119,6 +139,22 @@ const NewsItemForm = (props) => {
                                 files={heroImage}
                                 setFieldValue={setFieldValue}
                                 saveMediaUrl={props.saveMediaUrl} />
+                        </div>
+                        <div className="field">
+                            <FormControl fullWidth={true}>
+                                <InputLabel id="category">{props.categoryLabel}</InputLabel>
+                                <Select
+                                    labelId="ccategory"
+                                    id="categoryId"
+                                    name="categoryId"
+                                    value={categoryId}
+                                    onChange={handleOnChange}>
+                                    <MenuItem key={0} value="">{props.selectCategoryLabel}</MenuItem>
+                                    {props.categories && props.categories.map(category =>
+                                        <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
                         </div>
                         <div className="field">
                             <TextField 
@@ -170,7 +206,6 @@ const NewsItemForm = (props) => {
                                 deleteLabel={props.deleteLabel}
                                 dropFilesLabel={props.dropFilesLabel}
                                 dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
-                                imagePreviewEnabled={false}
                                 files={images}
                                 setFieldValue={setFieldValue}
                                 saveMediaUrl={props.saveMediaUrl} />
@@ -186,7 +221,6 @@ const NewsItemForm = (props) => {
                                 deleteLabel={props.deleteLabel}
                                 dropFilesLabel={props.dropFilesLabel}
                                 dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
-                                imagePreviewEnabled={false}
                                 files={files}
                                 setFieldValue={setFieldValue}
                                 saveMediaUrl={props.saveMediaUrl} />
@@ -249,6 +283,7 @@ const NewsItemForm = (props) => {
                             )}
                         </div>
                     </form>
+                    {state.isLoading && <CircularProgress className="progressBar" />}
                 </div>
             </div>
         </section>
@@ -272,7 +307,9 @@ NewsItemForm.propTypes = {
     filesLabel: PropTypes.string,
     imagesLabel: PropTypes.string,
     isPublishedLabel: PropTypes.string,
-    isNewLabel: PropTypes.string
+    isNewLabel: PropTypes.string,
+    categoryLabel: PropTypes.string,
+    selectCategoryLabel: PropTypes.string
 }
 
 export default NewsItemForm;

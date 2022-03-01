@@ -3,7 +3,7 @@ using System;
 
 namespace Seller.Web.Areas.News.ApiRequestModels
 {
-    public class CreateCategoryRequestModel : RequestModelBase
+    public class CategoryRequestModel : RequestModelBase
     {
         public string Name { get; set; }
         public Guid? ParentCategoryId { get; set; }

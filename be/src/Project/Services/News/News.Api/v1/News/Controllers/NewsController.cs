@@ -60,6 +60,7 @@ namespace News.Api.v1.News.Controllers
                     IsPublished = request.IsPublished,
                     IsNew = request.IsNew,
                     CategoryId = request.CategoryId,
+                    HeroImageId = request.HeroImageId,
                     Files = request.Files,
                     Tags = request.Tags,
                     Images = request.Images,
@@ -89,6 +90,7 @@ namespace News.Api.v1.News.Controllers
                     IsPublished = request.IsPublished,
                     IsNew = request.IsNew,
                     CategoryId = request.CategoryId,
+                    HeroImageId = request.HeroImageId,
                     Files = request.Files,
                     Tags = request.Tags,
                     Images = request.Images,
@@ -150,11 +152,15 @@ namespace News.Api.v1.News.Controllers
                         Data = newsItems.Data.OrEmptyIfNull().Select(x => new NewsItemResponseModel
                         {
                             Id = x.Id,
+                            CategoryId = x.CategoryId,
+                            CategoryName = x.CategoryName,
                             Title = x.Title,
                             Description = x.Description,
                             Content = x.Content,
-                            IsNew = x.IsNew,
                             IsPublished = x.IsPublished,
+                            IsNew = x.IsNew,
+                            Files = x.Files,
+                            Images = x.Images,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         })
@@ -202,6 +208,7 @@ namespace News.Api.v1.News.Controllers
                     {
                         Id = newsItem.Id,
                         CategoryId = newsItem.CategoryId,
+                        CategoryName = newsItem.CategoryName,
                         Title = newsItem.Title,
                         Description = newsItem.Description,
                         Content = newsItem.Content,
@@ -209,6 +216,7 @@ namespace News.Api.v1.News.Controllers
                         IsPublished = newsItem.IsPublished,
                         Tags = newsItem.Tags,
                         Files = newsItem.Files,
+                        Images = newsItem.Images,
                         LastModifiedDate = newsItem.LastModifiedDate,
                         CreatedDate = newsItem.CreatedDate
                     };

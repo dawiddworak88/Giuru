@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace News.Api.Infrastructure.Entities
+namespace News.Api.Infrastructure.Entities.Categories
 {
     public class Category : Entity
     {

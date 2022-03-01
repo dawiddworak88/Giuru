@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Foundation.PageContent.Components.ListItems.ViewModels;
+using System;
+using System.Collections.Generic;
 
 namespace Seller.Web.Areas.News.ViewModel
 {
@@ -17,10 +19,13 @@ namespace Seller.Web.Areas.News.ViewModel
         public string IsNewLabel { get; set; }
         public string FilesLabel { get; set; }
         public string ImagesLabel { get; set; }
+        public string CategoryLabel { get; set; }
+        public string SelectCategoryLabel { get; set; }
         public string IsPublishedLabel { get; set; }
         public string NavigateToNewsLabel { get; set; }
         public string SaveUrl { get; set; }
         public string SaveMediaUrl { get; set; }
         public string SaveText { get; set; }
+        public IEnumerable<ListItemViewModel> Categories { get; set; }
     }
 }

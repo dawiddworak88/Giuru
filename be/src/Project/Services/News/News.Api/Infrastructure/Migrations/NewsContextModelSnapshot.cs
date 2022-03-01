@@ -22,7 +22,7 @@ namespace News.Api.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("News.Api.Infrastructure.Entities.Category", b =>
+            modelBuilder.Entity("News.Api.Infrastructure.Entities.Categories.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,7 +50,7 @@ namespace News.Api.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("News.Api.Infrastructure.Entities.CategoryTranslation", b =>
+            modelBuilder.Entity("News.Api.Infrastructure.Entities.Categories.CategoryTranslation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -99,6 +99,9 @@ namespace News.Api.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("HeroImageId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -171,9 +174,6 @@ namespace News.Api.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsHero")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
@@ -219,47 +219,12 @@ namespace News.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
+                    b.Property<Guid>("TagId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.ToTable("NewsItemTags");
-                });
-
-            modelBuilder.Entity("News.Api.Infrastructure.Entities.News.NewsItemTagTranslation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Language")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("NewsItemTagId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NewsItemTagId");
-
-                    b.ToTable("NewsItemTagTranslations");
                 });
 
             modelBuilder.Entity("News.Api.Infrastructure.Entities.News.NewsItemTranslation", b =>
@@ -308,20 +273,11 @@ namespace News.Api.Infrastructure.Migrations
                     b.ToTable("NewsItemTranslations");
                 });
 
-            modelBuilder.Entity("News.Api.Infrastructure.Entities.CategoryTranslation", b =>
+            modelBuilder.Entity("News.Api.Infrastructure.Entities.Categories.CategoryTranslation", b =>
                 {
-                    b.HasOne("News.Api.Infrastructure.Entities.Category", null)
+                    b.HasOne("News.Api.Infrastructure.Entities.Categories.Category", null)
                         .WithMany("Translations")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("News.Api.Infrastructure.Entities.News.NewsItemTagTranslation", b =>
-                {
-                    b.HasOne("News.Api.Infrastructure.Entities.News.NewsItemTag", null)
-                        .WithMany("Translations")
-                        .HasForeignKey("NewsItemTagId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -335,17 +291,12 @@ namespace News.Api.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("News.Api.Infrastructure.Entities.Category", b =>
+            modelBuilder.Entity("News.Api.Infrastructure.Entities.Categories.Category", b =>
                 {
                     b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("News.Api.Infrastructure.Entities.News.NewsItem", b =>
-                {
-                    b.Navigation("Translations");
-                });
-
-            modelBuilder.Entity("News.Api.Infrastructure.Entities.News.NewsItemTag", b =>
                 {
                     b.Navigation("Translations");
                 });

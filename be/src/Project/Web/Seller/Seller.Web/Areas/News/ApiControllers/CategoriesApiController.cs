@@ -41,7 +41,7 @@ namespace Seller.Web.Areas.News.ApiControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateCategoryRequestModel model)
+        public async Task<IActionResult> Post([FromBody] CategoryRequestModel model)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;

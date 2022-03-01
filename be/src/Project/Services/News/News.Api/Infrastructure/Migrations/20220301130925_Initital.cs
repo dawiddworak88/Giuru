@@ -49,7 +49,6 @@ namespace News.Api.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     NewsItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsHero = table.Column<bool>(type: "bit", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -67,6 +66,7 @@ namespace News.Api.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    HeroImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrganisationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsNew = table.Column<bool>(type: "bit", nullable: false),
@@ -86,6 +86,7 @@ namespace News.Api.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TagId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     NewsItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
@@ -147,39 +148,10 @@ namespace News.Api.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "NewsItemTagTranslations",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NewsItemTagId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NewsItemTagTranslations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_NewsItemTagTranslations_NewsItemTags_NewsItemTagId",
-                        column: x => x.NewsItemTagId,
-                        principalTable: "NewsItemTags",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_CategoryTranslations_CategoryId",
                 table: "CategoryTranslations",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_NewsItemTagTranslations_NewsItemTagId",
-                table: "NewsItemTagTranslations",
-                column: "NewsItemTagId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_NewsItemTranslations_NewsItemId",
@@ -199,16 +171,13 @@ namespace News.Api.Infrastructure.Migrations
                 name: "NewsItemImages");
 
             migrationBuilder.DropTable(
-                name: "NewsItemTagTranslations");
+                name: "NewsItemTags");
 
             migrationBuilder.DropTable(
                 name: "NewsItemTranslations");
 
             migrationBuilder.DropTable(
                 name: "Categories");
-
-            migrationBuilder.DropTable(
-                name: "NewsItemTags");
 
             migrationBuilder.DropTable(
                 name: "NewsItems");
