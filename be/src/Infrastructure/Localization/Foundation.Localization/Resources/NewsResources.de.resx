@@ -135,11 +135,26 @@
   <data name="CategorySavedSuccessfully" xml:space="preserve">
     <value>Kategorie wurde erfolgreich erstellt</value>
   </data>
+  <data name="DescriptionLabel" xml:space="preserve">
+    <value>Kurze Beschreibung</value>
+  </data>
   <data name="EditCategory" xml:space="preserve">
     <value>Kategorie bearbeiten</value>
   </data>
+  <data name="FilesLabel" xml:space="preserve">
+    <value>Dateien</value>
+  </data>
   <data name="HeroImageLabel" xml:space="preserve">
     <value>Nachrichtenbild</value>
+  </data>
+  <data name="ImagesLabel" xml:space="preserve">
+    <value>Bilder</value>
+  </data>
+  <data name="IsNewLabel" xml:space="preserve">
+    <value>Neuheit</value>
+  </data>
+  <data name="IsPublishedLabel" xml:space="preserve">
+    <value>Veröffentlicht</value>
   </data>
   <data name="NameLabel" xml:space="preserve">
     <value>Name</value>
@@ -179,9 +194,6 @@
   </data>
   <data name="SubcategoriesDeleteCategoryConflict" xml:space="preserve">
     <value>Zu dieser Kategorie gehörende Unterkategorien löschen.</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>Titel</value>
   </data>
   <data name="TitleLabel" xml:space="preserve">
     <value>Titel</value>

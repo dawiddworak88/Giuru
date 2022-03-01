@@ -1,0 +1,26 @@
+.news-item {
+
+    &__tags {
+        margin-top: 0.5rem;
+        display: flex;
+        border-bottom: 1px solid $primary;
+
+        input {
+            flex: 1;
+            border: none;
+            outline: none;
+        }
+
+        ul {
+            display: flex;
+            // padding: 7px;
+
+            li {
+                list-style: none;
+                background: #f2f2f2;
+                margin: 4px 3px;
+                border: 1px solid #e3d1e1;
+            }
+        }
+    }
+}

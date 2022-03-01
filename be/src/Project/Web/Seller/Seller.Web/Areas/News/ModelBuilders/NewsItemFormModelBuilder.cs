@@ -40,7 +40,12 @@ namespace Seller.Web.Areas.News.ModelBuilders
                 NewsUrl = this.linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name }),
                 NavigateToNewsLabel = this.newsLocalizer.GetString("NavigateToNewsLabel"),
                 HeroImageLabel = this.newsLocalizer.GetString("HeroImageLabel"),
-                TitleLabel = this.newsLocalizer.GetString("TitleLabel")
+                TitleLabel = this.newsLocalizer.GetString("TitleLabel"),
+                DescriptionLabel = this.newsLocalizer.GetString("DescriptionLabel"),
+                IsNewLabel = this.newsLocalizer.GetString("IsNewLabel"),
+                IsPublishedLabel = this.newsLocalizer.GetString("IsPublishedLabel"),
+                ImagesLabel = this.newsLocalizer.GetString("ImagesLabel"),
+                FilesLabel = this.newsLocalizer.GetString("FilesLabel")
             };
 
             return viewModel;
