@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -12,16 +12,16 @@ import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { 
-    TextField, Select, FormControl, FormControlLabel, Switch, InputLabel, MenuItem, Button, CircularProgress, TextareaAutosize
+    TextField, Select, FormControl, FormControlLabel, Switch, 
+    InputLabel, MenuItem, Button, CircularProgress
 } from "@material-ui/core";
 
 const NewsItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [showBackToNewsListButton, setShowBackToNewsListButton] = useState(false);
-    const [tags, setTags] = useState([]);
     const [convertedToRaw, setConvertedToRaw] = useState(null);
     const [editorState, setEditorState] = useState(props.content ? EditorState.createWithContent(
-        ContentState.createFromText(
+        ContentState.createFromBlockArray(
             convertFromHTML(props.content)
         )
     ) : EditorState.createEmpty());
@@ -43,6 +43,7 @@ const NewsItemForm = (props) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const requestData = {
+            id: state.id,
             heroImageId: state.heroImageId ? state.heroImageId[0].id : null,
             categoryId: state.categoryId,
             title: state.title,
@@ -59,8 +60,6 @@ const NewsItemForm = (props) => {
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(requestData)
         };
-
-        console.log(JSON.stringify(requestData))
 
         fetch(props.saveUrl, requestOptions)
             .then((res) => {
@@ -85,29 +84,8 @@ const NewsItemForm = (props) => {
 
     }
 
-    const createTag = () => {
-        const ul = document.querySelector("ul");
-        ul.querySelectorAll("li").forEach(li => li.remove());
-        tags.forEach(tag => {
-            ul.insertAdjacentHTML("afterbegin", `<li>${tag}</li>`)
-        })
-    }
-
-    const onChangeTag = (e) => {
-        console.log("asdasd")
-        let tag = e.target.value.replace("/\s+/g", " ");
-        if (tag.length > 1 && !tags.includes(tag)){
-            tag.split(", ").forEach(tag => {
-                setTags([...tags, tag])
-                createTag();
-            });
-        }
-    }
-
     const handleEditorChange = (state) => {
         setEditorState(state);
-
-        console.log(draftToHtml(convertToRaw(state.getCurrentContent())));
 
         const converted = draftToHtml(convertToRaw(state.getCurrentContent()))
         setConvertedToRaw(converted);
@@ -185,16 +163,6 @@ const NewsItemForm = (props) => {
                                 />
                             </NoSsr>
                         </div>
-                        {/* <div className="field">
-                            <InputLabel id="language-label">Tagi</InputLabel>
-                            <div className="news-item__tags">
-                                <ul>
-                                    <li>NOWOŚĆ</li>
-                                    <li>NOWE</li>
-                                </ul>
-                                <input name="tags" id="tags" onKeyPress={onChangeTag}/>
-                            </div>
-                        </div> */}
                         <div className="field">
                             <MediaCloud
                                 id="images"

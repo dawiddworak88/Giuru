@@ -5,6 +5,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Seller.Web.Areas.News.ViewModel;
+using System;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -21,10 +22,11 @@ namespace Seller.Web.Areas.News.Controllers
             this.newsItemPageModelBuilder = newsItemPageModelBuilder;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Edit(Guid? id)
         {
             var componentModel = new ComponentModelBase
             {
+                Id = id,
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName)
             };

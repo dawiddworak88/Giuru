@@ -247,22 +247,23 @@ namespace News.Api.Services.News
                 await this.newsContext.NewsItemFIles.AddAsync(file.FillCommonProperties());
             }
 
-            /*var newsTags = this.newsContext.NewsItemTags.Where(x => x.NewsItemId == news.Id);
+            var newsImages = this.newsContext.NewsItemImages.Where(x => x.NewsItemId == news.Id);
 
-            foreach(var newsTag in newsTags.OrEmptyIfNull())
+            foreach (var newsImage in newsImages.OrEmptyIfNull())
             {
-                var existingTagTranslation = this.newsContext.NewsItemTagTranslations.FirstOrDefault(x => x.NewsItemTagId == news.Id && x.Language == model.Language);
-                if (existingTagTranslation is not null)
+                this.newsContext.NewsItemImages.Remove(newsImage);
+            }
+
+            foreach (var imageId in model.Images.OrEmptyIfNull())
+            {
+                var file = new NewsItemFile
                 {
-                    this.newsContext.NewsItemTagTranslations.Remove(existingTagTranslation);
-                }
+                    MediaId = imageId,
+                    NewsItemId = news.Id
+                };
 
-                this.newsContext.NewsItemTags.Remove(newsTag);
-            }*/
-            
-            //dodaj tagi
-
-            //dodaj images
+                await this.newsContext.NewsItemFIles.AddAsync(file.FillCommonProperties());
+            }
 
             await this.newsContext.SaveChangesAsync();
 

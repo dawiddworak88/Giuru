@@ -9,6 +9,7 @@ namespace Seller.Web.Areas.News.Repositories.News
     public interface INewsRepository
     {
         Task<PagedResults<IEnumerable<NewsItem>>> GetNewsItemsAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
+        Task<NewsItem> GetAsync(string token, string language, Guid? id);
         Task<Guid> SaveAsync(
             string token, string language, Guid? id, Guid? categoryId, Guid? heroImageId, string title, string description, 
             string content, bool isNew, bool isPublished, IEnumerable<Guid> images, IEnumerable<Guid> files);

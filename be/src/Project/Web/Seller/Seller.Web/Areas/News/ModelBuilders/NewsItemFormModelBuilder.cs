@@ -5,6 +5,7 @@ using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.News.Repositories.Categories;
+using Seller.Web.Areas.News.Repositories.News;
 using Seller.Web.Areas.News.ViewModel;
 using System.Globalization;
 using System.Linq;
@@ -18,17 +19,20 @@ namespace Seller.Web.Areas.News.ModelBuilders
         private readonly IStringLocalizer<NewsResources> newsLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly ICategoriesRepository categoriesRepository;
+        private readonly INewsRepository newsRepository;
 
         public NewsItemFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<NewsResources> newsLocalizer,
             ICategoriesRepository categoriesRepository,
+            INewsRepository newsRepository,
             LinkGenerator linkGenerator)
         {
             this.linkGenerator = linkGenerator;
             this.globalLocalizer = globalLocalizer;
             this.newsLocalizer = newsLocalizer;
             this.categoriesRepository = categoriesRepository;
+            this.newsRepository = newsRepository;
         }
 
         public async Task<NewsItemFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -60,6 +64,24 @@ namespace Seller.Web.Areas.News.ModelBuilders
             if (categories is not null)
             {
                 viewModel.Categories = categories.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
+            }
+
+            if (componentModel.Id.HasValue)
+            {
+                var existingNews = await this.newsRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                if (existingNews is not null)
+                {
+                    viewModel.Id = componentModel.Id;
+                    viewModel.HeroImageId = existingNews.HeroImageId;
+                    viewModel.CategoryId = existingNews.CategoryId;
+                    viewModel.NewsTitle = existingNews.Title;
+                    viewModel.Content = existingNews.Content;
+                    viewModel.Description = existingNews.Description;
+                    viewModel.IsNew = existingNews.IsNew;
+                    viewModel.IsPublished = existingNews.IsPublished;
+                    viewModel.Images = existingNews.Images;
+                    viewModel.Files = existingNews.Files;
+                }
             }
 
             return viewModel;
