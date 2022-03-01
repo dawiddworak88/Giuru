@@ -12,5 +12,6 @@ namespace Seller.Web.Areas.News.Repositories.Categories
         Task<IEnumerable<Category>> GetAllCategoriesAsync(string token, string language);
         Task<Guid> SaveAsync(string token, string language, Guid? id, string name, Guid? parentCategoryId);
         Task DeleteAsync(string token, string language, Guid? id);
+        Task<Category> GetAsync(string token, string language, Guid? id);
     }
 }

@@ -43,8 +43,8 @@ namespace Seller.Web.Areas.News.ModelBuilders
 
             viewModel.Title = this.newsLocalizer.GetString("Categories");
             viewModel.NewText = this.newsLocalizer.GetString("NewText");
-            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "CategoriesApi", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "CategoriesApi", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name });

@@ -22,7 +22,7 @@ namespace Seller.Web.Areas.News.Controllers
             this.categoryPageModelBuilder = categoryPageModelBuilder;
         }
 
-        public async Task<IActionResult> Index(Guid? id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             var componentModel = new ComponentModelBase
             {

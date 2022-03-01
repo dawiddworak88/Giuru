@@ -54,6 +54,16 @@ namespace Seller.Web.Areas.News.ModelBuilders
                 viewModel.ParentCategories = categories.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
+            if (componentModel.Id.HasValue)
+            {
+                var category = await this.categoriesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+                if (category is not null)
+                {
+                    viewModel.Name = category.Name;
+                    viewModel.ParentCategoryId = category.ParentCategoryId;
+                }
+            }
+
             return viewModel;
         }
     }

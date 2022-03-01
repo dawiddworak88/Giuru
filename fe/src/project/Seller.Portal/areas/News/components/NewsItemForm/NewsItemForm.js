@@ -142,10 +142,12 @@ const NewsItemForm = (props) => {
                             />
                         </div>
                         <div className="field">
-                            <Editor 
-                                editorState={editorState} 
-                                onEditorStateChange={handleEditorChange}
-                            />
+                            <NoSsr>
+                                <Editor 
+                                    editorState={editorState} 
+                                    onEditorStateChange={handleEditorChange}
+                                />
+                            </NoSsr>
                         </div>
                         {/* <div className="field">
                             <InputLabel id="language-label">Tagi</InputLabel>
