@@ -40,10 +40,10 @@ namespace News.Api.Services.News
 
             var newsItem = new NewsItem
             {
+                ThumbImageId = model.ThumbImageId.Value,
                 HeroImageId = model.HeroImageId.Value,
                 OrganisationId = model.OrganisationId.Value,
                 CategoryId = model.CategoryId.Value,
-                IsNew = model.IsNew,
                 IsPublished = model.IsPublished
             };
 
@@ -98,13 +98,14 @@ namespace News.Api.Services.News
                        select new NewsItemServiceModel
                        {
                            Id = n.Id,
+                           ThumbImageId = n.ThumbImageId,
+                           HeroImageId = n.HeroImageId,
                            CategoryId = n.CategoryId,
                            CategoryName = c.Name,
                            Title = nt.Title,
                            Description = nt.Description,
                            Content = nt.Content,
                            IsPublished = n.IsPublished,
-                           IsNew = n.IsNew,
                            LastModifiedDate = n.LastModifiedDate,
                            CreatedDate = n.CreatedDate
                        };
@@ -137,12 +138,13 @@ namespace News.Api.Services.News
                                select new NewsItemServiceModel
                                {
                                    Id = n.Id,
+                                   ThumbImageId = n.ThumbImageId,
+                                   HeroImageId = n.HeroImageId,
                                    CategoryId = n.CategoryId,
                                    CategoryName = c.Name,
                                    Title = nt.Title,
                                    Description = nt.Description,
                                    Content = nt.Content,
-                                   IsNew = n.IsNew,
                                    IsPublished = n.IsPublished,
                                    LastModifiedDate = n.LastModifiedDate,
                                    CreatedDate = n.CreatedDate
@@ -178,9 +180,9 @@ namespace News.Api.Services.News
                 throw new CustomException(this.newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NotFound);
             }
 
+            news.ThumbImageId = model.ThumbImageId.Value;
             news.HeroImageId = model.HeroImageId.Value;
             news.CategoryId = category.Id;
-            news.IsNew = model.IsNew;
             news.IsPublished = model.IsPublished;
             news.LastModifiedDate = DateTime.UtcNow;
 
@@ -217,17 +219,6 @@ namespace News.Api.Services.News
                 var file = new NewsItemFile
                 {
                     MediaId = fileId,
-                    NewsItemId = news.Id
-                };
-
-                await this.newsContext.NewsItemFIles.AddAsync(file.FillCommonProperties());
-            }
-
-            foreach (var imageId in model.Images.OrEmptyIfNull())
-            {
-                var file = new NewsItemFile
-                {
-                    MediaId = imageId,
                     NewsItemId = news.Id
                 };
 

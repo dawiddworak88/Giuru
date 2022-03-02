@@ -12,6 +12,7 @@ using News.Api.ServicesModels.News;
 using News.Api.v1.Categories.RequestModels;
 using News.Api.v1.News.ResponseModels;
 using News.Api.Validators.News;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -58,12 +59,10 @@ namespace News.Api.v1.News.Controllers
                     Description = request.Description,
                     Content = request.Content,
                     IsPublished = request.IsPublished,
-                    IsNew = request.IsNew,
                     CategoryId = request.CategoryId,
                     HeroImageId = request.HeroImageId,
+                    ThumbImageId = request.ThumbImageId,
                     Files = request.Files,
-                    Tags = request.Tags,
-                    Images = request.Images,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -88,12 +87,10 @@ namespace News.Api.v1.News.Controllers
                     Description = request.Description,
                     Content = request.Content,
                     IsPublished = request.IsPublished,
-                    IsNew = request.IsNew,
                     CategoryId = request.CategoryId,
+                    ThumbImageId = request.ThumbImageId,
                     HeroImageId = request.HeroImageId,
                     Files = request.Files,
-                    Tags = request.Tags,
-                    Images = request.Images,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -152,15 +149,15 @@ namespace News.Api.v1.News.Controllers
                         Data = newsItems.Data.OrEmptyIfNull().Select(x => new NewsItemResponseModel
                         {
                             Id = x.Id,
+                            ThumbImageId = x.ThumbImageId,
+                            HeroImageId = x.HeroImageId,
                             CategoryId = x.CategoryId,
                             CategoryName = x.CategoryName,
                             Title = x.Title,
                             Description = x.Description,
                             Content = x.Content,
                             IsPublished = x.IsPublished,
-                            IsNew = x.IsNew,
                             Files = x.Files,
-                            Images = x.Images,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         })
@@ -207,16 +204,15 @@ namespace News.Api.v1.News.Controllers
                     var response = new NewsItemResponseModel
                     {
                         Id = newsItem.Id,
+                        ThumbImageId = newsItem.ThumbImageId,
+                        HeroImageId = newsItem.HeroImageId,
                         CategoryId = newsItem.CategoryId,
                         CategoryName = newsItem.CategoryName,
                         Title = newsItem.Title,
                         Description = newsItem.Description,
                         Content = newsItem.Content,
-                        IsNew = newsItem.IsNew,
                         IsPublished = newsItem.IsPublished,
-                        Tags = newsItem.Tags,
                         Files = newsItem.Files,
-                        Images = newsItem.Images,
                         LastModifiedDate = newsItem.LastModifiedDate,
                         CreatedDate = newsItem.CreatedDate
                     };

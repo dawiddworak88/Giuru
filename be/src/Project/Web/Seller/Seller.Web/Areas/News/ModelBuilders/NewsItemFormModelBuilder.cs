@@ -72,14 +72,13 @@ namespace Seller.Web.Areas.News.ModelBuilders
                 if (existingNews is not null)
                 {
                     viewModel.Id = componentModel.Id;
+                    viewModel.ThumbImageId = existingNews.ThumbImageId;
                     viewModel.HeroImageId = existingNews.HeroImageId;
                     viewModel.CategoryId = existingNews.CategoryId;
                     viewModel.NewsTitle = existingNews.Title;
                     viewModel.Content = existingNews.Content;
                     viewModel.Description = existingNews.Description;
-                    viewModel.IsNew = existingNews.IsNew;
                     viewModel.IsPublished = existingNews.IsPublished;
-                    viewModel.Images = existingNews.Images;
                     viewModel.Files = existingNews.Files;
                 }
             }

@@ -48,10 +48,10 @@ namespace News.Api.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ThumbImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     HeroImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrganisationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsNew = table.Column<bool>(type: "bit", nullable: false),
                     IsPublished = table.Column<bool>(type: "bit", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),

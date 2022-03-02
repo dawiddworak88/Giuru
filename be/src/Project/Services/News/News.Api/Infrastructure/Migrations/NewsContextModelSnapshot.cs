@@ -106,9 +106,6 @@ namespace News.Api.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsNew")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsPublished")
                         .HasColumnType("bit");
 
@@ -122,6 +119,9 @@ namespace News.Api.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
+
+                    b.Property<Guid>("ThumbImageId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 

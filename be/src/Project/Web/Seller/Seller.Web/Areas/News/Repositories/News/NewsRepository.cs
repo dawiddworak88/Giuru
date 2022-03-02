@@ -6,6 +6,7 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Seller.Web.Areas.News.ApiRequestModels;
 using Seller.Web.Areas.News.DomainModels;
 using Seller.Web.Shared.Configurations;
@@ -88,20 +89,19 @@ namespace Seller.Web.Areas.News.Repositories.News
         }
 
         public async Task<Guid> SaveAsync(
-            string token, string language, Guid? id, Guid? categoryId, Guid? heroImageId, string title, string description, 
-            string content, bool isNew, bool isPublished, IEnumerable<Guid> images, IEnumerable<Guid> files)
+            string token, string language, Guid? id, Guid? thumbImageId, Guid? categoryId, Guid? heroImageId, 
+            string title, string description,  string content, bool isPublished, IEnumerable<Guid> files)
         {
             var requestModel = new NewsApiRequestModel
             {
                 Id = id,
+                ThumbImageId = thumbImageId,
                 CategoryId = categoryId,
                 HeroImageId = heroImageId,
                 Title = title,
                 Description = description,
                 Content = content,
-                IsNew = isNew,
                 IsPublished = isPublished,
-                Images = images,
                 Files = files
             };
 
@@ -125,6 +125,23 @@ namespace Seller.Web.Areas.News.Repositories.News
             }
 
             return default;
+        }
+
+        public async Task DeleteAsync(string token, string language, Guid? id)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.NewsUrl}{ApiConstants.News.NewsApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+            if (!response.IsSuccessStatusCode && response?.Data != null)
+            {
+                throw new CustomException(response.Data.Message, (int)response.StatusCode);
+            }
         }
     }
 }

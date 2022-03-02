@@ -12,7 +12,7 @@ using News.Api.Infrastructure;
 namespace News.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(NewsContext))]
-    [Migration("20220302094653_Initital")]
+    [Migration("20220302111206_Initital")]
     partial class Initital
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -108,9 +108,6 @@ namespace News.Api.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsNew")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsPublished")
                         .HasColumnType("bit");
 
@@ -124,6 +121,9 @@ namespace News.Api.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
+
+                    b.Property<Guid>("ThumbImageId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 

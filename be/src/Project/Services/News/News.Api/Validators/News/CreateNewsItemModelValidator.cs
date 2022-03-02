@@ -12,6 +12,8 @@ namespace News.Api.Validators.News
             this.RuleFor(x => x.Description).NotNull().NotEmpty();
             this.RuleFor(x => x.Content).NotNull().NotEmpty();
             this.RuleFor(x => x.CategoryId).NotNull().NotEmpty();
+            this.RuleFor(x => x.ThumbImageId).NotNull().NotEmpty();
+            this.RuleFor(x => x.HeroImageId).NotNull().NotEmpty();
         }
     }
 }

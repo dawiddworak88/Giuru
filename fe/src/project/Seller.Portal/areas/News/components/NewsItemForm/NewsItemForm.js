@@ -11,6 +11,7 @@ import { EditorState, convertToRaw, ContentState, convertFromHTML} from 'draft-j
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import {stateFromHtml} from "draft-js-import-html"
 import { 
     TextField, Select, FormControl, FormControlLabel, Switch, 
     InputLabel, MenuItem, Button, CircularProgress
@@ -20,17 +21,19 @@ const NewsItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [showBackToNewsListButton, setShowBackToNewsListButton] = useState(false);
     const [convertedToRaw, setConvertedToRaw] = useState(null);
-    const [editorState, setEditorState] = useState(props.content ? EditorState.createWithContent(
-        ContentState.createFromBlockArray(
-            convertFromHTML(props.content)
-        )
-    ) : EditorState.createEmpty());
+    const [editorState, setEditorState] = useState(props.content ? null
+        // EditorState.createWithContent(
+        // ContentState.createFromBlockArray(
+        //     convertFromHTML(props.content)
+        // )
+     : EditorState.createEmpty());
     
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         categoryId: { value: props.categoryId ? props.categoryId : null, error: ""},
         title: { value: props.newsTitle ? props.newsTitle : "", error: "" },
-        heroImageId: { value: props.images ? props.images : null },
+        heroImage: { value: props.heroImageId ? props.heroImageId : [], error: "" },
+        thumbImage: { value: props.thumbImageId ? props.thumbImageId : [], error: "" },
         description: { value: props.description ? props.description : null },
         content: { value: props.content, error: "" },
         files: { value: props.files ? props.files : [] },
@@ -42,14 +45,13 @@ const NewsItemForm = (props) => {
 
         const requestData = {
             id: state.id,
-            heroImageId: state.heroImageId ? state.heroImageId[0].id : null,
+            thumbImageId: state.thumbImage ? state.thumbImage[0].id : null,
+            heroImageId: state.heroImage ? state.heroImage[0].id : null,
             categoryId: state.categoryId,
             title: state.title,
             description: state.description,
             content: convertedToRaw,
-            images: state.images,
             files: state.files,
-            isNew: state.isNew,
             isPublished: state.isPublished
         }
 
@@ -94,7 +96,7 @@ const NewsItemForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
     
-    const { title, heroImage, description, isPublished, files, categoryId } = values;
+    const { title, heroImage, thumbImage, description, isPublished, files, categoryId } = values;
     return (
         <section className="section section-small-padding news-item">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -140,8 +142,23 @@ const NewsItemForm = (props) => {
                         </div>
                         <div className="field">
                             <MediaCloud
-                                id="heroImageId"
-                                name="heroImageId"
+                                id="thumbImage"
+                                name="thumbImage"
+                                label={props.thumbImageLabel}
+                                accept=".png, .jpg, .webp"
+                                multiple={false}
+                                generalErrorMessage={props.generalErrorMessage}
+                                deleteLabel={props.deleteLabel}
+                                dropFilesLabel={props.dropFilesLabel}
+                                dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
+                                files={thumbImage}
+                                setFieldValue={setFieldValue}
+                                saveMediaUrl={props.saveMediaUrl} />
+                        </div>
+                        <div className="field">
+                            <MediaCloud
+                                id="heroImage"
+                                name="heroImage"
                                 label={props.heroImageLabel}
                                 accept=".png, .jpg, .webp"
                                 multiple={false}
@@ -243,7 +260,8 @@ NewsItemForm.propTypes = {
     isPublishedLabel: PropTypes.string,
     isNewLabel: PropTypes.string,
     categoryLabel: PropTypes.string,
-    selectCategoryLabel: PropTypes.string
+    selectCategoryLabel: PropTypes.string,
+    thumbImageLabel: PropTypes.string
 }
 
 export default NewsItemForm;
