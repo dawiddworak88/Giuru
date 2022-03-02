@@ -135,7 +135,6 @@ function MediaCloud(props) {
         props.setFieldValue({ name: props.name, value: items });
     }
 
-    console.log(files)
     return (
         <div className="dropzone">
             {props.label &&

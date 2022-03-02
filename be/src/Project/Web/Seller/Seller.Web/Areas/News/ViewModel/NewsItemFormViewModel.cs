@@ -15,6 +15,9 @@ namespace Seller.Web.Areas.News.ViewModel
         public string Description { get; set; }
         public string Content { get; set; }
         public string GeneralErrorMessage { get; set; }
+        public string TitleRequiredErrorMessage { get; set; }
+        public string CategoryRequiredErrorMessage { get; set; }
+        public string DescriptionRequiredErrorMessage { get; set; }
         public string DropFilesLabel { get; set; }
         public string DropOrSelectImagesLabel { get; set; }
         public string DeleteLabel { get; set; }

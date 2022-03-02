@@ -132,11 +132,17 @@
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Nie odnaleziono kategorii</value>
   </data>
+  <data name="CategoryRequiredErrorMessage" xml:space="preserve">
+    <value>Wybierz kategorie</value>
+  </data>
   <data name="CategorySavedSuccessfully" xml:space="preserve">
     <value>Pomyślnie utworzono kategorię</value>
   </data>
   <data name="DescriptionLabel" xml:space="preserve">
     <value>Krótki opis</value>
+  </data>
+  <data name="DescriptionRequiredErrorMessage" xml:space="preserve">
+    <value>Wprowadź opis</value>
   </data>
   <data name="EditCategory" xml:space="preserve">
     <value>Edytuj kategorię</value>
@@ -169,13 +175,13 @@
     <value>Powróc do newsów</value>
   </data>
   <data name="News" xml:space="preserve">
-    <value>Aktualności</value>
+    <value>Newsy</value>
   </data>
   <data name="NewsItem" xml:space="preserve">
     <value>Edycja newsa</value>
   </data>
   <data name="NewsNewText" xml:space="preserve">
-    <value>Dodaj aktualność</value>
+    <value>Dodaj newsa</value>
   </data>
   <data name="NewsNotFound" xml:space="preserve">
     <value>Nie znaleziono newsa</value>
@@ -198,7 +204,13 @@
   <data name="SubcategoriesDeleteCategoryConflict" xml:space="preserve">
     <value>Usuń podkategorie należące do tej kategorii.</value>
   </data>
+  <data name="ThumbImageId" xml:space="preserve">
+    <value>Miniatura newsa</value>
+  </data>
   <data name="TitleLabel" xml:space="preserve">
     <value>Tytuł</value>
+  </data>
+  <data name="TitleRequiredErrorMessage" xml:space="preserve">
+    <value>Wprowadź tytuł</value>
   </data>
 </root>

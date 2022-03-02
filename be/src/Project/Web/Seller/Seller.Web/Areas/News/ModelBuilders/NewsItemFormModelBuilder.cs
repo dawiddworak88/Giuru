@@ -57,7 +57,11 @@ namespace Seller.Web.Areas.News.ModelBuilders
                 ImagesLabel = this.newsLocalizer.GetString("ImagesLabel"),
                 FilesLabel = this.newsLocalizer.GetString("FilesLabel"),
                 CategoryLabel = this.newsLocalizer.GetString("Category"),
-                SelectCategoryLabel = this.newsLocalizer.GetString("SelectCategoryLabel")
+                SelectCategoryLabel = this.newsLocalizer.GetString("SelectCategoryLabel"),
+                ThumbImageLabel = this.newsLocalizer.GetString("ThumbImageLabel"),
+                TitleRequiredErrorMessage = this.newsLocalizer.GetString("TitleRequiredErrorMessage"),
+                CategoryRequiredErrorMessage = this.newsLocalizer.GetString("CategoryRequiredErrorMessage"),
+                DescriptionRequiredErrorMessage = this.newsLocalizer.GetString("DescriptionRequiredErrorMessage")
             };
 
             var categories = await this.categoriesRepository.GetAllCategoriesAsync(componentModel.Token, componentModel.Language);

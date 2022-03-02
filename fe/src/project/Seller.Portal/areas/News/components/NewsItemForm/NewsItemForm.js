@@ -14,7 +14,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import {stateFromHtml} from "draft-js-import-html"
 import { 
     TextField, Select, FormControl, FormControlLabel, Switch, 
-    InputLabel, MenuItem, Button, CircularProgress
+    InputLabel, MenuItem, Button, CircularProgress, FormHelperText
 } from "@material-ui/core";
 
 const NewsItemForm = (props) => {
@@ -80,8 +80,25 @@ const NewsItemForm = (props) => {
 
     }
 
-    const stateValidatorSchema = () => {
-
+    const stateValidatorSchema = {
+        title: {
+            required: {
+                isRequired: true,
+                error: props.titleRequiredErrorMessage
+            }
+        },
+        categoryId: {
+            required: {
+                isRequired: true,
+                error: props.categoryRequiredErrorMessage
+            }
+        },
+        description: {
+            required: {
+                isRequired: true,
+                error: props.descriptionRequiredErrorMessage
+            }
+        }
     }
 
     const handleEditorChange = (state) => {
@@ -111,6 +128,8 @@ const NewsItemForm = (props) => {
                                 fullWidth={true}
                                 value={title} 
                                 onChange={handleOnChange} 
+                                helperText={dirty.title ? errors.title : ""} 
+                                error={(errors.title.length > 0) && dirty.title} 
                             />
                         </div>
                         <div className="field">
@@ -127,6 +146,9 @@ const NewsItemForm = (props) => {
                                         <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
                                     )}
                                 </Select>
+                                {errors.categoryId && dirty.categoryId && (
+                                    <FormHelperText>{errors.categoryId}</FormHelperText>
+                                )}
                             </FormControl>
                         </div>
                         <div className="field">
@@ -137,7 +159,9 @@ const NewsItemForm = (props) => {
                                 fullWidth={true}
                                 value={description} 
                                 multiline={true}
-                                onChange={handleOnChange} 
+                                onChange={handleOnChange}
+                                helperText={dirty.description ? errors.description : ""} 
+                                error={(errors.description.length > 0) && dirty.description} 
                             />
                         </div>
                         <div className="field">
@@ -176,6 +200,7 @@ const NewsItemForm = (props) => {
                                     editorState={editorState} 
                                     onEditorStateChange={handleEditorChange}
                                 />
+                                
                             </NoSsr>
                         </div>
                         <div className="field">
@@ -227,7 +252,7 @@ const NewsItemForm = (props) => {
                                     type="submit" 
                                     variant="contained" 
                                     color="primary"
-                                    disabled={false}
+                                    disabled={state.isLoading || disable || !heroImage || !thumbImage || !convertedToRaw}
                                     >
                                     {props.saveText}
                                 </Button>

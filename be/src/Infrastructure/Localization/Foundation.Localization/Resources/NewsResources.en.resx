@@ -132,11 +132,17 @@
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Category not found</value>
   </data>
+  <data name="CategoryRequiredErrorMessage" xml:space="preserve">
+    <value>Select category</value>
+  </data>
   <data name="CategorySavedSuccessfully" xml:space="preserve">
     <value>Category has been successfully created</value>
   </data>
   <data name="DescriptionLabel" xml:space="preserve">
     <value>Short description</value>
+  </data>
+  <data name="DescriptionRequiredErrorMessage" xml:space="preserve">
+    <value>Enter description</value>
   </data>
   <data name="EditCategory" xml:space="preserve">
     <value>Edit category</value>
@@ -172,7 +178,7 @@
     <value>News</value>
   </data>
   <data name="NewsItem" xml:space="preserve">
-    <value>Editing news</value>
+    <value>Edit news</value>
   </data>
   <data name="NewsNewText" xml:space="preserve">
     <value>Add news</value>
@@ -198,7 +204,13 @@
   <data name="SubcategoriesDeleteCategoryConflict" xml:space="preserve">
     <value>Delete subcategories belonging to this category.</value>
   </data>
+  <data name="ThumbImageId" xml:space="preserve">
+    <value>Thumbnail news image</value>
+  </data>
   <data name="TitleLabel" xml:space="preserve">
     <value>Title</value>
+  </data>
+  <data name="TitleRequiredErrorMessage" xml:space="preserve">
+    <value>Enter title</value>
   </data>
 </root>
