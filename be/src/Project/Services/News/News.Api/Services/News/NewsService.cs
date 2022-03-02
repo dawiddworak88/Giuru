@@ -3,7 +3,6 @@ using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using News.Api.Infrastructure;
 using News.Api.Infrastructure.Entities.News;
@@ -72,17 +71,6 @@ namespace News.Api.Services.News
                 await this.newsContext.NewsItemFIles.AddAsync(file.FillCommonProperties());
             }
 
-            foreach (var imageId in model.Images.OrEmptyIfNull())
-            {
-                var image = new NewsItemImage
-                {
-                    NewsItemId = newsItem.Id,
-                    MediaId = imageId,
-                };
-
-                await this.newsContext.NewsItemImages.AddAsync(image.FillCommonProperties());
-            }
-
             await this.newsContext.SaveChangesAsync();
 
             return newsItem.Id;
@@ -128,12 +116,6 @@ namespace News.Api.Services.News
                 {
                     newsItem.Files = files.Select(x => x.MediaId);
                 }
-
-                var images = this.newsContext.NewsItemImages.Where(x => x.NewsItemId == newsItem.Id);
-                if (images is not null)
-                {
-                    newsItem.Images = images.Select(x => x.MediaId);
-                }
             }
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
@@ -173,12 +155,6 @@ namespace News.Api.Services.News
                 if (files is not null)
                 {
                     news.Files = files.Select(x => x.MediaId);
-                }
-
-                var images = this.newsContext.NewsItemImages.Where(x => x.NewsItemId == model.Id);
-                if (images is not null)
-                {
-                    news.Images = images.Select(x => x.MediaId);
                 }
 
                 return news;
@@ -245,13 +221,6 @@ namespace News.Api.Services.News
                 };
 
                 await this.newsContext.NewsItemFIles.AddAsync(file.FillCommonProperties());
-            }
-
-            var newsImages = this.newsContext.NewsItemImages.Where(x => x.NewsItemId == news.Id);
-
-            foreach (var newsImage in newsImages.OrEmptyIfNull())
-            {
-                this.newsContext.NewsItemImages.Remove(newsImage);
             }
 
             foreach (var imageId in model.Images.OrEmptyIfNull())

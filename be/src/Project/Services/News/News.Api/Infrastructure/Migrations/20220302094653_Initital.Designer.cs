@@ -12,7 +12,7 @@ using News.Api.Infrastructure;
 namespace News.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(NewsContext))]
-    [Migration("20220301130925_Initital")]
+    [Migration("20220302094653_Initital")]
     partial class Initital
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -162,71 +162,6 @@ namespace News.Api.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("NewsItemFIles");
-                });
-
-            modelBuilder.Entity("News.Api.Infrastructure.Entities.News.NewsItemImage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("MediaId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("NewsItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("NewsItemImages");
-                });
-
-            modelBuilder.Entity("News.Api.Infrastructure.Entities.News.NewsItemTag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("NewsItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<Guid>("TagId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("NewsItemTags");
                 });
 
             modelBuilder.Entity("News.Api.Infrastructure.Entities.News.NewsItemTranslation", b =>

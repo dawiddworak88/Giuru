@@ -44,24 +44,6 @@ namespace News.Api.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "NewsItemImages",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    NewsItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MediaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Order = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NewsItemImages", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "NewsItems",
                 columns: table => new
                 {
@@ -79,23 +61,6 @@ namespace News.Api.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_NewsItems", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "NewsItemTags",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TagId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    NewsItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_NewsItemTags", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -166,12 +131,6 @@ namespace News.Api.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "NewsItemFIles");
-
-            migrationBuilder.DropTable(
-                name: "NewsItemImages");
-
-            migrationBuilder.DropTable(
-                name: "NewsItemTags");
 
             migrationBuilder.DropTable(
                 name: "NewsItemTranslations");

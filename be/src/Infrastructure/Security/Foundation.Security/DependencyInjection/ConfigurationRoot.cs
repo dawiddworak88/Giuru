@@ -15,6 +15,8 @@ namespace Foundation.Security.DependencyInjection
             app.UseReferrerPolicy(opts => opts.NoReferrerWhenDowngrade());
 
             app.UseCsp(options => options
+                .ImageSources(s => s.Self()
+                    .CustomSources("data:"))
                 .DefaultSources(s => s.Self()
                     .CustomSources("data:")
                     .CustomSources("https:")

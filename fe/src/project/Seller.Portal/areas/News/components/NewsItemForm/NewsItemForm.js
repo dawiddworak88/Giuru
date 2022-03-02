@@ -33,9 +33,7 @@ const NewsItemForm = (props) => {
         heroImageId: { value: props.images ? props.images : null },
         description: { value: props.description ? props.description : null },
         content: { value: props.content, error: "" },
-        images: { value: props.images ? props.images : [] },
         files: { value: props.files ? props.files : [] },
-        isNew: {value: props.isNew ? props.isNew : false, error: ""},
         isPublished: {value: props.isPublished ? props.isPublished : false, error: ""}
     }
 
@@ -96,13 +94,50 @@ const NewsItemForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
     
-    const { title, heroImage, description, isNew, isPublished, files, images, categoryId } = values;
+    const { title, heroImage, description, isPublished, files, categoryId } = values;
     return (
         <section className="section section-small-padding news-item">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit}>
+                        <div className="field">
+                            <TextField 
+                                id="title"
+                                name="title"
+                                label={props.titleLabel} 
+                                fullWidth={true}
+                                value={title} 
+                                onChange={handleOnChange} 
+                            />
+                        </div>
+                        <div className="field">
+                            <FormControl fullWidth={true}>
+                                <InputLabel id="category">{props.categoryLabel}</InputLabel>
+                                <Select
+                                    labelId="category"
+                                    id="categoryId"
+                                    name="categoryId"
+                                    value={categoryId}
+                                    onChange={handleOnChange}>
+                                    <MenuItem key={0} value="">{props.selectCategoryLabel}</MenuItem>
+                                    {props.categories && props.categories.map(category =>
+                                        <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <div className="field">
+                            <TextField 
+                                id="description" 
+                                name="description"
+                                label={props.descriptionLabel} 
+                                fullWidth={true}
+                                value={description} 
+                                multiline={true}
+                                onChange={handleOnChange} 
+                            />
+                        </div>
                         <div className="field">
                             <MediaCloud
                                 id="heroImageId"
@@ -119,64 +154,12 @@ const NewsItemForm = (props) => {
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
                         <div className="field">
-                            <FormControl fullWidth={true}>
-                                <InputLabel id="category">{props.categoryLabel}</InputLabel>
-                                <Select
-                                    labelId="ccategory"
-                                    id="categoryId"
-                                    name="categoryId"
-                                    value={categoryId}
-                                    onChange={handleOnChange}>
-                                    <MenuItem key={0} value="">{props.selectCategoryLabel}</MenuItem>
-                                    {props.categories && props.categories.map(category =>
-                                        <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
-                                    )}
-                                </Select>
-                            </FormControl>
-                        </div>
-                        <div className="field">
-                            <TextField 
-                                id="title"
-                                name="title"
-                                label={props.titleLabel} 
-                                fullWidth={true}
-                                value={title} 
-                                onChange={handleOnChange} 
-                            />
-                        </div>
-                        <div className="field">
-                            <TextField 
-                                id="description" 
-                                name="description"
-                                label={props.descriptionLabel} 
-                                fullWidth={true}
-                                value={description} 
-                                multiline={true}
-                                onChange={handleOnChange} 
-                            />
-                        </div>
-                        <div className="field">
                             <NoSsr>
                                 <Editor 
                                     editorState={editorState} 
                                     onEditorStateChange={handleEditorChange}
                                 />
                             </NoSsr>
-                        </div>
-                        <div className="field">
-                            <MediaCloud
-                                id="images"
-                                name="images"
-                                label={props.imagesLabel}
-                                accept=".png, .jpg, .webp"
-                                multiple={true}
-                                generalErrorMessage={props.generalErrorMessage}
-                                deleteLabel={props.deleteLabel}
-                                dropFilesLabel={props.dropFilesLabel}
-                                dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
-                                files={images}
-                                setFieldValue={setFieldValue}
-                                saveMediaUrl={props.saveMediaUrl} />
                         </div>
                         <div className="field">
                             <MediaCloud
@@ -192,23 +175,6 @@ const NewsItemForm = (props) => {
                                 files={files}
                                 setFieldValue={setFieldValue}
                                 saveMediaUrl={props.saveMediaUrl} />
-                        </div>
-                        <div className="field">
-                            <NoSsr>
-                                <FormControlLabel
-                                    control={
-                                        <Switch
-                                            onChange={e => {
-                                                setFieldValue({ name: "isNew", value: e.target.checked });
-                                            }}
-                                            checked={isNew}
-                                            id="isNew"
-                                            name="isNew"
-                                            color="secondary" />
-                                        }
-                                        label={props.isNewLabel} 
-                                    />
-                            </NoSsr>
                         </div>
                         <div className="field">
                             <NoSsr>
