@@ -10,7 +10,6 @@ import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaClou
 import { EditorState, convertToRaw, ContentState, convertFromHTML} from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { 
     TextField, Select, FormControl, FormControlLabel, Switch, 
     InputLabel, MenuItem, Button, CircularProgress, FormHelperText
