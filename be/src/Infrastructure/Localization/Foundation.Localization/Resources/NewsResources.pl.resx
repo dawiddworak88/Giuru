@@ -190,7 +190,7 @@
     <value>Nie znaleziono newsa</value>
   </data>
   <data name="NewsSavedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie uwtorzono newsa</value>
+    <value>Pomyślnie zapisano</value>
   </data>
   <data name="NewText" xml:space="preserve">
     <value>Dodaj kategorię</value>

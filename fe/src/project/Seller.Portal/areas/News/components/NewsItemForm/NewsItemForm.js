@@ -150,7 +150,7 @@ const NewsItemForm = (props) => {
     
     const { title, heroImage, thumbImage, description, isPublished, files, categoryId } = values;
     return (
-        <section className="section section-small-padding news-item">
+        <section className="section section-small-padding">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
