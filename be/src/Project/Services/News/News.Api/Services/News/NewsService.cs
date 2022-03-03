@@ -92,25 +92,25 @@ namespace News.Api.Services.News
         public async Task<PagedResults<IEnumerable<NewsItemServiceModel>>> GetAsync(GetNewsItemsServiceModel model)
         {
             var existingNews = from n in this.newsContext.NewsItems
-                       join nt in this.newsContext.NewsItemTranslations on n.Id equals nt.NewsItemId
-                       join c in this.newsContext.CategoryTranslations on n.CategoryId equals c.CategoryId
-                       where nt.Language == model.Language && n.IsActive && c.Language == model.Language
-                       select new NewsItemServiceModel
-                       {
-                           Id = n.Id,
-                           ThumbImageId = n.ThumbImageId,
-                           HeroImageId = n.HeroImageId,
-                           CategoryId = n.CategoryId,
-                           CategoryName = c.Name,
-                           Title = nt.Title,
-                           Description = nt.Description,
-                           Content = nt.Content,
-                           IsPublished = n.IsPublished,
-                           LastModifiedDate = n.LastModifiedDate,
-                           CreatedDate = n.CreatedDate
-                       };
+                               join nt in this.newsContext.NewsItemTranslations on n.Id equals nt.NewsItemId
+                               join c in this.newsContext.CategoryTranslations on n.CategoryId equals c.CategoryId
+                               where nt.Language == model.Language && n.IsActive && c.Language == model.Language
+                               select new NewsItemServiceModel
+                               {
+                                   Id = n.Id,
+                                   ThumbImageId = n.ThumbImageId,
+                                   HeroImageId = n.HeroImageId,
+                                   CategoryId = n.CategoryId,
+                                   CategoryName = c.Name,
+                                   Title = nt.Title,
+                                   Description = nt.Description,
+                                   Content = nt.Content,
+                                   IsPublished = n.IsPublished,
+                                   LastModifiedDate = n.LastModifiedDate,
+                                   CreatedDate = n.CreatedDate
+                               };
 
-            foreach(var newsItem in existingNews)
+            foreach (var newsItem in existingNews)
             {
                 var files = this.newsContext.NewsItemFIles.Where(x => x.NewsItemId == newsItem.Id);
                 if (files is not null)
@@ -186,7 +186,7 @@ namespace News.Api.Services.News
             news.IsPublished = model.IsPublished;
             news.LastModifiedDate = DateTime.UtcNow;
 
-            var newsTranslation = this.newsContext.NewsItemTranslations.FirstOrDefault(x => x.Id == model.Id && x.Language == model.Language && x.IsActive);
+            var newsTranslation = this.newsContext.NewsItemTranslations.FirstOrDefault(x => x.NewsItemId == model.Id && x.Language == model.Language && x.IsActive);
             if (newsTranslation is not null)
             {
                 newsTranslation.Title = model.Title;

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Products.Repositories
+namespace Seller.Web.Areas.Shared.Repositories.Media
 {
     public interface IMediaItemsRepository
     {

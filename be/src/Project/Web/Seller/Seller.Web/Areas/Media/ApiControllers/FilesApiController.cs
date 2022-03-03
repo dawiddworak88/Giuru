@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Media.Repositories;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
+using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Configurations;
 using System.Collections.Generic;
 using System.Globalization;

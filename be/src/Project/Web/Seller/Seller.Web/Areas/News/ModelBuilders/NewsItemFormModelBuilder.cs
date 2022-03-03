@@ -1,12 +1,23 @@
-﻿using Foundation.Extensions.ModelBuilders;
+﻿using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.ModelBuilders;
+using Foundation.Extensions.Services.MediaServices;
+using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Seller.Web.Areas.News.Repositories.Categories;
 using Seller.Web.Areas.News.Repositories.News;
 using Seller.Web.Areas.News.ViewModel;
+using Seller.Web.Areas.Shared.Repositories.Media;
+using Seller.Web.Shared.Configurations;
+using Seller.Web.Shared.Definitions;
+using Seller.Web.Shared.ViewModels;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,13 +30,19 @@ namespace Seller.Web.Areas.News.ModelBuilders
         private readonly IStringLocalizer<NewsResources> newsLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly ICategoriesRepository categoriesRepository;
+        private readonly IMediaItemsRepository mediaItemsRepository;
+        private readonly IMediaHelperService mediaHelperService;
         private readonly INewsRepository newsRepository;
+        private readonly IOptionsMonitor<AppSettings> settings;
 
         public NewsItemFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<NewsResources> newsLocalizer,
             ICategoriesRepository categoriesRepository,
+            IMediaItemsRepository mediaItemsRepository,
             INewsRepository newsRepository,
+            IMediaHelperService mediaHelperService,
+            IOptionsMonitor<AppSettings> settings,
             LinkGenerator linkGenerator)
         {
             this.linkGenerator = linkGenerator;
@@ -33,6 +50,9 @@ namespace Seller.Web.Areas.News.ModelBuilders
             this.newsLocalizer = newsLocalizer;
             this.categoriesRepository = categoriesRepository;
             this.newsRepository = newsRepository;
+            this.mediaItemsRepository = mediaItemsRepository;
+            this.settings = settings;
+            this.mediaHelperService = mediaHelperService;
         }
 
         public async Task<NewsItemFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -74,16 +94,73 @@ namespace Seller.Web.Areas.News.ModelBuilders
             {
                 var existingNews = await this.newsRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
                 if (existingNews is not null)
-                {
+                { 
+
+                    if (existingNews.Files is not null && existingNews.Files.Any())
+                    {
+                        var fileMediaItems = await this.mediaItemsRepository.GetAllMediaItemsAsync(
+                            componentModel.Token, componentModel.Language, existingNews.Files.Distinct().ToEndpointParameterString(), PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize);
+
+                        var files = new List<FileViewModel>();
+                        foreach (var file in fileMediaItems)
+                        {
+                            files.Add(new FileViewModel
+                            {
+                                Id = file.Id,
+                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, file.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
+                                Name = file.Name,
+                                MimeType = file.MimeType,
+                                Filename = file.Filename,
+                                Extension = file.Extension
+                            });
+                        }
+
+                        viewModel.Files = files;
+                    }
+
+                    var thumbImage = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, existingNews.ThumbImageId);
+                    if (thumbImage is not null)
+                    {
+
+                        viewModel.ThumbImages = new List<FileViewModel>
+                        {
+                            new FileViewModel
+                            {
+                                Id = thumbImage.Id,
+                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, thumbImage.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
+                                Name = thumbImage.Name,
+                                MimeType = thumbImage.MimeType,
+                                Filename = thumbImage.Filename,
+                                Extension = thumbImage.Extension
+                            }
+                        };
+
+                    }
+
+                    var heroImage = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, existingNews.HeroImageId);
+                    if (heroImage is not null)
+                    {
+                        viewModel.HeroImages = new List<FileViewModel>
+                        {
+                            new FileViewModel
+                            {
+                                Id = heroImage.Id,
+                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, heroImage.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
+                                Name = heroImage.Name,
+                                MimeType = heroImage.MimeType,
+                                Filename = heroImage.Filename,
+                                Extension = heroImage.Extension
+                            }
+                        };
+                    }
+
                     viewModel.Id = componentModel.Id;
-                    viewModel.ThumbImageId = existingNews.ThumbImageId;
-                    viewModel.HeroImageId = existingNews.HeroImageId;
                     viewModel.CategoryId = existingNews.CategoryId;
                     viewModel.NewsTitle = existingNews.Title;
                     viewModel.Content = existingNews.Content;
                     viewModel.Description = existingNews.Description;
                     viewModel.IsPublished = existingNews.IsPublished;
-                    viewModel.Files = existingNews.Files;
+                    
                 }
             }
 

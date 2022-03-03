@@ -11,7 +11,6 @@ import { EditorState, convertToRaw, ContentState, convertFromHTML} from 'draft-j
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import {stateFromHtml} from "draft-js-import-html"
 import { 
     TextField, Select, FormControl, FormControlLabel, Switch, 
     InputLabel, MenuItem, Button, CircularProgress, FormHelperText
@@ -21,19 +20,19 @@ const NewsItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [showBackToNewsListButton, setShowBackToNewsListButton] = useState(false);
     const [convertedToRaw, setConvertedToRaw] = useState(null);
-    const [editorState, setEditorState] = useState(props.content ? null
-        // EditorState.createWithContent(
-        // ContentState.createFromBlockArray(
-        //     convertFromHTML(props.content)
-        // )
-     : EditorState.createEmpty());
+    const [editorState, setEditorState] = useState(props.content ? 
+        EditorState.createWithContent(
+        ContentState.createFromBlockArray(
+            convertFromHTML(props.content)
+        )
+    ) : EditorState.createEmpty());
     
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         categoryId: { value: props.categoryId ? props.categoryId : null, error: ""},
         title: { value: props.newsTitle ? props.newsTitle : "", error: "" },
-        heroImage: { value: props.heroImageId ? props.heroImageId : [], error: "" },
-        thumbImage: { value: props.thumbImageId ? props.thumbImageId : [], error: "" },
+        heroImage: { value: props.heroImages ? props.heroImages : [], error: "" },
+        thumbImage: { value: props.thumbImages ? props.thumbImages : [], error: "" },
         description: { value: props.description ? props.description : null },
         content: { value: props.content, error: "" },
         files: { value: props.files ? props.files : [] },
@@ -45,8 +44,8 @@ const NewsItemForm = (props) => {
 
         const requestData = {
             id: state.id,
-            thumbImageId: state.thumbImage ? state.thumbImage[0].id : null,
-            heroImageId: state.heroImage ? state.heroImage[0].id : null,
+            thumbImageId: state.thumbImage[0].id,
+            heroImageId: state.heroImage[0].id,
             categoryId: state.categoryId,
             title: state.title,
             description: state.description,
@@ -160,8 +159,8 @@ const NewsItemForm = (props) => {
                                 value={description} 
                                 multiline={true}
                                 onChange={handleOnChange}
-                                helperText={dirty.description ? errors.description : ""} 
-                                error={(errors.description.length > 0) && dirty.description} 
+                                // helperText={dirty.description ? errors.description : ""} 
+                                // error={(errors.description.length > 0) && dirty.description} 
                             />
                         </div>
                         <div className="field">

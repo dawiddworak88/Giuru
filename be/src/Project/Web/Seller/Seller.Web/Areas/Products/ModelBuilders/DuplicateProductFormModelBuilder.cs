@@ -11,7 +11,6 @@ using Microsoft.Extensions.Options;
 using Seller.Web.Shared.Configurations;
 using System.Collections.Generic;
 using Seller.Web.Shared.ViewModels;
-using Seller.Web.Areas.Products.Definitons;
 using Foundation.GenericRepository.Paginations;
 using System.Linq;
 using Foundation.PageContent.Components.ListItems.ViewModels;
@@ -19,6 +18,8 @@ using Foundation.Extensions.ExtensionMethods;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.ComponentModels;
 using Seller.Web.Areas.Shared.Repositories.Products;
+using Seller.Web.Areas.Shared.Repositories.Media;
+using Seller.Web.Shared.Definitions;
 
 namespace Seller.Web.Areas.ModelBuilders.Products
 {

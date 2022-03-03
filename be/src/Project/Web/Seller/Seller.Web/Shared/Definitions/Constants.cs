@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Seller.Web.Areas.Products.Definitons
+namespace Seller.Web.Shared.Definitions
 {
     public static class Constants
     {

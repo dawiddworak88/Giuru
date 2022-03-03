@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Products.Repositories
+namespace Seller.Web.Areas.Shared.Repositories.Media
 {
     public class MediaItemsRepository : IMediaItemsRepository
     {
@@ -94,7 +94,6 @@ namespace Seller.Web.Areas.Products.Repositories
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, MediaItem>(apiRequest);
-
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);

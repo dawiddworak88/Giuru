@@ -1,4 +1,5 @@
 ﻿using Foundation.PageContent.Components.ListItems.ViewModels;
+using Seller.Web.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 
@@ -7,7 +8,6 @@ namespace Seller.Web.Areas.News.ViewModel
     public class NewsItemFormViewModel
     {
         public Guid? Id { get; set; }
-        public Guid? ThumbImageId { get; set; }
         public Guid? HeroImageId { get; set; }
         public Guid? CategoryId { get; set; }
         public string NewsTitle { get; set; }
@@ -37,7 +37,9 @@ namespace Seller.Web.Areas.News.ViewModel
         public string SaveMediaUrl { get; set; }
         public string SaveText { get; set; }
         public bool IsPublished { get; set; }
-        public IEnumerable<Guid> Files { get; set; }
+        public IEnumerable<FileViewModel> ThumbImages { get; set; }
+        public IEnumerable<FileViewModel> HeroImages { get; set; }
+        public IEnumerable<FileViewModel> Files { get; set; }
         public IEnumerable<ListItemViewModel> Categories { get; set; }
     }
 }

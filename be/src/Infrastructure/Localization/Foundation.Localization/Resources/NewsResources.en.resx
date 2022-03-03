@@ -204,7 +204,7 @@
   <data name="SubcategoriesDeleteCategoryConflict" xml:space="preserve">
     <value>Delete subcategories belonging to this category.</value>
   </data>
-  <data name="ThumbImageId" xml:space="preserve">
+  <data name="ThumbImageLabel" xml:space="preserve">
     <value>Thumbnail news image</value>
   </data>
   <data name="TitleLabel" xml:space="preserve">

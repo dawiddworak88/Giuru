@@ -16,8 +16,7 @@ namespace Foundation.Security.DependencyInjection
 
             app.UseCsp(options => options
                 .ImageSources(s => s.Self()
-                    .CustomSources("*")
-                    .CustomSources("data:"))
+                    .CustomSources("*"))
                 .DefaultSources(s => s.Self()
                     .CustomSources("data:")
                     .CustomSources("https:")
@@ -27,7 +26,7 @@ namespace Foundation.Security.DependencyInjection
                     .UnsafeInline()
                 )
                 .ScriptSources(s => s.Self()
-                       .CustomSources("*")
+                    .CustomSources("*")
                     .UnsafeInline()
                     .UnsafeEval()
                 ));
