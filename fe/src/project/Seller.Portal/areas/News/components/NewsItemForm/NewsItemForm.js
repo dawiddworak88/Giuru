@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -19,12 +19,7 @@ const NewsItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [showBackToNewsListButton, setShowBackToNewsListButton] = useState(false);
     const [convertedToRaw, setConvertedToRaw] = useState(null);
-    const [editorState, setEditorState] = useState(props.content ? 
-        EditorState.createWithContent(
-        ContentState.createFromBlockArray(
-            convertFromHTML(props.content)
-        )
-    ) : EditorState.createEmpty());
+    const [editorState, setEditorState] = useState(EditorState.createEmpty());
     
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -37,6 +32,16 @@ const NewsItemForm = (props) => {
         files: { value: props.files ? props.files : [], error: "" },
         isPublished: {value: props.isPublished ? props.isPublished : false, error: ""}
     }
+
+    useEffect(() => {
+        if (props.content){
+            setEditorState(EditorState.createWithContent(
+                ContentState.createFromBlockArray(
+                    convertFromHTML(props.content)
+                )
+            ))
+        }
+    }, [])
 
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
