@@ -65,7 +65,7 @@ namespace News.Api.Services.News
                 var file = new NewsItemFile
                 {
                     NewsItemId = newsItem.Id,
-                    MediaId = fileId,
+                    MediaId = fileId
                 };
 
                 await this.newsContext.NewsItemFIles.AddAsync(file.FillCommonProperties());
@@ -110,23 +110,44 @@ namespace News.Api.Services.News
                                    CreatedDate = n.CreatedDate
                                };
 
-            foreach (var newsItem in existingNews)
+            if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
+                existingNews = existingNews.Where(x => x.Title.StartsWith(model.SearchTerm));
+            }
+
+            existingNews = existingNews.ApplySort(model.OrderBy);
+
+            var newsItems = new List<NewsItemServiceModel>();
+            foreach (var newsItem in existingNews.OrEmptyIfNull())
+            {
+                var news = new NewsItemServiceModel
+                {
+                    Id = newsItem.Id,
+                    ThumbImageId = newsItem.ThumbImageId,
+                    HeroImageId = newsItem.HeroImageId,
+                    CategoryId = newsItem.CategoryId,
+                    CategoryName = newsItem.CategoryName,
+                    Title = newsItem.Title,
+                    Description = newsItem.Description,
+                    Content = newsItem.Content,
+                    IsPublished = newsItem.IsPublished,
+                    LastModifiedDate = newsItem.LastModifiedDate,
+                    CreatedDate = newsItem.CreatedDate
+                };
+
                 var files = this.newsContext.NewsItemFIles.Where(x => x.NewsItemId == newsItem.Id);
                 if (files is not null)
                 {
-                    newsItem.Files = files.Select(x => x.MediaId);
+                    news.Files = files.Select(x => x.MediaId);
                 }
+
+                newsItems.Add(news);
             }
 
-            if (!string.IsNullOrWhiteSpace(model.SearchTerm))
+            return new PagedResults<IEnumerable<NewsItemServiceModel>>(newsItems.Count, model.ItemsPerPage)
             {
-                existingNews.Where(x => x.Title.StartsWith(model.SearchTerm));
-            }
-
-            existingNews.ApplySort(model.OrderBy);
-
-            return existingNews.PagedIndex(new Pagination(existingNews.Count(), model.ItemsPerPage), model.PageIndex);
+                Data = newsItems
+            };
         }
 
         public async Task<NewsItemServiceModel> GetAsync(GetNewsItemServiceModel model)
