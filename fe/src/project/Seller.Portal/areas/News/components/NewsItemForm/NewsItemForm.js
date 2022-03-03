@@ -33,9 +33,9 @@ const NewsItemForm = (props) => {
         title: { value: props.newsTitle ? props.newsTitle : "", error: "" },
         heroImage: { value: props.heroImages ? props.heroImages : [], error: "" },
         thumbImage: { value: props.thumbImages ? props.thumbImages : [], error: "" },
-        description: { value: props.description ? props.description : null },
-        content: { value: props.content, error: "" },
-        files: { value: props.files ? props.files : [] },
+        description: { value: props.description ? props.description : null, error: "" },
+        content: { value: props.content ? props.content : "", error: "" },
+        files: { value: props.files ? props.files : [], error: "" },
         isPublished: {value: props.isPublished ? props.isPublished : false, error: ""}
     }
 
@@ -107,6 +107,42 @@ const NewsItemForm = (props) => {
         setConvertedToRaw(converted);
     }
 
+    const uploadCallback = (file) => {
+        return new Promise((resolve, reject) => {
+            const formData = new FormData();
+
+            formData.append("file", file)
+            const requestOptions = {
+                method: "POST",
+                body: formData
+            };
+
+            fetch(props.saveMediaUrl, requestOptions)
+                .then(function (response) {
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
+                    
+                    AuthenticationHelper.HandleResponse(response);
+
+                    response.json().then((media) => {
+                        if (response.ok) {
+
+                            resolve({
+                                data: {
+                                    link: media.url
+                                }
+                            })
+                        }
+                        else {
+                            toast.error(props.generalErrorMessage);
+                        }
+                    });
+                }).catch(() => {
+                    dispatch({ type: "SET_IS_LOADING", payload: false });
+                    toast.error(props.generalErrorMessage);
+                });
+        });
+    }
+
     const {
         values, errors, dirty, disable,
         setFieldValue, handleOnChange, handleOnSubmit
@@ -159,8 +195,8 @@ const NewsItemForm = (props) => {
                                 value={description} 
                                 multiline={true}
                                 onChange={handleOnChange}
-                                // helperText={dirty.description ? errors.description : ""} 
-                                // error={(errors.description.length > 0) && dirty.description} 
+                                helperText={dirty.description ? errors.description : ""} 
+                                error={(errors.description.length > 0) && dirty.description} 
                             />
                         </div>
                         <div className="field">
@@ -198,6 +234,14 @@ const NewsItemForm = (props) => {
                                 <Editor 
                                     editorState={editorState} 
                                     onEditorStateChange={handleEditorChange}
+                                    toolbar={{
+                                        image: {
+                                            uploadEnabled: true,
+                                            previewImage: true,
+                                            inputAccept: 'image/jpeg,image/jpg,image/png,image/webp',
+                                            uploadCallback: uploadCallback
+                                        }
+                                    }}
                                 />
                                 
                             </NoSsr>
@@ -252,7 +296,7 @@ const NewsItemForm = (props) => {
                                     variant="contained" 
                                     color="primary"
                                     disabled={state.isLoading || disable || !heroImage || !thumbImage || !convertedToRaw}
-                                    >
+                                >
                                     {props.saveText}
                                 </Button>
                             )}

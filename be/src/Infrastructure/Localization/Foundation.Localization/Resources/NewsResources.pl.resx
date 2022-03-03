@@ -127,7 +127,7 @@
     <value>Kategoria została pomyślnie usunięta</value>
   </data>
   <data name="CategoryDeleteNewsConflict" xml:space="preserve">
-    <value>Usuń pierw aktualność przypisaną do kategorii</value>
+    <value>Usuń pierw newsa przypisanego do kategorii</value>
   </data>
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Nie odnaleziono kategorii</value>
@@ -151,7 +151,7 @@
     <value>Pliki</value>
   </data>
   <data name="HeroImageLabel" xml:space="preserve">
-    <value>Zdjęcie newsa</value>
+    <value>Główne zdjęcie</value>
   </data>
   <data name="ImagesLabel" xml:space="preserve">
     <value>Zdjęcia</value>
@@ -176,6 +176,9 @@
   </data>
   <data name="News" xml:space="preserve">
     <value>Newsy</value>
+  </data>
+  <data name="NewsDeletedSuccessfully" xml:space="preserve">
+    <value>News zostałał pomyślnie usunięty</value>
   </data>
   <data name="NewsItem" xml:space="preserve">
     <value>Edycja newsa</value>

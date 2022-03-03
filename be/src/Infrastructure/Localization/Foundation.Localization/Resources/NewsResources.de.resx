@@ -177,6 +177,9 @@
   <data name="News" xml:space="preserve">
     <value>Nachrichten</value>
   </data>
+  <data name="NewsDeletedSuccessfully" xml:space="preserve">
+    <value>Nachrichten erfolgreich gelöscht</value>
+  </data>
   <data name="NewsItem" xml:space="preserve">
     <value>Nachrichten bearbeiten</value>
   </data>
