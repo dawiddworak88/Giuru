@@ -7,7 +7,6 @@ using Microsoft.Extensions.Localization;
 using News.Api.Infrastructure;
 using News.Api.Infrastructure.Entities.News;
 using News.Api.ServicesModels.News;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -250,6 +249,5 @@ namespace News.Api.Services.News
 
             return news.Id;
         }
-
     }
 }
