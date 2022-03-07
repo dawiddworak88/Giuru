@@ -10,12 +10,12 @@ import moment from "moment";
 
 const NewsCatalog = (props) => {
     const [state] = useContext(Context);
-    // const [items, setItems] = useState(props.pagedItems.data);
+    const [items, setItems] = useState(props.pagedItems.data);
     const [pageIndex, setPageIndex] = useState(1)
 
     const {
         news, hasMore, setNews
-    } = useDynamicSearch(props.newsApiUrl, null, 10, 1)
+    } = useDynamicSearch(props.newsApiUrl, items, 10, 1)
 
     const observer = useRef()
     const lastElement = useCallback(node => {
@@ -31,7 +31,11 @@ const NewsCatalog = (props) => {
     }, [state, hasMore]);
 
     const handleCategory = (category) => {
-        const filtered = news.filter((item) => item.categoryName === category.name);
+        if (category == null){
+            return setNews(items);
+        } 
+
+        const filtered = items.filter((item) => item.categoryName === category.name);
 
         setNews(filtered);
     }
@@ -42,7 +46,7 @@ const NewsCatalog = (props) => {
 
     return (
         <section className="section news-catalog">
-            {news ? (
+            {news && news.length > 0 ? (
                 <div>
                     <div className="columns is-centered">
                         {news.slice(0, 1).map(newsItem => {
@@ -68,7 +72,7 @@ const NewsCatalog = (props) => {
                     <div class="container">
                         {props.categories && props.categories.length > 0 &&
                             <div className="news-catalog__categories">
-                                <div className="category-tag" onClick={() => handleCategory(category)}>Wszystko</div>
+                                <div className="category-tag" onClick={() => handleCategory(null)}>{props.allCategoryLabel}</div>
                                 {props.categories.map(category => {
                                     return (
                                         <div className="category-tag" onClick={() => handleCategory(category)}>{category.name}</div>
@@ -102,7 +106,7 @@ const NewsCatalog = (props) => {
                 </div>
             ) : (
                 <section className="section is-flex-centered">
-                    <span className="is-title is-5">Brak wyników</span>
+                    <span className="is-title is-5">{props.noResultsLabel}</span>
                 </section>
             )}
         </section>

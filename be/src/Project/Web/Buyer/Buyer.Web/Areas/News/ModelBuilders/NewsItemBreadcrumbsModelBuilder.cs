@@ -39,7 +39,7 @@ namespace Buyer.Web.Areas.News.ModelBuilders
             {
                 Name = this.newsLocalizer.GetString("News"),
                 Url = this.linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name }),
-                IsActive = false,
+                IsActive = true,
             });
 
             var newsItem = await this.newsRepository.GetNewsItemAsync(componentModel.Token, componentModel.Language, componentModel.Id);
