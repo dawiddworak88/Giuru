@@ -8,6 +8,7 @@ namespace Buyer.Web.Areas.News.ViewModel
     {
         public BuyerHeaderViewModel Header { get; set; }
         public MainNavigationViewModel MainNavigation { get; set; }
+        public NewsItemBreadcrumbsViewModel Breadcrumbs { get; set; }
         public NewsItemDetailsViewModel NewsItemDetails { get; set; }
         public FooterViewModel Footer { get; set; }
     }
