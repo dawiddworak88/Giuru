@@ -1,14 +1,21 @@
-﻿using Buyer.Web.Areas.News.DomainModels;
+﻿using Buyer.Web.Areas.News.ApiResponseModels;
+using Buyer.Web.Areas.News.DomainModels;
 using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Paginations;
+using Foundation.PageContent.Components.Images;
+using Foundation.PageContent.Definitions;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.News.Repositories
@@ -18,13 +25,22 @@ namespace Buyer.Web.Areas.News.Repositories
 
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
+        private readonly LinkGenerator linkGenerator;
+        private readonly IMediaHelperService mediaService;
+        private readonly ICdnService cdnService;
 
         public NewsRepository(
             IApiClientService apiClientService,
+            LinkGenerator linkGenerator,
+            IMediaHelperService mediaService,
+            ICdnService cdnService,
             IOptions<AppSettings> settings)
         {
             this.apiClientService = apiClientService;
             this.settings = settings;
+            this.mediaService = mediaService;
+            this.linkGenerator = linkGenerator;
+            this.cdnService = cdnService;
         }
 
         public async Task<NewsItem> GetNewsItemAsync(string token, string language, Guid? id)
@@ -68,12 +84,48 @@ namespace Buyer.Web.Areas.News.Repositories
                 EndpointAddress = $"{this.settings.Value.NewsUrl}{ApiConstants.News.NewsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<NewsItem>>>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<NewsItemResponseModel>>>(apiRequest);
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
+                var newsItems = new List<NewsItem>();
+                foreach (var newsItem in response.Data.Data)
+                {
+                    var item = new NewsItem
+                    {
+                        Id = newsItem.Id,
+                        HeroImageId = newsItem.HeroImageId,
+                        ThumbImageId = newsItem.ThumbImageId,
+                        CategoryId = newsItem.CategoryId,
+                        CategoryName = newsItem.CategoryName,
+                        Title = newsItem.Title,
+                        Description = newsItem.Description,
+                        Content = newsItem.Content,
+                        Files = newsItem.Files,
+                        ThumbImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbImageId)),
+                        ThumbImages = new List<SourceViewModel>
+                        {
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.HeroImageId, 1024, 1024, true, MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.HeroImageId, 352, 352, true,MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.HeroImageId, 608, 608, true, MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.HeroImageId, 768, 768, true, MediaConstants.WebpExtension)) },
+
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.HeroImageId, 1024, 1024, true)) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.HeroImageId, 352, 352, true)) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.HeroImageId, 608, 608, true)) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.HeroImageId, 768, 768, true)) },
+                        },
+                        IsPublished = newsItem.IsPublished,
+                        Url = this.linkGenerator.GetPathByAction("Details", "NewsItem", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name, Id = newsItem.Id }),
+                        LastModifiedDate = newsItem.LastModifiedDate,
+                        CreatedDate = newsItem.CreatedDate,
+                    };
+
+                    newsItems.Add(item);
+                }
+
                 return new PagedResults<IEnumerable<NewsItem>>(response.Data.Total, response.Data.PageSize)
                 {
-                    Data = response.Data.Data
+                    Data = newsItems
                 };
             }
 

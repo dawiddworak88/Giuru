@@ -3,8 +3,10 @@ using Buyer.Web.Areas.News.ViewModel;
 using Buyer.Web.Shared.ModelBuilders.Breadcrumbs;
 using Buyer.Web.Shared.ViewModels.Breadcrumbs;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Threading.Tasks;
 
@@ -13,17 +15,20 @@ namespace Buyer.Web.Areas.News.ModelBuilders
     public class NewsItemBreadcrumbsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, NewsItemBreadcrumbsViewModel>
     {
         private readonly LinkGenerator linkGenerator;
+        private readonly IStringLocalizer<NewsResources> newsLocalizer;
         private readonly INewsRepository newsRepository;
         private readonly IBreadcrumbsModelBuilder<ComponentModelBase, NewsItemBreadcrumbsViewModel> breadcrumbsModelBuilder;
 
         public NewsItemBreadcrumbsModelBuilder(
             LinkGenerator linkGenerator,
+            IStringLocalizer<NewsResources> newsLocalizer,
             INewsRepository newsRepository,
             IBreadcrumbsModelBuilder<ComponentModelBase, NewsItemBreadcrumbsViewModel> breadcrumbsModelBuilder)
         {
             this.linkGenerator = linkGenerator;
             this.breadcrumbsModelBuilder = breadcrumbsModelBuilder;
             this.newsRepository = newsRepository;
+            this.newsLocalizer = newsLocalizer;
         }
 
         public async Task<NewsItemBreadcrumbsViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -32,7 +37,7 @@ namespace Buyer.Web.Areas.News.ModelBuilders
 
             viewModel.Items.Add(new BreadcrumbViewModel
             {
-                Name = "News",
+                Name = this.newsLocalizer.GetString("News"),
                 Url = this.linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name }),
                 IsActive = false,
             });

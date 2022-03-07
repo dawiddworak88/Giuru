@@ -34,7 +34,7 @@ const useDynamicSearch = (apiUrl, newsList, itemsPerPage, pageIndex) => {
 
     }, [itemsPerPage, pageIndex])
 
-    return { news, hasMore };
+    return { news, hasMore, setNews };
 }
 
 export default useDynamicSearch;
