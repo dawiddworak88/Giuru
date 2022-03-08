@@ -115,7 +115,7 @@ namespace Buyer.Web.Areas.News.Repositories
                             new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.HeroImageId, 768, 768, true)) },
                         },
                         IsPublished = newsItem.IsPublished,
-                        Url = this.linkGenerator.GetPathByAction("Details", "NewsItem", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name, Id = newsItem.Id }),
+                        Url = this.linkGenerator.GetPathByAction("Item", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name, Id = newsItem.Id }),
                         LastModifiedDate = newsItem.LastModifiedDate,
                         CreatedDate = newsItem.CreatedDate,
                     };
