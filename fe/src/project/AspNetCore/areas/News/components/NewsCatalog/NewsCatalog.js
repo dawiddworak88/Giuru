@@ -10,12 +10,12 @@ import moment from "moment";
 
 const NewsCatalog = (props) => {
     const [state] = useContext(Context);
-    // const [items, setItems] = useState(props.pagedItems.data);
+    const [items, setItems] = useState(props.pagedItems.data);
     const [pageIndex, setPageIndex] = useState(1)
 
     const {
         news, hasMore, setNews
-    } = useDynamicSearch(props.newsApiUrl, null, 10, 1)
+    } = useDynamicSearch(props.newsApiUrl, items, 10, 1)
 
     const observer = useRef()
     const lastElement = useCallback(node => {
