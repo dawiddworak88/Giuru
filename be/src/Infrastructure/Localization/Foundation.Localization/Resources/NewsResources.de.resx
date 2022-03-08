@@ -186,6 +186,9 @@
   <data name="NewsItem" xml:space="preserve">
     <value>Nachrichten bearbeiten</value>
   </data>
+  <data name="NewsItemDetails" xml:space="preserve">
+    <value>Nachrichten</value>
+  </data>
   <data name="NewsNewText" xml:space="preserve">
     <value>Neuigkeiten hinzufügen</value>
   </data>

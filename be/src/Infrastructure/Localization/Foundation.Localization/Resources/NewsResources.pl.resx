@@ -186,6 +186,9 @@
   <data name="NewsItem" xml:space="preserve">
     <value>Edycja newsa</value>
   </data>
+  <data name="NewsItemDetails" xml:space="preserve">
+    <value>News</value>
+  </data>
   <data name="NewsNewText" xml:space="preserve">
     <value>Dodaj newsa</value>
   </data>

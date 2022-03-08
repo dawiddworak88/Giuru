@@ -48,10 +48,9 @@ const NewsCatalog = (props) => {
         <section className="section news-catalog">
             {news && news.length > 0 ? (
                 <div>
-                    <div className="columns is-centered">
-                        {news.slice(0, 1).map(newsItem => {
+                    {news.slice(0, 1).map(newsItem => {
                             return (
-                                <>
+                                <div className="columns is-centered hero-news" onClick={() => navigateToNews(newsItem)}>
                                     <div className="column is-6">
                                         <figure class="image is-16by9">
                                             <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
@@ -64,10 +63,10 @@ const NewsCatalog = (props) => {
                                         <div className="news-data">{newsItem.categoryName} | {moment.utc(newsItem.createdDate).local().format("L")}</div>
                                         <h1 className="news-title">{newsItem.title}</h1>
                                     </div>
-                                </>
+                                </div>
                             )
-                        })}
-                    </div>
+                    })}
+                    
 
                     <div class="container">
                         {props.categories && props.categories.length > 0 &&

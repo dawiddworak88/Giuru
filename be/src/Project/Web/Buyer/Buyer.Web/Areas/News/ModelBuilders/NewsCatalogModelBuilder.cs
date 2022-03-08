@@ -56,7 +56,7 @@ namespace Buyer.Web.Areas.News.ModelBuilders
             {
                 viewModel.Categories = categories.Select(x => new ListItemViewModel
                 {
-                    Id = x.Id,
+                    Id = x.Id, 
                     Name = x.Name
                 });
             }
