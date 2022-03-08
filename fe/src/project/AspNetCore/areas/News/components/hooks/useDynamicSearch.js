@@ -8,7 +8,6 @@ const useDynamicSearch = (apiUrl, newsList, itemsPerPage, pageIndex) => {
     const [news, setNews] = useState(newsList ? newsList : []);
 
     useEffect(() => {
-        if (news.length <= 10) return;
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const requestOptions = {

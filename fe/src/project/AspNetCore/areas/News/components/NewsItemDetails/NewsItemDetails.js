@@ -12,7 +12,7 @@ const NewsItemDetails = (props) => {
                 <div className="columns is-centered">
                     <div className="column is-8">
                         <div className="news-details__head">
-                            <h1 className="">{props.title}</h1>
+                            <h1 className="headline-1">{props.title}</h1>
                             <p>{props.description}</p>
                         </div>
                         <figure className="image is-16by9 news-details__image">

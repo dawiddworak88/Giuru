@@ -15,7 +15,7 @@ const NewsCatalog = (props) => {
 
     const {
         news, hasMore, setNews
-    } = useDynamicSearch(props.newsApiUrl, items, 10, 1)
+    } = useDynamicSearch(props.newsApiUrl, items, 10, pageIndex)
 
     const observer = useRef()
     const lastElement = useCallback(node => {
@@ -46,9 +46,9 @@ const NewsCatalog = (props) => {
 
     return (
         <section className="section news-catalog">
-            {news && news.length > 0 ? (
+            {items && items.length > 0 ? (
                 <div>
-                    {news.slice(0, 1).map(newsItem => {
+                    {items.slice(0, 1).map(newsItem => {
                             return (
                                 <div className="columns is-centered hero-news" onClick={() => navigateToNews(newsItem)}>
                                     <div className="column is-6">
@@ -66,7 +66,6 @@ const NewsCatalog = (props) => {
                                 </div>
                             )
                     })}
-                    
 
                     <div class="container">
                         {props.categories && props.categories.length > 0 &&
@@ -81,25 +80,49 @@ const NewsCatalog = (props) => {
                         }
 
                         <div className="news-catalog__news columns is-tablet is-multiline">
-                            {news.slice(1).map((news, index) => {
-                                return (
-                                    <div className="column is-4" onClick={() => navigateToNews(news)} key={index}>
-                                        <div className="card">
-                                            <div className="card-image">
-                                                <figure className="image is-16by9">
-                                                    <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
-                                                        <ResponsiveImage imageSrc={news.thumbImageUrl} sources={news.thumbImages} />
-                                                    </LazyLoad>
-                                                </figure>
+                            {news && news.length > 0 ? (
+                                news.slice(1).map((news, index) => {
+                                    if (news.length === index + 1){
+                                        return (
+                                            <div className="column is-4" onClick={() => navigateToNews(news)} key={index} ref={lastElement}>
+                                                <div className="card">
+                                                    <div className="card-image">
+                                                        <figure className="image is-16by9">
+                                                            <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
+                                                                <ResponsiveImage imageSrc={news.thumbImageUrl} sources={news.thumbImages} />
+                                                            </LazyLoad>
+                                                        </figure>
+                                                    </div>
+                                                    <div className="media-content">
+                                                        <div className="news-data">{news.categoryName} | {moment.utc(news.createdDate).local().format("L")}</div>
+                                                        <h4 className="news-title">{news.title}</h4>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="media-content">
-                                                <div className="news-data">{news.categoryName} | {moment.utc(news.createdDate).local().format("L")}</div>
-                                                <h4 className="news-title">{news.title}</h4>
+                                        )
+                                    } else {
+                                        return (
+                                            <div className="column is-4" onClick={() => navigateToNews(news)} key={index}>
+                                                <div className="card">
+                                                    <div className="card-image">
+                                                        <figure className="image is-16by9">
+                                                            <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
+                                                                <ResponsiveImage imageSrc={news.thumbImageUrl} sources={news.thumbImages} />
+                                                            </LazyLoad>
+                                                        </figure>
+                                                    </div>
+                                                    <div className="media-content">
+                                                        <div className="news-data">{news.categoryName} | {moment.utc(news.createdDate).local().format("L")}</div>
+                                                        <h4 className="news-title">{news.title}</h4>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                )
-                            })}
+                                        )
+                                    }
+                                })
+                            ) : (
+                                <div>test</div>
+                            )}
                         </div>
                     </div>
                 </div>

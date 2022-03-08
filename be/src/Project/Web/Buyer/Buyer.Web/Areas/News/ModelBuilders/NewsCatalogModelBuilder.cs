@@ -11,6 +11,7 @@ using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -51,17 +52,28 @@ namespace Buyer.Web.Areas.News.ModelBuilders
                 NoResultsLabel = this.globalLocalizer.GetString("NoResultsLabel")
             };
 
-            var categories = await this.categoriesRepository.GetAllCategoriesAsync(componentModel.Token, componentModel.Language);
-            if (categories is not null)
+            var news = await this.newsRepository.GetNewsItemsAsync(componentModel.Token, componentModel.Language, NewsConstants.DefaultPageIndex, NewsConstants.DefaultPageSize, $"{nameof(NewsItem.CreatedDate)} desc");
+            if (news is not null)
             {
-                viewModel.Categories = categories.Select(x => new ListItemViewModel
+                var categories = new List<ListItemViewModel>();
+                foreach(var newsItem in news.Data)
                 {
-                    Id = x.Id, 
-                    Name = x.Name
-                });
-            }
+                    var existingCategory = categories.FirstOrDefault(x => x.Name == newsItem.CategoryName);
+                    if (existingCategory is null)
+                    {
+                        var category = new ListItemViewModel
+                        {
+                            Id = newsItem.CategoryId,
+                            Name = newsItem.CategoryName
+                        };
 
-            viewModel.PagedItems = await this.newsRepository.GetNewsItemsAsync(componentModel.Token, componentModel.Language, NewsConstants.DefaultPageIndex, NewsConstants.DefaultPageSize, $"{nameof(NewsItem.CreatedDate)} desc");
+                        categories.Add(category);
+                    }
+                };
+
+                viewModel.Categories = categories.OrderBy(x => x.Name);
+                viewModel.PagedItems = news;
+            }
 
             return viewModel;
         }
