@@ -1,5 +1,5 @@
 ﻿using Buyer.Web.Areas.News.DomainModels;
-using Buyer.Web.Areas.News.Repositories;
+using Buyer.Web.Areas.News.Repositories.News;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Localization;

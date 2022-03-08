@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.News.Repositories;
+using Buyer.Web.Areas.News.Repositories.News;
 using Buyer.Web.Areas.News.ViewModel;
 using Buyer.Web.Areas.Products.Repositories.Files;
 using Buyer.Web.Shared.Configurations;
@@ -12,7 +13,6 @@ using Foundation.PageContent.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.News.ModelBuilders

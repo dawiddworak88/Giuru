@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
 import { CalendarToday, Apps, PictureAsPdf, Folder, Attachment } from "@material-ui/icons";
 import LazyLoadConstants from "../../../../../../shared/constants/LazyLoadConstants";
@@ -92,6 +93,16 @@ const NewsItemDetails = (props) => {
             </div>
         </div>
     )
+}
+
+NewsItemDetails.propTypes = {
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    heroImages: PropTypes.array,
+    heroImageUrl: PropTypes.string,
+    categoryName: PropTypes.string,
+    files: PropTypes.array,
+    content: PropTypes.string
 }
 
 export default NewsItemDetails;

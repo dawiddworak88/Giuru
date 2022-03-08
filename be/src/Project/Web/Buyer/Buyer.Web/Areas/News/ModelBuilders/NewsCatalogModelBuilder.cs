@@ -1,7 +1,7 @@
 ﻿using Buyer.Web.Areas.News.Definitions;
 using Buyer.Web.Areas.News.DomainModels;
-using Buyer.Web.Areas.News.Repositories;
 using Buyer.Web.Areas.News.Repositories.Categories;
+using Buyer.Web.Areas.News.Repositories.News;
 using Buyer.Web.Areas.News.ViewModel;
 using Buyer.Web.Shared.Configurations;
 using Foundation.Extensions.ModelBuilders;

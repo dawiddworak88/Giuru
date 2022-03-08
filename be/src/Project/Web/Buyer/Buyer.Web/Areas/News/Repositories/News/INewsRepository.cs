@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.News.Repositories
+namespace Buyer.Web.Areas.News.Repositories.News
 {
     public interface INewsRepository
     {

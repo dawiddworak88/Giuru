@@ -18,7 +18,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.News.Repositories
+namespace Buyer.Web.Areas.News.Repositories.News
 {
     public class NewsRepository : INewsRepository
     {
