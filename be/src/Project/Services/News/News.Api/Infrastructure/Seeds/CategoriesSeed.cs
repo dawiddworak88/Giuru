@@ -15,10 +15,10 @@ namespace News.Api.Infrastructure.Seeds
             SeedCategory(context, NewsConstants.Categories.EventsCategory, null, "Events", "Wydarzenia", "Veranstaltungen");
             SeedCategory(context, NewsConstants.Categories.BusinessCategory, null, "Business", "Biznes", "Unternehmen");
 
-            SeedCategory(context, NewsConstants.Categories.CooperationCategory, NewsConstants.Categories.BusinessCategory, "B2B", "B2B", "B2B");
-            SeedCategory(context, NewsConstants.Categories.FairCategory, NewsConstants.Categories.EventsCategory, "Fairs", "Targi", "Messen");
-            SeedCategory(context, NewsConstants.Categories.ExhibitionCategory, NewsConstants.Categories.EventsCategory, "Exhibition", "Wystawa", "Auslage");
-            SeedCategory(context, NewsConstants.Categories.SalesCategory, NewsConstants.Categories.InformationCategory, "Sales", "Sprzedaż", "Verkauf");
+            SeedCategory(context, NewsConstants.Categories.CooperationCategory, null, "B2B", "B2B", "B2B");
+            SeedCategory(context, NewsConstants.Categories.FairCategory, null, "Fairs", "Targi", "Messen");
+            SeedCategory(context, NewsConstants.Categories.ExhibitionCategory, null, "Exhibition", "Wystawa", "Auslage");
+            SeedCategory(context, NewsConstants.Categories.SalesCategory, null, "Sales", "Sprzedaż", "Verkauf");
         }
 
         private static void SeedCategory(NewsContext context, Guid id, Guid? parentCategoryId, string englishName, string polishName, string germanName)

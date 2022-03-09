@@ -8,6 +8,7 @@ using Microsoft.Extensions.Localization;
 using News.Api.Infrastructure;
 using News.Api.Infrastructure.Entities.Categories;
 using News.Api.ServicesModels.Categories;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,19 +77,25 @@ namespace News.Api.Services.Categories
 
         public async Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model)
         {
-            var category = from c in this.newsContext.Categories
+            var existingCategory = from c in this.newsContext.Categories
                            join t in this.newsContext.CategoryTranslations on c.Id equals t.CategoryId
                            where t.Language == model.Language && c.Id == model.Id && c.IsActive
                            select new CategoryServiceModel
                            {
                                Id = c.Id,
                                Name = t.Name,
-                               ParentCategoryId= c.ParentCategoryId,
+                               ParentCategoryId = c.ParentCategoryId,
                                LastModifiedDate = c.LastModifiedDate,
                                CreatedDate = c.CreatedDate
                            };
 
-            return await category.FirstOrDefaultAsync();
+            var category = existingCategory.FirstOrDefault();
+            if (category.ParentCategoryId.HasValue)
+            {
+                category.ParentCategoryName = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.CategoryId == category.ParentCategoryId).Name;
+            }
+
+            return category;
         }
 
         public async Task<PagedResults<IEnumerable<CategoryServiceModel>>> GetAsync(GetCategoriesServiceModel model)
@@ -112,6 +119,11 @@ namespace News.Api.Services.Categories
 
             categories = categories.ApplySort(model.OrderBy);
 
+            var pagedResults = new PagedResults<IEnumerable<CategoryServiceModel>>(categories.Count(), model.ItemsPerPage)
+            {
+                Data = categories
+            };
+
             return categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage), model.PageIndex);
         }
 
@@ -124,7 +136,7 @@ namespace News.Api.Services.Categories
             }
 
             var parentCategory = await this.newsContext.Categories.FirstOrDefaultAsync(x => x.Id == model.ParentCategoryId && x.IsActive);
-            if (parentCategory == null)
+            if (parentCategory is  null)
             {
                 throw new CustomException(this.newsLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
@@ -132,10 +144,11 @@ namespace News.Api.Services.Categories
             category.ParentCategoryId = model.ParentCategoryId;
             category.LastModifiedDate = DateTime.UtcNow;
 
-            var categoryTranslation = await this.newsContext.CategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == model.Id && x.Language == model.Language && x.IsActive);
-            if (categoryTranslation != null)
+            var categoryTranslation = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.CategoryId == model.Id && x.Language == model.Language && x.IsActive);
+            if (categoryTranslation is not null)
             {
                 categoryTranslation.Name = model.Name;
+                categoryTranslation.LastModifiedDate = DateTime.UtcNow;
             }
             else
             {
@@ -147,8 +160,6 @@ namespace News.Api.Services.Categories
 
                 this.newsContext.CategoryTranslations.Add(newCategoryTranslation.FillCommonProperties());
             }
-
-            categoryTranslation.LastModifiedDate = DateTime.UtcNow;
 
             await this.newsContext.SaveChangesAsync();
 

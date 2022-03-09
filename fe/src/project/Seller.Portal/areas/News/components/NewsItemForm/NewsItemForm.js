@@ -24,9 +24,9 @@ const NewsItemForm = (props) => {
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         categoryId: { value: props.categoryId ? props.categoryId : null, error: ""},
-        title: { value: props.newsTitle ? props.newsTitle : "", error: "" },
-        heroImage: { value: props.heroImages ? props.heroImages : [], error: "" },
-        thumbImage: { value: props.thumbImages ? props.thumbImages : [], error: "" },
+        title: { value: props.newsTitle ? props.newsTitleclea : "", error: "" },
+        previewImage: { value: props.previewImages ? props.previewImages : null, error: "" },
+        thumbImage: { value: props.thumbnailImages ? props.thumbnailImages : [], error: "" },
         description: { value: props.description ? props.description : null, error: "" },
         content: { value: props.content ? props.content : "", error: "" },
         files: { value: props.files ? props.files : [], error: "" },
@@ -48,8 +48,8 @@ const NewsItemForm = (props) => {
 
         const requestData = {
             id: state.id,
-            thumbImageId: state.thumbImage[0].id,
-            heroImageId: state.heroImage[0].id,
+            thumbnailImageId: state.thumbImage[0].id,
+            previewImageId: state.previewImage ? state.previewImage[0].id : null,
             categoryId: state.categoryId,
             title: state.title,
             description: state.description,
@@ -152,7 +152,7 @@ const NewsItemForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
     
-    const { title, heroImage, thumbImage, description, isPublished, files, categoryId } = values;
+    const { title, previewImage, thumbImage, description, isPublished, files, categoryId } = values;
     return (
         <section className="section section-small-padding">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -205,7 +205,7 @@ const NewsItemForm = (props) => {
                         </div>
                         <div className="field">
                             <MediaCloud
-                                id="thumbImage"
+                                id="thumbnImage"
                                 name="thumbImage"
                                 label={props.thumbImageLabel}
                                 accept=".png, .jpg, .webp"
@@ -220,8 +220,8 @@ const NewsItemForm = (props) => {
                         </div>
                         <div className="field">
                             <MediaCloud
-                                id="heroImage"
-                                name="heroImage"
+                                id="previewImage"
+                                name="previewImage"
                                 label={props.heroImageLabel}
                                 accept=".png, .jpg, .webp"
                                 multiple={false}
@@ -229,7 +229,7 @@ const NewsItemForm = (props) => {
                                 deleteLabel={props.deleteLabel}
                                 dropFilesLabel={props.dropFilesLabel}
                                 dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
-                                files={heroImage}
+                                files={previewImage}
                                 setFieldValue={setFieldValue}
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
@@ -299,7 +299,7 @@ const NewsItemForm = (props) => {
                                     type="submit" 
                                     variant="contained" 
                                     color="primary"
-                                    disabled={state.isLoading || disable || !heroImage || !thumbImage || !convertedToRaw}
+                                    disabled={state.isLoading || disable || !thumbImage || !convertedToRaw}
                                 >
                                     {props.saveText}
                                 </Button>

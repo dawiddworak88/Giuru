@@ -8,7 +8,7 @@ namespace Seller.Web.Areas.News.ViewModel
     public class NewsItemFormViewModel
     {
         public Guid? Id { get; set; }
-        public Guid? HeroImageId { get; set; }
+        public Guid? PreviewImageId { get; set; }
         public Guid? CategoryId { get; set; }
         public string NewsTitle { get; set; }
         public string Title { get; set; }
@@ -36,8 +36,8 @@ namespace Seller.Web.Areas.News.ViewModel
         public string SaveMediaUrl { get; set; }
         public string SaveText { get; set; }
         public bool IsPublished { get; set; }
-        public IEnumerable<FileViewModel> ThumbImages { get; set; }
-        public IEnumerable<FileViewModel> HeroImages { get; set; }
+        public IEnumerable<FileViewModel> ThumbnailImages { get; set; }
+        public IEnumerable<FileViewModel> PreviewImages { get; set; }
         public IEnumerable<FileViewModel> Files { get; set; }
         public IEnumerable<ListItemViewModel> Categories { get; set; }
     }

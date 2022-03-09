@@ -7,8 +7,8 @@ namespace Buyer.Web.Areas.News.DomainModels
     public class NewsItem
     {
         public Guid Id { get; set; }
-        public Guid ThumbImageId { get; set; }
-        public Guid HeroImageId { get; set; }
+        public Guid ThumbnailImageId { get; set; }
+        public Guid? PreviewImageId { get; set; }
         public Guid CategoryId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }

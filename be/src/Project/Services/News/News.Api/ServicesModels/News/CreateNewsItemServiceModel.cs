@@ -11,8 +11,8 @@ namespace News.Api.ServicesModels.News
         public string Content { get; set; }
         public bool IsPublished { get; set; }
         public Guid? CategoryId { get; set; }
-        public Guid? HeroImageId { get; set; }
-        public Guid? ThumbImageId { get; set; }
+        public Guid? PreviewImageId { get; set; }
+        public Guid? ThumbnailImageId { get; set; }
         public IEnumerable<Guid> Files { get; set; }
     }
 }

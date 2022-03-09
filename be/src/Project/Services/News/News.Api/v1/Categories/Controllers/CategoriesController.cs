@@ -12,6 +12,7 @@ using News.Api.ServicesModels.Categories;
 using News.Api.v1.Categories.RequestModels;
 using News.Api.v1.Categories.ResponseModels;
 using News.Api.Validators.Categories;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -75,6 +76,7 @@ namespace News.Api.v1.Categories.Controllers
                             Id = category.Id,
                             Name = category.Name,
                             ParentCategoryId = category.ParentCategoryId,
+                            ParentCategoryName = category.ParentCategoryName,
                             LastModifiedDate = category.LastModifiedDate,
                             CreatedDate = category.CreatedDate
                         };
@@ -112,6 +114,7 @@ namespace News.Api.v1.Categories.Controllers
                             Id = category.Id,
                             Name = category.Name,
                             ParentCategoryId = category.ParentCategoryId,
+                            ParentCategoryName = category.ParentCategoryName,
                             LastModifiedDate = category.LastModifiedDate,
                             CreatedDate = category.CreatedDate
                         };
@@ -216,6 +219,7 @@ namespace News.Api.v1.Categories.Controllers
                         Id = category.Id,
                         Name = category.Name,
                         ParentCategoryId = category.ParentCategoryId,
+                        ParentCategoryName = category.ParentCategoryName,
                         LastModifiedDate = category.LastModifiedDate,
                         CreatedDate = category.CreatedDate
                     };

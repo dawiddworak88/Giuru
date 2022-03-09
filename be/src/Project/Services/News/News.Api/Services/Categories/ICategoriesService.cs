@@ -7,7 +7,6 @@ namespace News.Api.Services.Categories
 {
     public interface ICategoriesService
     {
-
         Task<CategoryServiceModel> CreateAsync(CreateCategoryServiceModel model);
         Task<CategoryServiceModel> UpdateAsync(UpdateCategoryServiceModel model);
         Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model);

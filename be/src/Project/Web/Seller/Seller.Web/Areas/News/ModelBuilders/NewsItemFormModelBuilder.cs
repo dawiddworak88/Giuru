@@ -115,11 +115,11 @@ namespace Seller.Web.Areas.News.ModelBuilders
                         viewModel.Files = files;
                     }
 
-                    var thumbImage = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, existingNews.ThumbImageId);
+                    var thumbImage = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, existingNews.ThumbnailImageId);
                     if (thumbImage is not null)
                     {
 
-                        viewModel.ThumbImages = new List<FileViewModel>
+                        viewModel.ThumbnailImages = new List<FileViewModel>
                         {
                             new FileViewModel
                             {
@@ -134,21 +134,24 @@ namespace Seller.Web.Areas.News.ModelBuilders
 
                     }
 
-                    var heroImage = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, existingNews.HeroImageId);
-                    if (heroImage is not null)
+                    if (existingNews.PreviewImageId.HasValue)
                     {
-                        viewModel.HeroImages = new List<FileViewModel>
+                        var previewImage = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, existingNews.PreviewImageId.Value);
+                        if (previewImage is not null)
                         {
-                            new FileViewModel
+                            viewModel.PreviewImages = new List<FileViewModel>
                             {
-                                Id = heroImage.Id,
-                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, heroImage.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
-                                Name = heroImage.Name,
-                                MimeType = heroImage.MimeType,
-                                Filename = heroImage.Filename,
-                                Extension = heroImage.Extension
-                            }
-                        };
+                                new FileViewModel
+                                {
+                                    Id = previewImage.Id,
+                                    Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, previewImage.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
+                                    Name = previewImage.Name,
+                                    MimeType = previewImage.MimeType,
+                                    Filename = previewImage.Filename,
+                                    Extension = previewImage.Extension
+                                }
+                            };
+                        }
                     }
 
                     viewModel.Id = componentModel.Id;
@@ -157,7 +160,6 @@ namespace Seller.Web.Areas.News.ModelBuilders
                     viewModel.Content = existingNews.Content;
                     viewModel.Description = existingNews.Description;
                     viewModel.IsPublished = existingNews.IsPublished;
-                    
                 }
             }
 

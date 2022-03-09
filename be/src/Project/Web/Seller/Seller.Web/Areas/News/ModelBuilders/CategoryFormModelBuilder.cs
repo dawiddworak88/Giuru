@@ -59,6 +59,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
                 var category = await this.categoriesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
                 if (category is not null)
                 {
+                    viewModel.Id = category.Id;
                     viewModel.Name = category.Name;
                     viewModel.ParentCategoryId = category.ParentCategoryId;
                 }

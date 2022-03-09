@@ -6,7 +6,6 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Seller.Web.Areas.News.ApiRequestModels;
 using Seller.Web.Areas.News.DomainModels;
 using Seller.Web.Shared.Configurations;
@@ -89,15 +88,15 @@ namespace Seller.Web.Areas.News.Repositories.News
         }
 
         public async Task<Guid> SaveAsync(
-            string token, string language, Guid? id, Guid? thumbImageId, Guid? categoryId, Guid? heroImageId, 
+            string token, string language, Guid? id, Guid? thumbnailImageId, Guid? categoryId, Guid? previewImageId, 
             string title, string description,  string content, bool isPublished, IEnumerable<Guid> files)
         {
             var requestModel = new NewsApiRequestModel
             {
                 Id = id,
-                ThumbImageId = thumbImageId,
+                ThumbnailImageId = thumbnailImageId,
                 CategoryId = categoryId,
-                HeroImageId = heroImageId,
+                PreviewImageId = previewImageId,
                 Title = title,
                 Description = description,
                 Content = content,

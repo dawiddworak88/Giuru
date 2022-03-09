@@ -12,7 +12,7 @@ namespace Seller.Web.Areas.News.Repositories.News
         Task<NewsItem> GetAsync(string token, string language, Guid? id);
         Task DeleteAsync(string token, string language, Guid? id);
         Task<Guid> SaveAsync(
-            string token, string language, Guid? id, Guid? thumbImageId, Guid? categoryId, Guid? heroImageId, 
+            string token, string language, Guid? id, Guid? thumbnailImageId, Guid? categoryId, Guid? previewImageId, 
             string title, string description, string content, bool isPublished, IEnumerable<Guid> files);
     }
 }

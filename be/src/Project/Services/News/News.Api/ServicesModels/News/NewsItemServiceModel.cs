@@ -9,8 +9,8 @@ namespace News.Api.ServicesModels.News
         public Guid? Id { get; set; }
         public Guid? CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public Guid? HeroImageId { get; set; }
-        public Guid? ThumbImageId { get; set; }
+        public Guid? PreviewImageId { get; set; }
+        public Guid? ThumbnailImageId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Content { get; set; }

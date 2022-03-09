@@ -26,7 +26,7 @@ namespace News.Api.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "NewsItemFIles",
+                name: "NewsItemFiles",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -40,7 +40,7 @@ namespace News.Api.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_NewsItemFIles", x => x.Id);
+                    table.PrimaryKey("PK_NewsItemFiles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -48,8 +48,8 @@ namespace News.Api.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ThumbImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    HeroImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ThumbnailImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PreviewImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrganisationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsPublished = table.Column<bool>(type: "bit", nullable: false),
@@ -130,7 +130,7 @@ namespace News.Api.Infrastructure.Migrations
                 name: "CategoryTranslations");
 
             migrationBuilder.DropTable(
-                name: "NewsItemFIles");
+                name: "NewsItemFiles");
 
             migrationBuilder.DropTable(
                 name: "NewsItemTranslations");

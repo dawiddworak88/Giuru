@@ -39,8 +39,8 @@ namespace News.Api.Services.News
 
             var newsItem = new NewsItem
             {
-                ThumbImageId = model.ThumbImageId.Value,
-                HeroImageId = model.HeroImageId.Value,
+                ThumbnailImageId = model.ThumbnailImageId.Value,
+                PreviewImageId = model.PreviewImageId,
                 OrganisationId = model.OrganisationId.Value,
                 CategoryId = model.CategoryId.Value,
                 IsPublished = model.IsPublished
@@ -67,7 +67,7 @@ namespace News.Api.Services.News
                     MediaId = fileId
                 };
 
-                await this.newsContext.NewsItemFIles.AddAsync(file.FillCommonProperties());
+                await this.newsContext.NewsItemFiles.AddAsync(file.FillCommonProperties());
             }
 
             await this.newsContext.SaveChangesAsync();
@@ -97,8 +97,8 @@ namespace News.Api.Services.News
                                select new NewsItemServiceModel
                                {
                                    Id = n.Id,
-                                   ThumbImageId = n.ThumbImageId,
-                                   HeroImageId = n.HeroImageId,
+                                   ThumbnailImageId = n.ThumbnailImageId,
+                                   PreviewImageId = n.PreviewImageId,
                                    CategoryId = n.CategoryId,
                                    CategoryName = c.Name,
                                    Title = nt.Title,
@@ -122,8 +122,8 @@ namespace News.Api.Services.News
                 var news = new NewsItemServiceModel
                 {
                     Id = newsItem.Id,
-                    ThumbImageId = newsItem.ThumbImageId,
-                    HeroImageId = newsItem.HeroImageId,
+                    ThumbnailImageId = newsItem.ThumbnailImageId,
+                    PreviewImageId = newsItem.PreviewImageId,
                     CategoryId = newsItem.CategoryId,
                     CategoryName = newsItem.CategoryName,
                     Title = newsItem.Title,
@@ -134,7 +134,7 @@ namespace News.Api.Services.News
                     CreatedDate = newsItem.CreatedDate
                 };
 
-                var files = this.newsContext.NewsItemFIles.Where(x => x.NewsItemId == newsItem.Id);
+                var files = this.newsContext.NewsItemFiles.Where(x => x.NewsItemId == newsItem.Id);
                 if (files is not null)
                 {
                     news.Files = files.Select(x => x.MediaId);
@@ -158,8 +158,8 @@ namespace News.Api.Services.News
                                select new NewsItemServiceModel
                                {
                                    Id = n.Id,
-                                   ThumbImageId = n.ThumbImageId,
-                                   HeroImageId = n.HeroImageId,
+                                   ThumbnailImageId = n.ThumbnailImageId,
+                                   PreviewImageId = n.PreviewImageId,
                                    CategoryId = n.CategoryId,
                                    CategoryName = c.Name,
                                    Title = nt.Title,
@@ -173,7 +173,7 @@ namespace News.Api.Services.News
             var news = existingNews.FirstOrDefault();
             if (news is not null)
             {
-                var files = this.newsContext.NewsItemFIles.Where(x => x.NewsItemId == model.Id);
+                var files = this.newsContext.NewsItemFiles.Where(x => x.NewsItemId == model.Id);
                 if (files is not null)
                 {
                     news.Files = files.Select(x => x.MediaId);
@@ -200,8 +200,8 @@ namespace News.Api.Services.News
                 throw new CustomException(this.newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NotFound);
             }
 
-            news.ThumbImageId = model.ThumbImageId.Value;
-            news.HeroImageId = model.HeroImageId.Value;
+            news.ThumbnailImageId = model.ThumbnailImageId.Value;
+            news.PreviewImageId = model.PreviewImageId;
             news.CategoryId = category.Id;
             news.IsPublished = model.IsPublished;
             news.LastModifiedDate = DateTime.UtcNow;
@@ -227,11 +227,11 @@ namespace News.Api.Services.News
                 await this.newsContext.NewsItemTranslations.AddAsync(newNewsTranslation.FillCommonProperties());
             }
 
-            var newsFiles = this.newsContext.NewsItemFIles.Where(x => x.NewsItemId == news.Id);
+            var newsFiles = this.newsContext.NewsItemFiles.Where(x => x.NewsItemId == news.Id);
 
             foreach(var newsFile in newsFiles.OrEmptyIfNull())
             {
-                this.newsContext.NewsItemFIles.Remove(newsFile);
+                this.newsContext.NewsItemFiles.Remove(newsFile);
             }
 
             foreach(var fileId in model.Files.OrEmptyIfNull())
@@ -242,7 +242,7 @@ namespace News.Api.Services.News
                     NewsItemId = news.Id
                 };
 
-                await this.newsContext.NewsItemFIles.AddAsync(file.FillCommonProperties());
+                await this.newsContext.NewsItemFiles.AddAsync(file.FillCommonProperties());
             }
 
             await this.newsContext.SaveChangesAsync();

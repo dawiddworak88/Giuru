@@ -48,7 +48,7 @@ namespace Seller.Web.Areas.News.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             var news = await this.newsRepository.SaveAsync(
-                token, language, model.Id, model.ThumbImageId, model.CategoryId, model.HeroImageId, model.Title, 
+                token, language, model.Id, model.ThumbnailImageId, model.CategoryId, model.PreviewImageId, model.Title, 
                 model.Description, model.Content, model.IsPublished, model.Files?.Select(x => x.Id)); 
 
             return this.StatusCode((int)HttpStatusCode.OK, new { news, Message = this.newsLocalizer.GetString("NewsSavedSuccessfully").Value });

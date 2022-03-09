@@ -12,10 +12,10 @@ namespace Buyer.Web.Areas.News.ViewModel
         public string Title { get; set; }
         public string Content { get; set; }
         public string Description { get; set; }
-        public string HeroImageUrl { get; set; }
+        public string PreviewImageUrl { get; set; }
         public string CategoryName { get; set; }
         public DateTime CreatedDate { get; set; }
-        public IEnumerable<SourceViewModel> HeroImages { get; set; }
+        public IEnumerable<SourceViewModel> PreviewImages { get; set; }
         public IEnumerable<FileViewModel> Files { get; set; }
     }
 }

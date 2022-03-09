@@ -100,9 +100,6 @@ namespace News.Api.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("HeroImageId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -115,12 +112,15 @@ namespace News.Api.Infrastructure.Migrations
                     b.Property<Guid>("OrganisationId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("PreviewImageId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid>("ThumbImageId")
+                    b.Property<Guid>("ThumbnailImageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -159,7 +159,7 @@ namespace News.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("NewsItemFIles");
+                    b.ToTable("NewsItemFiles");
                 });
 
             modelBuilder.Entity("News.Api.Infrastructure.Entities.News.NewsItemTranslation", b =>

@@ -60,8 +60,8 @@ namespace News.Api.v1.News.Controllers
                     Content = request.Content,
                     IsPublished = request.IsPublished,
                     CategoryId = request.CategoryId,
-                    HeroImageId = request.HeroImageId,
-                    ThumbImageId = request.ThumbImageId,
+                    PreviewImageId = request.PreviewImageId,
+                    ThumbnailImageId= request.ThumbnailImageId,
                     Files = request.Files,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
@@ -88,8 +88,8 @@ namespace News.Api.v1.News.Controllers
                     Content = request.Content,
                     IsPublished = request.IsPublished,
                     CategoryId = request.CategoryId,
-                    ThumbImageId = request.ThumbImageId,
-                    HeroImageId = request.HeroImageId,
+                    ThumbnailImageId = request.ThumbnailImageId,
+                    PreviewImageId = request.PreviewImageId,
                     Files = request.Files,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
@@ -149,8 +149,8 @@ namespace News.Api.v1.News.Controllers
                         Data = newsItems.Data.OrEmptyIfNull().Select(x => new NewsItemResponseModel
                         {
                             Id = x.Id,
-                            ThumbImageId = x.ThumbImageId,
-                            HeroImageId = x.HeroImageId,
+                            ThumbnailImageId = x.ThumbnailImageId,
+                            PreviewImageId = x.PreviewImageId,
                             CategoryId = x.CategoryId,
                             CategoryName = x.CategoryName,
                             Title = x.Title,
@@ -204,8 +204,8 @@ namespace News.Api.v1.News.Controllers
                     var response = new NewsItemResponseModel
                     {
                         Id = newsItem.Id,
-                        ThumbImageId = newsItem.ThumbImageId,
-                        HeroImageId = newsItem.HeroImageId,
+                        ThumbnailImageId = newsItem.ThumbnailImageId,
+                        PreviewImageId = newsItem.PreviewImageId,
                         CategoryId = newsItem.CategoryId,
                         CategoryName = newsItem.CategoryName,
                         Title = newsItem.Title,

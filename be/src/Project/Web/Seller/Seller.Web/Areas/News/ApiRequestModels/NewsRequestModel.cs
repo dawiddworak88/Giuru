@@ -6,8 +6,8 @@ namespace Seller.Web.Areas.News.ApiRequestModels
 {
     public class NewsRequestModel : RequestModelBase
     {
-        public Guid? ThumbImageId { get; set; }
-        public Guid? HeroImageId { get; set; }
+        public Guid? ThumbnailImageId { get; set; }
+        public Guid? PreviewImageId { get; set; }
         public Guid? CategoryId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
