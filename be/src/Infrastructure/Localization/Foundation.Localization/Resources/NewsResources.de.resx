@@ -159,9 +159,6 @@
   <data name="ImagesLabel" xml:space="preserve">
     <value>Bilder</value>
   </data>
-  <data name="IsNewLabel" xml:space="preserve">
-    <value>Neue News</value>
-  </data>
   <data name="IsPublishedLabel" xml:space="preserve">
     <value>Veröffentlicht</value>
   </data>
@@ -175,7 +172,7 @@
     <value>Zurück zu den Kategorien</value>
   </data>
   <data name="NavigateToNewsLabel" xml:space="preserve">
-    <value>Zurück zu Neuigkeiten</value>
+    <value>Zurück zu News</value>
   </data>
   <data name="News" xml:space="preserve">
     <value>News</value>

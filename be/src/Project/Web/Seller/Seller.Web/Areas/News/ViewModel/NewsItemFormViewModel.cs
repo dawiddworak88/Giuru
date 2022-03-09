@@ -26,7 +26,6 @@ namespace Seller.Web.Areas.News.ViewModel
         public string HeroImageLabel { get; set; }
         public string DescriptionLabel { get; set; }
         public string NewsUrl { get; set; }
-        public string IsNewLabel { get; set; }
         public string FilesLabel { get; set; }
         public string ImagesLabel { get; set; }
         public string CategoryLabel { get; set; }

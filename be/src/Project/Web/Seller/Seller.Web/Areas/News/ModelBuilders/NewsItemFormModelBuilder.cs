@@ -70,7 +70,6 @@ namespace Seller.Web.Areas.News.ModelBuilders
                 HeroImageLabel = this.newsLocalizer.GetString("HeroImageLabel"),
                 TitleLabel = this.newsLocalizer.GetString("TitleLabel"),
                 DescriptionLabel = this.newsLocalizer.GetString("DescriptionLabel"),
-                IsNewLabel = this.newsLocalizer.GetString("IsNewLabel"),
                 IsPublishedLabel = this.newsLocalizer.GetString("IsPublishedLabel"),
                 ImagesLabel = this.newsLocalizer.GetString("ImagesLabel"),
                 FilesLabel = this.newsLocalizer.GetString("FilesLabel"),

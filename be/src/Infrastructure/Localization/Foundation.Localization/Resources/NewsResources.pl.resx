@@ -130,7 +130,7 @@
     <value>Kategoria została pomyślnie usunięta</value>
   </data>
   <data name="CategoryDeleteNewsConflict" xml:space="preserve">
-    <value>Usuń pierw newsa przypisanego do kategorii</value>
+    <value>Usuń newsy przypisane do tej kategorii.</value>
   </data>
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Nie odnaleziono kategorii</value>
@@ -158,9 +158,6 @@
   </data>
   <data name="ImagesLabel" xml:space="preserve">
     <value>Zdjęcia</value>
-  </data>
-  <data name="IsNewLabel" xml:space="preserve">
-    <value>Nowość</value>
   </data>
   <data name="IsPublishedLabel" xml:space="preserve">
     <value>Opublikowane</value>
