@@ -7,13 +7,13 @@ import useForm from "../../../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
-import { EditorState, convertToRaw, ContentState, convertFromHTML} from 'draft-js';
+import { EditorState, convertToRaw, convertFromRaw} from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
-import draftToHtml from 'draftjs-to-html';
 import { 
     TextField, Select, FormControl, FormControlLabel, Switch, 
     InputLabel, MenuItem, Button, CircularProgress, FormHelperText
 } from "@material-ui/core";
+import {draftToMarkdown, markdownToDraft} from 'markdown-draft-js';
 
 const NewsItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -24,7 +24,7 @@ const NewsItemForm = (props) => {
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         categoryId: { value: props.categoryId ? props.categoryId : null, error: ""},
-        title: { value: props.newsTitle ? props.newsTitleclea : "", error: "" },
+        title: { value: props.newsTitle ? props.newsTitle : "", error: "" },
         previewImage: { value: props.previewImages ? props.previewImages : null, error: "" },
         thumbImage: { value: props.thumbnailImages ? props.thumbnailImages : [], error: "" },
         description: { value: props.description ? props.description : null, error: "" },
@@ -36,9 +36,7 @@ const NewsItemForm = (props) => {
     useEffect(() => {
         if (props.content){
             setEditorState(EditorState.createWithContent(
-                ContentState.createFromBlockArray(
-                    convertFromHTML(props.content)
-                )
+                convertFromRaw(markdownToDraft(props.content))
             ))
         }
     }, [])
@@ -107,8 +105,8 @@ const NewsItemForm = (props) => {
     const handleEditorChange = (state) => {
         setEditorState(state);
 
-        const converted = draftToHtml(convertToRaw(state.getCurrentContent()))
-        setConvertedToRaw(converted);
+        const convertedToMarkdown = draftToMarkdown(convertToRaw(state.getCurrentContent()));
+        setConvertedToRaw(convertedToMarkdown);
     }
 
     const uploadCallback = (file) => {
