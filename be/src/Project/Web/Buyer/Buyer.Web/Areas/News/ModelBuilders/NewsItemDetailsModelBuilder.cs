@@ -7,10 +7,12 @@ using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Buyer.Web.Shared.ViewModels.Files;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Extensions.Services.MediaServices;
+using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -25,6 +27,7 @@ namespace Buyer.Web.Areas.News.ModelBuilders
         private readonly ICdnService cdnService;
         private readonly IMediaHelperService mediaService;
         private readonly IMediaItemsRepository mediaRepository;
+        private readonly IStringLocalizer<NewsResources> newsLocalizer;
 
         public NewsItemDetailsModelBuilder(
             IOptions<AppSettings> options,
@@ -32,6 +35,7 @@ namespace Buyer.Web.Areas.News.ModelBuilders
             ICdnService cdnService,
             IMediaHelperService mediaService,
             IMediaItemsRepository mediaRepository,
+            IStringLocalizer<NewsResources> newsLocalizer,
             LinkGenerator linkGenerator)
         {
             this.options = options;
@@ -40,13 +44,14 @@ namespace Buyer.Web.Areas.News.ModelBuilders
             this.cdnService = cdnService;
             this.mediaService = mediaService;
             this.mediaRepository = mediaRepository;
+            this.newsLocalizer = newsLocalizer;
         }
 
         public async Task<NewsItemDetailsViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new NewsItemDetailsViewModel
             {
-
+                FilesLabel = this.newsLocalizer.GetString("FilesLabel")
             };
 
             var existingNews = await this.newsRepository.GetNewsItemAsync(componentModel.Token, componentModel.Language, componentModel.Id);
@@ -58,14 +63,18 @@ namespace Buyer.Web.Areas.News.ModelBuilders
                 viewModel.Description = existingNews.Description;
                 viewModel.CreatedDate = existingNews.CreatedDate;
                 viewModel.CategoryName = existingNews.CategoryName;
-                viewModel.PreviewImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, existingNews.PreviewImageId.Value, 1024, 1024, true, MediaConstants.WebpExtension));
-                viewModel.PreviewImages = new List<SourceViewModel>
+                
+                if (existingNews.PreviewImageId.HasValue)
                 {
-                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, existingNews.PreviewImageId.Value, 1024, 1024, true, MediaConstants.WebpExtension)) },
-                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, existingNews.PreviewImageId.Value, 352, 352, true,MediaConstants.WebpExtension)) },
-                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, existingNews.PreviewImageId.Value, 608, 608, true, MediaConstants.WebpExtension)) },
-                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, existingNews.PreviewImageId.Value, 768, 768, true, MediaConstants.WebpExtension)) }
-                };
+                    viewModel.PreviewImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, existingNews.PreviewImageId.Value, 1024, 1024, true, MediaConstants.WebpExtension));
+                    viewModel.PreviewImages = new List<SourceViewModel>
+                    {
+                        new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, existingNews.PreviewImageId.Value, 1024, 1024, true, MediaConstants.WebpExtension)) },
+                        new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, existingNews.PreviewImageId.Value, 352, 352, true,MediaConstants.WebpExtension)) },
+                        new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, existingNews.PreviewImageId.Value, 608, 608, true, MediaConstants.WebpExtension)) },
+                        new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, existingNews.PreviewImageId.Value, 768, 768, true, MediaConstants.WebpExtension)) }
+                    };
+                }
 
                 if (existingNews.Files is not null)
                 {

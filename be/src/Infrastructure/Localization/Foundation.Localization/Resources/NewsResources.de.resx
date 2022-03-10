@@ -187,7 +187,7 @@
     <value>News</value>
   </data>
   <data name="NewsNewText" xml:space="preserve">
-    <value>Neuigkeiten hinzufügen</value>
+    <value>News hinzufügen</value>
   </data>
   <data name="NewsNotFound" xml:space="preserve">
     <value>News nicht gefunden</value>

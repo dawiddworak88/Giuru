@@ -50,9 +50,9 @@ const NewsCatalog = (props) => {
                 <div>
                     {items.slice(0, 1).map(newsItem => {
                             return (
-                                <div className="columns is-centered hero-news" onClick={() => navigateToNews(newsItem)}>
+                                <div className="columns is-centered hero-news" onClick={() => navigateToNews(newsItem)} key={newsItem.id}>
                                     <div className="column is-6">
-                                        <figure class="image is-16by9">
+                                        <figure className="image is-16by9">
                                             <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
                                                 <ResponsiveImage imageSrc={newsItem.thumbImageUrl} sources={newsItem.thumbImages} />
                                             </LazyLoad>
@@ -67,7 +67,7 @@ const NewsCatalog = (props) => {
                             )
                     })}
 
-                    <div class="container">
+                    <div className="container">
                         {props.categories && props.categories.length > 0 &&
                             <div className="news-catalog__categories">
                                 <div className="category-tag" onClick={() => handleCategory(null)}>{props.allCategoryLabel}</div>

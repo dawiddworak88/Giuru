@@ -4,7 +4,7 @@ import { resetServerContext } from 'react-beautiful-dnd';
 import { ServerStyleSheets } from "@material-ui/core/styles";
 
 // AspNetCore
-import NewsItemDetails from "../../src/project/AspNetCore/areas/News/components/NewsItemDetails/NewsItemDetails";
+import NewsItemDetails from "../../src/project/AspNetCore/areas/News/pages/NewsItemPage/NewsItemPage";
 import NewsBuyerPage from "../../src/project/AspNetCore/areas/News/pages/NewsPage/NewsPage";
 import NewOrderPage from "../../src/project/AspNetCore/areas/Orders/pages/NewOrder/NewOrderPage";
 import ListOrdersPage from "../../src/project/AspNetCore/areas/Orders/pages/ListOrders/ListOrdersPage";

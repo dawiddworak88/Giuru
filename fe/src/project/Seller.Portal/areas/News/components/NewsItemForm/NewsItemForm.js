@@ -248,7 +248,6 @@ const NewsItemForm = (props) => {
                                         }
                                     }}
                                 />
-                                
                             </NoSsr>
                         </div>
                         <div className="field">
