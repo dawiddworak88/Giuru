@@ -23,7 +23,7 @@ namespace Seller.Web.Areas.News.ViewModel
         public string DeleteLabel { get; set; }
         public string TitleLabel { get; set; }
         public string ThumbImageLabel { get; set; }
-        public string HeroImageLabel { get; set; }
+        public string PreviewImageLabel { get; set; }
         public string DescriptionLabel { get; set; }
         public string NewsUrl { get; set; }
         public string FilesLabel { get; set; }

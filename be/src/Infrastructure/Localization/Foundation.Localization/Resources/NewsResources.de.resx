@@ -153,9 +153,6 @@
   <data name="FilesLabel" xml:space="preserve">
     <value>Dateien</value>
   </data>
-  <data name="HeroImageLabel" xml:space="preserve">
-    <value>Newsbild</value>
-  </data>
   <data name="ImagesLabel" xml:space="preserve">
     <value>Bilder</value>
   </data>
@@ -203,6 +200,9 @@
   </data>
   <data name="ParentCategoryNotFound" xml:space="preserve">
     <value>Übergeordnete Kategorie nicht gefunden</value>
+  </data>
+  <data name="PreviewImageLabel" xml:space="preserve">
+    <value>Newsbild</value>
   </data>
   <data name="SelectCategoryLabel" xml:space="preserve">
     <value>Kategorien auswählen</value>

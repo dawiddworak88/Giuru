@@ -220,7 +220,7 @@ const NewsItemForm = (props) => {
                             <MediaCloud
                                 id="previewImage"
                                 name="previewImage"
-                                label={props.heroImageLabel}
+                                label={props.previewImageLabel}
                                 accept=".png, .jpg, .webp"
                                 multiple={false}
                                 generalErrorMessage={props.generalErrorMessage}

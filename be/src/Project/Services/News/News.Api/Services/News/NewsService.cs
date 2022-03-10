@@ -116,37 +116,21 @@ namespace News.Api.Services.News
 
             existingNews = existingNews.ApplySort(model.OrderBy);
 
-            var newsItems = new List<NewsItemServiceModel>();
-            foreach (var newsItem in existingNews.OrEmptyIfNull())
+            var pagedResults = new PagedResults<IEnumerable<NewsItemServiceModel>>(existingNews.Count(), model.ItemsPerPage)
             {
-                var news = new NewsItemServiceModel
-                {
-                    Id = newsItem.Id,
-                    ThumbnailImageId = newsItem.ThumbnailImageId,
-                    PreviewImageId = newsItem.PreviewImageId,
-                    CategoryId = newsItem.CategoryId,
-                    CategoryName = newsItem.CategoryName,
-                    Title = newsItem.Title,
-                    Description = newsItem.Description,
-                    Content = newsItem.Content,
-                    IsPublished = newsItem.IsPublished,
-                    LastModifiedDate = newsItem.LastModifiedDate,
-                    CreatedDate = newsItem.CreatedDate
-                };
+                Data = existingNews
+            };
 
-                var files = this.newsContext.NewsItemFiles.Where(x => x.NewsItemId == newsItem.Id);
+            foreach(var news in pagedResults.Data)
+            {
+                var files = this.newsContext.NewsItemFiles.Where(x => x.NewsItemId == news.Id);
                 if (files is not null)
                 {
                     news.Files = files.Select(x => x.MediaId);
                 }
-
-                newsItems.Add(news);
             }
 
-            return new PagedResults<IEnumerable<NewsItemServiceModel>>(newsItems.Count, model.ItemsPerPage)
-            {
-                Data = newsItems
-            };
+            return pagedResults;
         }
 
         public async Task<NewsItemServiceModel> GetAsync(GetNewsItemServiceModel model)

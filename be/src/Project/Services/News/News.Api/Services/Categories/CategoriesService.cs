@@ -119,11 +119,6 @@ namespace News.Api.Services.Categories
 
             categories = categories.ApplySort(model.OrderBy);
 
-            var pagedResults = new PagedResults<IEnumerable<CategoryServiceModel>>(categories.Count(), model.ItemsPerPage)
-            {
-                Data = categories
-            };
-
             return categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage), model.PageIndex);
         }
 

@@ -62,6 +62,7 @@ const NewsCatalog = (props) => {
                                     <div className="column is-4">
                                         <div className="news-data">{newsItem.categoryName} | {moment.utc(newsItem.createdDate).local().format("L")}</div>
                                         <h1 className="news-title">{newsItem.title}</h1>
+                                        <p className="news-description">{newsItem.description}</p>
                                     </div>
                                 </div>
                             )

@@ -67,7 +67,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
                 DropFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
                 NewsUrl = this.linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name }),
                 NavigateToNewsLabel = this.newsLocalizer.GetString("NavigateToNewsLabel"),
-                HeroImageLabel = this.newsLocalizer.GetString("HeroImageLabel"),
+                PreviewImageLabel = this.newsLocalizer.GetString("PreviewImageLabel"),
                 TitleLabel = this.newsLocalizer.GetString("TitleLabel"),
                 DescriptionLabel = this.newsLocalizer.GetString("DescriptionLabel"),
                 IsPublishedLabel = this.newsLocalizer.GetString("IsPublishedLabel"),
