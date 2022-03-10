@@ -19,7 +19,7 @@ const NewsItemPage = (props) => {
             <Store>
                 <Header {...props.header}></Header>
                 <MenuTiles {...props.menuTiles} />
-                <NewsItemForm {...props.newsItemForm} />
+                <NewsItemForm {...props.newsItemForm} locale={props.locale} />
                 <Footer {...props.footer}></Footer>
             </Store>
         </ThemeProvider>

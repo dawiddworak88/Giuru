@@ -236,6 +236,9 @@ const NewsItemForm = (props) => {
                                 <Editor 
                                     editorState={editorState} 
                                     onEditorStateChange={handleEditorChange}
+                                    localization={{
+                                        locale: props.locale
+                                    }}
                                     toolbar={{
                                         image: {
                                             uploadEnabled: true,
