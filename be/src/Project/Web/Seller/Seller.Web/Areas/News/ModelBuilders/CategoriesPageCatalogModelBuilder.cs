@@ -56,6 +56,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
                 Labels = new string[]
                 {
                     this.globalLocalizer.GetString("Name"),
+                    this.globalLocalizer.GetString("ParentCategory"),
                     this.globalLocalizer.GetString("LastModifiedDate"),
                     this.globalLocalizer.GetString("CreatedDate")
                 },
@@ -75,6 +76,11 @@ namespace Seller.Web.Areas.News.ModelBuilders
                     new CatalogPropertyViewModel
                     {
                         Title = nameof(Category.Name).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(Category.ParentCategoryName).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel

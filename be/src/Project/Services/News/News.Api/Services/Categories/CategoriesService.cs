@@ -77,37 +77,39 @@ namespace News.Api.Services.Categories
 
         public async Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model)
         {
-            var existingCategory = from c in this.newsContext.Categories
-                           join t in this.newsContext.CategoryTranslations on c.Id equals t.CategoryId
-                           where t.Language == model.Language && c.Id == model.Id && c.IsActive
+            var category = from c in this.newsContext.Categories
+                           join t in this.newsContext.CategoryTranslations on c.Id equals t.CategoryId into ct
+                           from x in ct.DefaultIfEmpty()
+                           join pct in this.newsContext.CategoryTranslations on c.ParentCategoryId equals pct.CategoryId into pctg
+                           from w in pctg.DefaultIfEmpty()
+                           where x.Language == model.Language && c.Id == model.Id && c.IsActive
                            select new CategoryServiceModel
                            {
-                               Id = c.Id,
-                               Name = t.Name,
-                               ParentCategoryId = c.ParentCategoryId,
-                               LastModifiedDate = c.LastModifiedDate,
-                               CreatedDate = c.CreatedDate
+                                Id = c.Id,
+                                Name = x.Name,
+                                ParentCategoryId = c.ParentCategoryId,
+                                ParentCategoryName = w.Name,
+                                LastModifiedDate = c.LastModifiedDate,
+                                CreatedDate = c.CreatedDate
                            };
 
-            var category = existingCategory.FirstOrDefault();
-            if (category.ParentCategoryId.HasValue)
-            {
-                category.ParentCategoryName = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.CategoryId == category.ParentCategoryId).Name;
-            }
-
-            return category;
+            return category.FirstOrDefault();
         }
 
         public async Task<PagedResults<IEnumerable<CategoryServiceModel>>> GetAsync(GetCategoriesServiceModel model)
         {
             var categories = from c in this.newsContext.Categories
-                             join t in this.newsContext.CategoryTranslations on c.Id equals t.CategoryId
-                             where t.Language == model.Language && c.IsActive
+                             join t in this.newsContext.CategoryTranslations on c.Id equals t.CategoryId into ct
+                             from x in ct.DefaultIfEmpty()
+                             join pct in this.newsContext.CategoryTranslations on c.ParentCategoryId equals pct.CategoryId into pctg
+                             from w in pctg.DefaultIfEmpty()
+                             where x.Language == model.Language && (w.Language == model.Language || w.Language == null) && c.IsActive
                              select new CategoryServiceModel
                              {
                                  Id = c.Id,
-                                 Name = t.Name,
+                                 Name = x.Name,
                                  ParentCategoryId = c.ParentCategoryId,
+                                 ParentCategoryName = w.Name,
                                  LastModifiedDate = c.LastModifiedDate,
                                  CreatedDate = c.CreatedDate
                              };

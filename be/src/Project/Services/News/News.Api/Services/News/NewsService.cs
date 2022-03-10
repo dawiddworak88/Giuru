@@ -90,47 +90,36 @@ namespace News.Api.Services.News
 
         public async Task<PagedResults<IEnumerable<NewsItemServiceModel>>> GetAsync(GetNewsItemsServiceModel model)
         {
-            var existingNews = from n in this.newsContext.NewsItems
-                               join nt in this.newsContext.NewsItemTranslations on n.Id equals nt.NewsItemId
-                               join c in this.newsContext.CategoryTranslations on n.CategoryId equals c.CategoryId
-                               where nt.Language == model.Language && n.IsActive && c.Language == model.Language
-                               select new NewsItemServiceModel
-                               {
-                                   Id = n.Id,
-                                   ThumbnailImageId = n.ThumbnailImageId,
-                                   PreviewImageId = n.PreviewImageId,
-                                   CategoryId = n.CategoryId,
-                                   CategoryName = c.Name,
-                                   Title = nt.Title,
-                                   Description = nt.Description,
-                                   Content = nt.Content,
-                                   IsPublished = n.IsPublished,
-                                   LastModifiedDate = n.LastModifiedDate,
-                                   CreatedDate = n.CreatedDate
-                               };
-
+            var news = from n in this.newsContext.NewsItems
+                       join t in this.newsContext.NewsItemTranslations on n.Id equals t.NewsItemId into nt
+                       from x in nt.DefaultIfEmpty()
+                       join f in this.newsContext.NewsItemFiles on n.Id equals f.NewsItemId into fg
+                       from nf in fg.DefaultIfEmpty()
+                       join c in this.newsContext.CategoryTranslations on n.CategoryId equals c.CategoryId
+                       where x.Language == model.Language && (c.Language == model.Language || c.Language == null) && n.IsActive
+                       select new NewsItemServiceModel
+                       {
+                           Id = n.Id,
+                           ThumbnailImageId = n.ThumbnailImageId,
+                           PreviewImageId = n.PreviewImageId,
+                           CategoryId = n.CategoryId,
+                           CategoryName = c.Name,
+                           Title = x.Title,
+                           Description = x.Description,
+                           Content = x.Content,
+                           IsPublished = n.IsPublished,
+                           LastModifiedDate = n.LastModifiedDate,
+                           CreatedDate = n.CreatedDate
+                       };
+           
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
-                existingNews = existingNews.Where(x => x.Title.StartsWith(model.SearchTerm));
+                news = news.Where(x => x.Title.StartsWith(model.SearchTerm));
             }
 
-            existingNews = existingNews.ApplySort(model.OrderBy);
+            news = news.ApplySort(model.OrderBy);
 
-            var pagedResults = new PagedResults<IEnumerable<NewsItemServiceModel>>(existingNews.Count(), model.ItemsPerPage)
-            {
-                Data = existingNews
-            };
-
-            foreach(var news in pagedResults.Data)
-            {
-                var files = this.newsContext.NewsItemFiles.Where(x => x.NewsItemId == news.Id);
-                if (files is not null)
-                {
-                    news.Files = files.Select(x => x.MediaId);
-                }
-            }
-
-            return pagedResults;
+            return news.PagedIndex(new Pagination(news.Count(), model.ItemsPerPage), model.PageIndex);
         }
 
         public async Task<NewsItemServiceModel> GetAsync(GetNewsItemServiceModel model)

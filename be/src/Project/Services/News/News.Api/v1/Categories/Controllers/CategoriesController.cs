@@ -170,6 +170,7 @@ namespace News.Api.v1.Categories.Controllers
                             Id = x.Id,
                             Name = x.Name,
                             ParentCategoryId = x.ParentCategoryId,
+                            ParentCategoryName = x.ParentCategoryName,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         })
