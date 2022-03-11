@@ -12,7 +12,6 @@ using News.Api.ServicesModels.News;
 using News.Api.v1.Categories.RequestModels;
 using News.Api.v1.News.ResponseModels;
 using News.Api.Validators.News;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

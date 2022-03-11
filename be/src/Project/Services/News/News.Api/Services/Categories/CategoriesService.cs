@@ -8,7 +8,6 @@ using Microsoft.Extensions.Localization;
 using News.Api.Infrastructure;
 using News.Api.Infrastructure.Entities.Categories;
 using News.Api.ServicesModels.Categories;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;

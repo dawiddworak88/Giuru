@@ -10,7 +10,7 @@ import moment from "moment";
 
 const NewsCatalog = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [items, setItems] = useState(props.pagedItems.data);
+    const [items, setItems] = useState(props.pagedItems.data ? props.pagedItems.data : null);
     const [news, setNews] = useState(props.pagedItems.data ? props.pagedItems.data : null);
     const [hasMore, setHasMore] = useState(true);
 
@@ -51,7 +51,7 @@ const NewsCatalog = (props) => {
                 setHasMore(false)
             });
     }
-    
+
     const handleDynamicScroll = (e) => {
         const scrollHeight = e.target.documentElement.scrollHeight;
         const currentHeight = Math.ceil(
@@ -70,13 +70,12 @@ const NewsCatalog = (props) => {
     }, [hasMore])
 
     const handleCategory = (category) => {
-        if (category == null){
-            return setNews(items);
-        } 
-
         const filtered = items.filter((item) => item.categoryName === category.name);
+        if (filtered){
+            return setNews(filtered);
+        }
 
-        setNews(filtered);
+        return setNews(items);
     }
 
     const navigateToNews = (item) => {
@@ -154,7 +153,8 @@ const NewsCatalog = (props) => {
 NewsCatalog.propTypes = {
     noResultsLabel: PropTypes.string,
     newsApiUrl: PropTypes.string,
-    categories: PropTypes.array
+    categories: PropTypes.array,
+    newsApiUrl: PropTypes.string
 };
 
 export default NewsCatalog;
