@@ -25,7 +25,7 @@ const NewsItemForm = (props) => {
         id: { value: props.id ? props.id : null, error: "" },
         categoryId: { value: props.categoryId ? props.categoryId : null, error: ""},
         title: { value: props.newsTitle ? props.newsTitle : "", error: "" },
-        previewImage: { value: props.previewImages ? props.previewImages : null, error: "" },
+        previewImage: { value: props.previewImages ? props.previewImages : [], error: "" },
         thumbImage: { value: props.thumbnailImages ? props.thumbnailImages : [], error: "" },
         description: { value: props.description ? props.description : null, error: "" },
         content: { value: props.content ? props.content : "", error: "" },
@@ -47,7 +47,7 @@ const NewsItemForm = (props) => {
         const requestData = {
             id: state.id,
             thumbnailImageId: state.thumbImage[0].id,
-            previewImageId: state.previewImage ? state.previewImage[0].id : null,
+            previewImageId: state.previewImage.length > 0 ? state.previewImage[0].id : null,
             categoryId: state.categoryId,
             title: state.title,
             description: state.description,

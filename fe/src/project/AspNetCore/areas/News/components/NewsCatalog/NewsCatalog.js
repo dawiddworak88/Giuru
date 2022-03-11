@@ -27,7 +27,7 @@ const NewsCatalog = (props) => {
         const queryStrings = {
             itemsPerPage: 10, 
             pageIndex: pageIndex
-        }
+        }  
 
         const getNewsUrl = props.newsApiUrl + "?" + QueryStringSerializer.serialize(queryStrings);
         await fetch(getNewsUrl, requestOptions)
