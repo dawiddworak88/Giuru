@@ -51,6 +51,7 @@ const NewsCatalog = (props) => {
                 setHasMore(false)
             });
     }
+    
     const handleDynamicScroll = (e) => {
         const scrollHeight = e.target.documentElement.scrollHeight;
         const currentHeight = Math.ceil(

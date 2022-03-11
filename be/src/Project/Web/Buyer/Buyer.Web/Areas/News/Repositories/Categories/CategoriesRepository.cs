@@ -30,7 +30,7 @@ namespace Buyer.Web.Areas.News.Repositories.Categories
 
         public async Task<IEnumerable<Category>> GetAllCategoriesAsync(string token, string language)
         {
-            var productsRequestModel = new PagedRequestModelBase
+            var requestModel = new PagedRequestModelBase
             {
                 PageIndex = PaginationConstants.DefaultPageIndex,
                 ItemsPerPage = PaginationConstants.DefaultPageSize
@@ -39,7 +39,7 @@ namespace Buyer.Web.Areas.News.Repositories.Categories
             var apiRequest = new ApiRequest<PagedRequestModelBase>
             {
                 Language = language,
-                Data = productsRequestModel,
+                Data = requestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.NewsUrl}{ApiConstants.News.CategoriesApiEndpoint}"
             };
