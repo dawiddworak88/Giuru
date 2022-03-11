@@ -5,7 +5,7 @@ import QueryStringSerializer from "../../../../../../shared/helpers/serializers/
 const useDynamicSearch = (apiUrl, newsList, itemsPerPage, pageIndex) => {
     const [state, dispatch] = useContext(Context);
     const [hasMore, setHasMore] = useState(false)
-    const [news, setNews] = useState(newsList ? newsList : []);
+    const [news, setNews] = useState([]);
 
     useEffect(() => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -16,7 +16,7 @@ const useDynamicSearch = (apiUrl, newsList, itemsPerPage, pageIndex) => {
         }
 
         const queryStrings = {
-            itemsPerPage: itemsPerPage,
+            itemsPerPage: itemsPerPage, 
             pageIndex: pageIndex
         }
 
@@ -27,7 +27,8 @@ const useDynamicSearch = (apiUrl, newsList, itemsPerPage, pageIndex) => {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok){
-                        setNews(jsonResponse.data)
+                        setNews([...items, jsonResponse.data])
+                        setHasMore(true)
                     }
                 });
             });

@@ -1,34 +1,72 @@
-import React, { useRef, useContext, useState, useCallback } from "react";
+import React, { useRef, useContext, useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../../../shared/constants/LazyLoadConstants";
 import ResponsiveImage from "../../../../../../shared/components/Picture/ResponsiveImage";
+import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
-import useDynamicSearch from "../hooks/useDynamicSearch";
 import { Context } from "../../../../../../shared/stores/Store";
 import moment from "moment";
 
 const NewsCatalog = (props) => {
-    const [state] = useContext(Context);
+    const [state, dispatch] = useContext(Context);
     const [items, setItems] = useState(props.pagedItems.data);
-    const [pageIndex, setPageIndex] = useState(1)
+    const [news, setNews] = useState(props.pagedItems.data ? props.pagedItems.data : null);
+    const [hasMore, setHasMore] = useState(true);
 
-    const {
-        news, hasMore, setNews
-    } = useDynamicSearch(props.newsApiUrl, items, 10, pageIndex)
+    let pageIndex = 2;
+    const handleLoadNews = async () => {
+        if (!hasMore) return;
+        dispatch({ type: "SET_IS_LOADING", payload: true });
 
-    const observer = useRef()
-    const lastElement = useCallback(node => {
-        if (loading) return
-        if (observer.current) observer.current.disconnect()
-            observer.current = new IntersectionObserver(entries => {
-                if (entries[0].isIntersecting && hasMore) {
-                    setPageIndex(prevPageIndex => prevPageIndex + 1)
-                }
-            })
+        const requestOptions = {
+            method: "GET",
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
+        }
 
-        if (node) observer.current.observe(node)
-    }, [state, hasMore]);
+        const queryStrings = {
+            itemsPerPage: 3, 
+            pageIndex: pageIndex
+        }
+
+        const getNewsUrl = props.newsApiUrl + "?" + QueryStringSerializer.serialize(queryStrings);
+        await fetch(getNewsUrl, requestOptions)
+            .then((response) => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok){
+                        jsonResponse.data.forEach(item => {
+                            setNews(element => [...element, item]);
+                        })
+
+                        pageIndex += 1;
+
+                        if (pageIndex > jsonResponse.pageCount){
+                            setHasMore(false)
+                        }
+                    }
+                });
+            }).catch(() => {
+                setHasMore(false)
+            });
+    }
+    const handleDynamicScroll = (e) => {
+        const scrollHeight = e.target.documentElement.scrollHeight;
+        const currentHeight = Math.ceil(
+            e.target.documentElement.scrollTop + window.innerHeight
+        );
+
+        if (currentHeight + 1 >= scrollHeight) {
+            handleLoadNews();
+        }
+    }
+
+    useEffect(() => {
+        window.addEventListener("scroll", handleDynamicScroll)
+
+        return () => window.removeEventListener("scroll", handleDynamicScroll)
+    }, [hasMore])
 
     const handleCategory = (category) => {
         if (category == null){
@@ -82,43 +120,23 @@ const NewsCatalog = (props) => {
 
                         <div className="news-catalog__news columns is-tablet is-multiline">
                             {news.slice(1).map((news, index) => {
-                                if (news.length === index + 1){
-                                    return (
-                                        <div className="column is-4" onClick={() => navigateToNews(news)} key={index} ref={lastElement}>
-                                            <div className="card">
-                                                <div className="card-image">
-                                                    <figure className="image is-16by9">
-                                                        <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
-                                                            <ResponsiveImage imageSrc={news.thumbImageUrl} sources={news.thumbImages} />
-                                                        </LazyLoad>
-                                                    </figure>
-                                                </div>
-                                                <div className="media-content">
-                                                    <div className="news-data">{news.categoryName} | {moment.utc(news.createdDate).local().format("L")}</div>
-                                                    <h4 className="news-title">{news.title}</h4>
-                                                </div>
+                                return (
+                                    <div className="column is-4" onClick={() => navigateToNews(news)} key={index}>
+                                        <div className="card">
+                                            <div className="card-image">
+                                                <figure className="image is-16by9">
+                                                    <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
+                                                        <ResponsiveImage imageSrc={news.thumbImageUrl} sources={news.thumbImages} />
+                                                    </LazyLoad>
+                                                </figure>
+                                            </div>
+                                            <div className="media-content">
+                                                <div className="news-data">{news.categoryName} | {moment.utc(news.createdDate).local().format("L")}</div>
+                                                <h4 className="news-title">{news.title}</h4>
                                             </div>
                                         </div>
-                                    )
-                                } else {
-                                    return (
-                                        <div className="column is-4" onClick={() => navigateToNews(news)} key={index}>
-                                            <div className="card">
-                                                <div className="card-image">
-                                                    <figure className="image is-16by9">
-                                                        <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
-                                                            <ResponsiveImage imageSrc={news.thumbImageUrl} sources={news.thumbImages} />
-                                                        </LazyLoad>
-                                                    </figure>
-                                                </div>
-                                                <div className="media-content">
-                                                    <div className="news-data">{news.categoryName} | {moment.utc(news.createdDate).local().format("L")}</div>
-                                                    <h4 className="news-title">{news.title}</h4>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
-                                }
+                                    </div>
+                                )
                             })}
                         </div>
                     </div>
