@@ -1,8 +1,7 @@
-﻿using Buyer.Web.Areas.News.Repositories;
-using Buyer.Web.Areas.News.Repositories.News;
-using Buyer.Web.Areas.News.ViewModel;
+﻿using Buyer.Web.Areas.News.ViewModel;
 using Buyer.Web.Areas.Products.Repositories.Files;
 using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Repositories.News;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Buyer.Web.Shared.ViewModels.Files;
 using Foundation.Extensions.ModelBuilders;

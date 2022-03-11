@@ -1,5 +1,5 @@
 ﻿using Buyer.Web.Areas.News.DomainModels;
-using Buyer.Web.Areas.News.Repositories.News;
+using Buyer.Web.Shared.Repositories.News;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Localization;
@@ -33,7 +33,7 @@ namespace Buyer.Web.Areas.News.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             var categories = await this.newsRepository.GetNewsItemsAsync(
-                token, language, pageIndex, itemsPerPage, $"{nameof(NewsItem.CreatedDate)} desc");
+                token, language, pageIndex, itemsPerPage, null, $"{nameof(NewsItem.CreatedDate)} desc");
 
             return this.StatusCode((int)HttpStatusCode.OK, categories);
         }

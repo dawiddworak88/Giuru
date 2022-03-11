@@ -13,13 +13,12 @@ using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.News.Repositories.News
+namespace Buyer.Web.Shared.Repositories.News
 {
     public class NewsRepository : INewsRepository
     {
@@ -67,10 +66,11 @@ namespace Buyer.Web.Areas.News.Repositories.News
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<NewsItem>>> GetNewsItemsAsync(string token, string language, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<PagedResults<IEnumerable<NewsItem>>> GetNewsItemsAsync(string token, string language, int pageIndex, int itemsPerPage, string searchTerm, string orderBy)
         {
-            var productsRequestModel = new PagedRequestModelBase
+            var requestModel = new PagedRequestModelBase
             {
+                SearchTerm = searchTerm,
                 PageIndex = pageIndex,
                 ItemsPerPage = itemsPerPage,
                 OrderBy = orderBy
@@ -79,7 +79,7 @@ namespace Buyer.Web.Areas.News.Repositories.News
             var apiRequest = new ApiRequest<PagedRequestModelBase>
             {
                 Language = language,
-                Data = productsRequestModel,
+                Data = requestModel,
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.NewsUrl}{ApiConstants.News.NewsApiEndpoint}"
             };

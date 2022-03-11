@@ -8,6 +8,7 @@ import MainNavigation from "../../../../shared/components/MainNavigation/MainNav
 import HeroSlider from "../../components/HeroSlider/HeroSlider";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 import ContentGrid from "../../../../shared/components/ContentGrid/ContentGrid";
+import NewsCatalog from "../../components/NewsCatalog/NewsCatalog";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 
 function HomePage(props) {
@@ -22,6 +23,9 @@ function HomePage(props) {
         <HeroSlider {...props.heroSlider}></HeroSlider>
         {props.carouselGrid && 
           <CarouselGrid {...props.carouselGrid}></CarouselGrid>
+        }
+        {props.news &&
+          <NewsCatalog {...props.news} />
         }
         {props.contentGrid &&
           <ContentGrid {...props.contentGrid}></ContentGrid>

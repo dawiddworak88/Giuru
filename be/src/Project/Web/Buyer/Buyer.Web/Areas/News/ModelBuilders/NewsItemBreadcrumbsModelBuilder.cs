@@ -1,7 +1,6 @@
-﻿using Buyer.Web.Areas.News.Repositories;
-using Buyer.Web.Areas.News.Repositories.News;
-using Buyer.Web.Areas.News.ViewModel;
+﻿using Buyer.Web.Areas.News.ViewModel;
 using Buyer.Web.Shared.ModelBuilders.Breadcrumbs;
+using Buyer.Web.Shared.Repositories.News;
 using Buyer.Web.Shared.ViewModels.Breadcrumbs;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;

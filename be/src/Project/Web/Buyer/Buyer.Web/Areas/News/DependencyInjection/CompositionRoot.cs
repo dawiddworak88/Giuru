@@ -1,6 +1,5 @@
 ﻿using Buyer.Web.Areas.News.ModelBuilders;
 using Buyer.Web.Areas.News.Repositories.Categories;
-using Buyer.Web.Areas.News.Repositories.News;
 using Buyer.Web.Areas.News.ViewModel;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
@@ -12,7 +11,6 @@ namespace Buyer.Web.Areas.News.DependencyInjection
     {
         public static void RegisterNewsDependencies(this IServiceCollection services)
         {
-            services.AddScoped<INewsRepository, NewsRepository>();
             services.AddScoped<ICategoriesRepository, CategoriesRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, NewsPageViewModel>, NewsPageModelBuilder>();

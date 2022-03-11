@@ -114,7 +114,7 @@ namespace News.Api.Services.News
            
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
-                news = news.Where(x => x.Title.StartsWith(model.SearchTerm));
+                news = news.Where(x => x.Title.StartsWith(model.SearchTerm) || x.CategoryName.StartsWith(model.SearchTerm));
             }
 
             news = news.ApplySort(model.OrderBy);

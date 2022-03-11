@@ -1,9 +1,9 @@
 ﻿using Buyer.Web.Areas.News.Definitions;
 using Buyer.Web.Areas.News.DomainModels;
 using Buyer.Web.Areas.News.Repositories.Categories;
-using Buyer.Web.Areas.News.Repositories.News;
 using Buyer.Web.Areas.News.ViewModel;
 using Buyer.Web.Shared.Configurations;
+using Buyer.Web.Shared.Repositories.News;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
@@ -52,7 +52,7 @@ namespace Buyer.Web.Areas.News.ModelBuilders
                 NoResultsLabel = this.globalLocalizer.GetString("NoResultsLabel")
             };
 
-            var news = await this.newsRepository.GetNewsItemsAsync(componentModel.Token, componentModel.Language, NewsConstants.DefaultPageIndex, NewsConstants.DefaultPageSize, $"{nameof(NewsItem.CreatedDate)} desc");
+            var news = await this.newsRepository.GetNewsItemsAsync(componentModel.Token, componentModel.Language, NewsConstants.DefaultPageIndex, NewsConstants.DefaultPageSize, null, $"{nameof(NewsItem.CreatedDate)} desc");
             if (news is not null)
             {
                 var categories = new List<ListItemViewModel>();
