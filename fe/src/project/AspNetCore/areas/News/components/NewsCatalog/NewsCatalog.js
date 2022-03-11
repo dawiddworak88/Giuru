@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useState, useCallback, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../../../shared/constants/LazyLoadConstants";
@@ -25,7 +25,7 @@ const NewsCatalog = (props) => {
         }
 
         const queryStrings = {
-            itemsPerPage: 3, 
+            itemsPerPage: 10, 
             pageIndex: pageIndex
         }
 
