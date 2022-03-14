@@ -12,7 +12,7 @@ using News.Api.Infrastructure;
 namespace News.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(NewsContext))]
-    [Migration("20220309123826_Initital")]
+    [Migration("20220314122134_Initital")]
     partial class Initital
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -122,7 +122,7 @@ namespace News.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid>("ThumbnailImageId")
+                    b.Property<Guid?>("ThumbnailImageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");

@@ -7,8 +7,8 @@ namespace Buyer.Web.Areas.News.ViewModel
     public class NewsItemViewModel
     {
         public Guid Id { get; set; }
-        public Guid ThumbnailImageId { get; set; }
-        public Guid PreviewImageId { get; set; }
+        public Guid? ThumbnailImageId { get; set; }
+        public Guid? PreviewImageId { get; set; }
         public Guid CategoryId { get; set; }
         public string CategoryName { get; set; }
         public bool IsPublished { get; set; }

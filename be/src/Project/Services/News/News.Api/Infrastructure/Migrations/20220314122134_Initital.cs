@@ -48,7 +48,7 @@ namespace News.Api.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ThumbnailImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ThumbnailImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     PreviewImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrganisationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),

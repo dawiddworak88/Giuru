@@ -39,7 +39,7 @@ namespace News.Api.Services.News
 
             var newsItem = new NewsItem
             {
-                ThumbnailImageId = model.ThumbnailImageId.Value,
+                ThumbnailImageId = model.ThumbnailImageId,
                 PreviewImageId = model.PreviewImageId,
                 OrganisationId = model.OrganisationId.Value,
                 CategoryId = model.CategoryId.Value,
@@ -173,7 +173,7 @@ namespace News.Api.Services.News
                 throw new CustomException(this.newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NotFound);
             }
 
-            news.ThumbnailImageId = model.ThumbnailImageId.Value;
+            news.ThumbnailImageId = model.ThumbnailImageId;
             news.PreviewImageId = model.PreviewImageId;
             news.CategoryId = category.Id;
             news.IsPublished = model.IsPublished;

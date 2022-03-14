@@ -115,23 +115,25 @@ namespace Seller.Web.Areas.News.ModelBuilders
                         viewModel.Files = files;
                     }
 
-                    var thumbImage = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, existingNews.ThumbnailImageId);
-                    if (thumbImage is not null)
+                    if (existingNews.ThumbnailImageId.HasValue)
                     {
-
-                        viewModel.ThumbnailImages = new List<FileViewModel>
+                        var thumbImage = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, existingNews.ThumbnailImageId.Value);
+                        if (thumbImage is not null)
                         {
-                            new FileViewModel
-                            {
-                                Id = thumbImage.Id,
-                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, thumbImage.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
-                                Name = thumbImage.Name,
-                                MimeType = thumbImage.MimeType,
-                                Filename = thumbImage.Filename,
-                                Extension = thumbImage.Extension
-                            }
-                        };
 
+                            viewModel.ThumbnailImages = new List<FileViewModel>
+                            {
+                                new FileViewModel
+                                {
+                                    Id = thumbImage.Id,
+                                    Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, thumbImage.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
+                                    Name = thumbImage.Name,
+                                    MimeType = thumbImage.MimeType,
+                                    Filename = thumbImage.Filename,
+                                    Extension = thumbImage.Extension
+                                }
+                            };
+                        }
                     }
 
                     if (existingNews.PreviewImageId.HasValue)

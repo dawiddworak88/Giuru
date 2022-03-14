@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Home.DomainModels;
+﻿using Buyer.Web.Areas.Home.Definitions;
+using Buyer.Web.Areas.Home.DomainModels;
 using Buyer.Web.Areas.Home.ViewModel;
 using Buyer.Web.Shared.Repositories.News;
 using Foundation.Extensions.ModelBuilders;
@@ -33,7 +34,9 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                 ReadMoreLabel = this.newsLocalizer.GetString("ReadMoreLabel")
             };
 
-            var news = await this.newsRepository.GetNewsItemsAsync(componentModel.Token, componentModel.Language, 1, 6, "B2B", $"{nameof(NewsItem.CreatedDate)} desc");
+            var news = await this.newsRepository.GetNewsItemsAsync(
+                componentModel.Token, componentModel.Language, HomeConstants.News.DefaultPageIndex, HomeConstants.News.DefaultPageSize, HomeConstants.News.DefaultSearchTerm, $"{nameof(NewsItem.CreatedDate)} desc");
+
             if (news is not null)
             {
                 var pagedResults = new PagedResults<IEnumerable<NewsItemViewModel>>(news.Total, news.PageSize)

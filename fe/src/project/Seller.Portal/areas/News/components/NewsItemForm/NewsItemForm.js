@@ -46,7 +46,7 @@ const NewsItemForm = (props) => {
 
         const requestData = {
             id: state.id,
-            thumbnailImageId: state.thumbImage[0].id,
+            thumbnailImageId: state.thumbImage.length > 0 ? state.thumbImage[0].id : null,
             previewImageId: state.previewImage.length > 0 ? state.previewImage[0].id : null,
             categoryId: state.categoryId,
             title: state.title,
@@ -299,7 +299,7 @@ const NewsItemForm = (props) => {
                                     type="submit" 
                                     variant="contained" 
                                     color="primary"
-                                    disabled={state.isLoading || disable || !thumbImage || !convertedToRaw}
+                                    disabled={state.isLoading || disable || !convertedToRaw}
                                 >
                                     {props.saveText}
                                 </Button>

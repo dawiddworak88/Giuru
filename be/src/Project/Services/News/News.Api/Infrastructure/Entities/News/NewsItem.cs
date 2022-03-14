@@ -7,8 +7,7 @@ namespace News.Api.Infrastructure.Entities.News
 {
     public class NewsItem : Entity
     {
-        [Required]
-        public Guid ThumbnailImageId { get; set; }
+        public Guid? ThumbnailImageId { get; set; }
 
         public Guid? PreviewImageId { get; set; }
 

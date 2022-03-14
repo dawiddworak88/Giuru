@@ -60,7 +60,7 @@ namespace News.Api.v1.News.Controllers
                     IsPublished = request.IsPublished,
                     CategoryId = request.CategoryId,
                     PreviewImageId = request.PreviewImageId,
-                    ThumbnailImageId= request.ThumbnailImageId,
+                    ThumbnailImageId = request.ThumbnailImageId,
                     Files = request.Files,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,

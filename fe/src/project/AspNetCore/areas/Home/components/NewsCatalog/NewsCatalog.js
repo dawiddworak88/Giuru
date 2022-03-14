@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { CalendarToday } from "@material-ui/icons";
 import PropTypes from "prop-types";
+import { Hash } from "react-feather"
 import moment from "moment";
 
 const NewsCatalog = (props) => {
@@ -26,9 +27,13 @@ const NewsCatalog = (props) => {
                                         <div className="media-content">
                                             <h2 className="title is-5">{item.title}</h2>
                                             <div className="media-data">
-                                                <div className="media">
+                                                <div className="data">
+                                                    <Hash />
+                                                    <span className="data-text">{item.categoryName}</span>
+                                                </div>
+                                                <div className="data">
                                                     <CalendarToday /> 
-                                                    <span className="media-text">{moment.utc(item.createdDate).local().format("L")}</span>
+                                                    <span className="data-text">{moment.utc(item.createdDate).local().format("L")}</span>
                                                 </div>
                                             </div>
                                             <p className="is-6 media-description">{item.description}</p>

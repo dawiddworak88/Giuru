@@ -120,7 +120,7 @@ namespace News.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<Guid>("ThumbnailImageId")
+                    b.Property<Guid?>("ThumbnailImageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");

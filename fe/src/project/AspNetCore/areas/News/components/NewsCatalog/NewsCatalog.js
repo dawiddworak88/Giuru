@@ -6,12 +6,13 @@ import ResponsiveImage from "../../../../../../shared/components/Picture/Respons
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import { Context } from "../../../../../../shared/stores/Store";
+import { CalendarToday } from "@material-ui/icons";
+import { Hash } from "react-feather"
 import moment from "moment";
 
 const NewsCatalog = (props) => {
     const [state, dispatch] = useContext(Context);
     const [items, setItems] = useState(props.pagedItems.data ? props.pagedItems.data : null);
-    const [news, setNews] = useState(props.pagedItems.data ? props.pagedItems.data : null);
     const [hasMore, setHasMore] = useState(true);
 
     let pageIndex = 2;
@@ -70,12 +71,13 @@ const NewsCatalog = (props) => {
     }, [hasMore])
 
     const handleCategory = (category) => {
-        const filtered = items.filter((item) => item.categoryName === category.name);
-        if (filtered){
-            return setNews(filtered);
+        if (!category){
+            return setItems(props.pagedItems.data);
         }
 
-        return setNews(items);
+        const filtered = props.pagedItems.data.filter((item) => item.categoryName === category.name);
+
+        return setItems(filtered);
     }
 
     const navigateToNews = (item) => {
@@ -86,26 +88,6 @@ const NewsCatalog = (props) => {
         <section className="section news-catalog">
             {items && items.length > 0 ? (
                 <div>
-                    {items.slice(0, 1).map(newsItem => {
-                            return (
-                                <div className="columns is-centered hero-news" onClick={() => navigateToNews(newsItem)} key={newsItem.id}>
-                                    <div className="column is-6">
-                                        <figure className="image is-16by9">
-                                            <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
-                                                <ResponsiveImage imageSrc={newsItem.thumbImageUrl} sources={newsItem.thumbImages} />
-                                            </LazyLoad>
-                                        </figure>
-                                    </div>
-
-                                    <div className="column is-4">
-                                        <div className="news-data">{newsItem.categoryName} | {moment.utc(newsItem.createdDate).local().format("L")}</div>
-                                        <h1 className="news-title">{newsItem.title}</h1>
-                                        <p className="news-description">{newsItem.description}</p>
-                                    </div>
-                                </div>
-                            )
-                    })}
-
                     <div className="container">
                         {props.categories && props.categories.length > 0 &&
                             <div className="news-catalog__categories">
@@ -119,19 +101,31 @@ const NewsCatalog = (props) => {
                         }
 
                         <div className="news-catalog__news columns is-tablet is-multiline">
-                            {news.slice(1).map((news, index) => {
+                            {items.map((news, index) => {
                                 return (
                                     <div className="column is-4" onClick={() => navigateToNews(news)} key={index}>
                                         <div className="card">
-                                            <div className="card-image">
-                                                <figure className="image is-16by9">
-                                                    <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
-                                                        <ResponsiveImage imageSrc={news.thumbImageUrl} sources={news.thumbImages} />
-                                                    </LazyLoad>
-                                                </figure>
-                                            </div>
+                                            {news.thumbImages && 
+                                                <div className="card-image">
+                                                    <figure className="image is-16by9">
+                                                        <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
+                                                            <ResponsiveImage imageSrc={news.thumbImageUrl} sources={news.thumbImages} />
+                                                        </LazyLoad>
+                                                    </figure>
+                                                </div>
+                                            }
+                                            
                                             <div className="media-content">
-                                                <div className="news-data">{news.categoryName} | {moment.utc(news.createdDate).local().format("L")}</div>
+                                                <div className="news-data">
+                                                    <div className="data">
+                                                        <Hash /> 
+                                                        <span className="data-text">{news.categoryName}</span>
+                                                    </div>
+                                                    <div className="data">
+                                                        <CalendarToday />
+                                                        <span className="data-text">{moment.utc(news.createdDate).local().format("L")}</span>
+                                                    </div>
+                                                </div>
                                                 <h4 className="news-title">{news.title}</h4>
                                             </div>
                                         </div>
