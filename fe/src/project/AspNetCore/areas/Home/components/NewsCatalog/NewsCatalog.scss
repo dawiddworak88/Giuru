@@ -6,4 +6,54 @@
         background: #fff;
         padding: 2rem;
     }
+
+    &__item {
+
+        .media-collapse {
+            display: none;
+
+            &.active {
+                display: block;
+            }
+        }
+
+        .media-text {
+            margin-left: 0.5rem;
+        }
+
+        .media-description {
+            margin-bottom: 0.5rem;
+        }
+
+        .media-read {
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .media-data {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+
+            .media {
+                margin-right: 0.5rem;
+                font-size: 0.8rem;
+                display: flex;
+                align-items: center;
+
+                svg {
+                    fill: $primary;
+                }
+    
+                &:first-child {
+                    margin-right: 1rem;
+                }
+            }
+        }
+    }
+
+    .card {
+        box-shadow: none;
+        padding: 1rem;
+    }
 }

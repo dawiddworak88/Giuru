@@ -1,11 +1,11 @@
 ﻿using Buyer.Web.Areas.Home.DomainModels;
 using Buyer.Web.Areas.Home.ViewModel;
-using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Repositories.News;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,22 +14,23 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
 {
     public class HomePageNewsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, NewsViewModel>
     {
-        private readonly IOptions<AppSettings> options;
         private readonly INewsRepository newsRepository;
+        private readonly IStringLocalizer<NewsResources> newsLocalizer;
 
         public HomePageNewsModelBuilder(
-            IOptions<AppSettings> options,
-            INewsRepository newsRepository)
+            INewsRepository newsRepository,
+            IStringLocalizer<NewsResources> newsLocalizer)
         {
-            this.options = options;
             this.newsRepository = newsRepository;
+            this.newsLocalizer = newsLocalizer;
         }
 
         public async Task<NewsViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new NewsViewModel
             {
-                
+                Title = this.newsLocalizer.GetString("News"),
+                ReadMoreLabel = this.newsLocalizer.GetString("ReadMoreLabel")
             };
 
             var news = await this.newsRepository.GetNewsItemsAsync(componentModel.Token, componentModel.Language, 1, 6, "B2B", $"{nameof(NewsItem.CreatedDate)} desc");
@@ -40,13 +41,16 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                     Data = news.Data.Select(x => new NewsItemViewModel
                     {
                         Title = x.Title,
-
+                        CategoryName = x.CategoryName,
+                        Description = x.Description,
+                        Content = x.Content,
+                        LastModifiedDate = x.LastModifiedDate,
+                        CreatedDate = x.CreatedDate
                     })
                 };
 
-                viewModel.NewsItems = pagedResults;
+                viewModel.PagedResults = pagedResults;
             }
-            
 
             return viewModel;
         }
