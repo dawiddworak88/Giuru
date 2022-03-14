@@ -139,7 +139,7 @@
     <value>Select category</value>
   </data>
   <data name="CategorySavedSuccessfully" xml:space="preserve">
-    <value>Category has been successfully created</value>
+    <value>Category has been successfully saved.</value>
   </data>
   <data name="DescriptionLabel" xml:space="preserve">
     <value>Short description</value>
@@ -190,7 +190,7 @@
     <value>News not found</value>
   </data>
   <data name="NewsSavedSuccessfully" xml:space="preserve">
-    <value>News has been successfully created</value>
+    <value>News has been successfully created.</value>
   </data>
   <data name="NewText" xml:space="preserve">
     <value>Add category</value>
@@ -199,7 +199,7 @@
     <value>Parent category</value>
   </data>
   <data name="ParentCategoryNotFound" xml:space="preserve">
-    <value>Parent category not found</value>
+    <value>Parent category not found.</value>
   </data>
   <data name="PreviewImageLabel" xml:space="preserve">
     <value>Preview image</value>

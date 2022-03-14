@@ -127,10 +127,10 @@
     <value>Kategorie</value>
   </data>
   <data name="CategoryDeletedSuccessfully" xml:space="preserve">
-    <value>Kategorie erfolgreich gelöscht</value>
+    <value>Kategorie erfolgreich gelöscht.</value>
   </data>
   <data name="CategoryDeleteNewsConflict" xml:space="preserve">
-    <value>Entfernen Sie die News, die der Kategorie zugeordnet sind</value>
+    <value>Entfernen Sie die News, die der Kategorie zugeordnet sind.</value>
   </data>
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Kategorie nicht gefunden</value>
@@ -139,7 +139,7 @@
     <value>Kategorie wählen</value>
   </data>
   <data name="CategorySavedSuccessfully" xml:space="preserve">
-    <value>Kategorie wurde erfolgreich erstellt</value>
+    <value>Kategorie wurde erfolgreich erstellt.</value>
   </data>
   <data name="DescriptionLabel" xml:space="preserve">
     <value>Kurze Beschreibung</value>
@@ -190,7 +190,7 @@
     <value>News nicht gefunden</value>
   </data>
   <data name="NewsSavedSuccessfully" xml:space="preserve">
-    <value>News wurde erfolgreich erstellt</value>
+    <value>News wurde erfolgreich erstellt.</value>
   </data>
   <data name="NewText" xml:space="preserve">
     <value>Kategorie hinzufügen</value>
@@ -199,7 +199,7 @@
     <value>Eltern-Kategorie</value>
   </data>
   <data name="ParentCategoryNotFound" xml:space="preserve">
-    <value>Übergeordnete Kategorie nicht gefunden</value>
+    <value>Übergeordnete Kategorie nicht gefunden.</value>
   </data>
   <data name="PreviewImageLabel" xml:space="preserve">
     <value>Newsbild</value>

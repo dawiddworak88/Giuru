@@ -127,19 +127,19 @@
     <value>Kategoria</value>
   </data>
   <data name="CategoryDeletedSuccessfully" xml:space="preserve">
-    <value>Kategoria została pomyślnie usunięta</value>
+    <value>Kategoria została pomyślnie usunięta.</value>
   </data>
   <data name="CategoryDeleteNewsConflict" xml:space="preserve">
     <value>Usuń newsy przypisane do tej kategorii.</value>
   </data>
   <data name="CategoryNotFound" xml:space="preserve">
-    <value>Nie odnaleziono kategorii</value>
+    <value>Nie odnaleziono kategorii.</value>
   </data>
   <data name="CategoryRequiredErrorMessage" xml:space="preserve">
     <value>Wybierz kategorie</value>
   </data>
   <data name="CategorySavedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie utworzono kategorię</value>
+    <value>Pomyślnie zapisano.</value>
   </data>
   <data name="DescriptionLabel" xml:space="preserve">
     <value>Krótki opis</value>
@@ -175,7 +175,7 @@
     <value>News</value>
   </data>
   <data name="NewsDeletedSuccessfully" xml:space="preserve">
-    <value>News zostałał pomyślnie usunięty</value>
+    <value>News zostałał pomyślnie usunięty.</value>
   </data>
   <data name="NewsItem" xml:space="preserve">
     <value>Edycja newsa</value>
@@ -199,7 +199,7 @@
     <value>Kategoria nadrzędna</value>
   </data>
   <data name="ParentCategoryNotFound" xml:space="preserve">
-    <value>Nie znaleziono kategorii nadrzędnej</value>
+    <value>Nie znaleziono kategorii nadrzędnej.</value>
   </data>
   <data name="PreviewImageLabel" xml:space="preserve">
     <value>Główne zdjęcie</value>
