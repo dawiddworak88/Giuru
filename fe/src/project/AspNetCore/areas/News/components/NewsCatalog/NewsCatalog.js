@@ -18,7 +18,7 @@ const NewsCatalog = (props) => {
 
     let pageIndex = 2;
     const handleLoadNews = async () => {
-        if (total < 11) return;
+        if (total < 10) return;
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
         const requestOptions = {
@@ -27,7 +27,7 @@ const NewsCatalog = (props) => {
         }
 
         const queryStrings = {
-            itemsPerPage: 10, 
+            itemsPerPage: 9, 
             pageIndex: pageIndex
         }  
 
