@@ -7,7 +7,7 @@ import useForm from "../../../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
-import { EditorState, convertToRaw, convertFromRaw} from 'draft-js';
+import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import { 
     TextField, Select, FormControl, FormControlLabel, Switch, 
