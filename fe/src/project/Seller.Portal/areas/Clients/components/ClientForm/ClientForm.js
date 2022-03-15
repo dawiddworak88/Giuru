@@ -10,9 +10,7 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 function ClientForm(props) {
 
     const [state, dispatch] = useContext(Context);
-
     const stateSchema = {
-
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
         email: { value: props.email ? props.email : "", error: "" },
@@ -20,7 +18,6 @@ function ClientForm(props) {
     };
 
     const stateValidatorSchema = {
-
         name: {
             required: {
                 isRequired: true,
@@ -124,12 +121,27 @@ function ClientForm(props) {
                             <input id="id" name="id" type="hidden" value={id} />
                         }
                         <div className="field">
-                            <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
-                                value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
+                                <TextField 
+                                    id="name" 
+                                    name="name" 
+                                    label={props.nameLabel} 
+                                    fullWidth={true}
+                                    value={name} 
+                                    onChange={handleOnChange} 
+                                    helperText={dirty.name ? errors.name : ""} 
+                                    error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">
-                            <TextField id="email" name="email" label={props.emailLabel} fullWidth={true}
-                                value={email} onChange={handleOnChange} helperText={dirty.email ? errors.email : ""} error={(errors.email.length > 0) && dirty.email} />
+                                <TextField 
+                                    id="email" 
+                                    name="email" 
+                                    label={props.emailLabel} 
+                                    fullWidth={true}
+                                    value={email} 
+                                    onChange={handleOnChange} 
+                                    helperText={dirty.email ? errors.email : ""} 
+                                    error={(errors.email.length > 0) && dirty.email}
+                                    disabled={email ? true : false} />
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage}>
