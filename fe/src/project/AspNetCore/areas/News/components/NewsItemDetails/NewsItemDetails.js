@@ -26,7 +26,7 @@ const NewsItemDetails = (props) => {
                         {props.previewImages && 
                             <figure className="image is-16by9 news-details__image">
                                 <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
-                                    <ResponsiveImage sources={props.heroImages} imageSrc={props.heroImageUrl} />
+                                    <ResponsiveImage sources={props.previewImages} imageSrc={props.previewImageUrl} />
                                 </LazyLoad>
                             </figure>
                         }
