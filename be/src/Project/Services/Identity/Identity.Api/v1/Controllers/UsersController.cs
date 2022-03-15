@@ -123,15 +123,10 @@ namespace Identity.Api.v1.Controllers
                     Name = request.Name,
                     Email = request.Email,
                     CommunicationLanguage = request.CommunicationLanguage,
-/*                    PhoneNumber = request.PhoneNumber,
+                    PhoneNumber = request.PhoneNumber,
                     FirstName = request.FirstName,
                     LastName = request.LastName,
-                    TwoFactorEnabled = request.TwoFactorEnabled,
-                    AccessFailedCount = request.AccessFailedCount,
                     LockoutEnd = request.LockoutEnd,
-                    ReturnUrl = request.ReturnUrl,
-                    Scheme = this.HttpContext.Request.Scheme,
-                    Host = this.HttpContext.Request.Host*/
                 };
 
                 var validator = new UpdateUserModelValidator();

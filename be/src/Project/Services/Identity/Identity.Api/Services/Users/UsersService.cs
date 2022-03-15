@@ -219,10 +219,10 @@ namespace Identity.Api.Services.Users
                 organisation.Language = serviceModel.CommunicationLanguage;
             }
 
-            /*existingUser.FirstName = serviceModel.FirstName;
+            existingUser.FirstName = serviceModel.FirstName;
             existingUser.LastName = serviceModel.LastName;
             existingUser.PhoneNumber = serviceModel.PhoneNumber;
-            existingUser.LockoutEnd = serviceModel.LockoutEnd;*/
+            existingUser.LockoutEnd = serviceModel.LockoutEnd;
 
             await this.identityContext.SaveChangesAsync();
 
