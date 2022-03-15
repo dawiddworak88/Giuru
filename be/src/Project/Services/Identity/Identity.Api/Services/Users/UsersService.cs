@@ -206,21 +206,27 @@ namespace Identity.Api.Services.Users
 
         public async Task<UserServiceModel> UpdateAsync(UpdateUserServiceModel serviceModel)
         {
-            var existingUser = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Id == serviceModel.Id.ToString());
+            var existingUser = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
             if (existingUser == null)
             {
                 throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NotFound);
             }
 
-            existingUser.FirstName = serviceModel.FirstName;
+            var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == existingUser.OrganisationId);
+            if (organisation is not null)
+            {
+                organisation.Name = serviceModel.Name;
+                organisation.Language = serviceModel.CommunicationLanguage;
+            }
+
+            /*existingUser.FirstName = serviceModel.FirstName;
             existingUser.LastName = serviceModel.LastName;
-            existingUser.TwoFactorEnabled = serviceModel.TwoFactorEnabled.Value;
             existingUser.PhoneNumber = serviceModel.PhoneNumber;
-            existingUser.LockoutEnd = serviceModel.LockoutEnd;
+            existingUser.LockoutEnd = serviceModel.LockoutEnd;*/
 
             await this.identityContext.SaveChangesAsync();
 
-            return await this.GetById(new GetUserServiceModel { Id = serviceModel.Id.Value, Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
+            return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(existingUser.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
         }
     }
 }

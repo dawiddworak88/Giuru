@@ -66,13 +66,14 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 AccountText = this.clientLocalizer.GetString("AccountText"),
                 AccountUrl = this.linkGenerator.GetPathByAction("Account", "IdentityApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ClientsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                BackToClientsLabel = this.clientLocalizer.GetString("BackToClientsLabel"),
+                NewsUrl = this.linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 Languages = languages
             };
 
             if (componentModel.Id.HasValue)
             {
                 var client = await this.clientsRepository.GetClientAsync(componentModel.Token, componentModel.Language, componentModel.Id);
-
                 if (client != null)
                 {
                     viewModel.Id = client.Id;

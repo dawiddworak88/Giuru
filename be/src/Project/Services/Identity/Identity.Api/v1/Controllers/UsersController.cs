@@ -120,7 +120,10 @@ namespace Identity.Api.v1.Controllers
                 var serviceModel = new UpdateUserServiceModel
                 {
                     Id = request.Id,
-                    PhoneNumber = request.PhoneNumber,
+                    Name = request.Name,
+                    Email = request.Email,
+                    CommunicationLanguage = request.CommunicationLanguage,
+/*                    PhoneNumber = request.PhoneNumber,
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     TwoFactorEnabled = request.TwoFactorEnabled,
@@ -128,7 +131,7 @@ namespace Identity.Api.v1.Controllers
                     LockoutEnd = request.LockoutEnd,
                     ReturnUrl = request.ReturnUrl,
                     Scheme = this.HttpContext.Request.Scheme,
-                    Host = this.HttpContext.Request.Host
+                    Host = this.HttpContext.Request.Host*/
                 };
 
                 var validator = new UpdateUserModelValidator();

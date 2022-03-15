@@ -1,14 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function ClientForm(props) {
-
+    const [saved, setSaved] = useState(false);
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -42,6 +43,7 @@ function ClientForm(props) {
         }
     };
 
+
     function onSubmitForm(state) {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -59,6 +61,7 @@ function ClientForm(props) {
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         setFieldValue({ name: "id", value: jsonResponse.id });
+                        setSaved(true)
                         toast.success(jsonResponse.message);
                     }
                     else {
@@ -141,7 +144,7 @@ function ClientForm(props) {
                                     onChange={handleOnChange} 
                                     helperText={dirty.email ? errors.email : ""} 
                                     error={(errors.email.length > 0) && dirty.email}
-                                    disabled={email ? true : false} />
+                                    disabled={props.email ? true : false} />
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage}>
@@ -164,7 +167,21 @@ function ClientForm(props) {
                             </FormControl>
                         </div>
                         <div className="field client-form__field-row">
-                            <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>{props.saveText}</Button>
+                            {!saved ? (
+                                <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>{props.saveText}</Button>
+                            ) : (
+                                <Button
+                                    type="submit" 
+                                    variant="contained" 
+                                    color="primary"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        NavigationHelper.redirect(props.newsUrl)
+                                    }}>
+                                        {props.backToClientsLabel}
+                                </Button>
+                            )}
+
                             <Button className="client-form__create-button" color="secondary" variant="contained" onClick={createAccount} disabled={state.isLoading || !id}>{props.accountText}</Button>
                         </div>
                     </form>

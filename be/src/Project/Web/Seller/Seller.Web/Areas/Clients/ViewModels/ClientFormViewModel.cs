@@ -10,6 +10,7 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public Guid? Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+        public string BackToClientsLabel { get; set; }
         public string CommunicationLanguage { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string NameLabel { get; set; }
@@ -26,7 +27,7 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string SaveText { get; set; }
         public string AccountUrl { get; set; }
         public string AccountText { get; set; }
-        public bool HasAccount { get; set; }
+        public string NewsUrl { get; set; }
         public IEnumerable<LanguageViewModel> Languages { get; set; }
     }
 }

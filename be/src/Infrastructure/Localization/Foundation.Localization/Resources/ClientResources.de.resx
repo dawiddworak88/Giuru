@@ -147,4 +147,7 @@
   <data name="NewClient" xml:space="preserve">
     <value>Neuer Kunde</value>
   </data>
+  <data name="String" xml:space="preserve">
+    <value>Zurück zu den Kunden</value>
+  </data>
 </root>
