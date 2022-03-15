@@ -127,6 +127,7 @@ const NewsCatalog = (props) => {
                                                     </div>
                                                 </div>
                                                 <h4 className="news-title">{news.title}</h4>
+                                                <p className="news-description is-6">{news.description}</p>
                                             </div>
                                         </div>
                                     </div>
