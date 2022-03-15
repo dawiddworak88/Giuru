@@ -204,9 +204,6 @@
   <data name="PreviewImageLabel" xml:space="preserve">
     <value>Newsbild</value>
   </data>
-  <data name="ReadMoreLabel" xml:space="preserve">
-    <value>Weiterlesen</value>
-  </data>
   <data name="SelectCategoryLabel" xml:space="preserve">
     <value>Kategorien auswählen</value>
   </data>

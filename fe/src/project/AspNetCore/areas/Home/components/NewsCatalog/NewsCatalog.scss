@@ -9,50 +9,44 @@
 
     &__item {
 
-        .media-collapse {
-            display: none;
+        .media-content {
+            padding: 1rem;
 
-            &.active {
-                display: block;
-            }
-        }
-
-        .data-text {
-            margin-left: 0.5rem;
-        }
-
-        .media-description {
-            margin-bottom: 0.5rem;
-        }
-
-        .media-read {
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .media-data {
-            display: flex;
-            align-items: center;
-            margin: 0.5rem 0;
-
-            .data {
-                font-size: 0.8rem;
+            .media-data {
                 display: flex;
                 align-items: center;
-
-                svg {
-                    fill: $primary;
-                }
+                margin: 0.5rem 0;
     
-                &:first-child {
-                    margin-right: 1rem;
+                .data {
+                    font-size: 0.8rem;
+                    display: flex;
+                    align-items: center;
+    
+                    svg {
+                        fill: $primary;
+                    }
+        
+                    &:first-child {
+                        margin-right: 1rem;
+                    }
                 }
+            }
+
+            .data-text {
+                margin-left: 0.5rem;
+            }
+
+            .media-description {
+                margin-bottom: 0.5rem;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
             }
         }
     }
 
-    .card {
-        box-shadow: none;
-        padding: 1rem;
+    .card:hover {
+        cursor: pointer;
     }
 }

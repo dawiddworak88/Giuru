@@ -7,7 +7,6 @@ namespace Buyer.Web.Areas.Home.ViewModel
     public class NewsViewModel
     {
         public string Title { get; set; }
-        public string ReadMoreLabel { get; set; }
         public PagedResults<IEnumerable<NewsItemViewModel>> PagedResults { get; set; }
     }
 }

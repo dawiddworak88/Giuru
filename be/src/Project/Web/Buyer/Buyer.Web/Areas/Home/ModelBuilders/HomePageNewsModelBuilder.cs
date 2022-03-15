@@ -30,8 +30,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
         {
             var viewModel = new NewsViewModel
             {
-                Title = this.newsLocalizer.GetString("News"),
-                ReadMoreLabel = this.newsLocalizer.GetString("ReadMoreLabel")
+                Title = this.newsLocalizer.GetString("News")
             };
 
             var news = await this.newsRepository.GetNewsItemsAsync(
@@ -47,6 +46,9 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                         CategoryName = x.CategoryName,
                         Description = x.Description,
                         Content = x.Content,
+                        Url = x.Url,
+                        ThumbImageUrl = x.ThumbImageUrl,
+                        ThumbImages = x.ThumbImages,
                         LastModifiedDate = x.LastModifiedDate,
                         CreatedDate = x.CreatedDate
                     })
