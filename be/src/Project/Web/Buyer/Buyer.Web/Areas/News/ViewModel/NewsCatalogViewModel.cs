@@ -11,6 +11,6 @@ namespace Buyer.Web.Areas.News.ViewModel
         public string AllCategoryLabel { get; set; }
         public string NoResultsLabel { get; set; }
         public IEnumerable<ListItemViewModel> Categories { get; set; }
-        public PagedResults<IEnumerable<NewsItem>> PagedItems { get; set; }
+        public PagedResults<IEnumerable<NewsItem>> PagedResults { get; set; }
     }
 }

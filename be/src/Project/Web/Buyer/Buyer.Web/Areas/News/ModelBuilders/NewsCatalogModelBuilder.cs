@@ -72,7 +72,7 @@ namespace Buyer.Web.Areas.News.ModelBuilders
                 };
 
                 viewModel.Categories = categories.OrderBy(x => x.Name);
-                viewModel.PagedItems = news;
+                viewModel.PagedResults = news;
             }
 
             return viewModel;

@@ -12,14 +12,15 @@ import moment from "moment";
 
 const NewsCatalog = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [items, setItems] = useState(props.pagedItems.data ? props.pagedItems.data : null);
+    const [items, setItems] = useState(props.pagedResults.data ? props.pagedResults.data : null);
+    const [total] = useState(props.pagedResults.total ? props.pagedResults.total : null)
     const [hasMore, setHasMore] = useState(true);
 
     let pageIndex = 2;
     const handleLoadNews = async () => {
-        if (!hasMore) return;
-        dispatch({ type: "SET_IS_LOADING", payload: true });
+        if (total < 11) return;
 
+        dispatch({ type: "SET_IS_LOADING", payload: true });
         const requestOptions = {
             method: "GET",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
@@ -72,10 +73,10 @@ const NewsCatalog = (props) => {
 
     const handleCategory = (category) => {
         if (!category){
-            return setItems(props.pagedItems.data);
+            return setItems(props.pagedResults.data);
         }
 
-        const filtered = props.pagedItems.data.filter((item) => item.categoryName === category.name);
+        const filtered = props.pagedResults.data.filter((item) => item.categoryName === category.name);
 
         return setItems(filtered);
     }
