@@ -13,7 +13,8 @@ import {
     TextField, Select, FormControl, FormControlLabel, Switch, 
     InputLabel, MenuItem, Button, CircularProgress, FormHelperText
 } from "@material-ui/core";
-import {draftToMarkdown, markdownToDraft} from 'markdown-draft-js';
+import { stateToMarkdown } from "draft-js-export-markdown";
+import { stateFromMarkdown } from 'draft-js-import-markdown';
 
 const NewsItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -36,7 +37,11 @@ const NewsItemForm = (props) => {
     useEffect(() => {
         if (props.content){
             setEditorState(EditorState.createWithContent(
-                convertFromRaw(markdownToDraft(props.content))
+                stateFromMarkdown(props.content, {
+                    parserOptions: {
+                        atomicImages: true
+                    }
+                })
             ))
         }
     }, [])
@@ -105,7 +110,7 @@ const NewsItemForm = (props) => {
     const handleEditorChange = (state) => {
         setEditorState(state);
 
-        const convertedToMarkdown = draftToMarkdown(convertToRaw(state.getCurrentContent()));
+        const convertedToMarkdown = stateToMarkdown(state.getCurrentContent());
         setConvertedToRaw(convertedToMarkdown);
     }
 
