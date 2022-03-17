@@ -212,17 +212,19 @@ namespace Identity.Api.Services.Users
                 throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NotFound);
             }
 
-            var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == existingUser.OrganisationId);
-            if (organisation is not null)
-            {
-                organisation.Name = serviceModel.Name;
-                organisation.Language = serviceModel.CommunicationLanguage;
-            }
-
             existingUser.FirstName = serviceModel.FirstName;
             existingUser.LastName = serviceModel.LastName;
             existingUser.PhoneNumber = serviceModel.PhoneNumber;
             existingUser.LockoutEnd = serviceModel.LockoutEnd;
+
+            var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == existingUser.OrganisationId && x.IsActive);
+            if (organisation is null)
+            {
+                throw new CustomException(this.accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            organisation.Name = serviceModel.Name;
+            organisation.Language = serviceModel.CommunicationLanguage;
 
             await this.identityContext.SaveChangesAsync();
 

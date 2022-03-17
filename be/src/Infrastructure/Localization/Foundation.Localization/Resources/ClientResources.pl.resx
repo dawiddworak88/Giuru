@@ -123,7 +123,7 @@
   <data name="AccountText" xml:space="preserve">
     <value>Utwórz konto</value>
   </data>
-  <data name="BackToClientsLabel" xml:space="preserve">
+  <data name="BackToClientsText" xml:space="preserve">
     <value>Powróc do klientów</value>
   </data>
   <data name="Client" xml:space="preserve">

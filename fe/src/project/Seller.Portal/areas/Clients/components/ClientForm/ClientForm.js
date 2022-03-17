@@ -114,6 +114,7 @@ function ClientForm(props) {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const { id, name, email, communicationLanguage } = values;
+    console.log(id)
     return (
         <section className="section section-small-padding product client-form">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -144,7 +145,9 @@ function ClientForm(props) {
                                     onChange={handleOnChange} 
                                     helperText={dirty.email ? errors.email : ""} 
                                     error={(errors.email.length > 0) && dirty.email}
-                                    disabled={props.email ? true : false} />
+                                    InputProps={{
+                                        readOnly: props.email ? true : false,
+                                    }} />
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage}>
@@ -176,9 +179,9 @@ function ClientForm(props) {
                                     color="primary"
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        NavigationHelper.redirect(props.newsUrl)
+                                        NavigationHelper.redirect(props.clientsUrl)
                                     }}>
-                                        {props.backToClientsLabel}
+                                        {props.backToClientsText}
                                 </Button>
                             )}
 
