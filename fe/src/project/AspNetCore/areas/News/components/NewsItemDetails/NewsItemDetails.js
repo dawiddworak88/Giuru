@@ -47,29 +47,24 @@ const NewsItemDetails = (props) => {
                                 <h2 className="subtitle">{props.filesLabel}</h2>
                                 <div className="columns">
                                     {props.files.map((file, index) => {
-                                        const a = file.mimeType.includes("zip");
-                                        if (a){
-                                            console.log("test")
+                                        const iconType = {
+                                            "application/zip": <Folder />,
+                                            "application/pdf": <PictureAsPdf />
                                         }
+
                                         return (
-                                            <a href={file.url}>
-                                                <div className="column is-3" key={index}>
+                                            <div className="column is-3" key={index}>
+                                                <a href={file.url}>
                                                     <div className="card">
                                                         <div className="card-image">
-                                                            {file.mimeType.includes("pdf") &&
-                                                                <PictureAsPdf />
-                                                            }
-                                                            {file.mimeType.includes("zip") &&
-                                                                <div><Folder /></div>
-                                                            }
+                                                            {iconType[file.mimeType] ? iconType[file.mimeType] : <Attachment />}
                                                         </div>
                                                         <div className="media-content">
                                                             <span className="file">{file.filename}</span>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </a>
-//Attachment
+                                                </a>
+                                            </div>
                                         )
                                     })}
                                 </div>

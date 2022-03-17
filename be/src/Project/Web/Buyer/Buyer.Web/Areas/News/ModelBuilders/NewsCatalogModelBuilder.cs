@@ -72,7 +72,7 @@ namespace Buyer.Web.Areas.News.ModelBuilders
                     }
                 };
 
-                if (news.Total > (NewsConstants.DefaultPageSize + 1))
+                if (news.Total >= (NewsConstants.DefaultPageSize + 1))
                 {
                     viewModel.HasMore = true;
                 }
