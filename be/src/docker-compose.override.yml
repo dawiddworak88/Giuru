@@ -104,8 +104,6 @@ services:
       - LogstashUrl=http://logstash:31311
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
-      - EventBusConnection=amqp://rabbitmq
-      - EventBusRetryCount=5
     ports:
       - "5135:80"
 

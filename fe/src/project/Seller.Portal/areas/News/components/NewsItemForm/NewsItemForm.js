@@ -27,7 +27,7 @@ const NewsItemForm = (props) => {
         categoryId: { value: props.categoryId ? props.categoryId : null, error: ""},
         title: { value: props.newsTitle ? props.newsTitle : "", error: "" },
         previewImage: { value: props.previewImages ? props.previewImages : [], error: "" },
-        thumbImage: { value: props.thumbnailImages ? props.thumbnailImages : [], error: "" },
+        thumbnailImage: { value: props.thumbnailImages ? props.thumbnailImages : [], error: "" },
         description: { value: props.description ? props.description : null, error: "" },
         content: { value: props.content ? props.content : "", error: "" },
         files: { value: props.files ? props.files : [], error: "" },
@@ -51,7 +51,7 @@ const NewsItemForm = (props) => {
 
         const requestData = {
             id: state.id,
-            thumbnailImageId: state.thumbImage.length > 0 ? state.thumbImage[0].id : null,
+            thumbnailImageId: state.thumbnailImage.length > 0 ? state.thumbnailImage[0].id : null,
             previewImageId: state.previewImage.length > 0 ? state.previewImage[0].id : null,
             categoryId: state.categoryId,
             title: state.title,
@@ -83,7 +83,6 @@ const NewsItemForm = (props) => {
                     }
                 });
             });
-
     }
 
     const stateValidatorSchema = {
@@ -155,7 +154,7 @@ const NewsItemForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
     
-    const { title, previewImage, thumbImage, description, isPublished, files, categoryId } = values;
+    const { title, previewImage, thumbnailImage, description, isPublished, files, categoryId } = values;
     return (
         <section className="section section-small-padding">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -208,8 +207,8 @@ const NewsItemForm = (props) => {
                         </div>
                         <div className="field">
                             <MediaCloud
-                                id="thumbnImage"
-                                name="thumbImage"
+                                id="thumbnailImage"
+                                name="thumbnailImage"
                                 label={props.thumbImageLabel}
                                 accept=".png, .jpg, .webp"
                                 multiple={false}
@@ -217,7 +216,7 @@ const NewsItemForm = (props) => {
                                 deleteLabel={props.deleteLabel}
                                 dropFilesLabel={props.dropFilesLabel}
                                 dropOrSelectFilesLabel={props.dropOrSelectImagesLabel}
-                                files={thumbImage}
+                                files={thumbnailImage}
                                 setFieldValue={setFieldValue}
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>

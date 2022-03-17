@@ -81,8 +81,6 @@ services:
     restart: always
     depends_on: 
       - sqldata
-      - rabbitmq
-
 
   catalog-api:
     image: ${REGISTRY:-giuru}/catalog-api:${PLATFORM:-linux}-${TAG:-latest}

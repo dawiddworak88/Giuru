@@ -117,20 +117,20 @@ namespace Seller.Web.Areas.News.ModelBuilders
 
                     if (existingNews.ThumbnailImageId.HasValue)
                     {
-                        var thumbImage = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, existingNews.ThumbnailImageId.Value);
-                        if (thumbImage is not null)
+                        var thumbnailImage = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, existingNews.ThumbnailImageId.Value);
+                        if (thumbnailImage is not null)
                         {
 
                             viewModel.ThumbnailImages = new List<FileViewModel>
                             {
                                 new FileViewModel
                                 {
-                                    Id = thumbImage.Id,
-                                    Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, thumbImage.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
-                                    Name = thumbImage.Name,
-                                    MimeType = thumbImage.MimeType,
-                                    Filename = thumbImage.Filename,
-                                    Extension = thumbImage.Extension
+                                    Id = thumbnailImage.Id,
+                                    Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, thumbnailImage.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
+                                    Name = thumbnailImage.Name,
+                                    MimeType = thumbnailImage.MimeType,
+                                    Filename = thumbnailImage.Filename,
+                                    Extension = thumbnailImage.Extension
                                 }
                             };
                         }
@@ -158,7 +158,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
 
                     viewModel.Id = componentModel.Id;
                     viewModel.CategoryId = existingNews.CategoryId;
-                    viewModel.NewsTitle = existingNews.Title;
+                    viewModel.NewsTitle = existingNews.Name;
                     viewModel.Content = existingNews.Content;
                     viewModel.Description = existingNews.Description;
                     viewModel.IsPublished = existingNews.IsPublished;

@@ -4,10 +4,6 @@
         border-radius: 0.5rem;
     }
 
-    .hero-news {
-        cursor: pointer;
-    }
-
     .data-text {
         margin-left: 0.5rem;
     }
@@ -30,12 +26,6 @@
                 margin-right: 1rem;
             }
         }
-    }
-
-    .news-title {
-        font-size: 1.8rem;
-        font-weight: 700;
-        line-height: 2.2rem;
     }
 
     .news-description {
@@ -68,20 +58,10 @@
         flex-wrap: wrap;
         margin-top: 1rem;
 
-        .category-tag {
+        .category {
             margin-right: 0.5rem;
             margin-top: 1rem;
-            background: $primary;
-            padding: 0.5rem;
-            color: #fff;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-
-            &:hover {
-                background: #465652;
-            }
-
+        
             &:last-child {
                 margin-right: 0;
             }

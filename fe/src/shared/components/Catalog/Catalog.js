@@ -282,7 +282,7 @@ function Catalog(props) {
                     titleId="alert-dialog-title"
                     title={props.deleteConfirmationLabel}
                     textId="alert-dialog-description"
-                    text={props.areYouSureLabel + (entityToDelete ? (entityToDelete.name ? ": " + entityToDelete.name : entityToDelete.title ? ": " + entityToDelete.title : ": " + entityToDelete.productName) : "")}
+                    text={props.areYouSureLabel + (entityToDelete ? (entityToDelete.name ? ": " + entityToDelete.name : ": " + entityToDelete.productName) : "")}
                     noLabel={props.noLabel}
                     yesLabel={props.yesLabel}
                 />

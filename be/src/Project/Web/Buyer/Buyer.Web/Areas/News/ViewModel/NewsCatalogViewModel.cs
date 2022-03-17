@@ -10,6 +10,7 @@ namespace Buyer.Web.Areas.News.ViewModel
         public string NewsApiUrl { get; set; }
         public string AllCategoryLabel { get; set; }
         public string NoResultsLabel { get; set; }
+        public int TopUpContentSize { get; set; }
         public IEnumerable<ListItemViewModel> Categories { get; set; }
         public PagedResults<IEnumerable<NewsItem>> PagedResults { get; set; }
     }

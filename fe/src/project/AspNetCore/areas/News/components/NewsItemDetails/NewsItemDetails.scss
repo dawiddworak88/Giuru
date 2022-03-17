@@ -3,8 +3,6 @@
     &__content {
 
         p {
-            font-size: 1.2rem;
-
             &:not(:first-child) {
                 margin-top: 1rem;
             }
@@ -17,12 +15,6 @@
 
     &__files {
         margin-top: 2rem;
-
-        .headline-2 {
-            font-weight: 600;
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
 
         .card-image {
             display: flex;
@@ -53,15 +45,8 @@
 
     &__head {
 
-        .headline-1 {
-            font-size: 3rem;
-            font-weight: 700;
-            line-height: 3rem;
-        }
-
         p {
             margin: 1.2rem 0 ;
-            font-size: 1.3rem;
         }
     }
 

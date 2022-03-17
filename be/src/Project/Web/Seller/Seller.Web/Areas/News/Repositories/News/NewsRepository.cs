@@ -7,6 +7,7 @@ using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.News.ApiRequestModels;
+using Seller.Web.Areas.News.ApiResponseModels;
 using Seller.Web.Areas.News.DomainModels;
 using Seller.Web.Shared.Configurations;
 using System;
@@ -38,7 +39,7 @@ namespace Seller.Web.Areas.News.Repositories.News
                 EndpointAddress = $"{this.settings.Value.NewsUrl}{ApiConstants.News.NewsApiEndpoint}/{id}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, NewsItem>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, NewsItemResponseModel>(apiRequest);
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
@@ -46,7 +47,23 @@ namespace Seller.Web.Areas.News.Repositories.News
 
             if (response.IsSuccessStatusCode && response.Data != null)
             {
-                return response.Data;
+                var newsItem = new NewsItem
+                {
+                    Id = response.Data.Id,
+                    ThumbnailImageId = response.Data.ThumbnailImageId,
+                    PreviewImageId = response.Data.PreviewImageId,
+                    CategoryId = response.Data.CategoryId,
+                    Name = response.Data.Title,
+                    Description = response.Data.Description,
+                    Content = response.Data.Content,
+                    CategoryName = response.Data.CategoryName,
+                    IsPublished = response.Data.IsPublished,
+                    Files = response.Data.Files,
+                    LastModifiedDate = response.Data.LastModifiedDate,
+                    CreatedDate = response.Data.CreatedDate
+                };
+
+                return newsItem;
             }
 
             return default;
@@ -70,12 +87,34 @@ namespace Seller.Web.Areas.News.Repositories.News
                 EndpointAddress = $"{this.settings.Value.NewsUrl}{ApiConstants.News.NewsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<NewsItem>>>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<NewsItemResponseModel>>>(apiRequest);
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
+                var newsItems = new List<NewsItem>();
+                foreach (var newsItem in response.Data.Data)
+                {
+                    var news = new NewsItem
+                    {
+                        Id = newsItem.Id,
+                        ThumbnailImageId = newsItem.ThumbnailImageId,
+                        PreviewImageId = newsItem.PreviewImageId,
+                        CategoryId = newsItem.CategoryId,
+                        Name = newsItem.Title,
+                        Description = newsItem.Description,
+                        Content = newsItem.Content,
+                        CategoryName = newsItem.CategoryName,
+                        IsPublished = newsItem.IsPublished,
+                        Files = newsItem.Files,
+                        LastModifiedDate = newsItem.LastModifiedDate,
+                        CreatedDate = newsItem.CreatedDate
+                    };
+
+                    newsItems.Add(news);
+                }
+
                 return new PagedResults<IEnumerable<NewsItem>>(response.Data.Total, response.Data.PageSize)
                 {
-                    Data = response.Data.Data
+                    Data = newsItems
                 };
             }
 

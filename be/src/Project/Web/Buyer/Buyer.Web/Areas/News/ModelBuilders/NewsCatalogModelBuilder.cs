@@ -49,7 +49,8 @@ namespace Buyer.Web.Areas.News.ModelBuilders
             {
                 NewsApiUrl = this.linkGenerator.GetPathByAction("Get", "NewsApi", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name }),
                 AllCategoryLabel = this.newsLocalizer.GetString("AllCategoryLabel"),
-                NoResultsLabel = this.globalLocalizer.GetString("NoResultsLabel")
+                NoResultsLabel = this.globalLocalizer.GetString("NoResultsLabel"),
+                TopUpContentSize = NewsConstants.DefaultPageSize
             };
 
             var news = await this.newsRepository.GetNewsItemsAsync(componentModel.Token, componentModel.Language, NewsConstants.DefaultPageIndex, NewsConstants.DefaultPageSize, null, $"{nameof(NewsItem.CreatedDate)} desc");

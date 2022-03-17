@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, Fragment } from "react";
 import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../../../shared/constants/LazyLoadConstants";
@@ -8,6 +8,7 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 import { Context } from "../../../../../../shared/stores/Store";
 import { CalendarToday } from "@material-ui/icons";
 import { Hash } from "react-feather"
+import { Button } from "@material-ui/core";
 import moment from "moment";
 
 const NewsCatalog = (props) => {
@@ -18,7 +19,7 @@ const NewsCatalog = (props) => {
 
     let pageIndex = 2;
     const handleLoadNews = async () => {
-        if (total < 10) return;
+        if (total < (props.topUpContentSize + 1)) return;
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
         const requestOptions = {
@@ -27,7 +28,7 @@ const NewsCatalog = (props) => {
         }
 
         const queryStrings = {
-            itemsPerPage: 9, 
+            itemsPerPage: props.topUpContentSize, 
             pageIndex: pageIndex
         }  
 
@@ -66,9 +67,11 @@ const NewsCatalog = (props) => {
     }
 
     useEffect(() => {
-        window.addEventListener("scroll", handleDynamicScroll)
+        if (typeof window !== "undefined") {
+            window.addEventListener("scroll", handleDynamicScroll)
 
-        return () => window.removeEventListener("scroll", handleDynamicScroll)
+            return () => window.removeEventListener("scroll", handleDynamicScroll)
+        }
     }, [hasMore])
 
     const handleCategory = (category) => {
@@ -81,21 +84,17 @@ const NewsCatalog = (props) => {
         return setItems(filtered);
     }
 
-    const navigateToNews = (item) => {
-        NavigationHelper.redirect(item.url)
-    }
-
     return (
         <section className="section news-catalog">
             {items && items.length > 0 ? (
-                <div>
+                <Fragment>
                     <div className="container">
                         {props.categories && props.categories.length > 0 &&
                             <div className="news-catalog__categories">
-                                <div className="category-tag" onClick={() => handleCategory(null)}>{props.allCategoryLabel}</div>
+                                <Button type="text" variant="contained" className="category" color="primary" onClick={() => handleCategory(null)}>{props.allCategoryLabel}</Button>
                                 {props.categories.map(category => {
                                     return (
-                                        <div className="category-tag" onClick={() => handleCategory(category)}>{category.name}</div>
+                                        <Button type="text" variant="contained" className="category" color="primary" onClick={() => handleCategory(category)}>{category.name}</Button>
                                     )
                                 })}
                             </div>
@@ -104,7 +103,7 @@ const NewsCatalog = (props) => {
                         <div className="news-catalog__news columns is-tablet is-multiline">
                             {items.map((news, index) => {
                                 return (
-                                    <div className="column is-4" onClick={() => navigateToNews(news)} key={index}>
+                                    <div className="column is-4" onClick={() => NavigationHelper.redirect(news.url)} key={index}>
                                         <div className="card">
                                             {news.thumbImages && 
                                                 <div className="card-image">
@@ -127,8 +126,8 @@ const NewsCatalog = (props) => {
                                                         <span className="data-text">{moment.utc(news.createdDate).local().format("L")}</span>
                                                     </div>
                                                 </div>
-                                                <h4 className="news-title">{news.title}</h4>
-                                                <p className="news-description is-6">{news.description}</p>
+                                                <h4 className="title is-4">{news.title}</h4>
+                                                <p className="subtitle is-6 news-description">{news.description}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -136,7 +135,7 @@ const NewsCatalog = (props) => {
                             })}
                         </div>
                     </div>
-                </div>
+                </Fragment>
             ) : (
                 <section className="section is-flex-centered">
                     <span className="is-title is-5">{props.noResultsLabel}</span>

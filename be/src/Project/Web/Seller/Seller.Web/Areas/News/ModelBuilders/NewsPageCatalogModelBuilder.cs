@@ -75,7 +75,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(NewsItem.Title).ToCamelCase(),
+                        Title = nameof(NewsItem.Name).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel

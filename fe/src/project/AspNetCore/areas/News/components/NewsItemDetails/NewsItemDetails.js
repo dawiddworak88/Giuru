@@ -8,6 +8,7 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 import { Hash } from "react-feather"
 import {marked} from "marked";
 import moment from "moment";
+import { Button } from "@material-ui/core";
 
 const NewsItemDetails = (props) => {
     const handleDownloadFile = (file) => {
@@ -20,8 +21,8 @@ const NewsItemDetails = (props) => {
                 <div className="columns is-centered">
                     <div className="column is-8">
                         <div className="news-details__head">
-                            <h1 className="headline-1">{props.title}</h1>
-                            <p>{props.description}</p>
+                            <h1 className="title is-2">{props.title}</h1>
+                            <p className="subtitle is-5">{props.description}</p>
                         </div>
                         {props.previewImages && 
                             <figure className="image is-16by9 news-details__image">
@@ -44,52 +45,36 @@ const NewsItemDetails = (props) => {
                                 <span className="text-data">{moment.utc(props.createdDate).local().format("L")}</span>
                             </div>
                         </div>
-                        <div className="news-details__content" dangerouslySetInnerHTML={{__html: marked.parse(props.content)}}></div>
+                        <div className="news-details__content subtitle is-5" dangerouslySetInnerHTML={{__html: marked.parse(props.content)}}></div>
                         {props.files && props.files.length > 0 &&
                             <div className="news-details__files">
-                                <h2 className="headline-2">{props.filesLabel}</h2>
+                                <h2 className="subtitle">{props.filesLabel}</h2>
                                 <div className="columns">
                                     {props.files.map((file, index) => {
-                                        if (file.mimeType.includes("pdf")){
-                                            return (
-                                                <div className="column is-3" key={index} onClick={() => handleDownloadFile(file)}>
-                                                    <div className="card">
-                                                        <div className="card-image">
-                                                            <PictureAsPdf />
-                                                        </div>
-                                                        <div className="media-content">
-                                                            <span className="file">{file.filename}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )
-                                        } else if (file.mimeType.includes("zip")) {
-                                                return (
-                                                    <div className="column is-3" key={index} onClick={() => handleDownloadFile(file)}>
-                                                        <div className="card">
-                                                            <div className="card-image">
-                                                                <Folder />
-                                                            </div>
-                                                            <div className="media-content">
-                                                                <span className="file">{file.filename}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )
-                                        } else {
-                                            return (
-                                                <div className="column is-3" key={index} onClick={() => handleDownloadFile(file)}>
-                                                    <div className="card">
-                                                        <div className="card-image">
-                                                            <Attachment />
-                                                        </div>
-                                                        <div className="media-content">
-                                                            <span className="file">{file.filename}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )
+                                        const a = file.mimeType.includes("zip");
+                                        if (a){
+                                            console.log("test")
                                         }
+                                        return (
+                                            <a href={file.url}>
+                                                <div className="column is-3" key={index}>
+                                                    <div className="card">
+                                                        <div className="card-image">
+                                                            {file.mimeType.includes("pdf") &&
+                                                                <PictureAsPdf />
+                                                            }
+                                                            {file.mimeType.includes("zip") &&
+                                                                <div><Folder /></div>
+                                                            }
+                                                        </div>
+                                                        <div className="media-content">
+                                                            <span className="file">{file.filename}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </a>
+//Attachment
+                                        )
                                     })}
                                 </div>
                             </div>
