@@ -11,10 +11,6 @@ import moment from "moment";
 import { Button } from "@material-ui/core";
 
 const NewsItemDetails = (props) => {
-    const handleDownloadFile = (file) => {
-        NavigationHelper.redirect(file.url)
-    }
-
     return (
         <div className="section news-details">
             <div className="container">

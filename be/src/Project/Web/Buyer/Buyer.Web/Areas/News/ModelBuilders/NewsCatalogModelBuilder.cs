@@ -72,6 +72,11 @@ namespace Buyer.Web.Areas.News.ModelBuilders
                     }
                 };
 
+                if (news.Total > (NewsConstants.DefaultPageSize + 1))
+                {
+                    viewModel.HasMore = true;
+                }
+
                 viewModel.Categories = categories.OrderBy(x => x.Name);
                 viewModel.PagedResults = news;
             }

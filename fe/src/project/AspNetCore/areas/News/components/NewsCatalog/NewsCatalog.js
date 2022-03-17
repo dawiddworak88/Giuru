@@ -14,12 +14,12 @@ import moment from "moment";
 const NewsCatalog = (props) => {
     const [state, dispatch] = useContext(Context);
     const [items, setItems] = useState(props.pagedResults.data ? props.pagedResults.data : null);
-    const [total] = useState(props.pagedResults.total ? props.pagedResults.total : null)
-    const [hasMore, setHasMore] = useState(true);
+    const [hasMore, setHasMore] = useState(props.hasMore ? props.hasMore : false);
 
     let pageIndex = 2;
+    let loadMore = hasMore;
     const handleLoadNews = async () => {
-        if (total < (props.topUpContentSize + 1)) return;
+        if (!loadMore) return;
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
         const requestOptions = {
@@ -40,7 +40,7 @@ const NewsCatalog = (props) => {
                 return response.json().then(jsonResponse => {
                     if (response.ok){
                         jsonResponse.data.forEach(item => {
-                            setNews(element => [...element, item]);
+                            setItems(element => [...element, item]);
                         })
 
                         pageIndex += 1;
@@ -50,8 +50,6 @@ const NewsCatalog = (props) => {
                         }
                     }
                 });
-            }).catch(() => {
-                setHasMore(false)
             });
     }
 
@@ -99,7 +97,6 @@ const NewsCatalog = (props) => {
                                 })}
                             </div>
                         }
-
                         <div className="news-catalog__news columns is-tablet is-multiline">
                             {items.map((news, index) => {
                                 return (
@@ -114,7 +111,6 @@ const NewsCatalog = (props) => {
                                                     </figure>
                                                 </div>
                                             }
-                                            
                                             <div className="media-content">
                                                 <div className="news-data">
                                                     <div className="data">
