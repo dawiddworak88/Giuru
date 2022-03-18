@@ -90,69 +90,108 @@ namespace News.Api.Services.News
 
         public async Task<PagedResults<IEnumerable<NewsItemServiceModel>>> GetAsync(GetNewsItemsServiceModel model)
         {
-            var news = from n in this.newsContext.NewsItems
-                       join t in this.newsContext.NewsItemTranslations on n.Id equals t.NewsItemId into nt
-                       from x in nt.DefaultIfEmpty()
-                       join f in this.newsContext.NewsItemFiles on n.Id equals f.NewsItemId into fg
-                       from nf in fg.DefaultIfEmpty()
-                       join c in this.newsContext.CategoryTranslations on n.CategoryId equals c.CategoryId
-                       where x.Language == model.Language && (c.Language == model.Language || c.Language == null) && n.IsActive
-                       select new NewsItemServiceModel
-                       {
-                           Id = n.Id,
-                           ThumbnailImageId = n.ThumbnailImageId,
-                           PreviewImageId = n.PreviewImageId,
-                           CategoryId = n.CategoryId,
-                           CategoryName = c.Name,
-                           Title = x.Title,
-                           Description = x.Description,
-                           Content = x.Content,
-                           IsPublished = n.IsPublished,
-                           LastModifiedDate = n.LastModifiedDate,
-                           CreatedDate = n.CreatedDate
-                       };
-           
+            var news = this.newsContext.NewsItems.Where(x => x.IsActive);
+
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
-                news = news.Where(x => x.Title.StartsWith(model.SearchTerm) || x.CategoryName.StartsWith(model.SearchTerm));
+                var category = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.Name.StartsWith(model.SearchTerm));
+
+                news = news.Where(x => x.Translations.Any(x => x.Title.StartsWith(model.SearchTerm)) || x.CategoryId == category.CategoryId);
             }
 
             news = news.ApplySort(model.OrderBy);
 
-            return news.PagedIndex(new Pagination(news.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedResults = news.PagedIndex(new Pagination(news.Count(), model.ItemsPerPage), model.PageIndex);
+
+            var pagedNewsServiceModel = new PagedResults<IEnumerable<NewsItemServiceModel>>(pagedResults.Total, pagedResults.PageSize);
+
+            var newsItems = new List<NewsItemServiceModel>();
+            foreach (var newsItem in pagedResults.Data.ToList())
+            {
+                var item = new NewsItemServiceModel
+                {
+                    Id = newsItem.Id,
+                    ThumbnailImageId = newsItem.ThumbnailImageId,
+                    PreviewImageId = newsItem.PreviewImageId,
+                    CategoryId = newsItem.CategoryId,
+                    IsPublished = newsItem.IsPublished,
+                    LastModifiedDate = newsItem.LastModifiedDate,
+                    CreatedDate = newsItem.CreatedDate
+                };
+
+                var files = this.newsContext.NewsItemFiles.Where(x => x.NewsItemId == newsItem.Id && x.IsActive);
+                if (files.Any())
+                {
+                    item.Files = files.Select(x => x.MediaId);
+                }
+
+                var newsItemTranslations = this.newsContext.NewsItemTranslations.FirstOrDefault(x => x.Language == model.Language && x.NewsItemId == newsItem.Id && x.IsActive);
+                if (newsItemTranslations is null)
+                {
+                    newsItemTranslations = this.newsContext.NewsItemTranslations.FirstOrDefault(x => x.IsActive);
+                }
+
+                item.Title = newsItemTranslations?.Title;
+                item.Description = newsItemTranslations?.Description;
+                item.Content = newsItemTranslations?.Content;
+
+                var newsCategoryTranslation = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == newsItem.CategoryId && x.IsActive);
+                if (newsCategoryTranslation is null)
+                {
+                    newsCategoryTranslation = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.IsActive);
+                }
+                
+                item.CategoryName = newsCategoryTranslation?.Name;
+
+                newsItems.Add(item);
+            }
+
+            pagedNewsServiceModel.Data = newsItems;
+
+            return pagedNewsServiceModel;
         }
 
         public async Task<NewsItemServiceModel> GetAsync(GetNewsItemServiceModel model)
         {
-            var existingNews = from n in this.newsContext.NewsItems
-                               join nt in this.newsContext.NewsItemTranslations on n.Id equals nt.NewsItemId
-                               join c in this.newsContext.CategoryTranslations on n.CategoryId equals c.CategoryId
-                               where n.Id == model.Id && n.IsActive && nt.Language == model.Language && c.Language == model.Language
-                               select new NewsItemServiceModel
-                               {
-                                   Id = n.Id,
-                                   ThumbnailImageId = n.ThumbnailImageId,
-                                   PreviewImageId = n.PreviewImageId,
-                                   CategoryId = n.CategoryId,
-                                   CategoryName = c.Name,
-                                   Title = nt.Title,
-                                   Description = nt.Description,
-                                   Content = nt.Content,
-                                   IsPublished = n.IsPublished,
-                                   LastModifiedDate = n.LastModifiedDate,
-                                   CreatedDate = n.CreatedDate
-                               };
-
-            var news = existingNews.FirstOrDefault();
-            if (news is not null)
+            var newsItem = this.newsContext.NewsItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+            if (newsItem is not null)
             {
-                var files = this.newsContext.NewsItemFiles.Where(x => x.NewsItemId == model.Id);
-                if (files is not null)
+                var item = new NewsItemServiceModel
                 {
-                    news.Files = files.Select(x => x.MediaId);
+                    Id = newsItem.Id,
+                    ThumbnailImageId = newsItem.ThumbnailImageId,
+                    PreviewImageId = newsItem.PreviewImageId,
+                    CategoryId = newsItem.CategoryId,
+                    IsPublished = newsItem.IsPublished,
+                    LastModifiedDate = newsItem.LastModifiedDate,
+                    CreatedDate = newsItem.CreatedDate
+                };
+
+                var newsItemTranslations = this.newsContext.NewsItemTranslations.FirstOrDefault(x => x.Language == model.Language && x.NewsItemId == newsItem.Id && x.IsActive);
+                if (newsItemTranslations is null)
+                {
+                    newsItemTranslations = this.newsContext.NewsItemTranslations.FirstOrDefault(x => x.IsActive);
                 }
 
-                return news;
+                item.Title = newsItemTranslations?.Title;
+                item.Description = newsItemTranslations?.Description;
+                item.Content = newsItemTranslations?.Content;
+
+                var newsCategoryTranslation = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == newsItem.CategoryId && x.IsActive);
+                if (newsCategoryTranslation is null)
+                {
+                    newsCategoryTranslation = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.IsActive);
+                }
+                
+                item.CategoryName = newsCategoryTranslation?.Name;
+
+                var files = this.newsContext.NewsItemFiles.Where(x => x.NewsItemId == newsItem.Id && x.IsActive);
+                if (files.Any())
+                {
+                    item.Files = files.Select(x => x.MediaId);
+                }
+
+                return item;
             }
 
             return default;
