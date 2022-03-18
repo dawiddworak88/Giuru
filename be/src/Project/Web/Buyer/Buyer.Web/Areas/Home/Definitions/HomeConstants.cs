@@ -6,6 +6,7 @@ namespace Buyer.Web.Areas.Home.Definitions
     {
         public struct News
         {
+            public static readonly Guid NewsId = Guid.Parse("5632bec3-9087-48e3-8406-f5272f006506");
             public static readonly int DefaultPageIndex = 1;
             public static readonly int DefaultPageSize = 6;
             public static readonly string DefaultSearchTerm = "B2B";

@@ -47,7 +47,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                 HeroSlider = await this.heroSliderModelBuilder.BuildModelAsync(componentModel),
                 CarouselGrid = await this.carouselGridModelBuilder.BuildModelAsync(componentModel),
                 ContentGrid = await this.contentGridModelBuilder.BuildModelAsync(componentModel),
-                News = await this.newsModelBuilder.BuildModelAsync(componentModel),
+                NewsCarousel = await this.newsModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };
 

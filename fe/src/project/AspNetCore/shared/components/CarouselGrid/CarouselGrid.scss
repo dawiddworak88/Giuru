@@ -15,4 +15,35 @@
         max-width: 270px;
         margin: 2rem;
     }
+
+    &__data {
+        display: flex;
+        align-items: center;
+        margin: 0.5rem 0;
+
+        .data {
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+
+            svg {
+                fill: $primary;
+            }
+
+            &:first-child {
+                margin-right: 1rem;
+            }
+
+            .text {
+                margin-left: 0.5rem;
+            }
+        }
+    }
+
+    .grid-description {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
 }

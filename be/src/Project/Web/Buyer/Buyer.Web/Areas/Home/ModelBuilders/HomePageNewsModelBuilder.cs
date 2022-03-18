@@ -6,6 +6,7 @@ using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Components.CarouselGrids.ViewModels;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,31 +31,38 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
         {
             var viewModel = new NewsViewModel
             {
-                Title = this.newsLocalizer.GetString("News")
+                Title = this.newsLocalizer.GetString("News"),
+                IsNews = true
             };
 
+            var items = new List<CarouselGridItemViewModel>();
             var news = await this.newsRepository.GetNewsItemsAsync(
                 componentModel.Token, componentModel.Language, HomeConstants.News.DefaultPageIndex, HomeConstants.News.DefaultPageSize, HomeConstants.News.DefaultSearchTerm, $"{nameof(NewsItem.CreatedDate)} desc");
 
-            if (news is not null)
+            if (news is not null && news.Total > 0)
             {
-                var pagedResults = new PagedResults<IEnumerable<NewsItemViewModel>>(news.Total, news.PageSize)
-                {
-                    Data = news.Data.Select(x => new NewsItemViewModel
-                    {
-                        Title = x.Title,
-                        CategoryName = x.CategoryName,
-                        Description = x.Description,
-                        Content = x.Content,
-                        Url = x.Url,
-                        ThumbImageUrl = x.ThumbImageUrl,
-                        ThumbImages = x.ThumbImages,
-                        LastModifiedDate = x.LastModifiedDate,
-                        CreatedDate = x.CreatedDate
-                    })
-                };
+                var contentGridCarouselItems = new List<CarouselGridCarouselItemViewModel>();
 
-                viewModel.PagedResults = pagedResults;
+                foreach (var newsItem in news.Data)
+                {
+                    var carouselItem = new CarouselGridCarouselItemViewModel
+                    {
+                        Id = newsItem.Id,
+                        Title = newsItem.Title,
+                        CategoryName = newsItem.CategoryName,
+                        Subtitle = newsItem.Description,
+                        Url = newsItem.Url,
+                        ImageUrl = newsItem.ThumbImageUrl,
+                        Sources = newsItem.ThumbImages,
+                        CreatedDate = newsItem.CreatedDate
+                    };
+
+                    contentGridCarouselItems.Add(carouselItem);
+                }
+
+                items.Add(new CarouselGridItemViewModel { Id = HomeConstants.News.NewsId, Title = this.newsLocalizer.GetString("News"), CarouselItems = contentGridCarouselItems });
+
+                viewModel.Items = items;
             }
 
             return viewModel;

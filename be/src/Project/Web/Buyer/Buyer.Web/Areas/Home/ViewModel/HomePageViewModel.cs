@@ -14,7 +14,7 @@ namespace Buyer.Web.Areas.Home.ViewModel
         public HeroSliderViewModel HeroSlider { get; set; }
         public CarouselGridViewModel CarouselGrid { get; set; }
         public ContentGridViewModel ContentGrid { get; set; }
-        public NewsViewModel News { get; set; }
+        public NewsViewModel NewsCarousel { get; set; }
         public FooterViewModel Footer { get; set; }
     }
 }
