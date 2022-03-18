@@ -19,6 +19,15 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
         public string ProductName { get; set; }
 
         [Required]
+        public double TotalQuantity { get; set; }
+
+        [Required]
+        public double OutletQuantity { get; set; }
+
+        [Required]
+        public double StockQuantity { get; set; }
+
+        [Required]
         public double Quantity { get; set; }
 
         public string PictureUrl { get; set; }

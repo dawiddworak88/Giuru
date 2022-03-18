@@ -9,6 +9,9 @@ namespace Ordering.Api.ServicesModels
         public string ProductName { get; set; }
         public string PictureUrl { get; set; }
         public double Quantity { get; set; }
+        public double TotalQuantity { get; set; }
+        public double OutletQuantity { get; set; }
+        public double StockQuantity { get; set; }
         public string ExternalReference { get; set; }
         public DateTime? ExpectedDeliveryFrom { get; set; }
         public DateTime? ExpectedDeliveryTo { get; set; }
