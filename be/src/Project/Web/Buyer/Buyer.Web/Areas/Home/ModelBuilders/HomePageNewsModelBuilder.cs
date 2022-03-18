@@ -3,13 +3,11 @@ using Buyer.Web.Areas.Home.DomainModels;
 using Buyer.Web.Areas.Home.ViewModel;
 using Buyer.Web.Shared.Repositories.News;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.CarouselGrids.ViewModels;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Home.ModelBuilders
