@@ -10,7 +10,11 @@
     {
         <title>@MetaTagsService.GenerateTitle($"{((NewsItemPageViewModel)Model)?.NewsItemDetails?.Title}", true)</title>
     }
-    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("NewsItemDetails"))</title>
+    else
+    {
+        <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("NewsItemDetails"))</title>
+    }
+
     @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("NewsItemDetails")))
     {
         <meta name="description" content="@this.Localizer.GetString("NewsItemDetails")" />

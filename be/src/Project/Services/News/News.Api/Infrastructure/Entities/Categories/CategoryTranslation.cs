@@ -1,5 +1,4 @@
-﻿
-using Foundation.GenericRepository.Entities;
+﻿using Foundation.GenericRepository.Entities;
 using System.ComponentModel.DataAnnotations;
 using System;
 

@@ -77,6 +77,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
 IdentityModelEventSource.ShowPII = true;
 
 app.UseSwagger();
@@ -101,4 +102,5 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+
 app.Run();

@@ -77,6 +77,7 @@ namespace News.Api.Services.Categories
         public async Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model)
         {
             var category = this.newsContext.Categories.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+
             if (category is not null)
             {
                 var item = new CategoryServiceModel
@@ -88,6 +89,7 @@ namespace News.Api.Services.Categories
                 };
 
                 var categoryTranslations = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == category.Id && x.IsActive);
+                
                 if (categoryTranslations is null)
                 {
                     categoryTranslations = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.IsActive);
@@ -98,6 +100,7 @@ namespace News.Api.Services.Categories
                 if (category.ParentCategoryId.HasValue)
                 {
                     var categoryParentTranslations = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == category.ParentCategoryId && x.IsActive);
+                    
                     if (categoryParentTranslations is null)
                     {
                         categoryParentTranslations = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.CategoryId == category.ParentCategoryId && x.IsActive);
@@ -139,6 +142,7 @@ namespace News.Api.Services.Categories
                 };
 
                 var categoryTranslations = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == category.Id && x.IsActive);
+                
                 if (categoryTranslations is null)
                 {
                     categoryTranslations = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.IsActive);
@@ -149,6 +153,7 @@ namespace News.Api.Services.Categories
                 if (categoryItem.ParentCategoryId.HasValue)
                 {
                     var categoryParentTranslations = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == category.ParentCategoryId && x.IsActive);
+                    
                     if (categoryParentTranslations is null)
                     {
                         categoryParentTranslations = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.IsActive);
@@ -168,12 +173,14 @@ namespace News.Api.Services.Categories
         public async Task<CategoryServiceModel> UpdateAsync(UpdateCategoryServiceModel model)
         {
             var category = await this.newsContext.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            
             if (category is null)
             {
                 throw new CustomException(this.newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var parentCategory = await this.newsContext.Categories.FirstOrDefaultAsync(x => x.Id == model.ParentCategoryId && x.IsActive);
+            
             if (parentCategory is  null)
             {
                 throw new CustomException(this.newsLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NotFound);
@@ -183,6 +190,7 @@ namespace News.Api.Services.Categories
             category.LastModifiedDate = DateTime.UtcNow;
 
             var categoryTranslation = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.CategoryId == model.Id && x.Language == model.Language && x.IsActive);
+            
             if (categoryTranslation is not null)
             {
                 categoryTranslation.Name = model.Name;
