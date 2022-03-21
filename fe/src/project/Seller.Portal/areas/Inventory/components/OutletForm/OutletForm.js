@@ -92,7 +92,6 @@ const OutletForm = (props) => {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const { id, warehouseId, product, quantity, availableQuantity } = values;
-
     return (
         <section className="section section-small-padding inventory-add">
             <h1 className="subtitle is-4">{props.title}</h1>

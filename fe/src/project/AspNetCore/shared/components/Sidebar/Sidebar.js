@@ -83,6 +83,8 @@ const Sidebar = (props) => {
             ...item
         }
 
+        console.log(item)
+
         handleOrder(orderItem);
     }
 
@@ -175,7 +177,7 @@ const Sidebar = (props) => {
                                             </div>
                                         </div>
                                         <div className="sidebar-item__buttons">
-                                            <TextField 
+                                            {/* <TextField 
                                                 id={carouselItem.id} 
                                                 name="quantity" 
                                                 type="number" 
@@ -186,7 +188,7 @@ const Sidebar = (props) => {
                                                 }}
                                                 value={quantity} 
                                                 onChange={onQuantityChange(carouselItem.id)}
-                                                className="quantity-input" />
+                                                className="quantity-input" /> */}
                                             <Button title={props.labels.addToCartLabel} aria-label={props.labels.addToCartLabel} type="text" color="primary" variant="contained" className="cart-button" onClick={() => handleAddOrderItemClick(carouselItem)}><AddShoppingCart /></Button>
                                             <Button title={props.labels.goToDetailsLabel} aria-label={props.labels.goToDetailsLabel} type="text" color="primary" variant="contained" className="cart-button" onClick={variantDetails(carouselItem)}><ArrowRight /></Button>
                                         </div>
