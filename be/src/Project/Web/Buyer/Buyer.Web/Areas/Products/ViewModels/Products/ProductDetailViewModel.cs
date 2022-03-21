@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Orders.ApiResponseModels;
-using Buyer.Web.Shared.DomainModels.Baskets;
+﻿using Buyer.Web.Shared.DomainModels.Baskets;
 using Buyer.Web.Shared.ViewModels.Files;
 using Buyer.Web.Shared.ViewModels.Images;
 using Buyer.Web.Shared.ViewModels.Sidebar;
@@ -29,6 +28,9 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public bool InStock { get; set; }
         public int? AvailableQuantity { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
+        public bool InOutlet { get; set; }
+        public int? AvailableOutletQuantity { get; set; }
+        public DateTime? ExpectedOutletDelivery { get; set; }
         public string ExpectedDeliveryLabel { get; set; }
         public string RestockableInDaysLabel { get; set; }
         public int? RestockableInDays { get; set; }

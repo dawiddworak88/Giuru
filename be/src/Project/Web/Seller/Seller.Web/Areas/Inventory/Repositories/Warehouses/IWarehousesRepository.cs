@@ -12,7 +12,6 @@ namespace Seller.Web.Areas.Inventory.Repositories.Warehouses
         Task<PagedResults<IEnumerable<Warehouse>>> GetWarehousesAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
         Task DeleteAsync(string token, string language, Guid? id);
         Task<IEnumerable<Warehouse>> GetAllWarehousesAsync(string token, string language, IEnumerable<Guid> clientIds);
-        Task<IEnumerable<Warehouse>> GetAllWarehousesAsync(string token, string language);
         Task<Guid> SaveAsync(string token, string language, Guid? id, string name, string location, Guid? OrganisationId);
     }
 }

@@ -62,7 +62,6 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
             };
 
             var warehouses = await this.warehousesRepository.GetAllWarehousesAsync(componentModel.Token, componentModel.Language, null);
-            
             if (warehouses != null)
             {
                 viewModel.Warehouses = warehouses.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });

@@ -18,7 +18,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
-using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Foundation.PageContent.Components.CarouselGrids.ViewModels;
 using Foundation.GenericRepository.Paginations;
@@ -133,6 +132,15 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     viewModel.ExpectedDeliveryLabel = this.inventoryResources.GetString("ExpectedDeliveryLabel");
                     viewModel.RestockableInDays = inventory.RestockableInDays;
                     viewModel.RestockableInDaysLabel = this.inventoryResources.GetString("RestockableInDaysLabel");
+                }
+
+                var outlet = await this.productsRepository.GetProductOutletAsync(componentModel.Id);
+
+                if (outlet is not null && outlet.AvailableQuantity.HasValue && outlet.AvailableQuantity.Value > 0)
+                {
+                    viewModel.InOutlet = true;
+                    viewModel.AvailableOutletQuantity = outlet.AvailableQuantity;
+                    viewModel.ExpectedOutletDelivery = outlet.ExpectedDelivery;
                 }
 
                 if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)

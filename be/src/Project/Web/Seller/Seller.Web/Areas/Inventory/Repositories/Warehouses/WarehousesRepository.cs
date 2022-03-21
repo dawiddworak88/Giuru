@@ -55,58 +55,6 @@ namespace Seller.Web.Areas.Inventory.Repositories.Warehouses
             return default;
         }
 
-        public async Task<IEnumerable<Warehouse>> GetAllWarehousesAsync(string token, string language)
-        {
-            var warehousesRequestModel = new PagedRequestModelBase
-            {
-                PageIndex = PaginationConstants.DefaultPageIndex,
-                ItemsPerPage = PaginationConstants.DefaultPageSize
-            };
-
-            var apiRequest = new ApiRequest<PagedRequestModelBase>
-            {
-                Language = language,
-                Data = warehousesRequestModel,
-                AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.InventoryUrl}{ApiConstants.Inventory.WarehousesApiEndpoint}"
-            };
-
-            var response = await this.apiWarehouseService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Warehouse>>>(apiRequest);
-
-            if (response.IsSuccessStatusCode && response.Data?.Data != null)
-            {
-                var warehouses = new List<Warehouse>();
-
-                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
-
-                for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
-                {
-                    apiRequest.Data.PageIndex = i;
-
-                    var nextPagesResponse = await this.apiWarehouseService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Warehouse>>>(apiRequest);
-
-                    if (!nextPagesResponse.IsSuccessStatusCode)
-                    {
-                        throw new CustomException(response.Message, (int)response.StatusCode);
-                    }
-
-                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Count() > 0)
-                    {
-                        warehouses.AddRange(nextPagesResponse.Data.Data);
-                    }
-                }
-
-                return warehouses;
-            }
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
-            return default;
-        }
-
         public async Task<PagedResults<IEnumerable<Warehouse>>> GetWarehousesAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var ordersRequestModel = new PagedRequestModelBase

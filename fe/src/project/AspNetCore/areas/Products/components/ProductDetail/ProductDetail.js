@@ -10,13 +10,17 @@ import { Context } from "../../../../../../shared/stores/Store";
 import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import Modal from "../../../../shared/components/Modal/Modal";
 
 function ProductDetail(props) {
+    console.log(props)
     const [state, dispatch] = useContext(Context);
     const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
     const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
     const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
     const [quantity, setQuantity] = React.useState(1);
+    const [stockQuantity, setStockQuantity] = React.useState(0);
+    const [outletQuantity, setOutletQuantity] = React.useState(0);
     const [isProductOrdered, setIsProductOrdered] = React.useState(false);
 
     const toggleSidebar = () => {
@@ -184,6 +188,16 @@ function ProductDetail(props) {
             </div>
             <CarouselGrid items={props.productVariants} />
             <Files {...props.files} />
+            <Modal 
+                outletValue={outletQuantity}
+                quantityValue={quantity}
+                stockValue={stockQuantity}
+                setQuantity={setQuantity}
+                setStockQuantity={setStockQuantity}
+                setOutletQuantity={setOutletQuantity}
+                maxOutletValue={props.availableOutletQuantity}
+                maxStockValue={props.availableQuantity}
+            />
         </section>
     );
 }

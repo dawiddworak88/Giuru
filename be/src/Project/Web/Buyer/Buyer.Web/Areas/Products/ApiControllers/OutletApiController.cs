@@ -32,23 +32,15 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         [HttpGet]
         public async Task<IActionResult> Get(int pageIndex, int itemsPerPage)
         {
-            var outletItems = await this.outletRepository.GetOutletProductsAsync(
-                CultureInfo.CurrentUICulture.Name,
-                pageIndex,
-                itemsPerPage,
-                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName));
+            var language = CultureInfo.CurrentUICulture.Name;
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+
+            var outletItems = await this.outletRepository.GetOutletProductsAsync(language, pageIndex, itemsPerPage, token);
 
             if (outletItems?.Data is not null && outletItems.Data.Any())
             {
                 var products = await this.productsService.GetProductsAsync(
-                    outletItems.Data.Select(x => x.ProductId),
-                    null,
-                    null,
-                    CultureInfo.CurrentUICulture.Name,
-                    null,
-                    pageIndex,
-                    itemsPerPage,
-                    await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName));
+                    outletItems.Data.Select(x => x.ProductId), null, null, language,null, pageIndex, itemsPerPage, token);
 
                 if (products is not null)
                 {
