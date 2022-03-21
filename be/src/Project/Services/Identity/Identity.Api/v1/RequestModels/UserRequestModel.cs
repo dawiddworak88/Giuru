@@ -10,7 +10,7 @@ namespace Identity.Api.v1.RequestModels
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? CommunicationLanguage { get; set; }
-        public bool? TwoFactorEnabled { get; set; }
+        public bool TwoFactorEnabled { get; set; }
         public bool? PhoneNumberConfirmed { get; set; }
         public bool? EmailConfirmed { get; set; }
         public bool? LockoutEnabled { get; set; }

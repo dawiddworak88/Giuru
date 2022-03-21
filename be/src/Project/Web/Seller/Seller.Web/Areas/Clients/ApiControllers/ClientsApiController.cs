@@ -72,6 +72,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             }
 
             var clientId = await this.clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, organisationId.Value);
+
             if (model.Id.HasValue)
             {
                 await this.identityRepository.UpdateAsync(token, language, model.Id, model.Email, model.Name, model.CommunicationLanguage);

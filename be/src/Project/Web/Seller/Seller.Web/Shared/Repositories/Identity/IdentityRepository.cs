@@ -74,11 +74,6 @@ namespace Seller.Web.Shared.Repositories.Identity
             };
 
             var response = await this.apiClientService.PostAsync<ApiRequest<UpdateClientRequestModel>, UpdateClientRequestModel, BaseResponseModel>(apiRequest);
-            if (!response.IsSuccessStatusCode || response?.Data?.Id == null)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
             if (response.IsSuccessStatusCode)
             {
                 return response.Data.Id.Value;

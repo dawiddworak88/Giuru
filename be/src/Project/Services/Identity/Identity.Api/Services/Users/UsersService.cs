@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Globalization;
 using System.Net;
@@ -207,13 +208,14 @@ namespace Identity.Api.Services.Users
         public async Task<UserServiceModel> UpdateAsync(UpdateUserServiceModel serviceModel)
         {
             var existingUser = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
-            if (existingUser == null)
+            if (existingUser is null)
             {
                 throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             existingUser.FirstName = serviceModel.FirstName;
             existingUser.LastName = serviceModel.LastName;
+            existingUser.TwoFactorEnabled = serviceModel.TwoFactorEnabled;
             existingUser.PhoneNumber = serviceModel.PhoneNumber;
             existingUser.LockoutEnd = serviceModel.LockoutEnd;
 

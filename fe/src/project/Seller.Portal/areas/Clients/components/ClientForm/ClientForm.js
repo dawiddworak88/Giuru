@@ -1,15 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function ClientForm(props) {
-    const [saved, setSaved] = useState(false);
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -57,11 +55,12 @@ function ClientForm(props) {
         fetch(props.saveUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
                 AuthenticationHelper.HandleResponse(response);
+
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         setFieldValue({ name: "id", value: jsonResponse.id });
-                        setSaved(true)
                         toast.success(jsonResponse.message);
                     }
                     else {
@@ -92,7 +91,9 @@ function ClientForm(props) {
         fetch(props.accountUrl, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
                 AuthenticationHelper.HandleResponse(response);
+
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         setFieldValue({ name: "id", value: null });
@@ -114,7 +115,6 @@ function ClientForm(props) {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const { id, name, email, communicationLanguage } = values;
-    console.log(id)
     return (
         <section className="section section-small-padding product client-form">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -125,29 +125,29 @@ function ClientForm(props) {
                             <input id="id" name="id" type="hidden" value={id} />
                         }
                         <div className="field">
-                                <TextField 
-                                    id="name" 
-                                    name="name" 
-                                    label={props.nameLabel} 
-                                    fullWidth={true}
-                                    value={name} 
-                                    onChange={handleOnChange} 
-                                    helperText={dirty.name ? errors.name : ""} 
-                                    error={(errors.name.length > 0) && dirty.name} />
+                            <TextField 
+                                id="name" 
+                                name="name" 
+                                label={props.nameLabel} 
+                                fullWidth={true}
+                                value={name} 
+                                onChange={handleOnChange} 
+                                helperText={dirty.name ? errors.name : ""} 
+                                error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">
-                                <TextField 
-                                    id="email" 
-                                    name="email" 
-                                    label={props.emailLabel} 
-                                    fullWidth={true}
-                                    value={email} 
-                                    onChange={handleOnChange} 
-                                    helperText={dirty.email ? errors.email : ""} 
-                                    error={(errors.email.length > 0) && dirty.email}
-                                    InputProps={{
-                                        readOnly: props.email ? true : false,
-                                    }} />
+                            <TextField 
+                                id="email" 
+                                name="email" 
+                                label={props.emailLabel} 
+                                fullWidth={true}
+                                value={email} 
+                                onChange={handleOnChange} 
+                                helperText={dirty.email ? errors.email : ""} 
+                                error={(errors.email.length > 0) && dirty.email}
+                                InputProps={{
+                                    readOnly: props.email ? true : false,
+                                }} />
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage}>
@@ -170,21 +170,7 @@ function ClientForm(props) {
                             </FormControl>
                         </div>
                         <div className="field client-form__field-row">
-                            {!saved ? (
-                                <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>{props.saveText}</Button>
-                            ) : (
-                                <Button
-                                    type="submit" 
-                                    variant="contained" 
-                                    color="primary"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        NavigationHelper.redirect(props.clientsUrl)
-                                    }}>
-                                        {props.backToClientsText}
-                                </Button>
-                            )}
-
+                            <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>{props.saveText}</Button>
                             <Button className="client-form__create-button" color="secondary" variant="contained" onClick={createAccount} disabled={state.isLoading || !id}>{props.accountText}</Button>
                         </div>
                     </form>

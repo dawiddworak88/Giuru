@@ -111,7 +111,7 @@ namespace Identity.Api.v1.Controllers
                 {
                     var response = await this.userService.CreateAsync(serviceModel);
 
-                    return this.StatusCode((int)HttpStatusCode.Created, new { response.Id });
+                    return this.StatusCode((int)HttpStatusCode.Created, new { Id = response.Id });
                 }
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
@@ -126,7 +126,9 @@ namespace Identity.Api.v1.Controllers
                     PhoneNumber = request.PhoneNumber,
                     FirstName = request.FirstName,
                     LastName = request.LastName,
-                    LockoutEnd = request.LockoutEnd,
+                    TwoFactorEnabled = request.TwoFactorEnabled,
+                    AccessFailedCount = request.AccessFailedCount,
+                    LockoutEnd = request.LockoutEnd
                 };
 
                 var validator = new UpdateUserModelValidator();
@@ -135,7 +137,7 @@ namespace Identity.Api.v1.Controllers
                 {
                     var response = await this.userService.UpdateAsync(serviceModel);
 
-                    return this.StatusCode((int)HttpStatusCode.OK, new { response.Id });
+                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = response.Id });
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
