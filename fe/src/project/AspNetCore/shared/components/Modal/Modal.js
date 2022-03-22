@@ -33,7 +33,7 @@ const Modal = (props) => {
     }
 
     return (
-        <div class={isOpen ? "modal outlet-modal is-active" : "modal outlet-modal"}>
+        <div class={isOpen ? "modal outlet-modal is-active" : "modal outlet-modal fade-in"}>
             <div class="modal-background"></div>
             <div class="modal-card">
                 <header class="modal-card-head">
