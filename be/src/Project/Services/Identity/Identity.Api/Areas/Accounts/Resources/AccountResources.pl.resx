@@ -168,6 +168,9 @@
   <data name="nc_subject" xml:space="preserve">
     <value>Utworzyliśmy nowe konto klienta</value>
   </data>
+  <data name="OrganisationNotFound" xml:space="preserve">
+    <value>Nie odnaleziono organizacji.</value>
+  </data>
   <data name="PasswordUpdated" xml:space="preserve">
     <value>Hasło zostało pomyślnie ustawione</value>
   </data>
@@ -179,5 +182,8 @@
   </data>
   <data name="SignInText" xml:space="preserve">
     <value>Zaloguj się</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>Nie odnaleziono użytkownika.</value>
   </data>
 </root>
