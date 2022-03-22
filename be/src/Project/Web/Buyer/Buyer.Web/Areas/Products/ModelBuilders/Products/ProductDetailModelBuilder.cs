@@ -90,6 +90,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 BasketLabel = this.globalLocalizer.GetString("BasketLabel"),
                 SkuLabel = this.productLocalizer.GetString("Sku"),
                 InStockLabel = this.globalLocalizer.GetString("InStock"),
+                InOutletLabel = this.globalLocalizer.GetString("InOutlet"),
                 BasketId = componentModel.BasketId,
                 AddedProduct = this.orderResources.GetString("AddedProduct"),
                 Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel),

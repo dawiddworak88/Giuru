@@ -38,6 +38,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string DescriptionLabel { get; set; }
         public string Description { get; set; }
         public string InStockLabel { get; set; }
+        public string InOutletLabel { get; set; }
         public string BasketLabel { get; set; }
         public string UpdateBasketUrl { get; set; }
         public string AddedProduct { get; set; }

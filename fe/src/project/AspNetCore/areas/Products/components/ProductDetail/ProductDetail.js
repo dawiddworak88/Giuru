@@ -1,11 +1,10 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { Button, TextField } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import ImageGallery from "react-image-gallery";
 import Files from "../../../../shared/components/Files/Files";
-import { ShoppingCart, Done } from "@material-ui/icons";
 import { Context } from "../../../../../../shared/stores/Store";
 import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
@@ -20,6 +19,10 @@ function ProductDetail(props) {
     const [isModalOpen, setIsModalOpen] = React.useState(false);
     const [totalQuantities, setTotalQuantities] = React.useState(0);
 
+    const [product2, setProduct] = useState(null);
+
+    const [t, st] = useState(true);
+
     const toggleSidebar = () => {
         setIsSidebarOpen(true)
     }
@@ -28,38 +31,47 @@ function ProductDetail(props) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         let product = props;
-        if (!props.isProductVariant){
+        // if (!props.isProductVariant){
+        //     product = {
+        //         productId: item.id,
+        //         sku: item.subtitle,
+        //         title: item.title,
+        //         images: item.images,
+        //         quantity: item.quantity,
+        //         stockQuantity: parseInt(item.stockQuantity),
+        //         outletQuantity: parseInt(item.outletQuantity),
+        //     };
+        // }
+        
+        if (product2){
             product = {
-                productId: item.id,
-                sku: item.subtitle,
-                title: item.title,
-                images: item.images,
-                quantity: item.quantity,
-                stockQuantity: parseInt(item.stockQuantity),
-                outletQuantity: parseInt(item.outletQuantity),
-            };
+                productId: product2.id, 
+                sku: product2.subtitle, 
+                title: product2.title,
+                images: product2.images,
+            }
         }
 
         const orderItem = {
-            productId: product.productId, 
-            sku: product.sku, 
-            name: product.title, 
-            imageId: product.images ? product.images[0].id : null, 
-            quantity: product.quantity ? product.quantity : item.quantity,
-            stockQuantity: parseInt(item.stockQuantity),
-            outletQuantity: parseInt(item.outletQuantity),
+            productId: product.productId,
+            sku: product.sku,
+            name: product.title,
+            imageId: product.images ? product.images[0].id : null,
+            quantity: item.quantity,
+            stockQuantity: item.stockQuantity,
+            outletQuantity: item.outletQuantity,
             externalReference: item.externalReference, 
             deliveryFrom: item.deliveryFrom, 
             deliveryTo: item.deliveryTo, 
             moreInfo: item.moreInfo
-        };
+        }
 
         const basket = {
             id: basketId,
             items: [...orderItems, orderItem]
         };
 
-        setTotalQuantities(orderItem.quantity + orderItem.stockQuantity + orderItem.outletQuantity)
+        setTotalQuantities(orderItem.quantity + orderItem.stockQuantity + orderItem.outletQuantity);
 
         const requestOptions = {
             method: "POST",
@@ -82,7 +94,7 @@ function ProductDetail(props) {
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
                             toast.success(props.successfullyAddedProduct)
                             setOrderItems(jsonResponse.items);
-                            setIsProductOrdered(true)
+                            setIsModalOpen(false);
                         }
                         else {
                             setOrderItems([]);
@@ -99,6 +111,22 @@ function ProductDetail(props) {
                 toast.error(props.generalErrorMessage);
             });
     };
+
+    const handleModal = (item) => {
+        setIsModalOpen(true)
+        setProduct(item);
+        st(false);
+    }
+
+    useEffect(() => {
+        if (isSidebarOpen){
+            st(true);
+        }
+
+        if (!t && !isModalOpen){
+            setIsSidebarOpen(true)
+        }
+    }, [t, isModalOpen, isSidebarOpen])
 
     return (
         <section className="product-detail section">
@@ -120,6 +148,11 @@ function ProductDetail(props) {
                             {props.expectedDelivery && 
                                 <div className="product-detail__expected-delivery">{props.expectedDeliveryLabel} {moment.utc(props.expectedDelivery).local().format("L")}</div>
                             }
+                        </div>
+                    }
+                    {props.inOutlet && props.availableOutletQuantity && props.availableOutletQuantity > 0 &&
+                        <div className="product-detail__in-stock">
+                            {props.inOutletLabel} {props.availableOutletQuantity}
                         </div>
                     }
                     {props.isAuthenticated && 
@@ -166,7 +199,7 @@ function ProductDetail(props) {
                     isOpen={isSidebarOpen}
                     manyUses={false}
                     setIsOpen={setIsSidebarOpen}
-                    handleOrder={handleAddOrderItemClick}
+                    handleOrder={handleModal}
                     labels={props.sidebar}
                 />
             </div>
@@ -174,8 +207,9 @@ function ProductDetail(props) {
             <Files {...props.files} />
             <Modal
                 isOpen={isModalOpen}
-                maxOutletValue={props.availableOutletQuantity}
-                maxStockValue={props.availableQuantity}
+                setIsOpen={setIsModalOpen}
+                maxOutletValue={product2 ? product2.availableOutletQuantity : props.availableOutletQuantity}
+                maxStockValue={product2 ? product2.availableQuantity : props.availableQuantity}
                 handleOrder={handleAddOrderItemClick}
                 labels={props.modal}
             />

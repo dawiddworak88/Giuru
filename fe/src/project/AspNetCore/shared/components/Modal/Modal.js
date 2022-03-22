@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TextField, IconButton } from "@material-ui/core";
 import { Clear } from "@material-ui/icons";
 import PropTypes from "prop-types";
@@ -8,6 +8,7 @@ import {
 } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 
+// Don't worry about names of variables, I will change
 const Modal = (props) => {
     const [quantity, setQuantity] = useState(0);
     const [stockQuantity, setStockQuantity] = useState(0);
@@ -16,8 +17,8 @@ const Modal = (props) => {
     const [deliveryFrom, setDeliveryFrom] = useState(null);
     const [deliveryTo, setDeliveryTo] = useState(null);
     const [moreInfo, setMoreInfo] = useState(null);
-    const {isOpen, maxStockValue, maxOutletValue, handleOrder, labels} = props;
 
+    const {isOpen, setIsOpen, maxStockValue, maxOutletValue, handleOrder, labels} = props;
     const handleAddItemToBasket = () => {
         const payload = {
             quantity,
@@ -26,11 +27,22 @@ const Modal = (props) => {
             externalReference,
             deliveryFrom,
             deliveryTo,
-            moreInfo
+            moreInfo,
+            isModal: true
         }
 
         handleOrder(payload)
     }
+
+    useEffect(() => {
+        setQuantity(0);
+        setStockQuantity(0);
+        setOutletQuantity(0);
+        setExternalReference("");
+        setDeliveryFrom(null);
+        setDeliveryTo(null);
+        setMoreInfo("")
+    }, [isOpen])
 
     return (
         <div class={isOpen ? "modal outlet-modal is-active" : "modal outlet-modal fade-in"}>
@@ -38,7 +50,7 @@ const Modal = (props) => {
             <div class="modal-card">
                 <header class="modal-card-head">
                     <p class="modal-card-title">{labels.title}</p>
-                    <button class="delete" aria-label={labels.closeLabel}></button>
+                    <button class="delete" aria-label={labels.closeLabel} onClick={() => setIsOpen(false)}></button>
                 </header>
                 <section class="modal-card-body">
                     <div className="modal-container">
@@ -182,7 +194,7 @@ const Modal = (props) => {
                 </section>
                 <footer class="modal-card-foot">
                     <button class="button is-success" onClick={() => handleAddItemToBasket()}>{labels.addText}</button>
-                    <button class="button">{labels.cancelLabel}</button>
+                    <button class="button" onClick={() => setIsOpen(false)}>{labels.cancelLabel}</button>
                 </footer>
             </div>
         </div>

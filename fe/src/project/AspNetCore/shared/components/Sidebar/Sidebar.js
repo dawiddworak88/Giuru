@@ -5,7 +5,7 @@ import {
 import { Close, AddShoppingCart, ArrowRight } from "@material-ui/icons";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
-import { CircularProgress, TextField } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../shared/stores/Store";
 import ResponsiveImage from "../../../../../shared/components/Picture/ResponsiveImage";
@@ -78,14 +78,19 @@ const Sidebar = (props) => {
     }
 
     const handleAddOrderItemClick = (item) => {
-        const orderItem = {
-            quantity: quantities.find(x => x.id === item.id).quantity,
-            ...item
+        setIsOpen(false)
+
+        const { carouselItems } = productVariants[0];
+
+        const productIndex = carouselItems.findIndex(x => x.id === item.id);
+        const productVariant = carouselItems[productIndex];
+
+        const payload = {
+            ...item,
+            availableQuantity: productVariant.availableQuantity
         }
 
-        console.log(item)
-
-        handleOrder(orderItem);
+        handleOrder(payload);
     }
 
     const onQuantityChange = (id) => (e) => {
@@ -164,6 +169,11 @@ const Sidebar = (props) => {
                                                             {labels.inStockLabel} {carouselItem.availableQuantity}
                                                         </div>
                                                     }
+                                                    {carouselItem.availableOutletQuantity && carouselItem.availableOutletQuantity > 0 &&
+                                                        <div className="stock">
+                                                            {labels.inOutletLabel} {carouselItem.availableOutletQuantity}
+                                                        </div>
+                                                    }
                                                     {carouselItem.expectedDelivery &&
                                                         <div className="expected-delivery">
                                                             {labels.expectedDeliveryLabel} {moment(carouselItem.expectedDelivery).format("DD/MM/YYYY")}
@@ -177,18 +187,6 @@ const Sidebar = (props) => {
                                             </div>
                                         </div>
                                         <div className="sidebar-item__buttons">
-                                            {/* <TextField 
-                                                id={carouselItem.id} 
-                                                name="quantity" 
-                                                type="number" 
-                                                inputProps={{ 
-                                                    min: 1, 
-                                                    step: 1,
-                                                    style: { textAlign: 'center' }
-                                                }}
-                                                value={quantity} 
-                                                onChange={onQuantityChange(carouselItem.id)}
-                                                className="quantity-input" /> */}
                                             <Button title={props.labels.addToCartLabel} aria-label={props.labels.addToCartLabel} type="text" color="primary" variant="contained" className="cart-button" onClick={() => handleAddOrderItemClick(carouselItem)}><AddShoppingCart /></Button>
                                             <Button title={props.labels.goToDetailsLabel} aria-label={props.labels.goToDetailsLabel} type="text" color="primary" variant="contained" className="cart-button" onClick={variantDetails(carouselItem)}><ArrowRight /></Button>
                                         </div>
