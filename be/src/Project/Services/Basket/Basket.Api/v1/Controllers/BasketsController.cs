@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using Basket.Api.ServicesModels;
 using Basket.Api.v1.ResponseModels;
 using IdentityModel;
+using Newtonsoft.Json;
 
 namespace Basket.Api.v1.Controllers
 {
@@ -63,6 +64,8 @@ namespace Basket.Api.v1.Controllers
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
+
+            //Console.WriteLine(JsonConvert.SerializeObject(request.Items));
 
             var validator = new UpdateBasketModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);

@@ -62,12 +62,13 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
 
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
+
             foreach (var orderLine in importedOrderLines)
             {
                 var product = await this.productsRepository.GetProductAsync(orderLine.Sku, token, language);
                 if (product == null)
                 {
-                    this.logger.LogError($"Product for SKU {orderLine.Sku} and language {CultureInfo.CurrentUICulture.Name} couldn't be found.");
+                    this.logger.LogError($"Product for SKU {orderLine.Sku} and language {language} couldn't be found.");
                 }
                 else
                 {
@@ -88,11 +89,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 }
             }
 
-            var basket = await this.basketRepository.SaveAsync(
-                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                CultureInfo.CurrentUICulture.Name,
-                model.Id,
-                basketItems);
+            var basket = await this.basketRepository.SaveAsync(token, language, model.Id, basketItems);
 
             var basketResponseModel = new BasketResponseModel
             {
@@ -106,7 +103,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 basketResponseModel.Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                 {
                     ProductId = x.ProductId,
-                    ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
+                    ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = language, Id = x.ProductId }),
                     Name = x.ProductName,
                     Sku = x.ProductSku,
                     Quantity = x.Quantity,

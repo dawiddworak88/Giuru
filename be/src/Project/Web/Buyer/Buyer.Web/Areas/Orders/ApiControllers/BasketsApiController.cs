@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Globalization;
 using System.Linq;
@@ -82,6 +83,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     DeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
                 }));
+
+            //Console.WriteLine(JsonConvert.SerializeObject(basket.Items));
 
             var basketResponseModel = new BasketResponseModel
             {

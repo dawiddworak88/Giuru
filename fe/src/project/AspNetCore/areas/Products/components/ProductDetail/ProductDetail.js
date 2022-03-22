@@ -35,6 +35,8 @@ function ProductDetail(props) {
                 title: item.title,
                 images: item.images,
                 quantity: item.quantity,
+                stockQuantity: parseInt(item.stockQuantity),
+                outletQuantity: parseInt(item.outletQuantity),
             };
         }
 
@@ -44,8 +46,8 @@ function ProductDetail(props) {
             name: product.title, 
             imageId: product.images ? product.images[0].id : null, 
             quantity: product.quantity ? product.quantity : item.quantity,
-            stockQuantity: item.stockQuantity,
-            outletQuantity: item.outletQuantity,
+            stockQuantity: parseInt(item.stockQuantity),
+            outletQuantity: parseInt(item.outletQuantity),
             externalReference: item.externalReference, 
             deliveryFrom: item.deliveryFrom, 
             deliveryTo: item.deliveryTo, 
@@ -57,7 +59,7 @@ function ProductDetail(props) {
             items: [...orderItems, orderItem]
         };
 
-        setTotalQuantities(quantity + orderItem.stockQuantity + orderItem.outletQuantity)
+        setTotalQuantities(orderItem.quantity + orderItem.stockQuantity + orderItem.outletQuantity)
 
         const requestOptions = {
             method: "POST",
