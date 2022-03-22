@@ -1,7 +1,6 @@
-import React, { useContext, useState } from "react";
-import { Context } from "../../../../../shared/stores/Store";
+import React, { useState } from "react";
 import { TextField, IconButton } from "@material-ui/core";
-import {Clear} from "@material-ui/icons";
+import { Clear } from "@material-ui/icons";
 import PropTypes from "prop-types";
 import {
     MuiPickersUtilsProvider,
@@ -10,7 +9,6 @@ import {
 import MomentUtils from "@date-io/moment";
 
 const Modal = (props) => {
-    const [state, dispatch] = useContext(Context);
     const [quantity, setQuantity] = useState(0);
     const [stockQuantity, setStockQuantity] = useState(0);
     const [outletQuantity, setOutletQuantity] = useState(0);
@@ -18,7 +16,7 @@ const Modal = (props) => {
     const [deliveryFrom, setDeliveryFrom] = useState(null);
     const [deliveryTo, setDeliveryTo] = useState(null);
     const [moreInfo, setMoreInfo] = useState(null);
-    const {isOpen, maxStockValue, maxOutletValue, handleOrder} = props;
+    const {isOpen, maxStockValue, maxOutletValue, handleOrder, labels} = props;
 
     const handleAddItemToBasket = () => {
         const payload = {
@@ -39,8 +37,8 @@ const Modal = (props) => {
             <div class="modal-background"></div>
             <div class="modal-card">
                 <header class="modal-card-head">
-                    <p class="modal-card-title">{props.addToBasketText}</p>
-                    <button class="delete" aria-label={props.closeLabel}></button>
+                    <p class="modal-card-title">{labels.title}</p>
+                    <button class="delete" aria-label={labels.closeLabel}></button>
                 </header>
                 <section class="modal-card-body">
                     <div className="modal-container">
@@ -49,7 +47,7 @@ const Modal = (props) => {
                                 id="quantity" 
                                 name="quantity" 
                                 type="number"
-                                label={props.quantityLabel}
+                                label={labels.quantityLabel}
                                 inputProps={{ 
                                     min: 0, 
                                     step: 1,
@@ -67,7 +65,7 @@ const Modal = (props) => {
                                     id="stockQuantity" 
                                     name="stockQuantity" 
                                     type="number" 
-                                    label={props.stockQuantityLabel}
+                                    label={labels.stockQuantityLabel}
                                     inputProps={{ 
                                         min: 0, 
                                         step: 1,
@@ -87,7 +85,7 @@ const Modal = (props) => {
                                     id="outletQuantity" 
                                     name="outletQuantity" 
                                     type="number" 
-                                    label={props.outletQuantityLabel}
+                                    label={labels.outletQuantityLabel}
                                     inputProps={{ 
                                         min: 0, 
                                         step: 1,
@@ -106,7 +104,7 @@ const Modal = (props) => {
                                 id="externalReference" 
                                 name="externalReference" 
                                 type="text" 
-                                label={props.externalReferenceLabel}
+                                label={labels.externalReferenceLabel}
                                 value={externalReference}
                                 fullWidth={true}
                                 onChange={(e) => {
@@ -117,12 +115,12 @@ const Modal = (props) => {
                             <MuiPickersUtilsProvider utils={MomentUtils}>
                                 <KeyboardDatePicker
                                     id="deliveryFrom"
-                                    label={props.deliveryFromLabel}
+                                    label={labels.deliveryFromLabel}
                                     onChange={(date) => {
                                         setDeliveryFrom(date);
                                     }}
-                                    okLabel={props.okLabel}
-                                    cancelLabel={props.cancelLabel}
+                                    okLabel={labels.okLabel}
+                                    cancelLabel={labels.cancelLabel}
                                     InputProps={{
                                         endAdornment: (
                                             <IconButton onClick={() => setDeliveryFrom(null)}>
@@ -134,7 +132,7 @@ const Modal = (props) => {
                                         position: "start"
                                     }}
                                     KeyboardButtonProps={{
-                                        "aria-label": props.changeDeliveryFromLabel
+                                        "aria-label": labels.changeDeliveryFromLabel
                                     }} 
                                     value={deliveryFrom}
                                     fullWidth={true}
@@ -145,12 +143,12 @@ const Modal = (props) => {
                             <MuiPickersUtilsProvider utils={MomentUtils}>
                                 <KeyboardDatePicker
                                     id="deliveryTo"
-                                    label={props.deliveryToLabel}
+                                    label={labels.deliveryToLabel}
                                     onChange={(date) => {
                                         setDeliveryTo(date);
                                     }}
-                                    okLabel={props.okLabel}
-                                    cancelLabel={props.cancelLabel}
+                                    okLabel={labels.okLabel}
+                                    cancelLabel={labels.cancelLabel}
                                     InputProps={{
                                         endAdornment: (
                                             <IconButton onClick={() => setDeliveryTo(null)}>
@@ -162,7 +160,7 @@ const Modal = (props) => {
                                         position: "start"
                                     }}
                                     KeyboardButtonProps={{
-                                        "aria-label": props.changeDeliveryFromLabel
+                                        "aria-label": labels.changeDeliveryFromLabel
                                     }} 
                                     fullWidth={true}
                                     value={deliveryTo}
@@ -174,7 +172,7 @@ const Modal = (props) => {
                                 id="moreInfo" 
                                 name="moreInfo" 
                                 type="text" 
-                                label={props.moreInfoLabel}
+                                label={labels.moreInfoLabel}
                                 fullWidth={true}
                                 onChange={(e) => {
                                     setMoreInfo(e.target.value)
@@ -183,8 +181,8 @@ const Modal = (props) => {
                     </div>
                 </section>
                 <footer class="modal-card-foot">
-                    <button class="button is-success" onClick={() => handleAddItemToBasket()}>{props.addText}</button>
-                    <button class="button">{props.cancelLabel}</button>
+                    <button class="button is-success" onClick={() => handleAddItemToBasket()}>{labels.addText}</button>
+                    <button class="button">{labels.cancelLabel}</button>
                 </footer>
             </div>
         </div>
@@ -192,22 +190,23 @@ const Modal = (props) => {
 }
 
 Modal.propTypes = {
-    isOpen: PropTypes.string,
+    isOpen: PropTypes.func,
     addText: PropTypes.string,
     cancelLabel: PropTypes.string,
     moreInfoLabel: PropTypes.string,
-    maxOutletValue: PropTypes.string,
+    maxOutletValue: PropTypes.number,
     deliveryToLabel: PropTypes.string,
     deliveryFromLabel: PropTypes.string,
     externalReferenceLabel: PropTypes.string,
     outletQuantityLabel: PropTypes.string,
     stockQuantityLabel: PropTypes.string,
-    addToBasketText: PropTypes.string,
     quantityLabel: PropTypes.string,
-    maxStockValue: PropTypes.string,
+    maxStockValue: PropTypes.number,
     handleOrder: PropTypes.string,
     closeLabel: PropTypes.string,
     okLabel: PropTypes.string,
+    title: PropTypes.string,
+    labels: PropTypes.object
 }
 
 export default Modal;

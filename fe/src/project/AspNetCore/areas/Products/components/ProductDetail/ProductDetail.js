@@ -175,6 +175,7 @@ function ProductDetail(props) {
                 maxOutletValue={props.availableOutletQuantity}
                 maxStockValue={props.availableQuantity}
                 handleOrder={handleAddOrderItemClick}
+                labels={props.modal}
             />
         </section>
     );
@@ -202,6 +203,7 @@ ProductDetail.propTypes = {
     images: PropTypes.array,
     files: PropTypes.object,
     sidebar: PropTypes.object,
+    modal: PropTypes.object,
     addedProduct: PropTypes.string
 };
 

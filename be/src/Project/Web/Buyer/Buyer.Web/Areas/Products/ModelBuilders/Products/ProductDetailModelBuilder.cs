@@ -24,6 +24,7 @@ using Foundation.GenericRepository.Paginations;
 using Buyer.Web.Areas.Products.DomainModels;
 using Foundation.PageContent.Components.CarouselGrids.Definitions;
 using Buyer.Web.Shared.Services.Baskets;
+using Buyer.Web.Shared.ViewModels.Modals;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -31,6 +32,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
     {
         private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder;
         private readonly IProductsRepository productsRepository;
         private readonly IStringLocalizer<InventoryResources> inventoryResources;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
@@ -45,6 +47,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
             IProductsRepository productsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer, 
             IStringLocalizer<ProductResources> productLocalizer,
@@ -68,6 +71,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             this.basketService = basketService;
             this.cdnService = cdnService;
             this.orderResources = orderResources;
+            this.modalModelBuilder = modalModelBuilder;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -88,7 +92,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 InStockLabel = this.globalLocalizer.GetString("InStock"),
                 BasketId = componentModel.BasketId,
                 AddedProduct = this.orderResources.GetString("AddedProduct"),
-                Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel)
+                Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel),
+                Modal = await this.modalModelBuilder.BuildModelAsync(componentModel)
             };
 
             var product = await this.productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
