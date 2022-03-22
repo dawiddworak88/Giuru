@@ -41,7 +41,6 @@ function ClientForm(props) {
         }
     };
 
-
     function onSubmitForm(state) {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
