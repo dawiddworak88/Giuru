@@ -4,10 +4,14 @@ using Buyer.Web.Areas.News.Repositories.Categories;
 using Buyer.Web.Areas.News.ViewModel;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Repositories.News;
+using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.Extensions.Services.MediaServices;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
+using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Components.ListItems.ViewModels;
+using Foundation.PageContent.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -22,25 +26,28 @@ namespace Buyer.Web.Areas.News.ModelBuilders
     {
         private readonly IOptions<AppSettings> options;
         private readonly LinkGenerator linkGenerator;
-        private readonly ICategoriesRepository categoriesRepository;
         private readonly INewsRepository newsRepository;
         private readonly IStringLocalizer<NewsResources> newsLocalizer;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly ICdnService cdnService;
+        private readonly IMediaHelperService mediaService;
 
         public NewsCatalogModelBuilder(
             IOptions<AppSettings> options,
-            ICategoriesRepository categoriesRepository,
             IStringLocalizer<NewsResources> newsLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
             INewsRepository newsRepository,
+            ICdnService cdnService,
+            IMediaHelperService mediaService,
             LinkGenerator linkGenerator)
         {
             this.options = options;
             this.linkGenerator = linkGenerator;
-            this.categoriesRepository = categoriesRepository;
             this.newsLocalizer = newsLocalizer;
             this.globalLocalizer = globalLocalizer;
             this.newsRepository = newsRepository;
+            this.cdnService = cdnService;
+            this.mediaService = mediaService;
         }
 
         public async Task<NewsCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -69,6 +76,18 @@ namespace Buyer.Web.Areas.News.ModelBuilders
                         };
 
                         categories.Add(category);
+                    }
+
+                    if (newsItem.ThumbnailImageId.HasValue)
+                    {
+                        newsItem.ThumbImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 1024, 1024, true, MediaConstants.WebpExtension));
+                        newsItem.ThumbImages = new List<SourceViewModel>
+                        { 
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 1024, 1024, true, MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 352, 352, true,MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 608, 608, true, MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 768, 768, true, MediaConstants.WebpExtension)) }
+                        };
                     }
                 };
 
