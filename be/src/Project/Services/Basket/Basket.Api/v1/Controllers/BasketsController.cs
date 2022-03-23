@@ -65,8 +65,6 @@ namespace Basket.Api.v1.Controllers
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            //Console.WriteLine(JsonConvert.SerializeObject(request.Items));
-
             var validator = new UpdateBasketModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
             if (validationResult.IsValid)
@@ -161,6 +159,8 @@ namespace Basket.Api.v1.Controllers
                             ProductName = x.ProductName,
                             PictureUrl = x.PictureUrl,
                             Quantity = x.Quantity,
+                            StockQuantity = x.StockQuantity,
+                            OutletQuantity = x.OutletQuantity,
                             ExternalReference = x.ExternalReference,
                             DeliveryFrom = x.DeliveryFrom,
                             DeliveryTo = x.DeliveryTo,

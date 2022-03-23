@@ -23,7 +23,7 @@ function Catalog(props) {
     const [items, setItems] = useState(props.pagedItems.data);
     const [total, setTotal] = useState(props.pagedItems.total);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [product, setProduct] = useState(null)
     const [t, st] = useState(true);
 
