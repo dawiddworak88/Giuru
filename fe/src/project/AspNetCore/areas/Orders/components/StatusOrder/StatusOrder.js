@@ -46,7 +46,12 @@ function StatusOrder(props) {
                                         {props.orderItems && props.orderItems.map((item, index) => {
                                             let fabrics = null;
                                             if (item.fabrics.length > 0) {
-                                                fabrics = item.fabrics.find(x => x.key === "primaryFabrics").values.join(", ");
+                                                fabrics = item.fabrics.find(x => x.key === "primaryFabrics") ? item.fabrics.find(x => x.key === "primaryFabrics").values.join(", ") : "";
+
+                                                let secondaryFabrics = item.fabrics.find(x => x.key === "secondaryFabrics") ? item.fabrics.find(x => x.key === "secondaryFabrics").values.join(", ") : "";
+                                                if (secondaryFabrics){
+                                                    fabrics += ", " + secondaryFabrics;
+                                                }
                                             }
                                             return (
                                                 <TableRow key={index}>
