@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
@@ -102,7 +103,7 @@ namespace Seller.Web.Areas.Categories.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.categoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, $"{nameof(Category.CreatedDate)} desc");
+            viewModel.PagedItems = await this.categoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(Category.CreatedDate)} desc");
 
             return viewModel;
         }

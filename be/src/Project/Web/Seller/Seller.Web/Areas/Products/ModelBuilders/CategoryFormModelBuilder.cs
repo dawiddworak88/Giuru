@@ -70,8 +70,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
             var parentCategories = await this.categoriesRepository.GetAllCategoriesAsync(
                 componentModel.Token,
                 componentModel.Language,
-                null,
-                $"{nameof(Category.Level)},{nameof(Category.Name)}");
+                null, $"{nameof(Category.Level)}");
 
             if (parentCategories != null)
             {

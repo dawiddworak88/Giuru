@@ -32,31 +32,11 @@ namespace Catalog.Api.Services.Categories
 
         public async Task<PagedResults<IEnumerable<CategoryServiceModel>>> GetAsync(GetCategoriesServiceModel model)
         {
-            var categories = from c in this.context.Categories
-                             join t in this.context.CategoryTranslations on c.Id equals t.CategoryId into ct
-                             from x in ct.DefaultIfEmpty()
-                             join m in this.context.CategoryImages on c.Id equals m.CategoryId into cm
-                             from y in cm.DefaultIfEmpty()
-                             join pct in this.context.CategoryTranslations on c.Parentid equals pct.CategoryId into pctg
-                             from w in pctg.DefaultIfEmpty()
-                             where x.Language == model.Language && (w.Language == model.Language || w.Language == null) && c.IsActive
-                             select new CategoryServiceModel
-                             {
-                                 Id = c.Id,
-                                 Order = c.Order,
-                                 Level = c.Level,
-                                 IsLeaf = c.IsLeaf,
-                                 ParentId = c.Parentid,
-                                 ParentCategoryName = w.Name,
-                                 Name = x.Name,
-                                 ThumbnailMediaId = y.MediaId,
-                                 LastModifiedDate = c.LastModifiedDate,
-                                 CreatedDate = c.CreatedDate
-                             };
+            var categories = this.context.Categories.Where(x => x.IsActive);
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
-                categories = categories.Where(x => x.Name.StartsWith(model.SearchTerm));
+                categories = categories.Where(x => x.Translations.Any(x => x.Name.StartsWith(model.SearchTerm)));
             }
 
             if (model.Level.HasValue)
@@ -71,30 +51,102 @@ namespace Catalog.Api.Services.Categories
 
             categories = categories.ApplySort(model.OrderBy);
 
-            return categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedResults = categories.PagedIndex(new Pagination(categories.Count(), model.ItemsPerPage), model.PageIndex);
+
+            var pagedCategoriesServiceModel = new PagedResults<IEnumerable<CategoryServiceModel>>(pagedResults.Total, pagedResults.PageSize);
+
+            var categoriesItems = new List<CategoryServiceModel>();
+            foreach (var category in pagedResults.Data.ToList())
+            {
+                var categoryItem = new CategoryServiceModel
+                {
+                    Id = category.Id,
+                    Order = category.Order,
+                    Level = category.Level,
+                    IsLeaf = category.IsLeaf,
+                    ParentId = category.Parentid,
+                    LastModifiedDate = category.LastModifiedDate,
+                    CreatedDate = category.CreatedDate
+                };
+
+                var thumbnailMedia = this.context.CategoryImages.FirstOrDefault(x => x.CategoryId == category.Id && x.IsActive);
+                if (thumbnailMedia is not null)
+                {
+                    categoryItem.ThumbnailMediaId = thumbnailMedia.MediaId;
+                }
+
+                var categoryItemTranslations = this.context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == category.Id && x.IsActive);
+                if (categoryItemTranslations is null)
+                {
+                    categoryItemTranslations = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == category.Id && x.IsActive);
+                }
+
+                categoryItem.Name = categoryItemTranslations?.Name;
+
+                if (category.Parentid.HasValue)
+                {
+                    var parentCategoryTranslations = this.context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == category.Parentid && x.IsActive);
+                    if (parentCategoryTranslations is null)
+                    {
+                        parentCategoryTranslations = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == category.Parentid && x.IsActive);
+                    }
+
+                    categoryItem.ParentCategoryName = parentCategoryTranslations?.Name;
+                }
+
+                categoriesItems.Add(categoryItem);
+            }
+
+            pagedCategoriesServiceModel.Data = categoriesItems;
+
+            return pagedCategoriesServiceModel;
         }
 
         public async Task<CategoryServiceModel> GetAsync(GetCategoryServiceModel model)
         {
-            var categories = from c in this.context.Categories
-                             join t in this.context.CategoryTranslations on c.Id equals t.CategoryId into ct
-                             from x in ct.DefaultIfEmpty()
-                             join m in this.context.CategoryImages on c.Id equals m.CategoryId into cm
-                             from y in cm.DefaultIfEmpty()
-                             where x.Language == model.Language && c.Id == model.Id && c.IsActive
-                             orderby c.Order
-                             select new CategoryServiceModel
-                             {
-                                 Id = c.Id,
-                                 Order = c.Order,
-                                 Level = c.Level,
-                                 IsLeaf = c.IsLeaf,
-                                 ParentId = c.Parentid,
-                                 Name = x.Name,
-                                 ThumbnailMediaId = y.MediaId
-                             };
+            var categoryItem = this.context.Categories.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
+            if (categoryItem is not null)
+            {
+                var category = new CategoryServiceModel
+                {
+                    Id = categoryItem.Id,
+                    Order = categoryItem.Order,
+                    Level = categoryItem.Level,
+                    IsLeaf = categoryItem.IsLeaf,
+                    ParentId = categoryItem.Parentid,
+                    LastModifiedDate = categoryItem.LastModifiedDate,
+                    CreatedDate = categoryItem.CreatedDate
+                };
 
-            return await categories.FirstOrDefaultAsync();
+                var thumbnailMedia = this.context.CategoryImages.FirstOrDefault(x => x.CategoryId == categoryItem.Id && x.IsActive);
+                if (thumbnailMedia is not null)
+                {
+                    category.ThumbnailMediaId = thumbnailMedia.MediaId;
+                }
+
+                var categoryItemTranslations = this.context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == categoryItem.Id && x.IsActive);
+                if (categoryItemTranslations is null)
+                {
+                    categoryItemTranslations = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == categoryItem.Id && x.IsActive);
+                }
+
+                category.Name = categoryItemTranslations?.Name;
+
+                if (categoryItem.Parentid.HasValue)
+                {
+                    var parentCategoryTranslations = this.context.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == categoryItem.Parentid && x.IsActive);
+                    if (parentCategoryTranslations is null)
+                    {
+                        parentCategoryTranslations = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == categoryItem.Parentid && x.IsActive);
+                    }
+
+                    category.ParentCategoryName = parentCategoryTranslations?.Name;
+                }
+
+                return category;
+            }
+
+            return default;
         }
 
         public async Task DeleteAsync(DeleteCategoryServiceModel model)
