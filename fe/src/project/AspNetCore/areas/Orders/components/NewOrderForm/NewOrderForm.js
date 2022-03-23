@@ -163,7 +163,7 @@ function NewOrderForm(props) {
 
         const basket = {
             id: basketId,
-            items: orderItems.filter((orderItem) => orderItem.productId !== entityToDelete.productId)
+            items: orderItems.filter((orderItem) => orderItem !== entityToDelete)
         };
 
         const requestOptions = {
@@ -236,7 +236,6 @@ function NewOrderForm(props) {
         NavigationHelper.redirect(props.ordersUrl);
     };
 
-    
     const onDrop = useCallback(acceptedFiles => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
