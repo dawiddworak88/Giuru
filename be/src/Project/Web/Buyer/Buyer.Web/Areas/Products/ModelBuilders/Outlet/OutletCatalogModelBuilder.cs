@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using Buyer.Web.Areas.Products.Definitions;
 using Buyer.Web.Areas.Products.ViewModels;
 using Buyer.Web.Areas.Products.Repositories;
+using Buyer.Web.Shared.ViewModels.Sidebar;
+using Buyer.Web.Shared.ViewModels.Modals;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders
 {
@@ -21,6 +23,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
     {
         private readonly IStringLocalizer globalLocalizer;
         private readonly ICatalogModelBuilder<ComponentModelBase, OutletPageCatalogViewModel> outletCatalogModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder;
         private readonly IProductsService productsService;
         private readonly LinkGenerator linkGenerator;
         private readonly IOutletRepository outletRepository;
@@ -28,6 +31,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
         public OutletCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             ICatalogModelBuilder<ComponentModelBase, OutletPageCatalogViewModel> outletCatalogModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
             IProductsService productsService,
             IOutletRepository outletRepository,
             LinkGenerator linkGenerator)
@@ -37,19 +42,22 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
             this.productsService = productsService;
             this.linkGenerator = linkGenerator;
             this.outletRepository = outletRepository;
+            this.modalModelBuilder = modalModelBuilder;
         }
 
         public async Task<OutletPageCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = this.outletCatalogModelBuilder.BuildModel(componentModel);
-
-            viewModel.HideQuantityInput = true;
-            viewModel.ShowAddToCartButton = true;
-            viewModel.SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct");
-            viewModel.Title = this.globalLocalizer.GetString("Outlet");
-            viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "OutletApi", new { Area = "Products" });
-            viewModel.ItemsPerPage = OutletConstants.Catalog.DefaultItemsPerPage;
-            viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
+            var viewModel = new OutletPageCatalogViewModel
+            {
+                HideQuantityInput = true,
+                ShowAddToCartButton = true,
+                SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct"),
+                Title = this.globalLocalizer.GetString("Outlet"),
+                ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "OutletApi", new { Area = "Products" }),
+                ItemsPerPage = OutletConstants.Catalog.DefaultItemsPerPage,
+                PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize),
+                Modal = await this.modalModelBuilder.BuildModelAsync(componentModel)
+            };
 
             var outletItems = await this.outletRepository.GetOutletProductsAsync(
                 componentModel.Language, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);

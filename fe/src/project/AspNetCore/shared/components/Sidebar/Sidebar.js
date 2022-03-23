@@ -15,7 +15,6 @@ import moment from "moment";
 const Sidebar = (props) => {
     const [state, dispatch] = useContext(Context);
     const [productVariants, setProductVariants] = useState([]);
-    const [quantities, setQuantities] = useState([]);
     const {productId, isOpen, manyUses, setIsOpen, handleOrder, labels} = props;
 
     const toggleDrawer = (open) => (e) => {
@@ -57,18 +56,6 @@ const Sidebar = (props) => {
                     return response.json().then(jsonResponse => {
                         if (response.ok) {
                             setProductVariants(() => jsonResponse)
-                            
-                            let quantities = [];
-                            jsonResponse[0].carouselItems.forEach((item, i) => {
-                                const itemQuantity = {
-                                    id: item.id,
-                                    quantity: 1
-                                }
-
-                                quantities.push(itemQuantity);
-                            });
-
-                            setQuantities(quantities)
                         }   
                     });
                 }).catch(() => {
@@ -87,24 +74,11 @@ const Sidebar = (props) => {
 
         const payload = {
             ...item,
-            availableQuantity: productVariant.availableQuantity
+            availableQuantity: productVariant.availableQuantity,
+            availableOutletQuantity: productVariant.availableOutletQuantity
         }
 
         handleOrder(payload);
-    }
-
-    const onQuantityChange = (id) => (e) => {
-        if (e.target.value > 0) {
-            const itemQuantityIndex = quantities.findIndex(x => x.id === id);
-            let prevQuantities = [...quantities];
-
-            let item = prevQuantities.find(x => x.id === id);
-            item.quantity = e.target.value;
-
-            prevQuantities[itemQuantityIndex] = item;
-
-            setQuantities(prevQuantities)
-        }
     }
 
     useEffect(() => {
@@ -113,7 +87,6 @@ const Sidebar = (props) => {
         }
         else {
             setProductVariants(() => []);
-            setQuantities(() => []);
         }
     }, [isOpen, productId])
 
@@ -147,11 +120,6 @@ const Sidebar = (props) => {
                                     if (secondaryfabrics) {
                                         fabrics += ", " + secondaryfabrics;
                                     }
-                                }
-
-                                let quantity = 1;
-                                if (quantities.length !== 0){
-                                    quantity = quantities.find(x => x.id === carouselItem.id).quantity;
                                 }
 
                                 return (

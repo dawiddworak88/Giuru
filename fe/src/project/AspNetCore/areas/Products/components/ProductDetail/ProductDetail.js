@@ -13,11 +13,11 @@ import Modal from "../../../../shared/components/Modal/Modal";
 
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
-    const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
-    const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
-    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
-    const [isModalOpen, setIsModalOpen] = React.useState(false);
-    const [totalQuantities, setTotalQuantities] = React.useState(0);
+    const [orderItems, setOrderItems] = useState(props.orderItems ? props.orderItems : []);
+    const [basketId, setBasketId] = useState(props.basketId ? props.basketId : null);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [totalQuantities, setTotalQuantities] = useState(0);
 
     const [product2, setProduct] = useState(null);
 
@@ -31,18 +31,6 @@ function ProductDetail(props) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         let product = props;
-        // if (!props.isProductVariant){
-        //     product = {
-        //         productId: item.id,
-        //         sku: item.subtitle,
-        //         title: item.title,
-        //         images: item.images,
-        //         quantity: item.quantity,
-        //         stockQuantity: parseInt(item.stockQuantity),
-        //         outletQuantity: parseInt(item.outletQuantity),
-        //     };
-        // }
-        
         if (product2){
             product = {
                 productId: product2.id, 

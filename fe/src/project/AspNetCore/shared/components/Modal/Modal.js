@@ -8,7 +8,6 @@ import {
 } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 
-// Don't worry about names of variables, I will change
 const Modal = (props) => {
     const [quantity, setQuantity] = useState(0);
     const [stockQuantity, setStockQuantity] = useState(0);
@@ -27,8 +26,7 @@ const Modal = (props) => {
             externalReference,
             deliveryFrom,
             deliveryTo,
-            moreInfo,
-            isModal: true
+            moreInfo
         }
 
         handleOrder(payload)

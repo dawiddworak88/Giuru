@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Shared.DomainModels.Baskets;
+using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Foundation.GenericRepository.Paginations;
 using System;
@@ -34,6 +35,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string UpdateBasketUrl { get; set; }
         public string ExpectedDeliveryLabel { get; set; }
         public SidebarViewModel Sidebar { get; set; }
+        public ModalViewModel Modal { get; set; }
         public IEnumerable<BasketItem> BasketItems { get; set; }
         public PagedResults<IEnumerable<CatalogItemViewModel>> PagedItems { get; set; }
     }

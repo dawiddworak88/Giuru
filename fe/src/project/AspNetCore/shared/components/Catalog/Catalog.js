@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
@@ -12,22 +12,29 @@ import { ShoppingCart } from "@material-ui/icons";
 import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
+import Modal from "../Modal/Modal";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
-    const [orderItems, setOrderItems] = React.useState(props.basketItems ? props.basketItems : []);
-    const [page, setPage] = React.useState(0);
-    const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
-    const [itemsPerPage,] = React.useState(props.itemsPerPage ? props.itemsPerPage : CatalogConstants.defaultCatalogItemsPerPage());
-    const [items, setItems] = React.useState(props.pagedItems.data);
-    const [total, setTotal] = React.useState(props.pagedItems.total);
-    const [quantities, setQuantities] = React.useState([]);
-    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
-    const [product, setProduct] = React.useState(null)
+    const [orderItems, setOrderItems] = useState(props.basketItems ? props.basketItems : []);
+    const [page, setPage] = useState(0);
+    const [basketId, setBasketId] = useState(props.basketId ? props.basketId : null);
+    const [itemsPerPage,] = useState(props.itemsPerPage ? props.itemsPerPage : CatalogConstants.defaultCatalogItemsPerPage());
+    const [items, setItems] = useState(props.pagedItems.data);
+    const [total, setTotal] = useState(props.pagedItems.total);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const [product, setProduct] = useState(null)
+    const [t, st] = useState(true);
 
     const toggleSidebar = (item) => {
-        setProduct(item.id);
+        setProduct(item);
         setIsSidebarOpen(true)
+    }
+
+    const toggleModal = (item) => {
+        setProduct(item);
+        setIsModalOpen(true)
     }
 
     const handleChangePage = (event, newPage) => {
@@ -75,27 +82,34 @@ function Catalog(props) {
     };
 
     const handleOrder = (item) => {
-        const orderItem = {
-            quantity: quantities.find(x => x.id === item.id).quantity,
-            ...item
-        }
+        // const orderItem = {
+        //     quantity: quantities.find(x => x.id === item.id).quantity,
+        //     ...item
+        // }
 
-        handleAddOrderItemClick(orderItem);
+        // handleAddOrderItemClick(orderItem);
+    }
+
+    const handleModal = (item) => {
+        setIsModalOpen(true)
+        setProduct(item);
+        st(false);
     }
 
     const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const orderItem = {
-            productId: item.id, 
-            sku: item.subtitle ? item.subtitle : item.sku, 
-            name: item.title, 
-            imageId: item.images ? item.images[0].id ? item.images[0].id : item.images[0] : null,
-            quantity: parseInt(item.quantity), 
-            externalReference: null, 
-            deliveryFrom: null, 
-            deliveryTo: null, 
-            moreInfo: null
+            productId: product.id, 
+            sku: product.subtitle ? product.subtitle : product.sku, 
+            name: product.title, 
+            imageId: product.images ? product.images[0].id : null,
+            quantity: parseInt(item.quantity),
+            stockQuantity: item.stockQuantity,
+            externalReference: item.externalReference,
+            deliveryFrom: item.deliveryFrom, 
+            deliveryTo: item.deliveryTo, 
+            moreInfo: item.moreInfo
         };
 
         const basket = {
@@ -138,35 +152,15 @@ function Catalog(props) {
             });
     };
 
-    const onQuantityChange = (id) => (e) => {
-        if (e.target.value > 0) {
-            const itemQuantityIndex = quantities.findIndex(x => x.id === id);
-            let prevQuantities = [...quantities];
-
-            let item = prevQuantities.find(x => x.id === id);
-            item.quantity = e.target.value;
-
-            prevQuantities[itemQuantityIndex] = item;
-
-            setQuantities(prevQuantities)
-        }
-    }
-
     useEffect(() => {
-        if (items){
-            let quantities = []
-            items.forEach((item) => {
-                const itemQuantity = {
-                    id: item.id,
-                    quantity: 1
-                }
-
-                quantities.push(itemQuantity);
-            })
-
-            setQuantities(quantities);
+        if (isSidebarOpen){
+            st(true);
         }
-    }, [items])
+
+        if (!t && !isModalOpen){
+            setIsSidebarOpen(true)
+        }
+    }, [t, isModalOpen, isSidebarOpen])
 
     return (
         <section className="catalog section">
@@ -179,11 +173,6 @@ function Catalog(props) {
                         }
                         <div className="columns is-tablet is-multiline">
                             {items.map((item, index) => {
-                                let quantity = 1;
-                                if (quantities.length !== 0){
-                                    quantity = quantities.find(x => x.id === item.id).quantity;
-                                }
-
                                 let fabrics = null;
                                 if (item.productAttributes && item.productAttributes.length > 0) {
                                     fabrics = item.productAttributes.find(x => x.key === "primaryFabrics") ? item.productAttributes.find(x => x.key === "primaryFabrics").value : "";
@@ -233,22 +222,7 @@ function Catalog(props) {
                                                 <div className="catalog-item__add-to-cart-button-container">
                                                     {props.showAddToCartButton ? (
                                                         <div className="row is-flex is-flex-centered">
-                                                            {!props.hideQuantityInput &&
-                                                                <TextField 
-                                                                    id={item.id} 
-                                                                    name="quantity" 
-                                                                    type="number" 
-                                                                    inputProps={{ 
-                                                                        min: 1, 
-                                                                        step: 1,
-                                                                        style: { textAlign: 'center' }
-                                                                    }}
-                                                                    value={quantity} 
-                                                                    onChange={onQuantityChange(item.id)}
-                                                                    className="quantity-input"
-                                                                />
-                                                            }
-                                                            <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => handleOrder(item)} color="primary">
+                                                            <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => toggleModal(item)} color="primary">
                                                                 {props.basketLabel}
                                                             </Button>
                                                         </div>
@@ -291,8 +265,18 @@ function Catalog(props) {
                     isOpen={isSidebarOpen}
                     manyUses={true}
                     setIsOpen={setIsSidebarOpen}
-                    handleOrder={handleAddOrderItemClick}
+                    handleOrder={handleModal}
                     labels={props.sidebar}
+                />
+            }
+            {props.modal && 
+                <Modal 
+                    isOpen={isModalOpen}
+                    setIsOpen={setIsModalOpen}
+                    //maxOutletValue={product ? product2.availableOutletQuantity : props.availableOutletQuantity}
+                    maxStockValue={product ? product.availableQuantity : null}
+                    handleOrder={handleAddOrderItemClick}
+                    labels={props.modal}
                 />
             }
         </section>
