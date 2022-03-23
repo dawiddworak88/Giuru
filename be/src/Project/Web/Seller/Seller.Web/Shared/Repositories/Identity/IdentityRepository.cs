@@ -4,6 +4,7 @@ using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Microsoft.Extensions.Options;
+using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Shared.ApiRequestModels;
 using Seller.Web.Shared.Configurations;
 using System;
@@ -46,6 +47,33 @@ namespace Seller.Web.Shared.Repositories.Identity
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
+            if (response.IsSuccessStatusCode)
+            {
+                return response.Data.Id.Value;
+            }
+
+            return default;
+        }
+
+        public async Task<Guid> UpdateAsync(string token, string language, Guid? id, string email, string name, string communicationLanguage)
+        {
+            var requestModel = new UpdateClientRequestModel
+            {
+                Id = id,
+                Email = email,
+                Name = name,
+                CommunicationLanguage = communicationLanguage
+            };
+
+            var apiRequest = new ApiRequest<UpdateClientRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.UsersApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.PostAsync<ApiRequest<UpdateClientRequestModel>, UpdateClientRequestModel, BaseResponseModel>(apiRequest);
             if (response.IsSuccessStatusCode)
             {
                 return response.Data.Id.Value;

@@ -103,6 +103,12 @@ namespace Client.Api.Services
 
         public async Task<ClientServiceModel> CreateAsync(CreateClientServiceModel serviceModel)
         {
+            var exsitingClient = this.context.Clients.FirstOrDefault(x => x.Email == serviceModel.Email && x.IsActive);
+            if (exsitingClient is not null)
+            {
+                throw new CustomException(this.clientLocalizer.GetString("ClientExists"), (int)HttpStatusCode.NotFound);
+            }
+
             var client = new Infrastructure.Clients.Entities.Client
             {
                 Name = serviceModel.Name,

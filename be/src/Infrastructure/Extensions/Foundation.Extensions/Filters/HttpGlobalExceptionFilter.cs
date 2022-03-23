@@ -10,6 +10,9 @@ namespace Foundation.Extensions.Filters
     {
         private readonly IWebHostEnvironment env;
 
+        private HttpGlobalExceptionFilter()
+        { }
+
         public HttpGlobalExceptionFilter(IWebHostEnvironment env)
         {
             this.env = env;

@@ -72,7 +72,6 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             if (componentModel.Id.HasValue)
             {
                 var client = await this.clientsRepository.GetClientAsync(componentModel.Token, componentModel.Language, componentModel.Id);
-
                 if (client != null)
                 {
                     viewModel.Id = client.Id;
