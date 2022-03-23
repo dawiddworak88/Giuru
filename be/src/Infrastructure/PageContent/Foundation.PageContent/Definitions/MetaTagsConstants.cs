@@ -2,6 +2,6 @@
 {
     public static class MetaTagsConstants
     {
-        public static readonly string SiteName = "ELTAP";
+        public static readonly string SiteName = "B2B";
     }
 }

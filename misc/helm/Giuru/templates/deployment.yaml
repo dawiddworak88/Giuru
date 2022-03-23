@@ -408,6 +408,51 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: news-api-deployment
+  labels:
+    app: news-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: news-api
+  template:
+    metadata:
+      labels:
+        app: news-api
+    spec:
+      containers:
+      - name: news-api-container
+        image: {{ .Values.image.registry }}/news-api:{{ .Values.image.tag }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: ConnectionString
+          value: {{ .Values.newsApi.connectionString }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: CdnUrl
+          value: {{ .Values.cdnUrl }}
+        - name: EventBusConnection
+          value: {{ .Values.eventBusConnection }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: buyer-web-deployment
   labels:
     app: buyer-web

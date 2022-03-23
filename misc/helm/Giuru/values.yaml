@@ -27,6 +27,8 @@ senderName: "#{SenderName}#"
 googleTagManagerIdentifier: "#{GoogleTagManagerIdentifier}#"
 defaultCulture: "en"
 supportedCultures: "en,de,pl"
+newsApi:
+  connectionString: "#{NewsApi--ConnectionString}#"
 inventoryApi:
   connectionString: "#{InventoryApi--ConnectionString}#"
 clientApi:
