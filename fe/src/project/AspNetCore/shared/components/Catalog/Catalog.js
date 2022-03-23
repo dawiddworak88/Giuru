@@ -224,6 +224,15 @@ function Catalog(props) {
                                                         }
                                                     </div>
                                                 }
+                                                {item.inOutlet &&
+                                                    <div className="catalog-item__in-stock-details">
+                                                        {item.availableQuantity && item.availableQuantity > 0 && 
+                                                            <div className="stock">
+                                                                {props.inOutletLabel} {item.availableQuantity}
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                }
                                             </div>
                                             {props.isLoggedIn &&
                                                 <div className="catalog-item__add-to-cart-button-container">
@@ -280,7 +289,7 @@ function Catalog(props) {
                 <Modal 
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
-                    //maxOutletValue={product ? product2.availableOutletQuantity : props.availableOutletQuantity}
+                    // maxOutletValue={productVariant ? productVariant.availableOutletQuantity : null}
                     maxStockValue={productVariant ? productVariant.availableQuantity : null}
                     handleOrder={handleAddOrderItemClick}
                     labels={props.modal}

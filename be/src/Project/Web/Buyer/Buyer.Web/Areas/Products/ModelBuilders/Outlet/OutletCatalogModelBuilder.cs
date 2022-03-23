@@ -47,17 +47,16 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
 
         public async Task<OutletPageCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new OutletPageCatalogViewModel
-            {
-                HideQuantityInput = true,
-                ShowAddToCartButton = true,
-                SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct"),
-                Title = this.globalLocalizer.GetString("Outlet"),
-                ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "OutletApi", new { Area = "Products" }),
-                ItemsPerPage = OutletConstants.Catalog.DefaultItemsPerPage,
-                PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize),
-                Modal = await this.modalModelBuilder.BuildModelAsync(componentModel)
-            };
+            var viewModel = this.outletCatalogModelBuilder.BuildModel(componentModel);
+
+            viewModel.HideQuantityInput = true;
+            viewModel.ShowAddToCartButton = true;
+            viewModel.SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct");
+            viewModel.Title = this.globalLocalizer.GetString("Outlet");
+            viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "OutletApi", new { Area = "Products" });
+            viewModel.ItemsPerPage = OutletConstants.Catalog.DefaultItemsPerPage;
+            viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
+            viewModel.Modal = await this.modalModelBuilder.BuildModelAsync(componentModel);
 
             var outletItems = await this.outletRepository.GetOutletProductsAsync(
                 componentModel.Language, PaginationConstants.DefaultPageIndex, OutletConstants.Catalog.DefaultItemsPerPage, componentModel.Token);
@@ -71,7 +70,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                 {
                     foreach (var product in products.Data)
                     {
-                        product.InStock = true;
+                        product.InOutlet = true;
                         product.AvailableQuantity = OutletConstants.Catalog.DefaultQuantityValue;
                     }
                 }
