@@ -24,16 +24,16 @@ function Catalog(props) {
     const [total, setTotal] = useState(props.pagedItems.total);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [product, setProduct] = useState(null)
-    const [t, st] = useState(true);
+    const [productVariant, setProductVariant] = useState(null)
+    const [canActiveModal, setCanActiveModal] = useState(true);
 
     const toggleSidebar = (item) => {
-        setProduct(item);
+        setProductVariant(item);
         setIsSidebarOpen(true)
     }
 
     const toggleModal = (item) => {
-        setProduct(item);
+        setProductVariant(item);
         setIsModalOpen(true)
     }
 
@@ -92,20 +92,27 @@ function Catalog(props) {
 
     const handleModal = (item) => {
         setIsModalOpen(true)
-        setProduct(item);
-        st(false);
+        setProductVariant(item);
+        setCanActiveModal(false);
     }
 
     const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        const quantity = parseInt(item.quantity);
+        const stockQuantity = parseInt(item.stockQuantity);
+        const outletQuantity = parseInt(item.outletQuantity);
+
+        const totalQuantity = quantity + stockQuantity + outletQuantity;
         const orderItem = {
-            productId: product.id, 
-            sku: product.subtitle ? product.subtitle : product.sku, 
-            name: product.title, 
-            imageId: product.images ? product.images[0].id : null,
-            quantity: parseInt(item.quantity),
-            stockQuantity: item.stockQuantity,
+            productId: productVariant.id, 
+            sku: productVariant.subtitle ? productVariant.subtitle : productVariant.sku, 
+            name: productVariant.title, 
+            imageId: productVariant.images ? productVariant.images[0].id : null,
+            totalQuantity: totalQuantity,
+            quantity: quantity,
+            stockQuantity: stockQuantity,
+            outletQuantity: outletQuantity,
             externalReference: item.externalReference,
             deliveryFrom: item.deliveryFrom, 
             deliveryTo: item.deliveryTo, 
@@ -126,7 +133,7 @@ function Catalog(props) {
         fetch(props.updateBasketUrl, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
+                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(totalQuantity + state.totalBasketItems) })
 
                 AuthenticationHelper.HandleResponse(response);
 
@@ -154,13 +161,13 @@ function Catalog(props) {
 
     useEffect(() => {
         if (isSidebarOpen){
-            st(true);
+            setCanActiveModal(true);
         }
 
-        if (!t && !isModalOpen){
+        if (!canActiveModal && !isModalOpen){
             setIsSidebarOpen(true)
         }
-    }, [t, isModalOpen, isSidebarOpen])
+    }, [canActiveModal, isModalOpen, isSidebarOpen])
 
     return (
         <section className="catalog section">
@@ -261,7 +268,7 @@ function Catalog(props) {
             )}
             {props.sidebar &&  
                 <Sidebar
-                    productId={product}
+                    productId={productVariant}
                     isOpen={isSidebarOpen}
                     manyUses={true}
                     setIsOpen={setIsSidebarOpen}
@@ -274,7 +281,7 @@ function Catalog(props) {
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
                     //maxOutletValue={product ? product2.availableOutletQuantity : props.availableOutletQuantity}
-                    maxStockValue={product ? product.availableQuantity : null}
+                    maxStockValue={productVariant ? productVariant.availableQuantity : null}
                     handleOrder={handleAddOrderItemClick}
                     labels={props.modal}
                 />

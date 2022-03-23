@@ -17,37 +17,36 @@ function ProductDetail(props) {
     const [basketId, setBasketId] = useState(props.basketId ? props.basketId : null);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [totalQuantities, setTotalQuantities] = useState(0);
-
-    const [product2, setProduct] = useState(null);
-
-    const [t, st] = useState(true);
-
-    const toggleSidebar = () => {
-        setIsSidebarOpen(true)
-    }
+    const [productVariant, setProductVariant] = useState(null);
+    const [canActiveModal, setCanActiveModal] = useState(true);
 
     const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         let product = props;
-        if (product2){
+        if (productVariant){
             product = {
-                productId: product2.id, 
-                sku: product2.subtitle, 
-                title: product2.title,
-                images: product2.images,
+                productId: productVariant.id, 
+                sku: productVariant.subtitle, 
+                title: productVariant.title,
+                images: productVariant.images,
             }
         }
 
+        const quantity = parseInt(item.quantity);
+        const stockQuantity = parseInt(item.stockQuantity);
+        const outletQuantity = parseInt(item.outletQuantity);
+
+        const totalQuantity = quantity + stockQuantity + outletQuantity;
         const orderItem = {
             productId: product.productId,
             sku: product.sku,
             name: product.title,
             imageId: product.images ? product.images[0].id : null,
-            quantity: item.quantity,
-            stockQuantity: item.stockQuantity,
-            outletQuantity: item.outletQuantity,
+            totalQuantity: totalQuantity,
+            quantity: quantity,
+            stockQuantity: stockQuantity,
+            outletQuantity: outletQuantity,
             externalReference: item.externalReference, 
             deliveryFrom: item.deliveryFrom, 
             deliveryTo: item.deliveryTo, 
@@ -58,8 +57,6 @@ function ProductDetail(props) {
             id: basketId,
             items: [...orderItems, orderItem]
         };
-
-        setTotalQuantities(orderItem.quantity + orderItem.stockQuantity + orderItem.outletQuantity);
 
         const requestOptions = {
             method: "POST",
@@ -74,7 +71,7 @@ function ProductDetail(props) {
                 AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
-                    dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(totalQuantities + state.totalBasketItems) })
+                    dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(totalQuantity + state.totalBasketItems) })
                     
                     if (response.ok) {
                         setBasketId(jsonResponse.id);
@@ -87,8 +84,6 @@ function ProductDetail(props) {
                         else {
                             setOrderItems([]);
                         }
-
-                        setTotalQuantities(0);
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -102,19 +97,19 @@ function ProductDetail(props) {
 
     const handleModal = (item) => {
         setIsModalOpen(true)
-        setProduct(item);
-        st(false);
+        setProductVariant(item);
+        setCanActiveModal(false);
     }
 
     useEffect(() => {
         if (isSidebarOpen){
-            st(true);
+            setCanActiveModal(true);
         }
 
-        if (!t && !isModalOpen){
+        if (!canActiveModal && !isModalOpen){
             setIsSidebarOpen(true)
         }
-    }, [t, isModalOpen, isSidebarOpen])
+    }, [canActiveModal, isModalOpen, isSidebarOpen])
 
     return (
         <section className="product-detail section">
@@ -153,7 +148,7 @@ function ProductDetail(props) {
                                 </div>
                             ) : (
                                 <div className="product-detail__add-to-cart-button">
-                                    <Button type="text" variant="contained" color="primary" onClick={toggleSidebar}>
+                                    <Button type="text" variant="contained" color="primary" onClick={() => setIsSidebarOpen(true)}>
                                         {props.basketLabel}
                                     </Button>
                                 </div>
@@ -196,8 +191,8 @@ function ProductDetail(props) {
             <Modal
                 isOpen={isModalOpen}
                 setIsOpen={setIsModalOpen}
-                maxOutletValue={product2 ? product2.availableOutletQuantity : props.availableOutletQuantity}
-                maxStockValue={product2 ? product2.availableQuantity : props.availableQuantity}
+                maxOutletValue={productVariant ? productVariant.availableOutletQuantity : props.availableOutletQuantity}
+                maxStockValue={productVariant ? productVariant.availableQuantity : props.availableQuantity}
                 handleOrder={handleAddOrderItemClick}
                 labels={props.modal}
             />
