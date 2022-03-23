@@ -57,13 +57,12 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
+                    TotalQuantity = x.TotalQuantity,
                     ExternalReference = x.ExternalReference,
                     DeliveryFrom = x.DeliveryFrom,
                     DeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
                 }));
-
-            //Console.WriteLine(JsonConvert.SerializeObject(basket.Items));
 
             var basketResponseModel = new BasketResponseModel
             {
@@ -83,6 +82,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
+                    TotalQuantity = x.TotalQuantity,
                     ExternalReference = x.ExternalReference,
                     ImageSrc = x.PictureUrl,
                     ImageAlt = x.ProductName,

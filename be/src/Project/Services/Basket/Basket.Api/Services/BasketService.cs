@@ -79,6 +79,7 @@ namespace Basket.Api.Services
                         Quantity = x.Quantity,
                         StockQuantity = x.StockQuantity,
                         OutletQuantity = x.OutletQuantity,
+                        TotalQuantity = x.TotalQuantity,
                         ExternalReference = x.ExternalReference,
                         DeliveryFrom = x.DeliveryFrom,
                         DeliveryTo = x.DeliveryTo,
@@ -127,6 +128,7 @@ namespace Basket.Api.Services
                     Id = serviceModel.Id.Value,
                     Items = Array.Empty<BasketItemServiceModel>()
                 };
+
                 return emptyBasket;
             }
 
@@ -142,6 +144,7 @@ namespace Basket.Api.Services
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
+                    TotalQuantity = x.TotalQuantity,
                     ExternalReference = x.ExternalReference,
                     DeliveryFrom = x.DeliveryFrom,
                     DeliveryTo = x.DeliveryTo,
@@ -166,6 +169,7 @@ namespace Basket.Api.Services
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
+                    TotalQuantity = x.TotalQuantity,
                     ExternalReference = x.ExternalReference,
                     DeliveryFrom = x.DeliveryFrom,
                     DeliveryTo = x.DeliveryTo,
@@ -187,6 +191,7 @@ namespace Basket.Api.Services
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
+                    TotalQuantity = x.TotalQuantity,
                     ExternalReference = x.ExternalReference,
                     DeliveryFrom = x.DeliveryFrom,
                     DeliveryTo = x.DeliveryTo,
