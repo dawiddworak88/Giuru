@@ -23,6 +23,9 @@ function HomePage(props) {
         {props.carouselGrid && 
           <CarouselGrid {...props.carouselGrid}></CarouselGrid>
         }
+        {props.newsCarousel &&
+          <CarouselGrid {...props.newsCarousel} />
+        }
         {props.contentGrid &&
           <ContentGrid {...props.contentGrid}></ContentGrid>
         }

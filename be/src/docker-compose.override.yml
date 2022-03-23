@@ -96,6 +96,17 @@ services:
     ports:
       - "5134:80"
 
+  news-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionString=Server=sqldata;Database=NewsDb;User Id=sa;Password=Gre@tPassw0rd
+      - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - LogstashUrl=http://logstash:31311
+      - SupportedCultures=${SUPPORTED_CULTURES}
+      - DefaultCulture=${DEFAULT_CULTURE}
+    ports:
+      - "5135:80"
+
   catalog-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -198,6 +209,7 @@ services:
       - ClientUrl=http://client-api
       - OrderUrl=http://ordering-api
       - InventoryUrl=http://inventory-api
+      - NewsUrl=http://news-api
       - BuyerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - MediaUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5131
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
@@ -221,6 +233,7 @@ services:
       - OrderUrl=http://ordering-api
       - BasketUrl=http://basket-api
       - ClientUrl=http://client-api
+      - NewsUrl=http://news-api
       - IsMarketplace=${IS_MARKETPLACE}
       - OrganisationId=${ORGANISATION_ID}
       - SupportedCultures=${SUPPORTED_CULTURES}

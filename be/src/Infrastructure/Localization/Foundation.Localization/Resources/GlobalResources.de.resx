@@ -280,7 +280,7 @@
     <value>Keine Ergebnisse.</value>
   </data>
   <data name="Novelties" xml:space="preserve">
-    <value>Neuigkeiten</value>
+    <value>News</value>
   </data>
   <data name="Ok" xml:space="preserve">
     <value>OK</value>
@@ -443,5 +443,11 @@
   </data>
   <data name="Basket" xml:space="preserve">
     <value>Korb</value>
+  </data>
+  <data name="NewsCategories" xml:space="preserve">
+    <value>News Kategorien</value>
+  </data>
+  <data name="News" xml:space="preserve">
+    <value>News</value>
   </data>
 </root>

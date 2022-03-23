@@ -57,7 +57,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                 Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage,
                 "Order");
 
-            foreach (var category in categories.OrEmptyIfNull().Where(x => x.Level == CategoriesConstants.FirstLevel))
+            foreach (var category in categories.OrEmptyIfNull().Where(x => x.Level == HomeConstants.Categories.FirstLevel))
             {
                 var contentItem = new ContentGridItemViewModel
                 {

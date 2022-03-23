@@ -60,6 +60,8 @@ var browserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
+        newsItemPage: ["./src/project/AspNetCore/areas/News/pages/NewsItemPage/index.js", "./src/project/AspNetCore/areas/News/pages/NewsItemPage/NewsItemPage.scss"],
+        newsPage: ["./src/project/AspNetCore/areas/News/pages/NewsPage/index.js", "./src/project/AspNetCore/areas/News/pages/NewsPage/NewsPage.scss"],
         newOrderPage: ["./src/project/AspNetCore/areas/Orders/pages/NewOrder/index.js", "./src/project/AspNetCore/areas/Orders/pages/NewOrder/NewOrderPage.scss"],
         listOrdersPage: ["./src/project/AspNetCore/areas/Orders/pages/ListOrders/index.js", "./src/project/AspNetCore/areas/Orders/pages/ListOrders/ListOrdersPage.scss"],
         statusOrderPage: ["./src/project/AspNetCore/areas/Orders/pages/StatusOrder/index.js", "./src/project/AspNetCore/areas/Orders/pages/StatusOrder/StatusOrderPage.scss"],
@@ -199,6 +201,10 @@ var sellerPortalBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
+        newsitempage: ["./src/project/Seller.Portal/areas/News/pages/NewsItemPage/index.js", "./src/project/Seller.Portal/areas/News/pages/NewsItemPage/NewsItemPage.scss"],
+        newspage: ["./src/project/Seller.Portal/areas/News/pages/NewsPage/index.js", "./src/project/Seller.Portal/areas/News/pages/NewsPage/NewsPage.scss"],
+        newscategoriespage: ["./src/project/Seller.Portal/areas/News/pages/CategoriesPage/index.js", "./src/project/Seller.Portal/areas/News/pages/CategoriesPage/CategoriesPage.scss"],
+        newscategorypage: ["./src/project/Seller.Portal/areas/News/pages/CategoryPage/index.js", "./src/project/Seller.Portal/areas/News/pages/CategoryPage/CategoryPage.scss"],
         inventorypage: ["./src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/InventoryPage.scss"],
         warehousepage: ["./src/project/Seller.Portal/areas/Warehouse/pages/WarehousePage/index.js", "./src/project/Seller.Portal/areas/Warehouse/pages/WarehousePage/WarehousePage.scss"],
         inventoryaddpage: ["./src/project/Seller.Portal/areas/Inventory/pages/InventoryAddPage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/InventoryPage.scss"],

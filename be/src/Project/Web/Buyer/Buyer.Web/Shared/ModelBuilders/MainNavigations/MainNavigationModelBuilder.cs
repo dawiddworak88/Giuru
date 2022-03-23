@@ -81,6 +81,12 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
                 links.Add(brandZoneLink);
             }
 
+            links.Add(new LinkViewModel
+            {
+                Text = this.globalLocalizer.GetString("News"),
+                Url = this.linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
+            });
+
             return new MainNavigationViewModel
             {
                 Links = links

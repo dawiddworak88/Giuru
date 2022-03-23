@@ -11,6 +11,7 @@ namespace Buyer.Web.Shared.Configurations
         public string ClientUrl { get; set; }
         public string OrderUrl { get; set; }
         public string BasketUrl { get; set; }
+        public string NewsUrl { get; set; }
         public string CdnUrl { get; set; }
         public bool IsMarketplace { get; set; }
         public Guid? OrganisationId { get; set; }

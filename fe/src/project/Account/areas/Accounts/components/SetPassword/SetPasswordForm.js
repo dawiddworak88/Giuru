@@ -40,7 +40,7 @@ function SetPasswordForm(props) {
 
         fetch(props.submitUrl, requestOptions)
             .then(response => {
-                if (response.status == ResponseStatusConstants.found()) {
+                if (response.status === ResponseStatusConstants.found()) {
                     toast.success(props.passwordSetSuccessMessage);
                     setTimeout(() => NavigationHelper.redirect(props.returnUrl), 2000);
                 } else {
