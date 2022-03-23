@@ -70,6 +70,7 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
+                    TotalQuantity = x.TotalQuantity,
                     ExternalReference = x.ExternalReference,
                     ExpectedDeliveryFrom = x.DeliveryFrom,
                     ExpectedDeliveryTo = x.DeliveryTo,
