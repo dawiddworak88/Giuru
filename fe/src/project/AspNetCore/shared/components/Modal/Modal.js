@@ -7,6 +7,7 @@ import {
     KeyboardDatePicker,
 } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
+import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 
 const Modal = (props) => {
     const [quantity, setQuantity] = useState(0);
@@ -182,6 +183,7 @@ const Modal = (props) => {
                                 id="moreInfo" 
                                 name="moreInfo" 
                                 type="text" 
+                                value={moreInfo}
                                 label={labels.moreInfoLabel}
                                 fullWidth={true}
                                 onChange={(e) => {
@@ -190,9 +192,14 @@ const Modal = (props) => {
                         </div>
                     </div>
                 </section>
-                <footer class="modal-card-foot">
-                    <button class="button is-success" onClick={() => handleAddItemToBasket()}>{labels.addText}</button>
-                    <button class="button" onClick={() => setIsOpen(false)}>{labels.cancelLabel}</button>
+                <footer class="modal-card-foot is-justify-content-space-between">
+                    <div className="button-group">
+                        <button class="button is-success" onClick={() => handleAddItemToBasket()}>{labels.addText}</button>
+                        <button class="button" onClick={() => setIsOpen(false)}>{labels.cancelLabel}</button>
+                    </div>
+                    <div className="button-group">
+                        <button class="button" onClick={() => NavigationHelper.redirect(labels.basketUrl)}>{labels.basketLabel}</button>
+                    </div>
                 </footer>
             </div>
         </div>

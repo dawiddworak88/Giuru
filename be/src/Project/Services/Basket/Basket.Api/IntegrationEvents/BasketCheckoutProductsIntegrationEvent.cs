@@ -6,6 +6,6 @@ namespace Basket.Api.IntegrationEvents
 {
     public class BasketCheckoutProductsIntegrationEvent : IntegrationEvent
     {
-       public IEnumerable<BasketCheckoutProductEventModel> Items { get; set; }
+        public IEnumerable<BasketCheckoutProductEventModel> Items { get; set; }
     }
 }

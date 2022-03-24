@@ -96,7 +96,7 @@ namespace Basket.Api.Services
                 item.Add(new BasketCheckoutProductEventModel
                 {
                     ProductId = group.FirstOrDefault().ProductId,
-                    BookedQuantity = (int)-group.Sum(x => x.Quantity)
+                    BookedQuantity = (int)-group.Sum(x => x.StockQuantity)
                 });
             }
 
@@ -104,7 +104,7 @@ namespace Basket.Api.Services
             {
                 Items = item.Select(x => new BasketCheckoutProductEventModel
                 {
-                    ProductId= x.ProductId,
+                    ProductId = x.ProductId,
                     BookedQuantity = x.BookedQuantity,
                 })
             };

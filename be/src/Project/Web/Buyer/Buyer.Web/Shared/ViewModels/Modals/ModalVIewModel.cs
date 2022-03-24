@@ -14,5 +14,7 @@
         public string QuantityLabel { get; set; }
         public string OutletQuantityLabel { get; set; }
         public string StockQuantityLabel { get; set; }
+        public string BasketUrl { get; set; }
+        public string BasketLabel { get; set; }
     }
 }
