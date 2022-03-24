@@ -5,7 +5,6 @@ import {
 import { Close, AddShoppingCart, ArrowRight } from "@material-ui/icons";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
-import { CircularProgress } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../shared/stores/Store";
 import ResponsiveImage from "../../../../../shared/components/Picture/ResponsiveImage";
@@ -36,6 +35,8 @@ const Sidebar = (props) => {
     }
 
     const fetchProductVariants = () => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
         if (productVariants.length === 0) {
             const requestOptions = {
                 method: "GET",
@@ -162,8 +163,7 @@ const Sidebar = (props) => {
                                     </ListItem>
                                 )
                             }
-                        ),
-                        state.isLoading && <CircularProgress className="progressBar" />
+                        )
                     )
                 )}
             </List>
