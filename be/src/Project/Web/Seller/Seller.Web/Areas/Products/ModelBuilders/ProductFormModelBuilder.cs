@@ -83,10 +83,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
             };
 
             var categories = await this.categoriesRepository.GetAllCategoriesAsync(
-                componentModel.Token,
-                componentModel.Language,
-                true,
-                $"{nameof(Category.Level)},{nameof(Category.Name)}");
+                componentModel.Token, componentModel.Language, true, $"{nameof(Category.Level)}");
 
             if (categories != null)
             {
@@ -94,10 +91,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
             }
 
             var primaryProducts = await this.productsRepository.GetAllPrimaryProductsAsync(
-                componentModel.Token,
-                componentModel.Language,
-                componentModel.SellerId,
-                nameof(Product.Name));
+                componentModel.Token, componentModel.Language, componentModel.SellerId, nameof(Product.Name));
 
             if (primaryProducts != null)
             {
@@ -107,9 +101,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
             if (componentModel.Id.HasValue)
             {
                 var product = await this.productsRepository.GetProductAsync(
-                    componentModel.Token,
-                    componentModel.Language,
-                    componentModel.Id);
+                    componentModel.Token, componentModel.Language, componentModel.Id);
 
                 if (product != null)
                 {
