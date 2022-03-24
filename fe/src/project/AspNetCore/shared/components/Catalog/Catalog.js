@@ -278,7 +278,7 @@ function Catalog(props) {
             )}
             {props.sidebar &&  
                 <Sidebar
-                    productId={productVariant}
+                    productId={productVariant ? productVariant.id : null}
                     isOpen={isSidebarOpen}
                     manyUses={true}
                     setIsOpen={setIsSidebarOpen}
@@ -290,7 +290,7 @@ function Catalog(props) {
                 <Modal 
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
-                    // maxOutletValue={productVariant ? productVariant.availableOutletQuantity : null}
+                    maxOutletValue={productVariant ? productVariant.availableOutletQuantity : null}
                     maxStockValue={productVariant ? productVariant.availableQuantity : null}
                     handleOrder={handleAddOrderItemClick}
                     labels={props.modal}
