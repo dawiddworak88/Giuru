@@ -25,7 +25,6 @@ function Catalog(props) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productVariant, setProductVariant] = useState(null)
-    const [canActiveModal, setCanActiveModal] = useState(true);
 
     const toggleSidebar = (item) => {
         setProductVariant(item);
@@ -81,19 +80,9 @@ function Catalog(props) {
             });
     };
 
-    const handleOrder = (item) => {
-        // const orderItem = {
-        //     quantity: quantities.find(x => x.id === item.id).quantity,
-        //     ...item
-        // }
-
-        // handleAddOrderItemClick(orderItem);
-    }
-
     const handleModal = (item) => {
         setIsModalOpen(true)
         setProductVariant(item);
-        setCanActiveModal(false);
     }
 
     const handleAddOrderItemClick = (item) => {
@@ -159,16 +148,6 @@ function Catalog(props) {
                 toast.error(props.generalErrorMessage);
             });
     };
-
-    useEffect(() => {
-        if (isSidebarOpen){
-            setCanActiveModal(true);
-        }
-
-        if (!canActiveModal && !isModalOpen){
-            setIsSidebarOpen(true)
-        }
-    }, [canActiveModal, isModalOpen, isSidebarOpen])
 
     return (
         <section className="catalog section">
