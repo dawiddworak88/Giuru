@@ -19,7 +19,6 @@ using Foundation.EventBus.Abstractions;
 using Catalog.Api.IntegrationEvents;
 using Newtonsoft.Json.Linq;
 using Foundation.Catalog.Repositories.ProductSearchRepositories;
-using Newtonsoft.Json;
 
 namespace Catalog.Api.Services.Products
 {
