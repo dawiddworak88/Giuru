@@ -48,8 +48,8 @@ function ProductDetail(props) {
             stockQuantity: stockQuantity,
             outletQuantity: outletQuantity,
             externalReference: item.externalReference, 
-            deliveryFrom: item.deliveryFrom, 
-            deliveryTo: item.deliveryTo, 
+            deliveryFrom:  moment(item.deliveryFrom).startOf("day"), 
+            deliveryTo: moment(item.deliveryTo).startOf("day"), 
             moreInfo: item.moreInfo
         }
 

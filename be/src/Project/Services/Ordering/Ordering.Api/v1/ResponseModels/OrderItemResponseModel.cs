@@ -8,6 +8,7 @@ namespace Ordering.Api.v1.ResponseModels
         public double Quantity { get; set; }
         public double StockQuantity { get; set; }
         public double OutletQuantity { get; set; }
+        public double TotalQuantity { get; set; }
         public string ProductSku { get; set; }
         public string ProductName { get; set; }
         public string PictureUrl { get; set; }

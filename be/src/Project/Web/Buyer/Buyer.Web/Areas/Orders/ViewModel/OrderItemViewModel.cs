@@ -15,6 +15,7 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public double Quantity { get; set; }
         public double StockQuantity { get; set; }
         public double OutletQuantity { get; set; }
+        public double TotalQuantity { get; set; }
         public string ExternalReference { get; set; }
         public DateTime? DeliveryFrom { get; set; }
         public DateTime? DeliveryTo { get; set; }

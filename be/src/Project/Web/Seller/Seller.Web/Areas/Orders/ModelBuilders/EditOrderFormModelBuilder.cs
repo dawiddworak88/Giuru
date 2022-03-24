@@ -77,6 +77,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,
+                    TotalQuantity = x.TotalQuantity,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo,
                     DeliveryFrom = x.ExpectedDeliveryFrom,
