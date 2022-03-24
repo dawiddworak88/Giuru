@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
@@ -6,7 +6,7 @@ import ResponsiveImage from "../../../../../shared/components/Picture/Responsive
 import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
 import { Context } from "../../../../../shared/stores/Store";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
-import { TablePagination, Button, TextField } from "@material-ui/core";
+import { TablePagination, Button } from "@material-ui/core";
 import CatalogConstants from "./CatalogConstants";
 import { ShoppingCart } from "@material-ui/icons";
 import Sidebar from "../Sidebar/Sidebar";
