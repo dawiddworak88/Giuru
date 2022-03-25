@@ -26,7 +26,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder;
         private readonly IProductsService productsService;
         private readonly IInventoryRepository inventoryRepository;
-        private readonly IOutletRepository outletRepository;
         private readonly LinkGenerator linkGenerator;
 
         public AvailableProductsCatalogModelBuilder(
@@ -35,7 +34,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
             IProductsService productsService,
             IInventoryRepository inventoryRepository,
-            IOutletRepository outletRepository,
             LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
@@ -44,7 +42,6 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             this.inventoryRepository = inventoryRepository;
             this.linkGenerator = linkGenerator;
             this.modalModelBuilder = modalModelBuilder;
-            this.outletRepository = outletRepository;
         }
 
         public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)

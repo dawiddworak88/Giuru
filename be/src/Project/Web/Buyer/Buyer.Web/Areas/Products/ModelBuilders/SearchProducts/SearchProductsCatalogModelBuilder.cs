@@ -8,12 +8,7 @@ using Foundation.GenericRepository.Paginations;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Foundation.PageContent.ComponentModels;
-using Buyer.Web.Areas.Orders.Repositories.Baskets;
-using Microsoft.AspNetCore.Routing;
-using Foundation.Extensions.ExtensionMethods;
-using System.Linq;
-using Buyer.Web.Areas.Orders.ApiResponseModels;
-using System.Globalization;
+using Buyer.Web.Shared.ViewModels.Modals;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 {
@@ -21,16 +16,19 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
     {
         private readonly ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> searchProductsCatalogModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder;
         private readonly IProductsService productsService;
 
         public SearchProductsCatalogModelBuilder(
             ICatalogModelBuilder<SearchProductsComponentModel, SearchProductsCatalogViewModel> searchProductsCatalogModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
             IProductsService productsService)
         {
             this.searchProductsCatalogModelBuilder = searchProductsCatalogModelBuilder;
             this.productsService = productsService;
             this.sidebarModelBuilder = sidebarModelBuilder;
+            this.modalModelBuilder = modalModelBuilder;
         }
 
         public async Task<SearchProductsCatalogViewModel> BuildModelAsync(SearchProductsComponentModel componentModel)
@@ -39,6 +37,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.SearchProducts
 
             viewModel.Title = componentModel.SearchTerm;
             viewModel.Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel);
+            viewModel.Modal = await this.modalModelBuilder.BuildModelAsync(componentModel);
             viewModel.PagedItems = await this.productsService.GetProductsAsync(
                 null,
                 null,
