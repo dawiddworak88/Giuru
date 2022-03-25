@@ -53,63 +53,68 @@ const Modal = (props) => {
                 </header>
                 <section class="modal-card-body">
                     <div className="modal-container">
-                        <div className="field">
-                            <TextField 
-                                id="quantity" 
-                                name="quantity" 
-                                type="number"
-                                label={labels.quantityLabel}
-                                inputProps={{ 
-                                    min: 0, 
-                                    step: 1,
-                                    style: { textAlign: 'center' }
-                                }}
-                                value={quantity}
-                                onChange={(e) => {
-                                    setQuantity(e.target.value)
-                                }}
-                            />
+                        <div className="quantities-container">
+                            <div className="field">
+                                <TextField 
+                                    id="quantity" 
+                                    name="quantity" 
+                                    type="number"
+                                    label={labels.quantityLabel}
+                                    inputProps={{ 
+                                        min: 0, 
+                                        step: 1,
+                                        style: { textAlign: 'center' }
+                                    }}
+                                    value={quantity}
+                                    fullWidth={true}
+                                    onChange={(e) => {
+                                        setQuantity(e.target.value)
+                                    }}
+                                />
+                            </div>
+                            {maxStockValue && maxStockValue > 0 &&
+                                <div className="field">
+                                    <TextField 
+                                        id="stockQuantity" 
+                                        name="stockQuantity" 
+                                        type="number" 
+                                        label={labels.stockQuantityLabel}
+                                        inputProps={{ 
+                                            min: 0, 
+                                            step: 1,
+                                            max: maxStockValue,
+                                            style: { textAlign: 'center' }
+                                        }}
+                                        value={stockQuantity}
+                                        fullWidth={true}
+                                        onChange={(e) => {
+                                            setStockQuantity(e.target.value)
+                                        }}
+                                    />
+                                </div>
+                            }
+                            {maxOutletValue && maxOutletValue > 0 &&
+                                <div className="field">
+                                    <TextField 
+                                        id="outletQuantity" 
+                                        name="outletQuantity" 
+                                        type="number" 
+                                        label={labels.outletQuantityLabel}
+                                        inputProps={{ 
+                                            min: 0, 
+                                            step: 1,
+                                            max: maxOutletValue,
+                                            style: { textAlign: 'center' }
+                                        }}
+                                        value={outletQuantity}
+                                        fullWidth={true}
+                                        onChange={(e) => {
+                                            setOutletQuantity(e.target.value)
+                                        }}
+                                    />
+                                </div>
+                            }
                         </div>
-                        {maxStockValue && maxStockValue > 0 &&
-                            <div className="field">
-                                <TextField 
-                                    id="stockQuantity" 
-                                    name="stockQuantity" 
-                                    type="number" 
-                                    label={labels.stockQuantityLabel}
-                                    inputProps={{ 
-                                        min: 0, 
-                                        step: 1,
-                                        max: maxStockValue,
-                                        style: { textAlign: 'center' }
-                                    }}
-                                    value={stockQuantity} 
-                                    onChange={(e) => {
-                                        setStockQuantity(e.target.value)
-                                    }}
-                                />
-                            </div>
-                        }
-                        {maxOutletValue && maxOutletValue > 0 &&
-                            <div className="field">
-                                <TextField 
-                                    id="outletQuantity" 
-                                    name="outletQuantity" 
-                                    type="number" 
-                                    label={labels.outletQuantityLabel}
-                                    inputProps={{ 
-                                        min: 0, 
-                                        step: 1,
-                                        max: maxOutletValue,
-                                        style: { textAlign: 'center' }
-                                    }}
-                                    value={outletQuantity}
-                                    onChange={(e) => {
-                                        setOutletQuantity(e.target.value)
-                                    }}
-                                />
-                            </div>
-                        }
                         <div className="field">
                             <TextField 
                                 id="externalReference" 
