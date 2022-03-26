@@ -18,7 +18,8 @@ const NewsCatalog = (props) => {
 
     let pageIndex = 2;
     let loadMore = hasMore;
-    const handleLoadNews = async () => {
+
+    const handleLoadNews = () => {
         if (!loadMore) return;
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -34,8 +35,9 @@ const NewsCatalog = (props) => {
 
         const getNewsUrl = props.newsApiUrl + "?" + QueryStringSerializer.serialize(queryStrings);
 
-        await fetch(getNewsUrl, requestOptions)
+        fetch(getNewsUrl, requestOptions)
             .then((response) => {
+                
                 dispatch({ type: "SET_IS_LOADING", payload: false });
 
                 return response.json().then(jsonResponse => {
