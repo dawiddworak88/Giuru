@@ -492,6 +492,8 @@ spec:
           value: {{ .Values.basketUrl }}
         - name: OrderUrl
           value: {{ .Values.orderUrl }}
+        - name: NewsUrl
+          value: {{ .Values.newsUrl }}
         - name: CdnUrl
           value: {{ .Values.cdnUrl }}
         - name: ClientId
@@ -551,6 +553,8 @@ spec:
           value: {{ .Values.clientUrl }}
         - name: InventoryUrl
           value: {{ .Values.inventoryUrl }}
+        - name: NewsUrl
+          value: {{ .Values.newsUrl }}
         - name: BuyerUrl
           value: {{ .Values.buyerUrl }}
         - name: ClientId
