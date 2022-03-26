@@ -7,6 +7,13 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..\..</DockerfileContext>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="v1\News\RequestModels\**" />
+    <Content Remove="v1\News\RequestModels\**" />
+    <EmbeddedResource Remove="v1\News\RequestModels\**" />
+    <None Remove="v1\News\RequestModels\**" />
+  </ItemGroup>
 	
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.2" />
@@ -34,10 +41,6 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\ApiExtensions\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <Folder Include="v1\News\RequestModels\" />
   </ItemGroup>
 	
 </Project>

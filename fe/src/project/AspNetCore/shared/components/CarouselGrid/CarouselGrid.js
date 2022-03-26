@@ -36,22 +36,24 @@ function CarouselGrid(props) {
                                                 {carouselItem.title &&
                                                     <p className="title is-5 has-text-centered">{carouselItem.title}</p>
                                                 }
-
-                                                {props.isNews &&
+                                                {(carouselItem.categoryName || carouselItem.createdDate) && 
                                                     <div className="carousel-grid__data">
-                                                        <div className="data">
-                                                            <Hash />
-                                                            <span className="text">{carouselItem.categoryName}</span>
+                                                        {carouselItem.categoryName &&
+                                                            <div className="data">
+                                                                <Hash />
+                                                                <span className="text">{carouselItem.categoryName}</span>
+                                                            </div>
+                                                        }
+                                                        {carouselItem.createdDate &&
+                                                            <div className="data">
+                                                                <CalendarToday /> 
+                                                                <span className="text">{moment.utc(carouselItem.createdDate).local().format("L")}</span>
+                                                            </div>
+                                                        }
                                                         </div>
-                                                        <div className="data">
-                                                            <CalendarToday /> 
-                                                            <span className="text">{moment.utc(carouselItem.createdDate).local().format("L")}</span>
-                                                        </div>
-                                                    </div>
                                                 }
-
                                                 {carouselItem.subtitle &&
-                                                    <p className={props.isNews ? "subtitle is-6 has-text-centered grid-description" : "subtitle is-6 has-text-centered"}>{carouselItem.subtitle}</p>
+                                                    <p className="subtitle is-6 has-text-centered">{carouselItem.subtitle}</p>
                                                 }
                                             </a>
                                         </div>

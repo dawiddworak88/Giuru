@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Home.ModelBuilders
 {
-    public class HomePageNewsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, NewsViewModel>
+    public class HomePageNewsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, HomePageNewsCarouselGridViewModel>
     {
         private readonly INewsRepository newsRepository;
         private readonly IStringLocalizer<NewsResources> newsLocalizer;
@@ -25,17 +25,17 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             this.newsLocalizer = newsLocalizer;
         }
 
-        public async Task<NewsViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<HomePageNewsCarouselGridViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new NewsViewModel
+            var viewModel = new HomePageNewsCarouselGridViewModel
             {
-                Title = this.newsLocalizer.GetString("News"),
-                IsNews = true
+                Title = this.newsLocalizer.GetString("News")
             };
 
             var items = new List<CarouselGridItemViewModel>();
+
             var news = await this.newsRepository.GetNewsItemsAsync(
-                componentModel.Token, componentModel.Language, HomeConstants.News.DefaultPageIndex, HomeConstants.News.DefaultPageSize, HomeConstants.News.DefaultSearchTerm, $"{nameof(NewsItem.CreatedDate)} desc");
+                componentModel.Token, componentModel.Language, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, null, $"{nameof(NewsItem.CreatedDate)} desc");
 
             if (news is not null && news.Total > 0)
             {

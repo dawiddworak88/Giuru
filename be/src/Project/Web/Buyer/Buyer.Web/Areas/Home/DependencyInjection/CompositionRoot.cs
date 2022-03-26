@@ -15,7 +15,7 @@ namespace Buyer.Web.Areas.Home.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, HeroSliderViewModel>, HeroSliderModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, HomePageCarouselGridViewModel>, HomePageCarouselGridModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, HomePageContentGridViewModel>, HomePageContentGridModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, NewsViewModel>, HomePageNewsModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, HomePageNewsCarouselGridViewModel>, HomePageNewsModelBuilder>();
         }
     }
 }

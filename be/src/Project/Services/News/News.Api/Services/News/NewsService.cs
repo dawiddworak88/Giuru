@@ -92,11 +92,9 @@ namespace News.Api.Services.News
         {
             var news = this.newsContext.NewsItems.Where(x => x.IsActive);
 
-            if (!string.IsNullOrWhiteSpace(model.SearchTerm))
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                var category = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.Name.StartsWith(model.SearchTerm));
-
-                news = news.Where(x => x.Translations.Any(x => x.Title.StartsWith(model.SearchTerm)) || x.CategoryId == category.CategoryId);
+                news = news.Where(x => x.Translations.Any(x => x.Title.StartsWith(model.SearchTerm)));
             }
 
             news = news.ApplySort(model.OrderBy);
@@ -106,7 +104,8 @@ namespace News.Api.Services.News
             var pagedNewsServiceModel = new PagedResults<IEnumerable<NewsItemServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
             var newsItems = new List<NewsItemServiceModel>();
-            foreach (var newsItem in pagedResults.Data.ToList())
+
+            foreach (var newsItem in pagedResults.Data.OrEmptyIfNull().ToList())
             {
                 var item = new NewsItemServiceModel
                 {
@@ -225,7 +224,8 @@ namespace News.Api.Services.News
                 newsTranslation.Description = model.Description;
                 newsTranslation.Content = model.Content;
                 newsTranslation.LastModifiedDate = DateTime.UtcNow;
-            } else
+            } 
+            else
             {
                 var newNewsTranslation = new NewsItemTranslation
                 {

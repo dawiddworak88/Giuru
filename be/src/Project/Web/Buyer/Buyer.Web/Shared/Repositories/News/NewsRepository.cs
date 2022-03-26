@@ -85,9 +85,11 @@ namespace Buyer.Web.Shared.Repositories.News
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<NewsItemResponseModel>>>(apiRequest);
+            
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
                 var newsItems = new List<NewsItem>();
+
                 foreach (var newsItem in response.Data.Data)
                 {
                     var item = new NewsItem

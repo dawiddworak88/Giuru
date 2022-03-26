@@ -49,6 +49,7 @@ namespace News.Api.v1.News.Controllers
         public async Task<IActionResult> Save(NewsRequestModel request) 
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
             if (request.Id.HasValue)
             {
                 var serviceModel = new UpdateNewsItemServiceModel
@@ -69,6 +70,7 @@ namespace News.Api.v1.News.Controllers
 
                 var validator = new UpdateNewsItemModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
+
                 if (validationResult.IsValid)
                 {
                     var newsId = await this.newsService.UpdateAsync(serviceModel);
@@ -97,6 +99,8 @@ namespace News.Api.v1.News.Controllers
 
                 var validator = new CreateNewsItemModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
+
+
                 if (validationResult.IsValid)
                 {
                     var newsId = await this.newsService.CreateAsync(serviceModel);

@@ -4,11 +4,9 @@ import LazyLoad from "react-lazyload";
 import { CalendarToday, PictureAsPdf, Folder, Attachment } from "@material-ui/icons";
 import LazyLoadConstants from "../../../../../../shared/constants/LazyLoadConstants";
 import ResponsiveImage from "../../../../../../shared/components/Picture/ResponsiveImage";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import { Hash } from "react-feather"
 import {marked} from "marked";
 import moment from "moment";
-import { Button } from "@material-ui/core";
 
 const NewsItemDetails = (props) => {
     return (
@@ -17,8 +15,12 @@ const NewsItemDetails = (props) => {
                 <div className="columns is-centered">
                     <div className="column is-8">
                         <div className="news-details__head">
-                            <h1 className="title is-2">{props.title}</h1>
-                            <p className="subtitle is-5">{props.description}</p>
+                            {props.title &&
+                                <h1 className="title is-2 mb-4">{props.title}</h1>
+                            }
+                            {props.description &&
+                                <p className="subtitle is-5 mt-0">{props.description}</p>
+                            }
                         </div>
                         {props.previewImages && 
                             <figure className="image is-16by9 news-details__image">

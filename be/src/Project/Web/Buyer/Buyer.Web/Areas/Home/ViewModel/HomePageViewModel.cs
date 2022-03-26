@@ -9,12 +9,13 @@ namespace Buyer.Web.Areas.Home.ViewModel
 {
     public class HomePageViewModel
     {
+        public string Locale { get; set; }
         public BuyerHeaderViewModel Header { get; set; }
         public MainNavigationViewModel MainNavigation { get; set; }
         public HeroSliderViewModel HeroSlider { get; set; }
         public CarouselGridViewModel CarouselGrid { get; set; }
         public ContentGridViewModel ContentGrid { get; set; }
-        public NewsViewModel NewsCarousel { get; set; }
+        public CarouselGridViewModel NewsCarouselGrid { get; set; }
         public FooterViewModel Footer { get; set; }
     }
 }

@@ -33,6 +33,7 @@ const NewsCatalog = (props) => {
         }  
 
         const getNewsUrl = props.newsApiUrl + "?" + QueryStringSerializer.serialize(queryStrings);
+
         await fetch(getNewsUrl, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
@@ -112,18 +113,28 @@ const NewsCatalog = (props) => {
                                                 </div>
                                             }
                                             <div className="media-content">
-                                                <div className="news-data">
-                                                    <div className="data">
-                                                        <Hash /> 
-                                                        <span className="data-text">{news.categoryName}</span>
-                                                    </div>
-                                                    <div className="data">
-                                                        <CalendarToday />
-                                                        <span className="data-text">{moment.utc(news.createdDate).local().format("L")}</span>
-                                                    </div>
-                                                </div>
-                                                <h4 className="title is-4">{news.title}</h4>
-                                                <p className="subtitle is-6 news-description">{news.description}</p>
+                                                {(news.categoryName || news.createdDate) &&
+                                                    <div className="news-data">
+                                                        {news.categoryName &&
+                                                            <div className="data">
+                                                                <Hash /> 
+                                                                <span className="data-text">{news.categoryName}</span>
+                                                            </div>
+                                                        }
+                                                        {news.createdDate &&
+                                                            <div className="data">
+                                                                <CalendarToday />
+                                                                <span className="data-text">{moment.utc(news.createdDate).local().format("L")}</span>
+                                                            </div>
+                                                        }
+                                                    </div>   
+                                                }
+                                                {news.title &&
+                                                    <h4 className="title is-4 mb-2">{news.title}</h4>
+                                                }
+                                                {news.description &&
+                                                    <p className="subtitle is-6 mt-0 news-description">{news.description}</p>
+                                                }
                                             </div>
                                         </div>
                                     </div>

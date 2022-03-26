@@ -6,6 +6,7 @@ namespace Buyer.Web.Areas.News.ViewModel
 {
     public class NewsPageViewModel 
     {
+        public string Locale { get; set; }
         public BuyerHeaderViewModel Header { get; set; }
         public MainNavigationViewModel MainNavigation { get; set; }
         public NewsCatalogViewModel NewsCatalog { get; set; }

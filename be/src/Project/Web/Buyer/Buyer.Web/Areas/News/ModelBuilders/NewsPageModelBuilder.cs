@@ -4,6 +4,7 @@ using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.News.ModelBuilders
@@ -31,6 +32,7 @@ namespace Buyer.Web.Areas.News.ModelBuilders
         {
             var viewModel = new NewsPageViewModel
             {
+                Locale = CultureInfo.CurrentUICulture.Name,
                 Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
                 NewsCatalog = await this.newsCatalogModelBuilder.BuildModelAsync(componentModel),

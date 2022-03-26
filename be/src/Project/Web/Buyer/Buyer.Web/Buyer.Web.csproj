@@ -8,6 +8,12 @@
     <DockerfileContext>..\..\..\..</DockerfileContext>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Shared\ApiResponseModels\**" />
+    <Content Remove="Shared\ApiResponseModels\**" />
+    <EmbeddedResource Remove="Shared\ApiResponseModels\**" />
+    <None Remove="Shared\ApiResponseModels\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -34,7 +40,6 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\PageContent\Foundation.PageContent\Foundation.PageContent.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Shared\ApiResponseModels\" />
     <Folder Include="wwwroot\dist\" />
   </ItemGroup>
 </Project>
