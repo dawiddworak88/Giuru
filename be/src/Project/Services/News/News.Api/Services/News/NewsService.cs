@@ -127,7 +127,7 @@ namespace News.Api.Services.News
                 var newsItemTranslations = this.newsContext.NewsItemTranslations.FirstOrDefault(x => x.Language == model.Language && x.NewsItemId == newsItem.Id && x.IsActive);
                 if (newsItemTranslations is null)
                 {
-                    newsItemTranslations = this.newsContext.NewsItemTranslations.FirstOrDefault(x => x.IsActive);
+                    newsItemTranslations = this.newsContext.NewsItemTranslations.FirstOrDefault(x => x.NewsItemId == newsItem.Id && x.IsActive);
                 }
 
                 item.Title = newsItemTranslations?.Title;
