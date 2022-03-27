@@ -196,22 +196,22 @@ namespace Catalog.Api.Services.Categories
 
             var categoryTranslation = await this.context.CategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == model.Id && x.Language == model.Language && x.IsActive);
 
-            if (categoryTranslation != null)
+            if (categoryTranslation is not null)
             {
                 categoryTranslation.Name = model.Name;
+                categoryTranslation.LastModifiedDate = DateTime.UtcNow;
             }
             else
             {
                 var newCategoryTranslation = new CategoryTranslation
                 {
+                    Language = model.Language,
                     CategoryId = category.Id,
                     Name = model.Name
                 };
 
                 this.context.CategoryTranslations.Add(newCategoryTranslation.FillCommonProperties());
             }
-            
-            categoryTranslation.LastModifiedDate = DateTime.UtcNow;
 
             var categoryImages = this.context.CategoryImages.Where(x => x.CategoryId == model.Id);
 
@@ -220,18 +220,15 @@ namespace Catalog.Api.Services.Categories
                 this.context.CategoryImages.Remove(categoryImage);
             }
 
-            if (model.Files != null)
+            foreach (var file in model.Files.OrEmptyIfNull())
             {
-                foreach (var file in model.Files)
-                {
-                    var categoryImage = new CategoryImage
-                    { 
-                        CategoryId = model.Id.Value,
-                        MediaId = file
-                    };
+                var categoryImage = new CategoryImage
+                { 
+                    CategoryId = model.Id.Value,
+                    MediaId = file
+                };
 
-                    this.context.CategoryImages.Add(categoryImage.FillCommonProperties());
-                }
+                this.context.CategoryImages.Add(categoryImage.FillCommonProperties());
             }
 
             await this.context.SaveChangesAsync();
