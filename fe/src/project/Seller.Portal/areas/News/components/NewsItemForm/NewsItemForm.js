@@ -19,7 +19,7 @@ import { stateFromMarkdown } from 'draft-js-import-markdown';
 const NewsItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [showBackToNewsListButton, setShowBackToNewsListButton] = useState(false);
-    const [convertedToRaw, setConvertedToRaw] = useState(null);
+    const [convertedToRaw, setConvertedToRaw] = useState(props.content ? props.content : null);
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     
     const stateSchema = {
@@ -155,6 +155,7 @@ const NewsItemForm = (props) => {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
     
     const { title, previewImage, thumbnailImage, description, isPublished, files, categoryId } = values;
+    
     return (
         <section className="section section-small-padding">
             <h1 className="subtitle is-4">{props.title}</h1>

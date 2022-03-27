@@ -30,7 +30,7 @@ namespace News.Api.Services.News
 
         public async Task<Guid> CreateAsync(CreateNewsItemServiceModel model)
         {
-            var category = this.newsContext.Categories.FirstOrDefault(x => x.Id == model.CategoryId);
+            var category = this.newsContext.Categories.FirstOrDefault(x => x.Id == model.CategoryId && x.IsActive);
 
             if (category is null)
             {
@@ -77,7 +77,7 @@ namespace News.Api.Services.News
 
         public async Task DeleteAsync(DeleteNewsItemServiceModel model)
         {
-            var newsItem = this.newsContext.NewsItems.FirstOrDefault(x => x.Id == model.Id);
+            var newsItem = this.newsContext.NewsItems.FirstOrDefault(x => x.Id == model.Id && x.IsActive);
             if (newsItem is null)
             {
                 throw new CustomException(this.newsLocalizer.GetString("NewsNotFound"), (int)HttpStatusCode.NotFound);
@@ -169,7 +169,7 @@ namespace News.Api.Services.News
                 var newsItemTranslations = this.newsContext.NewsItemTranslations.FirstOrDefault(x => x.Language == model.Language && x.NewsItemId == newsItem.Id && x.IsActive);
                 if (newsItemTranslations is null)
                 {
-                    newsItemTranslations = this.newsContext.NewsItemTranslations.FirstOrDefault(x => x.IsActive);
+                    newsItemTranslations = this.newsContext.NewsItemTranslations.FirstOrDefault(x => x.NewsItemId == newsItem.Id && x.IsActive);
                 }
 
                 item.Title = newsItemTranslations?.Title;
@@ -179,7 +179,7 @@ namespace News.Api.Services.News
                 var newsCategoryTranslation = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.Language == model.Language && x.CategoryId == newsItem.CategoryId && x.IsActive);
                 if (newsCategoryTranslation is null)
                 {
-                    newsCategoryTranslation = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.IsActive);
+                    newsCategoryTranslation = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.CategoryId == newsItem.CategoryId && x.IsActive);
                 }
                 
                 item.CategoryName = newsCategoryTranslation?.Name;

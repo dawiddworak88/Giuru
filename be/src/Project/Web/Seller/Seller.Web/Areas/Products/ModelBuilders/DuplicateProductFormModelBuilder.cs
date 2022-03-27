@@ -86,7 +86,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 componentModel.Token,
                 componentModel.Language,
                 true,
-                $"{nameof(Category.Level)},{nameof(Category.Name)}");
+                $"{nameof(Category.Level)}");
 
             if (categories != null)
             {
