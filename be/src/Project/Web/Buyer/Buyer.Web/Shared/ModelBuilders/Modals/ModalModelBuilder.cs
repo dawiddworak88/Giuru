@@ -30,6 +30,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Modal
             var viewModel = new ModalViewModel
             {
                 Title = this.orderLocalizer.GetString("AddingToCart"),
+                MaximalLabel = this.globalLocalizer.GetString("MaximalLabel"),
                 OkLabel = this.globalLocalizer.GetString("Ok"),
                 MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
                 ExternalReferenceLabel = this.orderLocalizer.GetString("ExternalReferenceLabel"),

@@ -453,4 +453,7 @@
   <data name="InOutlet" xml:space="preserve">
     <value>W wyprzedaży:</value>
   </data>
+  <data name="MaximalLabel" xml:space="preserve">
+    <value>maks:</value>
+  </data>
 </root>

@@ -450,4 +450,7 @@
   <data name="InOutlet" xml:space="preserve">
     <value>Im Auslauf:</value>
   </data>
+  <data name="MaximalLabel" xml:space="preserve">
+    <value>max:</value>
+  </data>
 </root>

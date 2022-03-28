@@ -3,6 +3,7 @@
     public class ModalViewModel
     {
         public string Title { get; set; }
+        public string MaximalLabel { get; set; }
         public string ToBasketText { get; set; }
         public string MoreInfoLabel { get; set; }
         public string OkLabel { get; set; }

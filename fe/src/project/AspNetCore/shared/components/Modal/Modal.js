@@ -77,7 +77,7 @@ const Modal = (props) => {
                             id="stockQuantity" 
                             name="stockQuantity" 
                             type="number" 
-                            label={labels.stockQuantityLabel}
+                            label={labels.stockQuantityLabel + "(" + labels.maximalLabel + " " + maxStockValue + ")"}
                             inputProps={{ 
                                 min: 0, 
                                 step: 1,
@@ -97,7 +97,7 @@ const Modal = (props) => {
                             id="outletQuantity" 
                             name="outletQuantity" 
                             type="number" 
-                            label={labels.outletQuantityLabel}
+                            label={labels.outletQuantityLabel + "(" + labels.maximalLabel + " " + maxOutletValue + ")"}
                             inputProps={{ 
                                 min: 0, 
                                 step: 1,
