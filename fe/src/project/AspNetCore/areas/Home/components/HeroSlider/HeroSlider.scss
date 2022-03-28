@@ -2,6 +2,7 @@
     background-color: $grey;
     width: 100%;
     max-height: 400px;
+    padding-bottom: 3rem;
 
     @media only screen and (max-width: $tablet) {
         height: 257px;

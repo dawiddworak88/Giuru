@@ -7,7 +7,6 @@ import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants
 function ContentGrid(props) {
 
     return (
-
         <section className="content-grid section">
             <h1 className="title is-3">{props.title}</h1>
             {props.items && props.items.length > 0 &&
