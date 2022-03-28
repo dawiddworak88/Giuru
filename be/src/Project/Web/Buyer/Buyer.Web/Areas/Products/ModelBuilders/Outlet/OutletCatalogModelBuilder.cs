@@ -70,7 +70,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                     foreach (var product in products.Data)
                     {
                         product.InOutlet = true;
-                        product.AvailableQuantity = OutletConstants.Catalog.DefaultQuantityValue;
+                        product.AvailableOutletQuantity = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
                     }
                 }
 

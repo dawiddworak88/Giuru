@@ -152,7 +152,7 @@ function Catalog(props) {
                 toast.error(props.generalErrorMessage);
             });
     };
-
+    
     return (
         <section className="catalog section">
             <h1 className="title is-3">{props.title}</h1>
@@ -210,9 +210,9 @@ function Catalog(props) {
                                                 }
                                                 {item.inOutlet &&
                                                     <div className="catalog-item__in-stock-details">
-                                                        {item.availableQuantity && item.availableQuantity > 0 && 
+                                                        {item.availableOutletQuantity && item.availableOutletQuantity > 0 && 
                                                             <div className="stock">
-                                                                {props.inOutletLabel} {item.availableQuantity}
+                                                                {props.inOutletLabel} {item.availableOutletQuantity}
                                                             </div>
                                                         }
                                                     </div>
