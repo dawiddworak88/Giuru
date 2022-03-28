@@ -229,7 +229,7 @@
     <value>Customer organization does not exist</value>
   </data>
   <data name="OutletQuantityLabel" xml:space="preserve">
-    <value>Quantity from outlet:</value>
+    <value>Outlet quantity:</value>
   </data>
   <data name="PlaceOrder" xml:space="preserve">
     <value>New order</value>
@@ -247,7 +247,7 @@
     <value>SKU:</value>
   </data>
   <data name="StockQuantityLabel" xml:space="preserve">
-    <value>Quantity from stock:</value>
+    <value>Stock quantity:</value>
   </data>
   <data name="ToBasketLabel" xml:space="preserve">
     <value>View cart</value>

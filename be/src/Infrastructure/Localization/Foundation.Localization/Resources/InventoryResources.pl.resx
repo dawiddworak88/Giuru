@@ -148,7 +148,7 @@
     <value>Nie znaleziono produktu w stanach magazynowych</value>
   </data>
   <data name="InventorySavedSuccessfully" xml:space="preserve">
-    <value>Pomyślnie zapisano</value>
+    <value>Stan magazynowy został zapisany pomyślnie</value>
   </data>
   <data name="LocationLabel" xml:space="preserve">
     <value>Lokalizacja</value>
