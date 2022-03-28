@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Basket.Api.IntegrationEvents
 {
-    public class BasketCheckoutProductsIntegrationEvent : IntegrationEvent
+    public class BasketCheckoutOutletProductsIntegrationEvent : IntegrationEvent
     {
         public IEnumerable<BasketCheckoutProductEventModel> Items { get; set; }
     }

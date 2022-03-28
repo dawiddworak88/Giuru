@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Inventory.Api.IntegrationEventsHandlers
 {
-    public class UpdatedInventoryIntegrationEventHandler : IIntegrationEventHandler<BasketCheckoutProductsIntegrationEvent>
+    public class UpdatedInventoryIntegrationEventHandler : IIntegrationEventHandler<BasketCheckoutStockProductsIntegrationEvent>
     {
         private readonly IInventoryService inventoryService;
 
@@ -16,7 +16,7 @@ namespace Inventory.Api.IntegrationEventsHandlers
             this.inventoryService = inventoryService;
         }
 
-        public async Task Handle(BasketCheckoutProductsIntegrationEvent @event)
+        public async Task Handle(BasketCheckoutStockProductsIntegrationEvent @event)
         {
             if (@event.Items.Any())
             {
