@@ -95,8 +95,12 @@ function ProductDetail(props) {
             });
     };
 
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    }
+
     const handleModal = (item) => {
-        setIsModalOpen(true)
+        setIsModalOpen(true);
         setProductVariant(item);
         setCanActiveModal(false);
     }
@@ -191,6 +195,7 @@ function ProductDetail(props) {
             <Modal
                 isOpen={isModalOpen}
                 setIsOpen={setIsModalOpen}
+                handleClose={handleCloseModal}
                 maxOutletValue={productVariant ? productVariant.availableOutletQuantity : props.availableOutletQuantity}
                 maxStockValue={productVariant ? productVariant.availableQuantity : props.availableQuantity}
                 handleOrder={handleAddOrderItemClick}

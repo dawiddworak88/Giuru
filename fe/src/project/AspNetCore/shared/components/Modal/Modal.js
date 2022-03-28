@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { TextField, IconButton } from "@material-ui/core";
+import { TextField, IconButton, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@material-ui/core";
 import { Clear } from "@material-ui/icons";
 import PropTypes from "prop-types";
 import {
@@ -18,7 +18,7 @@ const Modal = (props) => {
     const [deliveryTo, setDeliveryTo] = useState(null);
     const [moreInfo, setMoreInfo] = useState(null);
 
-    const {isOpen, setIsOpen, maxStockValue, maxOutletValue, handleOrder, labels} = props;
+    const {isOpen, maxStockValue, maxOutletValue, handleOrder, handleClose, labels} = props;
     const handleAddItemToBasket = () => {
         const payload = {
             quantity,
@@ -44,170 +44,165 @@ const Modal = (props) => {
     }, [isOpen])
 
     return (
-        <div class={isOpen ? "modal outlet-modal is-active" : "modal outlet-modal fade-in"}>
-            <div class="modal-background"></div>
-            <div class="modal-card">
-                <header class="modal-card-head">
-                    <p class="modal-card-title">{labels.title}</p>
-                    <button class="delete" aria-label={labels.closeLabel} onClick={() => setIsOpen(false)}></button>
-                </header>
-                <section class="modal-card-body">
-                    <div className="modal-container">
-                        <div className="quantities-container">
-                            <div className="field">
-                                <TextField 
-                                    id="quantity" 
-                                    name="quantity" 
-                                    type="number"
-                                    label={labels.quantityLabel}
-                                    inputProps={{ 
-                                        min: 0, 
-                                        step: 1,
-                                        style: { textAlign: 'center' }
-                                    }}
-                                    value={quantity}
-                                    fullWidth={true}
-                                    onChange={(e) => {
-                                        setQuantity(e.target.value)
-                                    }}
-                                />
-                            </div>
-                            {maxStockValue && maxStockValue > 0 &&
-                                <div className="field">
-                                    <TextField 
-                                        id="stockQuantity" 
-                                        name="stockQuantity" 
-                                        type="number" 
-                                        label={labels.stockQuantityLabel}
-                                        inputProps={{ 
-                                            min: 0, 
-                                            step: 1,
-                                            max: maxStockValue,
-                                            style: { textAlign: 'center' }
-                                        }}
-                                        value={stockQuantity}
-                                        fullWidth={true}
-                                        onChange={(e) => {
-                                            setStockQuantity(e.target.value)
-                                        }}
-                                    />
-                                </div>
-                            }
-                            {maxOutletValue && maxOutletValue > 0 &&
-                                <div className="field">
-                                    <TextField 
-                                        id="outletQuantity" 
-                                        name="outletQuantity" 
-                                        type="number" 
-                                        label={labels.outletQuantityLabel}
-                                        inputProps={{ 
-                                            min: 0, 
-                                            step: 1,
-                                            max: maxOutletValue,
-                                            style: { textAlign: 'center' }
-                                        }}
-                                        value={outletQuantity}
-                                        fullWidth={true}
-                                        onChange={(e) => {
-                                            setOutletQuantity(e.target.value)
-                                        }}
-                                    />
-                                </div>
-                            }
-                        </div>
-                        <div className="field">
-                            <TextField 
-                                id="externalReference" 
-                                name="externalReference" 
-                                type="text" 
-                                label={labels.externalReferenceLabel}
-                                value={externalReference}
-                                fullWidth={true}
-                                onChange={(e) => {
-                                    setExternalReference(e.target.value);
-                                }} />
-                        </div>
-                        <div className="field">
-                            <MuiPickersUtilsProvider utils={MomentUtils}>
-                                <KeyboardDatePicker
-                                    id="deliveryFrom"
-                                    label={labels.deliveryFromLabel}
-                                    onChange={(date) => {
-                                        setDeliveryFrom(date);
-                                    }}
-                                    okLabel={labels.okLabel}
-                                    cancelLabel={labels.cancelLabel}
-                                    InputProps={{
-                                        endAdornment: (
-                                            <IconButton onClick={() => setDeliveryFrom(null)}>
-                                                <Clear />
-                                            </IconButton>
-                                        )
-                                    }}
-                                    InputAdornmentProps={{
-                                        position: "start"
-                                    }}
-                                    KeyboardButtonProps={{
-                                        "aria-label": labels.changeDeliveryFromLabel
-                                    }} 
-                                    value={deliveryFrom}
-                                    fullWidth={true}
-                                    disablePast={true}/>
-                            </MuiPickersUtilsProvider>
-                        </div>
-                        <div className="field">
-                            <MuiPickersUtilsProvider utils={MomentUtils}>
-                                <KeyboardDatePicker
-                                    id="deliveryTo"
-                                    label={labels.deliveryToLabel}
-                                    onChange={(date) => {
-                                        setDeliveryTo(date);
-                                    }}
-                                    okLabel={labels.okLabel}
-                                    cancelLabel={labels.cancelLabel}
-                                    InputProps={{
-                                        endAdornment: (
-                                            <IconButton onClick={() => setDeliveryTo(null)}>
-                                                <Clear />
-                                            </IconButton>
-                                        )
-                                    }}
-                                    InputAdornmentProps={{
-                                        position: "start"
-                                    }}
-                                    KeyboardButtonProps={{
-                                        "aria-label": labels.changeDeliveryFromLabel
-                                    }} 
-                                    fullWidth={true}
-                                    value={deliveryTo}
-                                    disablePast={true}/>
-                            </MuiPickersUtilsProvider>
-                        </div>
-                        <div className="field">
-                            <TextField 
-                                id="moreInfo" 
-                                name="moreInfo" 
-                                type="text" 
-                                value={moreInfo}
-                                label={labels.moreInfoLabel}
-                                fullWidth={true}
-                                onChange={(e) => {
-                                    setMoreInfo(e.target.value)
-                                }} />
-                        </div>
+        <Dialog
+            open={isOpen}
+            onClose={handleClose}
+            PaperProps={{
+                style: {
+                    width: "600px"
+                }
+            }}>
+            <DialogTitle>{labels.title}</DialogTitle>
+            <DialogContent>
+                <div className="field">
+                    <TextField 
+                        id="quantity" 
+                        name="quantity" 
+                        type="number"
+                        label={labels.quantityLabel}
+                        inputProps={{ 
+                            min: 0, 
+                            step: 1,
+                            className: "quantity-input"
+                        }}
+                        value={quantity}
+                        onChange={(e) => {
+                            setQuantity(e.target.value)
+                        }}
+                    />
+                </div>
+                {maxStockValue && maxStockValue > 0 &&
+                    <div className="field">
+                        <TextField 
+                            id="stockQuantity" 
+                            name="stockQuantity" 
+                            type="number" 
+                            label={labels.stockQuantityLabel}
+                            inputProps={{ 
+                                min: 0, 
+                                step: 1,
+                                max: maxStockValue,
+                                className: "quantity-input"
+                            }}
+                            value={stockQuantity}
+                            onChange={(e) => {
+                                setStockQuantity(e.target.value)
+                            }}
+                        />
                     </div>
-                </section>
-                <footer class="modal-card-foot is-justify-content-space-between">
-                    <div className="button-group">
-                        <button class="button is-success" onClick={() => handleAddItemToBasket()}>{labels.addText}</button>
-                        <button class="button" onClick={() => setIsOpen(false)}>{labels.cancelLabel}</button>
+                }
+                {maxOutletValue && maxOutletValue > 0 &&
+                    <div className="field">
+                        <TextField 
+                            id="outletQuantity" 
+                            name="outletQuantity" 
+                            type="number" 
+                            label={labels.outletQuantityLabel}
+                            inputProps={{ 
+                                min: 0, 
+                                step: 1,
+                                max: maxOutletValue,
+                                className: "quantity-input"
+                            }}
+                            value={outletQuantity}
+                            onChange={(e) => {
+                                setOutletQuantity(e.target.value)
+                            }}
+                        />
                     </div>
-                    <div className="button-group">
-                        <button class="button" onClick={() => NavigationHelper.redirect(labels.basketUrl)}>{labels.basketLabel}</button>
-                    </div>
-                </footer>
-            </div>
-        </div>
+                }
+                <div className="field">
+                    <TextField 
+                        id="externalReference" 
+                        name="externalReference" 
+                        type="text" 
+                        label={labels.externalReferenceLabel}
+                        value={externalReference}
+                        fullWidth={true}
+                        onChange={(e) => {
+                            setExternalReference(e.target.value);
+                        }} />
+                </div>
+                <div className="field">
+                    <MuiPickersUtilsProvider utils={MomentUtils}>
+                        <KeyboardDatePicker
+                            id="deliveryFrom"
+                            label={labels.deliveryFromLabel}
+                            onChange={(date) => {
+                                setDeliveryFrom(date);
+                            }}
+                            okLabel={labels.okLabel}
+                            cancelLabel={labels.cancelLabel}
+                            InputProps={{
+                                endAdornment: (
+                                    <IconButton onClick={() => setDeliveryFrom(null)}>
+                                        <Clear />
+                                    </IconButton>
+                                )
+                            }}
+                            InputAdornmentProps={{
+                                position: "start"
+                            }}
+                            KeyboardButtonProps={{
+                                "aria-label": labels.changeDeliveryFromLabel
+                            }} 
+                            value={deliveryFrom}
+                            fullWidth={true}
+                            disablePast={true}/>
+                    </MuiPickersUtilsProvider>
+                </div>
+                <div className="field">
+                    <MuiPickersUtilsProvider utils={MomentUtils}>
+                        <KeyboardDatePicker
+                            id="deliveryTo"
+                            label={labels.deliveryToLabel}
+                            onChange={(date) => {
+                                setDeliveryTo(date);
+                            }}
+                            okLabel={labels.okLabel}
+                            cancelLabel={labels.cancelLabel}
+                            InputProps={{
+                                endAdornment: (
+                                    <IconButton onClick={() => setDeliveryTo(null)}>
+                                        <Clear />
+                                    </IconButton>
+                                )
+                            }}
+                            InputAdornmentProps={{
+                                position: "start"
+                            }}
+                            KeyboardButtonProps={{
+                                "aria-label": labels.changeDeliveryFromLabel
+                            }} 
+                            fullWidth={true}
+                            value={deliveryTo}
+                            disablePast={true}/>
+                    </MuiPickersUtilsProvider>
+                </div>
+                <div className="field">
+                    <TextField 
+                        id="moreInfo" 
+                        name="moreInfo" 
+                        type="text" 
+                        value={moreInfo}
+                        label={labels.moreInfoLabel}
+                        fullWidth={true}
+                        onChange={(e) => {
+                            setMoreInfo(e.target.value)
+                        }} />
+                </div>
+            </DialogContent>
+            <DialogActions>
+                <Button type="text" onClick={() => NavigationHelper.redirect(labels.basketUrl)}>{labels.basketLabel}</Button>
+                <Button 
+                    type="text" 
+                    variant="contained" 
+                    color="primary" 
+                    onClick={() => handleAddItemToBasket()}>
+                        {labels.toBasketText}
+                </Button>
+            </DialogActions>
+        </Dialog>
     )
 }
 

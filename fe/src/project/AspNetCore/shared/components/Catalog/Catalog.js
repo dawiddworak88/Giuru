@@ -85,6 +85,10 @@ function Catalog(props) {
         setProductVariant(item);
     }
 
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    }
+
     const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
@@ -269,6 +273,7 @@ function Catalog(props) {
                 <Modal 
                     isOpen={isModalOpen}
                     setIsOpen={setIsModalOpen}
+                    handleClose={handleCloseModal}
                     maxOutletValue={productVariant ? productVariant.availableOutletQuantity : null}
                     maxStockValue={productVariant ? productVariant.availableQuantity : null}
                     handleOrder={handleAddOrderItemClick}
