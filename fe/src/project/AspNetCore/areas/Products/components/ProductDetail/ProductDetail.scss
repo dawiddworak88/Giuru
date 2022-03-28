@@ -50,6 +50,10 @@
         color: darkgreen;
         font-size: 1.1rem;
         font-weight: 600;
+
+        &:not(:first-child){
+            margin-top: 0;
+        }
     }
 
     &__product-description{
