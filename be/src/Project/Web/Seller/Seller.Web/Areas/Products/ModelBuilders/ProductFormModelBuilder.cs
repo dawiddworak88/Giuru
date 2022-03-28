@@ -79,7 +79,9 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 SelectPrimaryProductLabel = this.productLocalizer.GetString("SelectPrimaryProduct"),
                 IsNewLabel = this.productLocalizer.GetString("IsNew"),
                 IsPublishedLabel = this.productLocalizer.GetString("IsPublished"),
-                GetCategorySchemaUrl = this.linkGenerator.GetPathByAction("Get", "CategorySchemasApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                GetCategorySchemaUrl = this.linkGenerator.GetPathByAction("Get", "CategorySchemasApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                ProductsUrl = this.linkGenerator.GetPathByAction("Index", "Products", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                NavigateToProductsLabel = this.productLocalizer.GetString("NavigateToProductsLabel")
             };
 
             var categories = await this.categoriesRepository.GetAllCategoriesAsync(

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import NoSsr from '@material-ui/core/NoSsr';
@@ -10,9 +10,10 @@ import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaClou
 import DynamicForm from "../../../../../../shared/components/DynamicForm/DynamicForm";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function ProductForm(props) {
-
+    const [showBackToProductsButton, setShowBackToProductsButton] = useState(false);
     const categoriesProps = {
         options: props.categories,
         getOptionLabel: (option) => option.name
@@ -130,7 +131,7 @@ function ProductForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-
+                        setShowBackToProductsButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
@@ -286,9 +287,26 @@ function ProductForm(props) {
                             </NoSsr>
                         </div>
                         <div className="field">
-                            <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
-                                {props.saveText}
-                            </Button>
+                            {showBackToProductsButton ?
+                                <Button 
+                                    type="submit" 
+                                    variant="contained" 
+                                    color="primary"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        NavigationHelper.redirect(props.productsUrl);
+                                    }}>
+                                    {props.navigateToProductsLabel}
+                                </Button>
+                            : 
+                                <Button 
+                                    type="submit" 
+                                    variant="contained" 
+                                    color="primary" 
+                                    disabled={state.isLoading || disable}>
+                                    {props.saveText}
+                                </Button>
+                            }
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}
