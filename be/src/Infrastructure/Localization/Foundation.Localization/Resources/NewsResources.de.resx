@@ -130,7 +130,7 @@
     <value>Kategorie erfolgreich gelöscht.</value>
   </data>
   <data name="CategoryDeleteNewsConflict" xml:space="preserve">
-    <value>Entfernen Sie die News, die der Kategorie zugeordnet sind.</value>
+    <value>Entfernen Sie die Aktuell, die der Kategorie zugeordnet sind.</value>
   </data>
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Kategorie nicht gefunden</value>
@@ -169,28 +169,28 @@
     <value>Zurück zu den Kategorien</value>
   </data>
   <data name="NavigateToNewsLabel" xml:space="preserve">
-    <value>Zurück zu News</value>
+    <value>Zurück zu Aktuell</value>
   </data>
   <data name="News" xml:space="preserve">
-    <value>News</value>
+    <value>Aktuell</value>
   </data>
   <data name="NewsDeletedSuccessfully" xml:space="preserve">
-    <value>News erfolgreich gelöscht</value>
+    <value>Aktuell erfolgreich gelöscht</value>
   </data>
   <data name="NewsItem" xml:space="preserve">
-    <value>News bearbeiten</value>
+    <value>Aktuell bearbeiten</value>
   </data>
   <data name="NewsItemDetails" xml:space="preserve">
-    <value>News</value>
+    <value>Aktuell</value>
   </data>
   <data name="NewsNewText" xml:space="preserve">
-    <value>News hinzufügen</value>
+    <value>Aktuell hinzufügen</value>
   </data>
   <data name="NewsNotFound" xml:space="preserve">
-    <value>News nicht gefunden</value>
+    <value>Aktuell nicht gefunden</value>
   </data>
   <data name="NewsSavedSuccessfully" xml:space="preserve">
-    <value>News wurde erfolgreich erstellt.</value>
+    <value>Aktuell wurde erfolgreich erstellt.</value>
   </data>
   <data name="NewText" xml:space="preserve">
     <value>Kategorie hinzufügen</value>
@@ -202,7 +202,7 @@
     <value>Übergeordnete Kategorie nicht gefunden.</value>
   </data>
   <data name="PreviewImageLabel" xml:space="preserve">
-    <value>Newsbild</value>
+    <value>Aktuellbild</value>
   </data>
   <data name="SelectCategoryLabel" xml:space="preserve">
     <value>Kategorien auswählen</value>
@@ -211,7 +211,7 @@
     <value>Zu dieser Kategorie gehörende Unterkategorien löschen.</value>
   </data>
   <data name="ThumbImageLabel" xml:space="preserve">
-    <value>Vorschaubild für News</value>
+    <value>Vorschaubild für Aktuell</value>
   </data>
   <data name="TitleLabel" xml:space="preserve">
     <value>Titel</value>
