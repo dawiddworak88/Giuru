@@ -40,8 +40,6 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 EditUrl = this.linkGenerator.GetPathByAction("Edit", "ProductAttribute", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductAttributesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                ProductAttributesUrl = this.linkGenerator.GetPathByAction("Index", "ProductAttributes", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                NavigateToAttributesLabel = this.productLocalizer.GetString("NavigateToAttributesLabel")
             };
 
             if (componentModel.Id.HasValue)

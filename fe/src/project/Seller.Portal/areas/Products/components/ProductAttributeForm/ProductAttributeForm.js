@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -8,7 +8,7 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function ProductAttributeForm(props) {
-    const [showBackToAttributes, setShowBackToAttributes] = useState(false);
+
     const [state, dispatch] = useContext(Context);
 
     const stateSchema = {
@@ -47,7 +47,7 @@ function ProductAttributeForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-                        setShowBackToAttributes(true);
+
                         toast.success(jsonResponse.message);
 
                         if (!id) {
@@ -90,26 +90,9 @@ function ProductAttributeForm(props) {
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">
-                            {showBackToAttributes ?
-                                <Button 
-                                    type="button" 
-                                    variant="contained" 
-                                    color="primary"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        NavigationHelper.redirect(props.productAttributesUrl);
-                                    }}>
-                                        {props.navigateToAttributesLabel}
-                                </Button>
-                            : 
-                                <Button 
-                                    type="submit" 
-                                    variant="contained" 
-                                    color="primary" 
-                                    disabled={state.isLoading || disable}>
-                                        {props.saveText}
-                                </Button>
-                            }
+                            <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
+                                {props.saveText}
+                            </Button>
                         </div>
                     </form>
                 </div>
