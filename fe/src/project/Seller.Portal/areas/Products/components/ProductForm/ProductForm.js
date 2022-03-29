@@ -289,7 +289,7 @@ function ProductForm(props) {
                         <div className="field">
                             {showBackToProductsButton ?
                                 <Button 
-                                    type="submit" 
+                                    type="button" 
                                     variant="contained" 
                                     color="primary"
                                     onClick={(e) => {
