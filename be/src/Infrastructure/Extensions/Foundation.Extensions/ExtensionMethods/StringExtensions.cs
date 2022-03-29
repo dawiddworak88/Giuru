@@ -17,6 +17,16 @@ namespace Foundation.Extensions.ExtensionMethods
             return default;
         }
 
+        public static IEnumerable<string> ToEnumerableString(this string values)
+        {
+            if (!string.IsNullOrWhiteSpace(values))
+            {
+                return values.Split(EndpointParameterConstants.ParameterSeparator);
+            }
+
+            return default;
+        }
+
         public static string ToCamelCase(this string str)
         {
             if (!string.IsNullOrEmpty(str) && str.Length > 1)

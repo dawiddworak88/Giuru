@@ -16,6 +16,7 @@ using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
+using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -43,9 +44,21 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
         public async Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes)
         {
-            var test = this.options.Value.ProductAttributes;
+            var attributesToDisplay = this.options.Value.ProductAttributes.ToEnumerableString();
 
-            return test;
+            var attributes = new List<string>();
+            foreach(var productAttribute in attributesToDisplay.OrEmptyIfNull())
+            {
+                var existingAttribute = productAttributes.FirstOrDefault(x => x.Key == productAttribute);
+                if (existingAttribute is not null)
+                {
+                    var attribute = string.Join(", ", existingAttribute.Values);
+
+                    attributes.Add(attribute);
+                }
+            }
+
+            return string.Join(", ", attributes.OrEmptyIfNull());
         }
 
         public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
