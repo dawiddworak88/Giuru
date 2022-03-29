@@ -41,10 +41,12 @@ namespace Buyer.Web.Areas.Products.Services.Products
             this.cdnService = cdnService;
         }
 
-/*        public async Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes)
+        public async Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes)
         {
-            var test = this.options.Value
-        }*/
+            var test = this.options.Value.ProductAttributes;
+
+            return test;
+        }
 
         public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
         {
@@ -71,6 +73,9 @@ namespace Buyer.Web.Areas.Products.Services.Products
                             Value = string.Join(", ", x.Values.OrEmptyIfNull())
                         })
                     };
+
+                    var test = await this.GetProductAttributesAsync(product.ProductAttributes);
+                    Console.WriteLine(test);
 
                     if (product.Images != null)
                     {
