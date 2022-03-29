@@ -15,6 +15,7 @@ namespace Buyer.Web.Shared.Configurations
         public string CdnUrl { get; set; }
         public bool IsMarketplace { get; set; }
         public Guid? OrganisationId { get; set; }
+        public string ProductAttributes { get; set; }
         public string GoogleTagManagerIdentifier { get; set; }
     }
 }

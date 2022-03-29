@@ -235,6 +235,7 @@ services:
       - ClientUrl=http://client-api
       - NewsUrl=http://news-api
       - IsMarketplace=${IS_MARKETPLACE}
+      - ProductAttributes=${PRODUCT_ATTRIBUTES}
       - OrganisationId=${ORGANISATION_ID}
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}

@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
-using Buyer.Web.Areas.Products.ApiResponseModels;
 using Foundation.Extensions.ExtensionMethods;
 
 namespace Buyer.Web.Areas.Products.Services.Products
@@ -41,6 +40,11 @@ namespace Buyer.Web.Areas.Products.Services.Products
             this.linkGenerator = linkGenerator;
             this.cdnService = cdnService;
         }
+
+/*        public async Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes)
+        {
+            var test = this.options.Value
+        }*/
 
         public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
         {
