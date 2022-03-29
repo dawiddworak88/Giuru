@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -6,9 +6,11 @@ import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelpe
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
+    const [showBackToClientsButton, setShowBackToClientsButton] = useState(false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
@@ -59,6 +61,7 @@ function ClientForm(props) {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
+                        setShowBackToClientsButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
@@ -169,7 +172,26 @@ function ClientForm(props) {
                             </FormControl>
                         </div>
                         <div className="field client-form__field-row">
-                            <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>{props.saveText}</Button>
+                            {showBackToClientsButton ? 
+                                <Button
+                                    type="button"
+                                    variant="contained" 
+                                    color="primary"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        NavigationHelper.redirect(props.clientsUrl);
+                                    }}>
+                                        {props.navigateToClientsLabel}
+                                </Button>
+                            : 
+                                <Button 
+                                    type="submit" 
+                                    variant="contained" 
+                                    color="primary" 
+                                    disabled={state.isLoading || disable}>
+                                        {props.saveText}
+                                </Button>
+                            }
                             <Button className="client-form__create-button" color="secondary" variant="contained" onClick={createAccount} disabled={state.isLoading || !id}>{props.accountText}</Button>
                         </div>
                     </form>
