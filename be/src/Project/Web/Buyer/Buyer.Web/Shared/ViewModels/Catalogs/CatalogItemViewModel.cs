@@ -20,6 +20,6 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string BrandUrl { get; set; }
         public IEnumerable<Guid> Images { get; set; }
         public IEnumerable<SourceViewModel> Sources { get; set; }
-        public IEnumerable<CatalogItemProductAttributesViewModel> ProductAttributes { get; set; }
+        public string ProductAttributes { get; set; }
     }
 }

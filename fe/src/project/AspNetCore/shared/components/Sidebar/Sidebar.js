@@ -133,15 +133,6 @@ const Sidebar = (props) => {
                 ) : (
                     productVariants.map((item) => 
                         item.carouselItems.map((carouselItem) => {
-                                let fabrics = labels.lackInformation;
-                                if (carouselItem.attributes.length > 0) {
-                                    fabrics = carouselItem.attributes.find(x => x.key === "primaryFabrics") ? carouselItem.attributes.find(x => x.key === "primaryFabrics").value : "";
-                                    var secondaryfabrics = carouselItem.attributes.find(x => x.key === "secondaryFabrics") ? carouselItem.attributes.find(x => x.key === "secondaryFabrics").value : "";
-                                    if (secondaryfabrics) {
-                                        fabrics += ", " + secondaryfabrics;
-                                    }
-                                }
-
                                 let quantity = 1;
                                 if (quantities.length !== 0){
                                     quantity = quantities.find(x => x.id === carouselItem.id).quantity;
@@ -170,7 +161,7 @@ const Sidebar = (props) => {
                                                 </div>
                                                 <div className="fabrics">
                                                     <span>{labels.fabricsLabel}</span>
-                                                    <p>{fabrics}</p>
+                                                    <p>{carouselItem.productAttributes}</p>
                                                 </div>
                                             </div>
                                         </div>

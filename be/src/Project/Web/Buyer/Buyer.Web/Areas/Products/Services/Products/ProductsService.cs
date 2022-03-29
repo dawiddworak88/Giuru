@@ -16,7 +16,6 @@ using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
-using Newtonsoft.Json;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -80,15 +79,8 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         BrandName = product.BrandName,
                         Images = product.Images,
                         InStock = false,
-                        ProductAttributes = product.ProductAttributes.Select(x => new CatalogItemProductAttributesViewModel
-                        {
-                            Key = x.Key,
-                            Value = string.Join(", ", x.Values.OrEmptyIfNull())
-                        })
+                        ProductAttributes = await this.GetProductAttributesAsync(product.ProductAttributes)
                     };
-
-                    var test = await this.GetProductAttributesAsync(product.ProductAttributes);
-                    Console.WriteLine(test);
 
                     if (product.Images != null)
                     {

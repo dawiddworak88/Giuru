@@ -17,7 +17,7 @@ namespace Foundation.PageContent.Components.CarouselGrids.ViewModels
         public DateTime? ExpectedDelivery { get; set; }
         public DateTime? CreatedDate { get; set; }
         public IEnumerable<SourceViewModel> Sources { get; set; }
-        public IEnumerable<CarouselGridProductAttributesViewModel> Attributes { get; set; }
+        public string ProductAttributes { get; set; }
         public IEnumerable<ImageVariantViewModel> Images { get; set; }
     }
 }

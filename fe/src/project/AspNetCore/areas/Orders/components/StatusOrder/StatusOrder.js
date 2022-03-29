@@ -44,21 +44,12 @@ function StatusOrder(props) {
                                     </TableHead>
                                     <TableBody>
                                         {props.orderItems && props.orderItems.map((item, index) => {
-                                            let fabrics = null;
-                                            if (item.fabrics.length > 0) {
-                                                fabrics = item.fabrics.find(x => x.key === "primaryFabrics") ? item.fabrics.find(x => x.key === "primaryFabrics").values.join(", ") : "";
-
-                                                let secondaryFabrics = item.fabrics.find(x => x.key === "secondaryFabrics") ? item.fabrics.find(x => x.key === "secondaryFabrics").values.join(", ") : "";
-                                                if (secondaryFabrics){
-                                                    fabrics += ", " + secondaryFabrics;
-                                                }
-                                            }
                                             return (
                                                 <TableRow key={index}>
                                                     <TableCell><a href={item.productUrl}><img className="status-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
                                                     <TableCell>{item.sku}</TableCell>
                                                     <TableCell>{item.name}</TableCell>
-                                                    <TableCell>{fabrics}</TableCell>
+                                                    <TableCell>{item.productAttributes}</TableCell>
                                                     <TableCell>{item.quantity}</TableCell>
                                                     <TableCell>{item.externalReference}</TableCell>
                                                     <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
