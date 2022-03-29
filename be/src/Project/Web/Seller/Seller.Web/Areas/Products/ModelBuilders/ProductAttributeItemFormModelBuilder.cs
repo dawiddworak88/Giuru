@@ -39,7 +39,6 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 NameRequiredErrorMessage = this.productLocalizer.GetString("EnterProductAttributeItemName"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductAttributeItemsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                ProductAttributeUrl = this.linkGenerator.GetPathByAction("Edit", "ProductAttribute", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = componentModel.ProductAttributeId }),
                 NavigateToProductAttributeLabel = this.productLocalizer.GetString("NavigateToProductAttributeLabel")
             };
 
@@ -54,6 +53,8 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 {
                     viewModel.Id = productAttributeItem.Id;
                     viewModel.Name = productAttributeItem.Name;
+
+                    viewModel.ProductAttributeUrl = this.linkGenerator.GetPathByAction("Edit", "ProductAttribute", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = productAttributeItem.ProductAttributeId });
                 }
             }
             else
