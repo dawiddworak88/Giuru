@@ -47,6 +47,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 MoreInfoLabel = this.orderLocalizer.GetString("MoreInfoLabel"),
                 NameLabel = this.orderLocalizer.GetString("NameLabel"),
                 OrderItemsLabel = this.orderLocalizer.GetString("OrderItemsLabel"),
+                QuantityLabel = this.orderLocalizer.GetString("QuantityLabel"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 ExternalReferenceLabel = this.orderLocalizer.GetString("ExternalReferenceLabel"),
                 SkuLabel = this.orderLocalizer.GetString("SkuLabel"),
