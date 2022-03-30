@@ -21,13 +21,6 @@ namespace Ordering.Api.Infrastructure.Migrations
                 type: "float",
                 nullable: false,
                 defaultValue: 0.0);
-
-            migrationBuilder.AddColumn<double>(
-                name: "TotalQuantity",
-                table: "OrderItems",
-                type: "float",
-                nullable: false,
-                defaultValue: 0.0);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -38,10 +31,6 @@ namespace Ordering.Api.Infrastructure.Migrations
 
             migrationBuilder.DropColumn(
                 name: "StockQuantity",
-                table: "OrderItems");
-
-            migrationBuilder.DropColumn(
-                name: "TotalQuantity",
                 table: "OrderItems");
         }
     }

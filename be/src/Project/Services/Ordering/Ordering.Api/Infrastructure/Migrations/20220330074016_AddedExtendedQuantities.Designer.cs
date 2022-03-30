@@ -12,7 +12,7 @@ using Ordering.Api.Infrastructure;
 namespace Ordering.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(OrderingContext))]
-    [Migration("20220318135249_AddedExtendedQuantities")]
+    [Migration("20220330074016_AddedExtendedQuantities")]
     partial class AddedExtendedQuantities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -243,9 +243,6 @@ namespace Ordering.Api.Infrastructure.Migrations
                         .HasColumnType("rowversion");
 
                     b.Property<double>("StockQuantity")
-                        .HasColumnType("float");
-
-                    b.Property<double>("TotalQuantity")
                         .HasColumnType("float");
 
                     b.HasKey("Id");

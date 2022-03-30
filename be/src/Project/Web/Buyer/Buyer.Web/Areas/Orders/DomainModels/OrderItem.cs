@@ -13,7 +13,6 @@ namespace Buyer.Web.Areas.Orders.DomainModels
         public double Quantity { get; set; }
         public double StockQuantity { get; set; }
         public double OutletQuantity { get; set; }
-        public double TotalQuantity { get; set; }
         public string ExternalReference { get; set; }
         public IEnumerable<ProductAttribute> ProductAttributes { get; set; }
         public DateTime? ExpectedDeliveryFrom { get; set; }

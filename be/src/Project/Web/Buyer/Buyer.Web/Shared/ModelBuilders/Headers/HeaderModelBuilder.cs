@@ -85,8 +85,8 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers
                     {
                         double sum = 0;
                         foreach (var item in basketItems)
-                        { 
-                            sum += item.TotalQuantity;
+                        {
+                            sum += item.StockQuantity + item.OutletQuantity + item.Quantity;
                         }
        
                         viewModel.TotalBasketItems = sum;

@@ -108,7 +108,6 @@ function OrderForm(props) {
             name: product.name,
             imageId: product.images ? product.images[0] : null,
             quantity,
-            totalQuantity: quantity,
             externalReference,
             deliveryFrom: moment(deliveryFrom).startOf("day"),
             deliveryTo: moment(deliveryTo).startOf("day"),

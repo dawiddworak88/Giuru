@@ -40,7 +40,6 @@ namespace Buyer.Web.Shared.Services.Baskets
                         Quantity = x.Quantity,
                         StockQuantity = x.StockQuantity,
                         OutletQuantity = x.OutletQuantity,
-                        TotalQuantity = x.TotalQuantity,
                         ExternalReference = x.ExternalReference,
                         ImageSrc = x.PictureUrl,
                         ImageAlt = x.ProductName,

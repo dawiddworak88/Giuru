@@ -57,7 +57,6 @@ namespace Buyer.Web.Areas.Orders.Repositories
                             Quantity = item.Quantity,
                             StockQuantity = item.StockQuantity,
                             OutletQuantity = item.OutletQuantity,
-                            TotalQuantity = item.TotalQuantity,
                             ExternalReference = item.ExternalReference,
                             ExpectedDeliveryFrom = item.ExpectedDeliveryFrom,
                             ProductAttributes = product.ProductAttributes,

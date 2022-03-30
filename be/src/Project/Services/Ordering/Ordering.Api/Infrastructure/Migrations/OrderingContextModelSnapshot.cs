@@ -243,9 +243,6 @@ namespace Ordering.Api.Infrastructure.Migrations
                     b.Property<double>("StockQuantity")
                         .HasColumnType("float");
 
-                    b.Property<double>("TotalQuantity")
-                        .HasColumnType("float");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");

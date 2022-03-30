@@ -102,7 +102,6 @@ function Catalog(props) {
             sku: productVariant.subtitle ? productVariant.subtitle : productVariant.sku, 
             name: productVariant.title, 
             imageId: productVariant.images ? productVariant.images[0].id ? productVariant.images[0].id : productVariant.images[0] : null,
-            totalQuantity: totalQuantity,
             quantity: quantity,
             stockQuantity: stockQuantity,
             outletQuantity: outletQuantity,
