@@ -106,7 +106,43 @@ function Header(props) {
     
     return (
         <header>
-            <nav className="navbar is-spaced">
+            <nav className="is-flex is-justify-content-space-between p-3 px-4 is-align-items-center header">
+                <div className="navbar-brand">
+                    <a className="block max-w-max" href={props.logo.targetUrl}>
+                        <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} />
+                    </a>
+                </div>
+                <div className="navbar-container">
+                    <div className="navbar-end is-flex is-align-items-center">
+                        {props.isLoggedIn ? (
+                            props.signOutLink &&
+                                <div className="navbar-item">
+                                    <span className="welcome-text">{props.welcomeText} {props.name}, </span>
+                                    <a href={props.signOutLink.url} className="button is-text">{props.signOutLink.text}</a>
+                                </div>
+                        ) : (
+                            props.signInLink &&
+                                <div className="navbar-item">
+                                    <a className="button is-text" href={props.signInLink.url}>
+                                        {props.signInLink.text}
+                                    </a>
+                                </div>
+                        )}
+                        <div className="navbar-item">
+                            <LanguageSwitcher {...props.languageSwitcher} />
+                        </div>
+                        <div className="navbar-item">
+                            <a href={props.basketUrl} className="button is-text" title={props.goToCartLabel} aria-label={props.goToCartLabel}>
+                                <ShoppingCart />
+                                {totalBasketItems > 0 &&
+                                    <span className="count">{totalBasketItems}</span>
+                                }
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            {/* <nav className="navbar is-spaced">
                 <div className="navbar-brand">
                     <a href={props.logo.targetUrl}>
                         <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} />
@@ -161,7 +197,7 @@ function Header(props) {
                         }
                     </div>
                 </div>
-            </nav>
+            </nav> */}
         </header>
     );
 }
