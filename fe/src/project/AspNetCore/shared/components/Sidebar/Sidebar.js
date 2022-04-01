@@ -27,7 +27,6 @@ const Sidebar = (props) => {
 
         if (!isOpen && manyUses){
             setProductVariants([])
-            setQuantities([]);
         }
 
         setIsOpen(open)
@@ -109,7 +108,10 @@ const Sidebar = (props) => {
         if (isOpen){
             fetchProductVariants();
         }
-      
+        else {
+            setProductVariants(() => []);
+            setQuantities(() => []);
+        }
     }, [isOpen, productId])
 
     return (
