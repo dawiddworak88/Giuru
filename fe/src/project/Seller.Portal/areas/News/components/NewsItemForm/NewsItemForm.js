@@ -35,14 +35,16 @@ const NewsItemForm = (props) => {
     }
 
     useEffect(() => {
-        if (props.content){
-            setEditorState(EditorState.createWithContent(
-                stateFromMarkdown(props.content, {
-                    parserOptions: {
-                        atomicImages: true
-                    }
-                })
-            ))
+        if (typeof window !== "undefined") {
+            if (props.content){
+                setEditorState(EditorState.createWithContent(
+                    stateFromMarkdown(props.content, {
+                        parserOptions: {
+                            atomicImages: true
+                        }
+                    })
+                ))
+            }
         }
     }, [])
 
