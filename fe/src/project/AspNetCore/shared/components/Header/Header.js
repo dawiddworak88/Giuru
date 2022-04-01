@@ -107,7 +107,7 @@ function Header(props) {
     return (
         <header>
             <nav className="is-flex is-justify-content-space-between p-3 px-4 is-align-items-center header">
-                <div className="navbar-brand">
+                <div className="navbar-brand is-align-items-center">
                     <a className="navbar-logo" href={props.logo.targetUrl}>
                         <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} />
                     </a>
@@ -123,7 +123,7 @@ function Header(props) {
                                     renderSuggestion={renderSuggestion}
                                     inputProps={searchInputProps} 
                                 />
-                                <Button style={{ maxHeight: "40px", marginLeft: "0.5rem"  }} type="submit" variant="contained" color="primary">
+                                <Button type="submit" variant="contained" color="primary" className="search-button">
                                     {props.searchLabel}
                                 </Button>
                             </div>
