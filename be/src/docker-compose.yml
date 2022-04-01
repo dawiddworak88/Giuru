@@ -43,6 +43,10 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
     restart: always
 
+  postgres:
+    image: postgres:10.5
+    restart: always
+
   media-api:
     image: ${REGISTRY:-giuru}/media-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
@@ -133,6 +137,14 @@ services:
     depends_on:
       - catalog-api
       - rabbitmq
+
+  content-api:
+    image: ${REGISTRY:-giuru}/content-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: Project/Services/Content/Content.Api
+      dockerfile: Dockerfile-dev-local
+    depends_on:
+      - postgres
 
   seller-web:
     image: ${REGISTRY:-giuru}/seller-web:${PLATFORM:-linux}-${TAG:-latest}

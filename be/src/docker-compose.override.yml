@@ -60,6 +60,19 @@ services:
     volumes:
       - mssqldata:/var/opt/mssql
 
+  postgres:
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+    logging:
+        options:
+          max-size: 10m
+          max-file: "3"
+    ports:
+        - '5438:5432'
+    volumes: 
+        - postgresdata:/var/lib/postgresql/data
+
   media-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -198,6 +211,10 @@ services:
     ports:
       - "5102:80"
 
+  content-api:
+    ports:
+      - "5111:1337"
+
   seller-web:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -243,6 +260,8 @@ services:
 
 volumes:
   mssqldata:
+    external: false
+  postgresdata:
     external: false
   basketdata:
     external: false
