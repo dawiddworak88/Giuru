@@ -12,4 +12,6 @@ ENV NODE_ENV development
 
 EXPOSE 1337
 
+RUN npm run build
+
 CMD ["npm", "run", "develop"]
