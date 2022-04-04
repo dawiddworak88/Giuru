@@ -51,7 +51,7 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 SaveText = this.inventoryLocalizer.GetString("SaveText"),
                 WarehouseRequiredErrorMessage = this.inventoryLocalizer.GetString("WarehouseRequiredErrorMessage"),
                 ProductRequiredErrorMessage = this.inventoryLocalizer.GetString("ProductRequiredErrorMessage"),
-                NavigateToOutletListText = this.inventoryLocalizer.GetString("NavigateToInventoryListText"),
+                NavigateToOutletListText = this.inventoryLocalizer.GetString("NavigateToOutletListText"),
                 QuantityLabel = this.inventoryLocalizer.GetString("QuantityLabel"),
                 QuantityRequiredErrorMessage = this.inventoryLocalizer.GetString("QuantityRequiredErrorMessage"),
                 QuantityFormatErrorMessage = this.inventoryLocalizer.GetString("QuantityFormatErrorMessage"),
