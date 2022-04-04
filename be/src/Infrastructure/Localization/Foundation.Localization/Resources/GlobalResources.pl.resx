@@ -456,4 +456,7 @@
   <data name="MaximalLabel" xml:space="preserve">
     <value>maks:</value>
   </data>
+  <data name="QuantityErrorMessage" xml:space="preserve">
+    <value>Brak wybranej ilości zamawianego produktu</value>
+  </data>
 </root>

@@ -26,6 +26,7 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string ProductInformationLabel { get; set; }
         public string SignInToSeePricesLabel { get; set; }
         public string SuccessfullyAddedProduct { get; set; }
+        public string QuantityErrorMessage { get; set; }
         public bool InStock { get; set; }
         public int? AvailableQuantity { get; set; }
         public DateTime? ExpectedDelivery { get; set; }

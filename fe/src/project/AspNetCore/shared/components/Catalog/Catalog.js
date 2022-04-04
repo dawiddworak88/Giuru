@@ -122,6 +122,10 @@ function Catalog(props) {
             body: JSON.stringify(basket)
         };
 
+        if (totalQuantity <= 0){
+            return toast.error(props.quantityErrorMessage);
+        }
+
         fetch(props.updateBasketUrl, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });

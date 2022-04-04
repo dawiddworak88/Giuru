@@ -48,9 +48,7 @@ const Modal = (props) => {
             open={isOpen}
             onClose={handleClose}
             PaperProps={{
-                style: {
-                    width: "600px"
-                }
+                className:"basket-modal"
             }}>
             <DialogTitle>{labels.title}</DialogTitle>
             <DialogContent>
@@ -79,7 +77,7 @@ const Modal = (props) => {
                             id="stockQuantity" 
                             name="stockQuantity" 
                             type="number" 
-                            label={labels.stockQuantityLabel + "(" + labels.maximalLabel + " " + maxStockValue + ")"}
+                            label={labels.stockQuantityLabel + " (" + labels.maximalLabel + " " + maxStockValue + ")"}
                             inputProps={{ 
                                 min: 0, 
                                 step: 1,
@@ -88,8 +86,10 @@ const Modal = (props) => {
                             }}
                             value={stockQuantity}
                             onChange={(e) => {
-                                if (e.target.value >= 0){
-                                    setStockQuantity(e.target.value)
+                                let value = e.target.value;
+                                if (value >= 0){
+                                    if (value > maxStockValue) value = maxStockValue;
+                                    setStockQuantity(value)
                                 }
                             }}
                         />
@@ -101,7 +101,7 @@ const Modal = (props) => {
                             id="outletQuantity" 
                             name="outletQuantity" 
                             type="number" 
-                            label={labels.outletQuantityLabel + "(" + labels.maximalLabel + " " + maxOutletValue + ")"}
+                            label={labels.outletQuantityLabel + " (" + labels.maximalLabel + " " + maxOutletValue + ")"}
                             inputProps={{ 
                                 min: 0, 
                                 step: 1,
@@ -110,8 +110,10 @@ const Modal = (props) => {
                             }}
                             value={outletQuantity}
                             onChange={(e) => {
-                                if (e.target.value >= 0){
-                                    setOutletQuantity(e.target.value)
+                                let value = e.target.value;
+                                if (value >= 0){
+                                    if (value > maxOutletValue) value = maxOutletValue;
+                                    setOutletQuantity(value)
                                 }
                             }}
                         />

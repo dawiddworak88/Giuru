@@ -84,6 +84,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 ProductInformationLabel = this.productLocalizer.GetString("ProductInformation"),
                 PricesLabel = this.globalLocalizer.GetString("Prices"),
                 SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct"),
+                QuantityErrorMessage = this.globalLocalizer.GetString("QuantityErrorMessage"),
                 SignInToSeePricesLabel = this.globalLocalizer.GetString("SignInToSeePrices"),
                 SignInUrl = "#",
                 UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),

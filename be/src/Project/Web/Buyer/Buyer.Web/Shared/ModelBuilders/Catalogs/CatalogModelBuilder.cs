@@ -52,6 +52,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 IsLoggedIn = componentModel.IsAuthenticated,
                 BasketId = componentModel.BasketId,
                 SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct"),
+                QuantityErrorMessage = this.globalLocalizer.GetString("QuantityErrorMessage"),
                 ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products" }),
                 UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 ExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ExpectedDeliveryLabel")

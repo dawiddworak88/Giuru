@@ -31,6 +31,7 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string NextIconButtonText { get; set; }
         public string SuccessfullyAddedProduct { get; set; }
         public string GeneralErrorMessage { get; set; }
+        public string QuantityErrorMessage { get; set; }
         public string ProductsApiUrl { get; set; }
         public string UpdateBasketUrl { get; set; }
         public string ExpectedDeliveryLabel { get; set; }
