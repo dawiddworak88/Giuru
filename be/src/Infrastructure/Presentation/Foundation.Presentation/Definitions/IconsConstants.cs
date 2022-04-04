@@ -14,5 +14,6 @@
         public static readonly string Warehouses = "Server";
         public static readonly string Inventory = "Box";
         public static readonly string Outlet = "Tag";
+        public static readonly string News = "BookOpen";
     }
 }

@@ -169,7 +169,7 @@
     <value>Skopiuj link</value>
   </data>
   <data name="Copyright" xml:space="preserve">
-    <value>Copyright © [year] ELTAP</value>
+    <value>Copyright © [year]</value>
   </data>
   <data name="CreatedDate" xml:space="preserve">
     <value>Utworzono</value>
@@ -250,7 +250,7 @@
     <value>Logo</value>
   </data>
   <data name="SiteTitle" xml:space="preserve">
-    <value>ELTAP. Najlepsze meble w Polsce.</value>
+    <value>Najlepsze meble w Polsce.</value>
   </data>
   <data name="Media" xml:space="preserve">
     <value>Media</value>
@@ -458,5 +458,14 @@
   </data>
   <data name="QuantityErrorMessage" xml:space="preserve">
     <value>Brak wybranej ilości zamawianego produktu</value>
+  </data>
+  <data name="NewsCategories" xml:space="preserve">
+    <value>Kategorie newsów</value>
+  </data>
+  <data name="News" xml:space="preserve">
+    <value>Aktualności</value>
+  </data>
+  <data name="MakeComplaint" xml:space="preserve">
+    <value>Zgłoś reklamację</value>
   </data>
 </root>

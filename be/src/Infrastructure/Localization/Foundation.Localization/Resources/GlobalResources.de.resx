@@ -166,7 +166,7 @@
     <value>Link kopieren</value>
   </data>
   <data name="Copyright" xml:space="preserve">
-    <value>Copyright © [year] ELTAP</value>
+    <value>Copyright © [year]</value>
   </data>
   <data name="CreatedDate" xml:space="preserve">
     <value>Erstellungsdatum</value>
@@ -280,7 +280,7 @@
     <value>Keine Ergebnisse.</value>
   </data>
   <data name="Novelties" xml:space="preserve">
-    <value>Neuigkeiten</value>
+    <value>News</value>
   </data>
   <data name="Ok" xml:space="preserve">
     <value>OK</value>
@@ -455,5 +455,14 @@
   </data>
   <data name="QuantityErrorMessage" xml:space="preserve">
     <value>Keine ausgewählte Menge des bestellten Produkts</value>
+  </data>
+  <data name="NewsCategories" xml:space="preserve">
+    <value>News Kategorien</value>
+  </data>
+  <data name="News" xml:space="preserve">
+    <value>News</value>
+  </data>
+  <data name="MakeComplaint" xml:space="preserve">
+    <value>Beschwerde einreichen</value>
   </data>
 </root>

@@ -7,6 +7,7 @@ using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Extensions.Services.MediaServices;
+using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ContentGrids.ViewModels;
@@ -52,12 +53,9 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             var items = new List<ContentGridItemViewModel>();
 
             var categories = await this.catalogService.GetCatalogCategoriesAsync(
-                componentModel.Language, 
-                Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, 
-                Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage,
-                "Order");
+                componentModel.Language, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, "Order");
 
-            foreach (var category in categories.OrEmptyIfNull().Where(x => x.Level == CategoriesConstants.FirstLevel))
+            foreach (var category in categories.OrEmptyIfNull().Where(x => x.Level == HomeConstants.Categories.FirstLevel))
             {
                 var contentItem = new ContentGridItemViewModel
                 {

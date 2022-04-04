@@ -163,7 +163,6 @@ function OrderForm(props) {
     };
 
     const searchInputProps = {
-
         placeholder: props.searchPlaceholderLabel,
         className: "search__field",
         value: searchTerm,
@@ -174,25 +173,21 @@ function OrderForm(props) {
     };
 
     const handleDeleteClick = (item) => {
-
         setEntityToDelete(item);
         setOpenDeleteDialog(true);
     };
 
     const handleDeleteDialogClose = () => {
-
         setOpenDeleteDialog(false);
         setEntityToDelete(null);
     };
 
     const handleDeleteEntity = () => {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const basket = {
-
             id: basketId,
-            items: orderItems.filter((orderItem) => orderItem.productId !== entityToDelete.productId)
+            items: orderItems.filter((orderItem) => orderItem !== entityToDelete)
         };
 
         const requestOptions = {
@@ -275,7 +270,6 @@ function OrderForm(props) {
         e.preventDefault();
         NavigationHelper.redirect(props.ordersUrl);
     };
-
     
     const onDrop = useCallback(acceptedFiles => {
         dispatch({ type: "SET_IS_LOADING", payload: true });

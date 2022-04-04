@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Buyer.Web.Areas.Products.DomainModels;
+using Foundation.ApiExtensions.Models.Request;
+using Foundation.Extensions.Exceptions;
 
 namespace Buyer.Web.Areas.Products.Repositories.Files
 {
@@ -69,6 +71,30 @@ namespace Buyer.Web.Areas.Products.Repositories.Files
                 {
                     Data = mediaItems
                 };
+            }
+
+            return default;
+        }
+
+        public async Task<MediaItem> GetMediaItemAsync(string token, string language, Guid id)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.MediaUrl}{ApiConstants.Media.MediaItemsApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, MediaItem>(apiRequest);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
             }
 
             return default;

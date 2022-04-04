@@ -138,7 +138,7 @@ function MediaCloud(props) {
     return (
         <div className="dropzone">
             {props.label &&
-                <label className="dropzone__title" for={props.id}>{props.label}</label>
+                <label className="dropzone__title" htmlFor={props.id}>{props.label}</label>
             }
             <div className="dropzone__pond-container" {...getRootProps()}>
                 <input id={props.id} name={props.name} {...getInputProps()} />
@@ -205,7 +205,6 @@ MediaCloud.propTypes = {
     dropFilesLabel: PropTypes.string.isRequired,
     saveMediaUrl: PropTypes.string.isRequired,
     deleteLabel: PropTypes.string.isRequired,
-    imagePreviewEnabled: PropTypes.bool.isRequired,
     setFieldValue: PropTypes.func.isRequired,
     files: PropTypes.array
 };

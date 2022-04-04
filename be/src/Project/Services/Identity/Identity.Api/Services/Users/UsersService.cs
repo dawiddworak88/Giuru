@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Globalization;
 using System.Net;
@@ -192,7 +193,9 @@ namespace Identity.Api.Services.Users
                 {
                     existingUser.EmailConfirmed = true;
                     existingUser.PasswordHash = userService.GeneratePasswordHash(existingUser, serviceModel.Password);
+
                     await this.identityContext.SaveChangesAsync();
+
                     return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(existingUser.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
                 }
                 else
@@ -206,21 +209,30 @@ namespace Identity.Api.Services.Users
 
         public async Task<UserServiceModel> UpdateAsync(UpdateUserServiceModel serviceModel)
         {
-            var existingUser = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Id == serviceModel.Id.ToString());
-            if (existingUser == null)
+            var existingUser = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
+            if (existingUser is null)
             {
                 throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             existingUser.FirstName = serviceModel.FirstName;
             existingUser.LastName = serviceModel.LastName;
-            existingUser.TwoFactorEnabled = serviceModel.TwoFactorEnabled.Value;
+            existingUser.TwoFactorEnabled = serviceModel.TwoFactorEnabled;
             existingUser.PhoneNumber = serviceModel.PhoneNumber;
             existingUser.LockoutEnd = serviceModel.LockoutEnd;
 
+            var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == existingUser.OrganisationId && x.IsActive);
+            if (organisation is null)
+            {
+                throw new CustomException(this.accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            organisation.Name = serviceModel.Name;
+            organisation.Language = serviceModel.CommunicationLanguage;
+
             await this.identityContext.SaveChangesAsync();
 
-            return await this.GetById(new GetUserServiceModel { Id = serviceModel.Id.Value, Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
+            return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(existingUser.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
         }
     }
 }

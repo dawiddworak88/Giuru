@@ -168,6 +168,9 @@
   <data name="nc_subject" xml:space="preserve">
     <value>Wir haben ein neues Kundenkonto erstellt</value>
   </data>
+  <data name="OrganisationNotFound" xml:space="preserve">
+    <value>Organisation nicht gefunden.</value>
+  </data>
   <data name="PasswordUpdated" xml:space="preserve">
     <value>Passwort wurde erfolgreich gesetzt</value>
   </data>
@@ -179,5 +182,11 @@
   </data>
   <data name="SignInText" xml:space="preserve">
     <value>Einloggen</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>Benutzer nicht gefunden.</value>
+  </data>
+  <data name="VerifyDateExpired" xml:space="preserve">
+    <value>Der Link ist abgelaufen. Bitte wenden Sie sich an einen Administrator.</value>
   </data>
 </root>

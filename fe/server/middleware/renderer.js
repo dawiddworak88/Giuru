@@ -5,6 +5,8 @@ import { ServerStyleSheets } from "@material-ui/core/styles";
 
 // AspNetCore
 import OutletCatalogPage from "../../src/project/AspNetCore/areas/Products/pages/OutletPage/OutletPage";
+import NewsItemDetails from "../../src/project/AspNetCore/areas/News/pages/NewsItemPage/NewsItemPage";
+import NewsBuyerPage from "../../src/project/AspNetCore/areas/News/pages/NewsPage/NewsPage";
 import NewOrderPage from "../../src/project/AspNetCore/areas/Orders/pages/NewOrder/NewOrderPage";
 import ListOrdersPage from "../../src/project/AspNetCore/areas/Orders/pages/ListOrders/ListOrdersPage";
 import StatusOrderPage from "../../src/project/AspNetCore/areas/Orders/pages/StatusOrder/StatusOrderPage";
@@ -23,6 +25,10 @@ import ContentPage from "../../src/project/Account/areas/Home/pages/Content/Cont
 // Seller Portal
 import OutletPage from "../../src/project/Seller.Portal/areas/Inventory/pages/OutletPage/OutletPage";
 import OutletsPage from "../../src/project/Seller.Portal/areas/Inventory/pages/OutletsPage/OutletsPage";
+import NewsPage from "../../src/project/Seller.Portal/areas/News/pages/NewsPage/NewsPage";
+import NewsItemPage from "../../src/project/Seller.Portal/areas/News/pages/NewsItemPage/NewsItemPage";
+import NewsCategoriesPage from "../../src/project/Seller.Portal/areas/News/pages/CategoriesPage/CategoriesPage";
+import NewsCategoryPage from "../../src/project/Seller.Portal/areas/News/pages/CategoryPage/CategoryPage";
 import InventoryPage from "../../src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/InventoryPage";
 import InventoriesPage from "../../src/project/Seller.Portal/areas/Inventory/pages/InventoriesPage/InventoriesPage";
 import WarehousePage from "../../src/project/Seller.Portal/areas/Inventory/pages/WarehousePage/WarehousePage";
@@ -43,6 +49,8 @@ import SettingsPage from "../../src/project/Seller.Portal/areas/Settings/pages/S
 
 const Components = {
 	OutletCatalogPage,
+	NewsItemDetails,
+	NewsBuyerPage,
 	ListOrdersPage,
 	NewOrderPage,
 	StatusOrderPage,
@@ -59,6 +67,10 @@ const Components = {
 
 	OutletPage,
 	OutletsPage,
+	NewsPage,
+	NewsItemPage,
+	NewsCategoriesPage,
+	NewsCategoryPage,
 	InventoryPage,
 	InventoriesPage,
 	WarehousePage,

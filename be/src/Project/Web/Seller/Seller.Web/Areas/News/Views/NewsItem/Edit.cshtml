@@ -1,0 +1,22 @@
+﻿<div id="root" asp-prerender-module="NewsItemPage" asp-prerender-data="@Model">
+</div>
+
+<script>
+    window.data = @Html.Raw(Json.Serialize(@Model));
+</script>
+
+@section MetaTags {
+    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("NewsItem"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("NewsItem")))
+    {
+        <meta name="description" content="@this.Localizer.GetString("NewsItem")" />
+    }
+}
+
+@section HeadStyles {
+    <link rel="stylesheet" href="~/dist/css/newsitempage.css" type="text/css" asp-append-version="true" />
+}
+
+@section BodyScripts {
+    <script src="~/dist/js/newsitempage.js" asp-append-version="true"></script>
+}

@@ -12,7 +12,9 @@ basketUrl: "#{BasketUrl}#"
 orderUrl: "#{OrderUrl}#"
 clientUrl: "#{ClientUrl}#"
 inventoryUrl: "#{InventoryUrl}#"
+newsUrl: "#{NewsUrl}#"
 buyerUrl: "#{BuyerUrl}#"
+makeComplaintUrl: "#{MakeComplaintUrl}#"
 cdnUrl: "#{CdnUrl}#"
 elasticsearchUrl: "#{ElasticsearchUrl}#"
 logzIoToken: "#{LogzIoToken}#"
@@ -26,6 +28,8 @@ senderName: "#{SenderName}#"
 googleTagManagerIdentifier: "#{GoogleTagManagerIdentifier}#"
 defaultCulture: "en"
 supportedCultures: "en,de,pl"
+newsApi:
+  connectionString: "#{NewsApi--ConnectionString}#"
 inventoryApi:
   connectionString: "#{InventoryApi--ConnectionString}#"
 clientApi:

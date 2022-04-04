@@ -168,7 +168,7 @@ function ProductDetail(props) {
                             <p>{props.description}</p>
                         </div>
                     }
-                    {props.features &&
+                    {props.features && props.features.length > 0 &&
                         <div className="product-detail__product-information">
                             <h3 className="product-detail__feature-title">{props.productInformationLabel}</h3>
                             <div className="product-detail__product-information-list">

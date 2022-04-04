@@ -168,6 +168,9 @@
   <data name="nc_subject" xml:space="preserve">
     <value>We have created an account for you on our B2B Platform</value>
   </data>
+  <data name="OrganisationNotFound" xml:space="preserve">
+    <value>Organization not found.</value>
+  </data>
   <data name="PasswordUpdated" xml:space="preserve">
     <value>Password has been set successfully</value>
   </data>
@@ -179,5 +182,11 @@
   </data>
   <data name="SignInText" xml:space="preserve">
     <value>Sign in</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>User not found.</value>
+  </data>
+  <data name="VerifyDateExpired" xml:space="preserve">
+    <value>Link has expired. Please contact an administrator.</value>
   </data>
 </root>

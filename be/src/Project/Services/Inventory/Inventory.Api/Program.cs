@@ -16,7 +16,6 @@ using Foundation.Localization.Definitions;
 using Inventory.Api.DependencyInjection;
 using Foundation.EventBus.Abstractions;
 using Inventory.Api.IntegrationEvents;
-using Inventory.Api.IntegrationEventsHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
