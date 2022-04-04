@@ -1,7 +1,12 @@
 .search {
-    width: 25rem;
+    width: 20rem;
     margin-left: 2rem;
     height: 56px;
+}
+
+.search-button {
+    max-height: 40px;
+    margin-left: 0.5rem !important;
 }
 
 .count {
@@ -19,39 +24,36 @@
     border-radius: 50%;
 }
 
-.navbar-menu {
-    display: flex;;
+.navbar-item {
+    display: flex;
+    align-items: center;
 }
 
-@media only screen and (max-width: $tablet) {
-    .search {
-        width: 15rem;
-        margin-left: 0;
-        align-items: center;
-    }
-
-    .navbar-brand{
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
-
-    .navbar-menu {
+@media only screen and (max-width: $desktop){
+    .header {
         flex-direction: column;
-
-        .navbar-start {
-            display: flex;
-            justify-content: center;
-        }
-
-        .navbar-end {
-            padding: 0 0.5rem;
-            justify-content: space-between;
-            display: flex;
-        }
     }
-
+    
     .welcome-text {
         display: none;
     }
+}
+
+@media only screen and (max-width: $tablet){
+    .search {
+        width: 12rem;
+        margin-left: 1.5rem;
+    }
+
+    .search-button {
+        margin-left: 0.5rem !important;
+
+        .MuiButton-label {
+            padding: 1rem;
+        }
+    }
+}
+
+.react-autosuggest__suggestions-container {
+    z-index: 5;
 }

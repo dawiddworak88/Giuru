@@ -56,9 +56,9 @@ function OrderForm(props) {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
 
             const searchParameters = {
-
                 searchTerm: args.value,
                 pageIndex: 1,
+                hasPrimaryProduct: true,
                 itemsPerPage: OrderFormConstants.productSuggestionsNumber()
             };
 

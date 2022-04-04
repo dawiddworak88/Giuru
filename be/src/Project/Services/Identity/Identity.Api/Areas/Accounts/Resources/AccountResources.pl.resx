@@ -186,4 +186,7 @@
   <data name="UserNotFound" xml:space="preserve">
     <value>Nie odnaleziono użytkownika.</value>
   </data>
+  <data name="VerifyDateExpired" xml:space="preserve">
+    <value>Link wygasł. Skontaktuj się z administratorem.</value>
+  </data>
 </root>

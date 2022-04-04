@@ -193,7 +193,9 @@ namespace Identity.Api.Services.Users
                 {
                     existingUser.EmailConfirmed = true;
                     existingUser.PasswordHash = userService.GeneratePasswordHash(existingUser, serviceModel.Password);
+
                     await this.identityContext.SaveChangesAsync();
+
                     return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(existingUser.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
                 }
                 else

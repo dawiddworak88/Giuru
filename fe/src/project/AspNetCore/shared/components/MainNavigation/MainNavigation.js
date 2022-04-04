@@ -19,7 +19,7 @@ function MainNavigation(props) {
             </div>
             <div className={`main-nav__links-container ${isOpen ? "active" : ""}`}>
                 {props.links && props.links.map((link, index) => 
-                    <a key={index} href={link.url}>{link.text}</a>
+                    <a key={index} href={link.url} target={link.target}>{link.text}</a>
                 )}
             </div>
         </nav>
