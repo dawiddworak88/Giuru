@@ -409,7 +409,7 @@
     <value>Verfügbarkeit</value>
   </data>
   <data name="Warehouses" xml:space="preserve">
-    <value>Zeitschriften</value>
+    <value>Lager</value>
   </data>
   <data name="AvailableProducts" xml:space="preserve">
     <value>Verfügbare Produkte</value>
@@ -448,7 +448,7 @@
     <value>News Kategorien</value>
   </data>
   <data name="News" xml:space="preserve">
-    <value>News</value>
+    <value>Aktuell</value>
   </data>
   <data name="MakeComplaint" xml:space="preserve">
     <value>Beschwerde einreichen</value>
