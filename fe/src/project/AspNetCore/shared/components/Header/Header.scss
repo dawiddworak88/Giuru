@@ -6,7 +6,7 @@
 
 .search-button {
     max-height: 40px;
-    margin-left: 0.5rem;
+    margin-left: 0.5rem !important;
 }
 
 .count {
@@ -46,7 +46,7 @@
     }
 
     .search-button {
-        margin-left: 0.5rem;
+        margin-left: 0.5rem !important;
 
         .MuiButton-label {
             padding: 1rem;
