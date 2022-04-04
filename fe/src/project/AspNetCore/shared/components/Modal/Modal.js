@@ -67,7 +67,9 @@ const Modal = (props) => {
                         }}
                         value={quantity}
                         onChange={(e) => {
-                            setQuantity(e.target.value)
+                            if (e.target.value >= 0){
+                                setQuantity(e.target.value)
+                            }
                         }}
                     />
                 </div>
@@ -86,7 +88,9 @@ const Modal = (props) => {
                             }}
                             value={stockQuantity}
                             onChange={(e) => {
-                                setStockQuantity(e.target.value)
+                                if (e.target.value >= 0){
+                                    setStockQuantity(e.target.value)
+                                }
                             }}
                         />
                     </div>
@@ -106,7 +110,9 @@ const Modal = (props) => {
                             }}
                             value={outletQuantity}
                             onChange={(e) => {
-                                setOutletQuantity(e.target.value)
+                                if (e.target.value >= 0){
+                                    setOutletQuantity(e.target.value)
+                                }
                             }}
                         />
                     </div>
