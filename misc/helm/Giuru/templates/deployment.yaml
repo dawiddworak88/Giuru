@@ -494,6 +494,8 @@ spec:
           value: {{ .Values.orderUrl }}
         - name: NewsUrl
           value: {{ .Values.newsUrl }}
+        - name: MakeComplaintUrl
+          value: {{ .Values.makeComplaintUrl }}
         - name: CdnUrl
           value: {{ .Values.cdnUrl }}
         - name: ClientId
