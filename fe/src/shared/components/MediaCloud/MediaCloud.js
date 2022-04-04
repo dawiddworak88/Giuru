@@ -7,6 +7,7 @@ import { useDropzone } from "react-dropzone";
 import { Context } from "../../../shared/stores/Store";
 import IconConstants from "../../constants/IconConstants";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 
 function MediaCloud(props) {
 
@@ -39,8 +40,9 @@ function MediaCloud(props) {
 
             fetch(props.saveMediaUrl, requestOptions)
                 .then(function (response) {
-
                     dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                    AuthenticationHelper.HandleResponse(response);
 
                     return response.json().then((media) => {
 
@@ -71,8 +73,9 @@ function MediaCloud(props) {
 
                 fetch(props.saveMediaUrl, requestOptions)
                     .then(function (response) {
-
                         dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                        AuthenticationHelper.HandleResponse(response);
 
                         return response.json().then((media) => {
 
