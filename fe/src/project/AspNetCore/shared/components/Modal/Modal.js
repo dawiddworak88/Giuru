@@ -65,9 +65,12 @@ const Modal = (props) => {
                         }}
                         value={quantity}
                         onChange={(e) => {
-                            if (e.target.value >= 0){
-                                setQuantity(e.target.value)
+                            const value = e.target.value;
+                            if (value >= 0){
+                                setQuantity(value)
                             }
+
+                            if (value < 0) setQuantity(0)
                         }}
                     />
                 </div>
@@ -86,11 +89,12 @@ const Modal = (props) => {
                             }}
                             value={stockQuantity}
                             onChange={(e) => {
-                                let value = e.target.value;
+                                const value = e.target.value;
                                 if (value >= 0){
-                                    if (value > maxStockValue) value = maxStockValue;
-                                    setStockQuantity(value)
+                                    if (value > maxStockValue) setStockQuantity(maxStockValue);
                                 }
+
+                                if (value < 0) setStockQuantity(0)
                             }}
                         />
                     </div>
@@ -110,11 +114,12 @@ const Modal = (props) => {
                             }}
                             value={outletQuantity}
                             onChange={(e) => {
-                                let value = e.target.value;
+                                const value = e.target.value;
                                 if (value >= 0){
-                                    if (value > maxOutletValue) value = maxOutletValue;
-                                    setOutletQuantity(value)
+                                    if (value > maxOutletValue) setOutletQuantity(maxOutletValue);
                                 }
+
+                                if (value < 0) setOutletQuantity(0)
                             }}
                         />
                     </div>
