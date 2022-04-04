@@ -10,15 +10,15 @@ import MomentUtils from "@date-io/moment";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 
 const Modal = (props) => {
-    const [quantity, setQuantity] = useState(0);
-    const [stockQuantity, setStockQuantity] = useState(0);
-    const [outletQuantity, setOutletQuantity] = useState(0);
+    const {isOpen, maxStockValue, maxOutletValue, handleOrder, handleClose, labels} = props;
+    const [quantity, setQuantity] = useState(maxStockValue || maxOutletValue ? 0 : 1);
+    const [stockQuantity, setStockQuantity] = useState(maxStockValue && maxStockValue > 0 ? 1 : 0);
+    const [outletQuantity, setOutletQuantity] = useState(maxOutletValue && maxOutletValue > 0 ? 1 : 0);
     const [externalReference, setExternalReference] = useState(null);
     const [deliveryFrom, setDeliveryFrom] = useState(null);
     const [deliveryTo, setDeliveryTo] = useState(null);
     const [moreInfo, setMoreInfo] = useState(null);
 
-    const {isOpen, maxStockValue, maxOutletValue, handleOrder, handleClose, labels} = props;
     const handleAddItemToBasket = () => {
         const payload = {
             quantity,
@@ -34,15 +34,15 @@ const Modal = (props) => {
     }
 
     useEffect(() => {
-        setQuantity(0);
-        setStockQuantity(0);
-        setOutletQuantity(0);
+        setQuantity(maxStockValue || maxOutletValue ? 0 : 1);
+        setStockQuantity(maxStockValue && maxStockValue > 0 ? 1 : 0);
+        setOutletQuantity(maxOutletValue && maxOutletValue > 0 ? 1 : 0);
         setExternalReference(null);
         setDeliveryFrom(null);
         setDeliveryTo(null);
         setMoreInfo(null)
     }, [isOpen])
-
+    
     return (
         <Dialog
             open={isOpen}
