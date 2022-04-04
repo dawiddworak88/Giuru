@@ -37,10 +37,10 @@ const Modal = (props) => {
         setQuantity(0);
         setStockQuantity(0);
         setOutletQuantity(0);
-        setExternalReference("");
+        setExternalReference(null);
         setDeliveryFrom(null);
         setDeliveryTo(null);
-        setMoreInfo("")
+        setMoreInfo(null)
     }, [isOpen])
 
     return (
