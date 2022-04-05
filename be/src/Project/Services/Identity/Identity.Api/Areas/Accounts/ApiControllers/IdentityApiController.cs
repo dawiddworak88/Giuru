@@ -6,7 +6,6 @@ using Identity.Api.Areas.Accounts.Validators;
 using Identity.Api.Configurations;
 using Identity.Api.Services.Users;
 using Identity.Api.ServicesModels.Users;
-using IdentityServer4.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -58,9 +57,11 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             var result = await validator.ValidateAsync(model);
             if (result.IsValid)
             {
-                var serviceModel = new  ResetUserPasswordServiceModel {
+                var serviceModel = new ResetUserPasswordServiceModel {
                     Email = model.Email,
-                    ReturnUrl = this.options.Value.BuyerUrl
+                    ReturnUrl = this.options.Value.BuyerUrl,
+                    Scheme = this.HttpContext.Request.Scheme,
+                    Host = this.HttpContext.Request.Host
                 };
 
                 await this.usersService.ResetPasswordAsync(serviceModel);

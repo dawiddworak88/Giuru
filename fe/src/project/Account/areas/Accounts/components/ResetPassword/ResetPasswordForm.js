@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -8,6 +8,7 @@ import useForm from "../../../../../../shared/helpers/forms/useForm";
 
 const ResetPasswordForm = (props) => {
     const [state, dispatch] = useContext(Context);
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const stateSchema = {
         email: { value: null, error: "" }
     };
@@ -36,11 +37,18 @@ const ResetPasswordForm = (props) => {
 
         fetch(props.submitUrl, requestOptions)
             .then(response => {
-                if (response.status === ResponseStatusConstants.found()) {
-                    toast.success(jsonResponse.message);
-                } else {
-                    toast.error(props.generalErrorMessage);
-                }
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setDisableSaveButton(true);
+                        toast.success(jsonResponse.message);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
@@ -71,7 +79,12 @@ const ResetPasswordForm = (props) => {
                             error={(errors.email.length > 0) && dirty.email} />
                     </div>
                     <div className="field">
-                        <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable} fullWidth={true}>
+                        <Button 
+                            type="submit" 
+                            variant="contained" 
+                            color="primary" 
+                            disabled={state.isLoading || disable || disableSaveButton} 
+                            fullWidth={true}>
                             {props.resetPasswordText}
                         </Button>
                     </div>
@@ -86,7 +99,10 @@ ResetPasswordForm.propTypes = {
     resetPasswordText: PropTypes.string.isRequired,
     emailLabel: PropTypes.string.isRequired,
     emailFormatErrorMessage: PropTypes.string.isRequired,
-    emailRequiredErrorMessage: PropTypes.string.isRequired
+    emailRequiredErrorMessage: PropTypes.string.isRequired,
+    submitUrl: PropTypes.string.isRequired,
+    navigateToSignInLabel: PropTypes.string,
+    signInUrl: PropTypes.string
 }
 
 export default ResetPasswordForm;

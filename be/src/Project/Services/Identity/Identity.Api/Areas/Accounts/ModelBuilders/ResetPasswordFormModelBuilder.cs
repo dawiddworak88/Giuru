@@ -35,7 +35,7 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 ResetPasswordText = this.accountLocalizer.GetString("ResetPassword"),
                 EmailLabel = this.globalLocalizer.GetString("EmailLabel"),
-                SubmitUrl = this.linkGenerator.GetPathByAction("ResetPassword", "IdentityApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                SubmitUrl = this.linkGenerator.GetPathByAction("ResetPassword", "IdentityApi", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             return viewModel;

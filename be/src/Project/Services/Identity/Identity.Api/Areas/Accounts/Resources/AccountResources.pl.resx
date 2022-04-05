@@ -144,6 +144,9 @@
   <data name="FirstNameRequiredErrorMessage" xml:space="preserve">
     <value>Wprowadź swoje imię</value>
   </data>
+  <data name="ForgotPasswordLabel" xml:space="preserve">
+    <value>Resetuj hasło</value>
+  </data>
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Wprowadź swoje nazwisko</value>
   </data>
