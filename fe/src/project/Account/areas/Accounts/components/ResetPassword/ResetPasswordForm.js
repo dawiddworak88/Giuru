@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
 import { TextField, Button, CircularProgress } from "@material-ui/core";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
@@ -27,6 +28,23 @@ const ResetPasswordForm = (props) => {
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+            body: JSON.stringify(state)
+        };
+
+        fetch(props.submitUrl, requestOptions)
+            .then(response => {
+                if (response.status === ResponseStatusConstants.found()) {
+                    toast.success(jsonResponse.message);
+                } else {
+                    toast.error(props.generalErrorMessage);
+                }
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
     }
 
     const {

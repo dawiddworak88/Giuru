@@ -186,6 +186,9 @@
   <data name="SignInText" xml:space="preserve">
     <value>Zaloguj się</value>
   </data>
+  <data name="SuccessfullyResetPassword" xml:space="preserve">
+    <value>Pomyślnie rozpoczęto resetowanie hasła. Link do resetowania został wysłany na maila.</value>
+  </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>Nie odnaleziono użytkownika.</value>
   </data>

@@ -186,6 +186,9 @@
   <data name="SignInText" xml:space="preserve">
     <value>Einloggen</value>
   </data>
+  <data name="SuccessfullyResetPassword" xml:space="preserve">
+    <value>Passwortzurücksetzung erfolgreich gestartet. Ein Link zum Zurücksetzen wurde an die E-Mail gesendet</value>
+  </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>Benutzer nicht gefunden.</value>
   </data>
