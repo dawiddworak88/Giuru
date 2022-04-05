@@ -1,5 +1,6 @@
 ﻿using Feature.Account;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.Localization;
 using Identity.Api.Areas.Accounts.ComponentModels;
 using Identity.Api.Areas.Accounts.ViewModels;
 using Microsoft.AspNetCore.Routing;
@@ -11,13 +12,16 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
     public class ResetPasswordFormModelBuilder : IAsyncComponentModelBuilder<ResetPasswordComponentModel, ResetPasswordFormViewModel>
     {
         private readonly IStringLocalizer<AccountResources> accountLocalizer;
+        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly LinkGenerator linkGenerator;
 
         public ResetPasswordFormModelBuilder(
             IStringLocalizer<AccountResources> accountLocalizer,
+            IStringLocalizer<GlobalResources> globalLocalizer,
             LinkGenerator linkGenerator)
         {
             this.accountLocalizer = accountLocalizer;
+            this.globalLocalizer = globalLocalizer;
             this.linkGenerator = linkGenerator;
         }
 
@@ -25,7 +29,11 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
         {
             var viewModel = new ResetPasswordFormViewModel
             {
-               
+                EmailFormatErrorMessage = this.globalLocalizer.GetString("EmailFormatErrorMessage"),
+                EmailRequiredErrorMessage = this.globalLocalizer.GetString("EmailRequiredErrorMessage"),
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                ResetPasswordText = this.accountLocalizer.GetString("ResetPassword"),
+                EmailLabel = this.globalLocalizer.GetString("EmailLabel")
             };
 
             return viewModel;
