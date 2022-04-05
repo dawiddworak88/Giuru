@@ -174,6 +174,9 @@
   <data name="PasswordUpdated" xml:space="preserve">
     <value>Password has been set successfully</value>
   </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Password reset</value>
+  </data>
   <data name="SetPassword" xml:space="preserve">
     <value>Set password</value>
   </data>
