@@ -59,6 +59,7 @@ function SignInForm(props) {
                         <TextField id="password" name="password" type="password" label={props.enterPasswordText} fullWidth={true} 
                             value={password} onChange={handleOnChange} helperText={dirty.password ? errors.password : ""} error={(errors.password.length > 0) && dirty.password} />
                     </div>
+                    <span>Forgot password? Click</span>
                     <div className="field">
                         <Button type="submit" variant="contained" color="primary" disabled={disable} fullWidth={true}>
                             {props.signInText}
