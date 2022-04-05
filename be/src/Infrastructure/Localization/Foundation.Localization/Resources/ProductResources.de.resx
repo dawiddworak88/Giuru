@@ -162,6 +162,9 @@
   <data name="IsPublished" xml:space="preserve">
     <value>Veröffentlicht</value>
   </data>
+  <data name="NavigateToAttributesLabel" xml:space="preserve">
+    <value>Zurück zu den Attributen</value>
+  </data>
   <data name="NavigateToCategoriesLabel" xml:space="preserve">
     <value>Zurück zu den Kategorien</value>
   </data>

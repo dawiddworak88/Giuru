@@ -49,7 +49,7 @@ function OrderForm(props) {
     const [suggestions, setSuggestions] = useState([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
-    const [showBackToOrdersListButton, setShowBackToOrdersListButton] = useState(false);
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
 
     const onSuggestionsFetchRequested = (args) => {
 
@@ -259,18 +259,13 @@ function OrderForm(props) {
                     if (response.ok) {
 
                         toast.success(jsonResponse.message);
-                        setShowBackToOrdersListButton(true);
+                        setDisableSaveButton(true);
                     }
                 });
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
             });
-    };
-
-    const handleBackToOrdersClick = (e) => {
-        e.preventDefault();
-        NavigationHelper.redirect(props.ordersUrl);
     };
     
     const onDrop = useCallback(acceptedFiles => {
@@ -517,20 +512,25 @@ function OrderForm(props) {
                     </Fragment>
                 }
                 <div className="field">
-                    {showBackToOrdersListButton ?
-                        (
-                            <Button type="button" variant="contained" color="primary" onClick={handleBackToOrdersClick}>
-                                {props.navigateToOrdersListText}
-                            </Button>
-                        ) :
-                        (
-                            <Button type="button" variant="contained"
-                                color="primary"
-                                onClick={handlePlaceOrder}
-                                disabled={state.isLoading || orderItems.length === 0}>
-                                {props.saveText}
-                            </Button>
-                        )}
+                    <Button 
+                        type="button" 
+                        variant="contained"
+                        color="primary"
+                        onClick={handlePlaceOrder}
+                        disabled={state.isLoading || orderItems.length === 0 || disableSaveButton}>
+                        {props.saveText}
+                    </Button>
+                    <Button
+                        className="ml-2"
+                        type="button" 
+                        variant="contained" 
+                        color="secondary" 
+                        onClick={(e) => {
+                            e.preventDefault();
+                            NavigationHelper.redirect(props.ordersUrl)
+                        }}>
+                        {props.navigateToOrdersListText}
+                    </Button>
                 </div>
             </div>
             <ConfirmationDialog

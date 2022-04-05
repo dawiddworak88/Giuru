@@ -13,7 +13,7 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function ProductForm(props) {
-    const [showBackToProductsButton, setShowBackToProductsButton] = useState(false);
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const categoriesProps = {
         options: props.categories,
         getOptionLabel: (option) => option.name
@@ -131,7 +131,7 @@ function ProductForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-                        setShowBackToProductsButton(true);
+                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
@@ -287,26 +287,24 @@ function ProductForm(props) {
                             </NoSsr>
                         </div>
                         <div className="field">
-                            {showBackToProductsButton ?
-                                <Button 
-                                    type="button" 
-                                    variant="contained" 
-                                    color="primary"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        NavigationHelper.redirect(props.productsUrl);
-                                    }}>
-                                    {props.navigateToProductsLabel}
-                                </Button>
-                            : 
-                                <Button 
-                                    type="submit" 
-                                    variant="contained" 
-                                    color="primary" 
-                                    disabled={state.isLoading || disable}>
-                                    {props.saveText}
-                                </Button>
-                            }
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                color="primary" 
+                                disabled={state.isLoading || disable || disableSaveButton}>
+                                {props.saveText}
+                            </Button>
+                            <Button 
+                                className="ml-2"
+                                type="button" 
+                                variant="contained" 
+                                color="secondary"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.productsUrl);
+                                }}>
+                                {props.navigateToProductsLabel}
+                            </Button>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}

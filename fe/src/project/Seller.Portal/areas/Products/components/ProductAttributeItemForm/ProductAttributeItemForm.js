@@ -8,7 +8,7 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function ProductAttributeItemForm(props) {
-    const [showBackToAttributeItem, setShowbackToAttributeItem] = useState(false);
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const [state, dispatch] = useContext(Context);
 
     const stateSchema = {
@@ -48,7 +48,7 @@ function ProductAttributeItemForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-                        setShowbackToAttributeItem(true);
+                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
@@ -89,26 +89,24 @@ function ProductAttributeItemForm(props) {
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">
-                            {showBackToAttributeItem ?
-                                <Button
-                                    type="button"
-                                    variant="contained" 
-                                    color="primary"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        NavigationHelper.redirect(props.productAttributeUrl);
-                                    }}>
-                                        {props.navigateToProductAttributeLabel}
-                                </Button>
-                            : 
-                                <Button 
-                                    type="submit" 
-                                    variant="contained" 
-                                    color="primary" 
-                                    disabled={state.isLoading || disable}>
-                                        {props.saveText}
-                                </Button>
-                            }
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                color="primary" 
+                                disabled={state.isLoading || disable || disableSaveButton}>
+                                {props.saveText}
+                            </Button>
+                            <Button
+                                className="ml-2"
+                                type="button"
+                                variant="contained" 
+                                color="secondary"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.productAttributeUrl);
+                                }}>
+                                {props.navigateToProductAttributeLabel}
+                            </Button>
                         </div>
                     </form>
                 </div>

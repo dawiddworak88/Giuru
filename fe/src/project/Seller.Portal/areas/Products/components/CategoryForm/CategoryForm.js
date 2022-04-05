@@ -10,7 +10,7 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 
 function CategoryForm(props) {
     const [state, dispatch] = useContext(Context);
-    const [showBackToCategoriesButton, setShowBackToCategoriesButton] = useState(false);
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
 
     const stateSchema = {
 
@@ -50,7 +50,7 @@ function CategoryForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-                        setShowBackToCategoriesButton(true);
+                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
@@ -121,27 +121,23 @@ function CategoryForm(props) {
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
                         <div className="field">
-                            {showBackToCategoriesButton ? 
-                                <Button
-                                    type="button"
-                                    variant="contained" 
-                                    color="primary"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        NavigationHelper.redirect(props.categoriesUrl);
-                                    }}>
-                                        {props.navigateToCategoriesLabel}
-                                </Button>
-                            : 
-                                <Button 
-                                    type="submit" 
-                                    variant="contained" 
-                                    color="primary" 
-                                    disabled={state.isLoading || disable}>
-                                        {props.saveText}
-                                </Button>
-                            }
-                            
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                color="primary" 
+                                disabled={state.isLoading || disable || disableSaveButton}>
+                                {props.saveText}
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="contained" 
+                                color="secondary"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.categoriesUrl);
+                                }}>
+                                {props.navigateToCategoriesLabel}
+                            </Button>
                         </div>
                     </form>
                 </div>
