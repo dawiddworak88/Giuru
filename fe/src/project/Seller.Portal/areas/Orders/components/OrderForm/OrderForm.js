@@ -58,6 +58,7 @@ function OrderForm(props) {
             const searchParameters = {
                 searchTerm: args.value,
                 pageIndex: 1,
+                hasPrimaryProduct: true,
                 itemsPerPage: OrderFormConstants.productSuggestionsNumber()
             };
 
