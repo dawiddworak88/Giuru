@@ -234,6 +234,7 @@ services:
       - BasketUrl=http://basket-api
       - ClientUrl=http://client-api
       - NewsUrl=http://news-api
+      - MakeComplaintUrl=https://complaints.com
       - IsMarketplace=${IS_MARKETPLACE}
       - ProductAttributes=${PRODUCT_ATTRIBUTES}
       - OrganisationId=${ORGANISATION_ID}

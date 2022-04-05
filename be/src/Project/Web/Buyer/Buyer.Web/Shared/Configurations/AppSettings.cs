@@ -17,5 +17,6 @@ namespace Buyer.Web.Shared.Configurations
         public Guid? OrganisationId { get; set; }
         public string ProductAttributes { get; set; }
         public string GoogleTagManagerIdentifier { get; set; }
+        public string MakeComplaintUrl { get; set; }
     }
 }

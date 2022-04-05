@@ -21,19 +21,22 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
         private readonly LinkGenerator linkGenerator;
         private readonly IOptions<AppSettings> configuration;
         private readonly IBrandRepository brandRepository;
+        private readonly IOptionsMonitor<AppSettings> settings;
 
         public MainNavigationModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             LinkGenerator linkGenerator,
             IOptions<AppSettings> configuration,
-            IBrandRepository brandRepository)
+            IBrandRepository brandRepository,
+            IOptionsMonitor<AppSettings> settings)
         {
             this.globalLocalizer = globalLocalizer;
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
             this.configuration = configuration;
             this.brandRepository = brandRepository;
+            this.settings = settings;
         }
 
         public async Task<MainNavigationViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -85,6 +88,13 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
             {
                 Text = this.globalLocalizer.GetString("News"),
                 Url = this.linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
+            });
+
+            links.Add(new LinkViewModel
+            {
+                Text = this.globalLocalizer.GetString("MakeComplaint"),
+                Target = "_blank",
+                Url = this.settings.CurrentValue.MakeComplaintUrl
             });
 
             return new MainNavigationViewModel

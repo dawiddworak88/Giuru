@@ -450,4 +450,7 @@
   <data name="News" xml:space="preserve">
     <value>News</value>
   </data>
+  <data name="MakeComplaint" xml:space="preserve">
+    <value>Make a complaint</value>
+  </data>
 </root>
