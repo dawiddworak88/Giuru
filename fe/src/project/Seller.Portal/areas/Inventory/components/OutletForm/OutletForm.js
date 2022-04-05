@@ -14,7 +14,7 @@ import QuantityValidator from "../../../../../../shared/helpers/validators/Quant
 const OutletForm = (props) => {
 
     const [state, dispatch] = useContext(Context);
-    const [showBackToOutletListButton, setshowBackToOutletListButton] = useState(false);
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
     
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -171,26 +171,24 @@ const OutletForm = (props) => {
                                 onChange={handleOnChange}/>
                         </div>
                         <div className="field">
-                            {showBackToOutletListButton ? (
-                                <Button 
-                                    type="button" 
-                                    variant="contained" 
-                                    color="primary" 
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        NavigationHelper.redirect(props.outletUrl);
-                                    }}>
-                                    {props.navigateToOutletListText}
-                                </Button> 
-                            ) : (
-                                <Button 
-                                    type="subbmit" 
-                                    variant="contained"
-                                    color="primary"
-                                    disabled={state.isLoading || disable || !product}>
-                                    {props.saveText}
-                                </Button>
-                            )}
+                            <Button 
+                                type="subbmit" 
+                                variant="contained"
+                                color="primary"
+                                disabled={state.isLoading || disable || !product || disableSaveButton}>
+                                {props.saveText}
+                            </Button>
+                            <Button 
+                                className="ml-2"
+                                type="button" 
+                                variant="contained" 
+                                color="secondary" 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.outletUrl);
+                                }}>
+                                {props.navigateToOutletListText}
+                            </Button> 
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}
