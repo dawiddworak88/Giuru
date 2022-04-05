@@ -45,7 +45,7 @@ function Files(props) {
                                                                 <GetApp />
                                                         </Fab>
                                                     </Tooltip>
-                                                    <Tooltip title={props.copyLinkLabel} aria-label={props.copyLinkLabel}>
+                                                    <Tooltip title={props.copyLinkLabel} aria-label={props.copyLinkLabel} className="ml-2">
                                                         <Fab onClick={() => handleCopyClick(file)} size="small" color="secondary">
                                                             <Link />
                                                         </Fab>
