@@ -98,7 +98,16 @@ const OutletForm = (props) => {
                 <div className="column is-half inventory-add-content">
                     <form onSubmit={handleOnSubmit} className="is-modern-form" method="post">
                         {id &&
-                            <input id="id" name="id" type="hidden" value={id} />
+                            <div className="field">
+                                <TextField 
+                                    id="id"
+                                    name="id" 
+                                    type="text" 
+                                    label={props.idLabel} 
+                                    fullWidth={true} 
+                                    value={id}
+                                    readOnly={true} />
+                            </div>
                         }
                         <div className="field">
                             <FormControl fullWidth={true} helperText={dirty.warehouseId ? errors.warehouseId : ""} error={(errors.warehouseId.length > 0) && dirty.warehouseId}>
@@ -216,7 +225,8 @@ OutletForm.propTypes = {
     warehouseRequiredErrorMessage: PropTypes.string,
     productRequiredErrorMessage: PropTypes.string,
     quantityRequiredErrorMessage: PropTypes.string,
-    quantityFormatErrorMessage: PropTypes.string
+    quantityFormatErrorMessage: PropTypes.string,
+    idLabel: PropTypes.string
 };
 
 export default OutletForm;

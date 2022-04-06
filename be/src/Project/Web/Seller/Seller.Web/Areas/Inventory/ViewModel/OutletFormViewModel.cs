@@ -33,6 +33,7 @@ namespace Seller.Web.Areas.Inventory.ViewModel
         public int AvailableQuantity { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
         public string SaveUrl { get; set; }
+        public string IdLabel { get; set; }
         public string SaveText { get; set; }
     }
 }

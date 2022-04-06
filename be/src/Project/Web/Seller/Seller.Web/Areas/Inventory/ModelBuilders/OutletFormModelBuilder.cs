@@ -43,6 +43,7 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
         {
             var viewModel = new OutletFormViewModel
             {
+                IdLabel = this.globalLocalizer.GetString("Id"),
                 Title = this.inventoryLocalizer.GetString("OutletItem"),
                 SelectWarehouseLabel = this.inventoryLocalizer.GetString("Warehouse"),
                 SelectProductLabel = this.inventoryLocalizer.GetString("SelectProductLabel"),
@@ -76,8 +77,6 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
 
             if (componentModel.Id.HasValue)
             {
-                viewModel.Id = componentModel.Id.Value;
-
                 var outletItem = await this.outletRepository.GetOutletItemAsync(componentModel.Token, componentModel.Language, componentModel.Id);
                 
                 if (outletItem is not null)
