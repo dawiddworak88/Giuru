@@ -129,6 +129,7 @@ function CategoryForm(props) {
                                 {props.saveText}
                             </Button>
                             <Button
+                                className="ml-2"
                                 type="button"
                                 variant="contained" 
                                 color="secondary"
