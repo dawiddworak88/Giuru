@@ -62,57 +62,63 @@ function EditOrderForm(props) {
         <section className="section section-small-padding edit-order">
             <h1 className="subtitle is-4">{props.title}</h1>
             <h2 className="subtitle is-5 edit-order__items-subtitle">{props.orderStatusLabel}</h2>
-            <form className="is-modern-form" onSubmit={handleOrderStatusSubmit} method="post">
-                <div className="columns is-desktop">
-                    {props.id &&
-                        <div className="column is-3">
-                            <div className="field">
-                                <TextField 
-                                    id="id" 
-                                    name="id"
-                                    label={props.idLabel}
-                                    fullWidth={true}
-                                    value={props.id} 
-                                    readOnly={true} />
-                            </div>
-                        </div>
-                    }
+            {props.id &&
+                <div className="columns is-desktop props-id">
                     <div className="column is-3">
                         <div className="field">
-                            <FormControl fullWidth={true}>
-                                <InputLabel id="order-status-label">{props.orderStatusLabel}</InputLabel>
-                                <Select
-                                    labelId="order-status-label"
-                                    id="orderStatus"
-                                    name="orderStatus"
-                                    value={orderStatusId}
-                                    onChange={(e) => {
-
-                                        e.preventDefault();
-                                        setOrderStatusId(e.target.value);
-                                    }}>
-                                    {props.orderStatuses.map(status => {
-                                        return (
-                                            <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>
-                                        );
-                                    })}
-                                </Select>
-                            </FormControl>
-                        </div>
-                    </div>
-                    <div className="column is-3">
-                        <div className="field">
-                            <Button type="submit" variant="contained" color="primary" disabled={state.isLoading}>
-                                {props.saveText}
-                            </Button>
+                            <TextField 
+                                id="id" 
+                                name="id"
+                                label={props.idLabel}
+                                fullWidth={true}
+                                value={props.id} 
+                                readOnly={true} />
                         </div>
                     </div>
                 </div>
-            </form>
-            <div className="mt-5">
-                <h2 className="subtitle is-5 edit-order__items-subtitle">{props.clientLabel}</h2>
-                <div>
-                    <a href={props.clientUrl}>{props.clientName}</a>
+            }
+            <div className="columns is-desktop">
+                <div className="column is-half">
+                    <form className="is-modern-form" onSubmit={handleOrderStatusSubmit} method="post">
+                        <div className="columns is-desktop">
+                            <div className="column">
+                                <div className="field">
+                                    <FormControl fullWidth={true}>
+                                        <InputLabel id="order-status-label">{props.orderStatusLabel}</InputLabel>
+                                        <Select
+                                            labelId="order-status-label"
+                                            id="orderStatus"
+                                            name="orderStatus"
+                                            value={orderStatusId}
+                                            onChange={(e) => {
+                                                e.preventDefault();
+                                                setOrderStatusId(e.target.value);
+                                            }}>
+                                            {props.orderStatuses.map(status => {
+                                                return (
+                                                    <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>
+                                                );
+                                            })}
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                            </div>
+                            <div className="column">
+                                <div className="field">
+                                    <Button type="submit" variant="contained" color="primary" disabled={state.isLoading}>
+                                        {props.saveText}
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div className="mt-5">
+                        <h2 className="subtitle is-5 edit-order__items-subtitle">{props.clientLabel}</h2>
+                        <div>
+                            <a href={props.clientUrl}>{props.clientName}</a>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
             <div className="mt-5">
