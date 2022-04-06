@@ -6,7 +6,7 @@ import { CircularProgress } from "@material-ui/core";
 import {
     FormControl, InputLabel, Select, MenuItem, Button,
     Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper
+    TableHead, TableRow, Paper, TextField
 } from "@material-ui/core";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
@@ -64,6 +64,19 @@ function EditOrderForm(props) {
             <h2 className="subtitle is-5 edit-order__items-subtitle">{props.orderStatusLabel}</h2>
             <form className="is-modern-form" onSubmit={handleOrderStatusSubmit} method="post">
                 <div className="columns is-desktop">
+                    {props.id &&
+                        <div className="column is-3">
+                            <div className="field">
+                                <TextField 
+                                    id="id" 
+                                    name="id"
+                                    label={props.idLabel}
+                                    fullWidth={true}
+                                    value={props.id} 
+                                    readOnly={true} />
+                            </div>
+                        </div>
+                    }
                     <div className="column is-3">
                         <div className="field">
                             <FormControl fullWidth={true}>
@@ -165,7 +178,8 @@ EditOrderForm.propTypes = {
     clientLabel: PropTypes.string.isRequired,
     clientName: PropTypes.string.isRequired,
     clientUrl: PropTypes.string.isRequired,
-    updateOrderStatusUrl: PropTypes.string.isRequired
+    updateOrderStatusUrl: PropTypes.string.isRequired,
+    idLabel: PropTypes.string
 };
 
 export default EditOrderForm;
