@@ -63,8 +63,8 @@ function EditOrderForm(props) {
             <h1 className="subtitle is-4">{props.title}</h1>
             <h2 className="subtitle is-5 edit-order__items-subtitle">{props.orderStatusLabel}</h2>
             {props.id &&
-                <div className="columns is-desktop props-id">
-                    <div className="column is-3">
+                <div className="columns is-desktop mt-0 mb-0">
+                    <div className="column is-3 pb-0">
                         <div className="field">
                             <TextField 
                                 id="id" 
