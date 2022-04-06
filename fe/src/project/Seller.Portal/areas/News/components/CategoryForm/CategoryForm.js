@@ -69,7 +69,15 @@ const CategoryForm = (props) => {
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit}>
                         {id &&
-                            <input id="id" name="id" type="hidden" value={id} />
+                            <div className="field">
+                                <TextField 
+                                    id="id" 
+                                    name="id"
+                                    label={props.idLabel}
+                                    fullWidth={true}
+                                    value={id} 
+                                    readOnly={true} />
+                            </div>
                         }
                         <div className="field">
                             <TextField 
@@ -146,7 +154,8 @@ CategoryForm.propTypes = {
     saveMediaUrl: PropTypes.string.isRequired,
     deleteLabel: PropTypes.string.isRequired,
     categoryPictureLabel: PropTypes.string.isRequired,
-    saveUrl: PropTypes.string.isRequired
+    saveUrl: PropTypes.string.isRequired,
+    idLabel: PropTypes.string
 };
 
 export default CategoryForm;
