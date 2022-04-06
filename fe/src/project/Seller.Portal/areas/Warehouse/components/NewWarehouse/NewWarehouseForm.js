@@ -62,12 +62,23 @@ const NewWarehouseForm = (props) => {
         handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const {name, location} = values;
+    const {id, name, location} = values;
     return (
         <section className="section section-small-padding inventory-add">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="column is-half inventory-add-content">
                 <form onSubmit={handleOnSubmit} className="is-modern-form" method="post">
+                    {id &&
+                        <div className="field">
+                            <TextField 
+                                id="id" 
+                                name="id"
+                                label={props.idLabel}
+                                fullWidth={true}
+                                value={id} 
+                                readOnly={true} />
+                        </div>
+                    }
                     <div className="field">
                         <TextField 
                            id="name" 
@@ -134,7 +145,8 @@ NewWarehouseForm.propTypes = {
     addText: PropTypes.string,
     navigateToWarehouseListText: PropTypes.string,
     warehouseUrl: PropTypes.string,
-    locationLabel: PropTypes.string
+    locationLabel: PropTypes.string,
+    idLabel: PropTypes.string
 };
 
 export default NewWarehouseForm;
