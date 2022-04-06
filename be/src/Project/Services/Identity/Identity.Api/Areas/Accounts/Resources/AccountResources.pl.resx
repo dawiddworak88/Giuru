@@ -145,7 +145,7 @@
     <value>Wprowadź swoje imię</value>
   </data>
   <data name="ForgotPasswordLabel" xml:space="preserve">
-    <value>Resetuj hasło</value>
+    <value>Resetowanie hasła</value>
   </data>
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Wprowadź swoje nazwisko</value>

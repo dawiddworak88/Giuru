@@ -4,6 +4,7 @@ import { TextField, Button } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import PasswordValidator from "../../../../../../shared/helpers/validators/PasswordValidator";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function SignInForm(props) {
 
@@ -59,8 +60,15 @@ function SignInForm(props) {
                         <TextField id="password" name="password" type="password" label={props.enterPasswordText} fullWidth={true} 
                             value={password} onChange={handleOnChange} helperText={dirty.password ? errors.password : ""} error={(errors.password.length > 0) && dirty.password} />
                     </div>
-                    <div className="is-flex is-justify-content-end p-2">
-                        <a href={props.resetPasswordUrl} className="is-size-6">{props.forgotPasswordLabel}</a>
+                    <div className="is-flex is-justify-content-end">
+                        <button 
+                            className="button is-ghost"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                NavigationHelper.redirect(props.resetPasswordUrl)
+                            }}>
+                                {props.forgotPasswordLabel}
+                        </button>
                     </div>
                     <div className="field">
                         <Button type="submit" variant="contained" color="primary" disabled={disable} fullWidth={true}>
