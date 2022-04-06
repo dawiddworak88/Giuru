@@ -1,0 +1,10 @@
+.file-tooltip {
+    margin-left: 0.5rem !important;
+}
+
+@media only screen and (max-width: $desktop) {
+    .file-tooltip {
+        margin-left: 0 !important;
+        margin-top: 0.5rem !important;
+    }
+}

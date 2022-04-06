@@ -42,10 +42,10 @@ function Files(props) {
                                                 <TableCell width="11%">
                                                     <Tooltip title={props.downloadLabel} aria-label={props.downloadLabel}>
                                                         <Fab href={file.url} size="small" color="primary">
-                                                                <GetApp />
+                                                            <GetApp />
                                                         </Fab>
                                                     </Tooltip>
-                                                    <Tooltip title={props.copyLinkLabel} aria-label={props.copyLinkLabel} className="ml-2">
+                                                    <Tooltip title={props.copyLinkLabel} aria-label={props.copyLinkLabel} className="file-tooltip">
                                                         <Fab onClick={() => handleCopyClick(file)} size="small" color="secondary">
                                                             <Link />
                                                         </Fab>
