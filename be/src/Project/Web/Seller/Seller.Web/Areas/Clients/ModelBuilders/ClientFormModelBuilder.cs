@@ -66,7 +66,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 AccountText = this.clientLocalizer.GetString("AccountText"),
                 AccountUrl = this.linkGenerator.GetPathByAction("Account", "IdentityApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ClientsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
-                Languages = languages
+                Languages = languages,
+                IdLabel = this.globalLocalizer.GetString("Id")
             };
 
             if (componentModel.Id.HasValue)

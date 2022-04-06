@@ -121,8 +121,17 @@ function ClientForm(props) {
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                         {id &&
-                            <input id="id" name="id" type="hidden" value={id} />
+                            <div className="field">
+                                <TextField 
+                                    id="id" 
+                                    name="id"
+                                    label={props.idLabel}
+                                    fullWidth={true}
+                                    value={id} 
+                                    readOnly={true} />
+                            </div>
                         }
+                        
                         <div className="field">
                             <TextField 
                                 id="name" 
@@ -199,7 +208,8 @@ ClientForm.propTypes = {
     enterEmailText: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     saveUrl: PropTypes.string.isRequired,
-    languages: PropTypes.array.isRequired
+    languages: PropTypes.array.isRequired,
+    idLabel: PropTypes.string
 };
 
 export default ClientForm;
