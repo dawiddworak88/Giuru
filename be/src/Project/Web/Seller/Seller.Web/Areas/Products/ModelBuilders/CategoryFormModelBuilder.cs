@@ -52,6 +52,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
         {
             var viewModel = new CategoryFormViewModel
             {
+                IdLabel = this.globalLocalizer.GetString("Id"),
                 Title = this.productLocalizer.GetString("EditCategory"),
                 NameLabel = this.globalLocalizer.GetString("Name"),
                 ParentCategoryLabel = this.productLocalizer.GetString("ParentCategory"),

@@ -80,7 +80,15 @@ function ProductAttributeItemForm(props) {
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                         {id &&
-                            <input id="id" name="id" type="hidden" value={id} />
+                            <div className="field">
+                                <TextField 
+                                    id="id" 
+                                    name="id"
+                                    label={props.idLabel}
+                                    fullWidth={true}
+                                    value={id} 
+                                    readOnly={true} />
+                            </div>
                         }
                         <input id="productAttributeId" name="productAttributeId" type="hidden" value={productAttributeId} />
                         <div className="field">
@@ -106,7 +114,8 @@ ProductAttributeItemForm.propTypes = {
     nameLabel: PropTypes.string.isRequired,
     nameRequiredErrorMessage: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
-    generalErrorMessage: PropTypes.string.isRequired
+    generalErrorMessage: PropTypes.string.isRequired,
+    idLabel: PropTypes.string
 };
 
 export default ProductAttributeItemForm;

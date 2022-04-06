@@ -177,7 +177,15 @@ function ProductForm(props) {
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                         {id &&
-                            <input id="id" name="id" type="hidden" value={id} />
+                            <div className="field">
+                                <TextField 
+                                    id="id" 
+                                    name="id"
+                                    label={props.idLabel}
+                                    fullWidth={true}
+                                    value={id} 
+                                    readOnly={true} />
+                            </div>
                         }
                         <div className="field">
                             <Autocomplete
@@ -328,7 +336,8 @@ ProductForm.propTypes = {
     saveMediaUrl: PropTypes.string.isRequired,
     deleteLabel: PropTypes.string.isRequired,
     getCategorySchemaUrl: PropTypes.string.isRequired,
-    generalErrorMessage: PropTypes.string.isRequired
+    generalErrorMessage: PropTypes.string.isRequired,
+    idLabel: PropTypes.string
 };
 
 export default ProductForm;
