@@ -77,6 +77,7 @@ const OutletForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
+                        setFieldValue({ name: "id", value: jsonRes.id });
                         setshowBackToOutletListButton(true);
                     }
                     else {
@@ -99,14 +100,7 @@ const OutletForm = (props) => {
                     <form onSubmit={handleOnSubmit} className="is-modern-form" method="post">
                         {id &&
                             <div className="field">
-                                <TextField 
-                                    id="id"
-                                    name="id" 
-                                    type="text" 
-                                    label={props.idLabel} 
-                                    fullWidth={true} 
-                                    value={id}
-                                    readOnly={true} />
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
                             </div>
                         }
                         <div className="field">
