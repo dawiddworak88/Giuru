@@ -105,7 +105,7 @@ function ProductAttributeItemForm(props) {
                                     e.preventDefault();
                                     NavigationHelper.redirect(props.productAttributeUrl);
                                 }}>
-                                {props.navigateToProductAttributeLabel}
+                                {props.navigateToProductAttributesLabel}
                             </Button>
                         </div>
                     </form>

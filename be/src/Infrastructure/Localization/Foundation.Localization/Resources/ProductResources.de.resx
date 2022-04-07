@@ -168,9 +168,6 @@
   <data name="NavigateToCategoriesLabel" xml:space="preserve">
     <value>Zurück zu den Kategorien</value>
   </data>
-  <data name="NavigateToProductAttributeLabel" xml:space="preserve">
-    <value>Zurück zum Attribut</value>
-  </data>
   <data name="NavigateToProductsLabel" xml:space="preserve">
     <value>Zurück zu den Produktlisten</value>
   </data>
