@@ -17,6 +17,7 @@ import BuyerProductPage from "../../src/project/AspNetCore/areas/Products/pages/
 import BrandPage from "../../src/project/AspNetCore/areas/Products/pages/BrandPage/BrandPage";
 
 // Account
+import ResetPasswordPage from "../../src/project/Account/areas/Accounts/pages/ResetPassword/ResetPasswordPage";
 import SignInPage from "../../src/project/Account/areas/Accounts/pages/SignIn/SignInPage";
 import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetPassword/SetPasswordPage";
 import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
@@ -57,6 +58,7 @@ const Components = {
 	BuyerProductPage,
 	BrandPage,
 
+	ResetPasswordPage,
 	SignInPage,
 	SetPasswordPage,
 	ContentPage,
