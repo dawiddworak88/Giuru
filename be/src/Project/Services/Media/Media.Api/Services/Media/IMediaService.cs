@@ -10,7 +10,6 @@ namespace Media.Api.Services.Media
     public interface IMediaService
     {
         Task<PagedResults<IEnumerable<MediaItemServiceModel>>> GetAsync(GetMediaItemsServiceModel serviceModel);
-        Task<MediaFileServiceModel> GetFileAsync(Guid? mediaId, bool? optimize, int? width, int? height);
         Task<MediaFileServiceModel> GetFileAsync(Guid? mediaId, int? width, int? height, bool optimize, string? extension);
         Task<Guid> CreateFileAsync(CreateMediaItemServiceModel serviceModel);
         Task<Guid> UpdateFileAsync(UpdateMediaItemServiceModel serviceModel);

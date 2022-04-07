@@ -36,7 +36,7 @@ namespace Seller.Web.Areas.Media.Controllers
             {
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value)
+                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
             };
 
             var viewModel = await this.mediasPageModelBuilder.BuildModelAsync(componentModel);
@@ -51,7 +51,7 @@ namespace Seller.Web.Areas.Media.Controllers
                 Id = id,
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value)
+                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
             };
 
             var viewModel = await this.mediaItemPageModelBuilder.BuildModelAsync(componentModel);

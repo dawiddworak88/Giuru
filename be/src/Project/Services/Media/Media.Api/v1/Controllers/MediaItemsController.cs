@@ -51,7 +51,7 @@ namespace Media.Api.v1.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy )
         {
-            var sellerClaims = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaims = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var mediaItemsIds = ids.ToEnumerableGuidIds();
             if (mediaItemsIds != null)
             {
@@ -201,7 +201,7 @@ namespace Media.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> UpdateVersion(UpdateMediaItemVersionRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new UpdateMediaItemVersionServiceModel
             {
                 Id = request.Id,

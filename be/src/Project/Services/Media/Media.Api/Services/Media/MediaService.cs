@@ -129,7 +129,6 @@ namespace Media.Api.Services.Media
             return existingMediaItemVersion.FirstOrDefault().MediaItemId;
         }
 
-        public async Task<MediaFileServiceModel> GetFileAsync(Guid? mediaId, bool? optimize, int? width, int? height)
         public async Task<MediaFileServiceModel> GetFileAsync(Guid? mediaId, int? width, int? height, bool optimize, string? extension)
         {
             if (mediaId.HasValue)
