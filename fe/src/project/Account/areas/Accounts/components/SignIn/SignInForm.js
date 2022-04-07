@@ -43,7 +43,6 @@ function SignInForm(props) {
     } = useForm(stateSchema, stateValidatorSchema);
 
     const { email, password } = values;
-
     return (
         <section className="section is-flex-centered">
             <div className="account-card">
@@ -62,7 +61,7 @@ function SignInForm(props) {
                     </div>
                     <div className="is-flex is-justify-content-end">
                         <button 
-                            className="button is-ghost"
+                            className="button is-text"
                             onClick={(e) => {
                                 e.preventDefault();
                                 NavigationHelper.redirect(props.resetPasswordUrl)
@@ -70,7 +69,7 @@ function SignInForm(props) {
                                 {props.forgotPasswordLabel}
                         </button>
                     </div>
-                    <div className="field">
+                    <div className="field mt-2">
                         <Button type="submit" variant="contained" color="primary" disabled={disable} fullWidth={true}>
                             {props.signInText}
                         </Button>

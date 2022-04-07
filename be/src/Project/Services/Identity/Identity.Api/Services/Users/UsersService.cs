@@ -237,46 +237,44 @@ namespace Identity.Api.Services.Users
         public async Task ResetPasswordAsync(ResetUserPasswordServiceModel serviceModel)
         {
             var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
-            if (user is null)
+            if (user is not null)
             {
-                throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NotFound);
-            }
+                var timeExpiration = DateTime.UtcNow.AddHours(IdentityConstants.VerifyTimeExpiration);
 
-            var timeExpiration = DateTime.UtcNow.AddHours(IdentityConstants.VerifyTimeExpiration);
+                user.EmailConfirmed = false;
+                user.VerifyExpirationDate = timeExpiration;
+                user.ExpirationId = Guid.NewGuid();
 
-            user.EmailConfirmed = false;
-            user.VerifyExpirationDate = timeExpiration;
-            user.ExpirationId = Guid.NewGuid();
-
-            var userOrganisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == user.OrganisationId && x.IsActive);
-            if (userOrganisation is null)
-            {
-                throw new CustomException(this.accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NotFound);
-            }
-
-            Thread.CurrentThread.CurrentCulture = new CultureInfo(userOrganisation.Language);
-            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
-
-            await this.identityContext.SaveChangesAsync();
-            await this.mailingService.SendTemplateAsync(new TemplateEmail
-            {
-                RecipientEmailAddress = user.Email,
-                RecipientName = user.UserName,
-                SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
-                SenderName = this.mailingOptions.CurrentValue.SenderName,
-                TemplateId = this.mailingOptions.CurrentValue.ActionSendGridResetTemplateId,
-                DynamicTemplateData = new
+                var userOrganisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == user.OrganisationId && x.IsActive);
+                if (userOrganisation is null)
                 {
-                    lang = userOrganisation.Language,
-                    ap_subject = this.accountLocalizer.GetString("ap_subject").Value,
-                    ap_preHeader = this.accountLocalizer.GetString("ap_preHeader").Value,
-                    ap_buttonLabel = this.accountLocalizer.GetString("ap_buttonLabel").Value,
-                    ap_headOne = this.accountLocalizer.GetString("ap_headOne").Value,
-                    ap_headTwo = this.accountLocalizer.GetString("ap_headTwo").Value,
-                    ap_lineOne = this.accountLocalizer.GetString("ap_lineOne").Value,
-                    resetAccountLink = this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = userOrganisation.Language, Id = user.ExpirationId, ReturnUrl = string.IsNullOrWhiteSpace(serviceModel.ReturnUrl) ? null : HttpUtility.UrlEncode(serviceModel.ReturnUrl) }, serviceModel.Scheme, serviceModel.Host)
+                    throw new CustomException(this.accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NotFound);
                 }
-            });
+
+                Thread.CurrentThread.CurrentCulture = new CultureInfo(userOrganisation.Language);
+                Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
+
+                await this.identityContext.SaveChangesAsync();
+                await this.mailingService.SendTemplateAsync(new TemplateEmail
+                {
+                    RecipientEmailAddress = user.Email,
+                    RecipientName = user.UserName,
+                    SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
+                    SenderName = this.mailingOptions.CurrentValue.SenderName,
+                    TemplateId = this.mailingOptions.CurrentValue.ActionSendGridResetTemplateId,
+                    DynamicTemplateData = new
+                    {
+                        lang = userOrganisation.Language,
+                        ap_subject = this.accountLocalizer.GetString("ap_subject").Value,
+                        ap_preHeader = this.accountLocalizer.GetString("ap_preHeader").Value,
+                        ap_buttonLabel = this.accountLocalizer.GetString("ap_buttonLabel").Value,
+                        ap_headOne = this.accountLocalizer.GetString("ap_headOne").Value,
+                        ap_headTwo = this.accountLocalizer.GetString("ap_headTwo").Value,
+                        ap_lineOne = this.accountLocalizer.GetString("ap_lineOne").Value,
+                        resetAccountLink = this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = userOrganisation.Language, Id = user.ExpirationId, ReturnUrl = string.IsNullOrWhiteSpace(serviceModel.ReturnUrl) ? null : HttpUtility.UrlEncode(serviceModel.ReturnUrl) }, serviceModel.Scheme, serviceModel.Host)
+                    }
+                });
+            }
         }
     }
 }
