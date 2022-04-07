@@ -95,13 +95,7 @@ const InventoryAddForm = (props) => {
                     <form onSubmit={handleOnSubmit} className="is-modern-form" method="post">
                         {id &&
                             <div className="field">
-                                <TextField 
-                                    id="id" 
-                                    name="id"
-                                    label={props.idLabel}
-                                    fullWidth={true}
-                                    value={id} 
-                                    readOnly={true} />
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
                             </div>
                         }
                         <div className="field">

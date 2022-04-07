@@ -5,7 +5,7 @@ import NoSsr from '@material-ui/core/NoSsr';
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
-import { TextField, Button, CircularProgress, FormControlLabel, Switch } from "@material-ui/core";
+import { TextField, Button, CircularProgress, FormControlLabel, Switch, InputLabel } from "@material-ui/core";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import DynamicForm from "../../../../../../shared/components/DynamicForm/DynamicForm";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
@@ -168,7 +168,6 @@ function ProductForm(props) {
         formData,
         isPublished } = values;
     
-
     return (
         <section className="section section-small-padding product">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -177,13 +176,7 @@ function ProductForm(props) {
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                         {id &&
                             <div className="field">
-                                <TextField 
-                                    id="id" 
-                                    name="id"
-                                    label={props.idLabel}
-                                    fullWidth={true}
-                                    value={id} 
-                                    readOnly={true} />
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
                             </div>
                         }
                         <div className="field">

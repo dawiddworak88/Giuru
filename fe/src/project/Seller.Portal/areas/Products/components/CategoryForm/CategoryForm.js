@@ -82,13 +82,7 @@ function CategoryForm(props) {
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                         {id &&
                             <div className="field">
-                                <TextField 
-                                    id="id" 
-                                    name="id"
-                                    label={props.idLabel}
-                                    fullWidth={true}
-                                    value={id} 
-                                    readOnly={true} />
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
                             </div>
                         }
                         <div className="field">

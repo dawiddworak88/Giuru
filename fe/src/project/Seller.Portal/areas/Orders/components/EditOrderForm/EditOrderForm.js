@@ -65,13 +65,7 @@ function EditOrderForm(props) {
                 <div className="columns is-desktop mt-0 mb-0">
                     <div className="column is-3 pb-0">
                         <div className="field">
-                            <TextField 
-                                id="id" 
-                                name="id"
-                                label={props.idLabel}
-                                fullWidth={true}
-                                value={props.id} 
-                                readOnly={true} />
+                            <InputLabel id="id-label">{props.idLabel} {props.id}</InputLabel>
                         </div>
                     </div>
                 </div>

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
-import { TextField, Button, CircularProgress } from "@material-ui/core";
+import { TextField, Button, CircularProgress, InputLabel } from "@material-ui/core";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
@@ -83,13 +83,7 @@ function ProductAttributeForm(props) {
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                         {id &&
                             <div className="field">
-                                <TextField 
-                                    id="id" 
-                                    name="id"
-                                    label={props.idLabel}
-                                    fullWidth={true}
-                                    value={id} 
-                                    readOnly={true} />
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
                             </div>
                         }
                         <div className="field">

@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
-import { TextField, Button } from "@material-ui/core";
+import { TextField, Button, InputLabel } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
@@ -60,7 +60,7 @@ const NewWarehouseForm = (props) => {
 
     const {
         values, errors, dirty, disable,
-        handleOnChange, handleOnSubmit
+        setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const {id, name, location} = values;
@@ -71,13 +71,7 @@ const NewWarehouseForm = (props) => {
                 <form onSubmit={handleOnSubmit} className="is-modern-form" method="post">
                     {id &&
                         <div className="field">
-                            <TextField 
-                                id="id" 
-                                name="id"
-                                label={props.idLabel}
-                                fullWidth={true}
-                                value={id} 
-                                readOnly={true} />
+                            <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
                         </div>
                     }
                     <div className="field">
