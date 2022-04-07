@@ -69,7 +69,7 @@ function SignInForm(props) {
                                 {props.forgotPasswordLabel}
                         </button>
                     </div>
-                    <div className="field mt-2">
+                    <div className="field mt-4">
                         <Button type="submit" variant="contained" color="primary" disabled={disable} fullWidth={true}>
                             {props.signInText}
                         </Button>

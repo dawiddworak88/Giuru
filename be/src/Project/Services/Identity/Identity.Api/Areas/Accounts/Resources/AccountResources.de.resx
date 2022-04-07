@@ -190,7 +190,7 @@
     <value>Einloggen</value>
   </data>
   <data name="SuccessfullyResetPassword" xml:space="preserve">
-    <value>Der Link zum Zurücksetzen des Passworts wurde gesendet, wenn Ihr Konto auf unserer Plattform existiert. Bitte überprüfen Sie Ihr E-Mail-Postfach für weitere Anweisungen.</value>
+    <value>Der Link zum Zurücksetzen des Passworts wurde gesendet, wenn Ihr Konto auf unserer Plattform existiert. Bitte überprüfen Sie Ihre Mailbox für weitere Anweisungen.</value>
   </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>Benutzer nicht gefunden.</value>
