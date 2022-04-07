@@ -2,7 +2,7 @@ import React, {useContext, useState} from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
-import { TextField, Button } from "@material-ui/core";
+import { TextField, Button, InputLabel } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
@@ -48,6 +48,7 @@ const NewWarehouseForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
+                        setFieldValue({ name: "id", value: jsonRes.id });
                         setShowBackToWarehouseListButton(true);
                     }
                     else {
@@ -59,15 +60,20 @@ const NewWarehouseForm = (props) => {
 
     const {
         values, errors, dirty, disable,
-        handleOnChange, handleOnSubmit
+        setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const {name, location} = values;
+    const {id, name, location} = values;
     return (
         <section className="section section-small-padding inventory-add">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="column is-half inventory-add-content">
                 <form onSubmit={handleOnSubmit} className="is-modern-form" method="post">
+                    {id &&
+                        <div className="field">
+                            <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                        </div>
+                    }
                     <div className="field">
                         <TextField 
                            id="name" 
@@ -134,7 +140,8 @@ NewWarehouseForm.propTypes = {
     addText: PropTypes.string,
     navigateToWarehouseListText: PropTypes.string,
     warehouseUrl: PropTypes.string,
-    locationLabel: PropTypes.string
+    locationLabel: PropTypes.string,
+    idLabel: PropTypes.string
 };
 
 export default NewWarehouseForm;

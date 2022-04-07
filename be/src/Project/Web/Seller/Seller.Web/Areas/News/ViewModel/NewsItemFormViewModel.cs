@@ -36,6 +36,7 @@ namespace Seller.Web.Areas.News.ViewModel
         public string SaveMediaUrl { get; set; }
         public string SaveText { get; set; }
         public bool IsPublished { get; set; }
+        public string IdLabel { get; set; }
         public IEnumerable<FileViewModel> ThumbnailImages { get; set; }
         public IEnumerable<FileViewModel> PreviewImages { get; set; }
         public IEnumerable<FileViewModel> Files { get; set; }

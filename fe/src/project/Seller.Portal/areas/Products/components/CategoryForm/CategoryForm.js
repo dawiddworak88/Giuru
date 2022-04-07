@@ -49,7 +49,6 @@ function CategoryForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
@@ -82,7 +81,9 @@ function CategoryForm(props) {
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                         {id &&
-                            <input id="id" name="id" type="hidden" value={id} />
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                            </div>
                         }
                         <div className="field">
                             <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
@@ -149,7 +150,8 @@ CategoryForm.propTypes = {
     saveMediaUrl: PropTypes.string.isRequired,
     deleteLabel: PropTypes.string.isRequired,
     categoryPictureLabel: PropTypes.string.isRequired,
-    saveUrl: PropTypes.string.isRequired
+    saveUrl: PropTypes.string.isRequired,
+    idLabel: PropTypes.string
 };
 
 export default CategoryForm;

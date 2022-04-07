@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
-import { TextField, Button, CircularProgress } from "@material-ui/core";
+import { TextField, Button, CircularProgress, InputLabel } from "@material-ui/core";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function ProductAttributeItemForm(props) {
@@ -47,7 +47,6 @@ function ProductAttributeItemForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
@@ -80,7 +79,9 @@ function ProductAttributeItemForm(props) {
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                         {id &&
-                            <input id="id" name="id" type="hidden" value={id} />
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                            </div>
                         }
                         <input id="productAttributeId" name="productAttributeId" type="hidden" value={productAttributeId} />
                         <div className="field">
@@ -106,7 +107,8 @@ ProductAttributeItemForm.propTypes = {
     nameLabel: PropTypes.string.isRequired,
     nameRequiredErrorMessage: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
-    generalErrorMessage: PropTypes.string.isRequired
+    generalErrorMessage: PropTypes.string.isRequired,
+    idLabel: PropTypes.string
 };
 
 export default ProductAttributeItemForm;

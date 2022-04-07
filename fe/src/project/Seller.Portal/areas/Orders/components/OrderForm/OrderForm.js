@@ -35,7 +35,7 @@ function OrderForm(props) {
     };
 
     const [state, dispatch] = useContext(Context);
-    const [id,] = useState(props.id ? props.id : null);
+    const [id, setId] = useState(props.id ? props.id : null);
     const [basketId, setBasketId] = useState(null);
     const [client, setClient] = useState(props.clientId ? props.clients.find((item) => item.id === props.clientId) : null);
     const [searchTerm, setSearchTerm] = useState("");
@@ -77,7 +77,7 @@ function OrderForm(props) {
                     return response.json().then(jsonResponse => {
 
                         if (response.ok) {
-
+                            setId(jsonResponse.id);
                             setSuggestions(() => []);
                             setSuggestions(() => jsonResponse.data);
                         }
