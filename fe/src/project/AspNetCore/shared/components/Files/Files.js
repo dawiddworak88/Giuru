@@ -40,16 +40,18 @@ function Files(props) {
                                         {props.files.map((file) => (
                                             <TableRow key={file.id}>
                                                 <TableCell width="11%">
-                                                    <Tooltip title={props.downloadLabel} aria-label={props.downloadLabel}>
-                                                        <Fab href={file.url} size="small" color="primary">
-                                                            <GetApp />
-                                                        </Fab>
-                                                    </Tooltip>
-                                                    <Tooltip title={props.copyLinkLabel} aria-label={props.copyLinkLabel} className="file-tooltip">
-                                                        <Fab onClick={() => handleCopyClick(file)} size="small" color="secondary">
-                                                            <Link />
-                                                        </Fab>
-                                                    </Tooltip>
+                                                    <div className="files__tooltip">
+                                                        <Tooltip title={props.downloadLabel} aria-label={props.downloadLabel}>
+                                                            <Fab href={file.url} size="small" color="primary">
+                                                                <GetApp />
+                                                            </Fab>
+                                                        </Tooltip>
+                                                        <Tooltip title={props.copyLinkLabel} aria-label={props.copyLinkLabel}>
+                                                            <Fab onClick={() => handleCopyClick(file)} size="small" color="secondary">
+                                                                <Link />
+                                                            </Fab>
+                                                        </Tooltip>
+                                                    </div>
                                                 </TableCell>
                                                 <TableCell>
                                                     <Button variant="text" href={file.url}>
