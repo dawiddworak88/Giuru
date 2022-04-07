@@ -44,7 +44,6 @@ function EditOrderForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-
                         setOrderStatusId(jsonResponse.orderStatusId);
                         toast.success(jsonResponse.message);
                     }

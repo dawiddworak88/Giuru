@@ -47,7 +47,6 @@ function ProductAttributeForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-
                         toast.success(jsonResponse.message);
 
                         if (!id) {

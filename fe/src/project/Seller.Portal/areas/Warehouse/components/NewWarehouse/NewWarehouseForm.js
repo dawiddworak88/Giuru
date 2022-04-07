@@ -48,6 +48,7 @@ const NewWarehouseForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
+                        setFieldValue({ name: "id", value: jsonRes.id });
                         setShowBackToWarehouseListButton(true);
                     }
                     else {

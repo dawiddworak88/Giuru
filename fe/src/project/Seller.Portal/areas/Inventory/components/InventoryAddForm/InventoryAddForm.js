@@ -72,6 +72,7 @@ const InventoryAddForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
+                        setFieldValue({ name: "id", value: jsonRes.id });
                         setShowBackToInventoryListButton(true);
                     }
                     else {
