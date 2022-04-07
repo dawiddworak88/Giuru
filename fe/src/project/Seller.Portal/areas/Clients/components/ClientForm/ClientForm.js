@@ -180,7 +180,7 @@ function ClientForm(props) {
                                 {props.saveText}
                             </Button>
                             <Button 
-                                className="ml-2"
+                                className="field-button"
                                 type="button" 
                                 color="secondary" 
                                 variant="contained" 
@@ -189,7 +189,7 @@ function ClientForm(props) {
                                 {props.accountText}
                             </Button>
                             <Button
-                                className="ml-2"
+                                className="field-button"
                                 type="button"
                                 variant="contained" 
                                 color="primary"
