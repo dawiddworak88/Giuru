@@ -10,7 +10,7 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
-    const [showBackToClientsButton, setShowBackToClientsButton] = useState(false);
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
@@ -61,7 +61,7 @@ function ClientForm(props) {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        setShowBackToClientsButton(true);
+                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
@@ -172,27 +172,33 @@ function ClientForm(props) {
                             </FormControl>
                         </div>
                         <div className="field client-form__field-row">
-                            {showBackToClientsButton ? 
-                                <Button
-                                    type="button"
-                                    variant="contained" 
-                                    color="primary"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        NavigationHelper.redirect(props.clientsUrl);
-                                    }}>
-                                        {props.navigateToClientsLabel}
-                                </Button>
-                            : 
-                                <Button 
-                                    type="submit" 
-                                    variant="contained" 
-                                    color="primary" 
-                                    disabled={state.isLoading || disable}>
-                                        {props.saveText}
-                                </Button>
-                            }
-                            <Button className="client-form__create-button" color="secondary" variant="contained" onClick={createAccount} disabled={state.isLoading || !id}>{props.accountText}</Button>
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                color="primary" 
+                                disabled={state.isLoading || disable || disableSaveButton}>
+                                {props.saveText}
+                            </Button>
+                            <Button 
+                                className="ml-2"
+                                type="button" 
+                                color="secondary" 
+                                variant="contained" 
+                                onClick={createAccount} 
+                                disabled={state.isLoading || !id}>
+                                {props.accountText}
+                            </Button>
+                            <Button
+                                className="ml-2"
+                                type="button"
+                                variant="contained" 
+                                color="primary"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.clientsUrl);
+                                }}>
+                                    {props.navigateToClientsLabel}
+                            </Button>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}

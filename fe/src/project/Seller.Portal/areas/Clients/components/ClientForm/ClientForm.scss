@@ -1,9 +1,6 @@
 .client-form {
     &__field-row {
         display: flex;
-    }
-
-    &__create-button {
-        margin-left: 0.5rem !important;
+        flex-wrap: wrap;
     }
 }
