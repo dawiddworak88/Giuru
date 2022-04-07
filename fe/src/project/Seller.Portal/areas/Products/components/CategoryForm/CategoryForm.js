@@ -5,6 +5,7 @@ import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress } from "@material-ui/core";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function CategoryForm(props) {
 
@@ -34,7 +35,7 @@ function CategoryForm(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(state)
         };
 
@@ -42,6 +43,8 @@ function CategoryForm(props) {
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
 

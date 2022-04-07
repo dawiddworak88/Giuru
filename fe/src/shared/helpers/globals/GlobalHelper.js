@@ -8,7 +8,7 @@ export default class GlobalHelper {
     var themeDefinition = {
       typography: {
         body1: {
-          fontFamily: "'Poppins', sans-serif"
+          fontFamily: "'Nunito', sans-serif"
         },
         button: {
           textTransform: "none"
@@ -16,10 +16,10 @@ export default class GlobalHelper {
       },
       palette: {
         primary: {
-          main: "#BF202F"
+          main: "#647b76"
         },
         secondary: {
-          main: "#5E1916"
+          main: "#647b76"
         }
       }
     };

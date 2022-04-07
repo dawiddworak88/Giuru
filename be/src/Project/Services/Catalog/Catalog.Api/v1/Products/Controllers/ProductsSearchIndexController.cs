@@ -1,6 +1,5 @@
 ﻿using Catalog.Api.Services.Products;
 using Catalog.Api.ServicesModels.Products;
-using Catalog.Api.v1.Products.RequestModels;
 using Catalog.Api.Validators.Products;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
@@ -18,7 +17,6 @@ namespace Catalog.Api.v1.Products.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Produces("application/json")]
     [ApiController]
     public class ProductsSearchIndexController : BaseApiController
     {
@@ -38,7 +36,7 @@ namespace Catalog.Api.v1.Products.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Post()
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new RebuildCatalogIndexServiceModel
             {

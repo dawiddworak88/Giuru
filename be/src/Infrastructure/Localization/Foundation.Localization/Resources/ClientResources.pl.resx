@@ -132,6 +132,9 @@
   <data name="ClientDeletedSuccessfully" xml:space="preserve">
     <value>Klient został usunięty.</value>
   </data>
+  <data name="ClientExists" xml:space="preserve">
+    <value>Klient o takim adresie e-mail już istnieje.</value>
+  </data>
   <data name="ClientNotFound" xml:space="preserve">
     <value>Klient nie został znaleziony.</value>
   </data>

@@ -24,7 +24,6 @@ namespace Inventory.Api.v1.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Produces("application/json")]
     [Authorize]
     [ApiController]
     public class InventoryController : BaseApiController
@@ -37,14 +36,14 @@ namespace Inventory.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Gets list of products from inventory.
+        /// Gets a list of product inventories..
         /// </summary>
-        /// <param name="ids">The list of inv ids.</param>
+        /// <param name="ids">The list of inventory ids.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
         /// <param name="orderBy">The optional order by.</param>
-        /// <returns>The list of products from inventory.</returns>
+        /// <returns>The list of product inventories.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -52,7 +51,7 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var inventoryIds = ids.ToEnumerableGuidIds();
             if (inventoryIds != null)
             {
@@ -134,11 +133,11 @@ namespace Inventory.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Gets inventories of available products ordered by the available quantity.
+        /// Gets a list of products available on stock.
         /// </summary>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
-        /// <returns>The list of inventory details for products.</returns>
+        /// <returns>The list of products available on stock..</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [Route("availableproducts")]
@@ -149,7 +148,7 @@ namespace Inventory.Api.v1.Controllers
             int pageIndex, 
             int itemsPerPage)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             
             var serviceModel = new GetInventoriesServiceModel
             {
@@ -186,8 +185,8 @@ namespace Inventory.Api.v1.Controllers
         /// <summary>
         /// Creates or updates inventory (if inventory skus are set).
         /// </summary>
-        /// <param name="request">The model.</param>
-        /// <returns>The inventory ids.</returns>
+        /// <param name="request">The list of inventory items.</param>
+        /// <returns>The successfully saved inventory ids.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [Route("productinventories")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -196,10 +195,20 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> SaveProductInventories(SaveInventoriesBySkusRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
-            var serviceModel = new UpdateInventoryProductsServiceModel
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var serviceModel = new UpdateProductsInventoryServiceModel
             {
-                InventoryItems = request.InventoryItems,
+                InventoryItems = request.InventoryItems.OrEmptyIfNull().Select(x => new UpdateProductInventoryServiceModel
+                { 
+                    AvailableQuantity = x.AvailableQuantity,
+                    Quantity = x.Quantity,
+                    ExpectedDelivery = x.ExpectedDelivery,
+                    ProductId = x.ProductId,
+                    ProductName = x.ProductName,
+                    ProductSku = x.ProductSku,
+                    RestockableInDays = x.RestockableInDays,
+                    WarehouseName = x.WarehouseName
+                }),
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
@@ -207,18 +216,18 @@ namespace Inventory.Api.v1.Controllers
             var validationResult = await validator.ValidateAsync(serviceModel);
             if (validationResult.IsValid)
             {
-                var SaveInventoryProducts = await this.inventoriesService.SyncInventoryProducts(serviceModel);
+                await this.inventoriesService.SyncInventoryProducts(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK, new { SaveInventoryProducts.InventoryItems });
+                return this.StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
         /// <summary>
-        /// Creates or updates inventory (if inventory id is set).
+        /// Creates or updates an inventory.
         /// </summary>
-        /// <param name="request">The model.</param>
+        /// <param name="request">The inventory details to save.</param>
         /// <returns>The inventory id.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -227,7 +236,7 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(InventoryRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             if (request.Id.HasValue && request.Id != null)
             {
                 var serviceModel = new UpdateInventoryServiceModel
@@ -286,10 +295,10 @@ namespace Inventory.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Gets inventory product by id.
+        /// Gets a product inventory by id.
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <returns>The inventory product.</returns>
+        /// <returns>The inventory.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
         [AllowAnonymous]
@@ -299,7 +308,7 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetInventoryServiceModel
             {
                 Id = id.Value,
@@ -344,10 +353,10 @@ namespace Inventory.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Get product from inventory by product id
+        /// Gets a product inventory by product id.
         /// </summary>
         /// <param name="id">The product id.</param>
-        /// <returns>Product inventory.</returns>
+        /// <returns>The product inventory.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("product/{id}")]
         [AllowAnonymous]
@@ -357,7 +366,7 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetInventoryByProductId(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetInventoryByProductIdServiceModel
             {
                 ProductId = id.Value,
@@ -410,10 +419,10 @@ namespace Inventory.Api.v1.Controllers
 
 
         /// <summary>
-        /// Get product from inventory by product sku
+        /// Gets a product inventory by product sku.
         /// </summary>
         /// <param name="sku">The product sku.</param>
-        /// <returns>Product inventory.</returns>
+        /// <returns>The product inventory.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("product/sku/{sku}")]
         [AllowAnonymous]
@@ -476,7 +485,7 @@ namespace Inventory.Api.v1.Controllers
 
 
         /// <summary>
-        /// Delete inventory product by id.
+        /// Deletes a product inventory by id.
         /// </summary>
         /// <param name="id">The id.</param>
         /// <returns>OK.</returns>
@@ -488,7 +497,7 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new DeleteInventoryServiceModel
             {
                 Id = id,

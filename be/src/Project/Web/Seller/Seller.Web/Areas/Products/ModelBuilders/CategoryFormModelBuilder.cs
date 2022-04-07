@@ -1,17 +1,17 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.Extensions.Services.MediaServices;
-using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using Seller.Web.Areas.Products.Definitons;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Areas.Products.ViewModels;
+using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Configurations;
+using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
 using System.Globalization;
@@ -70,8 +70,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
             var parentCategories = await this.categoriesRepository.GetAllCategoriesAsync(
                 componentModel.Token,
                 componentModel.Language,
-                null,
-                $"{nameof(Category.Level)},{nameof(Category.Name)}");
+                null, $"{nameof(Category.Level)}");
 
             if (parentCategories != null)
             {

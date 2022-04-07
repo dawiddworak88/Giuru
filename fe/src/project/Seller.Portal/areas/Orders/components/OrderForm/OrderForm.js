@@ -25,6 +25,7 @@ import OrderFormConstants from "../../../../../../shared/constants/OrderFormCons
 import ConfirmationDialog from "../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import IconConstants from "../../../../../../shared/constants/IconConstants";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function OrderForm(props) {
 
@@ -34,7 +35,7 @@ function OrderForm(props) {
     };
 
     const [state, dispatch] = useContext(Context);
-    const [id, setId] = useState(props.id ? props.id : null);
+    const [id,] = useState(props.id ? props.id : null);
     const [basketId, setBasketId] = useState(null);
     const [client, setClient] = useState(props.clientId ? props.clients.find((item) => item.id === props.clientId) : null);
     const [searchTerm, setSearchTerm] = useState("");
@@ -55,21 +56,23 @@ function OrderForm(props) {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
 
             const searchParameters = {
-
                 searchTerm: args.value,
                 pageIndex: 1,
+                hasPrimaryProduct: true,
                 itemsPerPage: OrderFormConstants.productSuggestionsNumber()
             };
 
             const requestOptions = {
                 method: "GET",
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
             };
 
             const url = props.getSuggestionsUrl + "?" + QueryStringSerializer.serialize(searchParameters);
 
             return fetch(url, requestOptions)
                 .then(function (response) {
+
+                    AuthenticationHelper.HandleResponse(response);
 
                     return response.json().then(jsonResponse => {
 
@@ -89,7 +92,6 @@ function OrderForm(props) {
     };
 
     const onSuggestionSelected = (event, { suggestion }) => {
-
         setProduct(suggestion);
     };
 
@@ -103,7 +105,6 @@ function OrderForm(props) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const orderItem = {
-
             productId: product.id,
             sku: product.sku,
             name: product.name,
@@ -123,7 +124,7 @@ function OrderForm(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(basket)
         };
 
@@ -131,6 +132,8 @@ function OrderForm(props) {
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
 
@@ -162,7 +165,6 @@ function OrderForm(props) {
     };
 
     const searchInputProps = {
-
         placeholder: props.searchPlaceholderLabel,
         className: "search__field",
         value: searchTerm,
@@ -173,30 +175,26 @@ function OrderForm(props) {
     };
 
     const handleDeleteClick = (item) => {
-
         setEntityToDelete(item);
         setOpenDeleteDialog(true);
     };
 
     const handleDeleteDialogClose = () => {
-
         setOpenDeleteDialog(false);
         setEntityToDelete(null);
     };
 
     const handleDeleteEntity = () => {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const basket = {
-
             id: basketId,
-            items: orderItems.filter((orderItem) => orderItem.productId !== entityToDelete.productId)
+            items: orderItems.filter((orderItem) => orderItem !== entityToDelete)
         };
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(basket)
         };
 
@@ -204,6 +202,8 @@ function OrderForm(props) {
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
 
@@ -236,7 +236,6 @@ function OrderForm(props) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         var order = {
-
             basketId,
             clientId: client.id,
             clientName: client.name
@@ -244,7 +243,7 @@ function OrderForm(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(order)
         };
 
@@ -252,6 +251,8 @@ function OrderForm(props) {
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
 
@@ -268,14 +269,11 @@ function OrderForm(props) {
     };
 
     const handleBackToOrdersClick = (e) => {
-
         e.preventDefault();
         NavigationHelper.redirect(props.ordersUrl);
     };
-
     
     const onDrop = useCallback(acceptedFiles => {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         acceptedFiles.forEach((file) => {
@@ -520,15 +518,19 @@ function OrderForm(props) {
                 }
                 <div className="field">
                     {showBackToOrdersListButton ?
-                        (<Button type="button" variant="contained" color="primary" onClick={handleBackToOrdersClick}>
-                            {props.navigateToOrdersListText}
-                        </Button>) :
-                        (<Button type="button" variant="contained"
-                            color="primary"
-                            onClick={handlePlaceOrder}
-                            disabled={state.isLoading || orderItems.length === 0}>
-                            {props.saveText}
-                        </Button>)}
+                        (
+                            <Button type="button" variant="contained" color="primary" onClick={handleBackToOrdersClick}>
+                                {props.navigateToOrdersListText}
+                            </Button>
+                        ) :
+                        (
+                            <Button type="button" variant="contained"
+                                color="primary"
+                                onClick={handlePlaceOrder}
+                                disabled={state.isLoading || orderItems.length === 0}>
+                                {props.saveText}
+                            </Button>
+                        )}
                 </div>
             </div>
             <ConfirmationDialog

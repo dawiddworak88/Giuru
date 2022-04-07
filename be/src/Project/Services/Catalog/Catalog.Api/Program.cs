@@ -53,8 +53,9 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 
 builder.Services.AddControllers(options =>
 {
+    options.RespectBrowserAcceptHeader = true;
     options.Filters.Add(typeof(HttpGlobalExceptionFilter));
-}).AddNewtonsoftJson();
+}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 
 builder.Services.AddLocalization();
 

@@ -4,6 +4,8 @@ import { resetServerContext } from 'react-beautiful-dnd';
 import { ServerStyleSheets } from "@material-ui/core/styles";
 
 // AspNetCore
+import NewsItemDetails from "../../src/project/AspNetCore/areas/News/pages/NewsItemPage/NewsItemPage";
+import NewsBuyerPage from "../../src/project/AspNetCore/areas/News/pages/NewsPage/NewsPage";
 import NewOrderPage from "../../src/project/AspNetCore/areas/Orders/pages/NewOrder/NewOrderPage";
 import ListOrdersPage from "../../src/project/AspNetCore/areas/Orders/pages/ListOrders/ListOrdersPage";
 import StatusOrderPage from "../../src/project/AspNetCore/areas/Orders/pages/StatusOrder/StatusOrderPage";
@@ -23,6 +25,10 @@ import ContentPage from "../../src/project/Account/areas/Home/pages/Content/Cont
 import MediaPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage";
 import MediaItemPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage";
 import MediasPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediasPage/MediasPage"
+import NewsPage from "../../src/project/Seller.Portal/areas/News/pages/NewsPage/NewsPage";
+import NewsItemPage from "../../src/project/Seller.Portal/areas/News/pages/NewsItemPage/NewsItemPage";
+import NewsCategoriesPage from "../../src/project/Seller.Portal/areas/News/pages/CategoriesPage/CategoriesPage";
+import NewsCategoryPage from "../../src/project/Seller.Portal/areas/News/pages/CategoryPage/CategoryPage";
 import WarehouseAddPage from "../../src/project/Seller.Portal/areas/Warehouse/pages/WarehouseAddPage/WarehouseAddPage";
 import WarehousePage from "../../src/project/Seller.Portal/areas/Warehouse/pages/WarehousePage/WarehousePage";
 import InventoryPage from "../../src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/InventoryPage";
@@ -42,6 +48,8 @@ import SellerCategoryPage from "../../src/project/Seller.Portal/areas/Products/p
 import SettingsPage from "../../src/project/Seller.Portal/areas/Settings/pages/SettingsPage/SettingsPage";
 
 const Components = {
+	NewsItemDetails,
+	NewsBuyerPage,
 	ListOrdersPage,
 	NewOrderPage,
 	StatusOrderPage,
@@ -59,6 +67,10 @@ const Components = {
 	MediaPage,
 	MediaItemPage,
 	MediasPage,
+	NewsPage,
+	NewsItemPage,
+	NewsCategoriesPage,
+	NewsCategoryPage,
 	WarehouseAddPage,
 	WarehousePage,
 	InventoryPage,

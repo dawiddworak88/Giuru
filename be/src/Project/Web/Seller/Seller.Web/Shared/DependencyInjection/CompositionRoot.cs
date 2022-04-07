@@ -16,6 +16,7 @@ using Seller.Web.Shared.Repositories.Organisations;
 using Seller.Web.Areas.Shared.Repositories.Products;
 using Seller.Web.Shared.Repositories.Identity;
 using Seller.Web.Shared.Services.ContentDeliveryNetworks;
+using Seller.Web.Areas.Shared.Repositories.Media;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -24,6 +25,7 @@ namespace Seller.Web.Shared.DependencyInjection
         public static void RegisterDependencies(this IServiceCollection services)
         {
             services.AddScoped<ICdnService, CdnService>();
+            services.AddScoped<IMediaItemsRepository, MediaItemsRepository>();
             services.AddScoped<IOrganisationsRepository, OrganisationsRepository>();
             services.AddScoped<IClientsRepository, ClientsRepository>();
             services.AddScoped<IProductsRepository, ProductsRepository>();

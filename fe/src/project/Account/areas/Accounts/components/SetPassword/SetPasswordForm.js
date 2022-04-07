@@ -5,13 +5,15 @@ import { TextField, Button, CircularProgress } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import PasswordValidator from "../../../../../../shared/helpers/validators/PasswordValidator";
 import { toast } from "react-toastify";
+import ResponseStatusConstants from "../../../../../../shared/constants/ResponseStatusConstants";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function SetPasswordForm(props) {
 
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
-        id: {value: props.id ? props.id : null, error: ""},
-        password: { value: null, error: "" },
+        id: { value: props.id ? props.id : null, error: "" },
+        password: { value: null, error: "" }
     };
 
     const stateValidatorSchema = {
@@ -32,17 +34,15 @@ function SetPasswordForm(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(state)
         };
 
         fetch(props.submitUrl, requestOptions)
-            .then(async (response) => {
-                dispatch({ type: "SET_IS_LOADING", payload: false });
-                const jsonResponse = await response.json();
-                if (response.ok) {
-                    setFieldValue({ name: "id", value: jsonResponse.id });
-                    toast.success(jsonResponse.message);
+            .then(response => {
+                if (response.status === ResponseStatusConstants.found()) {
+                    toast.success(props.passwordSetSuccessMessage);
+                    setTimeout(() => NavigationHelper.redirect(props.returnUrl), 2000);
                 } else {
                     toast.error(props.generalErrorMessage);
                 }
@@ -53,17 +53,16 @@ function SetPasswordForm(props) {
     };
 
     const {
-        values, errors, dirty,
-        disable, setFieldValue, 
-        handleOnChange, handleOnSubmit
-    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
+        disable, values, errors, dirty, handleOnChange, handleOnSubmit
+    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
-    const { password } = values;
+    const { id, password } = values;
+
     return (
-        <section className="section is-flex-centered">
+        <section className="section is-flex-centered set-password">
             <div className="account-card">
                 <form className="is-modern-form has-text-centered" onSubmit={handleOnSubmit} method="post">
-                    <input type="hidden" name="id" value={props.id} />
+                    <input type="hidden" name="id" value={id} />
                     <div>
                         <h1 className="subtitle is-4">{props.setPasswordText}</h1>
                     </div>
@@ -92,13 +91,12 @@ function SetPasswordForm(props) {
 }
 
 SetPasswordForm.propTypes = {
-    emailRequiredErrorMessage: PropTypes.string.isRequired,
+    generalErrorMessage: PropTypes.string.isRequired,
+    passwordSetSuccessMessage: PropTypes.string.isRequired,
     passwordRequiredErrorMessage: PropTypes.string.isRequired,
-    emailFormatErrorMessage: PropTypes.string.isRequired,
     passwordFormatErrorMessage: PropTypes.string.isRequired,
-    signInText: PropTypes.string.isRequired,
-    enterEmailText: PropTypes.string.isRequired,
     enterPasswordText: PropTypes.string.isRequired,
+    returnUrl: PropTypes.string.isRequired,
     submitUrl: PropTypes.string.isRequired,
 };
 

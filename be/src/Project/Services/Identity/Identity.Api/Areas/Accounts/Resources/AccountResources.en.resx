@@ -117,11 +117,62 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ap_buttonLabel" xml:space="preserve">
+    <value>Reset your password</value>
+  </data>
+  <data name="ap_headOne" xml:space="preserve">
+    <value>PASSWORD RESET</value>
+  </data>
+  <data name="ap_headTwo" xml:space="preserve">
+    <value>Hi</value>
+  </data>
+  <data name="ap_lineOne" xml:space="preserve">
+    <value>You are receiving this message because the password reset procedure has started. To change your account password, please visit the link below.</value>
+  </data>
+  <data name="ap_preHeader" xml:space="preserve">
+    <value>You are receiving this message because the password reset procedure has started.</value>
+  </data>
+  <data name="ap_subject" xml:space="preserve">
+    <value>Reset your account password</value>
+  </data>
+  <data name="BackToLoginText" xml:space="preserve">
+    <value>Back to login</value>
+  </data>
+  <data name="EmailIsConfirmedText" xml:space="preserve">
+    <value>Account Confirmed</value>
+  </data>
   <data name="FirstNameRequiredErrorMessage" xml:space="preserve">
     <value>Enter your first name</value>
   </data>
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Enter your last name</value>
+  </data>
+  <data name="nc_buttonLabel" xml:space="preserve">
+    <value>Confirm and set a password</value>
+  </data>
+  <data name="nc_headOne" xml:space="preserve">
+    <value>NEW CLIENT ACCOUNT</value>
+  </data>
+  <data name="nc_headTwo" xml:space="preserve">
+    <value>Welcome to our Team</value>
+  </data>
+  <data name="nc_lineOne" xml:space="preserve">
+    <value>Welcome on board of our B2B platform. We have created an account for you. You will get an early access to our latest and greatest products and marketing materials. The platform will enable you to placer orders faster and track their statuses.</value>
+  </data>
+  <data name="nc_lineTwo" xml:space="preserve">
+    <value>Go to the link below to verify and complete your data.</value>
+  </data>
+  <data name="nc_preHeader" xml:space="preserve">
+    <value>We have created a client account for you.</value>
+  </data>
+  <data name="nc_subject" xml:space="preserve">
+    <value>We have created an account for you on our B2B Platform</value>
+  </data>
+  <data name="OrganisationNotFound" xml:space="preserve">
+    <value>Organization not found.</value>
+  </data>
+  <data name="PasswordUpdated" xml:space="preserve">
+    <value>Password has been set successfully</value>
   </data>
   <data name="SetPassword" xml:space="preserve">
     <value>Set password</value>
@@ -131,5 +182,11 @@
   </data>
   <data name="SignInText" xml:space="preserve">
     <value>Sign in</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>User not found.</value>
+  </data>
+  <data name="VerifyDateExpired" xml:space="preserve">
+    <value>Link has expired. Please contact an administrator.</value>
   </data>
 </root>

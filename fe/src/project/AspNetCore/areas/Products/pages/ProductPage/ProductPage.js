@@ -13,7 +13,6 @@ import Breadcrumbs from "../../../../shared/components/Breadcrumb/Breadcrumbs";
 function ProductPage(props) {
 
   toast.configure();
-
   LocaleHelper.setMomentLocale(props.locale);
 
   return (

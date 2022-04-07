@@ -6,6 +6,7 @@ using Identity.Api.Infrastructure.Organisations.Entities;
 using Identity.Api.ServicesModels.Organisations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -42,7 +43,7 @@ namespace Identity.Api.Services.Organisations
                 IsSeller = false,
                 Domain = new MailAddress(serviceModel.Email).Host,
                 Key = new MailAddress(serviceModel.Email).Host.Split('.')[0],
-                Language = serviceModel.Language
+                Language = serviceModel.CommunicationsLanguage
             };
 
             this.identityContext.Organisations.Add(organisation.FillCommonProperties());
@@ -50,6 +51,13 @@ namespace Identity.Api.Services.Organisations
             await this.identityContext.SaveChangesAsync();
 
             return await this.GetAsync(new GetOrganisationModel { Email = serviceModel.Email, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
+        }
+
+        public async Task<bool> IsSellerAsync(Guid id)
+        {
+            var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == id && x.IsActive);
+
+            return organisation?.IsSeller is true;
         }
 
         public async Task<OrganisationServiceModel> GetAsync(GetSellerModel serviceModel)

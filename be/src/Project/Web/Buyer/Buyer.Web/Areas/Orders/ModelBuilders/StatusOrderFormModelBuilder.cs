@@ -1,5 +1,7 @@
 ﻿using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.ViewModel;
+using Buyer.Web.Areas.Products.DomainModels;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
@@ -46,7 +48,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 SkuLabel = this.orderLocalizer.GetString("SkuLabel"),
                 OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
                 ExpectedDeliveryLabel = this.orderLocalizer.GetString("ExpectedDeliveryLabel"),
-
+                FabricsLabel = this.orderLocalizer.GetString("FabricsLabel")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -62,7 +64,6 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 viewModel.Id = order.Id;
                 viewModel.OrderStatusId = order.OrderStatusId;
                 viewModel.ExpectedDelivery = order.ExpectedDeliveryDate;
-                viewModel.OrderStatusesUrl = this.linkGenerator.GetPathByAction("Index", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
                 viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                 {
                     ProductId = x.ProductId,
@@ -72,6 +73,12 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     Quantity = x.Quantity,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo,
+                    Fabrics = x.ProductAttributes.OrEmptyIfNull().Select(x => new ProductAttribute
+                    {
+                        Key = x.Key,
+                        Values = x.Values,
+                        Name = x.Name
+                    }),
                     DeliveryFrom = x.ExpectedDeliveryFrom,
                     DeliveryTo = x.ExpectedDeliveryTo,
                     ImageAlt = x.ProductName,

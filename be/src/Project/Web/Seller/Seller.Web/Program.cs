@@ -22,6 +22,8 @@ using Seller.Web.Areas.Media.DependencyInjection;
 using Foundation.Extensions.Filters;
 using Microsoft.AspNetCore.Http;
 using Seller.Web.Areas.Inventory.DependencyInjection;
+using Foundation.Account.Definitions;
+using Seller.Web.Areas.News.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,7 +67,7 @@ builder.Services.AddCultureRouteConstraint();
 
 builder.Services.AddControllersWithViews(options =>
 {
-    options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+    options.Filters.Add(typeof(HttpWebGlobalExceptionFilter));
 }).AddNewtonsoftJson();
 
 builder.Services.RegisterClientAccountDependencies(builder.Configuration);
@@ -84,6 +86,8 @@ builder.Services.RegisterClientsAreaDependencies();
 
 builder.Services.RegisterInventoryAreaDependencies();
 
+builder.Services.RegisterNewsAreaDependencies();
+
 builder.Services.RegisterProductsAreaDependencies();
 
 builder.Services.RegisterSettingsAreaDependencies();
@@ -91,6 +95,11 @@ builder.Services.RegisterSettingsAreaDependencies();
 builder.Services.RegisterMediaAreaDependencies();
 
 builder.Services.ConfigureSettings(builder.Configuration);
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("SellerOnly", policy => policy.RequireRole(AccountConstants.Roles.Seller));
+});
 
 var app = builder.Build();
 
@@ -123,11 +132,11 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
                 name: "localizedAreaRoute",
-                pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization();
+                pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization("SellerOnly");
 
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization();
+        pattern: "{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization("SellerOnly");
 });
 
 app.Run();

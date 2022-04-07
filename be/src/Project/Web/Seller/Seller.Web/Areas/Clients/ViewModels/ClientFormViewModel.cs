@@ -26,7 +26,6 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string SaveText { get; set; }
         public string AccountUrl { get; set; }
         public string AccountText { get; set; }
-        public bool HasAccount { get; set; }
         public IEnumerable<LanguageViewModel> Languages { get; set; }
     }
 }

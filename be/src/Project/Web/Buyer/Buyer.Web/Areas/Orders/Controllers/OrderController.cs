@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Orders.ViewModel;
+using Buyer.Web.Shared.Definitions.Basket;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;
@@ -6,6 +7,7 @@ using Foundation.Extensions.Helpers;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;
@@ -16,6 +18,7 @@ using System.Threading.Tasks;
 namespace Buyer.Web.Areas.Orders.Controllers
 {
     [Area("Orders")]
+    [Authorize]
     public class OrderController : BaseController
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, StatusOrderPageViewModel> editOrderPageModelBuilder;
@@ -34,8 +37,11 @@ namespace Buyer.Web.Areas.Orders.Controllers
             var componentModel = new ComponentModelBase
             {
                 Language = CultureInfo.CurrentUICulture.Name,
+                IsAuthenticated = this.User.Identity.IsAuthenticated,
+                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
+                Name = this.User.Identity.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value)
+                BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName])
             };
 
             var viewModel = await this.orderPageModelBuilder.BuildModelAsync(componentModel);
@@ -49,8 +55,10 @@ namespace Buyer.Web.Areas.Orders.Controllers
             {
                 Id = id,
                 Language = CultureInfo.CurrentUICulture.Name,
+                IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value)
+                SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
+                Name = this.User.Identity.Name
             };
 
             var viewModel = await this.editOrderPageModelBuilder.BuildModelAsync(componentModel);

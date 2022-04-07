@@ -4,6 +4,7 @@ namespace Buyer.Web.Areas.Orders.ApiResponseModels
 {
     public class BasketItemApiResponseModel
     {
+        public Guid? Id { get; set; }
         public Guid? ProductId { get; set; }
         public string ProductSku { get; set; }
         public string ProductName { get; set; }

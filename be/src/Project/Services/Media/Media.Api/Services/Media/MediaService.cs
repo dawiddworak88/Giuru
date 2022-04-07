@@ -130,6 +130,7 @@ namespace Media.Api.Services.Media
         }
 
         public async Task<MediaFileServiceModel> GetFileAsync(Guid? mediaId, bool? optimize, int? width, int? height)
+        public async Task<MediaFileServiceModel> GetFileAsync(Guid? mediaId, int? width, int? height, bool optimize, string? extension)
         {
             if (mediaId.HasValue)
             {
@@ -154,16 +155,20 @@ namespace Media.Api.Services.Media
                     var file = await this.mediaRepository.GetFileAsync(mediaItem.Folder, $"{mediaItem.VersionId}{mediaItem.Extension}");
                     if (file != null)
                     {
-                        if (this.IsImage(mediaItem.ContentType))
+                        if (this.IsImage(mediaItem.ContentType) && (width.HasValue || height.HasValue || string.IsNullOrWhiteSpace(extension) is false))
                         {
-                            if (width.HasValue && height.HasValue)
+                            if (optimize)
                             {
-                                file = this.imageResizeService.Resize(file, width.Value, height.Value, optimize.HasValue && optimize.Value, mediaItem.ContentType);
+                                file = this.imageResizeService.Compress(file, mediaItem.ContentType, MediaConstants.ImageConversion.ReducedImageQuality, width, height, extension);
+                            }
+                            else
+                            {
+                                file = this.imageResizeService.Compress(file, mediaItem.ContentType, MediaConstants.ImageConversion.ImageQuality, width, height, extension);
                             }
 
-                            if (optimize.HasValue && optimize.Value)
+                            if (string.IsNullOrWhiteSpace(extension) is false)
                             {
-                                file = this.imageResizeService.Optimize(file, mediaItem.ContentType);
+                                mediaItem.Extension = $".{extension}";
                             }
                         }
 
@@ -212,7 +217,7 @@ namespace Media.Api.Services.Media
                 }
             }
 
-            return new PagedResults<IEnumerable<MediaItemServiceModel>>(unorderedMediaItemsResults.Count, model.ItemsPerPage)
+            return new PagedResults<IEnumerable<MediaItemServiceModel>>(model.Ids.Count(), model.ItemsPerPage)
             { 
                    Data = mediaItemsResults
             };
@@ -272,7 +277,8 @@ namespace Media.Api.Services.Media
             {
                 MediaConstants.MimeTypes.Jpeg,
                 MediaConstants.MimeTypes.Png,
-                MediaConstants.MimeTypes.Svg
+                MediaConstants.MimeTypes.Svg,
+                MediaConstants.MimeTypes.Webp
             };
 
             return imageContentTypes.Contains(contentType);

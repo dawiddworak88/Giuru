@@ -15,6 +15,9 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
 using Serilog.Sinks.Logz.Io;
 using Buyer.Web.Areas.Orders.DependencyInjection;
+using Microsoft.AspNetCore.Http;
+using Foundation.Extensions.Filters;
+using Buyer.Web.Areas.News.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,13 +66,18 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.Secure = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
 });
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(typeof(HttpWebGlobalExceptionFilter));
+}).AddNewtonsoftJson();
 
 builder.Services.RegisterClientAccountDependencies(builder.Configuration);
 
 builder.Services.RegisterLocalizationDependencies();
 
 builder.Services.RegisterOrdersAreaDependencies();
+
+builder.Services.RegisterNewsDependencies();
 
 builder.Services.RegisterGeneralDependencies();
 
@@ -92,6 +100,8 @@ app.UseGeneralException();
 
 app.UseResponseCompression();
 
+app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
+
 app.UseGeneralStaticFiles();
 
 app.UseRouting();
@@ -108,11 +118,11 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
                 name: "localizedAreaRoute",
-                pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Home}/{controller=Home}/{action=Index}/{id?}");
+                pattern: "{culture:" + LocalizationConstants.CultureRouteConstraint + "}/{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
 
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{area:exists=Home}/{controller=Home}/{action=Index}/{id?}");
+        pattern: "{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
 });
 
 app.Run();

@@ -169,7 +169,7 @@
     <value>Copy link</value>
   </data>
   <data name="Copyright" xml:space="preserve">
-    <value>Copyright © [year] ELTAP</value>
+    <value>Copyright © [year]</value>
   </data>
   <data name="CreatedDate" xml:space="preserve">
     <value>Created Date</value>
@@ -412,7 +412,7 @@
     <value>Warehouses</value>
   </data>
   <data name="AvailableProducts" xml:space="preserve">
-    <value>Available Products</value>
+    <value>Available products</value>
   </data>
   <data name="EnterConfirmPasswordText" xml:space="preserve">
     <value>Confirm password</value>
@@ -425,5 +425,34 @@
   </data>
   <data name="Miniature" xml:space="preserve">
     <value>Miniature</value>
+  <data name="BasketLabel" xml:space="preserve">
+    <value>Add to cart</value>
+  </data>
+  <data name="PrimaryFabricLabel" xml:space="preserve">
+    <value>Fabric:</value>
+  </data>
+  <data name="SuccessfullyAddedProduct" xml:space="preserve">
+    <value>The product has beed added successfully</value>
+  </data>
+  <data name="Catalog" xml:space="preserve">
+    <value>Catalog</value>
+  </data>
+  <data name="ErrorOccurred" xml:space="preserve">
+    <value>An error has occurred. Please contact an administrator.</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Unauthorized</value>
+  </data>
+  <data name="Basket" xml:space="preserve">
+    <value>Cart</value>
+  </data>
+  <data name="NewsCategories" xml:space="preserve">
+    <value>News categories</value>
+  </data>
+  <data name="News" xml:space="preserve">
+    <value>News</value>
+  </data>
+  <data name="MakeComplaint" xml:space="preserve">
+    <value>Make a complaint</value>
   </data>
 </root>

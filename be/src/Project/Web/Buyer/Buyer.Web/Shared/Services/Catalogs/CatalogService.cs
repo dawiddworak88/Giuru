@@ -82,6 +82,7 @@ namespace Buyer.Web.Shared.Services.Catalogs
                         BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId }),
                         BrandName = product.BrandName,
                         IsNew = product.IsNew,
+                        Images = product.Images,
                         InStock = false
                     };
 
@@ -92,9 +93,7 @@ namespace Buyer.Web.Shared.Services.Catalogs
                         catalogItem.ImageAlt = product.Name;
                         catalogItem.ImageUrl = this.mediaService.GetFileUrl(
                             this.options.Value.MediaUrl, 
-                            imageGuid, 
-                            ProductConstants.ProductsCatalogItemImageWidth, 
-                            ProductConstants.ProductsCatalogItemImageHeight);
+                            imageGuid);
                     }
 
                     catalogItemList.Add(catalogItem);

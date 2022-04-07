@@ -171,6 +171,9 @@
   <data name="NewTextInventory" xml:space="preserve">
     <value>Neuer Inventargegenstand</value>
   </data>
+  <data name="NullAvailability" xml:space="preserve">
+    <value>Das Produkt übersteigt den Bestand um weniger als null</value>
+  </data>
   <data name="ProductRequiredErrorMessage" xml:space="preserve">
     <value>Geben Sie das Produkt ein</value>
   </data>

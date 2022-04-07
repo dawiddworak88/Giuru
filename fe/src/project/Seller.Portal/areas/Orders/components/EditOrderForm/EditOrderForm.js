@@ -9,6 +9,7 @@ import {
     TableHead, TableRow, Paper
 } from "@material-ui/core";
 import moment from "moment";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function EditOrderForm(props) {
 
@@ -29,7 +30,7 @@ function EditOrderForm(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(orderStatus)
         };
 
@@ -37,6 +38,8 @@ function EditOrderForm(props) {
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
 

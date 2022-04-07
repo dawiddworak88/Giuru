@@ -1,5 +1,6 @@
-﻿using Buyer.Web.Areas.Orders.Repositories;
+﻿using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Buyer.Web.Areas.Orders.ViewModel;
+using Buyer.Web.Shared.Services.Baskets;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
@@ -15,28 +16,29 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly LinkGenerator linkGenerator;
-        private readonly IOrdersRepository ordersRepository;
+        private readonly IBasketService basketService;
 
         public OrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
-            LinkGenerator linkGenerator,
-            IOrdersRepository ordersRepository)
+            IBasketService basketService,
+            LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
-            this.ordersRepository = ordersRepository;
+            this.basketService = basketService;
         }
 
         public async Task<OrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new OrderFormViewModel
             {
+                BasketId = componentModel.BasketId,
                 Title = this.orderLocalizer.GetString("Order"),
                 AddText = this.orderLocalizer.GetString("AddOrderItem"),
                 SearchPlaceholderLabel = this.orderLocalizer.GetString("EnterSkuOrName"),
-                GetSuggestionsUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                GetSuggestionsUrl = this.linkGenerator.GetPathByAction("GetSuggestion", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 OrLabel = this.globalLocalizer.GetString("Or"),
                 DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
                 DropOrSelectFilesLabel = this.orderLocalizer.GetString("DropOrSelectOrderFile"),
@@ -57,6 +59,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 PlaceOrderUrl = this.linkGenerator.GetPathByAction("Checkout", "BasketCheckoutApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 NoLabel = this.globalLocalizer.GetString("No"),
+                DeleteItemBasketUrl = this.linkGenerator.GetPathByAction("DeleteItem", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 AreYouSureLabel = this.globalLocalizer.GetString("AreYouSureLabel"),
                 NavigateToOrdersListText = this.orderLocalizer.GetString("NavigateToOrdersList"),
                 NoOrderItemsLabel = this.orderLocalizer.GetString("NoOrderItemsLabel"),
@@ -65,7 +68,18 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 OrdersUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 UploadOrderFileUrl = this.linkGenerator.GetPathByAction("Index", "OrderFileApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                ClearBasketText = this.orderLocalizer.GetString("ClearBasketText"),
+                ClearBasketUrl = this.linkGenerator.GetPathByAction("Delete", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
+
+            if (componentModel.BasketId.HasValue)
+            {
+                var basketItems = await this.basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language);
+                if (basketItems is not null)
+                {
+                    viewModel.BasketItems = basketItems;
+                }
+            }
 
             return viewModel;
         }

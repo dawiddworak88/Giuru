@@ -19,7 +19,6 @@ namespace Ordering.Api.v1.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Produces("application/json")]
     [Authorize]
     [ApiController]
     public class OrderStatusesController : BaseApiController
@@ -41,7 +40,7 @@ namespace Ordering.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get()
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetOrderStatusesServiceModel
             {

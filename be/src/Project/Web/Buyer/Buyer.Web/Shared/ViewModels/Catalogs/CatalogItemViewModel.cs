@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Foundation.PageContent.Components.Images;
+using System;
+using System.Collections.Generic;
 
 namespace Buyer.Web.Shared.ViewModels.Catalogs
 {
@@ -13,7 +15,11 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public bool IsNew { get; set; }
         public bool InStock { get; set; }
         public int? AvailableQuantity { get; set; }
+        public DateTime? ExpectedDelivery { get; set; }
         public string BrandName { get; set; }
         public string BrandUrl { get; set; }
+        public IEnumerable<Guid> Images { get; set; }
+        public IEnumerable<SourceViewModel> Sources { get; set; }
+        public IEnumerable<CatalogItemProductAttributesViewModel> ProductAttributes { get; set; }
     }
 }

@@ -166,7 +166,7 @@
     <value>Link kopieren</value>
   </data>
   <data name="Copyright" xml:space="preserve">
-    <value>Copyright © [year] ELTAP</value>
+    <value>Copyright © [year]</value>
   </data>
   <data name="CreatedDate" xml:space="preserve">
     <value>Erstellungsdatum</value>
@@ -280,7 +280,7 @@
     <value>Keine Ergebnisse.</value>
   </data>
   <data name="Novelties" xml:space="preserve">
-    <value>Neuigkeiten</value>
+    <value>News</value>
   </data>
   <data name="Ok" xml:space="preserve">
     <value>OK</value>
@@ -409,7 +409,7 @@
     <value>Verfügbarkeit</value>
   </data>
   <data name="Warehouses" xml:space="preserve">
-    <value>Zeitschriften</value>
+    <value>Lager</value>
   </data>
   <data name="AvailableProducts" xml:space="preserve">
     <value>Verfügbare Produkte</value>
@@ -425,5 +425,34 @@
   </data>
   <data name="Miniature" xml:space="preserve">
     <value>Miniatur</value>
+  <data name="BasketLabel" xml:space="preserve">
+    <value>zum Warenkorb hinzufügen</value>
+  </data>
+  <data name="PrimaryFabricLabel" xml:space="preserve">
+    <value>Stoff</value>
+  </data>
+  <data name="SuccessfullyAddedProduct" xml:space="preserve">
+    <value>Das Produkt wurde erfolgreich hinzugefügt</value>
+  </data>
+  <data name="Catalog" xml:space="preserve">
+    <value>Katalog</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Unbefugt</value>
+  </data>
+  <data name="ErrorOccurred" xml:space="preserve">
+    <value>Ein Fehler ist aufgetreten. Bitte wenden Sie sich an einen Administrator.</value>
+  </data>
+  <data name="Basket" xml:space="preserve">
+    <value>Korb</value>
+  </data>
+  <data name="NewsCategories" xml:space="preserve">
+    <value>News Kategorien</value>
+  </data>
+  <data name="News" xml:space="preserve">
+    <value>Aktuell</value>
+  </data>
+  <data name="MakeComplaint" xml:space="preserve">
+    <value>Beschwerde einreichen</value>
   </data>
 </root>

@@ -21,12 +21,11 @@ import OrderFormConstants from "../../../../../../shared/constants/OrderFormCons
 import ConfirmationDialog from "../../../../../../shared/components/ConfirmationDialog/ConfirmationDialog";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import IconConstants from "../../../../../../shared/constants/IconConstants";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function NewOrderForm(props) {
-
     const [state, dispatch] = useContext(Context);
-    const [id, ] = useState(props.id ? props.id : null);
-    const [basketId, setBasketId] = useState(null);
+    const [basketId, setBasketId] = useState(props.basketId ? props.basketId : null);
     const [searchTerm, setSearchTerm] = useState("");
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
@@ -34,7 +33,7 @@ function NewOrderForm(props) {
     const [deliveryFrom, setDeliveryFrom] = useState(null);
     const [deliveryTo, setDeliveryTo] = useState(null);
     const [moreInfo, setMoreInfo] = useState("");
-    const [orderItems, setOrderItems] = useState([]);
+    const [orderItems, setOrderItems] = useState(props.basketItems ? props.basketItems : []);
     const [suggestions, setSuggestions] = useState([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
@@ -45,17 +44,20 @@ function NewOrderForm(props) {
             const searchParameters = {
                 searchTerm: args.value,
                 pageIndex: 1,
+                hasPrimaryProduct: true,
                 itemsPerPage: OrderFormConstants.productSuggestionsNumber()
             };
 
             const requestOptions = {
                 method: "GET",
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
             };
 
             const url = props.getSuggestionsUrl + "?" + QueryStringSerializer.serialize(searchParameters);
             return fetch(url, requestOptions)
                 .then(function (response) {
+
+                    AuthenticationHelper.HandleResponse(response);
 
                     return response.json().then(jsonResponse => {
                         if (response.ok) {
@@ -77,7 +79,7 @@ function NewOrderForm(props) {
     };
 
     const getProductSuggestionValue = (suggestion) => {
-        return `(${suggestion.sku}) ${suggestion.title}`;
+        return `(${suggestion.sku}) ${suggestion.name}`;
     };
 
     const handleAddOrderItemClick = () => {
@@ -88,7 +90,7 @@ function NewOrderForm(props) {
             sku: product.sku,
             name: product.name,
             imageId: product.images ? product.images[0] : null,
-            quantity,
+            quantity: quantity,
             externalReference,
             deliveryFrom: moment(deliveryFrom).startOf("day"),
             deliveryTo: moment(deliveryTo).startOf("day"),
@@ -102,13 +104,16 @@ function NewOrderForm(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(basket)
         };
 
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
@@ -159,23 +164,25 @@ function NewOrderForm(props) {
 
         const basket = {
             id: basketId,
-            items: orderItems.filter((orderItem) => orderItem.productId !== entityToDelete.productId)
+            items: orderItems.filter((orderItem) => orderItem !== entityToDelete)
         };
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(basket)
         };
 
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+                
+                AuthenticationHelper.HandleResponse(response);
+                
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         setBasketId(jsonResponse.id);
                         setOpenDeleteDialog(false);
-
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
                             setOrderItems(jsonResponse.items);
                         }
@@ -197,19 +204,22 @@ function NewOrderForm(props) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         var order = {
-            id,
             basketId,
         };
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(order)
         };
 
         fetch(props.placeOrderUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+                dispatch({ type: "SET_TOTAL_BASKET", payload: null })
+                
+                AuthenticationHelper.HandleResponse(response);
+                
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
@@ -227,7 +237,6 @@ function NewOrderForm(props) {
         NavigationHelper.redirect(props.ordersUrl);
     };
 
-    
     const onDrop = useCallback(acceptedFiles => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
@@ -269,11 +278,43 @@ function NewOrderForm(props) {
         multiple: false
     });
 
+    const clearBasket = () => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const requestOptions = {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+        };
+
+        const requestData = {
+            id: basketId
+        }
+
+        const url = props.clearBasketUrl + "?" + QueryStringSerializer.serialize(requestData);
+        fetch(url, requestOptions)
+            .then((response) => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                dispatch({ type: "SET_TOTAL_BASKET", payload: null });
+                
+                AuthenticationHelper.HandleResponse(response);
+                
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        toast.success(jsonResponse.message);
+                        setOrderItems([]);
+                        setBasketId(null);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    }
+
     return (
-        <section className="section section-small-padding order">
+        <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="is-modern-form">
-                {id && <input id="id" name="id" type="hidden" value={id} /> }
                 <Fragment>
                     <div className="container">
                         <div className="dropzone__pond-container" {...getRootProps()}>
@@ -396,7 +437,7 @@ function NewOrderForm(props) {
                             {(orderItems && orderItems.length > 0) ? (
                                 <Fragment>
                                     <section className="section">
-                                        <div className="orderitems__table">
+                                        <div className="order__items-table">
                                             <TableContainer component={Paper}>
                                                 <Table aria-label={props.orderItemsLabel}>
                                                     <TableHead>
@@ -456,6 +497,13 @@ function NewOrderForm(props) {
                                 onClick={handlePlaceOrder}
                                 disabled={state.isLoading || orderItems.length === 0}>
                                 {props.saveText}
+                            </Button>
+                            <Button 
+                                className="order__clear-button" 
+                                color="secondary" variant="contained" 
+                                onClick={clearBasket} 
+                                disabled={state.isLoading || orderItems.length === 0}>
+                                    {props.clearBasketText}
                             </Button>
                         </>
                     )}

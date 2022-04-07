@@ -8,11 +8,14 @@ namespace Buyer.Web.Shared.Configurations
         public string MediaUrl { get; set; }
         public string IdentityUrl { get; set; }
         public string InventoryUrl { get; set; }
+        public string ClientUrl { get; set; }
         public string OrderUrl { get; set; }
         public string BasketUrl { get; set; }
+        public string NewsUrl { get; set; }
         public string CdnUrl { get; set; }
         public bool IsMarketplace { get; set; }
         public Guid? OrganisationId { get; set; }
         public string GoogleTagManagerIdentifier { get; set; }
+        public string MakeComplaintUrl { get; set; }
     }
 }

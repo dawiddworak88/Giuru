@@ -1,9 +1,59 @@
 .search {
-    width: 25rem;
+    width: 20rem;
     margin-left: 2rem;
     height: 56px;
+}
 
-    @media only screen and (max-width: $tablet) {
-        width: 15rem;
+.search-button {
+    max-height: 40px;
+    margin-left: 0.5rem !important;
+}
+
+.count {
+    width: 1.2rem;
+    height: 1.2rem;
+    position: absolute;
+    background: $primary;
+    color: white;
+    top: -0.5rem;
+    right: -0.5rem;
+    font-size: 0.7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.navbar-item {
+    display: flex;
+    align-items: center;
+}
+
+@media only screen and (max-width: $desktop){
+    .header {
+        flex-direction: column;
     }
+    
+    .welcome-text {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: $tablet){
+    .search {
+        width: 12rem;
+        margin-left: 1.5rem;
+    }
+
+    .search-button {
+        margin-left: 0.5rem !important;
+
+        .MuiButton-label {
+            padding: 1rem;
+        }
+    }
+}
+
+.react-autosuggest__suggestions-container {
+    z-index: 5;
 }

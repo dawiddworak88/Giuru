@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Buyer.Web.Areas.Products.DomainModels;
+using System;
+using System.Collections.Generic;
 
 namespace Buyer.Web.Areas.Orders.DomainModels
 {
@@ -10,6 +12,7 @@ namespace Buyer.Web.Areas.Orders.DomainModels
         public string PictureUrl { get; set; }
         public double Quantity { get; set; }
         public string ExternalReference { get; set; }
+        public IEnumerable<ProductAttribute> ProductAttributes { get; set; }
         public DateTime? ExpectedDeliveryFrom { get; set; }
         public DateTime? ExpectedDeliveryTo { get; set; }
         public string MoreInfo { get; set; }

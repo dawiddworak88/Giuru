@@ -23,6 +23,7 @@ spec:
     - {{ .Values.ingress.mediaapidomain }}
     - {{ .Values.ingress.identityapidomain }}
     - {{ .Values.ingress.inventoryapidomain }}
+    - {{ .Values.ingress.newsapidomain }}
     - {{ .Values.ingress.catalogapidomain }}
     - {{ .Values.ingress.buyerapidomain }}
     - {{ .Values.ingress.sellerapidomain }}
@@ -75,6 +76,13 @@ spec:
       paths:
       - backend:
           serviceName: inventory-api-service
+          servicePort: 80
+        path: /
+  - host: {{ .Values.ingress.newsapidomain }}
+    http:
+      paths:
+      - backend:
+          serviceName: news-api-service
           servicePort: 80
         path: /
   - host: {{ .Values.ingress.buyerapidomain }}

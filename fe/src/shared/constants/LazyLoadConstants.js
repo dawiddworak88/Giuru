@@ -1,13 +1,13 @@
 export default class LazyLoadConstants {
     static defaultOffset() {
-        return 200;
+        return 400;
     }
 
     static catalogOffset() {
-        return 450;
+        return 500;
     }
 
     static contentGridOffset() {
-        return 450;
+        return 500;
     }
 }

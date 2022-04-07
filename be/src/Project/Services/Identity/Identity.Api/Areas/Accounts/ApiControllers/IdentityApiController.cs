@@ -1,9 +1,11 @@
 ﻿using Feature.Account;
 using Foundation.ApiExtensions.Controllers;
-using Foundation.ApiExtensions.Definitions;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
-using Identity.Api.Areas.Accounts.Repositories;
-using Microsoft.AspNetCore.Authentication;
+using Identity.Api.Areas.Accounts.Services.UserServices;
+using Identity.Api.Areas.Accounts.Validators;
+using Identity.Api.Services.Users;
+using Identity.Api.ServicesModels.Users;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using System;
@@ -16,24 +18,27 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
     [Area("Accounts")]
     public class IdentityApiController : BaseApiController
     {
-        private readonly IIdentityRepository identityRepository;
-        private readonly IStringLocalizer accountLocalizer;
+        private readonly IUserService userService;
+        private readonly IUsersService usersService;
 
         public IdentityApiController(
-            IIdentityRepository identityRepository,
-            IStringLocalizer<AccountResources> accountLocalizer)
+            IUserService userService,
+            IUsersService usersService)
         {
-            this.identityRepository = identityRepository;
-            this.accountLocalizer = accountLocalizer;
+            this.userService = userService;
+            this.usersService = usersService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string id)
+        public async Task<IActionResult> Get(Guid? id)
         {
-            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var user = await this.identityRepository.GetUserAsync(Guid.Parse(id), token, language);
+            var user = await this.usersService.GetById(new GetUserServiceModel
+            { 
+                Language = language,
+                Id = id
+            });
 
             return this.StatusCode((int)HttpStatusCode.OK, user);
         }
@@ -41,12 +46,30 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] SetUserPasswordRequestModel model)
         {
-            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
-            var language = CultureInfo.CurrentUICulture.Name;
+            var validator = new SetPasswordModelValidator();
+            var result = await validator.ValidateAsync(model);
+            if (result.IsValid)
+            {
+                var language = CultureInfo.CurrentUICulture.Name;
+                var serviceModel = new SetUserPasswordServiceModel
+                {
+                    ExpirationId = model.Id.Value,
+                    Password = model.Password,
+                    Language = language
+                };
 
-            var user = this.identityRepository.SetPassword(model.ExpirationId, model.Password, token, language);
+                var user = await this.usersService.SetPasswordAsync(serviceModel);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = user.Id, Message = this.accountLocalizer.GetString("PasswordUpdated").Value });
+                if (user is not null)
+                {
+                    if (await this.userService.SignInAsync(user.Email, model.Password, null, null))
+                    {
+                        return this.StatusCode((int)HttpStatusCode.Redirect);
+                    }
+                }
+            }
+
+            return this.StatusCode((int)HttpStatusCode.BadRequest);
         }
     }
 }

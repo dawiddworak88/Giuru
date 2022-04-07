@@ -4,15 +4,13 @@ using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Identity.Api.Areas.Accounts.ComponentModels;
 using Identity.Api.Areas.Accounts.Models;
-using Identity.Api.Areas.Accounts.Services.UserServices;
 using Identity.Api.Areas.Accounts.ViewModels;
-using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Globalization;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Identity.Api.Areas.Accounts.Controllers
 {
@@ -20,21 +18,11 @@ namespace Identity.Api.Areas.Accounts.Controllers
     [AllowAnonymous]
     public class SetPasswordController : BaseController
     {
-        private readonly IUserService userService;
-        private readonly IIdentityServerInteractionService interaction;
-        private readonly IEventService events;
-        private readonly IAsyncComponentModelBuilder<SetPasswordComponentModel, SetPasswordViewModel> signPasswordModelBuilder;
+        private readonly IAsyncComponentModelBuilder<SetPasswordComponentModel, SetPasswordViewModel> setPasswordModelBuilder;
 
-        public SetPasswordController(
-            IUserService userService,
-            IIdentityServerInteractionService interaction,
-            IAsyncComponentModelBuilder<SetPasswordComponentModel, SetPasswordViewModel> signPasswordModelBuilder,
-            IEventService events)
+        public SetPasswordController(IAsyncComponentModelBuilder<SetPasswordComponentModel, SetPasswordViewModel> signPasswordModelBuilder)
         {
-            this.userService = userService;
-            this.interaction = interaction;
-            this.events = events;
-            this.signPasswordModelBuilder = signPasswordModelBuilder;
+            this.setPasswordModelBuilder = signPasswordModelBuilder;
         }
             
         [HttpGet]
@@ -43,20 +31,14 @@ namespace Identity.Api.Areas.Accounts.Controllers
             var componentModel = new SetPasswordComponentModel
             {
                 Id = model.Id,
-                ReturnUrl = model.ReturnUrl,
+                ReturnUrl = string.IsNullOrWhiteSpace(model.ReturnUrl) ? null : HttpUtility.UrlDecode(model.ReturnUrl),
                 Language = CultureInfo.CurrentUICulture.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
             };
 
-            var viewModel = await this.signPasswordModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await this.setPasswordModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Save(SetPasswordModel model)
-        {
-            return default;
         }
     }
 }

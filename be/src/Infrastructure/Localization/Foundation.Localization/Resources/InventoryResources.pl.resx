@@ -136,7 +136,7 @@
     <value>Magazyn</value>
   </data>
   <data name="ExpectedDeliveryLabel" xml:space="preserve">
-    <value>Termin dostawy</value>
+    <value>Przewidywana dostawa:</value>
   </data>
   <data name="Inventory" xml:space="preserve">
     <value>Stany magazynowe</value>
@@ -174,6 +174,9 @@
   <data name="NewTextInventory" xml:space="preserve">
     <value>Nowy stan magazynowy</value>
   </data>
+  <data name="NullAvailability" xml:space="preserve">
+    <value>Produkt przekroczy stan magazynowy mniejszy od zera</value>
+  </data>
   <data name="ProductRequiredErrorMessage" xml:space="preserve">
     <value>Wprowadź produkt</value>
   </data>
@@ -187,7 +190,7 @@
     <value>Wprowadź ilość</value>
   </data>
   <data name="RestockableInDaysLabel" xml:space="preserve">
-    <value>Uzupełniany w magazynie w ciągu dni:</value>
+    <value>Dostępne za dni:</value>
   </data>
   <data name="SaveText" xml:space="preserve">
     <value>Zapisz</value>

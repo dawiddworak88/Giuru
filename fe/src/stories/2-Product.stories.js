@@ -38,7 +38,7 @@ function getFeatures(count) {
 
 var productDetail = {
     title: "Mounting Dream Tilt TV Wall Mount Bracket for Most 37-70 Inches TVs, TV Mount with VESA up to 600x400mm, Fits 16",
-    isAuthenticated: false,
+    isAuthenticated: true,
     images,
     signInUrl: "#",
     skuLabel: "SKU:",
@@ -46,6 +46,7 @@ var productDetail = {
     byLabel: "by",
     brandName: "eltap",
     brandUrl: "#",
+    isProductVariant: false,
     pricesLabel: "Prices:",
     productInformationLabel: "Product and Packagig Information:",
     signInToSeePricesLabel: "Log in to see prices",
@@ -56,7 +57,51 @@ var productDetail = {
     descriptionLabel: "Description:",
     description: "With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families. With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families. With more than 20 years of production and design experience, Mounting Dream dedicates to providing various kinds of TV mounts with high quality and first-class service. We always adhere to customer-centric, and win a good reputation in millions of North American families.",
     features: getFeatures(11),
-    files
+    files,
+    basketLabel: "Add to cart",
+    addedProduct: "Added",
+    basketUrl: "#",
+    sidebar: {
+      lackInformation: "Lack of information",
+      toBasketLabel: "View cart",
+      fabricsLabel: "Fabrics",
+      notFound: "No variants",
+      sidebarTitle: "Add the selected product variant to the cart",
+
+    },
+    productVariants: [
+      {
+        id: "5dddbdfb-2a79-412b-7d5f-08d907687b6a",
+        title: "Product variants",
+        carouselItems: [
+          {
+            name: "Aderito",
+            sku: "Adr05",
+            id: "5c5682ad-1d18-407c-e76f-08d9db1eef9f",
+            imageAlt: "Aderito 140X200",
+            attributes: [
+              {
+                key: "primaryFabrics",
+                name: "Tkanina",
+                value: "Kronos 15, Kronos 19"
+              },
+              {
+                key: "secondaryFabrics",
+                name: "Tkanina",
+                value: "Kronos 15, Kronos 219"
+              }
+            ]
+          },
+          {
+            name: "Anton",
+            sku: "An27",
+            id: "5c5682ad-1d18-407c-e76f-08d9db1eef9f",
+            imageAlt: "Aderito 140X200",
+            attributes: []
+          }
+        ]
+      }
+    ]
 };
 
 export const ProductPageStory = () => <ProductPage header={header} breadcrumbs={breadcrumbs} mainNavigation={mainNavigation} productDetail={productDetail} footer={footer} />

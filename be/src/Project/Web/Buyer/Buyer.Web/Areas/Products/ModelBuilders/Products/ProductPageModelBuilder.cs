@@ -10,14 +10,14 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
     public class ProductPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ProductPageViewModel>
     {
-        private readonly IModelBuilder<BuyerHeaderViewModel> headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductBreadcrumbsViewModel> productBreadcrumbsModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel> productDetailModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public ProductPageModelBuilder(
-            IModelBuilder<BuyerHeaderViewModel> headerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ProductBreadcrumbsViewModel> productBreadcrumbsModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, ProductDetailViewModel> productDetailModelBuilder,
@@ -35,7 +35,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
             var viewModel = new ProductPageViewModel
             {
-                Header = headerModelBuilder.BuildModel(),
+                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
                 Breadcrumbs = await this.productBreadcrumbsModelBuilder.BuildModelAsync(componentModel),
                 ProductDetail = await this.productDetailModelBuilder.BuildModelAsync(componentModel),

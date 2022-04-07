@@ -67,6 +67,24 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                     Items = new List<DrawerMenuItemViewModel>
                     {
                          new DrawerMenuItemViewModel
+                         {
+                            Icon = IconsConstants.News,
+                            Title = this.globalLocalizer.GetString("News"),
+                            Url = this.linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
+                         },
+                         new DrawerMenuItemViewModel
+                         {
+                            Icon = IconsConstants.Grid,
+                            Title = this.globalLocalizer.GetString("NewsCategories"),
+                            Url = this.linkGenerator.GetPathByAction("Index", "Categories", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
+                         }
+                    }
+                },
+                new DrawerMenuViewModel
+                {
+                    Items = new List<DrawerMenuItemViewModel>
+                    {
+                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Inventory,
                             Title = this.globalLocalizer.GetString("Inventory"),

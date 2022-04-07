@@ -5,7 +5,7 @@ metadata:
   labels:
     app: media-api
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: media-api
@@ -321,6 +321,8 @@ spec:
           value: {{ .Values.identityUrl }}
         - name: Clients
           value: {{ .Values.identityApi.clients }}
+        - name: SellerClientId
+          value: {{ .Values.identityApi.sellerClientId }}
         - name: Accounts
           value: {{ .Values.identityApi.accounts }}
         - name: Organisations
@@ -337,6 +339,16 @@ spec:
           value: {{ .Values.identityApi.azureKeyVaultClientId }}
         - name: AzureKeyVaultClientSecret
           value: {{ .Values.identityApi.azureKeyVaultClientSecret }}
+        - name: SendGridApiKey
+          value: {{ .Values.sendGridApiKey }}
+        - name: SenderEmail
+          value: {{ .Values.senderEmail }}
+        - name: SenderName
+          value: {{ .Values.senderName }}
+        - name: ActionSendGridCreateTemplateId
+          value: {{ .Values.identityApi.actionSendGridCreateTemplateId }}
+        - name: ActionSendGridResetTemplateId
+          value: {{ .Values.identityApi.actionSendGridResetTemplateId }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType
@@ -396,6 +408,51 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: news-api-deployment
+  labels:
+    app: news-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: news-api
+  template:
+    metadata:
+      labels:
+        app: news-api
+    spec:
+      containers:
+      - name: news-api-container
+        image: {{ .Values.image.registry }}/news-api:{{ .Values.image.tag }}
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: {{ .Values.environment }}
+        - name: ConnectionString
+          value: {{ .Values.newsApi.connectionString }}
+        - name: IdentityUrl
+          value: {{ .Values.identityUrl }}
+        - name: CdnUrl
+          value: {{ .Values.cdnUrl }}
+        - name: EventBusConnection
+          value: {{ .Values.eventBusConnection }}
+        - name: EventBusRetryCount
+          value: {{ .Values.eventBusRetryCount }}
+        - name: LogzIoToken
+          value: {{ .Values.logzIoToken }}
+        - name: LogzIoType
+          value: {{ .Values.logzIoType }}
+        - name: LogzIoDataCenterSubDomain
+          value: {{ .Values.logzIoDataCenterSubDomain }}
+        - name: DefaultCulture
+          value: {{ .Values.defaultCulture }}
+        - name: SupportedCultures
+          value: {{ .Values.supportedCultures }}
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: buyer-web-deployment
   labels:
     app: buyer-web
@@ -429,6 +486,16 @@ spec:
           value: {{ .Values.identityUrl }}
         - name: InventoryUrl
           value: {{ .Values.inventoryUrl }}
+        - name: ClientUrl
+          value: {{ .Values.clientUrl }}
+        - name: BasketUrl
+          value: {{ .Values.basketUrl }}
+        - name: OrderUrl
+          value: {{ .Values.orderUrl }}
+        - name: NewsUrl
+          value: {{ .Values.newsUrl }}
+        - name: MakeComplaintUrl
+          value: {{ .Values.makeComplaintUrl }}
         - name: CdnUrl
           value: {{ .Values.cdnUrl }}
         - name: ClientId
@@ -488,6 +555,10 @@ spec:
           value: {{ .Values.clientUrl }}
         - name: InventoryUrl
           value: {{ .Values.inventoryUrl }}
+        - name: NewsUrl
+          value: {{ .Values.newsUrl }}
+        - name: BuyerUrl
+          value: {{ .Values.buyerUrl }}
         - name: ClientId
           value: {{ .Values.sellerWeb.clientId }}
         - name: ClientSecret

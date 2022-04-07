@@ -24,7 +24,6 @@ namespace Ordering.Api.v1.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Produces("application/json")]
     [Authorize]
     [ApiController]
     public class OrdersController : BaseApiController
@@ -51,7 +50,7 @@ namespace Ordering.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage, string orderBy, DateTime? createdDateGreaterThan)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetOrdersServiceModel
             {
@@ -62,7 +61,8 @@ namespace Ordering.Api.v1.Controllers
                 OrderBy = orderBy,
                 CreatedDateGreaterThan = createdDateGreaterThan,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                IsSeller = this.User.IsInRole("Seller")
             };
 
             var validator = new GetOrdersModelValidator();
@@ -149,13 +149,14 @@ namespace Ordering.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetOrderServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                IsSeller = this.User.IsInRole("Seller")
             };
 
             var validator = new GetOrderModelValidator();
@@ -242,7 +243,7 @@ namespace Ordering.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Post(UpdateOrderStatusRequestModel model)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new UpdateOrderStatusServiceModel
             {
@@ -250,7 +251,8 @@ namespace Ordering.Api.v1.Controllers
                 OrderStatusId = model.OrderStatusId,
                 Language = CultureInfo.CurrentCulture.Name,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                IsSeller = this.User.IsInRole("Seller")
             };
 
             var validator = new UpdateOrderStatusModelValidator();

@@ -1,4 +1,4 @@
-﻿using Foundation.ApiExtensions.Definitions;
+﻿using Foundation.Account.Definitions;
 using Foundation.Localization.Definitions;
 using Identity.Api.Areas.Accounts.Configurations;
 using Identity.Api.Areas.Accounts.Services.ProfileServices;
@@ -71,7 +71,7 @@ namespace Identity.Api.DependencyInjection
                 {
                     options.Authority = configuration.GetValue<string>("IdentityUrl");
                     options.RequireHttpsMetadata = false;
-                    options.ApiName = ApiExtensionsConstants.AllScopes;
+                    options.ApiName = AccountConstants.ApiNames.All;
                 });
 
             services.AddScoped<IUserService, UserService>();

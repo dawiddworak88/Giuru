@@ -17,20 +17,26 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
     public class MainNavigationModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly IOptions<AppSettings> configuration;
         private readonly IBrandRepository brandRepository;
+        private readonly IOptionsMonitor<AppSettings> settings;
 
         public MainNavigationModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
+            IStringLocalizer<OrderResources> orderLocalizer,
             LinkGenerator linkGenerator,
             IOptions<AppSettings> configuration,
-            IBrandRepository brandRepository)
+            IBrandRepository brandRepository,
+            IOptionsMonitor<AppSettings> settings)
         {
             this.globalLocalizer = globalLocalizer;
+            this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
             this.configuration = configuration;
             this.brandRepository = brandRepository;
+            this.settings = settings;
         }
 
         public async Task<MainNavigationViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -41,13 +47,29 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
                 {
                     Text = this.globalLocalizer.GetString("Home"),
                     Url = this.linkGenerator.GetPathByAction("Index", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name })
-                },
-                new LinkViewModel
-                {
-                    Text = this.globalLocalizer.GetString("AvailableProducts"),
-                    Url = this.linkGenerator.GetPathByAction("Index", "AvailableProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
                 }
             };
+
+            if (componentModel.IsAuthenticated)
+            {
+                links.Add(new LinkViewModel
+                {
+                    Text = this.orderLocalizer.GetString("MyOrders").Value,
+                    Url = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                });
+
+                links.Add(new LinkViewModel
+                {
+                    Text = this.orderLocalizer.GetString("PlaceOrder").Value,
+                    Url = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                });
+            }
+
+            links.Add(new LinkViewModel
+            {
+                Text = this.globalLocalizer.GetString("AvailableProducts"),
+                Url = this.linkGenerator.GetPathByAction("Index", "AvailableProducts", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+            });
 
             if (!this.configuration.Value.IsMarketplace)
             {
@@ -55,12 +77,25 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
 
                 var brandZoneLink = new LinkViewModel
                 { 
-                    Text = string.Format(this.globalLocalizer.GetString("BrandZone"), brand.Name),
+                    Text = this.globalLocalizer.GetString("Products").Value,
                     Url = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = this.configuration.Value.OrganisationId })
                 };
 
                 links.Add(brandZoneLink);
             }
+
+            links.Add(new LinkViewModel
+            {
+                Text = this.globalLocalizer.GetString("News"),
+                Url = this.linkGenerator.GetPathByAction("Index", "News", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
+            });
+
+            links.Add(new LinkViewModel
+            {
+                Text = this.globalLocalizer.GetString("MakeComplaint"),
+                Target = "_blank",
+                Url = this.settings.CurrentValue.MakeComplaintUrl
+            });
 
             return new MainNavigationViewModel
             {

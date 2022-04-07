@@ -52,7 +52,7 @@ namespace Identity.Api.Areas.Accounts.Controllers
 
                 if (context != null)
                 {
-                    if (await this.userService.SignInAsync(model.Email, model.Password, model.ReturnUrl))
+                    if (await this.userService.SignInAsync(model.Email, model.Password, model.ReturnUrl, context.Client.ClientId))
                     {
                         return this.Redirect(model.ReturnUrl);
                     }

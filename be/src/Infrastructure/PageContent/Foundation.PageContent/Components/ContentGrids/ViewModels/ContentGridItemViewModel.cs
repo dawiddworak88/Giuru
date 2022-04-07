@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Foundation.PageContent.Components.Images;
+using System;
+using System.Collections.Generic;
 
 namespace Foundation.PageContent.Components.ContentGrids.ViewModels
 {
@@ -10,5 +12,6 @@ namespace Foundation.PageContent.Components.ContentGrids.ViewModels
         public string ImageAlt { get; set; }
         public string Title { get; set; }
         public string Subtitle { get; set; }
+        public IEnumerable<SourceViewModel> Sources { get; set; }
     }
 }

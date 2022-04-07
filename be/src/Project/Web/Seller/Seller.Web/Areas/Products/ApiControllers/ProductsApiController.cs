@@ -33,9 +33,9 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
         [HttpGet]
         public async Task<IActionResult> Get(
-            string searchTerm, 
-            bool? hasPrimaryProduct, 
-            int pageIndex, 
+            string searchTerm,
+            bool? hasPrimaryProduct,
+            int pageIndex,
             int itemsPerPage,
             string orderBy)
         {
@@ -44,7 +44,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 CultureInfo.CurrentUICulture.Name,
                 searchTerm,
                 hasPrimaryProduct,
-                GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim)?.Value),
+                GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
                 pageIndex,
                 itemsPerPage,
                 orderBy);

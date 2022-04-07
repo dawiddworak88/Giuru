@@ -4,6 +4,7 @@ using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Microsoft.Extensions.Options;
+using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Shared.ApiRequestModels;
 using Seller.Web.Shared.Configurations;
 using System;
@@ -13,7 +14,6 @@ namespace Seller.Web.Shared.Repositories.Identity
 {
     public class IdentityRepository : IIdentityRepository
     {
-
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
 
@@ -25,7 +25,7 @@ namespace Seller.Web.Shared.Repositories.Identity
             this.settings = settings;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, string name, string email, string communicationLanguage)
+        public async Task<Guid> SaveAsync(string token, string language, string name, string email, string communicationLanguage, string returnUrl)
         {
             var apiRequest = new ApiRequest<SaveUserRequestModel>
             {
@@ -34,7 +34,8 @@ namespace Seller.Web.Shared.Repositories.Identity
                 {
                     Email = email,
                     Name = name,
-                    CommunicationLanguage = communicationLanguage
+                    CommunicationLanguage = communicationLanguage,
+                    ReturnUrl = returnUrl
                 },
                 AccessToken = token,
                 EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.UsersApiEndpoint}"
@@ -46,6 +47,33 @@ namespace Seller.Web.Shared.Repositories.Identity
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
+            if (response.IsSuccessStatusCode)
+            {
+                return response.Data.Id.Value;
+            }
+
+            return default;
+        }
+
+        public async Task<Guid> UpdateAsync(string token, string language, Guid? id, string email, string name, string communicationLanguage)
+        {
+            var requestModel = new UpdateClientRequestModel
+            {
+                Id = id,
+                Email = email,
+                Name = name,
+                CommunicationLanguage = communicationLanguage
+            };
+
+            var apiRequest = new ApiRequest<UpdateClientRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.UsersApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.PostAsync<ApiRequest<UpdateClientRequestModel>, UpdateClientRequestModel, BaseResponseModel>(apiRequest);
             if (response.IsSuccessStatusCode)
             {
                 return response.Data.Id.Value;

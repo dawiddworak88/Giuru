@@ -24,7 +24,6 @@ namespace Client.Api.v1.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Produces("application/json")]
     [Authorize]
     [ApiController]
     public class ClientsController : BaseApiController
@@ -51,7 +50,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var clientIds = ids.ToEnumerableGuidIds();
 
@@ -154,7 +153,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new GetClientServiceModel
             {
@@ -196,6 +195,53 @@ namespace Client.Api.v1.Controllers
         }
 
         /// <summary>
+        /// Gets client by id.
+        /// </summary>
+        /// <returns>The client.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("organisation")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetByOrganisation()
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var serviceModel = new GetClientByOrganisationServiceModel
+            {
+                Id = GuidHelper.ParseNullable(sellerClaim?.Value),
+            };
+
+            var validator = new GetClientByOrganisationModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+            if (validationResult.IsValid)
+            {
+                var client = await this.clientsService.GetByOrganisationAsync(serviceModel);
+                if (client != null)
+                {
+                    var response = new ClientResponseModel
+                    {
+                        Id = client.Id,
+                        Email = client.Email,
+                        Name = client.Name,
+                        CommunicationLanguage = client.CommunicationLanguage,
+                        LastModifiedDate = client.LastModifiedDate,
+                        CreatedDate = client.CreatedDate
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+                else
+                {
+                    return this.StatusCode((int)HttpStatusCode.NotFound);
+                }
+
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
         /// Creates or updates client (if client id is set).
         /// </summary>
         /// <param name="request">The model.</param>
@@ -207,7 +253,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Save(ClientRequestModel request)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             if (request.Id.HasValue)
             {
@@ -277,7 +323,7 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
         {
-            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.OrganisationIdClaim);
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
             var serviceModel = new DeleteClientServiceModel
             {

@@ -6,24 +6,27 @@ using Foundation.PageContent.Components.HeroSliders.ViewModels;
 using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.ViewModels.Headers;
+using System.Globalization;
 
 namespace Buyer.Web.Areas.Home.ModelBuilders
 {
     public class HomePageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, HomePageViewModel>
     {
-        private readonly IModelBuilder<BuyerHeaderViewModel> headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, HeroSliderViewModel> heroSliderModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, HomePageCarouselGridViewModel> carouselGridModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, HomePageContentGridViewModel> contentGridModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, HomePageNewsCarouselGridViewModel> newsModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public HomePageModelBuilder(
-            IModelBuilder<BuyerHeaderViewModel> headerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, HeroSliderViewModel> heroSliderModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, HomePageCarouselGridViewModel> carouselGridModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, HomePageContentGridViewModel> contentGridModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, HomePageNewsCarouselGridViewModel> newsModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
@@ -32,6 +35,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             this.carouselGridModelBuilder = carouselGridModelBuilder;
             this.contentGridModelBuilder = contentGridModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
+            this.newsModelBuilder = newsModelBuilder;
         }
 
         public async Task<HomePageViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -39,11 +43,13 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
 
             var viewModel = new HomePageViewModel
             {
-                Header = headerModelBuilder.BuildModel(),
+                Locale = CultureInfo.CurrentUICulture.Name,
+                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
                 HeroSlider = await this.heroSliderModelBuilder.BuildModelAsync(componentModel),
                 CarouselGrid = await this.carouselGridModelBuilder.BuildModelAsync(componentModel),
                 ContentGrid = await this.contentGridModelBuilder.BuildModelAsync(componentModel),
+                NewsCarouselGrid = await this.newsModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };
 

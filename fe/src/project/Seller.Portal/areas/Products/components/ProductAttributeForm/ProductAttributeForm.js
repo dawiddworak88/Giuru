@@ -5,6 +5,7 @@ import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { TextField, Button, CircularProgress } from "@material-ui/core";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function ProductAttributeForm(props) {
 
@@ -32,7 +33,7 @@ function ProductAttributeForm(props) {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(state)
         };
 
@@ -40,6 +41,8 @@ function ProductAttributeForm(props) {
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
 

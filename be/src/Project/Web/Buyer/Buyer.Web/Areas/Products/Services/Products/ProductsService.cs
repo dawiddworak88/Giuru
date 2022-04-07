@@ -13,6 +13,10 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
+using Foundation.PageContent.Components.Images;
+using Foundation.PageContent.Definitions;
+using Buyer.Web.Areas.Products.ApiResponseModels;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
@@ -41,7 +45,6 @@ namespace Buyer.Web.Areas.Products.Services.Products
         public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
         {
             var catalogItemList = new List<CatalogItemViewModel>();
-
             var pagedProducts = await this.productsRepository.GetProductsAsync(ids, categoryId, sellerId, language, searchTerm, pageIndex, itemsPerPage, token, nameof(Product.Name));
 
             if (pagedProducts?.Data != null)
@@ -56,7 +59,13 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, product.Id }),
                         BrandUrl = this.linkGenerator.GetPathByAction("Index", "Brand", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = product.SellerId }),
                         BrandName = product.BrandName,
-                        InStock = false
+                        Images = product.Images,
+                        InStock = false,
+                        ProductAttributes = product.ProductAttributes.Select(x => new CatalogItemProductAttributesViewModel
+                        {
+                            Key = x.Key,
+                            Value = string.Join(", ", x.Values.OrEmptyIfNull())
+                        })
                     };
 
                     if (product.Images != null)
@@ -65,6 +74,18 @@ namespace Buyer.Web.Areas.Products.Services.Products
 
                         catalogItem.ImageAlt = product.Name;
                         catalogItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, ProductConstants.ProductsCatalogItemImageWidth, ProductConstants.ProductsCatalogItemImageHeight));
+                        catalogItem.Sources = new List<SourceViewModel>
+                        {
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 1024, 1024, true, MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 352, 352, true,MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 256, 256, true, MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 768, 768, true, MediaConstants.WebpExtension)) },
+
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 1024, 1024, true)) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 352, 352, true)) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 256, 256, true)) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 768, 768, true)) }
+                        };
                     }
 
                     catalogItemList.Add(catalogItem);

@@ -107,10 +107,11 @@ namespace Ordering.Api.Services
             var orders = from c in this.context.Orders
                          join os in this.context.OrderStatuses on c.OrderStatusId equals os.Id
                          join ost in this.context.OrderStatusTranslations on os.Id equals ost.OrderStatusId
-                         where ost.Language == model.Language && c.SellerId == model.OrganisationId.Value && c.IsActive
+                         where ost.Language == model.Language && c.IsActive
                          select new OrderServiceModel
                          {
                              Id = c.Id,
+                             SellerId = c.SellerId,
                              ClientId = c.ClientId.Value,
                              ClientName = c.ClientName,
                              BillingAddressId = c.BillingAddressId,
@@ -160,6 +161,11 @@ namespace Ordering.Api.Services
                              CreatedDate = c.CreatedDate
                          };
 
+            if (model.IsSeller is false)
+            {
+                orders = orders.Where(x => x.SellerId == model.OrganisationId.Value);
+            }
+
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
                 orders = orders.Where(x => x.ClientName == model.SearchTerm || x.OrderItems.Any(y => y.ExternalReference == model.SearchTerm));
@@ -180,10 +186,11 @@ namespace Ordering.Api.Services
             var orders = from c in this.context.Orders
                          join os in this.context.OrderStatuses on c.OrderStatusId equals os.Id
                          join ost in this.context.OrderStatusTranslations on os.Id equals ost.OrderStatusId
-                         where c.Id == model.Id && ost.Language == model.Language && c.SellerId == model.OrganisationId.Value && c.IsActive
+                         where c.Id == model.Id && ost.Language == model.Language && c.IsActive
                          select new OrderServiceModel
                           {
                               Id = c.Id,
+                              SellerId = c.SellerId,
                               ClientId = c.ClientId.Value,
                               ClientName = c.ClientName,
                               BillingAddressId = c.BillingAddressId,
@@ -233,6 +240,11 @@ namespace Ordering.Api.Services
                               CreatedDate = c.CreatedDate
                           };
 
+            if (model.IsSeller is false)
+            {
+                orders = orders.Where(x => x.SellerId == model.OrganisationId.Value);
+            }
+
             return await orders.FirstOrDefaultAsync();
         }
 
@@ -257,7 +269,14 @@ namespace Ordering.Api.Services
 
         public async Task<OrderServiceModel> SaveOrderStatusAsync(UpdateOrderStatusServiceModel serviceModel)
         {
-            var order = await this.context.Orders.FirstOrDefaultAsync(x => x.Id == serviceModel.OrderId && x.SellerId == serviceModel.OrganisationId.Value && x.IsActive);
+            var orders = this.context.Orders.Where(x => x.Id == serviceModel.OrderId && x.IsActive);
+
+            if (serviceModel.IsSeller is false)
+            {
+                orders = orders.Where(x => x.SellerId == serviceModel.OrganisationId.Value);
+            }
+
+            var order = await orders.FirstOrDefaultAsync();
 
             if (order == null)
             {
@@ -280,7 +299,8 @@ namespace Ordering.Api.Services
                 Id = serviceModel.OrderId,
                 OrganisationId = serviceModel.OrganisationId,
                 Username = serviceModel.Username,
-                Language = serviceModel.Language
+                Language = serviceModel.Language,
+                IsSeller = serviceModel.IsSeller
             });
         }
     }

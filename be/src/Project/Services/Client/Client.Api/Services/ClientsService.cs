@@ -103,6 +103,12 @@ namespace Client.Api.Services
 
         public async Task<ClientServiceModel> CreateAsync(CreateClientServiceModel serviceModel)
         {
+            var exsitingClient = this.context.Clients.FirstOrDefault(x => x.Email == serviceModel.Email && x.IsActive);
+            if (exsitingClient is not null)
+            {
+                throw new CustomException(this.clientLocalizer.GetString("ClientExists"), (int)HttpStatusCode.NotFound);
+            }
+
             var client = new Infrastructure.Clients.Entities.Client
             {
                 Name = serviceModel.Name,
@@ -134,6 +140,23 @@ namespace Client.Api.Services
                           };
 
             return clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage), model.PageIndex);
+        }
+
+        public async Task<ClientServiceModel> GetByOrganisationAsync(GetClientByOrganisationServiceModel model)
+        {
+            var clients = from c in this.context.Clients
+                          where c.OrganisationId == model.Id.Value && c.IsActive
+                          select new ClientServiceModel
+                          {
+                              Id = c.Id,
+                              Name = c.Name,
+                              Email = c.Email,
+                              CommunicationLanguage = c.Language,
+                              LastModifiedDate = c.LastModifiedDate,
+                              CreatedDate = c.CreatedDate
+                          };
+
+            return await clients.FirstOrDefaultAsync();
         }
     }
 }

@@ -15,7 +15,6 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Net;
 using System.Threading.Tasks;
-using Inventory.Api.v1.RequestModels;
 
 namespace Inventory.Api.Services
 {
@@ -78,7 +77,7 @@ namespace Inventory.Api.Services
             return await this.GetAsync(new GetInventoryServiceModel { Id = inventoryProduct.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 
-        public async Task<UpdateInventoryProductsServiceModel> SyncInventoryProducts(UpdateInventoryProductsServiceModel model)
+        public async Task SyncInventoryProducts(UpdateProductsInventoryServiceModel model)
         {
             var inventoryProducts = this.context.Inventory
                 .Join(this.context.Warehouses, inventory => inventory.WarehouseId, warehouse => warehouse.Id, (inventory, warehouse) => 
@@ -92,49 +91,42 @@ namespace Inventory.Api.Services
 
             foreach (var item in model.InventoryItems.OrEmptyIfNull())
             {
-                var inventoryId = await inventoryProducts.FirstOrDefaultAsync(x => x.ProductSku == item.ProductSku && x.WarehouseName == item.WarehouseName);
-                if (inventoryId != null)
+                var inventory = await inventoryProducts.FirstOrDefaultAsync(x => x.ProductSku == item.ProductSku && x.WarehouseName == item.WarehouseName);
+
+                if (inventory is not null)
                 {
-                    var inventoryItem = await this.context.Inventory.FirstOrDefaultAsync(x => x.Id == inventoryId.Id);
+                    var inventoryItem = await this.context.Inventory.FirstOrDefaultAsync(x => x.Id == inventory.Id);
+
+                    inventoryItem.ExpectedDelivery = item.ExpectedDelivery;
+                    inventoryItem.RestockableInDays = item.RestockableInDays;
                     inventoryItem.AvailableQuantity = item.AvailableQuantity;
                     inventoryItem.Quantity = item.Quantity;
-                    inventoryItem.LastModifiedDate = DateTime.Now;
+                    inventoryItem.LastModifiedDate = DateTime.UtcNow;
                 }
                 else
                 {
-                    var findWarehouse = await this.context.Warehouses.FirstOrDefaultAsync(x => x.Name == item.WarehouseName);
-                    if (findWarehouse != null)
+                    var warehouse = await this.context.Warehouses.FirstOrDefaultAsync(x => x.Name == item.WarehouseName);
+
+                    if (warehouse is not null)
                     {
                         var inventoryProduct = new InventoryItem
                         {
-                            WarehouseId = findWarehouse.Id,
+                            WarehouseId = warehouse.Id,
                             ProductId = item.ProductId.Value,
                             ProductName = item.ProductName,
                             ProductSku = item.ProductSku,
                             Quantity = item.Quantity,
-                            AvailableQuantity = item.AvailableQuantity.Value,
+                            AvailableQuantity = item.AvailableQuantity,
+                            ExpectedDelivery = item.ExpectedDelivery,
                             SellerId = model.OrganisationId.Value
                         };
 
                         this.context.Inventory.Add(inventoryProduct.FillCommonProperties());
                     }
                 }
-
-                await this.context.SaveChangesAsync();
             }
 
-            return new UpdateInventoryProductsServiceModel
-            {
-                InventoryItems = model.InventoryItems.Select(x => new UpdateInventoryProductRequestModel
-                {
-                    ProductId = x.ProductId.Value,
-                    ProductName = x.ProductName,
-                    ProductSku = x.ProductSku,
-                    WarehouseName = x.WarehouseName,
-                    AvailableQuantity = x.AvailableQuantity.Value,
-                    Quantity = x.Quantity
-                })
-            };
+            await this.context.SaveChangesAsync();
         }
 
         public async Task<InventoryServiceModel> GetAsync(GetInventoryServiceModel model)
@@ -363,6 +355,26 @@ namespace Inventory.Api.Services
                             }).OrderByDescending(x => x.AvailableQuantity);
 
                 return inventories.PagedIndex(new Pagination(inventories.Count(), model.ItemsPerPage), model.PageIndex);
+        }
+
+        public async Task UpdateInventoryBasket(Guid? ProductId, int BookedQuantity)
+        {
+            var inventoryProduct = this.context.Inventory.FirstOrDefault(x => x.ProductId == ProductId.Value && x.IsActive);
+            if (inventoryProduct != null)
+            {
+                var productQuantity = inventoryProduct.Quantity + BookedQuantity;
+
+                if (productQuantity < 0)
+                {
+                    productQuantity = 0;
+                }
+
+                inventoryProduct.Quantity = productQuantity;
+                inventoryProduct.AvailableQuantity = productQuantity;
+                inventoryProduct.LastModifiedDate = DateTime.UtcNow;
+
+                await this.context.SaveChangesAsync();
+            }
         }
     }
 }

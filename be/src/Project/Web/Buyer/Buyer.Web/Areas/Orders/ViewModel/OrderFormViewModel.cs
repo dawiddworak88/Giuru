@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Buyer.Web.Shared.DomainModels.Baskets;
+using System;
+using System.Collections.Generic;
 
 namespace Buyer.Web.Areas.Orders.ViewModel
 {
     public class OrderFormViewModel
     {
         public string Title { get; set; }
-        public Guid? Id { get; set; }
+        public Guid? BasketId { get; set; }
         public string NoOrderItemsLabel { get; set; }
         public string SearchPlaceholderLabel { get; set; }
         public string GeneralErrorMessage { get; set; }
@@ -30,6 +32,10 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string AreYouSureLabel { get; set; }
         public string YesLabel { get; set; }
         public string NoLabel { get; set; }
+        public string ClearBasketText { get; set; }
+        public string ClearBasketUrl { get; set; }
+        public IEnumerable<BasketItem> BasketItems { get; set; }
+        public string DeleteItemBasketUrl { get; set; }
         public string PlaceOrderUrl { get; set; }
         public string OrdersUrl { get; set; }
         public string NavigateToOrdersListText { get; set; }

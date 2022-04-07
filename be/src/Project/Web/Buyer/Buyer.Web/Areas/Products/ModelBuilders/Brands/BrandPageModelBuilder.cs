@@ -10,7 +10,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
 {
     public class BrandPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, BrandPageViewModel>
     {
-        private readonly IModelBuilder<BuyerHeaderViewModel> headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, BrandBreadcrumbsViewModel> brandBreadcrumbsModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, BrandDetailViewModel> brandDetailModelBuilder;
@@ -18,7 +18,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public BrandPageModelBuilder(
-            IModelBuilder<BuyerHeaderViewModel> headerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, BrandBreadcrumbsViewModel> brandBreadcrumbsModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, BrandDetailViewModel> brandDetailModelBuilder,
@@ -38,7 +38,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
 
             var viewModel = new BrandPageViewModel
             {
-                Header = headerModelBuilder.BuildModel(),
+                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 BrandDetail = await this.brandDetailModelBuilder.BuildModelAsync(componentModel),
                 Catalog = await this.brandCatalogModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),

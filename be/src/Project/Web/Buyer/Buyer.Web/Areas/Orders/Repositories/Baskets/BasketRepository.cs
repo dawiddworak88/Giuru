@@ -3,12 +3,14 @@ using Buyer.Web.Areas.Orders.ApiResponseModels;
 using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Communications;
+using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,6 +66,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                     Id = response.Data.Id,
                     Items = response.Data.Items.OrEmptyIfNull().Select(x => new BasketItem
                     {
+                        Id = x.Id,
                         ProductId = x.ProductId,
                         ProductSku = x.ProductSku,
                         ProductName = x.ProductName,
@@ -100,7 +103,42 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             };
 
             var response = await this.apiClientService.PostAsync<ApiRequest<CheckoutBasketRequestModel>, CheckoutBasketRequestModel, BaseResponseModel>(apiRequest);
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+        }
 
+        public async Task<Basket> GetBasketById(string token, string language, Guid? id)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Basket>(apiRequest);
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            return default;
+        }
+
+        public async Task DeleteAsync(string token, string language, Guid? id)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);

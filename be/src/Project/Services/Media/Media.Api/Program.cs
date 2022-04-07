@@ -15,6 +15,7 @@ using Foundation.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Foundation.Localization.Definitions;
 using Media.Api.Services.Checksums;
+using Foundation.Extensions.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,7 +51,11 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.RespectBrowserAcceptHeader = true;
+    options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 
 builder.Services.AddLocalization();
 

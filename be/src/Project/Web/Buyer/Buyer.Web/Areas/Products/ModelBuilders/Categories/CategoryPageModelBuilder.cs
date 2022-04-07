@@ -11,14 +11,14 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
 {
     public class CategoryPageModelBuilder : IAsyncComponentModelBuilder<SearchProductsComponentModel, CategoryPageViewModel>
     {
-        private readonly IModelBuilder<BuyerHeaderViewModel> headerModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryBreadcrumbsViewModel> categoryBreadcrumbsModelBuilder;
         private readonly IAsyncComponentModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel> categoryCatalogModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public CategoryPageModelBuilder(
-            IModelBuilder<BuyerHeaderViewModel> headerModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, CategoryBreadcrumbsViewModel> categoryBreadcrumbsModelBuilder,
             IAsyncComponentModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel> categoryCatalogModelBuilder,
@@ -35,7 +35,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
         {
             var viewModel = new CategoryPageViewModel
             {
-                Header = headerModelBuilder.BuildModel(),
+                Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
                 Breadcrumbs = await this.categoryBreadcrumbsModelBuilder.BuildModelAsync(componentModel),
                 Catalog = await this.categoryCatalogModelBuilder.BuildModelAsync(componentModel),

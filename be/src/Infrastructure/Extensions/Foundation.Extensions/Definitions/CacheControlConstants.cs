@@ -2,6 +2,6 @@
 {
     public static class CacheControlConstants
     {
-        public static readonly int CacheControlMaxAgeSeconds = 2592000;
+        public static readonly int CacheControlMaxAgeSeconds = 15552000;
     }
 }

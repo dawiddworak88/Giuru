@@ -18,6 +18,7 @@ import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializ
 import PaginationConstants from "../../constants/PaginationConstants";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
+import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -55,7 +56,7 @@ function Catalog(props) {
 
         const requestOptions = {
             method: "GET",
-            headers: { "Content-Type": "application/json" }
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
         };
 
         const url = props.searchApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
@@ -64,6 +65,8 @@ function Catalog(props) {
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
@@ -93,7 +96,7 @@ function Catalog(props) {
 
         const requestOptions = {
             method: "GET",
-            headers: { "Content-Type": "application/json" }
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
         };
 
         const url = props.searchApiUrl + "?" + QueryStringSerializer.serialize(searchParameters);
@@ -102,6 +105,8 @@ function Catalog(props) {
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
 
@@ -142,7 +147,7 @@ function Catalog(props) {
 
         const requestOptions = {
             method: "DELETE",
-            headers: { "Content-Type": "application/json" }
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
         };
 
         const url = props.deleteApiUrl + "?" + QueryStringSerializer.serialize(deleteParameters);
@@ -151,6 +156,8 @@ function Catalog(props) {
             .then(function (response) {
 
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
 

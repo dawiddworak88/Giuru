@@ -10,6 +10,9 @@ namespace Foundation.Extensions.Filters
     {
         private readonly IWebHostEnvironment env;
 
+        private HttpGlobalExceptionFilter()
+        { }
+
         public HttpGlobalExceptionFilter(IWebHostEnvironment env)
         {
             this.env = env;
@@ -19,29 +22,20 @@ namespace Foundation.Extensions.Filters
         {
             if (context.Exception.GetType() == typeof(CustomException))
             {
-                var redirectUrl = (string)context.Exception.Data[FilterConstants.RedirectUrlKeyName];
-
-                if (string.IsNullOrWhiteSpace(redirectUrl))
+                var response = new ErrorResponse
                 {
-                    var response = new ErrorResponse
-                    {
-                        Message = context.Exception.Message
-                    };
+                    Message = context.Exception.Message
+                };
 
-                    if (this.env.EnvironmentName == EnvironmentConstants.DevelopmentEnvironmentName)
-                    {
-                        response.DeveloperMessage = context.Exception;
-                    }
-
-                    if (((int?)context.Exception.Data[FilterConstants.StatusCodeKeyName]).HasValue)
-                    {
-                        context.Result = new ObjectResult(response);
-                        context.HttpContext.Response.StatusCode = ((int?)context.Exception.Data[FilterConstants.StatusCodeKeyName]).Value;
-                    }
+                if (this.env.EnvironmentName == EnvironmentConstants.DevelopmentEnvironmentName)
+                {
+                    response.DeveloperMessage = context.Exception;
                 }
-                else
+
+                if (((int?)context.Exception.Data[FilterConstants.StatusCodeKeyName]).HasValue)
                 {
-                    context.HttpContext.Response.Redirect(redirectUrl);
+                    context.Result = new ObjectResult(response);
+                    context.HttpContext.Response.StatusCode = ((int?)context.Exception.Data[FilterConstants.StatusCodeKeyName]).Value;
                 }
             }
         }

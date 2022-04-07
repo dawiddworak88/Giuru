@@ -18,8 +18,14 @@
             public static readonly string OrganisationsApiEndpoint = "/api/v1/organisations";
             public static readonly string SellersApiEndpoint = "/api/v1/sellers";
             public static readonly string ClientsApiEndpoint = "/api/v1/clients";
+            public static readonly string ClientByOrganisationApiEndpoint = "/api/v1/clients/organisation";
             public static readonly string UsersApiEndpoint = "/api/v1/users";
-            public static readonly string UsersSetPasswordApiEndpoint = "/api/v1/users/password";
+        }
+
+        public struct News
+        {
+            public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
+            public static readonly string NewsApiEndpoint = "/api/v1/news";
         }
 
         public struct Inventory
@@ -58,7 +64,7 @@
 
         public struct Request
         {
-            public const long RequestSizeLimit = 200_000_000;
+            public const long RequestSizeLimit = 500_000_000;
         }
     }
 }

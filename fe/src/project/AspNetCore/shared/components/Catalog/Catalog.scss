@@ -1,3 +1,5 @@
+@import "../Sidebar/Sidebar.scss";
+
 .catalog {
     .catalog-item {
         .media-content {
@@ -17,17 +19,34 @@
             color: $primary;
         }
 
-        &__brand {
+        &__brand-text {
+            font-size: 0.9rem;
+        }
+
+        &__fabric, &__brand {
             a:hover {
                 color: $primary;
             }
         }
 
-        &__in-stock {
+        &__fabric {
+            font-size: 0.750rem;
+        }
+
+        &__in-stock-details {
             margin-top: 0.5rem;
-            color: darkgreen;
-            font-size: 1.1rem;
-            font-weight: 700;
+
+            .stock {
+                color: darkgreen;
+                font-weight: 600;
+                font-size: 0.8rem;
+            }
+
+            .expected-delivery {
+                color: darkgreen;
+                font-weight: 600;
+                font-size: 0.7rem;
+            }
         }
 
         &__price {
@@ -39,7 +58,24 @@
         }
 
         &__sku {
-            font-size: 0.9rem;
+            font-size: 0.750rem;
+        }
+
+        &__add-to-cart-button-container {
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            padding: 0 1rem 1rem 0.5rem;
+
+            .row {
+                display: flex;
+            }
+
+            .quantity-input{
+                min-height: 2.625rem;
+                width: 4rem;
+                margin-right: 0.3125rem;
+            }
         }
     }
 }
