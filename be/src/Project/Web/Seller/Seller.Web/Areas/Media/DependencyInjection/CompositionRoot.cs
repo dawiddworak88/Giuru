@@ -15,12 +15,12 @@ namespace Seller.Web.Areas.Media.DependencyInjection
         public static void RegisterMediaAreaDependencies(this IServiceCollection services)
         {
             services.AddScoped<IFilesRepository, FilesRepository>();
-            services.AddScoped<IMediasRepository, MediasRepository>();
+            services.AddScoped<IMediaRepository, MediaRepository>();
 
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<MediaItem>>, MediasPageCatalogModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MediasPageViewModel>, MediasPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel>, MediaPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MediaFormViewModel>, MediaFormPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<MediaItem>>, MediaPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MediasPageViewModel>, MediaPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel>, MediaFormPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MediaFormViewModel>, MediaFormModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MediaItemPageViewModel>, MediaItemPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MediaItemFormViewModel>, MediaItemFormPageModelBuilder>();
         }

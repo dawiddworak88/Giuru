@@ -15,19 +15,19 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Media.ModelBuilders
 {
-    public class MediasPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<MediaItem>>
+    public class MediaPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<MediaItem>>
     {
         private readonly ICatalogModelBuilder catalogModelBuilder;
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer mediaLocalizer;
         private readonly LinkGenerator linkGenerator;
-        private readonly IMediasRepository mediaRepository;
+        private readonly IMediaRepository mediaRepository;
 
-        public MediasPageCatalogModelBuilder(
+        public MediaPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<MediaResources> mediaLocalizer,
-            IMediasRepository mediaRepository,
+            IMediaRepository mediaRepository,
             LinkGenerator linkGenerator)
         {
             this.catalogModelBuilder = catalogModelBuilder;

@@ -1,43 +1,42 @@
 ﻿using Foundation.Extensions.ModelBuilders;
-using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Localization;
+using Foundation.PageContent.Components.Footers.ViewModels;
+using Foundation.PageContent.Components.Headers.ViewModels;
+using Foundation.PageContent.MenuTiles.ViewModels;
 using Seller.Web.Areas.Media.ViewModel;
 using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Media.ModelBuilders
 {
-    public class MediaFormPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, MediaFormViewModel>
+    public class MediaFormPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel>
     {
-        private readonly IStringLocalizer globalLocalizer;
-        private readonly IStringLocalizer mediaResources;
-        private readonly LinkGenerator linkGenerator;
+        private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
+        private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MediaFormViewModel> mediaFormModelBuilder;
+        private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public MediaFormPageModelBuilder(
-            IStringLocalizer<GlobalResources> globalLocalizer,
-            IStringLocalizer<MediaResources> mediaResources,
-            LinkGenerator linkGenerator)
+            IModelBuilder<HeaderViewModel> headerModelBuilder,
+            IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, MediaFormViewModel> mediaFormModelBuilder,
+            IModelBuilder<FooterViewModel> footerModelBuilder)
         {
-            this.globalLocalizer = globalLocalizer;
-            this.mediaResources = mediaResources;
-            this.linkGenerator = linkGenerator;
+            this.headerModelBuilder = headerModelBuilder;
+            this.menuTilesModelBuilder = menuTilesModelBuilder;
+            this.mediaFormModelBuilder = mediaFormModelBuilder;
+            this.footerModelBuilder = footerModelBuilder;
         }
 
-        public async Task<MediaFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<MediaPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new MediaFormViewModel
+            var viewModel = new MediaPageViewModel
             {
-                Title = this.mediaResources.GetString("Media"),
-                SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
-                DropFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
-                DropOrSelectImagesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
-                MediaItemsLabel = this.mediaResources.GetString("MediaItemsLabel"),
-                BackToMediaText = this.mediaResources.GetString("BackToMediaText"),
-                MediaUrl = this.linkGenerator.GetPathByAction("Index", "Medias", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                DeleteLabel = this.globalLocalizer.GetString("Delete")
+                Locale = CultureInfo.CurrentUICulture.Name,
+                Header = this.headerModelBuilder.BuildModel(),
+                MenuTiles = this.menuTilesModelBuilder.BuildModel(),
+                MediaForm = await this.mediaFormModelBuilder.BuildModelAsync(componentModel),
+                Footer = footerModelBuilder.BuildModel()
             };
 
             return viewModel;

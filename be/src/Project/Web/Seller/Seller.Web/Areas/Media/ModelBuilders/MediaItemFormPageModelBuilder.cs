@@ -15,13 +15,13 @@ namespace Seller.Web.Areas.Media.ModelBuilders
     {
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer mediaResources;
-        private readonly IMediasRepository mediaRepository;
+        private readonly IMediaRepository mediaRepository;
         private readonly LinkGenerator linkGenerator;
 
         public MediaItemFormPageModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<MediaResources> mediaResources,
-            IMediasRepository mediaRepository,
+            IMediaRepository mediaRepository,
             LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;

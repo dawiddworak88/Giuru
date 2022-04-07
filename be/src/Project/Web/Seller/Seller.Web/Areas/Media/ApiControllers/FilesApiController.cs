@@ -30,7 +30,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
         private readonly IMediaHelperService mediaHelperService;
         private readonly IOptionsMonitor<AppSettings> settings;
         private readonly IMediaItemsRepository mediaItemsRepository;
-        private readonly IMediasRepository mediaRepository;
+        private readonly IMediaRepository mediaRepository;
         private readonly IStringLocalizer mediaResources;
         private readonly ICdnService cdnService;
 
@@ -39,7 +39,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
             IMediaHelperService mediaHelperService,
             IOptionsMonitor<AppSettings> settings,
             IMediaItemsRepository mediaItemsRepository,
-            IMediasRepository mediaRepository,
+            IMediaRepository mediaRepository,
             IStringLocalizer<MediaResources> mediaResources,
             ICdnService cdnService)
         {

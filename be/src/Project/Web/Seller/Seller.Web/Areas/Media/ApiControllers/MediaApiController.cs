@@ -16,11 +16,11 @@ namespace Seller.Web.Areas.Media.ApiControllers
     [Area("Media")]
     public class MediaApiController : BaseApiController
     {
-        private readonly IMediasRepository mediaRepository;
+        private readonly IMediaRepository mediaRepository;
         private readonly IStringLocalizer<MediaResources> mediaLocalizer;
 
         public MediaApiController(
-            IMediasRepository mediaRepository,
+            IMediaRepository mediaRepository,
             IStringLocalizer<MediaResources> mediaLocalizer)
         {
             this.mediaRepository = mediaRepository;
