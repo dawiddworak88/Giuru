@@ -4,7 +4,6 @@ import { TextField, Button } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import PasswordValidator from "../../../../../../shared/helpers/validators/PasswordValidator";
-import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function SignInForm(props) {
 
