@@ -129,7 +129,7 @@ const Sidebar = (props) => {
                     <a href={labels.basketUrl} className="link">{labels.toBasketLabel}</a>
                 </div>
                 {productVariants && productVariants.length > 0 ? (
-                     <Suspense fallback={"Trwa ładowanie"}>
+                     <Suspense fallback={<div className="not-found">{labels.loadingLabel}</div>}>
                         {productVariants.map((item) => 
                             item.carouselItems.map((carouselItem) => {
                                 let fabrics = labels.lackInformation;
@@ -215,7 +215,8 @@ Sidebar.propTypes = {
     labels: PropTypes.object,
     setIsOpen: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
-    handleOrder: PropTypes.func.isRequired
+    handleOrder: PropTypes.func.isRequired,
+    loadingLabel: PropTypes.string.isRequired
 }
 
 export default Sidebar;

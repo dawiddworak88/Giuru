@@ -453,4 +453,7 @@
   <data name="News" xml:space="preserve">
     <value>Aktualności</value>
   </data>
+  <data name="LoadingLabel" xml:space="preserve">
+    <value>Trwa ładowanie</value>
+  </data>
 </root>
