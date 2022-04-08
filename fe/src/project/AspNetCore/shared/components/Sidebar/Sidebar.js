@@ -5,7 +5,7 @@ import {
 import { Close, AddShoppingCart, ArrowRight } from "@material-ui/icons";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
-import { CircularProgress, TextField } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../shared/stores/Store";
 import ResponsiveImage from "../../../../../shared/components/Picture/ResponsiveImage";
