@@ -35,6 +35,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
         {
             var viewModel = new EditOrderFormViewModel
             {
+                IdLabel = this.globalLocalizer.GetString("Id"),
                 Title = this.orderLocalizer.GetString("EditOrder"),
                 DeliveryFromLabel = this.orderLocalizer.GetString("DeliveryFrom"),
                 DeliveryToLabel = this.orderLocalizer.GetString("DeliveryTo"),

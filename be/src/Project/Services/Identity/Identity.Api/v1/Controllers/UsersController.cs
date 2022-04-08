@@ -174,5 +174,38 @@ namespace Identity.Api.v1.Controllers
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
+
+        /// <summary>
+        /// Resets a user's password
+        /// </summary>
+        /// <param name="request">The model.</param>
+        [HttpPost, MapToApiVersion("1.0")]
+        [Route("resetpassword")]
+        [AllowAnonymous]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> ResetPassword(ResetUserPasswordRequestModel request)
+        {
+            var serviceModel = new ResetUserPasswordServiceModel
+            {
+                Email = request.Email,
+                ReturnUrl = request.ReturnUrl,
+                Scheme = this.HttpContext.Request.Scheme,
+                Host = this.HttpContext.Request.Host
+            };
+
+            var validator = new ResetUserPasswordModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+            if (validationResult != null)
+            {
+                await this.userService.ResetPasswordAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
     }
 }

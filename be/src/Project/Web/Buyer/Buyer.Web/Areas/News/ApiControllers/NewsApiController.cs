@@ -2,10 +2,8 @@
 using Buyer.Web.Shared.Repositories.News;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
-using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
@@ -15,14 +13,11 @@ namespace Buyer.Web.Areas.News.ApiControllers
     [Area("News")]
     public class NewsApiController : BaseApiController
     {
-        private readonly IStringLocalizer newsLocalizer;
         private readonly INewsRepository newsRepository;
 
         public NewsApiController(
-            IStringLocalizer<NewsResources> newsLocalizer,
             INewsRepository newsRepository)
         {
-            this.newsLocalizer = newsLocalizer;
             this.newsRepository = newsRepository;
         }
 

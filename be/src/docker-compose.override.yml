@@ -156,6 +156,7 @@ services:
       - SupportedCultures=${SUPPORTED_CULTURES}
       - PrivacyPolicy=Privacy%20Policy
       - Regulations=Regulations
+      - BuyerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - DefaultCulture=${DEFAULT_CULTURE}
       - SenderEmail=orders@eltap.com
       - SenderName=ELTAP
@@ -234,6 +235,7 @@ services:
       - BasketUrl=http://basket-api
       - ClientUrl=http://client-api
       - NewsUrl=http://news-api
+      - MakeComplaintUrl=https://complaints.com
       - IsMarketplace=${IS_MARKETPLACE}
       - OrganisationId=${ORGANISATION_ID}
       - SupportedCultures=${SUPPORTED_CULTURES}

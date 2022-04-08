@@ -43,6 +43,7 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
         {
             var viewModel = new EditInventoryFormViewModel
             {
+                IdLabel = this.globalLocalizer.GetString("Id"),
                 Title = this.inventoryLocalizer.GetString("EditInventory"),
                 SelectWarehouseLabel = this.inventoryLocalizer.GetString("Warehouse"),
                 SelectProductLabel = this.inventoryLocalizer.GetString("SelectProductLabel"),
@@ -61,7 +62,7 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 SelectWarehouse = this.inventoryLocalizer.GetString("SelectWarehouse"),
                 ChangeExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ChangeExpectedDeliveryLabel"),
                 InventoryUrl = this.linkGenerator.GetPathByAction("Index", "Inventories", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
-                SaveUrl = this.linkGenerator.GetPathByAction("Index", "InventoriesApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveUrl = this.linkGenerator.GetPathByAction("Index", "InventoriesApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var warehouses = await this.warehousesRepository.GetAllWarehousesAsync(componentModel.Token, componentModel.Language, null);

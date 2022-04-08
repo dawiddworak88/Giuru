@@ -34,5 +34,6 @@ namespace Seller.Web.Areas.Inventory.ViewModel
         public DateTime? ExpectedDelivery { get; set; }
         public string SaveUrl { get; set; }
         public string SaveText { get; set; }
+        public string IdLabel { get; set; }
     }
 }

@@ -453,4 +453,10 @@
   <data name="LoadingLabel" xml:space="preserve">
     <value>Loading in progress</value>
   </data>
+  <data name="MakeComplaint" xml:space="preserve">
+    <value>Make a complaint</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>Id:</value>
+  </data>
 </root>

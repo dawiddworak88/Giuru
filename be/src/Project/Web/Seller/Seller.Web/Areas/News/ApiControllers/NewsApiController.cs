@@ -51,7 +51,7 @@ namespace Seller.Web.Areas.News.ApiControllers
                 token, language, model.Id, model.ThumbnailImageId, model.CategoryId, model.PreviewImageId, model.Title, 
                 model.Description, model.Content, model.IsPublished, model.Files?.Select(x => x.Id)); 
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { news, Message = this.newsLocalizer.GetString("NewsSavedSuccessfully").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Id = news, Message = this.newsLocalizer.GetString("NewsSavedSuccessfully").Value });
 
         }
 

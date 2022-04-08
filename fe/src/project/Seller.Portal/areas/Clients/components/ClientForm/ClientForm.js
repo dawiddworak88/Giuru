@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -9,6 +9,7 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
+    const [canCreateAccount, setCanCreateAccount] = useState(false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
@@ -60,6 +61,7 @@ function ClientForm(props) {
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         setFieldValue({ name: "id", value: jsonResponse.id });
+                        setCanCreateAccount(true);
                         toast.success(jsonResponse.message);
                     }
                     else {
@@ -95,7 +97,7 @@ function ClientForm(props) {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        setFieldValue({ name: "id", value: null });
+                        setCanCreateAccount(false);
                         toast.success(jsonResponse.message);
                     }
                     else {
@@ -121,8 +123,11 @@ function ClientForm(props) {
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                         {id &&
-                            <input id="id" name="id" type="hidden" value={id} />
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                            </div>
                         }
+                        
                         <div className="field">
                             <TextField 
                                 id="name" 
@@ -170,7 +175,7 @@ function ClientForm(props) {
                         </div>
                         <div className="field client-form__field-row">
                             <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>{props.saveText}</Button>
-                            <Button className="client-form__create-button" color="secondary" variant="contained" onClick={createAccount} disabled={state.isLoading || !id}>{props.accountText}</Button>
+                            <Button className="client-form__create-button" color="secondary" variant="contained" onClick={createAccount} disabled={state.isLoading || !canCreateAccount}>{props.accountText}</Button>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}
@@ -199,7 +204,8 @@ ClientForm.propTypes = {
     enterEmailText: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     saveUrl: PropTypes.string.isRequired,
-    languages: PropTypes.array.isRequired
+    languages: PropTypes.array.isRequired,
+    idLabel: PropTypes.string
 };
 
 export default ClientForm;
