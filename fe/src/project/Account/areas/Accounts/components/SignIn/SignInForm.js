@@ -61,6 +61,7 @@ function SignInForm(props) {
                     </div>
                     <div className="is-flex is-justify-content-end">
                         <button 
+                            type="button"
                             className="button is-text"
                             onClick={(e) => {
                                 e.preventDefault();
