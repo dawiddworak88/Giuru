@@ -46,5 +46,6 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string GetCategorySchemaUrl { get; set; }
         public string NavigateToProductsLabel { get; set; }
         public string ProductsUrl { get; set; }
+        public string IdLabel { get; set; }
     }
 }

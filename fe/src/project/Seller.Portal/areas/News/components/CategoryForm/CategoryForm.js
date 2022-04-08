@@ -39,6 +39,7 @@ const CategoryForm = (props) => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
                         setDisableSaveButton(true);
+                        setFieldValue({ name: "id", value: jsonRes.id });
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -69,7 +70,9 @@ const CategoryForm = (props) => {
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit}>
                         {id &&
-                            <input id="id" name="id" type="hidden" value={id} />
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                            </div>
                         }
                         <div className="field">
                             <TextField 
@@ -144,7 +147,8 @@ CategoryForm.propTypes = {
     saveMediaUrl: PropTypes.string.isRequired,
     deleteLabel: PropTypes.string.isRequired,
     categoryPictureLabel: PropTypes.string.isRequired,
-    saveUrl: PropTypes.string.isRequired
+    saveUrl: PropTypes.string.isRequired,
+    idLabel: PropTypes.string
 };
 
 export default CategoryForm;

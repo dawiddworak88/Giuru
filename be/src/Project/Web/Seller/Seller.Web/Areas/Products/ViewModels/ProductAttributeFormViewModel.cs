@@ -15,5 +15,6 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string SaveUrl { get; set; }
         public string AttributesUrl { get; set; }
         public string NavigateToAttributesLabel { get; set; }
+        public string IdLabel { get; set; }
     }
 }

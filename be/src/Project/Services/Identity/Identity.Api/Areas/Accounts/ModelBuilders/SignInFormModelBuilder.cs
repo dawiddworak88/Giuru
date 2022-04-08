@@ -34,7 +34,9 @@ namespace Identity.Api.ModelBuilders.SignInForm
                 PasswordRequiredErrorMessage = this.globalLocalizer["PasswordRequiredErrorMessage"],
                 SignInText = this.accountLocalizer["SignInText"],
                 SubmitUrl = this.linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
-                ReturnUrl = componentModel.ReturnUrl
+                ReturnUrl = componentModel.ReturnUrl,
+                ForgotPasswordLabel = this.accountLocalizer.GetString("ForgotPasswordLabel"),
+                ResetPasswordUrl = this.linkGenerator.GetPathByAction("Index", "ResetPassword", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             return viewModel;

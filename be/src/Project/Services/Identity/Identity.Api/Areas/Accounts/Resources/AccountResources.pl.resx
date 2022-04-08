@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ap_buttonLabel" xml:space="preserve">
-    <value>Zresetuj Hasło</value>
+    <value>Resetowanie hasła</value>
   </data>
   <data name="ap_headOne" xml:space="preserve">
     <value>RESETOWANIE HASŁA</value>
@@ -143,6 +143,9 @@
   </data>
   <data name="FirstNameRequiredErrorMessage" xml:space="preserve">
     <value>Wprowadź swoje imię</value>
+  </data>
+  <data name="ForgotPasswordLabel" xml:space="preserve">
+    <value>Resetowanie hasła</value>
   </data>
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Wprowadź swoje nazwisko</value>
@@ -174,6 +177,9 @@
   <data name="PasswordUpdated" xml:space="preserve">
     <value>Hasło zostało pomyślnie ustawione</value>
   </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Resetowanie hasła</value>
+  </data>
   <data name="SetPassword" xml:space="preserve">
     <value>Ustaw hasło</value>
   </data>
@@ -182,6 +188,9 @@
   </data>
   <data name="SignInText" xml:space="preserve">
     <value>Zaloguj się</value>
+  </data>
+  <data name="SuccessfullyResetPassword" xml:space="preserve">
+    <value>Link do resetowania hasła został wysłany, jeśli Twoje konto istnieje na naszej platformie. Proszę sprawdź swoją skrzynkę e-mail w celu uzyskania dalszych instrukcji.</value>
   </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>Nie odnaleziono użytkownika.</value>

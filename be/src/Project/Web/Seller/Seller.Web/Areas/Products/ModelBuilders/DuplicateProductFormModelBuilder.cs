@@ -58,6 +58,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
         {
             var viewModel = new ProductFormViewModel
             {
+                IdLabel = this.globalLocalizer.GetString("Id"),
                 Title = this.productLocalizer.GetString("EditProduct"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 NameLabel = this.globalLocalizer.GetString("NameLabel"),

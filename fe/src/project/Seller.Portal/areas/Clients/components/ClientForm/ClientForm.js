@@ -11,6 +11,7 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
     const [disableSaveButton, setDisableSaveButton] = useState(false);
+    const [canCreateAccount, setCanCreateAccount] = useState(false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
@@ -63,6 +64,7 @@ function ClientForm(props) {
                     if (response.ok) {
                         setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
+                        setCanCreateAccount(true);
                         toast.success(jsonResponse.message);
                     }
                     else {
@@ -98,7 +100,7 @@ function ClientForm(props) {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        setFieldValue({ name: "id", value: null });
+                        setCanCreateAccount(false);
                         toast.success(jsonResponse.message);
                     }
                     else {
@@ -124,8 +126,11 @@ function ClientForm(props) {
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                         {id &&
-                            <input id="id" name="id" type="hidden" value={id} />
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                            </div>
                         }
+                        
                         <div className="field">
                             <TextField 
                                 id="name" 
@@ -185,7 +190,7 @@ function ClientForm(props) {
                                 color="secondary" 
                                 variant="contained" 
                                 onClick={createAccount} 
-                                disabled={state.isLoading || !id}>
+                                disabled={state.isLoading || !canCreateAccount}>
                                 {props.accountText}
                             </Button>
                             <Button
@@ -227,7 +232,8 @@ ClientForm.propTypes = {
     enterEmailText: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     saveUrl: PropTypes.string.isRequired,
-    languages: PropTypes.array.isRequired
+    languages: PropTypes.array.isRequired,
+    idLabel: PropTypes.string
 };
 
 export default ClientForm;

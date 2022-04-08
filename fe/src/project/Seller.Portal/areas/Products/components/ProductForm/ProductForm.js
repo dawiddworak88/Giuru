@@ -5,7 +5,7 @@ import NoSsr from '@material-ui/core/NoSsr';
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
-import { TextField, Button, CircularProgress, FormControlLabel, Switch } from "@material-ui/core";
+import { TextField, Button, CircularProgress, FormControlLabel, Switch, InputLabel } from "@material-ui/core";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import DynamicForm from "../../../../../../shared/components/DynamicForm/DynamicForm";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
@@ -170,7 +170,6 @@ function ProductForm(props) {
         formData,
         isPublished } = values;
     
-
     return (
         <section className="section section-small-padding product">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -178,7 +177,9 @@ function ProductForm(props) {
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                         {id &&
-                            <input id="id" name="id" type="hidden" value={id} />
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                            </div>
                         }
                         <div className="field">
                             <Autocomplete
@@ -344,7 +345,8 @@ ProductForm.propTypes = {
     saveMediaUrl: PropTypes.string.isRequired,
     deleteLabel: PropTypes.string.isRequired,
     getCategorySchemaUrl: PropTypes.string.isRequired,
-    generalErrorMessage: PropTypes.string.isRequired
+    generalErrorMessage: PropTypes.string.isRequired,
+    idLabel: PropTypes.string
 };
 
 export default ProductForm;

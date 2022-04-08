@@ -144,6 +144,9 @@
   <data name="FirstNameRequiredErrorMessage" xml:space="preserve">
     <value>Enter your first name</value>
   </data>
+  <data name="ForgotPasswordLabel" xml:space="preserve">
+    <value>Password reset</value>
+  </data>
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Enter your last name</value>
   </data>
@@ -174,6 +177,9 @@
   <data name="PasswordUpdated" xml:space="preserve">
     <value>Password has been set successfully</value>
   </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Password reset</value>
+  </data>
   <data name="SetPassword" xml:space="preserve">
     <value>Set password</value>
   </data>
@@ -182,6 +188,9 @@
   </data>
   <data name="SignInText" xml:space="preserve">
     <value>Sign in</value>
+  </data>
+  <data name="SuccessfullyResetPassword" xml:space="preserve">
+    <value>The reset password link has been sent if your account exists in our platform. Please check your e-mail box for further instructions.</value>
   </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>User not found.</value>

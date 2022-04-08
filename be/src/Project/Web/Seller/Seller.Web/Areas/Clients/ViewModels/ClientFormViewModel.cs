@@ -28,6 +28,7 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string AccountText { get; set; }
         public string ClientsUrl { get; set; }
         public string NavigateToClientsLabel { get; set; }
+        public string IdLabel { get; set; }
         public IEnumerable<LanguageViewModel> Languages { get; set; }
     }
 }

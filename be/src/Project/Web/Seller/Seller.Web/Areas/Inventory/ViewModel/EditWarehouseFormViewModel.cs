@@ -16,6 +16,7 @@ namespace Seller.Web.Areas.Inventory.ViewModel
         public string WarehouseUrl { get; set; }
         public string NavigateToWarehouseListText { get; set; }
         public string SaveUrl { get; set; }
+        public string IdLabel { get; set; }
         public string SaveText { get; set; }
     }
 }

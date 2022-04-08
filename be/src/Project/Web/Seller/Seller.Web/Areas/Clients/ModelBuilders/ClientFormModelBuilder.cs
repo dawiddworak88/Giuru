@@ -69,6 +69,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 Languages = languages,
                 ClientsUrl = this.linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 NavigateToClientsLabel = this.clientLocalizer.GetString("NavigateToClientsLabel")
+                IdLabel = this.globalLocalizer.GetString("Id")
             };
 
             if (componentModel.Id.HasValue)

@@ -33,6 +33,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
         {
             var viewModel = new ProductAttributeItemFormViewModel
             {
+                IdLabel = this.globalLocalizer.GetString("Id"),
                 Title = this.productLocalizer.GetString("EditProductAttributeItem"),
                 NameLabel = this.globalLocalizer.GetString("Name"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),

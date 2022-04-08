@@ -24,6 +24,7 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string ClientUrl { get; set; }
         public string ClientName { get; set; }
         public string UpdateOrderStatusUrl { get; set; }
+        public string IdLabel { get; set; }
         public IEnumerable<ListItemViewModel> OrderStatuses { get; set; }
         public IEnumerable<OrderItemViewModel> OrderItems { get; set; }
     }

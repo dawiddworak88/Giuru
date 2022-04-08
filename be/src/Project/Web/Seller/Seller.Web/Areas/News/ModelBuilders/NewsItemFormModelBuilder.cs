@@ -57,6 +57,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
         {
             var viewModel = new NewsItemFormViewModel
             {
+                IdLabel = this.globalLocalizer.GetString("Id"),
                 Title = this.newsLocalizer.GetString("NewsItem"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Post", "NewsApi", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name }),

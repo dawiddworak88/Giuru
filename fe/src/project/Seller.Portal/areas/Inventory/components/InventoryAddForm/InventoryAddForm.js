@@ -73,6 +73,7 @@ const InventoryAddForm = (props) => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
                         setDisableSaveButton(true);
+                        setFieldValue({ name: "id", value: jsonRes.id });
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -93,7 +94,9 @@ const InventoryAddForm = (props) => {
                 <div className="column is-half inventory-add-content">
                     <form onSubmit={handleOnSubmit} className="is-modern-form" method="post">
                         {id &&
-                            <input id="id" name="id" type="hidden" value={id} />
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                            </div>
                         }
                         <div className="field">
                             <FormControl fullWidth={true} helperText={dirty.warehouseId ? errors.warehouseId : ""} error={(errors.warehouseId.length > 0) && dirty.warehouseId}>
@@ -256,7 +259,8 @@ InventoryAddForm.propTypes = {
     warehouseRequiredErrorMessage: PropTypes.string,
     productRequiredErrorMessage: PropTypes.string,
     quantityRequiredErrorMessage: PropTypes.string,
-    quantityFormatErrorMessage: PropTypes.string
+    quantityFormatErrorMessage: PropTypes.string,
+    idLabel: PropTypes.string
 };
 
 export default InventoryAddForm;

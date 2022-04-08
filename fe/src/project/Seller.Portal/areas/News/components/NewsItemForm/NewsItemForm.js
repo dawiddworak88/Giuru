@@ -79,6 +79,7 @@ const NewsItemForm = (props) => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
                         setDisableSaveButton(true);
+                        setFieldValue({ name: "id", value: jsonRes.id });
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -156,7 +157,7 @@ const NewsItemForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
     
-    const { title, previewImage, thumbnailImage, description, isPublished, files, categoryId } = values;
+    const { id, title, previewImage, thumbnailImage, description, isPublished, files, categoryId } = values;
     
     return (
         <section className="section section-small-padding">
@@ -164,6 +165,11 @@ const NewsItemForm = (props) => {
             <div className="columns is-desktop">
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit}>
+                        {id &&
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                            </div>
+                        }
                         <div className="field">
                             <TextField 
                                 id="title"
@@ -338,7 +344,8 @@ NewsItemForm.propTypes = {
     isNewLabel: PropTypes.string,
     categoryLabel: PropTypes.string,
     selectCategoryLabel: PropTypes.string,
-    thumbImageLabel: PropTypes.string
+    thumbImageLabel: PropTypes.string,
+    idLabel: PropTypes.string
 }
 
 export default NewsItemForm;
