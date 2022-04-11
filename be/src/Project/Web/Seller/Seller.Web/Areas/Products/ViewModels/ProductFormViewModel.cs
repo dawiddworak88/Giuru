@@ -45,5 +45,6 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string GeneralErrorMessage { get; set; }
         public string GetCategorySchemaUrl { get; set; }
         public string IdLabel { get; set; }
+        public string EanLabel { get; set; }
     }
 }
