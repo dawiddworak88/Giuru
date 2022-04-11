@@ -7,6 +7,8 @@ import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import ReactPhoneInput from 'react-phone-input-material-ui';
+import PhoneInputPLTranslation from "react-phone-input-material-ui/lang/pl.json"
+import PhoneInputDETranslation from "react-phone-input-material-ui/lang/de.json"
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -111,6 +113,11 @@ function ClientForm(props) {
             });
     };
 
+    const phoneInputLocale = {
+        pl: PhoneInputPLTranslation,
+        de: PhoneInputDETranslation
+    }
+
     const {
         values, errors, dirty, disable,
         setFieldValue, handleOnChange, handleOnSubmit
@@ -183,7 +190,7 @@ function ClientForm(props) {
                                 }}
                                 value={phoneNumber}
                                 regions={"europe"}
-                                localization={[props.locale]}
+                                localization={phoneInputLocale[props.locale]}
                                 country={"pl"}
                                 component={TextField}
                                 onChange={(value) => setFieldValue({name: "phoneNumber", value: value})}
