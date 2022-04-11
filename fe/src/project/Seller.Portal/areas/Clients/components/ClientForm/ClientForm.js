@@ -176,15 +176,15 @@ function ClientForm(props) {
                         </div>
                         <div className="field">
                             <ReactPhoneInput
-                                inputExtraProps={{
+                                inputProps={{
                                     id: "phoneNumber",
-                                    name: "phoneNumber"
+                                    name: "phoneNumber",
+                                    label: props.phoneNumberLabel
                                 }}
                                 value={phoneNumber}
-                                // country={"pl"}
                                 regions={"europe"}
-                                localization={props.locale}
-                                defaultCountry={"pl"}
+                                localization={[props.locale]}
+                                country={"pl"}
                                 component={TextField}
                                 onChange={(value) => setFieldValue({name: "phoneNumber", value: value})}
                             />
@@ -221,6 +221,7 @@ ClientForm.propTypes = {
     saveText: PropTypes.string.isRequired,
     saveUrl: PropTypes.string.isRequired,
     languages: PropTypes.array.isRequired,
+    phoneNumberLabel: PropTypes.string.isRequired,
     idLabel: PropTypes.string
 };
 
