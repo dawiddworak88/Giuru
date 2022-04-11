@@ -453,6 +453,7 @@ namespace Catalog.Api.Services.Products
                 CategoryId = searchResultItem.CategoryId,
                 CategoryName = searchResultItem.CategoryName,
                 IsNew = searchResultItem.IsNew,
+                Ean = searchResultItem.Ean,
                 IsPublished = searchResultItem.IsPublished,
                 IsProtected = searchResultItem.IsProtected,
                 Sku = searchResultItem.Sku,
