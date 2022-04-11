@@ -6,6 +6,7 @@ import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelpe
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import ReactPhoneInput from 'react-phone-input-material-ui';
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -14,7 +15,8 @@ function ClientForm(props) {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
         email: { value: props.email ? props.email : "", error: "" },
-        communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" }
+        communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
+        phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null }
     };
 
     const stateValidatorSchema = {
@@ -80,7 +82,8 @@ function ClientForm(props) {
         const payload = {
             name: values.name,
             email: values.email,
-            communicationLanguage: values.communicationLanguage
+            communicationLanguage: values.communicationLanguage,
+            
         };
 
         const requestOptions = {
@@ -115,7 +118,7 @@ function ClientForm(props) {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, email, communicationLanguage } = values;
+    const { id, name, email, communicationLanguage, phoneNumber } = values;
     return (
         <section className="section section-small-padding product client-form">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -172,6 +175,21 @@ function ClientForm(props) {
                                     <FormHelperText>{errors.communicationLanguage}</FormHelperText>
                                 )}
                             </FormControl>
+                        </div>
+                        <div className="field">
+                            <ReactPhoneInput
+                                inputExtraProps={{
+                                    id: "phoneNumber",
+                                    name: "phoneNumber"
+                                }}
+                                value={phoneNumber}
+                                // country={"pl"}
+                                regions={"europe"}
+                                localization={props.locale}
+                                defaultCountry={"pl"}
+                                component={TextField}
+                                onChange={(value) => setFieldValue({name: "phoneNumber", value: value})}
+                            />
                         </div>
                         <div className="field client-form__field-row">
                             <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>{props.saveText}</Button>

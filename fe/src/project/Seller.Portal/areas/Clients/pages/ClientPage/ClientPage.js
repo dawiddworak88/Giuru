@@ -18,7 +18,7 @@ function ClientPage(props) {
         <div>
           <Header {...props.header}></Header>
           <MenuTiles {...props.menuTiles} />
-          <ClientForm {...props.clientForm} />
+          <ClientForm {...props.clientForm} locale={props.locale} />
           <Footer {...props.footer}></Footer>
         </div>
       </Store>
