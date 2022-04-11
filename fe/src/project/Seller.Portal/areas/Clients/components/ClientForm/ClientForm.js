@@ -45,7 +45,6 @@ function ClientForm(props) {
     };
 
     function onSubmitForm(state) {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const requestOptions = {
@@ -82,8 +81,7 @@ function ClientForm(props) {
         const payload = {
             name: values.name,
             email: values.email,
-            communicationLanguage: values.communicationLanguage,
-            
+            communicationLanguage: values.communicationLanguage
         };
 
         const requestOptions = {

@@ -8,6 +8,7 @@ namespace Client.Api.v1.RequestModels
         public string Name { get; set; }
         public string Email { get; set; }
         public string CommunicationLanguage { get; set; }
+        public string PhoneNumber { get; set; }
         public Guid? OrganisationId { get; set; }
     }
 }

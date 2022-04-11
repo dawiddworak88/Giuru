@@ -85,6 +85,7 @@ namespace Client.Api.v1.Controllers
                                 Name = x.Name,
                                 Email = x.Email,
                                 CommunicationLanguage = x.CommunicationLanguage,
+                                PhoneNumber = x.PhoneNumber,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -127,6 +128,7 @@ namespace Client.Api.v1.Controllers
                                 Name = x.Name,
                                 Email = x.Email,
                                 CommunicationLanguage = x.CommunicationLanguage,
+                                PhoneNumber = x.PhoneNumber,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -178,6 +180,7 @@ namespace Client.Api.v1.Controllers
                         Email = client.Email,
                         Name = client.Name,
                         CommunicationLanguage = client.CommunicationLanguage,
+                        PhoneNumber = client.PhoneNumber,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };
@@ -225,6 +228,7 @@ namespace Client.Api.v1.Controllers
                         Email = client.Email,
                         Name = client.Name,
                         CommunicationLanguage = client.CommunicationLanguage,
+                        PhoneNumber = client.PhoneNumber,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };
@@ -263,6 +267,7 @@ namespace Client.Api.v1.Controllers
                     Name = request.Name,
                     Email = request.Email,
                     CommunicationLanguage = request.CommunicationLanguage,
+                    PhoneNumber = request.PhoneNumber,
                     ClientOrganisationId = request.OrganisationId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
@@ -289,6 +294,7 @@ namespace Client.Api.v1.Controllers
                     Name = request.Name,
                     Email = request.Email,
                     CommunicationLanguage = request.CommunicationLanguage,
+                    PhoneNumber = request.PhoneNumber,
                     ClientOrganisationId = request.OrganisationId,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,

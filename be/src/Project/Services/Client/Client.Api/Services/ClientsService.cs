@@ -37,6 +37,7 @@ namespace Client.Api.Services
                               Name = c.Name,
                               Email = c.Email,
                               CommunicationLanguage = c.Language,
+                              PhoneNumber = c.PhoneNumber,
                               LastModifiedDate = c.LastModifiedDate,
                               CreatedDate = c.CreatedDate
                           };
@@ -61,6 +62,7 @@ namespace Client.Api.Services
                                 Name = c.Name,
                                 Email = c.Email,
                                 CommunicationLanguage = c.Language,
+                                PhoneNumber = c.PhoneNumber,
                                 LastModifiedDate = c.LastModifiedDate,
                                 CreatedDate = c.CreatedDate
                             };
@@ -94,6 +96,7 @@ namespace Client.Api.Services
             client.Name = serviceModel.Name;
             client.Email = serviceModel.Email;
             client.Language = serviceModel.CommunicationLanguage;
+            client.PhoneNumber = serviceModel.PhoneNumber;
             client.OrganisationId = serviceModel.ClientOrganisationId.Value;
 
             await this.context.SaveChangesAsync();
@@ -115,6 +118,7 @@ namespace Client.Api.Services
                 Email = serviceModel.Email,
                 Language = serviceModel.CommunicationLanguage,
                 OrganisationId = serviceModel.ClientOrganisationId.Value,
+                PhoneNumber = serviceModel.PhoneNumber,
                 SellerId = serviceModel.OrganisationId.Value
             };
 
@@ -135,6 +139,7 @@ namespace Client.Api.Services
                               Name = c.Name,
                               Email = c.Email,
                               CommunicationLanguage = c.Language,
+                              PhoneNumber = c.PhoneNumber,
                               LastModifiedDate = c.LastModifiedDate,
                               CreatedDate = c.CreatedDate
                           };
@@ -152,6 +157,7 @@ namespace Client.Api.Services
                               Name = c.Name,
                               Email = c.Email,
                               CommunicationLanguage = c.Language,
+                              PhoneNumber = c.PhoneNumber,
                               LastModifiedDate = c.LastModifiedDate,
                               CreatedDate = c.CreatedDate
                           };
