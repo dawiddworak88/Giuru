@@ -159,7 +159,7 @@ function ProductForm(props) {
         id, category, sku, name, description, primaryProduct, images, 
         files, isNew, schema, uiSchema, formData, isPublished, ean 
     } = values;
-    
+
     return (
         <section className="section section-small-padding product">
             <h1 className="subtitle is-4">{props.title}</h1>

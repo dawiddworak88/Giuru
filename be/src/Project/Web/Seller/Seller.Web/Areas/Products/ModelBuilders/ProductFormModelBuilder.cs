@@ -116,6 +116,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                     viewModel.CategoryId = product.CategoryId;
                     viewModel.PrimaryProductId = product.PrimaryProductId;
                     viewModel.FormData = product.FormData;
+                    viewModel.Ean = product.Ean;
 
                     var categorySchema = await this.categoriesRepository.GetCategorySchemaAsync(
                         componentModel.Token,

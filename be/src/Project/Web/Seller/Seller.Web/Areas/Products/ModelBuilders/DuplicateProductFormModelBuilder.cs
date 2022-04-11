@@ -119,6 +119,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                     viewModel.Sku = $"{product.Sku} {this.globalLocalizer.GetString("Copy")}";
                     viewModel.Description = product.Description;
                     viewModel.IsNew = product.IsNew;
+                    viewModel.Ean = product.Ean;
                     viewModel.IsPublished = product.IsPublished;
                     viewModel.CategoryId = product.CategoryId;
                     viewModel.PrimaryProductId = product.PrimaryProductId;
