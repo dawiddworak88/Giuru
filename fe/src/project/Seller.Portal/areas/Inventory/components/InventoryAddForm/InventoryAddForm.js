@@ -17,7 +17,7 @@ import QuantityValidator from "../../../../../../shared/helpers/validators/Quant
 const InventoryAddForm = (props) => {
 
     const [state, dispatch] = useContext(Context);
-    const [showBackToInventoryListButton, setShowBackToInventoryListButton] = useState(false);
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
     
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -72,8 +72,8 @@ const InventoryAddForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
+                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonRes.id });
-                        setShowBackToInventoryListButton(true);
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -211,26 +211,24 @@ const InventoryAddForm = (props) => {
                             </MuiPickersUtilsProvider>
                         </div>
                         <div className="field">
-                            {showBackToInventoryListButton ? (
-                                <Button 
-                                    type="button" 
-                                    variant="contained" 
-                                    color="primary" 
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        NavigationHelper.redirect(props.inventoryUrl);
-                                    }}>
-                                    {props.navigateToInventoryListText}
-                                </Button> 
-                            ) : (
-                                <Button 
-                                    type="subbmit" 
-                                    variant="contained"
-                                    color="primary"
-                                    disabled={state.isLoading || disable || !product}>
-                                    {props.saveText}
-                                </Button>
-                            )}
+                            <Button 
+                                type="subbmit" 
+                                variant="contained"
+                                color="primary"
+                                disabled={state.isLoading || disable || !product || disableSaveButton}>
+                                {props.saveText}
+                            </Button>
+                            <Button 
+                                className="ml-2"
+                                type="button" 
+                                variant="contained" 
+                                color="secondary" 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.inventoryUrl);
+                                }}>
+                                {props.navigateToInventoryListText}
+                            </Button> 
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}

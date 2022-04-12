@@ -9,7 +9,7 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 const NewWarehouseForm = (props) => {
 
     const [state, dispatch] = useContext(Context);
-    const [showBackToWarehouseListButton, setShowBackToWarehouseListButton] = useState(false);
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : null, error: "" },
@@ -48,8 +48,8 @@ const NewWarehouseForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
+                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonRes.id });
-                        setShowBackToWarehouseListButton(true);
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -99,26 +99,24 @@ const NewWarehouseForm = (props) => {
                            error={(errors.location.length > 0) && dirty.location}/>
                     </div>
                     <div className="field">
-                        {showBackToWarehouseListButton ? (
-                            <Button 
-                                type="button" 
-                                variant="contained" 
-                                color="primary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.warehouseUrl);
-                                }}>
-                                {props.navigateToWarehouseListText}
-                            </Button> 
-                        ) : (
-                            <Button 
-                                type="subbmit" 
-                                variant="contained"
-                                color="primary"
-                                disabled={state.isLoading || disable}>
-                                {props.saveText}
-                            </Button>
-                        )}
+                        <Button 
+                            type="subbmit" 
+                            variant="contained"
+                            color="primary"
+                            disabled={state.isLoading || disable || disableSaveButton}>
+                            {props.saveText}
+                        </Button>
+                        <Button 
+                            className="ml-2"
+                            type="button" 
+                            variant="contained" 
+                            color="secondary" 
+                            onClick={(e) => {
+                                e.preventDefault();
+                                NavigationHelper.redirect(props.warehouseUrl);
+                            }}>
+                            {props.navigateToWarehouseListText}
+                        </Button> 
                     </div>
                 </form>
             </div>

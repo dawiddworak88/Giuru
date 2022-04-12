@@ -240,9 +240,10 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
             bool isNew, 
             bool isPublished,
             Guid? primaryProductId, 
-            Guid? categoryId, 
+            Guid? categoryId,
             IEnumerable<Guid> images, 
             IEnumerable<Guid> files,
+            string ean,
             string formData)
         {
             var requestModel = new SaveProductApiRequestModel
@@ -257,6 +258,7 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
                 CategoryId = categoryId,
                 Images = images,
                 Files = files,
+                Ean = ean,
                 FormData = formData
             };
 

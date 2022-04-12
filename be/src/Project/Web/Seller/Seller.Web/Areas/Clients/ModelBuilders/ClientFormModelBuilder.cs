@@ -68,7 +68,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ClientsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 Languages = languages,
                 IdLabel = this.globalLocalizer.GetString("Id"),
-                PhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel")
+                PhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel"),
+                ClientsUrl = this.linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                NavigateToClientsLabel = this.clientLocalizer.GetString("NavigateToClientsLabel")
             };
 
             if (componentModel.Id.HasValue)

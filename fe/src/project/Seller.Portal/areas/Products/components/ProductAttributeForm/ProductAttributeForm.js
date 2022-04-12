@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -8,7 +8,7 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function ProductAttributeForm(props) {
-
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const [state, dispatch] = useContext(Context);
 
     const stateSchema = {
@@ -47,6 +47,7 @@ function ProductAttributeForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
+                        setDisableSaveButton(true)
                         toast.success(jsonResponse.message);
 
                         if (!id) {
@@ -91,8 +92,23 @@ function ProductAttributeForm(props) {
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">
-                            <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                color="primary" 
+                                disabled={state.isLoading || disable || disableSaveButton}>
                                 {props.saveText}
+                            </Button>
+                            <Button 
+                                className="ml-2"
+                                type="button" 
+                                variant="contained" 
+                                color="secondary" 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.attributesUrl)
+                                }}>
+                                {props.navigateToAttributesLabel}
                             </Button>
                         </div>
                     </form>

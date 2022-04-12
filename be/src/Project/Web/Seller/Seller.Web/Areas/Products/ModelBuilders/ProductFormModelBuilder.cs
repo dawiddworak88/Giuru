@@ -20,6 +20,7 @@ using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Shared.Repositories.Products;
 using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Definitions;
+using System;
 
 namespace Seller.Web.Areas.ModelBuilders.Products
 {
@@ -80,7 +81,10 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 SelectPrimaryProductLabel = this.productLocalizer.GetString("SelectPrimaryProduct"),
                 IsNewLabel = this.productLocalizer.GetString("IsNew"),
                 IsPublishedLabel = this.productLocalizer.GetString("IsPublished"),
-                GetCategorySchemaUrl = this.linkGenerator.GetPathByAction("Get", "CategorySchemasApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                GetCategorySchemaUrl = this.linkGenerator.GetPathByAction("Get", "CategorySchemasApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                ProductsUrl = this.linkGenerator.GetPathByAction("Index", "Products", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                EanLabel = this.globalLocalizer.GetString("Ean"),
+                NavigateToProductsLabel = this.productLocalizer.GetString("NavigateToProductsLabel")
             };
 
             var categories = await this.categoriesRepository.GetAllCategoriesAsync(
@@ -115,6 +119,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                     viewModel.CategoryId = product.CategoryId;
                     viewModel.PrimaryProductId = product.PrimaryProductId;
                     viewModel.FormData = product.FormData;
+                    viewModel.Ean = product.Ean;
 
                     var categorySchema = await this.categoriesRepository.GetCategorySchemaAsync(
                         componentModel.Token,
