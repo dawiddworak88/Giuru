@@ -157,7 +157,7 @@ namespace Inventory.Api.Services
         {
             var inventories = from c in this.context.Inventory
                               join warehouse in this.context.Warehouses on c.WarehouseId equals warehouse.Id
-                              where c.SellerId == model.OrganisationId.Value && c.IsActive
+                              where c.IsActive
                               select new InventoryServiceModel
                               {
                                 Id = c.Id,
