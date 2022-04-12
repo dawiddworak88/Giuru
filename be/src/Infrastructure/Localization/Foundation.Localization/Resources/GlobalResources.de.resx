@@ -456,4 +456,7 @@
   <data name="Id" xml:space="preserve">
     <value>Id:</value>
   </data>
+  <data name="Ean" xml:space="preserve">
+    <value>EAN:</value>
+  </data>
 </root>

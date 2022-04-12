@@ -80,7 +80,8 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 SelectPrimaryProductLabel = this.productLocalizer.GetString("SelectPrimaryProduct"),
                 IsNewLabel = this.productLocalizer.GetString("IsNew"),
                 IsPublishedLabel = this.productLocalizer.GetString("IsPublished"),
-                GetCategorySchemaUrl = this.linkGenerator.GetPathByAction("Get", "CategorySchemasApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                GetCategorySchemaUrl = this.linkGenerator.GetPathByAction("Get", "CategorySchemasApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                EanLabel = this.globalLocalizer.GetString("Ean")
             };
 
             var categories = await this.categoriesRepository.GetAllCategoriesAsync(
@@ -118,6 +119,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                     viewModel.Sku = $"{product.Sku} {this.globalLocalizer.GetString("Copy")}";
                     viewModel.Description = product.Description;
                     viewModel.IsNew = product.IsNew;
+                    viewModel.Ean = product.Ean;
                     viewModel.IsPublished = product.IsPublished;
                     viewModel.CategoryId = product.CategoryId;
                     viewModel.PrimaryProductId = product.PrimaryProductId;

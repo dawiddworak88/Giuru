@@ -27,6 +27,7 @@ namespace Seller.Web.Areas.Shared.Repositories.Products
             Guid? categoryId, 
             IEnumerable<Guid> images, 
             IEnumerable<Guid> files,
+            string ean,
             string formData);
         Task TriggerProductsReindexingAsync(string token, string language);
     }

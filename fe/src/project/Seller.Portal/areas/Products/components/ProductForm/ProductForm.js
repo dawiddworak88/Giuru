@@ -38,7 +38,8 @@ function ProductForm(props) {
         schema: { value: props.schema ? JSON.parse(props.schema) : {} },
         uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : {} },
         formData: { value: props.formData ? JSON.parse(props.formData) : {} },
-        isPublished: { value: props.isPublished ? props.isPublished : false }
+        isPublished: { value: props.isPublished ? props.isPublished : false },
+        ean: { value: props.ean ? props.ean : null }
     };
 
     const stateValidatorSchema = {
@@ -110,6 +111,7 @@ function ProductForm(props) {
             images,
             files,
             isNew,
+            ean,
             formData: JSON.stringify(formData),
             isPublished
         };
@@ -154,20 +156,10 @@ function ProductForm(props) {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const { 
-        id, 
-        category, 
-        sku, 
-        name, 
-        description, 
-        primaryProduct, 
-        images, 
-        files, 
-        isNew, 
-        schema, 
-        uiSchema, 
-        formData,
-        isPublished } = values;
-    
+        id, category, sku, name, description, primaryProduct, images, 
+        files, isNew, schema, uiSchema, formData, isPublished, ean 
+    } = values;
+
     return (
         <section className="section section-small-padding product">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -216,6 +208,15 @@ function ProductForm(props) {
                                 autoComplete
                                 renderInput={(params) => <TextField {...params} label={props.selectPrimaryProductLabel} margin="normal" />}
                             />
+                        </div>
+                        <div className="field">
+                            <TextField 
+                                id="ean" 
+                                name="ean" 
+                                label={props.eanLabel} 
+                                fullWidth={true}
+                                value={ean} 
+                                onChange={handleOnChange} />
                         </div>
                         <div className="field">
                             <MediaCloud
@@ -329,7 +330,8 @@ ProductForm.propTypes = {
     deleteLabel: PropTypes.string.isRequired,
     getCategorySchemaUrl: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
-    idLabel: PropTypes.string
+    eanLabel: PropTypes.string.isRequired,
+    idLabel: PropTypes.string,
 };
 
 export default ProductForm;
