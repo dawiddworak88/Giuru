@@ -6,9 +6,6 @@ import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelpe
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import ReactPhoneInput from 'react-phone-input-material-ui';
-import PhoneInputPLTranslation from "react-phone-input-material-ui/lang/pl.json"
-import PhoneInputDETranslation from "react-phone-input-material-ui/lang/de.json"
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -113,11 +110,6 @@ function ClientForm(props) {
             });
     };
 
-    const phoneInputLocale = {
-        pl: PhoneInputPLTranslation,
-        de: PhoneInputDETranslation
-    }
-
     const {
         values, errors, dirty, disable,
         setFieldValue, handleOnChange, handleOnSubmit
@@ -182,19 +174,13 @@ function ClientForm(props) {
                             </FormControl>
                         </div>
                         <div className="field">
-                            <ReactPhoneInput
-                                inputProps={{
-                                    id: "phoneNumber",
-                                    name: "phoneNumber",
-                                    label: props.phoneNumberLabel
-                                }}
-                                value={phoneNumber}
-                                regions={"europe"}
-                                localization={phoneInputLocale[props.locale]}
-                                country={"pl"}
-                                component={TextField}
-                                onChange={(value) => setFieldValue({name: "phoneNumber", value: value})}
-                            />
+                            <TextField 
+                                id="phoneNumber" 
+                                name="phoneNumber" 
+                                label={props.phoneNumberLabel} 
+                                fullWidth={true}
+                                value={phoneNumber} 
+                                onChange={handleOnChange} />
                         </div>
                         <div className="field client-form__field-row">
                             <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>{props.saveText}</Button>
