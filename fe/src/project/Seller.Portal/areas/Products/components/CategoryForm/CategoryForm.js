@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -6,10 +6,11 @@ import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress } from "@material-ui/core";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function CategoryForm(props) {
-
     const [state, dispatch] = useContext(Context);
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
 
     const stateSchema = {
 
@@ -49,7 +50,7 @@ function CategoryForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-
+                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
@@ -82,7 +83,9 @@ function CategoryForm(props) {
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                         {id &&
-                            <input id="id" name="id" type="hidden" value={id} />
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                            </div>
                         }
                         <div className="field">
                             <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
@@ -120,8 +123,23 @@ function CategoryForm(props) {
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
                         <div className="field">
-                            <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                color="primary" 
+                                disabled={state.isLoading || disable || disableSaveButton}>
                                 {props.saveText}
+                            </Button>
+                            <Button
+                                className="ml-2"
+                                type="button"
+                                variant="contained" 
+                                color="secondary"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.categoriesUrl);
+                                }}>
+                                {props.navigateToCategoriesLabel}
                             </Button>
                         </div>
                     </form>
@@ -149,7 +167,8 @@ CategoryForm.propTypes = {
     saveMediaUrl: PropTypes.string.isRequired,
     deleteLabel: PropTypes.string.isRequired,
     categoryPictureLabel: PropTypes.string.isRequired,
-    saveUrl: PropTypes.string.isRequired
+    saveUrl: PropTypes.string.isRequired,
+    idLabel: PropTypes.string
 };
 
 export default CategoryForm;

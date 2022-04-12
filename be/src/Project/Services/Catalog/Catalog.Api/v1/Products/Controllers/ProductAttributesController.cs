@@ -134,6 +134,7 @@ namespace Catalog.Api.v1.Products.Controllers
                             Items = productAttribute.ProductAttributeItems.OrEmptyIfNull().Select(x => new ProductAttributeItemResponseModel 
                             {
                                 Id = x.Id,
+                                ProductAttributeId = x.ProductAttributeId,
                                 Name = x.Name,
                                 Order = x.Order,
                                 LastModifiedDate = x.LastModifiedDate,
@@ -169,6 +170,7 @@ namespace Catalog.Api.v1.Products.Controllers
                             Items = productAttribute.ProductAttributeItems.OrEmptyIfNull().Select(x => new ProductAttributeItemResponseModel
                             {
                                 Id = x.Id,
+                                ProductAttributeId = x.ProductAttributeId,
                                 Name = x.Name,
                                 Order = x.Order,
                                 LastModifiedDate = x.LastModifiedDate,
@@ -227,6 +229,7 @@ namespace Catalog.Api.v1.Products.Controllers
                         Items = productAttribute.ProductAttributeItems.OrEmptyIfNull().Select(x => new ProductAttributeItemResponseModel
                         {
                             Id = x.Id,
+                            ProductAttributeId = x.ProductAttributeId,
                             Name = x.Name,
                             Order = x.Order,
                             LastModifiedDate = x.LastModifiedDate,

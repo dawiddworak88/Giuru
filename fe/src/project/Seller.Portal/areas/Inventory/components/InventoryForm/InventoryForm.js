@@ -17,7 +17,7 @@ import QuantityValidator from "../../../../../../shared/helpers/validators/Quant
 const InventoryForm = (props) => {
 
     const [state, dispatch] = useContext(Context);
-    const [showBackToInventoryListButton, setShowBackToInventoryListButton] = useState(false);
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
     
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -82,7 +82,8 @@ const InventoryForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
-                        setShowBackToInventoryListButton(true);
+                        setDisableSaveButton(true);
+                        setFieldValue({ name: "id", value: jsonRes.id });
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -104,7 +105,9 @@ const InventoryForm = (props) => {
                 <div className="column is-half inventory-add-content">
                     <form onSubmit={handleOnSubmit} className="is-modern-form" method="post">
                         {id &&
-                            <input id="id" name="id" type="hidden" value={id} />
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                            </div>
                         }
                         <div className="field">
                             <FormControl fullWidth={true} helperText={dirty.warehouseId ? errors.warehouseId : ""} error={(errors.warehouseId.length > 0) && dirty.warehouseId}>
@@ -219,26 +222,24 @@ const InventoryForm = (props) => {
                             </MuiPickersUtilsProvider>
                         </div>
                         <div className="field">
-                            {showBackToInventoryListButton ? (
-                                <Button 
-                                    type="button" 
-                                    variant="contained" 
-                                    color="primary" 
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        NavigationHelper.redirect(props.inventoryUrl);
-                                    }}>
-                                    {props.navigateToInventoryListText}
-                                </Button> 
-                            ) : (
-                                <Button 
-                                    type="subbmit" 
-                                    variant="contained"
-                                    color="primary"
-                                    disabled={state.isLoading || disable || !product}>
-                                    {props.saveText}
-                                </Button>
-                            )}
+                            <Button 
+                                type="subbmit" 
+                                variant="contained"
+                                color="primary"
+                                disabled={state.isLoading || disable || !product || disableSaveButton}>
+                                {props.saveText}
+                            </Button>
+                            <Button 
+                                className="ml-2"
+                                type="button" 
+                                variant="contained" 
+                                color="secondary" 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.inventoryUrl);
+                                }}>
+                                {props.navigateToInventoryListText}
+                            </Button> 
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}
@@ -269,7 +270,8 @@ InventoryForm.propTypes = {
     warehouseRequiredErrorMessage: PropTypes.string,
     productRequiredErrorMessage: PropTypes.string,
     quantityRequiredErrorMessage: PropTypes.string,
-    quantityFormatErrorMessage: PropTypes.string
+    quantityFormatErrorMessage: PropTypes.string,
+    idLabel: PropTypes.string
 };
 
 export default InventoryForm;

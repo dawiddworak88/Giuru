@@ -10,5 +10,6 @@ namespace Identity.Api.Services.Users
         Task<UserServiceModel> GetByExpirationId(GetUserServiceModel serviceModel);
         Task<UserServiceModel> UpdateAsync(UpdateUserServiceModel serviceModel);
         Task<UserServiceModel> SetPasswordAsync(SetUserPasswordServiceModel serviceModel);
+        Task ResetPasswordAsync(ResetUserPasswordServiceModel serviceModel);
     }
 }

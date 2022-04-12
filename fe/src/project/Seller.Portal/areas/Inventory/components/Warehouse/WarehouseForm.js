@@ -2,14 +2,14 @@ import React, {useContext, useState} from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
-import { TextField, Button } from "@material-ui/core";
+import { TextField, Button, InputLabel } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 const WarehouseForm = (props) => {
 
     const [state, dispatch] = useContext(Context);
-    const [showBackToWarehouseListButton, setShowBackToWarehouseListButton] = useState(false);
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : null, error: "" },
@@ -48,7 +48,8 @@ const WarehouseForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
-                        setShowBackToWarehouseListButton(true);
+                        setDisableSaveButton(true);
+                        setFieldValue({ name: "id", value: jsonRes.id });
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -59,15 +60,20 @@ const WarehouseForm = (props) => {
 
     const {
         values, errors, dirty, disable,
-        handleOnChange, handleOnSubmit
+        setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const {name, location} = values;
+    const {id, name, location} = values;
     return (
         <section className="section section-small-padding inventory-add">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="column is-half inventory-add-content">
                 <form onSubmit={handleOnSubmit} className="is-modern-form" method="post">
+                    {id &&
+                        <div className="field">
+                            <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                        </div>
+                    }
                     <div className="field">
                         <TextField 
                            id="name" 
@@ -93,26 +99,24 @@ const WarehouseForm = (props) => {
                            error={(errors.location.length > 0) && dirty.location}/>
                     </div>
                     <div className="field">
-                        {showBackToWarehouseListButton ? (
-                            <Button 
-                                type="button" 
-                                variant="contained" 
-                                color="primary" 
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    NavigationHelper.redirect(props.warehouseUrl);
-                                }}>
-                                {props.navigateToWarehouseListText}
-                            </Button> 
-                        ) : (
-                            <Button 
-                                type="subbmit" 
-                                variant="contained"
-                                color="primary"
-                                disabled={state.isLoading || disable}>
-                                {props.saveText}
-                            </Button>
-                        )}
+                        <Button 
+                            type="subbmit" 
+                            variant="contained"
+                            color="primary"
+                            disabled={state.isLoading || disable || disableSaveButton}>
+                            {props.saveText}
+                        </Button>
+                        <Button 
+                            className="ml-2"
+                            type="button" 
+                            variant="contained" 
+                            color="secondary" 
+                            onClick={(e) => {
+                                e.preventDefault();
+                                NavigationHelper.redirect(props.warehouseUrl);
+                            }}>
+                            {props.navigateToWarehouseListText}
+                        </Button> 
                     </div>
                 </form>
             </div>
@@ -134,7 +138,8 @@ WarehouseForm.propTypes = {
     addText: PropTypes.string,
     navigateToWarehouseListText: PropTypes.string,
     warehouseUrl: PropTypes.string,
-    locationLabel: PropTypes.string
+    locationLabel: PropTypes.string,
+    idLabel: PropTypes.string
 };
 
 export default WarehouseForm;

@@ -19,6 +19,7 @@ namespace Seller.Web.Areas.News.ViewModel
         public string SaveUrl { get; set; }
         public string CategoriesUrl { get; set; }
         public string SaveText { get; set; }
+        public string IdLabel { get; set; }
         public IEnumerable<ListItemViewModel> ParentCategories { get; set; }
     }
 }

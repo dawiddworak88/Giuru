@@ -42,7 +42,6 @@ function SignInForm(props) {
     } = useForm(stateSchema, stateValidatorSchema);
 
     const { email, password } = values;
-
     return (
         <section className="section is-flex-centered">
             <div className="account-card">
@@ -59,7 +58,10 @@ function SignInForm(props) {
                         <TextField id="password" name="password" type="password" label={props.enterPasswordText} fullWidth={true} 
                             value={password} onChange={handleOnChange} helperText={dirty.password ? errors.password : ""} error={(errors.password.length > 0) && dirty.password} />
                     </div>
-                    <div className="field">
+                    <div className="is-flex is-justify-content-end">
+                        <a className="button is-text is-size-7" href={props.resetPasswordUrl}>{props.forgotPasswordLabel}</a>
+                    </div>
+                    <div className="field mt-4">
                         <Button type="submit" variant="contained" color="primary" disabled={disable} fullWidth={true}>
                             {props.signInText}
                         </Button>

@@ -11,7 +11,7 @@ import {
 
 const CategoryForm = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [showBackToCategoriesListButton, setShowBackToCategoriesListButton] = useState(false);
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
@@ -38,7 +38,8 @@ const CategoryForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
-                        setShowBackToCategoriesListButton(true);
+                        setDisableSaveButton(true);
+                        setFieldValue({ name: "id", value: jsonRes.id });
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -69,7 +70,9 @@ const CategoryForm = (props) => {
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit}>
                         {id &&
-                            <input id="id" name="id" type="hidden" value={id} />
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                            </div>
                         }
                         <div className="field">
                             <TextField 
@@ -100,26 +103,24 @@ const CategoryForm = (props) => {
                             </FormControl>
                         </div>
                         <div className="field">
-                            {showBackToCategoriesListButton ? (
-                                <Button 
-                                    type="button" 
-                                    variant="contained" 
-                                    color="primary" 
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        NavigationHelper.redirect(props.categoriesUrl);
-                                    }}>
-                                    {props.navigateToCategoriesLabel}
-                                </Button> 
-                            ) : (
-                                <Button 
-                                    type="submit" 
-                                    variant="contained" 
-                                    color="primary"
-                                    disabled={state.isLoading || disable}>
-                                    {props.saveText}
-                                </Button>
-                            )}
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                color="primary"
+                                disabled={state.isLoading || disable || disableSaveButton}>
+                                {props.saveText}
+                            </Button>
+                            <Button
+                                className="ml-2"
+                                type="button" 
+                                variant="contained" 
+                                color="secondary" 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.categoriesUrl);
+                                }}>
+                                {props.navigateToCategoriesLabel}
+                            </Button> 
                         </div>
                     </form>
                 </div>
@@ -146,7 +147,8 @@ CategoryForm.propTypes = {
     saveMediaUrl: PropTypes.string.isRequired,
     deleteLabel: PropTypes.string.isRequired,
     categoryPictureLabel: PropTypes.string.isRequired,
-    saveUrl: PropTypes.string.isRequired
+    saveUrl: PropTypes.string.isRequired,
+    idLabel: PropTypes.string
 };
 
 export default CategoryForm;

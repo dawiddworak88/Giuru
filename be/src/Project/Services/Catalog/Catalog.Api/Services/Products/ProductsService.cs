@@ -69,6 +69,7 @@ namespace Catalog.Api.Services.Products
                 IsPublished = model.IsPublished,
                 IsProtected = model.IsProtected,
                 Sku = model.Sku,
+                Ean = model.Ean,
                 BrandId = brand.Id,
                 CategoryId = category.Id,
                 PrimaryProductId = model.PrimaryProductId
@@ -166,6 +167,7 @@ namespace Catalog.Api.Services.Products
             product.IsPublished = model.IsPublished;
             product.IsProtected = model.IsProtected;
             product.Sku = model.Sku;
+            product.Ean = model.Ean;
             product.BrandId = brand.Id;
             product.CategoryId = category.Id;
             product.PrimaryProductId = model.PrimaryProductId;
@@ -458,6 +460,7 @@ namespace Catalog.Api.Services.Products
                 CategoryId = searchResultItem.CategoryId,
                 CategoryName = searchResultItem.CategoryName,
                 IsNew = searchResultItem.IsNew,
+                Ean = searchResultItem.Ean,
                 IsPublished = searchResultItem.IsPublished,
                 IsProtected = searchResultItem.IsProtected,
                 Sku = searchResultItem.Sku,

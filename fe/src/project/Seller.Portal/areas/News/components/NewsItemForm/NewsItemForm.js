@@ -18,7 +18,7 @@ import { stateFromMarkdown } from 'draft-js-import-markdown';
 
 const NewsItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [showBackToNewsListButton, setShowBackToNewsListButton] = useState(false);
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const [convertedToRaw, setConvertedToRaw] = useState(props.content ? props.content : null);
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     
@@ -78,7 +78,8 @@ const NewsItemForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
-                        setShowBackToNewsListButton(true);
+                        setDisableSaveButton(true);
+                        setFieldValue({ name: "id", value: jsonRes.id });
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -156,7 +157,7 @@ const NewsItemForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
     
-    const { title, previewImage, thumbnailImage, description, isPublished, files, categoryId } = values;
+    const { id, title, previewImage, thumbnailImage, description, isPublished, files, categoryId } = values;
     
     return (
         <section className="section section-small-padding">
@@ -164,6 +165,11 @@ const NewsItemForm = (props) => {
             <div className="columns is-desktop">
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit}>
+                        {id &&
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                            </div>
+                        }
                         <div className="field">
                             <TextField 
                                 id="title"
@@ -290,27 +296,25 @@ const NewsItemForm = (props) => {
                             </NoSsr>
                         </div>
                         <div className="field">
-                            {showBackToNewsListButton ? (
-                                <Button 
-                                    type="button" 
-                                    variant="contained" 
-                                    color="primary" 
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        NavigationHelper.redirect(props.newsUrl);
-                                    }}>
-                                    {props.navigateToNewsLabel}
-                                </Button> 
-                            ) : (
-                                <Button 
+                            <Button 
                                     type="submit" 
                                     variant="contained" 
                                     color="primary"
-                                    disabled={state.isLoading || disable || !convertedToRaw}
+                                    disabled={state.isLoading || disable || !convertedToRaw || disableSaveButton}
                                 >
-                                    {props.saveText}
-                                </Button>
-                            )}
+                                {props.saveText}
+                            </Button>
+                            <Button 
+                                className="ml-2"
+                                type="button" 
+                                variant="contained" 
+                                color="secondary" 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.newsUrl);
+                                }}>
+                                {props.navigateToNewsLabel}
+                            </Button> 
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}
@@ -340,7 +344,8 @@ NewsItemForm.propTypes = {
     isNewLabel: PropTypes.string,
     categoryLabel: PropTypes.string,
     selectCategoryLabel: PropTypes.string,
-    thumbImageLabel: PropTypes.string
+    thumbImageLabel: PropTypes.string,
+    idLabel: PropTypes.string
 }
 
 export default NewsItemForm;

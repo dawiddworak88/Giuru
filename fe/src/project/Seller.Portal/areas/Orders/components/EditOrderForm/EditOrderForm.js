@@ -6,7 +6,7 @@ import { CircularProgress } from "@material-ui/core";
 import {
     FormControl, InputLabel, Select, MenuItem, Button,
     Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper
+    TableHead, TableRow, Paper, TextField
 } from "@material-ui/core";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
@@ -44,7 +44,6 @@ function EditOrderForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-
                         setOrderStatusId(jsonResponse.orderStatusId);
                         toast.success(jsonResponse.message);
                     }
@@ -62,44 +61,57 @@ function EditOrderForm(props) {
         <section className="section section-small-padding edit-order">
             <h1 className="subtitle is-4">{props.title}</h1>
             <h2 className="subtitle is-5 edit-order__items-subtitle">{props.orderStatusLabel}</h2>
-            <form className="is-modern-form" onSubmit={handleOrderStatusSubmit} method="post">
-                <div className="columns is-desktop">
-                    <div className="column is-3">
+            {props.id &&
+                <div className="columns is-desktop mt-0 mb-0">
+                    <div className="column is-3 pb-0">
                         <div className="field">
-                            <FormControl fullWidth={true}>
-                                <InputLabel id="order-status-label">{props.orderStatusLabel}</InputLabel>
-                                <Select
-                                    labelId="order-status-label"
-                                    id="orderStatus"
-                                    name="orderStatus"
-                                    value={orderStatusId}
-                                    onChange={(e) => {
-
-                                        e.preventDefault();
-                                        setOrderStatusId(e.target.value);
-                                    }}>
-                                    {props.orderStatuses.map(status => {
-                                        return (
-                                            <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>
-                                        );
-                                    })}
-                                </Select>
-                            </FormControl>
-                        </div>
-                    </div>
-                    <div className="column is-3">
-                        <div className="field">
-                            <Button type="submit" variant="contained" color="primary" disabled={state.isLoading}>
-                                {props.saveText}
-                            </Button>
+                            <InputLabel id="id-label">{props.idLabel} {props.id}</InputLabel>
                         </div>
                     </div>
                 </div>
-            </form>
-            <div className="mt-5">
-                <h2 className="subtitle is-5 edit-order__items-subtitle">{props.clientLabel}</h2>
-                <div>
-                    <a href={props.clientUrl}>{props.clientName}</a>
+            }
+            <div className="columns is-desktop">
+                <div className="column is-half">
+                    <form className="is-modern-form" onSubmit={handleOrderStatusSubmit} method="post">
+                        <div className="columns is-desktop">
+                            <div className="column">
+                                <div className="field">
+                                    <FormControl fullWidth={true}>
+                                        <InputLabel id="order-status-label">{props.orderStatusLabel}</InputLabel>
+                                        <Select
+                                            labelId="order-status-label"
+                                            id="orderStatus"
+                                            name="orderStatus"
+                                            value={orderStatusId}
+                                            onChange={(e) => {
+                                                e.preventDefault();
+                                                setOrderStatusId(e.target.value);
+                                            }}>
+                                            {props.orderStatuses.map(status => {
+                                                return (
+                                                    <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>
+                                                );
+                                            })}
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                            </div>
+                            <div className="column">
+                                <div className="field">
+                                    <Button type="submit" variant="contained" color="primary" disabled={state.isLoading}>
+                                        {props.saveText}
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div className="mt-5">
+                        <h2 className="subtitle is-5 edit-order__items-subtitle">{props.clientLabel}</h2>
+                        <div>
+                            <a href={props.clientUrl}>{props.clientName}</a>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
             <div className="mt-5">
@@ -169,7 +181,8 @@ EditOrderForm.propTypes = {
     clientLabel: PropTypes.string.isRequired,
     clientName: PropTypes.string.isRequired,
     clientUrl: PropTypes.string.isRequired,
-    updateOrderStatusUrl: PropTypes.string.isRequired
+    updateOrderStatusUrl: PropTypes.string.isRequired,
+    idLabel: PropTypes.string
 };
 
 export default EditOrderForm;

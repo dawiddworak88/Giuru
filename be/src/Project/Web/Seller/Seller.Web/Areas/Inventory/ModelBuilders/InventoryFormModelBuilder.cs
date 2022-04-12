@@ -43,6 +43,7 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
         {
             var viewModel = new InventoryFormViewModel
             {
+                IdLabel = this.globalLocalizer.GetString("Id"),
                 Title = this.inventoryLocalizer.GetString("EditInventory"),
                 SelectWarehouseLabel = this.inventoryLocalizer.GetString("Warehouse"),
                 SelectProductLabel = this.inventoryLocalizer.GetString("SelectProductLabel"),

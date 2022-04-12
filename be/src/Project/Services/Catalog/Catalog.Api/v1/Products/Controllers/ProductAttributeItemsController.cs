@@ -82,6 +82,7 @@ namespace Catalog.Api.v1.Products.Controllers
                         {
                             Id = x.Id,
                             Name = x.Name,
+                            ProductAttributeId = x.ProductAttributeId,
                             Order = x.Order,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
@@ -133,6 +134,7 @@ namespace Catalog.Api.v1.Products.Controllers
                         var response = new ProductAttributeItemResponseModel
                         {
                             Id = productAttributeItem.Id,
+                            ProductAttributeId = productAttributeItem.ProductAttributeId,
                             Name = productAttributeItem.Name,
                             Order = productAttributeItem.Order,
                             LastModifiedDate = productAttributeItem.LastModifiedDate,
@@ -160,6 +162,7 @@ namespace Catalog.Api.v1.Products.Controllers
                         var response = new ProductAttributeItemResponseModel
                         {
                             Id = productAttributeItem.Id,
+                            ProductAttributeId = productAttributeItem.ProductAttributeId,
                             Name = productAttributeItem.Name,
                             Order = productAttributeItem.Order,
                             LastModifiedDate = productAttributeItem.LastModifiedDate,
@@ -210,6 +213,7 @@ namespace Catalog.Api.v1.Products.Controllers
                     var response = new ProductAttributeItemResponseModel
                     {
                         Id = productAttributeItem.Id,
+                        ProductAttributeId = productAttributeItem.ProductAttributeId,
                         Name = productAttributeItem.Name,
                         Order = productAttributeItem.Order,
                         LastModifiedDate = productAttributeItem.LastModifiedDate,
