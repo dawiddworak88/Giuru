@@ -18,7 +18,7 @@ import { stateFromMarkdown } from 'draft-js-import-markdown';
 
 const NewsItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [showBackToNewsListButton, setShowBackToNewsListButton] = useState(false);
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const [convertedToRaw, setConvertedToRaw] = useState(props.content ? props.content : null);
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     
@@ -78,8 +78,8 @@ const NewsItemForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
+                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonRes.id });
-                        setShowBackToNewsListButton(true);
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -296,27 +296,25 @@ const NewsItemForm = (props) => {
                             </NoSsr>
                         </div>
                         <div className="field">
-                            {showBackToNewsListButton ? (
-                                <Button 
-                                    type="button" 
-                                    variant="contained" 
-                                    color="primary" 
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        NavigationHelper.redirect(props.newsUrl);
-                                    }}>
-                                    {props.navigateToNewsLabel}
-                                </Button> 
-                            ) : (
-                                <Button 
+                            <Button 
                                     type="submit" 
                                     variant="contained" 
                                     color="primary"
-                                    disabled={state.isLoading || disable || !convertedToRaw}
+                                    disabled={state.isLoading || disable || !convertedToRaw || disableSaveButton}
                                 >
-                                    {props.saveText}
-                                </Button>
-                            )}
+                                {props.saveText}
+                            </Button>
+                            <Button 
+                                className="ml-2"
+                                type="button" 
+                                variant="contained" 
+                                color="secondary" 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.newsUrl);
+                                }}>
+                                {props.navigateToNewsLabel}
+                            </Button> 
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}

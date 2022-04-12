@@ -459,4 +459,7 @@
   <data name="LoadingLabel" xml:space="preserve">
     <value>Der Ladevorgang läuft</value>
   </data>
+  <data name="Ean" xml:space="preserve">
+    <value>EAN:</value>
+  </data>
 </root>

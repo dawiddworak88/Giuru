@@ -12,6 +12,8 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string NameLabel { get; set; }
         public string SaveText { get; set; }
         public string GeneralErrorMessage { get; set; }
+        public string ProductAttributeUrl { get; set; }
+        public string NavigateToProductAttributesLabel { get; set; }
         public string SaveUrl { get; set; }
         public string IdLabel { get; set; }
     }
