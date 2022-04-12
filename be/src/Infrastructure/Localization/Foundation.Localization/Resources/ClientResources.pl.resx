@@ -147,6 +147,9 @@
   <data name="EditClient" xml:space="preserve">
     <value>Edytuj klienta</value>
   </data>
+  <data name="NavigateToClientsLabel" xml:space="preserve">
+    <value>Powróć do klientów</value>
+  </data>
   <data name="NewClient" xml:space="preserve">
     <value>Nowy klient</value>
   </data>

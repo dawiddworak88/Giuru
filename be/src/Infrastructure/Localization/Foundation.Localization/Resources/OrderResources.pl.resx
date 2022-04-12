@@ -184,7 +184,7 @@
     <value>Nazwa:</value>
   </data>
   <data name="NavigateToOrdersList" xml:space="preserve">
-    <value>Wróć do listy zamówień</value>
+    <value>Powróć do zamówień</value>
   </data>
   <data name="NewOrder" xml:space="preserve">
     <value>Złóż zamówienie</value>

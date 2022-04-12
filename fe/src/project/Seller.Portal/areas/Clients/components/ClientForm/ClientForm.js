@@ -6,9 +6,11 @@ import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelpe
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
+    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const [canCreateAccount, setCanCreateAccount] = useState(false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -60,6 +62,7 @@ function ClientForm(props) {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
+                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         setCanCreateAccount(true);
                         toast.success(jsonResponse.message);
@@ -174,8 +177,33 @@ function ClientForm(props) {
                             </FormControl>
                         </div>
                         <div className="field client-form__field-row">
-                            <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>{props.saveText}</Button>
-                            <Button className="client-form__create-button" color="secondary" variant="contained" onClick={createAccount} disabled={state.isLoading || !canCreateAccount}>{props.accountText}</Button>
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                color="primary" 
+                                disabled={state.isLoading || disable || disableSaveButton}>
+                                {props.saveText}
+                            </Button>
+                            <Button 
+                                className="field-button"
+                                type="button" 
+                                color="secondary" 
+                                variant="contained" 
+                                onClick={createAccount} 
+                                disabled={state.isLoading || !canCreateAccount}>
+                                {props.accountText}
+                            </Button>
+                            <Button
+                                className="field-button"
+                                type="button"
+                                variant="contained" 
+                                color="primary"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.clientsUrl);
+                                }}>
+                                    {props.navigateToClientsLabel}
+                            </Button>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}

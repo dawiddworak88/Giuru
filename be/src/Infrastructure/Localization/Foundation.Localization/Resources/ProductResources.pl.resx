@@ -162,6 +162,15 @@
   <data name="IsPublished" xml:space="preserve">
     <value>Opublikowany</value>
   </data>
+  <data name="NavigateToAttributesLabel" xml:space="preserve">
+    <value>Powróć do atrybutów</value>
+  </data>
+  <data name="NavigateToCategoriesLabel" xml:space="preserve">
+    <value>Powróć do kategorii</value>
+  </data>
+  <data name="NavigateToProductsLabel" xml:space="preserve">
+    <value>Powróc do produktów</value>
+  </data>
   <data name="NewProduct" xml:space="preserve">
     <value>Nowy produkt</value>
   </data>

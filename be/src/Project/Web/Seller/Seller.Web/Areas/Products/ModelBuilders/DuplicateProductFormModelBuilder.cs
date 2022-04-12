@@ -81,7 +81,9 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 IsNewLabel = this.productLocalizer.GetString("IsNew"),
                 IsPublishedLabel = this.productLocalizer.GetString("IsPublished"),
                 GetCategorySchemaUrl = this.linkGenerator.GetPathByAction("Get", "CategorySchemasApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                EanLabel = this.globalLocalizer.GetString("Ean")
+                ProductsUrl = this.linkGenerator.GetPathByAction("Index", "Products", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                EanLabel = this.globalLocalizer.GetString("Ean"),
+                NavigateToProductsLabel = this.productLocalizer.GetString("NavigateToProductsLabel")
             };
 
             var categories = await this.categoriesRepository.GetAllCategoriesAsync(

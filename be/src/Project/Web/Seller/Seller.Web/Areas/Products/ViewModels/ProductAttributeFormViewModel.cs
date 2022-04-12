@@ -13,6 +13,8 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string GeneralErrorMessage { get; set; }
         public string EditUrl { get; set; }
         public string SaveUrl { get; set; }
+        public string AttributesUrl { get; set; }
+        public string NavigateToAttributesLabel { get; set; }
         public string IdLabel { get; set; }
     }
 }

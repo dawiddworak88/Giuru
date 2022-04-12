@@ -39,21 +39,27 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 NameRequiredErrorMessage = this.productLocalizer.GetString("EnterProductAttributeItemName"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductAttributeItemsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductAttributeItemsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                ProductAttributeUrl = this.linkGenerator.GetPathByAction("Edit", "ProductAttribute", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = componentModel.ProductAttributeId }),
+                NavigateToProductAttributesLabel = this.productLocalizer.GetString("NavigateToAttributesLabel")
             };
+
+            var productAttributeId = componentModel.ProductAttributeId;
 
             if (componentModel.Id.HasValue)
             {
                 var productAttributeItem = await this.productAttributeItemsRepository.GetByIdAsync(
-                    componentModel.Token,
-                    componentModel.Language,
-                    componentModel.Id);
+                    componentModel.Token, componentModel.Language, componentModel.Id);
 
                 if (productAttributeItem != null)
                 {
                     viewModel.Id = productAttributeItem.Id;
                     viewModel.Name = productAttributeItem.Name;
+
+                    productAttributeId = productAttributeItem.ProductAttributeId;
                 }
+
+                viewModel.ProductAttributeUrl = this.linkGenerator.GetPathByAction("Edit", "ProductAttribute", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = productAttributeId });
             }
             else
             {
