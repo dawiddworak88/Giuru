@@ -47,5 +47,7 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string NavigateToProductsLabel { get; set; }
         public string ProductsUrl { get; set; }
         public string IdLabel { get; set; }
+        public string EanLabel { get; set; }
+        public string Ean { get; set; }
     }
 }

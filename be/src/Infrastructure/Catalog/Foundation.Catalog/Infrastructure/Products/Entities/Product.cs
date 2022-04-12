@@ -2,7 +2,6 @@
 using Foundation.GenericRepository.Entities;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Foundation.Catalog.Infrastructure.Products.Entities
@@ -29,6 +28,8 @@ namespace Foundation.Catalog.Infrastructure.Products.Entities
 
         [Required]
         public Guid CategoryId { get; set; }
+
+        public string Ean { get; set; }
 
         public virtual Category Category { get; set; }
 
