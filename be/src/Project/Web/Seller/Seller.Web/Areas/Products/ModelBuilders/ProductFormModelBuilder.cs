@@ -83,7 +83,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 IsPublishedLabel = this.productLocalizer.GetString("IsPublished"),
                 GetCategorySchemaUrl = this.linkGenerator.GetPathByAction("Get", "CategorySchemasApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 ProductsUrl = this.linkGenerator.GetPathByAction("Index", "Products", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                EanLabel = this.globalLocalizer.GetString("Ean")
+                EanLabel = this.globalLocalizer.GetString("Ean"),
                 NavigateToProductsLabel = this.productLocalizer.GetString("NavigateToProductsLabel")
             };
 
