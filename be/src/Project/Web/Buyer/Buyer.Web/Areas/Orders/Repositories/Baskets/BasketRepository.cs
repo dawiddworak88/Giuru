@@ -31,11 +31,12 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             this.settings = settings;
         }
 
-        public async Task<Basket> SaveAsync(string token, string language, Guid? id, IEnumerable<BasketItem> items)
+        public async Task<Basket> SaveAsync(string token, string language, Guid? id, string moreInfo, IEnumerable<BasketItem> items)
         {
             var requestModel = new SaveBasketApiRequestModel
             {
                 Id = id,
+                MoreInfo = moreInfo,
                 Items = items.OrEmptyIfNull().Select(x => new BasketItemApiRequestModel
                 {
                     ProductId = x.ProductId,
@@ -64,6 +65,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 return new Basket
                 {
                     Id = response.Data.Id,
+                    MoreInfo = response.Data.MoreInfo,
                     Items = response.Data.Items.OrEmptyIfNull().Select(x => new BasketItem
                     {
                         Id = x.Id,

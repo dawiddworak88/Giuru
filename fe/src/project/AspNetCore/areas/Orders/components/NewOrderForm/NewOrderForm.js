@@ -7,13 +7,12 @@ import MomentUtils from "@date-io/moment";
 import { MuiPickersUtilsProvider, KeyboardDatePicker,} from "@material-ui/pickers";
 import Autosuggest from "react-autosuggest";
 import { Context } from "../../../../../../shared/stores/Store";
-import { TextField, Button, IconButton, CircularProgress } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ClearIcon from "@material-ui/icons/Clear";
 import AddShoppingCartRounded from "@material-ui/icons/AddShoppingCartRounded";
 import {
-    Fab, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper
+    Fab, Table, TableBody, TableCell, TableContainer, FormControlLabel,
+    TableHead, TableRow, Paper, TextField, Button, IconButton, CircularProgress, Checkbox
 } from "@material-ui/core";
 import moment from "moment";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
@@ -38,6 +37,8 @@ function NewOrderForm(props) {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
     const [showBackToOrdersListButton, setShowBackToOrdersListButton] = useState(false);
+    const [customOrder, setCustomOrder] = useState(false);
+    const [customOrderComment, setCustomOrderComment] = useState(null);
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -99,6 +100,7 @@ function NewOrderForm(props) {
 
         const basket = {
             id: basketId,
+            moreInfo: customOrderComment,
             items: [...orderItems, orderItem]
         };
 
@@ -485,6 +487,33 @@ function NewOrderForm(props) {
                             )}
                     </div>
                 </Fragment>
+                <div className="field">
+                    <FormControlLabel 
+                        label="Chcę złożyć zamówienie niestandardowe"
+                        control={
+                            <Checkbox 
+                                checked={customOrder}
+                                onChange={(e) => {
+                                    setCustomOrder(e.target.checked);
+                                }}/>
+                        }
+                    />
+                    {customOrder && 
+                        <TextField
+                            id="customOrder"
+                            name="customOrder"
+                            label="Dodaj zamówienie niestandardowe:"
+                            className="order__items"
+                            rows={3}
+                            fullWidth={true}
+                            multiline={true}
+                            value={customOrderComment}
+                            onChange={(e) => {
+                                setCustomOrderComment(e.target.value);
+                            }}
+                        />
+                    }
+                </div>
                 <div className="field">
                     {showBackToOrdersListButton ? (
                         <Button type="button" variant="contained" color="primary" onClick={handleBackToOrdersClick}>
