@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import {
     Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper
+    TableHead, TableRow, Paper, Button
 } from "@material-ui/core";
 import moment from "moment";
 
@@ -13,14 +13,26 @@ function StatusOrder(props) {
         <section className="section status-order">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
-                {status &&
-                    <div className="column is-3">
-                        <div className="status-ordder__details">{props.orderStatusLabel}: {status.name}</div>
-                        {props.expectedDelivery && 
-                            <div className="status-ordder__details">{props.expectedDeliveryLabel}: {moment(props.expectedDelivery).format("L")}</div>
-                        }
+                <div className="column is-3">
+                    {status &&
+                        <div className="status-order-container">
+                            <div className="status-ordder__details">{props.orderStatusLabel}: {status.name}</div>
+                            {props.expectedDelivery &&
+                                <div className="status-ordder__details">{props.expectedDeliveryLabel}: {moment(props.expectedDelivery).format("L")}</div>
+                            }
+                        </div>
+                    }
+                    <div className="mt-2">
+                        <Button 
+                            type="text" 
+                            variant="contained" 
+                            color="primary"
+                            disabled={!props.canCancelOrder}
+                        >
+                            {props.cancelOrderLabel}
+                        </Button>
                     </div>
-                }
+                </div>
             </div>
             <div className="mt-5">
                 <h2 className="subtitle is-5 status-order__items-subtitle">{props.orderItemsLabel}</h2>

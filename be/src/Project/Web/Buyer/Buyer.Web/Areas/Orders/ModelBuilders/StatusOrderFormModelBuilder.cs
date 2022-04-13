@@ -1,4 +1,5 @@
-﻿using Buyer.Web.Areas.Orders.Repositories;
+﻿using Buyer.Web.Areas.Orders.Definitions;
+using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.ViewModel;
 using Buyer.Web.Areas.Products.DomainModels;
 using Foundation.Extensions.ExtensionMethods;
@@ -8,6 +9,7 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,7 +50,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 SkuLabel = this.orderLocalizer.GetString("SkuLabel"),
                 OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
                 ExpectedDeliveryLabel = this.orderLocalizer.GetString("ExpectedDeliveryLabel"),
-                FabricsLabel = this.orderLocalizer.GetString("FabricsLabel")
+                FabricsLabel = this.orderLocalizer.GetString("FabricsLabel"),
+                CancelOrderLabel = this.orderLocalizer.GetString("CancelOrder")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -61,6 +64,11 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             var order = await this.ordersRepository.GetOrderAsync(componentModel.Token, componentModel.Language, componentModel.Id);
             if (order != null)
             {
+                if (order.OrderStatusId.Equals(OrdersConstants.OrderStatuses.NewId))
+                {
+                    viewModel.CanCancelOrder = true;
+                }
+
                 viewModel.Id = order.Id;
                 viewModel.OrderStatusId = order.OrderStatusId;
                 viewModel.ExpectedDelivery = order.ExpectedDeliveryDate;

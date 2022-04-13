@@ -129,6 +129,9 @@
   <data name="BasketDeletedSuccessfully" xml:space="preserve">
     <value>Koszyk został pomyślnie wyczyszczony</value>
   </data>
+  <data name="CancelOrder" xml:space="preserve">
+    <value>Anuluj zamówienie</value>
+  </data>
   <data name="ChangeDeliveryFrom" xml:space="preserve">
     <value>Zmień początkową datę dostawy</value>
   </data>
