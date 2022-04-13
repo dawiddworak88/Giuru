@@ -12,7 +12,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import AddShoppingCartRounded from "@material-ui/icons/AddShoppingCartRounded";
 import {
     Fab, Table, TableBody, TableCell, TableContainer, FormControlLabel,
-    TableHead, TableRow, Paper, TextField, Button, IconButton, CircularProgress, Checkbox
+    TableHead, TableRow, Paper, TextField, Button, IconButton, CircularProgress, Checkbox, NoSsr
 } from "@material-ui/core";
 import moment from "moment";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
@@ -100,7 +100,6 @@ function NewOrderForm(props) {
 
         const basket = {
             id: basketId,
-            moreInfo: customOrderComment,
             items: [...orderItems, orderItem]
         };
 
@@ -207,6 +206,7 @@ function NewOrderForm(props) {
 
         var order = {
             basketId,
+            moreInfo: customOrderComment
         };
 
         const requestOptions = {
@@ -304,6 +304,7 @@ function NewOrderForm(props) {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
                         setOrderItems([]);
+                        setCustomOrderComment(null);
                         setBasketId(null);
                     }
                 });
@@ -488,16 +489,19 @@ function NewOrderForm(props) {
                     </div>
                 </Fragment>
                 <div className="field">
-                    <FormControlLabel 
-                        label="Chcę złożyć zamówienie niestandardowe"
-                        control={
-                            <Checkbox 
-                                checked={customOrder}
-                                onChange={(e) => {
-                                    setCustomOrder(e.target.checked);
-                                }}/>
-                        }
-                    />
+                    <NoSsr>
+                        <FormControlLabel 
+                            control={
+                                <Checkbox 
+                                    checked={customOrder}
+                                    defaultChecked
+                                    onChange={(e) => {
+                                        setCustomOrder(e.target.checked);
+                                    }}/>
+                            }
+                            label="Chcę złożyć zamówienie niestandardowe"
+                        />
+                    </NoSsr>
                     {customOrder && 
                         <TextField
                             id="customOrder"
@@ -524,14 +528,14 @@ function NewOrderForm(props) {
                             <Button type="button" variant="contained"
                                 color="primary"
                                 onClick={handlePlaceOrder}
-                                disabled={state.isLoading || orderItems.length === 0}>
+                                >
                                 {props.saveText}
                             </Button>
                             <Button 
                                 className="order__clear-button" 
                                 color="secondary" variant="contained" 
                                 onClick={clearBasket} 
-                                disabled={state.isLoading || orderItems.length === 0}>
+                                disabled={state.isLoading || orderItems.length === 0 || !customOrderComment}>
                                     {props.clearBasketText}
                             </Button>
                         </>
@@ -586,7 +590,7 @@ NewOrderForm.propTypes = {
     ordersUrl: PropTypes.string.isRequired,
     placeOrderUrl: PropTypes.string.isRequired,
     navigateToOrdersListText: PropTypes.string.isRequired,
-    expectedDeliveryabel: PropTypes.string.isRequired,
+    expectedDeliveryLabel: PropTypes.string.isRequired,
     uploadOrderFileUrl: PropTypes.string.isRequired,
     orLabel: PropTypes.string.isRequired,
     dropOrSelectFilesLabel: PropTypes.string.isRequired,
