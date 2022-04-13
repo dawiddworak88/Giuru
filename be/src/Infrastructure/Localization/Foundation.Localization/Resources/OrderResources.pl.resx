@@ -243,6 +243,9 @@
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
   </data>
+  <data name="SuccessfullyCanceledOrder" xml:space="preserve">
+    <value>Pomyślnie anulowano zamówienie.</value>
+  </data>
   <data name="ToBasketLabel" xml:space="preserve">
     <value>Zobacz koszyk</value>
   </data>

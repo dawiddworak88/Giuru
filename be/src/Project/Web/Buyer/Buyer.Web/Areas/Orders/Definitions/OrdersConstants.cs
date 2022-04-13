@@ -13,6 +13,7 @@ namespace Buyer.Web.Areas.Orders.Definitions
         public struct OrderStatuses
         {
             public static readonly Guid NewId = Guid.Parse("287ee71a-d87f-4563-833a-8e2771d1e5a5");
+            public static readonly Guid CancelId = Guid.Parse("4fcdefc0-8181-490c-9378-fe96d234ccc9");
         }
     }
 }

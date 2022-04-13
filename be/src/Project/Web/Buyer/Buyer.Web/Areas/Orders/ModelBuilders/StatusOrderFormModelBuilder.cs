@@ -51,7 +51,9 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
                 ExpectedDeliveryLabel = this.orderLocalizer.GetString("ExpectedDeliveryLabel"),
                 FabricsLabel = this.orderLocalizer.GetString("FabricsLabel"),
-                CancelOrderLabel = this.orderLocalizer.GetString("CancelOrder")
+                CancelOrderLabel = this.orderLocalizer.GetString("CancelOrder"),
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                UpdateOrderStatusUrl = this.linkGenerator.GetPathByAction("Cancel", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);

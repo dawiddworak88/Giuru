@@ -1,10 +1,12 @@
-﻿using Buyer.Web.Areas.Orders.DomainModels;
+﻿using Buyer.Web.Areas.Orders.ApiRequestModels;
+using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
+using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
 using System;
@@ -27,6 +29,37 @@ namespace Buyer.Web.Areas.Orders.Repositories
             this.settings = settings;
             this.productsRepository = productsRepository;
             this.apiClientService = apiClientService;
+        }
+
+        public async Task<Guid> SaveOrderStatusAsync(string token, string language, Guid orderId, Guid orderStatusId)
+        {
+            var requestModel = new UpdateOrderStatusRequestModel
+            {
+                OrderId = orderId,
+                OrderStatusId = orderStatusId
+            };
+
+            var apiRequest = new ApiRequest<UpdateOrderStatusRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.UpdateOrderStatusApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.PostAsync<ApiRequest<UpdateOrderStatusRequestModel>, UpdateOrderStatusRequestModel, Order>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.OrderStatusId != null)
+            {
+                return response.Data.OrderStatusId;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
         }
 
         public async Task<Order> GetOrderAsync(string token, string language, Guid? id)

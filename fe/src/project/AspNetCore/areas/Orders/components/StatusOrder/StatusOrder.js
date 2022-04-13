@@ -1,14 +1,56 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
+import { Context } from "../../../../../../shared/stores/Store";
+import { toast } from "react-toastify";
 import {
     Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Button
 } from "@material-ui/core";
 import moment from "moment";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function StatusOrder(props) {
+    const [state, dispatch] = useContext(Context);
+    const [canceledOrder, setCanceledOrder] = useState(false);
+    const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId ? props.orderStatusId : null);
 
-    const status = props.orderStatuses.find((item) => item.id === props.orderStatusId);
+    const handleCancelOrderSubmit = (e) => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const requestBody = {
+            orderId: props.id,
+        };
+
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+            body: JSON.stringify(requestBody)
+        };
+
+        fetch(props.updateOrderStatusUrl, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setCanceledOrder(true);
+                        setOrderStatusId(jsonResponse.orderStatusId);
+                        toast.success(jsonResponse.message);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    };
+
+    const status = props.orderStatuses.find((item) => item.id === orderStatusId);
     return (
         <section className="section status-order">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -24,10 +66,11 @@ function StatusOrder(props) {
                     }
                     <div className="mt-2">
                         <Button 
-                            type="text" 
+                            type="submit" 
                             variant="contained" 
                             color="primary"
-                            disabled={!props.canCancelOrder}
+                            onClick={handleCancelOrderSubmit}
+                            disabled={!props.canCancelOrder || canceledOrder}
                         >
                             {props.cancelOrderLabel}
                         </Button>
