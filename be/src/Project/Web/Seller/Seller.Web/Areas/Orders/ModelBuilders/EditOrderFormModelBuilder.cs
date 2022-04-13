@@ -4,6 +4,7 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.ViewModel;
 using System.Globalization;
@@ -48,7 +49,9 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
                 SaveText = this.orderLocalizer.GetString("UpdateOrderStatus"),
-                ClientLabel = this.globalLocalizer.GetString("Client")
+                ClientLabel = this.globalLocalizer.GetString("Client"),
+                CancelOrderLabel = this.orderLocalizer.GetString("CancelOrder"),
+                CancelOrderStatusUrl = this.linkGenerator.GetPathByAction("Cancel", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -62,6 +65,11 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 
             if (order != null)
             {
+                if (order.OrderStatusId.Equals(OrdersConstants.OrderStatuses.NewId))
+                {
+                    viewModel.CanCancelOrder = true;
+                }
+
                 viewModel.Id = order.Id;
                 viewModel.OrderStatusId = order.OrderStatusId;
                 viewModel.ClientUrl = this.linkGenerator.GetPathByAction("Edit", "Client", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });

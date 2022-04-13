@@ -12,12 +12,11 @@ import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function EditOrderForm(props) {
-
     const [state, dispatch] = useContext(Context);
+    const [canceledOrder, setCanceledOrder] = useState(false);
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
 
     const handleOrderStatusSubmit = (e) => {
-
         e.preventDefault();
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -44,6 +43,42 @@ function EditOrderForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
+                        setOrderStatusId(jsonResponse.orderStatusId);
+                        toast.success(jsonResponse.message);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    };
+
+    const handleCancelOrderSubmit = (e) => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const requestBody = {
+            orderId: props.id,
+        };
+
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+            body: JSON.stringify(requestBody)
+        };
+
+        fetch(props.cancelOrderStatusUrl, requestOptions)
+            .then(function (response) {
+
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        setCanceledOrder(true);
                         setOrderStatusId(jsonResponse.orderStatusId);
                         toast.success(jsonResponse.message);
                     }
@@ -111,7 +146,17 @@ function EditOrderForm(props) {
                             <a href={props.clientUrl}>{props.clientName}</a>
                         </div>
                     </div>
-                    
+                    <div className="mt-5">
+                        <Button 
+                            type="submit" 
+                            variant="contained" 
+                            color="primary"
+                            onClick={handleCancelOrderSubmit}
+                            disabled={!props.canCancelOrder || canceledOrder}
+                        >
+                            {props.cancelOrderLabel}
+                        </Button>
+                    </div>
                 </div>
             </div>
             <div className="mt-5">
