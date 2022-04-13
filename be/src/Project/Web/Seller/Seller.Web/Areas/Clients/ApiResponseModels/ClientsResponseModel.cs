@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Clients.ApiResponseModels
 {
-    public class InvsResponseModel : BaseResponseModel
+    public class ClientsResponseModel : BaseResponseModel
     {
-        public PagedResults<IEnumerable<InvResponseModel>> PagedClients { get; set; }
+        public PagedResults<IEnumerable<ClientResponseModel>> PagedClients { get; set; }
     }
 }

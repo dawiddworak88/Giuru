@@ -67,9 +67,10 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 AccountUrl = this.linkGenerator.GetPathByAction("Account", "IdentityApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "ClientsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 Languages = languages,
+                IdLabel = this.globalLocalizer.GetString("Id"),
+                PhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel"),
                 ClientsUrl = this.linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
-                NavigateToClientsLabel = this.clientLocalizer.GetString("NavigateToClientsLabel"),
-                IdLabel = this.globalLocalizer.GetString("Id")
+                NavigateToClientsLabel = this.clientLocalizer.GetString("NavigateToClientsLabel")
             };
 
             if (componentModel.Id.HasValue)
@@ -81,6 +82,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.Name = client.Name;
                     viewModel.Email = client.Email;
                     viewModel.CommunicationLanguage = client.CommunicationLanguage;
+                    viewModel.PhoneNumber = client.PhoneNumber;
                 }
             }
 
