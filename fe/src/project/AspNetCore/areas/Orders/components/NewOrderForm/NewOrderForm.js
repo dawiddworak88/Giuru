@@ -21,7 +21,6 @@ import ConfirmationDialog from "../../../../../../shared/components/Confirmation
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import IconConstants from "../../../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import { TramOutlined } from "@material-ui/icons";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -515,7 +514,7 @@ function NewOrderForm(props) {
                                 placeholder={props.customOrderLabel}
                                 InputProps={{
                                     className: "p-2",
-                                    disableUnderline: TramOutlined
+                                    disableUnderline: true
                                 }}
                                 rows={3}
                                 fullWidth={true}
