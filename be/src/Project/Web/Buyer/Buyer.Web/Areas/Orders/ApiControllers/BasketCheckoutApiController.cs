@@ -53,7 +53,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             }
 
             await this.basketRepository.CheckoutBasketAsync(
-                token, language, client.Id, client.Name, Guid.Parse(reqCookie), model.ExpectedDeliveryDate, model.MoreInfo);
+                token, language, client.Id, client.Name, Guid.Parse(reqCookie), model.ExpectedDeliveryDate, model.MoreInfo, model.HasCustomOrder);
 
             return this.StatusCode((int)HttpStatusCode.Accepted, new { Message = this.orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
         }

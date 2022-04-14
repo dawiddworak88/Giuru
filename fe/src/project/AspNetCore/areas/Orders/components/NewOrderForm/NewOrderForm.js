@@ -206,7 +206,8 @@ function NewOrderForm(props) {
 
         var order = {
             basketId,
-            moreInfo: customOrderComment
+            moreInfo: customOrderComment,
+            hasCustomOrder: customOrder
         };
 
         const requestOptions = {

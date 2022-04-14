@@ -60,7 +60,8 @@ namespace Basket.Api.Services
                 ShippingStreet = checkoutBasketServiceModel.ShippingStreet,
                 ExternalReference = checkoutBasketServiceModel.ExternalReference,
                 ExpectedDeliveryDate = checkoutBasketServiceModel.ExpectedDeliveryDate,
-                MoreInfo = checkoutBasketServiceModel.MoreInfo
+                MoreInfo = checkoutBasketServiceModel.MoreInfo,
+                HasCustomOrder = checkoutBasketServiceModel.HasCustomOrder
             };
 
             var basket = await this.basketRepository.GetBasketAsync(checkoutBasketServiceModel.BasketId.Value);

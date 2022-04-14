@@ -33,6 +33,7 @@ namespace Basket.Api.ServicesModels
         public string ShippingCountryCode { get; set; }
         public string ExternalReference { get; set; }
         public string MoreInfo { get; set; }
+        public bool HasCustomOrder { get; set; }
         public DateTime? ExpectedDeliveryDate { get; set; }
     }
 }

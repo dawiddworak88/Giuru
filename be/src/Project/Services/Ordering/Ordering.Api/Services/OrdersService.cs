@@ -4,8 +4,11 @@ using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
+using Foundation.Mailing.Models;
+using Foundation.Mailing.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Ordering.Api.Definitions;
 using Ordering.Api.Infrastructure;
 using Ordering.Api.Infrastructure.Orders.Definitions;
 using Ordering.Api.Infrastructure.Orders.Entities;
@@ -23,15 +26,18 @@ namespace Ordering.Api.Services
         private readonly OrderingContext context;
         private readonly IEventBus eventBus;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
+        private readonly IMailingService mailingService;
 
         public OrdersService(
             OrderingContext context,
             IEventBus eventBus,
-            IStringLocalizer<OrderResources> orderLocalizer)
+            IStringLocalizer<OrderResources> orderLocalizer,
+            IMailingService mailingService)
         {
             this.context = context;
             this.eventBus = eventBus;
             this.orderLocalizer = orderLocalizer;
+            this.mailingService = mailingService;
         }
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel serviceModel)
@@ -96,6 +102,18 @@ namespace Ordering.Api.Services
             }
 
             await this.context.SaveChangesAsync();
+
+            if (serviceModel.HasCustomOrder)
+            {
+                await this.mailingService.SendAsync(new Email
+                {
+                    SenderName = OrdersConstants.Mailing.SenderName,
+                    Subject = OrdersConstants.Mailing.Subject + " " + serviceModel.ClientName + " (" + order.Id + ")",
+                    SenderEmailAddress = OrdersConstants.Mailing.SenderEmail,
+                    PlainTextContent = serviceModel.MoreInfo,
+                    RecipientEmailAddress = OrdersConstants.Mailing.SenderEmail
+                });
+            }
 
             var message = new OrderStartedIntegrationEvent
             { 

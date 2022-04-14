@@ -36,5 +36,6 @@ namespace Ordering.Api.IntegrationEvents
         public DateTime? ExpectedDeliveryDate { get; set; }
         public string MoreInfo { get; set; }
         public BasketEventModel Basket { get; set; }
+        public bool HasCustomOrder { get; set; }
     }
 }

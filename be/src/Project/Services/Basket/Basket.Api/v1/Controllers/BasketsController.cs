@@ -206,6 +206,7 @@ namespace Basket.Api.v1.Controllers
                 ShippingStreet = request.ShippingStreet,
                 ExpectedDeliveryDate = request.ExpectedDeliveryDate,
                 MoreInfo = request.MoreInfo,
+                HasCustomOrder = request.HasCustomOrder,
                 Language = CultureInfo.CurrentCulture.Name,
                 Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)

@@ -21,6 +21,7 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string MoreInfoLabel { get; set; }
         public string OrderItemsLabel { get; set; }
         public string OrderStatusLabel { get; set; }
+        public string CustomOrderComment { get; set; }
         public IEnumerable<ListItemViewModel> OrderStatuses { get; set; }
         public IEnumerable<OrderItemViewModel> OrderItems { get; set; }
     }

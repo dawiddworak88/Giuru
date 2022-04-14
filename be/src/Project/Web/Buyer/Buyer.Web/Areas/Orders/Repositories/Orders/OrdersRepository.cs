@@ -68,15 +68,16 @@ namespace Buyer.Web.Areas.Orders.Repositories
 
                 var order = new Order
                 {
+                    Id = response.Data.Id,
                     OrderStatusId = response.Data.OrderStatusId,
                     OrderStateId = response.Data.OrderStateId,
                     ClientId = response.Data.ClientId,
                     ClientName = response.Data.ClientName,
                     OrderStatusName = response.Data.OrderStatusName,
                     OrderItems = orderItems,
+                    MoreInfo = response.Data.MoreInfo,
                     LastModifiedDate = response.Data.LastModifiedDate,
-                    CreatedDate = response.Data.CreatedDate,
-                    Id = response.Data.Id
+                    CreatedDate = response.Data.CreatedDate
                 };
 
                 return order;
