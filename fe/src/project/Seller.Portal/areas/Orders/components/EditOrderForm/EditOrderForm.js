@@ -22,7 +22,6 @@ function EditOrderForm(props) {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         var orderStatus = {
-
             orderId: props.id,
             orderStatusId
         };
@@ -61,6 +60,7 @@ function EditOrderForm(props) {
 
         const requestBody = {
             orderId: props.id,
+            orderStatusId: orderStatusId
         };
 
         const requestOptions = {
@@ -146,17 +146,18 @@ function EditOrderForm(props) {
                             <a href={props.clientUrl}>{props.clientName}</a>
                         </div>
                     </div>
-                    <div className="mt-5">
-                        <Button 
-                            type="submit" 
-                            variant="contained" 
-                            color="primary"
-                            onClick={handleCancelOrderSubmit}
-                            disabled={!props.canCancelOrder || canceledOrder}
-                        >
-                            {props.cancelOrderLabel}
-                        </Button>
-                    </div>
+                    {props.canCancelOrder && !canceledOrder &&
+                        <div className="mt-5">
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                color="primary"
+                                onClick={handleCancelOrderSubmit}
+                            >
+                                {props.cancelOrderLabel}
+                            </Button>
+                        </div>
+                    }
                 </div>
             </div>
             <div className="mt-5">

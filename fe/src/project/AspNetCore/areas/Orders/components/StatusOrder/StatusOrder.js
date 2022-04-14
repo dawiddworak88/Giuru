@@ -19,6 +19,7 @@ function StatusOrder(props) {
 
         const requestBody = {
             orderId: props.id,
+            orderStatusId: orderStatusId
         };
 
         const requestOptions = {
@@ -64,17 +65,18 @@ function StatusOrder(props) {
                             }
                         </div>
                     }
-                    <div className="mt-2">
-                        <Button 
-                            type="submit" 
-                            variant="contained" 
-                            color="primary"
-                            onClick={handleCancelOrderSubmit}
-                            disabled={!props.canCancelOrder || canceledOrder}
-                        >
-                            {props.cancelOrderLabel}
-                        </Button>
-                    </div>
+                    {props.canCancelOrder && !canceledOrder &&
+                        <div className="mt-2">
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                color="primary"
+                                onClick={handleCancelOrderSubmit}
+                            >
+                                {props.cancelOrderLabel}
+                            </Button>
+                        </div>
+                    }
                 </div>
             </div>
             <div className="mt-5">

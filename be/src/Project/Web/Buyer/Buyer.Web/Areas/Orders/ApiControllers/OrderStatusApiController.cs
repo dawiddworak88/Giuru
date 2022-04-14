@@ -3,6 +3,7 @@ using Buyer.Web.Areas.Orders.Definitions;
 using Buyer.Web.Areas.Orders.Repositories;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Exceptions;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,11 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Cancel([FromBody] UpdateOrderStatusRequestModel model)
         {
+            if (!model.OrderStatusId.Equals(OrdersConstants.OrderStatuses.NewId))
+            {
+                throw new CustomException(this.orderLocalizer.GetString("CancellationOrderError"), (int)HttpStatusCode.BadRequest);
+            }
+
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 

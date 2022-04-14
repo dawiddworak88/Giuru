@@ -129,6 +129,9 @@
   <data name="BasketDeletedSuccessfully" xml:space="preserve">
     <value>The basket has been cleared successfully</value>
   </data>
+  <data name="CancellationOrderError" xml:space="preserve">
+    <value>Only newly created orders can be cancelled.</value>
+  </data>
   <data name="CancelOrder" xml:space="preserve">
     <value>Cancel order</value>
   </data>
