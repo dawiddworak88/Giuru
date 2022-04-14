@@ -1,7 +1,7 @@
 {
-    "name": "strapi-provider-upload-eltap",
+    "name": "strapi-provider-upload-giuru",
     "version": "1.0.0",
-    "description": "Eltap provider for uploading and storing media files",
+    "description": "Giuru provider for uploading and storing media files",
     "main": "./lib/index.js",
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,10 +14,10 @@
     "strapi": {
       "isProvider": true
     },
-    "author": "ELTAP",
+    "author": "GIURU",
     "license": "MIT",
     "directories": {
       "lib": "lib"
     },
     "devDependencies": {}
-  }
+}

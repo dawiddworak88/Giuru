@@ -9,7 +9,7 @@ module.exports = ({ env }) => ({
     "upload": {
         enabled: true,
         config: {
-            provider: "eltap",
+            provider: "giuru",
             providerOptions: {}
         }
     }
