@@ -6,6 +6,10 @@
     &__items {
         border: 1px grey solid;
         border-radius: 4px;
+
+        .MuiInput-underline::before {
+            border-bottom: 0;
+        }
     }
 
     &__items-table{

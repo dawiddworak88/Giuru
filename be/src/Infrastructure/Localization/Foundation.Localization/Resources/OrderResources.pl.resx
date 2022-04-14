@@ -141,6 +141,9 @@
   <data name="ClientRequiredErrorMessage" xml:space="preserve">
     <value>Wybierz klienta</value>
   </data>
+  <data name="CustomOrderLabel" xml:space="preserve">
+    <value>Dodaj zamówienie niestandardowe</value>
+  </data>
   <data name="DeliveryFrom" xml:space="preserve">
     <value>Początkowa data dostawy:</value>
   </data>
@@ -167,6 +170,9 @@
   </data>
   <data name="ImportOrder" xml:space="preserve">
     <value>Import zamówienia</value>
+  </data>
+  <data name="InitCustomOrderLabel" xml:space="preserve">
+    <value>Chcę złożyć zamówienie niestandardowe</value>
   </data>
   <data name="ItemNotFound" xml:space="preserve">
     <value>Nie znaleziono produktu</value>

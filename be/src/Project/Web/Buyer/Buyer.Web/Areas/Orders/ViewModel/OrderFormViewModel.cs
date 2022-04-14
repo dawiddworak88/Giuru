@@ -43,5 +43,7 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string OrLabel { get; set; }
         public string DropOrSelectFilesLabel { get; set; }
         public string DropFilesLabel { get; set; }
+        public string CustomOrderLabel { get; set; }
+        public string InitCustomOrderLabel { get; set; }
     }
 }

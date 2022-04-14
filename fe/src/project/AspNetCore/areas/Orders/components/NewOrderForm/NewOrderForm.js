@@ -499,23 +499,27 @@ function NewOrderForm(props) {
                                         setCustomOrder(e.target.checked);
                                     }}/>
                             }
-                            label="Chcę złożyć zamówienie niestandardowe"
+                            label={props.initCustomOrderLabel}
                         />
                     </NoSsr>
                     {customOrder && 
-                        <TextField
-                            id="customOrder"
-                            name="customOrder"
-                            label="Dodaj zamówienie niestandardowe:"
-                            className="order__items"
-                            rows={3}
-                            fullWidth={true}
-                            multiline={true}
-                            value={customOrderComment}
-                            onChange={(e) => {
-                                setCustomOrderComment(e.target.value);
-                            }}
-                        />
+                        <div className="order__items">
+                            <TextField
+                                id="customOrder"
+                                name="customOrder"
+                                placeholder={props.customOrderLabel}
+                                inputProps={{
+                                    className: "p-2"
+                                }}
+                                rows={3}
+                                fullWidth={true}
+                                multiline={true}
+                                value={customOrderComment}
+                                onChange={(e) => {
+                                    setCustomOrderComment(e.target.value);
+                                }}
+                            />
+                        </div>
                     }
                 </div>
                 <div className="field">
@@ -528,6 +532,7 @@ function NewOrderForm(props) {
                             <Button type="button" variant="contained"
                                 color="primary"
                                 onClick={handlePlaceOrder}
+                                disabled={state.isLoading || !customOrderComment}
                                 >
                                 {props.saveText}
                             </Button>
@@ -594,7 +599,9 @@ NewOrderForm.propTypes = {
     uploadOrderFileUrl: PropTypes.string.isRequired,
     orLabel: PropTypes.string.isRequired,
     dropOrSelectFilesLabel: PropTypes.string.isRequired,
-    dropFilesLabel: PropTypes.string.isRequired
+    dropFilesLabel: PropTypes.string.isRequired,
+    initCustomOrderLabel: PropTypes.string.isRequired,
+    customOrderLabel: PropTypes.string.isRequired
 };
 
 export default NewOrderForm;
