@@ -6,6 +6,7 @@ namespace Ordering.Api.IntegrationEvents
 {
     public class BasketCheckoutAcceptedIntegrationEvent : IntegrationEvent
     {
+        public Guid? BasketId { get; set; }
         public Guid? ClientId { get; set; }
         public string ClientName { get; set; }
         public Guid? SellerId { get; set; }

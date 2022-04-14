@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Foundation.Extensions.ExtensionMethods;
 using Ordering.Api.ServicesModels;
 using System;
 using System.Linq;
@@ -14,36 +15,29 @@ namespace Ordering.Api.Validators
             this.RuleFor(x => x.SellerId).NotNull().NotEmpty();
             this.RuleFor(x => x).Must(y =>
             {
-                if (y.Items == null)
+                if (y.Items.OrEmptyIfNull().Any())
                 {
-                    return false;
-                }
-
-                if (!y.Items.Any())
-                {
-                    return false;
-                }
-
-                foreach (var item in y.Items)
-                {
-                    if (!item.ProductId.HasValue || item.ProductId.Value == Guid.Empty)
+                    foreach (var item in y.Items)
                     {
-                        return false;
-                    }
+                        if (!item.ProductId.HasValue || item.ProductId.Value == Guid.Empty)
+                        {
+                            return false;
+                        }
 
-                    if (string.IsNullOrWhiteSpace(item.ProductSku))
-                    {
-                        return false;
-                    }
+                        if (string.IsNullOrWhiteSpace(item.ProductSku))
+                        {
+                            return false;
+                        }
 
-                    if (string.IsNullOrWhiteSpace(item.ProductName))
-                    {
-                        return false;
-                    }
+                        if (string.IsNullOrWhiteSpace(item.ProductName))
+                        {
+                            return false;
+                        }
 
-                    if (item.Quantity <= 0)
-                    {
-                        return false;
+                        if (item.Quantity <= 0)
+                        {
+                            return false;
+                        }
                     }
                 }
 

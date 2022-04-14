@@ -73,23 +73,26 @@ namespace Ordering.Api.Services
 
             this.context.Orders.Add(order.FillCommonProperties());
 
-            foreach (var basketItem in serviceModel.Items)
+            if (serviceModel.Items.OrEmptyIfNull().Any())
             {
-                var orderItem = new OrderItem
+                foreach (var basketItem in serviceModel.Items)
                 {
-                    OrderId = order.Id,
-                    ProductId = basketItem.ProductId.Value,
-                    ProductSku = basketItem.ProductSku,
-                    ProductName = basketItem.ProductName,
-                    PictureUrl = basketItem.PictureUrl,
-                    Quantity = basketItem.Quantity,
-                    ExternalReference = basketItem.ExternalReference,
-                    ExpectedDeliveryFrom = basketItem.ExpectedDeliveryFrom,
-                    ExpectedDeliveryTo = basketItem.ExpectedDeliveryTo,
-                    MoreInfo = basketItem.MoreInfo                    
-                };
+                    var orderItem = new OrderItem
+                    {
+                        OrderId = order.Id,
+                        ProductId = basketItem.ProductId.Value,
+                        ProductSku = basketItem.ProductSku,
+                        ProductName = basketItem.ProductName,
+                        PictureUrl = basketItem.PictureUrl,
+                        Quantity = basketItem.Quantity,
+                        ExternalReference = basketItem.ExternalReference,
+                        ExpectedDeliveryFrom = basketItem.ExpectedDeliveryFrom,
+                        ExpectedDeliveryTo = basketItem.ExpectedDeliveryTo,
+                        MoreInfo = basketItem.MoreInfo
+                    };
 
-                this.context.OrderItems.Add(orderItem.FillCommonProperties());
+                    this.context.OrderItems.Add(orderItem.FillCommonProperties());
+                }
             }
 
             await this.context.SaveChangesAsync();

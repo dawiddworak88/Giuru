@@ -27,15 +27,9 @@ namespace Basket.Api.Services
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel checkoutBasketServiceModel)
         {
-            var basket = await this.basketRepository.GetBasketAsync(checkoutBasketServiceModel.BasketId.Value);
-
-            if (basket == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             var message = new BasketCheckoutAcceptedIntegrationEvent
             {
+                BasketId = checkoutBasketServiceModel.BasketId,
                 Language = checkoutBasketServiceModel.Language,
                 OrganisationId = checkoutBasketServiceModel.OrganisationId,
                 Username = checkoutBasketServiceModel.Username,
@@ -66,8 +60,14 @@ namespace Basket.Api.Services
                 ShippingStreet = checkoutBasketServiceModel.ShippingStreet,
                 ExternalReference = checkoutBasketServiceModel.ExternalReference,
                 ExpectedDeliveryDate = checkoutBasketServiceModel.ExpectedDeliveryDate,
-                MoreInfo = checkoutBasketServiceModel.MoreInfo,
-                Basket = new BasketEventModel
+                MoreInfo = checkoutBasketServiceModel.MoreInfo
+            };
+
+            var basket = await this.basketRepository.GetBasketAsync(checkoutBasketServiceModel.BasketId.Value);
+
+            if (basket is not null)
+            {
+                message.Basket = new BasketEventModel
                 {
                     Id = basket.Id,
                     Items = basket.Items.Select(x => new BasketItemEventModel
@@ -82,31 +82,32 @@ namespace Basket.Api.Services
                         DeliveryTo = x.DeliveryTo,
                         MoreInfo = x.MoreInfo
                     })
+                };
+
+                var itemGroups = basket.Items.OrEmptyIfNull().GroupBy(g => g.ProductId);
+                var item = new List<BasketCheckoutProductEventModel>();
+
+                foreach (var group in itemGroups)
+                {
+                    item.Add(new BasketCheckoutProductEventModel
+                    {
+                        ProductId = group.FirstOrDefault().ProductId,
+                        BookedQuantity = (int)-group.Sum(x => x.Quantity)
+                    });
                 }
-            };
 
-            var itemGroups = basket.Items.OrEmptyIfNull().GroupBy(g => g.ProductId);
-            var item = new List<BasketCheckoutProductEventModel>();
-
-            foreach (var group in itemGroups)
-            {
-                item.Add(new BasketCheckoutProductEventModel
+                var bookedItems = new BasketCheckoutProductsIntegrationEvent
                 {
-                    ProductId = group.FirstOrDefault().ProductId,
-                    BookedQuantity = (int)-group.Sum(x => x.Quantity)
-                });
+                    Items = item.Select(x => new BasketCheckoutProductEventModel
+                    {
+                        ProductId = x.ProductId,
+                        BookedQuantity = x.BookedQuantity,
+                    })
+                };
+
+                this.eventBus.Publish(bookedItems);
             }
-
-            var bookedItems = new BasketCheckoutProductsIntegrationEvent
-            {
-                Items = item.Select(x => new BasketCheckoutProductEventModel
-                {
-                    ProductId= x.ProductId,
-                    BookedQuantity = x.BookedQuantity,
-                })
-            };
-
-            this.eventBus.Publish(bookedItems);
+            
             this.eventBus.Publish(message);
         }
 
