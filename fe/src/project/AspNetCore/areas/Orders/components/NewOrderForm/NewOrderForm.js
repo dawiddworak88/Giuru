@@ -305,9 +305,11 @@ function NewOrderForm(props) {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
                         setOrderItems([]);
-                        setCustomOrderComment(null);
                         setBasketId(null);
                     }
+
+                    setCustomOrderComment(null);
+                    setCustomOrder(false);
                 });
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
@@ -315,6 +317,7 @@ function NewOrderForm(props) {
             });
     }
 
+    const a = orderItems.length === 0 ? !customOrderComment ? true : false : false
     return (
         <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -533,7 +536,7 @@ function NewOrderForm(props) {
                             <Button type="button" variant="contained"
                                 color="primary"
                                 onClick={handlePlaceOrder}
-                                disabled={state.isLoading || !customOrderComment}
+                                disabled={state.isLoading || a}
                                 >
                                 {props.saveText}
                             </Button>
@@ -541,7 +544,7 @@ function NewOrderForm(props) {
                                 className="order__clear-button" 
                                 color="secondary" variant="contained" 
                                 onClick={clearBasket} 
-                                disabled={state.isLoading || orderItems.length === 0 || !customOrderComment}>
+                                disabled={state.isLoading || a}>
                                     {props.clearBasketText}
                             </Button>
                         </>
@@ -606,3 +609,8 @@ NewOrderForm.propTypes = {
 };
 
 export default NewOrderForm;
+
+/*
+
+if (order.length === 0 ? comm)
+*/

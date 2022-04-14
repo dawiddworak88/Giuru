@@ -24,8 +24,8 @@ function StatusOrder(props) {
             </div>
             {props.orderItems && props.orderItems.length > 0 &&
                 <div className="mt-5">
-                    <h2 className="subtitle is-5 status-order__items-subtitle">{props.orderItemsLabel}</h2>
-                    <div className="edit-order__items">
+                    <h2 className="subtitle is-5 mb-2">{props.orderItemsLabel}</h2>
+                    <div className="status-order__items">
                         <section className="section">
                             <div className="orderitems__table">
                                 <TableContainer component={Paper}>
@@ -77,13 +77,20 @@ function StatusOrder(props) {
                 </div>
             }
             {props.customOrderComment &&
-                <div className="edit-order__items">
-                    <TextField 
-                        value={props.customOrderComment}
-                        fullWidth={true}
-                        multiline
-                        readonly
-                    />
+                <div className="mt-5">
+                    <h2 className="subtitle is-5 mb-2">{props.nonstandardOrderLabel}</h2>
+                    <div className="status-order__items">
+                        <TextField 
+                            value={props.customOrderComment}
+                            fullWidth={true}
+                            multiline={true}
+                            readonly={true}
+                            rows={3}
+                            inputProps={{
+                                className: "p-2"
+                            }}
+                        />
+                    </div>
                 </div>
             }
         </section >
@@ -103,6 +110,7 @@ StatusOrder.propTypes = {
     orderItemsLabel: PropTypes.string.isRequired,
     orderStatusLabel: PropTypes.string.isRequired,
     orderStatusId: PropTypes.string.isRequired,
+    nonstandardOrderLabel: PropTypes.string.isRequired
 };
 
 export default StatusOrder;

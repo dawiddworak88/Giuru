@@ -465,4 +465,7 @@
   <data name="Ean" xml:space="preserve">
     <value>EAN:</value>
   </data>
+  <data name="NonstandardOrderLabel" xml:space="preserve">
+    <value>Nonstandard order:</value>
+  </data>
 </root>
