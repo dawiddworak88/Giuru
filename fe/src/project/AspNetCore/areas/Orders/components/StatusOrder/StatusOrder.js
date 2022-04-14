@@ -84,10 +84,10 @@ function StatusOrder(props) {
                             value={props.customOrderComment}
                             fullWidth={true}
                             multiline={true}
-                            readonly={true}
+                            disabled={true}
                             rows={3}
-                            inputProps={{
-                                className: "p-2"
+                            InputProps={{ 
+                                className: "p-2" 
                             }}
                         />
                     </div>

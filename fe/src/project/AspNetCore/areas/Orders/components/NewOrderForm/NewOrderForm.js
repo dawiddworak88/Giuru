@@ -21,6 +21,7 @@ import ConfirmationDialog from "../../../../../../shared/components/Confirmation
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import IconConstants from "../../../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import { TramOutlined } from "@material-ui/icons";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -317,7 +318,7 @@ function NewOrderForm(props) {
             });
     }
 
-    const a = orderItems.length === 0 ? !customOrderComment ? true : false : false
+    const disabledActionButtons = orderItems.length === 0 ? !customOrderComment ? true : false : false
     return (
         <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -512,8 +513,9 @@ function NewOrderForm(props) {
                                 id="customOrder"
                                 name="customOrder"
                                 placeholder={props.customOrderLabel}
-                                inputProps={{
-                                    className: "p-2"
+                                InputProps={{
+                                    className: "p-2",
+                                    disableUnderline: TramOutlined
                                 }}
                                 rows={3}
                                 fullWidth={true}
@@ -536,7 +538,7 @@ function NewOrderForm(props) {
                             <Button type="button" variant="contained"
                                 color="primary"
                                 onClick={handlePlaceOrder}
-                                disabled={state.isLoading || a}
+                                disabled={state.isLoading || disabledActionButtons}
                                 >
                                 {props.saveText}
                             </Button>
@@ -544,7 +546,7 @@ function NewOrderForm(props) {
                                 className="order__clear-button" 
                                 color="secondary" variant="contained" 
                                 onClick={clearBasket} 
-                                disabled={state.isLoading || a}>
+                                disabled={state.isLoading || disabledActionButtons}>
                                     {props.clearBasketText}
                             </Button>
                         </>
