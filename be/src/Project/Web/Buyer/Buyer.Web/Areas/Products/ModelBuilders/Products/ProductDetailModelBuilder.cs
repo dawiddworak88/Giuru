@@ -90,13 +90,15 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 InStockLabel = this.globalLocalizer.GetString("InStock"),
                 BasketId = componentModel.BasketId,
                 AddedProduct = this.orderResources.GetString("AddedProduct"),
-                Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel)
+                Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel),
+                EanLabel = this.globalLocalizer.GetString("Ean")
             };
 
             var product = await this.productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
 
             if (product != null)
             {
+                viewModel.Ean = product.Ean;
                 viewModel.ProductId = product.Id;
                 viewModel.Title = product.Name;
                 viewModel.BrandName = product.BrandName;

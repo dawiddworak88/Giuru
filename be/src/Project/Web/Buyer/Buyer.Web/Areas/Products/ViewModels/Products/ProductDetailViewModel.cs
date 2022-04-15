@@ -38,6 +38,8 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string BasketLabel { get; set; }
         public string UpdateBasketUrl { get; set; }
         public string AddedProduct { get; set; }
+        public string EanLabel { get; set; }
+        public string Ean { get; set; }
         public SidebarViewModel Sidebar { get; set; }
         public FilesViewModel Files { get; set; }
         public IEnumerable<BasketItem> OrderItems { get; set; }
