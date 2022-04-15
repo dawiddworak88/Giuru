@@ -83,8 +83,7 @@ function ProductAttributeItemForm(props) {
                         {id &&
                             <div className="field">
                                 <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
-                            </div>
-                        }
+                            </div>}
                         <input id="productAttributeId" name="productAttributeId" type="hidden" value={productAttributeId} />
                         <div className="field">
                             <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}

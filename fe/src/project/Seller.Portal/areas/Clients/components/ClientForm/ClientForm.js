@@ -129,8 +129,7 @@ function ClientForm(props) {
                             <div className="field">
                                 <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
                             </div>
-                        }
-                        
+                        }                      
                         <div className="field">
                             <TextField 
                                 id="name" 
