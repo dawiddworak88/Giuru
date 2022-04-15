@@ -108,7 +108,7 @@ function ProductDetail(props) {
                 <div className="column is-4">
                     <p className="product-detail__sku">{props.skuLabel} {props.sku}</p>
                     {props.ean &&
-                        <p className="product-detail__sku">{props.eanLabel} {props.ean}</p>
+                        <p className="product-detail__ean">{props.eanLabel} {props.ean}</p>
                     }
                     <h1 className="title is-4">{props.title}</h1>
                     <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
