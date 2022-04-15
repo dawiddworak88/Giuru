@@ -86,7 +86,7 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                     {
                         Icon = IconsConstants.Grid,
                         Title = this.globalLocalizer.GetString("ClientsGroups"),
-                        Url = this.linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                        Url = this.linkGenerator.GetPathByAction("Index", "Groups", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                     },
                     new MenuTileViewModel
                     {

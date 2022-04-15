@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 namespace Seller.Web.Areas.Clients.Controllers
 {
     [Area("Clients")]
-    public class ClientsController : BaseController
+    public class GroupsController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel> clientsPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, GroupsPageViewModel> groupsPageModelBuilder;
 
-        public ClientsController(
-            IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel> clientsPageModelBuilder)
+        public GroupsController(
+            IAsyncComponentModelBuilder<ComponentModelBase, GroupsPageViewModel> groupsPageModelBuilder)
         {
-            this.clientsPageModelBuilder = clientsPageModelBuilder;
+            this.groupsPageModelBuilder = groupsPageModelBuilder;
         }
 
         public async Task<IActionResult> Index()
@@ -29,7 +29,7 @@ namespace Seller.Web.Areas.Clients.Controllers
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName)
             };
 
-            var viewModel = await this.clientsPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await this.groupsPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);
         }

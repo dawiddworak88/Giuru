@@ -153,4 +153,7 @@
   <data name="NewClient" xml:space="preserve">
     <value>Nowy klient</value>
   </data>
+  <data name="NewGroup" xml:space="preserve">
+    <value>Nowa grupa</value>
+  </data>
 </root>
