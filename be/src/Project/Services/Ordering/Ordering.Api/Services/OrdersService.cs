@@ -163,12 +163,14 @@ namespace Ordering.Api.Services
 
             if (model.IsSeller is false)
             {
-                orders = orders.Where(x => x.SellerId == model.OrganisationId.Value || x.OrderItems.Any(y => y.ExternalReference.StartsWith(model.SearchTerm.ToLowerInvariant())) || x.Id.ToString() == model.SearchTerm);
+                orders = orders.Where(x => x.SellerId == model.OrganisationId.Value);
             }
 
-            if (!string.IsNullOrWhiteSpace(model.SearchTerm))
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                orders = orders.Where(x => x.ClientName.StartsWith(model.SearchTerm.ToLowerInvariant()) || x.OrderItems.Any(y => y.ExternalReference.StartsWith(model.SearchTerm.ToLowerInvariant())) || x.Id.ToString() == model.SearchTerm);
+                orders = orders.Where(x => x.ClientName.ToLower().StartsWith(model.SearchTerm.ToLower()) 
+                || x.OrderItems.Any(y => y.ExternalReference.ToLower().StartsWith(model.SearchTerm.ToLower())) 
+                || x.Id.ToString().ToLower() == model.SearchTerm.ToLower());
             }
 
             if (model.CreatedDateGreaterThan.HasValue)
