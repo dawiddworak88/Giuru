@@ -23,6 +23,7 @@ import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetP
 import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
 
 // Seller Portal
+import GroupPage from "../../src/project/Seller.Portal/areas/Clients/pages/GroupPage/GroupPage";
 import GroupsPage from "../../src/project/Seller.Portal/areas/Clients/pages/GroupsPage/GroupsPage";
 import NewsPage from "../../src/project/Seller.Portal/areas/News/pages/NewsPage/NewsPage";
 import NewsItemPage from "../../src/project/Seller.Portal/areas/News/pages/NewsItemPage/NewsItemPage";
@@ -64,6 +65,7 @@ const Components = {
 	SetPasswordPage,
 	ContentPage,
 
+	GroupPage,
 	GroupsPage,
 	NewsPage,
 	NewsItemPage,

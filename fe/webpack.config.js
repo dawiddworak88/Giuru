@@ -202,6 +202,7 @@ var sellerPortalBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
+        grouppage: ["./src/project/Seller.Portal/areas/Clients/pages/GroupPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/GroupPage/GroupPage.scss"],
         groupspage: ["./src/project/Seller.Portal/areas/Clients/pages/GroupsPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/GroupsPage/GroupsPage.scss"],
         newsitempage: ["./src/project/Seller.Portal/areas/News/pages/NewsItemPage/index.js", "./src/project/Seller.Portal/areas/News/pages/NewsItemPage/NewsItemPage.scss"],
         newspage: ["./src/project/Seller.Portal/areas/News/pages/NewsPage/index.js", "./src/project/Seller.Portal/areas/News/pages/NewsPage/NewsPage.scss"],

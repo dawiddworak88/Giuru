@@ -468,4 +468,7 @@
   <data name="ClientsGroups" xml:space="preserve">
     <value>Kundengruppen</value>
   </data>
+  <data name="ClientsGroup" xml:space="preserve">
+    <value>Gruppe</value>
+  </data>
 </root>
