@@ -104,6 +104,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
             if (product != null)
             {
+                viewModel.Ean = product.Ean;
                 viewModel.ProductId = product.Id;
                 viewModel.Title = product.Name;
                 viewModel.BrandName = product.BrandName;

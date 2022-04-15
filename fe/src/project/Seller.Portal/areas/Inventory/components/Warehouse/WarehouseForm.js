@@ -72,8 +72,7 @@ const WarehouseForm = (props) => {
                     {id &&
                         <div className="field">
                             <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
-                        </div>
-                    }
+                        </div>}
                     <div className="field">
                         <TextField 
                            id="name" 

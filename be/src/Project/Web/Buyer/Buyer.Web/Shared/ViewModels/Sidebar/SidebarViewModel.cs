@@ -14,6 +14,7 @@
         public string GoToDetailsLabel { get; set; }
         public string InStockLabel { get; set; }
         public string InOutletLabel { get; set; }
+        public string LoadingLabel { get; set; }
         public string ExpectedDeliveryLabel { get; set; }
     }
 }

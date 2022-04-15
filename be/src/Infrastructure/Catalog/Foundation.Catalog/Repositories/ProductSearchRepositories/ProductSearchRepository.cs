@@ -62,6 +62,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 query = query && 
                     (Query<ProductSearchModel>.QueryString(d => d.Query(searchTerm))
                         || Query<ProductSearchModel>.Prefix(x => x.Sku, searchTerm.ToLowerInvariant())
+                        || Query<ProductSearchModel>.Prefix(x => x.Ean, searchTerm)
                         || Query<ProductSearchModel>.Match(x => x.Field(f => f.CategoryName).Query(searchTerm).Fuzziness(Fuzziness.Auto))
                         || Query<ProductSearchModel>.Prefix(x => x.Name.Suffix("keyword"), searchTerm));
             }

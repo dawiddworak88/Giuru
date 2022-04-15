@@ -462,11 +462,17 @@
   <data name="News" xml:space="preserve">
     <value>News</value>
   </data>
+  <data name="LoadingLabel" xml:space="preserve">
+    <value>Loading in progress</value>
+  </data>
   <data name="MakeComplaint" xml:space="preserve">
     <value>Make a complaint</value>
   </data>
   <data name="Id" xml:space="preserve">
     <value>Id:</value>
+  </data>
+  <data name="PhoneNumberLabel" xml:space="preserve">
+    <value>Phone number:</value>
   </data>
   <data name="Ean" xml:space="preserve">
     <value>EAN:</value>

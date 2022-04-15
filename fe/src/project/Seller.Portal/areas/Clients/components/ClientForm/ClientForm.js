@@ -16,7 +16,8 @@ function ClientForm(props) {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
         email: { value: props.email ? props.email : "", error: "" },
-        communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" }
+        communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
+        phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null }
     };
 
     const stateValidatorSchema = {
@@ -45,7 +46,6 @@ function ClientForm(props) {
     };
 
     function onSubmitForm(state) {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const requestOptions = {
@@ -118,7 +118,7 @@ function ClientForm(props) {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, email, communicationLanguage } = values;
+    const { id, name, email, communicationLanguage, phoneNumber } = values;
     return (
         <section className="section section-small-padding product client-form">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -129,8 +129,7 @@ function ClientForm(props) {
                             <div className="field">
                                 <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
                             </div>
-                        }
-                        
+                        }                      
                         <div className="field">
                             <TextField 
                                 id="name" 
@@ -175,6 +174,15 @@ function ClientForm(props) {
                                     <FormHelperText>{errors.communicationLanguage}</FormHelperText>
                                 )}
                             </FormControl>
+                        </div>
+                        <div className="field">
+                            <TextField 
+                                id="phoneNumber" 
+                                name="phoneNumber" 
+                                label={props.phoneNumberLabel} 
+                                fullWidth={true}
+                                value={phoneNumber} 
+                                onChange={handleOnChange} />
                         </div>
                         <div className="field client-form__field-row">
                             <Button 
@@ -233,6 +241,7 @@ ClientForm.propTypes = {
     saveText: PropTypes.string.isRequired,
     saveUrl: PropTypes.string.isRequired,
     languages: PropTypes.array.isRequired,
+    phoneNumberLabel: PropTypes.string.isRequired,
     idLabel: PropTypes.string
 };
 

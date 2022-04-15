@@ -468,6 +468,12 @@
   <data name="Id" xml:space="preserve">
     <value>Id:</value>
   </data>
+  <data name="LoadingLabel" xml:space="preserve">
+    <value>Der Ladevorgang läuft</value>
+  </data>
+  <data name="PhoneNumberLabel" xml:space="preserve">
+    <value>Telefonnummer:</value>
+  </data>
   <data name="Ean" xml:space="preserve">
     <value>EAN:</value>
   </data>

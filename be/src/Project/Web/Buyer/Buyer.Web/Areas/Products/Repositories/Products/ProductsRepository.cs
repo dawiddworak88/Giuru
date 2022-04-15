@@ -270,6 +270,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 BrandName = productResponse.BrandName,
                 CategoryId = productResponse.CategoryId,
                 CategoryName = productResponse.CategoryName,
+                Ean = productResponse.Ean,
                 ProductVariants = productResponse.ProductVariants,
                 Images = productResponse.Images,
                 Files = productResponse.Files,

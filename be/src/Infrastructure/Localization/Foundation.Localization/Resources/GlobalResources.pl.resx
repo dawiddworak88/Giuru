@@ -465,11 +465,17 @@
   <data name="News" xml:space="preserve">
     <value>Aktualności</value>
   </data>
+  <data name="LoadingLabel" xml:space="preserve">
+    <value>Trwa ładowanie</value>
+  </data>
   <data name="MakeComplaint" xml:space="preserve">
     <value>Zgłoś reklamację</value>
   </data>
   <data name="Id" xml:space="preserve">
     <value>Id:</value>
+  </data>
+  <data name="PhoneNumberLabel" xml:space="preserve">
+    <value>Numer telefonu:</value>
   </data>
   <data name="Ean" xml:space="preserve">
     <value>EAN:</value>

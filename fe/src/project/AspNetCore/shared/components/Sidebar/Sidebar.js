@@ -1,10 +1,11 @@
-import React, {useState, useContext, useEffect} from "react";
+import React, {useState, useContext, useEffect, Suspense} from "react";
 import { 
     Button, SwipeableDrawer, List, ListItem 
 } from "@material-ui/core";
 import { Close, AddShoppingCart, ArrowRight } from "@material-ui/icons";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
+import { TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../shared/stores/Store";
 import ResponsiveImage from "../../../../../shared/components/Picture/ResponsiveImage";
@@ -22,10 +23,6 @@ const Sidebar = (props) => {
                 return;
         }
 
-        if (!isOpen && manyUses){
-            setProductVariants([])
-        }
-
         setIsOpen(open)
     };
 
@@ -37,7 +34,7 @@ const Sidebar = (props) => {
     const fetchProductVariants = () => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        if (productVariants.length === 0) {
+        if (productVariants.length === 0 || manyUses) {
             const requestOptions = {
                 method: "GET",
                 headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
@@ -56,10 +53,22 @@ const Sidebar = (props) => {
 
                     return response.json().then(jsonResponse => {
                         if (response.ok) {
-                            setProductVariants(() => jsonResponse)
-                        }   
+                            if (jsonResponse && jsonResponse.length > 0 ){
+                                setProductVariants(() => jsonResponse)
+                                let quantities = [];
+                                jsonResponse[0].carouselItems.forEach((item, i) => {
+                                    const itemQuantity = {
+                                        id: item.id,
+                                        quantity: 1
+                                    }
+                                    quantities.push(itemQuantity);
+                                });
+                                setQuantities(quantities)
+                            }
+                        } 
                     });
                 }).catch(() => {
+                    setProductVariants([]);
                     dispatch({ type: "SET_IS_LOADING", payload: false });
                 });
         }
@@ -87,7 +96,6 @@ const Sidebar = (props) => {
             fetchProductVariants();
         }
         else {
-            setProductVariants(() => []);
         }
     }, [isOpen, productId])
 
@@ -109,11 +117,12 @@ const Sidebar = (props) => {
                     <h2 className="title">{labels.sidebarTitle}</h2>
                     <a href={labels.basketUrl} className="link">{labels.toBasketLabel}</a>
                 </div>
-                {productVariants.length === 0 ? (
-                    <div className="not-found">{labels.notFound}</div>
+                {state.isLoading ? (
+                    <div className="not-found">{labels.loadingLabel}</div>
                 ) : (
-                    productVariants.map((item) => 
-                        item.carouselItems.map((carouselItem) => {
+                    productVariants && productVariants.length > 0 ? (
+                        productVariants.map((item) => 
+                            item.carouselItems.map((carouselItem) => {
                                 let fabrics = labels.lackInformation;
                                 if (carouselItem.attributes.length > 0) {
                                     fabrics = carouselItem.attributes.find(x => x.key === "primaryFabrics") ? carouselItem.attributes.find(x => x.key === "primaryFabrics").value : "";
@@ -122,7 +131,6 @@ const Sidebar = (props) => {
                                         fabrics += ", " + secondaryfabrics;
                                     }
                                 }
-
                                 return (
                                     <ListItem className="sidebar-item">
                                         <div className="sidebar-item__row">
@@ -163,7 +171,9 @@ const Sidebar = (props) => {
                                     </ListItem>
                                 )
                             }
-                        )
+                        ))
+                    ) : (
+                        <div className="not-found">{labels.notFound}</div>
                     )
                 )}
             </List>
@@ -185,7 +195,8 @@ Sidebar.propTypes = {
     labels: PropTypes.object,
     setIsOpen: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
-    handleOrder: PropTypes.func.isRequired
+    handleOrder: PropTypes.func.isRequired,
+    loadingLabel: PropTypes.string.isRequired
 }
 
 export default Sidebar;
