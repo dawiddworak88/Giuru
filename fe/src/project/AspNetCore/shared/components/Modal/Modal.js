@@ -69,8 +69,7 @@ const Modal = (props) => {
                             if (value >= 0){
                                 setQuantity(value)
                             }
-
-                            if (value < 0) setQuantity(0)
+                            else setQuantity(0)
                         }}
                     />
                 </div>
@@ -84,17 +83,15 @@ const Modal = (props) => {
                             inputProps={{ 
                                 min: 0, 
                                 step: 1,
-                                max: maxStockValue,
                                 className: "quantity-input"
                             }}
                             value={stockQuantity}
                             onChange={(e) => {
                                 const value = e.target.value;
                                 if (value >= 0){
-                                    if (value > maxStockValue) setStockQuantity(maxStockValue);
+                                    setStockQuantity(value > maxStockValue ? maxStockValue : value);
                                 }
-
-                                if (value < 0) setStockQuantity(0)
+                                else setStockQuantity(0)
                             }}
                         />
                     </div>
@@ -109,17 +106,15 @@ const Modal = (props) => {
                             inputProps={{ 
                                 min: 0, 
                                 step: 1,
-                                max: maxOutletValue,
                                 className: "quantity-input"
                             }}
                             value={outletQuantity}
                             onChange={(e) => {
                                 const value = e.target.value;
                                 if (value >= 0){
-                                    if (value > maxOutletValue) setOutletQuantity(maxOutletValue);
+                                    setOutletQuantity(value > maxOutletValue ? maxOutletValue : value);
                                 }
-
-                                if (value < 0) setOutletQuantity(0)
+                                else setOutletQuantity(0)
                             }}
                         />
                     </div>
