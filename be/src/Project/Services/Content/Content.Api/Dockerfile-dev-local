@@ -2,11 +2,9 @@ FROM strapi/base
 
 WORKDIR /content
 
-COPY ./package.json ./
+COPY . .
 
 RUN npm install
-
-COPY . .
 
 ARG DATABASE_CLIENT
 ARG DATABASE_NAME
