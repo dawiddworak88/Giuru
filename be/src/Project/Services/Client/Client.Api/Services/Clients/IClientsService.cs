@@ -3,7 +3,7 @@ using Foundation.GenericRepository.Paginations;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Client.Api.Services
+namespace Client.Api.Services.Clients
 {
     public interface IClientsService
     {

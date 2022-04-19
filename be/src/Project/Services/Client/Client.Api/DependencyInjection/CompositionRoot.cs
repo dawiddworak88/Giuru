@@ -1,5 +1,5 @@
 ﻿using Client.Api.Infrastructure;
-using Client.Api.Services;
+using Client.Api.Services.Clients;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

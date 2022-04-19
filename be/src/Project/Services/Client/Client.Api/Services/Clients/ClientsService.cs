@@ -12,7 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Client.Api.Services
+namespace Client.Api.Services.Clients
 {
     public class ClientsService : IClientsService
     {

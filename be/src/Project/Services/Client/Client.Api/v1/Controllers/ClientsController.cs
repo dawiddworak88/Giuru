@@ -1,4 +1,4 @@
-﻿using Client.Api.Services;
+﻿using Client.Api.Services.Clients;
 using Client.Api.ServicesModels;
 using Client.Api.v1.RequestModels;
 using Client.Api.v1.ResponseModels;
