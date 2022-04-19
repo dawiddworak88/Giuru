@@ -280,6 +280,7 @@ function Catalog(props) {
                     maxOutletValue={productVariant ? productVariant.availableOutletQuantity : null}
                     maxStockValue={productVariant ? productVariant.availableQuantity : null}
                     handleOrder={handleAddOrderItemClick}
+                    product={productVariant}
                     labels={props.modal}
                 />
             }

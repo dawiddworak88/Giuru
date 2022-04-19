@@ -10,7 +10,8 @@ import MomentUtils from "@date-io/moment";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 
 const Modal = (props) => {
-    const {isOpen, maxStockValue, maxOutletValue, handleOrder, handleClose, labels} = props;
+    console.log(props.labels)
+    const {isOpen, maxStockValue, maxOutletValue, handleOrder, handleClose, labels, product} = props;
     const [quantity, setQuantity] = useState(maxStockValue || maxOutletValue ? 0 : 1);
     const [stockQuantity, setStockQuantity] = useState(maxStockValue && maxStockValue > 0 ? 1 : 0);
     const [outletQuantity, setOutletQuantity] = useState(maxOutletValue && maxOutletValue > 0 ? 1 : 0);
@@ -18,7 +19,6 @@ const Modal = (props) => {
     const [deliveryFrom, setDeliveryFrom] = useState(null);
     const [deliveryTo, setDeliveryTo] = useState(null);
     const [moreInfo, setMoreInfo] = useState(null);
-
     const handleAddItemToBasket = () => {
         const payload = {
             quantity,
@@ -52,6 +52,13 @@ const Modal = (props) => {
             }}>
             <DialogTitle>{labels.title}</DialogTitle>
             <DialogContent>
+                <div className="mb-3">
+                    <p className="basket-modal__sku">{labels.skuLabel} {product.sku ? product.sku : product.subtitle}</p>
+                    {product.ean &&
+                        <p className="basket-modal__ean">{labels.eanLabel} {product.ean}</p>
+                    }
+                    <h1 className="title is-4">{product.title}</h1>
+                </div>
                 <div className="field">
                     <TextField 
                         id="quantity" 

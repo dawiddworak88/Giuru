@@ -205,6 +205,7 @@ function ProductDetail(props) {
                 maxOutletValue={productVariant ? productVariant.availableOutletQuantity : props.availableOutletQuantity}
                 maxStockValue={productVariant ? productVariant.availableQuantity : props.availableQuantity}
                 handleOrder={handleAddOrderItemClick}
+                product={productVariant ? productVariant : props}
                 labels={props.modal}
             />
         </section>

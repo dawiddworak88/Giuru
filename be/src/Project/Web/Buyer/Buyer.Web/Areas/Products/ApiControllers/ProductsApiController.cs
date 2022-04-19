@@ -125,6 +125,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         Id = productVariant.Id,
                         Title = productVariant.Name,
                         Subtitle = productVariant.Sku,
+                        Ean = productVariant.Ean,
                         ImageAlt = productVariant.Name,
                         Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id }),
                         Attributes = productVariant.ProductAttributes.Select(x => new CarouselGridProductAttributesViewModel

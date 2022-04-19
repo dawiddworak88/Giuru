@@ -15,5 +15,7 @@
         public string StockQuantityLabel { get; set; }
         public string BasketUrl { get; set; }
         public string BasketLabel { get; set; }
+        public string SkuLabel { get; set; }
+        public string EanLabel { get; set; }
     }
 }

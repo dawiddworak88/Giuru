@@ -13,16 +13,19 @@ namespace Buyer.Web.Shared.ModelBuilders.Modal
     {
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly LinkGenerator linkGenerator;
 
         public ModalModelBuilder(
             IStringLocalizer<OrderResources> orderLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
+            IStringLocalizer<ProductResources> productLocalizer,
             LinkGenerator linkGenerator)
         {
             this.orderLocalizer = orderLocalizer;
             this.globalLocalizer = globalLocalizer;
             this.linkGenerator = linkGenerator;
+            this.productLocalizer = productLocalizer;
         }
 
         public async Task<ModalViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -41,7 +44,9 @@ namespace Buyer.Web.Shared.ModelBuilders.Modal
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 BasketLabel = this.globalLocalizer.GetString("Basket"),
-                BasketUrl = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                BasketUrl = this.linkGenerator.GetPathByAction("Index", "Order", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                SkuLabel = this.productLocalizer.GetString("Sku"),
+                EanLabel = this.globalLocalizer.GetString("Ean")
             };
 
             return viewModel;
