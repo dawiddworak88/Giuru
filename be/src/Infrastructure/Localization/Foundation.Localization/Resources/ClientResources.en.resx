@@ -147,8 +147,14 @@
   <data name="EditClient" xml:space="preserve">
     <value>Edit client</value>
   </data>
+  <data name="EditGroup" xml:space="preserve">
+    <value>Edit group</value>
+  </data>
   <data name="NavigateToClientsLabel" xml:space="preserve">
     <value>Back to clients</value>
+  </data>
+  <data name="NavigateToGroupsText" xml:space="preserve">
+    <value>Back to groups</value>
   </data>
   <data name="NewClient" xml:space="preserve">
     <value>New client</value>

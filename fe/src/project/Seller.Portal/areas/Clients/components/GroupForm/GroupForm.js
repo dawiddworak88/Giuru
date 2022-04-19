@@ -7,7 +7,7 @@ import { Context } from "../../../../../../shared/stores/Store";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 
-const GroupForm = () => {
+const GroupForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [disableSaveButton, setDisableSaveButton] = useState(false);
     const stateSchema = {

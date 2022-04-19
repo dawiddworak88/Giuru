@@ -6,8 +6,8 @@
 </script>
 
 @section MetaTags {
-    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("ClientsGroup"))</title>
-    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("ClientsGroup")))
+    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("EditGroup"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("EditGroup")))
     {
         <meta name="description" content="@this.Localizer.GetString("ClientsGroup")" />
     }

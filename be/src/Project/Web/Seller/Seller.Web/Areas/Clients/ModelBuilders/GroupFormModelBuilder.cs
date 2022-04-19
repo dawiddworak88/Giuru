@@ -28,7 +28,13 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         {
             var viewModel = new GroupFormViewModel
             {
-                
+                Title = this.clientLocalizer.GetString("EditGroup"),
+                IdLabel = this.globalLocalizer.GetString("Id"),
+                NameLabel = this.globalLocalizer.GetString("Name"),
+                SaveText = this.globalLocalizer.GetString("SaveText"),
+                NameRequiredErrorMessage = this.globalLocalizer.GetString("NameRequiredErrorMessage"),
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                NavigateToGroupsText = this.clientLocalizer.GetString("NavigateToGroupsText")
             };
 
             return viewModel;
