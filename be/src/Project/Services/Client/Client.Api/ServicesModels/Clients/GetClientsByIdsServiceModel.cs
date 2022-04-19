@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Client.Api.ServicesModels
+namespace Client.Api.ServicesModels.Clients
 {
     public class GetClientsByIdsServiceModel : BaseServiceModel
     {

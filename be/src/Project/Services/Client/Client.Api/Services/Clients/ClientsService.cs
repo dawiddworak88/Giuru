@@ -1,5 +1,5 @@
 ﻿using Client.Api.Infrastructure;
-using Client.Api.ServicesModels;
+using Client.Api.ServicesModels.Clients;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Extensions;

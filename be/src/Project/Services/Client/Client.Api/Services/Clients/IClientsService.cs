@@ -1,4 +1,4 @@
-﻿using Client.Api.ServicesModels;
+﻿using Client.Api.ServicesModels.Clients;
 using Foundation.GenericRepository.Paginations;
 using System.Collections.Generic;
 using System.Threading.Tasks;

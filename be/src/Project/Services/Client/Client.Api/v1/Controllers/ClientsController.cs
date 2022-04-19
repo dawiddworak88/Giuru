@@ -1,8 +1,8 @@
 ﻿using Client.Api.Services.Clients;
-using Client.Api.ServicesModels;
+using Client.Api.ServicesModels.Clients;
 using Client.Api.v1.RequestModels;
 using Client.Api.v1.ResponseModels;
-using Client.Api.Validators;
+using Client.Api.Validators.Clients;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;

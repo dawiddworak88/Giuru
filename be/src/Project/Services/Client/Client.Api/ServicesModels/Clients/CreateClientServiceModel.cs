@@ -1,11 +1,10 @@
 ﻿using Foundation.Extensions.Models;
 using System;
 
-namespace Client.Api.ServicesModels
+namespace Client.Api.ServicesModels.Clients
 {
-    public class UpdateClientServiceModel : BaseServiceModel
+    public class CreateClientServiceModel : BaseServiceModel
     {
-        public Guid? Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string CommunicationLanguage { get; set; }
