@@ -10,7 +10,7 @@ import MomentUtils from "@date-io/moment";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 
 const Modal = (props) => {
-    console.log(props.labels)
+    console.log(props.product)
     const {isOpen, maxStockValue, maxOutletValue, handleOrder, handleClose, labels, product} = props;
     const [quantity, setQuantity] = useState(maxStockValue || maxOutletValue ? 0 : 1);
     const [stockQuantity, setStockQuantity] = useState(maxStockValue && maxStockValue > 0 ? 1 : 0);
@@ -19,6 +19,7 @@ const Modal = (props) => {
     const [deliveryFrom, setDeliveryFrom] = useState(null);
     const [deliveryTo, setDeliveryTo] = useState(null);
     const [moreInfo, setMoreInfo] = useState(null);
+
     const handleAddItemToBasket = () => {
         const payload = {
             quantity,
@@ -43,6 +44,8 @@ const Modal = (props) => {
         setMoreInfo(null)
     }, [isOpen])
     
+    const maxStock = maxStockValue ? maxStockValue : 0;
+    const maxOutlet = maxOutletValue ? maxOutletValue : 0;
     return (
         <Dialog
             open={isOpen}
@@ -80,52 +83,48 @@ const Modal = (props) => {
                         }}
                     />
                 </div>
-                {maxStockValue && maxStockValue > 0 &&
-                    <div className="field">
-                        <TextField 
-                            id="stockQuantity" 
-                            name="stockQuantity" 
-                            type="number" 
-                            label={labels.stockQuantityLabel + " (" + labels.maximalLabel + " " + maxStockValue + ")"}
-                            inputProps={{ 
-                                min: 0, 
-                                step: 1,
-                                className: "quantity-input"
-                            }}
-                            value={stockQuantity}
-                            onChange={(e) => {
-                                const value = e.target.value;
-                                if (value >= 0){
-                                    setStockQuantity(value > maxStockValue ? maxStockValue : value);
-                                }
-                                else setStockQuantity(0)
-                            }}
-                        />
-                    </div>
-                }
-                {maxOutletValue && maxOutletValue > 0 &&
-                    <div className="field">
-                        <TextField 
-                            id="outletQuantity" 
-                            name="outletQuantity" 
-                            type="number" 
-                            label={labels.outletQuantityLabel + " (" + labels.maximalLabel + " " + maxOutletValue + ")"}
-                            inputProps={{ 
-                                min: 0, 
-                                step: 1,
-                                className: "quantity-input"
-                            }}
-                            value={outletQuantity}
-                            onChange={(e) => {
-                                const value = e.target.value;
-                                if (value >= 0){
-                                    setOutletQuantity(value > maxOutletValue ? maxOutletValue : value);
-                                }
-                                else setOutletQuantity(0)
-                            }}
-                        />
-                    </div>
-                }
+                <div className="field">
+                    <TextField 
+                        id="stockQuantity" 
+                        name="stockQuantity" 
+                        type="number" 
+                        label={labels.stockQuantityLabel + " (" + labels.maximalLabel + " " + maxStock + ")"}
+                        inputProps={{ 
+                            min: 0, 
+                            step: 1,
+                            className: "quantity-input"
+                        }}
+                        value={stockQuantity}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            if (value >= 0){
+                                setStockQuantity(value > maxStock ? maxStock : value);
+                            }
+                            else setStockQuantity(0)
+                        }}
+                    />
+                </div>
+                <div className="field">
+                    <TextField 
+                        id="outletQuantity" 
+                        name="outletQuantity" 
+                        type="number" 
+                        label={labels.outletQuantityLabel + " (" + labels.maximalLabel + " " + maxOutlet + ")"}
+                        inputProps={{ 
+                            min: 0, 
+                            step: 1,
+                            className: "quantity-input"
+                        }}
+                        value={outletQuantity}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            if (value >= 0){
+                                setOutletQuantity(value > maxOutlet ? maxOutlet : value);
+                            }
+                            else setOutletQuantity(0)
+                        }}
+                    />
+                </div>
                 <div className="field">
                     <TextField 
                         id="externalReference" 
