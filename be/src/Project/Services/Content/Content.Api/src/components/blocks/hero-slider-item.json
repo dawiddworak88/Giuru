@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_blocks_hero_slider_items",
+  "info": {
+    "displayName": "Hero Slider Item",
+    "icon": "clipboard"
+  },
+  "options": {},
+  "attributes": {
+    "media": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false,
+      "required": true
+    },
+    "title": {
+      "type": "string"
+    },
+    "link": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.link"
+    }
+  }
+}

@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * country router.
+ * global router.
  */
 
 const { createCoreRouter } = require('@strapi/strapi').factories;
 
-module.exports = createCoreRouter('api::country.country');
+module.exports = createCoreRouter('api::global.global');

@@ -16,15 +16,25 @@
     }
   },
   "attributes": {
-    "SeoTags": {
+    "seo": {
       "type": "component",
       "repeatable": false,
-      "component": "metadata.seo-tags",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      }
+      },
+      "component": "shared.seo"
+    },
+    "heroSlider": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "blocks.hero-slider"
     }
   }
 }

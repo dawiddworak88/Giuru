@@ -1,10 +1,10 @@
 {
-  "kind": "collectionType",
-  "collectionName": "countries",
+  "kind": "singleType",
+  "collectionName": "globals",
   "info": {
-    "singularName": "country",
-    "pluralName": "countries",
-    "displayName": "Country",
+    "singularName": "global",
+    "pluralName": "globals",
+    "displayName": "Global",
     "description": ""
   },
   "options": {
@@ -16,14 +16,15 @@
     }
   },
   "attributes": {
-    "Name": {
-      "type": "string",
-      "required": true,
+    "footer": {
+      "type": "component",
+      "repeatable": false,
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      }
+      },
+      "component": "global.footer"
     }
   }
 }
