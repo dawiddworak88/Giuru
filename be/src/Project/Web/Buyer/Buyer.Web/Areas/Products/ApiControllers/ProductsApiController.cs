@@ -164,6 +164,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         carouselItem.AvailableQuantity = availableProduct.AvailableQuantity;
                         carouselItem.ExpectedDelivery = availableProduct.ExpectedDelivery;
                     }
+
                     carouselItems.Add(carouselItem);
                 }
 
