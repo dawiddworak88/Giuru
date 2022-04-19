@@ -142,13 +142,25 @@
     <value>Clients</value>
   </data>
   <data name="ClientSavedSuccessfully" xml:space="preserve">
-    <value>Client has been saved succcessfully.</value>
+    <value>Client has been saved successfully.</value>
+  </data>
+  <data name="ClientsGroups" xml:space="preserve">
+    <value>Clients groups</value>
   </data>
   <data name="EditClient" xml:space="preserve">
     <value>Edit client</value>
   </data>
   <data name="EditGroup" xml:space="preserve">
     <value>Edit group</value>
+  </data>
+  <data name="GroupDeletedSuccessfully" xml:space="preserve">
+    <value>Group has been deleted successfully.</value>
+  </data>
+  <data name="GroupNotFound" xml:space="preserve">
+    <value>Group has not been found.</value>
+  </data>
+  <data name="GroupSavedSuccessfully" xml:space="preserve">
+    <value>Group has been saved successfully.</value>
   </data>
   <data name="NavigateToClientsLabel" xml:space="preserve">
     <value>Back to clients</value>

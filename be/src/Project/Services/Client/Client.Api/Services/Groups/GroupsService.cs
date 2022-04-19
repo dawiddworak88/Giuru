@@ -72,11 +72,11 @@ namespace Client.Api.Services.Groups
                     CreatedDate = group.CreatedDate,
                 };
 
-                var groupTranslation = await this.context.GroupTranslations.FirstOrDefaultAsync(x => x.Id == model.Id && x.Language == model.Language && x.IsActive);
+                var groupTranslation = await this.context.GroupTranslations.FirstOrDefaultAsync(x => x.GroupId == model.Id && x.Language == model.Language && x.IsActive);
 
                 if (groupTranslation is null)
                 {
-                    groupTranslation = await this.context.GroupTranslations.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+                    groupTranslation = await this.context.GroupTranslations.FirstOrDefaultAsync(x => x.GroupId == model.Id && x.IsActive);
                 }
 
                 groupItem.Name = groupTranslation?.Name;

@@ -1,5 +1,6 @@
 ﻿using Client.Api.Infrastructure;
 using Client.Api.Services.Clients;
+using Client.Api.Services.Groups;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ namespace Client.Api.DependencyInjection
         public static void RegisterClientApiDependencies(this IServiceCollection services)
         {
             services.AddScoped<IClientsService, ClientsService>();
+            services.AddScoped<IGroupsService, GroupsService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)

@@ -144,11 +144,23 @@
   <data name="ClientSavedSuccessfully" xml:space="preserve">
     <value>Der Kunde wurde erfolgreich gespeichert.</value>
   </data>
+  <data name="ClientsGroups" xml:space="preserve">
+    <value>Kundengruppen</value>
+  </data>
   <data name="EditClient" xml:space="preserve">
     <value>Kunde bearbeiten</value>
   </data>
   <data name="EditGroup" xml:space="preserve">
     <value>Gruppe bearbeiten</value>
+  </data>
+  <data name="GroupDeletedSuccessfully" xml:space="preserve">
+    <value>Gruppe wurde erfolgreich gelöscht.</value>
+  </data>
+  <data name="GroupNotFound" xml:space="preserve">
+    <value>Gruppe wurde nicht gefunden.</value>
+  </data>
+  <data name="GroupSavedSuccessfully" xml:space="preserve">
+    <value>Gruppe wurde erfolgreich gespeichert.</value>
   </data>
   <data name="NavigateToClientsLabel" xml:space="preserve">
     <value>Zurück zu den Kunden</value>

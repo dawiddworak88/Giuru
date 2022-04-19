@@ -1,7 +1,10 @@
-﻿namespace Seller.Web.Areas.Clients.ViewModels
+﻿using System;
+
+namespace Seller.Web.Areas.Clients.ViewModels
 {
     public class GroupFormViewModel
     {
+        public Guid? Id { get; set; }
         public string Title { get; set; }
         public string IdLabel { get; set; }
         public string NameLabel { get; set; }
