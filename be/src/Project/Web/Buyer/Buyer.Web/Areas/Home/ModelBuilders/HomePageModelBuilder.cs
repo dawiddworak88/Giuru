@@ -7,11 +7,13 @@ using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.ViewModels.Headers;
 using System.Globalization;
+using Foundation.PageContent.Components.Seo.ViewModels;
 
 namespace Buyer.Web.Areas.Home.ModelBuilders
 {
     public class HomePageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, HomePageViewModel>
     {
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SeoViewModel> seoModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, HeroSliderViewModel> heroSliderModelBuilder;
@@ -21,6 +23,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public HomePageModelBuilder(
+            IAsyncComponentModelBuilder<ComponentModelBase, SeoViewModel> seoModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, HeroSliderViewModel> heroSliderModelBuilder,
@@ -29,6 +32,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             IAsyncComponentModelBuilder<ComponentModelBase, HomePageNewsCarouselGridViewModel> newsModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
+            this.seoModelBuilder = seoModelBuilder;
             this.headerModelBuilder = headerModelBuilder;
             this.mainNavigationModelBuilder = mainNavigationModelBuilder;
             this.heroSliderModelBuilder = heroSliderModelBuilder;
@@ -44,6 +48,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             var viewModel = new HomePageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
+                Seo = await this.seoModelBuilder.BuildModelAsync(componentModel),
                 Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
                 HeroSlider = await this.heroSliderModelBuilder.BuildModelAsync(componentModel),

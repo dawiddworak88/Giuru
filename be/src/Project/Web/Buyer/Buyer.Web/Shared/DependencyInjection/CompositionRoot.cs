@@ -27,6 +27,8 @@ using Buyer.Web.Shared.ViewModels.Sidebar;
 using Buyer.Web.Shared.ModelBuilders.Sidebar;
 using Buyer.Web.Shared.Services.Baskets;
 using Buyer.Web.Shared.Repositories.News;
+using Buyer.Web.Shared.ModelBuilders.Seo;
+using Foundation.PageContent.Components.Seo.ViewModels;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -44,6 +46,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel>, SidebarModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>, MainNavigationModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SeoViewModel>, SeoModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
 

@@ -11,5 +11,6 @@ namespace Foundation.PageContent.ComponentModels
         public string Token { get; set; }
         public string Name { get; set; }
         public bool IsAuthenticated { get; set; }
+        public string ContentApiKey { get; set; }
     }
 }

@@ -26,6 +26,7 @@ namespace Buyer.Web.Areas.Home.Controllers
         {
             var componentModel = new ComponentModelBase
             {
+                ContentApiKey = "home-page",
                 Language = CultureInfo.CurrentUICulture.Name,
                 IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Name = this.User.Identity.Name,
