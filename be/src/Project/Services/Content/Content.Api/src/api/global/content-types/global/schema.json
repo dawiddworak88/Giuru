@@ -25,6 +25,16 @@
         }
       },
       "component": "global.footer"
+    },
+    "brand": {
+      "type": "component",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "global.brand"
     }
   }
 }
