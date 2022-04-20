@@ -107,6 +107,7 @@
         flex-direction: column;
 
         .stock-details {
+            margin-top: 0.625rem;
             margin-bottom: 0.5rem;
 
             .stock {
@@ -122,10 +123,9 @@
             }
         }
         
-        .sku {
+        .attribute {
             text-transform: capitalize;
             font-size: 0.7rem;
-            margin-bottom: 10px;
         }
 
         .fabrics {
