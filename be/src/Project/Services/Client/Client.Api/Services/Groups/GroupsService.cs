@@ -105,7 +105,7 @@ namespace Client.Api.Services.Groups
 
             var pagedResults = groups.PagedIndex(new Pagination(groups.Count(), model.ItemsPerPage), model.PageIndex);
 
-            var pagedNewsServiceModel = new PagedResults<IEnumerable<GroupServiceModel>>(pagedResults.Total, pagedResults.PageSize);
+            var pagedGroupServiceModel = new PagedResults<IEnumerable<GroupServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
             var groupItems = new List<GroupServiceModel>();
 
@@ -129,9 +129,51 @@ namespace Client.Api.Services.Groups
                 groupItems.Add(item);
             }
 
-            pagedNewsServiceModel.Data = groupItems;
+            pagedGroupServiceModel.Data = groupItems;
 
-            return pagedNewsServiceModel;
+            return pagedGroupServiceModel;
+        }
+
+        public async Task<PagedResults<IEnumerable<GroupServiceModel>>> GetByIdsAsync(GetGroupsByIdsServiceModel model)
+        {
+            var groups = this.context.Groups.Where(x => model.Ids.Contains(x.Id) && x.IsActive);
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                groups = groups.Where(x => x.Translations.Any(x => x.Name.StartsWith(model.SearchTerm)));
+            }
+
+            groups = groups.ApplySort(model.OrderBy);
+
+            var pagedResults = groups.PagedIndex(new Pagination(groups.Count(), model.ItemsPerPage), model.PageIndex);
+
+            var pagedGroupServiceModel = new PagedResults<IEnumerable<GroupServiceModel>>(pagedResults.Total, pagedResults.PageSize);
+
+            var groupItems = new List<GroupServiceModel>();
+
+            foreach (var group in pagedResults.Data.OrEmptyIfNull().ToList())
+            {
+                var item = new GroupServiceModel
+                {
+                    Id = group.Id,
+                    LastModifiedDate = group.LastModifiedDate,
+                    CreatedDate = group.CreatedDate
+                };
+
+                var groupTranslations = await this.context.GroupTranslations.FirstOrDefaultAsync(x => x.Language == model.Language && x.GroupId == group.Id && x.IsActive);
+                if (groupTranslations is null)
+                {
+                    groupTranslations = this.context.GroupTranslations.FirstOrDefault(x => x.GroupId == group.Id && x.IsActive);
+                }
+
+                item.Name = groupTranslations?.Name;
+
+                groupItems.Add(item);
+            }
+
+            pagedGroupServiceModel.Data = groupItems;
+
+            return pagedGroupServiceModel;
         }
 
         public async Task<Guid> UpdateAsync(UpdateGroupServiceModel model)

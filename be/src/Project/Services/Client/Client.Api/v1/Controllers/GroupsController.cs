@@ -39,6 +39,7 @@ namespace Client.Api.v1.Controllers
         /// <summary>
         /// Gets list of groups.
         /// </summary>
+        /// <param name="ids">The groups ids.</param>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
@@ -49,44 +50,87 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<GroupResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> Get(string ids, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-            var serviceModel = new GetGroupsServiceModel
-            {
-                SearchTerm = searchTerm,
-                PageIndex = pageIndex,
-                ItemsPerPage = itemsPerPage,
-                OrderBy = orderBy,
-                Language = CultureInfo.CurrentCulture.Name,
-                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
-            };
+            var groupsIds = ids.ToEnumerableGuidIds();
 
-            var validator = new GetGroupsModelValidator();
-            var validationResult = await validator.ValidateAsync(serviceModel);
-            if (validationResult.IsValid)
+            if (groupsIds.Any())
             {
-                var groups = await this.groupsService.GetAsync(serviceModel);
-
-                if (groups is not null)
+                var serviceModel = new GetGroupsByIdsServiceModel
                 {
-                    var response = new PagedResults<IEnumerable<GroupResponseModel>>(groups.Total, groups.PageSize)
+                    Ids = groupsIds,
+                    SearchTerm = searchTerm,
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    OrderBy = orderBy,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                };
+
+                var validator = new GetGroupsByIdsModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+                if (validationResult.IsValid)
+                {
+                    var groups = await this.groupsService.GetByIdsAsync(serviceModel);
+
+                    if (groups is not null)
                     {
-                        Data = groups.Data.OrEmptyIfNull().Select(x => new GroupResponseModel
+                        var response = new PagedResults<IEnumerable<GroupResponseModel>>(groups.Total, groups.PageSize)
                         {
-                            Id = x.Id,
-                            Name = x.Name,
-                            LastModifiedDate = x.LastModifiedDate,
-                            CreatedDate = x.CreatedDate
-                        })
-                    };
+                            Data = groups.Data.OrEmptyIfNull().Select(x => new GroupResponseModel
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                LastModifiedDate = x.LastModifiedDate,
+                                CreatedDate = x.CreatedDate
+                            })
+                        };
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                    }
                 }
-            }
 
-            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            } else
+            {
+                var serviceModel = new GetGroupsServiceModel
+                {
+                    SearchTerm = searchTerm,
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    OrderBy = orderBy,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                };
+
+                var validator = new GetGroupsModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+                if (validationResult.IsValid)
+                {
+                    var groups = await this.groupsService.GetAsync(serviceModel);
+
+                    if (groups is not null)
+                    {
+                        var response = new PagedResults<IEnumerable<GroupResponseModel>>(groups.Total, groups.PageSize)
+                        {
+                            Data = groups.Data.OrEmptyIfNull().Select(x => new GroupResponseModel
+                            {
+                                Id = x.Id,
+                                Name = x.Name,
+                                LastModifiedDate = x.LastModifiedDate,
+                                CreatedDate = x.CreatedDate
+                            })
+                        };
+
+                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                    }
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
         }
 
         /// <summary>

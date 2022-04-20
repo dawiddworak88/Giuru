@@ -13,5 +13,6 @@ namespace Client.Api.Services.Groups
         Task<GroupServiceModel> GetAsync(GetGroupServiceModel model);
         Task<PagedResults<IEnumerable<GroupServiceModel>>> GetAsync(GetGroupsServiceModel model);
         Task DeleteAsync(DeleteGroupServiceModel model);
+        Task<PagedResults<IEnumerable<GroupServiceModel>>> GetByIdsAsync(GetGroupsByIdsServiceModel model);
     }
 }
