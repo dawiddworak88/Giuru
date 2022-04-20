@@ -99,6 +99,14 @@ namespace Client.Api.Services.Clients
             client.PhoneNumber = serviceModel.PhoneNumber;
             client.OrganisationId = serviceModel.ClientOrganisationId.Value;
 
+            if (serviceModel.Groups.Any())
+            {
+                foreach (var group in serviceModel.Groups)
+                {
+
+                }
+            }
+
             await this.context.SaveChangesAsync();
 
             return await this.GetAsync(new GetClientServiceModel { Id = client.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });

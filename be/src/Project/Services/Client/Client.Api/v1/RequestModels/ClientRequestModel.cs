@@ -1,5 +1,6 @@
 ﻿using Foundation.ApiExtensions.Models.Request;
 using System;
+using System.Collections.Generic;
 
 namespace Client.Api.v1.RequestModels
 {
@@ -10,5 +11,6 @@ namespace Client.Api.v1.RequestModels
         public string CommunicationLanguage { get; set; }
         public string PhoneNumber { get; set; }
         public Guid? OrganisationId { get; set; }
+        public IEnumerable<Guid> Groups { get; set; }
     }
 }

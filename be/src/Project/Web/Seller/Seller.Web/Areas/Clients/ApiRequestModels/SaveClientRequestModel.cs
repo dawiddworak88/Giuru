@@ -1,5 +1,6 @@
 ﻿using Foundation.ApiExtensions.Models.Request;
 using System;
+using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Clients.ApiRequestModels
 {
@@ -10,5 +11,6 @@ namespace Seller.Web.Areas.Clients.ApiRequestModels
         public string CommunicationLanguage { get; set; }
         public string PhoneNumber { get; set; }
         public Guid OrganisationId { get; set; }
+        public IEnumerable<Guid> Groups { get; set; }
     }
 }

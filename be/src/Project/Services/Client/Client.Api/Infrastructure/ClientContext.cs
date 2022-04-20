@@ -19,5 +19,6 @@ namespace Client.Api.Infrastructure
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<GroupTranslation> GroupTranslations { get; set; }
+        public DbSet<ClientsGroups> ClientsGroups { get; set; }
     }
 }

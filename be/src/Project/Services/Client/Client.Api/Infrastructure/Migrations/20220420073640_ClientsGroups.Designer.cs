@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Client.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(ClientContext))]
-    [Migration("20220419102158_ClientsGroups")]
+    [Migration("20220420073640_ClientsGroups")]
     partial class ClientsGroups
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -133,6 +133,37 @@ namespace Client.Api.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Clients");
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientsGroups", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ClientId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClientsGroups");
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.Group", b =>
