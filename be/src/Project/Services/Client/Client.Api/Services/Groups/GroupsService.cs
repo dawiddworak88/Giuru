@@ -54,6 +54,11 @@ namespace Client.Api.Services.Groups
                 throw new CustomException(this.clientLocalizer.GetString("GroupNotFound"), (int)HttpStatusCode.NotFound);
             }
 
+            if (await this.context.ClientsGroups.AnyAsync(x => x.GroupId == model.Id && x.IsActive))
+            {
+                throw new CustomException(this.clientLocalizer.GetString("GroupDeleteClientConflict"), (int)HttpStatusCode.Conflict);
+            }
+
             group.IsActive = false;
 
             await this.context.SaveChangesAsync();

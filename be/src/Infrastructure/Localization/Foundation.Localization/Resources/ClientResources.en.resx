@@ -153,6 +153,9 @@
   <data name="EditGroup" xml:space="preserve">
     <value>Edit group</value>
   </data>
+  <data name="GroupDeleteClientConflict" xml:space="preserve">
+    <value>Unassign clients from this group.</value>
+  </data>
   <data name="GroupDeletedSuccessfully" xml:space="preserve">
     <value>Group has been deleted successfully.</value>
   </data>
@@ -173,5 +176,8 @@
   </data>
   <data name="NewGroup" xml:space="preserve">
     <value>New group</value>
+  </data>
+  <data name="NoGroupsText" xml:space="preserve">
+    <value>No groups available</value>
   </data>
 </root>

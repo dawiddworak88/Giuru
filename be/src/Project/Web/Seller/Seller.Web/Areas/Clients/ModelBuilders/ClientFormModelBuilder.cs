@@ -76,7 +76,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 IdLabel = this.globalLocalizer.GetString("Id"),
                 PhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel"),
                 ClientsUrl = this.linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
-                NavigateToClientsLabel = this.clientLocalizer.GetString("NavigateToClientsLabel")
+                NavigateToClientsLabel = this.clientLocalizer.GetString("NavigateToClientsLabel"),
+                NoGroupsText = this.clientLocalizer.GetString("NoGroupsText"),
+                GroupsLabel = this.globalLocalizer.GetString("Groups")
             };
 
             if (componentModel.Id.HasValue)

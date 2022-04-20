@@ -179,7 +179,7 @@ function ClientForm(props) {
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true}>
-                                <InputLabel id="group-label">Grupa</InputLabel>
+                                <InputLabel id="group-label">{props.groupsLabel}</InputLabel>
                                 <Select
                                     labelId="group-label"
                                     id="groups"
@@ -187,11 +187,15 @@ function ClientForm(props) {
                                     value={groups}
                                     multiple={true}
                                     onChange={handleOnChange}>
-                                    {props.groups.map((group, index) => {
-                                        return (
-                                            <MenuItem key={index} value={group.id}>{group.name}</MenuItem>
-                                        );
-                                    })}
+                                    {props.groups && props.groups.length > 0 ? (
+                                        props.groups.map((group, index) => {
+                                            return (
+                                                <MenuItem key={index} value={group.id}>{group.name}</MenuItem>
+                                            );
+                                        })
+                                    ) : (
+                                        <MenuItem disabled>{props.noGroupsText}</MenuItem>
+                                    )}
                                 </Select>
                             </FormControl>
                         </div>
@@ -262,7 +266,9 @@ ClientForm.propTypes = {
     saveUrl: PropTypes.string.isRequired,
     languages: PropTypes.array.isRequired,
     phoneNumberLabel: PropTypes.string.isRequired,
-    idLabel: PropTypes.string
+    idLabel: PropTypes.string,
+    noGroupsText: PropTypes.string.isRequired,
+    groupsLabel: PropTypes.string.isRequired
 };
 
 export default ClientForm;
