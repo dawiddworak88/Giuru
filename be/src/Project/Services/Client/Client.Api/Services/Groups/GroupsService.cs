@@ -191,6 +191,16 @@ namespace Client.Api.Services.Groups
             {
                 groupTranslation.Name = model.Name;
                 groupTranslation.LastModifiedDate = DateTime.UtcNow;
+            } else
+            {
+                var newGroupTranslation = new GroupTranslation
+                {
+                    Name = model.Name,
+                    Language = model.Language,
+                    GroupId = group.Id
+                };
+
+                await this.context.GroupTranslations.AddAsync(newGroupTranslation.FillCommonProperties());
             }
 
             group.LastModifiedDate = DateTime.UtcNow;
