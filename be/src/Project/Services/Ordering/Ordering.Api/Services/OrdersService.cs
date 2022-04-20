@@ -8,6 +8,8 @@ using Foundation.Mailing.Models;
 using Foundation.Mailing.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Ordering.Api.Configurations;
 using Ordering.Api.Definitions;
 using Ordering.Api.Infrastructure;
 using Ordering.Api.Infrastructure.Orders.Definitions;
@@ -27,17 +29,20 @@ namespace Ordering.Api.Services
         private readonly IEventBus eventBus;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly IMailingService mailingService;
+        private readonly IOptions<AppSettings> configuration;
 
         public OrdersService(
             OrderingContext context,
             IEventBus eventBus,
             IStringLocalizer<OrderResources> orderLocalizer,
-            IMailingService mailingService)
+            IMailingService mailingService,
+            IOptions<AppSettings> configuration)
         {
             this.context = context;
             this.eventBus = eventBus;
             this.orderLocalizer = orderLocalizer;
             this.mailingService = mailingService;
+            this.configuration = configuration;
         }
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel serviceModel)
@@ -107,11 +112,11 @@ namespace Ordering.Api.Services
             {
                 await this.mailingService.SendAsync(new Email
                 {
-                    SenderName = OrdersConstants.Mailing.SenderName,
+                    SenderName = this.configuration.Value.SenderName,
                     Subject = OrdersConstants.Mailing.Subject + " " + serviceModel.ClientName + " (" + order.Id + ")",
-                    SenderEmailAddress = OrdersConstants.Mailing.SenderEmail,
+                    SenderEmailAddress = this.configuration.Value.SenderEmail,
                     PlainTextContent = serviceModel.MoreInfo,
-                    RecipientEmailAddress = OrdersConstants.Mailing.SenderEmail
+                    RecipientEmailAddress = this.configuration.Value.SenderEmail
                 });
             }
 
