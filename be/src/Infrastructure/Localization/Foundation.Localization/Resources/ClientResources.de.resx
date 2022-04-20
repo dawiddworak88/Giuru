@@ -153,4 +153,7 @@
   <data name="NewClient" xml:space="preserve">
     <value>Neuer Kunde</value>
   </data>
+  <data name="ResetPasswordText" xml:space="preserve">
+    <value>Passwort zurücksetzen</value>
+  </data>
 </root>

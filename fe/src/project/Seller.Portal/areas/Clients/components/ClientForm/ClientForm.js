@@ -11,13 +11,14 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
     const [disableSaveButton, setDisableSaveButton] = useState(false);
-    const [canCreateAccount, setCanCreateAccount] = useState(false);
+    const [canCreateAccount, setCanCreateAccount] = useState(props.hasAccount ? props.hasAccount : false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
         email: { value: props.email ? props.email : "", error: "" },
         communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
-        phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null }
+        phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null },
+        hasAccount: { value: props.hasAccount ? props.hasAccount : false }
     };
 
     const stateValidatorSchema = {
@@ -199,7 +200,7 @@ function ClientForm(props) {
                                 variant="contained" 
                                 onClick={createAccount} 
                                 disabled={state.isLoading || !canCreateAccount}>
-                                {props.accountText}
+                                {props.hasAccount ? props.resetPasswordText : props.accountText}
                             </Button>
                             <Button
                                 className="field-button"
@@ -242,6 +243,7 @@ ClientForm.propTypes = {
     saveUrl: PropTypes.string.isRequired,
     languages: PropTypes.array.isRequired,
     phoneNumberLabel: PropTypes.string.isRequired,
+    resetPasswordText: PropTypes.string.isRequired,
     idLabel: PropTypes.string
 };
 

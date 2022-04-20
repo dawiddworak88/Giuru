@@ -31,6 +31,8 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string IdLabel { get; set; }
         public string PhoneNumber { get; set; }
         public string PhoneNumberLabel { get; set; }
+        public string ResetPasswordText { get; set; }
+        public bool HasAccount { get; set; }
         public IEnumerable<LanguageViewModel> Languages { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Foundation.ApiExtensions.Communications;
+using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Shared.ApiRequestModels;
 using Seller.Web.Shared.Configurations;
+using Seller.Web.Shared.DomainModels.Users;
 using System;
 using System.Threading.Tasks;
 
@@ -23,6 +25,26 @@ namespace Seller.Web.Shared.Repositories.Identity
         {
             this.apiClientService = apiClientService;
             this.settings = settings;
+        }
+
+        public async Task<User> GetAsync(string token, string language, string email)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.UsersApiEndpoint}/{email}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, User>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return response.Data;
+            }
+
+            return default;
         }
 
         public async Task<Guid> SaveAsync(string token, string language, string name, string email, string communicationLanguage, string returnUrl)

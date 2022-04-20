@@ -11,6 +11,7 @@ using Seller.Web.Areas.Clients.ViewModels;
 using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
 using Seller.Web.Shared.Repositories.Clients;
+using Seller.Web.Shared.Repositories.Identity;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -20,6 +21,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
         private readonly IOptionsMonitor<LocalizationSettings> localizationOptions;
+        private readonly IIdentityRepository identityRepository;
         private readonly LinkGenerator linkGenerator;
 
         public ClientFormModelBuilder(
@@ -27,6 +29,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
             IOptionsMonitor<LocalizationSettings> localizationOptions,
+            IIdentityRepository identityRepository,
             LinkGenerator linkGenerator)
         {
             this.clientsRepository = clientsRepository;
@@ -34,6 +37,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             this.clientLocalizer = clientLocalizer;
             this.localizationOptions = localizationOptions;
             this.linkGenerator = linkGenerator;
+            this.identityRepository = identityRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -70,19 +74,26 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 IdLabel = this.globalLocalizer.GetString("Id"),
                 PhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel"),
                 ClientsUrl = this.linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
-                NavigateToClientsLabel = this.clientLocalizer.GetString("NavigateToClientsLabel")
+                NavigateToClientsLabel = this.clientLocalizer.GetString("NavigateToClientsLabel"),
+                ResetPasswordText = this.clientLocalizer.GetString("ResetPasswordText")
             };
 
             if (componentModel.Id.HasValue)
             {
                 var client = await this.clientsRepository.GetClientAsync(componentModel.Token, componentModel.Language, componentModel.Id);
-                if (client != null)
+                if (client is not null)
                 {
                     viewModel.Id = client.Id;
                     viewModel.Name = client.Name;
                     viewModel.Email = client.Email;
                     viewModel.CommunicationLanguage = client.CommunicationLanguage;
                     viewModel.PhoneNumber = client.PhoneNumber;
+
+                    var user = await this.identityRepository.GetAsync(componentModel.Token, componentModel.Language, client.Email);
+                    if (user is not null)
+                    {
+                        viewModel.HasAccount = true;
+                    }
                 }
             }
 
