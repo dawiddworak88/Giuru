@@ -11,6 +11,9 @@ using Seller.Web.Areas.Clients.ViewModels;
 using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
 using Seller.Web.Shared.Repositories.Clients;
+using Seller.Web.Areas.Clients.Repositories;
+using System.Linq;
+using Foundation.PageContent.Components.ListItems.ViewModels;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -21,12 +24,14 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
         private readonly IOptionsMonitor<LocalizationSettings> localizationOptions;
         private readonly LinkGenerator linkGenerator;
+        private readonly IGroupsRepository groupsRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
             IOptionsMonitor<LocalizationSettings> localizationOptions,
+            IGroupsRepository groupsRepository,
             LinkGenerator linkGenerator)
         {
             this.clientsRepository = clientsRepository;
@@ -34,6 +39,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             this.clientLocalizer = clientLocalizer;
             this.localizationOptions = localizationOptions;
             this.linkGenerator = linkGenerator;
+            this.groupsRepository = groupsRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -84,6 +90,16 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.CommunicationLanguage = client.CommunicationLanguage;
                     viewModel.PhoneNumber = client.PhoneNumber;
                 }
+            }
+
+            var groups = await this.groupsRepository.GetAsync(componentModel.Token, componentModel.Language);
+            if (groups is not null)
+            {
+                viewModel.Groups = groups.Select(x => new ListItemViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                });
             }
 
             return viewModel;

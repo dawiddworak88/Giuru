@@ -12,5 +12,6 @@ namespace Seller.Web.Areas.Clients.Repositories
         Task<PagedResults<IEnumerable<Groups>>> GetAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
         Task<Groups> GetAsync(string token, string language, Guid? id);
         Task DeleteAsync(string token, string language, Guid? id);
+        Task<IEnumerable<Groups>> GetAsync(string token, string language);
     }
 }

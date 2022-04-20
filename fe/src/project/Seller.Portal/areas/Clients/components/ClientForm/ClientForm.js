@@ -17,6 +17,7 @@ function ClientForm(props) {
         name: { value: props.name ? props.name : "", error: "" },
         email: { value: props.email ? props.email : "", error: "" },
         communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
+        groups: { value: props.clientGroups ? props.clientGroups : []},
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null }
     };
 
@@ -118,7 +119,7 @@ function ClientForm(props) {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, email, communicationLanguage, phoneNumber } = values;
+    const { id, name, email, groups, communicationLanguage, phoneNumber } = values;
     return (
         <section className="section section-small-padding product client-form">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -174,6 +175,24 @@ function ClientForm(props) {
                                 {errors.communicationLanguage && dirty.communicationLanguage && (
                                     <FormHelperText>{errors.communicationLanguage}</FormHelperText>
                                 )}
+                            </FormControl>
+                        </div>
+                        <div className="field">
+                            <FormControl fullWidth={true}>
+                                <InputLabel id="group-label">Grupa</InputLabel>
+                                <Select
+                                    labelId="group-label"
+                                    id="groups"
+                                    name="groups"
+                                    value={groups}
+                                    multiple={true}
+                                    onChange={handleOnChange}>
+                                    {props.groups.map((group, index) => {
+                                        return (
+                                            <MenuItem key={index} value={group.id}>{group.name}</MenuItem>
+                                        );
+                                    })}
+                                </Select>
                             </FormControl>
                         </div>
                         <div className="field">

@@ -11,6 +11,7 @@ using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Shared.Configurations;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.Repositories
@@ -26,6 +27,60 @@ namespace Seller.Web.Areas.Clients.Repositories
         {
             this.apiClientService = apiClientService;
             this.settings = settings;
+        }
+
+        public async Task<IEnumerable<Groups>> GetAsync(string token, string language)
+        {
+            var warehousesRequestModel = new PagedRequestModelBase
+            {
+                PageIndex = PaginationConstants.DefaultPageIndex,
+                ItemsPerPage = PaginationConstants.DefaultPageSize
+            };
+
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Language = language,
+                Data = warehousesRequestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Groups.GroupsApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Groups>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                var groups = new List<Groups>();
+
+                groups.AddRange(response.Data.Data);
+
+                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
+
+                for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
+                {
+                    apiRequest.Data.PageIndex = i;
+
+                    var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Groups>>>(apiRequest);
+
+                    if (!nextPagesResponse.IsSuccessStatusCode)
+                    {
+                        throw new CustomException(response.Message, (int)response.StatusCode);
+                    }
+
+                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Count() > 0)
+                    {
+                        groups.AddRange(nextPagesResponse.Data.Data);
+                    }
+                }
+
+                return groups;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
         }
 
         public async Task DeleteAsync(string token, string language, Guid? id)

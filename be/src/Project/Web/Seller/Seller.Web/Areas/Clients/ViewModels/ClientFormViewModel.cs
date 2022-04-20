@@ -1,4 +1,5 @@
 ﻿using Foundation.PageContent.Components.Languages.ViewModels;
+using Foundation.PageContent.Components.ListItems.ViewModels;
 using System;
 using System.Collections.Generic;
 
@@ -32,5 +33,6 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string PhoneNumber { get; set; }
         public string PhoneNumberLabel { get; set; }
         public IEnumerable<LanguageViewModel> Languages { get; set; }
+        public IEnumerable<ListItemViewModel> Groups { get; set; }
     }
 }
