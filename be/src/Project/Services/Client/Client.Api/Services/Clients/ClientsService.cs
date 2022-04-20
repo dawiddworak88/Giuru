@@ -30,45 +30,77 @@ namespace Client.Api.Services.Clients
 
         public async Task<PagedResults<IEnumerable<ClientServiceModel>>> GetAsync(GetClientsServiceModel model)
         {
-            var clients = from c in this.context.Clients
-                          where c.SellerId == model.OrganisationId.Value && c.IsActive
-                          select new ClientServiceModel
-                          {
-                              Id = c.Id,
-                              Name = c.Name,
-                              Email = c.Email,
-                              CommunicationLanguage = c.Language,
-                              PhoneNumber = c.PhoneNumber,
-                              LastModifiedDate = c.LastModifiedDate,
-                              CreatedDate = c.CreatedDate
-                          };
+            var clients = this.context.Clients.Where(x => x.IsActive);
 
-            if (!string.IsNullOrWhiteSpace(model.SearchTerm))
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
                 clients = clients.Where(x => x.Name.StartsWith(model.SearchTerm));
             }
 
             clients = clients.ApplySort(model.OrderBy);
 
-            return clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedResults = clients.PagedIndex(new Pagination(clients.Count(), model.ItemsPerPage), model.PageIndex);
+
+            var pagedClientServiceModel = new PagedResults<IEnumerable<ClientServiceModel>>(pagedResults.Total, pagedResults.PageSize);
+
+            var clientsList = new List<ClientServiceModel>();
+
+            foreach (var client in pagedResults.Data.OrEmptyIfNull().ToList())
+            {
+                var item = new ClientServiceModel
+                {
+                    Id = client.Id,
+                    Name = client.Name,
+                    Email = client.Email,
+                    CommunicationLanguage = client.Language,
+                    PhoneNumber = client.PhoneNumber,
+                    LastModifiedDate = client.LastModifiedDate,
+                    CreatedDate = client.CreatedDate
+                };
+
+                var clientGroups = this.context.ClientsGroups.Where(x => x.ClientId == client.Id && x.IsActive);
+
+                if (clientGroups is not null)
+                {
+                    item.Groups = clientGroups.Select(x => x.GroupId);
+                }
+
+                clientsList.Add(item);
+            }
+
+            pagedClientServiceModel.Data = clientsList;
+
+            return pagedClientServiceModel;
         }
 
         public async Task<ClientServiceModel> GetAsync(GetClientServiceModel model)
         {
-            var clients = from c in this.context.Clients
-                            where c.SellerId == model.OrganisationId.Value && c.Id == model.Id && c.IsActive
-                            select new ClientServiceModel
-                            {
-                                Id = c.Id,
-                                Name = c.Name,
-                                Email = c.Email,
-                                CommunicationLanguage = c.Language,
-                                PhoneNumber = c.PhoneNumber,
-                                LastModifiedDate = c.LastModifiedDate,
-                                CreatedDate = c.CreatedDate
-                            };
+            var existingClient = await this.context.Clients.FirstOrDefaultAsync(x => x.SellerId == model.OrganisationId.Value && x.Id == model.Id && x.IsActive);
+            
+            if (existingClient is null)
+            {
+                throw new CustomException(this.clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
+            }
 
-            return await clients.FirstOrDefaultAsync();
+            var client = new ClientServiceModel
+            {
+                Id = existingClient.Id,
+                Name = existingClient.Name,
+                Email = existingClient.Email,
+                CommunicationLanguage = existingClient.Language,
+                PhoneNumber = existingClient.PhoneNumber,
+                LastModifiedDate = existingClient.LastModifiedDate,
+                CreatedDate = existingClient.CreatedDate
+            };
+
+            var clientGroups = this.context.ClientsGroups.Where(x => x.ClientId == existingClient.Id && x.IsActive);
+
+            if (clientGroups is not null)
+            {
+                client.Groups = clientGroups.Select(x => x.GroupId);
+            }
+            
+            return client;
         }
 
         public async Task DeleteAsync(DeleteClientServiceModel model)
@@ -141,18 +173,18 @@ namespace Client.Api.Services.Clients
                 SellerId = serviceModel.OrganisationId.Value
             };
 
+            this.context.Clients.Add(client.FillCommonProperties());
+
             foreach (var group in serviceModel.Groups.OrEmptyIfNull())
             {
                 var clientGroup = new ClientsGroups
                 {
-                    ClientId = exsitingClient.Id,
+                    ClientId = client.Id,
                     GroupId = group
                 };
 
                 await this.context.ClientsGroups.AddAsync(clientGroup.FillCommonProperties());
             }
-
-            this.context.Clients.Add(client.FillCommonProperties());
 
             await this.context.SaveChangesAsync();
 

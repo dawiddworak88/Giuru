@@ -86,6 +86,7 @@ namespace Client.Api.v1.Controllers
                                 Email = x.Email,
                                 CommunicationLanguage = x.CommunicationLanguage,
                                 PhoneNumber = x.PhoneNumber,
+                                Groups = x.Groups,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -129,6 +130,7 @@ namespace Client.Api.v1.Controllers
                                 Email = x.Email,
                                 CommunicationLanguage = x.CommunicationLanguage,
                                 PhoneNumber = x.PhoneNumber,
+                                Groups = x.Groups,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -181,6 +183,7 @@ namespace Client.Api.v1.Controllers
                         Name = client.Name,
                         CommunicationLanguage = client.CommunicationLanguage,
                         PhoneNumber = client.PhoneNumber,
+                        Groups = client.Groups,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };
@@ -229,6 +232,7 @@ namespace Client.Api.v1.Controllers
                         Name = client.Name,
                         CommunicationLanguage = client.CommunicationLanguage,
                         PhoneNumber = client.PhoneNumber,
+                        Groups = client.Groups,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };

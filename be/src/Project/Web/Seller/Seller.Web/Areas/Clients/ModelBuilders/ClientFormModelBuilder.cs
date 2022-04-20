@@ -89,6 +89,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.Email = client.Email;
                     viewModel.CommunicationLanguage = client.CommunicationLanguage;
                     viewModel.PhoneNumber = client.PhoneNumber;
+                    viewModel.ClientGroups = client.Groups;
                 }
             }
 

@@ -34,5 +34,6 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string PhoneNumberLabel { get; set; }
         public IEnumerable<LanguageViewModel> Languages { get; set; }
         public IEnumerable<ListItemViewModel> Groups { get; set; }
+        public IEnumerable<Guid> ClientGroups { get; set; }
     }
 }
