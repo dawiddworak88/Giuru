@@ -1,4 +1,5 @@
 ﻿using Client.Api.Infrastructure;
+using Client.Api.Infrastructure.Groups.Entities;
 using Client.Api.ServicesModels.Clients;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
@@ -99,12 +100,22 @@ namespace Client.Api.Services.Clients
             client.PhoneNumber = serviceModel.PhoneNumber;
             client.OrganisationId = serviceModel.ClientOrganisationId.Value;
 
-            if (serviceModel.Groups.Any())
-            {
-                foreach (var group in serviceModel.Groups)
-                {
+            var clientGroups = this.context.ClientsGroups.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
 
-                }
+            foreach (var clientGroup in clientGroups.OrEmptyIfNull())
+            {
+                this.context.ClientsGroups.Remove(clientGroup);
+            }
+
+            foreach (var group in serviceModel.Groups.OrEmptyIfNull())
+            {
+                var groupItem = new ClientsGroups
+                {
+                    ClientId = client.Id,
+                    GroupId = group
+                };
+
+                await this.context.ClientsGroups.AddAsync(groupItem.FillCommonProperties());
             }
 
             await this.context.SaveChangesAsync();
@@ -129,6 +140,17 @@ namespace Client.Api.Services.Clients
                 PhoneNumber = serviceModel.PhoneNumber,
                 SellerId = serviceModel.OrganisationId.Value
             };
+
+            foreach (var group in serviceModel.Groups.OrEmptyIfNull())
+            {
+                var clientGroup = new ClientsGroups
+                {
+                    ClientId = exsitingClient.Id,
+                    GroupId = group
+                };
+
+                await this.context.ClientsGroups.AddAsync(clientGroup.FillCommonProperties());
+            }
 
             this.context.Clients.Add(client.FillCommonProperties());
 

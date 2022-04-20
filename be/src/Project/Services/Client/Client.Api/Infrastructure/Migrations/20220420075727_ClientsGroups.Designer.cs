@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Client.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(ClientContext))]
-    [Migration("20220420073640_ClientsGroups")]
+    [Migration("20220420075727_ClientsGroups")]
     partial class ClientsGroups
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
