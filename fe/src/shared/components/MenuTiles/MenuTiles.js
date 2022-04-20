@@ -9,14 +9,18 @@ function MenuTiles(props) {
         let scrollStartX;
         let scrollLeft;
 
-        const startScrolling = (e) => {
+        const dragStart = (e) => {
             isDown = true;
             scrollStartX = e.pageX || e.touches[0].pageX - tiles.offsetLeft;
             scrollLeft = tiles.scrollLeft;	
+
+            tiles.classList.add('active');
         }
 
-        const endScrolling = (e) => {
+        const dragEnd = (e) => {
             isDown = false;
+
+            tiles.classList.remove('active');
         }
 
         const scrolling = (e) => {
@@ -29,23 +33,13 @@ function MenuTiles(props) {
         }
 
         useEffect(() => {
-            tiles.addEventListener('mousedown', startScrolling);
-            tiles.addEventListener('touchstart', startScrolling);
+            tiles.addEventListener('mousedown', dragStart);
+            tiles.addEventListener('touchstart', dragStart);
             tiles.addEventListener('mousemove', scrolling);
             tiles.addEventListener('touchmove', scrolling);
-            tiles.addEventListener('mouseleave', endScrolling);
-	        tiles.addEventListener('mouseup', endScrolling);
-	        tiles.addEventListener('touchend', endScrolling);
-
-            return () => {
-                tiles.removeEventListener('mousedown', startScrolling);
-                tiles.removeEventListener('touchstart', startScrolling);
-                tiles.removeEventListener('mousemove', scrolling);
-                tiles.removeEventListener('touchmove', scrolling);
-                tiles.removeEventListener('mouseleave', endScrolling);
-	            tiles.removeEventListener('mouseup', endScrolling);
-	            tiles.removeEventListener('touchend', endScrolling);
-            }
+            tiles.addEventListener('mouseleave', dragEnd);
+	        tiles.addEventListener('mouseup', dragEnd);
+	        tiles.addEventListener('touchend', dragEnd);
         }, [])
     }
 
