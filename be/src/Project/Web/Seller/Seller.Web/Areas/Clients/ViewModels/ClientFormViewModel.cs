@@ -1,4 +1,5 @@
 ﻿using Foundation.PageContent.Components.Languages.ViewModels;
+using Foundation.PageContent.Components.ListItems.ViewModels;
 using System;
 using System.Collections.Generic;
 
@@ -33,6 +34,10 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string PhoneNumberLabel { get; set; }
         public string ResetPasswordText { get; set; }
         public bool HasAccount { get; set; }
+        public string NoGroupsText { get; set; }
+        public string GroupsLabel { get; set; }
         public IEnumerable<LanguageViewModel> Languages { get; set; }
+        public IEnumerable<ListItemViewModel> ClientGroups { get; set; }
+        public IEnumerable<Guid> ClientGroupsIds { get; set; }
     }
 }

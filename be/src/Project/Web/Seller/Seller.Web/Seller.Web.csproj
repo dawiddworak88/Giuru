@@ -37,7 +37,7 @@
 	<ItemGroup>
 		<Folder Include="Areas\Inventory\Views\Inventory\" />
 		<Folder Include="Areas\Inventory\Views\Warehouse\" />
-		<Folder Include="wwwroot\dist\" />
+		<Folder Include="wwwroot\" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Update="Properties\appsettings.Development.json">
