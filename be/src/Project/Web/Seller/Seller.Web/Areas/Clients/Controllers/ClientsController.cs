@@ -15,7 +15,8 @@ namespace Seller.Web.Areas.Clients.Controllers
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel> clientsPageModelBuilder;
 
-        public ClientsController(IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel> clientsPageModelBuilder)
+        public ClientsController(
+            IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel> clientsPageModelBuilder)
         {
             this.clientsPageModelBuilder = clientsPageModelBuilder;
         }

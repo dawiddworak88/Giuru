@@ -53,16 +53,15 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] SaveClientRequestModel model)
         {
-            Guid? organisationId;
-
-            var organisation = await this.organisationsRepository.GetAsync(
-                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                CultureInfo.CurrentUICulture.Name,
-                model.Email);
-
+            
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
-            if (organisation != null)
+
+            Guid? organisationId;
+
+            var organisation = await this.organisationsRepository.GetAsync(token, language, model.Email);
+
+            if (organisation is not null)
             {
                 organisationId = organisation.Id;
             }
@@ -71,11 +70,11 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 organisationId = await this.organisationsRepository.SaveAsync(token, language, model.Name, model.Email, model.CommunicationLanguage);
             }
 
-            var clientId = await this.clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.PhoneNumber, organisationId.Value);
+            var clientId = await this.clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.PhoneNumber, organisationId.Value, model.ClientGroupIds);
 
-            if (model.Id.HasValue)
+            if (model.HasAccount)
             {
-                await this.identityRepository.UpdateAsync(token, language, model.Id, model.Email, model.Name, model.CommunicationLanguage);
+                await this.identityRepository.UpdateAsync(token, language, clientId, model.Email, model.Name, model.CommunicationLanguage);
             }
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Id = clientId, Message = this.clientLocalizer.GetString("ClientSavedSuccessfully").Value });

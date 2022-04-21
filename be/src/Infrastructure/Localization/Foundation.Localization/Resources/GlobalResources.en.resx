@@ -465,4 +465,13 @@
   <data name="Ean" xml:space="preserve">
     <value>EAN:</value>
   </data>
+  <data name="ClientsGroups" xml:space="preserve">
+    <value>Clients groups</value>
+  </data>
+  <data name="ClientsGroup" xml:space="preserve">
+    <value>Client group</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>Groups</value>
+  </data>
 </root>
