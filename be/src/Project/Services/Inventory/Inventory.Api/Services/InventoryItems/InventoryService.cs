@@ -45,6 +45,7 @@ namespace Inventory.Api.Services
             inventoryProduct.ProductName = serviceModel.ProductName;
             inventoryProduct.ProductSku = serviceModel.ProductSku;
             inventoryProduct.Quantity = serviceModel.Quantity;
+            inventoryProduct.Ean = serviceModel.Ean;
             inventoryProduct.RestockableInDays = serviceModel.RestockableInDays;
             inventoryProduct.AvailableQuantity = serviceModel.AvailableQuantity;
             inventoryProduct.ExpectedDelivery = serviceModel.ExpectedDelivery;
@@ -64,6 +65,7 @@ namespace Inventory.Api.Services
                 ProductName = serviceModel.ProductName,
                 ProductSku = serviceModel.ProductSku,
                 Quantity = serviceModel.Quantity,
+                Ean = serviceModel.Ean,
                 AvailableQuantity = serviceModel.AvailableQuantity,
                 RestockableInDays = serviceModel.RestockableInDays,
                 ExpectedDelivery = serviceModel.ExpectedDelivery,
@@ -143,6 +145,7 @@ namespace Inventory.Api.Services
                                        WarehouseId = c.WarehouseId,
                                        WarehouseName = warehouse.Name,
                                        Quantity = c.Quantity,
+                                       Ean = c.Ean,
                                        AvailableQuantity = c.AvailableQuantity.Value,
                                        RestockableInDays = c.RestockableInDays.Value,
                                        ExpectedDelivery = c.ExpectedDelivery.Value,
@@ -167,6 +170,7 @@ namespace Inventory.Api.Services
                                 WarehouseId = c.WarehouseId,
                                 WarehouseName = warehouse.Name,
                                 Quantity = c.Quantity,
+                                Ean = c.Ean,
                                 AvailableQuantity = c.AvailableQuantity.Value,
                                 RestockableInDays= c.RestockableInDays,
                                 ExpectedDelivery = c.ExpectedDelivery,
@@ -216,6 +220,7 @@ namespace Inventory.Api.Services
                                 ProductName = i.ProductName,
                                 ProductSku = i.ProductSku,
                                 Quantity = i.Quantity,
+                                Ean = i.Ean,
                                 AvailableQuantity = i.AvailableQuantity,
                                 ExpectedDelivery = i.ExpectedDelivery,
                                 RestockableInDays = i.RestockableInDays,
@@ -232,6 +237,7 @@ namespace Inventory.Api.Services
                     ProductId = model.ProductId.Value,
                     ProductName = inventory.FirstOrDefault().ProductName,
                     ProductSku = inventory.FirstOrDefault().ProductSku,
+                    Ean = inventory.FirstOrDefault().Ean,
                     AvailableQuantity = inventory.Sum(x => x.AvailableQuantity),
                     Quantity = inventory.Sum(x => x.Quantity),
                     ExpectedDelivery = inventory.Min(x => x.ExpectedDelivery),
@@ -244,6 +250,7 @@ namespace Inventory.Api.Services
                         ProductSku = item.ProductSku,
                         AvailableQuantity = item.AvailableQuantity,
                         Quantity = item.Quantity,
+                        Ean = item.Ean,
                         ExpectedDelivery = item.ExpectedDelivery,
                         WarehouseId = item.WarehouseId,
                         WarehouseName = item.WarehouseName,
@@ -271,6 +278,7 @@ namespace Inventory.Api.Services
                                 ProductName = i.ProductName,
                                 ProductSku = i.ProductSku,
                                 Quantity = i.Quantity,
+                                Ean = i.Ean,
                                 AvailableQuantity = i.AvailableQuantity,
                                 ExpectedDelivery = i.ExpectedDelivery,
                                 RestockableInDays = i.RestockableInDays,
@@ -287,6 +295,7 @@ namespace Inventory.Api.Services
                     ProductId = inventory.FirstOrDefault().ProductId,
                     ProductName = inventory.FirstOrDefault().ProductName,
                     ProductSku = model.ProductSku,
+                    Ean = inventory.FirstOrDefault().Ean,
                     AvailableQuantity = inventory.Sum(x => x.AvailableQuantity),
                     Quantity = inventory.Sum(x => x.Quantity),
                     ExpectedDelivery = inventory.Min(x => x.ExpectedDelivery),
@@ -299,6 +308,7 @@ namespace Inventory.Api.Services
                         ProductSku = item.ProductSku,
                         AvailableQuantity = item.AvailableQuantity,
                         Quantity = item.Quantity,
+                        Ean = item.Ean,
                         ExpectedDelivery = item.ExpectedDelivery,
                         WarehouseId = item.WarehouseId,
                         WarehouseName = item.WarehouseName,
@@ -350,6 +360,7 @@ namespace Inventory.Api.Services
                                 ProductSku = gpi.FirstOrDefault().ProductSku,
                                 AvailableQuantity = gpi.Sum(x => x.AvailableQuantity),
                                 Quantity = gpi.Sum(x => x.Quantity),
+                                Ean = gpi.FirstOrDefault().Ean,
                                 ExpectedDelivery = gpi.Min(x => x.ExpectedDelivery),
                                 RestockableInDays = gpi.Min(x => x.RestockableInDays)
                             }).OrderByDescending(x => x.AvailableQuantity);

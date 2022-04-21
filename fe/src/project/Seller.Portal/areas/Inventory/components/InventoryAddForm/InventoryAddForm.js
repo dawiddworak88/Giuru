@@ -26,7 +26,8 @@ const InventoryAddForm = (props) => {
         quantity: { value: props.quantity ? props.quantity : 0, error: "" },
         restockableInDays: { value: props.restockableInDays ? props.restockableInDays : null, error: "" },
         availableQuantity: { value: props.availableQuantity ? props.availableQuantity : 0, error: "" },
-        expectedDelivery: { value: props.expectedDelivery ? props.expectedDelivery : null, error: "" }
+        expectedDelivery: { value: props.expectedDelivery ? props.expectedDelivery : null, error: "" },
+        ean: { value: props.ean ? props.ean : null }
     };
 
     const productsProps = {
@@ -56,7 +57,7 @@ const InventoryAddForm = (props) => {
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        const inventoryProduct = {id, warehouseId, productId: state.product.id, quantity, restockableInDays, availableQuantity, expectedDelivery};
+        const inventoryProduct = {id, warehouseId, productId: state.product.id, quantity, ean, restockableInDays, availableQuantity, expectedDelivery};
 
         const requestOptions = {
             method: "POST",
@@ -87,7 +88,7 @@ const InventoryAddForm = (props) => {
         handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const {id, warehouseId, product, quantity, restockableInDays, availableQuantity, expectedDelivery } = values;
+    const {id, warehouseId, product, quantity, restockableInDays, availableQuantity, expectedDelivery, ean } = values;
     return (
         <section className="section section-small-padding inventory-add">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -167,6 +168,17 @@ const InventoryAddForm = (props) => {
                                 fullWidth={true} 
                                 value={availableQuantity} 
                                 onChange={handleOnChange}/>
+                        </div>
+                        <div className="field">
+                            <TextField 
+                                id="ean" 
+                                name="ean" 
+                                type="text" 
+                                label={props.eanLabel} 
+                                fullWidth={true} 
+                                value={ean} 
+                                onChange={handleOnChange}
+                            />
                         </div>
                         <div className="field">
                             <TextField 
@@ -260,7 +272,8 @@ InventoryAddForm.propTypes = {
     productRequiredErrorMessage: PropTypes.string,
     quantityRequiredErrorMessage: PropTypes.string,
     quantityFormatErrorMessage: PropTypes.string,
-    idLabel: PropTypes.string
+    idLabel: PropTypes.string,
+    eanLabel: PropTypes.string
 };
 
 export default InventoryAddForm;
