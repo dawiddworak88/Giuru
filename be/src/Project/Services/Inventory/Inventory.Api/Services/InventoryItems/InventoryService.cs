@@ -387,5 +387,17 @@ namespace Inventory.Api.Services
                 await this.context.SaveChangesAsync();
             }
         }
+
+        public async Task UpdateInventoryEan(Guid? ProductId, string ean)
+        {
+            var inventoryProduct = await this.context.Inventory.FirstOrDefaultAsync(x => x.ProductId == ProductId.Value && x.IsActive);
+            if (inventoryProduct is not null)
+            {
+                inventoryProduct.Ean = ean;
+                inventoryProduct.LastModifiedDate = DateTime.UtcNow;
+
+                await this.context.SaveChangesAsync();
+            }
+        }
     }
 }
