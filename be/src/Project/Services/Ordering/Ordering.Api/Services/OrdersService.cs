@@ -166,9 +166,11 @@ namespace Ordering.Api.Services
                 orders = orders.Where(x => x.SellerId == model.OrganisationId.Value);
             }
 
-            if (!string.IsNullOrWhiteSpace(model.SearchTerm))
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                orders = orders.Where(x => x.ClientName == model.SearchTerm || x.OrderItems.Any(y => y.ExternalReference == model.SearchTerm));
+                orders = orders.Where(x => x.ClientName.ToLower().StartsWith(model.SearchTerm.ToLower()) 
+                || x.OrderItems.Any(y => y.ExternalReference.ToLower().StartsWith(model.SearchTerm.ToLower())) 
+                || x.Id.ToString().ToLower() == model.SearchTerm.ToLower());
             }
 
             if (model.CreatedDateGreaterThan.HasValue)

@@ -8,6 +8,7 @@
         public string NotFound { get; set; }
         public string LackInformation { get; set; }
         public string SkuLabel { get; set; }
+        public string EanLabel { get; set; }
         public string FabricsLabel { get; set; }
         public string ProductsApiUrl { get; set; }
         public string AddToCartLabel { get; set; }
