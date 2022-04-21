@@ -11,6 +11,9 @@ using Seller.Web.Areas.Clients.ViewModels;
 using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
 using Seller.Web.Shared.Repositories.Clients;
+using Seller.Web.Areas.Clients.Repositories;
+using System.Linq;
+using Foundation.PageContent.Components.ListItems.ViewModels;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -21,12 +24,14 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
         private readonly IOptionsMonitor<LocalizationSettings> localizationOptions;
         private readonly LinkGenerator linkGenerator;
+        private readonly IClientGroupsRepository clientGroupsRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
             IOptionsMonitor<LocalizationSettings> localizationOptions,
+            IClientGroupsRepository clientGroupsRepository,
             LinkGenerator linkGenerator)
         {
             this.clientsRepository = clientsRepository;
@@ -34,6 +39,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             this.clientLocalizer = clientLocalizer;
             this.localizationOptions = localizationOptions;
             this.linkGenerator = linkGenerator;
+            this.clientGroupsRepository = clientGroupsRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -70,7 +76,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 IdLabel = this.globalLocalizer.GetString("Id"),
                 PhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel"),
                 ClientsUrl = this.linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
-                NavigateToClientsLabel = this.clientLocalizer.GetString("NavigateToClientsLabel")
+                NavigateToClientsLabel = this.clientLocalizer.GetString("NavigateToClientsLabel"),
+                NoGroupsText = this.clientLocalizer.GetString("NoGroupsText"),
+                GroupsLabel = this.globalLocalizer.GetString("Groups")
             };
 
             if (componentModel.Id.HasValue)
@@ -83,7 +91,18 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.Email = client.Email;
                     viewModel.CommunicationLanguage = client.CommunicationLanguage;
                     viewModel.PhoneNumber = client.PhoneNumber;
+                    viewModel.ClientGroupsIds = client.ClientGroupIds;
                 }
+            }
+
+            var groups = await this.clientGroupsRepository.GetAsync(componentModel.Token, componentModel.Language);
+            if (groups is not null)
+            {
+                viewModel.ClientGroups = groups.Select(x => new ListItemViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                });
             }
 
             return viewModel;

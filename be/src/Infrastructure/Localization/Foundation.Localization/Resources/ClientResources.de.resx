@@ -144,13 +144,40 @@
   <data name="ClientSavedSuccessfully" xml:space="preserve">
     <value>Der Kunde wurde erfolgreich gespeichert.</value>
   </data>
+  <data name="ClientsGroups" xml:space="preserve">
+    <value>Kundengruppen</value>
+  </data>
   <data name="EditClient" xml:space="preserve">
     <value>Kunde bearbeiten</value>
+  </data>
+  <data name="EditGroup" xml:space="preserve">
+    <value>Kundengruppe bearbeiten</value>
+  </data>
+  <data name="GroupDeleteClientConflict" xml:space="preserve">
+    <value>Heben Sie die Zuweisung von Clients zu dieser Gruppe auf.</value>
+  </data>
+  <data name="GroupDeletedSuccessfully" xml:space="preserve">
+    <value>Gruppe wurde erfolgreich gelöscht.</value>
+  </data>
+  <data name="GroupNotFound" xml:space="preserve">
+    <value>Gruppe wurde nicht gefunden.</value>
+  </data>
+  <data name="GroupSavedSuccessfully" xml:space="preserve">
+    <value>Gruppe wurde erfolgreich gespeichert.</value>
   </data>
   <data name="NavigateToClientsLabel" xml:space="preserve">
     <value>Zurück zu den Kunden</value>
   </data>
+  <data name="NavigateToGroupsText" xml:space="preserve">
+    <value>Zurück zu den Gruppen</value>
+  </data>
   <data name="NewClient" xml:space="preserve">
     <value>Neuer Kunde</value>
+  </data>
+  <data name="NewGroup" xml:space="preserve">
+    <value>Neue Kundengruppe</value>
+  </data>
+  <data name="NoGroupsText" xml:space="preserve">
+    <value>Keine Kundengruppe verfügbar</value>
   </data>
 </root>

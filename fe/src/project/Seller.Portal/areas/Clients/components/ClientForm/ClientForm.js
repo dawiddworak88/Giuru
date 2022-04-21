@@ -17,6 +17,7 @@ function ClientForm(props) {
         name: { value: props.name ? props.name : "", error: "" },
         email: { value: props.email ? props.email : "", error: "" },
         communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
+        clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null }
     };
 
@@ -118,7 +119,7 @@ function ClientForm(props) {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, email, communicationLanguage, phoneNumber } = values;
+    const { id, name, email, clientGroupIds, communicationLanguage, phoneNumber } = values;
     return (
         <section className="section section-small-padding product client-form">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -173,6 +174,28 @@ function ClientForm(props) {
                                 {errors.communicationLanguage && dirty.communicationLanguage && (
                                     <FormHelperText>{errors.communicationLanguage}</FormHelperText>
                                 )}
+                            </FormControl>
+                        </div>
+                        <div className="field">
+                            <FormControl fullWidth={true}>
+                                <InputLabel id="clientGroups-label">{props.groupsLabel}</InputLabel>
+                                <Select
+                                    labelId="clientGroups-label"
+                                    id="clientGroupIds"
+                                    name="clientGroupIds"
+                                    value={clientGroupIds}
+                                    multiple={true}
+                                    onChange={handleOnChange}>
+                                    {props.clientGroups && props.clientGroups.length > 0 ? (
+                                        props.clientGroups.map((group, index) => {
+                                            return (
+                                                <MenuItem key={index} value={group.id}>{group.name}</MenuItem>
+                                            );
+                                        })
+                                    ) : (
+                                        <MenuItem disabled>{props.noGroupsText}</MenuItem>
+                                    )}
+                                </Select>
                             </FormControl>
                         </div>
                         <div className="field">
@@ -242,7 +265,9 @@ ClientForm.propTypes = {
     saveUrl: PropTypes.string.isRequired,
     languages: PropTypes.array.isRequired,
     phoneNumberLabel: PropTypes.string.isRequired,
-    idLabel: PropTypes.string
+    idLabel: PropTypes.string,
+    noGroupsText: PropTypes.string.isRequired,
+    groupsLabel: PropTypes.string.isRequired
 };
 
 export default ClientForm;

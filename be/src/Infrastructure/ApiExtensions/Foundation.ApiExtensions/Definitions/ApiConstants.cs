@@ -13,6 +13,11 @@
             public static readonly string ProductSuggestionsApiEndpoint = "/api/v1/productsuggestions";
         }
 
+        public struct Client
+        {
+            public static readonly string GroupsApiEndpoint = "/api/v1/clientgroups";
+        }
+
         public struct Identity
         {
             public static readonly string OrganisationsApiEndpoint = "/api/v1/organisations";

@@ -71,7 +71,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 organisationId = await this.organisationsRepository.SaveAsync(token, language, model.Name, model.Email, model.CommunicationLanguage);
             }
 
-            var clientId = await this.clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.PhoneNumber, organisationId.Value);
+            var clientId = await this.clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.PhoneNumber, organisationId.Value, model.ClientGroupIds);
 
             if (model.Id.HasValue)
             {
