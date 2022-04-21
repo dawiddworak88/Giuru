@@ -180,4 +180,7 @@
   <data name="NoGroupsText" xml:space="preserve">
     <value>Keine Kundengruppe verfügbar</value>
   </data>
+  <data name="ResetPasswordText" xml:space="preserve">
+    <value>Passwort zurücksetzen</value>
+  </data>
 </root>
