@@ -41,6 +41,14 @@ namespace Ordering.Api.Validators
                     }
                 }
 
+                if (y.HasCustomOrder)
+                {
+                    if (string.IsNullOrWhiteSpace(y.MoreInfo))
+                    {
+                        return false;
+                    }
+                }
+
                 return true;
             });
         }
