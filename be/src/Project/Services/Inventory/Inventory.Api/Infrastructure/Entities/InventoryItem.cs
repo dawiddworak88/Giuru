@@ -20,6 +20,8 @@ namespace Inventory.Api.Infrastructure.Entities
 
         [Required]
         public int Quantity { get; set; }
+
+        public string Ean { get; set; }
         
         public int? AvailableQuantity { get; set; }
 
