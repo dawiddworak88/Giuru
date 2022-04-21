@@ -37,8 +37,8 @@ function NewOrderForm(props) {
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
     const [showBackToOrdersListButton, setShowBackToOrdersListButton] = useState(false);
-    const [customOrder, setCustomOrder] = useState(false);
-    const [hasCustomOrder, setHasCustomOrder] = useState(null);
+    const [customOrder, setCustomOrder] = useState(null);
+    const [hasCustomOrder, setHasCustomOrder] = useState(false);
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -317,7 +317,7 @@ function NewOrderForm(props) {
             });
     }
 
-    const disabledActionButtons = orderItems.length === 0 ? !customOrderComment ? true : false : false
+    const disabledActionButtons = orderItems.length === 0 ? !customOrder ? true : false : false
     return (
         <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -497,7 +497,7 @@ function NewOrderForm(props) {
                         <FormControlLabel 
                             control={
                                 <Checkbox 
-                                    checked={customOrder}
+                                    checked={hasCustomOrder}
                                     defaultChecked
                                     onChange={(e) => {
                                         setHasCustomOrder(e.target.checked);
@@ -506,7 +506,7 @@ function NewOrderForm(props) {
                             label={props.initCustomOrderLabel}
                         />
                     </NoSsr>
-                    {customOrder && 
+                    {hasCustomOrder && 
                         <div className="order__items">
                             <TextField
                                 id="customOrder"
@@ -519,7 +519,7 @@ function NewOrderForm(props) {
                                 rows={OrderFormConstants.minRowsForCustomOrder()}
                                 fullWidth={true}
                                 multiline={true}
-                                value={customOrderComment}
+                                value={customOrder}
                                 onChange={(e) => {
                                     setCustomOrder(e.target.value);
                                 }}
