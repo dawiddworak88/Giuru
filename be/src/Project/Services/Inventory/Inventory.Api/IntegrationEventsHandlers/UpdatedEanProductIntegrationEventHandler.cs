@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Inventory.Api.IntegrationEventsHandlers
 {
-    public class EanProductIntegrationEventHandler : IIntegrationEventHandler<EanProductIntegrationEvent>
+    public class UpdatedEanProductIntegrationEventHandler : IIntegrationEventHandler<UpdatedEanProductIntegrationEvent>
     {
         private readonly IInventoryService inventoryService;
 
-        public EanProductIntegrationEventHandler(
+        public UpdatedEanProductIntegrationEventHandler(
             IInventoryService inventoryService)
         {
             this.inventoryService = inventoryService;
@@ -24,7 +24,7 @@ namespace Inventory.Api.IntegrationEventsHandlers
         /// catalog.api once seller triggered the rebuild.
         /// </param>
         /// <returns></returns>
-        public async Task Handle(EanProductIntegrationEvent @event)
+        public async Task Handle(UpdatedEanProductIntegrationEvent @event)
         {
             if (@event.ProductId.HasValue)
             {

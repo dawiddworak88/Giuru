@@ -259,14 +259,14 @@ namespace Catalog.Api.Services.Products
                 ProductSku = model.Sku
             };
 
-            var ean = new EanProductIntegrationEvent
+            var updatedEan = new UpdatedEanProductIntegrationEvent
             {
                 ProductId = model.Id,
                 Ean = model.Ean
             };
 
             this.eventBus.Publish(message);
-            this.eventBus.Publish(ean);
+            this.eventBus.Publish(updatedEan);
 
             await this.catalogContext.SaveChangesAsync();
 

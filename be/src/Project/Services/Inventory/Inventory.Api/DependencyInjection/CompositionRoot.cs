@@ -34,7 +34,7 @@ namespace Inventory.Api.DependencyInjection
         {
             services.AddScoped<IIntegrationEventHandler<UpdatedProductIntegrationEvent>, UpdatedProductIntegrationEventHandler>();
             services.AddScoped<IIntegrationEventHandler<BasketCheckoutProductsIntegrationEvent>, UpdatedInventoryIntegrationEventHandler>();
-            services.AddScoped<IIntegrationEventHandler<EanProductIntegrationEvent>, EanProductIntegrationEventHandler>();
+            services.AddScoped<IIntegrationEventHandler<UpdatedEanProductIntegrationEvent>, UpdatedEanProductIntegrationEventHandler>();
 
             services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
             {

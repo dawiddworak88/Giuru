@@ -3,7 +3,7 @@ using System;
 
 namespace Catalog.Api.IntegrationEvents
 {
-    public class EanProductIntegrationEvent : IntegrationEvent
+    public class UpdatedEanProductIntegrationEvent : IntegrationEvent
     {
         public Guid? ProductId { get; set; }
         public string Ean { get; set; }
