@@ -46,6 +46,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Sidebar
                 ExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ExpectedDeliveryLabel"),
                 LoadingLabel = this.globalLocalizer.GetString("LoadingLabel"),
                 InOutletLabel = this.globalLocalizer.GetString("InOutlet"),
+                ExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ExpectedDeliveryLabel"),
                 EanLabel = this.globalLocalizer.GetString("Ean")
             };
            
