@@ -205,6 +205,7 @@ namespace Inventory.Api.v1.Controllers
                 { 
                     AvailableQuantity = x.AvailableQuantity,
                     Quantity = x.Quantity,
+                    Ean = x.Ean,
                     ExpectedDelivery = x.ExpectedDelivery,
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,

@@ -103,6 +103,7 @@ namespace Inventory.Api.Services
                     inventoryItem.RestockableInDays = item.RestockableInDays;
                     inventoryItem.AvailableQuantity = item.AvailableQuantity;
                     inventoryItem.Quantity = item.Quantity;
+                    inventoryItem.Ean = item.Ean;
                     inventoryItem.LastModifiedDate = DateTime.UtcNow;
                 }
                 else
@@ -118,6 +119,7 @@ namespace Inventory.Api.Services
                             ProductName = item.ProductName,
                             ProductSku = item.ProductSku,
                             Quantity = item.Quantity,
+                            Ean = item.Ean,
                             AvailableQuantity = item.AvailableQuantity,
                             ExpectedDelivery = item.ExpectedDelivery,
                             SellerId = model.OrganisationId.Value
