@@ -97,7 +97,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 BasketId = componentModel.BasketId,
                 AddedProduct = this.orderResources.GetString("AddedProduct"),
                 Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel),
-                Modal = await this.modalModelBuilder.BuildModelAsync(componentModel)
+                Modal = await this.modalModelBuilder.BuildModelAsync(componentModel),
+                EanLabel = this.globalLocalizer.GetString("Ean")
             };
 
             var product = await this.productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);

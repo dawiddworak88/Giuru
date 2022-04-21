@@ -60,7 +60,7 @@ const Modal = (props) => {
                         {product.ean &&
                             <p className="basket-modal__ean">{labels.eanLabel} {product.ean}</p>
                         }
-                        <h1 className="title is-4">{product.title}</h1>
+                        <h1 className="title is-4 mt-1">{product.title}</h1>
                     </div>
                 }
                 <div className="field">
