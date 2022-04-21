@@ -65,7 +65,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 viewModel.Id = order.Id;
                 viewModel.OrderStatusId = order.OrderStatusId;
                 viewModel.ExpectedDelivery = order.ExpectedDeliveryDate;
-                viewModel.CustomOrderComment = order.MoreInfo;
+                viewModel.CustomOrder = order.MoreInfo;
                 viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                 {
                     ProductId = x.ProductId,

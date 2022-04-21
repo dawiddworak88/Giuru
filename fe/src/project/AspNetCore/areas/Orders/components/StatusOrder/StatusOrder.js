@@ -5,6 +5,7 @@ import {
     TableHead, TableRow, Paper, TextField
 } from "@material-ui/core";
 import moment from "moment";
+import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
 
 function StatusOrder(props) {
 
@@ -76,16 +77,16 @@ function StatusOrder(props) {
                     </div>
                 </div>
             }
-            {props.customOrderComment &&
+            {props.customOrder &&
                 <div className="mt-5">
-                    <h2 className="subtitle is-5 mb-2">{props.nonstandardOrderLabel}</h2>
+                    <h2 className="subtitle is-5 mb-2">{props.customOrderLabel}</h2>
                     <div className="status-order__items">
                         <TextField 
-                            value={props.customOrderComment}
+                            value={props.customOrder}
                             fullWidth={true}
                             multiline={true}
                             disabled={true}
-                            rows={3}
+                            rows={OrderFormConstants.minRowsForCustomOrder()}
                             InputProps={{ 
                                 className: "p-2" 
                             }}
@@ -110,7 +111,7 @@ StatusOrder.propTypes = {
     orderItemsLabel: PropTypes.string.isRequired,
     orderStatusLabel: PropTypes.string.isRequired,
     orderStatusId: PropTypes.string.isRequired,
-    nonstandardOrderLabel: PropTypes.string.isRequired
+    customOrderLabel: PropTypes.string.isRequired
 };
 
 export default StatusOrder;

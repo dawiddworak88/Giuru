@@ -38,7 +38,7 @@ function NewOrderForm(props) {
     const [entityToDelete, setEntityToDelete] = useState(null);
     const [showBackToOrdersListButton, setShowBackToOrdersListButton] = useState(false);
     const [customOrder, setCustomOrder] = useState(false);
-    const [customOrderComment, setCustomOrderComment] = useState(null);
+    const [hasCustomOrder, setHasCustomOrder] = useState(null);
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -206,8 +206,8 @@ function NewOrderForm(props) {
 
         var order = {
             basketId,
-            moreInfo: customOrderComment,
-            hasCustomOrder: customOrder
+            moreInfo: customOrder,
+            hasCustomOrder: hasCustomOrder
         };
 
         const requestOptions = {
@@ -308,8 +308,8 @@ function NewOrderForm(props) {
                         setBasketId(null);
                     }
 
-                    setCustomOrderComment(null);
-                    setCustomOrder(false);
+                    setCustomOrder(null);
+                    setHasCustomOrder(false);
                 });
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
@@ -500,7 +500,7 @@ function NewOrderForm(props) {
                                     checked={customOrder}
                                     defaultChecked
                                     onChange={(e) => {
-                                        setCustomOrder(e.target.checked);
+                                        setHasCustomOrder(e.target.checked);
                                     }}/>
                             }
                             label={props.initCustomOrderLabel}
@@ -516,12 +516,12 @@ function NewOrderForm(props) {
                                     className: "p-2",
                                     disableUnderline: true
                                 }}
-                                rows={3}
+                                rows={OrderFormConstants.minRowsForCustomOrder()}
                                 fullWidth={true}
                                 multiline={true}
                                 value={customOrderComment}
                                 onChange={(e) => {
-                                    setCustomOrderComment(e.target.value);
+                                    setCustomOrder(e.target.value);
                                 }}
                             />
                         </div>
@@ -610,8 +610,3 @@ NewOrderForm.propTypes = {
 };
 
 export default NewOrderForm;
-
-/*
-
-if (order.length === 0 ? comm)
-*/
