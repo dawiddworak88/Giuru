@@ -49,7 +49,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
                 ExpectedDeliveryLabel = this.orderLocalizer.GetString("ExpectedDeliveryLabel"),
                 FabricsLabel = this.orderLocalizer.GetString("FabricsLabel"),
-                NonstandardOrderLabel = this.globalLocalizer.GetString("NonstandardOrderLabel")
+                CustomOrderLabel = this.globalLocalizer.GetString("NonstandardOrderLabel")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
