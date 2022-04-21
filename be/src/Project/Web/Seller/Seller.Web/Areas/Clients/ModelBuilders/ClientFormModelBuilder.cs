@@ -24,14 +24,14 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
         private readonly IOptionsMonitor<LocalizationSettings> localizationOptions;
         private readonly LinkGenerator linkGenerator;
-        private readonly IGroupsRepository groupsRepository;
+        private readonly IClientGroupsRepository clientGroupsRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
             IOptionsMonitor<LocalizationSettings> localizationOptions,
-            IGroupsRepository groupsRepository,
+            IClientGroupsRepository clientGroupsRepository,
             LinkGenerator linkGenerator)
         {
             this.clientsRepository = clientsRepository;
@@ -39,7 +39,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             this.clientLocalizer = clientLocalizer;
             this.localizationOptions = localizationOptions;
             this.linkGenerator = linkGenerator;
-            this.groupsRepository = groupsRepository;
+            this.clientGroupsRepository = clientGroupsRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -91,14 +91,14 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.Email = client.Email;
                     viewModel.CommunicationLanguage = client.CommunicationLanguage;
                     viewModel.PhoneNumber = client.PhoneNumber;
-                    viewModel.ClientGroups = client.Groups;
+                    viewModel.ClientGroupsIds = client.ClientGroupIds;
                 }
             }
 
-            var groups = await this.groupsRepository.GetAsync(componentModel.Token, componentModel.Language);
+            var groups = await this.clientGroupsRepository.GetAsync(componentModel.Token, componentModel.Language);
             if (groups is not null)
             {
-                viewModel.Groups = groups.Select(x => new ListItemViewModel
+                viewModel.ClientGroups = groups.Select(x => new ListItemViewModel
                 {
                     Id = x.Id,
                     Name = x.Name,

@@ -86,7 +86,7 @@ namespace Client.Api.v1.Controllers
                                 Email = x.Email,
                                 CommunicationLanguage = x.CommunicationLanguage,
                                 PhoneNumber = x.PhoneNumber,
-                                Groups = x.Groups,
+                                ClientGroupIds = x.ClientGroupIds,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -130,7 +130,7 @@ namespace Client.Api.v1.Controllers
                                 Email = x.Email,
                                 CommunicationLanguage = x.CommunicationLanguage,
                                 PhoneNumber = x.PhoneNumber,
-                                Groups = x.Groups,
+                                ClientGroupIds = x.ClientGroupIds,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -183,7 +183,7 @@ namespace Client.Api.v1.Controllers
                         Name = client.Name,
                         CommunicationLanguage = client.CommunicationLanguage,
                         PhoneNumber = client.PhoneNumber,
-                        Groups = client.Groups,
+                        ClientGroupIds = client.ClientGroupIds,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };
@@ -232,7 +232,7 @@ namespace Client.Api.v1.Controllers
                         Name = client.Name,
                         CommunicationLanguage = client.CommunicationLanguage,
                         PhoneNumber = client.PhoneNumber,
-                        Groups = client.Groups,
+                        ClientGroupIds = client.ClientGroupIds,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };
@@ -273,7 +273,7 @@ namespace Client.Api.v1.Controllers
                     CommunicationLanguage = request.CommunicationLanguage,
                     PhoneNumber = request.PhoneNumber,
                     ClientOrganisationId = request.OrganisationId,
-                    Groups = request.Groups,
+                    ClientGroupIds = request.ClientGroupIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -301,7 +301,7 @@ namespace Client.Api.v1.Controllers
                     CommunicationLanguage = request.CommunicationLanguage,
                     PhoneNumber = request.PhoneNumber,
                     ClientOrganisationId = request.OrganisationId,
-                    Groups = request.Groups,
+                    ClientGroupIds = request.ClientGroupIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)

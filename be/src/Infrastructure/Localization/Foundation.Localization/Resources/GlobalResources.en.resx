@@ -469,7 +469,7 @@
     <value>Clients groups</value>
   </data>
   <data name="ClientsGroup" xml:space="preserve">
-    <value>Group</value>
+    <value>Client group</value>
   </data>
   <data name="Groups" xml:space="preserve">
     <value>Groups</value>

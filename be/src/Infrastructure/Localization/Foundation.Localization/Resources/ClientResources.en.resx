@@ -151,19 +151,19 @@
     <value>Edit client</value>
   </data>
   <data name="EditGroup" xml:space="preserve">
-    <value>Edit group</value>
+    <value>Edit client group</value>
   </data>
   <data name="GroupDeleteClientConflict" xml:space="preserve">
     <value>Unassign clients from this group.</value>
   </data>
   <data name="GroupDeletedSuccessfully" xml:space="preserve">
-    <value>Group has been deleted successfully.</value>
+    <value>Client group has been deleted successfully.</value>
   </data>
   <data name="GroupNotFound" xml:space="preserve">
-    <value>Group has not been found.</value>
+    <value>Client group has not been found.</value>
   </data>
   <data name="GroupSavedSuccessfully" xml:space="preserve">
-    <value>Group has been saved successfully.</value>
+    <value>Client group has been saved successfully.</value>
   </data>
   <data name="NavigateToClientsLabel" xml:space="preserve">
     <value>Back to clients</value>
@@ -175,9 +175,9 @@
     <value>New client</value>
   </data>
   <data name="NewGroup" xml:space="preserve">
-    <value>New group</value>
+    <value>New client group</value>
   </data>
   <data name="NoGroupsText" xml:space="preserve">
-    <value>No groups available</value>
+    <value>No client groups available</value>
   </data>
 </root>

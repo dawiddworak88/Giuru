@@ -12,7 +12,7 @@ namespace Client.Api.DependencyInjection
         public static void RegisterClientApiDependencies(this IServiceCollection services)
         {
             services.AddScoped<IClientsService, ClientsService>();
-            services.AddScoped<IGroupsService, GroupsService>();
+            services.AddScoped<IClientGroupsService, ClientGroupsService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)

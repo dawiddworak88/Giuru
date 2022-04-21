@@ -58,11 +58,11 @@ namespace Client.Api.Services.Clients
                     CreatedDate = client.CreatedDate
                 };
 
-                var clientGroups = this.context.ClientsGroups.Where(x => x.ClientId == client.Id && x.IsActive);
+                var clientGroups = this.context.ClientsGroups.Where(x => x.ClientId == client.Id && x.IsActive).Select(x => x.GroupId);
 
                 if (clientGroups is not null)
                 {
-                    item.Groups = clientGroups.Select(x => x.GroupId);
+                    item.ClientGroupIds = clientGroups;
                 }
 
                 clientsList.Add(item);
@@ -93,11 +93,11 @@ namespace Client.Api.Services.Clients
                 CreatedDate = existingClient.CreatedDate
             };
 
-            var clientGroups = this.context.ClientsGroups.Where(x => x.ClientId == existingClient.Id && x.IsActive);
+            var clientGroups = this.context.ClientsGroups.Where(x => x.ClientId == existingClient.Id && x.IsActive).Select(x => x.GroupId);
 
             if (clientGroups is not null)
             {
-                client.Groups = clientGroups.Select(x => x.GroupId);
+                client.ClientGroupIds = clientGroups;
             }
             
             return client;
@@ -139,7 +139,7 @@ namespace Client.Api.Services.Clients
                 this.context.ClientsGroups.Remove(clientGroup);
             }
 
-            foreach (var group in serviceModel.Groups.OrEmptyIfNull())
+            foreach (var group in serviceModel.ClientGroupIds.OrEmptyIfNull())
             {
                 var groupItem = new ClientsGroups
                 {
@@ -175,7 +175,7 @@ namespace Client.Api.Services.Clients
 
             this.context.Clients.Add(client.FillCommonProperties());
 
-            foreach (var group in serviceModel.Groups.OrEmptyIfNull())
+            foreach (var group in serviceModel.ClientGroupIds.OrEmptyIfNull())
             {
                 var clientGroup = new ClientsGroups
                 {

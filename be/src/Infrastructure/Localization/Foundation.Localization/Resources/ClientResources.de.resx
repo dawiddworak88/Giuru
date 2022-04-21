@@ -151,7 +151,7 @@
     <value>Kunde bearbeiten</value>
   </data>
   <data name="EditGroup" xml:space="preserve">
-    <value>Gruppe bearbeiten</value>
+    <value>Kundengruppe bearbeiten</value>
   </data>
   <data name="GroupDeleteClientConflict" xml:space="preserve">
     <value>Heben Sie die Zuweisung von Clients zu dieser Gruppe auf.</value>
@@ -175,9 +175,9 @@
     <value>Neuer Kunde</value>
   </data>
   <data name="NewGroup" xml:space="preserve">
-    <value>Neue Gruppe</value>
+    <value>Neue Kundengruppe</value>
   </data>
   <data name="NoGroupsText" xml:space="preserve">
-    <value>Keine Gruppen verfügbar</value>
+    <value>Keine Kundengruppe verfügbar</value>
   </data>
 </root>

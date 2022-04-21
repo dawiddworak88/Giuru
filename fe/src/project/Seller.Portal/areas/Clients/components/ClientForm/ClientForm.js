@@ -17,7 +17,7 @@ function ClientForm(props) {
         name: { value: props.name ? props.name : "", error: "" },
         email: { value: props.email ? props.email : "", error: "" },
         communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
-        groups: { value: props.clientGroups ? props.clientGroups : []},
+        clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null }
     };
 
@@ -119,7 +119,7 @@ function ClientForm(props) {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, email, groups, communicationLanguage, phoneNumber } = values;
+    const { id, name, email, clientGroupIds, communicationLanguage, phoneNumber } = values;
     return (
         <section className="section section-small-padding product client-form">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -131,7 +131,6 @@ function ClientForm(props) {
                                 <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
                             </div>
                         }
-                        
                         <div className="field">
                             <TextField 
                                 id="name" 
@@ -179,16 +178,16 @@ function ClientForm(props) {
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true}>
-                                <InputLabel id="group-label">{props.groupsLabel}</InputLabel>
+                                <InputLabel id="clientGroups-label">{props.groupsLabel}</InputLabel>
                                 <Select
-                                    labelId="group-label"
-                                    id="groups"
-                                    name="groups"
-                                    value={groups}
+                                    labelId="clientGroups-label"
+                                    id="clientGroupIds"
+                                    name="clientGroupIds"
+                                    value={clientGroupIds}
                                     multiple={true}
                                     onChange={handleOnChange}>
-                                    {props.groups && props.groups.length > 0 ? (
-                                        props.groups.map((group, index) => {
+                                    {props.clientGroups && props.clientGroups.length > 0 ? (
+                                        props.clientGroups.map((group, index) => {
                                             return (
                                                 <MenuItem key={index} value={group.id}>{group.name}</MenuItem>
                                             );

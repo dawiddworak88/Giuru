@@ -35,7 +35,7 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string NoGroupsText { get; set; }
         public string GroupsLabel { get; set; }
         public IEnumerable<LanguageViewModel> Languages { get; set; }
-        public IEnumerable<ListItemViewModel> Groups { get; set; }
-        public IEnumerable<Guid> ClientGroups { get; set; }
+        public IEnumerable<ListItemViewModel> ClientGroups { get; set; }
+        public IEnumerable<Guid> ClientGroupsIds { get; set; }
     }
 }

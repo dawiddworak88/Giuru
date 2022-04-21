@@ -202,8 +202,8 @@ var sellerPortalBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
-        grouppage: ["./src/project/Seller.Portal/areas/Clients/pages/GroupPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/GroupPage/GroupPage.scss"],
-        groupspage: ["./src/project/Seller.Portal/areas/Clients/pages/GroupsPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/GroupsPage/GroupsPage.scss"],
+        clientgrouppage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientGroupPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientGroupPage/ClientGroupPage.scss"],
+        clientgroupspage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientGroupsPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientGroupsPage/ClientGroupsPage.scss"],
         newsitempage: ["./src/project/Seller.Portal/areas/News/pages/NewsItemPage/index.js", "./src/project/Seller.Portal/areas/News/pages/NewsItemPage/NewsItemPage.scss"],
         newspage: ["./src/project/Seller.Portal/areas/News/pages/NewsPage/index.js", "./src/project/Seller.Portal/areas/News/pages/NewsPage/NewsPage.scss"],
         newscategoriespage: ["./src/project/Seller.Portal/areas/News/pages/CategoriesPage/index.js", "./src/project/Seller.Portal/areas/News/pages/CategoriesPage/CategoriesPage.scss"],
