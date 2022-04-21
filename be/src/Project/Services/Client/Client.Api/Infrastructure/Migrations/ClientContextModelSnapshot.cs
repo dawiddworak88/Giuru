@@ -133,7 +133,32 @@ namespace Client.Api.Infrastructure.Migrations
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientsGroups", b =>
+            modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroup", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClientGroup");
+                });
+
+            modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroups", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -161,38 +186,16 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientsGroups");
+                    b.ToTable("ClientGroups");
                 });
 
-            modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.Group", b =>
+            modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroupTranslations", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Groups");
-                });
-
-            modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.GroupTranslation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid?>("ClientGroupId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -222,21 +225,19 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("ClientGroupId");
 
-                    b.ToTable("GroupTranslations");
+                    b.ToTable("ClientGroupTranslations");
                 });
 
-            modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.GroupTranslation", b =>
+            modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroupTranslations", b =>
                 {
-                    b.HasOne("Client.Api.Infrastructure.Groups.Entities.Group", null)
+                    b.HasOne("Client.Api.Infrastructure.Groups.Entities.ClientGroup", null)
                         .WithMany("Translations")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ClientGroupId");
                 });
 
-            modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.Group", b =>
+            modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroup", b =>
                 {
                     b.Navigation("Translations");
                 });

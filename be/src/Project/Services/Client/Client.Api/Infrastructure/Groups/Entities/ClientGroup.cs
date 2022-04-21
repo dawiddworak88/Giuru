@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace Client.Api.Infrastructure.Groups.Entities
 {
-    public class Group : Entity
+    public class ClientGroup : Entity
     {
-        public virtual IEnumerable<GroupTranslation> Translations { get; set; }
+        public virtual IEnumerable<ClientGroupTranslations> Translations { get; set; }
     }
 }

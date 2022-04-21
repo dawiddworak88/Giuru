@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Client.Api.Infrastructure.Groups.Entities
 {
-    public class ClientsGroups : Entity
+    public class ClientGroups : Entity
     {
         [Required]
         public Guid ClientId { get; set; }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Client.Api.Infrastructure.Groups.Entities
 {
-    public class GroupTranslation : Entity
+    public class ClientGroupTranslations : Entity
     {
         [Required]
         public string Name { get; set; }
