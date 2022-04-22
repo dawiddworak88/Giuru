@@ -19,5 +19,7 @@ namespace Inventory.Api.Infrastructure
         public DbSet<InventoryItem> Inventory { get; set; }
 
         public DbSet<OutletItem> Outlet { get; set; }
+
+        public DbSet<OutletItemTranslations> OutletTranslations { get; set; }
     }
 }
