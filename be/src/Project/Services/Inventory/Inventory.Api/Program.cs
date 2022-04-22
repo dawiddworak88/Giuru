@@ -106,6 +106,8 @@ var eventBus = app.Services.GetService<IEventBus>();
 eventBus.Subscribe<UpdatedProductIntegrationEvent, IIntegrationEventHandler<UpdatedProductIntegrationEvent>>();
 eventBus.Subscribe<BasketCheckoutProductsIntegrationEvent, IIntegrationEventHandler<BasketCheckoutProductsIntegrationEvent>>();
 eventBus.Subscribe<UpdatedEanProductIntegrationEvent, IIntegrationEventHandler<UpdatedEanProductIntegrationEvent>>();
+eventBus.Subscribe<BasketCheckoutStockProductsIntegrationEvent, IIntegrationEventHandler<BasketCheckoutStockProductsIntegrationEvent>>();
+eventBus.Subscribe<BasketCheckoutOutletProductsIntegrationEvent, IIntegrationEventHandler<BasketCheckoutOutletProductsIntegrationEvent>>();
 
 app.UseEndpoints(endpoints =>
 {

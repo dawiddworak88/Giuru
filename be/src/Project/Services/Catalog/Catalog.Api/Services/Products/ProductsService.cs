@@ -363,6 +363,13 @@ namespace Catalog.Api.Services.Products
             return this.productSearchRepository.GetProductSuggestions(model.SearchTerm, model.Size, model.Language, model.OrganisationId);
         }
 
+        public async Task<PagedResults<IEnumerable<ProductServiceModel>>> GetBySkusAsync(GetProductsBySkusServiceModel model)
+        {
+            var products = await this.productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Skus, model.OrderBy);
+
+            return await this.MapToPageResultsAsync(products, model.Language, model.OrganisationId);
+        }
+
         private async Task<PagedResults<IEnumerable<ProductServiceModel>>> MapToPageResultsAsync(PagedResults<IEnumerable<ProductSearchModel>> searchResults, string language, Guid? organisationId)
         {
             if (searchResults?.Data != null && searchResults.Data.Any())

@@ -14,7 +14,7 @@ namespace Seller.Web.Areas.Inventory.DomainModels
         public int Quantity { get; set; }
         public string Ean { get; set; }
         public int? RestockableInDays { get; set; }
-        public int? AvailableQuantity { get; set; }
+        public int AvailableQuantity { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }

@@ -23,6 +23,7 @@ using Foundation.GenericRepository.Paginations;
 using Buyer.Web.Areas.Products.DomainModels;
 using Foundation.PageContent.Components.CarouselGrids.Definitions;
 using Buyer.Web.Shared.Services.Baskets;
+using Buyer.Web.Shared.ViewModels.Modals;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using ImageViewModel = Buyer.Web.Shared.ViewModels.Images.ImageViewModel;
@@ -33,6 +34,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
     {
         private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder;
         private readonly IProductsRepository productsRepository;
         private readonly IStringLocalizer<InventoryResources> inventoryResources;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
@@ -47,6 +49,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
             IProductsRepository productsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer, 
             IStringLocalizer<ProductResources> productLocalizer,
@@ -70,6 +73,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             this.basketService = basketService;
             this.cdnService = cdnService;
             this.orderResources = orderResources;
+            this.modalModelBuilder = modalModelBuilder;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -82,16 +86,20 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 ProductInformationLabel = this.productLocalizer.GetString("ProductInformation"),
                 PricesLabel = this.globalLocalizer.GetString("Prices"),
                 SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct"),
+                QuantityErrorMessage = this.globalLocalizer.GetString("QuantityErrorMessage"),
                 SignInToSeePricesLabel = this.globalLocalizer.GetString("SignInToSeePrices"),
                 SignInUrl = "#",
                 UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 BasketLabel = this.globalLocalizer.GetString("BasketLabel"),
                 SkuLabel = this.productLocalizer.GetString("Sku"),
                 InStockLabel = this.globalLocalizer.GetString("InStock"),
+                InOutletLabel = this.globalLocalizer.GetString("InOutlet"),
                 BasketId = componentModel.BasketId,
                 AddedProduct = this.orderResources.GetString("AddedProduct"),
                 Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel),
-                EanLabel = this.globalLocalizer.GetString("Ean")
+                Modal = await this.modalModelBuilder.BuildModelAsync(componentModel),
+                EanLabel = this.globalLocalizer.GetString("Ean"),
+                OutletTitleLabel = this.globalLocalizer.GetString("Discount")
             };
 
             var product = await this.productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
@@ -136,6 +144,16 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     viewModel.ExpectedDeliveryLabel = this.inventoryResources.GetString("ExpectedDeliveryLabel");
                     viewModel.RestockableInDays = inventory.RestockableInDays;
                     viewModel.RestockableInDaysLabel = this.inventoryResources.GetString("RestockableInDaysLabel");
+                }
+
+                var outlet = await this.productsRepository.GetProductOutletAsync(componentModel.Id);
+
+                if (outlet is not null && outlet.AvailableQuantity.HasValue && outlet.AvailableQuantity.Value > 0)
+                {
+                    viewModel.InOutlet = true;
+                    viewModel.OutletTitle = outlet.Title;
+                    viewModel.AvailableOutletQuantity = outlet.AvailableQuantity;
+                    viewModel.ExpectedOutletDelivery = outlet.ExpectedDelivery;
                 }
 
                 if (componentModel.IsAuthenticated && componentModel.BasketId.HasValue)

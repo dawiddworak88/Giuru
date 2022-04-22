@@ -5,8 +5,7 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Inventory.Api.Infrastructure;
 using Inventory.Api.Infrastructure.Entities;
-using Inventory.Api.ServicesModels;
-using Inventory.Api.ServicesModels.InventoryServices;
+using Inventory.Api.ServicesModels.InventoryServiceModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System;
@@ -16,7 +15,7 @@ using System.Linq.Dynamic.Core;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Inventory.Api.Services
+namespace Inventory.Api.Services.InventoryItems
 {
     public class InventoryService : IInventoryService
     {
@@ -90,7 +89,6 @@ namespace Inventory.Api.Services
                     WarehouseName = warehouse.Name,
                 });
 
-
             foreach (var item in model.InventoryItems.OrEmptyIfNull())
             {
                 var inventory = await inventoryProducts.FirstOrDefaultAsync(x => x.ProductSku == item.ProductSku && x.WarehouseName == item.WarehouseName);
@@ -148,7 +146,7 @@ namespace Inventory.Api.Services
                                        WarehouseName = warehouse.Name,
                                        Quantity = c.Quantity,
                                        Ean = c.Ean,
-                                       AvailableQuantity = c.AvailableQuantity.Value,
+                                       AvailableQuantity = c.AvailableQuantity,
                                        RestockableInDays = c.RestockableInDays.Value,
                                        ExpectedDelivery = c.ExpectedDelivery.Value,
                                        LastModifiedDate = c.LastModifiedDate,
@@ -173,7 +171,7 @@ namespace Inventory.Api.Services
                                 WarehouseName = warehouse.Name,
                                 Quantity = c.Quantity,
                                 Ean = c.Ean,
-                                AvailableQuantity = c.AvailableQuantity.Value,
+                                AvailableQuantity = c.AvailableQuantity,
                                 RestockableInDays= c.RestockableInDays,
                                 ExpectedDelivery = c.ExpectedDelivery,
                                 LastModifiedDate = c.LastModifiedDate,
@@ -326,13 +324,13 @@ namespace Inventory.Api.Services
             return default;
         }
 
-        public async Task UpdateInventoryProduct(Guid? ProductId, string ProductName, string ProductSku, Guid? OrganisationId)
+        public async Task UpdateInventoryProduct(Guid? productId, string productName, string productSku, Guid? organisationId)
         {
-            var inventoryProduct = await this.context.Inventory.FirstOrDefaultAsync(x => x.ProductId == ProductId.Value && x.SellerId == OrganisationId.Value && x.IsActive);
+            var inventoryProduct = await this.context.Inventory.FirstOrDefaultAsync(x => x.ProductId == productId.Value && x.SellerId == organisationId.Value && x.IsActive);
             if (inventoryProduct != null)
             {
-                inventoryProduct.ProductName = ProductName;
-                inventoryProduct.ProductSku = ProductSku;
+                inventoryProduct.ProductName = productName;
+                inventoryProduct.ProductSku = productSku;
                 inventoryProduct.LastModifiedDate = DateTime.UtcNow;
 
                 await this.context.SaveChangesAsync();
@@ -370,12 +368,12 @@ namespace Inventory.Api.Services
                 return inventories.PagedIndex(new Pagination(inventories.Count(), model.ItemsPerPage), model.PageIndex);
         }
 
-        public async Task UpdateInventoryBasket(Guid? ProductId, int BookedQuantity)
+        public async Task UpdateInventoryBasket(Guid? productId, int bookedQuantity)
         {
-            var inventoryProduct = this.context.Inventory.FirstOrDefault(x => x.ProductId == ProductId.Value && x.IsActive);
+            var inventoryProduct = this.context.Inventory.FirstOrDefault(x => x.ProductId == productId.Value && x.IsActive);
             if (inventoryProduct != null)
             {
-                var productQuantity = inventoryProduct.Quantity + BookedQuantity;
+                var productQuantity = inventoryProduct.Quantity + bookedQuantity;
 
                 if (productQuantity < 0)
                 {

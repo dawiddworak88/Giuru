@@ -441,8 +441,20 @@
   <data name="ErrorOccurred" xml:space="preserve">
     <value>Ein Fehler ist aufgetreten. Bitte wenden Sie sich an einen Administrator.</value>
   </data>
+  <data name="Outlet" xml:space="preserve">
+    <value>Auslauf</value>
+  </data>
   <data name="Basket" xml:space="preserve">
     <value>Korb</value>
+  </data>
+  <data name="InOutlet" xml:space="preserve">
+    <value>Im Auslauf:</value>
+  </data>
+  <data name="MaximalLabel" xml:space="preserve">
+    <value>max:</value>
+  </data>
+  <data name="QuantityErrorMessage" xml:space="preserve">
+    <value>Keine ausgewählte Menge des bestellten Produkts</value>
   </data>
   <data name="NewsCategories" xml:space="preserve">
     <value>News Kategorien</value>
@@ -473,5 +485,8 @@
   </data>
   <data name="Groups" xml:space="preserve">
     <value>Gruppen</value>
+  </data>
+  <data name="Discount" xml:space="preserve">
+    <value>Rabatt</value>
   </data>
 </root>

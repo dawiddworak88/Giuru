@@ -41,7 +41,8 @@ namespace Ordering.Api.Validators
                         return false;
                     }
 
-                    if (item.Quantity <= 0)
+                    var totalQuantity = item.Quantity + item.StockQuantity + item.OutletQuantity;
+                    if (totalQuantity <= 0)
                     {
                         return false;
                     }
