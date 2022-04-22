@@ -8,7 +8,6 @@ using Identity.Api.v1.ResponseModels;
 using Identity.Api.Validators.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -33,29 +32,27 @@ namespace Identity.Api.v1.Controllers
         /// <summary>
         /// Get information about user
         /// </summary>
-        /// <param name="id">The user id</param>
+        /// <param name="email">The user email</param>
         /// <returns>The user data.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [Route("{id}")]
-        [AllowAnonymous]
+        [Route("{email}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(Guid? id)
+        public async Task<IActionResult> GetByEmail(string email)
         {
-            var serviceModel = new GetUserServiceModel
+            var serviceModel = new GetUserByEmailServiceModel
             {
-                Id = id
+                Email = email
             };
 
-            var validator = new GetUserModelValidator();
+            var validator = new GetUserByEmailModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
-            if (validationResult != null)
+            if (validationResult.IsValid)
             {
-                var user = await this.userService.GetById(serviceModel);
-                if (user != null)
+                var user = await this.userService.GetByEmail(serviceModel);
+
+                if (user is not null)
                 {
                     var response = new UserResponseModel
                     {
@@ -73,11 +70,8 @@ namespace Identity.Api.v1.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
-                else
-                {
-                    return this.StatusCode((int)HttpStatusCode.NotFound);
-                }
             }
+
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 

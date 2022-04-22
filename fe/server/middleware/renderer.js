@@ -26,6 +26,8 @@ import ContentPage from "../../src/project/Account/areas/Home/pages/Content/Cont
 // Seller Portal
 import OutletPage from "../../src/project/Seller.Portal/areas/Inventory/pages/OutletPage/OutletPage";
 import OutletsPage from "../../src/project/Seller.Portal/areas/Inventory/pages/OutletsPage/OutletsPage";
+import ClientGroupPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientGroupPage/ClientGroupPage";
+import ClientGroupsPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientGroupsPage/ClientGroupsPage";
 import NewsPage from "../../src/project/Seller.Portal/areas/News/pages/NewsPage/NewsPage";
 import NewsItemPage from "../../src/project/Seller.Portal/areas/News/pages/NewsItemPage/NewsItemPage";
 import NewsCategoriesPage from "../../src/project/Seller.Portal/areas/News/pages/CategoriesPage/CategoriesPage";
@@ -69,6 +71,8 @@ const Components = {
 
 	OutletPage,
 	OutletsPage,
+	ClientGroupPage,
+	ClientGroupsPage,
 	NewsPage,
 	NewsItemPage,
 	NewsCategoriesPage,
