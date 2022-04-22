@@ -155,7 +155,7 @@ function Catalog(props) {
                 toast.error(props.generalErrorMessage);
             });
     };
-    
+    console.log(props)
     return (
         <section className="catalog section">
             <h1 className="title is-3">{props.title}</h1>
@@ -178,10 +178,15 @@ function Catalog(props) {
                                 }
 
                                 return (
-                                    <div key={item.id} className="column is-3">
+                                    <div key={index} className="column is-3">
                                         <div className="catalog-item card">
                                             <a href={item.url}>
-                                                <div className="card-image">
+                                                <div className="card-image" aria-label={item.outletDescription} title={item.outletDescription}>
+                                                    {item.inOutlet && item.outletTitle &&
+                                                        <div className="catalog-item__discount p-1">
+                                                            <span className="p-1">{item.outletTitle}</span>
+                                                        </div>
+                                                    }
                                                     <figure className="image is-4by3">
                                                         <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
                                                             <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} />

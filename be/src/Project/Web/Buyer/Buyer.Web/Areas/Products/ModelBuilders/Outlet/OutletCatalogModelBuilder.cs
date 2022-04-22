@@ -71,6 +71,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders
                     {
                         product.InOutlet = true;
                         product.AvailableOutletQuantity = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.AvailableQuantity;
+                        product.OutletTitle = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.Title;
+                        product.OutletDescription = outletItems.Data.FirstOrDefault(x => x.ProductId == product.Id)?.Description;
                     }
                 }
 

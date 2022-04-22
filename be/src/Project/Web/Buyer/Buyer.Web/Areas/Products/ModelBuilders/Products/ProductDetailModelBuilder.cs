@@ -98,7 +98,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 AddedProduct = this.orderResources.GetString("AddedProduct"),
                 Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel),
                 Modal = await this.modalModelBuilder.BuildModelAsync(componentModel),
-                EanLabel = this.globalLocalizer.GetString("Ean")
+                EanLabel = this.globalLocalizer.GetString("Ean"),
+                OutletTitleLabel = this.globalLocalizer.GetString("Discount")
             };
 
             var product = await this.productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
@@ -150,6 +151,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 if (outlet is not null && outlet.AvailableQuantity.HasValue && outlet.AvailableQuantity.Value > 0)
                 {
                     viewModel.InOutlet = true;
+                    viewModel.OutletTitle = outlet.Title;
                     viewModel.AvailableOutletQuantity = outlet.AvailableQuantity;
                     viewModel.ExpectedOutletDelivery = outlet.ExpectedDelivery;
                 }

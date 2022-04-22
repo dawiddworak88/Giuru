@@ -175,6 +175,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     if (availableOutletProduct is not null)
                     {
                         carouselItem.AvailableOutletQuantity = availableOutletProduct.AvailableQuantity;
+                        carouselItem.OutletTitle = availableOutletProduct.Title;
                     }
 
                     carouselItems.Add(carouselItem);

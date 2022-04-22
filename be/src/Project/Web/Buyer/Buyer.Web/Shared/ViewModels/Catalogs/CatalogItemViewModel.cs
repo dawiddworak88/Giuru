@@ -20,6 +20,8 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public DateTime? ExpectedDelivery { get; set; }
         public string BrandName { get; set; }
         public string BrandUrl { get; set; }
+        public string OutletTitle { get; set; }
+        public string OutletDescription { get; set; }
         public IEnumerable<Guid> Images { get; set; }
         public IEnumerable<SourceViewModel> Sources { get; set; }
         public IEnumerable<CatalogItemProductAttributesViewModel> ProductAttributes { get; set; }

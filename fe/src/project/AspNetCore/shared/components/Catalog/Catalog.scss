@@ -30,6 +30,17 @@
             }
         }
 
+        &__discount {
+            position: absolute;
+            top: 1rem;
+            right: 0;
+            z-index: 1;
+            background: $primary;
+            color: #ffffff;
+            border-top-left-radius: 0.25rem;
+            border-bottom-left-radius: 0.25rem;
+        }
+
         &__fabric {
             font-size: 0.750rem;
         }

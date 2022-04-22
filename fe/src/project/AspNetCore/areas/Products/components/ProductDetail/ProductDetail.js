@@ -135,6 +135,9 @@ function ProductDetail(props) {
                     }
                     <h1 className="title is-4 mt-1">{props.title}</h1>
                     <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
+                    {props.outletTitle &&
+                        <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>     
+                    }
                     {props.inStock && props.availableQuantity && props.availableQuantity > 0 &&
                         <div className="product-detail__in-stock">
                             {props.inStockLabel} {props.availableQuantity}

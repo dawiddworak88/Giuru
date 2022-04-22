@@ -136,6 +136,11 @@ const Sidebar = (props) => {
                                                      <span className="attribute">{labels.eanLabel} {carouselItem.ean}</span>
                                                 }
                                                 <div className="stock-details">
+                                                    {carouselItem.outletTitle &&
+                                                        <div className="stock">
+                                                            {labels.outletTitleLabel} {carouselItem.outletTitle}
+                                                        </div>
+                                                    }
                                                     {carouselItem.availableQuantity && carouselItem.availableQuantity > 0 &&
                                                         <div className="stock">
                                                             {labels.inStockLabel} {carouselItem.availableQuantity}

@@ -6,6 +6,7 @@ namespace Buyer.Web.Areas.Products.DomainModels
     {
         public int? AvailableQuantity { get; set; }
         public int? RestockableInDays { get; set; }
+        public string Title { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
     }
 }

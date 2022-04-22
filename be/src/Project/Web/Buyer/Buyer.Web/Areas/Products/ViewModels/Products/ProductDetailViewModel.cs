@@ -45,6 +45,8 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string AddedProduct { get; set; }
         public string EanLabel { get; set; }
         public string Ean { get; set; }
+        public string OutletTitle { get; set; }
+        public string OutletTitleLabel { get; set; }
         public SidebarViewModel Sidebar { get; set; }
         public ModalViewModel Modal { get; set; }
         public FilesViewModel Files { get; set; }

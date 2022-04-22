@@ -10,6 +10,8 @@ namespace Buyer.Web.Areas.Products.DomainModels
         public int? Quantity { get; set; }
         public int? AvailableQuantity { get; set; }
         public int? RestockableInDays { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
     }
 }

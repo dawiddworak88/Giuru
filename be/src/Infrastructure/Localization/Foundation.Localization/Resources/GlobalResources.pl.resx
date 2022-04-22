@@ -489,4 +489,7 @@
   <data name="Groups" xml:space="preserve">
     <value>Grupy</value>
   </data>
+  <data name="Discount" xml:space="preserve">
+    <value>Zniżka:</value>
+  </data>
 </root>
