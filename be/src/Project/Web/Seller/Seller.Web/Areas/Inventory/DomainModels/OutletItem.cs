@@ -12,6 +12,9 @@ namespace Seller.Web.Areas.Inventory.DomainModels
         public string ProductSku { get; set; }
         public Guid SellerId { get; set; }
         public int Quantity { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Ean { get; set; }
         public int AvailableQuantity { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }

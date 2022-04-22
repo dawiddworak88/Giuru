@@ -18,15 +18,6 @@ namespace Seller.Web.Areas.Inventory.Repositories
         Task DeleteAsync(string token, string language, Guid? id);
         Task<OutletItem> GetOutletItemAsync(string token, string language, Guid? id);
         Task<Guid> SaveAsync(
-            string token, 
-            string language, 
-            Guid? id, 
-            Guid? warehouseId, 
-            Guid? productId, 
-            string productName, 
-            string productSku, 
-            int quantity, 
-            int? availableQuantity, 
-            Guid? organisationId);
+            string token, string language, Guid? id, Guid? warehouseId, Guid? productId, string productName, string productSku, int quantity, string title, string description, string ean, int? availableQuantity, Guid? organisationId);
     }
 }

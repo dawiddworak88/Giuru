@@ -21,7 +21,10 @@ const OutletForm = (props) => {
         warehouseId: { value: props.warehouseId ? props.warehouseId : null, error: "" },
         product: { value: props.productId ? props.products.find((item) => item.id === props.productId) : null, error: "" },
         quantity: { value: props.quantity ? props.quantity : 0, error: "" },
-        availableQuantity: { value: props.availableQuantity ? props.availableQuantity : 0, error: "" }
+        availableQuantity: { value: props.availableQuantity ? props.availableQuantity : 0, error: "" },
+        title: { value: props.outletTitle ? props.outletTitle : null },
+        description: { value: props.outletDescription ? props.outletDescription : null },
+        ean: { value: props.ean ? props.ean : null }
     };
 
     const productsProps = {
@@ -61,7 +64,7 @@ const OutletForm = (props) => {
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
-        const outletProduct = { id, warehouseId, productId: product.id, quantity, availableQuantity };
+        const outletProduct = { id, warehouseId, productId: product.id, quantity, availableQuantity, title, description, ean };
 
         const requestOptions = {
             method: "POST",
@@ -78,7 +81,7 @@ const OutletForm = (props) => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
                         setFieldValue({ name: "id", value: jsonRes.id });
-                        setshowBackToOutletListButton(true);
+                        setDisableSaveButton(true);
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -92,7 +95,7 @@ const OutletForm = (props) => {
         handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, warehouseId, product, quantity, availableQuantity } = values;
+    const { id, warehouseId, product, quantity, availableQuantity, title, description, ean } = values;
     return (
         <section className="section section-small-padding inventory-add">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -142,6 +145,36 @@ const OutletForm = (props) => {
                                         label={props.selectProductLabel} 
                                         margin="normal"/>
                                 )}/>
+                        </div>
+                        <div className="field">
+                            <TextField 
+                                id="title" 
+                                name="title" 
+                                type="text" 
+                                label={props.titleLabel} 
+                                fullWidth={true} 
+                                value={title} 
+                                onChange={handleOnChange}/>
+                        </div>
+                        <div className="field">
+                            <TextField 
+                                id="description" 
+                                name="description" 
+                                type="text" 
+                                label={props.descriptionLabel} 
+                                fullWidth={true} 
+                                value={description} 
+                                onChange={handleOnChange}/>
+                        </div>
+                        <div className="field">
+                            <TextField 
+                                id="ean" 
+                                name="ean" 
+                                type="text" 
+                                label={props.eanLabel} 
+                                fullWidth={true} 
+                                value={ean} 
+                                onChange={handleOnChange}/>
                         </div>
                         <div className="field">
                             <TextField 
@@ -220,7 +253,9 @@ OutletForm.propTypes = {
     productRequiredErrorMessage: PropTypes.string,
     quantityRequiredErrorMessage: PropTypes.string,
     quantityFormatErrorMessage: PropTypes.string,
-    idLabel: PropTypes.string
+    idLabel: PropTypes.string,
+    titleLabel: PropTypes.string,
+    descriptionLabel: PropTypes.string
 };
 
 export default OutletForm;

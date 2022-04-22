@@ -83,6 +83,9 @@ namespace Outlet.Api.v1.Controllers
                                 WarehouseId = x.WarehouseId,
                                 WarehouseName = x.WarehouseName,
                                 Quantity = x.Quantity,
+                                Title = x.Title,
+                                Description = x.Description,
+                                Ean = x.Ean,
                                 AvailableQuantity = x.AvailableQuantity,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
@@ -121,6 +124,9 @@ namespace Outlet.Api.v1.Controllers
                             ProductName = x.ProductName,
                             ProductSku = x.ProductSku,
                             Quantity = x.Quantity,
+                            Title = x.Title,
+                            Description = x.Description,
+                            Ean = x.Ean,
                             AvailableQuantity = x.AvailableQuantity,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
@@ -172,7 +178,10 @@ namespace Outlet.Api.v1.Controllers
                         AvailableQuantity = outletProduct.AvailableQuantity,
                         Quantity = outletProduct.Quantity,
                         ProductName = outletProduct.ProductName,
-                        ProductSku = outletProduct.ProductSku
+                        ProductSku = outletProduct.ProductSku,
+                        Title = outletProduct.Title,
+                        Description = outletProduct.Description,
+                        Ean = outletProduct.Ean
                     })
                 };
 
@@ -206,7 +215,8 @@ namespace Outlet.Api.v1.Controllers
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
                     ProductSku = x.ProductSku,
-                    WarehouseName = x.WarehouseName
+                    WarehouseName = x.WarehouseName,
+                    Ean = x.Ean
                 }),
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
@@ -249,6 +259,9 @@ namespace Outlet.Api.v1.Controllers
                     ProductSku = request.ProductSku,
                     Quantity = request.Quantity,
                     AvailableQuantity = request.AvailableQuantity,
+                    Title = request.Title,
+                    Description = request.Description,
+                    Ean = request.Ean,
                     Language = CultureInfo.CurrentCulture.Name,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
@@ -275,6 +288,9 @@ namespace Outlet.Api.v1.Controllers
                     ProductSku = request.ProductSku,
                     Quantity = request.Quantity,
                     AvailableQuantity = request.AvailableQuantity,
+                    Title = request.Title,
+                    Description = request.Description,
+                    Ean = request.Ean,
                     Language = CultureInfo.CurrentCulture.Name,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
@@ -333,6 +349,9 @@ namespace Outlet.Api.v1.Controllers
                         WarehouseId = outletProduct.WarehouseId.Value,
                         WarehouseName = outletProduct.WarehouseName,
                         Quantity = outletProduct.Quantity,
+                        Title = outletProduct.Title,
+                        Description = outletProduct.Description,
+                        Ean = outletProduct.Ean,
                         AvailableQuantity = outletProduct.AvailableQuantity,
                         LastModifiedDate = outletProduct.LastModifiedDate,
                         CreatedDate = outletProduct.CreatedDate,
@@ -367,7 +386,7 @@ namespace Outlet.Api.v1.Controllers
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new GetOutletByProductIdServiceModel
             {
-                ProductId = id.Value,
+                ProductId = id,
             };
 
             var validator = new GetProductByIdModelValidator();
@@ -386,6 +405,9 @@ namespace Outlet.Api.v1.Controllers
                         Quantity = outletProduct.Quantity,
                         ProductName = outletProduct.ProductName,
                         ProductSku = outletProduct.ProductSku,
+                        Ean = outletProduct.Ean,
+                        Title = outletProduct.Title,
+                        Description = outletProduct.Description,
                         Details = outletProduct.Details.Select(item => new OutletDetailsResponseModel
                         {
                             Id = item.Id,
@@ -396,6 +418,9 @@ namespace Outlet.Api.v1.Controllers
                             ProductSku = item.ProductSku,
                             WarehouseId = item.WarehouseId,
                             WarehouseName = item.WarehouseName,
+                            Title = item.Title,
+                            Description = item.Description,
+                            Ean = item.Ean,
                             LastModifiedDate = item.LastModifiedDate,
                             CreatedDate = item.CreatedDate
                         })
@@ -448,6 +473,8 @@ namespace Outlet.Api.v1.Controllers
                         Quantity = outletProduct.Quantity,
                         ProductName = outletProduct.ProductName,
                         ProductSku = outletProduct.ProductSku,
+                        Title = outletProduct.Title,
+                        Description = outletProduct.Description,
                         Details = outletProduct.Details.Select(item => new OutletDetailsResponseModel
                         {
                             Id = item.Id,
@@ -458,6 +485,9 @@ namespace Outlet.Api.v1.Controllers
                             ProductSku = item.ProductSku,
                             WarehouseId = item.WarehouseId,
                             WarehouseName = item.WarehouseName,
+                            Title = item.Title,
+                            Description = item.Description,
+                            Ean = item.Ean,
                             LastModifiedDate = item.LastModifiedDate,
                             CreatedDate = item.CreatedDate
                         })

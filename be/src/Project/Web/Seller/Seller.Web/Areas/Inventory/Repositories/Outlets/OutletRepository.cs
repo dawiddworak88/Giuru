@@ -80,7 +80,8 @@ namespace Seller.Web.Areas.Inventory.Repositories
             }
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? warehouseId, Guid? productId, string productName, string productSku, int quantity, int? availableQuantity, Guid? organisationId)
+        public async Task<Guid> SaveAsync(
+            string token, string language, Guid? id, Guid? warehouseId, Guid? productId, string productName, string productSku, int quantity, string title, string description, string ean, int? availableQuantity, Guid? organisationId)
         {
             var requestModel = new SaveOutletRequestModel
             {
@@ -90,8 +91,11 @@ namespace Seller.Web.Areas.Inventory.Repositories
                 ProductName = productName,
                 ProductSku = productSku,
                 Quantity = quantity,
+                Title = title,
+                Description = description,
                 AvailableQuantity = availableQuantity,
-                OrganisationId = organisationId
+                OrganisationId = organisationId,
+                Ean = ean
             };
             var apiRequest = new ApiRequest<SaveOutletRequestModel>
             {

@@ -59,7 +59,10 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 AvailableQuantityLabel = this.inventoryLocalizer.GetString("AvailableQuantityLabel"),
                 SelectWarehouse = this.inventoryLocalizer.GetString("SelectWarehouse"),
                 OutletUrl = this.linkGenerator.GetPathByAction("Index", "Outlets", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
-                SaveUrl = this.linkGenerator.GetPathByAction("Index", "OutletsApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name })
+                SaveUrl = this.linkGenerator.GetPathByAction("Index", "OutletsApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
+                DescriptionLabel = this.globalLocalizer.GetString("Description"),
+                TitleLabel = this.globalLocalizer.GetString("Title"),
+                EanLabel = this.globalLocalizer.GetString("Ean")
             };
 
             var warehouses = await this.warehousesRepository.GetAllWarehousesAsync(componentModel.Token, componentModel.Language, null);
@@ -85,7 +88,10 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                     viewModel.WarehouseId = outletItem.WarehouseId;
                     viewModel.ProductId = outletItem.ProductId;
                     viewModel.Quantity = outletItem.Quantity;
+                    viewModel.OutletDescription = outletItem.Description;
+                    viewModel.OutletTitle = outletItem.Title;
                     viewModel.AvailableQuantity = outletItem.AvailableQuantity;
+                    viewModel.Ean = outletItem.Ean;
                 }
             }
 
