@@ -76,8 +76,6 @@ namespace Inventory.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WarehouseId");
-
                     b.ToTable("Inventory");
                 });
 
@@ -210,15 +208,6 @@ namespace Inventory.Api.Infrastructure.Migrations
                     b.ToTable("Warehouses");
                 });
 
-            modelBuilder.Entity("Inventory.Api.Infrastructure.Entities.InventoryItem", b =>
-                {
-                    b.HasOne("Inventory.Api.Infrastructure.Entities.Warehouse", "Warehouse")
-                        .WithMany()
-                        .HasForeignKey("WarehouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Warehouse");
             modelBuilder.Entity("Inventory.Api.Infrastructure.Entities.OutletItemTranslations", b =>
                 {
                     b.HasOne("Inventory.Api.Infrastructure.Entities.OutletItem", null)

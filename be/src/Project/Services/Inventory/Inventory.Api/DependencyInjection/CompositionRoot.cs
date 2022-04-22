@@ -35,7 +35,6 @@ namespace Inventory.Api.DependencyInjection
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IIntegrationEventHandler<UpdatedProductIntegrationEvent>, UpdatedProductIntegrationEventHandler>();
-            services.AddScoped<IIntegrationEventHandler<BasketCheckoutProductsIntegrationEvent>, UpdatedInventoryIntegrationEventHandler>();
             services.AddScoped<IIntegrationEventHandler<UpdatedEanProductIntegrationEvent>, UpdatedEanProductIntegrationEventHandler>();
             services.AddScoped<IIntegrationEventHandler<BasketCheckoutStockProductsIntegrationEvent>, UpdatedInventoryIntegrationEventHandler>();
             services.AddScoped <IIntegrationEventHandler<BasketCheckoutOutletProductsIntegrationEvent>,  UpdatedOutletIntegrationEventHandler > ();
