@@ -1,6 +1,5 @@
 ﻿using Foundation.GenericRepository.Paginations;
-using Inventory.Api.ServicesModels;
-using Inventory.Api.ServicesModels.WarehouseServices;
+using Inventory.Api.ServicesModels.WarehouseServiceModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

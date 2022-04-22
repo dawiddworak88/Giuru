@@ -120,6 +120,9 @@
   <data name="AddedProduct" xml:space="preserve">
     <value>Hinzugefügt</value>
   </data>
+  <data name="AddingToCart" xml:space="preserve">
+    <value>Warenkorb hinzufügen</value>
+  </data>
   <data name="AddOrderItem" xml:space="preserve">
     <value>Hinzufügen</value>
   </data>
@@ -225,6 +228,9 @@
   <data name="OrganisationNotFound:" xml:space="preserve">
     <value>Kundenorganisation existiert nicht</value>
   </data>
+  <data name="OutletQuantityLabel" xml:space="preserve">
+    <value>Menge ab Verkaufsstelle:</value>
+  </data>
   <data name="PlaceOrder" xml:space="preserve">
     <value>Neue Bestellung</value>
   </data>
@@ -239,6 +245,9 @@
   </data>
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
+  </data>
+  <data name="StockQuantityLabel" xml:space="preserve">
+    <value>Menge ab Lager:</value>
   </data>
   <data name="ToBasketLabel" xml:space="preserve">
     <value>Warenkorb ansehen</value>

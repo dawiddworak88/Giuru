@@ -13,7 +13,6 @@ namespace Buyer.Web.Shared.Configurations
         public string BasketUrl { get; set; }
         public string NewsUrl { get; set; }
         public string CdnUrl { get; set; }
-        public bool IsMarketplace { get; set; }
         public Guid? OrganisationId { get; set; }
         public string GoogleTagManagerIdentifier { get; set; }
         public string MakeComplaintUrl { get; set; }

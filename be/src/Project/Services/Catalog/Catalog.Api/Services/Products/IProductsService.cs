@@ -15,6 +15,7 @@ namespace Catalog.Api.Services.Products
         Task<ProductServiceModel> GetBySkuAsync(GetProductBySkuServiceModel serviceModel);
         Task<PagedResults<IEnumerable<ProductServiceModel>>> GetAsync(GetProductsServiceModel getProductsModel);
         Task<PagedResults<IEnumerable<ProductServiceModel>>> GetByIdsAsync(GetProductsByIdsServiceModel getProductsModel);
+        Task<PagedResults<IEnumerable<ProductServiceModel>>> GetBySkusAsync(GetProductsBySkusServiceModel model);
         Task DeleteAsync(DeleteProductServiceModel deleteProductModel);
         IEnumerable<string> GetProductSuggestions(GetProductSuggestionsServiceModel model);
         Task TriggerCatalogIndexRebuildAsync(RebuildCatalogIndexServiceModel model);

@@ -6,6 +6,8 @@ namespace Ordering.Api.v1.ResponseModels
     {
         public Guid ProductId { get; set; }
         public double Quantity { get; set; }
+        public double StockQuantity { get; set; }
+        public double OutletQuantity { get; set; }
         public string ProductSku { get; set; }
         public string ProductName { get; set; }
         public string PictureUrl { get; set; }

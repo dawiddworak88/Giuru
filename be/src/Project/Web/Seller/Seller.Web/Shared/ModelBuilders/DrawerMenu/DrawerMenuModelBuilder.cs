@@ -90,6 +90,12 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                             Title = this.globalLocalizer.GetString("Inventory"),
                             Url = this.linkGenerator.GetPathByAction("Index", "Inventories", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
                         },
+                         new DrawerMenuItemViewModel
+                        {
+                            Icon = IconsConstants.Outlet,
+                            Title = this.globalLocalizer.GetString("Outlet"),
+                            Url = this.linkGenerator.GetPathByAction("Index", "Outlets", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
+                        },
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Warehouses,

@@ -6,7 +6,7 @@ import Header from "../../../../../../shared/components/Header/Header";
 import Store from "../../../../../../shared/stores/Store";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
-import Catalog from "../../../../../../shared/components/Catalog/Catalog";
+import InventoryForm from "../../components/InventoryForm/InventoryForm";
 import LocaleHelper from "../../../../../../shared/helpers/globals/LocaleHelper";
 
 function InventoryPage(props) {
@@ -20,7 +20,7 @@ function InventoryPage(props) {
         <div>
           <Header {...props.header}></Header>
           <MenuTiles {...props.menuTiles} />
-          <Catalog {...props.catalog} />
+          <InventoryForm {...props.inventoryForm} />
           <Footer {...props.footer}></Footer>
         </div>
       </Store>

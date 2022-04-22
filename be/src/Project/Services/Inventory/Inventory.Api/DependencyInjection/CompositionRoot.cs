@@ -4,7 +4,8 @@ using Foundation.EventBusRabbitMq;
 using Inventory.Api.Infrastructure;
 using Inventory.Api.IntegrationEvents;
 using Inventory.Api.IntegrationEventsHandlers;
-using Inventory.Api.Services;
+using Inventory.Api.Services.InventoryItems;
+using Inventory.Api.Services.OutletItems;
 using Inventory.Api.Services.Warehouses;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +23,7 @@ namespace Inventory.Api.DependencyInjection
         {
             services.AddScoped<IWarehouseService, WarehouseService>();
             services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<IOutletService, OutletService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
@@ -33,7 +35,8 @@ namespace Inventory.Api.DependencyInjection
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IIntegrationEventHandler<UpdatedProductIntegrationEvent>, UpdatedProductIntegrationEventHandler>();
-            services.AddScoped<IIntegrationEventHandler<BasketCheckoutProductsIntegrationEvent>, UpdatedInventoryIntegrationEventHandler>();
+            services.AddScoped<IIntegrationEventHandler<BasketCheckoutStockProductsIntegrationEvent>, UpdatedInventoryIntegrationEventHandler>();
+            services.AddScoped <IIntegrationEventHandler<BasketCheckoutOutletProductsIntegrationEvent>,  UpdatedOutletIntegrationEventHandler > ();
 
             services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
             {

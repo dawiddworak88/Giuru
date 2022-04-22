@@ -1,5 +1,6 @@
 ﻿using Buyer.Web.Areas.Products.Definitions;
 using Buyer.Web.Areas.Products.DomainModels;
+using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.Services.Products;
@@ -38,6 +39,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly IProductsRepository productsRepository;
         private readonly IInventoryRepository inventoryRepository;
+        private readonly IOutletRepository outletRepository;
         private readonly IMediaHelperService mediaService;
         private readonly LinkGenerator linkGenerator;
 
@@ -49,6 +51,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             IMediaHelperService mediaService,
             IOptions<AppSettings> options,
             IInventoryRepository inventoryRepository,
+            IOutletRepository outletRepository,
             LinkGenerator linkGenerator)
         {
             this.productsService = productsService;
@@ -60,6 +63,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             this.options = options;
             this.cdnService = cdnService;
             this.inventoryRepository = inventoryRepository;
+            this.outletRepository = outletRepository;
         }
 
         [HttpGet]
@@ -111,6 +115,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                 var availableProducts = await this.inventoryRepository.GetAvailbleProductsInventory(
                     language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, null);
 
+                var availableOutletProducts = await this.outletRepository.GetOutletProductsAsync(language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, token);
+
                 var carouselItems = new List<CarouselGridCarouselItemViewModel>();
                 foreach (var productVariant in productVariants.Data.OrEmptyIfNull())
                 {
@@ -119,8 +125,8 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         Id = productVariant.Id,
                         Title = productVariant.Name,
                         Subtitle = productVariant.Sku,
-                        ImageAlt = productVariant.Name,
                         Ean = productVariant.Ean,
+                        ImageAlt = productVariant.Name,
                         Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id }),
                         Attributes = productVariant.ProductAttributes.Select(x => new CarouselGridProductAttributesViewModel
                         {
@@ -163,6 +169,13 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                     {
                         carouselItem.AvailableQuantity = availableProduct.AvailableQuantity;
                         carouselItem.ExpectedDelivery = availableProduct.ExpectedDelivery;
+                    }
+
+                    var availableOutletProduct = availableOutletProducts.Data.FirstOrDefault(x => x.ProductSku == productVariant.Sku);
+                    if (availableOutletProduct is not null)
+                    {
+                        carouselItem.AvailableOutletQuantity = availableOutletProduct.AvailableQuantity;
+                        carouselItem.OutletTitle = availableOutletProduct.Title;
                     }
 
                     carouselItems.Add(carouselItem);

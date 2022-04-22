@@ -22,13 +22,13 @@ namespace Seller.Web.Areas.Inventory.ApiControllers
     public class WarehousesApiController : BaseApiController
     {
         private readonly IWarehousesRepository warehousesRepository;
-        private readonly IStringLocalizer warehousesLocalizer;
+        private readonly IStringLocalizer inventoryLocalizer;
 
         public WarehousesApiController(
             IWarehousesRepository warehousesRepository,
-            IStringLocalizer<InventoryResources> warehousesLocalizer)
+            IStringLocalizer<InventoryResources> inventoryLocalizer)
         {
-            this.warehousesLocalizer = warehousesLocalizer;
+            this.inventoryLocalizer = inventoryLocalizer;
             this.warehousesRepository = warehousesRepository;
         }
 
@@ -51,7 +51,7 @@ namespace Seller.Web.Areas.Inventory.ApiControllers
                 await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 CultureInfo.CurrentUICulture.Name, model.Id, model.Name, model.Location, OrganisationId);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = warehouseId, Message = this.warehousesLocalizer.GetString("WarehouseSavedSuccessfully").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Id = warehouseId, Message = this.inventoryLocalizer.GetString("WarehouseSavedSuccessfully").Value });
         }
 
         [HttpDelete]
@@ -62,7 +62,7 @@ namespace Seller.Web.Areas.Inventory.ApiControllers
 
             await this.warehousesRepository.DeleteAsync(token, language, id);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.warehousesLocalizer.GetString("WarehouseDeletedSuccessfully").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.inventoryLocalizer.GetString("WarehouseDeletedSuccessfully").Value });
         }
     }
 }

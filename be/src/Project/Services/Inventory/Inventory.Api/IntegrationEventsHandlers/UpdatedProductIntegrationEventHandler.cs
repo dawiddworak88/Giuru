@@ -1,6 +1,7 @@
 ﻿using Foundation.EventBus.Abstractions;
 using Inventory.Api.IntegrationEvents;
-using Inventory.Api.Services;
+using Inventory.Api.Services.InventoryItems;
+using Inventory.Api.Services.OutletItems;
 using System.Threading.Tasks;
 
 namespace Inventory.Api.IntegrationEventsHandlers
@@ -8,11 +9,14 @@ namespace Inventory.Api.IntegrationEventsHandlers
     public class UpdatedProductIntegrationEventHandler : IIntegrationEventHandler<UpdatedProductIntegrationEvent>
     {
         private readonly IInventoryService inventoryService;
+        private readonly IOutletService outletService;
 
         public UpdatedProductIntegrationEventHandler(
-            IInventoryService inventoryService)
+            IInventoryService inventoryService,
+            IOutletService outletService)
         {
             this.inventoryService = inventoryService;
+            this.outletService = outletService;
         }
 
         /// <summary>
@@ -27,6 +31,7 @@ namespace Inventory.Api.IntegrationEventsHandlers
         {
             if (@event.OrganisationId.HasValue)
             {
+                await this.outletService.UpdateOutletProduct(@event.ProductId, @event.ProductName, @event.ProductSku, @event.OrganisationId);
                 await this.inventoryService.UpdateInventoryProduct(@event.ProductId, @event.ProductName, @event.ProductSku, @event.OrganisationId);
             }
         }

@@ -77,6 +77,8 @@ namespace Basket.Api.Services
                         ProductName = x.ProductName,
                         PictureUrl = x.PictureUrl,
                         Quantity = x.Quantity,
+                        StockQuantity = x.StockQuantity,
+                        OutletQuantity = x.OutletQuantity,
                         ExternalReference = x.ExternalReference,
                         DeliveryFrom = x.DeliveryFrom,
                         DeliveryTo = x.DeliveryTo,
@@ -86,27 +88,44 @@ namespace Basket.Api.Services
             };
 
             var itemGroups = basket.Items.OrEmptyIfNull().GroupBy(g => g.ProductId);
-            var item = new List<BasketCheckoutProductEventModel>();
+            var stockItems = new List<BasketCheckoutProductEventModel>();
+            var outletItems = new List<BasketCheckoutProductEventModel>();
 
             foreach (var group in itemGroups)
             {
-                item.Add(new BasketCheckoutProductEventModel
+                stockItems.Add(new BasketCheckoutProductEventModel
                 {
                     ProductId = group.FirstOrDefault().ProductId,
-                    BookedQuantity = (int)-group.Sum(x => x.Quantity)
+                    BookedQuantity = (int)-group.Sum(x => x.StockQuantity)
+                });
+
+                outletItems.Add(new BasketCheckoutProductEventModel
+                {
+                    ProductId = group.FirstOrDefault().ProductId,
+                    BookedQuantity = (int)-group.Sum(x => x.OutletQuantity)
                 });
             }
 
-            var bookedItems = new BasketCheckoutProductsIntegrationEvent
+            var stockBookedItems = new BasketCheckoutStockProductsIntegrationEvent
             {
-                Items = item.Select(x => new BasketCheckoutProductEventModel
+                Items = stockItems.Select(x => new BasketCheckoutProductEventModel
                 {
-                    ProductId= x.ProductId,
-                    BookedQuantity = x.BookedQuantity,
+                    ProductId = x.ProductId,
+                    BookedQuantity = x.BookedQuantity
                 })
             };
 
-            this.eventBus.Publish(bookedItems);
+            var outletBookedItems = new BasketCheckoutOutletProductsIntegrationEvent
+            {
+                Items = outletItems.Select(x => new BasketCheckoutProductEventModel
+                {
+                    ProductId = x.ProductId,
+                    BookedQuantity = x.BookedQuantity
+                })
+            };
+
+            this.eventBus.Publish(outletBookedItems);
+            this.eventBus.Publish(stockBookedItems);
             this.eventBus.Publish(message);
         }
 
@@ -125,6 +144,7 @@ namespace Basket.Api.Services
                     Id = serviceModel.Id.Value,
                     Items = Array.Empty<BasketItemServiceModel>()
                 };
+
                 return emptyBasket;
             }
 
@@ -138,6 +158,8 @@ namespace Basket.Api.Services
                     ProductName = x.ProductName,
                     PictureUrl = x.PictureUrl,
                     Quantity = x.Quantity,
+                    StockQuantity = x.StockQuantity,
+                    OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
                     DeliveryFrom = x.DeliveryFrom,
                     DeliveryTo = x.DeliveryTo,
@@ -160,6 +182,8 @@ namespace Basket.Api.Services
                     ProductName = x.ProductName,
                     PictureUrl = x.PictureUrl,
                     Quantity = x.Quantity,
+                    StockQuantity = x.StockQuantity,
+                    OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
                     DeliveryFrom = x.DeliveryFrom,
                     DeliveryTo = x.DeliveryTo,
@@ -179,6 +203,8 @@ namespace Basket.Api.Services
                     ProductName = x.ProductName,
                     PictureUrl = x.PictureUrl,
                     Quantity = x.Quantity,
+                    StockQuantity = x.StockQuantity,
+                    OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
                     DeliveryFrom = x.DeliveryFrom,
                     DeliveryTo = x.DeliveryTo,

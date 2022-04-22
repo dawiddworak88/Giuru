@@ -9,14 +9,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.Localization;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.ViewModels.Sidebar;
-using Buyer.Web.Areas.Orders.Repositories.Baskets;
-using Foundation.Extensions.ExtensionMethods;
-using System.Linq;
-using Buyer.Web.Areas.Orders.ApiResponseModels;
-using System.Globalization;
-using Microsoft.AspNetCore.Routing;
-using System;
-using Newtonsoft.Json;
+using Buyer.Web.Shared.ViewModels.Modals;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
 {
@@ -24,34 +17,30 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Brands
     {
         private readonly ICatalogModelBuilder<ComponentModelBase, BrandCatalogViewModel> catalogModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder; 
         private readonly IProductsService productsService;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IBasketRepository basketRepository;
-        private readonly LinkGenerator linkGenerator;
 
         public BrandCatalogModelBuilder(
             ICatalogModelBuilder<ComponentModelBase, BrandCatalogViewModel> catalogModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
             IProductsService productsService,
-            IStringLocalizer<ProductResources> productLocalizer,
-            IBasketRepository basketRepository,
-            LinkGenerator linkGenerator,
-            IStringLocalizer<GlobalResources> globalLocalizer)
+            IStringLocalizer<ProductResources> productLocalizer)
         {
             this.catalogModelBuilder = catalogModelBuilder;
             this.productsService = productsService;
             this.productLocalizer = productLocalizer;
             this.sidebarModelBuilder = sidebarModelBuilder;
-            this.globalLocalizer = globalLocalizer;
-            this.basketRepository = basketRepository;
-            this.linkGenerator = linkGenerator;
+            this.modalModelBuilder = modalModelBuilder;
         }
 
         public async Task<BrandCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = this.catalogModelBuilder.BuildModel(componentModel);
+
             viewModel.Sidebar = await sidebarModelBuilder.BuildModelAsync(componentModel);
+            viewModel.Modal = await modalModelBuilder.BuildModelAsync(componentModel);
             viewModel.BrandId = componentModel.Id;
             viewModel.Title = this.productLocalizer.GetString("Products");
             viewModel.PagedItems = await this.productsService.GetProductsAsync(

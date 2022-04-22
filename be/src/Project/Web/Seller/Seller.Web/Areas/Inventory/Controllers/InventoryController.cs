@@ -18,11 +18,12 @@ namespace Seller.Web.Areas.Inventory.Controllers
     [Area("Inventory")]
     public class InventoryController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, EditInventoryPageViewModel> editInventoryPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, InventoryPageViewModel> inventoryPageModelBuilder;
 
-        public InventoryController(IAsyncComponentModelBuilder<ComponentModelBase, EditInventoryPageViewModel> editInventoryPageModelBuilder)
+        public InventoryController(
+            IAsyncComponentModelBuilder<ComponentModelBase, InventoryPageViewModel> inventoryPageModelBuilder)
         {
-            this.editInventoryPageModelBuilder = editInventoryPageModelBuilder;
+            this.inventoryPageModelBuilder = inventoryPageModelBuilder;
         }
 
         public async Task<IActionResult> Edit(Guid? id)
@@ -35,7 +36,7 @@ namespace Seller.Web.Areas.Inventory.Controllers
                 SellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value)
             };
 
-            var viewModel = await this.editInventoryPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await this.inventoryPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);
         }

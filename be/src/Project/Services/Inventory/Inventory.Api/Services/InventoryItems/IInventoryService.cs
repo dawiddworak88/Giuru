@@ -1,11 +1,10 @@
 ﻿using Foundation.GenericRepository.Paginations;
-using Inventory.Api.ServicesModels;
-using Inventory.Api.ServicesModels.InventoryServices;
+using Inventory.Api.ServicesModels.InventoryServiceModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Inventory.Api.Services
+namespace Inventory.Api.Services.InventoryItems
 {
     public interface IInventoryService
     {
