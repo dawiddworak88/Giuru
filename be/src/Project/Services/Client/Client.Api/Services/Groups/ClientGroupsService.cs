@@ -33,12 +33,12 @@ namespace Client.Api.Services.Groups
         {
             var group = new ClientGroup();
 
-            this.context.ClientGroup.Add(group.FillCommonProperties());
-            var groupTranslation = new ClientGroupTranslations
+            this.context.ClientGroups.Add(group.FillCommonProperties());
+            var groupTranslation = new ClientGroupTranslation
             {
                 Name = model.Name,
                 Language = model.Language,
-                GroupId = group.Id
+                ClientGroupId = group.Id
             };
 
             this.context.ClientGroupTranslations.Add(groupTranslation.FillCommonProperties());
@@ -50,14 +50,14 @@ namespace Client.Api.Services.Groups
 
         public async Task DeleteAsync(DeleteClientGroupServiceModel model)
         {
-            var group = await this.context.ClientGroup.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var group = await this.context.ClientGroups.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (group is null)
             {
                 throw new CustomException(this.clientLocalizer.GetString("GroupNotFound"), (int)HttpStatusCode.NotFound);
             }
 
-            if (await this.context.ClientGroups.AnyAsync(x => x.GroupId == model.Id && x.IsActive))
+            if (await this.context.ClientsGroups.AnyAsync(x => x.GroupId == model.Id && x.IsActive))
             {
                 throw new CustomException(this.clientLocalizer.GetString("GroupDeleteClientConflict"), (int)HttpStatusCode.Conflict);
             }
@@ -69,7 +69,7 @@ namespace Client.Api.Services.Groups
 
         public async Task<ClientGroupServiceModel> GetAsync(GetClientGroupServiceModel model)
         {
-            var group = await this.context.ClientGroup.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var group = await this.context.ClientGroups.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
             
             if (group is not null)
             {
@@ -80,11 +80,11 @@ namespace Client.Api.Services.Groups
                     CreatedDate = group.CreatedDate,
                 };
 
-                var groupTranslation = await this.context.ClientGroupTranslations.FirstOrDefaultAsync(x => x.GroupId == model.Id && x.Language == model.Language && x.IsActive);
+                var groupTranslation = await this.context.ClientGroupTranslations.FirstOrDefaultAsync(x => x.ClientGroupId == model.Id && x.Language == model.Language && x.IsActive);
 
                 if (groupTranslation is null)
                 {
-                    groupTranslation = await this.context.ClientGroupTranslations.FirstOrDefaultAsync(x => x.GroupId == model.Id && x.IsActive);
+                    groupTranslation = await this.context.ClientGroupTranslations.FirstOrDefaultAsync(x => x.ClientGroupId == model.Id && x.IsActive);
                 }
 
                 groupItem.Name = groupTranslation?.Name;
@@ -97,7 +97,7 @@ namespace Client.Api.Services.Groups
 
         public async Task<PagedResults<IEnumerable<ClientGroupServiceModel>>> GetAsync(GetClientGroupsServiceModel model)
         {
-            var groups = this.context.ClientGroup.Where(x => x.IsActive);
+            var groups = this.context.ClientGroups.Where(x => x.IsActive);
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -121,10 +121,10 @@ namespace Client.Api.Services.Groups
                     CreatedDate = group.CreatedDate
                 };
 
-                var groupTranslations = await this.context.ClientGroupTranslations.FirstOrDefaultAsync(x => x.Language == model.Language && x.GroupId == group.Id && x.IsActive);
+                var groupTranslations = await this.context.ClientGroupTranslations.FirstOrDefaultAsync(x => x.Language == model.Language && x.ClientGroupId == group.Id && x.IsActive);
                 if (groupTranslations is null)
                 {
-                    groupTranslations = this.context.ClientGroupTranslations.FirstOrDefault(x => x.GroupId == group.Id && x.IsActive);
+                    groupTranslations = this.context.ClientGroupTranslations.FirstOrDefault(x => x.ClientGroupId == group.Id && x.IsActive);
                 }
 
                 item.Name = groupTranslations?.Name;
@@ -139,7 +139,7 @@ namespace Client.Api.Services.Groups
 
         public async Task<PagedResults<IEnumerable<ClientGroupServiceModel>>> GetByIdsAsync(GetClientGroupsByIdsServiceModel model)
         {
-            var groups = this.context.ClientGroup.Where(x => model.Ids.Contains(x.Id) && x.IsActive);
+            var groups = this.context.ClientGroups.Where(x => model.Ids.Contains(x.Id) && x.IsActive);
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -163,10 +163,10 @@ namespace Client.Api.Services.Groups
                     CreatedDate = group.CreatedDate
                 };
 
-                var groupTranslations = await this.context.ClientGroupTranslations.FirstOrDefaultAsync(x => x.Language == model.Language && x.GroupId == group.Id && x.IsActive);
+                var groupTranslations = await this.context.ClientGroupTranslations.FirstOrDefaultAsync(x => x.Language == model.Language && x.ClientGroupId == group.Id && x.IsActive);
                 if (groupTranslations is null)
                 {
-                    groupTranslations = this.context.ClientGroupTranslations.FirstOrDefault(x => x.GroupId == group.Id && x.IsActive);
+                    groupTranslations = this.context.ClientGroupTranslations.FirstOrDefault(x => x.ClientGroupId == group.Id && x.IsActive);
                 }
 
                 item.Name = groupTranslations?.Name;
@@ -181,14 +181,14 @@ namespace Client.Api.Services.Groups
 
         public async Task<Guid> UpdateAsync(UpdateClientGroupServiceModel model)
         {
-            var group = await this.context.ClientGroup.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var group = await this.context.ClientGroups.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
             
             if (group == null)
             {
                 throw new CustomException(this.clientLocalizer.GetString("GroupNotFound"), (int)HttpStatusCode.NotFound);
             }
 
-            var groupTranslation = await this.context.ClientGroupTranslations.FirstOrDefaultAsync(x => x.GroupId == model.Id && x.Language == model.Language && x.IsActive);
+            var groupTranslation = await this.context.ClientGroupTranslations.FirstOrDefaultAsync(x => x.ClientGroupId == model.Id && x.Language == model.Language && x.IsActive);
 
             if (groupTranslation is not null)
             {
@@ -197,11 +197,11 @@ namespace Client.Api.Services.Groups
             } 
             else
             {
-                var newGroupTranslation = new ClientGroupTranslations
+                var newGroupTranslation = new ClientGroupTranslation
                 {
                     Name = model.Name,
                     Language = model.Language,
-                    GroupId = group.Id
+                    ClientGroupId = group.Id
                 };
 
                 await this.context.ClientGroupTranslations.AddAsync(newGroupTranslation.FillCommonProperties());

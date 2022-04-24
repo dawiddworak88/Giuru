@@ -62,7 +62,8 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 SelectWarehouse = this.inventoryLocalizer.GetString("SelectWarehouse"),
                 ChangeExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ChangeExpectedDeliveryLabel"),
                 InventoryUrl = this.linkGenerator.GetPathByAction("Index", "Inventories", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
-                SaveUrl = this.linkGenerator.GetPathByAction("Index", "InventoriesApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name })
+                SaveUrl = this.linkGenerator.GetPathByAction("Index", "InventoriesApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
+                EanLabel = this.globalLocalizer.GetString("Ean")
             };
 
             var warehouses = await this.warehousesRepository.GetAllWarehousesAsync(componentModel.Token, componentModel.Language, null);
@@ -86,6 +87,7 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                     viewModel.WarehouseId = inventoryProduct.WarehouseId;
                     viewModel.ProductId = inventoryProduct.ProductId;
                     viewModel.Quantity = inventoryProduct.Quantity;
+                    viewModel.Ean = inventoryProduct.Ean;
                     viewModel.AvailableQuantity = inventoryProduct.AvailableQuantity;
                     viewModel.RestockableInDays = inventoryProduct.RestockableInDays;
                     viewModel.ExpectedDelivery = inventoryProduct.ExpectedDelivery;

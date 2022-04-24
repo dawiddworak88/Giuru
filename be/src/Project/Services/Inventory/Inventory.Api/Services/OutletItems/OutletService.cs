@@ -8,7 +8,6 @@ using Inventory.Api.Infrastructure.Entities;
 using Inventory.Api.ServicesModels.OutletServiceModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,33 +20,36 @@ namespace Inventory.Api.Services.OutletItems
     public class OutletService : IOutletService
     {
         private readonly InventoryContext context;
-        private readonly IStringLocalizer inventortLocalizer;
+        private readonly IStringLocalizer inventoryLocalizer;
 
         public OutletService(
             InventoryContext context,
-            IStringLocalizer<InventoryResources> inventortLocalizer)
+            IStringLocalizer<InventoryResources> inventoryLocalizer)
         {
             this.context = context;
-            this.inventortLocalizer = inventortLocalizer;
+            this.inventoryLocalizer = inventoryLocalizer;
         }
 
         public async Task<OutletServiceModel> UpdateAsync(UpdateOutletServiceModel model)
         {
-            var outletProduct = await this.context.Outlet.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
-            
-            if (outletProduct == null)
+            var outlet = await this.context.Outlet.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
+            var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == outlet.ProductId && x.IsActive);
+
+            if (product is null || outlet is null)
             {
-                throw new CustomException(this.inventortLocalizer.GetString("OutletNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.inventoryLocalizer.GetString("InventoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
-            outletProduct.WarehouseId = model.WarehouseId.Value;
-            outletProduct.ProductId = model.ProductId.Value;
-            outletProduct.ProductName = model.ProductName;
-            outletProduct.ProductSku = model.ProductSku;
-            outletProduct.Quantity = model.Quantity;
-            outletProduct.AvailableQuantity = model.AvailableQuantity;
-            outletProduct.Ean = model.Ean;
-            outletProduct.LastModifiedDate = DateTime.UtcNow;
+            product.Name = model.ProductName;
+            product.Sku = model.ProductSku;
+            product.Ean = model.ProductEan;
+            product.LastModifiedDate = DateTime.UtcNow;
+
+            outlet.WarehouseId = model.WarehouseId.Value;
+            outlet.ProductId = model.ProductId.Value;
+            outlet.Quantity = model.Quantity;
+            outlet.AvailableQuantity = model.AvailableQuantity;
+            outlet.LastModifiedDate = DateTime.UtcNow;
 
             var outletProductTranslation = await this.context.OutletTranslations.FirstOrDefaultAsync(x => x.OutletItemId == model.Id && x.Language == model.Language && x.IsActive);
             if (outletProductTranslation is not null)
@@ -58,12 +60,12 @@ namespace Inventory.Api.Services.OutletItems
             }
             else
             {
-                var newOutletProductTranslation = new OutletItemTranslations
+                var newOutletProductTranslation = new OutletItemTranslation
                 {
                     Title = model.Title,
                     Description = model.Description,
                     Language = model.Language,
-                    OutletItemId = outletProduct.Id
+                    OutletItemId = outlet.Id
                 };
 
                 await this.context.OutletTranslations.AddAsync(newOutletProductTranslation.FillCommonProperties());
@@ -71,26 +73,33 @@ namespace Inventory.Api.Services.OutletItems
 
             await this.context.SaveChangesAsync();
 
-            return await this.GetAsync(new GetOutletServiceModel { Id = outletProduct.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
+            return await this.GetAsync(new GetOutletServiceModel { Id = outlet.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
         public async Task<OutletServiceModel> CreateAsync(CreateOutletServiceModel model)
         {
+            var product = new Product
+            {
+                Id = model.ProductId.Value,
+                Ean = model.ProductEan,
+                Sku = model.ProductSku,
+                Name = model.ProductName
+            };
+
+            this.context.Products.Add(product.FillCommonProperties());
+
             var outletItem = new OutletItem
             {
                 WarehouseId = model.WarehouseId.Value,
                 ProductId = model.ProductId.Value,
-                ProductName = model.ProductName,
-                ProductSku = model.ProductSku,
                 Quantity = model.Quantity,
                 AvailableQuantity = model.AvailableQuantity,
-                Ean = model.Ean,
                 SellerId = model.OrganisationId.Value
             };
 
             this.context.Outlet.Add(outletItem.FillCommonProperties());
 
-            var outletItemTranslation = new OutletItemTranslations
+            var outletItemTranslation = new OutletItemTranslation
             {
                 Title = model.Title,
                 Description = model.Description,
@@ -107,52 +116,55 @@ namespace Inventory.Api.Services.OutletItems
 
         public async Task SyncOutletProducts(UpdateOutletProductsServiceModel model)
         {
-            var outletProducts = this.context.Outlet
-                .Join(this.context.Warehouses, outlet => outlet.WarehouseId, warehouse => warehouse.Id, (outlet, warehouse) => 
-                new
-                {
-                    Id = outlet.Id,
-                    ProductSku = outlet.ProductSku,
-                    WarehouseName = warehouse.Name,
-                    Ean = outlet.Ean
-                });
-
-
             foreach (var item in model.OutletItems.OrEmptyIfNull())
             {
-                var outlet = await outletProducts.FirstOrDefaultAsync(x => x.ProductSku == item.ProductSku && x.WarehouseName == item.WarehouseName);
+                var outlet = await this.context.Outlet.FirstOrDefaultAsync(x => x.ProductId == item.ProductId.Value && x.WarehouseId == item.WarehouseId.Value);
 
                 if (outlet is not null)
                 {
                     var outletItem = await this.context.Outlet.FirstOrDefaultAsync(x => x.Id == outlet.Id);
 
-                    if (outletItem is not null)
-                    {
-                        outletItem.AvailableQuantity = item.AvailableQuantity;
-                        outletItem.Quantity = item.Quantity;
-                        outletItem.Ean = item.Ean;
-                        outletItem.LastModifiedDate = DateTime.UtcNow;
-                    }
+                    outletItem.AvailableQuantity = item.AvailableQuantity;
+                    outletItem.Quantity = item.Quantity;
+                    outletItem.LastModifiedDate = DateTime.UtcNow;
+
+                    var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == outletItem.ProductId && x.IsActive);
+
+                    product.Ean = item.ProductEan;
+                    product.Sku = item.ProductSku;
+                    product.Name = item.ProductName;
+                    product.LastModifiedDate = DateTime.UtcNow;
                 }
                 else
                 {
-                    var warehouse = await this.context.Warehouses.FirstOrDefaultAsync(x => x.Name == item.WarehouseName);
+                    var warehouse = await this.context.Warehouses.FirstOrDefaultAsync(x => x.Id == item.WarehouseId && x.IsActive);
 
                     if (warehouse is not null)
                     {
-                        var outletProduct = new OutletItem
+                        var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == item.ProductId && x.IsActive);
+
+                        if (product is null)
+                        {
+                            product = new Product
+                            {
+                                Name = item.ProductName,
+                                Sku = item.ProductSku,
+                                Ean = item.ProductEan
+                            };
+
+                            this.context.Products.Add(product.FillCommonProperties());
+                        }
+
+                        var outletItem = new OutletItem
                         {
                             WarehouseId = warehouse.Id,
-                            ProductId = item.ProductId.Value,
-                            ProductName = item.ProductName,
-                            ProductSku = item.ProductSku,
+                            ProductId = product.Id,
                             Quantity = item.Quantity,
-                            Ean = item.Ean,
                             AvailableQuantity = item.AvailableQuantity,
                             SellerId = model.OrganisationId.Value
                         };
 
-                        this.context.Outlet.Add(outletProduct.FillCommonProperties());
+                        this.context.Outlet.Add(outletItem.FillCommonProperties());
                     }
                 }
             }
@@ -162,7 +174,23 @@ namespace Inventory.Api.Services.OutletItems
 
         public async Task<OutletServiceModel> GetAsync(GetOutletServiceModel model)
         {
-            var outletItem = await this.context.Outlet.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var outletItem = (from o in this.context.Outlet
+                             join p in this.context.Products on o.ProductId equals p.Id
+                             where o.Id == model.Id && o.IsActive
+                             select new
+                             {
+                                 o.Id,
+                                 o.ProductId,
+                                 ProductName = p.Name,
+                                 ProductSku = p.Sku,
+                                 ProductEan = p.Ean,
+                                 o.WarehouseId,
+                                 o.Quantity,
+                                 o.AvailableQuantity,
+                                 o.LastModifiedDate,
+                                 o.CreatedDate
+                             }).FirstOrDefault();
+
             if (outletItem is not null)
             {
                 var item = new OutletServiceModel
@@ -173,7 +201,7 @@ namespace Inventory.Api.Services.OutletItems
                     ProductSku = outletItem.ProductSku,
                     WarehouseId = outletItem.WarehouseId,
                     Quantity = outletItem.Quantity,
-                    Ean = outletItem.Ean,
+                    ProductEan = outletItem.ProductEan,
                     AvailableQuantity = outletItem.AvailableQuantity,
                     LastModifiedDate = outletItem.LastModifiedDate,
                     CreatedDate = outletItem.CreatedDate
@@ -204,13 +232,29 @@ namespace Inventory.Api.Services.OutletItems
 
         public async Task<PagedResults<IEnumerable<OutletServiceModel>>> GetAsync(GetOutletsServiceModel model)
         {
-            var outletItems = this.context.Outlet.Where(x => x.IsActive);
+            var outletItems = from o in this.context.Outlet
+                              join p in this.context.Products on o.ProductId equals p.Id
+                              join t in this.context.OutletTranslations on o.Id equals t.OutletItemId
+                              where o.IsActive
+                              select new
+                              {
+                                  o.Id,
+                                  t.Title,
+                                  t.Description,
+                                  o.ProductId,
+                                  ProductName = p.Name,
+                                  ProductSku = p.Sku,
+                                  ProductEan = p.Ean,
+                                  o.WarehouseId,
+                                  o.Quantity,
+                                  o.AvailableQuantity,
+                                  o.LastModifiedDate,
+                                  o.CreatedDate
+                              };
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                var warehouse = await this.context.Warehouses.FirstOrDefaultAsync(x => x.Name.StartsWith(model.SearchTerm));
-
-                outletItems = outletItems.Where(x => x.Translations.Any(x => x.Title.StartsWith(model.SearchTerm) || x.Description.StartsWith(model.SearchTerm)) || x.WarehouseId == warehouse.Id);
+                outletItems = outletItems.Where(x => x.Title.StartsWith(model.SearchTerm) || x.Description.StartsWith(model.SearchTerm));
             }
 
             outletItems = outletItems.ApplySort(model.OrderBy);
@@ -231,7 +275,7 @@ namespace Inventory.Api.Services.OutletItems
                     ProductSku = outletItem.ProductSku,
                     WarehouseId = outletItem.WarehouseId,
                     Quantity = outletItem.Quantity,
-                    Ean = outletItem.Ean,
+                    ProductEan = outletItem.ProductEan,
                     AvailableQuantity = outletItem.AvailableQuantity,
                     LastModifiedDate = outletItem.LastModifiedDate,
                     CreatedDate = outletItem.CreatedDate
@@ -264,7 +308,22 @@ namespace Inventory.Api.Services.OutletItems
 
         public async Task<PagedResults<IEnumerable<OutletServiceModel>>> GetByIdsAsync(GetOutletsByIdsServiceModel model)
         {
-            var outletItems = this.context.Outlet.Where(x => model.Ids.Contains(x.Id) && x.IsActive);
+            var outletItems = from o in this.context.Outlet
+                              join p in this.context.Products on o.ProductId equals p.Id
+                              where model.Ids.Contains(o.Id) && o.IsActive
+                              select new
+                              {
+                                  o.Id,
+                                  o.ProductId,
+                                  ProductName = p.Name,
+                                  ProductSku = p.Sku,
+                                  ProductEan = p.Ean,
+                                  o.WarehouseId,
+                                  o.Quantity,
+                                  o.AvailableQuantity,
+                                  o.LastModifiedDate,
+                                  o.CreatedDate
+                              };
 
             outletItems = outletItems.ApplySort(model.OrderBy);
 
@@ -284,7 +343,7 @@ namespace Inventory.Api.Services.OutletItems
                     ProductSku = outletItem.ProductSku,
                     WarehouseId = outletItem.WarehouseId,
                     Quantity = outletItem.Quantity,
-                    Ean = outletItem.Ean,
+                    ProductEan = outletItem.ProductEan,
                     AvailableQuantity = outletItem.AvailableQuantity,
                     LastModifiedDate = outletItem.LastModifiedDate,
                     CreatedDate = outletItem.CreatedDate
@@ -311,6 +370,7 @@ namespace Inventory.Api.Services.OutletItems
         public async Task<OutletSumServiceModel> GetOutletByProductId(GetOutletByProductIdServiceModel model)
         {
             var outletItems = from o in this.context.Outlet
+                              join product in this.context.Products on o.ProductId equals product.Id
                               join warehouse in this.context.Warehouses on o.WarehouseId equals warehouse.Id
                               join ot in this.context.OutletTranslations on o.Id equals ot.OutletItemId
                               where o.ProductId == model.ProductId.Value && o.IsActive
@@ -318,13 +378,13 @@ namespace Inventory.Api.Services.OutletItems
                               {
                                   Id = o.Id,
                                   ProductId = o.ProductId,
-                                  ProductName = o.ProductName,
-                                  ProductSku = o.ProductSku,
+                                  ProductName = product.Name,
+                                  ProductSku = product.Sku,
                                   Quantity = o.Quantity,
                                   AvailableQuantity = o.AvailableQuantity,
                                   WarehouseId = o.WarehouseId,
                                   WarehouseName = warehouse.Name,
-                                  Ean = o.Ean,
+                                  ProductEan = product.Ean,
                                   Title = ot.Title,
                                   Description = ot.Description,
                                   LastModifiedDate = o.LastModifiedDate,
@@ -340,7 +400,7 @@ namespace Inventory.Api.Services.OutletItems
                     ProductSku = outletItems.FirstOrDefault().ProductSku,
                     AvailableQuantity = outletItems.Sum(x => x.AvailableQuantity),
                     Quantity = outletItems.Sum(x => x.Quantity),
-                    Ean = outletItems.FirstOrDefault().Ean,
+                    ProductEan = outletItems.FirstOrDefault().ProductEan,
                     Title= outletItems.FirstOrDefault().Title,
                     Description = outletItems.FirstOrDefault().Description,
                     Details = outletItems.Select(item => new OutletServiceModel
@@ -369,20 +429,21 @@ namespace Inventory.Api.Services.OutletItems
         public async Task<OutletSumServiceModel> GetOutletByProductSku(GetOutletByProductSkuServiceModel model)
         {
             var outletItems = from o in this.context.Outlet
+                              join product in this.context.Products on o.ProductId equals product.Id
                               join warehouse in this.context.Warehouses on o.WarehouseId equals warehouse.Id
                               join ot in this.context.OutletTranslations on o.Id equals ot.OutletItemId
-                              where o.ProductSku == model.ProductSku && o.IsActive
+                              where product.Sku == model.ProductSku && o.IsActive
                               select new
                               {
                                   Id = o.Id,
                                   ProductId = o.ProductId,
-                                  ProductName = o.ProductName,
-                                  ProductSku = o.ProductSku,
+                                  ProductName = product.Name,
+                                  ProductSku = product.Sku,
                                   Quantity = o.Quantity,
                                   AvailableQuantity = o.AvailableQuantity,
                                   WarehouseId = o.WarehouseId,
                                   WarehouseName = warehouse.Name,
-                                  Ean = o.Ean,
+                                  ProductEan = product.Ean,
                                   Title = ot.Title,
                                   Description = ot.Description,
                                   LastModifiedDate = o.LastModifiedDate,
@@ -398,7 +459,7 @@ namespace Inventory.Api.Services.OutletItems
                     ProductSku = outletItems.FirstOrDefault().ProductSku,
                     AvailableQuantity = outletItems.Sum(x => x.AvailableQuantity),
                     Quantity = outletItems.Sum(x => x.Quantity),
-                    Ean = outletItems.FirstOrDefault().Ean,
+                    ProductEan = outletItems.FirstOrDefault().ProductEan,
                     Title = outletItems.FirstOrDefault().Title,
                     Description = outletItems.FirstOrDefault().Description,
                     Details = outletItems.Select(item => new OutletServiceModel
@@ -424,25 +485,13 @@ namespace Inventory.Api.Services.OutletItems
             return default;
         }
 
-        public async Task UpdateOutletProduct(Guid? productId, string productName, string productSku, Guid? organisationId)
-        {
-            var outletProduct = await this.context.Outlet.FirstOrDefaultAsync(x => x.ProductId == productId.Value && x.SellerId == organisationId.Value && x.IsActive);
-            if (outletProduct != null)
-            {
-                outletProduct.ProductName = productName;
-                outletProduct.ProductSku = productSku;
-                outletProduct.LastModifiedDate = DateTime.UtcNow;
-
-                await this.context.SaveChangesAsync();
-            }
-        }
-
         public async Task DeleteAsync(DeleteOutletServiceModel model)
         {
             var outlet = await this.context.Outlet.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
+
             if (outlet == null)
             {
-                throw new CustomException(this.inventortLocalizer.GetString("OutletNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.inventoryLocalizer.GetString("OutletNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             outlet.IsActive = false;
@@ -452,15 +501,17 @@ namespace Inventory.Api.Services.OutletItems
 
         public async Task<PagedResults<IEnumerable<OutletSumServiceModel>>> GetAvailableProductsOutletsAsync(GetOutletsServiceModel model)
         {
-            var outletItems = (from i in this.context.Outlet
-                               group i by new { i.ProductId } into gpi
+            var outletItems = (from o in this.context.Outlet
+                               join p in this.context.Products on o.ProductId equals p.Id
+                               group o by new { o.ProductId } into gpi
                                where gpi.Sum(x => x.AvailableQuantity) > 0
                                select new OutletSumServiceModel
                                {
                                    ProductId = gpi.Key.ProductId,
-                                   ProductName = gpi.FirstOrDefault().ProductName,
-                                   ProductSku = gpi.FirstOrDefault().ProductSku,
-                                   Ean = gpi.FirstOrDefault().Ean,
+                                   OutletId = gpi.FirstOrDefault().Id,
+                                   ProductName = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Name,
+                                   ProductSku = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Sku,
+                                   ProductEan = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Ean,
                                    AvailableQuantity = gpi.Sum(x => x.AvailableQuantity),
                                    Quantity = gpi.Sum(x => x.Quantity)
                                }).OrderByDescending(x => x.AvailableQuantity);
@@ -473,32 +524,17 @@ namespace Inventory.Api.Services.OutletItems
 
             foreach (var outletItem in pagedResults.Data.OrEmptyIfNull().ToList())
             {
-                var item = new OutletSumServiceModel
+                var itemTranslation = await this.context.OutletTranslations.FirstOrDefaultAsync(x => x.OutletItemId == outletItem.OutletId && x.Language == model.Language && x.IsActive);
+
+                if (itemTranslation is null)
                 {
-                    ProductId = outletItem.ProductId,
-                    ProductName = outletItem.ProductName,
-                    ProductSku = outletItem.ProductSku,
-                    AvailableQuantity = outletItem.AvailableQuantity,
-                    Quantity = outletItem.Quantity,
-                    Ean = outletItem.Ean
-                };
-
-                var outletProduct = await this.context.Outlet.FirstOrDefaultAsync(x => x.ProductId == outletItem.ProductId);
-                
-                if (outletProduct is not null)
-                {
-                    var itemTranslation = await this.context.OutletTranslations.FirstOrDefaultAsync(x => x.OutletItemId == outletProduct.Id && x.Language == model.Language && x.IsActive);
-
-                    if (itemTranslation is null)
-                    {
-                        itemTranslation = await this.context.OutletTranslations.FirstOrDefaultAsync(x => x.OutletItemId == outletProduct.Id && x.IsActive);
-                    }
-
-                    item.Title = itemTranslation?.Title;
-                    item.Description = itemTranslation?.Description;
-
-                    outlet.Add(item);
+                    itemTranslation = await this.context.OutletTranslations.FirstOrDefaultAsync(x => x.OutletItemId == outletItem.OutletId && x.IsActive);
                 }
+
+                outletItem.Title = itemTranslation?.Title;
+                outletItem.Description = itemTranslation?.Description;
+
+                outlet.Add(outletItem);
             }
 
             pagedItemsServiceModel.Data = outlet;
@@ -506,21 +542,22 @@ namespace Inventory.Api.Services.OutletItems
             return pagedItemsServiceModel;
         }
 
-        public async Task UpdateOutletBasket(Guid? ProductId, int BookedQuantity)
+        public async Task UpdateOutletQuantity(Guid? productId, int bookedQuantity)
         {
-            var outletProduct = this.context.Outlet.FirstOrDefault(x => x.ProductId == ProductId.Value && x.IsActive);
-            if (outletProduct != null)
+            var outlet = this.context.Outlet.FirstOrDefault(x => x.ProductId == productId.Value && x.IsActive);
+
+            if (outlet != null)
             {
-                var productQuantity = outletProduct.Quantity + BookedQuantity;
+                var productQuantity = outlet.Quantity + bookedQuantity;
 
                 if (productQuantity < 0)
                 {
                     productQuantity = 0;
                 }
 
-                outletProduct.Quantity = productQuantity;
-                outletProduct.AvailableQuantity = productQuantity;
-                outletProduct.LastModifiedDate = DateTime.UtcNow;
+                outlet.Quantity = productQuantity;
+                outlet.AvailableQuantity = productQuantity;
+                outlet.LastModifiedDate = DateTime.UtcNow;
 
                 await this.context.SaveChangesAsync();
             }

@@ -80,6 +80,7 @@ namespace Inventory.Api.v1.Controllers
                                 ProductId = x.ProductId,
                                 ProductName = x.ProductName,
                                 ProductSku = x.ProductSku,
+                                Ean = x.Ean,
                                 WarehouseId = x.WarehouseId,
                                 WarehouseName = x.WarehouseName,
                                 Quantity = x.Quantity,
@@ -123,6 +124,7 @@ namespace Inventory.Api.v1.Controllers
                             ProductName = x.ProductName,
                             ProductSku = x.ProductSku,
                             Quantity = x.Quantity,
+                            Ean = x.Ean,
                             AvailableQuantity = x.AvailableQuantity,
                             RestockableInDays = x.RestockableInDays,
                             ExpectedDelivery = x.ExpectedDelivery,
@@ -177,6 +179,7 @@ namespace Inventory.Api.v1.Controllers
                         Quantity = inventoryProduct.Quantity,
                         ProductName = inventoryProduct.ProductName,
                         ProductSku = inventoryProduct.ProductSku,
+                        Ean = inventoryProduct.ProductEan,
                         RestockableInDays = inventoryProduct.RestockableInDays,
                         ExpectedDelivery = inventoryProduct.ExpectedDelivery
                     })
@@ -209,12 +212,13 @@ namespace Inventory.Api.v1.Controllers
                 { 
                     AvailableQuantity = x.AvailableQuantity,
                     Quantity = x.Quantity,
+                    ProductEan = x.Ean,
                     ExpectedDelivery = x.ExpectedDelivery,
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
                     ProductSku = x.ProductSku,
                     RestockableInDays = x.RestockableInDays,
-                    WarehouseName = x.WarehouseName
+                    WarehouseId = x.WarehouseId
                 }),
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
@@ -256,6 +260,7 @@ namespace Inventory.Api.v1.Controllers
                     ProductName = request.ProductName,
                     ProductSku = request.ProductSku,
                     Quantity = request.Quantity,
+                    ProductEan = request.Ean,
                     AvailableQuantity = request.AvailableQuantity,
                     RestockableInDays = request.RestockableInDays,
                     ExpectedDelivery = request.ExpectedDelivery,
@@ -284,6 +289,7 @@ namespace Inventory.Api.v1.Controllers
                     ProductName = request.ProductName,
                     ProductSku = request.ProductSku,
                     Quantity = request.Quantity,
+                    ProductEan = request.Ean,
                     AvailableQuantity = request.AvailableQuantity,
                     RestockableInDays = request.RestockableInDays,
                     ExpectedDelivery = request.ExpectedDelivery,
@@ -345,6 +351,7 @@ namespace Inventory.Api.v1.Controllers
                         WarehouseId = inventoryProduct.WarehouseId.Value,
                         WarehouseName = inventoryProduct.WarehouseName,
                         Quantity = inventoryProduct.Quantity,
+                        Ean = inventoryProduct.Ean,
                         AvailableQuantity = inventoryProduct.AvailableQuantity,
                         RestockableInDays = inventoryProduct.RestockableInDays,
                         ExpectedDelivery = inventoryProduct.ExpectedDelivery,
@@ -398,6 +405,7 @@ namespace Inventory.Api.v1.Controllers
                         ProductId = inventoryProduct.ProductId,
                         AvailableQuantity = inventoryProduct.AvailableQuantity,
                         Quantity = inventoryProduct.Quantity,
+                        Ean = inventoryProduct.ProductEan,
                         ProductName = inventoryProduct.ProductName,
                         ProductSku = inventoryProduct.ProductSku,
                         RestockableInDays = inventoryProduct.RestockableInDays,
@@ -408,6 +416,7 @@ namespace Inventory.Api.v1.Controllers
                             ProductId = item.ProductId,
                             ProductName = item.ProductName,
                             Quantity = item.Quantity,
+                            Ean = item.Ean,
                             AvailableQuantity = item.AvailableQuantity,
                             ExpectedDelivery = item.ExpectedDelivery,
                             ProductSku = item.ProductSku,
@@ -464,6 +473,7 @@ namespace Inventory.Api.v1.Controllers
                         ProductId = inventoryProduct.ProductId,
                         AvailableQuantity = inventoryProduct.AvailableQuantity,
                         Quantity = inventoryProduct.Quantity,
+                        Ean = inventoryProduct.ProductEan,
                         ProductName = inventoryProduct.ProductName,
                         ProductSku = inventoryProduct.ProductSku,
                         RestockableInDays = inventoryProduct.RestockableInDays,
@@ -474,6 +484,7 @@ namespace Inventory.Api.v1.Controllers
                             ProductId = item.ProductId,
                             ProductName = item.ProductName,
                             Quantity = item.Quantity,
+                            Ean = item.Ean,
                             AvailableQuantity = item.AvailableQuantity,
                             ExpectedDelivery = item.ExpectedDelivery,
                             ProductSku = item.ProductSku,
@@ -510,7 +521,7 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
-        {
+        {   
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new DeleteInventoryServiceModel
             {

@@ -34,9 +34,6 @@ namespace Inventory.Api.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Ean")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("ExpectedDelivery")
                         .HasColumnType("datetime2");
 
@@ -48,14 +45,6 @@ namespace Inventory.Api.Infrastructure.Migrations
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductSku")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -91,9 +80,6 @@ namespace Inventory.Api.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Ean")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -102,14 +88,6 @@ namespace Inventory.Api.Infrastructure.Migrations
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductSku")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -130,7 +108,7 @@ namespace Inventory.Api.Infrastructure.Migrations
                     b.ToTable("Outlet");
                 });
 
-            modelBuilder.Entity("Inventory.Api.Infrastructure.Entities.OutletItemTranslations", b =>
+            modelBuilder.Entity("Inventory.Api.Infrastructure.Entities.OutletItemTranslation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -172,6 +150,42 @@ namespace Inventory.Api.Infrastructure.Migrations
                     b.ToTable("OutletTranslations");
                 });
 
+            modelBuilder.Entity("Inventory.Api.Infrastructure.Entities.Product", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Ean")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<string>("Sku")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Products");
+                });
+
             modelBuilder.Entity("Inventory.Api.Infrastructure.Entities.Warehouse", b =>
                 {
                     b.Property<Guid>("Id")
@@ -208,7 +222,7 @@ namespace Inventory.Api.Infrastructure.Migrations
                     b.ToTable("Warehouses");
                 });
 
-            modelBuilder.Entity("Inventory.Api.Infrastructure.Entities.OutletItemTranslations", b =>
+            modelBuilder.Entity("Inventory.Api.Infrastructure.Entities.OutletItemTranslation", b =>
                 {
                     b.HasOne("Inventory.Api.Infrastructure.Entities.OutletItem", null)
                         .WithMany("Translations")

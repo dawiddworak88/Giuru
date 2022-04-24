@@ -14,6 +14,6 @@ namespace Inventory.Api.ServicesModels.OutletServiceModels
         public string Title { get; set; }
         public string Description { get; set; }
         public int AvailableQuantity { get; set; }
-        public string Ean { get; set; }
+        public string ProductEan { get; set; }
     }
 }

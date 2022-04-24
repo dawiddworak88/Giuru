@@ -213,20 +213,21 @@ namespace Seller.Web.Areas.Inventory.Repositories.Inventories
             }
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? warehouseId, Guid? productId, string productName, string productSku, int quantity, int? restockableInDays, int? availableQuantity, DateTime? expectedDelivery, Guid? organisationId)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? WarehouseId, Guid? ProductId, string ProductName, string ProductSku, int Quantity, string ean, int? RestockableInDays, int? AvailableQuantity, DateTime? ExpectedDelivery, Guid? OrganisationId)
         {
             var requestModel = new SaveInventoryRequestModel
             {
                 Id = id,
-                WarehouseId = warehouseId,
-                ProductId = productId,
-                ProductName = productName,
-                ProductSku = productSku,
-                Quantity = quantity,
-                RestockableInDays = restockableInDays,
-                AvailableQuantity = availableQuantity,
-                ExpectedDelivery = expectedDelivery,
-                OrganisationId = organisationId
+                WarehouseId = WarehouseId,
+                ProductId = ProductId,
+                ProductName = ProductName,
+                ProductSku = ProductSku,
+                Quantity = Quantity,
+                Ean = ean,
+                RestockableInDays = RestockableInDays,
+                AvailableQuantity = AvailableQuantity,
+                ExpectedDelivery = ExpectedDelivery,
+                OrganisationId = OrganisationId
             };
             var apiRequest = new ApiRequest<SaveInventoryRequestModel>
             {

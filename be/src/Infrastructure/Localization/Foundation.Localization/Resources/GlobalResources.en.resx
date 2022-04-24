@@ -489,4 +489,7 @@
   <data name="Discount" xml:space="preserve">
     <value>Discount:</value>
   </data>
+  <data name="TitleLabel" xml:space="preserve">
+    <value>Title:</value>
+  </data>
 </root>

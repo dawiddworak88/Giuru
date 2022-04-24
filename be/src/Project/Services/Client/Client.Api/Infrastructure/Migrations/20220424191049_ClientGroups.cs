@@ -10,7 +10,7 @@ namespace Client.Api.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ClientGroup",
+                name: "ClientGroups",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -21,11 +21,11 @@ namespace Client.Api.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientGroup", x => x.Id);
+                    table.PrimaryKey("PK_ClientGroups", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientGroups",
+                name: "ClientsGroups",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -38,7 +38,7 @@ namespace Client.Api.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientGroups", x => x.Id);
+                    table.PrimaryKey("PK_ClientsGroups", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -48,8 +48,7 @@ namespace Client.Api.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Language = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ClientGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ClientGroupId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -59,10 +58,11 @@ namespace Client.Api.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_ClientGroupTranslations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ClientGroupTranslations_ClientGroup_ClientGroupId",
+                        name: "FK_ClientGroupTranslations_ClientGroups_ClientGroupId",
                         column: x => x.ClientGroupId,
-                        principalTable: "ClientGroup",
-                        principalColumn: "Id");
+                        principalTable: "ClientGroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -74,13 +74,13 @@ namespace Client.Api.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ClientGroups");
-
-            migrationBuilder.DropTable(
                 name: "ClientGroupTranslations");
 
             migrationBuilder.DropTable(
-                name: "ClientGroup");
+                name: "ClientsGroups");
+
+            migrationBuilder.DropTable(
+                name: "ClientGroups");
         }
     }
 }

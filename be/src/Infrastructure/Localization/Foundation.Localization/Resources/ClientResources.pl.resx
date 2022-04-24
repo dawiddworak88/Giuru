@@ -169,7 +169,7 @@
     <value>Powróć do klientów</value>
   </data>
   <data name="NavigateToGroupsText" xml:space="preserve">
-    <value>Powróc do grup</value>
+    <value>Powróć do grup klientów</value>
   </data>
   <data name="NewClient" xml:space="preserve">
     <value>Nowy klient</value>

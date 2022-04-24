@@ -256,7 +256,8 @@ namespace Catalog.Api.Services.Products
                 Username = model.Username,
                 ProductId = model.Id,
                 ProductName = model.Name,
-                ProductSku = model.Sku
+                ProductSku = model.Sku,
+                ProductEan = model.Ean
             };
 
             this.eventBus.Publish(message);

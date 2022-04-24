@@ -19,18 +19,6 @@ namespace Seller.Web.Areas.Inventory.Repositories.Inventories
         Task<IEnumerable<InventoryItem>> GetAllProductsAsync(string token, string language, IEnumerable<Guid> inventoryIds);
         Task<IEnumerable<InventoryItem>> GetAllProductsAsync(string token, string language);
         Task DeleteAsync(string token, string language, Guid? id);
-        Task<Guid> SaveAsync(
-            string token, 
-            string language, 
-            Guid? id, 
-            Guid? warehouseId, 
-            Guid? productId, 
-            string productName, 
-            string productSku, 
-            int quantity, 
-            int? restockableInDays, 
-            int? availableQuantity, 
-            DateTime? expectedDelivery, 
-            Guid? organisationId);
+        Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? WarehouseId, Guid? ProductId, string ProductName, string ProductSku, int Quantity, string ean, int? RestockableInDays, int? AvailableQuantity, DateTime? ExpectedDelivery, Guid? OrganisationId);
     }
 }
