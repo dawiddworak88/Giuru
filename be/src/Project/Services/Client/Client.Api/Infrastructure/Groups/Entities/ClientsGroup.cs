@@ -4,13 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Client.Api.Infrastructure.Groups.Entities
 {
-    public class ClientGroupTranslations : Entity
+    public class ClientsGroup : Entity
     {
         [Required]
-        public string Name { get; set; }
-
-        [Required]
-        public string Language { get; set; }
+        public Guid ClientId { get; set; }
 
         [Required]
         public Guid GroupId { get; set; }

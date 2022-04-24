@@ -60,7 +60,7 @@ namespace Inventory.Api.Services.OutletItems
             }
             else
             {
-                var newOutletProductTranslation = new OutletItemTranslations
+                var newOutletProductTranslation = new OutletItemTranslation
                 {
                     Title = model.Title,
                     Description = model.Description,
@@ -99,7 +99,7 @@ namespace Inventory.Api.Services.OutletItems
 
             this.context.Outlet.Add(outletItem.FillCommonProperties());
 
-            var outletItemTranslation = new OutletItemTranslations
+            var outletItemTranslation = new OutletItemTranslation
             {
                 Title = model.Title,
                 Description = model.Description,
@@ -234,15 +234,17 @@ namespace Inventory.Api.Services.OutletItems
         {
             var outletItems = from o in this.context.Outlet
                               join p in this.context.Products on o.ProductId equals p.Id
+                              join t in this.context.OutletTranslations on o.Id equals t.OutletItemId
                               where o.IsActive
                               select new
                               {
                                   o.Id,
+                                  t.Title,
+                                  t.Description,
                                   o.ProductId,
                                   ProductName = p.Name,
                                   ProductSku = p.Sku,
                                   ProductEan = p.Ean,
-                                  o.Translations,
                                   o.WarehouseId,
                                   o.Quantity,
                                   o.AvailableQuantity,
@@ -252,9 +254,7 @@ namespace Inventory.Api.Services.OutletItems
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                var warehouse = await this.context.Warehouses.FirstOrDefaultAsync(x => x.Name.StartsWith(model.SearchTerm));
-
-                outletItems = outletItems.Where(x => x.Translations.Any(x => x.Title.StartsWith(model.SearchTerm) || x.Description.StartsWith(model.SearchTerm)) || x.WarehouseId == warehouse.Id);
+                outletItems = outletItems.Where(x => x.Title.StartsWith(model.SearchTerm) || x.Description.StartsWith(model.SearchTerm));
             }
 
             outletItems = outletItems.ApplySort(model.OrderBy);

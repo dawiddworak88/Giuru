@@ -5,6 +5,6 @@ namespace Client.Api.Infrastructure.Groups.Entities
 {
     public class ClientGroup : Entity
     {
-        public virtual IEnumerable<ClientGroupTranslations> Translations { get; set; }
+        public virtual IEnumerable<ClientGroupTranslation> Translations { get; set; }
     }
 }

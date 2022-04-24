@@ -60,8 +60,8 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 SelectWarehouse = this.inventoryLocalizer.GetString("SelectWarehouse"),
                 OutletUrl = this.linkGenerator.GetPathByAction("Index", "Outlets", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "OutletsApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
-                DescriptionLabel = this.globalLocalizer.GetString("Description"),
-                TitleLabel = this.globalLocalizer.GetString("Title"),
+                DescriptionLabel = this.globalLocalizer.GetString("DescriptionLabel"),
+                TitleLabel = this.globalLocalizer.GetString("TitleLabel"),
                 EanLabel = this.globalLocalizer.GetString("Ean")
             };
 

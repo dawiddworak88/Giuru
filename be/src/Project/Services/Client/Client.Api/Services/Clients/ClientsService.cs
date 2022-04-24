@@ -58,7 +58,7 @@ namespace Client.Api.Services.Clients
                     CreatedDate = client.CreatedDate
                 };
 
-                var clientGroups = this.context.ClientGroups.Where(x => x.ClientId == client.Id && x.IsActive).Select(x => x.GroupId);
+                var clientGroups = this.context.ClientsGroups.Where(x => x.ClientId == client.Id && x.IsActive).Select(x => x.GroupId);
 
                 if (clientGroups is not null)
                 {
@@ -93,7 +93,7 @@ namespace Client.Api.Services.Clients
                 CreatedDate = existingClient.CreatedDate
             };
 
-            var clientGroups = this.context.ClientGroups.Where(x => x.ClientId == existingClient.Id && x.IsActive).Select(x => x.GroupId);
+            var clientGroups = this.context.ClientsGroups.Where(x => x.ClientId == existingClient.Id && x.IsActive).Select(x => x.GroupId);
 
             if (clientGroups is not null)
             {
@@ -132,22 +132,22 @@ namespace Client.Api.Services.Clients
             client.PhoneNumber = serviceModel.PhoneNumber;
             client.OrganisationId = serviceModel.ClientOrganisationId.Value;
 
-            var clientGroups = this.context.ClientGroups.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
+            var clientGroups = this.context.ClientsGroups.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
 
             foreach (var clientGroup in clientGroups.OrEmptyIfNull())
             {
-                this.context.ClientGroups.Remove(clientGroup);
+                this.context.ClientsGroups.Remove(clientGroup);
             }
 
             foreach (var group in serviceModel.ClientGroupIds.OrEmptyIfNull())
             {
-                var groupItem = new ClientGroups
+                var groupItem = new ClientsGroup
                 {
                     ClientId = client.Id,
                     GroupId = group
                 };
 
-                await this.context.ClientGroups.AddAsync(groupItem.FillCommonProperties());
+                await this.context.ClientsGroups.AddAsync(groupItem.FillCommonProperties());
             }
 
             await this.context.SaveChangesAsync();
@@ -177,13 +177,13 @@ namespace Client.Api.Services.Clients
 
             foreach (var group in serviceModel.ClientGroupIds.OrEmptyIfNull())
             {
-                var clientGroup = new ClientGroups
+                var clientGroup = new ClientsGroup
                 {
                     ClientId = client.Id,
                     GroupId = group
                 };
 
-                await this.context.ClientGroups.AddAsync(clientGroup.FillCommonProperties());
+                await this.context.ClientsGroups.AddAsync(clientGroup.FillCommonProperties());
             }
 
             await this.context.SaveChangesAsync();

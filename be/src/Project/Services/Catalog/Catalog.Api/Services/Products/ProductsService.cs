@@ -256,17 +256,11 @@ namespace Catalog.Api.Services.Products
                 Username = model.Username,
                 ProductId = model.Id,
                 ProductName = model.Name,
-                ProductSku = model.Sku
-            };
-
-            var updatedEan = new UpdatedEanProductIntegrationEvent
-            {
-                ProductId = model.Id,
-                Ean = model.Ean
+                ProductSku = model.Sku,
+                ProductEan = model.Ean
             };
 
             this.eventBus.Publish(message);
-            this.eventBus.Publish(updatedEan);
 
             await this.catalogContext.SaveChangesAsync();
 

@@ -108,7 +108,7 @@ namespace Inventory.Api.Infrastructure.Migrations
                     b.ToTable("Outlet");
                 });
 
-            modelBuilder.Entity("Inventory.Api.Infrastructure.Entities.OutletItemTranslations", b =>
+            modelBuilder.Entity("Inventory.Api.Infrastructure.Entities.OutletItemTranslation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -222,7 +222,7 @@ namespace Inventory.Api.Infrastructure.Migrations
                     b.ToTable("Warehouses");
                 });
 
-            modelBuilder.Entity("Inventory.Api.Infrastructure.Entities.OutletItemTranslations", b =>
+            modelBuilder.Entity("Inventory.Api.Infrastructure.Entities.OutletItemTranslation", b =>
                 {
                     b.HasOne("Inventory.Api.Infrastructure.Entities.OutletItem", null)
                         .WithMany("Translations")

@@ -22,6 +22,6 @@ namespace Inventory.Api.Infrastructure
 
         public DbSet<OutletItem> Outlet { get; set; }
 
-        public DbSet<OutletItemTranslations> OutletTranslations { get; set; }
+        public DbSet<OutletItemTranslation> OutletTranslations { get; set; }
     }
 }

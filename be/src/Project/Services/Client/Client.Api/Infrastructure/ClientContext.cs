@@ -17,8 +17,8 @@ namespace Client.Api.Infrastructure
 
         public DbSet<Clients.Entities.Client> Clients { get; set; }
         public DbSet<Address> Addresses { get; set; }
-        public DbSet<ClientGroup> ClientGroup { get; set; }
-        public DbSet<ClientGroupTranslations> ClientGroupTranslations { get; set; }
-        public DbSet<ClientGroups> ClientGroups { get; set; }
+        public DbSet<ClientGroup> ClientGroups { get; set; }
+        public DbSet<ClientGroupTranslation> ClientGroupTranslations { get; set; }
+        public DbSet<ClientsGroup> ClientsGroups { get; set; }
     }
 }

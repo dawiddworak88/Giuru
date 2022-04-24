@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Inventory.Api.Infrastructure.Entities
 {
-    public class OutletItemTranslations : Entity
+    public class OutletItemTranslation : Entity
     {
         [Required]
         public string Title { get; set; }

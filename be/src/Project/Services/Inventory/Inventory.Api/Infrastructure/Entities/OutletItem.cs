@@ -22,6 +22,6 @@ namespace Inventory.Api.Infrastructure.Entities
         [Required]
         public Guid WarehouseId { get; set; }
 
-        public virtual IEnumerable<OutletItemTranslations> Translations { get; set; }
+        public virtual IEnumerable<OutletItemTranslation> Translations { get; set; }
     }
 }
