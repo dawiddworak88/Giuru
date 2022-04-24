@@ -17,8 +17,7 @@ namespace Inventory.Api.Services.OutletItems
         Task<OutletSumServiceModel> GetOutletByProductSku(GetOutletByProductSkuServiceModel model);
         Task SyncOutletProducts(UpdateOutletProductsServiceModel model);
         Task DeleteAsync(DeleteOutletServiceModel model);
-        Task UpdateOutletBasket(Guid? productId, int bookedQuantity);
-        Task UpdateOutletProduct(Guid? productId, string productName, string productSku, Guid? organisationId);
+        Task UpdateOutletQuantity(Guid? productId, int bookedQuantity);
         Task<PagedResults<IEnumerable<OutletSumServiceModel>>> GetAvailableProductsOutletsAsync(GetOutletsServiceModel model);
     }
 }

@@ -6,6 +6,7 @@ using Inventory.Api.IntegrationEvents;
 using Inventory.Api.IntegrationEventsHandlers;
 using Inventory.Api.Services.InventoryItems;
 using Inventory.Api.Services.OutletItems;
+using Inventory.Api.Services.Products;
 using Inventory.Api.Services.Warehouses;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -23,6 +24,7 @@ namespace Inventory.Api.DependencyInjection
         {
             services.AddScoped<IWarehouseService, WarehouseService>();
             services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IOutletService, OutletService>();
         }
 
@@ -35,7 +37,6 @@ namespace Inventory.Api.DependencyInjection
         public static void RegisterEventBus(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IIntegrationEventHandler<UpdatedProductIntegrationEvent>, UpdatedProductIntegrationEventHandler>();
-            services.AddScoped<IIntegrationEventHandler<UpdatedEanProductIntegrationEvent>, UpdatedEanProductIntegrationEventHandler>();
             services.AddScoped<IIntegrationEventHandler<BasketCheckoutStockProductsIntegrationEvent>, UpdatedInventoryIntegrationEventHandler>();
             services.AddScoped <IIntegrationEventHandler<BasketCheckoutOutletProductsIntegrationEvent>,  UpdatedOutletIntegrationEventHandler > ();
 

@@ -22,7 +22,7 @@ namespace Inventory.Api.IntegrationEventsHandlers
             {
                 foreach (var item in @event.Items)
                 {
-                    await this.outletService.UpdateOutletBasket(item.ProductId, item.BookedQuantity);
+                    await this.outletService.UpdateOutletQuantity(item.ProductId, item.BookedQuantity);
                 }
             }
         }

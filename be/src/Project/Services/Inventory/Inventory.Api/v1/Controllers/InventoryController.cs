@@ -179,7 +179,7 @@ namespace Inventory.Api.v1.Controllers
                         Quantity = inventoryProduct.Quantity,
                         ProductName = inventoryProduct.ProductName,
                         ProductSku = inventoryProduct.ProductSku,
-                        Ean = inventoryProduct.Ean,
+                        Ean = inventoryProduct.ProductEan,
                         RestockableInDays = inventoryProduct.RestockableInDays,
                         ExpectedDelivery = inventoryProduct.ExpectedDelivery
                     })
@@ -212,13 +212,13 @@ namespace Inventory.Api.v1.Controllers
                 { 
                     AvailableQuantity = x.AvailableQuantity,
                     Quantity = x.Quantity,
-                    Ean = x.Ean,
+                    ProductEan = x.Ean,
                     ExpectedDelivery = x.ExpectedDelivery,
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
                     ProductSku = x.ProductSku,
                     RestockableInDays = x.RestockableInDays,
-                    WarehouseName = x.WarehouseName
+                    WarehouseId = x.WarehouseId
                 }),
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
@@ -260,7 +260,7 @@ namespace Inventory.Api.v1.Controllers
                     ProductName = request.ProductName,
                     ProductSku = request.ProductSku,
                     Quantity = request.Quantity,
-                    Ean = request.Ean,
+                    ProductEan = request.Ean,
                     AvailableQuantity = request.AvailableQuantity,
                     RestockableInDays = request.RestockableInDays,
                     ExpectedDelivery = request.ExpectedDelivery,
@@ -289,7 +289,7 @@ namespace Inventory.Api.v1.Controllers
                     ProductName = request.ProductName,
                     ProductSku = request.ProductSku,
                     Quantity = request.Quantity,
-                    Ean = request.Ean,
+                    ProductEan = request.Ean,
                     AvailableQuantity = request.AvailableQuantity,
                     RestockableInDays = request.RestockableInDays,
                     ExpectedDelivery = request.ExpectedDelivery,
@@ -405,7 +405,7 @@ namespace Inventory.Api.v1.Controllers
                         ProductId = inventoryProduct.ProductId,
                         AvailableQuantity = inventoryProduct.AvailableQuantity,
                         Quantity = inventoryProduct.Quantity,
-                        Ean = inventoryProduct.Ean,
+                        Ean = inventoryProduct.ProductEan,
                         ProductName = inventoryProduct.ProductName,
                         ProductSku = inventoryProduct.ProductSku,
                         RestockableInDays = inventoryProduct.RestockableInDays,
@@ -473,7 +473,7 @@ namespace Inventory.Api.v1.Controllers
                         ProductId = inventoryProduct.ProductId,
                         AvailableQuantity = inventoryProduct.AvailableQuantity,
                         Quantity = inventoryProduct.Quantity,
-                        Ean = inventoryProduct.Ean,
+                        Ean = inventoryProduct.ProductEan,
                         ProductName = inventoryProduct.ProductName,
                         ProductSku = inventoryProduct.ProductSku,
                         RestockableInDays = inventoryProduct.RestockableInDays,

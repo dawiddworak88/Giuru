@@ -4,7 +4,7 @@ namespace Inventory.Api.v1.RequestModels
 {
     public class UpdateInventoryProductRequestModel
     {
-        public string WarehouseName { get; set; }
+        public Guid? WarehouseId { get; set; }
         public Guid? ProductId { get; set; }
         public string ProductName { get; set; }
         public string ProductSku { get; set; }

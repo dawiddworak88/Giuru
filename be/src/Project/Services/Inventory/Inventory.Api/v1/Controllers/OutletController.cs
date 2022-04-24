@@ -85,7 +85,7 @@ namespace Outlet.Api.v1.Controllers
                                 Quantity = x.Quantity,
                                 Title = x.Title,
                                 Description = x.Description,
-                                Ean = x.Ean,
+                                Ean = x.ProductEan,
                                 AvailableQuantity = x.AvailableQuantity,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
@@ -126,7 +126,7 @@ namespace Outlet.Api.v1.Controllers
                             Quantity = x.Quantity,
                             Title = x.Title,
                             Description = x.Description,
-                            Ean = x.Ean,
+                            Ean = x.ProductEan,
                             AvailableQuantity = x.AvailableQuantity,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
@@ -181,7 +181,7 @@ namespace Outlet.Api.v1.Controllers
                         ProductSku = outletProduct.ProductSku,
                         Title = outletProduct.Title,
                         Description = outletProduct.Description,
-                        Ean = outletProduct.Ean
+                        Ean = outletProduct.ProductEan
                     })
                 };
 
@@ -215,8 +215,8 @@ namespace Outlet.Api.v1.Controllers
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
                     ProductSku = x.ProductSku,
-                    WarehouseName = x.WarehouseName,
-                    Ean = x.Ean
+                    WarehouseId = x.WarehouseId,
+                    ProductEan = x.Ean
                 }),
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
@@ -261,7 +261,7 @@ namespace Outlet.Api.v1.Controllers
                     AvailableQuantity = request.AvailableQuantity,
                     Title = request.Title,
                     Description = request.Description,
-                    Ean = request.Ean,
+                    ProductEan = request.Ean,
                     Language = CultureInfo.CurrentCulture.Name,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
@@ -290,7 +290,7 @@ namespace Outlet.Api.v1.Controllers
                     AvailableQuantity = request.AvailableQuantity,
                     Title = request.Title,
                     Description = request.Description,
-                    Ean = request.Ean,
+                    ProductEan = request.Ean,
                     Language = CultureInfo.CurrentCulture.Name,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
@@ -351,7 +351,7 @@ namespace Outlet.Api.v1.Controllers
                         Quantity = outletProduct.Quantity,
                         Title = outletProduct.Title,
                         Description = outletProduct.Description,
-                        Ean = outletProduct.Ean,
+                        Ean = outletProduct.ProductEan,
                         AvailableQuantity = outletProduct.AvailableQuantity,
                         LastModifiedDate = outletProduct.LastModifiedDate,
                         CreatedDate = outletProduct.CreatedDate,
@@ -405,7 +405,7 @@ namespace Outlet.Api.v1.Controllers
                         Quantity = outletProduct.Quantity,
                         ProductName = outletProduct.ProductName,
                         ProductSku = outletProduct.ProductSku,
-                        Ean = outletProduct.Ean,
+                        Ean = outletProduct.ProductEan,
                         Title = outletProduct.Title,
                         Description = outletProduct.Description,
                         Details = outletProduct.Details.Select(item => new OutletDetailsResponseModel
@@ -420,7 +420,7 @@ namespace Outlet.Api.v1.Controllers
                             WarehouseName = item.WarehouseName,
                             Title = item.Title,
                             Description = item.Description,
-                            Ean = item.Ean,
+                            Ean = item.ProductEan,
                             LastModifiedDate = item.LastModifiedDate,
                             CreatedDate = item.CreatedDate
                         })
@@ -487,7 +487,7 @@ namespace Outlet.Api.v1.Controllers
                             WarehouseName = item.WarehouseName,
                             Title = item.Title,
                             Description = item.Description,
-                            Ean = item.Ean,
+                            Ean = item.ProductEan,
                             LastModifiedDate = item.LastModifiedDate,
                             CreatedDate = item.CreatedDate
                         })
