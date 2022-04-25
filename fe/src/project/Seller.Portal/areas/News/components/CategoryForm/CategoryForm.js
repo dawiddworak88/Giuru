@@ -11,7 +11,6 @@ import {
 
 const CategoryForm = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
@@ -38,7 +37,6 @@ const CategoryForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
-                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonRes.id });
                     }
                     else {
@@ -107,7 +105,7 @@ const CategoryForm = (props) => {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary"
-                                disabled={state.isLoading || disable || disableSaveButton}>
+                                disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
                             <Button

@@ -8,11 +8,8 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function ProductAttributeForm(props) {
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const [state, dispatch] = useContext(Context);
-
     const stateSchema = {
-
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" }
     };
@@ -47,7 +44,6 @@ function ProductAttributeForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-                        setDisableSaveButton(true)
                         toast.success(jsonResponse.message);
 
                         if (!id) {
@@ -96,7 +92,7 @@ function ProductAttributeForm(props) {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || disable || disableSaveButton}>
+                                disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
                             <Button 

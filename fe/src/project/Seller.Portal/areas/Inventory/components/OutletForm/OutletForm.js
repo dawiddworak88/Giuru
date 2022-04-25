@@ -14,8 +14,6 @@ import QuantityValidator from "../../../../../../shared/helpers/validators/Quant
 const OutletForm = (props) => {
 
     const [state, dispatch] = useContext(Context);
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
-    
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         warehouseId: { value: props.warehouseId ? props.warehouseId : null, error: "" },
@@ -81,7 +79,6 @@ const OutletForm = (props) => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
                         setFieldValue({ name: "id", value: jsonRes.id });
-                        setDisableSaveButton(true);
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -211,7 +208,7 @@ const OutletForm = (props) => {
                                 type="subbmit" 
                                 variant="contained"
                                 color="primary"
-                                disabled={state.isLoading || disable || !product || disableSaveButton}>
+                                disabled={state.isLoading || disable || !product}>
                                 {props.saveText}
                             </Button>
                             <Button 
