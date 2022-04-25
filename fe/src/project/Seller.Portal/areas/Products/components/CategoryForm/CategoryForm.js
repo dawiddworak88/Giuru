@@ -10,8 +10,6 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 
 function CategoryForm(props) {
     const [state, dispatch] = useContext(Context);
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
-
     const stateSchema = {
 
         id: { value: props.id ? props.id : null, error: "" },
@@ -50,7 +48,6 @@ function CategoryForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
@@ -127,7 +124,7 @@ function CategoryForm(props) {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || disable || disableSaveButton}>
+                                disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
                             <Button

@@ -18,7 +18,6 @@ import { stateFromMarkdown } from 'draft-js-import-markdown';
 
 const NewsItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const [convertedToRaw, setConvertedToRaw] = useState(props.content ? props.content : null);
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     
@@ -78,7 +77,6 @@ const NewsItemForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
-                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonRes.id });
                     }
                     else {
@@ -300,7 +298,7 @@ const NewsItemForm = (props) => {
                                     type="submit" 
                                     variant="contained" 
                                     color="primary"
-                                    disabled={state.isLoading || disable || !convertedToRaw || disableSaveButton}
+                                    disabled={state.isLoading || disable || !convertedToRaw}
                                 >
                                 {props.saveText}
                             </Button>
