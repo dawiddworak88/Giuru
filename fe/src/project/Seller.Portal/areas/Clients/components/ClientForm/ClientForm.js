@@ -214,15 +214,6 @@ function ClientForm(props) {
                                 disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
-                            <Button 
-                                className="field-button"
-                                type="button" 
-                                color="secondary" 
-                                variant="contained" 
-                                onClick={createAccount} 
-                                disabled={state.isLoading || !canCreateAccount}>
-                                {props.hasAccount ? props.resetPasswordText : props.accountText}
-                            </Button>
                             <Button
                                 className="field-button"
                                 type="button"
@@ -233,6 +224,15 @@ function ClientForm(props) {
                                     NavigationHelper.redirect(props.clientsUrl);
                                 }}>
                                     {props.navigateToClientsLabel}
+                            </Button>
+                            <Button 
+                                className="field-button"
+                                type="button" 
+                                color="secondary" 
+                                variant="contained" 
+                                onClick={createAccount} 
+                                disabled={state.isLoading || !canCreateAccount}>
+                                {props.hasAccount ? props.resetPasswordText : props.accountText}
                             </Button>
                         </div>
                     </form>
