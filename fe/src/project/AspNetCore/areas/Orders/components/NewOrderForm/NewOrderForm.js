@@ -509,7 +509,8 @@ function NewOrderForm(props) {
                                     defaultChecked
                                     onChange={(e) => {
                                         setHasCustomOrder(e.target.checked);
-                                    }}/>
+                                    }}
+                                    disabled={isOrdered}/>
                             }
                             label={props.initCustomOrderLabel}
                         />
@@ -528,6 +529,7 @@ function NewOrderForm(props) {
                                 fullWidth={true}
                                 multiline={true}
                                 value={customOrder}
+                                disabled={isOrdered}
                                 onChange={(e) => {
                                     setCustomOrder(e.target.value);
                                 }}
