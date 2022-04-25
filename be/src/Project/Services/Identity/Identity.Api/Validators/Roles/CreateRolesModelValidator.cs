@@ -8,6 +8,7 @@ namespace Identity.Api.Validators.Roles
     {
         public CreateRolesModelValidator()
         {
+            this.RuleFor(x => x.Email).NotEmpty().NotNull();
             this.RuleFor(x => x.Roles).NotEmpty().NotNull();
         }
     }

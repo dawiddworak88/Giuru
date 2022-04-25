@@ -1,4 +1,5 @@
-﻿using Foundation.ApiExtensions.Controllers;
+﻿using Foundation.Account.Definitions;
+using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
 using Identity.Api.Services.Roles;
@@ -29,10 +30,9 @@ namespace Identity.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Creates roles
+        /// Creates if not exists and assign roles to user
         /// </summary>
         /// <param name="request">The model.</param>
-        /// <returns>The roles id.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -43,14 +43,15 @@ namespace Identity.Api.v1.Controllers
         {
             var serviceModel = new CreateRolesServiceModel
             {
-                Roles = request.Roles,
+                Email = request.Email,
+                Roles = request.Roles
             };
 
             var validator = new CreateRolesModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
             if (validationResult.IsValid)
             {
-                await this.rolesService.CreateAsync(serviceModel);
+                await this.rolesService.AssignRolesAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }

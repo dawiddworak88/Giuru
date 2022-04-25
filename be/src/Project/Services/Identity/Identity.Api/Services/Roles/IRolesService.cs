@@ -5,6 +5,6 @@ namespace Identity.Api.Services.Roles
 {
     public interface IRolesService
     {
-        Task CreateAsync(CreateRolesServiceModel model);
+        Task AssignRolesAsync(CreateRolesServiceModel model);
     }
 }
