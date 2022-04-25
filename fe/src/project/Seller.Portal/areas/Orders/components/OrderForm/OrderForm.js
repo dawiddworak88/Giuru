@@ -101,7 +101,6 @@ function OrderForm(props) {
     };
 
     const handleAddOrderItemClick = () => {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const orderItem = {

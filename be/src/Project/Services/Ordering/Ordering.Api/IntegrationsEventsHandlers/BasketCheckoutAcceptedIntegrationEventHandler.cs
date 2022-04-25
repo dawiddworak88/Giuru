@@ -69,6 +69,8 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
                     ProductName = x.ProductName,
                     PictureUrl = x.PictureUrl,
                     Quantity = x.Quantity,
+                    StockQuantity = x.StockQuantity,
+                    OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
                     ExpectedDeliveryFrom = x.DeliveryFrom,
                     ExpectedDeliveryTo = x.DeliveryTo,

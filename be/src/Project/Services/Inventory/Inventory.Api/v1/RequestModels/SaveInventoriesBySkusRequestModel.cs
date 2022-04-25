@@ -1,4 +1,4 @@
-﻿using Inventory.Api.ServicesModels.InventoryServices;
+﻿using Inventory.Api.ServicesModels.InventoryServiceModels;
 using System.Collections.Generic;
 
 namespace Inventory.Api.v1.RequestModels

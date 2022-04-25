@@ -10,7 +10,6 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +42,8 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                     ProductName = x.ProductName,
                     PictureUrl = x.PictureUrl,
                     Quantity = x.Quantity,
+                    StockQuantity = x.StockQuantity,
+                    OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
                     DeliveryFrom = x.DeliveryFrom,
                     DeliveryTo = x.DeliveryTo,
@@ -72,6 +73,8 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                         ProductName = x.ProductName,
                         PictureUrl = x.PictureUrl,
                         Quantity = x.Quantity,
+                        StockQuantity = x.StockQuantity,
+                        OutletQuantity = x.OutletQuantity,
                         ExternalReference = x.ExternalReference,
                         DeliveryFrom = x.DeliveryFrom,
                         DeliveryTo = x.DeliveryTo,

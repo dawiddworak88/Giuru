@@ -38,6 +38,8 @@ function StatusOrder(props) {
                                                 <TableCell>{props.nameLabel}</TableCell>
                                                 <TableCell>{props.fabricsLabel}</TableCell>
                                                 <TableCell>{props.quantityLabel}</TableCell>
+                                                <TableCell>{props.stockQuantityLabel}</TableCell>
+                                                <TableCell>{props.outletQuantityLabel}</TableCell>
                                                 <TableCell>{props.externalReferenceLabel}</TableCell>
                                                 <TableCell>{props.deliveryFromLabel}</TableCell>
                                                 <TableCell>{props.deliveryToLabel}</TableCell>
@@ -45,7 +47,7 @@ function StatusOrder(props) {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {props.orderItems.map((item, index) => {
+                                            {props.orderItems && props.orderItems.map((item, index) => {
                                                 let fabrics = null;
                                                 if (item.fabrics.length > 0) {
                                                     fabrics = item.fabrics.find(x => x.key === "primaryFabrics") ? item.fabrics.find(x => x.key === "primaryFabrics").values.join(", ") : "";
@@ -62,6 +64,8 @@ function StatusOrder(props) {
                                                         <TableCell>{item.name}</TableCell>
                                                         <TableCell>{fabrics}</TableCell>
                                                         <TableCell>{item.quantity}</TableCell>
+                                                        <TableCell>{item.stockQuantity}</TableCell>
+                                                        <TableCell>{item.outletQuantity}</TableCell>
                                                         <TableCell>{item.externalReference}</TableCell>
                                                         <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
                                                         <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>

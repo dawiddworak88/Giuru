@@ -144,13 +144,43 @@
   <data name="ClientSavedSuccessfully" xml:space="preserve">
     <value>Klient został pomyślnie zapisany.</value>
   </data>
+  <data name="ClientsGroups" xml:space="preserve">
+    <value>Grupy klientów</value>
+  </data>
   <data name="EditClient" xml:space="preserve">
     <value>Edytuj klienta</value>
+  </data>
+  <data name="EditGroup" xml:space="preserve">
+    <value>Edytuj grupę</value>
+  </data>
+  <data name="GroupDeleteClientConflict" xml:space="preserve">
+    <value>Usuń przypisanie klientów do tej grupy.</value>
+  </data>
+  <data name="GroupDeletedSuccessfully" xml:space="preserve">
+    <value>Grupa została usunięta.</value>
+  </data>
+  <data name="GroupNotFound" xml:space="preserve">
+    <value>Grupa nie została znaleziona.</value>
+  </data>
+  <data name="GroupSavedSuccessfully" xml:space="preserve">
+    <value>Grupa została pomyślnie zapisana.</value>
   </data>
   <data name="NavigateToClientsLabel" xml:space="preserve">
     <value>Powróć do klientów</value>
   </data>
+  <data name="NavigateToGroupsText" xml:space="preserve">
+    <value>Powróć do grup klientów</value>
+  </data>
   <data name="NewClient" xml:space="preserve">
     <value>Nowy klient</value>
+  </data>
+  <data name="NewGroup" xml:space="preserve">
+    <value>Nowa grupa</value>
+  </data>
+  <data name="NoGroupsText" xml:space="preserve">
+    <value>Brak dostępnych grup</value>
+  </data>
+  <data name="ResetPasswordText" xml:space="preserve">
+    <value>Zresetuj hasło</value>
   </data>
 </root>

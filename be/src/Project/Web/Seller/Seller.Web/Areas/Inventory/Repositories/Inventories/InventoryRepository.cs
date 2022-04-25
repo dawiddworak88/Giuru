@@ -213,7 +213,7 @@ namespace Seller.Web.Areas.Inventory.Repositories.Inventories
             }
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? WarehouseId, Guid? ProductId, string ProductName, string ProductSku, int Quantity, int? RestockableInDays, int? AvailableQuantity, DateTime? ExpectedDelivery, Guid? OrganisationId)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? WarehouseId, Guid? ProductId, string ProductName, string ProductSku, int Quantity, string ean, int? RestockableInDays, int? AvailableQuantity, DateTime? ExpectedDelivery, Guid? OrganisationId)
         {
             var requestModel = new SaveInventoryRequestModel
             {
@@ -223,6 +223,7 @@ namespace Seller.Web.Areas.Inventory.Repositories.Inventories
                 ProductName = ProductName,
                 ProductSku = ProductSku,
                 Quantity = Quantity,
+                Ean = ean,
                 RestockableInDays = RestockableInDays,
                 AvailableQuantity = AvailableQuantity,
                 ExpectedDelivery = ExpectedDelivery,

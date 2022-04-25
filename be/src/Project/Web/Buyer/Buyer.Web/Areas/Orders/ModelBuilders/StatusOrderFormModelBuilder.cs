@@ -50,6 +50,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 ExpectedDeliveryLabel = this.orderLocalizer.GetString("ExpectedDeliveryLabel"),
                 FabricsLabel = this.orderLocalizer.GetString("FabricsLabel"),
                 CustomOrderLabel = this.globalLocalizer.GetString("NonstandardOrderLabel")
+                OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
+                StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -73,6 +75,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     Name = x.ProductName,
                     ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
                     Quantity = x.Quantity,
+                    StockQuantity = x.StockQuantity,
+                    OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo,
                     Fabrics = x.ProductAttributes.OrEmptyIfNull().Select(x => new ProductAttribute

@@ -104,7 +104,8 @@ app.UseCustomHeaderRequestLocalizationProvider(builder.Configuration, app.Servic
 var eventBus = app.Services.GetService<IEventBus>();
 
 eventBus.Subscribe<UpdatedProductIntegrationEvent, IIntegrationEventHandler<UpdatedProductIntegrationEvent>>();
-eventBus.Subscribe<BasketCheckoutProductsIntegrationEvent, IIntegrationEventHandler<BasketCheckoutProductsIntegrationEvent>>();
+eventBus.Subscribe<BasketCheckoutStockProductsIntegrationEvent, IIntegrationEventHandler<BasketCheckoutStockProductsIntegrationEvent>>();
+eventBus.Subscribe<BasketCheckoutOutletProductsIntegrationEvent, IIntegrationEventHandler<BasketCheckoutOutletProductsIntegrationEvent>>();
 
 app.UseEndpoints(endpoints =>
 {

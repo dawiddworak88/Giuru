@@ -72,6 +72,12 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                     },
                     new MenuTileViewModel
                     {
+                        Icon = IconsConstants.Outlet,
+                        Title = this.globalLocalizer.GetString("Outlet"),
+                        Url = this.linkGenerator.GetPathByAction("Index", "Outlets", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name })
+                    },
+                    new MenuTileViewModel
+                    {
                         Icon = IconsConstants.Warehouses,
                         Title = this.globalLocalizer.GetString("Warehouses"),
                         Url = this.linkGenerator.GetPathByAction("Index", "Warehouses", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name })
@@ -81,6 +87,12 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                         Icon = IconsConstants.Users,
                         Title = this.globalLocalizer.GetString("Clients"),
                         Url = this.linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                    },
+                    new MenuTileViewModel
+                    {
+                        Icon = IconsConstants.Grid,
+                        Title = this.globalLocalizer.GetString("ClientsGroups"),
+                        Url = this.linkGenerator.GetPathByAction("Index", "ClientGroups", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                     },
                     new MenuTileViewModel
                     {

@@ -48,6 +48,8 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 NameLabel = this.orderLocalizer.GetString("NameLabel"),
                 OrderItemsLabel = this.orderLocalizer.GetString("OrderItemsLabel"),
                 QuantityLabel = this.orderLocalizer.GetString("QuantityLabel"),
+                StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
+                OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 ExternalReferenceLabel = this.orderLocalizer.GetString("ExternalReferenceLabel"),
                 SkuLabel = this.orderLocalizer.GetString("SkuLabel"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),

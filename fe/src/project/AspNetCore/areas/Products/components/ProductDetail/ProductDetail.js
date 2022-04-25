@@ -1,57 +1,56 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { Button, TextField } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import ImageGallery from "react-image-gallery";
 import Files from "../../../../shared/components/Files/Files";
-import { ShoppingCart, Done } from "@material-ui/icons";
 import { Context } from "../../../../../../shared/stores/Store";
 import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import Modal from "../../../../shared/components/Modal/Modal";
 
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
-    const [orderItems, setOrderItems] = React.useState(props.orderItems ? props.orderItems : []);
-    const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
-    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
-    const [quantity, setQuantity] = React.useState(1);
-    const [isProductOrdered, setIsProductOrdered] = React.useState(false);
-
-    const toggleSidebar = () => {
-        setIsSidebarOpen(true)
-    }
+    const [orderItems, setOrderItems] = useState(props.orderItems ? props.orderItems : []);
+    const [basketId, setBasketId] = useState(props.basketId ? props.basketId : null);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [productVariant, setProductVariant] = useState(null);
+    const [canActiveModal, setCanActiveModal] = useState(true);
 
     const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         let product = props;
-        if (!props.isProductVariant){
+        if (productVariant){
             product = {
-                productId: item.id,
-                sku: item.subtitle,
-                title: item.title,
-                images: item.images,
-                quantity: item.quantity,
-                externalReference: null, 
-                deliveryFrom: null, 
-                deliveryTo: null, 
-                moreInfo: null
-            };
+                productId: productVariant.id, 
+                sku: productVariant.subtitle, 
+                title: productVariant.title,
+                images: productVariant.images,
+            }
         }
 
+        const quantity = parseInt(item.quantity);
+        const stockQuantity = parseInt(item.stockQuantity);
+        const outletQuantity = parseInt(item.outletQuantity);
+
+        const totalQuantity = quantity + stockQuantity + outletQuantity;
         const orderItem = {
-            productId: product.productId, 
-            sku: product.sku, 
-            name: product.title, 
-            imageId: product.images ? product.images[0].id : null, 
-            quantity: product.quantity ? product.quantity : quantity, 
-            externalReference: null, 
-            deliveryFrom: null, 
-            deliveryTo: null, 
-            moreInfo: null
-        };
+            productId: product.productId,
+            sku: product.sku,
+            name: product.title,
+            imageId: product.images ? product.images[0].id : null,
+            quantity: quantity,
+            stockQuantity: stockQuantity,
+            outletQuantity: outletQuantity,
+            externalReference: item.externalReference, 
+            deliveryFrom:  moment(item.deliveryFrom).startOf("day"), 
+            deliveryTo: moment(item.deliveryTo).startOf("day"), 
+            moreInfo: item.moreInfo
+        }
 
         const basket = {
             id: basketId,
@@ -64,6 +63,10 @@ function ProductDetail(props) {
             body: JSON.stringify(basket)
         };
 
+        if (totalQuantity <= 0){
+            return toast.error(props.quantityErrorMessage);
+        }
+
         fetch(props.updateBasketUrl, requestOptions)
             .then(function (response) {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
@@ -71,7 +74,7 @@ function ProductDetail(props) {
                 AuthenticationHelper.HandleResponse(response);
 
                 return response.json().then(jsonResponse => {
-                    dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
+                    dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(totalQuantity + state.totalBasketItems) })
                     
                     if (response.ok) {
                         setBasketId(jsonResponse.id);
@@ -79,7 +82,7 @@ function ProductDetail(props) {
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
                             toast.success(props.successfullyAddedProduct)
                             setOrderItems(jsonResponse.items);
-                            setIsProductOrdered(true)
+                            setIsModalOpen(false);
                         }
                         else {
                             setOrderItems([]);
@@ -95,6 +98,26 @@ function ProductDetail(props) {
             });
     };
 
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    }
+
+    const handleModal = (item) => {
+        setIsModalOpen(true);
+        setProductVariant(item);
+        setCanActiveModal(false);
+    }
+
+    useEffect(() => {
+        if (isSidebarOpen){
+            setCanActiveModal(true);
+        }
+
+        if (!canActiveModal && !isModalOpen){
+            setIsSidebarOpen(true)
+        }
+    }, [canActiveModal, isModalOpen, isSidebarOpen])
+
     return (
         <section className="product-detail section">
             <div className="product-detail__head columns is-tablet">
@@ -107,8 +130,14 @@ function ProductDetail(props) {
                 </div>
                 <div className="column is-4">
                     <p className="product-detail__sku">{props.skuLabel} {props.sku}</p>
-                    <h1 className="title is-4">{props.title}</h1>
+                    {props.ean &&
+                        <p className="product-detail__ean">{props.eanLabel} {props.ean}</p>
+                    }
+                    <h1 className="title is-4 mt-1">{props.title}</h1>
                     <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
+                    {props.outletTitle &&
+                        <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>     
+                    }
                     {props.inStock && props.availableQuantity && props.availableQuantity > 0 &&
                         <div className="product-detail__in-stock">
                             {props.inStockLabel} {props.availableQuantity}
@@ -117,37 +146,25 @@ function ProductDetail(props) {
                             }
                         </div>
                     }
+                    {props.inOutlet && props.availableOutletQuantity && props.availableOutletQuantity > 0 &&
+                        <div className="product-detail__in-stock">
+                            {props.inOutletLabel} {props.availableOutletQuantity}
+                        </div>
+                    }
                     {props.isAuthenticated && 
                         <div className="product-detail__add-to-cart-button">
                             {props.isProductVariant ? (
                                 <div className="row">
-                                    <TextField 
-                                        id={props.productId} 
-                                        name="quantity" 
-                                        type="number" 
-                                        inputProps={{ 
-                                            min: 1, 
-                                            step: 1,
-                                            style: { textAlign: 'center' }
-                                        }}
-                                        value={quantity} 
-                                        onChange={(e) => {
-                                            if (e.target.value > 0) {
-                                                setQuantity(e.target.value);
-                                            }
-                                        }}
-                                        className="quantity-input"
-                                    />
-                                    <Button type="submit" startIcon={isProductOrdered ? <Done/> : <ShoppingCart />} variant="contained" color="primary" onClick={() => handleAddOrderItemClick()}>
-                                        {isProductOrdered ? props.addedProduct : props.basketLabel}
+                                    <Button type="text" variant="contained" color="primary" onClick={() => setIsModalOpen(true)}>
+                                        {props.basketLabel}
                                     </Button>
                                 </div>
                             ) : (
                                 <div className="product-detail__add-to-cart-button">
-                                <Button type="text" variant="contained" color="primary" onClick={toggleSidebar}>
-                                    {props.basketLabel}
-                                </Button>
-                            </div>
+                                    <Button type="text" variant="contained" color="primary" onClick={() => setIsSidebarOpen(true)}>
+                                        {props.basketLabel}
+                                    </Button>
+                                </div>
                             )}
                         </div>
                     }
@@ -178,12 +195,22 @@ function ProductDetail(props) {
                     isOpen={isSidebarOpen}
                     manyUses={false}
                     setIsOpen={setIsSidebarOpen}
-                    handleOrder={handleAddOrderItemClick}
+                    handleOrder={handleModal}
                     labels={props.sidebar}
                 />
             </div>
             <CarouselGrid items={props.productVariants} />
             <Files {...props.files} />
+            <Modal
+                isOpen={isModalOpen}
+                setIsOpen={setIsModalOpen}
+                handleClose={handleCloseModal}
+                maxOutletValue={productVariant ? productVariant.availableOutletQuantity : props.availableOutletQuantity}
+                maxStockValue={productVariant ? productVariant.availableQuantity : props.availableQuantity}
+                handleOrder={handleAddOrderItemClick}
+                product={productVariant ? productVariant : props}
+                labels={props.modal}
+            />
         </section>
     );
 }
@@ -210,7 +237,9 @@ ProductDetail.propTypes = {
     images: PropTypes.array,
     files: PropTypes.object,
     sidebar: PropTypes.object,
-    addedProduct: PropTypes.string
+    modal: PropTypes.object,
+    addedProduct: PropTypes.string,
+    eanLabel: PropTypes.string.isRequired
 };
 
 export default ProductDetail;
