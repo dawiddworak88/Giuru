@@ -9,7 +9,6 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 const WarehouseForm = (props) => {
 
     const [state, dispatch] = useContext(Context);
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : null, error: "" },
@@ -48,7 +47,6 @@ const WarehouseForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
-                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonRes.id });
                     }
                     else {
@@ -102,7 +100,7 @@ const WarehouseForm = (props) => {
                             type="subbmit" 
                             variant="contained"
                             color="primary"
-                            disabled={state.isLoading || disable || disableSaveButton}>
+                            disabled={state.isLoading || disable}>
                             {props.saveText}
                         </Button>
                         <Button 
