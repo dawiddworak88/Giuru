@@ -479,6 +479,7 @@
   </data>
   <data name="NonstandardOrderLabel" xml:space="preserve">
     <value>Nicht standardmäßige Bestellung:</value>
+  </data>
   <data name="ClientsGroups" xml:space="preserve">
     <value>Kundengruppen</value>
   </data>
