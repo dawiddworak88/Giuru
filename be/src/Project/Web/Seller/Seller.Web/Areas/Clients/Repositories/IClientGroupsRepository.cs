@@ -13,5 +13,6 @@ namespace Seller.Web.Areas.Clients.Repositories
         Task<ClientGroup> GetAsync(string token, string language, Guid? id);
         Task DeleteAsync(string token, string language, Guid? id);
         Task<IEnumerable<ClientGroup>> GetAsync(string token, string language);
+        Task<IEnumerable<ClientGroup>> GetClientGroupsAsync(string token, string language, IEnumerable<Guid> clientGroupIds);
     }
 }
