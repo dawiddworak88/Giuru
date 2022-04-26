@@ -37,19 +37,22 @@ namespace Identity.Api.Services.Roles
 
             var userRoles = await this.userManager.GetRolesAsync(user);
 
+            foreach (var userRole in userRoles.OrEmptyIfNull())
+            {
+                await this.userManager.RemoveFromRoleAsync(user, userRole);
+            }
+
             foreach (var role in model.Roles.OrEmptyIfNull())
             {
-                if (!userRoles.Contains(role))
+  
+                var roles = await this.roleManager.RoleExistsAsync(role);
+
+                if (roles is false)
                 {
-                    var roles = await this.roleManager.RoleExistsAsync(role);
-
-                    if (roles is false)
-                    {
-                        await this.roleManager.CreateAsync(new IdentityRole(role));
-                    }
-
-                    await this.userManager.AddToRoleAsync(user, role);
+                    await this.roleManager.CreateAsync(new IdentityRole(role));
                 }
+
+                await this.userManager.AddToRoleAsync(user, role);
             }
         }
     }

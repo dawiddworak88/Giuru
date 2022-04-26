@@ -10,6 +10,7 @@ using Seller.Web.Shared.ApiRequestModels;
 using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.DomainModels.Users;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Shared.Repositories.Identity
@@ -25,6 +26,30 @@ namespace Seller.Web.Shared.Repositories.Identity
         {
             this.apiClientService = apiClientService;
             this.settings = settings;
+        }
+
+        public async Task AssignRolesAsync(string token, string language, string email, IEnumerable<string> roles)
+        {
+            var requestModel = new RolesRequestModel
+            {
+                Email = email,
+                Roles = roles
+            };
+
+            var apiRequest = new ApiRequest<RolesRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.RolesApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.PostAsync<ApiRequest<RolesRequestModel>, RolesRequestModel, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode && response?.Data != null)
+            {
+                throw new CustomException(response.Data.Message, (int)response.StatusCode);
+            }
         }
 
         public async Task<User> GetAsync(string token, string language, string email)

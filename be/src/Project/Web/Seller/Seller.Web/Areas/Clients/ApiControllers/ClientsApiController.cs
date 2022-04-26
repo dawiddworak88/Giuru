@@ -88,7 +88,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
                     if (clientGroups is not null)
                     {
-                        await this.
+                        await this.identityRepository.AssignRolesAsync(token, language, model.Email, clientGroups.Select(x => x.Name));
                     }
                 }
             }
