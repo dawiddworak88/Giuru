@@ -1,5 +1,4 @@
-﻿using Foundation.Account.Definitions;
-using Foundation.ApiExtensions.Controllers;
+﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
 using Identity.Api.Services.Roles;
