@@ -8,7 +8,6 @@ using Inventory.Api.Infrastructure.Entities;
 using Inventory.Api.ServicesModels.InventoryServiceModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,7 +92,7 @@ namespace Inventory.Api.Services.InventoryItems
         {
             foreach (var item in model.InventoryItems.OrEmptyIfNull())
             {
-                var inventoryProduct = await this.context.Inventory.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.IsActive);
+                var inventoryProduct = await this.context.Inventory.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.WarehouseId == item.WarehouseId && x.IsActive);
 
                 if (inventoryProduct is not null)
                 {
@@ -114,7 +113,7 @@ namespace Inventory.Api.Services.InventoryItems
                 }
                 else
                 {
-                    var warehouse = await this.context.Warehouses.FirstOrDefaultAsync(x => x.Name.ToLowerInvariant() == item.WarehouseName.ToLowerInvariant());
+                    var warehouse = await this.context.Warehouses.FirstOrDefaultAsync(x => x.Id == item.WarehouseId);
 
                     if (warehouse is not null)
                     {

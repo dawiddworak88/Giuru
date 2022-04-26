@@ -210,11 +210,11 @@ namespace Inventory.Api.v1.Controllers
             {
                 InventoryItems = request.InventoryItems.OrEmptyIfNull().Select(x => new UpdateProductInventoryServiceModel
                 {
+                    WarehouseId = x.WarehouseId,
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
                     ProductSku = x.ProductSku,
                     ProductEan = x.Ean,
-                    WarehouseName = x.WarehouseName,
                     Quantity = x.Quantity,
                     AvailableQuantity = x.AvailableQuantity,
                     ExpectedDelivery = x.ExpectedDelivery,

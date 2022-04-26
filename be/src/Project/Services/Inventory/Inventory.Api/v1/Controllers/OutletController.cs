@@ -210,13 +210,14 @@ namespace Outlet.Api.v1.Controllers
             {
                 OutletItems = request.OutletItems.OrEmptyIfNull().Select(x => new UpdateOutletProductServiceModel
                 {
-                    AvailableQuantity = x.AvailableQuantity,
-                    Quantity = x.Quantity,
+                    WarehouseId = x.WarehouseId,
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
                     ProductSku = x.ProductSku,
-                    WarehouseId = x.WarehouseId,
-                    ProductEan = x.Ean
+                    ProductEan = x.Ean,
+                    Quantity = x.Quantity,
+                    AvailableQuantity = x.AvailableQuantity
+
                 }),
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
