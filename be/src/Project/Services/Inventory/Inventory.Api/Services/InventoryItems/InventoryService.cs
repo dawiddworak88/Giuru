@@ -8,6 +8,7 @@ using Inventory.Api.Infrastructure.Entities;
 using Inventory.Api.ServicesModels.InventoryServiceModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,28 +93,28 @@ namespace Inventory.Api.Services.InventoryItems
         {
             foreach (var item in model.InventoryItems.OrEmptyIfNull())
             {
-                var inventory = await this.context.Inventory.FirstOrDefaultAsync(x => x.ProductId == item.ProductId.Value && x.WarehouseId == item.WarehouseId.Value);
+                var inventoryProduct = await this.context.Inventory.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.IsActive);
 
-                if (inventory is not null)
+                if (inventoryProduct is not null)
                 {
-                    var inventoryItem = await this.context.Inventory.FirstOrDefaultAsync(x => x.Id == inventory.Id);
+                    var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == inventoryProduct.ProductId && x.IsActive);
 
-                    inventoryItem.ExpectedDelivery = item.ExpectedDelivery;
-                    inventoryItem.RestockableInDays = item.RestockableInDays;
-                    inventoryItem.AvailableQuantity = item.AvailableQuantity;
-                    inventoryItem.Quantity = item.Quantity;
-                    inventoryItem.LastModifiedDate = DateTime.UtcNow;
+                    if (product is not null)
+                    {
+                        product.Ean = item.ProductEan;
+                        product.Sku = item.ProductSku;
+                        product.Name = item.ProductName;
+                        product.LastModifiedDate = DateTime.UtcNow;
+                    }
 
-                    var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == inventoryItem.ProductId && x.IsActive);
-
-                    product.Ean = item.ProductEan;
-                    product.Sku = item.ProductSku;
-                    product.Name = item.ProductName;
-                    product.LastModifiedDate = DateTime.UtcNow;
+                    inventoryProduct.Quantity = item.Quantity;
+                    inventoryProduct.AvailableQuantity = item.AvailableQuantity;
+                    inventoryProduct.ExpectedDelivery = item.ExpectedDelivery;
+                    inventoryProduct.LastModifiedDate = DateTime.UtcNow;
                 }
                 else
                 {
-                    var warehouse = await this.context.Warehouses.FirstOrDefaultAsync(x => x.Id == item.WarehouseId && x.IsActive);
+                    var warehouse = await this.context.Warehouses.FirstOrDefaultAsync(x => x.Name.ToLowerInvariant() == item.WarehouseName.ToLowerInvariant());
 
                     if (warehouse is not null)
                     {
@@ -122,7 +123,7 @@ namespace Inventory.Api.Services.InventoryItems
                         if (product is null)
                         {
                             product = new Product
-                            { 
+                            {
                                 Name = item.ProductName,
                                 Sku = item.ProductSku,
                                 Ean = item.ProductEan
