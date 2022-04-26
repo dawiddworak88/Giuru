@@ -16,10 +16,10 @@ export default class GlobalHelper {
       },
       palette: {
         primary: {
-          main: "#647b76"
+          main: "#1B5A6E"
         },
         secondary: {
-          main: "#647b76"
+          main: "#1B5A6E"
         }
       }
     };
