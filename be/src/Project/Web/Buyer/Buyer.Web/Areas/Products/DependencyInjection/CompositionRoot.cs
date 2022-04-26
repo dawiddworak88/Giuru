@@ -1,14 +1,17 @@
 ﻿using Buyer.Web.Areas.Products.ComponentModels;
+using Buyer.Web.Areas.Products.ModelBuilders;
 using Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts;
 using Buyer.Web.Areas.Products.ModelBuilders.Brands;
 using Buyer.Web.Areas.Products.ModelBuilders.Categories;
 using Buyer.Web.Areas.Products.ModelBuilders.Products;
 using Buyer.Web.Areas.Products.ModelBuilders.SearchProducts;
+using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Categories;
 using Buyer.Web.Areas.Products.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.Services.Products;
+using Buyer.Web.Areas.Products.ViewModels;
 using Buyer.Web.Areas.Products.ViewModels.AvailableProducts;
 using Buyer.Web.Areas.Products.ViewModels.Brands;
 using Buyer.Web.Areas.Products.ViewModels.Categories;
@@ -28,6 +31,7 @@ namespace Buyer.Web.Areas.Products.DependencyInjection
             services.AddScoped<IProductsRepository, ProductsRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
+            services.AddScoped<IOutletRepository, OutletRepository>();
 
             services.AddScoped<IProductsService, ProductsService>();
 
@@ -45,6 +49,8 @@ namespace Buyer.Web.Areas.Products.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ProductBreadcrumbsViewModel>, ProductBreadcrumbsModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BrandDetailViewModel>, BrandDetailModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BrandPageViewModel>, BrandPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OutletPageViewModel>, OutletPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OutletPageCatalogViewModel>, OutletCatalogModelBuilder>();
         }
     }
 }

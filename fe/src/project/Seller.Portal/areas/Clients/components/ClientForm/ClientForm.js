@@ -10,14 +10,15 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
-    const [canCreateAccount, setCanCreateAccount] = useState(false);
+    const [canCreateAccount, setCanCreateAccount] = useState(props.hasAccount ? props.hasAccount : false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
         email: { value: props.email ? props.email : "", error: "" },
         communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
-        phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null }
+        phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null },
+        clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
+        hasAccount: { value: props.hasAccount ? props.hasAccount : false }
     };
 
     const stateValidatorSchema = {
@@ -62,7 +63,6 @@ function ClientForm(props) {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         setCanCreateAccount(true);
                         toast.success(jsonResponse.message);
@@ -118,7 +118,7 @@ function ClientForm(props) {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, email, communicationLanguage, phoneNumber } = values;
+    const { id, name, email, clientGroupIds, communicationLanguage, phoneNumber } = values;
     return (
         <section className="section section-small-padding product client-form">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -129,8 +129,7 @@ function ClientForm(props) {
                             <div className="field">
                                 <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
                             </div>
-                        }
-                        
+                        }                      
                         <div className="field">
                             <TextField 
                                 id="name" 
@@ -177,6 +176,28 @@ function ClientForm(props) {
                             </FormControl>
                         </div>
                         <div className="field">
+                            <FormControl fullWidth={true}>
+                                <InputLabel id="clientGroups-label">{props.groupsLabel}</InputLabel>
+                                <Select
+                                    labelId="clientGroups-label"
+                                    id="clientGroupIds"
+                                    name="clientGroupIds"
+                                    value={clientGroupIds}
+                                    multiple={true}
+                                    onChange={handleOnChange}>
+                                    {props.clientGroups && props.clientGroups.length > 0 ? (
+                                        props.clientGroups.map((group, index) => {
+                                            return (
+                                                <MenuItem key={index} value={group.id}>{group.name}</MenuItem>
+                                            );
+                                        })
+                                    ) : (
+                                        <MenuItem disabled>{props.noGroupsText}</MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <div className="field">
                             <TextField 
                                 id="phoneNumber" 
                                 name="phoneNumber" 
@@ -190,17 +211,8 @@ function ClientForm(props) {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || disable || disableSaveButton}>
+                                disabled={state.isLoading || disable}>
                                 {props.saveText}
-                            </Button>
-                            <Button 
-                                className="field-button"
-                                type="button" 
-                                color="secondary" 
-                                variant="contained" 
-                                onClick={createAccount} 
-                                disabled={state.isLoading || !canCreateAccount}>
-                                {props.accountText}
                             </Button>
                             <Button
                                 className="field-button"
@@ -212,6 +224,15 @@ function ClientForm(props) {
                                     NavigationHelper.redirect(props.clientsUrl);
                                 }}>
                                     {props.navigateToClientsLabel}
+                            </Button>
+                            <Button 
+                                className="field-button"
+                                type="button" 
+                                color="secondary" 
+                                variant="contained" 
+                                onClick={createAccount} 
+                                disabled={state.isLoading || !canCreateAccount}>
+                                {props.hasAccount ? props.resetPasswordText : props.accountText}
                             </Button>
                         </div>
                     </form>
@@ -243,7 +264,10 @@ ClientForm.propTypes = {
     saveUrl: PropTypes.string.isRequired,
     languages: PropTypes.array.isRequired,
     phoneNumberLabel: PropTypes.string.isRequired,
-    idLabel: PropTypes.string
+    resetPasswordText: PropTypes.string.isRequired,
+    idLabel: PropTypes.string,
+    noGroupsText: PropTypes.string.isRequired,
+    groupsLabel: PropTypes.string.isRequired
 };
 
 export default ClientForm;

@@ -8,11 +8,8 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function ProductAttributeItemForm(props) {
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const [state, dispatch] = useContext(Context);
-
     const stateSchema = {
-
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
         productAttributeId: { value: props.productAttributeId ? props.productAttributeId : null }
@@ -48,7 +45,6 @@ function ProductAttributeItemForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
@@ -83,8 +79,7 @@ function ProductAttributeItemForm(props) {
                         {id &&
                             <div className="field">
                                 <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
-                            </div>
-                        }
+                            </div>}
                         <input id="productAttributeId" name="productAttributeId" type="hidden" value={productAttributeId} />
                         <div className="field">
                             <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
@@ -95,7 +90,7 @@ function ProductAttributeItemForm(props) {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || disable || disableSaveButton}>
+                                disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
                             <Button

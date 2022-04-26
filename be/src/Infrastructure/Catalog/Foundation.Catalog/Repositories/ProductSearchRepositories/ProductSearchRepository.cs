@@ -62,6 +62,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
                 query = query && 
                     (Query<ProductSearchModel>.QueryString(d => d.Query(searchTerm))
                         || Query<ProductSearchModel>.Prefix(x => x.Sku, searchTerm.ToLowerInvariant())
+                        || Query<ProductSearchModel>.Prefix(x => x.Ean, searchTerm)
                         || Query<ProductSearchModel>.Match(x => x.Field(f => f.CategoryName).Query(searchTerm).Fuzziness(Fuzziness.Auto))
                         || Query<ProductSearchModel>.Prefix(x => x.Name.Suffix("keyword"), searchTerm));
             }
@@ -151,6 +152,42 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
             }
 
             query = query && idsQuery;
+
+            var response = await this.elasticClient.SearchAsync<ProductSearchModel>(q => q.From(ProductSearchConstants.Pagination.BeginningPage).Size(ProductSearchConstants.Pagination.ProductsMaxSize).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
+
+            if (response.IsValid && response.Hits.Any())
+            {
+                return new PagedResults<IEnumerable<ProductSearchModel>>(response.Total, (int)response.Total)
+                {
+                    Data = response.Documents
+                };
+            }
+
+            return default;
+        }
+
+        public async Task<PagedResults<IEnumerable<ProductSearchModel>>> GetAsync(string language, Guid? organisationId, IEnumerable<string> skus, string orderBy)
+        {
+            var query = Query<ProductSearchModel>.Term(t => t.Language, language)
+                && Query<ProductSearchModel>.Term(t => t.IsActive, true);
+
+            if (organisationId.HasValue)
+            {
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.SellerId).Value(organisationId.Value));
+            }
+            else
+            {
+                query = query && Query<ProductSearchModel>.Term(t => t.Field(x => x.IsPublished).Value(true));
+            }
+
+            var skusQuery = Query<ProductSearchModel>.MatchNone();
+
+            foreach (var sku in skus)
+            {
+                skusQuery = skusQuery || Query<ProductSearchModel>.Term(t => t.Field(x => x.Sku).Value(sku.ToLowerInvariant()));
+            }
+
+            query = query && skusQuery;
 
             var response = await this.elasticClient.SearchAsync<ProductSearchModel>(q => q.From(ProductSearchConstants.Pagination.BeginningPage).Size(ProductSearchConstants.Pagination.ProductsMaxSize).Query(q => query).Sort(s => orderBy.ToElasticSortList<ProductSearchModel>()));
 

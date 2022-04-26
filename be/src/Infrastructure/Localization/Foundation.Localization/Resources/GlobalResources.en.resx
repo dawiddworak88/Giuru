@@ -441,8 +441,20 @@
   <data name="Unauthorized" xml:space="preserve">
     <value>Unauthorized</value>
   </data>
+  <data name="Outlet" xml:space="preserve">
+    <value>Outlet</value>
+  </data>
   <data name="Basket" xml:space="preserve">
     <value>Cart</value>
+  </data>
+  <data name="InOutlet" xml:space="preserve">
+    <value>In outlet:</value>
+  </data>
+  <data name="MaximalLabel" xml:space="preserve">
+    <value>max:</value>
+  </data>
+  <data name="QuantityErrorMessage" xml:space="preserve">
+    <value>No selected quantity of the ordered product</value>
   </data>
   <data name="NewsCategories" xml:space="preserve">
     <value>News categories</value>
@@ -464,5 +476,20 @@
   </data>
   <data name="Ean" xml:space="preserve">
     <value>EAN:</value>
+  </data>
+  <data name="ClientsGroups" xml:space="preserve">
+    <value>Clients groups</value>
+  </data>
+  <data name="ClientsGroup" xml:space="preserve">
+    <value>Client group</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>Groups</value>
+  </data>
+  <data name="Discount" xml:space="preserve">
+    <value>Discount:</value>
+  </data>
+  <data name="TitleLabel" xml:space="preserve">
+    <value>Title:</value>
   </data>
 </root>

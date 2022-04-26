@@ -51,7 +51,9 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 SaveText = this.orderLocalizer.GetString("UpdateOrderStatus"),
                 ClientLabel = this.globalLocalizer.GetString("Client"),
                 CancelOrderLabel = this.orderLocalizer.GetString("CancelOrder"),
-                CancelOrderStatusUrl = this.linkGenerator.GetPathByAction("Cancel", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
+                CancelOrderStatusUrl = this.linkGenerator.GetPathByAction("Cancel", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
+                OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
+                StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -82,6 +84,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     Name = x.ProductName,
                     ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
                     Quantity = x.Quantity,
+                    StockQuantity = x.StockQuantity,
+                    OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo,
                     DeliveryFrom = x.ExpectedDeliveryFrom,

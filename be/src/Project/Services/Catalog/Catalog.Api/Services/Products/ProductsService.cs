@@ -256,7 +256,8 @@ namespace Catalog.Api.Services.Products
                 Username = model.Username,
                 ProductId = model.Id,
                 ProductName = model.Name,
-                ProductSku = model.Sku
+                ProductSku = model.Sku,
+                ProductEan = model.Ean
             };
 
             this.eventBus.Publish(message);
@@ -354,6 +355,13 @@ namespace Catalog.Api.Services.Products
         public IEnumerable<string> GetProductSuggestions(GetProductSuggestionsServiceModel model)
         {
             return this.productSearchRepository.GetProductSuggestions(model.SearchTerm, model.Size, model.Language, model.OrganisationId);
+        }
+
+        public async Task<PagedResults<IEnumerable<ProductServiceModel>>> GetBySkusAsync(GetProductsBySkusServiceModel model)
+        {
+            var products = await this.productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Skus, model.OrderBy);
+
+            return await this.MapToPageResultsAsync(products, model.Language, model.OrganisationId);
         }
 
         private async Task<PagedResults<IEnumerable<ProductServiceModel>>> MapToPageResultsAsync(PagedResults<IEnumerable<ProductSearchModel>> searchResults, string language, Guid? organisationId)

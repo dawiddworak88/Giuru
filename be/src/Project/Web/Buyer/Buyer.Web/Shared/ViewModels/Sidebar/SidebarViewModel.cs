@@ -8,12 +8,15 @@
         public string NotFound { get; set; }
         public string LackInformation { get; set; }
         public string SkuLabel { get; set; }
+        public string EanLabel { get; set; }
         public string FabricsLabel { get; set; }
         public string ProductsApiUrl { get; set; }
         public string AddToCartLabel { get; set; }
         public string GoToDetailsLabel { get; set; }
         public string InStockLabel { get; set; }
+        public string InOutletLabel { get; set; }
         public string LoadingLabel { get; set; }
         public string ExpectedDeliveryLabel { get; set; }
+        public string OutletTitleLabel { get; set; }
     }
 }

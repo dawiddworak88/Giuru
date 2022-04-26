@@ -13,7 +13,10 @@ namespace Foundation.PageContent.Components.CarouselGrids.ViewModels
         public string Title { get; set; }
         public string CategoryName { get; set; }
         public string Subtitle { get; set; }
+        public string Ean { get; set; }
+        public string OutletTitle { get; set; }
         public int? AvailableQuantity { get; set; }
+        public int? AvailableOutletQuantity { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
         public DateTime? CreatedDate { get; set; }
         public IEnumerable<SourceViewModel> Sources { get; set; }

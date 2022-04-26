@@ -6,8 +6,7 @@ import { CircularProgress } from "@material-ui/core";
 import {
     FormControl, InputLabel, Select, MenuItem, Button,
     Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, TextField
-} from "@material-ui/core";
+    TableHead, TableRow, Paper } from "@material-ui/core";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
@@ -96,46 +95,47 @@ function EditOrderForm(props) {
         <section className="section section-small-padding edit-order">
             <h1 className="subtitle is-4">{props.title}</h1>
             <h2 className="subtitle is-5 edit-order__items-subtitle">{props.orderStatusLabel}</h2>
-            {props.id &&
-                <div className="columns is-desktop mt-0 mb-0">
-                    <div className="column is-3 pb-0">
-                        <div className="field">
-                            <InputLabel id="id-label">{props.idLabel} {props.id}</InputLabel>
-                        </div>
-                    </div>
-                </div>
-            }
             <div className="columns is-desktop">
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOrderStatusSubmit} method="post">
                         <div className="columns is-desktop">
                             <div className="column">
+                            {props.id &&
                                 <div className="field">
-                                    <FormControl fullWidth={true}>
-                                        <InputLabel id="order-status-label">{props.orderStatusLabel}</InputLabel>
-                                        <Select
-                                            labelId="order-status-label"
-                                            id="orderStatus"
-                                            name="orderStatus"
-                                            value={orderStatusId}
-                                            onChange={(e) => {
-                                                e.preventDefault();
-                                                setOrderStatusId(e.target.value);
-                                            }}>
-                                            {props.orderStatuses.map(status => {
-                                                return (
-                                                    <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>
-                                                );
-                                            })}
-                                        </Select>
-                                    </FormControl>
-                                </div>
-                            </div>
-                            <div className="column">
-                                <div className="field">
-                                    <Button type="submit" variant="contained" color="primary" disabled={state.isLoading}>
-                                        {props.saveText}
-                                    </Button>
+                                    <InputLabel id="id-label">{props.idLabel} {props.id}</InputLabel>
+                                </div>}
+                                <div className="columns is-desktop">
+                                    <div className="column is-half">
+                                        <div className="field">
+                                            <FormControl fullWidth={true}>
+                                                <InputLabel id="order-status-label">{props.orderStatusLabel}</InputLabel>
+                                                <Select
+                                                    labelId="order-status-label"
+                                                    id="orderStatus"
+                                                    name="orderStatus"
+                                                    value={orderStatusId}
+                                                    onChange={(e) => {
+                                                        e.preventDefault();
+                                                        setOrderStatusId(e.target.value);
+                                                    }}>
+                                                    {props.orderStatuses.map(status => {
+                                                        return (
+                                                            <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>
+                                                        );
+                                                    })}
+                                                </Select>
+                                            </FormControl>
+                                    </div>
+                                    </div>
+                                    <div className="column is-half">
+                                        <div className="column">
+                                            <div className="field">
+                                                <Button type="submit" variant="contained" color="primary" disabled={state.isLoading}>
+                                                    {props.saveText}
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -173,6 +173,8 @@ function EditOrderForm(props) {
                                             <TableCell>{props.skuLabel}</TableCell>
                                             <TableCell>{props.nameLabel}</TableCell>
                                             <TableCell>{props.quantityLabel}</TableCell>
+                                            <TableCell>{props.stockQuantityLabel}</TableCell>
+                                            <TableCell>{props.outletQuantityLabel}</TableCell>
                                             <TableCell>{props.externalReferenceLabel}</TableCell>
                                             <TableCell>{props.deliveryFromLabel}</TableCell>
                                             <TableCell>{props.deliveryToLabel}</TableCell>
@@ -186,6 +188,8 @@ function EditOrderForm(props) {
                                                 <TableCell>{item.sku}</TableCell>
                                                 <TableCell>{item.name}</TableCell>
                                                 <TableCell>{item.quantity}</TableCell>
+                                                <TableCell>{item.stockQuantity}</TableCell>
+                                                <TableCell>{item.outletQuantity}</TableCell>
                                                 <TableCell>{item.externalReference}</TableCell>
                                                 <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
                                                 <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>

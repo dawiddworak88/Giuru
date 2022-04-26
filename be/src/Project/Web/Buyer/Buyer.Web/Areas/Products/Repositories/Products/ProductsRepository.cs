@@ -195,6 +195,39 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
             throw new CustomException(response.Data.Message, (int)response.StatusCode);
         }
 
+        public async Task<ProductStock> GetProductOutletAsync(Guid? id)
+        {
+            var productRequestModel = new ProductStockRequestModel
+            {
+                ProductId = id.Value,
+            };
+
+            var apiRequest = new ApiRequest<ProductStockRequestModel>
+            {
+                Data = productRequestModel,
+                EndpointAddress = $"{this.settings.Value.InventoryUrl}{ApiConstants.Outlet.ProductOutletApiEndpoint}/{id}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<ProductStockRequestModel>, ProductStockRequestModel, ProductStockResponseModel>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data != null)
+            {
+                return new ProductStock
+                {
+                    AvailableQuantity = response.Data.AvailableQuantity,
+                    RestockableInDays = response.Data.RestockableInDays,
+                    ExpectedDelivery = response.Data.ExpectedDelivery
+                };
+            }
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            throw new CustomException(response.Data.Message, (int)response.StatusCode);
+        }
+
         public async Task<IEnumerable<string>> GetProductSuggestionsAsync(string searchTerm, int size, string language, string token)
         {
             var productRequestModel = new ProductSuggestionsRequestModel
@@ -237,6 +270,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 BrandName = productResponse.BrandName,
                 CategoryId = productResponse.CategoryId,
                 CategoryName = productResponse.CategoryName,
+                Ean = productResponse.Ean,
                 ProductVariants = productResponse.ProductVariants,
                 Images = productResponse.Images,
                 Files = productResponse.Files,

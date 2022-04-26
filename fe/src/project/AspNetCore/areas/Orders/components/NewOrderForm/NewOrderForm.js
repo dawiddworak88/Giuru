@@ -37,7 +37,7 @@ function NewOrderForm(props) {
     const [suggestions, setSuggestions] = useState([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
-    const [showBackToOrdersListButton, setShowBackToOrdersListButton] = useState(false);
+    const [isOrdered, setIsOrdered] = useState(false);
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -223,7 +223,7 @@ function NewOrderForm(props) {
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
-                        setShowBackToOrdersListButton(true);
+                        setIsOrdered(true);
                     }
                 });
             }).catch(() => {
@@ -442,11 +442,15 @@ function NewOrderForm(props) {
                                                 <Table aria-label={props.orderItemsLabel}>
                                                     <TableHead>
                                                         <TableRow>
-                                                            <TableCell></TableCell>
+                                                            {!isOrdered &&
+                                                                <TableCell></TableCell>
+                                                            }
                                                             <TableCell></TableCell>
                                                             <TableCell>{props.skuLabel}</TableCell>
                                                             <TableCell>{props.nameLabel}</TableCell>
                                                             <TableCell>{props.quantityLabel}</TableCell>
+                                                            <TableCell>{props.stockQuantityLabel}</TableCell>
+                                                            <TableCell>{props.outletQuantityLabel}</TableCell>
                                                             <TableCell>{props.externalReferenceLabel}</TableCell>
                                                             <TableCell>{props.deliveryFromLabel}</TableCell>
                                                             <TableCell>{props.deliveryToLabel}</TableCell>
@@ -456,15 +460,19 @@ function NewOrderForm(props) {
                                                     <TableBody>
                                                         {orderItems.map((item, index) => (
                                                             <TableRow key={index}>
-                                                                <TableCell width="11%">
-                                                                    <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
-                                                                        <DeleteIcon />
-                                                                    </Fab>
-                                                                </TableCell>
+                                                                {!isOrdered &&
+                                                                    <TableCell width="11%">
+                                                                        <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
+                                                                            <DeleteIcon />
+                                                                        </Fab>
+                                                                    </TableCell>
+                                                                }
                                                                 <TableCell><a href={item.productUrl} rel="noreferrer" target="_blank"><img className="order__basket-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
                                                                 <TableCell>{item.sku}</TableCell>
                                                                 <TableCell>{item.name}</TableCell>
                                                                 <TableCell>{item.quantity}</TableCell>
+                                                                <TableCell>{item.stockQuantity}</TableCell>
+                                                                <TableCell>{item.outletQuantity}</TableCell>
                                                                 <TableCell>{item.externalReference}</TableCell>
                                                                 <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
                                                                 <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
@@ -486,7 +494,7 @@ function NewOrderForm(props) {
                     </div>
                 </Fragment>
                 <div className="field">
-                    {showBackToOrdersListButton ? (
+                    {isOrdered ? (
                         <Button type="button" variant="contained" color="primary" onClick={handleBackToOrdersClick}>
                             {props.navigateToOrdersListText}
                         </Button> 

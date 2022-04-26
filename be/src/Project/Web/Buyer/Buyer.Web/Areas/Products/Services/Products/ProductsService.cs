@@ -61,7 +61,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         BrandName = product.BrandName,
                         Images = product.Images,
                         InStock = false,
-                        ProductAttributes = product.ProductAttributes.Select(x => new CatalogItemProductAttributesViewModel
+                        ProductAttributes = product.ProductAttributes.OrEmptyIfNull().Select(x => new CatalogItemProductAttributesViewModel
                         {
                             Key = x.Key,
                             Value = string.Join(", ", x.Values.OrEmptyIfNull())

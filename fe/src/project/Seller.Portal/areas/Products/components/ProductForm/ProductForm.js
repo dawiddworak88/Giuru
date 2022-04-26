@@ -13,7 +13,6 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function ProductForm(props) {
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const categoriesProps = {
         options: props.categories,
         getOptionLabel: (option) => option.name
@@ -133,7 +132,6 @@ function ProductForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
@@ -171,8 +169,7 @@ function ProductForm(props) {
                         {id &&
                             <div className="field">
                                 <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
-                            </div>
-                        }
+                            </div>}
                         <div className="field">
                             <Autocomplete
                                 {...categoriesProps}
@@ -188,6 +185,15 @@ function ProductForm(props) {
                         <div className="field">
                             <TextField id="sku" name="sku" label={props.skuLabel} fullWidth={true}
                                 value={sku} onChange={handleOnChange} helperText={dirty.sku ? errors.sku : ""} error={(errors.sku.length > 0) && dirty.sku} />
+                        </div>
+                        <div className="field">
+                            <TextField 
+                                id="ean" 
+                                name="ean" 
+                                label={props.eanLabel} 
+                                fullWidth={true}
+                                value={ean} 
+                                onChange={handleOnChange} />
                         </div>
                         <div className="field">
                             <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
@@ -210,15 +216,6 @@ function ProductForm(props) {
                                 autoComplete
                                 renderInput={(params) => <TextField {...params} label={props.selectPrimaryProductLabel} margin="normal" />}
                             />
-                        </div>
-                        <div className="field">
-                            <TextField 
-                                id="ean" 
-                                name="ean" 
-                                label={props.eanLabel} 
-                                fullWidth={true}
-                                value={ean} 
-                                onChange={handleOnChange} />
                         </div>
                         <div className="field">
                             <MediaCloud
@@ -293,7 +290,7 @@ function ProductForm(props) {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || disable || disableSaveButton}>
+                                disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
                             <Button 

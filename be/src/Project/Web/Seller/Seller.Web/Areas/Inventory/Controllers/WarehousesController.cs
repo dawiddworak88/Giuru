@@ -1,5 +1,4 @@
-﻿using Seller.Web.Areas.Orders.ViewModel;
-using Foundation.Extensions.Controllers;
+﻿using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Microsoft.AspNetCore.Mvc;
 using Foundation.PageContent.ComponentModels;

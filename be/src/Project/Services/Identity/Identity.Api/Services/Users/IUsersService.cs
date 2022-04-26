@@ -11,5 +11,6 @@ namespace Identity.Api.Services.Users
         Task<UserServiceModel> UpdateAsync(UpdateUserServiceModel serviceModel);
         Task<UserServiceModel> SetPasswordAsync(SetUserPasswordServiceModel serviceModel);
         Task ResetPasswordAsync(ResetUserPasswordServiceModel serviceModel);
+        Task<UserServiceModel> GetByEmail(GetUserByEmailServiceModel serviceModel);
     }
 }

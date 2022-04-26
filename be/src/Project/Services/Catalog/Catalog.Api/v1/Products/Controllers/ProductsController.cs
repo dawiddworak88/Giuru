@@ -37,6 +37,59 @@ namespace Catalog.Api.v1.Products.Controllers
         }
 
         /// <summary>
+        /// Gets list of products by Skus.
+        /// </summary>
+        /// <param name="skus">The list of skus.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
+        /// <returns>The list of products.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [AllowAnonymous]
+        [Route("skus")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetBySkus(string skus, int pageIndex, int itemsPerPage, string orderBy)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+            var productSkus = skus.ToEnumerableString();
+            if (productSkus is not null)
+            {
+                var serviceModel = new GetProductsBySkusServiceModel
+                {
+                    Skus = productSkus,
+                    PageIndex = pageIndex,
+                    ItemsPerPage = itemsPerPage,
+                    OrderBy = orderBy,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                    Language = CultureInfo.CurrentCulture.Name
+                };
+
+                var validator = new GetProductsBySkusModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+                if (validationResult.IsValid)
+                {
+                    var products = await this.productService.GetBySkusAsync(serviceModel);
+                    if (products != null)
+                    {
+                        var response = new PagedResults<IEnumerable<ProductResponseModel>>(products.Total, products.PageSize)
+                        {
+                            Data = products.Data.OrEmptyIfNull().Select(x => MapProductServiceModelToProductResponseModel(x))
+                        };
+
+                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                    }
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
+
+            return default;
+        }
+
+        /// <summary>
         /// Returns products by search term. Returns all products (paginated) if search term is empty.
         /// </summary>
         /// <param name="ids">The list of product ids.</param>
