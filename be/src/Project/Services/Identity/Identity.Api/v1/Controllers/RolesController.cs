@@ -34,7 +34,6 @@ namespace Identity.Api.v1.Controllers
         /// </summary>
         /// <param name="request">The model.</param>
         [HttpPost, MapToApiVersion("1.0")]
-        [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
