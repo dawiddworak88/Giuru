@@ -8,6 +8,7 @@ using Identity.Api.Infrastructure;
 using Identity.Api.Infrastructure.Accounts.Entities;
 using Identity.Api.Repositories.AppSecrets;
 using Identity.Api.Services.Organisations;
+using Identity.Api.Services.Secrets;
 using Identity.Api.Services.Tokens;
 using Identity.Api.Services.Users;
 using IdentityServer4.Services;
@@ -89,6 +90,7 @@ namespace Identity.Api.DependencyInjection
             services.AddScoped<IOrganisationService, OrganisationService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<ISecretsService, SecretsService>();
         }
     }
 }
