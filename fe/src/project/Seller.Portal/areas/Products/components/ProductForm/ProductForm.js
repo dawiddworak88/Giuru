@@ -13,7 +13,6 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function ProductForm(props) {
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const categoriesProps = {
         options: props.categories,
         getOptionLabel: (option) => option.name
@@ -133,7 +132,6 @@ function ProductForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
@@ -292,7 +290,7 @@ function ProductForm(props) {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || disable || disableSaveButton}>
+                                disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
                             <Button 

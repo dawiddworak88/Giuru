@@ -10,7 +10,6 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const [canCreateAccount, setCanCreateAccount] = useState(props.hasAccount ? props.hasAccount : false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -64,7 +63,6 @@ function ClientForm(props) {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         setCanCreateAccount(true);
                         toast.success(jsonResponse.message);
@@ -213,17 +211,8 @@ function ClientForm(props) {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || disable || disableSaveButton}>
+                                disabled={state.isLoading || disable}>
                                 {props.saveText}
-                            </Button>
-                            <Button 
-                                className="field-button"
-                                type="button" 
-                                color="secondary" 
-                                variant="contained" 
-                                onClick={createAccount} 
-                                disabled={state.isLoading || !canCreateAccount}>
-                                {props.hasAccount ? props.resetPasswordText : props.accountText}
                             </Button>
                             <Button
                                 className="field-button"
@@ -235,6 +224,15 @@ function ClientForm(props) {
                                     NavigationHelper.redirect(props.clientsUrl);
                                 }}>
                                     {props.navigateToClientsLabel}
+                            </Button>
+                            <Button 
+                                className="field-button"
+                                type="button" 
+                                color="secondary" 
+                                variant="contained" 
+                                onClick={createAccount} 
+                                disabled={state.isLoading || !canCreateAccount}>
+                                {props.hasAccount ? props.resetPasswordText : props.accountText}
                             </Button>
                         </div>
                     </form>

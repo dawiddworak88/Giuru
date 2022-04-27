@@ -118,22 +118,23 @@ namespace Inventory.Api.Services.OutletItems
         {
             foreach (var item in model.OutletItems.OrEmptyIfNull())
             {
-                var outlet = await this.context.Outlet.FirstOrDefaultAsync(x => x.ProductId == item.ProductId.Value && x.WarehouseId == item.WarehouseId.Value);
+                var outletProduct = await this.context.Outlet.FirstOrDefaultAsync(x => x.ProductId == item.ProductId && x.WarehouseId == item.WarehouseId && x.IsActive);
 
-                if (outlet is not null)
+                if (outletProduct is not null)
                 {
-                    var outletItem = await this.context.Outlet.FirstOrDefaultAsync(x => x.Id == outlet.Id);
+                    var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == outletProduct.ProductId && x.IsActive);
 
-                    outletItem.AvailableQuantity = item.AvailableQuantity;
-                    outletItem.Quantity = item.Quantity;
-                    outletItem.LastModifiedDate = DateTime.UtcNow;
+                    if (product is not null)
+                    {
+                        product.Ean = item.ProductEan;
+                        product.Sku = item.ProductSku;
+                        product.Name = item.ProductName;
+                        product.LastModifiedDate = DateTime.UtcNow;
+                    }
 
-                    var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == outletItem.ProductId && x.IsActive);
-
-                    product.Ean = item.ProductEan;
-                    product.Sku = item.ProductSku;
-                    product.Name = item.ProductName;
-                    product.LastModifiedDate = DateTime.UtcNow;
+                    outletProduct.Quantity = item.Quantity;
+                    outletProduct.AvailableQuantity = item.AvailableQuantity;
+                    outletProduct.LastModifiedDate = DateTime.UtcNow;
                 }
                 else
                 {

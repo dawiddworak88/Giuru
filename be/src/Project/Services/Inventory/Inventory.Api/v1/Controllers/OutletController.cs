@@ -152,9 +152,7 @@ namespace Outlet.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetAvailableOutletProducts(
-            int pageIndex,
-            int itemsPerPage)
+        public async Task<IActionResult> GetAvailableOutletProducts(int pageIndex, int itemsPerPage)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -210,13 +208,14 @@ namespace Outlet.Api.v1.Controllers
             {
                 OutletItems = request.OutletItems.OrEmptyIfNull().Select(x => new UpdateOutletProductServiceModel
                 {
-                    AvailableQuantity = x.AvailableQuantity,
-                    Quantity = x.Quantity,
+                    WarehouseId = x.WarehouseId,
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
                     ProductSku = x.ProductSku,
-                    WarehouseId = x.WarehouseId,
-                    ProductEan = x.Ean
+                    ProductEan = x.Ean,
+                    Quantity = x.Quantity,
+                    AvailableQuantity = x.AvailableQuantity
+
                 }),
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
