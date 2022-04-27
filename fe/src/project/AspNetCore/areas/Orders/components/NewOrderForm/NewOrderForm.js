@@ -207,7 +207,7 @@ function NewOrderForm(props) {
         var order = {
             basketId,
             moreInfo: customOrder,
-            hasCustomOrder: hasCustomOrder
+            hasCustomOrder
         };
 
         const requestOptions = {

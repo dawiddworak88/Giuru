@@ -49,7 +49,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 OrderStatusLabel = this.orderLocalizer.GetString("OrderStatus"),
                 ExpectedDeliveryLabel = this.orderLocalizer.GetString("ExpectedDeliveryLabel"),
                 FabricsLabel = this.orderLocalizer.GetString("FabricsLabel"),
-                CustomOrderLabel = this.globalLocalizer.GetString("NonstandardOrderLabel"),
+                CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel")
             };

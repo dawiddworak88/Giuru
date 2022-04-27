@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Ordering.Api.Configurations;
-using Ordering.Api.Definitions;
 using Ordering.Api.Infrastructure;
 using Ordering.Api.Infrastructure.Orders.Definitions;
 using Ordering.Api.Infrastructure.Orders.Entities;
@@ -84,29 +83,27 @@ namespace Ordering.Api.Services
 
             this.context.Orders.Add(order.FillCommonProperties());
 
-            if (serviceModel.Items.OrEmptyIfNull().Any())
+            foreach (var basketItem in serviceModel.Items.OrEmptyIfNull())
             {
-                foreach (var basketItem in serviceModel.Items)
+                var orderItem = new OrderItem
                 {
-                    var orderItem = new OrderItem
-                    {
-                        OrderId = order.Id,
-                        ProductId = basketItem.ProductId.Value,
-                        ProductSku = basketItem.ProductSku,
-                        ProductName = basketItem.ProductName,
-                        PictureUrl = basketItem.PictureUrl,
-                        Quantity = basketItem.Quantity,
-                        StockQuantity = basketItem.StockQuantity,
-                        OutletQuantity = basketItem.OutletQuantity,
-                        ExternalReference = basketItem.ExternalReference,
-                        ExpectedDeliveryFrom = basketItem.ExpectedDeliveryFrom,
-                        ExpectedDeliveryTo = basketItem.ExpectedDeliveryTo,
-                        MoreInfo = basketItem.MoreInfo
-                    };
-             
-                    this.context.OrderItems.Add(orderItem.FillCommonProperties());
+                    OrderId = order.Id,
+                    ProductId = basketItem.ProductId.Value,
+                    ProductSku = basketItem.ProductSku,
+                    ProductName = basketItem.ProductName,
+                    PictureUrl = basketItem.PictureUrl,
+                    Quantity = basketItem.Quantity,
+                    StockQuantity = basketItem.StockQuantity,
+                    OutletQuantity = basketItem.OutletQuantity,
+                    ExternalReference = basketItem.ExternalReference,
+                    ExpectedDeliveryFrom = basketItem.ExpectedDeliveryFrom,
+                    ExpectedDeliveryTo = basketItem.ExpectedDeliveryTo,
+                    MoreInfo = basketItem.MoreInfo
                 };
-            }
+             
+                this.context.OrderItems.Add(orderItem.FillCommonProperties());
+            };
+            
 
             await this.context.SaveChangesAsync();
 
@@ -115,7 +112,7 @@ namespace Ordering.Api.Services
                 await this.mailingService.SendAsync(new Email
                 {
                     SenderName = this.configuration.Value.SenderName,
-                    Subject = OrdersConstants.Mailing.Subject + " " + serviceModel.ClientName + " (" + order.Id + ")",
+                    Subject = this.orderLocalizer.GetString("CustomOrderSubject").Value + " " + serviceModel.ClientName + " (" + order.Id + ")",
                     SenderEmailAddress = this.configuration.Value.SenderEmail,
                     PlainTextContent = serviceModel.MoreInfo,
                     RecipientEmailAddress = this.configuration.Value.SenderEmail

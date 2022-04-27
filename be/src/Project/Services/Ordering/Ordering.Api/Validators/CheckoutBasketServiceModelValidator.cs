@@ -15,30 +15,27 @@ namespace Ordering.Api.Validators
             this.RuleFor(x => x.SellerId).NotNull().NotEmpty();
             this.RuleFor(x => x).Must(y =>
             {
-                if (y.Items.OrEmptyIfNull().Any())
+                foreach (var item in y.Items.OrEmptyIfNull())
                 {
-                    foreach (var item in y.Items)
+                    if (!item.ProductId.HasValue || item.ProductId.Value == Guid.Empty)
                     {
-                        if (!item.ProductId.HasValue || item.ProductId.Value == Guid.Empty)
-                        {
-                            return false;
-                        }
+                        return false;
+                    }
 
-                        if (string.IsNullOrWhiteSpace(item.ProductSku))
-                        {
-                            return false;
-                        }
+                    if (string.IsNullOrWhiteSpace(item.ProductSku))
+                    {
+                        return false;
+                    }
 
-                        if (string.IsNullOrWhiteSpace(item.ProductName))
-                        {
-                            return false;
-                        }
+                    if (string.IsNullOrWhiteSpace(item.ProductName))
+                    {
+                        return false;
+                    }
 
-                        var totalQuantity = item.Quantity + item.StockQuantity + item.OutletQuantity;
-                        if (totalQuantity <= 0)
-                        {
-                            return false;
-                        }
+                    var totalQuantity = item.Quantity + item.StockQuantity + item.OutletQuantity;
+                    if (totalQuantity <= 0)
+                    {
+                        return false;
                     }
                 }
 

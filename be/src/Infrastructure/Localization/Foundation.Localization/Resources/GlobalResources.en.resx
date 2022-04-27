@@ -477,8 +477,8 @@
   <data name="Ean" xml:space="preserve">
     <value>EAN:</value>
   </data>
-  <data name="NonstandardOrderLabel" xml:space="preserve">
-    <value>Nonstandard order:</value>
+  <data name="CustomOrderLabel" xml:space="preserve">
+    <value>Custom order:</value>
   </data>
   <data name="ClientsGroups" xml:space="preserve">
     <value>Clients groups</value>

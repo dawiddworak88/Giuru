@@ -147,6 +147,9 @@
   <data name="CustomOrderLabel" xml:space="preserve">
     <value>Fügen Sie eine benutzerdefinierte Bestellung hinzu</value>
   </data>
+  <data name="CustomOrderSubject" xml:space="preserve">
+    <value>Sonderanfertigung von</value>
+  </data>
   <data name="DeliveryFrom" xml:space="preserve">
     <value>LIeferung ab:</value>
   </data>

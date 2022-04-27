@@ -147,6 +147,9 @@
   <data name="CustomOrderLabel" xml:space="preserve">
     <value>Dodaj zamówienie niestandardowe</value>
   </data>
+  <data name="CustomOrderSubject" xml:space="preserve">
+    <value>Niestandardowe zamówienie od</value>
+  </data>
   <data name="DeliveryFrom" xml:space="preserve">
     <value>Początkowa data dostawy:</value>
   </data>
