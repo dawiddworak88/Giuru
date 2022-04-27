@@ -78,15 +78,20 @@ namespace Inventory.Api.Services.OutletItems
 
         public async Task<OutletServiceModel> CreateAsync(CreateOutletServiceModel model)
         {
-            var product = new Product
+            var outletProduct = await this.context.Products.FirstOrDefaultAsync(x => x.Id == model.ProductId && x.IsActive);
+            
+            if (outletProduct is null)
             {
-                Id = model.ProductId.Value,
-                Ean = model.ProductEan,
-                Sku = model.ProductSku,
-                Name = model.ProductName
-            };
+                outletProduct = new Product
+                {
+                    Id = model.ProductId.Value,
+                    Ean = model.ProductEan,
+                    Sku = model.ProductSku,
+                    Name = model.ProductName
+                };
 
-            this.context.Products.Add(product.FillCommonProperties());
+                this.context.Products.Add(outletProduct.FillCommonProperties());
+            }
 
             var outletItem = new OutletItem
             {
