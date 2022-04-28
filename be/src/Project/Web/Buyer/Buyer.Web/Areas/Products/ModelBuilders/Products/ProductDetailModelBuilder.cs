@@ -99,7 +99,9 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                 Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel),
                 Modal = await this.modalModelBuilder.BuildModelAsync(componentModel),
                 EanLabel = this.globalLocalizer.GetString("Ean"),
-                OutletTitleLabel = this.globalLocalizer.GetString("Discount")
+                OutletTitleLabel = this.globalLocalizer.GetString("Discount"),
+                ReadMoreText = this.globalLocalizer.GetString("ReadMore"),
+                ReadLessText = this.globalLocalizer.GetString("ReadLess")
             };
 
             var product = await this.productsRepository.GetProductAsync(componentModel.Id, componentModel.Language, null);
