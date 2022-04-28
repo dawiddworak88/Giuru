@@ -209,16 +209,16 @@ namespace Inventory.Api.v1.Controllers
             var serviceModel = new UpdateProductsInventoryServiceModel
             {
                 InventoryItems = request.InventoryItems.OrEmptyIfNull().Select(x => new UpdateProductInventoryServiceModel
-                { 
-                    AvailableQuantity = x.AvailableQuantity,
-                    Quantity = x.Quantity,
-                    ProductEan = x.Ean,
-                    ExpectedDelivery = x.ExpectedDelivery,
+                {
+                    WarehouseId = x.WarehouseId,
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
                     ProductSku = x.ProductSku,
-                    RestockableInDays = x.RestockableInDays,
-                    WarehouseId = x.WarehouseId
+                    ProductEan = x.Ean,
+                    Quantity = x.Quantity,
+                    AvailableQuantity = x.AvailableQuantity,
+                    ExpectedDelivery = x.ExpectedDelivery,
+                    RestockableInDays = x.RestockableInDays
                 }),
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };

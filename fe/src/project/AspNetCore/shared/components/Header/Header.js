@@ -123,7 +123,7 @@ function Header(props) {
                                     renderSuggestion={renderSuggestion}
                                     inputProps={searchInputProps} 
                                 />
-                                <Button type="submit" variant="contained" color="primary" className="search-button">
+                                <Button type="submit" variant="contained" color="secondary" className="search-button">
                                     {props.searchLabel}
                                 </Button>
                             </div>
