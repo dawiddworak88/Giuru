@@ -9,4 +9,14 @@ module.exports = [
   'strapi::session',
   'strapi::favicon',
   'strapi::public',
+  {
+    name: "strapi::security",
+    config: {
+      contentSecurityPolicy: {
+        directives: {
+          'img-src': ["'self'", 'data:', `host.docker.internal:5131`],
+        }
+      }
+    }
+  }
 ];
