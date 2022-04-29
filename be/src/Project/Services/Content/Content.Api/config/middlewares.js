@@ -1,4 +1,4 @@
-module.exports = [
+module.exports = ({ env }) => [
   'strapi::errors',
   'strapi::security',
   'strapi::cors',
@@ -14,7 +14,7 @@ module.exports = [
     config: {
       contentSecurityPolicy: {
         directives: {
-          'img-src': ["'self'", 'data:', `host.docker.internal:5131`],
+          'img-src': ["'self'", 'data:', `${env("GIURU_MEDIA_API_URL")}`],
         }
       }
     }
