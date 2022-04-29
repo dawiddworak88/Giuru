@@ -31,7 +31,7 @@ SENDGRID_RESET_PASSWORD_TEMPLATE_ID=[PUT_YOUR_SENDGRID_RESET_ACCOUNT_TEMPLATE_ID
 1. Clone this repository
 2. Execute the following commands from the /fe folder to build fe:
 
-    npm install
+    npm install --legacy-peer-deps
 
     npm run build-fe
 

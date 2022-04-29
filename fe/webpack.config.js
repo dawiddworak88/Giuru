@@ -5,7 +5,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
-var browserConfig = {
+const browserConfig = {
     module: {
         rules: [
             {
@@ -45,12 +45,17 @@ var browserConfig = {
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
         }),
-        new CopyWebpackPlugin([{
-            from: path.resolve(__dirname, "wwwroot/src/*.png"),
-            to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-        }])
+        // new CopyWebpackPlugin({
+        //     patterns: [
+        //         {
+        //             from: path.resolve(__dirname, "wwwroot/src/*.png"),
+        //             to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
+        //         }
+        //     ]
+        // })
     ],
     optimization: {
+        minimize: true,
         minimizer: [
             new OptimizeCSSAssetsPlugin({}),
             new TerserPlugin({})
@@ -77,10 +82,16 @@ var browserConfig = {
         publicPath: path.resolve(__dirname, "../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),
         path: path.resolve(__dirname, "../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),
         filename: "[name].js"
+    },
+    devtool: "eval",
+    performance: {
+        hints: false,
+        maxEntrypointSize: 512000,
+        maxAssetSize: 512000
     }
 };
 
-var accountBrowserConfig = {
+const accountBrowserConfig = {
     module: {
         rules: [
             {
@@ -120,12 +131,13 @@ var accountBrowserConfig = {
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
         }),
-        new CopyWebpackPlugin([{
-            from: path.resolve(__dirname, "wwwroot/src/*.png"),
-            to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-        }])
+        // new CopyWebpackPlugin([{
+        //     from: path.resolve(__dirname, "wwwroot/src/*.png"),
+        //     to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
+        // }])
     ],
     optimization: {
+        minimize: true,
         minimizer: [
             new OptimizeCSSAssetsPlugin({}),
             new TerserPlugin({})
@@ -145,10 +157,16 @@ var accountBrowserConfig = {
         path: path.resolve(__dirname, "../be/src/Project/Services/Identity/Identity.Api/wwwroot/dist/js"),
         filename: "[name].js"
     },
-    target: "node"
+    target: "node",
+    devtool: "eval",
+    performance: {
+        hints: false,
+        maxEntrypointSize: 512000,
+        maxAssetSize: 512000
+    }
 };
 
-var sellerPortalBrowserConfig = {
+const sellerPortalBrowserConfig = {
     module: {
         rules: [
             {
@@ -188,12 +206,13 @@ var sellerPortalBrowserConfig = {
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
         }),
-        new CopyWebpackPlugin([{
-            from: path.resolve(__dirname, "wwwroot/src/*.png"),
-            to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-        }])
+        // new CopyWebpackPlugin([{
+        //     from: path.resolve(__dirname, "wwwroot/src/*.png"),
+        //     to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
+        // }])
     ],
     optimization: {
+        minimize: true,
         minimizer: [
             new OptimizeCSSAssetsPlugin({}),
             new TerserPlugin({})
@@ -233,7 +252,13 @@ var sellerPortalBrowserConfig = {
         publicPath: path.resolve(__dirname, "../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),
         path: path.resolve(__dirname, "../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),
         filename: "[name].js"
+    },
+    devtool: "eval",
+    performance: {
+        hints: false,
+        maxEntrypointSize: 512000,
+        maxAssetSize: 512000
     }
 };
 
-module.exports = [browserConfig, accountBrowserConfig, sellerPortalBrowserConfig];
+module.exports = [browserConfig, accountBrowserConfig, sellerPortalBrowserConfig]
