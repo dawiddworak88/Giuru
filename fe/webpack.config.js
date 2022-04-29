@@ -1,6 +1,6 @@
 ﻿const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
@@ -57,8 +57,8 @@ const browserConfig = {
     optimization: {
         minimize: true,
         minimizer: [
-            new OptimizeCSSAssetsPlugin({}),
-            new TerserPlugin({})
+            new TerserPlugin(),
+            new CssMinimizerPlugin()
         ]
     },
     resolve: {
@@ -83,7 +83,6 @@ const browserConfig = {
         path: path.resolve(__dirname, "../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),
         filename: "[name].js"
     },
-    devtool: "eval",
     performance: {
         hints: false,
         maxEntrypointSize: 512000,
@@ -139,8 +138,8 @@ const accountBrowserConfig = {
     optimization: {
         minimize: true,
         minimizer: [
-            new OptimizeCSSAssetsPlugin({}),
-            new TerserPlugin({})
+            new TerserPlugin(),
+            new CssMinimizerPlugin()
         ]
     },
     resolve: {
@@ -158,7 +157,6 @@ const accountBrowserConfig = {
         filename: "[name].js"
     },
     target: "node",
-    devtool: "eval",
     performance: {
         hints: false,
         maxEntrypointSize: 512000,
@@ -214,8 +212,8 @@ const sellerPortalBrowserConfig = {
     optimization: {
         minimize: true,
         minimizer: [
-            new OptimizeCSSAssetsPlugin({}),
-            new TerserPlugin({})
+            new TerserPlugin(),
+            new CssMinimizerPlugin()
         ]
     },
     resolve: {
@@ -253,7 +251,6 @@ const sellerPortalBrowserConfig = {
         path: path.resolve(__dirname, "../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),
         filename: "[name].js"
     },
-    devtool: "eval",
     performance: {
         hints: false,
         maxEntrypointSize: 512000,
