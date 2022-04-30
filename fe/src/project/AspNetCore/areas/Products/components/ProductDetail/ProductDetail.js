@@ -19,6 +19,7 @@ function ProductDetail(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productVariant, setProductVariant] = useState(null);
     const [canActiveModal, setCanActiveModal] = useState(true);
+    const [showMore, setShowMore] = useState(false);
 
     const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -175,18 +176,27 @@ function ProductDetail(props) {
                         </div>
                     }
                     {props.features && props.features.length > 0 &&
-                        <div className="product-detail__product-information">
-                            <h3 className="product-detail__feature-title">{props.productInformationLabel}</h3>
-                            <div className="product-detail__product-information-list">
-                                <dl>
-                                    {props.features.map((item, index) =>
-                                        <Fragment key={item.key}>
-                                            <dt>{item.key}</dt>
-                                            <dd>{item.value}</dd>
-                                        </Fragment>
-                                    )}
-                                </dl>
-                            </div>
+                        <div className="product-detail__read-more">
+                            {showMore ? (
+                                <Fragment>
+                                    <span className="product-details__read-more-text" onClick={() => setShowMore(false)}>{props.readLessText}</span>
+                                    <div className="product-detail__product-information">
+                                        <h3 className="product-detail__feature-title">{props.productInformationLabel}</h3>
+                                        <div className="product-detail__product-information-list">
+                                            <dl>
+                                                {props.features.map((item, index) =>
+                                                    <Fragment key={item.key}>
+                                                        <dt>{item.key}</dt>
+                                                        <dd>{item.value}</dd>
+                                                    </Fragment>
+                                                )}
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </Fragment>
+                            ) : (
+                                <span className="product-details__read-more-text" onClick={() => setShowMore(true)}>{props.readMoreText}</span>
+                            )}
                         </div>
                     }
                 </div>
@@ -199,7 +209,7 @@ function ProductDetail(props) {
                     labels={props.sidebar}
                 />
             </div>
-            <CarouselGrid items={props.productVariants} />
+            <CarouselGrid items={props.productVariants}/>
             <Files {...props.files} />
             <Modal
                 isOpen={isModalOpen}
@@ -239,7 +249,9 @@ ProductDetail.propTypes = {
     sidebar: PropTypes.object,
     modal: PropTypes.object,
     addedProduct: PropTypes.string,
-    eanLabel: PropTypes.string.isRequired
+    eanLabel: PropTypes.string.isRequired,
+    readLessText: PropTypes.string.isRequired,
+    readMoreText: PropTypes.string.isRequired
 };
 
 export default ProductDetail;
