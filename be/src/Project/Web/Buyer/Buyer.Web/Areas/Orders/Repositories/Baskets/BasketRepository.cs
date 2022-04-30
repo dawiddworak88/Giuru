@@ -86,7 +86,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             throw new CustomException(response.Message, (int)response.StatusCode);
         }
 
-        public async Task CheckoutBasketAsync(string token, string language, Guid? clientId, string clientName, Guid? basketId, DateTime? expectedDelivery, string moreInfo)
+        public async Task CheckoutBasketAsync(string token, string language, Guid? clientId, string clientName, Guid? basketId, DateTime? expectedDelivery, string moreInfo, bool hasCustomOrder)
         {
             var requestModel = new CheckoutBasketRequestModel
             {
@@ -94,7 +94,8 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 ClientName = clientName,
                 BasketId = basketId,
                 ExpectedDeliveryDate = expectedDelivery,
-                MoreInfo = moreInfo
+                MoreInfo = moreInfo,
+                HasCustomOrder = hasCustomOrder
             };
 
             var apiRequest = new ApiRequest<CheckoutBasketRequestModel>

@@ -4,8 +4,12 @@ using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
+using Foundation.Mailing.Models;
+using Foundation.Mailing.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Ordering.Api.Configurations;
 using Ordering.Api.Infrastructure;
 using Ordering.Api.Infrastructure.Orders.Definitions;
 using Ordering.Api.Infrastructure.Orders.Entities;
@@ -23,15 +27,21 @@ namespace Ordering.Api.Services
         private readonly OrderingContext context;
         private readonly IEventBus eventBus;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
+        private readonly IMailingService mailingService;
+        private readonly IOptions<AppSettings> configuration;
 
         public OrdersService(
             OrderingContext context,
             IEventBus eventBus,
-            IStringLocalizer<OrderResources> orderLocalizer)
+            IStringLocalizer<OrderResources> orderLocalizer,
+            IMailingService mailingService,
+            IOptions<AppSettings> configuration)
         {
             this.context = context;
             this.eventBus = eventBus;
             this.orderLocalizer = orderLocalizer;
+            this.mailingService = mailingService;
+            this.configuration = configuration;
         }
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel serviceModel)
@@ -73,7 +83,7 @@ namespace Ordering.Api.Services
 
             this.context.Orders.Add(order.FillCommonProperties());
 
-            foreach (var basketItem in serviceModel.Items)
+            foreach (var basketItem in serviceModel.Items.OrEmptyIfNull())
             {
                 var orderItem = new OrderItem
                 {
@@ -88,13 +98,26 @@ namespace Ordering.Api.Services
                     ExternalReference = basketItem.ExternalReference,
                     ExpectedDeliveryFrom = basketItem.ExpectedDeliveryFrom,
                     ExpectedDeliveryTo = basketItem.ExpectedDeliveryTo,
-                    MoreInfo = basketItem.MoreInfo                    
+                    MoreInfo = basketItem.MoreInfo
                 };
-
+             
                 this.context.OrderItems.Add(orderItem.FillCommonProperties());
-            }
+            };
+            
 
             await this.context.SaveChangesAsync();
+
+            if (serviceModel.HasCustomOrder)
+            {
+                await this.mailingService.SendAsync(new Email
+                {
+                    SenderName = this.configuration.Value.SenderName,
+                    Subject = this.orderLocalizer.GetString("CustomOrderSubject").Value + " " + serviceModel.ClientName + " (" + order.Id + ")",
+                    SenderEmailAddress = this.configuration.Value.SenderEmail,
+                    PlainTextContent = serviceModel.MoreInfo,
+                    RecipientEmailAddress = this.configuration.Value.SenderEmail
+                });
+            }
 
             var message = new OrderStartedIntegrationEvent
             { 

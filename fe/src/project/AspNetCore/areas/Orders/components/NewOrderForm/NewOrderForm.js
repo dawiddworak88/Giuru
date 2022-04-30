@@ -7,13 +7,12 @@ import MomentUtils from "@date-io/moment";
 import { MuiPickersUtilsProvider, KeyboardDatePicker,} from "@material-ui/pickers";
 import Autosuggest from "react-autosuggest";
 import { Context } from "../../../../../../shared/stores/Store";
-import { TextField, Button, IconButton, CircularProgress } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ClearIcon from "@material-ui/icons/Clear";
 import AddShoppingCartRounded from "@material-ui/icons/AddShoppingCartRounded";
 import {
-    Fab, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper
+    Fab, Table, TableBody, TableCell, TableContainer, FormControlLabel,
+    TableHead, TableRow, Paper, TextField, Button, IconButton, CircularProgress, Checkbox, NoSsr
 } from "@material-ui/core";
 import moment from "moment";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
@@ -37,6 +36,8 @@ function NewOrderForm(props) {
     const [suggestions, setSuggestions] = useState([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
+    const [customOrder, setCustomOrder] = useState(null);
+    const [hasCustomOrder, setHasCustomOrder] = useState(false);
     const [isOrdered, setIsOrdered] = useState(false);
 
     const onSuggestionsFetchRequested = (args) => {
@@ -205,6 +206,8 @@ function NewOrderForm(props) {
 
         var order = {
             basketId,
+            moreInfo: customOrder,
+            hasCustomOrder
         };
 
         const requestOptions = {
@@ -304,6 +307,9 @@ function NewOrderForm(props) {
                         setOrderItems([]);
                         setBasketId(null);
                     }
+
+                    setCustomOrder(null);
+                    setHasCustomOrder(false);
                 });
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
@@ -311,6 +317,7 @@ function NewOrderForm(props) {
             });
     }
 
+    const disabledActionButtons = orderItems.length === 0 ? !customOrder ? true : false : false
     return (
         <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -494,6 +501,43 @@ function NewOrderForm(props) {
                     </div>
                 </Fragment>
                 <div className="field">
+                    <NoSsr>
+                        <FormControlLabel 
+                            control={
+                                <Checkbox 
+                                    checked={hasCustomOrder}
+                                    defaultChecked
+                                    onChange={(e) => {
+                                        setHasCustomOrder(e.target.checked);
+                                    }}
+                                    disabled={isOrdered}/>
+                            }
+                            label={props.initCustomOrderLabel}
+                        />
+                    </NoSsr>
+                    {hasCustomOrder && 
+                        <div className="order__items">
+                            <TextField
+                                id="customOrder"
+                                name="customOrder"
+                                placeholder={props.customOrderLabel}
+                                InputProps={{
+                                    className: "p-2",
+                                    disableUnderline: true
+                                }}
+                                rows={OrderFormConstants.minRowsForCustomOrder()}
+                                fullWidth={true}
+                                multiline={true}
+                                value={customOrder}
+                                disabled={isOrdered}
+                                onChange={(e) => {
+                                    setCustomOrder(e.target.value);
+                                }}
+                            />
+                        </div>
+                    }
+                </div>
+                <div className="field">
                     {isOrdered ? (
                         <Button type="button" variant="contained" color="primary" onClick={handleBackToOrdersClick}>
                             {props.navigateToOrdersListText}
@@ -503,14 +547,15 @@ function NewOrderForm(props) {
                             <Button type="button" variant="contained"
                                 color="primary"
                                 onClick={handlePlaceOrder}
-                                disabled={state.isLoading || orderItems.length === 0}>
+                                disabled={state.isLoading || disabledActionButtons}
+                                >
                                 {props.saveText}
                             </Button>
                             <Button 
                                 className="order__clear-button" 
                                 color="secondary" variant="contained" 
                                 onClick={clearBasket} 
-                                disabled={state.isLoading || orderItems.length === 0}>
+                                disabled={state.isLoading || disabledActionButtons}>
                                     {props.clearBasketText}
                             </Button>
                         </>
@@ -565,11 +610,13 @@ NewOrderForm.propTypes = {
     ordersUrl: PropTypes.string.isRequired,
     placeOrderUrl: PropTypes.string.isRequired,
     navigateToOrdersListText: PropTypes.string.isRequired,
-    expectedDeliveryabel: PropTypes.string.isRequired,
+    expectedDeliveryLabel: PropTypes.string.isRequired,
     uploadOrderFileUrl: PropTypes.string.isRequired,
     orLabel: PropTypes.string.isRequired,
     dropOrSelectFilesLabel: PropTypes.string.isRequired,
-    dropFilesLabel: PropTypes.string.isRequired
+    dropFilesLabel: PropTypes.string.isRequired,
+    initCustomOrderLabel: PropTypes.string.isRequired,
+    customOrderLabel: PropTypes.string.isRequired
 };
 
 export default NewOrderForm;
