@@ -498,4 +498,10 @@
   <data name="TitleLabel" xml:space="preserve">
     <value>Tytuł:</value>
   </data>
+  <data name="ReadLess" xml:space="preserve">
+    <value>Czytaj mniej</value>
+  </data>
+  <data name="ReadMore" xml:space="preserve">
+    <value>Czytaj więcej</value>
+  </data>
 </root>

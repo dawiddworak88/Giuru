@@ -18,7 +18,7 @@
 
     &__discount {
         margin-top: 1rem;
-        color: darkgreen;
+        color: $inventory-color;
         font-size: 1.1rem;
         font-weight: 600;
     }
@@ -59,7 +59,7 @@
 
     &__in-stock {
         margin-top: 1rem;
-        color: darkgreen;
+        color: $inventory-color;
         font-size: 1.1rem;
         font-weight: 600;
 
@@ -84,6 +84,11 @@
         .row {
             display: flex;
         }
+    }
+
+    &__read-more-text {
+        text-decoration: underline;
+        cursor: pointer;
     }
 
     &__product-information {
