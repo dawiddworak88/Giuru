@@ -88,7 +88,7 @@ namespace Inventory.Api.Services.InventoryItems
             return await this.GetAsync(new GetInventoryServiceModel { Id = inventory.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
         }
 
-        public async Task SyncInventoryProducts(UpdateProductsInventoryServiceModel model)
+        public async Task SyncProductsInventories(UpdateProductsInventoryServiceModel model)
         {
             foreach (var item in model.InventoryItems.OrEmptyIfNull())
             {
@@ -123,6 +123,7 @@ namespace Inventory.Api.Services.InventoryItems
                         {
                             product = new Product
                             {
+                                Id = item.ProductId.Value,
                                 Name = item.ProductName,
                                 Sku = item.ProductSku,
                                 Ean = item.ProductEan

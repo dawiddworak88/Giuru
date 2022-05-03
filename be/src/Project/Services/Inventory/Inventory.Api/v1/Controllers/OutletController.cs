@@ -225,7 +225,7 @@ namespace Outlet.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.outletsService.SyncOutletProducts(serviceModel);
+                await this.outletsService.SyncProductsOutlet(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }

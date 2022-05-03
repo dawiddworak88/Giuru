@@ -119,7 +119,7 @@ namespace Inventory.Api.Services.OutletItems
             return await this.GetAsync(new GetOutletServiceModel { Id = outletItem.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
-        public async Task SyncOutletProducts(UpdateOutletProductsServiceModel model)
+        public async Task SyncProductsOutlet(UpdateOutletProductsServiceModel model)
         {
             foreach (var item in model.OutletItems.OrEmptyIfNull())
             {
@@ -153,6 +153,7 @@ namespace Inventory.Api.Services.OutletItems
                         {
                             product = new Product
                             {
+                                Id = item.ProductId.Value,
                                 Name = item.ProductName,
                                 Sku = item.ProductSku,
                                 Ean = item.ProductEan
