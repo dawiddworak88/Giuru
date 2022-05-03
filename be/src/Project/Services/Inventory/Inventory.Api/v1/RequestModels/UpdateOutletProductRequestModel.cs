@@ -11,5 +11,7 @@ namespace Inventory.Api.v1.RequestModels
         public int Quantity { get; set; }
         public string Ean { get; set; }
         public int AvailableQuantity { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
     }
 }

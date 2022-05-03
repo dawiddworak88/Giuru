@@ -145,9 +145,9 @@ namespace Inventory.Api.Services.InventoryItems
                         this.context.Inventory.Add(inventoryItem.FillCommonProperties());
                     }
                 }
-            }
 
-            await this.context.SaveChangesAsync();
+                await this.context.SaveChangesAsync();
+            }
         }
 
         public async Task<InventoryServiceModel> GetAsync(GetInventoryServiceModel model)

@@ -137,6 +137,27 @@ namespace Inventory.Api.Services.OutletItems
                         product.LastModifiedDate = DateTime.UtcNow;
                     }
 
+                    var outletItemTranslation = await this.context.OutletTranslations.FirstOrDefaultAsync(x => x.OutletItemId == outletProduct.Id && x.Language == model.Language && x.IsActive);
+
+                    if (outletItemTranslation is not null)
+                    {
+                        outletItemTranslation.Title = item.Title;
+                        outletItemTranslation.Description = item.Description;
+                        outletItemTranslation.LastModifiedDate = DateTime.UtcNow;
+                    }
+                    else
+                    {
+                        outletItemTranslation = new OutletItemTranslation
+                        {
+                            OutletItemId = outletProduct.Id,
+                            Title = item.Title,
+                            Description = item.Description,
+                            Language = model.Language
+                        };
+
+                        this.context.OutletTranslations.Add(outletItemTranslation.FillCommonProperties());
+                    }
+
                     outletProduct.Quantity = item.Quantity;
                     outletProduct.AvailableQuantity = item.AvailableQuantity;
                     outletProduct.LastModifiedDate = DateTime.UtcNow;
@@ -172,11 +193,21 @@ namespace Inventory.Api.Services.OutletItems
                         };
 
                         this.context.Outlet.Add(outletItem.FillCommonProperties());
+
+                        var outletItemTranslation = new OutletItemTranslation
+                        {
+                            OutletItemId = outletItem.Id,
+                            Title = item.Title,
+                            Description = item.Description,
+                            Language = model.Language
+                        };
+
+                        this.context.OutletTranslations.Add(outletItemTranslation.FillCommonProperties());
                     }
                 }
-            }
 
-            await this.context.SaveChangesAsync();
+                await this.context.SaveChangesAsync();
+            }
         }
 
         public async Task<OutletServiceModel> GetAsync(GetOutletServiceModel model)
