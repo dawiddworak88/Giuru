@@ -21,6 +21,7 @@ import ConfirmationDialog from "../../../../../../shared/components/Confirmation
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import IconConstants from "../../../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -39,6 +40,7 @@ function NewOrderForm(props) {
     const [customOrder, setCustomOrder] = useState(null);
     const [hasCustomOrder, setHasCustomOrder] = useState(false);
     const [isOrdered, setIsOrdered] = useState(false);
+    const [attachments, setAttachments] = useState([]);
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -516,25 +518,45 @@ function NewOrderForm(props) {
                         />
                     </NoSsr>
                     {hasCustomOrder && 
-                        <div className="order__items">
-                            <TextField
-                                id="customOrder"
-                                name="customOrder"
-                                placeholder={props.customOrderLabel}
-                                InputProps={{
-                                    className: "p-2",
-                                    disableUnderline: true
-                                }}
-                                rows={OrderFormConstants.minRowsForCustomOrder()}
-                                fullWidth={true}
-                                multiline={true}
-                                value={customOrder}
-                                disabled={isOrdered}
-                                onChange={(e) => {
-                                    setCustomOrder(e.target.value);
-                                }}
-                            />
-                        </div>
+                        <Fragment>
+                            <div className="order__items">
+                                <TextField
+                                    id="customOrder"
+                                    name="customOrder"
+                                    placeholder={props.customOrderLabel}
+                                    InputProps={{
+                                        className: "p-2",
+                                        disableUnderline: true
+                                    }}
+                                    rows={OrderFormConstants.minRowsForCustomOrder()}
+                                    fullWidth={true}
+                                    multiline={true}
+                                    value={customOrder}
+                                    disabled={isOrdered}
+                                    onChange={(e) => {
+                                        setCustomOrder(e.target.value);
+                                    }}
+                                />
+                            </div>
+                            <div className="mt-3">
+                                <MediaCloud 
+                                    id="attachments"
+                                    name="attachments"
+                                    label={props.attachmentsLabel}
+                                    accept=".pdf, .docx, .zip, .xls, .xlsx, .png, .jpg"
+                                    multiple={true}
+                                    generalErrorMessage={props.generalErrorMessage}
+                                    deleteLabel={props.deleteLabel}
+                                    dropFilesLabel={props.dropFilesLabel}
+                                    dropOrSelectFilesLabel={props.dropOrSelectAttachmentsLabel}
+                                    files={attachments}
+                                    setFieldValue={({value}) => {
+                                        setAttachments(value);
+                                    }}
+                                    saveMediaUrl={props.saveMediaUrl}
+                                />
+                            </div>
+                        </Fragment>
                     }
                 </div>
                 <div className="field">

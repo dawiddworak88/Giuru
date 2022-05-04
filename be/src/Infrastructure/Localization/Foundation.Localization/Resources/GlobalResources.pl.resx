@@ -504,4 +504,10 @@
   <data name="ReadMore" xml:space="preserve">
     <value>Czytaj więcej</value>
   </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Załączniki:</value>
+  </data>
+  <data name="DropOrSelectAttachments" xml:space="preserve">
+    <value>Upuść lub wybierz załącznik</value>
+  </data>
 </root>
