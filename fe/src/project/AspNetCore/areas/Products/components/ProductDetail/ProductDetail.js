@@ -177,7 +177,7 @@ function ProductDetail(props) {
                         </div>
                     }
                     {props.features && props.features.length > 0 &&
-                        <div className="product-detail__read-more">
+                        <div className="product-detail__read-more mt-2">
                             {showMore ? (
                                 <Fragment>
                                     <div className="is-flex is-justify-content-center">
