@@ -86,9 +86,13 @@
         }
     }
 
-    &__read-more-text {
-        text-decoration: underline;
-        cursor: pointer;
+    &__read-more {
+        .read-more-text {
+            display: flex;
+            align-items: center;
+            text-decoration: underline;
+            cursor: pointer;
+        }
     }
 
     &__product-information {

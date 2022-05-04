@@ -1,13 +1,35 @@
 @import "swiper/swiper.scss";
+@import "swiper/swiper-bundle.min";
+@import "swiper/components/navigation/navigation.min";
 
 .swiper-wrapper {
     max-width: 1180px;
+}
+
+.swiper-container {
+    position: none;
 }
 
 .menu-tiles {
     display: flex;
     justify-content: center;
     padding: 1.5rem;
+    max-width: 1380px;
+    position: relative;
+    margin: 0 auto;
+
+    &__prev,
+    &__next {
+        color: $primary;
+    }
+
+    &__next {
+        inset: 50% 2rem auto auto;
+    }
+
+    &__prev {
+        inset: 50% auto auto 2rem;
+    }
 
     .tile {
         display: inline-block;
