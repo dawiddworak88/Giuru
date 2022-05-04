@@ -10,6 +10,7 @@ import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import Modal from "../../../../shared/components/Modal/Modal";
+import { ExpandMore, ExpandLess } from "@material-ui/icons"
 
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
@@ -117,7 +118,7 @@ function ProductDetail(props) {
         if (!canActiveModal && !isModalOpen){
             setIsSidebarOpen(true)
         }
-    }, [canActiveModal, isModalOpen, isSidebarOpen])
+    }, [canActiveModal, isModalOpen, isSidebarOpen]);
 
     return (
         <section className="product-detail section">
@@ -179,7 +180,9 @@ function ProductDetail(props) {
                         <div className="product-detail__read-more">
                             {showMore ? (
                                 <Fragment>
-                                    <span className="product-details__read-more-text" onClick={() => setShowMore(false)}>{props.readLessText}</span>
+                                    <div className="is-flex is-justify-content-center">
+                                        <span className="read-more-text" onClick={() => setShowMore(false)}>{props.readLessText} <ExpandLess/></span>
+                                    </div>
                                     <div className="product-detail__product-information">
                                         <h3 className="product-detail__feature-title">{props.productInformationLabel}</h3>
                                         <div className="product-detail__product-information-list">
@@ -195,7 +198,9 @@ function ProductDetail(props) {
                                     </div>
                                 </Fragment>
                             ) : (
-                                <span className="product-details__read-more-text" onClick={() => setShowMore(true)}>{props.readMoreText}</span>
+                                <div className="is-flex is-justify-content-center">
+                                    <span className="read-more-text" onClick={() => setShowMore(true)}>{props.readMoreText} <ExpandMore/></span>
+                                </div>
                             )}
                         </div>
                     }
