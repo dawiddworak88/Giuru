@@ -1,9 +1,6 @@
 import React from "react";
 
-import FormControl from "@material-ui/core/FormControl";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
+import { FormControl, MenuItem, Select, InputLabel } from "@mui/material"
 import { asNumber, guessType } from "../utils/utils";
 const nums = new Set(["number", "integer"]);
 

@@ -2,16 +2,14 @@ import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
-import { CircularProgress } from "@material-ui/core";
 import {
     FormControl, InputLabel, Select, MenuItem, Button,
     Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper } from "@material-ui/core";
+    TableHead, TableRow, Paper, CircularProgress } from "@mui/material";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function EditOrderForm(props) {
-
     const [state, dispatch] = useContext(Context);
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
 

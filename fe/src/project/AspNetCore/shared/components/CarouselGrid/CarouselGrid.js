@@ -5,7 +5,7 @@ import ResponsiveImage from "../../../../../shared/components/Picture/Responsive
 import LazyLoad from "react-lazyload";
 import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
 import CarouselConstants from "../Carousel/CarouselConstants";
-import { CalendarToday } from "@material-ui/icons";
+import { CalendarToday } from "@mui/icons-material";
 import { Hash } from "react-feather";
 import moment from "moment";
 

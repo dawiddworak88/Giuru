@@ -6,9 +6,9 @@ import ResponsiveImage from "../../../../../shared/components/Picture/Responsive
 import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
 import { Context } from "../../../../../shared/stores/Store";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
-import { TablePagination, Button } from "@material-ui/core";
+import { TablePagination, Button } from "@mui/material";
 import CatalogConstants from "./CatalogConstants";
-import { ShoppingCart } from "@material-ui/icons";
+import { ShoppingCart } from "@mui/icons-material";
 import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";

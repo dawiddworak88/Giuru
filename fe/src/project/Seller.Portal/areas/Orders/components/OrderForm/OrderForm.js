@@ -4,21 +4,14 @@ import { UploadCloud } from "react-feather";
 import { useDropzone } from "react-dropzone";
 import PropTypes from "prop-types";
 import MomentUtils from "@date-io/moment";
-import {
-    MuiPickersUtilsProvider,
-    KeyboardDatePicker,
-} from "@material-ui/pickers";
+import { DatePicker, LocalizationProvider } from "@mui/lab";
 import Autosuggest from "react-autosuggest";
-import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Context } from "../../../../../../shared/stores/Store";
-import { TextField, Button, IconButton, CircularProgress } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
-import ClearIcon from "@material-ui/icons/Clear";
-import AddShoppingCartRounded from "@material-ui/icons/AddShoppingCartRounded";
+import { Clear, Delete, AddShoppingCartRounded } from "@mui/icons-material"
 import {
-    Fab, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper
-} from "@material-ui/core";
+    Fab, Table, TableBody, TableCell, TableContainer, Autocomplete, 
+    TableHead, TableRow, Paper, TextField, Button, IconButton, CircularProgress
+} from "@mui/material";
 import moment from "moment";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
@@ -391,8 +384,8 @@ function OrderForm(props) {
                                     }} />
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <MuiPickersUtilsProvider utils={MomentUtils}>
-                                    <KeyboardDatePicker
+                                <LocalizationProvider utils={MomentUtils}>
+                                    <DatePicker
                                         id="deliveryFrom"
                                         label={props.deliveryFromLabel}
                                         value={deliveryFrom}
@@ -404,7 +397,7 @@ function OrderForm(props) {
                                         InputProps={{
                                             endAdornment: (
                                                 <IconButton onClick={() => setDeliveryFrom(null)}>
-                                                    <ClearIcon />
+                                                    <Clear />
                                                 </IconButton>
                                             )
                                         }}
@@ -415,11 +408,11 @@ function OrderForm(props) {
                                             "aria-label": props.changeDeliveryFromLabel
                                         }} 
                                         disablePast={true}/>
-                                </MuiPickersUtilsProvider>
+                                </LocalizationProvider>
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <MuiPickersUtilsProvider utils={MomentUtils}>
-                                    <KeyboardDatePicker
+                                <LocalizationProvider utils={MomentUtils}>
+                                    <DatePicker
                                         id="deliveryTo"
                                         label={props.deliveryToLabel}
                                         value={deliveryTo}
@@ -431,7 +424,7 @@ function OrderForm(props) {
                                         InputProps={{
                                             endAdornment: (
                                                 <IconButton onClick={() => setDeliveryTo(null)}>
-                                                    <ClearIcon />
+                                                    <Clear />
                                                 </IconButton>
                                             )
                                         }}
@@ -442,7 +435,7 @@ function OrderForm(props) {
                                             "aria-label": props.changeDeliveryToLabel
                                         }} 
                                         disablePast={true}/>
-                                </MuiPickersUtilsProvider>
+                                </LocalizationProvider>
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
                                 <TextField id="moreInfo" name="moreInfo" type="text" label={props.moreInfoLabel}
@@ -483,7 +476,7 @@ function OrderForm(props) {
                                                             <TableRow key={index}>
                                                                 <TableCell width="11%">
                                                                     <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
-                                                                        <DeleteIcon />
+                                                                        <Delete />
                                                                     </Fab>
                                                                 </TableCell>
                                                                 <TableCell><a href={item.productUrl} target="_blank"><img className="order__basket-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>

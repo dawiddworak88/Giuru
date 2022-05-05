@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
-import NoSsr from '@material-ui/core/NoSsr';
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
@@ -10,9 +9,9 @@ import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaClou
 import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import { 
-    TextField, Select, FormControl, FormControlLabel, Switch, 
+    TextField, Select, FormControl, FormControlLabel, Switch, NoSsr,
     InputLabel, MenuItem, Button, CircularProgress, FormHelperText
-} from "@material-ui/core";
+} from "@mui/material";
 import { stateToMarkdown } from "draft-js-export-markdown";
 import { stateFromMarkdown } from 'draft-js-import-markdown';
 

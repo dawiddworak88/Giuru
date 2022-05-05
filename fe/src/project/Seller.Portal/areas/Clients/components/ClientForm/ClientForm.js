@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from "@material-ui/core";
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from "@mui/material";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";

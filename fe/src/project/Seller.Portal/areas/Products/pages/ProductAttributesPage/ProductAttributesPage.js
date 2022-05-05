@@ -1,6 +1,6 @@
 import React from "react";
 import { toast } from "react-toastify";
-import { ThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider } from "@mui/styles";
 import Store from "../../../../../../shared/stores/Store";
 import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
 import LocaleHelper from "../../../../../../shared/helpers/globals/LocaleHelper";
@@ -12,7 +12,6 @@ import Catalog from "../../../../../../shared/components/Catalog/Catalog";
 function ProductAttributesPage(props) {
 
   toast.configure();
-
   LocaleHelper.setMomentLocale(props.locale);
 
   return (

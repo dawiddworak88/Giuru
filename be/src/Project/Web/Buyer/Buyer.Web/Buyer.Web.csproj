@@ -39,7 +39,4 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\Security\Foundation.Security\Foundation.Security.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\PageContent\Foundation.PageContent\Foundation.PageContent.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="wwwroot\dist\" />
-  </ItemGroup>
 </Project>

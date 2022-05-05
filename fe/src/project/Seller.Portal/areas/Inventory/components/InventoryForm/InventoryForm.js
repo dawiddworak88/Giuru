@@ -1,16 +1,15 @@
-import React, {useState, useContext} from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Autocomplete from "@mui/lab/Autocomplete";
 import {
-    FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress, IconButton
-} from "@material-ui/core";
-import { Clear } from "@material-ui/icons";
-import { TextField, Button } from "@material-ui/core";
+    FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress, IconButton, TextField, Button
+} from "@mui/material";
+import { Clear } from "@mui/icons-material";
 import { Context } from "../../../../../../shared/stores/Store";
 import { toast } from "react-toastify";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
-import { MuiPickersUtilsProvider, KeyboardDatePicker,} from "@material-ui/pickers";
+import { LocalizationProvider, DatePicker,} from "@mui/lab";
 import MomentUtils from "@date-io/moment";
 import QuantityValidator from "../../../../../../shared/helpers/validators/QuantityValidator";
 
@@ -202,8 +201,8 @@ const InventoryForm = (props) => {
                                 onChange={handleOnChange}/>
                         </div>
                         <div className="field">
-                            <MuiPickersUtilsProvider utils={MomentUtils} >
-                                <KeyboardDatePicker
+                            <LocalizationProvider utils={MomentUtils} >
+                                <DatePicker
                                     id="expectedDelivery"
                                     label={props.expectedDeliveryLabel}
                                     value={expectedDelivery}
@@ -227,7 +226,7 @@ const InventoryForm = (props) => {
                                         "aria-label": props.changeExpectedDeliveryLabel
                                     }} 
                                     disablePast={true}/>
-                            </MuiPickersUtilsProvider>
+                            </LocalizationProvider>
                         </div>
                         <div className="field">
                             <Button 

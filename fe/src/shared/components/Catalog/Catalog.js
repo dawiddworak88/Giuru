@@ -5,13 +5,12 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { Plus } from "react-feather";
 import {
-    Delete, Edit
-} from "@material-ui/icons";
-import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+    Delete, Edit, FileCopyOutlined
+} from "@mui/icons-material";
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, TablePagination, CircularProgress, Fab
-} from "@material-ui/core";
+} from "@mui/material";
 import KeyConstants from "../../constants/KeyConstants";
 import { Context } from "../../stores/Store";
 import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializer";
@@ -234,7 +233,7 @@ function Catalog(props) {
                                                                 </Fab>)
                                                             else if (actionItem.isDuplicate) return (
                                                                 <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary" aria-label={props.duplicateLabel}>
-                                                                    <FileCopyOutlinedIcon />
+                                                                    <FileCopyOutlined />
                                                                 </Fab>)
                                                             else return (
                                                                 <div></div>)})}

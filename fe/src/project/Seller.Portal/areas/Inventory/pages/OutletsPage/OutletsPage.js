@@ -1,6 +1,6 @@
 import React from "react";
 import { toast } from "react-toastify";
-import { ThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider } from "@mui/styles";
 import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
 import Header from "../../../../../../shared/components/Header/Header";
 import Store from "../../../../../../shared/stores/Store";
@@ -17,12 +17,10 @@ const OutletsPage = (props) => {
   return (
     <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
       <Store>
-        <div>
-          <Header {...props.header}></Header>
-          <MenuTiles {...props.menuTiles} />
-          <Catalog {...props.catalog} />
-          <Footer {...props.footer}></Footer>
-        </div>
+        <Header {...props.header}></Header>
+        <MenuTiles {...props.menuTiles} />
+        <Catalog {...props.catalog} />
+        <Footer {...props.footer}></Footer>
       </Store>
     </ThemeProvider>
   );

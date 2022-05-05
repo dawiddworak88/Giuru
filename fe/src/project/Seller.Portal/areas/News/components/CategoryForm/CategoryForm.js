@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -7,7 +7,7 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import { 
     TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress 
-} from "@material-ui/core";
+} from "@mui/material";
 
 const CategoryForm = (props) => {
     const [state, dispatch] = useContext(Context);

@@ -1,11 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-import NoSsr from '@material-ui/core/NoSsr';
-import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
-import { TextField, Button, CircularProgress, FormControlLabel, Switch, InputLabel } from "@material-ui/core";
+import { TextField, Button, CircularProgress, FormControlLabel, Switch, InputLabel, NoSsr, Autocomplete } from "@mui/material";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import DynamicForm from "../../../../../../shared/components/DynamicForm/DynamicForm";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";

@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { TextField, IconButton, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@material-ui/core";
-import { Clear } from "@material-ui/icons";
+import { TextField, IconButton, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import { Clear } from "@mui/icons-material";
 import PropTypes from "prop-types";
-import {
-    MuiPickersUtilsProvider,
-    KeyboardDatePicker,
-} from "@material-ui/pickers";
+import { LocalizationProvider, DatePicker } from "@mui/lab";
 import MomentUtils from "@date-io/moment";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 
@@ -139,8 +136,8 @@ const Modal = (props) => {
                         }} />
                 </div>
                 <div className="field">
-                    <MuiPickersUtilsProvider utils={MomentUtils}>
-                        <KeyboardDatePicker
+                    <LocalizationProvider utils={MomentUtils}>
+                        <DatePicker
                             id="deliveryFrom"
                             label={labels.deliveryFromLabel}
                             onChange={(date) => {
@@ -164,11 +161,11 @@ const Modal = (props) => {
                             value={deliveryFrom}
                             fullWidth={true}
                             disablePast={true}/>
-                    </MuiPickersUtilsProvider>
+                    </LocalizationProvider>
                 </div>
                 <div className="field">
-                    <MuiPickersUtilsProvider utils={MomentUtils}>
-                        <KeyboardDatePicker
+                    <LocalizationProvider utils={MomentUtils}>
+                        <DatePicker
                             id="deliveryTo"
                             label={labels.deliveryToLabel}
                             onChange={(date) => {
@@ -192,7 +189,7 @@ const Modal = (props) => {
                             fullWidth={true}
                             value={deliveryTo}
                             disablePast={true}/>
-                    </MuiPickersUtilsProvider>
+                    </LocalizationProvider>
                 </div>
                 <div className="field">
                     <TextField 

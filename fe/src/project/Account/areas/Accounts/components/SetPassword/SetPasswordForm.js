@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
-import { TextField, Button, CircularProgress } from "@material-ui/core";
+import { TextField, Button, CircularProgress } from "@mui/material";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import PasswordValidator from "../../../../../../shared/helpers/validators/PasswordValidator";
 import { toast } from "react-toastify";
