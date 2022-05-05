@@ -8,9 +8,11 @@ WORKDIR /home/node/aspnetcore-react-ssr
 
 COPY package*.json ./
 
-USER node
+USER root
 
-RUN npm ci --only=production
+RUN npm ci --only=production --legacy-peer-deps
+
+USER node
 
 COPY --chown=node:node . .
 
