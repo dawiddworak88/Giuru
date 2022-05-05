@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { toast } from "react-toastify";
-import { ThemeProvider } from "@mui/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import Store from "../../../../../../shared/stores/Store";
 import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
 import LocaleHelper from "../../../../../../shared/helpers/globals/LocaleHelper";
