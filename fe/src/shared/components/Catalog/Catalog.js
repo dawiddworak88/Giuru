@@ -19,7 +19,7 @@ import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 
 function Catalog(props) {
-
+    console.log(props.theme)
     const [state, dispatch] = useContext(Context);
     const [page, setPage] = React.useState(0);
     const [itemsPerPage,] = React.useState(PaginationConstants.defaultRowsPerPage());

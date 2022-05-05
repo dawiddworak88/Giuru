@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const browserConfig = {
     module: {
@@ -43,6 +44,14 @@ const browserConfig = {
         new CleanWebpackPlugin({
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
+        }),
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: path.resolve(__dirname, "wwwroot/*.png"),
+                    to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
+                }
+            ]
         })
     ],
     optimization: {
@@ -119,6 +128,14 @@ const accountBrowserConfig = {
         new CleanWebpackPlugin({
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
+        }),
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: path.resolve(__dirname, "wwwroot/*.png"),
+                    to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
+                }
+            ]
         })
     ],
     optimization: {
@@ -189,6 +206,14 @@ const sellerPortalBrowserConfig = {
         new CleanWebpackPlugin({
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
+        }),
+        new CopyWebpackPlugin({
+            patterns: [
+                {
+                    from: path.resolve(__dirname, "wwwroot/*.png"),
+                    to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
+                }
+            ]
         })
     ],
     optimization: {
