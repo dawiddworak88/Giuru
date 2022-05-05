@@ -111,13 +111,13 @@
             margin-bottom: 0.5rem;
 
             .stock {
-                color: darkgreen;
+                color: $inventory-color;
                 font-size: 0.8rem;
                 font-weight: 600;
             }
 
             .expected-delivery {
-                color: darkgreen;
+                color: $inventory-color;
                 font-size: 0.7rem;
                 font-weight: 600;
             }

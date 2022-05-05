@@ -36,6 +36,6 @@ namespace Ordering.Api.ServicesModels
         public string ExternalReference { get; set; }
         public DateTime? ExpectedDeliveryDate { get; set; }
         public IEnumerable<CheckoutBasketItemServiceModel> Items { get; set; }
-
+        public bool HasCustomOrder { get; set; }
     }
 }

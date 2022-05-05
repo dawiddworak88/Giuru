@@ -2,9 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import {
     Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper
+    TableHead, TableRow, Paper, TextField
 } from "@material-ui/core";
 import moment from "moment";
+import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
 
 function StatusOrder(props) {
 
@@ -22,62 +23,81 @@ function StatusOrder(props) {
                     </div>
                 }
             </div>
-            <div className="mt-5">
-                <h2 className="subtitle is-5 status-order__items-subtitle">{props.orderItemsLabel}</h2>
-                <div className="edit-order__items">
-                    <section className="section">
-                        <div className="orderitems__table">
-                            <TableContainer component={Paper}>
-                                <Table aria-label={props.orderItemsLabel}>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell></TableCell>
-                                            <TableCell>{props.skuLabel}</TableCell>
-                                            <TableCell>{props.nameLabel}</TableCell>
-                                            <TableCell>{props.fabricsLabel}</TableCell>
-                                            <TableCell>{props.quantityLabel}</TableCell>
-                                            <TableCell>{props.stockQuantityLabel}</TableCell>
-                                            <TableCell>{props.outletQuantityLabel}</TableCell>
-                                            <TableCell>{props.externalReferenceLabel}</TableCell>
-                                            <TableCell>{props.deliveryFromLabel}</TableCell>
-                                            <TableCell>{props.deliveryToLabel}</TableCell>
-                                            <TableCell>{props.moreInfoLabel}</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {props.orderItems && props.orderItems.map((item, index) => {
-                                            let fabrics = null;
-                                            if (item.fabrics.length > 0) {
-                                                fabrics = item.fabrics.find(x => x.key === "primaryFabrics") ? item.fabrics.find(x => x.key === "primaryFabrics").values.join(", ") : "";
+            {props.orderItems && props.orderItems.length > 0 &&
+                <div className="mt-5">
+                    <h2 className="subtitle is-5 mb-2">{props.orderItemsLabel}</h2>
+                    <div className="status-order__items">
+                        <section className="section">
+                            <div className="orderitems__table">
+                                <TableContainer component={Paper}>
+                                    <Table aria-label={props.orderItemsLabel}>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell></TableCell>
+                                                <TableCell>{props.skuLabel}</TableCell>
+                                                <TableCell>{props.nameLabel}</TableCell>
+                                                <TableCell>{props.fabricsLabel}</TableCell>
+                                                <TableCell>{props.quantityLabel}</TableCell>
+                                                <TableCell>{props.stockQuantityLabel}</TableCell>
+                                                <TableCell>{props.outletQuantityLabel}</TableCell>
+                                                <TableCell>{props.externalReferenceLabel}</TableCell>
+                                                <TableCell>{props.deliveryFromLabel}</TableCell>
+                                                <TableCell>{props.deliveryToLabel}</TableCell>
+                                                <TableCell>{props.moreInfoLabel}</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {props.orderItems && props.orderItems.map((item, index) => {
+                                                let fabrics = null;
+                                                if (item.fabrics.length > 0) {
+                                                    fabrics = item.fabrics.find(x => x.key === "primaryFabrics") ? item.fabrics.find(x => x.key === "primaryFabrics").values.join(", ") : "";
 
-                                                let secondaryFabrics = item.fabrics.find(x => x.key === "secondaryFabrics") ? item.fabrics.find(x => x.key === "secondaryFabrics").values.join(", ") : "";
-                                                if (secondaryFabrics){
-                                                    fabrics += ", " + secondaryFabrics;
+                                                    let secondaryFabrics = item.fabrics.find(x => x.key === "secondaryFabrics") ? item.fabrics.find(x => x.key === "secondaryFabrics").values.join(", ") : "";
+                                                    if (secondaryFabrics){
+                                                        fabrics += ", " + secondaryFabrics;
+                                                    }
                                                 }
-                                            }
-                                            return (
-                                                <TableRow key={index}>
-                                                    <TableCell><a href={item.productUrl}><img className="status-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
-                                                    <TableCell>{item.sku}</TableCell>
-                                                    <TableCell>{item.name}</TableCell>
-                                                    <TableCell>{fabrics}</TableCell>
-                                                    <TableCell>{item.quantity}</TableCell>
-                                                    <TableCell>{item.stockQuantity}</TableCell>
-                                                    <TableCell>{item.outletQuantity}</TableCell>
-                                                    <TableCell>{item.externalReference}</TableCell>
-                                                    <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
-                                                    <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
-                                                    <TableCell>{item.moreInfo}</TableCell>
-                                                </TableRow>
-                                            )
-                                        })}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </div>
-                    </section>
+                                                return (
+                                                    <TableRow key={index}>
+                                                        <TableCell><a href={item.productUrl}><img className="status-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
+                                                        <TableCell>{item.sku}</TableCell>
+                                                        <TableCell>{item.name}</TableCell>
+                                                        <TableCell>{fabrics}</TableCell>
+                                                        <TableCell>{item.quantity}</TableCell>
+                                                        <TableCell>{item.stockQuantity}</TableCell>
+                                                        <TableCell>{item.outletQuantity}</TableCell>
+                                                        <TableCell>{item.externalReference}</TableCell>
+                                                        <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
+                                                        <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
+                                                        <TableCell>{item.moreInfo}</TableCell>
+                                                    </TableRow>
+                                                )
+                                            })}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </div>
+                        </section>
+                    </div>
                 </div>
-            </div>
+            }
+            {props.customOrder &&
+                <div className="mt-5">
+                    <h2 className="subtitle is-5 mb-2">{props.customOrderLabel}</h2>
+                    <div className="status-order__items">
+                        <TextField 
+                            value={props.customOrder}
+                            fullWidth={true}
+                            multiline={true}
+                            disabled={true}
+                            rows={OrderFormConstants.minRowsForCustomOrder()}
+                            InputProps={{ 
+                                className: "p-2" 
+                            }}
+                        />
+                    </div>
+                </div>
+            }
         </section >
     );
 }
@@ -95,6 +115,7 @@ StatusOrder.propTypes = {
     orderItemsLabel: PropTypes.string.isRequired,
     orderStatusLabel: PropTypes.string.isRequired,
     orderStatusId: PropTypes.string.isRequired,
+    customOrderLabel: PropTypes.string.isRequired
 };
 
 export default StatusOrder;

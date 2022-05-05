@@ -38,6 +38,7 @@
     "react-scripts": "5.0.1",
     "react-toastify": "8.2.0",
     "shortid": "2.2.16",
+    "swiper": "6.8.4",
     "whatwg-fetch": "3.6.2"
   },
   "scripts": {

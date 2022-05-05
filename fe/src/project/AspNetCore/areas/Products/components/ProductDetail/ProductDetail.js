@@ -10,6 +10,7 @@ import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import Modal from "../../../../shared/components/Modal/Modal";
+import { ExpandMore, ExpandLess } from "@material-ui/icons"
 
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
@@ -19,6 +20,7 @@ function ProductDetail(props) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productVariant, setProductVariant] = useState(null);
     const [canActiveModal, setCanActiveModal] = useState(true);
+    const [showMore, setShowMore] = useState(false);
 
     const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
@@ -116,7 +118,7 @@ function ProductDetail(props) {
         if (!canActiveModal && !isModalOpen){
             setIsSidebarOpen(true)
         }
-    }, [canActiveModal, isModalOpen, isSidebarOpen])
+    }, [canActiveModal, isModalOpen, isSidebarOpen]);
 
     return (
         <section className="product-detail section">
@@ -175,18 +177,31 @@ function ProductDetail(props) {
                         </div>
                     }
                     {props.features && props.features.length > 0 &&
-                        <div className="product-detail__product-information">
-                            <h3 className="product-detail__feature-title">{props.productInformationLabel}</h3>
-                            <div className="product-detail__product-information-list">
-                                <dl>
-                                    {props.features.map((item, index) =>
-                                        <Fragment key={item.key}>
-                                            <dt>{item.key}</dt>
-                                            <dd>{item.value}</dd>
-                                        </Fragment>
-                                    )}
-                                </dl>
-                            </div>
+                        <div className="product-detail__read-more mt-2">
+                            {showMore ? (
+                                <Fragment>
+                                    <div className="is-flex is-justify-content-center">
+                                        <span className="read-more-text" onClick={() => setShowMore(false)}>{props.readLessText} <ExpandLess/></span>
+                                    </div>
+                                    <div className="product-detail__product-information">
+                                        <h3 className="product-detail__feature-title">{props.productInformationLabel}</h3>
+                                        <div className="product-detail__product-information-list">
+                                            <dl>
+                                                {props.features.map((item, index) =>
+                                                    <Fragment key={item.key}>
+                                                        <dt>{item.key}</dt>
+                                                        <dd>{item.value}</dd>
+                                                    </Fragment>
+                                                )}
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </Fragment>
+                            ) : (
+                                <div className="is-flex is-justify-content-center">
+                                    <span className="read-more-text" onClick={() => setShowMore(true)}>{props.readMoreText} <ExpandMore/></span>
+                                </div>
+                            )}
                         </div>
                     }
                 </div>
@@ -199,7 +214,7 @@ function ProductDetail(props) {
                     labels={props.sidebar}
                 />
             </div>
-            <CarouselGrid items={props.productVariants} />
+            <CarouselGrid items={props.productVariants}/>
             <Files {...props.files} />
             <Modal
                 isOpen={isModalOpen}
@@ -239,7 +254,9 @@ ProductDetail.propTypes = {
     sidebar: PropTypes.object,
     modal: PropTypes.object,
     addedProduct: PropTypes.string,
-    eanLabel: PropTypes.string.isRequired
+    eanLabel: PropTypes.string.isRequired,
+    readLessText: PropTypes.string.isRequired,
+    readMoreText: PropTypes.string.isRequired
 };
 
 export default ProductDetail;

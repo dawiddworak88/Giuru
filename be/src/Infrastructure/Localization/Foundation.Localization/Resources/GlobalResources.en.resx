@@ -477,6 +477,9 @@
   <data name="Ean" xml:space="preserve">
     <value>EAN:</value>
   </data>
+  <data name="CustomOrderLabel" xml:space="preserve">
+    <value>Custom order:</value>
+  </data>
   <data name="ClientsGroups" xml:space="preserve">
     <value>Clients groups</value>
   </data>
@@ -491,5 +494,11 @@
   </data>
   <data name="TitleLabel" xml:space="preserve">
     <value>Title:</value>
+  </data>
+  <data name="ReadLess" xml:space="preserve">
+    <value>Read less</value>
+  </data>
+  <data name="ReadMore" xml:space="preserve">
+    <value>Read more</value>
   </data>
 </root>

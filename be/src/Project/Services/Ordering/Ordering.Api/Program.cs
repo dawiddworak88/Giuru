@@ -17,6 +17,7 @@ using System.Reflection;
 using System.IO;
 using Foundation.Localization.Definitions;
 using Microsoft.Extensions.Options;
+using Foundation.Mailing.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +72,8 @@ builder.Services.ConfigureSettings(builder.Configuration);
 builder.Services.RegisterEventBus(builder.Configuration);
 
 builder.Services.RegisterOrderingDatabaseDependencies(builder.Configuration);
+
+builder.Services.RegisterMailingDependencies(builder.Configuration);
 
 builder.Services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
 {

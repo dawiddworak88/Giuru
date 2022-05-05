@@ -78,15 +78,20 @@ namespace Inventory.Api.Services.OutletItems
 
         public async Task<OutletServiceModel> CreateAsync(CreateOutletServiceModel model)
         {
-            var product = new Product
+            var outletProduct = await this.context.Products.FirstOrDefaultAsync(x => x.Id == model.ProductId && x.IsActive);
+            
+            if (outletProduct is null)
             {
-                Id = model.ProductId.Value,
-                Ean = model.ProductEan,
-                Sku = model.ProductSku,
-                Name = model.ProductName
-            };
+                outletProduct = new Product
+                {
+                    Id = model.ProductId.Value,
+                    Ean = model.ProductEan,
+                    Sku = model.ProductSku,
+                    Name = model.ProductName
+                };
 
-            this.context.Products.Add(product.FillCommonProperties());
+                this.context.Products.Add(outletProduct.FillCommonProperties());
+            }
 
             var outletItem = new OutletItem
             {
@@ -114,7 +119,7 @@ namespace Inventory.Api.Services.OutletItems
             return await this.GetAsync(new GetOutletServiceModel { Id = outletItem.Id, Language = model.Language, OrganisationId = model.OrganisationId, Username = model.Username });
         }
 
-        public async Task SyncOutletProducts(UpdateOutletProductsServiceModel model)
+        public async Task SyncProductsOutlet(UpdateOutletProductsServiceModel model)
         {
             foreach (var item in model.OutletItems.OrEmptyIfNull())
             {
@@ -130,6 +135,27 @@ namespace Inventory.Api.Services.OutletItems
                         product.Sku = item.ProductSku;
                         product.Name = item.ProductName;
                         product.LastModifiedDate = DateTime.UtcNow;
+                    }
+
+                    var outletItemTranslation = await this.context.OutletTranslations.FirstOrDefaultAsync(x => x.OutletItemId == outletProduct.Id && x.Language == model.Language && x.IsActive);
+
+                    if (outletItemTranslation is not null)
+                    {
+                        outletItemTranslation.Title = item.Title;
+                        outletItemTranslation.Description = item.Description;
+                        outletItemTranslation.LastModifiedDate = DateTime.UtcNow;
+                    }
+                    else
+                    {
+                        outletItemTranslation = new OutletItemTranslation
+                        {
+                            OutletItemId = outletProduct.Id,
+                            Title = item.Title,
+                            Description = item.Description,
+                            Language = model.Language
+                        };
+
+                        this.context.OutletTranslations.Add(outletItemTranslation.FillCommonProperties());
                     }
 
                     outletProduct.Quantity = item.Quantity;
@@ -148,6 +174,7 @@ namespace Inventory.Api.Services.OutletItems
                         {
                             product = new Product
                             {
+                                Id = item.ProductId.Value,
                                 Name = item.ProductName,
                                 Sku = item.ProductSku,
                                 Ean = item.ProductEan
@@ -166,11 +193,21 @@ namespace Inventory.Api.Services.OutletItems
                         };
 
                         this.context.Outlet.Add(outletItem.FillCommonProperties());
+
+                        var outletItemTranslation = new OutletItemTranslation
+                        {
+                            OutletItemId = outletItem.Id,
+                            Title = item.Title,
+                            Description = item.Description,
+                            Language = model.Language
+                        };
+
+                        this.context.OutletTranslations.Add(outletItemTranslation.FillCommonProperties());
                     }
                 }
-            }
 
-            await this.context.SaveChangesAsync();
+                await this.context.SaveChangesAsync();
+            }
         }
 
         public async Task<OutletServiceModel> GetAsync(GetOutletServiceModel model)

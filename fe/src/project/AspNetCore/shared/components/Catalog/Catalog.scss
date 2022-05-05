@@ -35,7 +35,7 @@
             top: 1rem;
             right: 0;
             z-index: 1;
-            background: $primary;
+            background: $inventory-color;
             color: #ffffff;
             border-top-left-radius: 0.25rem;
             border-bottom-left-radius: 0.25rem;
@@ -49,13 +49,13 @@
             margin-top: 0.5rem;
 
             .stock {
-                color: darkgreen;
+                color: $inventory-color;
                 font-weight: 600;
                 font-size: 0.8rem;
             }
 
             .expected-delivery {
-                color: darkgreen;
+                color: $inventory-color;
                 font-weight: 600;
                 font-size: 0.7rem;
             }
