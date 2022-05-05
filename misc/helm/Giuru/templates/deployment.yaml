@@ -19,7 +19,7 @@ spec:
         image: {{ .Values.image.registry }}/media-api:{{ .Values.image.tag }}
         resources:
           limits:
-            memory: "1750Mi"
+            memory: "2500Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
