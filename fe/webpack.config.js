@@ -45,14 +45,14 @@ const browserConfig = {
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
         }),
-        new CopyWebpackPlugin({
-            patterns: [
-                {
-                    from: path.resolve(__dirname, "wwwroot/src/*.png"),
-                    to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-                }
-            ]
-        })
+        // new CopyWebpackPlugin({
+        //     patterns: [
+        //         {
+        //             from: path.resolve(__dirname, "wwwroot/src/*.png"),
+        //             to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
+        //         }
+        //     ]
+        // })
     ],
     optimization: {
         minimize: true,
@@ -130,14 +130,14 @@ const accountBrowserConfig = {
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
         }),
-        new CopyWebpackPlugin({
-            patterns: [
-                {
-                    from: path.resolve(__dirname, "wwwroot/src/*.png"),
-                    to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-                }
-            ]
-        })
+        // new CopyWebpackPlugin({
+        //     patterns: [
+        //         {
+        //             from: path.resolve(__dirname, "wwwroot/src/*.png"),
+        //             to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
+        //         }
+        //     ]
+        // })
     ],
     optimization: {
         minimize: true,
@@ -208,14 +208,14 @@ const sellerPortalBrowserConfig = {
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
         }),
-        new CopyWebpackPlugin({
-            patterns: [
-                {
-                    from: path.resolve(__dirname, "wwwroot/src/*.png"),
-                    to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-                }
-            ]
-        })
+        // new CopyWebpackPlugin({
+        //     patterns: [
+        //         {
+        //             from: path.resolve(__dirname, "wwwroot/src/*.png"),
+        //             to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
+        //         }
+        //     ]
+        // })
     ],
     optimization: {
         minimize: true,
