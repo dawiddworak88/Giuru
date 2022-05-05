@@ -1,7 +1,6 @@
 ﻿const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
@@ -44,15 +43,7 @@ const browserConfig = {
         new CleanWebpackPlugin({
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
-        }),
-        // new CopyWebpackPlugin({
-        //     patterns: [
-        //         {
-        //             from: path.resolve(__dirname, "wwwroot/src/*.png"),
-        //             to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-        //         }
-        //     ]
-        // })
+        })
     ],
     optimization: {
         minimize: true,
@@ -129,15 +120,7 @@ const accountBrowserConfig = {
         new CleanWebpackPlugin({
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
-        }),
-        // new CopyWebpackPlugin({
-        //     patterns: [
-        //         {
-        //             from: path.resolve(__dirname, "wwwroot/src/*.png"),
-        //             to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-        //         }
-        //     ]
-        // })
+        })
     ],
     optimization: {
         minimize: true,
@@ -207,15 +190,7 @@ const sellerPortalBrowserConfig = {
         new CleanWebpackPlugin({
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
-        }),
-        // new CopyWebpackPlugin({
-        //     patterns: [
-        //         {
-        //             from: path.resolve(__dirname, "wwwroot/src/*.png"),
-        //             to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-        //         }
-        //     ]
-        // })
+        })
     ],
     optimization: {
         minimize: true,
