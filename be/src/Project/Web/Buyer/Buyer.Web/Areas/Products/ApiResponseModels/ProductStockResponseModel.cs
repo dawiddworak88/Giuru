@@ -8,5 +8,6 @@ namespace Buyer.Web.Areas.Products.ApiResponseModels
         public int? AvailableQuantity { get; set; }
         public int? RestockableInDays { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
+        public string Title { get; set; }
     }
 }
