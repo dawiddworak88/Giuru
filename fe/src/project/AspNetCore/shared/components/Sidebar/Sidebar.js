@@ -133,17 +133,15 @@ const Sidebar = (props) => {
                                                         <span className="attribute">{labels.eanLabel} {carouselItem.ean}</span>
                                                     }
                                                     <div className="stock-details">
-                                                        {(carouselItem.availableQuantity || carouselItem.availableOutletQuantity) &&
-                                                            carouselItem.availableQuantity > 0 ? (
-                                                                <div className="stock">
-                                                                    {labels.inStockLabel} {carouselItem.availableQuantity}
-                                                                </div>
-                                                            ) : (
-                                                                carouselItem.availableOutletQuantity > 0 &&
-                                                                    <div className="stock">
-                                                                        {labels.inOutletLabel} {carouselItem.availableOutletQuantity} {carouselItem.outletTitle && <span>({carouselItem.outletTitle})</span>}
-                                                                    </div>
-                                                            )
+                                                        {carouselItem.availableQuantity && carouselItem.availableQuantity > 0 &&
+                                                            <div className="stock">
+                                                                {labels.inStockLabel} {carouselItem.availableQuantity}
+                                                            </div>
+                                                        }
+                                                        {carouselItem.availableOutletQuantity && carouselItem.availableOutletQuantity > 0 &&
+                                                            <div className="stock">
+                                                                {labels.inOutletLabel} {carouselItem.availableOutletQuantity} {carouselItem.outletTitle && <span>({carouselItem.outletTitle})</span>}
+                                                            </div>
                                                         }
                                                         {carouselItem.expectedDelivery &&
                                                             <div className="expected-delivery">

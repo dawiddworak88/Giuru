@@ -137,20 +137,21 @@ function ProductDetail(props) {
                     }
                     <h1 className="title is-4 mt-1">{props.title}</h1>
                     <h2 className="product-detail__brand subtitle is-6">{props.byLabel} <a href={props.brandUrl}>{props.brandName}</a></h2>
-                    {(props.availableQuantity || props.availableOutletQuantity) &&
-                        props.availableQuantity > 0 ? (
-                            <div className="product-detail__in-stock">
-                                {props.inStockLabel} {props.availableQuantity}
-                                {props.expectedDelivery && 
-                                    <div className="product-detail__expected-delivery">{props.expectedDeliveryLabel} {moment.utc(props.expectedDelivery).local().format("L")}</div>
-                                }
-                            </div>
-                        ) : (
-                            props.availableOutletQuantity > 0 &&
-                                <div className="product-detail__in-stock">
-                                    {props.inOutletLabel} {props.availableOutletQuantity} {props.outletTitle && <span>({props.outletTitle})</span>}
-                                </div>
-                        )
+                    {props.outletTitle &&
+                        <div className="product-details__discount">{props.outletTitleLabel} {props.outletTitle}</div>     
+                    }
+                    {props.inStock && props.availableQuantity && props.availableQuantity > 0 &&
+                        <div className="product-detail__in-stock">
+                            {props.inStockLabel} {props.availableQuantity}
+                            {props.expectedDelivery && 
+                                <div className="product-detail__expected-delivery">{props.expectedDeliveryLabel} {moment.utc(props.expectedDelivery).local().format("L")}</div>
+                            }
+                        </div>
+                    }
+                    {props.inOutlet && props.availableOutletQuantity && props.availableOutletQuantity > 0 &&
+                        <div className="product-detail__in-stock">
+                            {props.inOutletLabel} {props.availableOutletQuantity}
+                        </div>
                     }
                     {props.isAuthenticated && 
                         <div className="product-detail__add-to-cart-button">
