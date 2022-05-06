@@ -12,8 +12,8 @@ import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHe
 const Modal = (props) => {
     const {isOpen, maxStockValue, maxOutletValue, handleOrder, handleClose, labels, product} = props;
     const [quantity, setQuantity] = useState(maxStockValue || maxOutletValue ? 0 : 1);
-    const [stockQuantity, setStockQuantity] = useState(maxStockValue && maxStockValue > 0 ? 1 : 0);
-    const [outletQuantity, setOutletQuantity] = useState(maxOutletValue && maxOutletValue > 0 ? 1 : 0);
+    const [stockQuantity, setStockQuantity] = useState(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 1 : maxStockValue && maxStockValue > 0 ? 1 : 0);
+    const [outletQuantity, setOutletQuantity] = useState(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 0 : maxOutletValue && maxOutletValue > 0 ? 1 : 0);
     const [externalReference, setExternalReference] = useState(null);
     const [deliveryFrom, setDeliveryFrom] = useState(null);
     const [deliveryTo, setDeliveryTo] = useState(null);
@@ -35,8 +35,8 @@ const Modal = (props) => {
 
     useEffect(() => {
         setQuantity(maxStockValue || maxOutletValue ? 0 : 1);
-        setStockQuantity(maxStockValue && maxStockValue > 0 ? 1 : 0);
-        setOutletQuantity(maxOutletValue && maxOutletValue > 0 ? 1 : 0);
+        setStockQuantity(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 1 : maxStockValue && maxStockValue > 0 ? 1 : 0);
+        setOutletQuantity(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 0 : maxOutletValue && maxOutletValue > 0 ? 1 : 0);
         setExternalReference(null);
         setDeliveryFrom(null);
         setDeliveryTo(null);
