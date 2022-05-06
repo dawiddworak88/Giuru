@@ -112,7 +112,7 @@ namespace Ordering.Api.Services
                 await this.mailingService.SendAsync(new Email
                 {
                     SenderName = this.configuration.Value.SenderName,
-                    Subject = this.orderLocalizer.GetString("CustomOrderSubject").Value + " " + serviceModel.ClientName + " (" + order.Id + ")",
+                    Subject = this.orderLocalizer.GetString("CustomOrderSubject") + " " + serviceModel.ClientName + " (" + order.Id + ")",
                     SenderEmailAddress = this.configuration.Value.SenderEmail,
                     PlainTextContent = serviceModel.MoreInfo,
                     RecipientEmailAddress = this.configuration.Value.SenderEmail
