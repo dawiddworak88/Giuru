@@ -18,7 +18,18 @@ const browserConfig = {
                 ]
             },
             {
-                test: /\.(png|svg|jpg|gif|woff(2)?|ttf|eot)$/,
+                test: /\.(woff(2)?|ttf|eot)$/,
+                use: [{
+                    loader: "file-loader",
+                    options: {
+                        name: "[name].[ext]",
+                        outputPath: "../fonts",
+                        publicPath: "/dist/fonts"
+                    }
+                }]
+            },
+            {
+                test: /\.(png|svg|jpg|gif)$/,
                 use: [{
                     loader: "file-loader",
                     options: {
@@ -44,15 +55,7 @@ const browserConfig = {
         new CleanWebpackPlugin({
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
-        }),
-        // new CopyWebpackPlugin({
-        //     patterns: [
-        //         {
-        //             from: path.resolve(__dirname, "wwwroot/*.png"),
-        //             to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-        //         }
-        //     ]
-        // })
+        })
     ],
     optimization: {
         minimize: true,
@@ -102,7 +105,18 @@ const accountBrowserConfig = {
                 ]
             },
             {
-                test: /\.(png|svg|jpg|gif|woff(2)?|ttf|eot)$/,
+                test: /\.(woff(2)?|ttf|eot)$/,
+                use: [{
+                    loader: "file-loader",
+                    options: {
+                        name: "[name].[ext]",
+                        outputPath: "../fonts",
+                        publicPath: "/dist/fonts"
+                    }
+                }]
+            },
+            {
+                test: /\.(png|svg|jpg|gif)$/,
                 use: [{
                     loader: "file-loader",
                     options: {
@@ -128,15 +142,7 @@ const accountBrowserConfig = {
         new CleanWebpackPlugin({
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
-        }),
-        // new CopyWebpackPlugin({
-        //     patterns: [
-        //         {
-        //             from: path.resolve(__dirname, "wwwroot/*.png"),
-        //             to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-        //         }
-        //     ]
-        // })
+        })
     ],
     optimization: {
         minimize: true,
@@ -180,7 +186,18 @@ const sellerPortalBrowserConfig = {
                 ]
             },
             {
-                test: /\.(png|svg|jpg|gif|woff(2)?|ttf|eot)$/,
+                test: /\.(woff(2)?|ttf|eot)$/,
+                use: [{
+                    loader: "file-loader",
+                    options: {
+                        name: "[name].[ext]",
+                        outputPath: "../fonts",
+                        publicPath: "/dist/fonts"
+                    }
+                }]
+            },
+            {
+                test: /\.(png|svg|jpg|gif)$/,
                 use: [{
                     loader: "file-loader",
                     options: {
@@ -206,15 +223,7 @@ const sellerPortalBrowserConfig = {
         new CleanWebpackPlugin({
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
-        }),
-        // new CopyWebpackPlugin({
-        //     patterns: [
-        //         {
-        //             from: path.resolve(__dirname, "wwwroot/*.png"),
-        //             to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-        //         }
-        //     ]
-        // })
+        })
     ],
     optimization: {
         minimize: true,
