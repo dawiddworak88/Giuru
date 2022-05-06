@@ -16,8 +16,10 @@ using Ordering.Api.Infrastructure.Orders.Entities;
 using Ordering.Api.IntegrationEvents;
 using Ordering.Api.ServicesModels;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Ordering.Api.Services
@@ -109,6 +111,9 @@ namespace Ordering.Api.Services
 
             if (serviceModel.HasCustomOrder)
             {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo(serviceModel.Language);
+                Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
+                
                 await this.mailingService.SendAsync(new Email
                 {
                     SenderName = this.configuration.Value.SenderName,
