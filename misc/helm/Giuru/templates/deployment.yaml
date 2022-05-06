@@ -105,7 +105,7 @@ spec:
         image: {{ .Values.image.registry }}/catalog-api:{{ .Values.image.tag }}
         resources:
           limits:
-            memory: "250Mi"
+            memory: "500Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
