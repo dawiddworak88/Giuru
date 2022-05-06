@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { TextField, IconButton, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
-import { Clear } from "@mui/icons-material";
+import { TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import PropTypes from "prop-types";
-import { LocalizationProvider, DatePicker } from "@mui/lab";
-import MomentUtils from "@date-io/moment";
+import { LocalizationProvider, DatePicker  } from "@mui/lab";
+import AdapterMoment from '@mui/lab/AdapterMoment';
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 
 const Modal = (props) => {
@@ -136,59 +135,34 @@ const Modal = (props) => {
                         }} />
                 </div>
                 <div className="field">
-                    <LocalizationProvider utils={MomentUtils}>
+                    <LocalizationProvider dateAdapter={AdapterMoment}>
                         <DatePicker
                             id="deliveryFrom"
+                            value={deliveryFrom}
                             label={labels.deliveryFromLabel}
+                            disablePast={true}
+                            renderInput={(params) => 
+                                <TextField {...params} fullWidth={true} />}
                             onChange={(date) => {
+                                console.log(date)
                                 setDeliveryFrom(date);
                             }}
-                            okLabel={labels.okLabel}
-                            cancelLabel={labels.cancelLabel}
-                            InputProps={{
-                                endAdornment: (
-                                    <IconButton onClick={() => setDeliveryFrom(null)}>
-                                        <Clear />
-                                    </IconButton>
-                                )
-                            }}
-                            InputAdornmentProps={{
-                                position: "start"
-                            }}
-                            KeyboardButtonProps={{
-                                "aria-label": labels.changeDeliveryFromLabel
-                            }} 
-                            value={deliveryFrom}
-                            fullWidth={true}
-                            disablePast={true}/>
+                        />
                     </LocalizationProvider>
                 </div>
                 <div className="field">
-                    <LocalizationProvider utils={MomentUtils}>
+                    <LocalizationProvider dateAdapter={AdapterMoment}>
                         <DatePicker
                             id="deliveryTo"
+                            value={deliveryTo}
                             label={labels.deliveryToLabel}
+                            disablePast={true}
+                            renderInput={(params) => 
+                                <TextField {...params} fullWidth={true} />}
                             onChange={(date) => {
                                 setDeliveryTo(date);
                             }}
-                            okLabel={labels.okLabel}
-                            cancelLabel={labels.cancelLabel}
-                            InputProps={{
-                                endAdornment: (
-                                    <IconButton onClick={() => setDeliveryTo(null)}>
-                                        <Clear />
-                                    </IconButton>
-                                )
-                            }}
-                            InputAdornmentProps={{
-                                position: "start"
-                            }}
-                            KeyboardButtonProps={{
-                                "aria-label": labels.changeDeliveryFromLabel
-                            }} 
-                            fullWidth={true}
-                            value={deliveryTo}
-                            disablePast={true}/>
+                        />
                     </LocalizationProvider>
                 </div>
                 <div className="field">

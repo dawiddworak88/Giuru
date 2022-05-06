@@ -3,11 +3,11 @@ import { toast } from "react-toastify";
 import { UploadCloud } from "react-feather";
 import { useDropzone } from "react-dropzone";
 import PropTypes from "prop-types";
-import MomentUtils from "@date-io/moment";
-import { LocalizationProvider, DatePicker,} from "@mui/lab";
+import { LocalizationProvider, DatePicker } from "@mui/lab";
+import AdapterMoment from '@mui/lab/AdapterMoment';
 import Autosuggest from "react-autosuggest";
 import { Context } from "../../../../../../shared/stores/Store";
-import { Delete, Clear, AddShoppingCartRounded } from "@mui/icons-material";
+import { Delete, AddShoppingCartRounded } from "@mui/icons-material";
 import {
     Fab, Table, TableBody, TableCell, TableContainer, FormControlLabel,
     TableHead, TableRow, Paper, TextField, Button, IconButton, CircularProgress, Checkbox, NoSsr
@@ -372,7 +372,7 @@ function NewOrderForm(props) {
                                 />
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <LocalizationProvider utils={MomentUtils}>
+                                <LocalizationProvider dateAdapter={AdapterMoment}>
                                     <DatePicker
                                         id="deliveryFrom"
                                         label={props.deliveryFromLabel}
@@ -380,26 +380,13 @@ function NewOrderForm(props) {
                                         onChange={(date) => {
                                             setDeliveryFrom(date);
                                         }}
-                                        okLabel={props.okLabel}
-                                        cancelLabel={props.cancelLabel}
-                                        InputProps={{
-                                            endAdornment: (
-                                                <IconButton onClick={() => setDeliveryFrom(null)}>
-                                                    <Clear />
-                                                </IconButton>
-                                            )
-                                        }}
-                                        InputAdornmentProps={{
-                                            position: "start"
-                                        }}
-                                        KeyboardButtonProps={{
-                                            "aria-label": props.changeDeliveryFromLabel
-                                        }} disablePast={true}
-                                    />
+                                        renderInput={(params) => 
+                                            <TextField {...params} />}
+                                        disablePast={true}/>
                                 </LocalizationProvider>
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <LocalizationProvider utils={MomentUtils}>
+                                <LocalizationProvider dateAdapter={AdapterMoment}>
                                     <DatePicker
                                         id="deliveryTo"
                                         label={props.deliveryToLabel}
@@ -407,21 +394,8 @@ function NewOrderForm(props) {
                                         onChange={(date) => {
                                             setDeliveryTo(date);
                                         }}
-                                        okLabel={props.okLabel}
-                                        cancelLabel={props.cancelLabel}
-                                        InputProps={{
-                                            endAdornment: (
-                                                <IconButton onClick={() => setDeliveryTo(null)}>
-                                                    <Clear />
-                                                </IconButton>
-                                            )
-                                        }}
-                                        InputAdornmentProps={{
-                                            position: "start"
-                                        }}
-                                        KeyboardButtonProps={{
-                                           "aria-label": props.changeDeliveryToLabel
-                                        }} 
+                                        renderInput={(params) => 
+                                            <TextField {...params} />}
                                         disablePast={true}/>
                                 </LocalizationProvider>
                             </div>
