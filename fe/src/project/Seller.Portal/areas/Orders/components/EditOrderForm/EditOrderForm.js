@@ -5,13 +5,13 @@ import { Context } from "../../../../../../shared/stores/Store";
 import { CircularProgress } from "@material-ui/core";
 import {
     FormControl, InputLabel, Select, MenuItem, Button,
-    Table, TableBody, TableCell, TableContainer,
+    Table, TableBody, TableCell, TableContainer, TextField,
     TableHead, TableRow, Paper } from "@material-ui/core";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
 
 function EditOrderForm(props) {
-
     const [state, dispatch] = useContext(Context);
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
 
@@ -157,6 +157,23 @@ function EditOrderForm(props) {
                     </section>
                 </div>
             </div>
+            {props.customOrder &&
+                <div className="mt-5">
+                    <h2 className="subtitle is-5 mb-2">{props.customOrderLabel}</h2>
+                    <div className="edit-order__items">
+                        <TextField 
+                            value={props.customOrder}
+                            fullWidth={true}
+                            multiline={true}
+                            disabled={true}
+                            rows={OrderFormConstants.minRowsForCustomOrder()}
+                            InputProps={{ 
+                                className: "p-2" 
+                            }}
+                        />
+                    </div>
+                </div>
+            }
             {state.isLoading && <CircularProgress className="progressBar" />}
         </section >
     );

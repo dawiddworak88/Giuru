@@ -50,7 +50,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 SaveText = this.orderLocalizer.GetString("UpdateOrderStatus"),
                 ClientLabel = this.globalLocalizer.GetString("Client"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
-                StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel")
+                StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
+                CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -85,6 +86,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     ImageAlt = x.ProductName,
                     ImageSrc = x.PictureUrl
                 });
+                viewModel.CustomOrder = order.MoreInfo;
             }
 
             return viewModel;

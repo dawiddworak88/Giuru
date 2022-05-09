@@ -76,7 +76,8 @@ namespace Ordering.Api.v1.Areas.Orders.IntegrationEventsHandlers
                     ExpectedDeliveryFrom = x.DeliveryFrom,
                     ExpectedDeliveryTo = x.DeliveryTo,
                     MoreInfo = x.MoreInfo
-                })
+                }),
+                Language = @event.Language
             };
 
             var validator = new CheckoutBasketServiceModelValidator();

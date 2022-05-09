@@ -28,7 +28,6 @@ import IconConstants from "../../../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function OrderForm(props) {
-
     const clientsProps = {
         options: props.clients,
         getOptionLabel: (option) => option.name

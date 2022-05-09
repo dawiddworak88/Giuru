@@ -19,7 +19,7 @@ spec:
         image: {{ .Values.image.registry }}/media-api:{{ .Values.image.tag }}
         resources:
           limits:
-            memory: "1500Mi"
+            memory: "1750Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -63,7 +63,7 @@ spec:
         image: {{ .Values.image.registry }}/client-api:{{ .Values.image.tag }}
         resources:
           limits:
-            memory: "200Mi"
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -105,7 +105,7 @@ spec:
         image: {{ .Values.image.registry }}/catalog-api:{{ .Values.image.tag }}
         resources:
           limits:
-            memory: "200Mi"
+            memory: "500Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -159,7 +159,7 @@ spec:
         image: {{ .Values.image.registry }}/catalog-backgroundtasks:{{ .Values.image.tag }}
         resources:
           limits:
-            memory: "200Mi"
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -209,7 +209,7 @@ spec:
         image: {{ .Values.image.registry }}/basket-api:{{ .Values.image.tag }}
         resources:
           limits:
-            memory: "200Mi"
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -255,7 +255,7 @@ spec:
         image: {{ .Values.image.registry }}/ordering-api:{{ .Values.image.tag }}
         resources:
           limits:
-            memory: "200Mi"
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -335,7 +335,7 @@ spec:
         image: {{ .Values.image.registry }}/identity-api:{{ .Values.image.tag }}
         resources:
           limits:
-            memory: "200Mi"
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -413,7 +413,7 @@ spec:
         image: {{ .Values.image.registry }}/inventory-api:{{ .Values.image.tag }}
         resources:
           limits:
-            memory: "200Mi"
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -459,7 +459,7 @@ spec:
         image: {{ .Values.image.registry }}/news-api:{{ .Values.image.tag }}
         resources:
           limits:
-            memory: "200Mi"
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -507,7 +507,7 @@ spec:
         image: {{ .Values.image.registry }}/buyer-web:{{ .Values.image.tag }}
         resources:
           limits:
-            memory: "200Mi"
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -575,7 +575,7 @@ spec:
         image: {{ .Values.image.registry }}/seller-web:{{ .Values.image.tag }}
         resources:
           limits:
-            memory: "200Mi"
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}

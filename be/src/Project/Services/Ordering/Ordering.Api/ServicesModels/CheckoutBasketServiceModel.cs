@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Foundation.Extensions.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Ordering.Api.ServicesModels
 {
-    public class CheckoutBasketServiceModel
+    public class CheckoutBasketServiceModel : BaseServiceModel
     {
         public Guid? BasketId { get; set; }
         public Guid? ClientId { get; set; }
