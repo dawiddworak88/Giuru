@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Buyer.Web.Areas.Orders.ApiRequestModels
 {
-    public class CheckoutBasketRequestModel
+    public class CheckoutBasketApiRequestModel
     {
         public Guid? BasketId { get; set; }
         public Guid? ClientId { get; set; }
@@ -12,6 +12,6 @@ namespace Buyer.Web.Areas.Orders.ApiRequestModels
         public DateTime? ExpectedDeliveryDate { get; set; }
         public string MoreInfo { get; set; }
         public bool HasCustomOrder { get; set; }
-        public IEnumerable<AttachmentRequestModel> Attachments { get; set; }
+        public IEnumerable<Guid> Attachments { get; set; }
     }
 }

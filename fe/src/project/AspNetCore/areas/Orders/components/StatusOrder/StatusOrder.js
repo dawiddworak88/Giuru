@@ -1,14 +1,14 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import {
     Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, TextField
+    TableHead, TableRow, Paper, TextField 
 } from "@material-ui/core";
 import moment from "moment";
 import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
+import { PictureAsPdf, Folder, Attachment } from "@material-ui/icons";
 
 function StatusOrder(props) {
-
     const status = props.orderStatuses.find((item) => item.id === props.orderStatusId);
     return (
         <section className="section status-order">
@@ -82,21 +82,51 @@ function StatusOrder(props) {
                 </div>
             }
             {props.customOrder &&
-                <div className="mt-5">
-                    <h2 className="subtitle is-5 mb-2">{props.customOrderLabel}</h2>
-                    <div className="status-order__items">
-                        <TextField 
-                            value={props.customOrder}
-                            fullWidth={true}
-                            multiline={true}
-                            disabled={true}
-                            rows={OrderFormConstants.minRowsForCustomOrder()}
-                            InputProps={{ 
-                                className: "p-2" 
-                            }}
-                        />
+                <Fragment>
+                    <div className="mt-5">
+                        <h2 className="subtitle is-5 mb-2">{props.customOrderLabel}</h2>
+                        <div className="status-order__items">
+                            <TextField 
+                                value={props.customOrder}
+                                fullWidth={true}
+                                multiline={true}
+                                disabled={true}
+                                rows={OrderFormConstants.minRowsForCustomOrder()}
+                                InputProps={{ 
+                                    className: "p-2" 
+                                }}
+                            />
+                        </div>
+                        
                     </div>
-                </div>
+                    {props.attachments &&
+                        <div className="mt-2 status-order__attachments">
+                            <h2 className="subtitle">{props.attachmentsLabel}</h2>
+                            {props.attachments.length > 0 && props.attachments.map((attachment, index) => {
+                                const iconType = {
+                                    "application/zip": <Folder />,
+                                    "application/pdf": <PictureAsPdf />
+                                }
+
+                                return (
+                                    <div className="column is-3" key={index}>
+                                        <a href={attachment.url}>
+                                            <div className="card">
+                                                <div className="card-image">
+                                                    {iconType[attachment.mimeType] ? iconType[attachment.mimeType] : <Attachment /> }
+                                                </div>
+                                                <div className="media-content">
+                                                    <span className="file">{attachment.filename}</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    }
+                </Fragment>
+               
             }
         </section >
     );

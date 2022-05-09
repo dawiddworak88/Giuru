@@ -209,6 +209,7 @@ function NewOrderForm(props) {
         var order = {
             basketId,
             moreInfo: customOrder,
+            attachments,
             hasCustomOrder
         };
 

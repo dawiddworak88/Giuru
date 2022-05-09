@@ -126,6 +126,7 @@ namespace Ordering.Api.v1.Controllers
                                 LastModifiedDate = y.LastModifiedDate,
                                 CreatedDate = y.CreatedDate
                             }),
+                            Attachments = x.Attachments,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         })
@@ -220,6 +221,7 @@ namespace Ordering.Api.v1.Controllers
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         }),
+                        Attachments = order.Attachments,
                         LastModifiedDate = order.LastModifiedDate,
                         CreatedDate = order.CreatedDate
                     };
@@ -318,6 +320,7 @@ namespace Ordering.Api.v1.Controllers
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         }),
+                        Attachments = order.Attachments,
                         LastModifiedDate = order.LastModifiedDate,
                         CreatedDate = order.CreatedDate
                     };

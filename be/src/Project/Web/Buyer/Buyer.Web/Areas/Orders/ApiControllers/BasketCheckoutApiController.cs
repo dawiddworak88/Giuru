@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -53,7 +54,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             }
 
             await this.basketRepository.CheckoutBasketAsync(
-                token, language, client.Id, client.Name, Guid.Parse(reqCookie), model.ExpectedDeliveryDate, model.MoreInfo, model.HasCustomOrder);
+                token, language, client.Id, client.Name, Guid.Parse(reqCookie), model.ExpectedDeliveryDate, model.MoreInfo, model.HasCustomOrder, model.Attachments?.Select(x => x.Id));
 
             return this.StatusCode((int)HttpStatusCode.Accepted, new { Message = this.orderLocalizer.GetString("OrderPlacedSuccessfully").Value });
         }
