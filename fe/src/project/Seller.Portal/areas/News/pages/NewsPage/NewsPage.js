@@ -15,7 +15,7 @@ const NewsPage = (props) => {
     LocaleHelper.setMomentLocale(props.locale);
 
     return (
-        <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
+        <ThemeProvider theme={GlobalHelper.initMuiTheme(props.locale)}>
             <Store>
                 <Header {...props.header}></Header>
                 <MenuTiles {...props.menuTiles} />

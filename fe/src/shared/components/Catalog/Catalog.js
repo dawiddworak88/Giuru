@@ -264,7 +264,7 @@ function Catalog(props) {
                                 component="div"
                                 count={total}
                                 page={page}
-                                onChangePage={handleChangePage}
+                                onPageChange={handleChangePage}
                                 rowsPerPage={PaginationConstants.defaultRowsPerPage()}
                             />
                         </div>
