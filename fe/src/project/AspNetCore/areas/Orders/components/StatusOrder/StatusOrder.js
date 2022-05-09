@@ -90,6 +90,7 @@ function StatusOrder(props) {
                             fullWidth={true}
                             multiline={true}
                             disabled={true}
+                            variant="standard"
                             rows={OrderFormConstants.minRowsForCustomOrder()}
                             InputProps={{ 
                                 className: "p-2" 

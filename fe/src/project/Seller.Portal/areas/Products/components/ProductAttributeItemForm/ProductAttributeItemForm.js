@@ -82,7 +82,7 @@ function ProductAttributeItemForm(props) {
                             </div>}
                         <input id="productAttributeId" name="productAttributeId" type="hidden" value={productAttributeId} />
                         <div className="field">
-                            <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
+                            <TextField id="name" name="name" label={props.nameLabel} fullWidth={true} variant="standard"
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">

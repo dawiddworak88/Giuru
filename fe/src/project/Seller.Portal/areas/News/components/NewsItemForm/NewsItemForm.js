@@ -175,12 +175,13 @@ const NewsItemForm = (props) => {
                                 fullWidth={true}
                                 value={title} 
                                 onChange={handleOnChange} 
+                                variant="standard"
                                 helperText={dirty.title ? errors.title : ""} 
                                 error={(errors.title.length > 0) && dirty.title} 
                             />
                         </div>
                         <div className="field">
-                            <FormControl fullWidth={true}>
+                            <FormControl fullWidth={true} variant="standard">
                                 <InputLabel id="category">{props.categoryLabel}</InputLabel>
                                 <Select
                                     labelId="category"
@@ -207,6 +208,7 @@ const NewsItemForm = (props) => {
                                 value={description} 
                                 multiline={true}
                                 onChange={handleOnChange}
+                                variant="standard"
                                 helperText={dirty.description ? errors.description : ""} 
                                 error={(errors.description.length > 0) && dirty.description} 
                             />

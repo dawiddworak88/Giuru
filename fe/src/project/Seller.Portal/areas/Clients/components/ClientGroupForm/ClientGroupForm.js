@@ -80,6 +80,7 @@ const ClientGroupForm = (props) => {
                                 fullWidth={true}
                                 value={name} 
                                 onChange={handleOnChange} 
+                                variant="standard"
                                 helperText={dirty.name ? errors.name : ""} 
                                 error={(errors.name.length > 0) && dirty.name} />
                         </div>

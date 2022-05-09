@@ -71,6 +71,7 @@ function SetPasswordForm(props) {
                             id="password" 
                             name="password" 
                             type="password"
+                            variant="standard"
                             label={props.passwordLabel} 
                             fullWidth={true} 
                             value={password} 

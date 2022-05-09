@@ -177,11 +177,11 @@ function ProductForm(props) {
                                 value={category}
                                 onChange={onCategoryChange}
                                 autoComplete
-                                renderInput={(params) => <TextField {...params} label={props.selectCategoryLabel} margin="normal" />}
+                                renderInput={(params) => <TextField {...params} label={props.selectCategoryLabel} margin="normal" variant="standard" />}
                             />
                         </div>
                         <div className="field">
-                            <TextField id="sku" name="sku" label={props.skuLabel} fullWidth={true}
+                            <TextField id="sku" name="sku" label={props.skuLabel} fullWidth={true} variant="standard"
                                 value={sku} onChange={handleOnChange} helperText={dirty.sku ? errors.sku : ""} error={(errors.sku.length > 0) && dirty.sku} />
                         </div>
                         <div className="field">
@@ -191,14 +191,15 @@ function ProductForm(props) {
                                 label={props.eanLabel} 
                                 fullWidth={true}
                                 value={ean} 
+                                variant="standard"
                                 onChange={handleOnChange} />
                         </div>
                         <div className="field">
-                            <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
+                            <TextField id="name" name="name" label={props.nameLabel} fullWidth={true} variant="standard"
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">
-                            <TextField id="description" name="description" label={props.descriptionLabel} fullWidth={true}
+                            <TextField id="description" name="description" label={props.descriptionLabel} fullWidth={true} variant="standard"
                                 value={description} onChange={handleOnChange} multiline />
                         </div>
                         <div className="field">
@@ -212,7 +213,7 @@ function ProductForm(props) {
                                     setFieldValue({ name: "primaryProduct", value: newValue });
                                   }}
                                 autoComplete
-                                renderInput={(params) => <TextField {...params} label={props.selectPrimaryProductLabel} margin="normal" />}
+                                renderInput={(params) => <TextField {...params} label={props.selectPrimaryProductLabel} margin="normal" variant="standard" />}
                             />
                         </div>
                         <div className="field">

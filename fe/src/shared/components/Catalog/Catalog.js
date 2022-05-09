@@ -195,7 +195,7 @@ function Catalog(props) {
             <div>
                 {props.searchLabel &&
                     <div className="catalog__search is-flex-centered">
-                        <TextField id="search" name="search" value={searchTerm} onChange={handleOnChange} onKeyPress={handleSearchTermKeyPress} className="catalog__search-field" label={props.searchLabel} type="search" autoComplete="off" />
+                        <TextField id="search" name="search" value={searchTerm} onChange={handleOnChange} variant="standard" onKeyPress={handleSearchTermKeyPress} className="catalog__search-field" label={props.searchLabel} type="search" autoComplete="off" />
                         <Button onClick={search} type="button" variant="contained" color="primary">
                             {props.searchLabel}
                         </Button>

@@ -58,6 +58,7 @@ const SelectWidget = ({
     return (
         <div className="field">
             <FormControl
+                variant="standard"
                 fullWidth={true}
                 required={required}>
                 <InputLabel shrink={true} htmlFor={id}>

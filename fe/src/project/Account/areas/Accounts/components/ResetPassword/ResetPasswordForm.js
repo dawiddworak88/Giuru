@@ -75,6 +75,7 @@ const ResetPasswordForm = (props) => {
                             fullWidth={true} 
                             value={email} 
                             onChange={handleOnChange} 
+                            variant="standard"
                             helperText={dirty.email ? errors.email : ""} 
                             error={(errors.email.length > 0) && dirty.email} />
                     </div>

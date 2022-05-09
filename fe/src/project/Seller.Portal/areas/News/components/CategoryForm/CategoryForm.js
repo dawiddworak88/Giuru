@@ -80,12 +80,13 @@ const CategoryForm = (props) => {
                                 fullWidth={true}
                                 value={name} 
                                 onChange={handleOnChange} 
+                                variant="standard"
                                 helperText={dirty.name ? errors.name : ""} 
                                 error={(errors.name.length > 0) && dirty.name} 
                             />
                         </div>
                         <div className="field">
-                            <FormControl fullWidth={true}>
+                            <FormControl fullWidth={true} variant="standard">
                                 <InputLabel id="parent-category">{props.parentCategoryLabel}</InputLabel>
                                 <Select
                                     labelId="parent-category"

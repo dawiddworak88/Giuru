@@ -51,11 +51,11 @@ function SignInForm(props) {
                         <h1 className="subtitle is-4">{props.signInText}</h1>
                     </div>
                     <div className="field">
-                        <TextField id="email" name="email" label={props.enterEmailText} fullWidth={true} 
+                        <TextField id="email" name="email" label={props.enterEmailText} fullWidth={true} variant="standard"
                             value={email} onChange={handleOnChange} helperText={dirty.email ? errors.email : ""} error={(errors.email.length > 0) && dirty.email} />
                     </div>
                     <div className="field">
-                        <TextField id="password" name="password" type="password" label={props.enterPasswordText} fullWidth={true} 
+                        <TextField id="password" name="password" type="password" label={props.enterPasswordText} fullWidth={true} variant="standard"
                             value={password} onChange={handleOnChange} helperText={dirty.password ? errors.password : ""} error={(errors.password.length > 0) && dirty.password} />
                     </div>
                     <div className="is-flex is-justify-content-end">

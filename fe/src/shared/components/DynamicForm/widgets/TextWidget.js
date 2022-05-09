@@ -11,6 +11,7 @@ function TextWidget(props) {
           name={props.id} 
           onChange={props.onChange} 
           label={props.label}
+          variant="standard"
           value={props.value ? props.value : ""}
           fullWidth={true} />
     </div>

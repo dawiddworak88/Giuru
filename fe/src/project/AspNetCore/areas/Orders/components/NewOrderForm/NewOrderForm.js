@@ -356,7 +356,7 @@ function NewOrderForm(props) {
                                 />
                             </div>
                             <div className="column is-1 is-flex is-align-items-flex-end">
-                                <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "1", step: "1" }}
+                                <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "1", step: "1" }} variant="standard"
                                     label={props.quantityLabel} fullWidth={true} value={quantity} onChange={(e) => {
                                         e.preventDefault();
                                         setQuantity(e.target.value);
@@ -364,7 +364,7 @@ function NewOrderForm(props) {
                                 />
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel}
+                                <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel} variant="standard"
                                     fullWidth={true} value={externalReference} onChange={(e) => {
                                         e.preventDefault();
                                         setExternalReference(e.target.value);
@@ -381,7 +381,7 @@ function NewOrderForm(props) {
                                             setDeliveryFrom(date);
                                         }}
                                         renderInput={(params) => 
-                                            <TextField {...params} />}
+                                            <TextField {...params} variant="standard" />}
                                         disablePast={true}/>
                                 </LocalizationProvider>
                             </div>
@@ -395,12 +395,12 @@ function NewOrderForm(props) {
                                             setDeliveryTo(date);
                                         }}
                                         renderInput={(params) => 
-                                            <TextField {...params} />}
+                                            <TextField {...params} variant="standard" />}
                                         disablePast={true}/>
                                 </LocalizationProvider>
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <TextField id="moreInfo" name="moreInfo" type="text" label={props.moreInfoLabel}
+                                <TextField id="moreInfo" name="moreInfo" type="text" label={props.moreInfoLabel} variant="standard"
                                     fullWidth={true} value={moreInfo} onChange={(e) => {
                                         e.preventDefault();
                                         setMoreInfo(e.target.value);
@@ -502,6 +502,7 @@ function NewOrderForm(props) {
                                 multiline={true}
                                 value={customOrder}
                                 disabled={isOrdered}
+                                variant="standard"
                                 onChange={(e) => {
                                     setCustomOrder(e.target.value);
                                 }}

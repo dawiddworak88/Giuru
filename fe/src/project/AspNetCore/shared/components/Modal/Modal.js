@@ -64,6 +64,7 @@ const Modal = (props) => {
                         id="quantity" 
                         name="quantity" 
                         type="number"
+                        variant="standard"
                         label={labels.quantityLabel}
                         inputProps={{ 
                             min: 0, 
@@ -85,6 +86,7 @@ const Modal = (props) => {
                         id="stockQuantity" 
                         name="stockQuantity" 
                         type="number" 
+                        variant="standard"
                         label={labels.stockQuantityLabel + " (" + labels.maximalLabel + " " + maxStock + ")"}
                         inputProps={{ 
                             min: 0, 
@@ -106,6 +108,7 @@ const Modal = (props) => {
                         id="outletQuantity" 
                         name="outletQuantity" 
                         type="number" 
+                        variant="standard"
                         label={labels.outletQuantityLabel + " (" + labels.maximalLabel + " " + maxOutlet + ")"}
                         inputProps={{ 
                             min: 0, 
@@ -127,6 +130,7 @@ const Modal = (props) => {
                         id="externalReference" 
                         name="externalReference" 
                         type="text" 
+                        variant="standard"
                         label={labels.externalReferenceLabel}
                         value={externalReference}
                         fullWidth={true}
@@ -142,7 +146,7 @@ const Modal = (props) => {
                             label={labels.deliveryFromLabel}
                             disablePast={true}
                             renderInput={(params) => 
-                                <TextField {...params} fullWidth={true} />}
+                                <TextField {...params} fullWidth={true} variant="standard" />}
                             onChange={(date) => {
                                 console.log(date)
                                 setDeliveryFrom(date);
@@ -158,7 +162,7 @@ const Modal = (props) => {
                             label={labels.deliveryToLabel}
                             disablePast={true}
                             renderInput={(params) => 
-                                <TextField {...params} fullWidth={true} />}
+                                <TextField {...params} fullWidth={true} variant="standard" />}
                             onChange={(date) => {
                                 setDeliveryTo(date);
                             }}
@@ -173,6 +177,7 @@ const Modal = (props) => {
                         value={moreInfo}
                         label={labels.moreInfoLabel}
                         fullWidth={true}
+                        variant="standard"
                         onChange={(e) => {
                             setMoreInfo(e.target.value)
                         }} />

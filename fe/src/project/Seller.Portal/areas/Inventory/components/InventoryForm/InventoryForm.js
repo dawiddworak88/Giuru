@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import { LocalizationProvider, DatePicker,} from "@mui/lab";
-import MomentUtils from "@date-io/moment";
+import AdapterMoment from '@mui/lab/AdapterMoment';
 import QuantityValidator from "../../../../../../shared/helpers/validators/QuantityValidator";
 
 const InventoryForm = (props) => {
@@ -106,7 +106,7 @@ const InventoryForm = (props) => {
                             </div>
                         }
                         <div className="field">
-                            <FormControl fullWidth={true} helperText={dirty.warehouseId ? errors.warehouseId : ""} error={(errors.warehouseId.length > 0) && dirty.warehouseId}>
+                            <FormControl fullWidth={true} helperText={dirty.warehouseId ? errors.warehouseId : ""} error={(errors.warehouseId.length > 0) && dirty.warehouseId} variant="standard">
                                 <InputLabel id="warehouse-label">{props.selectWarehouseLabel}</InputLabel>
                                 <Select
                                     name="warehouseId"
@@ -134,6 +134,7 @@ const InventoryForm = (props) => {
                                 name="productId"
                                 fullWidth={true}
                                 value={product}
+                                variant="standard"
                                 onChange={(event, newValue) => {
                                     setFieldValue({name: "product", value: newValue});
                                 }}
@@ -142,6 +143,7 @@ const InventoryForm = (props) => {
                                     <TextField 
                                         {...params} 
                                         label={props.selectProductLabel} 
+                                        variant="standard"
                                         margin="normal"/>
                                 )}/>
                         </div>
@@ -150,6 +152,7 @@ const InventoryForm = (props) => {
                                 id="quantity" 
                                 name="quantity" 
                                 type="number" 
+                                variant="standard"
                                 inputProps={{ 
                                     min: "1", 
                                     step: "1" 
@@ -164,6 +167,7 @@ const InventoryForm = (props) => {
                         <div className="field">
                             <TextField 
                                 id="availableQuantity" 
+                                variant="standard"
                                 name="availableQuantity" 
                                 type="number" 
                                 inputProps={{ 
@@ -179,7 +183,8 @@ const InventoryForm = (props) => {
                             <TextField 
                                 id="ean" 
                                 name="ean" 
-                                type="text" 
+                                type="text"
+                                variant="standard" 
                                 label={props.eanLabel} 
                                 fullWidth={true} 
                                 value={ean} 
@@ -191,6 +196,7 @@ const InventoryForm = (props) => {
                                 id="restockableInDays" 
                                 name="restockableInDays" 
                                 type="number" 
+                                variant="standard"
                                 inputProps={{ 
                                     min: "0", 
                                     step: "1" 
@@ -201,7 +207,7 @@ const InventoryForm = (props) => {
                                 onChange={handleOnChange}/>
                         </div>
                         <div className="field">
-                            <LocalizationProvider utils={MomentUtils} >
+                            <LocalizationProvider dateAdapter={AdapterMoment} >
                                 <DatePicker
                                     id="expectedDelivery"
                                     label={props.expectedDeliveryLabel}
@@ -210,21 +216,8 @@ const InventoryForm = (props) => {
                                     onChange={(date) => {
                                         setFieldValue({name: "expectedDelivery", value: date});
                                     }}
-                                    okLabel={props.okLabel}
-                                    cancelLabel={props.cancelLabel}
-                                    InputProps={{
-                                        endAdornment: (
-                                            <IconButton onClick={() => setFieldValue({name: "expectedDelivery", value: null})}>
-                                                <Clear />
-                                            </IconButton>
-                                        )
-                                    }}
-                                    InputAdornmentProps={{
-                                        position: "start"
-                                    }}
-                                    KeyboardButtonProps={{
-                                        "aria-label": props.changeExpectedDeliveryLabel
-                                    }} 
+                                    renderInput={(params) => 
+                                        <TextField {...params} variant="standard" fullWidth={true} />}
                                     disablePast={true}/>
                             </LocalizationProvider>
                         </div>

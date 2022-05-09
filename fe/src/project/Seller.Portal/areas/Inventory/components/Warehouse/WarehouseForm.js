@@ -80,6 +80,7 @@ const WarehouseForm = (props) => {
                            fullWidth={true} 
                            value={name} 
                            onChange={handleOnChange}
+                           variant="standard"
                            helperText={dirty.name ? errors.name : ""} 
                            error={(errors.name.length > 0) && dirty.name}/>
                     </div>
@@ -92,6 +93,7 @@ const WarehouseForm = (props) => {
                            fullWidth={true} 
                            value={location} 
                            onChange={handleOnChange}
+                           variant="standard"
                            helperText={dirty.location ? errors.location : ""} 
                            error={(errors.location.length > 0) && dirty.location}/>
                     </div>

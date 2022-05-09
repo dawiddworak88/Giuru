@@ -103,7 +103,7 @@ const OutletForm = (props) => {
                             </div>
                         }
                         <div className="field">
-                            <FormControl fullWidth={true} helperText={dirty.warehouseId ? errors.warehouseId : ""} error={(errors.warehouseId.length > 0) && dirty.warehouseId}>
+                            <FormControl fullWidth={true} helperText={dirty.warehouseId ? errors.warehouseId : ""} error={(errors.warehouseId.length > 0) && dirty.warehouseId} variant="standard">
                                 <InputLabel id="warehouse-label">{props.selectWarehouseLabel}</InputLabel>
                                 <Select
                                     name="warehouseId"
@@ -139,6 +139,7 @@ const OutletForm = (props) => {
                                     <TextField 
                                         {...params} 
                                         label={props.selectProductLabel} 
+                                        variant="standard"
                                         margin="normal"/>
                                 )}/>
                         </div>
@@ -149,6 +150,7 @@ const OutletForm = (props) => {
                                 type="text" 
                                 label={props.titleLabel} 
                                 fullWidth={true} 
+                                variant="standard"
                                 value={title} 
                                 onChange={handleOnChange}/>
                         </div>
@@ -160,6 +162,7 @@ const OutletForm = (props) => {
                                 label={props.descriptionLabel} 
                                 fullWidth={true} 
                                 value={description} 
+                                variant="standard"
                                 onChange={handleOnChange}/>
                         </div>
                         <div className="field">
@@ -170,6 +173,7 @@ const OutletForm = (props) => {
                                 label={props.eanLabel} 
                                 fullWidth={true} 
                                 value={ean} 
+                                variant="standard"
                                 onChange={handleOnChange}/>
                         </div>
                         <div className="field">
@@ -177,6 +181,7 @@ const OutletForm = (props) => {
                                 id="quantity" 
                                 name="quantity" 
                                 type="number" 
+                                variant="standard"
                                 inputProps={{ 
                                     min: "1", 
                                     step: "1" 
@@ -200,6 +205,7 @@ const OutletForm = (props) => {
                                 label={props.availableQuantityLabel} 
                                 fullWidth={true} 
                                 value={availableQuantity} 
+                                variant="standard"
                                 onChange={handleOnChange}/>
                         </div>
                         <div className="field">

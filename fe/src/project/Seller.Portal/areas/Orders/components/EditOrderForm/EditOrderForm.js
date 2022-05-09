@@ -70,7 +70,7 @@ function EditOrderForm(props) {
                                 <div className="columns is-desktop">
                                     <div className="column is-half">
                                         <div className="field">
-                                            <FormControl fullWidth={true}>
+                                            <FormControl fullWidth={true} variant="standard">
                                                 <InputLabel id="order-status-label">{props.orderStatusLabel}</InputLabel>
                                                 <Select
                                                     labelId="order-status-label"
