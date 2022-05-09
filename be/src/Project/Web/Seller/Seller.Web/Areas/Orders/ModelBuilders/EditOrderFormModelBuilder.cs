@@ -1,11 +1,18 @@
-﻿using Foundation.Extensions.ModelBuilders;
+﻿using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.ModelBuilders;
+using Foundation.Extensions.Services.MediaServices;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.ViewModel;
+using Seller.Web.Areas.Shared.Repositories.Media;
+using Seller.Web.Shared.Configurations;
+using Seller.Web.Shared.ViewModels;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,17 +25,26 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly IOrdersRepository ordersRepository;
+        private readonly IMediaHelperService mediaService;
+        private readonly IMediaItemsRepository mediaRepository;
+        private readonly IOptions<AppSettings> options;
 
         public EditOrderFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             LinkGenerator linkGenerator,
+            IOptions<AppSettings> options,
+            IMediaHelperService mediaService,
+            IMediaItemsRepository mediaRepository,
             IOrdersRepository ordersRepository)
         {
             this.globalLocalizer = globalLocalizer;
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
             this.ordersRepository = ordersRepository;
+            this.mediaService = mediaService;
+            this.mediaRepository = mediaRepository;
+            this.options = options;
         }
 
         public async Task<EditOrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -51,7 +67,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 ClientLabel = this.globalLocalizer.GetString("Client"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
-                CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel")
+                CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
+                AttachmentsLabel = this.globalLocalizer.GetString("Attachments")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -87,6 +104,27 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     ImageSrc = x.PictureUrl
                 });
                 viewModel.CustomOrder = order.MoreInfo;
+
+                var attachments = new List<FileViewModel>();
+
+                foreach (var attachmentItem in order.Attachments.OrEmptyIfNull())
+                {
+                    var file = await this.mediaRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, attachmentItem);
+
+                    if (file is not null)
+                    {
+                        attachments.Add(new FileViewModel
+                        {
+                            Id = file.Id,
+                            Url = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, attachmentItem),
+                            Name = file.Name,
+                            MimeType = file.MimeType,
+                            Filename = file.Filename
+                        });
+                    };
+                };
+
+                viewModel.Attachments = attachments;
             }
 
             return viewModel;
