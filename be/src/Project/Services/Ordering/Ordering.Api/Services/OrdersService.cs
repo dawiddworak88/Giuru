@@ -4,6 +4,7 @@ using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
+using Foundation.Mailing.Configurations;
 using Foundation.Mailing.Models;
 using Foundation.Mailing.Services;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,8 @@ namespace Ordering.Api.Services
         private readonly OrderingContext context;
         private readonly IEventBus eventBus;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
+        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IOptionsMonitor<MailingConfiguration> mailingOptions;
         private readonly IMailingService mailingService;
         private readonly IOptions<AppSettings> configuration;
 
@@ -38,6 +41,8 @@ namespace Ordering.Api.Services
             IEventBus eventBus,
             IStringLocalizer<OrderResources> orderLocalizer,
             IMailingService mailingService,
+            IStringLocalizer<GlobalResources> globalLocalizer,
+            IOptionsMonitor<MailingConfiguration> mailingOptions,
             IOptions<AppSettings> configuration)
         {
             this.context = context;
@@ -45,6 +50,8 @@ namespace Ordering.Api.Services
             this.orderLocalizer = orderLocalizer;
             this.mailingService = mailingService;
             this.configuration = configuration;
+            this.globalLocalizer = globalLocalizer;
+            this.mailingOptions = mailingOptions;
         }
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel serviceModel)
@@ -109,18 +116,6 @@ namespace Ordering.Api.Services
 
             if (serviceModel.HasCustomOrder)
             {
-                Thread.CurrentThread.CurrentCulture = new CultureInfo(serviceModel.Language);
-                Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
-                
-                await this.mailingService.SendAsync(new Email
-                {
-                    SenderName = this.configuration.Value.SenderName,
-                    Subject = this.orderLocalizer.GetString("CustomOrderSubject").Value + " " + serviceModel.ClientName + " (" + order.Id + ")",
-                    SenderEmailAddress = this.configuration.Value.SenderEmail,
-                    PlainTextContent = serviceModel.MoreInfo,
-                    RecipientEmailAddress = this.configuration.Value.SenderEmail
-                });
-
                 foreach (var attachmentId in serviceModel.Attachments.OrEmptyIfNull())
                 {
                     var newAttachment = new OrderAttachment
@@ -131,6 +126,25 @@ namespace Ordering.Api.Services
 
                     await this.context.OrderAttachments.AddAsync(newAttachment.FillCommonProperties());
                 }
+
+                Thread.CurrentThread.CurrentCulture = new CultureInfo(serviceModel.Language);
+                Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
+
+                await this.mailingService.SendTemplateAsync(new TemplateEmail
+                {
+                    RecipientEmailAddress = this.configuration.Value.SenderEmail,
+                    RecipientName = this.configuration.Value.SenderName,
+                    SenderEmailAddress = this.configuration.Value.SenderEmail,
+                    SenderName = this.configuration.Value.SenderName,
+                    TemplateId = this.mailingOptions.CurrentValue.ActionSendGridCustomOrderTemplateId,
+                    DynamicTemplateData = new
+                    {
+                        attachmentsLabel = this.globalLocalizer.GetString("Attachments"),
+                        attachments = serviceModel.Attachments,
+                        subject = this.orderLocalizer.GetString("CustomOrderSubject").Value + " " + serviceModel.ClientName + " (" + order.Id + ")",
+                        text = serviceModel.MoreInfo
+                    }
+                });
             }
 
             await this.context.SaveChangesAsync();
