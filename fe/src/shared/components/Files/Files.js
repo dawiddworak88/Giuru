@@ -6,7 +6,7 @@ import {
 } from "@material-ui/core";
 import { GetApp, Link, LockOutlined } from "@material-ui/icons";
 import moment from "moment";
-import ClipboardHelper from "../../../../../shared/helpers/globals/ClipboardHelper";
+import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
 
 function Files(props) {
 
@@ -20,7 +20,7 @@ function Files(props) {
         <Fragment>
             {props.files &&
                 <section className="section files">
-                    <h3 className="title is-4">{props.downloadFilesLabel}</h3>
+                    <h3 className="title is-4">{props.isAttachments ? props.attachmentsLabel : props.downloadFilesLabel}</h3>
                     <div className="table-container">
                         <div className="catalog__table">
                             <TableContainer component={Paper}>
@@ -81,6 +81,7 @@ function Files(props) {
 
 Files.propTypes = {
     files: PropTypes.array.isRequired,
+    attachmentsLabel: PropTypes.string,
     downloadFilesLabel: PropTypes.string.isRequired,
     downloadLabel: PropTypes.string.isRequired,
     copyLinkLabel: PropTypes.string.isRequired,

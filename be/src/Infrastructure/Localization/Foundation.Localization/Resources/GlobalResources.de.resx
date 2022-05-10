@@ -502,7 +502,7 @@
     <value>Weiterlesen</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Attachments:</value>
+    <value>Attachments</value>
   </data>
   <data name="DropOrSelectAttachments" xml:space="preserve">
     <value>Legen Sie einen Anhang ab oder wählen Sie ihn aus</value>

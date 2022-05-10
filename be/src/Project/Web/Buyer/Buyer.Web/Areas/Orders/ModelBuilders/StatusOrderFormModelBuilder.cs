@@ -1,22 +1,15 @@
 ﻿using Buyer.Web.Areas.Orders.Repositories;
 using Buyer.Web.Areas.Orders.ViewModel;
 using Buyer.Web.Areas.Products.DomainModels;
-using Buyer.Web.Areas.Products.Repositories.Files;
-using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
+using Buyer.Web.Shared.ComponentModels.Files;
 using Buyer.Web.Shared.ViewModels.Files;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.Extensions.Services.MediaServices;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,33 +18,24 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
 {
     public class StatusOrderFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, StatusOrderFormViewModel>
     {
-        private readonly IOptions<AppSettings> options;
+        private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly IOrdersRepository ordersRepository;
-        private readonly ICdnService cdnService;
-        private readonly IMediaHelperService mediaService;
-        private readonly IMediaItemsRepository mediaRepository;
 
         public StatusOrderFormModelBuilder(
+            IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             LinkGenerator linkGenerator,
-            ICdnService cdnService,
-            IOptions<AppSettings> options,
-            IMediaHelperService mediaService,
-            IMediaItemsRepository mediaRepository,
             IOrdersRepository ordersRepository)
         {
             this.globalLocalizer = globalLocalizer;
             this.orderLocalizer = orderLocalizer;
             this.linkGenerator = linkGenerator;
             this.ordersRepository = ordersRepository;
-            this.cdnService = cdnService;
-            this.mediaService = mediaService;
-            this.mediaRepository = mediaRepository;
-            this.options = options;
+            this.filesModelBuilder = filesModelBuilder;
         }
 
         public async Task<StatusOrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -72,8 +56,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 FabricsLabel = this.orderLocalizer.GetString("FabricsLabel"),
                 CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
-                StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
-                AttachmentsLabel = this.globalLocalizer.GetString("Attachments")
+                StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -113,26 +96,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     ImageSrc = x.PictureUrl
                 });
 
-                var attachments = new List<FileViewModel>();
-
-                foreach (var attachmentItem in order.Attachments.OrEmptyIfNull())
-                {
-                    var file = await this.mediaRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, attachmentItem);
-
-                    if (file is not null)
-                    {
-                        attachments.Add(new FileViewModel
-                        {
-                            Id = file.Id,
-                            Url = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, attachmentItem)),
-                            Name = file.Name,
-                            MimeType = file.MimeType,
-                            Filename = file.Filename
-                        });
-                    };
-                };
-
-                viewModel.Attachments = attachments;
+                viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = order.Attachments, IsAttachments = true });
             }
 
             return viewModel;

@@ -7,6 +7,7 @@ import {
 import moment from "moment";
 import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
 import { PictureAsPdf, Folder, Attachment } from "@material-ui/icons";
+import Files from "../../../../../../shared/components/Files/Files";
 
 function StatusOrder(props) {
     const status = props.orderStatuses.find((item) => item.id === props.orderStatusId);
@@ -100,30 +101,7 @@ function StatusOrder(props) {
                         
                     </div>
                     {props.attachments &&
-                        <div className="mt-2 status-order__attachments">
-                            <h2 className="subtitle">{props.attachmentsLabel}</h2>
-                            {props.attachments.length > 0 && props.attachments.map((attachment, index) => {
-                                const iconType = {
-                                    "application/zip": <Folder />,
-                                    "application/pdf": <PictureAsPdf />
-                                }
-
-                                return (
-                                    <div className="column is-3" key={index}>
-                                        <a href={attachment.url}>
-                                            <div className="card">
-                                                <div className="card-image">
-                                                    {iconType[attachment.mimeType] ? iconType[attachment.mimeType] : <Attachment /> }
-                                                </div>
-                                                <div className="media-content">
-                                                    <span className="file">{attachment.filename}</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                )
-                            })}
-                        </div>
+                        <Files {...props.attachments} />
                     }
                 </Fragment>
                

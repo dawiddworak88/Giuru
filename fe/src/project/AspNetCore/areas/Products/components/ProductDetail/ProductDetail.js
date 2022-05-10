@@ -4,7 +4,7 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { Button } from "@material-ui/core";
 import ImageGallery from "react-image-gallery";
-import Files from "../../../../shared/components/Files/Files";
+import Files from "../../../../../../shared/components/Files/Files";
 import { Context } from "../../../../../../shared/stores/Store";
 import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
