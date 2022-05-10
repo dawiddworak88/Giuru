@@ -1,6 +1,7 @@
 ﻿using Foundation.EventBus.Abstractions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
@@ -35,6 +36,8 @@ namespace Ordering.Api.Services
         private readonly IOptionsMonitor<MailingConfiguration> mailingOptions;
         private readonly IMailingService mailingService;
         private readonly IOptions<AppSettings> configuration;
+        private readonly IMediaHelperService mediaService;
+        private readonly IOptions<AppSettings> options;
 
         public OrdersService(
             OrderingContext context,
@@ -43,6 +46,8 @@ namespace Ordering.Api.Services
             IMailingService mailingService,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IOptionsMonitor<MailingConfiguration> mailingOptions,
+            IMediaHelperService mediaService,
+            IOptions<AppSettings> options,
             IOptions<AppSettings> configuration)
         {
             this.context = context;
@@ -52,6 +57,8 @@ namespace Ordering.Api.Services
             this.configuration = configuration;
             this.globalLocalizer = globalLocalizer;
             this.mailingOptions = mailingOptions;
+            this.mediaService = mediaService;
+            this.options = options;
         }
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel serviceModel)
@@ -116,6 +123,8 @@ namespace Ordering.Api.Services
 
             if (serviceModel.HasCustomOrder)
             {
+                var attachments = new List<string>();
+
                 foreach (var attachmentId in serviceModel.Attachments.OrEmptyIfNull())
                 {
                     var newAttachment = new OrderAttachment
@@ -123,6 +132,8 @@ namespace Ordering.Api.Services
                         OrderId = order.Id,
                         MediaId = attachmentId
                     };
+
+                    attachments.Add(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, attachmentId));
 
                     await this.context.OrderAttachments.AddAsync(newAttachment.FillCommonProperties());
                 }
@@ -139,8 +150,8 @@ namespace Ordering.Api.Services
                     TemplateId = this.mailingOptions.CurrentValue.ActionSendGridCustomOrderTemplateId,
                     DynamicTemplateData = new
                     {
-                        attachmentsLabel = this.globalLocalizer.GetString("Attachments"),
-                        attachments = serviceModel.Attachments,
+                        attachmentsLabel = this.globalLocalizer.GetString("Attachments").Value,
+                        attachments = attachments,
                         subject = this.orderLocalizer.GetString("CustomOrderSubject").Value + " " + serviceModel.ClientName + " (" + order.Id + ")",
                         text = serviceModel.MoreInfo
                     }
