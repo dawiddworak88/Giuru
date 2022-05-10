@@ -133,11 +133,11 @@ function Header(props) {
 }
 
 Header.propTypes = {
-    drawerBackLabel: PropTypes.string.isRequired,
-    drawerBackIcon: PropTypes.string.isRequired,
+    drawerBackLabel: PropTypes.string,
+    drawerBackIcon: PropTypes.string,
     logo: PropTypes.object.isRequired,
     links: PropTypes.array.isRequired,
-    drawerMenuCategories: PropTypes.array.isRequired,
+    drawerMenuCategories: PropTypes.array,
     isLoggedIn: PropTypes.bool,
     signOutLink: PropTypes.object
 };
