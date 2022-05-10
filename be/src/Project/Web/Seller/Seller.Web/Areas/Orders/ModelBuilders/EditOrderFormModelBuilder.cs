@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Areas.Shared.Repositories.Media;
+using Seller.Web.Shared.ComponentModels.Files;
 using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 {
     public class EditOrderFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, EditOrderFormViewModel>
     {
+        private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly LinkGenerator linkGenerator;
@@ -29,7 +31,9 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
         private readonly IMediaItemsRepository mediaRepository;
         private readonly IOptions<AppSettings> options;
 
-        public EditOrderFormModelBuilder(
+        public EditOrderFormModelBuilder
+        (
+            IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<OrderResources> orderLocalizer,
             LinkGenerator linkGenerator,
@@ -45,6 +49,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
             this.mediaService = mediaService;
             this.mediaRepository = mediaRepository;
             this.options = options;
+            this.filesModelBuilder = filesModelBuilder;
         }
 
         public async Task<EditOrderFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -105,26 +110,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 });
                 viewModel.CustomOrder = order.MoreInfo;
 
-                var attachments = new List<FileViewModel>();
-
-                foreach (var attachmentItem in order.Attachments.OrEmptyIfNull())
-                {
-                    var file = await this.mediaRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, attachmentItem);
-
-                    if (file is not null)
-                    {
-                        attachments.Add(new FileViewModel
-                        {
-                            Id = file.Id,
-                            Url = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, attachmentItem),
-                            Name = file.Name,
-                            MimeType = file.MimeType,
-                            Filename = file.Filename
-                        });
-                    };
-                };
-
-                viewModel.Attachments = attachments;
+                viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = order.Attachments, IsAttachments = true });
             }
 
             return viewModel;

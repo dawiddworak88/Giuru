@@ -11,6 +11,7 @@ import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
 import { PictureAsPdf, Folder, Attachment } from "@material-ui/icons";
+import Files from "../../../../../../shared/components/Files/Files";
 
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -178,30 +179,7 @@ function EditOrderForm(props) {
                         </div>
                     </div>
                     {props.attachments &&
-                        <div className="mt-2 edit-order__attachments">
-                            <h2 className="subtitle">{props.attachmentsLabel}</h2>
-                            {props.attachments.length > 0 && props.attachments.map((attachment, index) => {
-                                const iconType = {
-                                    "application/zip": <Folder />,
-                                    "application/pdf": <PictureAsPdf />
-                                }
-
-                                return (
-                                    <div className="column is-3" key={index}>
-                                        <a href={attachment.url}>
-                                            <div className="card">
-                                                <div className="card-image">
-                                                    {iconType[attachment.mimeType] ? iconType[attachment.mimeType] : <Attachment /> }
-                                                </div>
-                                                <div className="media-content">
-                                                    <span className="file">{attachment.filename}</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                )
-                            })}
-                        </div>
+                        <Files {...props.attachments} />
                     }
                 </Fragment>
             }

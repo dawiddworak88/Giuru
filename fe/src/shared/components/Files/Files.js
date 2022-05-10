@@ -16,7 +16,6 @@ function Files(props) {
     };
 
     return (
-        
         <Fragment>
             {props.files &&
                 <section className="section files">
