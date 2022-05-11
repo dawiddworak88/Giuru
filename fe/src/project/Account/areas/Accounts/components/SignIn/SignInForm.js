@@ -4,6 +4,7 @@ import { TextField, Button } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import PasswordValidator from "../../../../../../shared/helpers/validators/PasswordValidator";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function SignInForm(props) {
 
@@ -43,13 +44,11 @@ function SignInForm(props) {
 
     const { email, password } = values;
     return (
-        <section className="section is-flex-centered">
+        <section className="section is-flex-direction-column is-flex-centered">
             <div className="account-card">
                 <form className="is-modern-form has-text-centered" action={props.submitUrl} method="post">
                     <input type="hidden" name="returnUrl" value={props.returnUrl} />
-                    <div>
-                        <h1 className="subtitle is-4">{props.signInText}</h1>
-                    </div>
+                    <h1 className="subtitle is-4">{props.signInText}</h1>
                     <div className="field">
                         <TextField id="email" name="email" label={props.enterEmailText} fullWidth={true} 
                             value={email} onChange={handleOnChange} helperText={dirty.email ? errors.email : ""} error={(errors.email.length > 0) && dirty.email} />
@@ -68,6 +67,14 @@ function SignInForm(props) {
                     </div>
                 </form>
             </div>
+            <div className="account-container has-text-centered mt-4">
+                <h2 className="title is-size-6 mb-3">{props.registerLabel}</h2>
+                <Button type="text" variant="contained" color="primary" fullWidth={true} onClick={() => NavigationHelper.redirect(props.registerUrl)}>{props.registerButtonText}</Button>
+                <div className="mt-6">
+                    <p>{props.contactText}</p>
+                    <a href={`mailto:${props.developersEmail}`}>{props.developersEmail}</a>
+                </div>
+            </div>
         </section>
     );
 }
@@ -81,7 +88,12 @@ SignInForm.propTypes = {
     enterEmailText: PropTypes.string.isRequired,
     enterPasswordText: PropTypes.string.isRequired,
     submitUrl: PropTypes.string.isRequired,
-    returnUrl: PropTypes.string
+    returnUrl: PropTypes.string,
+    registerLabel: PropTypes.string.isRequired,
+    registerButtonLabel: PropTypes.string.isRequired,
+    developersEmail: PropTypes.string.isRequired,
+    contactText: PropTypes.string.isRequired,
+    registerUrl: PropTypes.string.isRequired
 };
 
 export default SignInForm;

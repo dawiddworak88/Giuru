@@ -177,6 +177,15 @@
   <data name="PasswordUpdated" xml:space="preserve">
     <value>Hasło zostało pomyślnie ustawione</value>
   </data>
+  <data name="Register" xml:space="preserve">
+    <value>Dołącz do nas</value>
+  </data>
+  <data name="RegisterButton" xml:space="preserve">
+    <value>Aplikuj tutaj</value>
+  </data>
+  <data name="RegisterContact" xml:space="preserve">
+    <value>Potrzebujesz pomocy? Skontaktuj się</value>
+  </data>
   <data name="ResetPassword" xml:space="preserve">
     <value>Resetowanie hasła</value>
   </data>

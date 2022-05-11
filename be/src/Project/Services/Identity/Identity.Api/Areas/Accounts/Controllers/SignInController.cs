@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Identity.Api.Areas.Accounts.Services.UserServices;
 using IdentityServer4.Services;
+using Identity.Api.Configurations;
+using Microsoft.Extensions.Options;
 
 namespace Identity.Api.Areas.Accounts.Controllers
 {
@@ -16,11 +18,13 @@ namespace Identity.Api.Areas.Accounts.Controllers
     [AllowAnonymous]
     public class SignInController : BaseController
     {
+        private readonly IOptions<AppSettings> settings;
         private readonly IIdentityServerInteractionService interactionService;
         private readonly IUserService userService;
         private readonly IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder;
 
         public SignInController(
+            IOptions<AppSettings> settings,
             IIdentityServerInteractionService interactionService,
             IUserService userService,
             IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder
@@ -29,12 +33,13 @@ namespace Identity.Api.Areas.Accounts.Controllers
             this.interactionService = interactionService;
             this.userService = userService;
             this.signInModelBuilder = signInModelBuilder;
+            this.settings = settings;
         }
 
         [HttpGet]
         public IActionResult Index(string returnUrl)
         {
-            var viewModel = this.signInModelBuilder.BuildModel(new SignInComponentModel { ReturnUrl = returnUrl });
+            var viewModel = this.signInModelBuilder.BuildModel(new SignInComponentModel { ReturnUrl = returnUrl, DevelopersEmail = this.settings.Value.DevelopersEmail });
 
             return this.View(viewModel);
         }
@@ -59,7 +64,7 @@ namespace Identity.Api.Areas.Accounts.Controllers
                 }                
             }
 
-            var viewModel = this.signInModelBuilder.BuildModel(new SignInComponentModel { ReturnUrl = model.ReturnUrl });
+            var viewModel = this.signInModelBuilder.BuildModel(new SignInComponentModel { ReturnUrl = model.ReturnUrl, DevelopersEmail = this.settings.Value.DevelopersEmail });
 
             return this.View(viewModel);
         }
