@@ -82,12 +82,12 @@ function Header(props) {
                                             </ListItem>
                                         </List>
                                         <Divider /><Divider />
-                                    {props.drawerMenuCategories.map((category) => (
-                                        <Fragment key={category.title}>
+                                    {props.drawerMenuCategories.map((category, index) => (
+                                        <Fragment key={index}>
                                             <List>
-                                                {category.items.map((item) => (
-                                                    <a href={item.url}>
-                                                        <ListItem selected={item.isActive} button key={item.title}>
+                                                {category.items.map((item, index) => (
+                                                    <a href={item.url} key={index}>
+                                                        <ListItem selected={item.isActive} button>
                                                             <ListItemIcon>{ListIcon(item.icon)}</ListItemIcon>
                                                             <ListItemText primary={item.title} />
                                                         </ListItem>
@@ -133,11 +133,11 @@ function Header(props) {
 }
 
 Header.propTypes = {
-    drawerBackLabel: PropTypes.string.isRequired,
-    drawerBackIcon: PropTypes.string.isRequired,
+    drawerBackLabel: PropTypes.string,
+    drawerBackIcon: PropTypes.string,
     logo: PropTypes.object.isRequired,
     links: PropTypes.array.isRequired,
-    drawerMenuCategories: PropTypes.array.isRequired,
+    drawerMenuCategories: PropTypes.array,
     isLoggedIn: PropTypes.bool,
     signOutLink: PropTypes.object
 };
