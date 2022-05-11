@@ -63,7 +63,7 @@ function NewOrderForm(props) {
                     return response.json().then(jsonResponse => {
                         if (response.ok) {
                             setSuggestions(() => []);
-                            setSuggestions(() => jsonResponse.data);
+                            setSuggestions(() => jsonResponse);
                         }
                         else {
                             toast.error(props.generalErrorMessage);

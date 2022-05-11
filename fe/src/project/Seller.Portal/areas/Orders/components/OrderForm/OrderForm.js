@@ -78,7 +78,7 @@ function OrderForm(props) {
                         if (response.ok) {
                             setId(jsonResponse.id);
                             setSuggestions(() => []);
-                            setSuggestions(() => jsonResponse.data);
+                            setSuggestions(() => jsonResponse);
                         }
                         else {
                             toast.error(props.generalErrorMessage);

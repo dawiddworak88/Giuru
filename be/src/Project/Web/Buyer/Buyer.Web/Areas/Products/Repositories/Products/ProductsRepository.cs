@@ -265,6 +265,7 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 Description = productResponse.Description,
                 IsNew = productResponse.IsNew,
                 IsProtected = productResponse.IsProtected,
+                IsPublished = productResponse.IsPublished,
                 FormData = productResponse.FormData,
                 SellerId = productResponse.SellerId,
                 BrandName = productResponse.BrandName,

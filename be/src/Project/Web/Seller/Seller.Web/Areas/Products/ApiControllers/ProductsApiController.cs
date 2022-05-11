@@ -33,23 +33,16 @@ namespace Seller.Web.Areas.Clients.ApiControllers
 
         [HttpGet]
         public async Task<IActionResult> Get(
-            string searchTerm,
-            bool? hasPrimaryProduct,
-            int pageIndex,
-            int itemsPerPage,
-            string orderBy)
+            string searchTerm, bool? hasPrimaryProduct, int pageIndex, int itemsPerPage, string orderBy)
         {
-            var products = await this.productsRepository.GetProductsAsync(
-                await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
-                CultureInfo.CurrentUICulture.Name,
-                searchTerm,
-                hasPrimaryProduct,
-                GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value),
-                pageIndex,
-                itemsPerPage,
-                orderBy);
+            var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
+            var language = CultureInfo.CurrentUICulture.Name;
+            var sellerId = GuidHelper.ParseNullable((this.User.Identity as ClaimsIdentity).Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim)?.Value);
 
-            return this.StatusCode((int)HttpStatusCode.OK, products);
+            var products = await this.productsRepository.GetProductsAsync(
+                token, language, searchTerm, hasPrimaryProduct, sellerId, pageIndex, itemsPerPage, orderBy);
+
+            return this.StatusCode((int)HttpStatusCode.OK, products.Data.Where(x => x.IsPublished));
         }
 
         [HttpPost]

@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -87,17 +88,11 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         {
             var language = CultureInfo.CurrentUICulture.Name;
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
-            var products = await this.productsRepository.GetProductsAsync(
-                token,
-                language,
-                searchTerm,
-                hasPrimaryProduct,
-                brandId,
-                pageIndex,
-                itemsPerPage,
-                orderBy);
 
-            return this.StatusCode((int)HttpStatusCode.OK, products);
+            var products = await this.productsRepository.GetProductsAsync(
+                token, language, searchTerm, hasPrimaryProduct, brandId, pageIndex, itemsPerPage, orderBy);
+
+            return this.StatusCode((int)HttpStatusCode.OK, products.Data.Where(x => x.IsPublished));
         }
 
         [HttpGet]
