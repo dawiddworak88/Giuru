@@ -104,7 +104,7 @@ const OutletForm = (props) => {
                             </div>
                         }
                         <div className="field">
-                            <FormControl fullWidth={true} helperText={dirty.warehouseId ? errors.warehouseId : ""} error={(errors.warehouseId.length > 0) && dirty.warehouseId}>
+                            <FormControl fullWidth={true} error={(errors.warehouseId.length > 0) && dirty.warehouseId}>
                                 <InputLabel id="warehouse-label">{props.selectWarehouseLabel}</InputLabel>
                                 <Select
                                     name="warehouseId"

@@ -119,7 +119,7 @@ function ProductDetail(props) {
             setIsSidebarOpen(true)
         }
     }, [canActiveModal, isModalOpen, isSidebarOpen]);
-
+    
     return (
         <section className="product-detail section">
             <div className="product-detail__head columns is-tablet">
@@ -177,11 +177,11 @@ function ProductDetail(props) {
                         </div>
                     }
                     {props.features && props.features.length > 0 &&
-                        <div className="product-detail__read-more mt-2">
+                        <div className="mt-2">
                             {showMore ? (
                                 <Fragment>
                                     <div className="is-flex is-justify-content-center">
-                                        <span className="read-more-text" onClick={() => setShowMore(false)}>{props.readLessText} <ExpandLess/></span>
+                                        <span className="is-flex is-align-content-center is-text button" onClick={() => setShowMore(false)}>{props.readLessText} <ExpandLess/></span>
                                     </div>
                                     <div className="product-detail__product-information">
                                         <h3 className="product-detail__feature-title">{props.productInformationLabel}</h3>
@@ -199,7 +199,7 @@ function ProductDetail(props) {
                                 </Fragment>
                             ) : (
                                 <div className="is-flex is-justify-content-center">
-                                    <span className="read-more-text" onClick={() => setShowMore(true)}>{props.readMoreText} <ExpandMore/></span>
+                                    <span className="button is-flex is-align-content-center is-text" onClick={() => setShowMore(true)}>{props.readMoreText} <ExpandMore/></span>
                                 </div>
                             )}
                         </div>

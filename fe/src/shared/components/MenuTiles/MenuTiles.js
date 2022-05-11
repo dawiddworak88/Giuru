@@ -20,8 +20,8 @@ function MenuTiles(props) {
             >
                 {props.tiles.map((tile, index) => {
                     return(
-                        <SwiperSlide>
-                            <Tile key={index} icon={tile.icon} title={tile.title} url={tile.url} />
+                        <SwiperSlide  key={index}>
+                            <Tile icon={tile.icon} title={tile.title} url={tile.url} />
                         </SwiperSlide>
                     );
                 })}
