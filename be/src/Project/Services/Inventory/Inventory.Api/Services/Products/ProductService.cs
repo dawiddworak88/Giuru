@@ -14,6 +14,19 @@ namespace Inventory.Api.Services.Products
             this.context = context;
         }
 
+        public async Task DeleteProductAsync(Guid? productId)
+        {
+            var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == productId.Value && x.IsActive);
+
+            if (product is not null)
+            {
+                product.IsActive = false;
+                product.LastModifiedDate = DateTime.UtcNow;
+
+                await this.context.SaveChangesAsync();
+            }
+        }
+
         public async Task UpdateProductAsync(Guid? productId, string productName, string productSku, string productEan)
         {
             var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == productId.Value && x.IsActive);
