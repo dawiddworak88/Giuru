@@ -213,27 +213,27 @@ function Catalog(props) {
                                             {props.table.actions &&
                                                 <TableCell width="11%"></TableCell>
                                             }
-                                            {props.table.labels.map((item) =>
-                                                <TableCell key={item} value={item}>{item}</TableCell>
+                                            {props.table.labels.map((item, index) =>
+                                                <TableCell key={index} value={item}>{item}</TableCell>
                                             )}
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {items.map((item) => (
-                                            <TableRow key={item.name}>
+                                        {items.map((item, index) => (
+                                            <TableRow key={index}>
                                                 {props.table.actions &&
                                                     <TableCell width="11%">
-                                                        {props.table.actions.map((actionItem) => {
+                                                        {props.table.actions.map((actionItem, index) => {
                                                             if (actionItem.isEdit) return (
-                                                                <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel}>
+                                                                <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel} key={index}>
                                                                     <Edit />
                                                                 </Fab>)
                                                             else if (actionItem.isDelete) return (
-                                                                <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
+                                                                <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel} key={index}>
                                                                     <Delete />
                                                                 </Fab>)
                                                             else if (actionItem.isDuplicate) return (
-                                                                <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary" aria-label={props.duplicateLabel}>
+                                                                <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary" aria-label={props.duplicateLabel} key={index}>
                                                                     <FileCopyOutlinedIcon />
                                                                 </Fab>)
                                                             else return (
@@ -241,14 +241,14 @@ function Catalog(props) {
                                                     </TableCell>
                                                 }
 
-                                                {props.table.properties && props.table.properties.map((property) => {
+                                                {props.table.properties && props.table.properties.map((property, index) => {
 
                                                     if (property.isDateTime) return (
-                                                        <TableCell>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
+                                                        <TableCell key={index}>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
                                                     )
                                                     else {
                                                         return (
-                                                            <TableCell>{item[property.title] !== null ? item[property.title] : "-"}</TableCell>
+                                                            <TableCell key={index}>{item[property.title] !== null ? item[property.title] : "-"}</TableCell>
                                                         )}})}
                                             </TableRow>
                                         ))}

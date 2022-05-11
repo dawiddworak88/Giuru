@@ -579,7 +579,6 @@ OrderForm.propTypes = {
     ordersUrl: PropTypes.string.isRequired,
     placeOrderUrl: PropTypes.string.isRequired,
     navigateToOrdersListText: PropTypes.string.isRequired,
-    expectedDeliveryabel: PropTypes.string.isRequired,
     uploadOrderFileUrl: PropTypes.string.isRequired,
     orLabel: PropTypes.string.isRequired,
     dropOrSelectFilesLabel: PropTypes.string.isRequired,

@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Routing;
 using Seller.Web.Areas.News.Repositories.Categories;
 using System.Linq;
 using Foundation.PageContent.Components.ListItems.ViewModels;
-using System;
-using Newtonsoft.Json;
 using System.Globalization;
 
 namespace Seller.Web.Areas.News.ModelBuilders
@@ -46,7 +44,8 @@ namespace Seller.Web.Areas.News.ModelBuilders
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Post", "CategoriesApi", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name }),
                 NavigateToCategoriesLabel = this.newsLocalizer.GetString("NavigateToCategoriesLabel"),
-                CategoriesUrl = this.linkGenerator.GetPathByAction("Index", "Categories", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name })
+                CategoriesUrl = this.linkGenerator.GetPathByAction("Index", "Categories", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name }),
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred")
             };
 
             var categories = await this.categoriesRepository.GetAllCategoriesAsync(componentModel.Token, componentModel.Language);
