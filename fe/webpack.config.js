@@ -3,7 +3,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 const browserConfig = {
     module: {
@@ -18,26 +17,8 @@ const browserConfig = {
                 ]
             },
             {
-                test: /\.(woff(2)?|ttf|eot)$/,
-                use: [{
-                    loader: "file-loader",
-                    options: {
-                        name: "[name].[ext]",
-                        outputPath: "../fonts",
-                        publicPath: "/dist/fonts"
-                    }
-                }]
-            },
-            {
-                test: /\.(png|svg|jpg|gif)$/,
-                use: [{
-                    loader: "file-loader",
-                    options: {
-                        name: "[name].[ext]",
-                        outputPath: "../images",
-                        publicPath: "/dist/images"
-                    }
-                }]
+                test: /\.(png|svg|jpg|jpeg|gif|woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/inline',
             },
             {
                 test: /\.(js|jsx)$/,
@@ -105,26 +86,8 @@ const accountBrowserConfig = {
                 ]
             },
             {
-                test: /\.(woff(2)?|ttf|eot)$/,
-                use: [{
-                    loader: "file-loader",
-                    options: {
-                        name: "[name].[ext]",
-                        outputPath: "../fonts",
-                        publicPath: "/dist/fonts"
-                    }
-                }]
-            },
-            {
-                test: /\.(png|svg|jpg|gif)$/,
-                use: [{
-                    loader: "file-loader",
-                    options: {
-                        name: "[name].[ext]",
-                        outputPath: "../images",
-                        publicPath: "/dist/images"
-                    }
-                }]
+                test: /\.(png|svg|jpg|jpeg|gif|woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/inline',
             },
             {
                 test: /\.(js|jsx)$/,
@@ -186,26 +149,8 @@ const sellerPortalBrowserConfig = {
                 ]
             },
             {
-                test: /\.(woff(2)?|ttf|eot)$/,
-                use: [{
-                    loader: "file-loader",
-                    options: {
-                        name: "[name].[ext]",
-                        outputPath: "../fonts",
-                        publicPath: "/dist/fonts"
-                    }
-                }]
-            },
-            {
-                test: /\.(png|svg|jpg|gif)$/,
-                use: [{
-                    loader: "file-loader",
-                    options: {
-                        name: "[name].[ext]",
-                        outputPath: "../images",
-                        publicPath: "/dist/images"
-                    }
-                }]
+                test: /\.(png|svg|jpg|jpeg|gif|woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/inline',
             },
             {
                 test: /\.(js|jsx)$/,
