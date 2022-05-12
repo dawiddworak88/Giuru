@@ -285,6 +285,8 @@ namespace Catalog.Api.Services.Products
 
             product.IsActive = false;
 
+            await this.catalogContext.SaveChangesAsync();
+
             var message = new DeletedProductIntegrationEvent
             {
                 ProductId = model.Id,
@@ -294,8 +296,6 @@ namespace Catalog.Api.Services.Products
             };
 
             this.eventBus.Publish(message);
-
-            await this.catalogContext.SaveChangesAsync();
 
             await this.productIndexingRepository.IndexAsync(product.Id);
         }
