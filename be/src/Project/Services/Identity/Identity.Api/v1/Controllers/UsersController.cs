@@ -70,6 +70,8 @@ namespace Identity.Api.v1.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
+
+                return this.StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
