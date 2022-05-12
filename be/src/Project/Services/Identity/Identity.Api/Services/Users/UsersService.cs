@@ -281,24 +281,24 @@ namespace Identity.Api.Services.Users
         {
             var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
 
-            if (user is null)
+            if (user is not null)
             {
-                throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NotFound);
+                return new UserServiceModel
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    UserName = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    OrganisationId = user.OrganisationId,
+                    TwoFactorEnabled = user.TwoFactorEnabled,
+                    EmailConfirmed = user.EmailConfirmed,
+                    PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+                    PhoneNumber = user.PhoneNumber
+                };
             }
 
-            return new UserServiceModel
-            {
-                Id = user.Id,
-                Email = user.Email,
-                UserName = user.UserName,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                OrganisationId = user.OrganisationId,
-                TwoFactorEnabled = user.TwoFactorEnabled,
-                EmailConfirmed = user.EmailConfirmed,
-                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
-                PhoneNumber = user.PhoneNumber
-            };
+            return default;
         }
     }
 }
