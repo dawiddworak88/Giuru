@@ -132,7 +132,6 @@ namespace Ordering.Api.Services
                         OrderId = order.Id,
                         MediaId = attachmentId
                     };
-
                     attachments.Add(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, attachmentId));
 
                     await this.context.OrderAttachments.AddAsync(newAttachment.FillCommonProperties());

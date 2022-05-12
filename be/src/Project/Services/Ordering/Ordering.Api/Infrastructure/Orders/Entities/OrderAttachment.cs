@@ -9,10 +9,5 @@ namespace Ordering.Api.Infrastructure.Orders.Entities
     {
         [Required]
         public Guid OrderId { get; set; }
-
-        internal IEnumerable<Guid> Select(Func<object, object> p)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
