@@ -49,6 +49,7 @@ namespace Seller.Web.Areas.Inventory.Repositories.Inventories
             };
 
             var response = await this.apiInventoryService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<InventoryItem>>>(apiRequest);
+
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
                 return new PagedResults<IEnumerable<InventoryItem>>(response.Data.Total, response.Data.PageSize)
