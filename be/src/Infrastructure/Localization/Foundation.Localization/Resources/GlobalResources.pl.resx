@@ -504,4 +504,10 @@
   <data name="ReadMore" xml:space="preserve">
     <value>Czytaj więcej</value>
   </data>
+  <data name="EltapPartner" xml:space="preserve">
+    <value>Współpracuj z ELTAP</value>
+  </data>
+  <data name="EltapPartnerDescription" xml:space="preserve">
+    <value>Dziękujemy za zainteresowanie współpracą z ELTAP! Cieszymy się, że dzięki Tobie możemy rozszerzyć nasze produkty na inne regiony.</value>
+  </data>
 </root>

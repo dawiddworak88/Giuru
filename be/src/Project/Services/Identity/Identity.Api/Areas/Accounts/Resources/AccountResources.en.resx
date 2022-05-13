@@ -138,6 +138,18 @@
   <data name="BackToLoginText" xml:space="preserve">
     <value>Back to login</value>
   </data>
+  <data name="BusinessInformation" xml:space="preserve">
+    <value>Business Information</value>
+  </data>
+  <data name="BusinessInformationDescription" xml:space="preserve">
+    <value>Let us know your business details</value>
+  </data>
+  <data name="ContactInformation" xml:space="preserve">
+    <value>Contact Information</value>
+  </data>
+  <data name="ContactInformationDescription" xml:space="preserve">
+    <value>Your primary contact will be ELTAP point person for your business</value>
+  </data>
   <data name="EmailIsConfirmedText" xml:space="preserve">
     <value>Account Confirmed</value>
   </data>
@@ -149,6 +161,12 @@
   </data>
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Enter your last name</value>
+  </data>
+  <data name="LogisticalInformation" xml:space="preserve">
+    <value>Logistical Information</value>
+  </data>
+  <data name="LogisticalInformationDescription" xml:space="preserve">
+    <value>Tell us details about how your business is operating</value>
   </data>
   <data name="nc_buttonLabel" xml:space="preserve">
     <value>Confirm and set a password</value>
@@ -173,6 +191,9 @@
   </data>
   <data name="OrganisationNotFound" xml:space="preserve">
     <value>Organization not found.</value>
+  </data>
+  <data name="Partnership" xml:space="preserve">
+    <value>Partnership</value>
   </data>
   <data name="PasswordUpdated" xml:space="preserve">
     <value>Password has been set successfully</value>

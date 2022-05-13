@@ -138,6 +138,18 @@
   <data name="BackToLoginText" xml:space="preserve">
     <value>Zurück zur Anmeldung</value>
   </data>
+  <data name="BusinessInformation" xml:space="preserve">
+    <value>Geschäftsinformationen</value>
+  </data>
+  <data name="BusinessInformationDescription" xml:space="preserve">
+    <value>Teilen Sie uns Ihren Firmennamen und Standort mit</value>
+  </data>
+  <data name="ContactInformation" xml:space="preserve">
+    <value>Kontaktinformation</value>
+  </data>
+  <data name="ContactInformationDescription" xml:space="preserve">
+    <value>Ihr Hauptansprechpartner ist die ELTAP-Kontaktperson für Ihr Unternehmen</value>
+  </data>
   <data name="EmailIsConfirmedText" xml:space="preserve">
     <value>Konto bestätigt</value>
   </data>
@@ -149,6 +161,12 @@
   </data>
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Geben Sie Ihren Nachnamen ein</value>
+  </data>
+  <data name="LogisticalInformation" xml:space="preserve">
+    <value>Logistische Informationen</value>
+  </data>
+  <data name="LogisticalInformationDescription" xml:space="preserve">
+    <value>Teilen Sie uns Einzelheiten darüber mit, wie Ihr Unternehmen funktioniert</value>
   </data>
   <data name="nc_buttonLabel" xml:space="preserve">
     <value>Bestätigen und ein Passwort festlegen</value>
@@ -173,6 +191,9 @@
   </data>
   <data name="OrganisationNotFound" xml:space="preserve">
     <value>Organisation nicht gefunden.</value>
+  </data>
+  <data name="Partnership" xml:space="preserve">
+    <value>Partnerschaft</value>
   </data>
   <data name="PasswordUpdated" xml:space="preserve">
     <value>Passwort wurde erfolgreich gesetzt</value>
