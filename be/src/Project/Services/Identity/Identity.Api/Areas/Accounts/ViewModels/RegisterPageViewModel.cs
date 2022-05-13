@@ -6,6 +6,7 @@ namespace Identity.Api.Areas.Accounts.ViewModels
     public class RegisterPageViewModel
     {
         public HeaderViewModel Header { get; set; }
+        public RegisterFormViewModel RegisterForm { get; set; }
         public FooterViewModel Footer { get; set; }
     }
 }

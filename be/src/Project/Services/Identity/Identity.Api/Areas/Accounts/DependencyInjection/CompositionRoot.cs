@@ -24,6 +24,7 @@ namespace Identity.Api.Areas.Accounts.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ResetPasswordComponentModel, ResetPasswordFormViewModel>, ResetPasswordFormModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ResetPasswordComponentModel, ResetPasswordViewModel>, ResetPasswordModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, RegisterPageViewModel>, RegisterPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, RegisterFormViewModel>, RegisterFormModelBuilder>();
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
