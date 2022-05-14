@@ -17,9 +17,6 @@ spec:
       containers:
       - name: media-api-container
         image: {{ .Values.image.registry }}/media-api:{{ .Values.image.tag }}
-        resources:
-          limits:
-            memory: "1800Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
