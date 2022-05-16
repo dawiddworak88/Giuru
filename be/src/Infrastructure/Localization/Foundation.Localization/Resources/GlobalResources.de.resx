@@ -507,4 +507,28 @@
   <data name="EltapPartnerDescription" xml:space="preserve">
     <value>Vielen Dank für Ihr Interesse an einer Zusammenarbeit mit ELTAP! Wir freuen uns, dass wir dank Ihnen unsere Produkte in andere Regionen ausdehnen können.</value>
   </data>
+  <data name="FieldRequiredErrorMessage" xml:space="preserve">
+    <value>Feld ist erforderlich</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Die Anschrift</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>Stadt</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Name der Firma</value>
+  </data>
+  <data name="ContactJobTitle" xml:space="preserve">
+    <value>Stellenbezeichnung kontaktieren</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Land</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Postleitzahl</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
 </root>

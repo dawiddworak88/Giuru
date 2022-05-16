@@ -39,15 +39,27 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 LastNameLabel = this.globalLocalizer.GetString("LastName"),
                 EmailLabel = this.globalLocalizer.GetString("Email"),
                 PhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel"),
-                FirstNameRequiredErrorMessage = this.accountLocalizer.GetString("FirstNameRequiredErrorMessage"),
-                LastNameRequiredErrorMessage = this.accountLocalizer.GetString("LastNameRequiredErrorMessage"),
-                EmailRequiredErrorMessage = this.globalLocalizer.GetString("EmailRequiredErrorMessage"),
                 EmailFormatErrorMessage = this.globalLocalizer.GetString("EmailFormatErrorMessage"),
-                PhoneRequiredErrorMessage = this.globalLocalizer.GetString("PhoneRequiredErrorMessage"),
-                ContactJobTitleLabel = this.globalLocalizer.GetString("ContactJobTitleLabel"),
-                ContactJobTitleRequiredErrorMessage = this.globalLocalizer.GetString("ContactJobTitleRequiredErrorMessage"),
-                PostalCodeLabel = this.globalLocalizer.GetString("PostalCode"),
-                PostalCodeRequiredErrorMessage = this.globalLocalizer.GetString("PostalCodeRequiredErrorMessage")
+                ContactJobTitleLabel = this.globalLocalizer.GetString("ContactJobTitle"),
+                CompanyPostalCodeLabel = this.globalLocalizer.GetString("PostalCode"),
+                FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
+                CompanyNameLabel = this.globalLocalizer.GetString("CompanyName"),
+                CompanyAddressLabel = this.globalLocalizer.GetString("Address"),
+                CompanyCityLabel = this.globalLocalizer.GetString("City"),
+                CompanyRegionLabel = this.globalLocalizer.GetString("Region"),
+                CompanyCountryLabel = this.globalLocalizer.GetString("Country")
+            };
+
+            viewModel.ContactJobTitles = new List<ContactJobTitle>
+            {
+                new ContactJobTitle { Name = this.globalLocalizer.GetString("SalesRep") },
+                new ContactJobTitle { Name = this.globalLocalizer.GetString("SalesManager") },
+                new ContactJobTitle { Name = this.globalLocalizer.GetString("President") },
+                new ContactJobTitle { Name = this.globalLocalizer.GetString("CEO") },
+                new ContactJobTitle { Name = this.globalLocalizer.GetString("ServiceManager") },
+                new ContactJobTitle { Name = this.globalLocalizer.GetString("ServiceManagerRep") },
+                new ContactJobTitle { Name = this.globalLocalizer.GetString("CEO") },
+                new ContactJobTitle { Name = this.globalLocalizer.GetString("Other") },
             };
 
             viewModel.Steps = new List<StepViewModel>

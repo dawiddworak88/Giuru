@@ -15,42 +15,83 @@ const RegisterForm = (props) => {
        email: { value: null, error: "" },
        phoneNumber: { value: null, error: "" },
        contactJobTitle: { value: null, error: "" },
-       postalCode: { value: null, error: "" }
+       companyName: { value: null, error: "" },
+       companyAddress: { value: null, error: "" },
+       companyCity: { value: null, error: "" },
+       companyRegion: { value: null, error: "" },
+       companyPostalCode: { value: null, error: "" },
+       companyCountry: { value: null, error: "" }
     };
 
     const stateValidatorSchema = {
         firstName: {
             required: {
                 isRequired: true,
-                error: props.firstNameRequiredErrorMessage
+                error: props.fieldRequiredErrorMessage
             }
         },
         lastName: {
             required: {
                 isRequired: true,
-                error: props.lastNameRequiredErrorMessage
+                error: props.fieldRequiredErrorMessage
             }
         },
         email: {
             required: {
                 isRequired: true,
-                error: props.emailRequiredErrorMessage
+                error: props.fieldRequiredErrorMessage
             },
             validator: {
                 func: value => EmailValidator.validateFormat(value),
                 error: props.emailFormatErrorMessage
             }
         },
+        phoneNumber: {
+            required: {
+                isRequired: true,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
         contactJobTitle: {
             required: {
                 isRequired: true,
-                error: props.contactJobTitleRequiredErrorMessage
+                error: props.fieldRequiredErrorMessage
             }
         },
-        postalCode: {
+        companyName: {
             required: {
                 isRequired: true,
-                error: props.postalCodeRequiredErrorMessage
+                error: props.fieldRequiredErrorMessage
+            }
+        },
+        companyAddress: {
+            required: {
+                isRequired: true,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
+        companyCity: {
+            required: {
+                isRequired: true,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
+        companyRegion: {
+            required: {
+                isRequired: true,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
+        companyPostalCode: {
+            required: {
+                isRequired: true,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
+        companyCountry: {
+            required: {
+                isRequired: true,
+                error: props.fieldRequiredErrorMessage
             }
         }
     };
@@ -64,7 +105,8 @@ const RegisterForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { firstName, lastName, email, phoneNumber, contactJobTitle, postalCode } = values;
+    const { 
+        firstName, lastName, email, phoneNumber, contactJobTitle, companyName, companyAddress, companyCity, companyCountry, companyRegion, companyPostalCode } = values;
     
     return (
         <div className="container register-form">
@@ -120,7 +162,11 @@ const RegisterForm = (props) => {
                                         name="contactJobTitle"
                                         value={contactJobTitle}
                                         onChange={handleOnChange}>
-                                            <MenuItem value={0}>EXAMPLE</MenuItem>
+                                        {props.contactJobTitles && props.contactJobTitles.map((title, index) => {
+                                            return (
+                                                <MenuItem key={index} value={title.name}>{title.name}</MenuItem>
+                                            )
+                                        })}
                                     </Select>
                                     {errors.contactJobTitle && dirty.contactJobTitle && (
                                         <FormHelperText>{errors.contactJobTitle}</FormHelperText>
@@ -145,53 +191,79 @@ const RegisterForm = (props) => {
                                     value={phoneNumber}
                                     fullWidth={true}
                                     label={props.phoneNumberLabel}
-                                />
+                                    onChange={handleOnChange}
+                                    helperText={dirty.phoneNumber ? errors.phoneNumber : ""} 
+                                    error={(errors.phoneNumber.length > 0) && dirty.phoneNumber} />
                             </div>
                         </div>
                         <div className="group mb-6" onFocus={() => setActiveStep(1)}>
                             <h1 className="subtitle has-text-centered">{props.businessInformationTitle}</h1>
                             <div className="field">
                                 <TextField
-                                    id="compnayName" 
-                                    name="compnayName"
+                                    id="companyName" 
+                                    name="companyName"
+                                    value={companyName}
                                     fullWidth={true}
-                                    label="Nazwa"
+                                    label={props.companyNameLabel}
+                                    onChange={handleOnChange}
+                                    helperText={dirty.companyName ? errors.companyName : ""} 
+                                    error={(errors.companyName.length > 0) && dirty.companyName} />
+                            </div>
+                            <div className="field">
+                                <TextField
+                                    id="companyAddress" 
+                                    name="companyAddress"
+                                    value={companyAddress}
+                                    fullWidth={true}
+                                    label={props.companyAddressLabel}
+                                    onChange={handleOnChange}
+                                    helperText={dirty.companyAddress ? errors.companyAddress : ""} 
+                                    error={(errors.companyAddress.length > 0) && dirty.companyAddress} />
+                            </div>
+                            <div className="field">
+                                <TextField
+                                    id="companyCountry" 
+                                    name="companyCountry"
+                                    value={companyCountry}
+                                    fullWidth={true}
+                                    label={props.companyCountryLabel}
+                                    onChange={handleOnChange}
+                                    helperText={dirty.companyCountry ? errors.companyCountry : ""} 
+                                    error={(errors.companyCountry.length > 0) && dirty.companyCountry} />
+                            </div>
+                            <div className="field">
+                                <TextField
+                                    id="companyCity" 
+                                    name="companyCity"
+                                    value={companyCity}
+                                    fullWidth={true}
+                                    label={props.companyCityLabel}
+                                    onChange={handleOnChange}
+                                    helperText={dirty.companyCity ? errors.companyCity : ""} 
+                                    error={(errors.companyCity.length > 0) && dirty.companyCity}/>
+                            </div>
+                            <div className="field">
+                                <TextField
+                                    id="companyRegion" 
+                                    name="companyRegion"
+                                    value={companyRegion}
+                                    fullWidth={true}
+                                    label={props.companyRegionLabel}
+                                    onChange={handleOnChange}
+                                    helperText={dirty.companyRegion ? errors.companyRegion : ""} 
+                                    error={(errors.companyRegion.length > 0) && dirty.companyRegion}
                                 />
                             </div>
                             <div className="field">
                                 <TextField
-                                    id="adres"
-                                    name="adres"
+                                    id="companyPostalCode"
+                                    name="companyPostalCode"
                                     fullWidth={true}
-                                    label="Adres"
-                                />
-                            </div>
-                            <div className="field">
-                                <TextField
-                                    id="city"
-                                    name="city"
-                                    fullWidth={true}
-                                    label="City/Town"
-                                />
-                            </div>
-                            <div className="field">
-                                <TextField
-                                    id="region"
-                                    name="region"
-                                    fullWidth={true}
-                                    label="region"
-                                />
-                            </div>
-                            <div className="field">
-                                <TextField
-                                    id="postalCode"
-                                    name="postalCode"
-                                    fullWidth={true}
-                                    value={postalCode}
-                                    label={props.postalCodeLabel}
+                                    value={companyPostalCode}
+                                    label={props.companyPostalCodeLabel}
                                     onChange={handleOnChange} 
-                                    helperText={dirty.postalCode ? errors.postalCode : ""} 
-                                    error={(errors.postalCode.length > 0) && dirty.postalCode} />
+                                    helperText={dirty.companyPostalCode ? errors.companyPostalCode : ""} 
+                                    error={(errors.companyPostalCode.length > 0) && dirty.companyPostalCode} />
                             </div>
                         </div>
                         <div className="group mb-6" onFocus={() => setActiveStep(2)}>
@@ -252,14 +324,10 @@ RegisterForm.propTypes = {
     lastNameLabel: PropTypes.string.isRequired,
     emailLabel: PropTypes.string.isRequired,
     phoneNumberLabel: PropTypes.string.isRequired,
-    firstNameRequiredErrorMessage: PropTypes.string.isRequired,
-    lastNameRequiredErrorMessage: PropTypes.string.isRequired,
-    emailRequiredErrorMessage: PropTypes.string.isRequired,
-    emailFormatErrorMessage: PropTypes.string.isRequired,
-    contactJobTitleRequiredErrorMessage: PropTypes.string.isRequired,
     contactJobTitleLabel: PropTypes.string.isRequired,
-    postalCodeRequiredErrorMessage: PropTypes.string.isRequired,
-    postalCodeLabel: PropTypes.string.isRequired
+    postalCodeLabel: PropTypes.string.isRequired,
+    fieldRequiredErrorMessage: PropTypes.string.isRequired,
+
 }
 
 export default RegisterForm;
