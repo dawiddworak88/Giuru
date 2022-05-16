@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
+import { Context } from "../../../../../../shared/stores/Store";
 import {
     Stepper, Step, StepLabel, StepContent, TextField, Button,
-    FormControl, InputLabel, Select, MenuItem
+    FormControl, InputLabel, Select, MenuItem, RadioGroup, FormControlLabel, Radio
 } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 
 const RegisterForm = (props) => {
+    const [state, dispatch] = useContext(Context);
     const [activeStep, setActiveStep] = useState(0);
     const stateSchema = {
        firstName: { value: null, error: "" },
@@ -96,8 +99,32 @@ const RegisterForm = (props) => {
         }
     };
 
-    const onSubmitForm = () => {
+    const onSubmitForm = (state) => {
+        dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+            body: JSON.stringify(state)
+        };
+
+        fetch(props.saveUrl, requestOptions)
+            .then(response => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        toast.success(jsonResponse.message);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
     }
 
     const {
@@ -269,12 +296,12 @@ const RegisterForm = (props) => {
                         <div className="group mb-6" onFocus={() => setActiveStep(2)}>
                             <h1 className="subtitle has-text-centered">{props.logisticalInformationTitle}</h1>
                             <div className="field">
-                                <TextField
-                                    id="firstname" 
-                                    name="firstname"
-                                    fullWidth={true}
-                                    label="Imię"
-                                />
+                                <FormControl fullWidth={true}>
+                                    <InputLabel>TEST</InputLabel>
+                                    <RadioGroup>
+                                        <FormControlLabel value="fem" control={<Radio />} label="sdad" />
+                                    </RadioGroup>
+                                </FormControl>
                             </div>
                             <div className="field">
                                 <TextField

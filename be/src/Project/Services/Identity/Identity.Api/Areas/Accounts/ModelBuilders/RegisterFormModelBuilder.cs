@@ -6,6 +6,7 @@ using Identity.Api.Areas.Accounts.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Identity.Api.Areas.Accounts.ModelBuilders
@@ -47,7 +48,8 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 CompanyAddressLabel = this.globalLocalizer.GetString("Address"),
                 CompanyCityLabel = this.globalLocalizer.GetString("City"),
                 CompanyRegionLabel = this.globalLocalizer.GetString("Region"),
-                CompanyCountryLabel = this.globalLocalizer.GetString("Country")
+                CompanyCountryLabel = this.globalLocalizer.GetString("Country"),
+                SaveUrl = this.linkGenerator.GetPathByAction("Register", "IdentityApi", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             viewModel.ContactJobTitles = new List<ContactJobTitle>

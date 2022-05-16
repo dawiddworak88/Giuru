@@ -29,6 +29,7 @@ namespace Identity.Api.Areas.Accounts.ViewModels
         public string LogisticalInformationTitle { get; set; }
         public string EmailFormatErrorMessage { get; set; }
         public string FieldRequiredErrorMessage { get; set; }
+        public string SaveUrl { get; set; }
         public IEnumerable<ContactJobTitle> ContactJobTitles { get; set; }
         public IEnumerable<StepViewModel> Steps { get; set; }
     }

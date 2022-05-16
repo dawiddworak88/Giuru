@@ -300,5 +300,10 @@ namespace Identity.Api.Services.Users
                 PhoneNumber = user.PhoneNumber
             };
         }
+
+        public Task RegisterAsync(RegisterServiceModel serviceModel)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

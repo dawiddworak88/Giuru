@@ -201,5 +201,43 @@ namespace Identity.Api.v1.Controllers
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
+
+        /// <summary>
+        /// Apply to be client.
+        /// </summary>
+        /// <param name="request">The model.</param>
+        /// <returns>OK.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [Route("reigster")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Register(RegisterRequestModel request)
+        {
+            var serviceModel = new RegisterServiceModel
+            {
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Email = request.Email,
+                ContactJobTitle = request.ContactJobTitle,
+                PhoneNumber = request.PhoneNumber,
+                CompanyName = request.CompanyName,
+                CompanyAddress = request.CompanyAddress,
+                CompanyCountry = request.CompanyCountry,
+                CompanyCity = request.CompanyCity,
+                CompanyRegion = request.CompanyRegion,
+                CompanyPostalCode = request.CompanyPostalCode,
+            };
+
+            var validator = new RegisterModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+            if (validationResult.IsValid)
+            {
+                await this.userService.RegisterAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
     }
 }

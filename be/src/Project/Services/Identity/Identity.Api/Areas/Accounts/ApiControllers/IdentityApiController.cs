@@ -51,6 +51,12 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> Register([FromBody] ResetUserPasswordRequestModel model)
+        {
+            return this.StatusCode((int)HttpStatusCode.BadRequest);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> ResetPassword([FromBody] ResetUserPasswordRequestModel model)
         {
             var validator = new ResetPasswordModelValidator();
