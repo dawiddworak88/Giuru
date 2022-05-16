@@ -316,11 +316,50 @@ namespace Identity.Api.Services.Users
                 TemplateId = this.mailingOptions.CurrentValue.ActionSendGridClientApplyConfirmationTemplateId,
                 DynamicTemplateData = new
                 {
-                    welcomeLabel = this.globalLocalizer.GetString("Welcome"),
+                    welcomeLabel = this.globalLocalizer.GetString("Welcome").Value,
                     firstName = serviceModel.FirstName,
                     lastName = serviceModel.LastName,
                     subject = this.accountLocalizer.GetString("ClientApplyConfirmationSubject").Value,
                     lineOne = this.accountLocalizer.GetString("ClientApplyConfirmation").Value
+                }
+            });
+
+            await this.mailingService.SendTemplateAsync(new TemplateEmail
+            {
+                RecipientEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
+                RecipientName = this.mailingOptions.CurrentValue.SenderName,
+                SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
+                SenderName = this.mailingOptions.CurrentValue.SenderName,
+                TemplateId = this.mailingOptions.CurrentValue.ActionSendGridClientApplyTemplateId,
+                DynamicTemplateData = new
+                {
+                    firstName = serviceModel.FirstName,
+                    lastName = serviceModel.LastName,
+                    email = serviceModel.Email,
+                    phoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel").Value,
+                    phoneNumber = serviceModel.PhoneNumber,
+                    subject = this.accountLocalizer.GetString("ClientApplySubject").Value,
+                    contactInformation = this.accountLocalizer.GetString("ContactInformation").Value,
+                    businessInformation = this.accountLocalizer.GetString("BusinessInformation").Value,
+                    logisticalInformation = this.accountLocalizer.GetString("LogisticalInformation").Value,
+                    firstNameLabel = this.globalLocalizer.GetString("FirstName").Value,
+                    lastNameLabel = this.globalLocalizer.GetString("LastName").Value,
+                    companyNameLabel = this.globalLocalizer.GetString("CompanyName").Value,
+                    companyName = serviceModel.CompanyName,
+                    addressLabel = this.globalLocalizer.GetString("Address").Value,
+                    address = serviceModel.CompanyAddress,
+                    cityLabel = this.globalLocalizer.GetString("City").Value,
+                    city = serviceModel.CompanyCity,
+                    regionLabel = this.globalLocalizer.GetString("Region").Value,
+                    region = serviceModel.CompanyRegion,
+                    postalCodeLabel = this.globalLocalizer.GetString("PostalCode").Value,
+                    postalCode = serviceModel.CompanyPostalCode,
+                    onlineRetailersLabel = this.accountLocalizer.GetString("OnlineRetailers").Value,
+                    onlineRetailers = serviceModel.OnlineRetailers,
+                    acceptRetunsLabel = this.accountLocalizer.GetString("AcceptRetuns").Value,
+                    acceptRetuns = serviceModel.AcceptReturns,
+                    directlyShipLabel = this.accountLocalizer.GetString("DirectlyShip").Value,
+                    directlyShip = serviceModel.DirectlyShip
                 }
             });
         }

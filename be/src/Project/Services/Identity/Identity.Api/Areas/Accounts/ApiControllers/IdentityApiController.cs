@@ -79,6 +79,8 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
 
                 return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.accountLocalizer.GetString("SuccessfullyClientApply").Value });
             }
+
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
         }
 
         [HttpPost]

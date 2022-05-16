@@ -13,8 +13,8 @@
         public string CompanyCity { get; set; }
         public string CompanyRegion { get; set; }
         public string CompanyPostalCode { get; set; }
-        public bool AcceptReturns { get; set; }
-        public bool DirectlyShip { get; set; }
+        public string AcceptReturns { get; set; }
+        public string DirectlyShip { get; set; }
         public string OnlineRetailers { get; set; }
     }
 }

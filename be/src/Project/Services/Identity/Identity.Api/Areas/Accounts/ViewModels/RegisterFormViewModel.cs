@@ -30,7 +30,11 @@ namespace Identity.Api.Areas.Accounts.ViewModels
         public string EmailFormatErrorMessage { get; set; }
         public string FieldRequiredErrorMessage { get; set; }
         public string SaveUrl { get; set; }
-        public string TopOnlineRetailersLabel { get; set; }
+        public string OnlineRetailersLabel { get; set; }
+        public string GeneralErrorMessage { get; set; }
+        public string AcceptReturnsLabel { get; set; }
+        public string DirectlyShipLabel { get; set; }
+        public string SaveText { get; set; }
         public IEnumerable<ContactJobTitle> ContactJobTitles { get; set; }
         public IEnumerable<StepViewModel> Steps { get; set; }
     }

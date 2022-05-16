@@ -108,13 +108,13 @@ const RegisterForm = (props) => {
         },
         directlyShip: {
             required: {
-                isRequired: false,
+                isRequired: true,
                 error: props.fieldRequiredErrorMessage
             }
         },
         acceptReturns: {
             required: {
-                isRequired: false,
+                isRequired: true,
                 error: props.fieldRequiredErrorMessage
             }
         }
@@ -149,8 +149,7 @@ const RegisterForm = (props) => {
     }
 
     const {
-        values, errors, dirty, disable,
-        setFieldValue, handleOnChange, handleOnSubmit
+        values, errors, dirty, disable, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const { 
@@ -317,16 +316,10 @@ const RegisterForm = (props) => {
                             <h1 className="subtitle has-text-centered">{props.logisticalInformationTitle}</h1>
                             <div className="field">
                                 <FormControl component="fieldset" fullWidth={true} error={(errors.directlyShip.length > 0) && dirty.directlyShip}>
-                                    <FormLabel component="legend">Would you be able to ship directly to customers (also known as dropship)?</FormLabel>
-                                    <RadioGroup 
-                                        value={directlyShip} 
-                                        name="directlyShip" 
-                                        id="directlyShip" 
-                                        onChange={(e) => 
-                                            setFieldValue({name: "directlyShip", value: e.target.value})
-                                        }>
-                                            <FormControlLabel value={true} control={<Radio />} label={props.yesLabel} />
-                                            <FormControlLabel value={false} control={<Radio />} label={props.noLabel} />
+                                    <FormLabel>{props.directlyShipLabel}</FormLabel>
+                                    <RadioGroup name="directlyShip" value={directlyShip} onChange={handleOnChange}>
+                                        <FormControlLabel value={props.yesLabel} control={<Radio />} label={props.yesLabel} />
+                                        <FormControlLabel value={props.noLabel} control={<Radio />} label={props.noLabel} />
                                     </RadioGroup>
                                     {errors.directlyShip && dirty.directlyShip && (
                                         <FormHelperText>{errors.directlyShip}</FormHelperText>
@@ -335,16 +328,10 @@ const RegisterForm = (props) => {
                             </div>
                             <div className="field">
                                 <FormControl component="fieldset" fullWidth={true} error={(errors.acceptReturns.length > 0) && dirty.acceptReturns}>
-                                    <FormLabel component="legend">Czy jesteś w stanie przyjmować zwroty?</FormLabel>
-                                    <RadioGroup 
-                                        value={acceptReturns} 
-                                        name="acceptReturns" 
-                                        id="acceptReturns" 
-                                        onChange={(e) => 
-                                            setFieldValue({name: "acceptReturns", value: e.target.value})
-                                        }>
-                                            <FormControlLabel value={true} control={<Radio />} label={props.yesLabel} />
-                                            <FormControlLabel value={false} control={<Radio />} label={props.noLabel} />
+                                    <FormLabel>{props.acceptReturnsLabel}</FormLabel>
+                                    <RadioGroup name="acceptReturns" value={acceptReturns} onChange={handleOnChange}>
+                                        <FormControlLabel value={props.yesLabel} control={<Radio />} label={props.yesLabel} />
+                                        <FormControlLabel value={props.noLabel} control={<Radio />} label={props.noLabel} />
                                     </RadioGroup>
                                     {errors.acceptReturns && dirty.acceptReturns && (
                                         <FormHelperText>{errors.acceptReturns}</FormHelperText>
@@ -371,7 +358,7 @@ const RegisterForm = (props) => {
                                 fullWidth={true}
                                 disabled={state.isLoading || disable}
                             >
-                                Aplikuj
+                                {props.saveText}
                             </Button>
                         </div>
                     </form>
@@ -393,10 +380,20 @@ RegisterForm.propTypes = {
     emailLabel: PropTypes.string.isRequired,
     phoneNumberLabel: PropTypes.string.isRequired,
     contactJobTitleLabel: PropTypes.string.isRequired,
-    postalCodeLabel: PropTypes.string.isRequired,
     fieldRequiredErrorMessage: PropTypes.string.isRequired,
     yesLabel: PropTypes.string.isRequired,
-    noLabel: PropTypes.string.isRequired
+    noLabel: PropTypes.string.isRequired,
+    generalErrorMessage: PropTypes.string.isRequired,
+    companyNameLabel: PropTypes.string.isRequired,
+    companyAddressLabel: PropTypes.string.isRequired,
+    companyCountryLabel: PropTypes.string.isRequired,
+    companyCityLabel: PropTypes.string.isRequired,
+    companyRegionLabel: PropTypes.string.isRequired,
+    companyPostalCodeLabel: PropTypes.string.isRequired,
+    onlineRetailersLabel: PropTypes.string.isRequired,
+    acceptRetunsLabel: PropTypes.string.isRequired,
+    directlyShipLabel: PropTypes.string.isRequired,
+    saveText: PropTypes.string.isRequired
 }
 
 export default RegisterForm;

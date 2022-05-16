@@ -231,7 +231,7 @@
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>Der Link zum Zurücksetzen des Passworts wurde gesendet, wenn Ihr Konto auf unserer Plattform existiert. Bitte überprüfen Sie Ihre Mailbox für weitere Anweisungen.</value>
   </data>
-  <data name="TopOnlineRetailers" xml:space="preserve">
+  <data name="OnlineRetailers" xml:space="preserve">
     <value>Wo verkaufen Sie online am meisten?</value>
   </data>
   <data name="UserNotFound" xml:space="preserve">
@@ -239,5 +239,14 @@
   </data>
   <data name="VerifyDateExpired" xml:space="preserve">
     <value>Der Link ist abgelaufen. Bitte wenden Sie sich an einen Administrator.</value>
+  </data>
+  <data name="AcceptRetuns" xml:space="preserve">
+    <value>Wären Sie in der Lage, Rücksendungen anzunehmen?</value>
+  </data>
+  <data name="ClientApplySubject" xml:space="preserve">
+    <value>Neue Kooperationsanfrage</value>
+  </data>
+  <data name="DirectlyShip" xml:space="preserve">
+    <value>Wären Sie in der Lage, direkt an Kunden zu versenden (auch bekannt als Direktversand)?</value>
   </data>
 </root>

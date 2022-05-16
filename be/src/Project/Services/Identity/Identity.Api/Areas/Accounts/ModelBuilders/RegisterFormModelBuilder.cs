@@ -50,9 +50,13 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 CompanyRegionLabel = this.globalLocalizer.GetString("Region"),
                 CompanyCountryLabel = this.globalLocalizer.GetString("Country"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Register", "IdentityApi", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
-                TopOnlineRetailersLabel = this.accountLocalizer.GetString("TopOnlineRetailers"),
+                OnlineRetailersLabel = this.accountLocalizer.GetString("OnlineRetailers"),
                 YesLabel = this.globalLocalizer.GetString("Yes"),
-                NoLabel = this.globalLocalizer.GetString("No")
+                NoLabel = this.globalLocalizer.GetString("No"),
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                AcceptReturnsLabel = this.accountLocalizer.GetString("AcceptRetuns"),
+                DirectlyShipLabel = this.accountLocalizer.GetString("DirectlyShip"),
+                SaveText = this.accountLocalizer.GetString("RegisterButton")
             };
 
             viewModel.ContactJobTitles = new List<ContactJobTitle>

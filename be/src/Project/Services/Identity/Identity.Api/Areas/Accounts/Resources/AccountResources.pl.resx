@@ -231,7 +231,7 @@
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>Link do resetowania hasła został wysłany, jeśli Twoje konto istnieje na naszej platformie. Proszę sprawdź swoją skrzynkę e-mail w celu uzyskania dalszych instrukcji.</value>
   </data>
-  <data name="TopOnlineRetailers" xml:space="preserve">
+  <data name="OnlineRetailers" xml:space="preserve">
     <value>Gdzie prowadzisz największą sprzedaż online?</value>
   </data>
   <data name="UserNotFound" xml:space="preserve">
@@ -239,5 +239,14 @@
   </data>
   <data name="VerifyDateExpired" xml:space="preserve">
     <value>Link wygasł. Skontaktuj się z administratorem.</value>
+  </data>
+  <data name="AcceptRetuns" xml:space="preserve">
+    <value>Czy byłbyś w stanie przyjąć zwroty?</value>
+  </data>
+  <data name="ClientApplySubject" xml:space="preserve">
+    <value>Nowa prośba współpracy</value>
+  </data>
+  <data name="DirectlyShip" xml:space="preserve">
+    <value>Czy będziesz w stanie wysyłać przesyłki bezpośrednio do klientów (tzw. dropship)?</value>
   </data>
 </root>
