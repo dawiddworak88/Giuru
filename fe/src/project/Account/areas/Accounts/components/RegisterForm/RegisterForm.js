@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
 import {
-    Stepper, Step, StepLabel, StepContent, TextField, Button,
-    FormControl, InputLabel, Select, MenuItem, RadioGroup, FormControlLabel, Radio
+    Stepper, Step, StepLabel, StepContent, TextField, Button, FormHelperText,
+    FormControl, InputLabel, Select, MenuItem, RadioGroup, FormControlLabel, Radio, FormLabel
 } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
@@ -23,7 +23,10 @@ const RegisterForm = (props) => {
        companyCity: { value: null, error: "" },
        companyRegion: { value: null, error: "" },
        companyPostalCode: { value: null, error: "" },
-       companyCountry: { value: null, error: "" }
+       companyCountry: { value: null, error: "" },
+       directlyShip: { value: null, error: "" },
+       acceptReturns: { value: null, error: "" },
+       topOnlineRetailers: { value: null, error: "" }
     };
 
     const stateValidatorSchema = {
@@ -96,6 +99,24 @@ const RegisterForm = (props) => {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
             }
+        },
+        topOnlineRetailers: {
+            required: {
+                isRequired: true,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
+        directlyShip: {
+            required: {
+                isRequired: false,
+                error: props.fieldRequiredErrorMessage
+            }
+        },
+        acceptReturns: {
+            required: {
+                isRequired: false,
+                error: props.fieldRequiredErrorMessage
+            }
         }
     };
 
@@ -133,8 +154,7 @@ const RegisterForm = (props) => {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const { 
-        firstName, lastName, email, phoneNumber, contactJobTitle, companyName, companyAddress, companyCity, companyCountry, companyRegion, companyPostalCode } = values;
-    
+        firstName, lastName, email, phoneNumber, contactJobTitle, companyName, companyAddress, companyCity, companyCountry, companyRegion, companyPostalCode, directlyShip, acceptReturns, topOnlineRetailers } = values;
     return (
         <div className="container register-form">
             <div className="columns">
@@ -155,7 +175,7 @@ const RegisterForm = (props) => {
                     </div>
                 </div>
                 <div className="column">
-                    <div className="register-form__groups p-6">
+                    <form className="register-form__groups p-6" onSubmit={handleOnSubmit}>
                         <div className="group mb-6" onFocus={() => setActiveStep(0)}>
                             <h1 className="subtitle has-text-centered">{props.contactInformationTitle}</h1>
                             <div className="field">
@@ -296,44 +316,65 @@ const RegisterForm = (props) => {
                         <div className="group mb-6" onFocus={() => setActiveStep(2)}>
                             <h1 className="subtitle has-text-centered">{props.logisticalInformationTitle}</h1>
                             <div className="field">
-                                <FormControl fullWidth={true}>
-                                    <InputLabel>TEST</InputLabel>
-                                    <RadioGroup>
-                                        <FormControlLabel value="fem" control={<Radio />} label="sdad" />
+                                <FormControl component="fieldset" fullWidth={true} error={(errors.directlyShip.length > 0) && dirty.directlyShip}>
+                                    <FormLabel component="legend">Would you be able to ship directly to customers (also known as dropship)?</FormLabel>
+                                    <RadioGroup 
+                                        value={directlyShip} 
+                                        name="directlyShip" 
+                                        id="directlyShip" 
+                                        onChange={(e) => 
+                                            setFieldValue({name: "directlyShip", value: e.target.value})
+                                        }>
+                                            <FormControlLabel value={props.yesLabel} control={<Radio />} label={props.yesLabel} />
+                                            <FormControlLabel value={props.noLabel} control={<Radio />} label={props.noLabel} />
                                     </RadioGroup>
+                                    {errors.directlyShip && dirty.directlyShip && (
+                                        <FormHelperText>{errors.directlyShip}</FormHelperText>
+                                    )}
+                                </FormControl>
+                            </div>
+                            <div className="field">
+                                <FormControl component="fieldset" fullWidth={true} error={(errors.acceptReturns.length > 0) && dirty.acceptReturns}>
+                                    <FormLabel component="legend">Czy jesteś w stanie przyjmować zwroty?</FormLabel>
+                                    <RadioGroup 
+                                        value={acceptReturns} 
+                                        name="acceptReturns" 
+                                        id="acceptReturns" 
+                                        onChange={(e) => 
+                                            setFieldValue({name: "acceptReturns", value: e.target.value})
+                                        }>
+                                            <FormControlLabel value={props.yesLabel} control={<Radio />} label={props.yesLabel} />
+                                            <FormControlLabel value={props.noLabel} control={<Radio />} label={props.noLabel} />
+                                    </RadioGroup>
+                                    {errors.acceptReturns && dirty.acceptReturns && (
+                                        <FormHelperText>{errors.acceptReturns}</FormHelperText>
+                                    )}
                                 </FormControl>
                             </div>
                             <div className="field">
                                 <TextField
-                                    id="lastname"
-                                    name="lastname"
+                                    id="topOnlineRetailers"
+                                    name="topOnlineRetailers"
                                     fullWidth={true}
-                                    label="Nazwisko"
-                                />
-                            </div>
-                            <div className="field">
-                                <TextField
-                                    id="email"
-                                    name="email"
-                                    fullWidth={true}
-                                    label="Email"
-                                />
-                            </div>
-                            <div className="field">
-                                <TextField
-                                    id="telephone"
-                                    name="telephone"
-                                    fullWidth={true}
-                                    label="Numer telefonu"
-                                />
+                                    value={topOnlineRetailers}
+                                    label={props.topOnlineRetailersLabel}
+                                    onChange={handleOnChange} 
+                                    helperText={dirty.topOnlineRetailers ? errors.topOnlineRetailers : ""} 
+                                    error={(errors.topOnlineRetailers.length > 0) && dirty.topOnlineRetailers} />
                             </div>
                         </div>
                         <div className="is-flex is-justify-content-center">
-                            <Button type="submit" variant="contained" color="primary" fullWidth={true}>
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                color="primary" 
+                                fullWidth={true}
+                                disabled={state.isLoading || disable}
+                            >
                                 Aplikuj
                             </Button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -354,7 +395,8 @@ RegisterForm.propTypes = {
     contactJobTitleLabel: PropTypes.string.isRequired,
     postalCodeLabel: PropTypes.string.isRequired,
     fieldRequiredErrorMessage: PropTypes.string.isRequired,
-
+    yesLabel: PropTypes.string.isRequired,
+    noLabel: PropTypes.string.isRequired
 }
 
 export default RegisterForm;

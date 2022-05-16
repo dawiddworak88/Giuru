@@ -222,6 +222,9 @@
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>Der Link zum Zurücksetzen des Passworts wurde gesendet, wenn Ihr Konto auf unserer Plattform existiert. Bitte überprüfen Sie Ihre Mailbox für weitere Anweisungen.</value>
   </data>
+  <data name="TopOnlineRetailers" xml:space="preserve">
+    <value>Wo verkaufen Sie online am meisten?</value>
+  </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>Benutzer nicht gefunden.</value>
   </data>

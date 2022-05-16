@@ -222,6 +222,9 @@
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>Link do resetowania hasła został wysłany, jeśli Twoje konto istnieje na naszej platformie. Proszę sprawdź swoją skrzynkę e-mail w celu uzyskania dalszych instrukcji.</value>
   </data>
+  <data name="TopOnlineRetailers" xml:space="preserve">
+    <value>Gdzie prowadzisz największą sprzedaż online?</value>
+  </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>Nie odnaleziono użytkownika.</value>
   </data>

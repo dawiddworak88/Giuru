@@ -222,6 +222,9 @@
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>The reset password link has been sent if your account exists in our platform. Please check your e-mail box for further instructions.</value>
   </data>
+  <data name="TopOnlineRetailers" xml:space="preserve">
+    <value>Where do you sell the most online?</value>
+  </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>User not found.</value>
   </data>
