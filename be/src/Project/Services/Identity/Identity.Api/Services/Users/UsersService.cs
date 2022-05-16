@@ -313,7 +313,7 @@ namespace Identity.Api.Services.Users
                 RecipientName = serviceModel.FirstName + " " + serviceModel.LastName,
                 SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
                 SenderName = this.mailingOptions.CurrentValue.SenderName,
-                TemplateId = this.mailingOptions.CurrentValue.ActionSendGridResetTemplateId,
+                TemplateId = this.mailingOptions.CurrentValue.ActionSendGridClientApplyConfirmationTemplateId,
                 DynamicTemplateData = new
                 {
                     welcomeLabel = this.globalLocalizer.GetString("Welcome"),
