@@ -26,7 +26,7 @@ const RegisterForm = (props) => {
        companyCountry: { value: null, error: "" },
        directlyShip: { value: null, error: "" },
        acceptReturns: { value: null, error: "" },
-       topOnlineRetailers: { value: null, error: "" }
+       onlineRetailers: { value: null, error: "" }
     };
 
     const stateValidatorSchema = {
@@ -100,7 +100,7 @@ const RegisterForm = (props) => {
                 error: props.fieldRequiredErrorMessage
             }
         },
-        topOnlineRetailers: {
+        onlineRetailers: {
             required: {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
@@ -154,7 +154,7 @@ const RegisterForm = (props) => {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const { 
-        firstName, lastName, email, phoneNumber, contactJobTitle, companyName, companyAddress, companyCity, companyCountry, companyRegion, companyPostalCode, directlyShip, acceptReturns, topOnlineRetailers } = values;
+        firstName, lastName, email, phoneNumber, contactJobTitle, companyName, companyAddress, companyCity, companyCountry, companyRegion, companyPostalCode, directlyShip, acceptReturns, onlineRetailers } = values;
     return (
         <div className="container register-form">
             <div className="columns">
@@ -325,8 +325,8 @@ const RegisterForm = (props) => {
                                         onChange={(e) => 
                                             setFieldValue({name: "directlyShip", value: e.target.value})
                                         }>
-                                            <FormControlLabel value={props.yesLabel} control={<Radio />} label={props.yesLabel} />
-                                            <FormControlLabel value={props.noLabel} control={<Radio />} label={props.noLabel} />
+                                            <FormControlLabel value={true} control={<Radio />} label={props.yesLabel} />
+                                            <FormControlLabel value={false} control={<Radio />} label={props.noLabel} />
                                     </RadioGroup>
                                     {errors.directlyShip && dirty.directlyShip && (
                                         <FormHelperText>{errors.directlyShip}</FormHelperText>
@@ -343,8 +343,8 @@ const RegisterForm = (props) => {
                                         onChange={(e) => 
                                             setFieldValue({name: "acceptReturns", value: e.target.value})
                                         }>
-                                            <FormControlLabel value={props.yesLabel} control={<Radio />} label={props.yesLabel} />
-                                            <FormControlLabel value={props.noLabel} control={<Radio />} label={props.noLabel} />
+                                            <FormControlLabel value={true} control={<Radio />} label={props.yesLabel} />
+                                            <FormControlLabel value={false} control={<Radio />} label={props.noLabel} />
                                     </RadioGroup>
                                     {errors.acceptReturns && dirty.acceptReturns && (
                                         <FormHelperText>{errors.acceptReturns}</FormHelperText>
@@ -353,14 +353,14 @@ const RegisterForm = (props) => {
                             </div>
                             <div className="field">
                                 <TextField
-                                    id="topOnlineRetailers"
-                                    name="topOnlineRetailers"
+                                    id="onlineRetailers"
+                                    name="onlineRetailers"
                                     fullWidth={true}
-                                    value={topOnlineRetailers}
-                                    label={props.topOnlineRetailersLabel}
+                                    value={onlineRetailers}
+                                    label={props.onlineRetailersLabel}
                                     onChange={handleOnChange} 
-                                    helperText={dirty.topOnlineRetailers ? errors.topOnlineRetailers : ""} 
-                                    error={(errors.topOnlineRetailers.length > 0) && dirty.topOnlineRetailers} />
+                                    helperText={dirty.onlineRetailers ? errors.onlineRetailers : ""} 
+                                    error={(errors.onlineRetailers.length > 0) && dirty.onlineRetailers} />
                             </div>
                         </div>
                         <div className="is-flex is-justify-content-center">

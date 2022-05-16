@@ -144,6 +144,12 @@
   <data name="BusinessInformationDescription" xml:space="preserve">
     <value>Podaj informacje o twojej firmie</value>
   </data>
+  <data name="ClientApplyConfirmation" xml:space="preserve">
+    <value>Dziękujemy za rejestrację na naszej platformie B2B. Twój wniosek został przesłany i czeka na weryfikację naszego zespołu. O aktywacji konta powiadomimy Cię drogą mailową.</value>
+  </data>
+  <data name="ClientApplyConfirmationSubject" xml:space="preserve">
+    <value>Potwierdzenie przesłania prośby o współpracę.</value>
+  </data>
   <data name="ContactInformation" xml:space="preserve">
     <value>Informacje Kontaktowe</value>
   </data>
@@ -218,6 +224,9 @@
   </data>
   <data name="SignInText" xml:space="preserve">
     <value>Zaloguj się</value>
+  </data>
+  <data name="SuccessfullyClientApply" xml:space="preserve">
+    <value>Pomyślnie przesłano prośbę o współpracę.</value>
   </data>
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>Link do resetowania hasła został wysłany, jeśli Twoje konto istnieje na naszej platformie. Proszę sprawdź swoją skrzynkę e-mail w celu uzyskania dalszych instrukcji.</value>

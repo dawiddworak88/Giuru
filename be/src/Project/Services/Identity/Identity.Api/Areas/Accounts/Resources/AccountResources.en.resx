@@ -144,6 +144,12 @@
   <data name="BusinessInformationDescription" xml:space="preserve">
     <value>Let us know your business details</value>
   </data>
+  <data name="ClientApplyConfirmation" xml:space="preserve">
+    <value>Thank you for registering on our B2B platform. Your application has been sent and is waiting for verification by our team. We will notify you by e-mail about activating the account.</value>
+  </data>
+  <data name="ClientApplyConfirmationSubject" xml:space="preserve">
+    <value>Confirmation of sending the request for cooperation.</value>
+  </data>
   <data name="ContactInformation" xml:space="preserve">
     <value>Contact Information</value>
   </data>
@@ -218,6 +224,9 @@
   </data>
   <data name="SignInText" xml:space="preserve">
     <value>Sign in</value>
+  </data>
+  <data name="SuccessfullyClientApply" xml:space="preserve">
+    <value>The cooperation request was successfully submitted.</value>
   </data>
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>The reset password link has been sent if your account exists in our platform. Please check your e-mail box for further instructions.</value>

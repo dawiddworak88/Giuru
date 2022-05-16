@@ -1,4 +1,4 @@
-﻿namespace Identity.Api.v1.RequestModels
+﻿namespace Identity.Api.Areas.Accounts.ApiRequestModels
 {
     public class RegisterRequestModel
     {

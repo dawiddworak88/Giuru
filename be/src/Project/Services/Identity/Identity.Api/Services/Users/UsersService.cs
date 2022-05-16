@@ -1,5 +1,6 @@
 ﻿using Feature.Account;
 using Foundation.Extensions.Exceptions;
+using Foundation.Localization;
 using Foundation.Mailing.Configurations;
 using Foundation.Mailing.Models;
 using Foundation.Mailing.Services;
@@ -27,7 +28,8 @@ namespace Identity.Api.Services.Users
         private readonly IdentityContext identityContext;
         private readonly IOptionsMonitor<MailingConfiguration> mailingOptions;
         private readonly IMailingService mailingService;
-        private readonly IStringLocalizer accountLocalizer;
+        private readonly IStringLocalizer<AccountResources> accountLocalizer;
+        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IUserService userService;
         private readonly LinkGenerator linkGenerator;
 
@@ -36,6 +38,7 @@ namespace Identity.Api.Services.Users
             IOptionsMonitor<MailingConfiguration> mailingOptions,
             IMailingService mailingService,
             IStringLocalizer<AccountResources> accountLocalizer,
+            IStringLocalizer<GlobalResources> globalLocalizer,
             IUserService userService,
             LinkGenerator linkGenerator)
         {
@@ -45,6 +48,7 @@ namespace Identity.Api.Services.Users
             this.accountLocalizer = accountLocalizer;
             this.userService = userService;
             this.linkGenerator = linkGenerator;
+            this.globalLocalizer = globalLocalizer;
         }
 
         public async Task<UserServiceModel> CreateAsync(CreateUserServiceModel serviceModel)
@@ -301,9 +305,24 @@ namespace Identity.Api.Services.Users
             };
         }
 
-        public Task RegisterAsync(RegisterServiceModel serviceModel)
+        public async Task RegisterAsync(RegisterServiceModel serviceModel)
         {
-            throw new NotImplementedException();
+            await this.mailingService.SendTemplateAsync(new TemplateEmail
+            {
+                RecipientEmailAddress = serviceModel.Email,
+                RecipientName = serviceModel.FirstName + " " + serviceModel.LastName,
+                SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
+                SenderName = this.mailingOptions.CurrentValue.SenderName,
+                TemplateId = this.mailingOptions.CurrentValue.ActionSendGridResetTemplateId,
+                DynamicTemplateData = new
+                {
+                    welcomeLabel = this.globalLocalizer.GetString("Welcome"),
+                    firstName = serviceModel.FirstName,
+                    lastName = serviceModel.LastName,
+                    subject = this.accountLocalizer.GetString("ClientApplyConfirmationSubject").Value,
+                    lineOne = this.accountLocalizer.GetString("ClientApplyConfirmation").Value
+                }
+            });
         }
     }
 }

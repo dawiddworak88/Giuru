@@ -144,6 +144,12 @@
   <data name="BusinessInformationDescription" xml:space="preserve">
     <value>Teilen Sie uns Ihren Firmennamen und Standort mit</value>
   </data>
+  <data name="ClientApplyConfirmation" xml:space="preserve">
+    <value>Vielen Dank für die Registrierung auf unserer B2B-Plattform. Ihre Bewerbung wurde gesendet und wartet auf die Überprüfung durch unser Team. Wir benachrichtigen Sie per E-Mail über die Aktivierung des Kontos.</value>
+  </data>
+  <data name="ClientApplyConfirmationSubject" xml:space="preserve">
+    <value>Bestätigung des Absendens der Kooperationsanfrage.</value>
+  </data>
   <data name="ContactInformation" xml:space="preserve">
     <value>Kontaktinformation</value>
   </data>
@@ -218,6 +224,9 @@
   </data>
   <data name="SignInText" xml:space="preserve">
     <value>Einloggen</value>
+  </data>
+  <data name="SuccessfullyClientApply" xml:space="preserve">
+    <value>Die Kooperationsanfrage wurde erfolgreich übermittelt.</value>
   </data>
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>Der Link zum Zurücksetzen des Passworts wurde gesendet, wenn Ihr Konto auf unserer Plattform existiert. Bitte überprüfen Sie Ihre Mailbox für weitere Anweisungen.</value>

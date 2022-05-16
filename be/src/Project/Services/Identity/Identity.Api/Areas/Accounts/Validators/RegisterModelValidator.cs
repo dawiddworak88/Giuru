@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
-using Foundation.Extensions.Validators;
-using Identity.Api.ServicesModels.Users;
+using Identity.Api.Areas.Accounts.ApiRequestModels;
 
-namespace Identity.Api.Validators.Users
+namespace Identity.Api.Areas.Accounts.Validators
 {
-    public class RegisterModelValidator : BaseServiceModelValidator<RegisterServiceModel>
+    public class RegisterModelValidator : AbstractValidator<RegisterRequestModel>
     {
         public RegisterModelValidator()
         {
@@ -15,12 +14,12 @@ namespace Identity.Api.Validators.Users
             this.RuleFor(x => x.PhoneNumber).NotNull().NotEmpty();
             this.RuleFor(x => x.CompanyName).NotNull().NotEmpty();
             this.RuleFor(x => x.CompanyAddress).NotNull().NotEmpty();
-            this.RuleFor(x => x.CompanyCountry).NotNull().NotEmpty();
             this.RuleFor(x => x.CompanyCity).NotNull().NotEmpty();
-            this.RuleFor(x => x.CompanyRegion).NotNull().NotEmpty();
+            this.RuleFor(x => x.CompanyCountry).NotNull().NotEmpty();
             this.RuleFor(x => x.CompanyPostalCode).NotNull().NotEmpty();
-            this.RuleFor(x => x.AcceptReturns).NotNull().NotEmpty();
+            this.RuleFor(x => x.CompanyRegion).NotNull().NotEmpty();
             this.RuleFor(x => x.DirectlyShip).NotNull().NotEmpty();
+            this.RuleFor(x => x.AcceptReturns).NotNull().NotEmpty();
             this.RuleFor(x => x.OnlineRetailers).NotNull().NotEmpty();
         }
     }
