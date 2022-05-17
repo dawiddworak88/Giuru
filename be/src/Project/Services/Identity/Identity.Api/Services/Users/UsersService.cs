@@ -359,7 +359,11 @@ namespace Identity.Api.Services.Users
                     acceptRetunsLabel = this.accountLocalizer.GetString("AcceptRetuns").Value,
                     acceptRetuns = serviceModel.AcceptReturns,
                     directlyShipLabel = this.accountLocalizer.GetString("DirectlyShip").Value,
-                    directlyShip = serviceModel.DirectlyShip
+                    directlyShip = serviceModel.DirectlyShip,
+                    contactJobLabel = this.globalLocalizer.GetString("ContactJobTitle").Value,
+                    contactJobTitle = serviceModel.ContactJobTitle,
+                    countryLabel = this.globalLocalizer.GetString("Country").Value,
+                    country = serviceModel.CompanyCountry
                 }
             });
         }
