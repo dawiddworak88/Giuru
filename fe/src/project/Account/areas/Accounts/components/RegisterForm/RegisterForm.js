@@ -1,13 +1,16 @@
 import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
+import clsx from "clsx";
 import { toast } from "react-toastify";
-import { Context } from "../../../../../../shared/stores/Store";
+import { Context } from "../../../../../../shared/stores/Store"
+import { makeStyles } from "@material-ui/core/styles";
 import {
     Stepper, Step, StepLabel, StepContent, TextField, Button, FormHelperText,
     FormControl, InputLabel, Select, MenuItem, RadioGroup, FormControlLabel, Radio, FormLabel
 } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
+import { RadioButtonChecked, RadioButtonUnchecked } from "@material-ui/icons";
 
 const RegisterForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -147,6 +150,23 @@ const RegisterForm = (props) => {
                 toast.error(props.generalErrorMessage);
             });
     }
+
+    const useStyles = makeStyles({
+        layer: {
+            position: "absolute",
+            left: 0,
+            background: "red"
+        },
+        root: {
+            position: "relative",
+            display: "flex",
+            "&:last-child": {
+                position: 'absolute'
+            }
+        }
+    });
+
+    const classes = useStyles();
 
     const {
         values, errors, dirty, disable, handleOnChange, handleOnSubmit
@@ -318,8 +338,26 @@ const RegisterForm = (props) => {
                                 <FormControl component="fieldset" fullWidth={true} error={(errors.directlyShip.length > 0) && dirty.directlyShip}>
                                     <FormLabel>{props.directlyShipLabel}</FormLabel>
                                     <RadioGroup name="directlyShip" value={directlyShip} onChange={handleOnChange}>
-                                        <FormControlLabel value={props.yesLabel} control={<Radio />} label={props.yesLabel} />
-                                        <FormControlLabel value={props.noLabel} control={<Radio />} label={props.noLabel} />
+                                        <FormControlLabel 
+                                            value={props.yesLabel} 
+                                            label={props.yesLabel}
+                                            control={
+                                                <Radio 
+                                                    inputProps={{hidden: true}}
+                                                    icon={<RadioButtonUnchecked />}
+                                                    checkedIcon={<RadioButtonChecked />} 
+                                                />}  
+                                            />
+                                        <FormControlLabel 
+                                            label={props.noLabel}
+                                            value={props.noLabel} 
+                                            control={
+                                                <Radio 
+                                                    inputProps={{hidden: true}} 
+                                                    icon={<RadioButtonUnchecked />}
+                                                    checkedIcon={<RadioButtonChecked />} 
+                                                />} 
+                                            />
                                     </RadioGroup>
                                     {errors.directlyShip && dirty.directlyShip && (
                                         <FormHelperText>{errors.directlyShip}</FormHelperText>
@@ -330,8 +368,26 @@ const RegisterForm = (props) => {
                                 <FormControl component="fieldset" fullWidth={true} error={(errors.acceptReturns.length > 0) && dirty.acceptReturns}>
                                     <FormLabel>{props.acceptReturnsLabel}</FormLabel>
                                     <RadioGroup name="acceptReturns" value={acceptReturns} onChange={handleOnChange}>
-                                        <FormControlLabel value={props.yesLabel} control={<Radio />} label={props.yesLabel} />
-                                        <FormControlLabel value={props.noLabel} control={<Radio />} label={props.noLabel} />
+                                        <FormControlLabel 
+                                            value={props.yesLabel} 
+                                            label={props.yesLabel}
+                                            control={
+                                                <Radio 
+                                                    inputProps={{hidden: true}}
+                                                    icon={<RadioButtonUnchecked />}
+                                                    checkedIcon={<RadioButtonChecked />} 
+                                                />}  
+                                            />
+                                        <FormControlLabel 
+                                            label={props.noLabel}
+                                            value={props.noLabel} 
+                                            control={
+                                                <Radio 
+                                                    inputProps={{hidden: true}} 
+                                                    icon={<RadioButtonUnchecked />}
+                                                    checkedIcon={<RadioButtonChecked />} 
+                                                />} 
+                                            />
                                     </RadioGroup>
                                     {errors.acceptReturns && dirty.acceptReturns && (
                                         <FormHelperText>{errors.acceptReturns}</FormHelperText>
