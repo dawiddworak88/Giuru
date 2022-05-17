@@ -8,10 +8,12 @@ import {
 } from "@material-ui/core";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import { RadioButtonChecked, RadioButtonUnchecked } from "@material-ui/icons";
 
 const RegisterForm = (props) => {
     const [state, dispatch] = useContext(Context);
+    const [isSended, setIsSended] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
     const stateSchema = {
        firstName: { value: null, error: "" },
@@ -137,6 +139,10 @@ const RegisterForm = (props) => {
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
+                        setIsSended(true);
+                        setTimeout(() => {
+                            NavigationHelper.redirect(props.signInUrl)
+                        }, 3000);
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -397,7 +403,7 @@ const RegisterForm = (props) => {
                                 variant="contained" 
                                 color="primary" 
                                 fullWidth={true}
-                                disabled={state.isLoading || disable}
+                                disabled={state.isLoading || disable || isSended}
                             >
                                 {props.saveText}
                             </Button>
@@ -435,7 +441,8 @@ RegisterForm.propTypes = {
     acceptRetunsLabel: PropTypes.string.isRequired,
     directlyShipLabel: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
-    selectJobTitle: PropTypes.string.isRequired
+    selectJobTitle: PropTypes.string.isRequired,
+    signInUrl: PropTypes.string.isRequired
 }
 
 export default RegisterForm;

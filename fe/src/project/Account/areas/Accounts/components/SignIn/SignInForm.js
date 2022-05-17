@@ -69,7 +69,16 @@ function SignInForm(props) {
             </div>
             <div className="account-container has-text-centered mt-4">
                 <h2 className="title is-size-6 mb-3">{props.registerLabel}</h2>
-                <Button type="text" variant="contained" color="primary" fullWidth={true} onClick={() => NavigationHelper.redirect(props.registerUrl)}>{props.registerButtonText}</Button>
+                <Button 
+                    type="text" 
+                    variant="contained" 
+                    color="primary" 
+                    onClick={() => 
+                        NavigationHelper.redirect(props.registerUrl)
+                    }
+                    fullWidth={true}>
+                    {props.registerButtonText}
+                </Button>
                 <div className="mt-6">
                     <p>{props.contactText}</p>
                     <a href={`mailto:${props.developersEmail}`}>{props.developersEmail}</a>
