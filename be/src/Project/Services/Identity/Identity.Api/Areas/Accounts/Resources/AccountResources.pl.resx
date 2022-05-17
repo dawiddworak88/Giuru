@@ -153,9 +153,6 @@
   <data name="ContactInformation" xml:space="preserve">
     <value>Informacje Kontaktowe</value>
   </data>
-  <data name="ContactInformationDescription" xml:space="preserve">
-    <value>Twoją główną osobą kontaktową będzie osoba kontaktowa ELTAP dla Twojej firmy</value>
-  </data>
   <data name="EmailIsConfirmedText" xml:space="preserve">
     <value>Konto Potwierdzone</value>
   </data>
@@ -172,7 +169,7 @@
     <value>Informacje Logistyczne</value>
   </data>
   <data name="LogisticalInformationDescription" xml:space="preserve">
-    <value>Podaj szczegóły o tym jak działa Twoja firma</value>
+    <value>Podaj więcej informacji o tym jak działa Twoja firma</value>
   </data>
   <data name="nc_buttonLabel" xml:space="preserve">
     <value>Potwierdź i ustaw hasło</value>
@@ -248,5 +245,14 @@
   </data>
   <data name="DirectlyShip" xml:space="preserve">
     <value>Czy będziesz w stanie wysyłać przesyłki bezpośrednio do klientów (tzw. dropship)?</value>
+  </data>
+  <data name="ContactInformationDescription" xml:space="preserve">
+    <value>Twoją główną osobą kontaktową z ELTAP będzie osoba kontaktowa podana w formularzu</value>
+  </data>
+  <data name="ApplySubmit" xml:space="preserve">
+    <value>Wyślij wniosek teraz</value>
+  </data>
+  <data name="SelectJobTitle" xml:space="preserve">
+    <value>Wybierz stanowisko pracy</value>
   </data>
 </root>

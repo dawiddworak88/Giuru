@@ -56,7 +56,8 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 AcceptReturnsLabel = this.accountLocalizer.GetString("AcceptRetuns"),
                 DirectlyShipLabel = this.accountLocalizer.GetString("DirectlyShip"),
-                SaveText = this.accountLocalizer.GetString("RegisterButton")
+                SaveText = this.accountLocalizer.GetString("ApplySubmit"),
+                SelectJobTitle = this.accountLocalizer.GetString("SelectJobTitle")
             };
 
             viewModel.ContactJobTitles = new List<ContactJobTitle>
@@ -65,10 +66,12 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 new ContactJobTitle { Name = this.globalLocalizer.GetString("SalesManager") },
                 new ContactJobTitle { Name = this.globalLocalizer.GetString("President") },
                 new ContactJobTitle { Name = this.globalLocalizer.GetString("CEO") },
-                new ContactJobTitle { Name = this.globalLocalizer.GetString("ServiceManager") },
-                new ContactJobTitle { Name = this.globalLocalizer.GetString("ServiceManagerRep") },
-                new ContactJobTitle { Name = this.globalLocalizer.GetString("CEO") },
-                new ContactJobTitle { Name = this.globalLocalizer.GetString("Other") },
+                new ContactJobTitle { Name = this.globalLocalizer.GetString("AccountManager") },
+                new ContactJobTitle { Name = this.globalLocalizer.GetString("Owner") },
+                new ContactJobTitle { Name = this.globalLocalizer.GetString("VicePresident") },
+                new ContactJobTitle { Name = this.globalLocalizer.GetString("GeneralManager") },
+                new ContactJobTitle { Name = this.globalLocalizer.GetString("OperationsManager") },
+                new ContactJobTitle { Name = this.globalLocalizer.GetString("Other") }
             };
 
             viewModel.Steps = new List<StepViewModel>

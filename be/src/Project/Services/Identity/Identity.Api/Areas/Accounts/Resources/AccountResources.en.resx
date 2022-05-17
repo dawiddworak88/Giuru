@@ -154,7 +154,7 @@
     <value>Contact Information</value>
   </data>
   <data name="ContactInformationDescription" xml:space="preserve">
-    <value>Your primary contact will be ELTAP point person for your business</value>
+    <value>Your primary contact person for ELTAP will be the contact person provided in the form</value>
   </data>
   <data name="EmailIsConfirmedText" xml:space="preserve">
     <value>Account Confirmed</value>
@@ -248,5 +248,11 @@
   </data>
   <data name="DirectlyShip" xml:space="preserve">
     <value>Would you be able to ship directly to customers (also known as dropship)?</value>
+  </data>
+  <data name="SelectJobTitle" xml:space="preserve">
+    <value>Choose a workplace title</value>
+  </data>
+  <data name="ApplySubmit" xml:space="preserve">
+    <value>Submit your application now</value>
   </data>
 </root>

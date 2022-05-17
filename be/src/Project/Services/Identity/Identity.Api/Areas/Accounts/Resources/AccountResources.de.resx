@@ -154,7 +154,7 @@
     <value>Kontaktinformation</value>
   </data>
   <data name="ContactInformationDescription" xml:space="preserve">
-    <value>Ihr Hauptansprechpartner ist die ELTAP-Kontaktperson für Ihr Unternehmen</value>
+    <value>Ihr primärer Ansprechpartner für ELTAP ist der im Formular angegebene Ansprechpartner</value>
   </data>
   <data name="EmailIsConfirmedText" xml:space="preserve">
     <value>Konto bestätigt</value>
@@ -248,5 +248,11 @@
   </data>
   <data name="DirectlyShip" xml:space="preserve">
     <value>Wären Sie in der Lage, direkt an Kunden zu versenden (auch bekannt als Direktversand)?</value>
+  </data>
+  <data name="SelectJobTitle" xml:space="preserve">
+    <value>Wähle einen Arbeitsplatz</value>
+  </data>
+  <data name="ApplySubmit" xml:space="preserve">
+    <value>Reichen Sie jetzt Ihre Bewerbung ein</value>
   </data>
 </root>

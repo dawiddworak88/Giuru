@@ -531,4 +531,34 @@
   <data name="ContactJobTitle" xml:space="preserve">
     <value>Contact job title</value>
   </data>
+  <data name="AccountManager" xml:space="preserve">
+    <value>Account Manager</value>
+  </data>
+  <data name="CEO" xml:space="preserve">
+    <value>CEO</value>
+  </data>
+  <data name="GeneralManager" xml:space="preserve">
+    <value>General Manager</value>
+  </data>
+  <data name="OperationsManager" xml:space="preserve">
+    <value>Operations Manager</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Owner</value>
+  </data>
+  <data name="President" xml:space="preserve">
+    <value>President</value>
+  </data>
+  <data name="SalesManager" xml:space="preserve">
+    <value>Sales Manager</value>
+  </data>
+  <data name="SalesRep" xml:space="preserve">
+    <value>Sales Representative</value>
+  </data>
+  <data name="V" xml:space="preserve">
+    <value>Vicepresident</value>
+  </data>
 </root>

@@ -35,6 +35,7 @@ namespace Identity.Api.Areas.Accounts.ViewModels
         public string AcceptReturnsLabel { get; set; }
         public string DirectlyShipLabel { get; set; }
         public string SaveText { get; set; }
+        public string SelectJobTitle { get; set; }
         public IEnumerable<ContactJobTitle> ContactJobTitles { get; set; }
         public IEnumerable<StepViewModel> Steps { get; set; }
     }

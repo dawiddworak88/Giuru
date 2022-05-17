@@ -531,4 +531,34 @@
   <data name="Region" xml:space="preserve">
     <value>Region</value>
   </data>
+  <data name="AccountManager" xml:space="preserve">
+    <value>Account Manager</value>
+  </data>
+  <data name="CEO" xml:space="preserve">
+    <value>CEO</value>
+  </data>
+  <data name="GeneralManager" xml:space="preserve">
+    <value>Hauptgeschäftsführer</value>
+  </data>
+  <data name="OperationsManager" xml:space="preserve">
+    <value>Betriebsleiter</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Andere</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Inhaber</value>
+  </data>
+  <data name="President" xml:space="preserve">
+    <value>Präsident</value>
+  </data>
+  <data name="SalesManager" xml:space="preserve">
+    <value>Verkaufsleiter</value>
+  </data>
+  <data name="SalesRep" xml:space="preserve">
+    <value>Außendienstmitarbeiter</value>
+  </data>
+  <data name="V" xml:space="preserve">
+    <value>Vizepräsident</value>
+  </data>
 </root>

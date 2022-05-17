@@ -212,6 +212,7 @@ const RegisterForm = (props) => {
                                         name="contactJobTitle"
                                         value={contactJobTitle}
                                         onChange={handleOnChange}>
+                                        <MenuItem key={0} value="">{props.selectJobTitle}</MenuItem>
                                         {props.contactJobTitles && props.contactJobTitles.map((title, index) => {
                                             return (
                                                 <MenuItem key={index} value={title.name}>{title.name}</MenuItem>
@@ -433,7 +434,8 @@ RegisterForm.propTypes = {
     onlineRetailersLabel: PropTypes.string.isRequired,
     acceptRetunsLabel: PropTypes.string.isRequired,
     directlyShipLabel: PropTypes.string.isRequired,
-    saveText: PropTypes.string.isRequired
+    saveText: PropTypes.string.isRequired,
+    selectJobTitle: PropTypes.string.isRequired
 }
 
 export default RegisterForm;
