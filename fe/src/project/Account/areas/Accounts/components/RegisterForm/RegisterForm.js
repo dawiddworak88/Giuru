@@ -1,9 +1,7 @@
 import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
-import clsx from "clsx";
 import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store"
-import { makeStyles } from "@material-ui/core/styles";
 import {
     Stepper, Step, StepLabel, StepContent, TextField, Button, FormHelperText,
     FormControl, InputLabel, Select, MenuItem, RadioGroup, FormControlLabel, Radio, FormLabel
@@ -151,29 +149,15 @@ const RegisterForm = (props) => {
             });
     }
 
-    const useStyles = makeStyles({
-        layer: {
-            position: "absolute",
-            left: 0,
-            background: "red"
-        },
-        root: {
-            position: "relative",
-            display: "flex",
-            "&:last-child": {
-                position: 'absolute'
-            }
-        }
-    });
-
-    const classes = useStyles();
-
     const {
         values, errors, dirty, disable, handleOnChange, handleOnSubmit
-    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
+    } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
     const { 
-        firstName, lastName, email, phoneNumber, contactJobTitle, companyName, companyAddress, companyCity, companyCountry, companyRegion, companyPostalCode, directlyShip, acceptReturns, onlineRetailers } = values;
+        firstName, lastName, email, phoneNumber, contactJobTitle, companyName, companyAddress, companyCity, 
+        companyCountry, companyRegion, companyPostalCode, directlyShip, acceptReturns, onlineRetailers 
+    } = values;
+    
     return (
         <div className="container register-form">
             <div className="columns">
