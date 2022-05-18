@@ -141,11 +141,6 @@ CategoryForm.propTypes = {
     saveText: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
     parentCategories: PropTypes.array.isRequired,
-    dropOrSelectFilesLabel: PropTypes.string.isRequired,
-    dropFilesLabel: PropTypes.string.isRequired,
-    saveMediaUrl: PropTypes.string.isRequired,
-    deleteLabel: PropTypes.string.isRequired,
-    categoryPictureLabel: PropTypes.string.isRequired,
     saveUrl: PropTypes.string.isRequired,
     idLabel: PropTypes.string
 };

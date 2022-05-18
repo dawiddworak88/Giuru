@@ -17,9 +17,6 @@ spec:
       containers:
       - name: media-api-container
         image: {{ .Values.image.registry }}/media-api:{{ .Values.image.tag }}
-        resources:
-          limits:
-            memory: "1750Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -105,7 +102,7 @@ spec:
         image: {{ .Values.image.registry }}/catalog-api:{{ .Values.image.tag }}
         resources:
           limits:
-            memory: "250Mi"
+            memory: "500Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}

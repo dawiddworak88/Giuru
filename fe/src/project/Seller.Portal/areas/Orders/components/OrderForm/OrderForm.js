@@ -21,7 +21,6 @@ import IconConstants from "../../../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function OrderForm(props) {
-
     const clientsProps = {
         options: props.clients,
         getOptionLabel: (option) => option.name
@@ -546,7 +545,6 @@ OrderForm.propTypes = {
     ordersUrl: PropTypes.string.isRequired,
     placeOrderUrl: PropTypes.string.isRequired,
     navigateToOrdersListText: PropTypes.string.isRequired,
-    expectedDeliveryabel: PropTypes.string.isRequired,
     uploadOrderFileUrl: PropTypes.string.isRequired,
     orLabel: PropTypes.string.isRequired,
     dropOrSelectFilesLabel: PropTypes.string.isRequired,

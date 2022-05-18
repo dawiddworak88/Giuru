@@ -198,7 +198,7 @@ const Modal = (props) => {
 }
 
 Modal.propTypes = {
-    isOpen: PropTypes.func,
+    isOpen: PropTypes.bool,
     addText: PropTypes.string,
     cancelLabel: PropTypes.string,
     moreInfoLabel: PropTypes.string,
@@ -210,7 +210,7 @@ Modal.propTypes = {
     stockQuantityLabel: PropTypes.string,
     quantityLabel: PropTypes.string,
     maxStockValue: PropTypes.number,
-    handleOrder: PropTypes.string,
+    handleOrder: PropTypes.func,
     closeLabel: PropTypes.string,
     okLabel: PropTypes.string,
     title: PropTypes.string,

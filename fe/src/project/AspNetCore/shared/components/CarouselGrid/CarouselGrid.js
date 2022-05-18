@@ -12,14 +12,14 @@ import moment from "moment";
 function CarouselGrid(props) {
     return (
         <Fragment>
-            {props.items && props.items.map((item) =>
-                <section className="section carousel-grid">
+            {props.items && props.items.map((item, index) =>
+                <section className="section carousel-grid" key={index}>
                     {item.carouselItems && item.carouselItems.length > 0 && 
                         <div key={item.id} className="carousel-grid__item">
                             <p className="title is-4">{item.title}</p>
                             <Carousel responsive={CarouselConstants.defaultCarouselResponsive()}>
-                                {item.carouselItems.map((carouselItem) =>
-                                    <div key={carouselItem.id} className="card">
+                                {item.carouselItems.map((carouselItem, index) =>
+                                    <div key={index} className="card">
                                         {carouselItem.sources && 
                                             <a href={carouselItem.url}>
                                                 <div className="card-image">

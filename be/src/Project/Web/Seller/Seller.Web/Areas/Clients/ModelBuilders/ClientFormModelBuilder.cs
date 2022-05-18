@@ -97,7 +97,9 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.CommunicationLanguage = client.CommunicationLanguage;
                     viewModel.PhoneNumber = client.PhoneNumber;
                     viewModel.ClientGroupsIds = client.ClientGroupIds;
+
                     var user = await this.identityRepository.GetAsync(componentModel.Token, componentModel.Language, client.Email);
+
                     if (user is not null)
                     {
                         viewModel.HasAccount = true;
