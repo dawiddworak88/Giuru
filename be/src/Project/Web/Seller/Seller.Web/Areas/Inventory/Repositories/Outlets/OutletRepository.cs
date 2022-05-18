@@ -81,7 +81,7 @@ namespace Seller.Web.Areas.Inventory.Repositories
         }
 
         public async Task<Guid> SaveAsync(
-            string token, string language, Guid? id, Guid? warehouseId, Guid? productId, string productName, string productSku, int quantity, string title, string description, string ean, int? availableQuantity, Guid? organisationId)
+            string token, string language, Guid? id, Guid? warehouseId, Guid? productId, string productName, string productSku, double quantity, string title, string description, string ean, double? availableQuantity, Guid? organisationId)
         {
             var requestModel = new SaveOutletRequestModel
             {
