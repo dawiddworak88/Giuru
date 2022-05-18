@@ -3,17 +3,15 @@ import { toast } from "react-toastify";
 import { UploadCloud } from "react-feather";
 import { useDropzone } from "react-dropzone";
 import PropTypes from "prop-types";
-import MomentUtils from "@date-io/moment";
-import { MuiPickersUtilsProvider, KeyboardDatePicker,} from "@material-ui/pickers";
+import { LocalizationProvider, DatePicker } from "@mui/lab";
+import AdapterMoment from '@mui/lab/AdapterMoment';
 import Autosuggest from "react-autosuggest";
 import { Context } from "../../../../../../shared/stores/Store";
-import DeleteIcon from "@material-ui/icons/Delete";
-import ClearIcon from "@material-ui/icons/Clear";
-import AddShoppingCartRounded from "@material-ui/icons/AddShoppingCartRounded";
+import { Delete, AddShoppingCartRounded } from "@mui/icons-material";
 import {
     Fab, Table, TableBody, TableCell, TableContainer, FormControlLabel,
     TableHead, TableRow, Paper, TextField, Button, IconButton, CircularProgress, Checkbox, NoSsr
-} from "@material-ui/core";
+} from "@mui/material";
 import moment from "moment";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
@@ -358,7 +356,7 @@ function NewOrderForm(props) {
                                 />
                             </div>
                             <div className="column is-1 is-flex is-align-items-flex-end">
-                                <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "1", step: "1" }}
+                                <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "1", step: "1" }} variant="standard"
                                     label={props.quantityLabel} fullWidth={true} value={quantity} onChange={(e) => {
                                         e.preventDefault();
                                         setQuantity(e.target.value);
@@ -366,7 +364,7 @@ function NewOrderForm(props) {
                                 />
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel}
+                                <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel} variant="standard"
                                     fullWidth={true} value={externalReference} onChange={(e) => {
                                         e.preventDefault();
                                         setExternalReference(e.target.value);
@@ -374,61 +372,35 @@ function NewOrderForm(props) {
                                 />
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <MuiPickersUtilsProvider utils={MomentUtils}>
-                                    <KeyboardDatePicker
+                                <LocalizationProvider dateAdapter={AdapterMoment}>
+                                    <DatePicker
                                         id="deliveryFrom"
                                         label={props.deliveryFromLabel}
                                         value={deliveryFrom}
                                         onChange={(date) => {
                                             setDeliveryFrom(date);
                                         }}
-                                        okLabel={props.okLabel}
-                                        cancelLabel={props.cancelLabel}
-                                        InputProps={{
-                                            endAdornment: (
-                                                <IconButton onClick={() => setDeliveryFrom(null)}>
-                                                    <ClearIcon />
-                                                </IconButton>
-                                            )
-                                        }}
-                                        InputAdornmentProps={{
-                                            position: "start"
-                                        }}
-                                        KeyboardButtonProps={{
-                                            "aria-label": props.changeDeliveryFromLabel
-                                        }} disablePast={true}
-                                    />
-                                </MuiPickersUtilsProvider>
+                                        renderInput={(params) => 
+                                            <TextField {...params} variant="standard" />}
+                                        disablePast={true}/>
+                                </LocalizationProvider>
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <MuiPickersUtilsProvider utils={MomentUtils}>
-                                    <KeyboardDatePicker
+                                <LocalizationProvider dateAdapter={AdapterMoment}>
+                                    <DatePicker
                                         id="deliveryTo"
                                         label={props.deliveryToLabel}
                                         value={deliveryTo}
                                         onChange={(date) => {
                                             setDeliveryTo(date);
                                         }}
-                                        okLabel={props.okLabel}
-                                        cancelLabel={props.cancelLabel}
-                                        InputProps={{
-                                            endAdornment: (
-                                                <IconButton onClick={() => setDeliveryTo(null)}>
-                                                    <ClearIcon />
-                                                </IconButton>
-                                            )
-                                        }}
-                                        InputAdornmentProps={{
-                                            position: "start"
-                                        }}
-                                        KeyboardButtonProps={{
-                                           "aria-label": props.changeDeliveryToLabel
-                                        }} 
+                                        renderInput={(params) => 
+                                            <TextField {...params} variant="standard" />}
                                         disablePast={true}/>
-                                </MuiPickersUtilsProvider>
+                                </LocalizationProvider>
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <TextField id="moreInfo" name="moreInfo" type="text" label={props.moreInfoLabel}
+                                <TextField id="moreInfo" name="moreInfo" type="text" label={props.moreInfoLabel} variant="standard"
                                     fullWidth={true} value={moreInfo} onChange={(e) => {
                                         e.preventDefault();
                                         setMoreInfo(e.target.value);
@@ -470,7 +442,7 @@ function NewOrderForm(props) {
                                                                 {!isOrdered &&
                                                                     <TableCell width="11%">
                                                                         <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
-                                                                            <DeleteIcon />
+                                                                            <Delete />
                                                                         </Fab>
                                                                     </TableCell>
                                                                 }
@@ -530,6 +502,7 @@ function NewOrderForm(props) {
                                 multiline={true}
                                 value={customOrder}
                                 disabled={isOrdered}
+                                variant="standard"
                                 onChange={(e) => {
                                     setCustomOrder(e.target.value);
                                 }}

@@ -1,5 +1,5 @@
-import { createMuiTheme } from "@material-ui/core/styles";
-import * as locales from "@material-ui/core/locale";
+import { createTheme } from "@mui/material/styles";
+import * as locales from "@mui/material/locale";
 
 export default class GlobalHelper {
 
@@ -32,11 +32,11 @@ export default class GlobalHelper {
         "en": "enUS"
       };
 
-      return createMuiTheme(themeDefinition, locales[localeMappings[locale]]);
+      return createTheme(themeDefinition, locales[localeMappings[locale]]);
     }
     else {
       
-      return createMuiTheme(themeDefinition);
+      return createTheme(themeDefinition);
     }
   }
 }

@@ -1,8 +1,8 @@
 import React, {useState, useContext, useEffect} from "react";
 import { 
     Button, SwipeableDrawer, List, ListItem 
-} from "@material-ui/core";
-import { Close, AddShoppingCart, ArrowRight } from "@material-ui/icons";
+} from "@mui/material";
+import { Close, AddShoppingCart, ArrowRight } from "@mui/icons-material";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import PropTypes from "prop-types";

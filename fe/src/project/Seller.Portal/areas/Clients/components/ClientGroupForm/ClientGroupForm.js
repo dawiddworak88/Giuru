@@ -1,6 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
-import { TextField, Button, InputLabel, CircularProgress } from "@material-ui/core";
+import { TextField, Button, InputLabel, CircularProgress } from "@mui/material";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -80,6 +80,7 @@ const ClientGroupForm = (props) => {
                                 fullWidth={true}
                                 value={name} 
                                 onChange={handleOnChange} 
+                                variant="standard"
                                 helperText={dirty.name ? errors.name : ""} 
                                 error={(errors.name.length > 0) && dirty.name} />
                         </div>
