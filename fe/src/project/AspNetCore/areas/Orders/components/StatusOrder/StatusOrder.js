@@ -5,7 +5,6 @@ import {
     TableHead, TableRow, Paper, TextField
 } from "@material-ui/core";
 import moment from "moment";
-import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
 
 function StatusOrder(props) {
 
@@ -90,7 +89,6 @@ function StatusOrder(props) {
                             fullWidth={true}
                             multiline={true}
                             disabled={true}
-                            rows={OrderFormConstants.minRowsForCustomOrder()}
                             InputProps={{ 
                                 className: "p-2" 
                             }}

@@ -9,7 +9,6 @@ import {
     TableHead, TableRow, Paper } from "@material-ui/core";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
 
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -166,7 +165,6 @@ function EditOrderForm(props) {
                             fullWidth={true}
                             multiline={true}
                             disabled={true}
-                            rows={OrderFormConstants.minRowsForCustomOrder()}
                             InputProps={{ 
                                 className: "p-2" 
                             }}
