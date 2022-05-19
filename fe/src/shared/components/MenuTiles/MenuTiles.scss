@@ -1,13 +1,19 @@
-@import "swiper/swiper.min";
-@import "swiper/swiper-bundle.min";
-@import "swiper/components/navigation/navigation.min";
+// @import "@splidejs/react-splide/dist/css/splide.min";
 
-.swiper-wrapper {
+.splide__list {
     max-width: 1180px;
+
+    @media only screen and (max-width: 1260px) {
+        max-width: 960px;
+    }
 }
 
-.swiper-container {
-    position: none;
+.splide__arrow--next {
+    margin-right: -3rem;
+}
+
+.splide__arrow--prev {
+    margin-left: -3rem;
 }
 
 .menu-tiles {
