@@ -10,8 +10,7 @@
     "@mui/lab": "5.0.0-alpha.82",
     "@mui/material": "5.8.0",
     "@mui/styles": "5.8.0",
-    "@splidejs/react-splide": "^0.7.5",
-    "@splidejs/splide": "^4.0.2",
+    "@splidejs/react-splide": "0.7.5",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "13.2.0",
     "@testing-library/user-event": "14.2.0",
@@ -42,7 +41,6 @@
     "react-scripts": "5.0.1",
     "react-toastify": "9.0.1",
     "shortid": "2.2.16",
-    "swiper": "6.8.4",
     "whatwg-fetch": "3.6.2"
   },
   "scripts": {
