@@ -1,6 +1,7 @@
 ﻿using Foundation.EventBus.Events;
 using Ordering.Api.IntegrationEventsModels;
 using System;
+using System.Collections.Generic;
 
 namespace Ordering.Api.IntegrationEvents
 {
@@ -37,5 +38,6 @@ namespace Ordering.Api.IntegrationEvents
         public string MoreInfo { get; set; }
         public BasketEventModel Basket { get; set; }
         public bool HasCustomOrder { get; set; }
+        public IEnumerable<Guid> Attachments { get; set; }
     }
 }

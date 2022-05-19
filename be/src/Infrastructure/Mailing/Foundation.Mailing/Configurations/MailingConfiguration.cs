@@ -6,6 +6,7 @@
         public string NoReplyFromEmail { get; set; }
         public string ActionSendGridCreateTemplateId { get; set; }
         public string ActionSendGridResetTemplateId { get; set; }
+        public string ActionSendGridCustomOrderTemplateId { get; set; }
         public string ActionSendGridClientApplyConfirmationTemplateId { get; set; }
         public string ActionSendGridClientApplyTemplateId { get; set; }
         public string DefaulEmail { get; set; }

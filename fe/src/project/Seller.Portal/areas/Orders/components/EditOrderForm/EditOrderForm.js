@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, Fragment } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -8,6 +8,7 @@ import {
     TableHead, TableRow, Paper, CircularProgress } from "@mui/material";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import Files from "../../../../../../shared/components/Files/Files";
 
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -112,64 +113,71 @@ function EditOrderForm(props) {
                     
                 </div>
             </div>
-            <div className="mt-5">
-                <h2 className="subtitle is-5 edit-order__items-subtitle">{props.orderItemsLabel}</h2>
-                <div className="edit-order__items">
-                    <section className="section">
-                        <div className="orderitems__table">
-                            <TableContainer component={Paper}>
-                                <Table aria-label={props.orderItemsLabel}>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell></TableCell>
-                                            <TableCell>{props.skuLabel}</TableCell>
-                                            <TableCell>{props.nameLabel}</TableCell>
-                                            <TableCell>{props.quantityLabel}</TableCell>
-                                            <TableCell>{props.stockQuantityLabel}</TableCell>
-                                            <TableCell>{props.outletQuantityLabel}</TableCell>
-                                            <TableCell>{props.externalReferenceLabel}</TableCell>
-                                            <TableCell>{props.deliveryFromLabel}</TableCell>
-                                            <TableCell>{props.deliveryToLabel}</TableCell>
-                                            <TableCell>{props.moreInfoLabel}</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {props.orderItems && props.orderItems.map((item, index) => (
-                                            <TableRow key={index}>
-                                                <TableCell><a href={item.productUrl} target="_blank"><img className="edit-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
-                                                <TableCell>{item.sku}</TableCell>
-                                                <TableCell>{item.name}</TableCell>
-                                                <TableCell>{item.quantity}</TableCell>
-                                                <TableCell>{item.stockQuantity}</TableCell>
-                                                <TableCell>{item.outletQuantity}</TableCell>
-                                                <TableCell>{item.externalReference}</TableCell>
-                                                <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
-                                                <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
-                                                <TableCell>{item.moreInfo}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </div>
-                    </section>
-                </div>
-            </div>
-            {props.customOrder &&
+            {props.orderItems && props.orderItems.length > 0 &&
                 <div className="mt-5">
-                    <h2 className="subtitle is-5 mb-2">{props.customOrderLabel}</h2>
+                    <h2 className="subtitle is-5 edit-order__items-subtitle">{props.orderItemsLabel}</h2>
                     <div className="edit-order__items">
-                        <TextField 
-                            value={props.customOrder}
-                            fullWidth={true}
-                            multiline={true}
-                            disabled={true}
-                            InputProps={{ 
-                                className: "p-2" 
-                            }}
-                        />
+                        <section className="section">
+                            <div className="orderitems__table">
+                                <TableContainer component={Paper}>
+                                    <Table aria-label={props.orderItemsLabel}>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell></TableCell>
+                                                <TableCell>{props.skuLabel}</TableCell>
+                                                <TableCell>{props.nameLabel}</TableCell>
+                                                <TableCell>{props.quantityLabel}</TableCell>
+                                                <TableCell>{props.stockQuantityLabel}</TableCell>
+                                                <TableCell>{props.outletQuantityLabel}</TableCell>
+                                                <TableCell>{props.externalReferenceLabel}</TableCell>
+                                                <TableCell>{props.deliveryFromLabel}</TableCell>
+                                                <TableCell>{props.deliveryToLabel}</TableCell>
+                                                <TableCell>{props.moreInfoLabel}</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {props.orderItems.map((item, index) => (
+                                                <TableRow key={index}>
+                                                    <TableCell><a href={item.productUrl} target="_blank"><img className="edit-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
+                                                    <TableCell>{item.sku}</TableCell>
+                                                    <TableCell>{item.name}</TableCell>
+                                                    <TableCell>{item.quantity}</TableCell>
+                                                    <TableCell>{item.stockQuantity}</TableCell>
+                                                    <TableCell>{item.outletQuantity}</TableCell>
+                                                    <TableCell>{item.externalReference}</TableCell>
+                                                    <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
+                                                    <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
+                                                    <TableCell>{item.moreInfo}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </div>
+                        </section>
                     </div>
                 </div>
+            }
+            {props.customOrder &&
+                <Fragment>
+                    <div className="mt-5">
+                        <h2 className="subtitle is-5 mb-2">{props.customOrderLabel}</h2>
+                        <div className="edit-order__items">
+                            <TextField 
+                                value={props.customOrder}
+                                fullWidth={true}
+                                multiline={true}
+                                disabled={true}
+                                InputProps={{ 
+                                    className: "p-2" 
+                                }}
+                            />
+                        </div>
+                    </div>
+                    {props.attachments &&
+                        <Files {...props.attachments} />
+                    }
+                </Fragment>
             }
             {state.isLoading && <CircularProgress className="progressBar" />}
         </section >

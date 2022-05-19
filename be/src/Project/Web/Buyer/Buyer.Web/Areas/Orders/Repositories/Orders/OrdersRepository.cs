@@ -78,6 +78,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
                     OrderStatusName = response.Data.OrderStatusName,
                     OrderItems = orderItems,
                     MoreInfo = response.Data.MoreInfo,
+                    Attachments = response.Data.Attachments,
                     LastModifiedDate = response.Data.LastModifiedDate,
                     CreatedDate = response.Data.CreatedDate
                 };

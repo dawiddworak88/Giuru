@@ -228,8 +228,8 @@
   <data name="Filename" xml:space="preserve">
     <value>Nazwa pliku</value>
   </data>
-  <data name="FilesToDownload" xml:space="preserve">
-    <value>Pliki do pobrania</value>
+  <data name="Files" xml:space="preserve">
+    <value>Pliki</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Strona główna</value>
@@ -503,6 +503,12 @@
   </data>
   <data name="ReadMore" xml:space="preserve">
     <value>Czytaj więcej</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Załączniki</value>
+  </data>
+  <data name="DropOrSelectAttachments" xml:space="preserve">
+    <value>Upuść lub wybierz załącznik</value>
   </data>
   <data name="EltapPartner" xml:space="preserve">
     <value>Współpracuj z ELTAP</value>

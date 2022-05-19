@@ -73,7 +73,11 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                 ClearBasketText = this.orderLocalizer.GetString("ClearBasketText"),
                 ClearBasketUrl = this.linkGenerator.GetPathByAction("Delete", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 CustomOrderLabel = this.orderLocalizer.GetString("CustomOrderLabel"),
-                InitCustomOrderLabel = this.orderLocalizer.GetString("InitCustomOrderLabel")
+                InitCustomOrderLabel = this.orderLocalizer.GetString("InitCustomOrderLabel"),
+                AttachmentsLabel = this.globalLocalizer.GetString("Attachments"),
+                DeleteLabel = this.globalLocalizer.GetString("Delete"),
+                DropOrSelectAttachmentsLabel = this.globalLocalizer.GetString("DropOrSelectAttachments"),
+                SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
             };
 
             if (componentModel.BasketId.HasValue)

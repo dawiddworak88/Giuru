@@ -61,7 +61,8 @@ namespace Basket.Api.Services
                 ExternalReference = checkoutBasketServiceModel.ExternalReference,
                 ExpectedDeliveryDate = checkoutBasketServiceModel.ExpectedDeliveryDate,
                 MoreInfo = checkoutBasketServiceModel.MoreInfo,
-                HasCustomOrder = checkoutBasketServiceModel.HasCustomOrder
+                HasCustomOrder = checkoutBasketServiceModel.HasCustomOrder,
+                Attachments = checkoutBasketServiceModel.Attachments
             };
 
             var basket = await this.basketRepository.GetBasketAsync(checkoutBasketServiceModel.BasketId.Value);

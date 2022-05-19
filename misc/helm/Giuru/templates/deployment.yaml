@@ -270,6 +270,10 @@ spec:
           value: {{ .Values.senderName }}
         - name: SendGridApiKey
           value: {{ .Values.sendGridApiKey }}
+        - name: ActionSendGridCustomOrderTemplateId
+          value: {{ .Values.identityApi.actionSendGridCustomOrderTemplateId }}
+        - name: MediaUrl
+          value: {{ .Values.mediaUrl }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType

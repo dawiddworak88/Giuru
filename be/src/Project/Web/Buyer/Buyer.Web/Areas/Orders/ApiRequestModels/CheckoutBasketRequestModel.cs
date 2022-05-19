@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Buyer.Web.Areas.Orders.ApiRequestModels
 {
@@ -11,5 +12,6 @@ namespace Buyer.Web.Areas.Orders.ApiRequestModels
         public DateTime? ExpectedDeliveryDate { get; set; }
         public string MoreInfo { get; set; }
         public bool HasCustomOrder { get; set; }
+        public IEnumerable<AttachmentRequestModel> Attachments { get; set; }
     }
 }
