@@ -1,10 +1,10 @@
 // @import "@splidejs/react-splide/dist/css/splide.min";
 
 .splide__list {
-    max-width: 1180px;
+    max-width: 73.75rem;
 
-    @media only screen and (max-width: 1260px) {
-        max-width: 960px;
+    @media only screen and (max-width: 78.75rem) {
+        max-width: 60rem;
     }
 }
 
@@ -20,22 +20,8 @@
     display: flex;
     justify-content: center;
     padding: 1.5rem;
-    max-width: 1380px;
     position: relative;
     margin: 0 auto;
-
-    &__prev,
-    &__next {
-        color: $primary;
-    }
-
-    &__next {
-        inset: 50% 2rem auto auto;
-    }
-
-    &__prev {
-        inset: 50% auto auto 2rem;
-    }
 
     .tile {
         display: inline-block;
