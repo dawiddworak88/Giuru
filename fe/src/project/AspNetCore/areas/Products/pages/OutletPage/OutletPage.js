@@ -9,9 +9,7 @@ import Catalog from "../../../../shared/components/Catalog/Catalog";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 
 function OutletPage(props) {
-
-  toast.configure();
-
+  
   return (
     <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
       <ToastContainer />

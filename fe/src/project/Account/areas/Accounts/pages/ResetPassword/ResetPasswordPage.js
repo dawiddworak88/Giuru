@@ -8,8 +8,6 @@ import Store from "../../../../../../shared/stores/Store";
 import ResetPasswordForm from "../../components/ResetPassword/ResetPasswordForm";
 
 const ResetPasswordPage = (props) => {
-    
-    toast.configure();
 
     return (
         <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
