@@ -1,5 +1,5 @@
 import React from "react";
-import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "@mui/material/styles";
 import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
 import Header from "../../../../../../shared/components/Header/Header";
@@ -11,18 +11,16 @@ import LocaleHelper from "../../../../../../shared/helpers/globals/LocaleHelper"
 
 function WarehousesPage(props) {
 
-  toast.configure();
   LocaleHelper.setMomentLocale(props.locale);
 
   return (
     <ThemeProvider theme={GlobalHelper.initMuiTheme(props.locale)}>
+      <ToastContainer />
       <Store>
-        <div>
-          <Header {...props.header}></Header>
-          <MenuTiles {...props.menuTiles} />
-          <Catalog {...props.catalog} />
-          <Footer {...props.footer}></Footer>
-        </div>
+        <Header {...props.header}></Header>
+        <MenuTiles {...props.menuTiles} />
+        <Catalog {...props.catalog} />
+        <Footer {...props.footer}></Footer>
       </Store>
     </ThemeProvider>
   );
