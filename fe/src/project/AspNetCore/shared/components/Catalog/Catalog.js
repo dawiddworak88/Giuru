@@ -254,7 +254,7 @@ function Catalog(props) {
                                 component="div"
                                 count={total}
                                 page={page}
-                                onChangePage={handleChangePage}
+                                onPageChange={handleChangePage}
                                 rowsPerPage={itemsPerPage}
                             />
                         </div>

@@ -215,7 +215,9 @@ function ProductDetail(props) {
                 />
             </div>
             <CarouselGrid items={props.productVariants}/>
-            <Files {...props.files} />
+            {props.files &&
+                <Files {...props.files} />
+            }
             <Modal
                 isOpen={isModalOpen}
                 setIsOpen={setIsModalOpen}
