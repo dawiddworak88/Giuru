@@ -1,4 +1,4 @@
-# Giuru &middot; [![GitHub license](https://img.shields.io/badge/license-GPL-blue.svg)](https://github.com/dawiddworak88/Giuru/blob/master/LICENSE.md) ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/8ee660cb3f7b42c1aa7ca8d7d8158b85)](https://www.codacy.com/manual/dawiddworak88/Giuru?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dawiddworak88/Giuru&amp;utm_campaign=Badge_Grade)
+# Giuru &middot; [![GitHub license](https://img.shields.io/badge/license-GPL-blue.svg)](https://github.com/dawiddworak88/Giuru/blob/master/LICENSE.md) ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/755ee3b0687b4e3984c5a22399f14100)](https://www.codacy.com/gh/dawiddworak88/Giuru/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=dawiddworak88/Giuru&amp;utm_campaign=Badge_Grade)
 
 Giuru is a user-friendly, fast and complete B2B Commerce that connects with your existing ERP, CRM and CMS systems. 
 
@@ -42,17 +42,10 @@ SENDGRID_CLIENT_APPLY_TEMPLATE_ID=[PUT_YOUR_SENDGRID_CLIENT_APPLY_TEMPLATE_ID_HE
 
 3. Open Visual Studio, set the docker-compose project as a startup project and hit F5
 
-## Documentation
-
-You will learn more about Giuru [on the website](https://giuru.com).
 
 ## Contributing
 
 Found a serious bug? Your pull request is very welcome :)
-
-## Support
-
-To get support [contact me directly](https://spincoding.com/contact/).
 
 ### License
 

@@ -5,11 +5,11 @@ import { Context } from "../../../../../../shared/stores/Store"
 import {
     Stepper, Step, StepLabel, StepContent, TextField, Button, FormHelperText,
     FormControl, InputLabel, Select, MenuItem, RadioGroup, FormControlLabel, Radio, FormLabel
-} from "@material-ui/core";
+} from "@mui/material";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
-import { RadioButtonChecked, RadioButtonUnchecked } from "@material-ui/icons";
+import { RadioButtonChecked, RadioButtonUnchecked } from "@mui/icons-material";
 
 const RegisterForm = (props) => {
     const [state, dispatch] = useContext(Context);
