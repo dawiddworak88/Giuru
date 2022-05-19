@@ -9,7 +9,7 @@ import { Context } from "../../../../../../shared/stores/Store";
 import { Delete, AddShoppingCartRounded } from "@mui/icons-material"
 import {
     Fab, Table, TableBody, TableCell, TableContainer, Autocomplete, 
-    TableHead, TableRow, Paper, TextField, Button, IconButton, CircularProgress
+    TableHead, TableRow, Paper, TextField, Button, CircularProgress
 } from "@mui/material";
 import moment from "moment";
 import AdapterMoment from '@mui/lab/AdapterMoment';
@@ -332,7 +332,7 @@ function OrderForm(props) {
                 </div>
                 {client &&
                     <Fragment>
-                        <h2 className="subtitle is-5 order__items-subtitle">{props.orderItemsLabel}</h2>
+                        <h2 className="subtitle is-5 pb-2">{props.orderItemsLabel}</h2>
                         <div className="container">
                             <div className="dropzone__pond-container" {...getRootProps()}>
                                 <input id={props.id} name={props.name} {...getInputProps()} />

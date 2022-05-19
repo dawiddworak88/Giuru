@@ -214,7 +214,7 @@ namespace Inventory.Api.Services.OutletItems
         {
             var outletItem = (from o in this.context.Outlet
                              join p in this.context.Products on o.ProductId equals p.Id
-                             where o.Id == model.Id && o.IsActive
+                             where o.Id == model.Id && p.IsActive && o.IsActive
                              select new
                              {
                                  o.Id,
@@ -273,7 +273,7 @@ namespace Inventory.Api.Services.OutletItems
             var outletItems = from o in this.context.Outlet
                               join p in this.context.Products on o.ProductId equals p.Id
                               join t in this.context.OutletTranslations on o.Id equals t.OutletItemId
-                              where o.IsActive
+                              where p.IsActive && o.IsActive
                               select new
                               {
                                   o.Id,
@@ -348,7 +348,7 @@ namespace Inventory.Api.Services.OutletItems
         {
             var outletItems = from o in this.context.Outlet
                               join p in this.context.Products on o.ProductId equals p.Id
-                              where model.Ids.Contains(o.Id) && o.IsActive
+                              where model.Ids.Contains(o.Id) && p.IsActive && o.IsActive
                               select new
                               {
                                   o.Id,
@@ -411,7 +411,7 @@ namespace Inventory.Api.Services.OutletItems
                               join product in this.context.Products on o.ProductId equals product.Id
                               join warehouse in this.context.Warehouses on o.WarehouseId equals warehouse.Id
                               join ot in this.context.OutletTranslations on o.Id equals ot.OutletItemId
-                              where o.ProductId == model.ProductId.Value && o.IsActive
+                              where o.ProductId == model.ProductId.Value && product.IsActive && o.IsActive
                               select new
                               {
                                   Id = o.Id,
@@ -470,7 +470,7 @@ namespace Inventory.Api.Services.OutletItems
                               join product in this.context.Products on o.ProductId equals product.Id
                               join warehouse in this.context.Warehouses on o.WarehouseId equals warehouse.Id
                               join ot in this.context.OutletTranslations on o.Id equals ot.OutletItemId
-                              where product.Sku == model.ProductSku && o.IsActive
+                              where product.Sku == model.ProductSku && product.IsActive && o.IsActive
                               select new
                               {
                                   Id = o.Id,
@@ -540,12 +540,13 @@ namespace Inventory.Api.Services.OutletItems
         public async Task<PagedResults<IEnumerable<OutletSumServiceModel>>> GetAvailableProductsOutletsAsync(GetOutletsServiceModel model)
         {
             var outletItems = (from o in this.context.Outlet
-                               join p in this.context.Products on o.ProductId equals p.Id
-                               group o by new { o.ProductId } into gpi
+                               join product in this.context.Products on o.ProductId equals product.Id
+                               where product.IsActive
+                               group o by new { product.Id } into gpi
                                where gpi.Sum(x => x.AvailableQuantity) > 0
                                select new OutletSumServiceModel
                                {
-                                   ProductId = gpi.Key.ProductId,
+                                   ProductId = gpi.Key.Id,
                                    OutletId = gpi.FirstOrDefault().Id,
                                    ProductName = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Name,
                                    ProductSku = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Sku,
@@ -580,7 +581,7 @@ namespace Inventory.Api.Services.OutletItems
             return pagedItemsServiceModel;
         }
 
-        public async Task UpdateOutletQuantity(Guid? productId, int bookedQuantity)
+        public async Task UpdateOutletQuantity(Guid? productId, double bookedQuantity)
         {
             var outlet = this.context.Outlet.FirstOrDefault(x => x.ProductId == productId.Value && x.IsActive);
 

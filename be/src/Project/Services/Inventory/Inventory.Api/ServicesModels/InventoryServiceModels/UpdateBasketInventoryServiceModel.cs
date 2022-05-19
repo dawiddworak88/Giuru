@@ -6,6 +6,6 @@ namespace Inventory.Api.ServicesModels.InventoryServiceModels
     public class UpdateBasketInventoryServiceModel : BaseServiceModel
     {
         public Guid? ProductId { get; set; }
-        public int BookedQuantity { get; set; }
+        public double BookedQuantity { get; set; }
     }
 }

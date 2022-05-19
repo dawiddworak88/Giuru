@@ -7,6 +7,8 @@
         public string ActionSendGridCreateTemplateId { get; set; }
         public string ActionSendGridResetTemplateId { get; set; }
         public string ActionSendGridCustomOrderTemplateId { get; set; }
+        public string ActionSendGridClientApplyConfirmationTemplateId { get; set; }
+        public string ActionSendGridClientApplyTemplateId { get; set; }
         public string DefaulEmail { get; set; }
         public string SenderEmail { get; set; }
         public string SenderName { get; set; }

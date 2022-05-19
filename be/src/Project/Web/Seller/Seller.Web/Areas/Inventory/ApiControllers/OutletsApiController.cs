@@ -72,7 +72,7 @@ namespace Seller.Web.Areas.Inventory.ApiControllers
             {
                 var outletitemId = await this.outletRepository.SaveAsync(
                     token, language, model.Id, model.WarehouseId, model.ProductId, product.Name, 
-                    product.Sku, model.Quantity, model.Title, model.Description,  model.Ean, model.AvailableQuantity, OrganisationId);
+                    product.Sku, model.Quantity, model.Title, model.Description, model.Ean, model.AvailableQuantity, OrganisationId);
 
                 return this.StatusCode((int)HttpStatusCode.OK, new { Id = outletitemId, Message = this.inventoryLocalizer.GetString("OutletItemSavedSuccessfully").Value });
             }

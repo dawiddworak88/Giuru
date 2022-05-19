@@ -8,7 +8,6 @@ import {
     TableHead, TableRow, Paper, CircularProgress } from "@mui/material";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
-import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
 import Files from "../../../../../../shared/components/Files/Files";
 
 function EditOrderForm(props) {
@@ -169,7 +168,6 @@ function EditOrderForm(props) {
                                 fullWidth={true}
                                 multiline={true}
                                 disabled={true}
-                                rows={OrderFormConstants.minRowsForCustomOrder()}
                                 InputProps={{ 
                                     className: "p-2" 
                                 }}

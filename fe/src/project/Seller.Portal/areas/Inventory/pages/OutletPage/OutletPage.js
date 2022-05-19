@@ -1,5 +1,5 @@
 import React from "react";
-import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "@mui/material/styles";
 import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
 import Header from "../../../../../../shared/components/Header/Header";
@@ -11,11 +11,11 @@ import OutletForm from "../../components/OutletForm/OutletForm";
 
 const OutletPage = (props) => {
 
-  toast.configure();
   LocaleHelper.setMomentLocale(props.locale);
 
   return (
     <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
+      <ToastContainer />
       <Store>
         <Header {...props.header}></Header>
         <MenuTiles {...props.menuTiles} />
