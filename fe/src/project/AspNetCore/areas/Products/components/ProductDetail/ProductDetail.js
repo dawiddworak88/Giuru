@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import ImageGallery from "react-image-gallery";
 import Files from "../../../../shared/components/Files/Files";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -10,7 +10,7 @@ import Sidebar from "../../../../shared/components/Sidebar/Sidebar";
 import CarouselGrid from "../../../../shared/components/CarouselGrid/CarouselGrid";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import Modal from "../../../../shared/components/Modal/Modal";
-import { ExpandMore, ExpandLess } from "@material-ui/icons"
+import { ExpandMore, ExpandLess } from "@mui/icons-material"
 
 function ProductDetail(props) {
     const [state, dispatch] = useContext(Context);
@@ -119,7 +119,7 @@ function ProductDetail(props) {
             setIsSidebarOpen(true)
         }
     }, [canActiveModal, isModalOpen, isSidebarOpen]);
-
+    
     return (
         <section className="product-detail section">
             <div className="product-detail__head columns is-tablet">
@@ -177,11 +177,11 @@ function ProductDetail(props) {
                         </div>
                     }
                     {props.features && props.features.length > 0 &&
-                        <div className="product-detail__read-more mt-2">
+                        <div className="mt-2">
                             {showMore ? (
                                 <Fragment>
                                     <div className="is-flex is-justify-content-center">
-                                        <span className="read-more-text" onClick={() => setShowMore(false)}>{props.readLessText} <ExpandLess/></span>
+                                        <span className="is-flex is-align-content-center is-text button" onClick={() => setShowMore(false)}>{props.readLessText} <ExpandLess/></span>
                                     </div>
                                     <div className="product-detail__product-information">
                                         <h3 className="product-detail__feature-title">{props.productInformationLabel}</h3>
@@ -199,7 +199,7 @@ function ProductDetail(props) {
                                 </Fragment>
                             ) : (
                                 <div className="is-flex is-justify-content-center">
-                                    <span className="read-more-text" onClick={() => setShowMore(true)}>{props.readMoreText} <ExpandMore/></span>
+                                    <span className="button is-flex is-align-content-center is-text" onClick={() => setShowMore(true)}>{props.readMoreText} <ExpandMore/></span>
                                 </div>
                             )}
                         </div>
@@ -215,7 +215,9 @@ function ProductDetail(props) {
                 />
             </div>
             <CarouselGrid items={props.productVariants}/>
-            <Files {...props.files} />
+            {props.files &&
+                <Files {...props.files} />
+            }
             <Modal
                 isOpen={isModalOpen}
                 setIsOpen={setIsModalOpen}

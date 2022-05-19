@@ -28,8 +28,6 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 DuplicateLabel = this.globalLocalizer.GetString("Duplicate"),
                 DisplayedRowsLabel = this.globalLocalizer.GetString("DisplayedRows"),
                 RowsPerPageLabel = this.globalLocalizer.GetString("RowsPerPage"),
-                BackIconButtonText = this.globalLocalizer.GetString("Previous"),
-                NextIconButtonText = this.globalLocalizer.GetString("Next"),
                 NoResultsLabel = this.globalLocalizer.GetString("NoResultsLabel"),
                 SearchTerm = string.Empty
             };

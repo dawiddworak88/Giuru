@@ -161,7 +161,7 @@ namespace Inventory.Api.Services.InventoryItems
                                        Id = c.Id,
                                        ProductId = c.ProductId,
                                        ProductName = product.Name,
-                                       ProductSku = product.Sku,
+                                       Sku = product.Sku,
                                        WarehouseId = c.WarehouseId,
                                        WarehouseName = warehouse.Name,
                                        Quantity = c.Quantity,
@@ -187,7 +187,7 @@ namespace Inventory.Api.Services.InventoryItems
                                 Id = c.Id,
                                 ProductId = c.ProductId,
                                 ProductName = product.Name,
-                                ProductSku = product.Sku,
+                                Sku = product.Sku,
                                 WarehouseId = c.WarehouseId,
                                 WarehouseName = warehouse.Name,
                                 Quantity = c.Quantity,
@@ -201,7 +201,7 @@ namespace Inventory.Api.Services.InventoryItems
 
             if (!string.IsNullOrWhiteSpace(model.SearchTerm))
             {
-                inventories = inventories.Where(x => x.ProductName.StartsWith(model.SearchTerm) || x.WarehouseName.StartsWith(model.SearchTerm) || x.ProductSku.StartsWith(model.SearchTerm));
+                inventories = inventories.Where(x => x.ProductName.StartsWith(model.SearchTerm) || x.WarehouseName.StartsWith(model.SearchTerm) || x.Sku.StartsWith(model.SearchTerm));
             }
 
             inventories = inventories.ApplySort(model.OrderBy);
@@ -220,7 +220,7 @@ namespace Inventory.Api.Services.InventoryItems
                                  Id = c.Id,
                                  ProductId = c.ProductId,
                                  ProductName = product.Name,
-                                 ProductSku = product.Sku,
+                                 Sku = product.Sku,
                                  Ean = product.Ean,
                                  AvailableQuantity = c.AvailableQuantity,
                                  Quantity = c.Quantity,
@@ -275,7 +275,7 @@ namespace Inventory.Api.Services.InventoryItems
                         Id = item.Id,
                         ProductId = item.ProductId,
                         ProductName = item.ProductName,
-                        ProductSku = item.ProductSku,
+                        Sku = item.ProductSku,
                         AvailableQuantity = item.AvailableQuantity,
                         Quantity = item.Quantity,
                         Ean = item.Ean,
@@ -334,7 +334,7 @@ namespace Inventory.Api.Services.InventoryItems
                         Id = item.Id,
                         ProductId = item.ProductId,
                         ProductName = item.ProductName,
-                        ProductSku = item.ProductSku,
+                        Sku = item.ProductSku,
                         AvailableQuantity = item.AvailableQuantity,
                         Quantity = item.Quantity,
                         Ean = item.Ean,
@@ -386,7 +386,7 @@ namespace Inventory.Api.Services.InventoryItems
                 return inventories.PagedIndex(new Pagination(inventories.Count(), model.ItemsPerPage), model.PageIndex);
         }
 
-        public async Task UpdateInventoryQuantity(Guid? productId, int bookedQuantity)
+        public async Task UpdateInventoryQuantity(Guid? productId, double bookedQuantity)
         {
             var inventory = this.context.Inventory.FirstOrDefault(x => x.ProductId == productId.Value && x.IsActive);
 
@@ -406,7 +406,5 @@ namespace Inventory.Api.Services.InventoryItems
                 await this.context.SaveChangesAsync();
             }
         }
-
-        
     }
 }

@@ -9,11 +9,10 @@ let formerMetaSchema = null;
 
 function createAjvInstance() {
   const ajv = new Ajv({
-    errorDataPath: "property",
+    $data: true,
     allErrors: true,
     multipleOfPrecision: 8,
-    schemaId: "auto",
-    unknownFormats: "ignore",
+    schemaId: "auto"
   });
 
   // add custom formats

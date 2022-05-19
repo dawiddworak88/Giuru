@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {
     Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, TextField
-} from "@material-ui/core";
+} from "@mui/material";
 import moment from "moment";
 import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
 
@@ -90,6 +90,7 @@ function StatusOrder(props) {
                             fullWidth={true}
                             multiline={true}
                             disabled={true}
+                            variant="standard"
                             rows={OrderFormConstants.minRowsForCustomOrder()}
                             InputProps={{ 
                                 className: "p-2" 

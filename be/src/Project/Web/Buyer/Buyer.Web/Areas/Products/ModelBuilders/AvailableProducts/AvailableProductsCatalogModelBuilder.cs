@@ -74,7 +74,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
                         product.ExpectedDelivery = inventories.Data.FirstOrDefault(x => x.ProductId == product.Id)?.ExpectedDelivery;
                     }
 
-                    viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(products.Total, AvailableProductsConstants.Pagination.ItemsPerPage)
+                    viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(inventories.Total, AvailableProductsConstants.Pagination.ItemsPerPage)
                     {
                         Data = products.Data.OrderBy(x => x.Title)
                     };

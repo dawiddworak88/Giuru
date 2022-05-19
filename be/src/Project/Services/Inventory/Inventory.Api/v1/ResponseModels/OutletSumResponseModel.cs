@@ -11,8 +11,8 @@ namespace Inventory.Api.v1.ResponseModels
         public string Title { get; set; }
         public string Description { get; set; }
         public string Ean { get; set; }
-        public int? Quantity { get; set; }
-        public int? AvailableQuantity { get; set; }
+        public double? Quantity { get; set; }
+        public double? AvailableQuantity { get; set; }
         public IEnumerable<OutletDetailsResponseModel> Details { get; set; }
         
     }
