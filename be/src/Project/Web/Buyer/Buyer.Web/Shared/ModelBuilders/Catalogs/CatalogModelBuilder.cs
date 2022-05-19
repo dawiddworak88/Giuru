@@ -47,8 +47,6 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"],
                 DisplayedRowsLabel = this.globalLocalizer["DisplayedRows"],
                 RowsPerPageLabel = this.globalLocalizer["RowsPerPage"],
-                BackIconButtonText = this.globalLocalizer["Previous"],
-                NextIconButtonText = this.globalLocalizer["Next"],
                 IsLoggedIn = componentModel.IsAuthenticated,
                 BasketId = componentModel.BasketId,
                 SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct"),
