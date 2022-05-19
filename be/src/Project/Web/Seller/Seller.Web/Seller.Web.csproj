@@ -10,8 +10,8 @@
 	<ItemGroup>
 		<PackageReference Include="IdentityServer4" Version="4.1.2" />
 		<PackageReference Include="ClosedXML" Version="0.95.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4">
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.5">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -35,7 +35,6 @@
 		<ProjectReference Include="..\..\..\..\Infrastructure\PageContent\Foundation.PageContent\Foundation.PageContent.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="wwwroot\dist\" />
 		<Folder Include="Areas\Inventory\Views\Inventory\" />
 		<Folder Include="Areas\Inventory\Views\Warehouse\" />
 		<Folder Include="wwwroot\" />

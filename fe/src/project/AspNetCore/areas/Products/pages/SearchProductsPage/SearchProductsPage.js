@@ -1,6 +1,6 @@
 import React from "react";
 import { toast } from "react-toastify";
-import { ThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
 import Store from "../../../../../../shared/stores/Store";
 import Header from "../../../../shared/components/Header/Header";

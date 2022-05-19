@@ -6,9 +6,9 @@ import ResponsiveImage from "../../../../../shared/components/Picture/Responsive
 import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
 import { Context } from "../../../../../shared/stores/Store";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
-import { TablePagination, Button } from "@material-ui/core";
+import { TablePagination, Button } from "@mui/material";
 import CatalogConstants from "./CatalogConstants";
-import { ShoppingCart } from "@material-ui/icons";
+import { ShoppingCart } from "@mui/icons-material";
 import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
@@ -296,12 +296,10 @@ function Catalog(props) {
 Catalog.propTypes = {
     title: PropTypes.string.isRequired,
     noResultsLabel: PropTypes.string.isRequired,
-    resultsCount: PropTypes.number.isRequired,
     resultsLabel: PropTypes.string.isRequired,
     skuLabel: PropTypes.string.isRequired,
     byLabel: PropTypes.string.isRequired,
     inStockLabel: PropTypes.string.isRequired,
-    isAuthenticated: PropTypes.bool.isRequired,
     signInUrl: PropTypes.string.isRequired,
     signInToSeePricesLabel: PropTypes.string.isRequired,
     displayedRowsLabel: PropTypes.string.isRequired,
@@ -310,10 +308,10 @@ Catalog.propTypes = {
     nextIconButtonText: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
     productsApiUrl: PropTypes.string.isRequired,
-    categoryId: PropTypes.string.isRequired,
     orderBy: PropTypes.string,
     successfullyAddedProduct: PropTypes.string,
-    inStock: PropTypes.bool.isRequired,
+    inStock: PropTypes.bool,
+    inOutlet: PropTypes.bool,
     availableQuantity: PropTypes.number,
     showAddToCartButton: PropTypes.bool,
     items: PropTypes.array,

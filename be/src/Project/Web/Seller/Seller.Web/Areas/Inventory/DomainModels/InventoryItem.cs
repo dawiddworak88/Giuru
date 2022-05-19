@@ -9,7 +9,7 @@ namespace Seller.Web.Areas.Inventory.DomainModels
         public string WarehouseName { get; set; }
         public Guid ProductId { get; set; }
         public string ProductName { get; set; }
-        public string ProductSku { get; set; }
+        public string Sku { get; set; }
         public Guid SellerId { get; set; }
         public int Quantity { get; set; }
         public string Ean { get; set; }

@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { TextField, IconButton, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@material-ui/core";
-import { Clear } from "@material-ui/icons";
+import { TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import PropTypes from "prop-types";
-import {
-    MuiPickersUtilsProvider,
-    KeyboardDatePicker,
-} from "@material-ui/pickers";
-import MomentUtils from "@date-io/moment";
+import { LocalizationProvider, DatePicker  } from "@mui/lab";
+import AdapterMoment from '@mui/lab/AdapterMoment';
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 
 const Modal = (props) => {
@@ -68,6 +64,7 @@ const Modal = (props) => {
                         id="quantity" 
                         name="quantity" 
                         type="number"
+                        variant="standard"
                         label={labels.quantityLabel}
                         inputProps={{ 
                             min: 0, 
@@ -89,6 +86,7 @@ const Modal = (props) => {
                         id="stockQuantity" 
                         name="stockQuantity" 
                         type="number" 
+                        variant="standard"
                         label={labels.stockQuantityLabel + " (" + labels.maximalLabel + " " + maxStock + ")"}
                         inputProps={{ 
                             min: 0, 
@@ -110,6 +108,7 @@ const Modal = (props) => {
                         id="outletQuantity" 
                         name="outletQuantity" 
                         type="number" 
+                        variant="standard"
                         label={labels.outletQuantityLabel + " (" + labels.maximalLabel + " " + maxOutlet + ")"}
                         inputProps={{ 
                             min: 0, 
@@ -131,6 +130,7 @@ const Modal = (props) => {
                         id="externalReference" 
                         name="externalReference" 
                         type="text" 
+                        variant="standard"
                         label={labels.externalReferenceLabel}
                         value={externalReference}
                         fullWidth={true}
@@ -139,60 +139,35 @@ const Modal = (props) => {
                         }} />
                 </div>
                 <div className="field">
-                    <MuiPickersUtilsProvider utils={MomentUtils}>
-                        <KeyboardDatePicker
+                    <LocalizationProvider dateAdapter={AdapterMoment}>
+                        <DatePicker
                             id="deliveryFrom"
+                            value={deliveryFrom}
                             label={labels.deliveryFromLabel}
+                            disablePast={true}
+                            renderInput={(params) => 
+                                <TextField {...params} fullWidth={true} variant="standard" />}
                             onChange={(date) => {
+                                console.log(date)
                                 setDeliveryFrom(date);
                             }}
-                            okLabel={labels.okLabel}
-                            cancelLabel={labels.cancelLabel}
-                            InputProps={{
-                                endAdornment: (
-                                    <IconButton onClick={() => setDeliveryFrom(null)}>
-                                        <Clear />
-                                    </IconButton>
-                                )
-                            }}
-                            InputAdornmentProps={{
-                                position: "start"
-                            }}
-                            KeyboardButtonProps={{
-                                "aria-label": labels.changeDeliveryFromLabel
-                            }} 
-                            value={deliveryFrom}
-                            fullWidth={true}
-                            disablePast={true}/>
-                    </MuiPickersUtilsProvider>
+                        />
+                    </LocalizationProvider>
                 </div>
                 <div className="field">
-                    <MuiPickersUtilsProvider utils={MomentUtils}>
-                        <KeyboardDatePicker
+                    <LocalizationProvider dateAdapter={AdapterMoment}>
+                        <DatePicker
                             id="deliveryTo"
+                            value={deliveryTo}
                             label={labels.deliveryToLabel}
+                            disablePast={true}
+                            renderInput={(params) => 
+                                <TextField {...params} fullWidth={true} variant="standard" />}
                             onChange={(date) => {
                                 setDeliveryTo(date);
                             }}
-                            okLabel={labels.okLabel}
-                            cancelLabel={labels.cancelLabel}
-                            InputProps={{
-                                endAdornment: (
-                                    <IconButton onClick={() => setDeliveryTo(null)}>
-                                        <Clear />
-                                    </IconButton>
-                                )
-                            }}
-                            InputAdornmentProps={{
-                                position: "start"
-                            }}
-                            KeyboardButtonProps={{
-                                "aria-label": labels.changeDeliveryFromLabel
-                            }} 
-                            fullWidth={true}
-                            value={deliveryTo}
-                            disablePast={true}/>
-                    </MuiPickersUtilsProvider>
+                        />
+                    </LocalizationProvider>
                 </div>
                 <div className="field">
                     <TextField 
@@ -202,6 +177,7 @@ const Modal = (props) => {
                         value={moreInfo}
                         label={labels.moreInfoLabel}
                         fullWidth={true}
+                        variant="standard"
                         onChange={(e) => {
                             setMoreInfo(e.target.value)
                         }} />
@@ -222,7 +198,7 @@ const Modal = (props) => {
 }
 
 Modal.propTypes = {
-    isOpen: PropTypes.func,
+    isOpen: PropTypes.bool,
     addText: PropTypes.string,
     cancelLabel: PropTypes.string,
     moreInfoLabel: PropTypes.string,
@@ -234,7 +210,7 @@ Modal.propTypes = {
     stockQuantityLabel: PropTypes.string,
     quantityLabel: PropTypes.string,
     maxStockValue: PropTypes.number,
-    handleOrder: PropTypes.string,
+    handleOrder: PropTypes.func,
     closeLabel: PropTypes.string,
     okLabel: PropTypes.string,
     title: PropTypes.string,

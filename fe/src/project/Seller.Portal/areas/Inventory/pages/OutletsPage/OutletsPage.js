@@ -1,6 +1,6 @@
 import React from "react";
 import { toast } from "react-toastify";
-import { ThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
 import Header from "../../../../../../shared/components/Header/Header";
 import Store from "../../../../../../shared/stores/Store";
@@ -15,14 +15,12 @@ const OutletsPage = (props) => {
   LocaleHelper.setMomentLocale(props.locale);
 
   return (
-    <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
+    <ThemeProvider theme={GlobalHelper.initMuiTheme(props.locale)}>
       <Store>
-        <div>
-          <Header {...props.header}></Header>
-          <MenuTiles {...props.menuTiles} />
-          <Catalog {...props.catalog} />
-          <Footer {...props.footer}></Footer>
-        </div>
+        <Header {...props.header}></Header>
+        <MenuTiles {...props.menuTiles} />
+        <Catalog {...props.catalog} />
+        <Footer {...props.footer}></Footer>
       </Store>
     </ThemeProvider>
   );

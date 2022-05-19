@@ -47,7 +47,7 @@ namespace Seller.Web.Areas.Inventory.ApiControllers
                 searchTerm,
                 pageIndex,
                 itemsPerPage,
-                $"{nameof(InventoryItem.ProductSku)} ASC");
+                $"{nameof(InventoryItem.Sku)} ASC");
 
             return this.StatusCode((int)HttpStatusCode.OK, inventories);
         }

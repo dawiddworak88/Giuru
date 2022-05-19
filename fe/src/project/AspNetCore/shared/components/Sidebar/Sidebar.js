@@ -1,8 +1,8 @@
 import React, {useState, useContext, useEffect} from "react";
 import { 
     Button, SwipeableDrawer, List, ListItem 
-} from "@material-ui/core";
-import { Close, AddShoppingCart, ArrowRight } from "@material-ui/icons";
+} from "@mui/material";
+import { Close, AddShoppingCart, ArrowRight } from "@mui/icons-material";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import PropTypes from "prop-types";
@@ -46,12 +46,13 @@ const Sidebar = (props) => {
             const url = labels.productsApiUrl + "?" + QueryStringSerializer.serialize(requestQuery);
             return fetch(url, requestOptions)
                 .then(function (response) {
-                    dispatch({ type: "SET_IS_LOADING", payload: false });
 
                     AuthenticationHelper.HandleResponse(response);
 
                     return response.json().then(jsonResponse => {
                         if (response.ok) {
+                            dispatch({ type: "SET_IS_LOADING", payload: false });
+                            
                             if (jsonResponse && jsonResponse.length > 0 ){
                                 setProductVariants(() => jsonResponse)
                             }

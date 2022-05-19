@@ -5,13 +5,12 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { Plus } from "react-feather";
 import {
-    Delete, Edit
-} from "@material-ui/icons";
-import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+    Delete, Edit, FileCopyOutlined
+} from "@mui/icons-material";
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, TablePagination, CircularProgress, Fab
-} from "@material-ui/core";
+} from "@mui/material";
 import KeyConstants from "../../constants/KeyConstants";
 import { Context } from "../../stores/Store";
 import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializer";
@@ -20,7 +19,6 @@ import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 
 function Catalog(props) {
-
     const [state, dispatch] = useContext(Context);
     const [page, setPage] = React.useState(0);
     const [itemsPerPage,] = React.useState(PaginationConstants.defaultRowsPerPage());
@@ -197,7 +195,7 @@ function Catalog(props) {
             <div>
                 {props.searchLabel &&
                     <div className="catalog__search is-flex-centered">
-                        <TextField id="search" name="search" value={searchTerm} onChange={handleOnChange} onKeyPress={handleSearchTermKeyPress} className="catalog__search-field" label={props.searchLabel} type="search" autoComplete="off" />
+                        <TextField id="search" name="search" value={searchTerm} onChange={handleOnChange} variant="standard" onKeyPress={handleSearchTermKeyPress} className="catalog__search-field" label={props.searchLabel} type="search" autoComplete="off" />
                         <Button onClick={search} type="button" variant="contained" color="primary">
                             {props.searchLabel}
                         </Button>
@@ -213,42 +211,42 @@ function Catalog(props) {
                                             {props.table.actions &&
                                                 <TableCell width="11%"></TableCell>
                                             }
-                                            {props.table.labels.map((item) =>
-                                                <TableCell key={item} value={item}>{item}</TableCell>
+                                            {props.table.labels.map((item, index) =>
+                                                <TableCell key={index} value={item}>{item}</TableCell>
                                             )}
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {items.map((item) => (
-                                            <TableRow key={item.name}>
+                                        {items.map((item, index) => (
+                                            <TableRow key={index}>
                                                 {props.table.actions &&
                                                     <TableCell width="11%">
-                                                        {props.table.actions.map((actionItem) => {
+                                                        {props.table.actions.map((actionItem, index) => {
                                                             if (actionItem.isEdit) return (
-                                                                <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel}>
+                                                                <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel} key={index}>
                                                                     <Edit />
                                                                 </Fab>)
                                                             else if (actionItem.isDelete) return (
-                                                                <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
+                                                                <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel} key={index}>
                                                                     <Delete />
                                                                 </Fab>)
                                                             else if (actionItem.isDuplicate) return (
-                                                                <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary" aria-label={props.duplicateLabel}>
-                                                                    <FileCopyOutlinedIcon />
+                                                                <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary" aria-label={props.duplicateLabel} key={index}>
+                                                                    <FileCopyOutlined />
                                                                 </Fab>)
                                                             else return (
                                                                 <div></div>)})}
                                                     </TableCell>
                                                 }
 
-                                                {props.table.properties && props.table.properties.map((property) => {
+                                                {props.table.properties && props.table.properties.map((property, index) => {
 
                                                     if (property.isDateTime) return (
-                                                        <TableCell>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
+                                                        <TableCell key={index}>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
                                                     )
                                                     else {
                                                         return (
-                                                            <TableCell>{item[property.title] !== null ? item[property.title] : "-"}</TableCell>
+                                                            <TableCell key={index}>{item[property.title] !== null ? item[property.title] : "-"}</TableCell>
                                                         )}})}
                                             </TableRow>
                                         ))}
@@ -266,7 +264,7 @@ function Catalog(props) {
                                 component="div"
                                 count={total}
                                 page={page}
-                                onChangePage={handleChangePage}
+                                onPageChange={handleChangePage}
                                 rowsPerPage={PaginationConstants.defaultRowsPerPage()}
                             />
                         </div>
