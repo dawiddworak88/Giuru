@@ -580,7 +580,7 @@ namespace Inventory.Api.Services.OutletItems
             return pagedItemsServiceModel;
         }
 
-        public async Task UpdateOutletQuantity(Guid? productId, int bookedQuantity)
+        public async Task UpdateOutletQuantity(Guid? productId, double bookedQuantity)
         {
             var outlet = this.context.Outlet.FirstOrDefault(x => x.ProductId == productId.Value && x.IsActive);
 

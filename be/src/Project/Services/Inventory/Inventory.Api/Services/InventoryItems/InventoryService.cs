@@ -386,7 +386,7 @@ namespace Inventory.Api.Services.InventoryItems
                 return inventories.PagedIndex(new Pagination(inventories.Count(), model.ItemsPerPage), model.PageIndex);
         }
 
-        public async Task UpdateInventoryQuantity(Guid? productId, int bookedQuantity)
+        public async Task UpdateInventoryQuantity(Guid? productId, double bookedQuantity)
         {
             var inventory = this.context.Inventory.FirstOrDefault(x => x.ProductId == productId.Value && x.IsActive);
 
@@ -406,7 +406,5 @@ namespace Inventory.Api.Services.InventoryItems
                 await this.context.SaveChangesAsync();
             }
         }
-
-        
     }
 }
