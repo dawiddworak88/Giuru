@@ -1,6 +1,6 @@
 import React, {useState, useRef} from "react";
 import PropTypes from "prop-types";
-import { Close, Menu } from "@material-ui/icons";
+import { Close, Menu } from "@mui/icons-material";
 
 function MainNavigation(props) {
     const [isOpen, setIsOpen] = useState(false);

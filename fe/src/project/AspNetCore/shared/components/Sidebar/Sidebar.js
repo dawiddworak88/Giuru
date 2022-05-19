@@ -1,8 +1,8 @@
 import React, {useState, useContext, useEffect} from "react";
 import { 
     Button, SwipeableDrawer, List, ListItem 
-} from "@material-ui/core";
-import { Close, AddShoppingCart, ArrowRight } from "@material-ui/icons";
+} from "@mui/material";
+import { Close, AddShoppingCart, ArrowRight } from "@mui/icons-material";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import PropTypes from "prop-types";
@@ -91,8 +91,9 @@ const Sidebar = (props) => {
     return (
         <SwipeableDrawer
             anchor="right"
-            open={isOpen}
+            on={isOpen}
             onClose={toggleDrawer(false)}
+            onOpen={null}
         >
         <div className="sidebar-content">
                 <div className="sidebar-content__close">
@@ -180,17 +181,8 @@ const Sidebar = (props) => {
 }
 
 Sidebar.propTypes = {
-    sources: PropTypes.array,
-    sidebarTitle: PropTypes.string,
-    basketUrl: PropTypes.string,
-    basketLabel: PropTypes.string,
-    toBasketLabel: PropTypes.string,
-    notFound: PropTypes.string,
-    fabricsLabel: PropTypes.string,
-    lackInformation: PropTypes.string,
-    productsApiUrl: PropTypes.string.isRequired,
-    productId: PropTypes.string.isRequired,
-    labels: PropTypes.object,
+    productId: PropTypes.string,
+    labels: PropTypes.object.isRequired,
     setIsOpen: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
     handleOrder: PropTypes.func.isRequired,

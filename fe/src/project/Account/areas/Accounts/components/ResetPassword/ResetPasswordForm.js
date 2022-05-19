@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
-import { TextField, Button, CircularProgress } from "@material-ui/core";
+import { TextField, Button, CircularProgress } from "@mui/material";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 
@@ -75,6 +75,7 @@ const ResetPasswordForm = (props) => {
                             fullWidth={true} 
                             value={email} 
                             onChange={handleOnChange} 
+                            variant="standard"
                             helperText={dirty.email ? errors.email : ""} 
                             error={(errors.email.length > 0) && dirty.email} />
                     </div>

@@ -5,13 +5,12 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { Plus } from "react-feather";
 import {
-    Delete, Edit
-} from "@material-ui/icons";
-import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+    Delete, Edit, FileCopyOutlined
+} from "@mui/icons-material";
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, TablePagination, CircularProgress, Fab
-} from "@material-ui/core";
+} from "@mui/material";
 import KeyConstants from "../../constants/KeyConstants";
 import { Context } from "../../stores/Store";
 import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializer";
@@ -20,7 +19,6 @@ import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 
 function Catalog(props) {
-
     const [state, dispatch] = useContext(Context);
     const [page, setPage] = React.useState(0);
     const [itemsPerPage,] = React.useState(PaginationConstants.defaultRowsPerPage());
@@ -197,7 +195,7 @@ function Catalog(props) {
             <div>
                 {props.searchLabel &&
                     <div className="catalog__search is-flex-centered">
-                        <TextField id="search" name="search" value={searchTerm} onChange={handleOnChange} onKeyPress={handleSearchTermKeyPress} className="catalog__search-field" label={props.searchLabel} type="search" autoComplete="off" />
+                        <TextField id="search" name="search" value={searchTerm} onChange={handleOnChange} variant="standard" onKeyPress={handleSearchTermKeyPress} className="catalog__search-field" label={props.searchLabel} type="search" autoComplete="off" />
                         <Button onClick={search} type="button" variant="contained" color="primary">
                             {props.searchLabel}
                         </Button>
@@ -234,7 +232,7 @@ function Catalog(props) {
                                                                 </Fab>)
                                                             else if (actionItem.isDuplicate) return (
                                                                 <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary" aria-label={props.duplicateLabel} key={index}>
-                                                                    <FileCopyOutlinedIcon />
+                                                                    <FileCopyOutlined />
                                                                 </Fab>)
                                                             else return (
                                                                 <div></div>)})}
@@ -260,13 +258,11 @@ function Catalog(props) {
                             <TablePagination
                                 labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
                                 labelRowsPerPage={props.rowsPerPageLabel}
-                                backIconButtonText={props.backIconButtonText}
-                                nextIconButtonText={props.nextIconButtonText}
                                 rowsPerPageOptions={[PaginationConstants.defaultRowsPerPage()]}
                                 component="div"
                                 count={total}
                                 page={page}
-                                onChangePage={handleChangePage}
+                                onPageChange={handleChangePage}
                                 rowsPerPage={PaginationConstants.defaultRowsPerPage()}
                             />
                         </div>
@@ -308,8 +304,6 @@ Catalog.propTypes = {
     duplicateLabel: PropTypes.string,
     displayedRowsLabel: PropTypes.string.isRequired,
     rowsPerPageLabel: PropTypes.string.isRequired,
-    backIconButtonText: PropTypes.string.isRequired,
-    nextIconButtonText: PropTypes.string.isRequired,
     editUrl: PropTypes.string,
     deleteUrl: PropTypes.string,
     duplicateUrl: PropTypes.string,
