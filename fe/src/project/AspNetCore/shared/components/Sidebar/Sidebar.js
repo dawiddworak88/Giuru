@@ -125,15 +125,19 @@ const Sidebar = (props) => {
                                     return (
                                         <ListItem className="sidebar-item">
                                             <div className="sidebar-item__row">
-                                                <figure className="sidebar-item__image">
-                                                    <ResponsiveImage sources={carouselItem.sources} imageSrc={carouselItem.imageUrl} imageAlt={carouselItem.imageAlt} />
-                                                </figure>
+                                                <a href={carouselItem.url}>
+                                                    <figure className="sidebar-item__image">
+                                                        <ResponsiveImage sources={carouselItem.sources} imageSrc={carouselItem.imageUrl} imageAlt={carouselItem.imageAlt} />
+                                                    </figure>
+                                                </a>
                                                 <div className="sidebar-item__details">
-                                                    <h1 className="title">{carouselItem.title}</h1>
-                                                    <span className="attribute">{labels.skuLabel} {carouselItem.subtitle}</span>
-                                                    {carouselItem.ean &&
-                                                        <span className="attribute">{labels.eanLabel} {carouselItem.ean}</span>
-                                                    }
+                                                    <a href={carouselItem.url}>
+                                                        <h1 className="title">{carouselItem.title}</h1>
+                                                        <span className="attribute">{labels.skuLabel} {carouselItem.subtitle}</span>
+                                                        {carouselItem.ean &&
+                                                            <span className="attribute">{labels.eanLabel} {carouselItem.ean}</span>
+                                                        }
+                                                    </a>
                                                     <div className="stock-details">
                                                         {carouselItem.availableQuantity && carouselItem.availableQuantity > 0 &&
                                                             <div className="stock">
