@@ -20,4 +20,8 @@
     &__clear-button {
         margin-left: 0.5rem !important;
     }
+
+    .react-autosuggest__container {
+        z-index: 10000;
+    }
 }

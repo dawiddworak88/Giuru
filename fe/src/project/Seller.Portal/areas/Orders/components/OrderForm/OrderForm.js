@@ -332,7 +332,7 @@ function OrderForm(props) {
                 </div>
                 {client &&
                     <Fragment>
-                        <h2 className="subtitle is-5 order__items-subtitle">{props.orderItemsLabel}</h2>
+                        <h2 className="subtitle is-5 pb-2">{props.orderItemsLabel}</h2>
                         <div className="container">
                             <div className="dropzone__pond-container" {...getRootProps()}>
                                 <input id={props.id} name={props.name} {...getInputProps()} />
