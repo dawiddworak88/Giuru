@@ -250,8 +250,6 @@ function Catalog(props) {
                             <TablePagination
                                 labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
                                 labelRowsPerPage={props.rowsPerPageLabel}
-                                backIconButtonText={props.backIconButtonText}
-                                nextIconButtonText={props.nextIconButtonText}
                                 rowsPerPageOptions={[itemsPerPage]}
                                 component="div"
                                 count={total}
@@ -304,8 +302,6 @@ Catalog.propTypes = {
     signInToSeePricesLabel: PropTypes.string.isRequired,
     displayedRowsLabel: PropTypes.string.isRequired,
     rowsPerPageLabel: PropTypes.string.isRequired,
-    backIconButtonText: PropTypes.string.isRequired,
-    nextIconButtonText: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
     productsApiUrl: PropTypes.string.isRequired,
     orderBy: PropTypes.string,
