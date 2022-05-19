@@ -1,8 +1,8 @@
 import React, {useState, useContext, useEffect} from "react";
 import { 
     Button, SwipeableDrawer, List, ListItem 
-} from "@material-ui/core";
-import { Close, AddShoppingCart, ArrowRight } from "@material-ui/icons";
+} from "@mui/material";
+import { Close, AddShoppingCart, ArrowRight } from "@mui/icons-material";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import PropTypes from "prop-types";
@@ -91,8 +91,9 @@ const Sidebar = (props) => {
     return (
         <SwipeableDrawer
             anchor="right"
-            open={isOpen}
+            on={isOpen}
             onClose={toggleDrawer(false)}
+            onOpen={null}
         >
         <div className="sidebar-content">
                 <div className="sidebar-content__close">
@@ -124,15 +125,19 @@ const Sidebar = (props) => {
                                     return (
                                         <ListItem className="sidebar-item">
                                             <div className="sidebar-item__row">
-                                                <figure className="sidebar-item__image">
-                                                    <ResponsiveImage sources={carouselItem.sources} imageSrc={carouselItem.imageUrl} imageAlt={carouselItem.imageAlt} />
-                                                </figure>
+                                                <a href={carouselItem.url}>
+                                                    <figure className="sidebar-item__image">
+                                                        <ResponsiveImage sources={carouselItem.sources} imageSrc={carouselItem.imageUrl} imageAlt={carouselItem.imageAlt} />
+                                                    </figure>
+                                                </a>
                                                 <div className="sidebar-item__details">
-                                                    <h1 className="title">{carouselItem.title}</h1>
-                                                    <span className="attribute">{labels.skuLabel} {carouselItem.subtitle}</span>
-                                                    {carouselItem.ean &&
-                                                        <span className="attribute">{labels.eanLabel} {carouselItem.ean}</span>
-                                                    }
+                                                    <a href={carouselItem.url}>
+                                                        <h1 className="title">{carouselItem.title}</h1>
+                                                        <span className="attribute">{labels.skuLabel} {carouselItem.subtitle}</span>
+                                                        {carouselItem.ean &&
+                                                            <span className="attribute">{labels.eanLabel} {carouselItem.ean}</span>
+                                                        }
+                                                    </a>
                                                     <div className="stock-details">
                                                         {carouselItem.availableQuantity && carouselItem.availableQuantity > 0 &&
                                                             <div className="stock">
@@ -176,17 +181,8 @@ const Sidebar = (props) => {
 }
 
 Sidebar.propTypes = {
-    sources: PropTypes.array,
-    sidebarTitle: PropTypes.string,
-    basketUrl: PropTypes.string,
-    basketLabel: PropTypes.string,
-    toBasketLabel: PropTypes.string,
-    notFound: PropTypes.string,
-    fabricsLabel: PropTypes.string,
-    lackInformation: PropTypes.string,
-    productsApiUrl: PropTypes.string.isRequired,
-    productId: PropTypes.string.isRequired,
-    labels: PropTypes.object,
+    productId: PropTypes.string,
+    labels: PropTypes.object.isRequired,
     setIsOpen: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
     handleOrder: PropTypes.func.isRequired,

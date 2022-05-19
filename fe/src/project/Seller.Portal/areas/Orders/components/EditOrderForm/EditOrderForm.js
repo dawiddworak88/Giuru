@@ -2,11 +2,10 @@ import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
-import { CircularProgress } from "@material-ui/core";
 import {
     FormControl, InputLabel, Select, MenuItem, Button,
     Table, TableBody, TableCell, TableContainer, TextField,
-    TableHead, TableRow, Paper } from "@material-ui/core";
+    TableHead, TableRow, Paper, CircularProgress } from "@mui/material";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
@@ -71,7 +70,7 @@ function EditOrderForm(props) {
                                 <div className="columns is-desktop">
                                     <div className="column is-half">
                                         <div className="field">
-                                            <FormControl fullWidth={true}>
+                                            <FormControl fullWidth={true} variant="standard">
                                                 <InputLabel id="order-status-label">{props.orderStatusLabel}</InputLabel>
                                                 <Select
                                                     labelId="order-status-label"

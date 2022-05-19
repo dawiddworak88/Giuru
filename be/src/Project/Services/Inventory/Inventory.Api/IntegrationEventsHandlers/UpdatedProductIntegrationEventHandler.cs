@@ -1,7 +1,5 @@
 ﻿using Foundation.EventBus.Abstractions;
 using Inventory.Api.IntegrationEvents;
-using Inventory.Api.Services.InventoryItems;
-using Inventory.Api.Services.OutletItems;
 using Inventory.Api.Services.Products;
 using System.Threading.Tasks;
 

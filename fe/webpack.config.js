@@ -1,11 +1,10 @@
 ﻿const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
-var browserConfig = {
+const browserConfig = {
     module: {
         rules: [
             {
@@ -18,15 +17,8 @@ var browserConfig = {
                 ]
             },
             {
-                test: /\.(png|svg|jpg|gif|woff(2)?|ttf|eot)$/,
-                use: [{
-                    loader: "file-loader",
-                    options: {
-                        name: "[name].[ext]",
-                        outputPath: "../images",
-                        publicPath: "/dist/images"
-                    }
-                }]
+                test: /\.(png|svg|jpg|jpeg|gif|woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/inline',
             },
             {
                 test: /\.(js|jsx)$/,
@@ -44,16 +36,13 @@ var browserConfig = {
         new CleanWebpackPlugin({
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
-        }),
-        new CopyWebpackPlugin([{
-            from: path.resolve(__dirname, "wwwroot/src/*.png"),
-            to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-        }])
+        })
     ],
     optimization: {
+        minimize: true,
         minimizer: [
-            new OptimizeCSSAssetsPlugin({}),
-            new TerserPlugin({})
+            new TerserPlugin(),
+            new CssMinimizerPlugin()
         ]
     },
     resolve: {
@@ -76,10 +65,15 @@ var browserConfig = {
         publicPath: path.resolve(__dirname, "../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),
         path: path.resolve(__dirname, "../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),
         filename: "[name].js"
+    },
+    performance: {
+        hints: false,
+        maxEntrypointSize: 512000,
+        maxAssetSize: 512000
     }
 };
 
-var accountBrowserConfig = {
+const accountBrowserConfig = {
     module: {
         rules: [
             {
@@ -92,15 +86,8 @@ var accountBrowserConfig = {
                 ]
             },
             {
-                test: /\.(png|svg|jpg|gif|woff(2)?|ttf|eot)$/,
-                use: [{
-                    loader: "file-loader",
-                    options: {
-                        name: "[name].[ext]",
-                        outputPath: "../images",
-                        publicPath: "/dist/images"
-                    }
-                }]
+                test: /\.(png|svg|jpg|jpeg|gif|woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/inline',
             },
             {
                 test: /\.(js|jsx)$/,
@@ -118,16 +105,13 @@ var accountBrowserConfig = {
         new CleanWebpackPlugin({
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
-        }),
-        new CopyWebpackPlugin([{
-            from: path.resolve(__dirname, "wwwroot/src/*.png"),
-            to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-        }])
+        })
     ],
     optimization: {
+        minimize: true,
         minimizer: [
-            new OptimizeCSSAssetsPlugin({}),
-            new TerserPlugin({})
+            new TerserPlugin(),
+            new CssMinimizerPlugin()
         ]
     },
     resolve: {
@@ -144,10 +128,15 @@ var accountBrowserConfig = {
         path: path.resolve(__dirname, "../be/src/Project/Services/Identity/Identity.Api/wwwroot/dist/js"),
         filename: "[name].js"
     },
-    target: "node"
+    target: "node",
+    performance: {
+        hints: false,
+        maxEntrypointSize: 512000,
+        maxAssetSize: 512000
+    }
 };
 
-var sellerPortalBrowserConfig = {
+const sellerPortalBrowserConfig = {
     module: {
         rules: [
             {
@@ -160,15 +149,8 @@ var sellerPortalBrowserConfig = {
                 ]
             },
             {
-                test: /\.(png|svg|jpg|gif|woff(2)?|ttf|eot)$/,
-                use: [{
-                    loader: "file-loader",
-                    options: {
-                        name: "[name].[ext]",
-                        outputPath: "../images",
-                        publicPath: "/dist/images"
-                    }
-                }]
+                test: /\.(png|svg|jpg|jpeg|gif|woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/inline',
             },
             {
                 test: /\.(js|jsx)$/,
@@ -186,16 +168,13 @@ var sellerPortalBrowserConfig = {
         new CleanWebpackPlugin({
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
-        }),
-        new CopyWebpackPlugin([{
-            from: path.resolve(__dirname, "wwwroot/src/*.png"),
-            to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-        }])
+        })
     ],
     optimization: {
+        minimize: true,
         minimizer: [
-            new OptimizeCSSAssetsPlugin({}),
-            new TerserPlugin({})
+            new TerserPlugin(),
+            new CssMinimizerPlugin()
         ]
     },
     resolve: {
@@ -232,7 +211,12 @@ var sellerPortalBrowserConfig = {
         publicPath: path.resolve(__dirname, "../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),
         path: path.resolve(__dirname, "../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),
         filename: "[name].js"
+    },
+    performance: {
+        hints: false,
+        maxEntrypointSize: 512000,
+        maxAssetSize: 512000
     }
 };
 
-module.exports = [browserConfig, accountBrowserConfig, sellerPortalBrowserConfig];
+module.exports = [browserConfig, accountBrowserConfig, sellerPortalBrowserConfig]

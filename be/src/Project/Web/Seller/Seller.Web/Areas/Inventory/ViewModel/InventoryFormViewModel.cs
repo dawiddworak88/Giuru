@@ -29,8 +29,8 @@ namespace Seller.Web.Areas.Inventory.ViewModel
         public IEnumerable<ListItemViewModel> Warehouses { get; set; }
         public IEnumerable<ListInventoryItemViewModel> Products { get; set; }
         public int? RestockableInDays { get; set; }
-        public int Quantity { get; set; }
-        public int AvailableQuantity { get; set; }
+        public double Quantity { get; set; }
+        public double AvailableQuantity { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
         public string SaveUrl { get; set; }
         public string SaveText { get; set; }
