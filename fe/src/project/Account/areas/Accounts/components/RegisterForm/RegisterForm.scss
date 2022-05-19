@@ -1,0 +1,25 @@
+.register-form {
+    .MuiStepLabel-label {
+        font-size: 1rem;
+    }
+
+    &__container {
+        padding: 3rem;
+    }
+
+    &__stepper {
+        position: fixed;
+        max-width: 600px;
+
+        @media only screen and (max-width: $tablet) {
+            position: relative;
+            max-width: none;
+        }
+    }
+
+    &__groups {
+        @media only screen and (max-width: $tablet) {
+            padding-top: 0 !important;
+        }
+    }
+}

@@ -51,6 +51,39 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> Register([FromBody] RegisterRequestModel model)
+        {
+            var validator = new RegisterModelValidator();
+            var result = await validator.ValidateAsync(model);
+            if (result.IsValid)
+            {
+                var serviceModel = new RegisterServiceModel
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Email = model.Email,
+                    ContactJobTitle = model.ContactJobTitle,
+                    PhoneNumber = model.PhoneNumber,
+                    CompanyName = model.CompanyName,
+                    CompanyAddress = model.CompanyAddress,
+                    CompanyCountry = model.CompanyCountry,
+                    CompanyCity = model.CompanyCity,
+                    CompanyPostalCode = model.CompanyPostalCode,
+                    CompanyRegion = model.CompanyRegion,
+                    DirectlyShip = model.DirectlyShip,
+                    AcceptReturns = model.AcceptReturns,
+                    OnlineRetailers = model.OnlineRetailers
+                };
+
+                await this.usersService.RegisterAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.accountLocalizer.GetString("SuccessfullyClientApply").Value });
+            }
+
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> ResetPassword([FromBody] ResetUserPasswordRequestModel model)
         {
             var validator = new ResetPasswordModelValidator();

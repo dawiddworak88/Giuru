@@ -10,5 +10,6 @@ namespace Identity.Api.Configurations
         public Guid SellerClientId { get; set; }
         public string Regulations { get; set; }
         public string PrivacyPolicy { get; set; }
+        public string DevelopersEmail { get; set; }
     }
 }

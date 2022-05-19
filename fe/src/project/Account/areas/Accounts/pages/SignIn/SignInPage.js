@@ -10,11 +10,9 @@ function SignInPage(props) {
     return (
         <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
             <ToastContainer />
-            <div>
-                <Header {...props.header}></Header>
-                <SignInForm {...props.signInForm} />
-                <Footer {...props.footer}></Footer>
-            </div>
+            <Header {...props.header}></Header>
+            <SignInForm {...props.signInForm} />
+            <Footer {...props.footer}></Footer>
         </ThemeProvider>
     );
 }
