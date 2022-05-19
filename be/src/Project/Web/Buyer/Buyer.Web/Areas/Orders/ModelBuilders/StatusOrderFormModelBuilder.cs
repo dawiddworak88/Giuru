@@ -96,7 +96,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     ImageSrc = x.PictureUrl
                 });
 
-                viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = order.Attachments, IsAttachments = true });
+                viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = order.Attachments });
             }
 
             return viewModel;
