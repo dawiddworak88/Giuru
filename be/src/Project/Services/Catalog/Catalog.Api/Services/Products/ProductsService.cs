@@ -287,6 +287,16 @@ namespace Catalog.Api.Services.Products
 
             await this.catalogContext.SaveChangesAsync();
 
+            var message = new DeletedProductIntegrationEvent
+            {
+                ProductId = model.Id,
+                Language = model.Language,
+                Username = model.Username,
+                OrganisationId = model.OrganisationId
+            };
+
+            this.eventBus.Publish(message);
+
             await this.productIndexingRepository.IndexAsync(product.Id);
         }
 

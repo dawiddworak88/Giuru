@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import {
     Fab, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Button, Tooltip
-} from "@material-ui/core";
-import { GetApp, Link, LockOutlined } from "@material-ui/icons";
+} from "@mui/material";
+import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
 import ClipboardHelper from "../../../../../shared/helpers/globals/ClipboardHelper";
 

@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from "@material-ui/core";
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from "@mui/material";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
@@ -137,6 +137,7 @@ function ClientForm(props) {
                                 label={props.nameLabel} 
                                 fullWidth={true}
                                 value={name} 
+                                variant="standard"
                                 onChange={handleOnChange} 
                                 helperText={dirty.name ? errors.name : ""} 
                                 error={(errors.name.length > 0) && dirty.name} />
@@ -149,6 +150,7 @@ function ClientForm(props) {
                                 fullWidth={true}
                                 value={email} 
                                 onChange={handleOnChange} 
+                                variant="standard"
                                 helperText={dirty.email ? errors.email : ""} 
                                 error={(errors.email.length > 0) && dirty.email}
                                 InputProps={{
@@ -156,7 +158,7 @@ function ClientForm(props) {
                                 }} />
                         </div>
                         <div className="field">
-                            <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage}>
+                            <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage} variant="standard">
                                 <InputLabel id="language-label">{props.languageLabel}</InputLabel>
                                 <Select
                                     labelId="language-label"
@@ -176,7 +178,7 @@ function ClientForm(props) {
                             </FormControl>
                         </div>
                         <div className="field">
-                            <FormControl fullWidth={true}>
+                            <FormControl fullWidth={true} variant="standard">
                                 <InputLabel id="clientGroups-label">{props.groupsLabel}</InputLabel>
                                 <Select
                                     labelId="clientGroups-label"
@@ -204,6 +206,7 @@ function ClientForm(props) {
                                 label={props.phoneNumberLabel} 
                                 fullWidth={true}
                                 value={phoneNumber} 
+                                variant="standard"
                                 onChange={handleOnChange} />
                         </div>
                         <div className="field client-form__field-row">

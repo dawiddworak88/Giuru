@@ -106,6 +106,10 @@
         max-width: 15.625rem;
         flex-direction: column;
 
+        a {
+            display: inline-grid;
+        }
+
         .stock-details {
             margin-top: 0.625rem;
             margin-bottom: 0.5rem;

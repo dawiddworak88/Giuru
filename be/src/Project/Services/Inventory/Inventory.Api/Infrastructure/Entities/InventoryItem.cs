@@ -10,10 +10,10 @@ namespace Inventory.Api.Infrastructure.Entities
         public Guid ProductId { get; set; }
 
         [Required]
-        public int Quantity { get; set; }
+        public double Quantity { get; set; }
 
         [Required]
-        public int AvailableQuantity { get; set; }
+        public double AvailableQuantity { get; set; }
 
         public int? RestockableInDays { get; set; }
 

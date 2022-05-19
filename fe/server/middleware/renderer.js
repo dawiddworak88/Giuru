@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import { resetServerContext } from 'react-beautiful-dnd';
-import { ServerStyleSheets } from "@material-ui/core/styles";
+import { ServerStyleSheets } from "@mui/styles";
 
 // AspNetCore
 import OutletCatalogPage from "../../src/project/AspNetCore/areas/Products/pages/OutletPage/OutletPage";
