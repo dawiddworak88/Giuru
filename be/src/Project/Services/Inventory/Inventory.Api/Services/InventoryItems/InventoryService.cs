@@ -60,15 +60,20 @@ namespace Inventory.Api.Services.InventoryItems
 
         public async Task<InventoryServiceModel> CreateAsync(CreateInventoryServiceModel serviceModel)
         {
-            var product = new Product
-            {
-                Id = serviceModel.ProductId.Value,
-                Ean = serviceModel.ProductEan,
-                Sku = serviceModel.ProductSku,
-                Name = serviceModel.ProductName
-            };
+            var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == serviceModel.ProductId && x.IsActive);
 
-            this.context.Products.Add(product.FillCommonProperties());
+            if (product is null)
+            {
+                product = new Product
+                {
+                    Id = serviceModel.ProductId.Value,
+                    Ean = serviceModel.ProductEan,
+                    Sku = serviceModel.ProductSku,
+                    Name = serviceModel.ProductName
+                };
+
+                this.context.Products.Add(product.FillCommonProperties());
+            }
 
             var inventory = new InventoryItem
             {
@@ -155,7 +160,7 @@ namespace Inventory.Api.Services.InventoryItems
             var inventoryProduct = from c in this.context.Inventory
                                    join warehouse in this.context.Warehouses on c.WarehouseId equals warehouse.Id
                                    join product in this.context.Products on c.ProductId equals product.Id
-                                   where c.Id == model.Id.Value && c.IsActive
+                                   where c.Id == model.Id.Value && product.IsActive && c.IsActive
                                    select new InventoryServiceModel
                                    {
                                        Id = c.Id,
@@ -181,7 +186,7 @@ namespace Inventory.Api.Services.InventoryItems
             var inventories = from c in this.context.Inventory
                               join warehouse in this.context.Warehouses on c.WarehouseId equals warehouse.Id
                               join product in this.context.Products on c.ProductId equals product.Id
-                              where c.SellerId == model.OrganisationId.Value && c.IsActive
+                              where c.SellerId == model.OrganisationId.Value && product.IsActive && c.IsActive
                               select new InventoryServiceModel
                               {
                                 Id = c.Id,
@@ -214,7 +219,7 @@ namespace Inventory.Api.Services.InventoryItems
             var inventoryProducts = from c in this.context.Inventory
                              join warehouse in this.context.Warehouses on c.WarehouseId equals warehouse.Id
                              join product in this.context.Products on c.ProductId equals product.Id
-                             where model.Ids.Contains(c.Id) && c.SellerId == model.OrganisationId.Value && c.IsActive
+                             where model.Ids.Contains(c.Id) && c.SellerId == model.OrganisationId.Value && product.IsActive && c.IsActive
                              select new InventoryServiceModel
                              {
                                  Id = c.Id,
@@ -240,7 +245,7 @@ namespace Inventory.Api.Services.InventoryItems
             var inventory = from i in this.context.Inventory
                             join warehouse in this.context.Warehouses on i.WarehouseId equals warehouse.Id
                             join product in this.context.Products on i.ProductId equals product.Id
-                            where i.ProductId == model.ProductId.Value && i.IsActive
+                            where i.ProductId == model.ProductId.Value && product.IsActive && i.IsActive
                             select new
                             {
                                 Id = i.Id,
@@ -299,7 +304,7 @@ namespace Inventory.Api.Services.InventoryItems
             var inventory = from i in this.context.Inventory
                             join warehouse in this.context.Warehouses on i.WarehouseId equals warehouse.Id
                             join product in this.context.Products on i.ProductId equals product.Id
-                            where product.Sku == model.ProductSku && i.IsActive
+                            where product.Sku == model.ProductSku && product.IsActive && i.IsActive
                             select new
                             {
                                 Id = i.Id,
@@ -369,19 +374,21 @@ namespace Inventory.Api.Services.InventoryItems
         public async Task<PagedResults<IEnumerable<InventorySumServiceModel>>> GetAvailableProductsInventoriesAsync(GetInventoriesServiceModel model)
         {
             var inventories = (from i in this.context.Inventory
-                            group i by new { i.ProductId } into gpi
-                            where gpi.Sum(x => x.AvailableQuantity) > 0
-                            select new InventorySumServiceModel
-                            {
-                                ProductId = gpi.Key.ProductId,
-                                ProductName = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Name,
-                                ProductSku = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Sku,
-                                ProductEan = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Ean,
-                                AvailableQuantity = gpi.Sum(x => x.AvailableQuantity),
-                                Quantity = gpi.Sum(x => x.Quantity),
-                                ExpectedDelivery = gpi.Min(x => x.ExpectedDelivery),
-                                RestockableInDays = gpi.Min(x => x.RestockableInDays)
-                            }).OrderByDescending(x => x.AvailableQuantity);
+                               join product in this.context.Products on i.ProductId equals product.Id
+                               where product.IsActive
+                               group i by new { product.Id } into gpi
+                               where gpi.Sum(x => x.AvailableQuantity) > 0
+                               select new InventorySumServiceModel
+                               {
+                                    ProductId = gpi.Key.Id,
+                                    ProductName = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Name,
+                                    ProductSku = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Sku,
+                                    ProductEan = this.context.Products.FirstOrDefault(x => x.Id == gpi.FirstOrDefault().ProductId && x.IsActive).Ean,
+                                    AvailableQuantity = gpi.Sum(x => x.AvailableQuantity),
+                                    Quantity = gpi.Sum(x => x.Quantity),
+                                    ExpectedDelivery = gpi.Min(x => x.ExpectedDelivery),
+                                    RestockableInDays = gpi.Min(x => x.RestockableInDays)
+                               }).OrderByDescending(x => x.AvailableQuantity);
 
                 return inventories.PagedIndex(new Pagination(inventories.Count(), model.ItemsPerPage), model.PageIndex);
         }

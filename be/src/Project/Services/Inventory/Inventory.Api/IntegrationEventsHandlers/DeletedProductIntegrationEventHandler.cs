@@ -5,28 +5,29 @@ using System.Threading.Tasks;
 
 namespace Inventory.Api.IntegrationEventsHandlers
 {
-    public class UpdatedProductIntegrationEventHandler : IIntegrationEventHandler<UpdatedProductIntegrationEvent>
+    public class DeletedProductIntegrationEventHandler : IIntegrationEventHandler<DeletedProductIntegrationEvent>
     {
         private readonly IProductService productService;
 
-        public UpdatedProductIntegrationEventHandler(IProductService productService)
+        public DeletedProductIntegrationEventHandler(
+            IProductService productService)
         {
             this.productService = productService;
         }
 
         /// <summary>
-        /// Integration event handler which starts the rebuild of catalog index
+        /// Integration event handler which delete products from inventory when product will deleted
         /// </summary>
         /// <param name="event">
         /// Integration event message which is sent by the
-        /// catalog.api once seller triggered the rebuild.
+        /// catalog.api once seller deleted product.
         /// </param>
         /// <returns></returns>
-        public async Task Handle(UpdatedProductIntegrationEvent @event)
+        public async Task Handle(DeletedProductIntegrationEvent @event)
         {
             if (@event.OrganisationId.HasValue)
             {
-                await this.productService.UpdateProductAsync(@event.ProductId, @event.ProductName, @event.ProductSku, @event.ProductEan);
+                await this.productService.DeleteProductAsync(@event.ProductId);
             }
         }
     }
