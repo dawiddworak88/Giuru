@@ -9,7 +9,6 @@ import {
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
-import { PictureAsPdf, Folder, Attachment } from "@material-ui/icons";
 import Files from "../../../../../../shared/components/Files/Files";
 
 function EditOrderForm(props) {

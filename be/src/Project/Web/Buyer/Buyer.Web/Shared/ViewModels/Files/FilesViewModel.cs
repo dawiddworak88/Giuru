@@ -4,7 +4,7 @@ namespace Buyer.Web.Shared.ViewModels.Files
 {
     public class FilesViewModel
     {
-        public string DownloadFilesLabel { get; set; }
+        public string FilesLabel { get; set; }
         public string DownloadLabel { get; set; }
         public string CopyLinkLabel { get; set; }
         public string FilenameLabel { get; set; }
@@ -14,7 +14,6 @@ namespace Buyer.Web.Shared.ViewModels.Files
         public string LastModifiedDateLabel { get; set; }
         public string CreatedDateLabel { get; set; }
         public string AttachmentsLabel { get; set; }
-        public bool? IsAttachments { get; set; }
         public IEnumerable<FileViewModel> Files { get; set; }
     }
 }

@@ -72,8 +72,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 ClientLabel = this.globalLocalizer.GetString("Client"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
-                CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
-                AttachmentsLabel = this.globalLocalizer.GetString("Attachments")
+                CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel")
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -110,7 +109,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 });
                 viewModel.CustomOrder = order.MoreInfo;
 
-                viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = order.Attachments, IsAttachments = true });
+                viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = order.Attachments });
             }
 
             return viewModel;

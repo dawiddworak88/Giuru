@@ -228,8 +228,8 @@
   <data name="Filename" xml:space="preserve">
     <value>Filename</value>
   </data>
-  <data name="FilesToDownload" xml:space="preserve">
-    <value>Download</value>
+  <data name="Files" xml:space="preserve">
+    <value>Files</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Home</value>

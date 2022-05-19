@@ -228,8 +228,8 @@
   <data name="Filename" xml:space="preserve">
     <value>Nazwa pliku</value>
   </data>
-  <data name="FilesToDownload" xml:space="preserve">
-    <value>Pliki do pobrania</value>
+  <data name="Files" xml:space="preserve">
+    <value>Pliki</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Strona główna</value>

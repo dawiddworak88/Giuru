@@ -4,7 +4,7 @@ namespace Seller.Web.Shared.ViewModels
 {
     public class FilesViewModel
     {
-        public string DownloadFilesLabel { get; set; }
+        public string FilesLabel { get; set; }
         public string DownloadLabel { get; set; }
         public string CopyLinkLabel { get; set; }
         public string FilenameLabel { get; set; }

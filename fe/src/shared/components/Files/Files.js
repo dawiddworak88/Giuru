@@ -11,7 +11,6 @@ import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
 function Files(props) {
 
     const handleCopyClick = (file) => {
-
         ClipboardHelper.copyToClipboard(file.url);
     };
 
@@ -19,11 +18,11 @@ function Files(props) {
         <Fragment>
             {props.files &&
                 <section className="section files">
-                    <h3 className="title is-4">{props.isAttachments ? props.attachmentsLabel : props.downloadFilesLabel}</h3>
+                    <h3 className="title is-4">{props.filesLabel}</h3>
                     <div className="table-container">
                         <div className="catalog__table">
                             <TableContainer component={Paper}>
-                                <Table aria-label={props.downloadLabel}>
+                                <Table aria-label={props.filesLabel}>
                                     <TableHead>
                                         <TableRow>
                                             <TableCell width="11%"></TableCell>
@@ -80,8 +79,7 @@ function Files(props) {
 
 Files.propTypes = {
     files: PropTypes.array.isRequired,
-    attachmentsLabel: PropTypes.string,
-    downloadFilesLabel: PropTypes.string.isRequired,
+    filesLabel: PropTypes.string.isRequired,
     downloadLabel: PropTypes.string.isRequired,
     copyLinkLabel: PropTypes.string.isRequired,
     filenameLabel: PropTypes.string.isRequired,
