@@ -10,7 +10,7 @@ import { Context } from "../../../../../../shared/stores/Store";
 import { Delete, AddShoppingCartRounded } from "@mui/icons-material";
 import {
     Fab, Table, TableBody, TableCell, TableContainer, FormControlLabel,
-    TableHead, TableRow, Paper, TextField, Button, IconButton, CircularProgress, Checkbox, NoSsr
+    TableHead, TableRow, Paper, TextField, Button, CircularProgress, Checkbox, NoSsr
 } from "@mui/material";
 import moment from "moment";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
@@ -19,6 +19,7 @@ import ConfirmationDialog from "../../../../../../shared/components/Confirmation
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import IconConstants from "../../../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -37,6 +38,7 @@ function NewOrderForm(props) {
     const [customOrder, setCustomOrder] = useState(null);
     const [hasCustomOrder, setHasCustomOrder] = useState(false);
     const [isOrdered, setIsOrdered] = useState(false);
+    const [attachments, setAttachments] = useState([]);
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -205,6 +207,7 @@ function NewOrderForm(props) {
         var order = {
             basketId,
             moreInfo: customOrder,
+            attachments,
             hasCustomOrder
         };
 
@@ -470,7 +473,7 @@ function NewOrderForm(props) {
                                     <span className="is-title is-5">{props.noOrderItemsLabel}</span>
                                 </section>
                             )}
-                    </div>
+                        </div>
                 </Fragment>
                 <div className="field">
                     <NoSsr>
@@ -488,26 +491,45 @@ function NewOrderForm(props) {
                         />
                     </NoSsr>
                     {hasCustomOrder && 
-                        <div className="order__items">
-                            <TextField
-                                id="customOrder"
-                                name="customOrder"
-                                placeholder={props.customOrderLabel}
-                                InputProps={{
-                                    className: "p-2",
-                                    disableUnderline: true
-                                }}
-                                rows={OrderFormConstants.minRowsForCustomOrder()}
-                                fullWidth={true}
-                                multiline={true}
-                                value={customOrder}
-                                disabled={isOrdered}
-                                variant="standard"
-                                onChange={(e) => {
-                                    setCustomOrder(e.target.value);
-                                }}
-                            />
-                        </div>
+                        <Fragment>
+                            <div className="order__items">
+                                <TextField
+                                    id="customOrder"
+                                    name="customOrder"
+                                    placeholder={props.customOrderLabel}
+                                    InputProps={{
+                                        className: "p-2",
+                                        disableUnderline: true
+                                    }}
+                                    rows={OrderFormConstants.minRowsForCustomOrder()}
+                                    fullWidth={true}
+                                    multiline={true}
+                                    value={customOrder}
+                                    disabled={isOrdered}
+                                    onChange={(e) => {
+                                        setCustomOrder(e.target.value);
+                                    }}
+                                />
+                            </div>
+                            <div className="mt-3">
+                                <MediaCloud 
+                                    id="attachments"
+                                    name="attachments"
+                                    label={props.attachmentsLabel}
+                                    accept=".pdf, .docx, .zip, .xls, .xlsx, .png, .jpg"
+                                    multiple={true}
+                                    generalErrorMessage={props.generalErrorMessage}
+                                    deleteLabel={props.deleteLabel}
+                                    dropFilesLabel={props.dropFilesLabel}
+                                    dropOrSelectFilesLabel={props.dropOrSelectAttachmentsLabel}
+                                    files={attachments}
+                                    setFieldValue={({value}) => {
+                                        setAttachments(value);
+                                    }}
+                                    saveMediaUrl={props.saveMediaUrl}
+                                />
+                            </div>
+                        </Fragment>
                     }
                 </div>
                 <div className="field">

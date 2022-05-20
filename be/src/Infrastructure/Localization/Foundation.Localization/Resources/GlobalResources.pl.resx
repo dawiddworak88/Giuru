@@ -475,7 +475,7 @@
     <value>Id:</value>
   </data>
   <data name="PhoneNumberLabel" xml:space="preserve">
-    <value>Numer telefonu:</value>
+    <value>Numer telefonu</value>
   </data>
   <data name="Ean" xml:space="preserve">
     <value>EAN:</value>
@@ -514,7 +514,7 @@
     <value>Współpracuj z ELTAP</value>
   </data>
   <data name="EltapPartnerDescription" xml:space="preserve">
-    <value>Dziękujemy za zainteresowanie współpracą z ELTAP! Cieszymy się, że dzięki Tobie możemy rozszerzyć nasze produkty na inne regiony.</value>
+    <value>Dziękujemy za zainteresowanie ELTAP. Zapraszamy do współpracy!</value>
   </data>
   <data name="FieldRequiredErrorMessage" xml:space="preserve">
     <value>To pole jest wymagane</value>
