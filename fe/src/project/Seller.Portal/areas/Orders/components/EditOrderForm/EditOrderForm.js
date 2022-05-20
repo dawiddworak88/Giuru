@@ -5,7 +5,8 @@ import { Context } from "../../../../../../shared/stores/Store";
 import {
     FormControl, InputLabel, Select, MenuItem, Button,
     Table, TableBody, TableCell, TableContainer, TextField,
-    TableHead, TableRow, Paper, CircularProgress } from "@mui/material";
+    TableHead, TableRow, Paper, CircularProgress 
+} from "@mui/material";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import Files from "../../../../../../shared/components/Files/Files";
@@ -149,7 +150,7 @@ function EditOrderForm(props) {
                     {props.canCancelOrder && !canceledOrder &&
                         <div className="mt-5">
                             <Button 
-                                type="submit" 
+                                type="text" 
                                 variant="contained" 
                                 color="primary"
                                 onClick={handleCancelOrderSubmit}

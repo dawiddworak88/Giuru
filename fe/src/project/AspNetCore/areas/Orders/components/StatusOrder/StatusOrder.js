@@ -4,7 +4,7 @@ import { Context } from "../../../../../../shared/stores/Store";
 import { toast } from "react-toastify";
 import {
     Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, TextField
+    TableHead, TableRow, Paper, TextField, Button
 } from "@mui/material";
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
@@ -68,7 +68,7 @@ function StatusOrder(props) {
                     {props.canCancelOrder && !canceledOrder &&
                         <div className="mt-2">
                             <Button 
-                                type="submit" 
+                                type="text" 
                                 variant="contained" 
                                 color="primary"
                                 onClick={handleCancelOrderSubmit}
