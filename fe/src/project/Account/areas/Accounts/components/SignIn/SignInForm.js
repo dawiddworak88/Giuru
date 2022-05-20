@@ -44,7 +44,7 @@ function SignInForm(props) {
 
     const { email, password } = values;
     return (
-        <section className="section is-flex-direction-column is-flex-centered">
+        <section className="section is-flex-direction-column is-flex-centered sign-in">
             <div className="account-card">
                 <form className="is-modern-form has-text-centered" action={props.submitUrl} method="post">
                     <input type="hidden" name="returnUrl" value={props.returnUrl} />
@@ -70,6 +70,7 @@ function SignInForm(props) {
             <div className="account-container has-text-centered mt-4">
                 <h2 className="title is-size-6 mb-3">{props.registerLabel}</h2>
                 <Button 
+                    className="sign-in__client-apply"
                     type="text" 
                     variant="contained" 
                     color="primary" 
