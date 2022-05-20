@@ -472,7 +472,7 @@
     <value>Der Ladevorgang läuft</value>
   </data>
   <data name="PhoneNumberLabel" xml:space="preserve">
-    <value>Telefonnummer:</value>
+    <value>Telefonnummer</value>
   </data>
   <data name="Ean" xml:space="preserve">
     <value>EAN:</value>

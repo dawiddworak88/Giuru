@@ -475,7 +475,7 @@
     <value>Id:</value>
   </data>
   <data name="PhoneNumberLabel" xml:space="preserve">
-    <value>Numer telefonu:</value>
+    <value>Numer telefonu</value>
   </data>
   <data name="Ean" xml:space="preserve">
     <value>EAN:</value>
