@@ -9,7 +9,6 @@ import {
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
-import { RadioButtonChecked, RadioButtonUnchecked } from "@mui/icons-material";
 
 const RegisterForm = (props) => {
     const [state, dispatch] = useContext(Context);

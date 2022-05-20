@@ -199,13 +199,13 @@
     <value>Password has been set successfully</value>
   </data>
   <data name="Register" xml:space="preserve">
-    <value>Join to us</value>
+    <value>Join us</value>
   </data>
   <data name="RegisterButton" xml:space="preserve">
     <value>Apply here</value>
   </data>
   <data name="RegisterContact" xml:space="preserve">
-    <value>Need you help? Contact with us</value>
+    <value>Do you need help? Contact us</value>
   </data>
   <data name="ResetPassword" xml:space="preserve">
     <value>Password reset</value>
