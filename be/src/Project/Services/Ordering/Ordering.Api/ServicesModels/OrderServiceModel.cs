@@ -41,5 +41,6 @@ namespace Ordering.Api.ServicesModels
         public IEnumerable<OrderItemServiceModel> OrderItems { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public IEnumerable<Guid> Attachments { get; set; }
     }
 }

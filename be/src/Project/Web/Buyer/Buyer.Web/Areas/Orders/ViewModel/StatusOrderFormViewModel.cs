@@ -1,4 +1,6 @@
-﻿using Foundation.PageContent.Components.ListItems.ViewModels;
+﻿using Buyer.Web.Shared.ViewModels.Files;
+using Foundation.PageContent.Components.Images;
+using Foundation.PageContent.Components.ListItems.ViewModels;
 using System;
 using System.Collections.Generic;
 
@@ -27,7 +29,10 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string CancelOrderLabel { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string UpdateOrderStatusUrl { get; set; }
+        public string CustomOrder { get; set; }
+        public string CustomOrderLabel { get; set; }
         public IEnumerable<ListItemViewModel> OrderStatuses { get; set; }
         public IEnumerable<OrderItemViewModel> OrderItems { get; set; }
+        public FilesViewModel Attachments { get; set; }
     }
 }

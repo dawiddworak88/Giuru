@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -7,7 +7,7 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import { 
     TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress 
-} from "@material-ui/core";
+} from "@mui/material";
 
 const CategoryForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -80,12 +80,13 @@ const CategoryForm = (props) => {
                                 fullWidth={true}
                                 value={name} 
                                 onChange={handleOnChange} 
+                                variant="standard"
                                 helperText={dirty.name ? errors.name : ""} 
                                 error={(errors.name.length > 0) && dirty.name} 
                             />
                         </div>
                         <div className="field">
-                            <FormControl fullWidth={true}>
+                            <FormControl fullWidth={true} variant="standard">
                                 <InputLabel id="parent-category">{props.parentCategoryLabel}</InputLabel>
                                 <Select
                                     labelId="parent-category"
@@ -140,11 +141,6 @@ CategoryForm.propTypes = {
     saveText: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
     parentCategories: PropTypes.array.isRequired,
-    dropOrSelectFilesLabel: PropTypes.string.isRequired,
-    dropFilesLabel: PropTypes.string.isRequired,
-    saveMediaUrl: PropTypes.string.isRequired,
-    deleteLabel: PropTypes.string.isRequired,
-    categoryPictureLabel: PropTypes.string.isRequired,
     saveUrl: PropTypes.string.isRequired,
     idLabel: PropTypes.string
 };

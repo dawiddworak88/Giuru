@@ -28,10 +28,10 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string SuccessfullyAddedProduct { get; set; }
         public string QuantityErrorMessage { get; set; }
         public bool InStock { get; set; }
-        public int? AvailableQuantity { get; set; }
+        public double? AvailableQuantity { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
         public bool InOutlet { get; set; }
-        public int? AvailableOutletQuantity { get; set; }
+        public double? AvailableOutletQuantity { get; set; }
         public DateTime? ExpectedOutletDelivery { get; set; }
         public string ExpectedDeliveryLabel { get; set; }
         public string RestockableInDaysLabel { get; set; }
@@ -47,6 +47,8 @@ namespace Buyer.Web.Areas.Products.ViewModels.Products
         public string Ean { get; set; }
         public string OutletTitle { get; set; }
         public string OutletTitleLabel { get; set; }
+        public string ReadMoreText { get; set; }
+        public string ReadLessText { get; set; }
         public SidebarViewModel Sidebar { get; set; }
         public ModalViewModel Modal { get; set; }
         public FilesViewModel Files { get; set; }

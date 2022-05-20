@@ -228,8 +228,8 @@
   <data name="Filename" xml:space="preserve">
     <value>Nazwa pliku</value>
   </data>
-  <data name="FilesToDownload" xml:space="preserve">
-    <value>Pliki do pobrania</value>
+  <data name="Files" xml:space="preserve">
+    <value>Pliki</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Strona główna</value>
@@ -480,6 +480,9 @@
   <data name="Ean" xml:space="preserve">
     <value>EAN:</value>
   </data>
+  <data name="CustomOrderLabel" xml:space="preserve">
+    <value>Niestandardowe zamówienie: </value>
+  </data>
   <data name="ClientsGroups" xml:space="preserve">
     <value>Grupy klientów</value>
   </data>
@@ -494,5 +497,77 @@
   </data>
   <data name="TitleLabel" xml:space="preserve">
     <value>Tytuł:</value>
+  </data>
+  <data name="ReadLess" xml:space="preserve">
+    <value>Czytaj mniej</value>
+  </data>
+  <data name="ReadMore" xml:space="preserve">
+    <value>Czytaj więcej</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Załączniki</value>
+  </data>
+  <data name="DropOrSelectAttachments" xml:space="preserve">
+    <value>Upuść lub wybierz załącznik</value>
+  </data>
+  <data name="EltapPartner" xml:space="preserve">
+    <value>Współpracuj z ELTAP</value>
+  </data>
+  <data name="EltapPartnerDescription" xml:space="preserve">
+    <value>Dziękujemy za zainteresowanie współpracą z ELTAP! Cieszymy się, że dzięki Tobie możemy rozszerzyć nasze produkty na inne regiony.</value>
+  </data>
+  <data name="FieldRequiredErrorMessage" xml:space="preserve">
+    <value>To pole jest wymagane</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Adres</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>Miasto</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Nazwa firmy</value>
+  </data>
+  <data name="ContactJobTitle" xml:space="preserve">
+    <value>Stanowisko osoby kontaktowej</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Kraj</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Kod pocztowy</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="AccountManager" xml:space="preserve">
+    <value>Menadżer konta</value>
+  </data>
+  <data name="CEO" xml:space="preserve">
+    <value>CEO</value>
+  </data>
+  <data name="GeneralManager" xml:space="preserve">
+    <value>Dyrektor naczelny</value>
+  </data>
+  <data name="OperationsManager" xml:space="preserve">
+    <value>Dyrektor operacyjny</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Inne</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Właściciel</value>
+  </data>
+  <data name="President" xml:space="preserve">
+    <value>Prezes</value>
+  </data>
+  <data name="SalesManager" xml:space="preserve">
+    <value>Kierownik sprzedaży</value>
+  </data>
+  <data name="SalesRep" xml:space="preserve">
+    <value>Przedstawiciel handlowy</value>
+  </data>
+  <data name="VicePresident" xml:space="preserve">
+    <value>Wiceprezes</value>
   </data>
 </root>

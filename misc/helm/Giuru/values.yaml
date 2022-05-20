@@ -59,6 +59,7 @@ basketApi:
   connectionString: "#{BasketApi--ConnectionString}#"
 orderingApi:
   connectionString: "#{OrderingApi--ConnectionString}#"
+  actionSendGridCustomOrderTemplateId: "#{OrderingApi--ActionSendGridCustomOrderTemplateId}#"
 buyerWeb:
   clientId: "#{BuyerWeb--ClientId}#"
   clientSecret: "#{BuyerWeb--ClientSecret}#"

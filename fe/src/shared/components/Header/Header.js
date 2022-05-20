@@ -1,16 +1,10 @@
 import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ListItem from "@material-ui/core/ListItem";
+import { makeStyles } from "@mui/styles";
+import { Drawer, List, Divider, IconButton, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { Menu } from "@mui/icons-material"
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 import ColorConstants from "../../constants/ColorConstants";
 import * as Icon from "react-feather";
 
@@ -67,7 +61,7 @@ function Header(props) {
                                 edge="start"
                                 style={drawerStyles}
                                 className={clsx(classes.menuButton, open && classes.hide)}>
-                                <MenuIcon />
+                                <Menu />
                             </IconButton>
                             <Drawer anchor="top" open={open} onClose={handleDrawerClose}>
                                 <div
@@ -82,12 +76,12 @@ function Header(props) {
                                             </ListItem>
                                         </List>
                                         <Divider /><Divider />
-                                    {props.drawerMenuCategories.map((category) => (
-                                        <Fragment key={category.title}>
+                                    {props.drawerMenuCategories.map((category, index) => (
+                                        <Fragment key={index}>
                                             <List>
-                                                {category.items.map((item) => (
-                                                    <a href={item.url}>
-                                                        <ListItem selected={item.isActive} button key={item.title}>
+                                                {category.items.map((item, index) => (
+                                                    <a href={item.url} key={index}>
+                                                        <ListItem selected={item.isActive} button>
                                                             <ListItemIcon>{ListIcon(item.icon)}</ListItemIcon>
                                                             <ListItemText primary={item.title} />
                                                         </ListItem>
@@ -133,11 +127,11 @@ function Header(props) {
 }
 
 Header.propTypes = {
-    drawerBackLabel: PropTypes.string.isRequired,
-    drawerBackIcon: PropTypes.string.isRequired,
+    drawerBackLabel: PropTypes.string,
+    drawerBackIcon: PropTypes.string,
     logo: PropTypes.object.isRequired,
     links: PropTypes.array.isRequired,
-    drawerMenuCategories: PropTypes.array.isRequired,
+    drawerMenuCategories: PropTypes.array,
     isLoggedIn: PropTypes.bool,
     signOutLink: PropTypes.object
 };

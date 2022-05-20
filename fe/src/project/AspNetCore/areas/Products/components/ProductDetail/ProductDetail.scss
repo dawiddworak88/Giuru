@@ -1,7 +1,7 @@
 @import "../../../../shared/components/CarouselGrid/CarouselGrid.scss";
 @import "../../../../shared/components/Sidebar/Sidebar.scss";
 @import "../../../../shared/components/Modal/Modal.scss";
-@import "../../../../shared/components/Files/Files.scss";
+@import "../../../../../../shared/components/Files/Files.scss";
 
 .product-detail {
     &__feature-title {
@@ -18,7 +18,7 @@
 
     &__discount {
         margin-top: 1rem;
-        color: darkgreen;
+        color: $inventory-color;
         font-size: 1.1rem;
         font-weight: 600;
     }
@@ -59,7 +59,7 @@
 
     &__in-stock {
         margin-top: 1rem;
-        color: darkgreen;
+        color: $inventory-color;
         font-size: 1.1rem;
         font-weight: 600;
 

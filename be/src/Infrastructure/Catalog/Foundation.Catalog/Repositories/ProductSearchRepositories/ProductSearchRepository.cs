@@ -184,7 +184,7 @@ namespace Foundation.Catalog.Repositories.ProductSearchRepositories
 
             foreach (var sku in skus)
             {
-                skusQuery = skusQuery || Query<ProductSearchModel>.Term(t => t.Field(x => x.Sku).Value(sku.ToLowerInvariant()));
+                skusQuery = skusQuery || Query<ProductSearchModel>.Term(t => t.Field(x => x.Sku.Suffix("keyword")).Value(sku));
             }
 
             query = query && skusQuery;

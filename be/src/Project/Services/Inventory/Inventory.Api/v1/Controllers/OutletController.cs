@@ -152,9 +152,7 @@ namespace Outlet.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetAvailableOutletProducts(
-            int pageIndex,
-            int itemsPerPage)
+        public async Task<IActionResult> GetAvailableOutletProducts(int pageIndex, int itemsPerPage)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -208,15 +206,18 @@ namespace Outlet.Api.v1.Controllers
 
             var serviceModel = new UpdateOutletProductsServiceModel
             {
+                Language = CultureInfo.CurrentCulture.Name,
                 OutletItems = request.OutletItems.OrEmptyIfNull().Select(x => new UpdateOutletProductServiceModel
                 {
-                    AvailableQuantity = x.AvailableQuantity,
-                    Quantity = x.Quantity,
+                    WarehouseId = x.WarehouseId,
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
                     ProductSku = x.ProductSku,
-                    WarehouseId = x.WarehouseId,
-                    ProductEan = x.Ean
+                    ProductEan = x.Ean,
+                    Quantity = x.Quantity,
+                    AvailableQuantity = x.AvailableQuantity,
+                    Title = x.Title,
+                    Description = x.Description
                 }),
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
@@ -226,7 +227,7 @@ namespace Outlet.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.outletsService.SyncOutletProducts(serviceModel);
+                await this.outletsService.SyncProductsOutlet(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }

@@ -25,8 +25,8 @@ namespace Seller.Web.Areas.Inventory.ViewModel
         public string NavigateToOutletListText { get; set; }
         public IEnumerable<ListItemViewModel> Warehouses { get; set; }
         public IEnumerable<ListOutletItemViewModel> Products { get; set; }
-        public int Quantity { get; set; }
-        public int AvailableQuantity { get; set; }
+        public double Quantity { get; set; }
+        public double AvailableQuantity { get; set; }
         public string SaveUrl { get; set; }
         public string IdLabel { get; set; }
         public string SaveText { get; set; }

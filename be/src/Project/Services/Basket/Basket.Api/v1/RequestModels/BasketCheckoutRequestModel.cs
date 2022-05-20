@@ -1,5 +1,6 @@
 ﻿using Foundation.ApiExtensions.Models.Request;
 using System;
+using System.Collections.Generic;
 
 namespace Basket.Api.v1.RequestModels
 {
@@ -33,5 +34,7 @@ namespace Basket.Api.v1.RequestModels
         public DateTime? ExpectedDeliveryDate { get; set; }
         public string Reason { get; set; }
         public string MoreInfo { get; set; }
+        public bool HasCustomOrder { get; set; }
+        public IEnumerable<Guid> Attachments { get; set; }
     }
 }
