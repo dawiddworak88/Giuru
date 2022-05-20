@@ -168,12 +168,6 @@
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Enter your last name</value>
   </data>
-  <data name="LogisticalInformation" xml:space="preserve">
-    <value>Logistical Information</value>
-  </data>
-  <data name="LogisticalInformationDescription" xml:space="preserve">
-    <value>Tell us details about how your business is operating</value>
-  </data>
   <data name="nc_buttonLabel" xml:space="preserve">
     <value>Confirm and set a password</value>
   </data>
@@ -240,14 +234,8 @@
   <data name="VerifyDateExpired" xml:space="preserve">
     <value>Link has expired. Please contact an administrator.</value>
   </data>
-  <data name="AcceptRetuns" xml:space="preserve">
-    <value>Would you be able to accept returns?</value>
-  </data>
   <data name="ClientApplySubject" xml:space="preserve">
     <value>New cooperation request</value>
-  </data>
-  <data name="DirectlyShip" xml:space="preserve">
-    <value>Would you be able to ship directly to customers (also known as dropship)?</value>
   </data>
   <data name="SelectJobTitle" xml:space="preserve">
     <value>Choose a workplace title</value>

@@ -15,8 +15,5 @@ namespace Identity.Api.ServicesModels.Users
         public string CompanyCity { get; set; }
         public string CompanyRegion { get; set; }
         public string CompanyPostalCode { get; set; }
-        public string AcceptReturns { get; set; }
-        public string DirectlyShip { get; set; }
-        public string OnlineRetailers { get; set; }
     }
 }
