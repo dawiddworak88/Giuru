@@ -1,10 +1,11 @@
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import {
     Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, TextField
 } from "@mui/material";
 import moment from "moment";
+import Files from "../../../../../../shared/components/Files/Files";
 
 function StatusOrder(props) {
 
@@ -81,21 +82,26 @@ function StatusOrder(props) {
                 </div>
             }
             {props.customOrder &&
-                <div className="mt-5">
-                    <h2 className="subtitle is-5 mb-2">{props.customOrderLabel}</h2>
-                    <div className="status-order__items">
-                        <TextField 
-                            value={props.customOrder}
-                            fullWidth={true}
-                            multiline={true}
-                            disabled={true}
-                            variant="standard"
-                            InputProps={{ 
-                                className: "p-2" 
-                            }}
-                        />
+                <Fragment>
+                    <div className="mt-5">
+                        <h2 className="subtitle is-5 mb-2">{props.customOrderLabel}</h2>
+                        <div className="status-order__items">
+                            <TextField 
+                                value={props.customOrder}
+                                fullWidth={true}
+                                multiline={true}
+                                disabled={true}
+                                variant="standard"
+                                InputProps={{ 
+                                    className: "p-2" 
+                                }}
+                            />
+                        </div>
                     </div>
-                </div>
+                    {props.attachments &&
+                        <Files {...props.attachments} />
+                    }
+                </Fragment>
             }
         </section >
     );

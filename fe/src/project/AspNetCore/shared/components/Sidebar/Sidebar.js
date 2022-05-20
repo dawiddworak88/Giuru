@@ -91,9 +91,9 @@ const Sidebar = (props) => {
     return (
         <SwipeableDrawer
             anchor="right"
-            on={isOpen}
+            open={isOpen}
+            onOpen={alert("test")}
             onClose={toggleDrawer(false)}
-            onOpen={null}
         >
         <div className="sidebar-content">
                 <div className="sidebar-content__close">
@@ -185,9 +185,7 @@ Sidebar.propTypes = {
     labels: PropTypes.object.isRequired,
     setIsOpen: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
-    handleOrder: PropTypes.func.isRequired,
-    loadingLabel: PropTypes.string.isRequired,
-    eanLabel: PropTypes.string.isRequired
+    handleOrder: PropTypes.func.isRequired
 }
 
 export default Sidebar;
