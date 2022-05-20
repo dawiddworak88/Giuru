@@ -74,7 +74,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             var order = await this.ordersRepository.GetOrderAsync(componentModel.Token, componentModel.Language, componentModel.Id);
             if (order != null)
             {
-                if (order.OrderStatusId.Equals(OrdersConstants.OrderStatuses.NewId))
+                if (order.OrderStatusId == OrdersConstants.OrderStatuses.NewId)
                 {
                     viewModel.CanCancelOrder = true;
                 }

@@ -89,7 +89,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 
             if (order != null)
             {
-                if (order.OrderStatusId.Equals(OrdersConstants.OrderStatuses.NewId))
+                if (order.OrderStatusId == OrdersConstants.OrderStatuses.NewId)
                 {
                     viewModel.CanCancelOrder = true;
                 }
