@@ -26,7 +26,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\Account\Foundation.Account\Foundation.Account.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\ApiExtensions\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
-    <ProjectReference Include="..\..\..\..\Infrastructure\Content\Foundation.Content\Foundation.Content.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Localization\Foundation.Localization\Foundation.Localization.csproj" />

@@ -8,10 +8,10 @@
 </script>
 
 @section MetaTags {
-    <title>@Model.Seo.MetaTitle</title>
-    @if (string.IsNullOrWhiteSpace(@Model.Seo.MetaDescription) is false)
+    <title>@Model.Metadata.MetaTitle</title>
+    @if (string.IsNullOrWhiteSpace(@Model.Metadata.MetaDescription) is false)
     {
-        <meta name="description" content="@Model.Seo.MetaDescription" />
+        <meta name="description" content="@Model.Metadata.MetaDescription" />
     }
 }
 

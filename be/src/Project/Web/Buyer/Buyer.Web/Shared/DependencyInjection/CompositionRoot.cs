@@ -30,10 +30,13 @@ using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ModelBuilders.Modal;
 using Buyer.Web.Shared.Repositories.News;
 using Buyer.Web.Shared.ModelBuilders.Seo;
-using Foundation.PageContent.Components.Seo.ViewModels;
+using Foundation.PageContent.Components.Metadatas.ViewModels;
 using Buyer.Web.Shared.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Files;
-using Foundation.Content.Factories.GraphQlFactories;
+using GraphQL.Client.Abstractions;
+using GraphQL.Client.Serializer.Newtonsoft;
+using GraphQL.Client.Http;
+using Buyer.Web.Shared.Repositories.Metadatas;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -52,11 +55,12 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel>, ModalModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>, MainNavigationModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, SeoViewModel>, SeoModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MetadataViewModel>, MetadataModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
 
             // Repositories
+            services.AddScoped<IMetadataRepository, MetadataRepository>();
             services.AddScoped<IBrandRepository, BrandRepository>();
             services.AddScoped<ICatalogProductsRepository, CatalogProductsRepository>();
 
@@ -73,9 +77,11 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IClientsRepository, ClientsRepository>();
 
             // GraphQL
-            services.AddScoped<IGraphQlClientFactory>(sp => 
+            services.AddScoped<IGraphQLClient>(sp => 
             {
-                return new GraphQlClientFactory(configuration["ContentGraphQlUrl"], configuration["ContentGraphQlAuthorizationKey"]);
+                var graphQlClient = new GraphQLHttpClient(configuration["ContentGraphQlUrl"], new NewtonsoftJsonSerializer());
+                graphQlClient.HttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {configuration["ContentGraphQlAuthorizationKey"]}");
+                return graphQlClient;
             });
         }
 

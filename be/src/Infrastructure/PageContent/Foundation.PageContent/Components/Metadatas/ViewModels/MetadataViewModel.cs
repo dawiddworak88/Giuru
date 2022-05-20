@@ -1,6 +1,6 @@
-﻿namespace Foundation.PageContent.Components.Seo.ViewModels
+﻿namespace Foundation.PageContent.Components.Metadatas.ViewModels
 {
-    public class SeoViewModel
+    public class MetadataViewModel
     {
         public string MetaTitle { get; set; }
         public string MetaDescription { get; set; }
