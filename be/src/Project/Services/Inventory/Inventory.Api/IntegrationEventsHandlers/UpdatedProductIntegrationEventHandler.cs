@@ -1,18 +1,17 @@
 ﻿using Foundation.EventBus.Abstractions;
 using Inventory.Api.IntegrationEvents;
-using Inventory.Api.Services;
+using Inventory.Api.Services.Products;
 using System.Threading.Tasks;
 
 namespace Inventory.Api.IntegrationEventsHandlers
 {
     public class UpdatedProductIntegrationEventHandler : IIntegrationEventHandler<UpdatedProductIntegrationEvent>
     {
-        private readonly IInventoryService inventoryService;
+        private readonly IProductService productService;
 
-        public UpdatedProductIntegrationEventHandler(
-            IInventoryService inventoryService)
+        public UpdatedProductIntegrationEventHandler(IProductService productService)
         {
-            this.inventoryService = inventoryService;
+            this.productService = productService;
         }
 
         /// <summary>
@@ -27,7 +26,7 @@ namespace Inventory.Api.IntegrationEventsHandlers
         {
             if (@event.OrganisationId.HasValue)
             {
-                await this.inventoryService.UpdateInventoryProduct(@event.ProductId, @event.ProductName, @event.ProductSku, @event.OrganisationId);
+                await this.productService.UpdateProductAsync(@event.ProductId, @event.ProductName, @event.ProductSku, @event.ProductEan);
             }
         }
     }

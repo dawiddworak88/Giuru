@@ -1,6 +1,6 @@
 import React from "react";
-import { toast } from "react-toastify";
-import { ThemeProvider } from "@material-ui/core/styles";
+import { ToastContainer } from "react-toastify";
+import { ThemeProvider } from "@mui/material/styles";
 import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
 import LocaleHelper from "../../../../../../shared/helpers/globals/LocaleHelper";
 import Header from "../../../../../../shared/components/Header/Header";
@@ -11,19 +11,16 @@ import CategoryForm from "../../components/CategoryForm/CategoryForm";
 
 function CategoryPage(props) {
 
-  toast.configure();
-
   LocaleHelper.setMomentLocale(props.locale);
 
   return (
     <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
+      <ToastContainer />
       <Store>
-        <div>
-          <Header {...props.header}></Header>
-          <MenuTiles {...props.menuTiles} />
-          <CategoryForm {...props.categoryForm} />
-          <Footer {...props.footer}></Footer>
-        </div>
+        <Header {...props.header}></Header>
+        <MenuTiles {...props.menuTiles} />
+        <CategoryForm {...props.categoryForm} />
+        <Footer {...props.footer}></Footer>
       </Store>
     </ThemeProvider>
   );

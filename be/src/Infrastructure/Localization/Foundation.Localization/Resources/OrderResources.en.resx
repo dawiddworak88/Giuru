@@ -120,6 +120,9 @@
   <data name="AddedProduct" xml:space="preserve">
     <value>Added</value>
   </data>
+  <data name="AddingToCart" xml:space="preserve">
+    <value>Adding to cart</value>
+  </data>
   <data name="AddOrderItem" xml:space="preserve">
     <value>Add</value>
   </data>
@@ -140,6 +143,12 @@
   </data>
   <data name="ClientRequiredErrorMessage" xml:space="preserve">
     <value>Select a client</value>
+  </data>
+  <data name="CustomOrderLabel" xml:space="preserve">
+    <value>Add a custom order</value>
+  </data>
+  <data name="CustomOrderSubject" xml:space="preserve">
+    <value>Custom order from</value>
   </data>
   <data name="DeliveryFrom" xml:space="preserve">
     <value>Delivery from:</value>
@@ -167,6 +176,9 @@
   </data>
   <data name="ImportOrder" xml:space="preserve">
     <value>Import order</value>
+  </data>
+  <data name="InitCustomOrderLabel" xml:space="preserve">
+    <value>I want to place a custom order</value>
   </data>
   <data name="ItemNotFound" xml:space="preserve">
     <value>Product not found</value>
@@ -225,6 +237,9 @@
   <data name="OrganisationNotFound:" xml:space="preserve">
     <value>Customer organization does not exist</value>
   </data>
+  <data name="OutletQuantityLabel" xml:space="preserve">
+    <value>Outlet quantity:</value>
+  </data>
   <data name="PlaceOrder" xml:space="preserve">
     <value>Place order</value>
   </data>
@@ -239,6 +254,9 @@
   </data>
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
+  </data>
+  <data name="StockQuantityLabel" xml:space="preserve">
+    <value>Stock quantity:</value>
   </data>
   <data name="ToBasketLabel" xml:space="preserve">
     <value>View cart</value>

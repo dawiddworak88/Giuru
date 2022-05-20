@@ -13,6 +13,11 @@
             public static readonly string ProductSuggestionsApiEndpoint = "/api/v1/productsuggestions";
         }
 
+        public struct Client
+        {
+            public static readonly string GroupsApiEndpoint = "/api/v1/clientgroups";
+        }
+
         public struct Identity
         {
             public static readonly string OrganisationsApiEndpoint = "/api/v1/organisations";
@@ -33,6 +38,13 @@
             public static readonly string WarehousesApiEndpoint = "/api/v1/warehouse";
             public static readonly string InventoryApiEndpoint = "/api/v1/inventory";
             public static readonly string AvailableProductsApiEndpoint = "/api/v1/inventory/availableproducts";
+        }
+
+        public struct Outlet
+        {
+            public static readonly string OutletApiEndpoint = "/api/v1/outlet";
+            public static readonly string AvailableOutletProductsApiEndpoint = "/api/v1/outlet/availableproducts";
+            public static readonly string ProductOutletApiEndpoint = "/api/v1/outlet/product";
         }
 
         public struct Media
@@ -62,7 +74,7 @@
 
         public struct Request
         {
-            public const long RequestSizeLimit = 500_000_000;
+            public const long RequestSizeLimit = 250_000_000;
         }
     }
 }

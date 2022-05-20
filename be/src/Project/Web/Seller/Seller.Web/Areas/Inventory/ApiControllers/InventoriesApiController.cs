@@ -47,7 +47,7 @@ namespace Seller.Web.Areas.Inventory.ApiControllers
                 searchTerm,
                 pageIndex,
                 itemsPerPage,
-                $"{nameof(InventoryItem.ProductSku)} ASC");
+                $"{nameof(InventoryItem.Sku)} ASC");
 
             return this.StatusCode((int)HttpStatusCode.OK, inventories);
         }
@@ -65,7 +65,7 @@ namespace Seller.Web.Areas.Inventory.ApiControllers
             {
                 var inventoryId = await this.inventoriesRepository.SaveAsync(
                     token, language, model.Id, model.WarehouseId, model.ProductId,
-                    product.Name, product.Sku, model.Quantity, model.RestockableInDays, 
+                    product.Name, product.Sku, model.Quantity, model.Ean, model.RestockableInDays, 
                     model.AvailableQuantity, model.ExpectedDelivery, OrganisationId);
 
                 return this.StatusCode((int)HttpStatusCode.OK, new { Id = inventoryId, Message = this.inventoryLocalizer.GetString("InventorySavedSuccessfully").Value });

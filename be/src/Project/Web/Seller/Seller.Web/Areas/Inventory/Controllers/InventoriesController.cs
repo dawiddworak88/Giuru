@@ -1,17 +1,16 @@
-﻿using Seller.Web.Areas.Orders.ViewModel;
-using Foundation.Extensions.Controllers;
-using Foundation.Extensions.ModelBuilders;
-using Microsoft.AspNetCore.Mvc;
-using Foundation.PageContent.ComponentModels;
-using System.Threading.Tasks;
-using System.Globalization;
+﻿using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Definitions;
-using Microsoft.AspNetCore.Authentication;
-using System.Security.Claims;
+using Foundation.Extensions.Controllers;
 using Foundation.Extensions.Helpers;
-using System.Linq;
-using Foundation.Account.Definitions;
+using Foundation.Extensions.ModelBuilders;
+using Foundation.PageContent.ComponentModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using Seller.Web.Areas.Inventory.ViewModel;
+using System.Globalization;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Inventory.Controllers
 {
@@ -20,7 +19,8 @@ namespace Seller.Web.Areas.Inventory.Controllers
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, InventoriesPageViewModel> inventoriesPageModelBuilder;
 
-        public InventoriesController(IAsyncComponentModelBuilder<ComponentModelBase, InventoriesPageViewModel> inventoriesPageModelBuilder)
+        public InventoriesController(
+            IAsyncComponentModelBuilder<ComponentModelBase, InventoriesPageViewModel> inventoriesPageModelBuilder)
         {
             this.inventoriesPageModelBuilder = inventoriesPageModelBuilder;
         }

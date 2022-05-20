@@ -13,9 +13,9 @@ using System.Linq;
 using Microsoft.AspNetCore.Routing;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using System.Collections.Generic;
-using Microsoft.Extensions.Options;
-using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Areas.Products.Definitions;
+using Buyer.Web.Shared.ViewModels.Modals;
+using Buyer.Web.Areas.Products.Repositories;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
 {
@@ -23,17 +23,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
     {
         private readonly IStringLocalizer globalLocalizer;
         private readonly ICatalogModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel> availableProductsCatalogModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder;
         private readonly IProductsService productsService;
         private readonly IInventoryRepository inventoryRepository;
         private readonly LinkGenerator linkGenerator;
-        private readonly IOptions<AppSettings> settings;
 
         public AvailableProductsCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             ICatalogModelBuilder<ComponentModelBase, AvailableProductsCatalogViewModel> availableProductsCatalogModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
             IProductsService productsService,
             IInventoryRepository inventoryRepository,
-            IOptions<AppSettings> settings,
             LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
@@ -41,30 +41,23 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.AvailableProducts
             this.productsService = productsService;
             this.inventoryRepository = inventoryRepository;
             this.linkGenerator = linkGenerator;
-            this.settings = settings;
+            this.modalModelBuilder = modalModelBuilder;
         }
 
         public async Task<AvailableProductsCatalogViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = this.availableProductsCatalogModelBuilder.BuildModel(componentModel);
 
-            if (this.settings.Value.IsMarketplace)
-            {
-                viewModel.ShowBrand = true;
-            }
-
             viewModel.ShowAddToCartButton = true;
             viewModel.SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct");
             viewModel.Title = this.globalLocalizer.GetString("AvailableProducts");
             viewModel.ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "AvailableProductsApi", new { Area = "Products" });
             viewModel.ItemsPerPage = AvailableProductsConstants.Pagination.ItemsPerPage;
+            viewModel.Modal = await this.modalModelBuilder.BuildModelAsync(componentModel);
             viewModel.PagedItems = new PagedResults<IEnumerable<CatalogItemViewModel>>(PaginationConstants.EmptyTotal, ProductConstants.ProductsCatalogPaginationPageSize);
 
             var inventories = await this.inventoryRepository.GetAvailbleProductsInventory(
-                componentModel.Language,
-                PaginationConstants.DefaultPageIndex,
-                AvailableProductsConstants.Pagination.ItemsPerPage,
-                componentModel.Token);
+                componentModel.Language, PaginationConstants.DefaultPageIndex, AvailableProductsConstants.Pagination.ItemsPerPage, componentModel.Token);
 
             if (inventories?.Data is not null && inventories.Data.Any())
             {

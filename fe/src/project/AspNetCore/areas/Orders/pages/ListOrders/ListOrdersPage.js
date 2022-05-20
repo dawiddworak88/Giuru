@@ -1,6 +1,6 @@
 import React from "react";
-import { toast } from "react-toastify";
-import { ThemeProvider } from "@material-ui/core/styles";
+import { ToastContainer } from "react-toastify";
+import { ThemeProvider } from "@mui/material/styles";
 import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
 import Store from "../../../../../../shared/stores/Store";
 import Header from "../../../../shared/components/Header/Header";
@@ -11,11 +11,11 @@ import Catalog from "../../../../../../shared/components/Catalog/Catalog";
 
 const ListOrdersPage = (props) => {
 
-    toast.configure();
     LocaleHelper.setMomentLocale(props.locale);
 
     return (
         <ThemeProvider theme={GlobalHelper.initMuiTheme(props.locale)}>
+            <ToastContainer />
             <Store>
                 <Header {...props.header}></Header>
                 <MainNavigation {...props.mainNavigation}></MainNavigation>

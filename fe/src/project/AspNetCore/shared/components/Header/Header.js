@@ -2,13 +2,13 @@ import React, { useState, useContext, useEffect } from "react";
 import { toast } from "react-toastify";
 import Autosuggest from "react-autosuggest";
 import PropTypes from "prop-types";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import LanguageSwitcher from "../../../../../shared/components/LanguageSwitcher/LanguageSwitcher";
 import HeaderConstants from "./HeaderConstants";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
 import NavigationHelper from "../../../../../shared/helpers/globals/NavigationHelper";
 import { Context } from "../../../../../shared/stores/Store";
-import {ShoppingCart} from '@material-ui/icons';
+import { ShoppingCart } from '@mui/icons-material';
 import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function Header(props) {
@@ -106,13 +106,11 @@ function Header(props) {
     
     return (
         <header>
-            <nav className="navbar is-spaced">
-                <div className="navbar-brand">
-                    <a href={props.logo.targetUrl}>
+            <nav className="is-flex is-justify-content-space-between p-3 px-4 is-align-items-center header">
+                <div className="navbar-brand is-align-items-center">
+                    <a className="navbar-logo" href={props.logo.targetUrl}>
                         <img src={props.logo.logoUrl} alt={props.logo.logoAltLabel} />
                     </a>
-                </div>
-                <div className="navbar-menu">
                     <div className="navbar-start">
                         <form action={props.searchUrl} method="get" role="search" onSubmit={onSearchSubmit}>
                             <div className="field is-flex is-flex-centered search">
@@ -125,13 +123,15 @@ function Header(props) {
                                     renderSuggestion={renderSuggestion}
                                     inputProps={searchInputProps} 
                                 />
-                                <Button style={{ maxHeight: "40px", marginLeft: "0.5rem"  }} type="submit" variant="contained" color="primary">
+                                <Button type="submit" variant="contained" color="secondary" className="search-button">
                                     {props.searchLabel}
                                 </Button>
                             </div>
                         </form>
                     </div>
-                    <div className="navbar-end">
+                </div>
+                <div className="navbar-container">
+                    <div className="navbar-end is-flex is-align-items-center">
                         {props.isLoggedIn ? (
                             props.signOutLink &&
                                 <div className="navbar-item">
@@ -149,16 +149,14 @@ function Header(props) {
                         <div className="navbar-item">
                             <LanguageSwitcher {...props.languageSwitcher} />
                         </div>
-                        {props.isLoggedIn &&
-                            <div className="navbar-item">
-                                <a href={props.basketUrl} className="button is-text" title={props.goToCartLabel} aria-label={props.goToCartLabel}>
-                                    <ShoppingCart />
-                                    {totalBasketItems > 0 &&
-                                        <span className="count">{totalBasketItems}</span>
-                                    }
-                                </a>
-                            </div>
-                        }
+                        <div className="navbar-item">
+                            <a href={props.basketUrl} className="button is-text" title={props.goToCartLabel} aria-label={props.goToCartLabel}>
+                                <ShoppingCart />
+                                {totalBasketItems > 0 &&
+                                    <span className="count">{totalBasketItems}</span>
+                                }
+                            </a>
+                        </div>
                     </div>
                 </div>
             </nav>

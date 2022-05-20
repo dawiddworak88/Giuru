@@ -8,7 +8,6 @@ using Identity.Api.v1.ResponseModels;
 using Identity.Api.Validators.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -33,29 +32,27 @@ namespace Identity.Api.v1.Controllers
         /// <summary>
         /// Get information about user
         /// </summary>
-        /// <param name="id">The user id</param>
+        /// <param name="email">The user email</param>
         /// <returns>The user data.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [Route("{id}")]
-        [AllowAnonymous]
+        [Route("{email}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.Conflict)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> Get(Guid? id)
+        public async Task<IActionResult> GetByEmail(string email)
         {
-            var serviceModel = new GetUserServiceModel
+            var serviceModel = new GetUserByEmailServiceModel
             {
-                Id = id
+                Email = email
             };
 
-            var validator = new GetUserModelValidator();
+            var validator = new GetUserByEmailModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
-            if (validationResult != null)
+            if (validationResult.IsValid)
             {
-                var user = await this.userService.GetById(serviceModel);
-                if (user != null)
+                var user = await this.userService.GetByEmail(serviceModel);
+
+                if (user is not null)
                 {
                     var response = new UserResponseModel
                     {
@@ -73,11 +70,10 @@ namespace Identity.Api.v1.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
-                else
-                {
-                    return this.StatusCode((int)HttpStatusCode.NotFound);
-                }
+
+                return this.StatusCode((int)HttpStatusCode.OK);
             }
+
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
@@ -170,6 +166,77 @@ namespace Identity.Api.v1.Controllers
                 var response = await this.userService.SetPasswordAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK, new { response.Id });
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Resets a user's password
+        /// </summary>
+        /// <param name="request">The model.</param>
+        [HttpPost, MapToApiVersion("1.0")]
+        [Route("resetpassword")]
+        [AllowAnonymous]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> ResetPassword(ResetUserPasswordRequestModel request)
+        {
+            var serviceModel = new ResetUserPasswordServiceModel
+            {
+                Email = request.Email,
+                ReturnUrl = request.ReturnUrl,
+                Scheme = this.HttpContext.Request.Scheme,
+                Host = this.HttpContext.Request.Host
+            };
+
+            var validator = new ResetUserPasswordModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+            if (validationResult != null)
+            {
+                await this.userService.ResetPasswordAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Apply to be client.
+        /// </summary>
+        /// <param name="request">The model.</param>
+        /// <returns>OK.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [Route("reigster")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Register(RegisterRequestModel request)
+        {
+            var serviceModel = new RegisterServiceModel
+            {
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                Email = request.Email,
+                ContactJobTitle = request.ContactJobTitle,
+                PhoneNumber = request.PhoneNumber,
+                CompanyName = request.CompanyName,
+                CompanyAddress = request.CompanyAddress,
+                CompanyCountry = request.CompanyCountry,
+                CompanyCity = request.CompanyCity,
+                CompanyRegion = request.CompanyRegion,
+                CompanyPostalCode = request.CompanyPostalCode
+            };
+
+            var validator = new RegisterModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+            if (validationResult.IsValid)
+            {
+                await this.userService.RegisterAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);

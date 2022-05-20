@@ -5,7 +5,7 @@ metadata:
   labels:
     app: media-api
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: media-api
@@ -58,6 +58,9 @@ spec:
       containers:
       - name: client-api-container
         image: {{ .Values.image.registry }}/client-api:{{ .Values.image.tag }}
+        resources:
+          limits:
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -97,6 +100,9 @@ spec:
       containers:
       - name: catalog-api-container
         image: {{ .Values.image.registry }}/catalog-api:{{ .Values.image.tag }}
+        resources:
+          limits:
+            memory: "500Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -148,6 +154,9 @@ spec:
       containers:
       - name: catalog-backgroundtasks-container
         image: {{ .Values.image.registry }}/catalog-backgroundtasks:{{ .Values.image.tag }}
+        resources:
+          limits:
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -195,6 +204,9 @@ spec:
       containers:
       - name: basket-api-container
         image: {{ .Values.image.registry }}/basket-api:{{ .Values.image.tag }}
+        resources:
+          limits:
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -238,6 +250,9 @@ spec:
       containers:
       - name: ordering-api-container
         image: {{ .Values.image.registry }}/ordering-api:{{ .Values.image.tag }}
+        resources:
+          limits:
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -249,6 +264,16 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
+        - name: SenderEmail
+          value: {{ .Values.senderEmail }}
+        - name: SenderName
+          value: {{ .Values.senderName }}
+        - name: SendGridApiKey
+          value: {{ .Values.sendGridApiKey }}
+        - name: ActionSendGridCustomOrderTemplateId
+          value: {{ .Values.identityApi.actionSendGridCustomOrderTemplateId }}
+        - name: MediaUrl
+          value: {{ .Values.mediaUrl }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType
@@ -281,6 +306,9 @@ spec:
       containers:
       - name: react-ssr-web-container
         image: {{ .Values.image.registry }}/react-ssr-web:{{ .Values.image.tag }}
+        resources:
+          limits:
+            memory: "1000Mi"
         env:
         - name: NODE_ENV
           value: {{ .Values.nodeEnvironment }}
@@ -306,6 +334,9 @@ spec:
       containers:
       - name: identity-api-container
         image: {{ .Values.image.registry }}/identity-api:{{ .Values.image.tag }}
+        resources:
+          limits:
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -381,6 +412,9 @@ spec:
       containers:
       - name: inventory-api-container
         image: {{ .Values.image.registry }}/inventory-api:{{ .Values.image.tag }}
+        resources:
+          limits:
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -424,6 +458,9 @@ spec:
       containers:
       - name: news-api-container
         image: {{ .Values.image.registry }}/news-api:{{ .Values.image.tag }}
+        resources:
+          limits:
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -469,11 +506,12 @@ spec:
       containers:
       - name: buyer-web-container
         image: {{ .Values.image.registry }}/buyer-web:{{ .Values.image.tag }}
+        resources:
+          limits:
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
-        - name: IsMarketplace
-          value: {{ .Values.isMarketplace }}
         - name: OrganisationId
           value: {{ .Values.organisationId }}
         - name: ServerSideRenderingEndpoint
@@ -494,6 +532,8 @@ spec:
           value: {{ .Values.orderUrl }}
         - name: NewsUrl
           value: {{ .Values.newsUrl }}
+        - name: MakeComplaintUrl
+          value: {{ .Values.makeComplaintUrl }}
         - name: CdnUrl
           value: {{ .Values.cdnUrl }}
         - name: ClientId
@@ -534,6 +574,9 @@ spec:
       containers:
       - name: seller-web-container
         image: {{ .Values.image.registry }}/seller-web:{{ .Values.image.tag }}
+        resources:
+          limits:
+            memory: "250Mi"
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}

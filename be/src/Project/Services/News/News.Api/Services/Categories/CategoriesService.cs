@@ -179,15 +179,17 @@ namespace News.Api.Services.Categories
                 throw new CustomException(this.newsLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
-            var parentCategory = await this.newsContext.Categories.FirstOrDefaultAsync(x => x.Id == model.ParentCategoryId && x.IsActive);
-            
-            if (parentCategory is  null)
+            if (model.ParentCategoryId.HasValue)
             {
-                throw new CustomException(this.newsLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NotFound);
-            }
+                var parentCategory = await this.newsContext.Categories.FirstOrDefaultAsync(x => x.Id == model.ParentCategoryId && x.IsActive);
 
-            category.ParentCategoryId = model.ParentCategoryId;
-            category.LastModifiedDate = DateTime.UtcNow;
+                if (parentCategory is null)
+                {
+                    throw new CustomException(this.newsLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NotFound);
+                }
+
+                category.ParentCategoryId = model.ParentCategoryId;
+            }
 
             var categoryTranslation = this.newsContext.CategoryTranslations.FirstOrDefault(x => x.CategoryId == model.Id && x.Language == model.Language && x.IsActive);
             
@@ -206,6 +208,8 @@ namespace News.Api.Services.Categories
 
                 this.newsContext.CategoryTranslations.Add(newCategoryTranslation.FillCommonProperties());
             }
+
+            category.LastModifiedDate = DateTime.UtcNow;
 
             await this.newsContext.SaveChangesAsync();
 

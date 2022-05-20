@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Seller.Web.Areas.Clients.DomainModels
 {
@@ -8,6 +9,8 @@ namespace Seller.Web.Areas.Clients.DomainModels
         public string Name { get; set; }
         public string Email { get; set; }
         public string CommunicationLanguage { get; set; }
+        public string PhoneNumber { get; set; }
+        public IEnumerable<Guid> ClientGroupIds { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

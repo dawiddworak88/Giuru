@@ -1,5 +1,5 @@
 export default class ColorConstants {
     static swampColor() {
-        return "#647b76";
+        return "#1B5A6E";
     }
 }

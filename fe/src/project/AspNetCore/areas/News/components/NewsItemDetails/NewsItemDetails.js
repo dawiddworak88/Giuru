@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
-import { CalendarToday, PictureAsPdf, Folder, Attachment } from "@material-ui/icons";
+import { CalendarToday, PictureAsPdf, Folder, Attachment } from "@mui/icons-material";
 import LazyLoadConstants from "../../../../../../shared/constants/LazyLoadConstants";
 import ResponsiveImage from "../../../../../../shared/components/Picture/ResponsiveImage";
 import { Hash } from "react-feather"

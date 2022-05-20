@@ -106,26 +106,30 @@
         max-width: 15.625rem;
         flex-direction: column;
 
+        a {
+            display: inline-grid;
+        }
+
         .stock-details {
+            margin-top: 0.625rem;
             margin-bottom: 0.5rem;
 
             .stock {
-                color: darkgreen;
+                color: $inventory-color;
                 font-size: 0.8rem;
                 font-weight: 600;
             }
 
             .expected-delivery {
-                color: darkgreen;
+                color: $inventory-color;
                 font-size: 0.7rem;
                 font-weight: 600;
             }
         }
         
-        .sku {
+        .attribute {
             text-transform: capitalize;
             font-size: 0.7rem;
-            margin-bottom: 10px;
         }
 
         .fabrics {

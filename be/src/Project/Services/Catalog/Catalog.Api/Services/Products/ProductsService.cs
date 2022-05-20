@@ -69,6 +69,7 @@ namespace Catalog.Api.Services.Products
                 IsPublished = model.IsPublished,
                 IsProtected = model.IsProtected,
                 Sku = model.Sku,
+                Ean = model.Ean,
                 BrandId = brand.Id,
                 CategoryId = category.Id,
                 PrimaryProductId = model.PrimaryProductId
@@ -166,6 +167,7 @@ namespace Catalog.Api.Services.Products
             product.IsPublished = model.IsPublished;
             product.IsProtected = model.IsProtected;
             product.Sku = model.Sku;
+            product.Ean = model.Ean;
             product.BrandId = brand.Id;
             product.CategoryId = category.Id;
             product.PrimaryProductId = model.PrimaryProductId;
@@ -254,7 +256,8 @@ namespace Catalog.Api.Services.Products
                 Username = model.Username,
                 ProductId = model.Id,
                 ProductName = model.Name,
-                ProductSku = model.Sku
+                ProductSku = model.Sku,
+                ProductEan = model.Ean
             };
 
             this.eventBus.Publish(message);
@@ -283,6 +286,16 @@ namespace Catalog.Api.Services.Products
             product.IsActive = false;
 
             await this.catalogContext.SaveChangesAsync();
+
+            var message = new DeletedProductIntegrationEvent
+            {
+                ProductId = model.Id,
+                Language = model.Language,
+                Username = model.Username,
+                OrganisationId = model.OrganisationId
+            };
+
+            this.eventBus.Publish(message);
 
             await this.productIndexingRepository.IndexAsync(product.Id);
         }
@@ -352,6 +365,13 @@ namespace Catalog.Api.Services.Products
         public IEnumerable<string> GetProductSuggestions(GetProductSuggestionsServiceModel model)
         {
             return this.productSearchRepository.GetProductSuggestions(model.SearchTerm, model.Size, model.Language, model.OrganisationId);
+        }
+
+        public async Task<PagedResults<IEnumerable<ProductServiceModel>>> GetBySkusAsync(GetProductsBySkusServiceModel model)
+        {
+            var products = await this.productSearchRepository.GetAsync(model.Language, model.OrganisationId, model.Skus, model.OrderBy);
+
+            return await this.MapToPageResultsAsync(products, model.Language, model.OrganisationId);
         }
 
         private async Task<PagedResults<IEnumerable<ProductServiceModel>>> MapToPageResultsAsync(PagedResults<IEnumerable<ProductSearchModel>> searchResults, string language, Guid? organisationId)
@@ -451,6 +471,7 @@ namespace Catalog.Api.Services.Products
                 CategoryId = searchResultItem.CategoryId,
                 CategoryName = searchResultItem.CategoryName,
                 IsNew = searchResultItem.IsNew,
+                Ean = searchResultItem.Ean,
                 IsPublished = searchResultItem.IsPublished,
                 IsProtected = searchResultItem.IsProtected,
                 Sku = searchResultItem.Sku,

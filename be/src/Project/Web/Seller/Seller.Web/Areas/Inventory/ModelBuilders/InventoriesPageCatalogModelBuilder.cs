@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
@@ -43,10 +44,10 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
             viewModel.Title = this.inventoryLocalizer.GetString("Inventory");
             viewModel.NewText = this.inventoryLocalizer.GetString("NewTextInventory");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Inventory", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "InventoriesAPi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "InventoriesApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Inventory", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "InventoriesApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.OrderBy = $"{nameof(InventoryItem.ProductSku)} ASC";
+            viewModel.OrderBy = $"{nameof(InventoryItem.Sku)} ASC";
 
             viewModel.Table = new CatalogTableViewModel
             {
@@ -85,7 +86,7 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(InventoryItem.ProductSku).ToCamelCase(),
+                        Title = nameof(InventoryItem.Sku).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
@@ -111,7 +112,7 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.inventoryRepository.GetInventoryProductsAsync(componentModel.Token, componentModel.Language, null, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, $"{nameof(InventoryItem.ProductSku)} ASC");
+            viewModel.PagedItems = await this.inventoryRepository.GetInventoryProductsAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(InventoryItem.Sku)} ASC"); ;
 
             return viewModel;
         }

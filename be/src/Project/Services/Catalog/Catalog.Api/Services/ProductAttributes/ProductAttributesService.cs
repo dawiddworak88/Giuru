@@ -233,6 +233,7 @@ namespace Catalog.Api.Services.ProductAttributes
                         var productAttributeItemServiceModel = new ProductAttributeItemServiceModel
                         { 
                             Id = productAttributeItem.Id,
+                            ProductAttributeId = productAttributeItem.ProductAttributeId,
                             Order = productAttributeItem.Order,
                             LastModifiedDate = productAttributeItem.LastModifiedDate,
                             CreatedDate = productAttributeItem.CreatedDate
@@ -268,6 +269,7 @@ namespace Catalog.Api.Services.ProductAttributes
                 var productAttributeItemServiceModel = new ProductAttributeItemServiceModel
                 {
                     Id = productAttributeItem.Id,
+                    ProductAttributeId = productAttributeItem.ProductAttributeId,
                     Order = productAttributeItem.Order,
                     LastModifiedDate = productAttributeItem.LastModifiedDate,
                     CreatedDate = productAttributeItem.CreatedDate
@@ -396,6 +398,7 @@ namespace Catalog.Api.Services.ProductAttributes
                 var productAttributeItemServiceModel = new ProductAttributeItemServiceModel
                 {
                     Id = pagedProductAttributeItem.Id,
+                    ProductAttributeId = pagedProductAttributeItem.ProductAttributeId,
                     Order = pagedProductAttributeItem.Order,
                     LastModifiedDate = pagedProductAttributeItem.LastModifiedDate,
                     CreatedDate = pagedProductAttributeItem.CreatedDate

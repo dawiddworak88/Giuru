@@ -1,11 +1,13 @@
 ﻿using Foundation.EventBus.Events;
 using Ordering.Api.IntegrationEventsModels;
 using System;
+using System.Collections.Generic;
 
 namespace Ordering.Api.IntegrationEvents
 {
     public class BasketCheckoutAcceptedIntegrationEvent : IntegrationEvent
     {
+        public Guid? BasketId { get; set; }
         public Guid? ClientId { get; set; }
         public string ClientName { get; set; }
         public Guid? SellerId { get; set; }
@@ -35,5 +37,7 @@ namespace Ordering.Api.IntegrationEvents
         public DateTime? ExpectedDeliveryDate { get; set; }
         public string MoreInfo { get; set; }
         public BasketEventModel Basket { get; set; }
+        public bool HasCustomOrder { get; set; }
+        public IEnumerable<Guid> Attachments { get; set; }
     }
 }

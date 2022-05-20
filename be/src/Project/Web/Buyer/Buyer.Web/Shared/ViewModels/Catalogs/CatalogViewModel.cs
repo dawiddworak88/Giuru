@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Shared.DomainModels.Baskets;
+using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Foundation.GenericRepository.Paginations;
 using System;
@@ -16,9 +17,9 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string SkuLabel { get; set; }
         public string ByLabel { get; set; }
         public string InStockLabel { get; set; }
+        public string InOutletLabel { get; set; }
         public string BasketLabel { get; set; }
         public string PrimaryFabricLabel { get; set; }
-        public bool ShowBrand { get; set; }
         public bool ShowAddToCartButton { get; set; }
         public bool IsLoggedIn { get; set; }
         public string SignInUrl { get; set; }
@@ -29,10 +30,12 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string NextIconButtonText { get; set; }
         public string SuccessfullyAddedProduct { get; set; }
         public string GeneralErrorMessage { get; set; }
+        public string QuantityErrorMessage { get; set; }
         public string ProductsApiUrl { get; set; }
         public string UpdateBasketUrl { get; set; }
         public string ExpectedDeliveryLabel { get; set; }
         public SidebarViewModel Sidebar { get; set; }
+        public ModalViewModel Modal { get; set; }
         public IEnumerable<BasketItem> BasketItems { get; set; }
         public PagedResults<IEnumerable<CatalogItemViewModel>> PagedItems { get; set; }
     }

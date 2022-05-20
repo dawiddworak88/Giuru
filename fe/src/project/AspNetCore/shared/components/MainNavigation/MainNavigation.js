@@ -1,6 +1,6 @@
 import React, {useState, useRef} from "react";
 import PropTypes from "prop-types";
-import { Close, Menu } from "@material-ui/icons";
+import { Close, Menu } from "@mui/icons-material";
 
 function MainNavigation(props) {
     const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +19,7 @@ function MainNavigation(props) {
             </div>
             <div className={`main-nav__links-container ${isOpen ? "active" : ""}`}>
                 {props.links && props.links.map((link, index) => 
-                    <a key={index} href={link.url}>{link.text}</a>
+                    <a key={index} href={link.url} target={link.target}>{link.text}</a>
                 )}
             </div>
         </nav>

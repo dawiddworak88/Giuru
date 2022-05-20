@@ -55,6 +55,8 @@ namespace Buyer.Web.Areas.Orders.Repositories
                             ProductSku = item.ProductSku,
                             PictureUrl = item.PictureUrl,
                             Quantity = item.Quantity,
+                            StockQuantity = item.StockQuantity,
+                            OutletQuantity = item.OutletQuantity,
                             ExternalReference = item.ExternalReference,
                             ExpectedDeliveryFrom = item.ExpectedDeliveryFrom,
                             ProductAttributes = product.ProductAttributes,
@@ -68,15 +70,17 @@ namespace Buyer.Web.Areas.Orders.Repositories
 
                 var order = new Order
                 {
+                    Id = response.Data.Id,
                     OrderStatusId = response.Data.OrderStatusId,
                     OrderStateId = response.Data.OrderStateId,
                     ClientId = response.Data.ClientId,
                     ClientName = response.Data.ClientName,
                     OrderStatusName = response.Data.OrderStatusName,
                     OrderItems = orderItems,
+                    MoreInfo = response.Data.MoreInfo,
+                    Attachments = response.Data.Attachments,
                     LastModifiedDate = response.Data.LastModifiedDate,
-                    CreatedDate = response.Data.CreatedDate,
-                    Id = response.Data.Id
+                    CreatedDate = response.Data.CreatedDate
                 };
 
                 return order;

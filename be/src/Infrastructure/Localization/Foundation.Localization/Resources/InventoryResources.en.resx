@@ -142,13 +142,13 @@
     <value>Inventory</value>
   </data>
   <data name="InventoryDeletedSuccessfully" xml:space="preserve">
-    <value>Product was successfully deleted</value>
+    <value>Inventory has been deleted successfully</value>
   </data>
   <data name="InventoryNotFound" xml:space="preserve">
-    <value>Not found inventory product</value>
+    <value>Inventory not found</value>
   </data>
   <data name="InventorySavedSuccessfully" xml:space="preserve">
-    <value>Product was successfully given a state</value>
+    <value>Inventory has been saved successfully</value>
   </data>
   <data name="LocationLabel" xml:space="preserve">
     <value>Location</value>
@@ -165,8 +165,14 @@
   <data name="NavigateToInventoryListText" xml:space="preserve">
     <value>Back to inventory</value>
   </data>
+  <data name="NavigateToOutletListText" xml:space="preserve">
+    <value>Zurück zum Ausgang</value>
+  </data>
   <data name="NavigateToWarehouseListText" xml:space="preserve">
     <value>Back to warehouses</value>
+  </data>
+  <data name="NewOutletText" xml:space="preserve">
+    <value>New outlet item</value>
   </data>
   <data name="NewText" xml:space="preserve">
     <value>New warehouse</value>
@@ -176,6 +182,21 @@
   </data>
   <data name="NullAvailability" xml:space="preserve">
     <value>Product will exceed the inventory less than zero</value>
+  </data>
+  <data name="OrderNameLabel" xml:space="preserve">
+    <value>Order number</value>
+  </data>
+  <data name="OrderNameRequiredErrorMessage" xml:space="preserve">
+    <value>Please enter order number</value>
+  </data>
+  <data name="OutletItem" xml:space="preserve">
+    <value>Outlet item</value>
+  </data>
+  <data name="OutletItemDeletedSuccessfully" xml:space="preserve">
+    <value>Outlet item has been deleted successfully.</value>
+  </data>
+  <data name="OutletItemSavedSuccessfully" xml:space="preserve">
+    <value>Outlet item has been saved successfully.</value>
   </data>
   <data name="ProductRequiredErrorMessage" xml:space="preserve">
     <value>Enter product</value>
