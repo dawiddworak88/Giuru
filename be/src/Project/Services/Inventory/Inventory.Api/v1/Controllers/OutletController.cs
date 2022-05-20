@@ -206,6 +206,7 @@ namespace Outlet.Api.v1.Controllers
 
             var serviceModel = new UpdateOutletProductsServiceModel
             {
+                Language = CultureInfo.CurrentCulture.Name,
                 OutletItems = request.OutletItems.OrEmptyIfNull().Select(x => new UpdateOutletProductServiceModel
                 {
                     WarehouseId = x.WarehouseId,
@@ -214,8 +215,9 @@ namespace Outlet.Api.v1.Controllers
                     ProductSku = x.ProductSku,
                     ProductEan = x.Ean,
                     Quantity = x.Quantity,
-                    AvailableQuantity = x.AvailableQuantity
-
+                    AvailableQuantity = x.AvailableQuantity,
+                    Title = x.Title,
+                    Description = x.Description
                 }),
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
@@ -225,7 +227,7 @@ namespace Outlet.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                await this.outletsService.SyncOutletProducts(serviceModel);
+                await this.outletsService.SyncProductsOutlet(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }

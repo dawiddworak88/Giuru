@@ -29,6 +29,8 @@ using Buyer.Web.Shared.Services.Baskets;
 using Buyer.Web.Shared.ViewModels.Modals;
 using Buyer.Web.Shared.ModelBuilders.Modal;
 using Buyer.Web.Shared.Repositories.News;
+using Buyer.Web.Shared.Repositories.Files;
+using Buyer.Web.Areas.Products.Repositories.Files;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -59,6 +61,8 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<ICatalogService, CatalogService>();
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<INewsRepository, NewsRepository>();
+            services.AddScoped<IFilesRepository, FilesRepository>();
+            services.AddScoped<IMediaItemsRepository, MediaItemsRepository>();
 
             // Client
             services.AddScoped<ICatalogOrderModelBuilder, CatalogOrderModelBuilder>();

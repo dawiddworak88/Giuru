@@ -28,7 +28,7 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             var viewModel = new SignInViewModel
             {
                 Header = headerModelBuilder.BuildModel(),
-                SignInForm = signInFormModelBuilder.BuildModel(new SignInFormComponentModel { ReturnUrl = componentModel.ReturnUrl }),
+                SignInForm = signInFormModelBuilder.BuildModel(new SignInFormComponentModel { ReturnUrl = componentModel.ReturnUrl, DevelopersEmail = componentModel.DevelopersEmail }),
                 Footer = footerModelBuilder.BuildModel()
             };
 

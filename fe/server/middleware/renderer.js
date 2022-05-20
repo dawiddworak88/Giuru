@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import { resetServerContext } from 'react-beautiful-dnd';
-import { ServerStyleSheets } from "@material-ui/core/styles";
+import { ServerStyleSheets } from "@mui/styles";
 
 // AspNetCore
 import OutletCatalogPage from "../../src/project/AspNetCore/areas/Products/pages/OutletPage/OutletPage";
@@ -15,9 +15,9 @@ import CategoryPage from "../../src/project/AspNetCore/areas/Products/pages/Cate
 import SearchProductsPage from "../../src/project/AspNetCore/areas/Products/pages/SearchProductsPage/SearchProductsPage";
 import AvailableProductsPage from "../../src/project/AspNetCore/areas/Products/pages/AvailableProductsPage/AvailableProductsPage";
 import BuyerProductPage from "../../src/project/AspNetCore/areas/Products/pages/ProductPage/ProductPage";
-import BrandPage from "../../src/project/AspNetCore/areas/Products/pages/BrandPage/BrandPage";
 
 // Account
+import RegisterPage from "../../src/project/Account/areas/Accounts/pages/Register/RegisterPage";
 import ResetPasswordPage from "../../src/project/Account/areas/Accounts/pages/ResetPassword/ResetPasswordPage";
 import SignInPage from "../../src/project/Account/areas/Accounts/pages/SignIn/SignInPage";
 import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetPassword/SetPasswordPage";
@@ -62,8 +62,8 @@ const Components = {
 	SearchProductsPage,
 	AvailableProductsPage,
 	BuyerProductPage,
-	BrandPage,
 
+	RegisterPage,
 	ResetPasswordPage,
 	SignInPage,
 	SetPasswordPage,

@@ -1,4 +1,5 @@
 ﻿using Foundation.PageContent.Components.ListItems.ViewModels;
+using Seller.Web.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 
@@ -27,7 +28,10 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string ClientName { get; set; }
         public string UpdateOrderStatusUrl { get; set; }
         public string IdLabel { get; set; }
+        public string CustomOrderLabel { get; set; }
+        public string CustomOrder { get; set; }
         public IEnumerable<ListItemViewModel> OrderStatuses { get; set; }
         public IEnumerable<OrderItemViewModel> OrderItems { get; set; }
+        public FilesViewModel Attachments { get; set; }
     }
 }

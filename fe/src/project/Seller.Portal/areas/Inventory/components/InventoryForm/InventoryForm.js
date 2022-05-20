@@ -1,17 +1,16 @@
-import React, {useState, useContext} from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Autocomplete from "@mui/lab/Autocomplete";
 import {
-    FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress, IconButton
-} from "@material-ui/core";
-import { Clear } from "@material-ui/icons";
-import { TextField, Button } from "@material-ui/core";
+    FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress, IconButton, TextField, Button
+} from "@mui/material";
+import { Clear } from "@mui/icons-material";
 import { Context } from "../../../../../../shared/stores/Store";
 import { toast } from "react-toastify";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
-import { MuiPickersUtilsProvider, KeyboardDatePicker,} from "@material-ui/pickers";
-import MomentUtils from "@date-io/moment";
+import { LocalizationProvider, DatePicker,} from "@mui/lab";
+import AdapterMoment from '@mui/lab/AdapterMoment';
 import QuantityValidator from "../../../../../../shared/helpers/validators/QuantityValidator";
 
 const InventoryForm = (props) => {
@@ -107,7 +106,7 @@ const InventoryForm = (props) => {
                             </div>
                         }
                         <div className="field">
-                            <FormControl fullWidth={true} helperText={dirty.warehouseId ? errors.warehouseId : ""} error={(errors.warehouseId.length > 0) && dirty.warehouseId}>
+                            <FormControl fullWidth={true} helperText={dirty.warehouseId ? errors.warehouseId : ""} error={(errors.warehouseId.length > 0) && dirty.warehouseId} variant="standard">
                                 <InputLabel id="warehouse-label">{props.selectWarehouseLabel}</InputLabel>
                                 <Select
                                     name="warehouseId"
@@ -135,6 +134,7 @@ const InventoryForm = (props) => {
                                 name="productId"
                                 fullWidth={true}
                                 value={product}
+                                variant="standard"
                                 onChange={(event, newValue) => {
                                     setFieldValue({name: "product", value: newValue});
                                 }}
@@ -143,6 +143,7 @@ const InventoryForm = (props) => {
                                     <TextField 
                                         {...params} 
                                         label={props.selectProductLabel} 
+                                        variant="standard"
                                         margin="normal"/>
                                 )}/>
                         </div>
@@ -151,6 +152,7 @@ const InventoryForm = (props) => {
                                 id="quantity" 
                                 name="quantity" 
                                 type="number" 
+                                variant="standard"
                                 inputProps={{ 
                                     min: "1", 
                                     step: "1" 
@@ -165,6 +167,7 @@ const InventoryForm = (props) => {
                         <div className="field">
                             <TextField 
                                 id="availableQuantity" 
+                                variant="standard"
                                 name="availableQuantity" 
                                 type="number" 
                                 inputProps={{ 
@@ -180,7 +183,8 @@ const InventoryForm = (props) => {
                             <TextField 
                                 id="ean" 
                                 name="ean" 
-                                type="text" 
+                                type="text"
+                                variant="standard" 
                                 label={props.eanLabel} 
                                 fullWidth={true} 
                                 value={ean} 
@@ -192,6 +196,7 @@ const InventoryForm = (props) => {
                                 id="restockableInDays" 
                                 name="restockableInDays" 
                                 type="number" 
+                                variant="standard"
                                 inputProps={{ 
                                     min: "0", 
                                     step: "1" 
@@ -202,8 +207,8 @@ const InventoryForm = (props) => {
                                 onChange={handleOnChange}/>
                         </div>
                         <div className="field">
-                            <MuiPickersUtilsProvider utils={MomentUtils} >
-                                <KeyboardDatePicker
+                            <LocalizationProvider dateAdapter={AdapterMoment} >
+                                <DatePicker
                                     id="expectedDelivery"
                                     label={props.expectedDeliveryLabel}
                                     value={expectedDelivery}
@@ -211,23 +216,10 @@ const InventoryForm = (props) => {
                                     onChange={(date) => {
                                         setFieldValue({name: "expectedDelivery", value: date});
                                     }}
-                                    okLabel={props.okLabel}
-                                    cancelLabel={props.cancelLabel}
-                                    InputProps={{
-                                        endAdornment: (
-                                            <IconButton onClick={() => setFieldValue({name: "expectedDelivery", value: null})}>
-                                                <Clear />
-                                            </IconButton>
-                                        )
-                                    }}
-                                    InputAdornmentProps={{
-                                        position: "start"
-                                    }}
-                                    KeyboardButtonProps={{
-                                        "aria-label": props.changeExpectedDeliveryLabel
-                                    }} 
+                                    renderInput={(params) => 
+                                        <TextField {...params} variant="standard" fullWidth={true} />}
                                     disablePast={true}/>
-                            </MuiPickersUtilsProvider>
+                            </LocalizationProvider>
                         </div>
                         <div className="field">
                             <Button 

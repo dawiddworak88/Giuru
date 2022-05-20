@@ -5,4 +5,8 @@ export default class OrderFormConstants {
     static minSuggestionSearchTermLength() {
         return 3;
     }
+
+    static minRowsForCustomOrder(){
+        return 3;
+    }
 }

@@ -79,7 +79,7 @@ namespace Inventory.Api.v1.Controllers
                                 Id = x.Id,
                                 ProductId = x.ProductId,
                                 ProductName = x.ProductName,
-                                ProductSku = x.ProductSku,
+                                Sku = x.Sku,
                                 Ean = x.Ean,
                                 WarehouseId = x.WarehouseId,
                                 WarehouseName = x.WarehouseName,
@@ -122,7 +122,7 @@ namespace Inventory.Api.v1.Controllers
                             WarehouseName = x.WarehouseName,
                             ProductId = x.ProductId,
                             ProductName = x.ProductName,
-                            ProductSku = x.ProductSku,
+                            Sku = x.Sku,
                             Quantity = x.Quantity,
                             Ean = x.Ean,
                             AvailableQuantity = x.AvailableQuantity,
@@ -224,11 +224,12 @@ namespace Inventory.Api.v1.Controllers
             };
 
             var validator = new SaveInventoryItemsByProductSkusModelValidator();
+
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
             {
-                await this.inventoriesService.SyncInventoryProducts(serviceModel);
+                await this.inventoriesService.SyncProductsInventories(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }
@@ -347,7 +348,7 @@ namespace Inventory.Api.v1.Controllers
                         Id = inventoryProduct.Id,
                         ProductId = inventoryProduct.ProductId,
                         ProductName = inventoryProduct.ProductName,
-                        ProductSku = inventoryProduct.ProductSku,
+                        Sku = inventoryProduct.Sku,
                         WarehouseId = inventoryProduct.WarehouseId.Value,
                         WarehouseName = inventoryProduct.WarehouseName,
                         Quantity = inventoryProduct.Quantity,
@@ -419,7 +420,7 @@ namespace Inventory.Api.v1.Controllers
                             Ean = item.Ean,
                             AvailableQuantity = item.AvailableQuantity,
                             ExpectedDelivery = item.ExpectedDelivery,
-                            ProductSku = item.ProductSku,
+                            ProductSku = item.Sku,
                             WarehouseId = item.WarehouseId,
                             WarehouseName = item.WarehouseName,
                             RestockableInDays = item.RestockableInDays,
@@ -487,7 +488,7 @@ namespace Inventory.Api.v1.Controllers
                             Ean = item.Ean,
                             AvailableQuantity = item.AvailableQuantity,
                             ExpectedDelivery = item.ExpectedDelivery,
-                            ProductSku = item.ProductSku,
+                            ProductSku = item.Sku,
                             WarehouseId = item.WarehouseId,
                             WarehouseName = item.WarehouseName,
                             RestockableInDays = item.RestockableInDays,
