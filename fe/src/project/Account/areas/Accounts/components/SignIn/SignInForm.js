@@ -81,7 +81,7 @@ function SignInForm(props) {
                 </Button>
                 <div className="mt-6">
                     <p>{props.contactText}</p>
-                    <a href={`mailto:${props.developersEmail}`}>{props.developersEmail}</a>
+                    <a href={`mailto:${props.developersEmail}`} className="is-underlined">{props.developersEmail}</a>
                 </div>
             </div>
         </section>
@@ -99,7 +99,6 @@ SignInForm.propTypes = {
     submitUrl: PropTypes.string.isRequired,
     returnUrl: PropTypes.string,
     registerLabel: PropTypes.string.isRequired,
-    registerButtonLabel: PropTypes.string.isRequired,
     developersEmail: PropTypes.string.isRequired,
     contactText: PropTypes.string.isRequired,
     registerUrl: PropTypes.string.isRequired

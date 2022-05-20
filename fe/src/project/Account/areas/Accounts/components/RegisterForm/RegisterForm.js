@@ -15,17 +15,17 @@ const RegisterForm = (props) => {
     const [isSended, setIsSended] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
     const stateSchema = {
-       firstName: { value: null, error: "" },
-       lastName: { value: null, error: "" },
-       email: { value: null, error: "" },
-       phoneNumber: { value: null, error: "" },
-       contactJobTitle: { value: null, error: "" },
-       companyName: { value: null, error: "" },
-       companyAddress: { value: null, error: "" },
-       companyCity: { value: null, error: "" },
-       companyRegion: { value: null, error: "" },
-       companyPostalCode: { value: null, error: "" },
-       companyCountry: { value: null, error: "" }
+       firstName: { value: "", error: "" },
+       lastName: { value: "", error: "" },
+       email: { value: "", error: "" },
+       phoneNumber: { value: "", error: "" },
+       contactJobTitle: { value: "", error: "" },
+       companyName: { value: "", error: "" },
+       companyAddress: { value: "", error: "" },
+       companyCity: { value: "", error: "" },
+       companyRegion: { value: "", error: "" },
+       companyPostalCode: { value: "", error: "" },
+       companyCountry: { value: "", error: "" }
     };
 
     const stateValidatorSchema = {
@@ -148,7 +148,7 @@ const RegisterForm = (props) => {
                 <div className="column">
                     <div className="register-form__stepper p-6">
                         <h1 className="title">{props.title}</h1>
-                        <p className="subtitle mb-2">{props.subtitle}</p>
+                        <p className="subtitle mb-2 mt-1">{props.subtitle}</p>
                         {props.steps &&
                             <Stepper activeStep={activeStep} orientation="vertical">
                                 {props.steps.length > 0 && props.steps.map((step, index) => 
