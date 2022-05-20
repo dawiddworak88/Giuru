@@ -92,7 +92,7 @@ const Sidebar = (props) => {
         <SwipeableDrawer
             anchor="right"
             open={isOpen}
-            onOpen={alert("test")}
+            onOpen={toggleDrawer(true)}
             onClose={toggleDrawer(false)}
         >
         <div className="sidebar-content">
