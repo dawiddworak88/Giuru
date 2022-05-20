@@ -1,7 +1,5 @@
 import React from "react";
-import Switch from "@material-ui/core/Switch";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import NoSsr from '@material-ui/core/NoSsr';
+import { Switch, FormControlLabel, NoSsr } from "@mui/material"
 import { schemaRequiresTrueValue } from "../utils/utils";
 
 const CheckboxWidget = (props) => {

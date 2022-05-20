@@ -117,6 +117,8 @@ namespace Ordering.Api.v1.Controllers
                                 ProductName = y.ProductName,
                                 PictureUrl = y.PictureUrl,
                                 Quantity = y.Quantity,
+                                StockQuantity = y.StockQuantity,
+                                OutletQuantity = y.OutletQuantity,
                                 ExternalReference = y.ExternalReference,
                                 ExpectedDeliveryFrom = y.ExpectedDeliveryFrom,
                                 ExpectedDeliveryTo = y.ExpectedDeliveryTo,
@@ -124,6 +126,7 @@ namespace Ordering.Api.v1.Controllers
                                 LastModifiedDate = y.LastModifiedDate,
                                 CreatedDate = y.CreatedDate
                             }),
+                            Attachments = x.Attachments,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         })
@@ -209,6 +212,8 @@ namespace Ordering.Api.v1.Controllers
                             ProductName = x.ProductName,
                             PictureUrl = x.PictureUrl,
                             Quantity = x.Quantity,
+                            StockQuantity = x.StockQuantity,
+                            OutletQuantity = x.OutletQuantity,
                             ExternalReference = x.ExternalReference,
                             ExpectedDeliveryFrom = x.ExpectedDeliveryFrom,
                             ExpectedDeliveryTo = x.ExpectedDeliveryTo,
@@ -216,6 +221,7 @@ namespace Ordering.Api.v1.Controllers
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         }),
+                        Attachments = order.Attachments,
                         LastModifiedDate = order.LastModifiedDate,
                         CreatedDate = order.CreatedDate
                     };
@@ -305,6 +311,8 @@ namespace Ordering.Api.v1.Controllers
                             ProductName = x.ProductName,
                             PictureUrl = x.PictureUrl,
                             Quantity = x.Quantity,
+                            StockQuantity = x.StockQuantity,
+                            OutletQuantity = x.OutletQuantity,
                             ExternalReference = x.ExternalReference,
                             ExpectedDeliveryFrom = x.ExpectedDeliveryFrom,
                             ExpectedDeliveryTo = x.ExpectedDeliveryTo,
@@ -312,6 +320,7 @@ namespace Ordering.Api.v1.Controllers
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         }),
+                        Attachments = order.Attachments,
                         LastModifiedDate = order.LastModifiedDate,
                         CreatedDate = order.CreatedDate
                     };

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { TextField } from "@material-ui/core";
+import { TextField } from "@mui/material";
 
 function TextWidget(props) {
 
@@ -11,6 +11,7 @@ function TextWidget(props) {
           name={props.id} 
           onChange={props.onChange} 
           label={props.label}
+          variant="standard"
           value={props.value ? props.value : ""}
           fullWidth={true} />
     </div>

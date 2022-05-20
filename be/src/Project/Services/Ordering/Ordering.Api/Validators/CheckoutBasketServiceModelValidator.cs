@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Foundation.Extensions.ExtensionMethods;
 using Ordering.Api.ServicesModels;
 using System;
 using System.Linq;
@@ -14,17 +15,7 @@ namespace Ordering.Api.Validators
             this.RuleFor(x => x.SellerId).NotNull().NotEmpty();
             this.RuleFor(x => x).Must(y =>
             {
-                if (y.Items == null)
-                {
-                    return false;
-                }
-
-                if (!y.Items.Any())
-                {
-                    return false;
-                }
-
-                foreach (var item in y.Items)
+                foreach (var item in y.Items.OrEmptyIfNull())
                 {
                     if (!item.ProductId.HasValue || item.ProductId.Value == Guid.Empty)
                     {
@@ -41,7 +32,16 @@ namespace Ordering.Api.Validators
                         return false;
                     }
 
-                    if (item.Quantity <= 0)
+                    var totalQuantity = item.Quantity + item.StockQuantity + item.OutletQuantity;
+                    if (totalQuantity <= 0)
+                    {
+                        return false;
+                    }
+                }
+
+                if (y.HasCustomOrder)
+                {
+                    if (string.IsNullOrWhiteSpace(y.MoreInfo))
                     {
                         return false;
                     }

@@ -1,11 +1,10 @@
 ﻿const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require('terser-webpack-plugin');
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
-var browserConfig = {
+const browserConfig = {
     module: {
         rules: [
             {
@@ -18,15 +17,8 @@ var browserConfig = {
                 ]
             },
             {
-                test: /\.(png|svg|jpg|gif|woff(2)?|ttf|eot)$/,
-                use: [{
-                    loader: "file-loader",
-                    options: {
-                        name: "[name].[ext]",
-                        outputPath: "../images",
-                        publicPath: "/dist/images"
-                    }
-                }]
+                test: /\.(png|svg|jpg|jpeg|gif|woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/inline',
             },
             {
                 test: /\.(js|jsx)$/,
@@ -44,22 +36,20 @@ var browserConfig = {
         new CleanWebpackPlugin({
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
-        }),
-        new CopyWebpackPlugin([{
-            from: path.resolve(__dirname, "wwwroot/src/*.png"),
-            to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-        }])
+        })
     ],
     optimization: {
+        minimize: true,
         minimizer: [
-            new OptimizeCSSAssetsPlugin({}),
-            new TerserPlugin({})
+            new TerserPlugin(),
+            new CssMinimizerPlugin()
         ]
     },
     resolve: {
         extensions: [".js", ".jsx"]
     },
     entry: {
+        outletpage: ["./src/project/AspNetCore/areas/Products/pages/OutletPage/index.js", "./src/project/AspNetCore/areas/Products/pages/OutletPage/OutletPage.scss"],
         newsItemPage: ["./src/project/AspNetCore/areas/News/pages/NewsItemPage/index.js", "./src/project/AspNetCore/areas/News/pages/NewsItemPage/NewsItemPage.scss"],
         newsPage: ["./src/project/AspNetCore/areas/News/pages/NewsPage/index.js", "./src/project/AspNetCore/areas/News/pages/NewsPage/NewsPage.scss"],
         newOrderPage: ["./src/project/AspNetCore/areas/Orders/pages/NewOrder/index.js", "./src/project/AspNetCore/areas/Orders/pages/NewOrder/NewOrderPage.scss"],
@@ -69,17 +59,21 @@ var browserConfig = {
         categorypage: ["./src/project/AspNetCore/areas/Products/pages/CategoryPage/index.js", "./src/project/AspNetCore/areas/Products/pages/CategoryPage/CategoryPage.scss"],
         searchproductspage: ["./src/project/AspNetCore/areas/Products/pages/SearchProductsPage/index.js", "./src/project/AspNetCore/areas/Products/pages/SearchProductsPage/SearchProductsPage.scss"],
         availableproductspage: ["./src/project/AspNetCore/areas/Products/pages/AvailableProductsPage/index.js", "./src/project/AspNetCore/areas/Products/pages/AvailableProductsPage/AvailableProductsPage.scss"],
-        productpage: ["./src/project/AspNetCore/areas/Products/pages/ProductPage/index.js", "./src/project/AspNetCore/areas/Products/pages/ProductPage/ProductPage.scss"],
-        brandpage: ["./src/project/AspNetCore/areas/Products/pages/BrandPage/index.js", "./src/project/AspNetCore/areas/Products/pages/BrandPage/BrandPage.scss"]
+        productpage: ["./src/project/AspNetCore/areas/Products/pages/ProductPage/index.js", "./src/project/AspNetCore/areas/Products/pages/ProductPage/ProductPage.scss"]
     },
     output: {
         publicPath: path.resolve(__dirname, "../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),
         path: path.resolve(__dirname, "../be/src/Project/Web/Buyer/Buyer.Web/wwwroot/dist/js"),
         filename: "[name].js"
+    },
+    performance: {
+        hints: false,
+        maxEntrypointSize: 512000,
+        maxAssetSize: 512000
     }
 };
 
-var accountBrowserConfig = {
+const accountBrowserConfig = {
     module: {
         rules: [
             {
@@ -92,15 +86,8 @@ var accountBrowserConfig = {
                 ]
             },
             {
-                test: /\.(png|svg|jpg|gif|woff(2)?|ttf|eot)$/,
-                use: [{
-                    loader: "file-loader",
-                    options: {
-                        name: "[name].[ext]",
-                        outputPath: "../images",
-                        publicPath: "/dist/images"
-                    }
-                }]
+                test: /\.(png|svg|jpg|jpeg|gif|woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/inline',
             },
             {
                 test: /\.(js|jsx)$/,
@@ -118,22 +105,21 @@ var accountBrowserConfig = {
         new CleanWebpackPlugin({
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
-        }),
-        new CopyWebpackPlugin([{
-            from: path.resolve(__dirname, "wwwroot/src/*.png"),
-            to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-        }])
+        })
     ],
     optimization: {
+        minimize: true,
         minimizer: [
-            new OptimizeCSSAssetsPlugin({}),
-            new TerserPlugin({})
+            new TerserPlugin(),
+            new CssMinimizerPlugin()
         ]
     },
     resolve: {
         extensions: [".js", ".jsx"]
     },
     entry: {
+        registerpage: ["./src/project/Account/areas/Accounts/pages/Register/index.js", "./src/project/Account/areas/Accounts/pages/Register/RegisterPage.scss"],
+        resetpasswordpage: ["./src/project/Account/areas/Accounts/pages/ResetPassword/index.js", "./src/project/Account/areas/Accounts/pages/ResetPassword/ResetPasswordPage.scss"],
         signinpage: ["./src/project/Account/areas/Accounts/pages/SignIn/index.js", "./src/project/Account/areas/Accounts/pages/SignIn/SignInPage.scss"],
         setpasswordpage: ["./src/project/Account/areas/Accounts/pages/SetPassword/index.js", "./src/project/Account/areas/Accounts/pages/SetPassword/SetPasswordPage.scss"],
         contentpage: ["./src/project/Account/areas/Home/pages/Content/index.js", "./src/project/Account/areas/Home/pages/Content/ContentPage.scss"]
@@ -143,10 +129,15 @@ var accountBrowserConfig = {
         path: path.resolve(__dirname, "../be/src/Project/Services/Identity/Identity.Api/wwwroot/dist/js"),
         filename: "[name].js"
     },
-    target: "node"
+    target: "node",
+    performance: {
+        hints: false,
+        maxEntrypointSize: 512000,
+        maxAssetSize: 512000
+    }
 };
 
-var sellerPortalBrowserConfig = {
+const sellerPortalBrowserConfig = {
     module: {
         rules: [
             {
@@ -159,15 +150,8 @@ var sellerPortalBrowserConfig = {
                 ]
             },
             {
-                test: /\.(png|svg|jpg|gif|woff(2)?|ttf|eot)$/,
-                use: [{
-                    loader: "file-loader",
-                    options: {
-                        name: "[name].[ext]",
-                        outputPath: "../images",
-                        publicPath: "/dist/images"
-                    }
-                }]
+                test: /\.(png|svg|jpg|jpeg|gif|woff|woff2|eot|ttf|otf)$/i,
+                type: 'asset/inline',
             },
             {
                 test: /\.(js|jsx)$/,
@@ -185,30 +169,31 @@ var sellerPortalBrowserConfig = {
         new CleanWebpackPlugin({
             dry: false,
             dangerouslyAllowCleanPatternsOutsideProject: true
-        }),
-        new CopyWebpackPlugin([{
-            from: path.resolve(__dirname, "wwwroot/src/*.png"),
-            to: path.resolve(__dirname, "wwwroot/dist/images") + "/[name].[ext]"
-        }])
+        })
     ],
     optimization: {
+        minimize: true,
         minimizer: [
-            new OptimizeCSSAssetsPlugin({}),
-            new TerserPlugin({})
+            new TerserPlugin(),
+            new CssMinimizerPlugin()
         ]
     },
     resolve: {
         extensions: [".js", ".jsx"]
     },
     entry: {
+        outletpage: ["./src/project/Seller.Portal/areas/Inventory/pages/OutletPage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/OutletPage/OutletPage.scss"],
+        outletspage: ["./src/project/Seller.Portal/areas/Inventory/pages/OutletsPage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/OutletsPage/OutletsPage.scss"],
+        clientgrouppage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientGroupPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientGroupPage/ClientGroupPage.scss"],
+        clientgroupspage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientGroupsPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientGroupsPage/ClientGroupsPage.scss"],
         newsitempage: ["./src/project/Seller.Portal/areas/News/pages/NewsItemPage/index.js", "./src/project/Seller.Portal/areas/News/pages/NewsItemPage/NewsItemPage.scss"],
         newspage: ["./src/project/Seller.Portal/areas/News/pages/NewsPage/index.js", "./src/project/Seller.Portal/areas/News/pages/NewsPage/NewsPage.scss"],
         newscategoriespage: ["./src/project/Seller.Portal/areas/News/pages/CategoriesPage/index.js", "./src/project/Seller.Portal/areas/News/pages/CategoriesPage/CategoriesPage.scss"],
         newscategorypage: ["./src/project/Seller.Portal/areas/News/pages/CategoryPage/index.js", "./src/project/Seller.Portal/areas/News/pages/CategoryPage/CategoryPage.scss"],
         inventorypage: ["./src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/InventoryPage.scss"],
-        warehousepage: ["./src/project/Seller.Portal/areas/Warehouse/pages/WarehousePage/index.js", "./src/project/Seller.Portal/areas/Warehouse/pages/WarehousePage/WarehousePage.scss"],
-        inventoryaddpage: ["./src/project/Seller.Portal/areas/Inventory/pages/InventoryAddPage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/InventoryPage.scss"],
-        warehouseaddpage: ["./src/project/Seller.Portal/areas/Warehouse/pages/WarehouseAddPage/index.js", "./src/project/Seller.Portal/areas/Warehouse/pages/WarehouseAddPage/WarehouseAddPage.scss"],
+        inventoriespage: ["./src/project/Seller.Portal/areas/Inventory/pages/InventoriesPage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/InventoriesPage/InventoriesPage.scss"],
+        warehousespage: ["./src/project/Seller.Portal/areas/Inventory/pages/WarehousesPage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/WarehousesPage/WarehousesPage.scss"],
+        warehousepage: ["./src/project/Seller.Portal/areas/Inventory/pages/WarehousePage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/WarehousePage/WarehousePage.scss"],
         orderspage: ["./src/project/Seller.Portal/areas/Orders/pages/OrdersPage/index.js", "./src/project/Seller.Portal/areas/Orders/pages/OrdersPage/OrdersPage.scss"],
         orderpage: ["./src/project/Seller.Portal/areas/Orders/pages/OrderPage/index.js", "./src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage.scss"],
         editorderpage: ["./src/project/Seller.Portal/areas/Orders/pages/EditOrderPage/index.js", "./src/project/Seller.Portal/areas/Orders/pages/EditOrderPage/EditOrderPage.scss"],
@@ -227,7 +212,12 @@ var sellerPortalBrowserConfig = {
         publicPath: path.resolve(__dirname, "../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),
         path: path.resolve(__dirname, "../be/src/Project/Web/Seller/Seller.Web/wwwroot/dist/js"),
         filename: "[name].js"
+    },
+    performance: {
+        hints: false,
+        maxEntrypointSize: 512000,
+        maxAssetSize: 512000
     }
 };
 
-module.exports = [browserConfig, accountBrowserConfig, sellerPortalBrowserConfig];
+module.exports = [browserConfig, accountBrowserConfig, sellerPortalBrowserConfig]

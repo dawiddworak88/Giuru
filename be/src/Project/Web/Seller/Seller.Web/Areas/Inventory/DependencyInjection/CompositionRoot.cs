@@ -3,6 +3,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.DependencyInjection;
 using Seller.Web.Areas.Inventory.DomainModels;
 using Seller.Web.Areas.Inventory.ModelBuilders;
+using Seller.Web.Areas.Inventory.Repositories;
 using Seller.Web.Areas.Inventory.Repositories.Inventories;
 using Seller.Web.Areas.Inventory.Repositories.Warehouses;
 using Seller.Web.Areas.Inventory.ViewModel;
@@ -16,16 +17,22 @@ namespace Seller.Web.Areas.Inventory.DependencyInjection
         {
             services.AddScoped<IWarehousesRepository, WarehousesRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
+            services.AddScoped<IOutletRepository, OutletRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Warehouse>>, WarehousesPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, WarehousesPageViewModel>, WarehousesPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, EditWarehousePageViewModel>, EditWarehousePageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, EditWarehouseFormViewModel>, EditWarehouseFormModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, WarehousePageViewModel>, WarehousePageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, WarehouseFormViewModel>, WarehouseFormModelBuilder>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<InventoryItem>>, InventoriesPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, InventoriesPageViewModel>, InventoriesPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, EditInventoryPageViewModel>, EditInventoryPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, EditInventoryFormViewModel>, EditInventoryFormModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, InventoryPageViewModel>, InventoryPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, InventoryFormViewModel>, InventoryFormModelBuilder>();
+
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<OutletItem>>, OutletPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OutletsPageViewModel>, OutletsPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OutletPageViewModel>, OutletPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, OutletFormViewModel>, OutletFormModelBuilder>();
         }
     }
 }

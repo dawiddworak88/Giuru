@@ -3,5 +3,6 @@
     public class SignInFormComponentModel
     {
         public string ReturnUrl { get; set; }
+        public string DevelopersEmail { get; set; }
     }
 }

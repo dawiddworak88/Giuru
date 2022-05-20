@@ -33,13 +33,16 @@ namespace Seller.Web.Areas.ModelBuilders.Products
         {
             var viewModel = new ProductAttributeFormViewModel
             {
+                IdLabel = this.globalLocalizer.GetString("Id"),
                 Title = this.productLocalizer.GetString("EditProductAttribute"),
                 NameLabel = this.globalLocalizer.GetString("Name"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 NameRequiredErrorMessage = this.productLocalizer.GetString("EnterProductAttributeName"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 EditUrl = this.linkGenerator.GetPathByAction("Edit", "ProductAttribute", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
-                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductAttributesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
+                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ProductAttributesApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                AttributesUrl = this.linkGenerator.GetPathByAction("index", "ProductAttributes", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
+                NavigateToAttributesLabel = this.productLocalizer.GetString("NavigateToAttributesLabel")
             };
 
             if (componentModel.Id.HasValue)

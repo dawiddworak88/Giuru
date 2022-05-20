@@ -75,6 +75,8 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                     ProductName = x.Name,
                     PictureUrl = !string.IsNullOrWhiteSpace(x.ImageSrc) ? x.ImageSrc : (x.ImageId.HasValue ? this.mediaService.GetFileUrl(this.options.Value.MediaUrl, x.ImageId.Value, OrdersConstants.Basket.BasketProductImageMaxWidth, OrdersConstants.Basket.BasketProductImageMaxHeight, true) : null),
                     Quantity = x.Quantity,
+                    StockQuantity = x.StockQuantity,
+                    OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
                     DeliveryFrom = x.DeliveryFrom,
                     DeliveryTo = x.DeliveryTo,
@@ -92,10 +94,12 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                 basketResponseModel.Items = basket.Items.OrEmptyIfNull().Select(x => new BasketItemResponseModel
                 {
                     ProductId = x.ProductId,
-                    ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, Id = x.ProductId }),
+                    ProductUrl = this.linkGenerator.GetPathByAction("Edit", "Product", new { Area = "Products", culture = language, Id = x.ProductId }),
                     Name = x.ProductName,
                     Sku = x.ProductSku,
                     Quantity = x.Quantity,
+                    StockQuantity = x.StockQuantity,
+                    OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
                     ImageSrc = x.PictureUrl,
                     ImageAlt = x.ProductName,

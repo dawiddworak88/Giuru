@@ -1,19 +1,24 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from "@material-ui/core";
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress } from "@mui/material";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function ClientForm(props) {
     const [state, dispatch] = useContext(Context);
+    const [canCreateAccount, setCanCreateAccount] = useState(props.hasAccount ? props.hasAccount : false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
         email: { value: props.email ? props.email : "", error: "" },
-        communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" }
+        communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
+        phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null },
+        clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
+        hasAccount: { value: props.hasAccount ? props.hasAccount : false }
     };
 
     const stateValidatorSchema = {
@@ -42,7 +47,6 @@ function ClientForm(props) {
     };
 
     function onSubmitForm(state) {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const requestOptions = {
@@ -60,6 +64,7 @@ function ClientForm(props) {
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         setFieldValue({ name: "id", value: jsonResponse.id });
+                        setCanCreateAccount(true);
                         toast.success(jsonResponse.message);
                     }
                     else {
@@ -95,7 +100,7 @@ function ClientForm(props) {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        setFieldValue({ name: "id", value: null });
+                        setCanCreateAccount(false);
                         toast.success(jsonResponse.message);
                     }
                     else {
@@ -113,7 +118,7 @@ function ClientForm(props) {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, email, communicationLanguage } = values;
+    const { id, name, email, clientGroupIds, communicationLanguage, phoneNumber } = values;
     return (
         <section className="section section-small-padding product client-form">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -121,8 +126,10 @@ function ClientForm(props) {
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit} method="post">
                         {id &&
-                            <input id="id" name="id" type="hidden" value={id} />
-                        }
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                            </div>
+                        }                      
                         <div className="field">
                             <TextField 
                                 id="name" 
@@ -130,6 +137,7 @@ function ClientForm(props) {
                                 label={props.nameLabel} 
                                 fullWidth={true}
                                 value={name} 
+                                variant="standard"
                                 onChange={handleOnChange} 
                                 helperText={dirty.name ? errors.name : ""} 
                                 error={(errors.name.length > 0) && dirty.name} />
@@ -142,6 +150,7 @@ function ClientForm(props) {
                                 fullWidth={true}
                                 value={email} 
                                 onChange={handleOnChange} 
+                                variant="standard"
                                 helperText={dirty.email ? errors.email : ""} 
                                 error={(errors.email.length > 0) && dirty.email}
                                 InputProps={{
@@ -149,7 +158,7 @@ function ClientForm(props) {
                                 }} />
                         </div>
                         <div className="field">
-                            <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage}>
+                            <FormControl fullWidth={true} error={(errors.communicationLanguage.length > 0) && dirty.communicationLanguage} variant="standard">
                                 <InputLabel id="language-label">{props.languageLabel}</InputLabel>
                                 <Select
                                     labelId="language-label"
@@ -168,9 +177,66 @@ function ClientForm(props) {
                                 )}
                             </FormControl>
                         </div>
+                        <div className="field">
+                            <FormControl fullWidth={true} variant="standard">
+                                <InputLabel id="clientGroups-label">{props.groupsLabel}</InputLabel>
+                                <Select
+                                    labelId="clientGroups-label"
+                                    id="clientGroupIds"
+                                    name="clientGroupIds"
+                                    value={clientGroupIds}
+                                    multiple={true}
+                                    onChange={handleOnChange}>
+                                    {props.clientGroups && props.clientGroups.length > 0 ? (
+                                        props.clientGroups.map((group, index) => {
+                                            return (
+                                                <MenuItem key={index} value={group.id}>{group.name}</MenuItem>
+                                            );
+                                        })
+                                    ) : (
+                                        <MenuItem disabled>{props.noGroupsText}</MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <div className="field">
+                            <TextField 
+                                id="phoneNumber" 
+                                name="phoneNumber" 
+                                label={props.phoneNumberLabel} 
+                                fullWidth={true}
+                                value={phoneNumber} 
+                                variant="standard"
+                                onChange={handleOnChange} />
+                        </div>
                         <div className="field client-form__field-row">
-                            <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable}>{props.saveText}</Button>
-                            <Button className="client-form__create-button" color="secondary" variant="contained" onClick={createAccount} disabled={state.isLoading || !id}>{props.accountText}</Button>
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                color="primary" 
+                                disabled={state.isLoading || disable}>
+                                {props.saveText}
+                            </Button>
+                            <Button
+                                className="field-button"
+                                type="button"
+                                variant="contained" 
+                                color="primary"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.clientsUrl);
+                                }}>
+                                    {props.navigateToClientsLabel}
+                            </Button>
+                            <Button 
+                                className="field-button"
+                                type="button" 
+                                color="secondary" 
+                                variant="contained" 
+                                onClick={createAccount} 
+                                disabled={state.isLoading || !canCreateAccount}>
+                                {props.hasAccount ? props.resetPasswordText : props.accountText}
+                            </Button>
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}
@@ -199,7 +265,12 @@ ClientForm.propTypes = {
     enterEmailText: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     saveUrl: PropTypes.string.isRequired,
-    languages: PropTypes.array.isRequired
+    languages: PropTypes.array.isRequired,
+    phoneNumberLabel: PropTypes.string.isRequired,
+    resetPasswordText: PropTypes.string.isRequired,
+    idLabel: PropTypes.string,
+    noGroupsText: PropTypes.string.isRequired,
+    groupsLabel: PropTypes.string.isRequired
 };
 
 export default ClientForm;

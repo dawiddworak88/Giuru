@@ -32,9 +32,10 @@ namespace Basket.Api.ServicesModelsValidators
                             context.AddFailure("Product name cannot be null or empty");
                         }
 
-                        if (item.Quantity < 0)
+                        var totalQuantity = item.Quantity + item.StockQuantity + item.OutletQuantity;
+                        if (totalQuantity <= 0)
                         {
-                            context.AddFailure("Qunatity must be equal or greater than 0");
+                            context.AddFailure("Total quantity must be greater than 0");
                         }
 
                         if (item.DeliveryFrom.HasValue && item.DeliveryTo.HasValue && item.DeliveryTo < item.DeliveryFrom)

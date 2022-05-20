@@ -14,10 +14,14 @@ namespace Buyer.Web.Shared.ViewModels.Catalogs
         public string ImageAlt { get; set; }
         public bool IsNew { get; set; }
         public bool InStock { get; set; }
-        public int? AvailableQuantity { get; set; }
+        public bool InOutlet { get; set; }
+        public double? AvailableQuantity { get; set; }
+        public double? AvailableOutletQuantity { get; set; }
         public DateTime? ExpectedDelivery { get; set; }
         public string BrandName { get; set; }
         public string BrandUrl { get; set; }
+        public string OutletTitle { get; set; }
+        public string OutletDescription { get; set; }
         public IEnumerable<Guid> Images { get; set; }
         public IEnumerable<SourceViewModel> Sources { get; set; }
         public string ProductAttributes { get; set; }

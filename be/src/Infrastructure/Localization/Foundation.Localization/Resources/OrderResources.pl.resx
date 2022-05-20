@@ -120,6 +120,9 @@
   <data name="AddedProduct" xml:space="preserve">
     <value>Dodano</value>
   </data>
+  <data name="AddingToCart" xml:space="preserve">
+    <value>Dodaj do koszyka</value>
+  </data>
   <data name="AddOrderItem" xml:space="preserve">
     <value>Dodaj</value>
   </data>
@@ -140,6 +143,12 @@
   </data>
   <data name="ClientRequiredErrorMessage" xml:space="preserve">
     <value>Wybierz klienta</value>
+  </data>
+  <data name="CustomOrderLabel" xml:space="preserve">
+    <value>Dodaj zamówienie niestandardowe</value>
+  </data>
+  <data name="CustomOrderSubject" xml:space="preserve">
+    <value>Niestandardowe zamówienie od</value>
   </data>
   <data name="DeliveryFrom" xml:space="preserve">
     <value>Początkowa data dostawy:</value>
@@ -168,6 +177,9 @@
   <data name="ImportOrder" xml:space="preserve">
     <value>Import zamówienia</value>
   </data>
+  <data name="InitCustomOrderLabel" xml:space="preserve">
+    <value>Chcę złożyć zamówienie niestandardowe</value>
+  </data>
   <data name="ItemNotFound" xml:space="preserve">
     <value>Nie znaleziono produktu</value>
   </data>
@@ -184,7 +196,7 @@
     <value>Nazwa:</value>
   </data>
   <data name="NavigateToOrdersList" xml:space="preserve">
-    <value>Wróć do listy zamówień</value>
+    <value>Powróć do zamówień</value>
   </data>
   <data name="NewOrder" xml:space="preserve">
     <value>Złóż zamówienie</value>
@@ -225,6 +237,9 @@
   <data name="OrganisationNotFound:" xml:space="preserve">
     <value>Organizacja klienta nie istnieje</value>
   </data>
+  <data name="OutletQuantityLabel" xml:space="preserve">
+    <value>Ilość z wyprzedaży:</value>
+  </data>
   <data name="PlaceOrder" xml:space="preserve">
     <value>Złóż zamówienie</value>
   </data>
@@ -239,6 +254,9 @@
   </data>
   <data name="SkuLabel" xml:space="preserve">
     <value>SKU:</value>
+  </data>
+  <data name="StockQuantityLabel" xml:space="preserve">
+    <value>Ilość z magazynu:</value>
   </data>
   <data name="ToBasketLabel" xml:space="preserve">
     <value>Zobacz koszyk</value>

@@ -65,6 +65,7 @@ namespace Foundation.Catalog.Repositories.Products.ProductIndexingRepositories
                             Language = language,
                             ProductId = product.Id,
                             CategoryId = product.CategoryId,
+                            Ean = product.Ean,
                             CategoryName = categoryTranslations.Name,
                             CategoryNameSuggest = new CompletionField
                             {

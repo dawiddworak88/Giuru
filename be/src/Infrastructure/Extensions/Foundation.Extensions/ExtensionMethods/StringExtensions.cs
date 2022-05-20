@@ -22,9 +22,8 @@ namespace Foundation.Extensions.ExtensionMethods
             if (!string.IsNullOrWhiteSpace(values))
             {
                 return values.Split(EndpointParameterConstants.ParameterSeparator);
-            }
 
-            return default;
+            }
         }
 
         public static string ToCamelCase(this string str)

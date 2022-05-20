@@ -1,0 +1,22 @@
+﻿<div id="root" asp-prerender-module="RegisterPage" asp-prerender-data="@Model">
+</div>
+
+<script>
+    window.data = @Html.Raw(Json.Serialize(@Model));
+</script>
+
+@section MetaTags {
+    <title>@MetaTagsService.GenerateTitle(this.Localizer.GetString("Partnership"))</title>
+    @if (!string.IsNullOrWhiteSpace(this.Localizer.GetString("Partnership")))
+    {
+        <meta name="description" content="@this.Localizer.GetString("Partnership")" />
+    }
+}
+
+@section HeadStyles {
+    <link rel="stylesheet" href="~/dist/css/registerpage.css" type="text/css" asp-append-version="true" />
+}
+
+@section BodyScripts {
+    <script src="~/dist/js/registerpage.js" asp-append-version="true"></script>
+}
