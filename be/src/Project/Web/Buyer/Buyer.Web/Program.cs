@@ -81,7 +81,7 @@ builder.Services.RegisterNewsDependencies();
 
 builder.Services.RegisterGeneralDependencies();
 
-builder.Services.RegisterDependencies();
+builder.Services.RegisterDependencies(builder.Configuration);
 
 builder.Services.RegisterApiExtensionsDependencies();
 

@@ -269,6 +269,7 @@ services:
       - ClientUrl=http://client-api
       - NewsUrl=http://news-api
       - ContentGraphQlUrl=http://content-api:1337/graphql
+      - ContentGraphQlAuthorizationKey=${STRAPI_AUTHORIZATION_KEY}
       - MakeComplaintUrl=https://complaints.com
       - OrganisationId=${ORGANISATION_ID}
       - SupportedCultures=${SUPPORTED_CULTURES}

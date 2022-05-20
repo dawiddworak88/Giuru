@@ -33,12 +33,13 @@ using Buyer.Web.Shared.ModelBuilders.Seo;
 using Foundation.PageContent.Components.Seo.ViewModels;
 using Buyer.Web.Shared.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Files;
+using Foundation.Content.Factories.GraphQlFactories;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
     public static class CompositionRoot
     {
-        public static void RegisterDependencies(this IServiceCollection services)
+        public static void RegisterDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.RegisterHomeDependencies();
             services.RegisterProductDependencies();
@@ -70,6 +71,12 @@ namespace Buyer.Web.Shared.DependencyInjection
             // Client
             services.AddScoped<ICatalogOrderModelBuilder, CatalogOrderModelBuilder>();
             services.AddScoped<IClientsRepository, ClientsRepository>();
+
+            // GraphQL
+            services.AddScoped<IGraphQlClientFactory>(sp => 
+            {
+                return new GraphQlClientFactory(configuration["ContentGraphQlUrl"], configuration["ContentGraphQlAuthorizationKey"]);
+            });
         }
 
         public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
