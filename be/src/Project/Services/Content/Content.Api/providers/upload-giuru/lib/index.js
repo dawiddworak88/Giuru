@@ -46,8 +46,9 @@ module.exports = {
             email: providerOptions.appEmail,
             tokenApiUrl: providerOptions.identityTokenApiUrl
           });
-
+          
           return new Promise((resolve, reject) => {
+
             const formData = new FormData();
 
             formData.append("file", file.buffer, {
@@ -64,6 +65,7 @@ module.exports = {
 
             fetch(`${providerOptions.mediaApiUrl}/api/v1/files`, requestOptions)
               .then((response) => {
+
                 return response.json().then((media) => {
                   if (response.ok) {
                     const filePath = `${providerOptions.mediaApiUrl}/api/v1/files/${media.id}`;
