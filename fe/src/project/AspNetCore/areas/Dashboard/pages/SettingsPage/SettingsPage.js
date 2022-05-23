@@ -7,6 +7,8 @@ import Store from "../../../../../../shared/stores/Store";
 import Header from "../../../../shared/components/Header/Header";
 import MainNavigation from "../../../../shared/components/MainNavigation/MainNavigation";
 import Footer from "../../../../../../shared/components/Footer/Footer";
+import SettingsForm from "../../components/SettingsForm/SettingsForm";
+import DashboardNavigation from "../../../../shared/components/DashboardNavigation/DashboardNavigation";
 
 const SettingsPage = (props) => {
 
@@ -18,12 +20,14 @@ const SettingsPage = (props) => {
       <Store>
         <Header {...props.header}></Header>
         <MainNavigation {...props.mainNavigation}></MainNavigation>
-        <div className="columns">
-            <div className="column">
-                asdasd
-            </div>
-            <div className="column is-three-quarters">
-                asdads
+        <div className="container pt-6 pb-6">
+            <div className="columns p-2">
+                <div className="column">
+                    <DashboardNavigation {...props.dashboardNavigation} />
+                </div>
+                <div className="column p-2 is-three-quarters">
+                    <SettingsForm {...props.settingsForm} />
+                </div>
             </div>
         </div>
         <Footer {...props.footer}></Footer>

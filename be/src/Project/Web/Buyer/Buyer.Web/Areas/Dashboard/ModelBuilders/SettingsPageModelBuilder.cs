@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Dashboard.ViewModel;
+using Buyer.Web.Shared.ViewModels.DashboardNavigation;
 using Buyer.Web.Shared.ViewModels.Headers;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
@@ -14,15 +15,18 @@ namespace Buyer.Web.Areas.Dashboard.ModelBuilders
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
+        private readonly IModelBuilder<DashboardNavigationViewModel> dashboardNavigationModelBuilder;
 
         public SettingsPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
+            IModelBuilder<DashboardNavigationViewModel> dashboardNavigationModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.mainNavigationModelBuilder = mainNavigationModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
+            this.dashboardNavigationModelBuilder = dashboardNavigationModelBuilder;
         }
 
         public async Task<SettingsPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -33,6 +37,7 @@ namespace Buyer.Web.Areas.Dashboard.ModelBuilders
                 Locale = CultureInfo.CurrentUICulture.Name,
                 Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
+                DashboardNavigation = dashboardNavigationModelBuilder.BuildModel(),
                 Footer = footerModelBuilder.BuildModel()
             };
 

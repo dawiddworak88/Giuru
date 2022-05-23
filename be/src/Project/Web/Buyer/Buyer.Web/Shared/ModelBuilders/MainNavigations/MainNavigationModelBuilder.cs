@@ -80,6 +80,12 @@ namespace Buyer.Web.Shared.ModelBuilders.MainNavigations
                 Url = this.settings.CurrentValue.MakeComplaintUrl
             });
 
+            links.Add(new LinkViewModel
+            {
+                Text = this.globalLocalizer.GetString("Dashboard"),
+                Url = this.linkGenerator.GetPathByAction("Index", "Settings", new { Area = "Dashboard", culture = CultureInfo.CurrentUICulture.Name })
+            });
+
             return new MainNavigationViewModel
             {
                 Links = links

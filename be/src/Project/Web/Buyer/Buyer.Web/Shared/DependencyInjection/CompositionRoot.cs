@@ -31,6 +31,8 @@ using Buyer.Web.Shared.ModelBuilders.Modal;
 using Buyer.Web.Shared.Repositories.News;
 using Buyer.Web.Shared.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Files;
+using Buyer.Web.Shared.ViewModels.DashboardNavigation;
+using Buyer.Web.Shared.ModelBuilders.DashboardNavigation;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -51,6 +53,7 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel>, MainNavigationModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
+            services.AddScoped<IModelBuilder<DashboardNavigationViewModel>, DashboardNavigationModelBuilder>();
 
             // Repositories
             services.AddScoped<IBrandRepository, BrandRepository>();
