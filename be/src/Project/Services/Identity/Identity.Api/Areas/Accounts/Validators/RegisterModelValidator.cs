@@ -18,9 +18,6 @@ namespace Identity.Api.Areas.Accounts.Validators
             this.RuleFor(x => x.CompanyCountry).NotNull().NotEmpty();
             this.RuleFor(x => x.CompanyPostalCode).NotNull().NotEmpty();
             this.RuleFor(x => x.CompanyRegion).NotNull().NotEmpty();
-            this.RuleFor(x => x.DirectlyShip).NotNull().NotEmpty();
-            this.RuleFor(x => x.AcceptReturns).NotNull().NotEmpty();
-            this.RuleFor(x => x.OnlineRetailers).NotNull().NotEmpty();
         }
     }
 }

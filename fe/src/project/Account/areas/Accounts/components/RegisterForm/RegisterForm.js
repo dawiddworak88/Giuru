@@ -9,27 +9,23 @@ import {
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
-import { RadioButtonChecked, RadioButtonUnchecked } from "@mui/icons-material";
 
 const RegisterForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [isSended, setIsSended] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
     const stateSchema = {
-       firstName: { value: null, error: "" },
-       lastName: { value: null, error: "" },
-       email: { value: null, error: "" },
-       phoneNumber: { value: null, error: "" },
-       contactJobTitle: { value: null, error: "" },
-       companyName: { value: null, error: "" },
-       companyAddress: { value: null, error: "" },
-       companyCity: { value: null, error: "" },
-       companyRegion: { value: null, error: "" },
-       companyPostalCode: { value: null, error: "" },
-       companyCountry: { value: null, error: "" },
-       directlyShip: { value: null, error: "" },
-       acceptReturns: { value: null, error: "" },
-       onlineRetailers: { value: null, error: "" }
+       firstName: { value: "", error: "" },
+       lastName: { value: "", error: "" },
+       email: { value: "", error: "" },
+       phoneNumber: { value: "", error: "" },
+       contactJobTitle: { value: "", error: "" },
+       companyName: { value: "", error: "" },
+       companyAddress: { value: "", error: "" },
+       companyCity: { value: "", error: "" },
+       companyRegion: { value: "", error: "" },
+       companyPostalCode: { value: "", error: "" },
+       companyCountry: { value: "", error: "" }
     };
 
     const stateValidatorSchema = {
@@ -102,24 +98,6 @@ const RegisterForm = (props) => {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
             }
-        },
-        onlineRetailers: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        directlyShip: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
-        },
-        acceptReturns: {
-            required: {
-                isRequired: true,
-                error: props.fieldRequiredErrorMessage
-            }
         }
     };
 
@@ -160,8 +138,8 @@ const RegisterForm = (props) => {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
     const { 
-        firstName, lastName, email, phoneNumber, contactJobTitle, companyName, companyAddress, companyCity, 
-        companyCountry, companyRegion, companyPostalCode, directlyShip, acceptReturns, onlineRetailers 
+        firstName, lastName, email, phoneNumber, contactJobTitle, companyName, 
+        companyAddress, companyCity, companyCountry, companyRegion, companyPostalCode
     } = values;
     
     return (
@@ -170,7 +148,7 @@ const RegisterForm = (props) => {
                 <div className="column">
                     <div className="register-form__stepper p-6">
                         <h1 className="title">{props.title}</h1>
-                        <p className="subtitle mb-2">{props.subtitle}</p>
+                        <p className="subtitle mb-2 mt-1">{props.subtitle}</p>
                         {props.steps &&
                             <Stepper activeStep={activeStep} orientation="vertical">
                                 {props.steps.length > 0 && props.steps.map((step, index) => 
@@ -193,6 +171,7 @@ const RegisterForm = (props) => {
                                     name="firstName"
                                     value={firstName}
                                     fullWidth={true}
+                                    variant="standard"
                                     label={props.firstNameLabel}
                                     onChange={handleOnChange} 
                                     helperText={dirty.firstName ? errors.firstName : ""} 
@@ -204,13 +183,14 @@ const RegisterForm = (props) => {
                                     name="lastName"
                                     value={lastName}
                                     fullWidth={true}
+                                    variant="standard"
                                     label={props.lastNameLabel}
                                     onChange={handleOnChange} 
                                     helperText={dirty.lastName ? errors.lastName : ""} 
                                     error={(errors.lastName.length > 0) && dirty.lastName} />
                             </div>
                             <div className="field">
-                                <FormControl fullWidth={true} error={(errors.contactJobTitle.length > 0) && dirty.contactJobTitle}>
+                                <FormControl fullWidth={true} variant="standard" error={(errors.contactJobTitle.length > 0) && dirty.contactJobTitle}>
                                     <InputLabel id="contactJobTitle-label">{props.contactJobTitleLabel}</InputLabel>
                                     <Select
                                         labelId="contactJobTitle-label"
@@ -236,6 +216,7 @@ const RegisterForm = (props) => {
                                     name="email"
                                     value={email}
                                     fullWidth={true}
+                                    variant="standard"
                                     label={props.emailLabel}
                                     onChange={handleOnChange} 
                                     helperText={dirty.email ? errors.email : ""} 
@@ -247,6 +228,7 @@ const RegisterForm = (props) => {
                                     name="phoneNumber"
                                     value={phoneNumber}
                                     fullWidth={true}
+                                    variant="standard"
                                     label={props.phoneNumberLabel}
                                     onChange={handleOnChange}
                                     helperText={dirty.phoneNumber ? errors.phoneNumber : ""} 
@@ -261,6 +243,7 @@ const RegisterForm = (props) => {
                                     name="companyName"
                                     value={companyName}
                                     fullWidth={true}
+                                    variant="standard"
                                     label={props.companyNameLabel}
                                     onChange={handleOnChange}
                                     helperText={dirty.companyName ? errors.companyName : ""} 
@@ -272,6 +255,7 @@ const RegisterForm = (props) => {
                                     name="companyAddress"
                                     value={companyAddress}
                                     fullWidth={true}
+                                    variant="standard"
                                     label={props.companyAddressLabel}
                                     onChange={handleOnChange}
                                     helperText={dirty.companyAddress ? errors.companyAddress : ""} 
@@ -283,6 +267,7 @@ const RegisterForm = (props) => {
                                     name="companyCountry"
                                     value={companyCountry}
                                     fullWidth={true}
+                                    variant="standard"
                                     label={props.companyCountryLabel}
                                     onChange={handleOnChange}
                                     helperText={dirty.companyCountry ? errors.companyCountry : ""} 
@@ -294,6 +279,7 @@ const RegisterForm = (props) => {
                                     name="companyCity"
                                     value={companyCity}
                                     fullWidth={true}
+                                    variant="standard"
                                     label={props.companyCityLabel}
                                     onChange={handleOnChange}
                                     helperText={dirty.companyCity ? errors.companyCity : ""} 
@@ -305,6 +291,7 @@ const RegisterForm = (props) => {
                                     name="companyRegion"
                                     value={companyRegion}
                                     fullWidth={true}
+                                    variant="standard"
                                     label={props.companyRegionLabel}
                                     onChange={handleOnChange}
                                     helperText={dirty.companyRegion ? errors.companyRegion : ""} 
@@ -317,84 +304,11 @@ const RegisterForm = (props) => {
                                     name="companyPostalCode"
                                     fullWidth={true}
                                     value={companyPostalCode}
+                                    variant="standard"
                                     label={props.companyPostalCodeLabel}
                                     onChange={handleOnChange} 
                                     helperText={dirty.companyPostalCode ? errors.companyPostalCode : ""} 
                                     error={(errors.companyPostalCode.length > 0) && dirty.companyPostalCode} />
-                            </div>
-                        </div>
-                        <div className="group mb-6" onFocus={() => setActiveStep(2)}>
-                            <h1 className="subtitle has-text-centered">{props.logisticalInformationTitle}</h1>
-                            <div className="field">
-                                <FormControl component="fieldset" fullWidth={true} error={(errors.directlyShip.length > 0) && dirty.directlyShip}>
-                                    <FormLabel>{props.directlyShipLabel}</FormLabel>
-                                    <RadioGroup name="directlyShip" value={directlyShip} onChange={handleOnChange}>
-                                        <FormControlLabel 
-                                            value={props.yesLabel} 
-                                            label={props.yesLabel}
-                                            control={
-                                                <Radio 
-                                                    inputProps={{hidden: true}}
-                                                    icon={<RadioButtonUnchecked />}
-                                                    checkedIcon={<RadioButtonChecked />} 
-                                                />}  
-                                            />
-                                        <FormControlLabel 
-                                            label={props.noLabel}
-                                            value={props.noLabel} 
-                                            control={
-                                                <Radio 
-                                                    inputProps={{hidden: true}} 
-                                                    icon={<RadioButtonUnchecked />}
-                                                    checkedIcon={<RadioButtonChecked />} 
-                                                />} 
-                                            />
-                                    </RadioGroup>
-                                    {errors.directlyShip && dirty.directlyShip && (
-                                        <FormHelperText>{errors.directlyShip}</FormHelperText>
-                                    )}
-                                </FormControl>
-                            </div>
-                            <div className="field">
-                                <FormControl component="fieldset" fullWidth={true} error={(errors.acceptReturns.length > 0) && dirty.acceptReturns}>
-                                    <FormLabel>{props.acceptReturnsLabel}</FormLabel>
-                                    <RadioGroup name="acceptReturns" value={acceptReturns} onChange={handleOnChange}>
-                                        <FormControlLabel 
-                                            value={props.yesLabel} 
-                                            label={props.yesLabel}
-                                            control={
-                                                <Radio 
-                                                    inputProps={{hidden: true}}
-                                                    icon={<RadioButtonUnchecked />}
-                                                    checkedIcon={<RadioButtonChecked />} 
-                                                />}  
-                                            />
-                                        <FormControlLabel 
-                                            label={props.noLabel}
-                                            value={props.noLabel} 
-                                            control={
-                                                <Radio 
-                                                    inputProps={{hidden: true}} 
-                                                    icon={<RadioButtonUnchecked />}
-                                                    checkedIcon={<RadioButtonChecked />} 
-                                                />} 
-                                            />
-                                    </RadioGroup>
-                                    {errors.acceptReturns && dirty.acceptReturns && (
-                                        <FormHelperText>{errors.acceptReturns}</FormHelperText>
-                                    )}
-                                </FormControl>
-                            </div>
-                            <div className="field">
-                                <TextField
-                                    id="onlineRetailers"
-                                    name="onlineRetailers"
-                                    fullWidth={true}
-                                    value={onlineRetailers}
-                                    label={props.onlineRetailersLabel}
-                                    onChange={handleOnChange} 
-                                    helperText={dirty.onlineRetailers ? errors.onlineRetailers : ""} 
-                                    error={(errors.onlineRetailers.length > 0) && dirty.onlineRetailers} />
                             </div>
                         </div>
                         <div className="is-flex is-justify-content-center">
@@ -421,7 +335,6 @@ RegisterForm.propTypes = {
     steps: PropTypes.array,
     contactInformationTitle: PropTypes.string.isRequired,
     businessInformationTitle: PropTypes.string.isRequired,
-    logisticalInformationTitle: PropTypes.string.isRequired,
     firstNameLabel: PropTypes.string.isRequired,
     lastNameLabel: PropTypes.string.isRequired,
     emailLabel: PropTypes.string.isRequired,
@@ -437,9 +350,6 @@ RegisterForm.propTypes = {
     companyCityLabel: PropTypes.string.isRequired,
     companyRegionLabel: PropTypes.string.isRequired,
     companyPostalCodeLabel: PropTypes.string.isRequired,
-    onlineRetailersLabel: PropTypes.string.isRequired,
-    acceptRetunsLabel: PropTypes.string.isRequired,
-    directlyShipLabel: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     selectJobTitle: PropTypes.string.isRequired,
     signInUrl: PropTypes.string.isRequired

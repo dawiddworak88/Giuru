@@ -69,10 +69,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                     CompanyCountry = model.CompanyCountry,
                     CompanyCity = model.CompanyCity,
                     CompanyPostalCode = model.CompanyPostalCode,
-                    CompanyRegion = model.CompanyRegion,
-                    DirectlyShip = model.DirectlyShip,
-                    AcceptReturns = model.AcceptReturns,
-                    OnlineRetailers = model.OnlineRetailers
+                    CompanyRegion = model.CompanyRegion
                 };
 
                 await this.usersService.RegisterAsync(serviceModel);

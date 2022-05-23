@@ -16,24 +16,17 @@ namespace Identity.Api.Areas.Accounts.ViewModels
         public string CompanyRegionLabel { get; set; }
         public string CompanyCountryLabel { get; set; }
         public string CompanyPostalCodeLabel { get; set; }
-        public string AddressLabel { get; set; }
         public string ContactJobTitleLabel { get; set; }
-        public string CityLabel { get; set; }
-        public string RegionLabel { get; set; }
-        public string CountryLabel { get; set; }
         public string YesLabel { get; set; }
         public string NoLabel { get; set; }
-        public string ContactJobTitle { get; set; }
         public string ContactInformationTitle { get; set; }
         public string BusinessInformationTitle { get; set; }
-        public string LogisticalInformationTitle { get; set; }
         public string EmailFormatErrorMessage { get; set; }
         public string FieldRequiredErrorMessage { get; set; }
         public string SaveUrl { get; set; }
         public string OnlineRetailersLabel { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string AcceptReturnsLabel { get; set; }
-        public string DirectlyShipLabel { get; set; }
         public string SaveText { get; set; }
         public string SelectJobTitle { get; set; }
         public string SignInUrl { get; set; }

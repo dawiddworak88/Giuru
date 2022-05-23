@@ -472,7 +472,7 @@
     <value>Id:</value>
   </data>
   <data name="PhoneNumberLabel" xml:space="preserve">
-    <value>Phone number:</value>
+    <value>Phone number</value>
   </data>
   <data name="Ean" xml:space="preserve">
     <value>EAN:</value>
@@ -511,7 +511,7 @@
     <value>Partner with ELTAP</value>
   </data>
   <data name="EltapPartnerDescription" xml:space="preserve">
-    <value>Thanks for you interest in working with ELTAP! We're excited we can bring our products expand to other regions thanks to you.</value>
+    <value>Thank you for your interest in ELTAP. We look forward to working with you!</value>
   </data>
   <data name="FieldRequiredErrorMessage" xml:space="preserve">
     <value>Field is required</value>

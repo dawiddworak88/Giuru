@@ -227,10 +227,7 @@ namespace Identity.Api.v1.Controllers
                 CompanyCountry = request.CompanyCountry,
                 CompanyCity = request.CompanyCity,
                 CompanyRegion = request.CompanyRegion,
-                CompanyPostalCode = request.CompanyPostalCode,
-                AcceptReturns = request.AcceptReturns,
-                DirectlyShip = request.DirectlyShip,
-                OnlineRetailers = request.OnlineRetailers
+                CompanyPostalCode = request.CompanyPostalCode
             };
 
             var validator = new RegisterModelValidator();
