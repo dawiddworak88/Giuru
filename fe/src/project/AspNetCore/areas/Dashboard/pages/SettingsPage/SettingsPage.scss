@@ -4,3 +4,9 @@
 @import "../../../.../../../../../shared/components/Footer/Footer.scss";
 @import "../../components/SettingsForm/SettingsForm.scss";
 @import "../../../../shared/components/DashboardNavigation/DashboardNavigation.scss";
+
+.tmp-mobile {
+    @media only screen and (max-width: $desktop) {
+        display: none;
+    }
+}

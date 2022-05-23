@@ -22,10 +22,10 @@ const SettingsPage = (props) => {
         <MainNavigation {...props.mainNavigation}></MainNavigation>
         <div className="container pt-6 pb-6">
             <div className="columns p-2">
-                <div className="column">
+                <div className="column tmp-mobile">
                     <DashboardNavigation {...props.dashboardNavigation} />
                 </div>
-                <div className="column p-2 is-three-quarters">
+                <div className="column is-three-quarters">
                     <SettingsForm {...props.settingsForm} />
                 </div>
             </div>
