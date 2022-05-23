@@ -18,6 +18,7 @@ using Buyer.Web.Areas.Orders.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using Foundation.Extensions.Filters;
 using Buyer.Web.Areas.News.DependencyInjection;
+using Buyer.Web.Areas.Dashboard.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,6 +79,8 @@ builder.Services.RegisterLocalizationDependencies();
 builder.Services.RegisterOrdersAreaDependencies();
 
 builder.Services.RegisterNewsDependencies();
+
+builder.Services.RegisterDashboardDependencies();
 
 builder.Services.RegisterGeneralDependencies();
 
