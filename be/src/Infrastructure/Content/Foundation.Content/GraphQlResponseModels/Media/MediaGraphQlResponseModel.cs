@@ -22,5 +22,8 @@ namespace Foundation.Content.GraphQlResponseModels.Media
 
         [JsonProperty("alternativeText")]
         public string AlternativeText { get; set; }
+
+        [JsonProperty("caption")]
+        public string Caption { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Buyer.Web.Areas.Home.DomainModels;
 using Buyer.Web.Areas.Home.GraphQlResponseModels;
-using Foundation.Extensions.ExtensionMethods;
 using GraphQL;
 using GraphQL.Client.Abstractions;
 using Microsoft.Extensions.Logging;
@@ -24,57 +23,28 @@ namespace Buyer.Web.Areas.Home.Repositories
             this.logger = logger;
         }
 
-        public async Task<IEnumerable<HeroSliderItem>> GetHeroSliderItemsAsync(string language)
+        public async Task<IEnumerable<HeroSliderItem>> GetHeroSliderItemsAsync(string language, string fallbackLanguage)
         {
             try
             {
-                var query = new GraphQLRequest
-                {
-                    Query = @$"
-                     query GetHomePageHeroSlider{{
-                      homePage(locale: ""{language}"") {{
-		                data {{
-                          id,
-                          attributes {{
-      	                    heroSlider {{
-                              heroSliderItems
-                              {{
-                                title,
-                                link {{
-                                  href,
-                                  label,
-                                  target
-                                }},
-                                media {{
-                                  data {{
-                                    attributes {{
-                                      url,
-                                      alternativeText,
-                                      caption,
-                                      mime,
-                                      name
-                                    }}
-                                  }}
-                                }}
-                              }}
-                            }}
-                        }}
-	                    }}
-                      }}
-                    }}"
-                };
+                var response = await this.graphQlClient.SendQueryAsync<HomePageHeroSliderGraphQlResponseModel>(this.GetHomePageHeroSliderQuery(language));
 
-                var response = await this.graphQlClient.SendQueryAsync<HomePageHeroSliderGraphQlResponseModel>(query);
-
-                return response?.Data?.HomePage?.Data?.Attributes.HeroSlider?.HeroSliderItems.OrEmptyIfNull().Select(x => new HeroSliderItem
+                if (response?.Data?.HomePage?.Data?.Attributes.HeroSlider?.HeroSliderItems is null && string.IsNullOrWhiteSpace(fallbackLanguage) is false)
                 {
-                    CtaText = x.Title,
+                    response = await this.graphQlClient.SendQueryAsync<HomePageHeroSliderGraphQlResponseModel>(this.GetHomePageHeroSliderQuery(fallbackLanguage));
+                }
+
+                return response?.Data?.HomePage?.Data?.Attributes.HeroSlider?.HeroSliderItems?.Select(x => new HeroSliderItem
+                {
+                    CtaText = x.Link?.Label,
                     CtaUrl = x.Link?.Href?.ToString(),
-                    TeaserTitle = string.Empty,
-                    TeaserText = string.Empty,
+                    TeaserTitle = x.Title,
+                    TeaserText = x.Subtitle,
                     Image = new HeroSliderItemImage
                     {
-                        ImageSrc = x.Media?.Data?.Attributes?.Url?.ToString()
+                        ImageSrc = x.Media?.Data?.Attributes?.Url?.ToString(),
+                        ImageAlt = x.Media?.Data?.Attributes?.AlternativeText,
+                        ImageTitle = x.Media?.Data?.Attributes?.Caption
                     }
 
                 });
@@ -85,6 +55,48 @@ namespace Buyer.Web.Areas.Home.Repositories
             }
 
             return default;
+        }
+
+        private GraphQLRequest GetHomePageHeroSliderQuery(string language)
+        {
+            return new GraphQLRequest
+            {
+                Query = @$"
+                     query GetHomePageHeroSlider($locale: I18NLocaleCode!){{
+                      homePage(locale: $locale) {{
+		                data {{
+                          id,
+                          attributes {{
+      	                    heroSlider {{
+                              heroSliderItems
+                              {{
+                                title,
+                                subtitle,
+                                link {{
+                                  href,
+                                  label,
+                                  target
+                                }},
+                                media {{
+                                  data {{
+                                    attributes {{
+                                      url,
+                                      alternativeText,
+                                      caption
+                                    }}
+                                  }}
+                                }}
+                              }}
+                            }}
+                        }}
+	                    }}
+                      }}
+                    }}",
+                Variables = new
+                { 
+                    locale = language
+                }
+            };
         }
     }
 }

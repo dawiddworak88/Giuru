@@ -6,6 +6,6 @@ namespace Buyer.Web.Areas.Home.Repositories
 {
     public interface IHeroSliderRepository
     {
-        Task<IEnumerable<HeroSliderItem>> GetHeroSliderItemsAsync(string language);
+        Task<IEnumerable<HeroSliderItem>> GetHeroSliderItemsAsync(string language, string fallbackLanguage);
     }
 }
