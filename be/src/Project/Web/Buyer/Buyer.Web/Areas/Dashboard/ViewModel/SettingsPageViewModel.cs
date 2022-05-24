@@ -11,6 +11,7 @@ namespace Buyer.Web.Areas.Dashboard.ViewModel
         public BuyerHeaderViewModel Header { get; set; }
         public MainNavigationViewModel MainNavigation { get; set; }
         public DashboardNavigationViewModel DashboardNavigation { get; set; }
+        public SettingsFormViewModel SettingsForm { get; set; }
         public FooterViewModel Footer { get; set; }
     }
 }

@@ -14,12 +14,14 @@ namespace Buyer.Web.Areas.Dashboard.ModelBuilders
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, SettingsFormViewModel> settingsFormModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
         private readonly IModelBuilder<DashboardNavigationViewModel> dashboardNavigationModelBuilder;
 
         public SettingsPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, SettingsFormViewModel> settingsFormModelBuilder,
             IModelBuilder<DashboardNavigationViewModel> dashboardNavigationModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
@@ -27,6 +29,7 @@ namespace Buyer.Web.Areas.Dashboard.ModelBuilders
             this.mainNavigationModelBuilder = mainNavigationModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
             this.dashboardNavigationModelBuilder = dashboardNavigationModelBuilder;
+            this.settingsFormModelBuilder = settingsFormModelBuilder;
         }
 
         public async Task<SettingsPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -38,6 +41,7 @@ namespace Buyer.Web.Areas.Dashboard.ModelBuilders
                 Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
                 DashboardNavigation = dashboardNavigationModelBuilder.BuildModel(),
+                SettingsForm = await this.settingsFormModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };
 

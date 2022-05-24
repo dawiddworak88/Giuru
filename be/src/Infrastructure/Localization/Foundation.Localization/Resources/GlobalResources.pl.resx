@@ -403,7 +403,7 @@
     <value>Duplikuj</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Kopia</value>
+    <value>Kopiuj</value>
   </data>
   <data name="Location" xml:space="preserve">
     <value>Lokalizacja</value>
@@ -572,5 +572,26 @@
   </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Panel</value>
+  </data>
+  <data name="AccountSettings" xml:space="preserve">
+    <value>Ustawienia konta</value>
+  </data>
+  <data name="AccountData" xml:space="preserve">
+    <value>Dane konta</value>
+  </data>
+  <data name="ApiIdentifierDescription" xml:space="preserve">
+    <value>Dzięki temu identyfikatorowi możesz generować kod dostępu do naszego api.</value>
+  </data>
+  <data name="ApiIdentifierTitle" xml:space="preserve">
+    <value>Twój identyfikator API</value>
+  </data>
+  <data name="AppSecret" xml:space="preserve">
+    <value>Klucz dostępu</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>Generuj</value>
+  </data>
+  <data name="OrganisationIdLabel" xml:space="preserve">
+    <value>Identyfikator organizacji</value>
   </data>
 </root>

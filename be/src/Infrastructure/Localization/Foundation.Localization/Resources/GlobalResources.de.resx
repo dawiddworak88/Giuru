@@ -570,4 +570,25 @@
   <data name="Dashboard" xml:space="preserve">
     <value>Armaturenbrett</value>
   </data>
+  <data name="AccountData" xml:space="preserve">
+    <value>Kontodaten</value>
+  </data>
+  <data name="AccountSettings" xml:space="preserve">
+    <value>Account Einstellungen</value>
+  </data>
+  <data name="ApiIdentifierDescription" xml:space="preserve">
+    <value>Mit dieser ID können Sie den Zugangscode zu unserer API generieren.</value>
+  </data>
+  <data name="ApiIdentifierTitle" xml:space="preserve">
+    <value>Ihre API-ID</value>
+  </data>
+  <data name="AppSecret" xml:space="preserve">
+    <value>Geheimer Zugangsschlüssel</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>Generieren</value>
+  </data>
+  <data name="OrganisationIdLabel" xml:space="preserve">
+    <value>Organisations-ID</value>
+  </data>
 </root>

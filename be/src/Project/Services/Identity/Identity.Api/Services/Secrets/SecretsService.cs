@@ -38,7 +38,7 @@ namespace Identity.Api.Services.Secrets
 
             if (secret is not null)
             {
-                throw new CustomException(this.accountLocalizer.GetString("AppSecretExist"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.accountLocalizer.GetString("AppSecretExist"), (int)HttpStatusCode.Conflict);
             }
 
             var appSecret = new OrganisationAppSecret
@@ -54,6 +54,25 @@ namespace Identity.Api.Services.Secrets
             {
                 AppSecret = appSecret.AppSecret
             };
+        }
+
+        public async Task<Guid> GetAsync(GetSecretServiceModel model)
+        {
+            var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == model.OrganisationId);
+
+            if (organisation is null)
+            {
+                throw new CustomException(this.accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            var secret = await this.identityContext.OrganisationAppSecrets.FirstOrDefaultAsync(x => x.OrganisationId == model.OrganisationId);
+
+            if (secret is not null)
+            {
+                return Guid.Parse(secret.AppSecret);
+            }
+
+            return default;
         }
     }
 }
