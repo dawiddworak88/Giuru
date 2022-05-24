@@ -52,11 +52,11 @@ namespace Identity.Api.Services.Secrets
 
             return new SecretServiceModel
             {
-                AppSecret = appSecret.AppSecret
+                Id = Guid.Parse(appSecret.AppSecret)
             };
         }
 
-        public async Task<Guid> GetAsync(GetSecretServiceModel model)
+        public async Task<SecretServiceModel> GetAsync(GetSecretServiceModel model)
         {
             var organisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == model.OrganisationId);
 
@@ -69,7 +69,10 @@ namespace Identity.Api.Services.Secrets
 
             if (secret is not null)
             {
-                return Guid.Parse(secret.AppSecret);
+                return new SecretServiceModel
+                {
+                    Id = Guid.Parse(secret.AppSecret)
+                };
             }
 
             return default;

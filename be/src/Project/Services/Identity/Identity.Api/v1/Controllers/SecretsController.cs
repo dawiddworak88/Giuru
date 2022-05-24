@@ -8,7 +8,6 @@ using Identity.Api.ServicesModels.Secrets;
 using Identity.Api.Validators.Secrets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -56,7 +55,12 @@ namespace Identity.Api.v1.Controllers
             {
                 var secret = await this.secretsService.GetAsync(serviceModel);
 
-                return this.StatusCode((int)HttpStatusCode.OK, new { Id = secret });
+                if (secret is not null)
+                {
+                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = secret.Id });
+                }
+
+                return this.StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -88,7 +92,7 @@ namespace Identity.Api.v1.Controllers
 
                 if (secret is not null)
                 {
-                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = secret.AppSecret });
+                    return this.StatusCode((int)HttpStatusCode.OK, secret);
                 }
             }
 

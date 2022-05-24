@@ -7,6 +7,6 @@ namespace Buyer.Web.Areas.Dashboard.Repositories.Identity
     public interface IIdentityRepository
     {
         Task<Guid> CreateAppSecretAsync(string token, string language);
-        Task<Guid> GetSecretAsync(string token, string language);
+        Task<Secret> GetSecretAsync(string token, string language);
     }
 }

@@ -53,9 +53,9 @@ namespace Buyer.Web.Areas.Dashboard.ModelBuilders
 
             var appSecret = await this.identityRepository.GetSecretAsync(componentModel.Token, componentModel.Language);
 
-            if (appSecret != null)
+            if (appSecret is not null)
             {
-                viewModel.AppSecret = appSecret;
+                viewModel.AppSecret = appSecret.Id;
             }
 
             var client = await this.clientRepository.GetClientAsync(componentModel.Token, componentModel.Language);

@@ -1,7 +1,9 @@
-﻿namespace Identity.Api.ServicesModels.Secrets
+﻿using System;
+
+namespace Identity.Api.ServicesModels.Secrets
 {
     public class SecretServiceModel
     {
-        public string AppSecret { get; set; }
+        public Guid? Id { get; set; }
     }
 }

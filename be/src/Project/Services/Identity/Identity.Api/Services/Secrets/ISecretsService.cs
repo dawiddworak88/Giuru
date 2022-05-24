@@ -7,6 +7,6 @@ namespace Identity.Api.Services.Secrets
     public interface ISecretsService
     {
         Task<SecretServiceModel> CreateAsync(CreateSecretServiceModel model);
-        Task<Guid> GetAsync(GetSecretServiceModel model);
+        Task<SecretServiceModel> GetAsync(GetSecretServiceModel model);
     }
 }

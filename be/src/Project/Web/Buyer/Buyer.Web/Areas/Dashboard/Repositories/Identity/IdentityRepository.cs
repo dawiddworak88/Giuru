@@ -50,7 +50,7 @@ namespace Buyer.Web.Areas.Dashboard.Repositories.Identity
             return default;
         }
 
-        public async Task<Guid> GetSecretAsync(string token, string language)
+        public async Task<Secret> GetSecretAsync(string token, string language)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
@@ -60,11 +60,11 @@ namespace Buyer.Web.Areas.Dashboard.Repositories.Identity
                 EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.SecretsApiEndpoint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Secret>(apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data != null)
+            if (response.IsSuccessStatusCode && response.Data is not null)
             {
-                return response.Data.Id.Value;
+                return response.Data;
             }
 
             return default;

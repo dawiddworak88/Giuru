@@ -125,9 +125,9 @@ const SettingsForm = (props) => {
                             fullWidth={true}
                             InputProps={{
                                 readOnly: true,
-                                endAdornment: props.appSecret ? (
+                                endAdornment: appSecret ? (
                                     <InputAdornment position="end">
-                                        <IconButton onClick={() => ClipboardHelper.copyToClipboard(props.appSecret)} aria-label={props.copyLabel} title={props.copyLabel}>
+                                        <IconButton onClick={() => ClipboardHelper.copyToClipboard(appSecret)} aria-label={props.copyLabel} title={props.copyLabel}>
                                             <FileCopyOutlined />
                                         </IconButton>
                                     </InputAdornment>

@@ -28,7 +28,7 @@ namespace Buyer.Web.Areas.Dashboard.ApiControllers
 
             var secret = await this.identityRepository.CreateAppSecretAsync(token, language);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = "SUKCES" });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Id = secret, Message = "SUKCES" });
         }
     }
 }
