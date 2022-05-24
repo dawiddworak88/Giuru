@@ -49,6 +49,7 @@ namespace Identity.Api.Services.Secrets
             };
 
             await this.identityContext.OrganisationAppSecrets.AddAsync(appSecret);
+            await this.identityContext.SaveChangesAsync();
 
             return new SecretServiceModel
             {

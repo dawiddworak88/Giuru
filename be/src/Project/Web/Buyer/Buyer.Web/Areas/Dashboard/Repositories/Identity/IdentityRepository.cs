@@ -42,7 +42,7 @@ namespace Buyer.Web.Areas.Dashboard.Repositories.Identity
                 throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
-            if (response.IsSuccessStatusCode && response.Data != null)
+            if (response.IsSuccessStatusCode && response.Data is not null)
             {
                 return response.Data.Id.Value;
             }
