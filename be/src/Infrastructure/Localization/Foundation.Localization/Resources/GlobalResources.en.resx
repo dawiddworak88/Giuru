@@ -591,4 +591,7 @@
   <data name="OrganisationIdLabel" xml:space="preserve">
     <value>Organization ID</value>
   </data>
+  <data name="SuccessfullyCreatedAppSecret" xml:space="preserve">
+    <value>Successfully created access key.</value>
+  </data>
 </root>

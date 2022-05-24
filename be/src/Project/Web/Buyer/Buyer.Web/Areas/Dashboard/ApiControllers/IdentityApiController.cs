@@ -1,8 +1,10 @@
 ﻿using Buyer.Web.Areas.Dashboard.Repositories.Identity;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
@@ -13,11 +15,14 @@ namespace Buyer.Web.Areas.Dashboard.ApiControllers
     public class IdentityApiController : BaseApiController
     {
         private readonly IIdentityRepository identityRepository;
+        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
 
         public IdentityApiController(
-            IIdentityRepository identityRepository)
+            IIdentityRepository identityRepository,
+            IStringLocalizer<GlobalResources> globalLocalizer)
         {
             this.identityRepository = identityRepository;
+            this.globalLocalizer = globalLocalizer;
         }
 
         [HttpPost]
@@ -28,7 +33,7 @@ namespace Buyer.Web.Areas.Dashboard.ApiControllers
 
             var secret = await this.identityRepository.CreateAppSecretAsync(token, language);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = secret, Message = "SUKCES" });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Id = secret, Message = this.globalLocalizer.GetString("SuccessfullyCreatedAppSecret").Value });
         }
     }
 }

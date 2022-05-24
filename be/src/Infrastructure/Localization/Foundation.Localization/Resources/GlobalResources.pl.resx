@@ -594,4 +594,7 @@
   <data name="OrganisationIdLabel" xml:space="preserve">
     <value>Identyfikator organizacji</value>
   </data>
+  <data name="SuccessfullyCreatedAppSecret" xml:space="preserve">
+    <value>Pomyślnie utworzono klucz dostępu.</value>
+  </data>
 </root>
