@@ -1,23 +1,19 @@
 .dashboard-navigation {
-    padding: 0 1rem;
+  padding-left: 4rem;
 
-    .dashboard-navigation-item {
-        position: relative;
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        padding: 0.75rem 0;
+  .dashboard-navigation-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0.75rem 0;
 
-        &:first-child {
-            padding-top: 0;
-        }
-
-        &__icon {
-            margin-right: 0.5rem;
-        }
-
-        &__title {
-
-        }
+    &:first-child {
+      padding-top: 0;
     }
+
+    &__icon {
+      margin-right: 0.5rem;
+    }
+  }
 }
