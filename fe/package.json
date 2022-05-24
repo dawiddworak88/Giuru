@@ -49,7 +49,8 @@
     "build-fe-dev": "SET NODE_ENV=development&&webpack --mode development",
     "build-fe": "SET NODE_ENV=production&&webpack --mode production",
     "watch-fe": "SET NODE_ENV=development&&webpack --mode development -w",
-    "ssr": "node server/bootstrap.js"
+    "ssr": "node server/bootstrap.js",
+    "watch-ssr": "nodemon server/bootstrap.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -92,6 +93,7 @@
     "style-loader": "3.3.1",
     "url-loader": "4.1.1",
     "webpack": "5.72.1",
-    "webpack-cli": "4.9.2"
+    "webpack-cli": "4.9.2",
+    "nodemon": "2.0.16"
   }
 }

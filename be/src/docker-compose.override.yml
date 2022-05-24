@@ -50,6 +50,10 @@ services:
   react-ssr:
     environment: 
       NODE_ENV: development
+    volumes:
+      - ../../fe/node_modules:/home/node/aspnetcore-react-ssr/node_modules
+      - ../../fe/server:/home/node/aspnetcore-react-ssr/server
+      - ../../fe/src:/home/node/aspnetcore-react-ssr/src
 
   sqldata:
     environment:
@@ -257,6 +261,8 @@ services:
       - LogstashUrl=http://logstash:31311
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
+    volumes:
+      - ./Project/Web/Buyer/Buyer.Web/wwwroot/dist:/src/wwwroot/disc
     ports:
       - "5104:80"
 
@@ -281,6 +287,8 @@ services:
       - OrganisationId=${ORGANISATION_ID}
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
+    volumes:
+      - ./Project/Web/Seller/Seller.Web/wwwroot/dist:/src/wwwroot/disc
     ports:
       - "5107:80"
 
