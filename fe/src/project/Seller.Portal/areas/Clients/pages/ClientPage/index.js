@@ -1,9 +1,9 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { hydrateRoot } from 'react-dom/client';
 import "../../../../../../shared/polyfills/index";
 import ClientPage from "./ClientPage";
 import CssSsrRemovalHelper from "../../../../../../shared/helpers/globals/CssSsrRemovalHelper";
 
 CssSsrRemovalHelper.remove();
 
-ReactDOM.hydrate(<ClientPage {...window.data} />, document.getElementById("root"));
+hydrateRoot(document.getElementById("root"), <ClientPage {...window.data} />)
