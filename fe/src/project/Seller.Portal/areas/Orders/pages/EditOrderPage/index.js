@@ -1,8 +1,8 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { hydrateRoot } from 'react-dom/client';
 import EditOrderPage from "./EditOrderPage";
 import CssSsrRemovalHelper from "../../../../../../shared/helpers/globals/CssSsrRemovalHelper";
 
 CssSsrRemovalHelper.remove();
 
-ReactDOM.hydrate(<EditOrderPage {...window.data} />, document.getElementById("root"));
+hydrateRoot(document.getElementById("root"), <EditOrderPage {...window.data} />)

@@ -216,7 +216,8 @@ namespace Buyer.Web.Areas.Products.Repositories.Products
                 {
                     AvailableQuantity = response.Data.AvailableQuantity,
                     RestockableInDays = response.Data.RestockableInDays,
-                    ExpectedDelivery = response.Data.ExpectedDelivery
+                    ExpectedDelivery = response.Data.ExpectedDelivery,
+                    Title = response.Data.Title
                 };
             }
 

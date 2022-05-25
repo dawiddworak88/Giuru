@@ -144,6 +144,12 @@
   <data name="ClientRequiredErrorMessage" xml:space="preserve">
     <value>Wählen Sie einen Kunde aus</value>
   </data>
+  <data name="CustomOrderLabel" xml:space="preserve">
+    <value>Fügen Sie eine benutzerdefinierte Bestellung hinzu</value>
+  </data>
+  <data name="CustomOrderSubject" xml:space="preserve">
+    <value>Sonderanfertigung von</value>
+  </data>
   <data name="DeliveryFrom" xml:space="preserve">
     <value>LIeferung ab:</value>
   </data>
@@ -170,6 +176,9 @@
   </data>
   <data name="ImportOrder" xml:space="preserve">
     <value>Bestellung importieren</value>
+  </data>
+  <data name="InitCustomOrderLabel" xml:space="preserve">
+    <value>Ich möchte eine kundenspezifische Bestellung aufgeben</value>
   </data>
   <data name="ItemNotFound" xml:space="preserve">
     <value>Produkt nicht gefunden</value>

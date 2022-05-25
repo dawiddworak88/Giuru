@@ -228,8 +228,8 @@
   <data name="Filename" xml:space="preserve">
     <value>Filename</value>
   </data>
-  <data name="FilesToDownload" xml:space="preserve">
-    <value>Download</value>
+  <data name="Files" xml:space="preserve">
+    <value>Files</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Home</value>
@@ -472,10 +472,13 @@
     <value>Id:</value>
   </data>
   <data name="PhoneNumberLabel" xml:space="preserve">
-    <value>Phone number:</value>
+    <value>Phone number</value>
   </data>
   <data name="Ean" xml:space="preserve">
     <value>EAN:</value>
+  </data>
+  <data name="CustomOrderLabel" xml:space="preserve">
+    <value>Custom order:</value>
   </data>
   <data name="ClientsGroups" xml:space="preserve">
     <value>Clients groups</value>
@@ -491,5 +494,77 @@
   </data>
   <data name="TitleLabel" xml:space="preserve">
     <value>Title:</value>
+  </data>
+  <data name="ReadLess" xml:space="preserve">
+    <value>Read less</value>
+  </data>
+  <data name="ReadMore" xml:space="preserve">
+    <value>Read more</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Attachments</value>
+  </data>
+  <data name="DropOrSelectAttachments" xml:space="preserve">
+    <value>Drop or select an attachment</value>
+  </data>
+  <data name="EltapPartner" xml:space="preserve">
+    <value>Partner with ELTAP</value>
+  </data>
+  <data name="EltapPartnerDescription" xml:space="preserve">
+    <value>Thank you for your interest in ELTAP. We look forward to working with you!</value>
+  </data>
+  <data name="FieldRequiredErrorMessage" xml:space="preserve">
+    <value>Field is required</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="City" xml:space="preserve">
+    <value>City</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Company name</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>Postal Code</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="ContactJobTitle" xml:space="preserve">
+    <value>Contact job title</value>
+  </data>
+  <data name="AccountManager" xml:space="preserve">
+    <value>Account Manager</value>
+  </data>
+  <data name="CEO" xml:space="preserve">
+    <value>CEO</value>
+  </data>
+  <data name="GeneralManager" xml:space="preserve">
+    <value>General Manager</value>
+  </data>
+  <data name="OperationsManager" xml:space="preserve">
+    <value>Operations Manager</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Owner</value>
+  </data>
+  <data name="President" xml:space="preserve">
+    <value>President</value>
+  </data>
+  <data name="SalesManager" xml:space="preserve">
+    <value>Sales Manager</value>
+  </data>
+  <data name="SalesRep" xml:space="preserve">
+    <value>Sales Representative</value>
+  </data>
+  <data name="V" xml:space="preserve">
+    <value>Vicepresident</value>
   </data>
 </root>

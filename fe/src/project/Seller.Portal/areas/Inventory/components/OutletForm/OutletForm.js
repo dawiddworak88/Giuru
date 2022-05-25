@@ -1,10 +1,9 @@
-import React, {useState, useContext} from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import Autocomplete from "@mui/lab/Autocomplete";
 import {
-    FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress
-} from "@material-ui/core";
-import { TextField, Button } from "@material-ui/core";
+    FormControl, InputLabel, Select, MenuItem, FormHelperText, CircularProgress, TextField, Button
+} from "@mui/material";
 import { Context } from "../../../../../../shared/stores/Store";
 import { toast } from "react-toastify";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
@@ -14,8 +13,6 @@ import QuantityValidator from "../../../../../../shared/helpers/validators/Quant
 const OutletForm = (props) => {
 
     const [state, dispatch] = useContext(Context);
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
-    
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         warehouseId: { value: props.warehouseId ? props.warehouseId : null, error: "" },
@@ -81,7 +78,6 @@ const OutletForm = (props) => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
                         setFieldValue({ name: "id", value: jsonRes.id });
-                        setDisableSaveButton(true);
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -107,7 +103,7 @@ const OutletForm = (props) => {
                             </div>
                         }
                         <div className="field">
-                            <FormControl fullWidth={true} helperText={dirty.warehouseId ? errors.warehouseId : ""} error={(errors.warehouseId.length > 0) && dirty.warehouseId}>
+                            <FormControl fullWidth={true} helperText={dirty.warehouseId ? errors.warehouseId : ""} error={(errors.warehouseId.length > 0) && dirty.warehouseId} variant="standard">
                                 <InputLabel id="warehouse-label">{props.selectWarehouseLabel}</InputLabel>
                                 <Select
                                     name="warehouseId"
@@ -143,6 +139,7 @@ const OutletForm = (props) => {
                                     <TextField 
                                         {...params} 
                                         label={props.selectProductLabel} 
+                                        variant="standard"
                                         margin="normal"/>
                                 )}/>
                         </div>
@@ -153,6 +150,7 @@ const OutletForm = (props) => {
                                 type="text" 
                                 label={props.titleLabel} 
                                 fullWidth={true} 
+                                variant="standard"
                                 value={title} 
                                 onChange={handleOnChange}/>
                         </div>
@@ -164,6 +162,7 @@ const OutletForm = (props) => {
                                 label={props.descriptionLabel} 
                                 fullWidth={true} 
                                 value={description} 
+                                variant="standard"
                                 onChange={handleOnChange}/>
                         </div>
                         <div className="field">
@@ -174,6 +173,7 @@ const OutletForm = (props) => {
                                 label={props.eanLabel} 
                                 fullWidth={true} 
                                 value={ean} 
+                                variant="standard"
                                 onChange={handleOnChange}/>
                         </div>
                         <div className="field">
@@ -181,6 +181,7 @@ const OutletForm = (props) => {
                                 id="quantity" 
                                 name="quantity" 
                                 type="number" 
+                                variant="standard"
                                 inputProps={{ 
                                     min: "1", 
                                     step: "1" 
@@ -204,6 +205,7 @@ const OutletForm = (props) => {
                                 label={props.availableQuantityLabel} 
                                 fullWidth={true} 
                                 value={availableQuantity} 
+                                variant="standard"
                                 onChange={handleOnChange}/>
                         </div>
                         <div className="field">
@@ -211,7 +213,7 @@ const OutletForm = (props) => {
                                 type="subbmit" 
                                 variant="contained"
                                 color="primary"
-                                disabled={state.isLoading || disable || !product || disableSaveButton}>
+                                disabled={state.isLoading || disable || !product}>
                                 {props.saveText}
                             </Button>
                             <Button 

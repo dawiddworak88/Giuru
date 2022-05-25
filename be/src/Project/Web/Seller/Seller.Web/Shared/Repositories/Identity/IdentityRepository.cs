@@ -64,7 +64,7 @@ namespace Seller.Web.Shared.Repositories.Identity
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, User>(apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data != null)
+            if (response.IsSuccessStatusCode && response.Data is not null)
             {
                 return response.Data;
             }

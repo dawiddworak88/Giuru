@@ -1,15 +1,14 @@
-import React, {useContext, useState} from "react";
+import React, {useContext} from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
-import { TextField, Button, InputLabel } from "@material-ui/core";
+import { TextField, Button, InputLabel } from "@mui/material";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 const WarehouseForm = (props) => {
 
     const [state, dispatch] = useContext(Context);
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : null, error: "" },
@@ -48,7 +47,6 @@ const WarehouseForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
-                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonRes.id });
                     }
                     else {
@@ -82,6 +80,7 @@ const WarehouseForm = (props) => {
                            fullWidth={true} 
                            value={name} 
                            onChange={handleOnChange}
+                           variant="standard"
                            helperText={dirty.name ? errors.name : ""} 
                            error={(errors.name.length > 0) && dirty.name}/>
                     </div>
@@ -94,6 +93,7 @@ const WarehouseForm = (props) => {
                            fullWidth={true} 
                            value={location} 
                            onChange={handleOnChange}
+                           variant="standard"
                            helperText={dirty.location ? errors.location : ""} 
                            error={(errors.location.length > 0) && dirty.location}/>
                     </div>
@@ -102,7 +102,7 @@ const WarehouseForm = (props) => {
                             type="subbmit" 
                             variant="contained"
                             color="primary"
-                            disabled={state.isLoading || disable || disableSaveButton}>
+                            disabled={state.isLoading || disable}>
                             {props.saveText}
                         </Button>
                         <Button 

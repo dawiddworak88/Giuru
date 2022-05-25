@@ -13,8 +13,8 @@ function HeroSlider(props) {
             <div className="hero-slider">
                 <Carousel autoPlay={true} showArrows={true} showThumbs={false} useKeyboardArrows={false} dynamicHeight={false} showStatus={false} swipeable={true}>
                     {props.items.map((item, index) =>
-                        <LazyLoad offset={LazyLoadConstants.defaultOffset()}>
-                            <div className="hero-slider__item" key={index}>
+                        <LazyLoad offset={LazyLoadConstants.defaultOffset()} key={index}>
+                            <div className="hero-slider__item" >
                                     <ResponsiveImage {...item.image} />
                                     {item.teaserTitle &&
                                     <div className="hero-slider__teaser">

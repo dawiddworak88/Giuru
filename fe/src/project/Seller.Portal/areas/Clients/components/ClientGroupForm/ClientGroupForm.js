@@ -1,6 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
-import { TextField, Button, InputLabel, CircularProgress } from "@material-ui/core";
+import { TextField, Button, InputLabel, CircularProgress } from "@mui/material";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -9,7 +9,6 @@ import PropTypes from "prop-types";
 
 const ClientGroupForm = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : null, error: "" }
@@ -43,7 +42,6 @@ const ClientGroupForm = (props) => {
 
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
-                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
@@ -82,6 +80,7 @@ const ClientGroupForm = (props) => {
                                 fullWidth={true}
                                 value={name} 
                                 onChange={handleOnChange} 
+                                variant="standard"
                                 helperText={dirty.name ? errors.name : ""} 
                                 error={(errors.name.length > 0) && dirty.name} />
                         </div>
@@ -90,7 +89,7 @@ const ClientGroupForm = (props) => {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary"
-                                disabled={state.isLoading || disable || disableSaveButton}>
+                                disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
                             <Button

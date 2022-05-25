@@ -8,6 +8,7 @@ using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Globalization;

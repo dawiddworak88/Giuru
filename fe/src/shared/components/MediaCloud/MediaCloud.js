@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { UploadCloud } from "react-feather";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import { Context } from "../../../shared/stores/Store";
 import IconConstants from "../../constants/IconConstants";

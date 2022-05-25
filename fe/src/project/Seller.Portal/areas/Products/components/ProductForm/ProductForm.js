@@ -1,11 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
-import NoSsr from '@material-ui/core/NoSsr';
-import Autocomplete from "@material-ui/lab/Autocomplete";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
-import { TextField, Button, CircularProgress, FormControlLabel, Switch, InputLabel } from "@material-ui/core";
+import { TextField, Button, CircularProgress, FormControlLabel, Switch, InputLabel, NoSsr, Autocomplete } from "@mui/material";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import DynamicForm from "../../../../../../shared/components/DynamicForm/DynamicForm";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
@@ -13,7 +11,6 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function ProductForm(props) {
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const categoriesProps = {
         options: props.categories,
         getOptionLabel: (option) => option.name
@@ -133,7 +130,6 @@ function ProductForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
@@ -181,11 +177,11 @@ function ProductForm(props) {
                                 value={category}
                                 onChange={onCategoryChange}
                                 autoComplete
-                                renderInput={(params) => <TextField {...params} label={props.selectCategoryLabel} margin="normal" />}
+                                renderInput={(params) => <TextField {...params} label={props.selectCategoryLabel} margin="normal" variant="standard" />}
                             />
                         </div>
                         <div className="field">
-                            <TextField id="sku" name="sku" label={props.skuLabel} fullWidth={true}
+                            <TextField id="sku" name="sku" label={props.skuLabel} fullWidth={true} variant="standard"
                                 value={sku} onChange={handleOnChange} helperText={dirty.sku ? errors.sku : ""} error={(errors.sku.length > 0) && dirty.sku} />
                         </div>
                         <div className="field">
@@ -195,14 +191,15 @@ function ProductForm(props) {
                                 label={props.eanLabel} 
                                 fullWidth={true}
                                 value={ean} 
+                                variant="standard"
                                 onChange={handleOnChange} />
                         </div>
                         <div className="field">
-                            <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
+                            <TextField id="name" name="name" label={props.nameLabel} fullWidth={true} variant="standard"
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">
-                            <TextField id="description" name="description" label={props.descriptionLabel} fullWidth={true}
+                            <TextField id="description" name="description" label={props.descriptionLabel} fullWidth={true} variant="standard"
                                 value={description} onChange={handleOnChange} multiline />
                         </div>
                         <div className="field">
@@ -216,7 +213,7 @@ function ProductForm(props) {
                                     setFieldValue({ name: "primaryProduct", value: newValue });
                                   }}
                                 autoComplete
-                                renderInput={(params) => <TextField {...params} label={props.selectPrimaryProductLabel} margin="normal" />}
+                                renderInput={(params) => <TextField {...params} label={props.selectPrimaryProductLabel} margin="normal" variant="standard" />}
                             />
                         </div>
                         <div className="field">
@@ -292,7 +289,7 @@ function ProductForm(props) {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || disable || disableSaveButton}>
+                                disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
                             <Button 

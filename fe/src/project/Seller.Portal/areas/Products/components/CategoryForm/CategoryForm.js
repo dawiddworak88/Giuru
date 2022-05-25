@@ -1,17 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
-import { TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress } from "@material-ui/core";
+import { TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress } from "@mui/material";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function CategoryForm(props) {
     const [state, dispatch] = useContext(Context);
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
-
     const stateSchema = {
 
         id: { value: props.id ? props.id : null, error: "" },
@@ -50,7 +48,6 @@ function CategoryForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonResponse.id });
                         toast.success(jsonResponse.message);
                     }
@@ -88,11 +85,11 @@ function CategoryForm(props) {
                             </div>
                         }
                         <div className="field">
-                            <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
+                            <TextField id="name" name="name" label={props.nameLabel} fullWidth={true} variant="standard"
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">
-                            <FormControl fullWidth={true}>
+                            <FormControl fullWidth={true} variant="standard">
                                 <InputLabel id="parent-category">{props.parentCategoryLabel}</InputLabel>
                                 <Select
                                     labelId="parent-category"
@@ -127,7 +124,7 @@ function CategoryForm(props) {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || disable || disableSaveButton}>
+                                disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
                             <Button

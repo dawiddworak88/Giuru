@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Foundation.Extensions.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Ordering.Api.ServicesModels
 {
-    public class CheckoutBasketServiceModel
+    public class CheckoutBasketServiceModel : BaseServiceModel
     {
         public Guid? BasketId { get; set; }
         public Guid? ClientId { get; set; }
@@ -36,6 +37,7 @@ namespace Ordering.Api.ServicesModels
         public string ExternalReference { get; set; }
         public DateTime? ExpectedDeliveryDate { get; set; }
         public IEnumerable<CheckoutBasketItemServiceModel> Items { get; set; }
-
+        public bool HasCustomOrder { get; set; }
+        public IEnumerable<Guid> Attachments { get; set; }
     }
 }

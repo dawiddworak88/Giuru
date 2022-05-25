@@ -1,18 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
-import { TextField, Button, CircularProgress, InputLabel } from "@material-ui/core";
+import { TextField, Button, CircularProgress, InputLabel } from "@mui/material";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 function ProductAttributeForm(props) {
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const [state, dispatch] = useContext(Context);
-
     const stateSchema = {
-
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" }
     };
@@ -47,7 +44,6 @@ function ProductAttributeForm(props) {
                 return response.json().then(jsonResponse => {
 
                     if (response.ok) {
-                        setDisableSaveButton(true)
                         toast.success(jsonResponse.message);
 
                         if (!id) {
@@ -88,7 +84,7 @@ function ProductAttributeForm(props) {
                             </div>
                         }
                         <div className="field">
-                            <TextField id="name" name="name" label={props.nameLabel} fullWidth={true}
+                            <TextField id="name" name="name" label={props.nameLabel} fullWidth={true} variant="standard"
                                 value={name} onChange={handleOnChange} helperText={dirty.name ? errors.name : ""} error={(errors.name.length > 0) && dirty.name} />
                         </div>
                         <div className="field">
@@ -96,7 +92,7 @@ function ProductAttributeForm(props) {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
-                                disabled={state.isLoading || disable || disableSaveButton}>
+                                disabled={state.isLoading || disable}>
                                 {props.saveText}
                             </Button>
                             <Button 

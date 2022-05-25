@@ -86,18 +86,20 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
             throw new CustomException(response.Message, (int)response.StatusCode);
         }
 
-        public async Task CheckoutBasketAsync(string token, string language, Guid? clientId, string clientName, Guid? basketId, DateTime? expectedDelivery, string moreInfo)
+        public async Task CheckoutBasketAsync(string token, string language, Guid? clientId, string clientName, Guid? basketId, DateTime? expectedDelivery, string moreInfo, bool hasCustomOrder, IEnumerable<Guid> attachments)
         {
-            var requestModel = new CheckoutBasketRequestModel
+            var requestModel = new CheckoutBasketApiRequestModel
             {
                 ClientId = clientId,
                 ClientName = clientName,
                 BasketId = basketId,
                 ExpectedDeliveryDate = expectedDelivery,
-                MoreInfo = moreInfo
+                MoreInfo = moreInfo,
+                HasCustomOrder = hasCustomOrder,
+                Attachments = attachments
             };
 
-            var apiRequest = new ApiRequest<CheckoutBasketRequestModel>
+            var apiRequest = new ApiRequest<CheckoutBasketApiRequestModel>
             {
                 Language = language,
                 Data = requestModel,
@@ -105,7 +107,7 @@ namespace Buyer.Web.Areas.Orders.Repositories.Baskets
                 EndpointAddress = $"{this.settings.Value.BasketUrl}{ApiConstants.Baskets.BasketsCheckoutApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<CheckoutBasketRequestModel>, CheckoutBasketRequestModel, BaseResponseModel>(apiRequest);
+            var response = await this.apiClientService.PostAsync<ApiRequest<CheckoutBasketApiRequestModel>, CheckoutBasketApiRequestModel, BaseResponseModel>(apiRequest);
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);

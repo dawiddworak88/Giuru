@@ -27,15 +27,9 @@ namespace Basket.Api.Services
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel checkoutBasketServiceModel)
         {
-            var basket = await this.basketRepository.GetBasketAsync(checkoutBasketServiceModel.BasketId.Value);
-
-            if (basket == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             var message = new BasketCheckoutAcceptedIntegrationEvent
             {
+                BasketId = checkoutBasketServiceModel.BasketId,
                 Language = checkoutBasketServiceModel.Language,
                 OrganisationId = checkoutBasketServiceModel.OrganisationId,
                 Username = checkoutBasketServiceModel.Username,
@@ -67,7 +61,15 @@ namespace Basket.Api.Services
                 ExternalReference = checkoutBasketServiceModel.ExternalReference,
                 ExpectedDeliveryDate = checkoutBasketServiceModel.ExpectedDeliveryDate,
                 MoreInfo = checkoutBasketServiceModel.MoreInfo,
-                Basket = new BasketEventModel
+                HasCustomOrder = checkoutBasketServiceModel.HasCustomOrder,
+                Attachments = checkoutBasketServiceModel.Attachments
+            };
+
+            var basket = await this.basketRepository.GetBasketAsync(checkoutBasketServiceModel.BasketId.Value);
+
+            if (basket is not null)
+            {
+                message.Basket = new BasketEventModel
                 {
                     Id = basket.Id,
                     Items = basket.Items.Select(x => new BasketItemEventModel
@@ -84,48 +86,49 @@ namespace Basket.Api.Services
                         DeliveryTo = x.DeliveryTo,
                         MoreInfo = x.MoreInfo
                     })
+                };
+
+                var itemGroups = basket.Items.OrEmptyIfNull().GroupBy(g => g.ProductId);
+                var stockItems = new List<BasketCheckoutProductEventModel>();
+                var outletItems = new List<BasketCheckoutProductEventModel>();
+
+                foreach (var group in itemGroups)
+                {
+                    stockItems.Add(new BasketCheckoutProductEventModel
+                    {
+                        ProductId = group.FirstOrDefault().ProductId,
+                        BookedQuantity = (int)-group.Sum(x => x.StockQuantity)
+                    });
+
+                    outletItems.Add(new BasketCheckoutProductEventModel
+                    {
+                        ProductId = group.FirstOrDefault().ProductId,
+                        BookedQuantity = (int)-group.Sum(x => x.OutletQuantity)
+                    });
                 }
-            };
 
-            var itemGroups = basket.Items.OrEmptyIfNull().GroupBy(g => g.ProductId);
-            var stockItems = new List<BasketCheckoutProductEventModel>();
-            var outletItems = new List<BasketCheckoutProductEventModel>();
-
-            foreach (var group in itemGroups)
-            {
-                stockItems.Add(new BasketCheckoutProductEventModel
+                var stockBookedItems = new BasketCheckoutStockProductsIntegrationEvent
                 {
-                    ProductId = group.FirstOrDefault().ProductId,
-                    BookedQuantity = (int)-group.Sum(x => x.StockQuantity)
-                });
+                    Items = stockItems.Select(x => new BasketCheckoutProductEventModel
+                    {
+                        ProductId = x.ProductId,
+                        BookedQuantity = x.BookedQuantity
+                    })
+                };
 
-                outletItems.Add(new BasketCheckoutProductEventModel
+                var outletBookedItems = new BasketCheckoutOutletProductsIntegrationEvent
                 {
-                    ProductId = group.FirstOrDefault().ProductId,
-                    BookedQuantity = (int)-group.Sum(x => x.OutletQuantity)
-                });
+                    Items = outletItems.Select(x => new BasketCheckoutProductEventModel
+                    {
+                        ProductId = x.ProductId,
+                        BookedQuantity = x.BookedQuantity
+                    })
+                };
+
+                this.eventBus.Publish(outletBookedItems);
+                this.eventBus.Publish(stockBookedItems);
             }
-
-            var stockBookedItems = new BasketCheckoutStockProductsIntegrationEvent
-            {
-                Items = stockItems.Select(x => new BasketCheckoutProductEventModel
-                {
-                    ProductId = x.ProductId,
-                    BookedQuantity = x.BookedQuantity
-                })
-            };
-
-            var outletBookedItems = new BasketCheckoutOutletProductsIntegrationEvent
-            {
-                Items = outletItems.Select(x => new BasketCheckoutProductEventModel
-                {
-                    ProductId = x.ProductId,
-                    BookedQuantity = x.BookedQuantity
-                })
-            };
-
-            this.eventBus.Publish(outletBookedItems);
-            this.eventBus.Publish(stockBookedItems);
+            
             this.eventBus.Publish(message);
         }
 

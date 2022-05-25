@@ -36,7 +36,12 @@ namespace Identity.Api.ModelBuilders.SignInForm
                 SubmitUrl = this.linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
                 ReturnUrl = componentModel.ReturnUrl,
                 ForgotPasswordLabel = this.accountLocalizer.GetString("ForgotPasswordLabel"),
-                ResetPasswordUrl = this.linkGenerator.GetPathByAction("Index", "ResetPassword", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name })
+                ResetPasswordUrl = this.linkGenerator.GetPathByAction("Index", "ResetPassword", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
+                RegisterLabel = this.accountLocalizer.GetString("Register"),
+                RegisterButtonText = this.accountLocalizer.GetString("RegisterButton"),
+                RegisterUrl = this.linkGenerator.GetPathByAction("Index", "Register", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
+                ContactText = this.accountLocalizer.GetString("RegisterContact"),
+                DevelopersEmail = componentModel.DevelopersEmail
             };
 
             return viewModel;

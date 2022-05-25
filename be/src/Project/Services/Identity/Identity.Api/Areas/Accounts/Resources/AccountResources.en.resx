@@ -138,6 +138,24 @@
   <data name="BackToLoginText" xml:space="preserve">
     <value>Back to login</value>
   </data>
+  <data name="BusinessInformation" xml:space="preserve">
+    <value>Business Information</value>
+  </data>
+  <data name="BusinessInformationDescription" xml:space="preserve">
+    <value>Let us know your business details</value>
+  </data>
+  <data name="ClientApplyConfirmation" xml:space="preserve">
+    <value>Thank you for registering on our B2B platform. Your application has been sent and is waiting for verification by our team. We will notify you by e-mail about activating the account.</value>
+  </data>
+  <data name="ClientApplyConfirmationSubject" xml:space="preserve">
+    <value>Confirmation of sending the request for cooperation.</value>
+  </data>
+  <data name="ContactInformation" xml:space="preserve">
+    <value>Contact Information</value>
+  </data>
+  <data name="ContactInformationDescription" xml:space="preserve">
+    <value>Your primary contact person for ELTAP will be the contact person provided in the form</value>
+  </data>
   <data name="EmailIsConfirmedText" xml:space="preserve">
     <value>Account Confirmed</value>
   </data>
@@ -174,8 +192,20 @@
   <data name="OrganisationNotFound" xml:space="preserve">
     <value>Organization not found.</value>
   </data>
+  <data name="Partnership" xml:space="preserve">
+    <value>Partnership</value>
+  </data>
   <data name="PasswordUpdated" xml:space="preserve">
     <value>Password has been set successfully</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Join us</value>
+  </data>
+  <data name="RegisterButton" xml:space="preserve">
+    <value>Apply here</value>
+  </data>
+  <data name="RegisterContact" xml:space="preserve">
+    <value>Do you need help? Contact us</value>
   </data>
   <data name="ResetPassword" xml:space="preserve">
     <value>Password reset</value>
@@ -189,13 +219,28 @@
   <data name="SignInText" xml:space="preserve">
     <value>Sign in</value>
   </data>
+  <data name="SuccessfullyClientApply" xml:space="preserve">
+    <value>The cooperation request was successfully submitted.</value>
+  </data>
   <data name="SuccessfullyResetPassword" xml:space="preserve">
     <value>The reset password link has been sent if your account exists in our platform. Please check your e-mail box for further instructions.</value>
+  </data>
+  <data name="OnlineRetailers" xml:space="preserve">
+    <value>Where do you sell the most online?</value>
   </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>User not found.</value>
   </data>
   <data name="VerifyDateExpired" xml:space="preserve">
     <value>Link has expired. Please contact an administrator.</value>
+  </data>
+  <data name="ClientApplySubject" xml:space="preserve">
+    <value>New cooperation request</value>
+  </data>
+  <data name="SelectJobTitle" xml:space="preserve">
+    <value>Choose a workplace title</value>
+  </data>
+  <data name="ApplySubmit" xml:space="preserve">
+    <value>Submit your application now</value>
   </data>
 </root>

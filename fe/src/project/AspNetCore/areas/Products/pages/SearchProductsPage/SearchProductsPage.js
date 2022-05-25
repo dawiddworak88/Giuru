@@ -1,6 +1,6 @@
 import React from "react";
-import { toast } from "react-toastify";
-import { ThemeProvider } from "@material-ui/core/styles";
+import { ToastContainer } from "react-toastify";
+import { ThemeProvider } from "@mui/material/styles";
 import GlobalHelper from "../../../../../../shared/helpers/globals/GlobalHelper";
 import Store from "../../../../../../shared/stores/Store";
 import Header from "../../../../shared/components/Header/Header";
@@ -9,11 +9,9 @@ import Catalog from "../../../../shared/components/Catalog/Catalog";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 
 function SearchProductsPage(props) {
-
-  toast.configure();
-
   return (
     <ThemeProvider theme={GlobalHelper.initMuiTheme()}>
+      <ToastContainer />
       <Store>
         <div className="search-products-page">
           <Header {...props.header}></Header>

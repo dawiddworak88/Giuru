@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
-import NoSsr from '@material-ui/core/NoSsr';
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
@@ -10,15 +9,14 @@ import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaClou
 import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import { 
-    TextField, Select, FormControl, FormControlLabel, Switch, 
+    TextField, Select, FormControl, FormControlLabel, Switch, NoSsr,
     InputLabel, MenuItem, Button, CircularProgress, FormHelperText
-} from "@material-ui/core";
+} from "@mui/material";
 import { stateToMarkdown } from "draft-js-export-markdown";
 import { stateFromMarkdown } from 'draft-js-import-markdown';
 
 const NewsItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [disableSaveButton, setDisableSaveButton] = useState(false);
     const [convertedToRaw, setConvertedToRaw] = useState(props.content ? props.content : null);
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     
@@ -78,7 +76,6 @@ const NewsItemForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
-                        setDisableSaveButton(true);
                         setFieldValue({ name: "id", value: jsonRes.id });
                     }
                     else {
@@ -178,12 +175,13 @@ const NewsItemForm = (props) => {
                                 fullWidth={true}
                                 value={title} 
                                 onChange={handleOnChange} 
+                                variant="standard"
                                 helperText={dirty.title ? errors.title : ""} 
                                 error={(errors.title.length > 0) && dirty.title} 
                             />
                         </div>
                         <div className="field">
-                            <FormControl fullWidth={true}>
+                            <FormControl fullWidth={true} variant="standard">
                                 <InputLabel id="category">{props.categoryLabel}</InputLabel>
                                 <Select
                                     labelId="category"
@@ -210,6 +208,7 @@ const NewsItemForm = (props) => {
                                 value={description} 
                                 multiline={true}
                                 onChange={handleOnChange}
+                                variant="standard"
                                 helperText={dirty.description ? errors.description : ""} 
                                 error={(errors.description.length > 0) && dirty.description} 
                             />
@@ -300,7 +299,7 @@ const NewsItemForm = (props) => {
                                     type="submit" 
                                     variant="contained" 
                                     color="primary"
-                                    disabled={state.isLoading || disable || !convertedToRaw || disableSaveButton}
+                                    disabled={state.isLoading || disable || !convertedToRaw}
                                 >
                                 {props.saveText}
                             </Button>
