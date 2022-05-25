@@ -1,8 +1,8 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { hydrateRoot } from 'react-dom/client';
 import ContentPage from "./ContentPage";
 import CssSsrRemovalHelper from "../../../../../../shared/helpers/globals/CssSsrRemovalHelper";
 
 CssSsrRemovalHelper.remove();
 
-ReactDOM.hydrate(<ContentPage {...window.data} />, document.getElementById("root"));
+hydrateRoot(document.getElementById("root"), <ContentPage {...window.data} />)
