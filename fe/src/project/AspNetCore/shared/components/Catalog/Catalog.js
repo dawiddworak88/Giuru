@@ -225,6 +225,7 @@ function Catalog(props) {
                                                         }
                                                     </div>
                                                 }
+
                                             </div>
                                             {props.isLoggedIn &&
                                                 <div className="catalog-item__add-to-cart-button-container">

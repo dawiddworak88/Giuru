@@ -1,5 +1,5 @@
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import moment from "moment";
@@ -20,6 +20,7 @@ import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
+    const [isMounted, setMounted] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [itemsPerPage,] = React.useState(PaginationConstants.defaultRowsPerPage());
     const [searchTerm, setSearchTerm] = React.useState("");
@@ -176,6 +177,10 @@ function Catalog(props) {
                 toast.error(props.generalErrorMessage);
             });
     };
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
     
     return (
         <section className="section section-small-padding catalog">
@@ -240,10 +245,11 @@ function Catalog(props) {
                                                 }
 
                                                 {props.table.properties && props.table.properties.map((property, index) => {
-
-                                                    if (property.isDateTime) return (
-                                                        <TableCell key={index}>{moment.utc(item[property.title]).format("L LT")}</TableCell>
-                                                    )
+                                                    if (property.isDateTime && isMounted){
+                                                        return (
+                                                            <TableCell key={index}>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
+                                                        )
+                                                    }
                                                     else {
                                                         return (
                                                             <TableCell key={index}>{item[property.title] !== null ? item[property.title] : "-"}</TableCell>
