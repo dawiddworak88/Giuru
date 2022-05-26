@@ -141,7 +141,7 @@ function MediaCloud(props) {
     return (
         <div className="dropzone">
             {props.label &&
-                <label className="dropzone__title" htmlFor={props.id}>{props.label}</label>
+                <label className="dropzone__title">{props.label}</label>
             }
             <div className="dropzone__pond-container" {...getRootProps()}>
                 <input id={props.id} name={props.name} {...getInputProps()} />

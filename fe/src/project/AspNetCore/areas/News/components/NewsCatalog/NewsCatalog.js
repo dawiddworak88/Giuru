@@ -93,9 +93,9 @@ const NewsCatalog = (props) => {
                         {props.categories && props.categories.length > 0 &&
                             <div className="news-catalog__categories">
                                 <Button type="text" variant="contained" className="category" color="primary" onClick={() => handleCategory(null)}>{props.allCategoryLabel}</Button>
-                                {props.categories.map(category => {
+                                {props.categories.map((category, index) => {
                                     return (
-                                        <Button type="text" variant="contained" className="category" color="primary" onClick={() => handleCategory(category)}>{category.name}</Button>
+                                        <Button type="text" variant="contained" className="category" color="primary" onClick={() => handleCategory(category)} key={index}>{category.name}</Button>
                                     )
                                 })}
                             </div>
