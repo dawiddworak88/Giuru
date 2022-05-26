@@ -50,7 +50,7 @@
     "build-fe": "SET NODE_ENV=production&&webpack --mode production",
     "watch-fe": "SET NODE_ENV=development&&webpack --mode development -w",
     "ssr": "node server/bootstrap.js",
-    "watch-ssr": "nodemon server/bootstrap.js --watch \".\" --legacy-watch"
+    "watch-ssr": "nodemon server/bootstrap.js --watch \".\" --legacy-watch --polling-interval 4000"
   },
   "eslintConfig": {
     "extends": "react-app"
