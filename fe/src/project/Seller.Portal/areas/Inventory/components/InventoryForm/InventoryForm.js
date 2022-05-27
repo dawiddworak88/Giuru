@@ -21,7 +21,7 @@ const InventoryForm = (props) => {
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         warehouseId: { value: props.warehouseId ? props.warehouseId : null, error: "" },
-        product: { value: props.productId ? props.products.find((item) => item.id === props.productId) : null, error: "" },
+        product: { value: props.product ? props.product : null, error: "" },
         quantity: { value: props.quantity ? props.quantity : 0, error: "" },
         restockableInDays: { value: props.restockableInDays ? props.restockableInDays : null, error: "" },
         availableQuantity: { value: props.availableQuantity ? props.availableQuantity : 0, error: "" },

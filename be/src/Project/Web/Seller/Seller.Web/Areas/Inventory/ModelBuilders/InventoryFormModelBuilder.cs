@@ -4,9 +4,11 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Inventory.Definitions;
 using Seller.Web.Areas.Inventory.Repositories.Inventories;
 using Seller.Web.Areas.Inventory.Repositories.Warehouses;
 using Seller.Web.Areas.Inventory.ViewModel;
+using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Shared.Repositories.Products;
 using System.Globalization;
 using System.Linq;
@@ -73,10 +75,10 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 viewModel.Warehouses = warehouses.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
-            var products = await this.productsRepository.GetAllProductsAsync(componentModel.Token, componentModel.Language, null);
+            var products = await this.productsRepository.GetProductsAsync(componentModel.Token, componentModel.Language, null, null, null, InventoryConstants.ProductsSuggestionDefaultPageIndex, InventoryConstants.ProductsSuggestionDefaultItemsPerPage, $"{nameof(Product.Name)} ASC");
             if (products != null)
             {
-                viewModel.Products = products.Select(x => new ListInventoryItemViewModel { Id = x.Id, Name = x.Name, Sku = x.Sku });
+                viewModel.Products = products.Data.Select(x => new ListInventoryItemViewModel { Id = x.Id, Name = x.Name, Sku = x.Sku });
             }
 
             if (componentModel.Id.HasValue)
@@ -86,12 +88,18 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 {
                     viewModel.Id = inventoryProduct.Id;
                     viewModel.WarehouseId = inventoryProduct.WarehouseId;
-                    viewModel.ProductId = inventoryProduct.ProductId;
                     viewModel.Quantity = inventoryProduct.Quantity;
                     viewModel.Ean = inventoryProduct.Ean;
                     viewModel.AvailableQuantity = inventoryProduct.AvailableQuantity;
                     viewModel.RestockableInDays = inventoryProduct.RestockableInDays;
                     viewModel.ExpectedDelivery = inventoryProduct.ExpectedDelivery;
+                    
+                    var product = await this.productsRepository.GetProductAsync(componentModel.Token, componentModel.Language, inventoryProduct.ProductId);
+
+                    if (product is not null)
+                    {
+                        viewModel.Product = new ListInventoryItemViewModel { Id = product.Id, Name = product.Name, Sku = product.Sku };
+                    }
                 }
             }
 

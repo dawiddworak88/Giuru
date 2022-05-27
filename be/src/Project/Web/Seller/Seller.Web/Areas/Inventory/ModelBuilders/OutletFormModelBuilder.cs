@@ -4,9 +4,11 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.Inventory.Definitions;
 using Seller.Web.Areas.Inventory.Repositories;
 using Seller.Web.Areas.Inventory.Repositories.Warehouses;
 using Seller.Web.Areas.Inventory.ViewModel;
+using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Shared.Repositories.Products;
 using System.Globalization;
 using System.Linq;
@@ -62,7 +64,8 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "OutletsApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
                 DescriptionLabel = this.globalLocalizer.GetString("DescriptionLabel"),
                 TitleLabel = this.globalLocalizer.GetString("TitleLabel"),
-                EanLabel = this.globalLocalizer.GetString("Ean")
+                EanLabel = this.globalLocalizer.GetString("Ean"),
+                ProductsSuggestionUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var warehouses = await this.warehousesRepository.GetAllWarehousesAsync(componentModel.Token, componentModel.Language, null);
@@ -71,11 +74,11 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 viewModel.Warehouses = warehouses.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
-            var products = await this.productsRepository.GetAllProductsAsync(componentModel.Token, componentModel.Language, null);
-
-            if (products is not null)
+            var products = await this.productsRepository.GetProductsAsync(componentModel.Token, componentModel.Language, null, null, null, InventoryConstants.ProductsSuggestionDefaultPageIndex, InventoryConstants.ProductsSuggestionDefaultItemsPerPage, $"{nameof(Product.Name)} ASC");
+            
+            if (products != null)
             {
-                viewModel.Products = products.Select(x => new ListOutletItemViewModel { Id = x.Id, Name = x.Name, Sku = x.Sku });
+                viewModel.Products = products.Data.Select(x => new ListOutletItemViewModel { Id = x.Id, Name = x.Name, Sku = x.Sku });
             }
 
             if (componentModel.Id.HasValue)
@@ -86,12 +89,18 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 {
                     viewModel.Id = outletItem.Id;
                     viewModel.WarehouseId = outletItem.WarehouseId;
-                    viewModel.ProductId = outletItem.ProductId;
                     viewModel.Quantity = outletItem.Quantity;
                     viewModel.OutletDescription = outletItem.Description;
                     viewModel.OutletTitle = outletItem.Title;
                     viewModel.AvailableQuantity = outletItem.AvailableQuantity;
                     viewModel.Ean = outletItem.Ean;
+
+                    var product = await this.productsRepository.GetProductAsync(componentModel.Token, componentModel.Language, outletItem.ProductId);
+
+                    if (product is not null)
+                    {
+                        viewModel.Product = new ListOutletItemViewModel { Id = product.Id, Name = product.Name, Sku = product.Sku };
+                    }
                 }
             }
 
