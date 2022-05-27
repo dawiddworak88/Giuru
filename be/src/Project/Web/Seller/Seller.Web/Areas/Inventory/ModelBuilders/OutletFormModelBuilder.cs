@@ -4,12 +4,12 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Seller.Web.Areas.Inventory.Definitions;
 using Seller.Web.Areas.Inventory.Repositories;
 using Seller.Web.Areas.Inventory.Repositories.Warehouses;
 using Seller.Web.Areas.Inventory.ViewModel;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Shared.Repositories.Products;
+using Seller.Web.Shared.Definitions;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -74,7 +74,7 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 viewModel.Warehouses = warehouses.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
-            var products = await this.productsRepository.GetProductsAsync(componentModel.Token, componentModel.Language, null, null, null, InventoryConstants.ProductsSuggestionDefaultPageIndex, InventoryConstants.ProductsSuggestionDefaultItemsPerPage, $"{nameof(Product.Name)} ASC");
+            var products = await this.productsRepository.GetProductsAsync(componentModel.Token, componentModel.Language, null, null, null, Constants.ProductsSuggestionDefaultPageIndex, Constants.ProductsSuggestionDefaultItemsPerPage, $"{nameof(Product.Name)} ASC");
             
             if (products != null)
             {
