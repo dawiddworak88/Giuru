@@ -37,5 +37,6 @@ namespace Seller.Web.Areas.Inventory.ViewModel
         public string IdLabel { get; set; }
         public string EanLabel { get; set; }
         public string Ean { get; set; }
+        public string ProductsSuggestionUrl { get; set; }
     }
 }

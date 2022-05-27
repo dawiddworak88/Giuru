@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import {
     FormControl, InputLabel, Select, MenuItem, FormHelperText, 
@@ -11,10 +11,13 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 import { LocalizationProvider, DatePicker,} from "@mui/lab";
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import QuantityValidator from "../../../../../../shared/helpers/validators/QuantityValidator";
+import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import SearchConstants from "../../../../../../shared/constants/SearchConstants";
 
 const InventoryForm = (props) => {
-
     const [state, dispatch] = useContext(Context);
+    const [products, setProducts] = useState(props.products ? props.products : []);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         warehouseId: { value: props.warehouseId ? props.warehouseId : null, error: "" },
@@ -27,7 +30,7 @@ const InventoryForm = (props) => {
     };
 
     const productsProps = {
-        options: props.products,
+        options: products,
         getOptionLabel: (option) => option.name + " (" + option.sku + ")"
     };
 
@@ -88,12 +91,43 @@ const InventoryForm = (props) => {
             });
     };
 
+    const productsSuggesstionFetchRequest = (e) => {
+        const { value } = e.target;
+
+        if (value.length >= SearchConstants.minSearchTermLength()){
+            const searchParameters = {
+                searchTerm: value,
+                pageIndex: 1,
+                itemsPerPage: SearchConstants.productsSuggestionItemsPerPage()
+            };
+
+            const requestOptions = {
+                method: "GET",
+                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
+            };
+
+            const url = props.productsSuggestionUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+            return fetch(url, requestOptions)
+                .then(function (response) {
+
+                    AuthenticationHelper.HandleResponse(response);
+
+                    return response.json().then(jsonResponse => {
+                        if (response.ok) {
+                            setProducts(jsonResponse.data);
+                        }
+                    });
+                })
+        }
+    }
+
     const {
         values, errors, dirty, disable, setFieldValue,
         handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const {id, warehouseId, product, quantity, restockableInDays, availableQuantity, expectedDelivery, ean } = values;
+
     return (
         <section className="section section-small-padding inventory-add">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -105,7 +139,7 @@ const InventoryForm = (props) => {
                             </div>
                         }
                         <div className="field">
-                            <FormControl fullWidth={true} helperText={dirty.warehouseId ? errors.warehouseId : ""} error={(errors.warehouseId.length > 0) && dirty.warehouseId} variant="standard">
+                            <FormControl fullWidth={true} error={(errors.warehouseId.length > 0) && dirty.warehouseId} variant="standard">
                                 <InputLabel id="warehouse-label">{props.selectWarehouseLabel}</InputLabel>
                                 <Select
                                     name="warehouseId"
@@ -143,6 +177,7 @@ const InventoryForm = (props) => {
                                         {...params} 
                                         label={props.selectProductLabel} 
                                         variant="standard"
+                                        onChange={productsSuggesstionFetchRequest}
                                         margin="normal"/>
                                 )}/>
                         </div>
@@ -271,7 +306,8 @@ InventoryForm.propTypes = {
     quantityRequiredErrorMessage: PropTypes.string,
     quantityFormatErrorMessage: PropTypes.string,
     idLabel: PropTypes.string,
-    eanLabel: PropTypes.string
+    eanLabel: PropTypes.string,
+    productsSuggestionUrl: PropTypes.string.isRequired
 };
 
 export default InventoryForm;
