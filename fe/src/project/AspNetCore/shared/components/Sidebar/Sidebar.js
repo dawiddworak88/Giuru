@@ -112,7 +112,7 @@ const Sidebar = (props) => {
                 ) : (
                     productVariants && productVariants.length > 0 ? (
                         productVariants.map((item) => 
-                            item.carouselItems.map((carouselItem) => {
+                            item.carouselItems.map((carouselItem, index) => {
                                     let fabrics = labels.lackInformation;
                                     if (carouselItem.attributes.length > 0) {
                                         fabrics = carouselItem.attributes.find(x => x.key === "primaryFabrics") ? carouselItem.attributes.find(x => x.key === "primaryFabrics").value : "";
@@ -123,7 +123,7 @@ const Sidebar = (props) => {
                                     }
 
                                     return (
-                                        <ListItem className="sidebar-item">
+                                        <ListItem className="sidebar-item" key={index}>
                                             <div className="sidebar-item__row">
                                                 <a href={carouselItem.url}>
                                                     <figure className="sidebar-item__image">

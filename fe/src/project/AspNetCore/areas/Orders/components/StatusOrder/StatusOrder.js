@@ -87,6 +87,8 @@ function StatusOrder(props) {
                         <h2 className="subtitle is-5 mb-2">{props.customOrderLabel}</h2>
                         <div className="status-order__items">
                             <TextField 
+                                id="customOrder"
+                                name="customOrder"
                                 value={props.customOrder}
                                 fullWidth={true}
                                 multiline={true}
