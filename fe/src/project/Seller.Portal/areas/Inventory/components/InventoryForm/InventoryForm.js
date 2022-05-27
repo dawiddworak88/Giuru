@@ -108,7 +108,7 @@ const InventoryForm = (props) => {
 
             const url = props.productsSuggestionUrl + "?" + QueryStringSerializer.serialize(searchParameters);
             return fetch(url, requestOptions)
-                .then(function (response) {
+                .then((response) => {
 
                     AuthenticationHelper.HandleResponse(response);
 
