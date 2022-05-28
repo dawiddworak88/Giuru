@@ -113,15 +113,6 @@ const Sidebar = (props) => {
                     productVariants && productVariants.length > 0 ? (
                         productVariants.map((item) => 
                             item.carouselItems.map((carouselItem, index) => {
-                                    let fabrics = labels.lackInformation;
-                                    if (carouselItem.attributes.length > 0) {
-                                        fabrics = carouselItem.attributes.find(x => x.key === "primaryFabrics") ? carouselItem.attributes.find(x => x.key === "primaryFabrics").value : "";
-                                        var secondaryfabrics = carouselItem.attributes.find(x => x.key === "secondaryFabrics") ? carouselItem.attributes.find(x => x.key === "secondaryFabrics").value : "";
-                                        if (secondaryfabrics) {
-                                            fabrics += ", " + secondaryfabrics;
-                                        }
-                                    }
-
                                     return (
                                         <ListItem className="sidebar-item" key={index}>
                                             <div className="sidebar-item__row">
@@ -155,9 +146,8 @@ const Sidebar = (props) => {
                                                             </div>
                                                         }
                                                     </div>
-                                                    <div className="fabrics">
-                                                        <span>{labels.fabricsLabel}</span>
-                                                        <p>{fabrics}</p>
+                                                    <div className="productAttributes">
+                                                        <p>{carouselItem.productAttributes}</p>
                                                     </div>
                                                 </div>
                                             </div>

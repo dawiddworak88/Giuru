@@ -167,16 +167,6 @@ function Catalog(props) {
                         }
                         <div className="columns is-tablet is-multiline">
                             {items.map((item, index) => {
-                                let fabrics = null;
-                                if (item.productAttributes && item.productAttributes.length > 0) {
-                                    fabrics = item.productAttributes.find(x => x.key === "primaryFabrics") ? item.productAttributes.find(x => x.key === "primaryFabrics").value : "";
-                                    var secondaryFabrics = item.productAttributes.find(x => x.key === "secondaryFabrics") ? item.productAttributes.find(x => x.key === "secondaryFabrics").value : "";
-
-                                    if (secondaryFabrics) {
-                                        fabrics += ", " + secondaryFabrics;
-                                    }
-                                }
-
                                 return (
                                     <div key={index} className="column is-3">
                                         <div className="catalog-item card">
@@ -197,9 +187,9 @@ function Catalog(props) {
                                             <div className="media-content">
                                                 <p className="catalog-item__sku">{props.skuLabel} {item.sku}</p>
                                                 <h2 className="catalog-item__title"><a href={item.url}>{item.title}</a></h2>
-                                                {item.productAttributes && fabrics &&
-                                                    <div className="catalog-item__fabric">
-                                                        <h3>{props.primaryFabricLabel} {fabrics}</h3>
+                                                {item.productAttributes &&
+                                                    <div className="catalog-item__productAttributes">
+                                                        <h3>{item.productAttributes}</h3>
                                                     </div>
                                                 }
                                                 {item.inStock &&
