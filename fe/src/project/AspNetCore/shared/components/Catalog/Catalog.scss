@@ -24,7 +24,7 @@
             font-size: 0.9rem;
         }
 
-        &__fabric, &__brand {
+        &__productAttributes, &__brand {
             a:hover {
                 color: $primary;
             }
@@ -41,7 +41,7 @@
             border-bottom-left-radius: 0.25rem;
         }
 
-        &__fabric {
+        &__productAttributes {
             font-size: 0.750rem;
         }
 

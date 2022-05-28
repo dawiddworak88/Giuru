@@ -5,6 +5,7 @@ using Foundation.Mailing.Configurations;
 using Foundation.Mailing.Models;
 using Foundation.Mailing.Services;
 using Identity.Api.Areas.Accounts.Services.UserServices;
+using Identity.Api.Configurations;
 using Identity.Api.Definitions;
 using Identity.Api.Infrastructure;
 using Identity.Api.Infrastructure.Accounts.Entities;
@@ -27,6 +28,7 @@ namespace Identity.Api.Services.Users
     {
         private readonly IdentityContext identityContext;
         private readonly IOptionsMonitor<MailingConfiguration> mailingOptions;
+        private readonly IOptionsMonitor<AppSettings> identityOptions;
         private readonly IMailingService mailingService;
         private readonly IStringLocalizer<AccountResources> accountLocalizer;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
@@ -36,6 +38,7 @@ namespace Identity.Api.Services.Users
         public UsersService(
             IdentityContext identityContext,
             IOptionsMonitor<MailingConfiguration> mailingOptions,
+            IOptionsMonitor<AppSettings> identityOptions,
             IMailingService mailingService,
             IStringLocalizer<AccountResources> accountLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -44,6 +47,7 @@ namespace Identity.Api.Services.Users
         {
             this.identityContext = identityContext;
             this.mailingOptions = mailingOptions;
+            this.identityOptions = identityOptions;
             this.mailingService = mailingService;
             this.accountLocalizer = accountLocalizer;
             this.userService = userService;
@@ -79,7 +83,7 @@ namespace Identity.Api.Services.Users
                     RecipientName = user.UserName,
                     SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
                     SenderName = this.mailingOptions.CurrentValue.SenderName,
-                    TemplateId = this.mailingOptions.CurrentValue.ActionSendGridResetTemplateId,
+                    TemplateId = this.identityOptions.CurrentValue.ActionSendGridResetTemplateId,
                     DynamicTemplateData = new
                     {
                         lang = existingOrganisation.Language,
@@ -121,7 +125,7 @@ namespace Identity.Api.Services.Users
                 RecipientName = userAccount.UserName,
                 SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
                 SenderName = this.mailingOptions.CurrentValue.SenderName,
-                TemplateId = this.mailingOptions.CurrentValue.ActionSendGridCreateTemplateId,
+                TemplateId = this.identityOptions.CurrentValue.ActionSendGridCreateTemplateId,
                 DynamicTemplateData = new
                 {
                     lang = existingOrganisation.Language,
@@ -265,7 +269,7 @@ namespace Identity.Api.Services.Users
                     RecipientName = user.UserName,
                     SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
                     SenderName = this.mailingOptions.CurrentValue.SenderName,
-                    TemplateId = this.mailingOptions.CurrentValue.ActionSendGridResetTemplateId,
+                    TemplateId = this.identityOptions.CurrentValue.ActionSendGridResetTemplateId,
                     DynamicTemplateData = new
                     {
                         lang = userOrganisation.Language,
@@ -313,7 +317,7 @@ namespace Identity.Api.Services.Users
                 RecipientName = serviceModel.FirstName + " " + serviceModel.LastName,
                 SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
                 SenderName = this.mailingOptions.CurrentValue.SenderName,
-                TemplateId = this.mailingOptions.CurrentValue.ActionSendGridClientApplyConfirmationTemplateId,
+                TemplateId = this.identityOptions.CurrentValue.ActionSendGridClientApplyConfirmationTemplateId,
                 DynamicTemplateData = new
                 {
                     welcomeLabel = this.globalLocalizer.GetString("Welcome").Value,
@@ -326,11 +330,11 @@ namespace Identity.Api.Services.Users
 
             await this.mailingService.SendTemplateAsync(new TemplateEmail
             {
-                RecipientEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
+                RecipientEmailAddress = this.identityOptions.CurrentValue.ApplyRecipientEmail,
                 RecipientName = this.mailingOptions.CurrentValue.SenderName,
                 SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
                 SenderName = this.mailingOptions.CurrentValue.SenderName,
-                TemplateId = this.mailingOptions.CurrentValue.ActionSendGridClientApplyTemplateId,
+                TemplateId = this.identityOptions.CurrentValue.ActionSendGridClientApplyTemplateId,
                 DynamicTemplateData = new
                 {
                     firstName = serviceModel.FirstName,
@@ -338,7 +342,7 @@ namespace Identity.Api.Services.Users
                     email = serviceModel.Email,
                     phoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel").Value,
                     phoneNumber = serviceModel.PhoneNumber,
-                    subject = this.accountLocalizer.GetString("ClientApplySubject").Value,
+                    subject = $"{serviceModel.CompanyName} - {serviceModel.FirstName} {serviceModel.LastName} - {this.accountLocalizer.GetString("ClientApplySubject").Value}",
                     contactInformation = this.accountLocalizer.GetString("ContactInformation").Value,
                     businessInformation = this.accountLocalizer.GetString("BusinessInformation").Value,
                     firstNameLabel = this.globalLocalizer.GetString("FirstName").Value,
