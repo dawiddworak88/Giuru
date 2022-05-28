@@ -9,7 +9,6 @@ namespace Seller.Web.Areas.Inventory.ViewModel
         public string Title { get; set; }
         public Guid? Id { get; set; }
         public Guid? WarehouseId { get; set; }
-        public Guid? ProductId { get; set; }
         public string WarehouseRequiredErrorMessage { get; set; }
         public string ProductRequiredErrorMessage { get; set; }
         public string QuantityRequiredErrorMessage { get; set; }
@@ -36,5 +35,7 @@ namespace Seller.Web.Areas.Inventory.ViewModel
         public string DescriptionLabel { get; set; }
         public string EanLabel { get; set; }
         public string Ean { get; set; }
+        public string ProductsSuggestionUrl { get; set; }
+        public ListOutletItemViewModel Product { get; set; }
     }
 }

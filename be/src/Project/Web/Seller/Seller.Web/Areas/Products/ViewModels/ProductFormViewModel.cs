@@ -13,7 +13,6 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string Sku { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public Guid? PrimaryProductId { get; set; }
         public IEnumerable<FileViewModel> Images { get; set; }
         public IEnumerable<FileViewModel> Files  { get; set; }
         public string Schema { get; set; }
@@ -49,5 +48,7 @@ namespace Seller.Web.Areas.Products.ViewModels
         public string IdLabel { get; set; }
         public string EanLabel { get; set; }
         public string Ean { get; set; }
+        public ListItemViewModel PrimaryProduct { get; set; }
+        public string ProductsSuggestionUrl { get; set; }
     }
 }

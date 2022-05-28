@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import {
     FormControl, InputLabel, Select, MenuItem, FormHelperText, 
@@ -9,14 +9,17 @@ import { toast } from "react-toastify";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import QuantityValidator from "../../../../../../shared/helpers/validators/QuantityValidator";
+import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import SearchConstants from "../../../../../../shared/constants/SearchConstants";
 
 const OutletForm = (props) => {
-
     const [state, dispatch] = useContext(Context);
+    const [products, setProducts] = useState(props.products ? props.products : []);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         warehouseId: { value: props.warehouseId ? props.warehouseId : null, error: "" },
-        product: { value: props.productId ? props.products.find((item) => item.id === props.productId) : null, error: "" },
+        product: { value: props.product ? props.product : null, error: "" },
         quantity: { value: props.quantity ? props.quantity : 0, error: "" },
         availableQuantity: { value: props.availableQuantity ? props.availableQuantity : 0, error: "" },
         title: { value: props.outletTitle ? props.outletTitle : null },
@@ -25,7 +28,7 @@ const OutletForm = (props) => {
     };
 
     const productsProps = {
-        options: props.products,
+        options: products,
         getOptionLabel: (option) => option.name + " (" + option.sku + ")"
     };
 
@@ -86,6 +89,36 @@ const OutletForm = (props) => {
             });
     };
 
+    const productsSuggesstionFetchRequest = (e) => {
+        const { value } = e.target;
+
+        if (value.length >= SearchConstants.minSearchTermLength()){
+            const searchParameters = {
+                searchTerm: value,
+                pageIndex: 1,
+                itemsPerPage: SearchConstants.productsSuggestionItemsPerPage()
+            };
+
+            const requestOptions = {
+                method: "GET",
+                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
+            };
+
+            const url = props.productsSuggestionUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+            return fetch(url, requestOptions)
+                .then((response) => {
+
+                    AuthenticationHelper.HandleResponse(response);
+
+                    return response.json().then(jsonResponse => {
+                        if (response.ok) {
+                            setProducts(jsonResponse.data);
+                        }
+                    });
+                })
+        }
+    }
+
     const {
         values, errors, dirty, disable, setFieldValue,
         handleOnChange, handleOnSubmit
@@ -140,6 +173,7 @@ const OutletForm = (props) => {
                                         {...params} 
                                         label={props.selectProductLabel} 
                                         variant="standard"
+                                        onChange={productsSuggesstionFetchRequest}
                                         margin="normal"/>
                                 )}/>
                         </div>
@@ -257,7 +291,8 @@ OutletForm.propTypes = {
     quantityFormatErrorMessage: PropTypes.string,
     idLabel: PropTypes.string,
     titleLabel: PropTypes.string,
-    descriptionLabel: PropTypes.string
+    descriptionLabel: PropTypes.string,
+    productsSuggestionUrl: PropTypes.string.isRequired
 };
 
 export default OutletForm;
