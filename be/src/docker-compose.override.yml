@@ -244,6 +244,7 @@ services:
       - ClientUrl=http://client-api
       - NewsUrl=http://news-api
       - MakeComplaintUrl=https://complaints.com
+      - ProductAttributes=${PRODUCT_ATTRIBUTES}
       - OrganisationId=${ORGANISATION_ID}
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}

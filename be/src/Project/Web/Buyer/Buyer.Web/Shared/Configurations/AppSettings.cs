@@ -14,6 +14,7 @@ namespace Buyer.Web.Shared.Configurations
         public string NewsUrl { get; set; }
         public string CdnUrl { get; set; }
         public Guid? OrganisationId { get; set; }
+        public string ProductAttributes { get; set; }
         public string GoogleTagManagerIdentifier { get; set; }
         public string MakeComplaintUrl { get; set; }
     }

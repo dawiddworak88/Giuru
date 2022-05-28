@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
-using Buyer.Web.Areas.Products.ApiResponseModels;
 using Foundation.Extensions.ExtensionMethods;
 
 namespace Buyer.Web.Areas.Products.Services.Products
@@ -42,6 +41,25 @@ namespace Buyer.Web.Areas.Products.Services.Products
             this.cdnService = cdnService;
         }
 
+        public async Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes)
+        {
+            var attributesToDisplay = this.options.Value.ProductAttributes.ToEnumerableString();
+
+            var attributes = new List<string>();
+            foreach(var productAttribute in attributesToDisplay.OrEmptyIfNull())
+            {
+                var existingAttribute = productAttributes.FirstOrDefault(x => x.Key == productAttribute);
+                if (existingAttribute is not null)
+                {
+                    var attribute = string.Join(", ", existingAttribute.Values);
+
+                    attributes.Add(attribute);
+                }
+            }
+
+            return string.Join(", ", attributes.OrEmptyIfNull());
+        }
+
         public async Task<PagedResults<IEnumerable<CatalogItemViewModel>>> GetProductsAsync(IEnumerable<Guid> ids, Guid? categoryId, Guid? sellerId, string language, string searchTerm, int pageIndex, int itemsPerPage, string token)
         {
             var catalogItemList = new List<CatalogItemViewModel>();
@@ -61,11 +79,7 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         BrandName = product.BrandName,
                         Images = product.Images,
                         InStock = false,
-                        ProductAttributes = product.ProductAttributes.OrEmptyIfNull().Select(x => new CatalogItemProductAttributesViewModel
-                        {
-                            Key = x.Key,
-                            Value = string.Join(", ", x.Values.OrEmptyIfNull())
-                        })
+                        ProductAttributes = await this.GetProductAttributesAsync(product.ProductAttributes)
                     };
 
                     if (product.Images != null)

@@ -84,12 +84,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo,
-                    Fabrics = x.ProductAttributes.OrEmptyIfNull().Select(x => new ProductAttribute
-                    {
-                        Key = x.Key,
-                        Values = x.Values,
-                        Name = x.Name
-                    }),
+                    ProductAttributes = x.ProductAttributes,
                     DeliveryFrom = x.ExpectedDeliveryFrom,
                     DeliveryTo = x.ExpectedDeliveryTo,
                     ImageAlt = x.ProductName,
