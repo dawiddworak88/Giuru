@@ -7,7 +7,9 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Inventory.Repositories.Inventories;
 using Seller.Web.Areas.Inventory.Repositories.Warehouses;
 using Seller.Web.Areas.Inventory.ViewModel;
+using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Shared.Repositories.Products;
+using Seller.Web.Shared.Definitions;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -63,7 +65,8 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 ChangeExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ChangeExpectedDeliveryLabel"),
                 InventoryUrl = this.linkGenerator.GetPathByAction("Index", "Inventories", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveUrl = this.linkGenerator.GetPathByAction("Index", "InventoriesApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
-                EanLabel = this.globalLocalizer.GetString("Ean")
+                EanLabel = this.globalLocalizer.GetString("Ean"),
+                ProductsSuggestionUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var warehouses = await this.warehousesRepository.GetAllWarehousesAsync(componentModel.Token, componentModel.Language, null);
@@ -72,10 +75,10 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 viewModel.Warehouses = warehouses.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
-            var products = await this.productsRepository.GetAllProductsAsync(componentModel.Token, componentModel.Language, null);
+            var products = await this.productsRepository.GetProductsAsync(componentModel.Token, componentModel.Language, null, null, null, Constants.ProductsSuggestionDefaultPageIndex, Constants.ProductsSuggestionDefaultItemsPerPage, $"{nameof(Product.Name)} ASC");
             if (products != null)
             {
-                viewModel.Products = products.Select(x => new ListInventoryItemViewModel { Id = x.Id, Name = x.Name, Sku = x.Sku });
+                viewModel.Products = products.Data.Select(x => new ListInventoryItemViewModel { Id = x.Id, Name = x.Name, Sku = x.Sku });
             }
 
             if (componentModel.Id.HasValue)
@@ -85,12 +88,18 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
                 {
                     viewModel.Id = inventoryProduct.Id;
                     viewModel.WarehouseId = inventoryProduct.WarehouseId;
-                    viewModel.ProductId = inventoryProduct.ProductId;
                     viewModel.Quantity = inventoryProduct.Quantity;
                     viewModel.Ean = inventoryProduct.Ean;
                     viewModel.AvailableQuantity = inventoryProduct.AvailableQuantity;
                     viewModel.RestockableInDays = inventoryProduct.RestockableInDays;
                     viewModel.ExpectedDelivery = inventoryProduct.ExpectedDelivery;
+                    
+                    var product = await this.productsRepository.GetProductAsync(componentModel.Token, componentModel.Language, inventoryProduct.ProductId);
+
+                    if (product is not null)
+                    {
+                        viewModel.Product = new ListInventoryItemViewModel { Id = product.Id, Name = product.Name, Sku = product.Sku };
+                    }
                 }
             }
 

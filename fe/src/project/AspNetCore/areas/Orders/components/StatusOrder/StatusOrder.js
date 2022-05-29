@@ -36,7 +36,7 @@ function StatusOrder(props) {
                                                 <TableCell></TableCell>
                                                 <TableCell>{props.skuLabel}</TableCell>
                                                 <TableCell>{props.nameLabel}</TableCell>
-                                                <TableCell>{props.fabricsLabel}</TableCell>
+                                                <TableCell></TableCell>
                                                 <TableCell>{props.quantityLabel}</TableCell>
                                                 <TableCell>{props.stockQuantityLabel}</TableCell>
                                                 <TableCell>{props.outletQuantityLabel}</TableCell>
@@ -48,21 +48,12 @@ function StatusOrder(props) {
                                         </TableHead>
                                         <TableBody>
                                             {props.orderItems && props.orderItems.map((item, index) => {
-                                                let fabrics = null;
-                                                if (item.fabrics.length > 0) {
-                                                    fabrics = item.fabrics.find(x => x.key === "primaryFabrics") ? item.fabrics.find(x => x.key === "primaryFabrics").values.join(", ") : "";
-
-                                                    let secondaryFabrics = item.fabrics.find(x => x.key === "secondaryFabrics") ? item.fabrics.find(x => x.key === "secondaryFabrics").values.join(", ") : "";
-                                                    if (secondaryFabrics){
-                                                        fabrics += ", " + secondaryFabrics;
-                                                    }
-                                                }
                                                 return (
                                                     <TableRow key={index}>
                                                         <TableCell><a href={item.productUrl}><img className="status-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
                                                         <TableCell>{item.sku}</TableCell>
                                                         <TableCell>{item.name}</TableCell>
-                                                        <TableCell>{fabrics}</TableCell>
+                                                        <TableCell>{item.productAttributes}</TableCell>
                                                         <TableCell>{item.quantity}</TableCell>
                                                         <TableCell>{item.stockQuantity}</TableCell>
                                                         <TableCell>{item.outletQuantity}</TableCell>
@@ -87,6 +78,8 @@ function StatusOrder(props) {
                         <h2 className="subtitle is-5 mb-2">{props.customOrderLabel}</h2>
                         <div className="status-order__items">
                             <TextField 
+                                id="customOrder"
+                                name="customOrder"
                                 value={props.customOrder}
                                 fullWidth={true}
                                 multiline={true}

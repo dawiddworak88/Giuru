@@ -64,7 +64,6 @@ var productDetail = {
     sidebar: {
       lackInformation: "Lack of information",
       toBasketLabel: "View cart",
-      fabricsLabel: "Fabrics",
       notFound: "No variants",
       sidebarTitle: "Add the selected product variant to the cart",
 

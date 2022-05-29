@@ -16,7 +16,6 @@ const statusOrder = {
     moreInfoLabel: "More info",
     orderItemsLabel: "Order items",
     orderStatusLabel: "Status",
-    fabricsLabel: "Fabrics",
     orderStatuses: [
         {
             id: "",
@@ -29,22 +28,12 @@ const statusOrder = {
             sku: "An01",
             name: "Anton",
             quantity: 1,
-            fabrics: [
-                {
-                    key: "primaryFabrics",
-                    name: "Fabric",
-                    values: [
-                        "Sawanna05", "Sawanna35"
-                    ]
-                }
-            ]
         },
         {
             productUrl: "https://b2badmin.eltap.com/en/Products/Product/Edit/a5fd574a-83c9-4d26-97ee-08d92e360cb4",
             sku: "An02",
             name: "Anton",
-            quantity: 1,
-            fabrics: []
+            quantity: 1
         }
     ]
 };

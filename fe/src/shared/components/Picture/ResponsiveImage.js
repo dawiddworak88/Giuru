@@ -7,15 +7,15 @@ function ResponsiveImage(props) {
         <Fragment>
             {props.sources &&
                 <picture>
-                    {props.sources.map((item) =>
-                        <source media={item.media} srcset={item.srcset} />
+                    {props.sources.map((item, index) =>
+                        <source media={item.media} srcSet={item.srcset} key={index}/>
                     )}
-                    <img src={props.imageSrc} alt={props.imageAlt} title={props.imageTitle} srcset={props.imageSrcset} />
+                    <img src={props.imageSrc} alt={props.imageAlt} title={props.imageTitle} srcSet={props.imageSrcset} />
                 </picture>
             }
 
             {(!props.sources || props.sources.length === 0) &&
-                <img src={props.imageSrc} alt={props.imageAlt} title={props.imageTitle} srcset={props.imageSrcset} />
+                <img src={props.imageSrc} alt={props.imageAlt} title={props.imageTitle} srcSet={props.imageSrcset} />
             }
         </Fragment>       
     );
