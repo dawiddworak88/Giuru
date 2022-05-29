@@ -1,15 +1,14 @@
 module.exports = async () => {
-    const pluginStore = strapi.store({
-        environment: '',
-        type: 'plugin',
-        name: 'example-migration',
-    });
 
-    const values = await pluginStore.get({ key: "advanced" });
+    const homePage = await strapi.db.query("api::homePage");
 
-    if (values) {
-        // Place for set values
+    if (!homePage) {
 
-        await pluginStore.set({ key: 'advanced', value : values });
+        await homePage.update({
+            where: { id: 1, locale: "en" },
+            data: {
+            title: "Title"
+            }
+        });
     }
 }
