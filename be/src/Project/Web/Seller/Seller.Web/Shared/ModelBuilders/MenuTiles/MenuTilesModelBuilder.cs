@@ -94,7 +94,7 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                         Title = this.globalLocalizer.GetString("ClientsGroups"),
                         Url = this.linkGenerator.GetPathByAction("Index", "ClientGroups", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                     },
-                    new MenuTilesViewModel 
+                    new MenuTileViewModel
                     {
                         Icon = IconsConstants.Media,
                         Title = this.globalLocalizer.GetString("Media"),
