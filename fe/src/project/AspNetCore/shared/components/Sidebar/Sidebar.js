@@ -91,9 +91,9 @@ const Sidebar = (props) => {
     return (
         <SwipeableDrawer
             anchor="right"
-            on={isOpen}
+            open={isOpen}
+            onOpen={toggleDrawer(true)}
             onClose={toggleDrawer(false)}
-            onOpen={null}
         >
         <div className="sidebar-content">
                 <div className="sidebar-content__close">
@@ -112,18 +112,9 @@ const Sidebar = (props) => {
                 ) : (
                     productVariants && productVariants.length > 0 ? (
                         productVariants.map((item) => 
-                            item.carouselItems.map((carouselItem) => {
-                                    let fabrics = labels.lackInformation;
-                                    if (carouselItem.attributes.length > 0) {
-                                        fabrics = carouselItem.attributes.find(x => x.key === "primaryFabrics") ? carouselItem.attributes.find(x => x.key === "primaryFabrics").value : "";
-                                        var secondaryfabrics = carouselItem.attributes.find(x => x.key === "secondaryFabrics") ? carouselItem.attributes.find(x => x.key === "secondaryFabrics").value : "";
-                                        if (secondaryfabrics) {
-                                            fabrics += ", " + secondaryfabrics;
-                                        }
-                                    }
-
+                            item.carouselItems.map((carouselItem, index) => {
                                     return (
-                                        <ListItem className="sidebar-item">
+                                        <ListItem className="sidebar-item" key={index}>
                                             <div className="sidebar-item__row">
                                                 <a href={carouselItem.url}>
                                                     <figure className="sidebar-item__image">
@@ -155,9 +146,8 @@ const Sidebar = (props) => {
                                                             </div>
                                                         }
                                                     </div>
-                                                    <div className="fabrics">
-                                                        <span>{labels.fabricsLabel}</span>
-                                                        <p>{fabrics}</p>
+                                                    <div className="productAttributes">
+                                                        <p>{carouselItem.productAttributes}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -185,9 +175,7 @@ Sidebar.propTypes = {
     labels: PropTypes.object.isRequired,
     setIsOpen: PropTypes.func.isRequired,
     isOpen: PropTypes.bool.isRequired,
-    handleOrder: PropTypes.func.isRequired,
-    loadingLabel: PropTypes.string.isRequired,
-    eanLabel: PropTypes.string.isRequired
+    handleOrder: PropTypes.func.isRequired
 }
 
 export default Sidebar;

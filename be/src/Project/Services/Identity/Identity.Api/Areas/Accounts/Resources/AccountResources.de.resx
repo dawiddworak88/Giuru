@@ -151,7 +151,7 @@
     <value>Bestätigung des Absendens der Kooperationsanfrage.</value>
   </data>
   <data name="ContactInformation" xml:space="preserve">
-    <value>Kontaktinformation</value>
+    <value>Kontaktinformationen</value>
   </data>
   <data name="ContactInformationDescription" xml:space="preserve">
     <value>Ihr primärer Ansprechpartner für ELTAP ist der im Formular angegebene Ansprechpartner</value>
@@ -167,12 +167,6 @@
   </data>
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Geben Sie Ihren Nachnamen ein</value>
-  </data>
-  <data name="LogisticalInformation" xml:space="preserve">
-    <value>Logistische Informationen</value>
-  </data>
-  <data name="LogisticalInformationDescription" xml:space="preserve">
-    <value>Teilen Sie uns Einzelheiten darüber mit, wie Ihr Unternehmen funktioniert</value>
   </data>
   <data name="nc_buttonLabel" xml:space="preserve">
     <value>Bestätigen und ein Passwort festlegen</value>
@@ -240,14 +234,8 @@
   <data name="VerifyDateExpired" xml:space="preserve">
     <value>Der Link ist abgelaufen. Bitte wenden Sie sich an einen Administrator.</value>
   </data>
-  <data name="AcceptRetuns" xml:space="preserve">
-    <value>Wären Sie in der Lage, Rücksendungen anzunehmen?</value>
-  </data>
   <data name="ClientApplySubject" xml:space="preserve">
     <value>Neue Kooperationsanfrage</value>
-  </data>
-  <data name="DirectlyShip" xml:space="preserve">
-    <value>Wären Sie in der Lage, direkt an Kunden zu versenden (auch bekannt als Direktversand)?</value>
   </data>
   <data name="SelectJobTitle" xml:space="preserve">
     <value>Wähle einen Arbeitsplatz</value>

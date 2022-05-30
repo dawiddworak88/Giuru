@@ -35,7 +35,6 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 Subtitle = this.globalLocalizer.GetString("EltapPartnerDescription"),
                 ContactInformationTitle = this.accountLocalizer.GetString("ContactInformation"),
                 BusinessInformationTitle = this.accountLocalizer.GetString("BusinessInformation"),
-                LogisticalInformationTitle = this.accountLocalizer.GetString("LogisticalInformation"),
                 FirstNameLabel = this.globalLocalizer.GetString("FirstName"),
                 LastNameLabel = this.globalLocalizer.GetString("LastName"),
                 EmailLabel = this.globalLocalizer.GetString("Email"),
@@ -54,8 +53,6 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 YesLabel = this.globalLocalizer.GetString("Yes"),
                 NoLabel = this.globalLocalizer.GetString("No"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                AcceptReturnsLabel = this.accountLocalizer.GetString("AcceptRetuns"),
-                DirectlyShipLabel = this.accountLocalizer.GetString("DirectlyShip"),
                 SaveText = this.accountLocalizer.GetString("ApplySubmit"),
                 SelectJobTitle = this.accountLocalizer.GetString("SelectJobTitle"),
                 SignInUrl = this.linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name })
@@ -86,11 +83,6 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 {
                     Title = this.accountLocalizer.GetString("BusinessInformation"),
                     Subtitle = this.accountLocalizer.GetString("BusinessInformationDescription")
-                },
-                new StepViewModel
-                {
-                    Title = this.accountLocalizer.GetString("LogisticalInformation"),
-                    Subtitle = this.accountLocalizer.GetString("LogisticalInformationDescription")
                 }
             };
 

@@ -165,12 +165,6 @@
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Wprowadź swoje nazwisko</value>
   </data>
-  <data name="LogisticalInformation" xml:space="preserve">
-    <value>Informacje Logistyczne</value>
-  </data>
-  <data name="LogisticalInformationDescription" xml:space="preserve">
-    <value>Podaj więcej informacji o tym jak działa Twoja firma</value>
-  </data>
   <data name="nc_buttonLabel" xml:space="preserve">
     <value>Potwierdź i ustaw hasło</value>
   </data>
@@ -237,14 +231,8 @@
   <data name="VerifyDateExpired" xml:space="preserve">
     <value>Link wygasł. Skontaktuj się z administratorem.</value>
   </data>
-  <data name="AcceptRetuns" xml:space="preserve">
-    <value>Czy byłbyś w stanie przyjąć zwroty?</value>
-  </data>
   <data name="ClientApplySubject" xml:space="preserve">
     <value>Nowa prośba współpracy</value>
-  </data>
-  <data name="DirectlyShip" xml:space="preserve">
-    <value>Czy będziesz w stanie wysyłać przesyłki bezpośrednio do klientów (tzw. dropship)?</value>
   </data>
   <data name="ContactInformationDescription" xml:space="preserve">
     <value>Twoją główną osobą kontaktową z ELTAP będzie osoba kontaktowa podana w formularzu</value>

@@ -128,11 +128,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         Ean = productVariant.Ean,
                         ImageAlt = productVariant.Name,
                         Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, productVariant.Id }),
-                        Attributes = productVariant.ProductAttributes.Select(x => new CarouselGridProductAttributesViewModel
-                        {
-                            Key = x.Key,
-                            Value = string.Join(", ", x.Values.OrEmptyIfNull())
-                        })
+                        ProductAttributes = await this.productsService.GetProductAttributesAsync(productVariant.ProductAttributes)
                     };
 
                     if (productVariant.Images != null && productVariant.Images.Any())

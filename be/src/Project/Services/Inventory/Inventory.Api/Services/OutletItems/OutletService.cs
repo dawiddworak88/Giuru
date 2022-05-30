@@ -292,7 +292,7 @@ namespace Inventory.Api.Services.OutletItems
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                outletItems = outletItems.Where(x => x.Title.StartsWith(model.SearchTerm) || x.Description.StartsWith(model.SearchTerm));
+                outletItems = outletItems.Where(x => x.Title.StartsWith(model.SearchTerm) || x.Description.StartsWith(model.SearchTerm) || x.ProductSku.StartsWith(model.SearchTerm) || x.ProductName.StartsWith(model.SearchTerm));
             }
 
             outletItems = outletItems.ApplySort(model.OrderBy);
