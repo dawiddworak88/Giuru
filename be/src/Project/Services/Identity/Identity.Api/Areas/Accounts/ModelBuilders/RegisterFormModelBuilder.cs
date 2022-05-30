@@ -55,7 +55,8 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 SaveText = this.accountLocalizer.GetString("ApplySubmit"),
                 SelectJobTitle = this.accountLocalizer.GetString("SelectJobTitle"),
-                SignInUrl = this.linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name })
+                SignInUrl = this.linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
+                AcceptTermsText = this.globalLocalizer.GetString("AcceptTermsText")
             };
 
             viewModel.ContactJobTitles = new List<ContactJobTitle>

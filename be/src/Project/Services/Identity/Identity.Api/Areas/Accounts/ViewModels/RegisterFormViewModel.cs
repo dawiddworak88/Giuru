@@ -30,6 +30,7 @@ namespace Identity.Api.Areas.Accounts.ViewModels
         public string SaveText { get; set; }
         public string SelectJobTitle { get; set; }
         public string SignInUrl { get; set; }
+        public string AcceptTermsText { get; set; }
         public IEnumerable<ContactJobTitle> ContactJobTitles { get; set; }
         public IEnumerable<StepViewModel> Steps { get; set; }
     }
