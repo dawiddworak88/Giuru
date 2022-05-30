@@ -570,4 +570,7 @@
   <data name="VicePresident" xml:space="preserve">
     <value>Wiceprezes</value>
   </data>
+  <data name="AcceptTermsText" xml:space="preserve">
+    <value>Akceptuję Regulamin i Politykę Prywatności</value>
+  </data>
 </root>

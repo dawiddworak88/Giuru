@@ -567,4 +567,7 @@
   <data name="V" xml:space="preserve">
     <value>Vicepresident</value>
   </data>
+  <data name="AcceptTermsText" xml:space="preserve">
+    <value>I accept the Terms and Conditions &amp; Privacy Policy</value>
+  </data>
 </root>
