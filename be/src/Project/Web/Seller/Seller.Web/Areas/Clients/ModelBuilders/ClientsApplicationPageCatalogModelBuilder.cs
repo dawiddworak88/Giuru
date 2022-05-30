@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
+using Seller.Web.Shared.Repositories.Identity;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
 using System.Globalization;
@@ -20,17 +21,20 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer clientLocalizer;
         private readonly LinkGenerator linkGenerator;
+        private readonly IIdentityRepository identityRepository;
 
         public ClientsApplicationPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
+            IIdentityRepository identityRepository,
             LinkGenerator linkGenerator)
         {
             this.catalogModelBuilder = catalogModelBuilder;
             this.globalLocalizer = globalLocalizer;
             this.clientLocalizer = clientLocalizer;
             this.linkGenerator = linkGenerator;
+            this.identityRepository = identityRepository;
         }
 
         public async Task<CatalogViewModel<ClientApplication>> BuildModelAsync(ComponentModelBase componentModel)
@@ -71,21 +75,23 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientGroup.Name).ToCamelCase(),
+                        Title = nameof(ClientApplication.CompanyName).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientGroup.LastModifiedDate).ToCamelCase(),
+                        Title = nameof(ClientApplication.LastModifiedDate).ToCamelCase(),
                         IsDateTime = true
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(ClientGroup.CreatedDate).ToCamelCase(),
+                        Title = nameof(ClientApplication.CreatedDate).ToCamelCase(),
                         IsDateTime = true
                     }
                 }
             };
+
+            viewModel.PagedItems = await this.identityRepository.GetRegisterApplicationsAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientApplication.CreatedDate)} desc");
 
             return viewModel;
         }

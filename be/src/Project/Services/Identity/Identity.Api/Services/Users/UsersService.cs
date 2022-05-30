@@ -1,5 +1,7 @@
 ﻿using Feature.Account;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.Mailing.Configurations;
 using Foundation.Mailing.Models;
@@ -16,7 +18,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -363,6 +367,38 @@ namespace Identity.Api.Services.Users
                     country = serviceModel.CompanyCountry
                 }
             });
+        }
+
+        public async Task<PagedResults<IEnumerable<RegisterApplicationServiceModel>>> GetRegisterApplicationsAsync(GetRegisterApplicationsServiceModel model)
+        {
+            var registerApplications = from r in this.identityContext.Applications
+                                       where r.IsActive
+                                       select new RegisterApplicationServiceModel
+                                       {
+                                           Id = r.Id,
+                                           FirstName = r.FirstName,
+                                           LastName = r.LastName,
+                                           ContactJobTitle = r.ContactJobTitle,
+                                           Email = r.Email,
+                                           PhoneNumber = r.PhoneNumber,
+                                           CompanyAddress = r.CompanyAddress,
+                                           CompanyCity = r.CompanyCity,
+                                           CompanyCountry = r.CompanyCountry,
+                                           CompanyName = r.CompanyName,
+                                           CompanyPostalCode = r.CompanyPostalCode,
+                                           CompanyRegion = r.CompanyRegion,
+                                           LastModifiedDate = r.LastModifiedDate,
+                                           CreatedDate = r.CreatedDate
+                                       };
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                registerApplications = registerApplications.Where(x => x.CompanyName.StartsWith(model.SearchTerm) || x.FirstName.StartsWith(model.SearchTerm) || x.LastName.StartsWith(model.SearchTerm));
+            }
+
+            registerApplications = registerApplications.ApplySort(model.OrderBy);
+
+            return registerApplications.PagedIndex(new Pagination(registerApplications.Count(), model.ItemsPerPage), model.PageIndex);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Identity.Api.ServicesModels.Users;
+﻿using Foundation.GenericRepository.Paginations;
+using Identity.Api.ServicesModels.Users;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Identity.Api.Services.Users
@@ -13,5 +15,6 @@ namespace Identity.Api.Services.Users
         Task ResetPasswordAsync(ResetUserPasswordServiceModel serviceModel);
         Task<UserServiceModel> GetByEmail(GetUserByEmailServiceModel serviceModel);
         Task RegisterAsync(RegisterServiceModel serviceModel);
+        Task<PagedResults<IEnumerable<RegisterApplicationServiceModel>>> GetRegisterApplicationsAsync(GetRegisterApplicationsServiceModel model);
     }
 }

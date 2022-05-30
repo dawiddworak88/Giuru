@@ -1,6 +1,9 @@
-﻿using Foundation.ApiExtensions.Controllers;
+﻿using Foundation.Account.Definitions;
+using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.Helpers;
+using Foundation.GenericRepository.Paginations;
 using Identity.Api.Services.Users;
 using Identity.Api.ServicesModels.Users;
 using Identity.Api.v1.RequestModels;
@@ -8,8 +11,11 @@ using Identity.Api.v1.ResponseModels;
 using Identity.Api.Validators.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Identity.Api.v1.Controllers
@@ -210,7 +216,7 @@ namespace Identity.Api.v1.Controllers
         /// <param name="request">The model.</param>
         /// <returns>OK.</returns>
         [HttpPost, MapToApiVersion("1.0")]
-        [Route("reigster")]
+        [Route("register")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Register(RegisterRequestModel request)
@@ -237,6 +243,70 @@ namespace Identity.Api.v1.Controllers
                 await this.userService.RegisterAsync(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Gets list of orders.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
+        /// <returns>The list of register applications.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("register")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Registers(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetRegisterApplicationsServiceModel
+            {
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Language = CultureInfo.CurrentCulture.Name
+            };
+
+            var validator = new GetRegisterApplicationsModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var registerApplications = await this.userService.GetRegisterApplicationsAsync(serviceModel);
+
+                if (registerApplications is not null)
+                {
+                    var response = new PagedResults<IEnumerable<RegisterApplicationsResponseModel>>(registerApplications.Total, registerApplications.PageSize)
+                    {
+                        Data = registerApplications.Data.Select(x => new RegisterApplicationsResponseModel
+                        {
+                            Id = x.Id,
+                            FirstName = x.FirstName,
+                            LastName = x.LastName,
+                            ContactJobTitle = x.ContactJobTitle,
+                            Email = x.Email,
+                            PhoneNumber = x.PhoneNumber,
+                            CompanyName = x.CompanyName,
+                            CompanyAddress = x.CompanyAddress,
+                            CompanyCity = x.CompanyCity,
+                            CompanyCountry = x.CompanyCountry,
+                            CompanyPostalCode = x.CompanyPostalCode,
+                            CompanyRegion = x.CompanyRegion,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        })
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);

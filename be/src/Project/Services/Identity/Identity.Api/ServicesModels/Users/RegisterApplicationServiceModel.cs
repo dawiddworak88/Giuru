@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Foundation.Extensions.Models;
+using System;
 
-namespace Seller.Web.Areas.Clients.DomainModels
+namespace Identity.Api.ServicesModels.Users
 {
-    public class ClientApplication
+    public class RegisterApplicationServiceModel : BaseServiceModel
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }

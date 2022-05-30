@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Seller.Web.Areas.Clients.DomainModels
+namespace Identity.Api.v1.ResponseModels
 {
-    public class ClientApplication
+    public class RegisterApplicationsResponseModel
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }

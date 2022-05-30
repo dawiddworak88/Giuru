@@ -4,12 +4,15 @@ using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Clients.ApiRequestModels;
+using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Shared.ApiRequestModels;
 using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.DomainModels.Users;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Shared.Repositories.Identity
@@ -99,6 +102,42 @@ namespace Seller.Web.Shared.Repositories.Identity
             if (response.IsSuccessStatusCode)
             {
                 return response.Data.Id.Value;
+            }
+
+            return default;
+        }
+
+        public async Task<PagedResults<IEnumerable<ClientApplication>>> GetRegisterApplicationsAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        {
+            var requestModel = new PagedRequestModelBase
+            {
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy
+            };
+
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.RegisterApplicationsApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientApplication>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                return new PagedResults<IEnumerable<ClientApplication>>(response.Data.Total, response.Data.PageSize)
+                {
+                    Data = response.Data.Data
+                };
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
             return default;
