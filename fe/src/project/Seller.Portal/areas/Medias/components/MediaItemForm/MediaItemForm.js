@@ -3,10 +3,10 @@ import { toast } from "react-toastify";
 import PropTypes from "prop-types"; 
 import {
     TextField, Button,  CircularProgress
-} from "@material-ui/core";
+} from "@mui/material";
 import {
     PictureAsPdf, Attachment
-} from "@material-ui/icons";
+} from "@mui/icons-material";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import useForm from "../../../../../../shared/helpers/forms/useForm";

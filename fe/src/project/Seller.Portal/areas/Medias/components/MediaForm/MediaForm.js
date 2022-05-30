@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
