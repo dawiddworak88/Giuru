@@ -24,6 +24,7 @@ namespace Identity.Api.Infrastructure
         public DbSet<OrganisationFile> OrganisationFiles { get; set; }
         public DbSet<Connection> Connections { get; set; }
         public DbSet<ApplicationUser> Accounts { get; set; }
+        public DbSet<ApplicationsUser> Applications { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<OrganisationAddress> OrganisationAddreses { get; set; }
         public DbSet<OrganisationAppSecret> OrganisationAppSecrets { get; set; }
