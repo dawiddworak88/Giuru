@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store"
 import {
     Stepper, Step, StepLabel, StepContent, TextField, Button, FormHelperText,
-    FormControl, InputLabel, Select, MenuItem, RadioGroup, FormControlLabel, Radio, FormLabel
+    FormControl, InputLabel, Select, MenuItem, NoSsr, FormControlLabel, Checkbox
 } from "@mui/material";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
@@ -14,6 +14,7 @@ const RegisterForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [isSended, setIsSended] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
+    const [acceptedTerms, setAcceptedTerms] = useState(false);
     const stateSchema = {
        firstName: { value: "", error: "" },
        lastName: { value: "", error: "" },
@@ -235,7 +236,7 @@ const RegisterForm = (props) => {
                                     error={(errors.phoneNumber.length > 0) && dirty.phoneNumber} />
                             </div>
                         </div>
-                        <div className="group mb-6" onFocus={() => setActiveStep(1)}>
+                        <div className="group mb-4" onFocus={() => setActiveStep(1)}>
                             <h1 className="subtitle has-text-centered">{props.businessInformationTitle}</h1>
                             <div className="field">
                                 <TextField
@@ -311,13 +312,27 @@ const RegisterForm = (props) => {
                                     error={(errors.companyPostalCode.length > 0) && dirty.companyPostalCode} />
                             </div>
                         </div>
+                        <div className="field">
+                            <NoSsr>
+                                <FormControlLabel 
+                                    control={
+                                        <Checkbox 
+                                            checked={acceptedTerms}
+                                            onChange={(e) => {
+                                                setAcceptedTerms(e.target.checked);
+                                            }}/>
+                                    }
+                                    label={props.acceptTermsText}
+                                />
+                            </NoSsr>
+                        </div>
                         <div className="is-flex is-justify-content-center">
                             <Button 
                                 type="submit" 
                                 variant="contained" 
                                 color="primary" 
                                 fullWidth={true}
-                                disabled={state.isLoading || disable || isSended}
+                                disabled={state.isLoading || disable || isSended || !acceptedTerms}
                             >
                                 {props.saveText}
                             </Button>
@@ -352,7 +367,8 @@ RegisterForm.propTypes = {
     companyPostalCodeLabel: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     selectJobTitle: PropTypes.string.isRequired,
-    signInUrl: PropTypes.string.isRequired
+    signInUrl: PropTypes.string.isRequired,
+    acceptTermsText: PropTypes.string.isRequired
 }
 
 export default RegisterForm;
