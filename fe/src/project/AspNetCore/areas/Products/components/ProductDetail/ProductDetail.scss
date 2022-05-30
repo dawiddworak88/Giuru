@@ -1,5 +1,7 @@
 @import "../../../../shared/components/CarouselGrid/CarouselGrid.scss";
 @import "../../../../shared/components/Sidebar/Sidebar.scss";
+@import "../../../../shared/components/Modal/Modal.scss";
+@import "../../../../../../shared/components/Files/Files.scss";
 
 .product-detail {
     &__feature-title {
@@ -14,7 +16,18 @@
         top: 8px;
     }
 
+    &__discount {
+        margin-top: 1rem;
+        color: $inventory-color;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
     &__sku {
+        font-size: 0.75rem;
+    }
+
+    &__ean {
         font-size: 0.75rem;
     }
 
@@ -46,9 +59,13 @@
 
     &__in-stock {
         margin-top: 1rem;
-        color: darkgreen;
+        color: $inventory-color;
         font-size: 1.1rem;
         font-weight: 600;
+
+        &:not(:first-child){
+            margin-top: 0;
+        }
     }
 
     &__product-description{

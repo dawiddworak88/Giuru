@@ -1,8 +1,8 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { hydrateRoot } from 'react-dom/client';
 import ProductAttributePage from "./ProductAttributePage";
 import CssSsrRemovalHelper from "../../../../../../shared/helpers/globals/CssSsrRemovalHelper";
 
 CssSsrRemovalHelper.remove();
 
-ReactDOM.hydrate(<ProductAttributePage {...window.data} />, document.getElementById("root"));
+hydrateRoot(document.getElementById("root"), <ProductAttributePage {...window.data} />)

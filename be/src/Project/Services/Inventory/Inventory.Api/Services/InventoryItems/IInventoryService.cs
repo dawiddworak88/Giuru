@@ -1,11 +1,10 @@
 ﻿using Foundation.GenericRepository.Paginations;
-using Inventory.Api.ServicesModels;
-using Inventory.Api.ServicesModels.InventoryServices;
+using Inventory.Api.ServicesModels.InventoryServiceModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Inventory.Api.Services
+namespace Inventory.Api.Services.InventoryItems
 {
     public interface IInventoryService
     {
@@ -16,10 +15,9 @@ namespace Inventory.Api.Services
         Task<InventoryServiceModel> CreateAsync(CreateInventoryServiceModel serviceModel);
         Task<InventorySumServiceModel> GetInventoryByProductId(GetInventoryByProductIdServiceModel model);
         Task<InventorySumServiceModel> GetInventoryByProductSku(GetInventoryByProductSkuServiceModel model);
-        Task SyncInventoryProducts(UpdateProductsInventoryServiceModel model);
+        Task SyncProductsInventories(UpdateProductsInventoryServiceModel model);
         Task DeleteAsync(DeleteInventoryServiceModel model);
-        Task UpdateInventoryBasket(Guid? ProductId, int BookedQuantity);
-        Task UpdateInventoryProduct(Guid? ProductId, string ProductName, string ProductSku, Guid? OrganisationId);
+        Task UpdateInventoryQuantity(Guid? ProductId, double BookedQuantity);
         Task<PagedResults<IEnumerable<InventorySumServiceModel>>> GetAvailableProductsInventoriesAsync(GetInventoriesServiceModel serviceModel);
     }
 }

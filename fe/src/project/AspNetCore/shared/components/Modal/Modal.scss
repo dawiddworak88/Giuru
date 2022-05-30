@@ -1,0 +1,20 @@
+.basket-modal {
+    width: 600px;
+
+    .quantity-input {
+        text-align: center;
+        max-width: 12rem;
+    }
+
+    .MuiInputLabel-root {
+        white-space: nowrap;
+    }
+
+    &__sku {
+        font-size: 0.75rem;
+    }
+
+    &__ean {
+        font-size: 0.75rem;
+    }
+}

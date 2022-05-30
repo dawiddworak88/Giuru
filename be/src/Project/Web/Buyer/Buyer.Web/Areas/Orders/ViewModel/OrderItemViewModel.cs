@@ -13,10 +13,12 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string ImageSrc { get; set; }
         public string ImageAlt { get; set; }
         public double Quantity { get; set; }
+        public double StockQuantity { get; set; }
+        public double OutletQuantity { get; set; }
         public string ExternalReference { get; set; }
         public DateTime? DeliveryFrom { get; set; }
         public DateTime? DeliveryTo { get; set; }
         public string MoreInfo { get; set; }
-        public IEnumerable<ProductAttribute> Fabrics { get; set; }
+        public string ProductAttributes { get; set; }
     }
 }

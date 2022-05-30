@@ -11,5 +11,12 @@
         public string SignInText { get; set; }
         public string EnterEmailText { get; set; }
         public string EnterPasswordText { get; set; }
+        public string ForgotPasswordLabel { get; set; }
+        public string ResetPasswordUrl { get; set; }
+        public string RegisterLabel { get; set; }
+        public string RegisterButtonText { get; set; }
+        public string ContactText{ get; set; }
+        public string RegisterUrl { get; set; }
+        public string DevelopersEmail { get; set; }
     }
 }

@@ -43,7 +43,10 @@ namespace Buyer.Web.Shared.ModelBuilders.Sidebar
                 AddToCartLabel = this.orderLocalizer.GetString("AddToCart"),
                 GoToDetailsLabel = this.orderLocalizer.GetString("GoToDetails"),
                 InStockLabel = this.globalLocalizer.GetString("InStock"),
-                ExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ExpectedDeliveryLabel")
+                ExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ExpectedDeliveryLabel"),
+                LoadingLabel = this.globalLocalizer.GetString("LoadingLabel"),
+                InOutletLabel = this.globalLocalizer.GetString("InOutlet"),
+                EanLabel = this.globalLocalizer.GetString("Ean")
             };
            
             return viewModel;

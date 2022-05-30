@@ -2,7 +2,7 @@
 
 namespace Seller.Web.Areas.Clients.ApiResponseModels
 {
-    public class InvResponseModel : BaseResponseModel
+    public class ClientResponseModel : BaseResponseModel
     {
         public string Name { get; set; }
     }

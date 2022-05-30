@@ -1,5 +1,6 @@
 ﻿using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.Extensions.ModelBuilders;
+using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using Identity.Api.Areas.Accounts.ComponentModels;
@@ -20,6 +21,10 @@ namespace Identity.Api.Areas.Accounts.DependencyInjection
             services.AddScoped<IComponentModelBuilder<SignInFormComponentModel, SignInFormViewModel>, SignInFormModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<SetPasswordComponentModel, SetPasswordViewModel>, SetPasswordModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<SetPasswordFormComponentModel, SetPasswordFormViewModel>, SetPasswordFormModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ResetPasswordComponentModel, ResetPasswordFormViewModel>, ResetPasswordFormModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ResetPasswordComponentModel, ResetPasswordViewModel>, ResetPasswordModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, RegisterPageViewModel>, RegisterPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, RegisterFormViewModel>, RegisterFormModelBuilder>();
             services.AddScoped<IModelBuilder<HeaderViewModel>, HeaderModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();

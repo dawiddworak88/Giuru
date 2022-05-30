@@ -49,7 +49,7 @@ namespace Seller.Web.Areas.News.ApiControllers
             var category = await this.categoriesRepository.SaveAsync(
                 token, language, model.Id, model.Name, model.ParentCategoryId);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { category, Message = this.newsLocalizer.GetString("CategorySavedSuccessfully").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Id = category, Message = this.newsLocalizer.GetString("CategorySavedSuccessfully").Value });
 
         }
 

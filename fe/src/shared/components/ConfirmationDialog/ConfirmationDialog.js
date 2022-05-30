@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import {
     Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
-} from "@material-ui/core";
+} from "@mui/material";
 import { Context } from "../../stores/Store";
 
 function ConfirmationDialog(props) {

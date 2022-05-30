@@ -1,8 +1,8 @@
-﻿using Client.Api.Services;
-using Client.Api.ServicesModels;
+﻿using Client.Api.Services.Clients;
+using Client.Api.ServicesModels.Clients;
 using Client.Api.v1.RequestModels;
 using Client.Api.v1.ResponseModels;
-using Client.Api.Validators;
+using Client.Api.Validators.Clients;
 using Foundation.Account.Definitions;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.Extensions.Definitions;
@@ -85,6 +85,8 @@ namespace Client.Api.v1.Controllers
                                 Name = x.Name,
                                 Email = x.Email,
                                 CommunicationLanguage = x.CommunicationLanguage,
+                                PhoneNumber = x.PhoneNumber,
+                                ClientGroupIds = x.ClientGroupIds,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -127,6 +129,8 @@ namespace Client.Api.v1.Controllers
                                 Name = x.Name,
                                 Email = x.Email,
                                 CommunicationLanguage = x.CommunicationLanguage,
+                                PhoneNumber = x.PhoneNumber,
+                                ClientGroupIds = x.ClientGroupIds,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -178,6 +182,8 @@ namespace Client.Api.v1.Controllers
                         Email = client.Email,
                         Name = client.Name,
                         CommunicationLanguage = client.CommunicationLanguage,
+                        PhoneNumber = client.PhoneNumber,
+                        ClientGroupIds = client.ClientGroupIds,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };
@@ -225,6 +231,8 @@ namespace Client.Api.v1.Controllers
                         Email = client.Email,
                         Name = client.Name,
                         CommunicationLanguage = client.CommunicationLanguage,
+                        PhoneNumber = client.PhoneNumber,
+                        ClientGroupIds = client.ClientGroupIds,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };
@@ -263,7 +271,9 @@ namespace Client.Api.v1.Controllers
                     Name = request.Name,
                     Email = request.Email,
                     CommunicationLanguage = request.CommunicationLanguage,
+                    PhoneNumber = request.PhoneNumber,
                     ClientOrganisationId = request.OrganisationId,
+                    ClientGroupIds = request.ClientGroupIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -289,7 +299,9 @@ namespace Client.Api.v1.Controllers
                     Name = request.Name,
                     Email = request.Email,
                     CommunicationLanguage = request.CommunicationLanguage,
+                    PhoneNumber = request.PhoneNumber,
                     ClientOrganisationId = request.OrganisationId,
+                    ClientGroupIds = request.ClientGroupIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)

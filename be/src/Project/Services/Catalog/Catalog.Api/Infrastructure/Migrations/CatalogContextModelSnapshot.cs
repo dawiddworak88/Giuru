@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace Catalog.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogContext))]
@@ -15,9 +17,10 @@ namespace Catalog.Api.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.17")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Foundation.Catalog.Infrastructure.Categories.Entites.CategoryImage", b =>
                 {
@@ -351,6 +354,9 @@ namespace Catalog.Api.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Ean")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -588,6 +594,10 @@ namespace Catalog.Api.Infrastructure.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Brand");
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Foundation.Catalog.Infrastructure.Products.Entities.ProductTranslation", b =>
@@ -597,6 +607,30 @@ namespace Catalog.Api.Infrastructure.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Foundation.Catalog.Infrastructure.Categories.Entities.Category", b =>
+                {
+                    b.Navigation("Schemas");
+
+                    b.Navigation("Translations");
+                });
+
+            modelBuilder.Entity("Foundation.Catalog.Infrastructure.ProductAttributes.Entities.ProductAttribute", b =>
+                {
+                    b.Navigation("ProductAttributeItems");
+
+                    b.Navigation("ProductAttributeTranslations");
+                });
+
+            modelBuilder.Entity("Foundation.Catalog.Infrastructure.ProductAttributes.Entities.ProductAttributeItem", b =>
+                {
+                    b.Navigation("ProductAttributeItemTranslations");
+                });
+
+            modelBuilder.Entity("Foundation.Catalog.Infrastructure.Products.Entities.Product", b =>
+                {
+                    b.Navigation("Translations");
                 });
 #pragma warning restore 612, 618
         }

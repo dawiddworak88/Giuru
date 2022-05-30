@@ -8,5 +8,6 @@ namespace Catalog.Api.IntegrationEvents
         public Guid? ProductId { get; set; }
         public string ProductName { get; set; }
         public string ProductSku { get; set; }
+        public string ProductEan { get; set; }
     }
 }

@@ -7,21 +7,13 @@ namespace Inventory.Api.Infrastructure.Entities
     public class InventoryItem : Entity
     {
         [Required]
-        public Guid WarehouseId { get; set; }
-
-        [Required]
         public Guid ProductId { get; set; }
 
         [Required]
-        public string ProductName { get; set; }
+        public double Quantity { get; set; }
 
         [Required]
-        public string ProductSku { get; set; }
-
-        [Required]
-        public int Quantity { get; set; }
-        
-        public int? AvailableQuantity { get; set; }
+        public double AvailableQuantity { get; set; }
 
         public int? RestockableInDays { get; set; }
 
@@ -30,6 +22,7 @@ namespace Inventory.Api.Infrastructure.Entities
         [Required]
         public Guid SellerId { get; set; }
 
-        public virtual Warehouse Warehouse { get; set; }
+        [Required]
+        public Guid WarehouseId { get; set; }
     }
 }

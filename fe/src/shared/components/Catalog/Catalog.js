@@ -1,17 +1,16 @@
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import moment from "moment";
 import { Plus } from "react-feather";
 import {
-    Delete, Edit, Link
-} from "@material-ui/icons";
-import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
+    Delete, Edit, FileCopyOutlined, Link
+} from "@mui/icons-material";
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, TablePagination, CircularProgress, Fab
-} from "@material-ui/core";
+} from "@mui/material";
 import KeyConstants from "../../constants/KeyConstants";
 import { Context } from "../../stores/Store";
 import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializer";
@@ -22,6 +21,7 @@ import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
+    const [isMounted, setMounted] = React.useState(false);
     const [page, setPage] = React.useState(0);
     const [itemsPerPage,] = React.useState(PaginationConstants.defaultRowsPerPage());
     const [searchTerm, setSearchTerm] = React.useState("");
@@ -181,6 +181,9 @@ function Catalog(props) {
     const copyToClipboard = (text) => {
         ClipboardHelper.copyToClipboard(text);
     }
+    useEffect(() => {
+        setMounted(true)
+    }, [])
     
     return (
         <section className="section section-small-padding catalog">
@@ -200,7 +203,7 @@ function Catalog(props) {
             <div>
                 {props.searchLabel &&
                     <div className="catalog__search is-flex-centered">
-                        <TextField id="search" name="search" value={searchTerm} onChange={handleOnChange} onKeyPress={handleSearchTermKeyPress} className="catalog__search-field" label={props.searchLabel} type="search" autoComplete="off" />
+                        <TextField id="search" name="search" value={searchTerm} onChange={handleOnChange} variant="standard" onKeyPress={handleSearchTermKeyPress} className="catalog__search-field" label={props.searchLabel} type="search" autoComplete="off" />
                         <Button onClick={search} type="button" variant="contained" color="primary">
                             {props.searchLabel}
                         </Button>
@@ -216,28 +219,28 @@ function Catalog(props) {
                                             {props.table.actions &&
                                                 <TableCell width="11%"></TableCell>
                                             }
-                                            {props.table.labels.map((item) =>
-                                                <TableCell key={item} value={item}>{item}</TableCell>
+                                            {props.table.labels.map((item, index) =>
+                                                <TableCell key={index} value={item}>{item}</TableCell>
                                             )}
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {items.map((item) => (
-                                            <TableRow key={item.name}>
+                                        {items.map((item, index) => (
+                                            <TableRow key={index}>
                                                 {props.table.actions &&
                                                     <TableCell width="11%">
-                                                        {props.table.actions.map((actionItem) => {
+                                                        {props.table.actions.map((actionItem, index) => {
                                                             if (actionItem.isEdit) return (
-                                                                <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel}>
+                                                                <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel} key={index}>
                                                                     <Edit />
                                                                 </Fab>)
                                                             else if (actionItem.isDelete) return (
-                                                                <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
+                                                                <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel} key={index}>
                                                                     <Delete />
                                                                 </Fab>)
                                                             else if (actionItem.isDuplicate) return (
-                                                                <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary" aria-label={props.duplicateLabel}>
-                                                                    <FileCopyOutlinedIcon />
+                                                                <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary" aria-label={props.duplicateLabel} key={index}>
+                                                                    <FileCopyOutlined />
                                                                 </Fab>)
                                                             else if (actionItem.isPicture) return (
                                                                 <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary" aria-label={props.duplicateLabel}>
@@ -248,21 +251,15 @@ function Catalog(props) {
                                                     </TableCell>
                                                 }
 
-                                                {props.table.properties && props.table.properties.map((property) => {
-                                                    console.log(property)
-                                                    if (property.isDateTime) {
+                                                {props.table.properties && props.table.properties.map((property, index) => {
+                                                    if (property.isDateTime){
                                                         return (
-                                                            <TableCell>{moment.utc(item[property.title]).local().format("L LT")}</TableCell>
-                                                        )
-                                                    }
-                                                    else if (property.isPicture) {
-                                                        return (
-                                                            <TableCell><img src={item[property.title]} alt={props.isAttachmentLabel}/></TableCell>
+                                                            <TableCell key={index}>{isMounted ? moment.utc(item[property.title]).local().format("L LT") : moment.utc(item[property.title]).format("L LT")}</TableCell>
                                                         )
                                                     }
                                                     else {
                                                         return (
-                                                            <TableCell>{item[property.title] !== null ? item[property.title] : "-"}</TableCell>
+                                                            <TableCell key={index}>{item[property.title] !== null ? item[property.title] : "-"}</TableCell>
                                                         )}})}
                                             </TableRow>
                                         ))}
@@ -274,13 +271,11 @@ function Catalog(props) {
                             <TablePagination
                                 labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
                                 labelRowsPerPage={props.rowsPerPageLabel}
-                                backIconButtonText={props.backIconButtonText}
-                                nextIconButtonText={props.nextIconButtonText}
                                 rowsPerPageOptions={[PaginationConstants.defaultRowsPerPage()]}
                                 component="div"
                                 count={total}
                                 page={page}
-                                onChangePage={handleChangePage}
+                                onPageChange={handleChangePage}
                                 rowsPerPage={PaginationConstants.defaultRowsPerPage()}
                             />
                         </div>
@@ -322,8 +317,6 @@ Catalog.propTypes = {
     duplicateLabel: PropTypes.string,
     displayedRowsLabel: PropTypes.string.isRequired,
     rowsPerPageLabel: PropTypes.string.isRequired,
-    backIconButtonText: PropTypes.string.isRequired,
-    nextIconButtonText: PropTypes.string.isRequired,
     editUrl: PropTypes.string,
     deleteUrl: PropTypes.string,
     duplicateUrl: PropTypes.string,

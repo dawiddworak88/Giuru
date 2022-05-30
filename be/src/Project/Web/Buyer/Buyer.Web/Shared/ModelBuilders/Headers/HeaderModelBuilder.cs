@@ -14,8 +14,6 @@ using System.Threading.Tasks;
 using Buyer.Web.Areas.Orders.Repositories.Baskets;
 using Foundation.Extensions.ExtensionMethods;
 using System.Linq;
-using Newtonsoft.Json;
-using System;
 
 namespace Buyer.Web.Shared.ModelBuilders.Headers
 {
@@ -87,8 +85,8 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers
                     {
                         double sum = 0;
                         foreach (var item in basketItems)
-                        { 
-                            sum += item.Quantity;
+                        {
+                            sum += item.StockQuantity + item.OutletQuantity + item.Quantity;
                         }
        
                         viewModel.TotalBasketItems = sum;

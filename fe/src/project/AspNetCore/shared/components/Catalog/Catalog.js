@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import LazyLoad from "react-lazyload";
@@ -6,28 +6,34 @@ import ResponsiveImage from "../../../../../shared/components/Picture/Responsive
 import LazyLoadConstants from "../../../../../shared/constants/LazyLoadConstants";
 import { Context } from "../../../../../shared/stores/Store";
 import QueryStringSerializer from "../../../../../shared/helpers/serializers/QueryStringSerializer";
-import { TablePagination, Button, TextField } from "@material-ui/core";
+import { TablePagination, Button } from "@mui/material";
 import CatalogConstants from "./CatalogConstants";
-import { ShoppingCart } from "@material-ui/icons";
+import { ShoppingCart } from "@mui/icons-material";
 import Sidebar from "../Sidebar/Sidebar";
 import AuthenticationHelper from "../../../../../shared/helpers/globals/AuthenticationHelper";
 import moment from "moment";
+import Modal from "../Modal/Modal";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
-    const [orderItems, setOrderItems] = React.useState(props.basketItems ? props.basketItems : []);
-    const [page, setPage] = React.useState(0);
-    const [basketId, setBasketId] = React.useState(props.basketId ? props.basketId : null);
-    const [itemsPerPage,] = React.useState(props.itemsPerPage ? props.itemsPerPage : CatalogConstants.defaultCatalogItemsPerPage());
-    const [items, setItems] = React.useState(props.pagedItems.data);
-    const [total, setTotal] = React.useState(props.pagedItems.total);
-    const [quantities, setQuantities] = React.useState([]);
-    const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
-    const [product, setProduct] = React.useState(null)
+    const [orderItems, setOrderItems] = useState(props.basketItems ? props.basketItems : []);
+    const [page, setPage] = useState(0);
+    const [basketId, setBasketId] = useState(props.basketId ? props.basketId : null);
+    const [itemsPerPage,] = useState(props.itemsPerPage ? props.itemsPerPage : CatalogConstants.defaultCatalogItemsPerPage());
+    const [items, setItems] = useState(props.pagedItems.data);
+    const [total, setTotal] = useState(props.pagedItems.total);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [productVariant, setProductVariant] = useState(null)
 
     const toggleSidebar = (item) => {
-        setProduct(item.id);
+        setProductVariant(item);
         setIsSidebarOpen(true)
+    }
+
+    const toggleModal = (item) => {
+        setProductVariant(item);
+        setIsModalOpen(true)
     }
 
     const handleChangePage = (event, newPage) => {
@@ -74,28 +80,35 @@ function Catalog(props) {
             });
     };
 
-    const handleOrder = (item) => {
-        const orderItem = {
-            quantity: quantities.find(x => x.id === item.id).quantity,
-            ...item
-        }
+    const handleModal = (item) => {
+        setIsModalOpen(true)
+        setProductVariant(item);
+    }
 
-        handleAddOrderItemClick(orderItem);
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
     }
 
     const handleAddOrderItemClick = (item) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        const quantity = parseInt(item.quantity);
+        const stockQuantity = parseInt(item.stockQuantity);
+        const outletQuantity = parseInt(item.outletQuantity);
+
+        const totalQuantity = quantity + stockQuantity + outletQuantity;
         const orderItem = {
-            productId: item.id, 
-            sku: item.subtitle ? item.subtitle : item.sku, 
-            name: item.title, 
-            imageId: item.images ? item.images[0].id ? item.images[0].id : item.images[0] : null,
-            quantity: parseInt(item.quantity), 
-            externalReference: null, 
-            deliveryFrom: null, 
-            deliveryTo: null, 
-            moreInfo: null
+            productId: productVariant.id, 
+            sku: productVariant.subtitle ? productVariant.subtitle : productVariant.sku, 
+            name: productVariant.title, 
+            imageId: productVariant.images ? productVariant.images[0].id ? productVariant.images[0].id : productVariant.images[0] : null,
+            quantity: quantity,
+            stockQuantity: stockQuantity,
+            outletQuantity: outletQuantity,
+            externalReference: item.externalReference,
+            deliveryFrom: moment(item.deliveryFrom).startOf("day"), 
+            deliveryTo: moment(item.deliveryTo).startOf("day"), 
+            moreInfo: item.moreInfo
         };
 
         const basket = {
@@ -109,10 +122,14 @@ function Catalog(props) {
             body: JSON.stringify(basket)
         };
 
+        if (totalQuantity <= 0){
+            return toast.error(props.quantityErrorMessage);
+        }
+
         fetch(props.updateBasketUrl, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
-                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(orderItem.quantity + state.totalBasketItems) })
+                dispatch({ type: "SET_TOTAL_BASKET", payload: parseInt(totalQuantity + state.totalBasketItems) })
 
                 AuthenticationHelper.HandleResponse(response);
 
@@ -123,6 +140,7 @@ function Catalog(props) {
                         if (jsonResponse.items && jsonResponse.items.length > 0) {
                             toast.success(props.successfullyAddedProduct)
                             setOrderItems(jsonResponse.items);
+                            setIsModalOpen(false);
                         }
                         else {
                             setOrderItems([]);
@@ -137,37 +155,7 @@ function Catalog(props) {
                 toast.error(props.generalErrorMessage);
             });
     };
-
-    const onQuantityChange = (id) => (e) => {
-        if (e.target.value > 0) {
-            const itemQuantityIndex = quantities.findIndex(x => x.id === id);
-            let prevQuantities = [...quantities];
-
-            let item = prevQuantities.find(x => x.id === id);
-            item.quantity = e.target.value;
-
-            prevQuantities[itemQuantityIndex] = item;
-
-            setQuantities(prevQuantities)
-        }
-    }
-
-    useEffect(() => {
-        if (items){
-            let quantities = []
-            items.forEach((item) => {
-                const itemQuantity = {
-                    id: item.id,
-                    quantity: 1
-                }
-
-                quantities.push(itemQuantity);
-            })
-
-            setQuantities(quantities);
-        }
-    }, [items])
-
+    
     return (
         <section className="catalog section">
             <h1 className="title is-3">{props.title}</h1>
@@ -179,26 +167,16 @@ function Catalog(props) {
                         }
                         <div className="columns is-tablet is-multiline">
                             {items.map((item, index) => {
-                                let quantity = 1;
-                                if (quantities.length !== 0){
-                                    quantity = quantities.find(x => x.id === item.id).quantity;
-                                }
-
-                                let fabrics = null;
-                                if (item.productAttributes.length > 0) {
-                                    fabrics = item.productAttributes.find(x => x.key === "primaryFabrics") ? item.productAttributes.find(x => x.key === "primaryFabrics").value : "";
-                                    var secondaryFabrics = item.productAttributes.find(x => x.key === "secondaryFabrics") ? item.productAttributes.find(x => x.key === "secondaryFabrics").value : "";
-
-                                    if (secondaryFabrics) {
-                                        fabrics += ", " + secondaryFabrics;
-                                    }
-                                }
-
                                 return (
-                                    <div key={item.id} className="column is-3">
+                                    <div key={index} className="column is-3">
                                         <div className="catalog-item card">
                                             <a href={item.url}>
-                                                <div className="card-image">
+                                                <div className="card-image" aria-label={item.outletDescription} title={item.outletDescription}>
+                                                    {item.inOutlet && item.outletTitle &&
+                                                        <div className="catalog-item__discount p-1">
+                                                            <span className="p-1">{item.outletTitle}</span>
+                                                        </div>
+                                                    }
                                                     <figure className="image is-4by3">
                                                         <LazyLoad offset={LazyLoadConstants.catalogOffset()}>
                                                             <ResponsiveImage imageSrc={item.imageUrl} imageAlt={item.imageAlt} sources={item.sources} />
@@ -209,14 +187,9 @@ function Catalog(props) {
                                             <div className="media-content">
                                                 <p className="catalog-item__sku">{props.skuLabel} {item.sku}</p>
                                                 <h2 className="catalog-item__title"><a href={item.url}>{item.title}</a></h2>
-                                                {props.showBrand && item.brandName &&
-                                                    <div className="catalog-item__brand">
-                                                        <h2 className="catalog-item__brand-text">{props.byLabel} <a href={item.brandUrl}>{item.brandName}</a></h2>
-                                                    </div>
-                                                }
-                                                {item.productAttributes && fabrics &&
-                                                    <div className="catalog-item__fabric">
-                                                        <h3>{props.primaryFabricLabel} {fabrics}</h3>
+                                                {item.productAttributes &&
+                                                    <div className="catalog-item__productAttributes">
+                                                        <h3>{item.productAttributes}</h3>
                                                     </div>
                                                 }
                                                 {item.inStock &&
@@ -233,25 +206,22 @@ function Catalog(props) {
                                                         }
                                                     </div>
                                                 }
+                                                {item.inOutlet &&
+                                                    <div className="catalog-item__in-stock-details">
+                                                        {item.availableOutletQuantity && item.availableOutletQuantity > 0 && 
+                                                            <div className="stock">
+                                                                {props.inOutletLabel} {item.availableOutletQuantity}
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                }
+
                                             </div>
                                             {props.isLoggedIn &&
                                                 <div className="catalog-item__add-to-cart-button-container">
                                                     {props.showAddToCartButton ? (
                                                         <div className="row is-flex is-flex-centered">
-                                                            <TextField 
-                                                                id={item.id} 
-                                                                name="quantity" 
-                                                                type="number" 
-                                                                inputProps={{ 
-                                                                    min: 1, 
-                                                                    step: 1,
-                                                                    style: { textAlign: 'center' }
-                                                                }}
-                                                                value={quantity} 
-                                                                onChange={onQuantityChange(item.id)}
-                                                                className="quantity-input"
-                                                            />
-                                                            <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => handleOrder(item)} color="primary">
+                                                            <Button variant="contained" startIcon={<ShoppingCart />} onClick={() => toggleModal(item)} color="primary">
                                                                 {props.basketLabel}
                                                             </Button>
                                                         </div>
@@ -271,13 +241,11 @@ function Catalog(props) {
                             <TablePagination
                                 labelDisplayedRows={({ from, to, count }) => `${from} - ${to} ${props.displayedRowsLabel} ${count}`}
                                 labelRowsPerPage={props.rowsPerPageLabel}
-                                backIconButtonText={props.backIconButtonText}
-                                nextIconButtonText={props.nextIconButtonText}
                                 rowsPerPageOptions={[itemsPerPage]}
                                 component="div"
                                 count={total}
                                 page={page}
-                                onChangePage={handleChangePage}
+                                onPageChange={handleChangePage}
                                 rowsPerPage={itemsPerPage}
                             />
                         </div>
@@ -290,12 +258,24 @@ function Catalog(props) {
             )}
             {props.sidebar &&  
                 <Sidebar
-                    productId={product}
+                    productId={productVariant ? productVariant.id : null}
                     isOpen={isSidebarOpen}
                     manyUses={true}
                     setIsOpen={setIsSidebarOpen}
-                    handleOrder={handleAddOrderItemClick}
+                    handleOrder={handleModal}
                     labels={props.sidebar}
+                />
+            }
+            {props.modal && 
+                <Modal 
+                    isOpen={isModalOpen}
+                    setIsOpen={setIsModalOpen}
+                    handleClose={handleCloseModal}
+                    maxOutletValue={productVariant ? productVariant.availableOutletQuantity : null}
+                    maxStockValue={productVariant ? productVariant.availableQuantity : null}
+                    handleOrder={handleAddOrderItemClick}
+                    product={productVariant}
+                    labels={props.modal}
                 />
             }
         </section>
@@ -305,24 +285,20 @@ function Catalog(props) {
 Catalog.propTypes = {
     title: PropTypes.string.isRequired,
     noResultsLabel: PropTypes.string.isRequired,
-    resultsCount: PropTypes.number.isRequired,
     resultsLabel: PropTypes.string.isRequired,
     skuLabel: PropTypes.string.isRequired,
     byLabel: PropTypes.string.isRequired,
     inStockLabel: PropTypes.string.isRequired,
-    isAuthenticated: PropTypes.bool.isRequired,
     signInUrl: PropTypes.string.isRequired,
     signInToSeePricesLabel: PropTypes.string.isRequired,
     displayedRowsLabel: PropTypes.string.isRequired,
     rowsPerPageLabel: PropTypes.string.isRequired,
-    backIconButtonText: PropTypes.string.isRequired,
-    nextIconButtonText: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
     productsApiUrl: PropTypes.string.isRequired,
-    categoryId: PropTypes.string.isRequired,
     orderBy: PropTypes.string,
     successfullyAddedProduct: PropTypes.string,
-    inStock: PropTypes.bool.isRequired,
+    inStock: PropTypes.bool,
+    inOutlet: PropTypes.bool,
     availableQuantity: PropTypes.number,
     showAddToCartButton: PropTypes.bool,
     items: PropTypes.array,

@@ -40,17 +40,17 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
                 ResultsLabel = this.globalLocalizer.GetString("Results"),
                 ByLabel = this.globalLocalizer.GetString("By"),
                 InStockLabel = this.globalLocalizer.GetString("InStock"),
+                InOutletLabel = this.globalLocalizer.GetString("InOutlet"),
                 BasketLabel = this.globalLocalizer.GetString("BasketLabel"),
                 PrimaryFabricLabel = this.globalLocalizer.GetString("PrimaryFabricLabel"),
                 NoResultsLabel = this.globalLocalizer.GetString("NoResults"),
                 GeneralErrorMessage = this.globalLocalizer["AnErrorOccurred"],
                 DisplayedRowsLabel = this.globalLocalizer["DisplayedRows"],
                 RowsPerPageLabel = this.globalLocalizer["RowsPerPage"],
-                BackIconButtonText = this.globalLocalizer["Previous"],
-                NextIconButtonText = this.globalLocalizer["Next"],
                 IsLoggedIn = componentModel.IsAuthenticated,
                 BasketId = componentModel.BasketId,
                 SuccessfullyAddedProduct = this.globalLocalizer.GetString("SuccessfullyAddedProduct"),
+                QuantityErrorMessage = this.globalLocalizer.GetString("QuantityErrorMessage"),
                 ProductsApiUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products" }),
                 UpdateBasketUrl = this.linkGenerator.GetPathByAction("Index", "BasketsApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
                 ExpectedDeliveryLabel = this.inventoryLocalizer.GetString("ExpectedDeliveryLabel")
@@ -59,6 +59,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Catalogs
             if (componentModel.IsAuthenticated)
             {
                 var basketItems = this.basketService.GetBasketAsync(componentModel.BasketId, componentModel.Token, componentModel.Language).Result;
+
                 if (basketItems is not null)
                 {
                     viewModel.BasketItems = basketItems;

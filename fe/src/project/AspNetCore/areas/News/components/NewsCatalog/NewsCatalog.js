@@ -6,9 +6,9 @@ import ResponsiveImage from "../../../../../../shared/components/Picture/Respons
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import { Context } from "../../../../../../shared/stores/Store";
-import { CalendarToday } from "@material-ui/icons";
+import { CalendarToday } from "@mui/icons-material";
 import { Hash } from "react-feather"
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import moment from "moment";
 
 const NewsCatalog = (props) => {
@@ -93,9 +93,9 @@ const NewsCatalog = (props) => {
                         {props.categories && props.categories.length > 0 &&
                             <div className="news-catalog__categories">
                                 <Button type="text" variant="contained" className="category" color="primary" onClick={() => handleCategory(null)}>{props.allCategoryLabel}</Button>
-                                {props.categories.map(category => {
+                                {props.categories.map((category, index) => {
                                     return (
-                                        <Button type="text" variant="contained" className="category" color="primary" onClick={() => handleCategory(category)}>{category.name}</Button>
+                                        <Button type="text" variant="contained" className="category" color="primary" onClick={() => handleCategory(category)} key={index}>{category.name}</Button>
                                     )
                                 })}
                             </div>

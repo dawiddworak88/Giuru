@@ -1,9 +1,10 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import { resetServerContext } from 'react-beautiful-dnd';
-import { ServerStyleSheets } from "@material-ui/core/styles";
+import { ServerStyleSheets } from "@mui/styles";
 
 // AspNetCore
+import OutletCatalogPage from "../../src/project/AspNetCore/areas/Products/pages/OutletPage/OutletPage";
 import NewsItemDetails from "../../src/project/AspNetCore/areas/News/pages/NewsItemPage/NewsItemPage";
 import NewsBuyerPage from "../../src/project/AspNetCore/areas/News/pages/NewsPage/NewsPage";
 import NewOrderPage from "../../src/project/AspNetCore/areas/Orders/pages/NewOrder/NewOrderPage";
@@ -14,9 +15,10 @@ import CategoryPage from "../../src/project/AspNetCore/areas/Products/pages/Cate
 import SearchProductsPage from "../../src/project/AspNetCore/areas/Products/pages/SearchProductsPage/SearchProductsPage";
 import AvailableProductsPage from "../../src/project/AspNetCore/areas/Products/pages/AvailableProductsPage/AvailableProductsPage";
 import BuyerProductPage from "../../src/project/AspNetCore/areas/Products/pages/ProductPage/ProductPage";
-import BrandPage from "../../src/project/AspNetCore/areas/Products/pages/BrandPage/BrandPage";
 
 // Account
+import RegisterPage from "../../src/project/Account/areas/Accounts/pages/Register/RegisterPage";
+import ResetPasswordPage from "../../src/project/Account/areas/Accounts/pages/ResetPassword/ResetPasswordPage";
 import SignInPage from "../../src/project/Account/areas/Accounts/pages/SignIn/SignInPage";
 import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetPassword/SetPasswordPage";
 import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
@@ -25,14 +27,18 @@ import ContentPage from "../../src/project/Account/areas/Home/pages/Content/Cont
 import MediaPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage";
 import MediaItemPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage";
 import MediasPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediasPage/MediasPage"
+import OutletPage from "../../src/project/Seller.Portal/areas/Inventory/pages/OutletPage/OutletPage";
+import OutletsPage from "../../src/project/Seller.Portal/areas/Inventory/pages/OutletsPage/OutletsPage";
+import ClientGroupPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientGroupPage/ClientGroupPage";
+import ClientGroupsPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientGroupsPage/ClientGroupsPage";
 import NewsPage from "../../src/project/Seller.Portal/areas/News/pages/NewsPage/NewsPage";
 import NewsItemPage from "../../src/project/Seller.Portal/areas/News/pages/NewsItemPage/NewsItemPage";
 import NewsCategoriesPage from "../../src/project/Seller.Portal/areas/News/pages/CategoriesPage/CategoriesPage";
 import NewsCategoryPage from "../../src/project/Seller.Portal/areas/News/pages/CategoryPage/CategoryPage";
-import WarehouseAddPage from "../../src/project/Seller.Portal/areas/Warehouse/pages/WarehouseAddPage/WarehouseAddPage";
-import WarehousePage from "../../src/project/Seller.Portal/areas/Warehouse/pages/WarehousePage/WarehousePage";
 import InventoryPage from "../../src/project/Seller.Portal/areas/Inventory/pages/InventoryPage/InventoryPage";
-import InventoryAddPage from "../../src/project/Seller.Portal/areas/Inventory/pages/InventoryAddPage/InventoryAddPage";
+import InventoriesPage from "../../src/project/Seller.Portal/areas/Inventory/pages/InventoriesPage/InventoriesPage";
+import WarehousePage from "../../src/project/Seller.Portal/areas/Inventory/pages/WarehousePage/WarehousePage";
+import WarehousesPage from "../../src/project/Seller.Portal/areas/Inventory/pages/WarehousesPage/WarehousesPage";
 import OrdersPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrdersPage/OrdersPage";
 import OrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/OrderPage/OrderPage";
 import EditOrderPage from "../../src/project/Seller.Portal/areas/Orders/pages/EditOrderPage/EditOrderPage";
@@ -48,6 +54,7 @@ import SellerCategoryPage from "../../src/project/Seller.Portal/areas/Products/p
 import SettingsPage from "../../src/project/Seller.Portal/areas/Settings/pages/SettingsPage/SettingsPage";
 
 const Components = {
+	OutletCatalogPage,
 	NewsItemDetails,
 	NewsBuyerPage,
 	ListOrdersPage,
@@ -58,8 +65,9 @@ const Components = {
 	SearchProductsPage,
 	AvailableProductsPage,
 	BuyerProductPage,
-	BrandPage,
 
+	RegisterPage,
+	ResetPasswordPage,
 	SignInPage,
 	SetPasswordPage,
 	ContentPage,
@@ -67,14 +75,18 @@ const Components = {
 	MediaPage,
 	MediaItemPage,
 	MediasPage,
+	OutletPage,
+	OutletsPage,
+	ClientGroupPage,
+	ClientGroupsPage,
 	NewsPage,
 	NewsItemPage,
 	NewsCategoriesPage,
 	NewsCategoryPage,
-	WarehouseAddPage,
-	WarehousePage,
 	InventoryPage,
-	InventoryAddPage,
+	InventoriesPage,
+	WarehousePage,
+	WarehousesPage,
 	OrdersPage,
 	OrderPage,
 	EditOrderPage,

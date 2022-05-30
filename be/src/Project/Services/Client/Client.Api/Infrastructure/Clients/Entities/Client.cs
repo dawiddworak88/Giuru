@@ -15,6 +15,8 @@ namespace Client.Api.Infrastructure.Clients.Entities
         [Required]
         public string Language { get; set; }
 
+        public string PhoneNumber { get; set; }
+
         [Required]
         public Guid OrganisationId { get; set; }
 

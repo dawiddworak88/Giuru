@@ -1,4 +1,5 @@
 @import "../Sidebar/Sidebar.scss";
+@import "../Modal/Modal.scss";
 
 .catalog {
     .catalog-item {
@@ -23,13 +24,24 @@
             font-size: 0.9rem;
         }
 
-        &__fabric, &__brand {
+        &__productAttributes, &__brand {
             a:hover {
                 color: $primary;
             }
         }
 
-        &__fabric {
+        &__discount {
+            position: absolute;
+            top: 1rem;
+            right: 0;
+            z-index: 1;
+            background: $inventory-color;
+            color: #ffffff;
+            border-top-left-radius: 0.25rem;
+            border-bottom-left-radius: 0.25rem;
+        }
+
+        &__productAttributes {
             font-size: 0.750rem;
         }
 
@@ -37,13 +49,13 @@
             margin-top: 0.5rem;
 
             .stock {
-                color: darkgreen;
+                color: $inventory-color;
                 font-weight: 600;
                 font-size: 0.8rem;
             }
 
             .expected-delivery {
-                color: darkgreen;
+                color: $inventory-color;
                 font-weight: 600;
                 font-size: 0.7rem;
             }
@@ -64,7 +76,7 @@
         &__add-to-cart-button-container {
             display: flex;
             align-items: center;
-            justify-content: end;
+            justify-content: flex-end;
             padding: 0 1rem 1rem 0.5rem;
 
             .row {

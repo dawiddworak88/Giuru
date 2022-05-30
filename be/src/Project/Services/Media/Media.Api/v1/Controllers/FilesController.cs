@@ -92,9 +92,9 @@ namespace Media.Api.v1.Controllers
 
 
         /// <summary>
-        /// Uploads a file.
+        /// Uploads a file. The maximum file size is 250MB
         /// </summary>
-        /// <param name="model">File contents.</param>
+        /// <param name="model">File contents. Max file size is 250MB</param>
         /// <returns>Created if the file has been uploaded successfully.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(Guid))]

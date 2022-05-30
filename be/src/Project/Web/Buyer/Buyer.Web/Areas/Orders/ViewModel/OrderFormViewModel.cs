@@ -16,6 +16,8 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string SkuLabel { get; set; }
         public string NameLabel { get; set; }
         public string QuantityLabel { get; set; }
+        public string StockQuantityLabel { get; set; }
+        public string OutletQuantityLabel { get; set; }
         public string ExternalReferenceLabel { get; set; }
         public string DeliveryFromLabel { get; set; }
         public string DeliveryToLabel { get; set; }
@@ -43,5 +45,11 @@ namespace Buyer.Web.Areas.Orders.ViewModel
         public string OrLabel { get; set; }
         public string DropOrSelectFilesLabel { get; set; }
         public string DropFilesLabel { get; set; }
+        public string CustomOrderLabel { get; set; }
+        public string InitCustomOrderLabel { get; set; }
+        public string DeleteLabel { get; set; }
+        public string DropOrSelectAttachmentsLabel { get; set; }
+        public string AttachmentsLabel { get; set; }
+        public string SaveMediaUrl { get; set; }
     }
 }

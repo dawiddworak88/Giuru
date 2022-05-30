@@ -17,6 +17,9 @@ using Seller.Web.Areas.Shared.Repositories.Products;
 using Seller.Web.Shared.Repositories.Identity;
 using Seller.Web.Shared.Services.ContentDeliveryNetworks;
 using Seller.Web.Areas.Shared.Repositories.Media;
+using Seller.Web.Shared.ComponentModels.Files;
+using Seller.Web.Shared.ViewModels;
+using Seller.Web.Shared.ModelBuilders.Files;
 
 namespace Seller.Web.Shared.DependencyInjection
 {
@@ -36,6 +39,7 @@ namespace Seller.Web.Shared.DependencyInjection
             services.AddScoped<ICatalogModelBuilder, CatalogModelBuilder>();
             services.AddScoped<IModelBuilder<FooterViewModel>, FooterModelBuilder>();
             services.AddScoped<IModelBuilder<LogoViewModel>, LogoModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel>, FilesModelBuilder>();
         }
     }
 }

@@ -3,10 +3,13 @@ using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Products.ApiRequestModels;
 using Seller.Web.Areas.Products.DomainModels;
+using Seller.Web.Shared.ApiRequestModels;
+using Seller.Web.Shared.ApiResponseModels;
 using Seller.Web.Shared.Configurations;
 using System;
 using System.Collections.Generic;
@@ -102,6 +105,55 @@ namespace Seller.Web.Areas.Shared.Repositories.Media
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return response.Data;
+            }
+
+            return default;
+        }
+
+        public async Task<PagedResults<IEnumerable<MediaItem>>> GetMediaItemsAsync(IEnumerable<Guid> ids, string language, int pageIndex, int itemsPerPage, string token)
+        {
+            var filesRequestModel = new FilesRequestModel
+            {
+                Ids = ids.ToEndpointParameterString(),
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage
+            };
+
+            var apiRequest = new ApiRequest<FilesRequestModel>
+            {
+                Language = language,
+                Data = filesRequestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.MediaUrl}{ApiConstants.Media.MediaItemsApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<FilesRequestModel>, FilesRequestModel, PagedResults<IEnumerable<FileResponseModel>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                var mediaItems = new List<MediaItem>();
+
+                foreach (var mediaItemResponse in response.Data.Data)
+                {
+                    var mediaItem = new MediaItem
+                    {
+                        Id = mediaItemResponse.Id.Value,
+                        Name = mediaItemResponse.Name,
+                        Filename = mediaItemResponse.Filename,
+                        IsProtected = mediaItemResponse.IsProtected,
+                        Size = mediaItemResponse.Size,
+                        Description = mediaItemResponse.Description,
+                        LastModifiedDate = mediaItemResponse.LastModifiedDate,
+                        CreatedDate = mediaItemResponse.CreatedDate
+                    };
+
+                    mediaItems.Add(mediaItem);
+                }
+
+                return new PagedResults<IEnumerable<MediaItem>>(response.Data.Total, response.Data.PageSize)
+                {
+                    Data = mediaItems
+                };
             }
 
             return default;

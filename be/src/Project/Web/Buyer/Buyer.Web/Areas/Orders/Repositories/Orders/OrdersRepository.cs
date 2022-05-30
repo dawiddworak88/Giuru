@@ -1,5 +1,6 @@
 ﻿using Buyer.Web.Areas.Orders.DomainModels;
 using Buyer.Web.Areas.Products.Repositories.Products;
+using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
@@ -18,15 +19,18 @@ namespace Buyer.Web.Areas.Orders.Repositories
         private readonly IApiClientService apiClientService;
         private readonly IProductsRepository productsRepository;
         private readonly IOptions<AppSettings> settings;
+        private readonly IProductsService productsService;
 
         public OrdersRepository(
             IApiClientService apiClientService,
             IProductsRepository productsRepository,
+            IProductsService productsService,
             IOptions<AppSettings> settings)
         {
             this.settings = settings;
             this.productsRepository = productsRepository;
             this.apiClientService = apiClientService;
+            this.productsService = productsService;
         }
 
         public async Task<Order> GetOrderAsync(string token, string language, Guid? id)
@@ -55,9 +59,11 @@ namespace Buyer.Web.Areas.Orders.Repositories
                             ProductSku = item.ProductSku,
                             PictureUrl = item.PictureUrl,
                             Quantity = item.Quantity,
+                            StockQuantity = item.StockQuantity,
+                            OutletQuantity = item.OutletQuantity,
                             ExternalReference = item.ExternalReference,
                             ExpectedDeliveryFrom = item.ExpectedDeliveryFrom,
-                            ProductAttributes = product.ProductAttributes,
+                            ProductAttributes = await this.productsService.GetProductAttributesAsync(product.ProductAttributes),
                             ExpectedDeliveryTo = item.ExpectedDeliveryTo,
                             MoreInfo = item.MoreInfo,
                             LastModifiedDate = item.LastModifiedDate,
@@ -68,15 +74,17 @@ namespace Buyer.Web.Areas.Orders.Repositories
 
                 var order = new Order
                 {
+                    Id = response.Data.Id,
                     OrderStatusId = response.Data.OrderStatusId,
                     OrderStateId = response.Data.OrderStateId,
                     ClientId = response.Data.ClientId,
                     ClientName = response.Data.ClientName,
                     OrderStatusName = response.Data.OrderStatusName,
                     OrderItems = orderItems,
+                    MoreInfo = response.Data.MoreInfo,
+                    Attachments = response.Data.Attachments,
                     LastModifiedDate = response.Data.LastModifiedDate,
-                    CreatedDate = response.Data.CreatedDate,
-                    Id = response.Data.Id
+                    CreatedDate = response.Data.CreatedDate
                 };
 
                 return order;

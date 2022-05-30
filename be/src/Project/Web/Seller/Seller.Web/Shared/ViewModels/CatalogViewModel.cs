@@ -16,8 +16,6 @@ namespace Seller.Web.Shared.ViewModels
         public string SearchTerm { get; set; }
         public string DisplayedRowsLabel { get; set; }
         public string RowsPerPageLabel { get; set; }
-        public string BackIconButtonText { get; set; }
-        public string NextIconButtonText { get; set; }
         public string NoResultsLabel { get; set; }
         public string NoLabel { get; set; }
         public string YesLabel { get; set; }

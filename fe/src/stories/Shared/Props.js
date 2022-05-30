@@ -81,6 +81,7 @@ export var menuTiles = {
     { icon: "Package", title: "Products", url: "#" },
     { icon: "Server", title: "Warehouses", url: "#" },
     { icon: "Box", title: "Inventory", url: "#" },
+    { icon: "Tag", title: "Outlet", url: "#" },
     { icon: "Users", title: "Clients", url: "#" },
     { icon: "Image", title: "Media", url: "#" },
     { icon: "Settings", title: "Settings", url: "#" }

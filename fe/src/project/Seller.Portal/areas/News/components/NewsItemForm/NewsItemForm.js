@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
-import NoSsr from '@material-ui/core/NoSsr';
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
@@ -10,15 +9,14 @@ import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaClou
 import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import { 
-    TextField, Select, FormControl, FormControlLabel, Switch, 
+    TextField, Select, FormControl, FormControlLabel, Switch, NoSsr,
     InputLabel, MenuItem, Button, CircularProgress, FormHelperText
-} from "@material-ui/core";
+} from "@mui/material";
 import { stateToMarkdown } from "draft-js-export-markdown";
 import { stateFromMarkdown } from 'draft-js-import-markdown';
 
 const NewsItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [showBackToNewsListButton, setShowBackToNewsListButton] = useState(false);
     const [convertedToRaw, setConvertedToRaw] = useState(props.content ? props.content : null);
     const [editorState, setEditorState] = useState(EditorState.createEmpty());
     
@@ -78,7 +76,7 @@ const NewsItemForm = (props) => {
                 return res.json().then(jsonRes => {
                     if (res.ok) {
                         toast.success(jsonRes.message);
-                        setShowBackToNewsListButton(true);
+                        setFieldValue({ name: "id", value: jsonRes.id });
                     }
                     else {
                         toast.error(props.generalErrorMessage);
@@ -156,7 +154,7 @@ const NewsItemForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
     
-    const { title, previewImage, thumbnailImage, description, isPublished, files, categoryId } = values;
+    const { id, title, previewImage, thumbnailImage, description, isPublished, files, categoryId } = values;
     
     return (
         <section className="section section-small-padding">
@@ -164,6 +162,11 @@ const NewsItemForm = (props) => {
             <div className="columns is-desktop">
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit}>
+                        {id &&
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                            </div>
+                        }
                         <div className="field">
                             <TextField 
                                 id="title"
@@ -172,12 +175,13 @@ const NewsItemForm = (props) => {
                                 fullWidth={true}
                                 value={title} 
                                 onChange={handleOnChange} 
+                                variant="standard"
                                 helperText={dirty.title ? errors.title : ""} 
                                 error={(errors.title.length > 0) && dirty.title} 
                             />
                         </div>
                         <div className="field">
-                            <FormControl fullWidth={true}>
+                            <FormControl fullWidth={true} variant="standard">
                                 <InputLabel id="category">{props.categoryLabel}</InputLabel>
                                 <Select
                                     labelId="category"
@@ -204,6 +208,7 @@ const NewsItemForm = (props) => {
                                 value={description} 
                                 multiline={true}
                                 onChange={handleOnChange}
+                                variant="standard"
                                 helperText={dirty.description ? errors.description : ""} 
                                 error={(errors.description.length > 0) && dirty.description} 
                             />
@@ -290,27 +295,25 @@ const NewsItemForm = (props) => {
                             </NoSsr>
                         </div>
                         <div className="field">
-                            {showBackToNewsListButton ? (
-                                <Button 
-                                    type="button" 
-                                    variant="contained" 
-                                    color="primary" 
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        NavigationHelper.redirect(props.newsUrl);
-                                    }}>
-                                    {props.navigateToNewsLabel}
-                                </Button> 
-                            ) : (
-                                <Button 
+                            <Button 
                                     type="submit" 
                                     variant="contained" 
                                     color="primary"
                                     disabled={state.isLoading || disable || !convertedToRaw}
                                 >
-                                    {props.saveText}
-                                </Button>
-                            )}
+                                {props.saveText}
+                            </Button>
+                            <Button 
+                                className="ml-2"
+                                type="button" 
+                                variant="contained" 
+                                color="secondary" 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.newsUrl);
+                                }}>
+                                {props.navigateToNewsLabel}
+                            </Button> 
                         </div>
                     </form>
                     {state.isLoading && <CircularProgress className="progressBar" />}
@@ -340,7 +343,8 @@ NewsItemForm.propTypes = {
     isNewLabel: PropTypes.string,
     categoryLabel: PropTypes.string,
     selectCategoryLabel: PropTypes.string,
-    thumbImageLabel: PropTypes.string
+    thumbImageLabel: PropTypes.string,
+    idLabel: PropTypes.string
 }
 
 export default NewsItemForm;

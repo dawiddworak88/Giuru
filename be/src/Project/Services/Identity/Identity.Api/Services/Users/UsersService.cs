@@ -1,9 +1,11 @@
 ﻿using Feature.Account;
 using Foundation.Extensions.Exceptions;
+using Foundation.Localization;
 using Foundation.Mailing.Configurations;
 using Foundation.Mailing.Models;
 using Foundation.Mailing.Services;
 using Identity.Api.Areas.Accounts.Services.UserServices;
+using Identity.Api.Configurations;
 using Identity.Api.Definitions;
 using Identity.Api.Infrastructure;
 using Identity.Api.Infrastructure.Accounts.Entities;
@@ -13,7 +15,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using System;
 using System.Globalization;
 using System.Net;
@@ -27,25 +28,31 @@ namespace Identity.Api.Services.Users
     {
         private readonly IdentityContext identityContext;
         private readonly IOptionsMonitor<MailingConfiguration> mailingOptions;
+        private readonly IOptionsMonitor<AppSettings> identityOptions;
         private readonly IMailingService mailingService;
-        private readonly IStringLocalizer accountLocalizer;
+        private readonly IStringLocalizer<AccountResources> accountLocalizer;
+        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IUserService userService;
         private readonly LinkGenerator linkGenerator;
 
         public UsersService(
             IdentityContext identityContext,
             IOptionsMonitor<MailingConfiguration> mailingOptions,
+            IOptionsMonitor<AppSettings> identityOptions,
             IMailingService mailingService,
             IStringLocalizer<AccountResources> accountLocalizer,
+            IStringLocalizer<GlobalResources> globalLocalizer,
             IUserService userService,
             LinkGenerator linkGenerator)
         {
             this.identityContext = identityContext;
             this.mailingOptions = mailingOptions;
+            this.identityOptions = identityOptions;
             this.mailingService = mailingService;
             this.accountLocalizer = accountLocalizer;
             this.userService = userService;
             this.linkGenerator = linkGenerator;
+            this.globalLocalizer = globalLocalizer;
         }
 
         public async Task<UserServiceModel> CreateAsync(CreateUserServiceModel serviceModel)
@@ -76,7 +83,7 @@ namespace Identity.Api.Services.Users
                     RecipientName = user.UserName,
                     SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
                     SenderName = this.mailingOptions.CurrentValue.SenderName,
-                    TemplateId = this.mailingOptions.CurrentValue.ActionSendGridResetTemplateId,
+                    TemplateId = this.identityOptions.CurrentValue.ActionSendGridResetTemplateId,
                     DynamicTemplateData = new
                     {
                         lang = existingOrganisation.Language,
@@ -118,7 +125,7 @@ namespace Identity.Api.Services.Users
                 RecipientName = userAccount.UserName,
                 SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
                 SenderName = this.mailingOptions.CurrentValue.SenderName,
-                TemplateId = this.mailingOptions.CurrentValue.ActionSendGridCreateTemplateId,
+                TemplateId = this.identityOptions.CurrentValue.ActionSendGridCreateTemplateId,
                 DynamicTemplateData = new
                 {
                     lang = existingOrganisation.Language,
@@ -233,6 +240,129 @@ namespace Identity.Api.Services.Users
             await this.identityContext.SaveChangesAsync();
 
             return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(existingUser.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
+        }
+
+        public async Task ResetPasswordAsync(ResetUserPasswordServiceModel serviceModel)
+        {
+            var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
+            if (user is not null)
+            {
+                var timeExpiration = DateTime.UtcNow.AddHours(IdentityConstants.VerifyTimeExpiration);
+
+                user.EmailConfirmed = false;
+                user.VerifyExpirationDate = timeExpiration;
+                user.ExpirationId = Guid.NewGuid();
+
+                var userOrganisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == user.OrganisationId && x.IsActive);
+                if (userOrganisation is null)
+                {
+                    throw new CustomException(this.accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NotFound);
+                }
+
+                Thread.CurrentThread.CurrentCulture = new CultureInfo(userOrganisation.Language);
+                Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
+
+                await this.identityContext.SaveChangesAsync();
+                await this.mailingService.SendTemplateAsync(new TemplateEmail
+                {
+                    RecipientEmailAddress = user.Email,
+                    RecipientName = user.UserName,
+                    SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
+                    SenderName = this.mailingOptions.CurrentValue.SenderName,
+                    TemplateId = this.identityOptions.CurrentValue.ActionSendGridResetTemplateId,
+                    DynamicTemplateData = new
+                    {
+                        lang = userOrganisation.Language,
+                        ap_subject = this.accountLocalizer.GetString("ap_subject").Value,
+                        ap_preHeader = this.accountLocalizer.GetString("ap_preHeader").Value,
+                        ap_buttonLabel = this.accountLocalizer.GetString("ap_buttonLabel").Value,
+                        ap_headOne = this.accountLocalizer.GetString("ap_headOne").Value,
+                        ap_headTwo = this.accountLocalizer.GetString("ap_headTwo").Value,
+                        ap_lineOne = this.accountLocalizer.GetString("ap_lineOne").Value,
+                        resetAccountLink = this.linkGenerator.GetUriByAction("Index", "SetPassword", new { Area = "Accounts", culture = userOrganisation.Language, Id = user.ExpirationId, ReturnUrl = string.IsNullOrWhiteSpace(serviceModel.ReturnUrl) ? null : HttpUtility.UrlEncode(serviceModel.ReturnUrl) }, serviceModel.Scheme, serviceModel.Host)
+                    }
+                });
+            }
+        }
+
+        public async Task<UserServiceModel> GetByEmail(GetUserByEmailServiceModel serviceModel)
+        {
+            var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
+
+            if (user is not null)
+            {
+                return new UserServiceModel
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    UserName = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    OrganisationId = user.OrganisationId,
+                    TwoFactorEnabled = user.TwoFactorEnabled,
+                    EmailConfirmed = user.EmailConfirmed,
+                    PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+                    PhoneNumber = user.PhoneNumber
+                };
+            }
+
+            return default;
+        }
+
+        public async Task RegisterAsync(RegisterServiceModel serviceModel)
+        {
+            await this.mailingService.SendTemplateAsync(new TemplateEmail
+            {
+                RecipientEmailAddress = serviceModel.Email,
+                RecipientName = serviceModel.FirstName + " " + serviceModel.LastName,
+                SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
+                SenderName = this.mailingOptions.CurrentValue.SenderName,
+                TemplateId = this.identityOptions.CurrentValue.ActionSendGridClientApplyConfirmationTemplateId,
+                DynamicTemplateData = new
+                {
+                    welcomeLabel = this.globalLocalizer.GetString("Welcome").Value,
+                    firstName = serviceModel.FirstName,
+                    lastName = serviceModel.LastName,
+                    subject = this.accountLocalizer.GetString("ClientApplyConfirmationSubject").Value,
+                    lineOne = this.accountLocalizer.GetString("ClientApplyConfirmation").Value
+                }
+            });
+
+            await this.mailingService.SendTemplateAsync(new TemplateEmail
+            {
+                RecipientEmailAddress = this.identityOptions.CurrentValue.ApplyRecipientEmail,
+                RecipientName = this.mailingOptions.CurrentValue.SenderName,
+                SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
+                SenderName = this.mailingOptions.CurrentValue.SenderName,
+                TemplateId = this.identityOptions.CurrentValue.ActionSendGridClientApplyTemplateId,
+                DynamicTemplateData = new
+                {
+                    firstName = serviceModel.FirstName,
+                    lastName = serviceModel.LastName,
+                    email = serviceModel.Email,
+                    phoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel").Value,
+                    phoneNumber = serviceModel.PhoneNumber,
+                    subject = $"{serviceModel.CompanyName} - {serviceModel.FirstName} {serviceModel.LastName} - {this.accountLocalizer.GetString("ClientApplySubject").Value}",
+                    contactInformation = this.accountLocalizer.GetString("ContactInformation").Value,
+                    businessInformation = this.accountLocalizer.GetString("BusinessInformation").Value,
+                    firstNameLabel = this.globalLocalizer.GetString("FirstName").Value,
+                    lastNameLabel = this.globalLocalizer.GetString("LastName").Value,
+                    companyNameLabel = this.globalLocalizer.GetString("CompanyName").Value,
+                    companyName = serviceModel.CompanyName,
+                    addressLabel = this.globalLocalizer.GetString("Address").Value,
+                    address = serviceModel.CompanyAddress,
+                    cityLabel = this.globalLocalizer.GetString("City").Value,
+                    city = serviceModel.CompanyCity,
+                    regionLabel = this.globalLocalizer.GetString("Region").Value,
+                    region = serviceModel.CompanyRegion,
+                    postalCodeLabel = this.globalLocalizer.GetString("PostalCode").Value,
+                    postalCode = serviceModel.CompanyPostalCode,
+                    contactJobLabel = this.globalLocalizer.GetString("ContactJobTitle").Value,
+                    contactJobTitle = serviceModel.ContactJobTitle,
+                    countryLabel = this.globalLocalizer.GetString("Country").Value,
+                    country = serviceModel.CompanyCountry
+                }
+            });
         }
     }
 }

@@ -15,6 +15,7 @@ namespace Seller.Web.Areas.Products.ApiRequestModels
         public IEnumerable<ListItemRequestModel> Images { get; set; }
         public IEnumerable<ListItemRequestModel> Files { get; set; }
         public bool IsNew { get; set; }
+        public string Ean { get; set; }
         public bool IsPublished { get; set; }
         public string FormData { get; set; }
     }

@@ -90,6 +90,12 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                             Title = this.globalLocalizer.GetString("Inventory"),
                             Url = this.linkGenerator.GetPathByAction("Index", "Inventories", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
                         },
+                         new DrawerMenuItemViewModel
+                        {
+                            Icon = IconsConstants.Outlet,
+                            Title = this.globalLocalizer.GetString("Outlet"),
+                            Url = this.linkGenerator.GetPathByAction("Index", "Outlets", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name }),
+                        },
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Warehouses,
@@ -107,6 +113,12 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                             Icon = IconsConstants.Users,
                             Title = this.globalLocalizer.GetString("Clients"),
                             Url = this.linkGenerator.GetPathByAction("Index", "Clients", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                        },
+                        new DrawerMenuItemViewModel
+                        {
+                            Icon = IconsConstants.Users,
+                            Title = this.globalLocalizer.GetString("ClientsGroups"),
+                            Url = this.linkGenerator.GetPathByAction("Index", "ClientGroups", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                         }
                     }
                 },

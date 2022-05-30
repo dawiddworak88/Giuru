@@ -3,18 +3,15 @@ import { toast } from "react-toastify";
 import { UploadCloud } from "react-feather";
 import { useDropzone } from "react-dropzone";
 import PropTypes from "prop-types";
-import MomentUtils from "@date-io/moment";
-import { MuiPickersUtilsProvider, KeyboardDatePicker,} from "@material-ui/pickers";
+import { LocalizationProvider, DatePicker } from "@mui/lab";
+import AdapterMoment from '@mui/lab/AdapterMoment';
 import Autosuggest from "react-autosuggest";
 import { Context } from "../../../../../../shared/stores/Store";
-import { TextField, Button, IconButton, CircularProgress } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
-import ClearIcon from "@material-ui/icons/Clear";
-import AddShoppingCartRounded from "@material-ui/icons/AddShoppingCartRounded";
+import { Delete, AddShoppingCartRounded } from "@mui/icons-material";
 import {
-    Fab, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper
-} from "@material-ui/core";
+    Fab, Table, TableBody, TableCell, TableContainer, FormControlLabel,
+    TableHead, TableRow, Paper, TextField, Button, CircularProgress, Checkbox, NoSsr
+} from "@mui/material";
 import moment from "moment";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import OrderFormConstants from "../../../../../../shared/constants/OrderFormConstants";
@@ -22,6 +19,7 @@ import ConfirmationDialog from "../../../../../../shared/components/Confirmation
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import IconConstants from "../../../../../../shared/constants/IconConstants";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
+import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 
 function NewOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -37,7 +35,10 @@ function NewOrderForm(props) {
     const [suggestions, setSuggestions] = useState([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
-    const [showBackToOrdersListButton, setShowBackToOrdersListButton] = useState(false);
+    const [customOrder, setCustomOrder] = useState("");
+    const [hasCustomOrder, setHasCustomOrder] = useState(false);
+    const [isOrdered, setIsOrdered] = useState(false);
+    const [attachments, setAttachments] = useState([]);
 
     const onSuggestionsFetchRequested = (args) => {
         if (args.value && args.value.length >= OrderFormConstants.minSuggestionSearchTermLength()) {
@@ -205,6 +206,9 @@ function NewOrderForm(props) {
 
         var order = {
             basketId,
+            moreInfo: customOrder,
+            attachments,
+            hasCustomOrder
         };
 
         const requestOptions = {
@@ -223,7 +227,7 @@ function NewOrderForm(props) {
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
-                        setShowBackToOrdersListButton(true);
+                        setIsOrdered(true);
                     }
                 });
             }).catch(() => {
@@ -304,6 +308,9 @@ function NewOrderForm(props) {
                         setOrderItems([]);
                         setBasketId(null);
                     }
+
+                    setCustomOrder(null);
+                    setHasCustomOrder(false);
                 });
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
@@ -311,6 +318,7 @@ function NewOrderForm(props) {
             });
     }
 
+    const disabledActionButtons = orderItems.length === 0 ? !customOrder ? true : false : false
     return (
         <section className="section order">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -351,7 +359,7 @@ function NewOrderForm(props) {
                                 />
                             </div>
                             <div className="column is-1 is-flex is-align-items-flex-end">
-                                <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "1", step: "1" }}
+                                <TextField id="quantity" name="quantity" type="number" inputProps={{ min: "1", step: "1" }} variant="standard"
                                     label={props.quantityLabel} fullWidth={true} value={quantity} onChange={(e) => {
                                         e.preventDefault();
                                         setQuantity(e.target.value);
@@ -359,7 +367,7 @@ function NewOrderForm(props) {
                                 />
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel}
+                                <TextField id="externalReference" name="externalReference" type="text" label={props.externalReferenceLabel} variant="standard"
                                     fullWidth={true} value={externalReference} onChange={(e) => {
                                         e.preventDefault();
                                         setExternalReference(e.target.value);
@@ -367,61 +375,35 @@ function NewOrderForm(props) {
                                 />
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <MuiPickersUtilsProvider utils={MomentUtils}>
-                                    <KeyboardDatePicker
+                                <LocalizationProvider dateAdapter={AdapterMoment}>
+                                    <DatePicker
                                         id="deliveryFrom"
                                         label={props.deliveryFromLabel}
                                         value={deliveryFrom}
                                         onChange={(date) => {
                                             setDeliveryFrom(date);
                                         }}
-                                        okLabel={props.okLabel}
-                                        cancelLabel={props.cancelLabel}
-                                        InputProps={{
-                                            endAdornment: (
-                                                <IconButton onClick={() => setDeliveryFrom(null)}>
-                                                    <ClearIcon />
-                                                </IconButton>
-                                            )
-                                        }}
-                                        InputAdornmentProps={{
-                                            position: "start"
-                                        }}
-                                        KeyboardButtonProps={{
-                                            "aria-label": props.changeDeliveryFromLabel
-                                        }} disablePast={true}
-                                    />
-                                </MuiPickersUtilsProvider>
+                                        renderInput={(params) => 
+                                            <TextField {...params} variant="standard" />}
+                                        disablePast={true}/>
+                                </LocalizationProvider>
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <MuiPickersUtilsProvider utils={MomentUtils}>
-                                    <KeyboardDatePicker
+                                <LocalizationProvider dateAdapter={AdapterMoment}>
+                                    <DatePicker
                                         id="deliveryTo"
                                         label={props.deliveryToLabel}
                                         value={deliveryTo}
                                         onChange={(date) => {
                                             setDeliveryTo(date);
                                         }}
-                                        okLabel={props.okLabel}
-                                        cancelLabel={props.cancelLabel}
-                                        InputProps={{
-                                            endAdornment: (
-                                                <IconButton onClick={() => setDeliveryTo(null)}>
-                                                    <ClearIcon />
-                                                </IconButton>
-                                            )
-                                        }}
-                                        InputAdornmentProps={{
-                                            position: "start"
-                                        }}
-                                        KeyboardButtonProps={{
-                                           "aria-label": props.changeDeliveryToLabel
-                                        }} 
+                                        renderInput={(params) => 
+                                            <TextField {...params} variant="standard" />}
                                         disablePast={true}/>
-                                </MuiPickersUtilsProvider>
+                                </LocalizationProvider>
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">
-                                <TextField id="moreInfo" name="moreInfo" type="text" label={props.moreInfoLabel}
+                                <TextField id="moreInfo" name="moreInfo" type="text" label={props.moreInfoLabel} variant="standard"
                                     fullWidth={true} value={moreInfo} onChange={(e) => {
                                         e.preventDefault();
                                         setMoreInfo(e.target.value);
@@ -442,11 +424,15 @@ function NewOrderForm(props) {
                                                 <Table aria-label={props.orderItemsLabel}>
                                                     <TableHead>
                                                         <TableRow>
-                                                            <TableCell></TableCell>
+                                                            {!isOrdered &&
+                                                                <TableCell></TableCell>
+                                                            }
                                                             <TableCell></TableCell>
                                                             <TableCell>{props.skuLabel}</TableCell>
                                                             <TableCell>{props.nameLabel}</TableCell>
                                                             <TableCell>{props.quantityLabel}</TableCell>
+                                                            <TableCell>{props.stockQuantityLabel}</TableCell>
+                                                            <TableCell>{props.outletQuantityLabel}</TableCell>
                                                             <TableCell>{props.externalReferenceLabel}</TableCell>
                                                             <TableCell>{props.deliveryFromLabel}</TableCell>
                                                             <TableCell>{props.deliveryToLabel}</TableCell>
@@ -456,15 +442,19 @@ function NewOrderForm(props) {
                                                     <TableBody>
                                                         {orderItems.map((item, index) => (
                                                             <TableRow key={index}>
-                                                                <TableCell width="11%">
-                                                                    <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
-                                                                        <DeleteIcon />
-                                                                    </Fab>
-                                                                </TableCell>
+                                                                {!isOrdered &&
+                                                                    <TableCell width="11%">
+                                                                        <Fab onClick={() => handleDeleteClick(item)} size="small" color="primary" aria-label={props.deleteLabel}>
+                                                                            <Delete />
+                                                                        </Fab>
+                                                                    </TableCell>
+                                                                }
                                                                 <TableCell><a href={item.productUrl} rel="noreferrer" target="_blank"><img className="order__basket-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
                                                                 <TableCell>{item.sku}</TableCell>
                                                                 <TableCell>{item.name}</TableCell>
                                                                 <TableCell>{item.quantity}</TableCell>
+                                                                <TableCell>{item.stockQuantity}</TableCell>
+                                                                <TableCell>{item.outletQuantity}</TableCell>
                                                                 <TableCell>{item.externalReference}</TableCell>
                                                                 <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
                                                                 <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
@@ -483,10 +473,66 @@ function NewOrderForm(props) {
                                     <span className="is-title is-5">{props.noOrderItemsLabel}</span>
                                 </section>
                             )}
-                    </div>
+                        </div>
                 </Fragment>
                 <div className="field">
-                    {showBackToOrdersListButton ? (
+                    <NoSsr>
+                        <FormControlLabel 
+                            control={
+                                <Checkbox 
+                                    checked={hasCustomOrder}
+                                    onChange={(e) => {
+                                        setHasCustomOrder(e.target.checked);
+                                    }}
+                                    disabled={isOrdered}/>
+                            }
+                            label={props.initCustomOrderLabel}
+                        />
+                    </NoSsr>
+                    {hasCustomOrder && 
+                        <Fragment>
+                            <div className="order__items">
+                                <TextField
+                                    id="customOrder"
+                                    name="customOrder"
+                                    placeholder={props.customOrderLabel}
+                                    InputProps={{
+                                        className: "p-2",
+                                        disableUnderline: true
+                                    }}
+                                    rows={OrderFormConstants.minRowsForCustomOrder()}
+                                    fullWidth={true}
+                                    multiline={true}
+                                    value={customOrder}
+                                    disabled={isOrdered}
+                                    onChange={(e) => {
+                                        setCustomOrder(e.target.value);
+                                    }}
+                                />
+                            </div>
+                            <div className="mt-3">
+                                <MediaCloud 
+                                    id="attachments"
+                                    name="attachments"
+                                    label={props.attachmentsLabel}
+                                    accept=".pdf, .docx, .zip, .xls, .xlsx, .png, .jpg"
+                                    multiple={true}
+                                    generalErrorMessage={props.generalErrorMessage}
+                                    deleteLabel={props.deleteLabel}
+                                    dropFilesLabel={props.dropFilesLabel}
+                                    dropOrSelectFilesLabel={props.dropOrSelectAttachmentsLabel}
+                                    files={attachments}
+                                    setFieldValue={({value}) => {
+                                        setAttachments(value);
+                                    }}
+                                    saveMediaUrl={props.saveMediaUrl}
+                                />
+                            </div>
+                        </Fragment>
+                    }
+                </div>
+                <div className="field">
+                    {isOrdered ? (
                         <Button type="button" variant="contained" color="primary" onClick={handleBackToOrdersClick}>
                             {props.navigateToOrdersListText}
                         </Button> 
@@ -495,14 +541,15 @@ function NewOrderForm(props) {
                             <Button type="button" variant="contained"
                                 color="primary"
                                 onClick={handlePlaceOrder}
-                                disabled={state.isLoading || orderItems.length === 0}>
+                                disabled={state.isLoading || disabledActionButtons}
+                                >
                                 {props.saveText}
                             </Button>
                             <Button 
                                 className="order__clear-button" 
                                 color="secondary" variant="contained" 
                                 onClick={clearBasket} 
-                                disabled={state.isLoading || orderItems.length === 0}>
+                                disabled={state.isLoading || disabledActionButtons}>
                                     {props.clearBasketText}
                             </Button>
                         </>
@@ -536,12 +583,10 @@ NewOrderForm.propTypes = {
     deliveryFromLabel: PropTypes.string.isRequired,
     deliveryToLabel: PropTypes.string.isRequired,
     moreInfoLabel: PropTypes.string.isRequired,
-    selectClientLabel: PropTypes.string.isRequired,
     getSuggestionsUrl: PropTypes.string.isRequired,
     orderItemsLabel: PropTypes.string.isRequired,
     changeDeliveryFromLabel: PropTypes.string.isRequired,
     changeDeliveryToLabel: PropTypes.string.isRequired,
-    clientRequiredErrorMessage: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
     addText: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
@@ -557,11 +602,12 @@ NewOrderForm.propTypes = {
     ordersUrl: PropTypes.string.isRequired,
     placeOrderUrl: PropTypes.string.isRequired,
     navigateToOrdersListText: PropTypes.string.isRequired,
-    expectedDeliveryabel: PropTypes.string.isRequired,
     uploadOrderFileUrl: PropTypes.string.isRequired,
     orLabel: PropTypes.string.isRequired,
     dropOrSelectFilesLabel: PropTypes.string.isRequired,
-    dropFilesLabel: PropTypes.string.isRequired
+    dropFilesLabel: PropTypes.string.isRequired,
+    initCustomOrderLabel: PropTypes.string.isRequired,
+    customOrderLabel: PropTypes.string.isRequired
 };
 
 export default NewOrderForm;

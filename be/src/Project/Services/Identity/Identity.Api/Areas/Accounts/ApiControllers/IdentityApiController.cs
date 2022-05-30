@@ -3,11 +3,12 @@ using Foundation.ApiExtensions.Controllers;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
 using Identity.Api.Areas.Accounts.Services.UserServices;
 using Identity.Api.Areas.Accounts.Validators;
+using Identity.Api.Configurations;
 using Identity.Api.Services.Users;
 using Identity.Api.ServicesModels.Users;
-using IdentityServer4.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using System;
 using System.Globalization;
 using System.Net;
@@ -20,13 +21,19 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
     {
         private readonly IUserService userService;
         private readonly IUsersService usersService;
+        private readonly IOptions<AppSettings> options;
+        private readonly IStringLocalizer<AccountResources> accountLocalizer;
 
         public IdentityApiController(
             IUserService userService,
+            IOptions<AppSettings> options,
+            IStringLocalizer<AccountResources> accountLocalizer,
             IUsersService usersService)
         {
             this.userService = userService;
             this.usersService = usersService;
+            this.options = options;
+            this.accountLocalizer = accountLocalizer;
         }
 
         [HttpGet]
@@ -41,6 +48,58 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             });
 
             return this.StatusCode((int)HttpStatusCode.OK, user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] RegisterRequestModel model)
+        {
+            var validator = new RegisterModelValidator();
+            var result = await validator.ValidateAsync(model);
+            if (result.IsValid)
+            {
+                var serviceModel = new RegisterServiceModel
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Email = model.Email,
+                    ContactJobTitle = model.ContactJobTitle,
+                    PhoneNumber = model.PhoneNumber,
+                    CompanyName = model.CompanyName,
+                    CompanyAddress = model.CompanyAddress,
+                    CompanyCountry = model.CompanyCountry,
+                    CompanyCity = model.CompanyCity,
+                    CompanyPostalCode = model.CompanyPostalCode,
+                    CompanyRegion = model.CompanyRegion
+                };
+
+                await this.usersService.RegisterAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.accountLocalizer.GetString("SuccessfullyClientApply").Value });
+            }
+
+            return this.StatusCode((int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetUserPasswordRequestModel model)
+        {
+            var validator = new ResetPasswordModelValidator();
+            var result = await validator.ValidateAsync(model);
+            if (result.IsValid)
+            {
+                var serviceModel = new ResetUserPasswordServiceModel {
+                    Email = model.Email,
+                    ReturnUrl = this.options.Value.BuyerUrl,
+                    Scheme = this.HttpContext.Request.Scheme,
+                    Host = this.HttpContext.Request.Host
+                };
+
+                await this.usersService.ResetPasswordAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.accountLocalizer.GetString("SuccessfullyResetPassword").Value });
+            }
+
+            return this.StatusCode((int)HttpStatusCode.BadRequest);
         }
 
         [HttpPost]

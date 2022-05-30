@@ -5,8 +5,8 @@ using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.Helpers;
 using Foundation.GenericRepository.Paginations;
-using Inventory.Api.Services;
-using Inventory.Api.ServicesModels.InventoryServices;
+using Inventory.Api.Services.InventoryItems;
+using Inventory.Api.ServicesModels.InventoryServiceModels;
 using Inventory.Api.v1.RequestModels;
 using Inventory.Api.v1.ResponseModels;
 using Inventory.Api.Validators.InventoryValidators;
@@ -79,10 +79,14 @@ namespace Inventory.Api.v1.Controllers
                                 Id = x.Id,
                                 ProductId = x.ProductId,
                                 ProductName = x.ProductName,
-                                ProductSku = x.ProductSku,
+                                Sku = x.Sku,
+                                Ean = x.Ean,
                                 WarehouseId = x.WarehouseId,
                                 WarehouseName = x.WarehouseName,
+                                Quantity = x.Quantity,
                                 AvailableQuantity = x.AvailableQuantity,
+                                RestockableInDays = x.RestockableInDays,
+                                ExpectedDelivery = x.ExpectedDelivery,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -118,9 +122,12 @@ namespace Inventory.Api.v1.Controllers
                             WarehouseName = x.WarehouseName,
                             ProductId = x.ProductId,
                             ProductName = x.ProductName,
-                            ProductSku = x.ProductSku,
+                            Sku = x.Sku,
                             Quantity = x.Quantity,
+                            Ean = x.Ean,
                             AvailableQuantity = x.AvailableQuantity,
+                            RestockableInDays = x.RestockableInDays,
+                            ExpectedDelivery = x.ExpectedDelivery,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         })
@@ -128,6 +135,7 @@ namespace Inventory.Api.v1.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
+
                 throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
             }
         }
@@ -171,6 +179,7 @@ namespace Inventory.Api.v1.Controllers
                         Quantity = inventoryProduct.Quantity,
                         ProductName = inventoryProduct.ProductName,
                         ProductSku = inventoryProduct.ProductSku,
+                        Ean = inventoryProduct.ProductEan,
                         RestockableInDays = inventoryProduct.RestockableInDays,
                         ExpectedDelivery = inventoryProduct.ExpectedDelivery
                     })
@@ -196,27 +205,31 @@ namespace Inventory.Api.v1.Controllers
         public async Task<IActionResult> SaveProductInventories(SaveInventoriesBySkusRequestModel request)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
             var serviceModel = new UpdateProductsInventoryServiceModel
             {
                 InventoryItems = request.InventoryItems.OrEmptyIfNull().Select(x => new UpdateProductInventoryServiceModel
-                { 
-                    AvailableQuantity = x.AvailableQuantity,
-                    Quantity = x.Quantity,
-                    ExpectedDelivery = x.ExpectedDelivery,
+                {
+                    WarehouseId = x.WarehouseId,
                     ProductId = x.ProductId,
                     ProductName = x.ProductName,
                     ProductSku = x.ProductSku,
-                    RestockableInDays = x.RestockableInDays,
-                    WarehouseName = x.WarehouseName
+                    ProductEan = x.Ean,
+                    Quantity = x.Quantity,
+                    AvailableQuantity = x.AvailableQuantity,
+                    ExpectedDelivery = x.ExpectedDelivery,
+                    RestockableInDays = x.RestockableInDays
                 }),
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new SaveInventoryItemsByProductSkusModelValidator();
+
             var validationResult = await validator.ValidateAsync(serviceModel);
+
             if (validationResult.IsValid)
             {
-                await this.inventoriesService.SyncInventoryProducts(serviceModel);
+                await this.inventoriesService.SyncProductsInventories(serviceModel);
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }
@@ -237,6 +250,7 @@ namespace Inventory.Api.v1.Controllers
         public async Task<IActionResult> Save(InventoryRequestModel request)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
             if (request.Id.HasValue && request.Id != null)
             {
                 var serviceModel = new UpdateInventoryServiceModel
@@ -247,6 +261,7 @@ namespace Inventory.Api.v1.Controllers
                     ProductName = request.ProductName,
                     ProductSku = request.ProductSku,
                     Quantity = request.Quantity,
+                    ProductEan = request.Ean,
                     AvailableQuantity = request.AvailableQuantity,
                     RestockableInDays = request.RestockableInDays,
                     ExpectedDelivery = request.ExpectedDelivery,
@@ -263,6 +278,7 @@ namespace Inventory.Api.v1.Controllers
 
                     return this.StatusCode((int)HttpStatusCode.OK, new { inventoryProduct.Id });
                 }
+
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
             else
@@ -274,6 +290,7 @@ namespace Inventory.Api.v1.Controllers
                     ProductName = request.ProductName,
                     ProductSku = request.ProductSku,
                     Quantity = request.Quantity,
+                    ProductEan = request.Ean,
                     AvailableQuantity = request.AvailableQuantity,
                     RestockableInDays = request.RestockableInDays,
                     ExpectedDelivery = request.ExpectedDelivery,
@@ -283,6 +300,7 @@ namespace Inventory.Api.v1.Controllers
 
                 var validator = new CreateInventoryModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
+
                 if (validationResult.IsValid)
                 {
                     var inventoryProduct = await this.inventoriesService.CreateAsync(serviceModel);
@@ -322,6 +340,7 @@ namespace Inventory.Api.v1.Controllers
             if (validationResult.IsValid)
             {
                 var inventoryProduct = await this.inventoriesService.GetAsync(serviceModel);
+
                 if (inventoryProduct != null)
                 {
                     var response = new InventoryResponseModel
@@ -329,10 +348,11 @@ namespace Inventory.Api.v1.Controllers
                         Id = inventoryProduct.Id,
                         ProductId = inventoryProduct.ProductId,
                         ProductName = inventoryProduct.ProductName,
-                        ProductSku = inventoryProduct.ProductSku,
+                        Sku = inventoryProduct.Sku,
                         WarehouseId = inventoryProduct.WarehouseId.Value,
                         WarehouseName = inventoryProduct.WarehouseName,
                         Quantity = inventoryProduct.Quantity,
+                        Ean = inventoryProduct.Ean,
                         AvailableQuantity = inventoryProduct.AvailableQuantity,
                         RestockableInDays = inventoryProduct.RestockableInDays,
                         ExpectedDelivery = inventoryProduct.ExpectedDelivery,
@@ -374,6 +394,7 @@ namespace Inventory.Api.v1.Controllers
 
             var validator = new GetProductByIdModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
+
             if (validationResult.IsValid)
             {
                 var inventoryProduct = await this.inventoriesService.GetInventoryByProductId(serviceModel);
@@ -385,6 +406,7 @@ namespace Inventory.Api.v1.Controllers
                         ProductId = inventoryProduct.ProductId,
                         AvailableQuantity = inventoryProduct.AvailableQuantity,
                         Quantity = inventoryProduct.Quantity,
+                        Ean = inventoryProduct.ProductEan,
                         ProductName = inventoryProduct.ProductName,
                         ProductSku = inventoryProduct.ProductSku,
                         RestockableInDays = inventoryProduct.RestockableInDays,
@@ -395,9 +417,10 @@ namespace Inventory.Api.v1.Controllers
                             ProductId = item.ProductId,
                             ProductName = item.ProductName,
                             Quantity = item.Quantity,
+                            Ean = item.Ean,
                             AvailableQuantity = item.AvailableQuantity,
                             ExpectedDelivery = item.ExpectedDelivery,
-                            ProductSku = item.ProductSku,
+                            ProductSku = item.Sku,
                             WarehouseId = item.WarehouseId,
                             WarehouseName = item.WarehouseName,
                             RestockableInDays = item.RestockableInDays,
@@ -439,6 +462,7 @@ namespace Inventory.Api.v1.Controllers
 
             var validator = new GetProductBySkuModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
+
             if (validationResult.IsValid)
             {
                 var inventoryProduct = await this.inventoriesService.GetInventoryByProductSku(serviceModel);
@@ -450,6 +474,7 @@ namespace Inventory.Api.v1.Controllers
                         ProductId = inventoryProduct.ProductId,
                         AvailableQuantity = inventoryProduct.AvailableQuantity,
                         Quantity = inventoryProduct.Quantity,
+                        Ean = inventoryProduct.ProductEan,
                         ProductName = inventoryProduct.ProductName,
                         ProductSku = inventoryProduct.ProductSku,
                         RestockableInDays = inventoryProduct.RestockableInDays,
@@ -460,9 +485,10 @@ namespace Inventory.Api.v1.Controllers
                             ProductId = item.ProductId,
                             ProductName = item.ProductName,
                             Quantity = item.Quantity,
+                            Ean = item.Ean,
                             AvailableQuantity = item.AvailableQuantity,
                             ExpectedDelivery = item.ExpectedDelivery,
-                            ProductSku = item.ProductSku,
+                            ProductSku = item.Sku,
                             WarehouseId = item.WarehouseId,
                             WarehouseName = item.WarehouseName,
                             RestockableInDays = item.RestockableInDays,
@@ -496,7 +522,7 @@ namespace Inventory.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.Conflict)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Delete(Guid? id)
-        {
+        {   
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var serviceModel = new DeleteInventoryServiceModel
             {
@@ -515,6 +541,7 @@ namespace Inventory.Api.v1.Controllers
 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }
+
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
     }

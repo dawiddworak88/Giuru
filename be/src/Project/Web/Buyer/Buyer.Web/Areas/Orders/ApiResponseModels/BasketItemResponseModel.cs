@@ -11,6 +11,8 @@ namespace Buyer.Web.Areas.Orders.ApiResponseModels
         public string ImageSrc { get; set; }
         public string ImageAlt { get; set; }
         public double Quantity { get; set; }
+        public double StockQuantity { get; set; }
+        public double OutletQuantity { get; set; }
         public string ExternalReference { get; set; }
         public DateTime? DeliveryFrom { get; set; }
         public DateTime? DeliveryTo { get; set; }

@@ -9,11 +9,9 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using System;
 using Foundation.ApiExtensions.Models.Request;
-using System.Linq;
 using Seller.Web.Areas.Inventory.DomainModels;
 using Seller.Web.Areas.Inventory.ApiRequestModels;
 using Foundation.ApiExtensions.Models.Response;
-using Foundation.Extensions.ExtensionMethods;
 
 namespace Seller.Web.Areas.Inventory.Repositories.Inventories
 {
@@ -49,6 +47,7 @@ namespace Seller.Web.Areas.Inventory.Repositories.Inventories
             };
 
             var response = await this.apiInventoryService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<InventoryItem>>>(apiRequest);
+
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
                 return new PagedResults<IEnumerable<InventoryItem>>(response.Data.Total, response.Data.PageSize)
@@ -89,113 +88,6 @@ namespace Seller.Web.Areas.Inventory.Repositories.Inventories
             return default;
         }
 
-        public async Task<IEnumerable<InventoryItem>> GetAllProductsAsync(string token, string language)
-        {
-            var productsRequestModel = new PagedRequestModelBase
-            {
-                PageIndex = PaginationConstants.DefaultPageIndex,
-                ItemsPerPage = PaginationConstants.DefaultPageSize
-            };
-
-            var apiRequest = new ApiRequest<PagedRequestModelBase>
-            {
-                Language = language,
-                Data = productsRequestModel,
-                AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.InventoryUrl}{ApiConstants.Inventory.InventoryApiEndpoint}"
-            };
-
-            var response = await this.apiInventoryService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<InventoryItem>>>(apiRequest);
-
-            if (response.IsSuccessStatusCode && response.Data?.Data != null)
-            {
-                var products = new List<InventoryItem>();
-
-                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
-
-                for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
-                {
-                    apiRequest.Data.PageIndex = i;
-
-                    var nextPagesResponse = await this.apiInventoryService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<InventoryItem>>>(apiRequest);
-
-                    if (!nextPagesResponse.IsSuccessStatusCode)
-                    {
-                        throw new CustomException(response.Message, (int)response.StatusCode);
-                    }
-
-                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Any())
-                    {
-                        products.AddRange(nextPagesResponse.Data.Data);
-                    }
-                }
-
-                return products;
-            }
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
-            return default;
-        }
-
-        public async Task<IEnumerable<InventoryItem>> GetAllProductsAsync(string token, string language, IEnumerable<Guid> inventoryIds)
-        {
-            var productsRequestModel = new PagedRequestModelBase
-            {
-                Ids = inventoryIds.ToEndpointParameterString(),
-                PageIndex = PaginationConstants.DefaultPageIndex,
-                ItemsPerPage = PaginationConstants.DefaultPageSize
-            };
-
-            var apiRequest = new ApiRequest<PagedRequestModelBase>
-            {
-                Language = language,
-                Data = productsRequestModel,
-                AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.InventoryUrl}{ApiConstants.Inventory.InventoryApiEndpoint}"
-            };
-
-            var response = await this.apiInventoryService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<InventoryItem>>>(apiRequest);
-
-            if (response.IsSuccessStatusCode && response.Data?.Data != null)
-            {
-                var products = new List<InventoryItem>();
-
-                products.AddRange(response.Data.Data);
-
-                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
-
-                for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
-                {
-                    apiRequest.Data.PageIndex = i;
-
-                    var nextPagesResponse = await this.apiInventoryService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<InventoryItem>>>(apiRequest);
-
-                    if (!nextPagesResponse.IsSuccessStatusCode)
-                    {
-                        throw new CustomException(response.Message, (int)response.StatusCode);
-                    }
-
-                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Any())
-                    {
-                        products.AddRange(nextPagesResponse.Data.Data);
-                    }
-                }
-
-                return products;
-            }
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
-            return default;
-        }
-
         public async Task DeleteAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
@@ -213,7 +105,7 @@ namespace Seller.Web.Areas.Inventory.Repositories.Inventories
             }
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? WarehouseId, Guid? ProductId, string ProductName, string ProductSku, int Quantity, int? RestockableInDays, int? AvailableQuantity, DateTime? ExpectedDelivery, Guid? OrganisationId)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? WarehouseId, Guid? ProductId, string ProductName, string ProductSku, double Quantity, string ean, int? RestockableInDays, double? AvailableQuantity, DateTime? ExpectedDelivery, Guid? OrganisationId)
         {
             var requestModel = new SaveInventoryRequestModel
             {
@@ -223,6 +115,7 @@ namespace Seller.Web.Areas.Inventory.Repositories.Inventories
                 ProductName = ProductName,
                 ProductSku = ProductSku,
                 Quantity = Quantity,
+                Ean = ean,
                 RestockableInDays = RestockableInDays,
                 AvailableQuantity = AvailableQuantity,
                 ExpectedDelivery = ExpectedDelivery,

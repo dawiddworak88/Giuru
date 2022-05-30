@@ -9,6 +9,7 @@ using Foundation.GenericRepository.Paginations;
 using System.Threading.Tasks;
 using Foundation.PageContent.ComponentModels;
 using Buyer.Web.Shared.ViewModels.Sidebar;
+using Buyer.Web.Shared.ViewModels.Modals;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
 {
@@ -16,12 +17,14 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
     {
         private readonly ICatalogModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel> catalogModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder;
         private readonly IProductsService productsService;
         private readonly ICategoryRepository categoryRepository;
 
         public CategoryCatalogModelBuilder(
             ICatalogModelBuilder<SearchProductsComponentModel, CategoryCatalogViewModel> catalogModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, SidebarViewModel> sidebarModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, ModalViewModel> modalModelBuilder,
             IProductsService productsService,
             ICategoryRepository categoryRepository)
         {
@@ -29,6 +32,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
             this.sidebarModelBuilder = sidebarModelBuilder;
             this.productsService = productsService;
             this.categoryRepository = categoryRepository;
+            this.modalModelBuilder = modalModelBuilder;
         }
 
         public async Task<CategoryCatalogViewModel> BuildModelAsync(SearchProductsComponentModel componentModel)
@@ -42,6 +46,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Categories
                 viewModel.Title = category.Name;
                 viewModel.CategoryId = category.Id;
                 viewModel.Sidebar = await this.sidebarModelBuilder.BuildModelAsync(componentModel);
+                viewModel.Modal = await this.modalModelBuilder.BuildModelAsync(componentModel);
                 viewModel.PagedItems = await this.productsService.GetProductsAsync(
                     null,
                     componentModel.Id,

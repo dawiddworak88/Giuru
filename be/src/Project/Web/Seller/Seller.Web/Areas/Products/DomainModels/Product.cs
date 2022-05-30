@@ -14,6 +14,7 @@ namespace Seller.Web.Areas.Products.DomainModels
         public bool IsPublished { get; set; }
         public bool IsProtected { get; set; }
         public string FormData { get; set; }
+        public string Ean { get; set; }
         public Guid SellerId { get; set; }
         public string BrandName { get; set; }
         public Guid CategoryId { get; set; }
