@@ -11,6 +11,7 @@ import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaClou
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import { Context } from "../../../../../../shared/stores/Store";
+import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 
 const MediaItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
@@ -37,13 +38,16 @@ const MediaItemForm = (props) => {
 
         const requestOptions = {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
             body: JSON.stringify(state)
         };
 
         fetch(props.updateMediaVersionUrl, requestOptions)
             .then((response) => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
                 return response.json().then(jsonResponse => {
                     if (response.ok) {
                         toast.success(jsonResponse.message);
