@@ -271,11 +271,10 @@ namespace Media.Api.v1.Controllers
                         })
                     };
 
-
                     return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
-                return this.StatusCode((int)HttpStatusCode.NotFound);
             }
+
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
     }
