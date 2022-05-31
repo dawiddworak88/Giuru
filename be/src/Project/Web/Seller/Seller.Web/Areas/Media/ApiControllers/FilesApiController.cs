@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using Seller.Web.Areas.Media.Repositories;
+using Seller.Web.Areas.Media.Repositories.Files;
 using Seller.Web.Areas.Media.Repositories.Media;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Shared.Repositories.Media;

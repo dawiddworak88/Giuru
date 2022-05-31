@@ -3,7 +3,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.DependencyInjection;
 using Seller.Web.Areas.Media.DomainModels;
 using Seller.Web.Areas.Media.ModelBuilders;
-using Seller.Web.Areas.Media.Repositories;
+using Seller.Web.Areas.Media.Repositories.Files;
 using Seller.Web.Areas.Media.Repositories.Media;
 using Seller.Web.Areas.Media.ViewModel;
 using Seller.Web.Shared.ViewModels;

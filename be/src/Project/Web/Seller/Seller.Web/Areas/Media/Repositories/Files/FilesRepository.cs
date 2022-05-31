@@ -9,7 +9,7 @@ using Seller.Web.Shared.Configurations;
 using System;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Media.Repositories
+namespace Seller.Web.Areas.Media.Repositories.Files
 {
     public class FilesRepository : IFilesRepository
     {

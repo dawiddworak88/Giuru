@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Media.Repositories
+namespace Seller.Web.Areas.Media.Repositories.Files
 {
     public interface IFilesRepository
     {
