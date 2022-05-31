@@ -231,7 +231,7 @@ namespace Media.Api.v1.Controllers
         [HttpGet, MapToApiVersion("1.0")]
         [AllowAnonymous]
         [Route("versions/{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(MediaItemResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(MediaItemVersionsResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetVersions(Guid? id)
@@ -247,17 +247,32 @@ namespace Media.Api.v1.Controllers
             if (validationResult.IsValid)
             {
                 var mediaItemVersions = await this.mediaService.GetMediaItemVerionsByIdAsync(serviceModel);
+
                 if (mediaItemVersions is not null)
                 {
-                    var response = new MediaItemVerionsByIdServiceModel
+                    var response = new MediaItemVersionsResponseModel
                     {
-                        Id = mediaItemVersions.Id,
+                        Id = mediaItemVersions.Id.Value,
                         Name = mediaItemVersions.Name,
                         Description = mediaItemVersions.Description,
                         MetaData = mediaItemVersions.MetaData,
-                        Versions = mediaItemVersions.Versions,
+                        Versions = mediaItemVersions.Versions.Select(x => new MediaItemServiceModel
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            Description= x.Description,
+                            MetaData = x.MetaData,
+                            Filename = x.Filename,
+                            IsProtected = x.IsProtected,
+                            Size = x.Size,
+                            Extension = x.Extension,
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        })
                     };
-                    return this.StatusCode((int)HttpStatusCode.OK, mediaItemVersions);
+
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
                 }
                 return this.StatusCode((int)HttpStatusCode.NotFound);
             }
