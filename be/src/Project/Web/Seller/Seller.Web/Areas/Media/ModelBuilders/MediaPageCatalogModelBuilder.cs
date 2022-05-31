@@ -86,7 +86,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(MediaItem.FileName).ToCamelCase(),
+                        Title = nameof(MediaItem.Name).ToCamelCase(),
                         IsDateTime = false,
                     },
                     new CatalogPropertyViewModel
