@@ -1,59 +1,59 @@
 @import "../../../../../../shared/components/MediaCloud/MediaCloud.scss";
 
 .media-edit{
-    &__last-files {
-        width: 100%;
-        padding: 1rem;
-        position: relative;
+  &__last-files {
+    width: 100%;
+    padding: 1rem;
+    position: relative;
 
-        h2 {
-            margin-bottom: 0.8rem;
-        }
+    h2 {
+      margin-bottom: 0.8rem;
     }
+  }
 
-    &__versions {
+  &__versions {
+    display: flex;
+    padding: 0.5rem 0;
+
+    .version {
+      margin-right: 1rem;
+      transition: all 0.5s ease;
+      width: 12.5rem;
+      height: auto;
+
+      &:last-child{
+        margin-right: 0;
+      }
+
+      img {
+        max-width: 100% ;
+      }
+
+      .icon {
         display: flex;
-        padding: 0.5rem 0;
+        justify-content: center;
+        align-items: center;
+      }
 
-        .version {
-            margin-right: 1rem;
-            transition: all 0.5s ease;
-            width: 12.5rem;
-            height: auto;
-
-            &:last-child{
-                margin-right: 0;
-            }
-
-            img {
-                max-width: 100% ;
-            }
-
-            .icon {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-            &:hover {
-                cursor: pointer;
-                transform: scale(1.1);
-            }
-        }
-
-        .icon-version{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 12.5rem;
-            background: white;
-            object-fit: cover;
-            height: 7.5rem;
-            box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.02);
-            
-            svg {
-                font-size: 3rem;
-            }
-        }
+      &:hover {
+        cursor: pointer;
+        transform: scale(1.1);
+      }
     }
+
+    .icon-version{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 12.5rem;
+      background: white;
+      object-fit: cover;
+      height: 7.5rem;
+      box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.02);
+
+      svg {
+        font-size: 3rem;
+      }
+    }
+  }
 }
