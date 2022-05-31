@@ -128,9 +128,10 @@ const MediaItemForm = (props) => {
                                 id="name" 
                                 name="name" 
                                 type="text" 
-                                label={props.nameLabel} 
-                                fullWidth={true} 
-                                value={name} 
+                                label={props.nameLabel}
+                                fullWidth={true}
+                                value={name}
+                                variant="standard"
                                 onChange={handleOnChange} />
                         </div>
                         <div className="field">
@@ -139,7 +140,8 @@ const MediaItemForm = (props) => {
                                 name="description" 
                                 type="text" 
                                 label={props.descriptionLabel} 
-                                fullWidth={true} 
+                                fullWidth={true}
+                                variant="standard"
                                 value={description} 
                                 onChange={handleOnChange} />
                         </div>
@@ -151,10 +153,15 @@ const MediaItemForm = (props) => {
                                 label={props.metaDataLabel} 
                                 fullWidth={true} 
                                 value={metadata} 
+                                variant="standard"
                                 onChange={handleOnChange} />
                         </div>
                         <div className="field">
-                            <Button type="submit" variant="contained" color="primary" disabled={disable || state.isLoading}>
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                color="primary" 
+                                disabled={disable || state.isLoading}>
                                 {props.saveMediaText}
                             </Button>
                         </div>
