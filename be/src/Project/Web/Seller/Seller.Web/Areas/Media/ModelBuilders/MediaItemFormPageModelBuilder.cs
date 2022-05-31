@@ -47,16 +47,16 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                 SaveMediaText = this.globalLocalizer.GetString("SaveText"),
                 UpdateMediaVersionUrl = this.linkGenerator.GetPathByAction("UpdateVersion", "MediaApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 LatestVersionsLabel = this.mediaResources.GetString("LatestVersionsLabel"),
-                MetaDataLabel = this.mediaResources.GetString("MetaDataLabel")
+                MetaDataLabel = this.mediaResources.GetString("MetaDataLabel"),
+                MediaUrl = this.linkGenerator.GetPathByAction("Index", "Medias", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             if (componentModel.Id.HasValue)
             {
-                viewModel.Id = componentModel.Id.Value;
-
                 var itemVersions = await this.mediaRepository.GetMediaItemVersionsAsync(componentModel.Id.Value, componentModel.Token, componentModel.Language);
                 if (itemVersions is not null)
                 {
+                    viewModel.Id = componentModel.Id.Value;
                     viewModel.Name = itemVersions.Name;
                     viewModel.Description = itemVersions.Description;
                     viewModel.Versions = itemVersions.Versions;

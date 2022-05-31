@@ -164,9 +164,19 @@ const MediaItemForm = (props) => {
                                 disabled={disable || state.isLoading}>
                                 {props.saveMediaText}
                             </Button>
+                            <Button 
+                                className="ml-2"
+                                type="button" 
+                                variant="contained" 
+                                color="secondary" 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.mediaUrl);
+                                }}>
+                                {props.backToMediaText}
+                            </Button> 
                         </div>
                     </form>
-        
                     {state.isLoading && <CircularProgress className="progressBar" />}
                 </div>
             </div>
@@ -176,17 +186,19 @@ const MediaItemForm = (props) => {
 
 MediaItemForm.propTypes = {
     title: PropTypes.string.isRequired,
-    descriptionLabel: PropTypes.string,
-    nameLabel: PropTypes.string,
-    generalErrorMessage: PropTypes.string,
-    mediaItemsLabel: PropTypes.string,
-    deleteLabel: PropTypes.string,
-    dropFilesLabel: PropTypes.string,
-    dropOrSelectImagesLabel: PropTypes.string,
-    saveMediaUrl: PropTypes.string,
-    backToMediaText: PropTypes.string,
-    saveMediaText: PropTypes.string,
-    latestVersionsLabel: PropTypes.string
+    descriptionLabel: PropTypes.string.isRequired,
+    nameLabel: PropTypes.string.isRequired,
+    generalErrorMessage: PropTypes.string.isRequired,
+    mediaItemsLabel: PropTypes.string.isRequired,
+    deleteLabel: PropTypes.string.isRequired,
+    dropFilesLabel: PropTypes.string.isRequired,
+    dropOrSelectImagesLabel: PropTypes.string.isRequired,
+    saveMediaUrl: PropTypes.string.isRequired,
+    backToMediaText: PropTypes.string.isRequired,
+    saveMediaText: PropTypes.string.isRequired,
+    latestVersionsLabel: PropTypes.string.isRequired,
+    mediaUrl: PropTypes.string.isRequired,
+    backToMediaText: PropTypes.string.isRequired
 }
 
 export default MediaItemForm;
