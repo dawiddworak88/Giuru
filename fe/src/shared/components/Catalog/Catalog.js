@@ -217,7 +217,7 @@ function Catalog(props) {
                                     <TableHead>
                                         <TableRow>
                                             {props.table.actions &&
-                                                <TableCell width="11%"></TableCell>
+                                                <TableCell width="12%"></TableCell>
                                             }
                                             {props.table.labels.map((item, index) =>
                                                 <TableCell key={index} value={item}>{item}</TableCell>
@@ -228,7 +228,7 @@ function Catalog(props) {
                                         {items.map((item, index) => (
                                             <TableRow key={index}>
                                                 {props.table.actions &&
-                                                    <TableCell width="11%">
+                                                    <TableCell width="12%">
                                                         {props.table.actions.map((actionItem, index) => {
                                                             if (actionItem.isEdit) return (
                                                                 <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel} key={index}>
@@ -250,9 +250,13 @@ function Catalog(props) {
                                                                 <div></div>)})}
                                                     </TableCell>
                                                 }
-
                                                 {props.table.properties && props.table.properties.map((property, index) => {
-                                                    if (property.isDateTime){
+                                                    if (property.isPicture){
+                                                        return (
+                                                            <TableCell key={index}><img src={item[property.title]} /></TableCell>
+                                                        )
+                                                    }
+                                                    else if (property.isDateTime){
                                                         return (
                                                             <TableCell key={index}>{isMounted ? moment.utc(item[property.title]).local().format("L LT") : moment.utc(item[property.title]).format("L LT")}</TableCell>
                                                         )

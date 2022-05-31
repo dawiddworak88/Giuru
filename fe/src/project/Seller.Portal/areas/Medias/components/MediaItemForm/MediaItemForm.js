@@ -15,8 +15,8 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 
 const MediaItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [versions, setVersions] = useState(props.versions ? props.versions.slice(1) : []);
-    const [images, setImages] = useState(props.versions ? props.versions.slice(0, 1) : []);
+    const [versions, setVersions] = useState(props.versions ? props.versions : []);
+    const [images, setImages] = useState([]);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : null, error: "" },
@@ -107,7 +107,7 @@ const MediaItemForm = (props) => {
                                         } else if (version.mimeType.startsWith("image")) {
                                             return (
                                                 <div className="version" key={version.id} onClick={() => mediaHandle(url)}>
-                                                    <img src={version.url} alt={version.filename} />
+                                                    <img src={url} alt={version.filename} />
                                                 </div>
                                             )
                                         } else  {

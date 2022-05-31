@@ -9,6 +9,7 @@ namespace Seller.Web.Areas.Media.ApiResponseModels
         public string Url { get; set; }
         public string MimeType { get; set; }
         public Guid? MediaItemId { get; set; }
+        public Guid? MediaItemVersionId { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

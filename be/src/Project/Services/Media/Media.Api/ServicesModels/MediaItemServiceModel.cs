@@ -14,6 +14,7 @@ namespace Media.Api.v1.Areas.Media.ResultModels
         public long Size { get; set; }
         public bool IsProtected { get; set; }
         public Guid? MediaItemId { get; set; }
+        public Guid? MediaItemVersionId { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

@@ -20,6 +20,7 @@ using Foundation.Extensions.Exceptions;
 using System.Net;
 using Microsoft.Extensions.Localization;
 using Foundation.Localization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Media.Api.Services.Media
 {
@@ -285,30 +286,58 @@ namespace Media.Api.Services.Media
 
         public async Task<PagedResults<IEnumerable<MediaItemServiceModel>>> GetAsync(GetMediaItemsServiceModel serviceModel)
         {
-            var mediaItems = from media in this.context.MediaItems
-                             where media.IsActive == true && media.OrganisationId == serviceModel.OrganisationId.Value
-                             select new MediaItemServiceModel
-                             {
-                                Id = media.Id,
-                                Filename = media.Versions.FirstOrDefault().Filename,
-                                Extension = media.Versions.FirstOrDefault().Extension,
-                                MimeType = media.Versions.FirstOrDefault().MimeType,
-                                Size = media.Versions.FirstOrDefault().Size,
-                                Name = media.Versions.FirstOrDefault().Translations.FirstOrDefault().Name,
-                                Description = media.Versions.FirstOrDefault().Translations.FirstOrDefault().Description,
-                                MetaData = media.Versions.FirstOrDefault().Translations.FirstOrDefault().Metadata,
-                                LastModifiedDate = media.LastModifiedDate,
-                                CreatedDate = media.CreatedDate,
-                             };
+            var mediaItems = this.context.MediaItems.Where(x => x.IsActive && x.OrganisationId == serviceModel.OrganisationId.Value);
 
-            if (!string.IsNullOrWhiteSpace(serviceModel.SearchTerm))
+            if (string.IsNullOrWhiteSpace(serviceModel.SearchTerm) is false)
             {
-                mediaItems = mediaItems.Where(x => x.Filename.StartsWith(serviceModel.SearchTerm));
+                mediaItems = mediaItems.Where(x => x.Versions.Any(x => x.Filename.StartsWith(serviceModel.SearchTerm)));
             }
 
             mediaItems = mediaItems.ApplySort(serviceModel.OrderBy);
 
-            return mediaItems.PagedIndex(new Pagination(mediaItems.Count(), serviceModel.ItemsPerPage), serviceModel.PageIndex);
+            var pagedResults = mediaItems.PagedIndex(new Pagination(mediaItems.Count(), serviceModel.ItemsPerPage), serviceModel.PageIndex);
+
+            var pagedMediaItemsServiceModel = new PagedResults<IEnumerable<MediaItemServiceModel>>(pagedResults.Total, pagedResults.PageSize);
+
+            var items = new List<MediaItemServiceModel>();
+
+            foreach (var mediaItem in pagedResults.Data.ToList())
+            {
+                var item = new MediaItemServiceModel
+                {
+                    Id = mediaItem.Id,
+                    LastModifiedDate = mediaItem.LastModifiedDate,
+                    CreatedDate = mediaItem.CreatedDate
+                };
+
+                var mediaItemVersion = await this.context.MediaItemVersions.OrderBy(x => x.Version).LastOrDefaultAsync(x => x.MediaItemId == mediaItem.Id);
+
+                if (mediaItemVersion is not null)
+                {
+                    item.MediaItemVersionId = mediaItemVersion.Id;
+                    item.Filename = mediaItemVersion.Filename;
+                    item.Extension = mediaItemVersion.Extension;
+                    item.MimeType = mediaItemVersion.MimeType;
+                    item.Size = mediaItemVersion.Size;
+
+                    var mediaItemVersionTranslation = await this.context.MediaItemTranslations.FirstOrDefaultAsync(x => x.MediaItemVersionId == mediaItemVersion.Id && x.Language == serviceModel.Language && x.IsActive);
+
+                    if (mediaItemVersionTranslation is null)
+                    {
+                        mediaItemVersionTranslation = await this.context.MediaItemTranslations.FirstOrDefaultAsync(x => x.MediaItemVersionId == mediaItemVersion.Id && x.IsActive);
+                    }
+
+                    item.Name = mediaItemVersionTranslation?.Name;
+                    item.Description = mediaItemVersionTranslation?.Description;
+                    item.MetaData = mediaItemVersionTranslation?.Metadata;
+                }
+
+                items.Add(item);
+            }
+
+            pagedMediaItemsServiceModel.Data = items;
+
+            return pagedMediaItemsServiceModel;
         }
 
         public async Task DeleteAsync(DeleteFileServiceModel model)

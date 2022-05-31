@@ -115,6 +115,7 @@ namespace Media.Api.v1.Controllers
                         Data = mediaItems.Result.Data.OrEmptyIfNull().Select(x => new MediaItemResponseModel
                         {
                             Id = x.Id,
+                            MediaItemVersionId = x.MediaItemVersionId,
                             Description = x.Description,
                             Extension = x.Extension,
                             Filename = x.Filename,
@@ -130,8 +131,6 @@ namespace Media.Api.v1.Controllers
                 }
                 throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
             }
-
-            return this.BadRequest();
         }
 
         /// <summary>

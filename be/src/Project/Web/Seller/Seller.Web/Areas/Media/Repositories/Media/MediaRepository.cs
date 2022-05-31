@@ -89,7 +89,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                         Id = mediaItem.Id,
                         FileName = mediaItem.FileName,
                         Name = mediaItem.FileName,
-                        Url = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, mediaItem.Id, 200, 120, true)),
+                        Url = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, mediaItem.MediaItemVersionId.Value, 200, 120, true)),
                         LastModifiedDate = mediaItem.LastModifiedDate,
                         CreatedDate = mediaItem.CreatedDate
                     };
