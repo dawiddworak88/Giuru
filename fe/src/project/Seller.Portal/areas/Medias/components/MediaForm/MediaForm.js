@@ -6,12 +6,7 @@ import NavigationHelper from "../../../../../../shared/helpers/globals/Navigatio
 
 function UploadForm(props) {
     const [images, setImages] = useState([]);
-    const backToMediaList = (e) => {
-        e.preventDefault();
-        NavigationHelper.redirect(props.mediaUrl);
-    }
     
-    const buttonDisable = images.length === 0 ? true : false;
     return (
         <section className="section section-small-padding product client-form">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -34,7 +29,14 @@ function UploadForm(props) {
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
                         <div className="field">
-                            <Button type="submit" variant="contained" color="primary" onClick={backToMediaList} disabled={buttonDisable}>
+                            <Button 
+                                type="submit" 
+                                variant="contained" 
+                                color="primary" 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    NavigationHelper.redirect(props.mediaUrl);
+                                }}>
                                 {props.backToMediaText}
                             </Button>
                         </div>
