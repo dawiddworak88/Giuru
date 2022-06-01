@@ -166,6 +166,7 @@ function EditOrderForm(props) {
                             <TextField 
                                 id="customOrder"
                                 name="customOrder"
+                                variant="standard"
                                 value={props.customOrder}
                                 fullWidth={true}
                                 multiline={true}
