@@ -73,7 +73,9 @@ namespace Client.Api.v1.Controllers
                         CompanyAddress = clientApplication.CompanyAddress,
                         CompanyCity = clientApplication.CompanyCity,
                         CompanyCountry = clientApplication.CompanyCountry,
-                        CompanyName = clientApplication.CompanyName
+                        CompanyName = clientApplication.CompanyName,
+                        LastModifiedDate = clientApplication.LastModifiedDate,
+                        CreatedDate = clientApplication.CreatedDate
                     };
 
                     return this.StatusCode((int)HttpStatusCode.OK, response);
@@ -140,7 +142,9 @@ namespace Client.Api.v1.Controllers
                                 CompanyCity = x.CompanyCity,
                                 CompanyCountry = x.CompanyCountry,
                                 CompanyPostalCode = x.CompanyPostalCode,
-                                CompanyRegion = x.CompanyRegion
+                                CompanyRegion = x.CompanyRegion,
+                                LastModifiedDate = x.LastModifiedDate,
+                                CreatedDate = x.CreatedDate
                             })
                         };
 
@@ -187,7 +191,9 @@ namespace Client.Api.v1.Controllers
                                 CompanyCity = x.CompanyCity,
                                 CompanyCountry = x.CompanyCountry,
                                 CompanyPostalCode = x.CompanyPostalCode,
-                                CompanyRegion = x.CompanyRegion
+                                CompanyRegion = x.CompanyRegion,
+                                LastModifiedDate = x.LastModifiedDate,
+                                CreatedDate = x.CreatedDate
                             })
                         };
 

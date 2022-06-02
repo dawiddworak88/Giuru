@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Client.Api.v1.ResponseModels
+namespace Seller.Web.Areas.Clients.DomainModels
 {
-    public class ClientApplicationResponseModel
+    public class ClientApplication
     {
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ContactJobTitle { get; set; }
@@ -16,7 +16,7 @@ namespace Client.Api.v1.ResponseModels
         public string CompanyCity { get; set; }
         public string CompanyRegion { get; set; }
         public string CompanyPostalCode { get; set; }
-        public DateTime? LastModifiedDate { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

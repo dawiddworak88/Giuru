@@ -17,5 +17,7 @@ namespace Client.Api.ServicesModels.Applications
         public string CompanyCity { get; set; }
         public string CompanyRegion { get; set; }
         public string CompanyPostalCode { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

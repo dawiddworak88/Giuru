@@ -69,7 +69,9 @@ namespace Client.Api.Services.Applications
                                           CompanyCountry = c.CompanyCountry,
                                           CompanyName = c.CompanyName,
                                           CompanyPostalCode = c.CompanyPostalCode,
-                                          CompanyRegion = c.CompanyRegion
+                                          CompanyRegion = c.CompanyRegion,
+                                          LastModifiedDate = c.LastModifiedDate,
+                                          CreatedDate = c.CreatedDate
                                       };
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
@@ -103,7 +105,9 @@ namespace Client.Api.Services.Applications
                 CompanyCountry = existingApplication.CompanyCountry,
                 CompanyName = existingApplication.CompanyName,
                 CompanyPostalCode = existingApplication.CompanyPostalCode,
-                CompanyRegion = existingApplication.CompanyRegion
+                CompanyRegion = existingApplication.CompanyRegion,
+                LastModifiedDate = existingApplication.LastModifiedDate,
+                CreatedDate = existingApplication.CreatedDate
             };
 
             return clientApplication;
@@ -126,7 +130,9 @@ namespace Client.Api.Services.Applications
                                           CompanyCountry = c.CompanyCountry,
                                           CompanyName = c.CompanyName,
                                           CompanyPostalCode = c.CompanyPostalCode,
-                                          CompanyRegion = c.CompanyRegion
+                                          CompanyRegion = c.CompanyRegion,
+                                          LastModifiedDate = c.LastModifiedDate,
+                                          CreatedDate = c.CreatedDate
                                       };
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
