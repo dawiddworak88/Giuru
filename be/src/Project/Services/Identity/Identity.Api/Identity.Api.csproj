@@ -37,6 +37,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\Infrastructure\Account\Foundation.Account\Foundation.Account.csproj" />
 		<ProjectReference Include="..\..\..\..\Infrastructure\ApiExtensions\Foundation.ApiExtensions\Foundation.ApiExtensions.csproj" />
+		<ProjectReference Include="..\..\..\..\Infrastructure\EventBus\Foundation.EventBusRabbitMq\Foundation.EventBusRabbitMq.csproj" />
+		<ProjectReference Include="..\..\..\..\Infrastructure\EventBus\Foundation.EventBus\Foundation.EventBus.csproj" />
 		<ProjectReference Include="..\..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
 		<ProjectReference Include="..\..\..\..\Infrastructure\Localization\Foundation.Localization\Foundation.Localization.csproj" />
 		<ProjectReference Include="..\..\..\..\Infrastructure\Mailing\Foundation.Mailing\Foundation.Mailing.csproj" />

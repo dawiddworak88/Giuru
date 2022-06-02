@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Foundation.Localization.Definitions;
+using Foundation.EventBus.Abstractions;
+using Client.Api.IntegrationEvents;
 
 namespace Client.Api.DependencyInjection
 {
@@ -27,6 +29,13 @@ namespace Client.Api.DependencyInjection
         public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<LocalizationSettings>(configuration);
+        }
+
+        public static void ConfigureEventBus(this IApplicationBuilder app)
+        {
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+
+            eventBus.Subscribe<ClientApplicationIntegrationEvent, IIntegrationEventHandler<ClientApplicationIntegrationEvent>>();
         }
     }
 }

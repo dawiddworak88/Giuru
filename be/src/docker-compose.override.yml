@@ -80,6 +80,8 @@ services:
       - LogstashUrl=http://logstash:31311
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
+      - EventBusConnection=amqp://rabbitmq
+      - EventBusRetryCount=5
     ports:
       - "5133:80"
 
@@ -167,6 +169,8 @@ services:
       - ActionSendGridClientApplyConfirmationTemplateId=${SENDGRID_CLIENT_APPLY_CONFIRMATION_TEMPLATE_ID}
       - ActionSendGridClientApplyTemplateId=${SENDGRID_CLIENT_APPLY_TEMPLATE_ID}
       - DevelopersEmail=it.developers@eltap.com
+      - EventBusConnection=amqp://rabbitmq
+      - EventBusRetryCount=5
     ports:
       - "5105:80"
 
