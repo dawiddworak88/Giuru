@@ -36,6 +36,41 @@ namespace Client.Api.v1.Controllers
         }
 
         /// <summary>
+        /// Delete client application by id.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <returns>OK.</returns>
+        [HttpDelete, MapToApiVersion("1.0")]
+        [Route("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new DeleteClientApplicationServiceModel
+            {
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new DeleteClientApplicationModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                await this.clientsApplicationService.DeleteAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
         /// Get information client application
         /// </summary>
         /// <param name="id">The client application id</param>
@@ -46,9 +81,14 @@ namespace Client.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetByEmail(Guid? id)
         {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
             var serviceModel = new GetClientApplicationServiceModel
             {
-                Id = id
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new GetClientApplicationModelValidator();

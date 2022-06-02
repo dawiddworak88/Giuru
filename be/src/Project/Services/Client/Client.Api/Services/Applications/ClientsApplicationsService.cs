@@ -52,6 +52,20 @@ namespace Client.Api.Services.Applications
             return clientApplication.Id;
         }
 
+        public async Task DeleteAsync(DeleteClientApplicationServiceModel model)
+        {
+            var clientApplication = await this.context.Clients.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
+
+            if (clientApplication is null)
+            {
+                throw new CustomException(this.clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            clientApplication.IsActive = false;
+
+            await this.context.SaveChangesAsync();
+        }
+
         public async Task<PagedResults<IEnumerable<ClientApplicationServiceModel>>> GetAsync(GetClientsApplicationsServiceModel model)
         {
             var clientsApplications = from c in this.context.ClientsApplications
@@ -90,7 +104,7 @@ namespace Client.Api.Services.Applications
 
             if (existingApplication is null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ClientNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var clientApplication = new ClientApplicationServiceModel

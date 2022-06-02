@@ -17,7 +17,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
     [Area("Clients")]
     public class ClientGroupsApiController : BaseApiController
     {
-        public IStringLocalizer<ClientResources> clientLocalizer;
+        private readonly IStringLocalizer<ClientResources> clientLocalizer;
         private readonly IClientGroupsRepository clientGroupsRepository;
 
         public ClientGroupsApiController(

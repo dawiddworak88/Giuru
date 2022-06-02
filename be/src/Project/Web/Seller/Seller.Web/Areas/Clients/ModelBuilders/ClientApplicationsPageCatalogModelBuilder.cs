@@ -41,22 +41,18 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         {
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<ClientApplication>, ClientApplication>();
 
-            viewModel.Title = this.clientLocalizer.GetString("ClientsGroups");
-
-            viewModel.NewText = this.clientLocalizer.GetString("NewGroup");
-            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "ClientGroup", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "ClientGroup", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
-
-            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ClientGroupsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ClientGroupsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.Title = this.clientLocalizer.GetString("ClientsApplications");
+            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "ClientsApplication", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ClientsApplicationApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ClientsApplicationApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(ClientApplication.CreatedDate)} desc";
-
             viewModel.Table = new CatalogTableViewModel
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("Name"),
+                    this.globalLocalizer.GetString("CompanyName"),
+                    this.globalLocalizer.GetString("Email"),
                     this.globalLocalizer.GetString("LastModifiedDate"),
                     this.globalLocalizer.GetString("CreatedDate")
                 },
@@ -76,6 +72,11 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     new CatalogPropertyViewModel
                     {
                         Title = nameof(ClientApplication.CompanyName).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(ClientApplication.Email).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
