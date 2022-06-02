@@ -573,4 +573,7 @@
   <data name="AcceptTermsText" xml:space="preserve">
     <value>Akceptuję Regulamin i Politykę Prywatności</value>
   </data>
+  <data name="AttachedAttachments" xml:space="preserve">
+    <value>Klient załączył następujące pliki</value>
+  </data>
 </root>

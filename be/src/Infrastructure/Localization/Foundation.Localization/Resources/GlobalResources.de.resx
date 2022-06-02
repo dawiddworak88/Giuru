@@ -570,4 +570,7 @@
   <data name="AcceptTermsText" xml:space="preserve">
     <value>Ich akzeptiere die Allgemeinen Geschäftsbedingungen und Datenschutzbestimmungen</value>
   </data>
+  <data name="AttachedAttachments" xml:space="preserve">
+    <value>Der Kunde hat folgende Dateien angehängt</value>
+  </data>
 </root>

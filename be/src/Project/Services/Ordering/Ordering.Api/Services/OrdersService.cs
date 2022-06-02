@@ -152,7 +152,7 @@ namespace Ordering.Api.Services
                     TemplateId = this.orderingOptions.CurrentValue.ActionSendGridCustomOrderTemplateId,
                     DynamicTemplateData = new
                     {
-                        attachmentsLabel = this.globalLocalizer.GetString("Attachments").Value,
+                        attachmentsLabel = this.globalLocalizer.GetString("AttachedAttachments").Value,
                         attachments = attachments,
                         subject = this.orderLocalizer.GetString("CustomOrderSubject").Value + " " + serviceModel.ClientName + " (" + order.Id + ")",
                         text = serviceModel.MoreInfo
