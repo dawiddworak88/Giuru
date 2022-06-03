@@ -60,16 +60,46 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
 
             viewModel.ContactJobTitles = new List<ContactJobTitle>
             {
-                new ContactJobTitle { Name = this.globalLocalizer.GetString("SalesRep") },
-                new ContactJobTitle { Name = this.globalLocalizer.GetString("SalesManager") },
-                new ContactJobTitle { Name = this.globalLocalizer.GetString("President") },
-                new ContactJobTitle { Name = this.globalLocalizer.GetString("CEO") },
-                new ContactJobTitle { Name = this.globalLocalizer.GetString("AccountManager") },
-                new ContactJobTitle { Name = this.globalLocalizer.GetString("Owner") },
-                new ContactJobTitle { Name = this.globalLocalizer.GetString("VicePresident") },
-                new ContactJobTitle { Name = this.globalLocalizer.GetString("GeneralManager") },
-                new ContactJobTitle { Name = this.globalLocalizer.GetString("OperationsManager") },
-                new ContactJobTitle { Name = this.globalLocalizer.GetString("Other") }
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("SalesRep").Name,
+                    Value = this.globalLocalizer.GetString("SalesRep").Value
+                },
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("SalesManager").Name,
+                    Value = this.globalLocalizer.GetString("SalesManager").Value
+                },
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("President").Name,
+                    Value = this.globalLocalizer.GetString("President").Value
+                },
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("CEO").Name,
+                    Value = this.globalLocalizer.GetString("CEO").Value
+                },
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("AccountManager").Name,
+                    Value = this.globalLocalizer.GetString("AccountManager").Value
+                },
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("Owner").Name,
+                    Value = this.globalLocalizer.GetString("Owner").Value
+                },
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("VicePresident").Name,
+                    Value = this.globalLocalizer.GetString("VicePresident").Value
+                },
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("GeneralManager").Name,
+                    Value = this.globalLocalizer.GetString("GeneralManager").Value
+                },
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("OperationsManager").Name,
+                    Value = this.globalLocalizer.GetString("OperationsManager").Value
+                },
+                new ContactJobTitle {
+                    Name = this.globalLocalizer.GetString("Other").Name,
+                    Value = this.globalLocalizer.GetString("Other").Value
+                }
             };
 
             viewModel.Steps = new List<StepViewModel>

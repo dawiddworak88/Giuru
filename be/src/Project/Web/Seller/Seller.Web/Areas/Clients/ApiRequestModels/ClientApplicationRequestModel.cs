@@ -1,11 +1,9 @@
-﻿using Foundation.Extensions.Models;
-using System;
+﻿using Foundation.ApiExtensions.Models.Request;
 
-namespace Client.Api.ServicesModels.Applications
+namespace Seller.Web.Areas.Clients.ApiRequestModels
 {
-    public class UpdateClientApplicationServiceModel : BaseServiceModel
+    public class ClientApplicationRequestModel : RequestModelBase
     {
-        public Guid? Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ContactJobTitle { get; set; }

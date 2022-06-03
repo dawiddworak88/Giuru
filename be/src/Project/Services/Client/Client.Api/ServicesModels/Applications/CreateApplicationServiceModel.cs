@@ -1,11 +1,9 @@
 ﻿using Foundation.Extensions.Models;
-using System;
 
 namespace Client.Api.ServicesModels.Applications
 {
-    public class UpdateClientApplicationServiceModel : BaseServiceModel
+    public class CreateApplicationServiceModel : BaseServiceModel
     {
-        public Guid? Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ContactJobTitle { get; set; }

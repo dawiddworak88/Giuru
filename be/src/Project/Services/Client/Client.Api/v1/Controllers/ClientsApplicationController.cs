@@ -1,5 +1,6 @@
 ﻿using Client.Api.Services.Applications;
 using Client.Api.ServicesModels.Applications;
+using Client.Api.v1.RequestModels;
 using Client.Api.v1.ResponseModels;
 using Client.Api.Validators.Applications;
 using Foundation.Account.Definitions;
@@ -33,6 +34,86 @@ namespace Client.Api.v1.Controllers
             IClientsApplicationsService clientsApplicationService)
         {
             this.clientsApplicationService = clientsApplicationService;
+        }
+
+        /// <summary>
+        /// Creates or updates client application
+        /// </summary>
+        /// <param name="request">The model.</param>
+        /// <returns>The client application id.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Save(ClientApplicationRequestModel request)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            if (request.Id.HasValue)
+            {
+                var serviceModel = new CreateClientApplicationServiceModel
+                {
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    ContactJobTitle = request.ContactJobTitle,
+                    Email = request.Email,
+                    PhoneNumber = request.PhoneNumber,
+                    CompanyAddress = request.CompanyAddress,
+                    CompanyCity = request.CompanyCity,
+                    CompanyCountry = request.CompanyCountry,
+                    CompanyName = request.CompanyName,
+                    CompanyPostalCode = request.CompanyPostalCode,
+                    CompanyRegion = request.CompanyRegion,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                };
+
+                var validator = new CreateClientApplicationModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult != null)
+                {
+                    var clientApplicationId = await this.clientsApplicationService.CreateAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.Created, new { Id = clientApplicationId });
+                }
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
+            else
+            {
+                var serviceModel = new UpdateClientApplicationServiceModel
+                {
+                    Id = request.Id,
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    ContactJobTitle = request.ContactJobTitle,
+                    Email = request.Email,
+                    PhoneNumber = request.PhoneNumber,
+                    CompanyAddress = request.CompanyAddress,
+                    CompanyCity = request.CompanyCity,
+                    CompanyCountry = request.CompanyCountry,
+                    CompanyName = request.CompanyName,
+                    CompanyPostalCode = request.CompanyPostalCode,
+                    CompanyRegion = request.CompanyRegion,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                };
+
+                var validator = new UpdateClientApplicationModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult != null)
+                {
+                    var clientApplicationId = await this.clientsApplicationService.UpdateAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = clientApplicationId });
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
         }
 
         /// <summary>

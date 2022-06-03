@@ -123,6 +123,9 @@
   <data name="AccountText" xml:space="preserve">
     <value>Benutzerkonto erstellen</value>
   </data>
+  <data name="BackToClientsApplications" xml:space="preserve">
+    <value>Zurück zu den Kundenanwendungen</value>
+  </data>
   <data name="Client" xml:space="preserve">
     <value>Kunde</value>
   </data>

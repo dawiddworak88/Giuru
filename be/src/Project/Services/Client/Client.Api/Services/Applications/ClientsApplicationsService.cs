@@ -109,6 +109,7 @@ namespace Client.Api.Services.Applications
 
             var clientApplication = new ClientApplicationServiceModel
             {
+                Id = existingApplication.Id,
                 FirstName = existingApplication.FirstName,
                 LastName = existingApplication.LastName,
                 Email = existingApplication.Email,
@@ -157,6 +158,32 @@ namespace Client.Api.Services.Applications
             clientsApplications = clientsApplications.ApplySort(model.OrderBy);
 
             return clientsApplications.PagedIndex(new Pagination(clientsApplications.Count(), model.ItemsPerPage), model.PageIndex);
+        }
+
+        public async Task<Guid> UpdateAsync(UpdateClientApplicationServiceModel model)
+        {
+            var clientApplication = await this.context.ClientsApplications.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+
+            if (clientApplication == null)
+            {
+                throw new CustomException(this.clientLocalizer.GetString("ClientApplicationNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            clientApplication.FirstName = model.FirstName;
+            clientApplication.LastName = model.LastName;
+            clientApplication.ContactJobTitle = model.ContactJobTitle;
+            clientApplication.Email = model.Email;
+            clientApplication.PhoneNumber = model.PhoneNumber;
+            clientApplication.CompanyCity = model.CompanyCity;
+            clientApplication.CompanyPostalCode = model.CompanyPostalCode;
+            clientApplication.CompanyRegion = model.CompanyRegion;
+            clientApplication.CompanyCountry = model.CompanyCountry;
+            clientApplication.CompanyAddress = model.CompanyAddress;
+            clientApplication.CompanyName = model.CompanyName;
+
+            await this.context.SaveChangesAsync();
+
+            return clientApplication.Id;
         }
     }
 }

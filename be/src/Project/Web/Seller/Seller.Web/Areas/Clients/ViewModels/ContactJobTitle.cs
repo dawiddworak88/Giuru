@@ -1,4 +1,4 @@
-﻿namespace Identity.Api.Areas.Accounts.ViewModels
+﻿namespace Seller.Web.Areas.Clients.ViewModels
 {
     public class ContactJobTitle
     {

@@ -123,6 +123,9 @@
   <data name="AccountText" xml:space="preserve">
     <value>Utwórz konto</value>
   </data>
+  <data name="BackToClientsApplications" xml:space="preserve">
+    <value>Powróc do aplikacji klientów</value>
+  </data>
   <data name="Client" xml:space="preserve">
     <value>Klient</value>
   </data>

@@ -570,4 +570,7 @@
   <data name="AttachedAttachments" xml:space="preserve">
     <value>The client attached following files</value>
   </data>
+  <data name="SelectJobTitle" xml:space="preserve">
+    <value>Choose a workplace title</value>
+  </data>
 </root>

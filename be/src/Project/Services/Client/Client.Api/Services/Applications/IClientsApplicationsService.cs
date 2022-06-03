@@ -12,6 +12,7 @@ namespace Client.Api.Services.Applications
         Task<PagedResults<IEnumerable<ClientApplicationServiceModel>>> GetAsync(GetClientsApplicationsServiceModel model);
         Task<PagedResults<IEnumerable<ClientApplicationServiceModel>>> GetByIds(GetClientsApplicationsByIdsServiceModel model);
         Task<ClientApplicationServiceModel> GetAsync(GetClientApplicationServiceModel model);
+        Task<Guid> UpdateAsync(UpdateClientApplicationServiceModel model);
         Task DeleteAsync(DeleteClientApplicationServiceModel model);
     }
 }

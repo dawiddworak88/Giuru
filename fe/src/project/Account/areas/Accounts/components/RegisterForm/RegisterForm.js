@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { Context } from "../../../../../../shared/stores/Store"
 import {
     Stepper, Step, StepLabel, StepContent, TextField, Button, FormHelperText,
-    FormControl, InputLabel, Select, MenuItem, RadioGroup, FormControlLabel, Radio, FormLabel
+    FormControl, InputLabel, Select, MenuItem
 } from "@mui/material";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import EmailValidator from "../../../../../../shared/helpers/validators/EmailValidator";
@@ -201,7 +201,7 @@ const RegisterForm = (props) => {
                                         <MenuItem key={0} value="">{props.selectJobTitle}</MenuItem>
                                         {props.contactJobTitles && props.contactJobTitles.map((title, index) => {
                                             return (
-                                                <MenuItem key={index} value={title.name}>{title.name}</MenuItem>
+                                                <MenuItem key={index} value={title.name}>{title.value}</MenuItem>
                                             )
                                         })}
                                     </Select>
