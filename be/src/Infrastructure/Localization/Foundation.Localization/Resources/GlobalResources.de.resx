@@ -573,4 +573,7 @@
   <data name="SelectJobTitle" xml:space="preserve">
     <value>Wähle einen Arbeitsplatz</value>
   </data>
+  <data name="ClientsApplications" xml:space="preserve">
+    <value>Client-Anwendungen</value>
+  </data>
 </root>

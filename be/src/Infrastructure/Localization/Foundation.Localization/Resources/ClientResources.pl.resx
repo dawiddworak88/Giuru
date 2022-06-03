@@ -123,6 +123,9 @@
   <data name="AccountText" xml:space="preserve">
     <value>Utwórz konto</value>
   </data>
+  <data name="ApplicationDeletedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie usunięto wniosek klienta</value>
+  </data>
   <data name="BackToClientsApplications" xml:space="preserve">
     <value>Powróc do aplikacji klientów</value>
   </data>
@@ -131,6 +134,12 @@
   </data>
   <data name="ClientAlreadyExists" xml:space="preserve">
     <value>Użytkownik o podanym adresie e-mail został już utworzony.</value>
+  </data>
+  <data name="ClientApplicationNotFound" xml:space="preserve">
+    <value>Nie znaleziono wniosku klienta</value>
+  </data>
+  <data name="ClientApplicationSavedSuccessfully" xml:space="preserve">
+    <value>Wniosek klienta został pomyślnie zapisany</value>
   </data>
   <data name="ClientDeletedSuccessfully" xml:space="preserve">
     <value>Klient został usunięty.</value>
@@ -144,6 +153,9 @@
   <data name="Clients" xml:space="preserve">
     <value>Klienci</value>
   </data>
+  <data name="ClientsApplications" xml:space="preserve">
+    <value>Wnioski klientów</value>
+  </data>
   <data name="ClientSavedSuccessfully" xml:space="preserve">
     <value>Klient został pomyślnie zapisany.</value>
   </data>
@@ -152,6 +164,9 @@
   </data>
   <data name="EditClient" xml:space="preserve">
     <value>Edytuj klienta</value>
+  </data>
+  <data name="EditClientApplication" xml:space="preserve">
+    <value>Edytuj wniosek klienta</value>
   </data>
   <data name="EditGroup" xml:space="preserve">
     <value>Edytuj grupę</value>
@@ -176,6 +191,9 @@
   </data>
   <data name="NewClient" xml:space="preserve">
     <value>Nowy klient</value>
+  </data>
+  <data name="NewClientApplication" xml:space="preserve">
+    <value>Dodaj wniosek</value>
   </data>
   <data name="NewGroup" xml:space="preserve">
     <value>Nowa grupa</value>

@@ -41,8 +41,11 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         {
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<ClientApplication>, ClientApplication>();
 
+            viewModel.NewText = this.clientLocalizer.GetString("NewClientApplication");
+
             viewModel.Title = this.clientLocalizer.GetString("ClientsApplications");
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "ClientApplication", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "ClientApplication", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "ClientsApplicationApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ClientsApplicationApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
