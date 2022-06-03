@@ -54,7 +54,7 @@ namespace Client.Api.Services.Applications
 
         public async Task DeleteAsync(DeleteClientApplicationServiceModel model)
         {
-            var clientApplication = await this.context.Clients.FirstOrDefaultAsync(x => x.Id == model.Id && x.SellerId == model.OrganisationId.Value && x.IsActive);
+            var clientApplication = await this.context.ClientsApplications.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (clientApplication is null)
             {
