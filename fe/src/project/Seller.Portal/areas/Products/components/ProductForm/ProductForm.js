@@ -1,27 +1,32 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
-import { TextField, Button, CircularProgress, FormControlLabel, Switch, InputLabel, NoSsr, Autocomplete } from "@mui/material";
+import { 
+    TextField, Button, CircularProgress, FormControlLabel, 
+    Switch, InputLabel, NoSsr, Autocomplete 
+} from "@mui/material";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import DynamicForm from "../../../../../../shared/components/DynamicForm/DynamicForm";
 import QueryStringSerializer from "../../../../../../shared/helpers/serializers/QueryStringSerializer";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
+import SearchConstants from "../../../../../../shared/constants/SearchConstants";
 
 function ProductForm(props) {
+    const [state, dispatch] = useContext(Context);
+    const [primaryProducts, setPrimaryProducts] = useState(props.primaryProducts ? props.primaryProducts : []);
+
     const categoriesProps = {
         options: props.categories,
         getOptionLabel: (option) => option.name
     };
 
     const primaryProductsProps = {
-        options: props.primaryProducts,
+        options: primaryProducts,
         getOptionLabel: (option) => option.name
     };
-
-    const [state, dispatch] = useContext(Context);
 
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -29,7 +34,7 @@ function ProductForm(props) {
         name: { value: props.name ? props.name : "", error: "" },
         description: { value: props.description ? props.description : "", error: "" },
         sku: { value: props.sku ? props.sku : "", error: "" },
-        primaryProduct: { value: props.primaryProductId ? props.primaryProducts.find((item) => item.id === props.primaryProductId) : null },
+        primaryProduct: { value: props.primaryProduct ? props.primaryProduct : null },
         images: { value: props.images ? props.images : [] },
         files: { value: props.files ? props.files : [] },
         isNew: { value: props.isNew ? props.isNew : false },
@@ -37,11 +42,10 @@ function ProductForm(props) {
         uiSchema: { value: props.uiSchema ? JSON.parse(props.uiSchema) : {} },
         formData: { value: props.formData ? JSON.parse(props.formData) : {} },
         isPublished: { value: props.isPublished ? props.isPublished : false },
-        ean: { value: props.ean ? props.ean : null }
+        ean: { value: props.ean ? props.ean : "" }
     };
 
     const stateValidatorSchema = {
-
         sku: {
             required: {
                 isRequired: true,
@@ -57,7 +61,6 @@ function ProductForm(props) {
     };
 
     const onCategoryChange = (event, newValue) => {
-
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         setFieldValue({ name: "category", value: newValue });
@@ -143,6 +146,37 @@ function ProductForm(props) {
             });
     };
 
+    const productsSuggesstionFetchRequest = (e) => {
+        const { value } = e.target;
+
+        if (value.length >= SearchConstants.minSearchTermLength()){
+            const searchParameters = {
+                searchTerm: value,
+                pageIndex: 1,
+                hasPrimaryProduct: false,
+                itemsPerPage: SearchConstants.productsSuggestionItemsPerPage()
+            };
+
+            const requestOptions = {
+                method: "GET",
+                headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" }
+            };
+
+            const url = props.productsSuggestionUrl + "?" + QueryStringSerializer.serialize(searchParameters);
+            return fetch(url, requestOptions)
+                .then((response) => {
+
+                    AuthenticationHelper.HandleResponse(response);
+
+                    return response.json().then(jsonResponse => {
+                        if (response.ok) {
+                            setPrimaryProducts(jsonResponse.data);
+                        }
+                    });
+                })
+        }
+    }
+
     const {
         values,
         errors,
@@ -213,7 +247,7 @@ function ProductForm(props) {
                                     setFieldValue({ name: "primaryProduct", value: newValue });
                                   }}
                                 autoComplete
-                                renderInput={(params) => <TextField {...params} label={props.selectPrimaryProductLabel} margin="normal" variant="standard" />}
+                                renderInput={(params) => <TextField {...params} label={props.selectPrimaryProductLabel} margin="normal" variant="standard" onChange={productsSuggesstionFetchRequest} />}
                             />
                         </div>
                         <div className="field">
@@ -345,6 +379,7 @@ ProductForm.propTypes = {
     generalErrorMessage: PropTypes.string.isRequired,
     eanLabel: PropTypes.string.isRequired,
     idLabel: PropTypes.string,
+    productsSuggestionUrl: PropTypes.string.isRequired
 };
 
 export default ProductForm;

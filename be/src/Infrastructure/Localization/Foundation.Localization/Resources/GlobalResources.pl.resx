@@ -597,4 +597,7 @@
   <data name="SuccessfullyCreatedAppSecret" xml:space="preserve">
     <value>Pomyślnie utworzono klucz dostępu.</value>
   </data>
+  <data name="AttachedAttachments" xml:space="preserve">
+    <value>Klient załączył następujące pliki</value>
+  </data>
 </root>

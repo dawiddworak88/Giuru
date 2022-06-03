@@ -594,4 +594,7 @@
   <data name="SuccessfullyCreatedAppSecret" xml:space="preserve">
     <value>Successfully created access key.</value>
   </data>
+  <data name="AttachedAttachments" xml:space="preserve">
+    <value>The client attached following files</value>
+  </data>
 </root>

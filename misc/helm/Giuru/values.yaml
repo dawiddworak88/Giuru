@@ -49,12 +49,16 @@ identityApi:
   connectionString: "#{IdentityApi--ConnectionString}#"
   actionSendGridCreateTemplateId: "#{IdentityApi--ActionSendGridCreateTemplateId}#"
   actionSendGridResetTemplateId: "#{IdentityApi--ActionSendGridResetTemplateId}#"
+  actionSendGridClientApplyConfirmationTemplateId: "#{IdentityApi--ActionSendGridClientApplyConfirmationTemplateId}#"
+  actionSendGridClientApplyTemplateId: "#{IdentityApi--ActionSendGridClientApplyTemplateId}#"
   clients: "#{IdentityApi--Clients}#"
   sellerClientId: "#{IdentityApi--SellerClientId}#"
   accounts: "#{IdentityApi--Accounts}#"
   organisations: "#{IdentityApi--Organisations}#"
   privacyPolicy: "#{IdentityApi--PrivacyPolicy}#"
   regulations: "#{IdentityApi--Regulations}#"
+  applyRecipientEmail: "#{IdentityApi--ApplyRecipientEmail}#"
+  developersEmail: "#{IdentityApi--DevelopersEmail}#"
 basketApi:
   connectionString: "#{BasketApi--ConnectionString}#"
 orderingApi:
@@ -63,6 +67,7 @@ orderingApi:
 buyerWeb:
   clientId: "#{BuyerWeb--ClientId}#"
   clientSecret: "#{BuyerWeb--ClientSecret}#"
+  productAttributes: "#{BuyerWeb--ProductAttributes}#"
 sellerWeb:
   clientId: "#{SellerWeb--ClientId}#"
   clientSecret: "#{SellerWeb--ClientSecret}#"

@@ -83,7 +83,8 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 GetCategorySchemaUrl = this.linkGenerator.GetPathByAction("Get", "CategorySchemasApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 ProductsUrl = this.linkGenerator.GetPathByAction("Index", "Products", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name }),
                 EanLabel = this.globalLocalizer.GetString("Ean"),
-                NavigateToProductsLabel = this.productLocalizer.GetString("NavigateToProductsLabel")
+                NavigateToProductsLabel = this.productLocalizer.GetString("NavigateToProductsLabel"),
+                ProductsSuggestionUrl = this.linkGenerator.GetPathByAction("Get", "ProductsApi", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var categories = await this.categoriesRepository.GetAllCategoriesAsync(
@@ -97,15 +98,11 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                 viewModel.Categories = categories.OrderBy(x => x.Level).ThenBy(x => x.Name).Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
-            var primaryProducts = await this.productsRepository.GetAllPrimaryProductsAsync(
-                componentModel.Token,
-                componentModel.Language,
-                componentModel.SellerId,
-                nameof(Product.Name));
+            var primaryProducts = await this.productsRepository.GetProductsAsync(componentModel.Token, componentModel.Language, null, false, componentModel.SellerId, Constants.ProductsSuggestionDefaultPageIndex, Constants.ProductsSuggestionDefaultItemsPerPage, $"{nameof(Product.Name)} ASC");
 
             if (primaryProducts != null)
             {
-                viewModel.PrimaryProducts = primaryProducts.OrderBy(x => x.Name).Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
+                viewModel.PrimaryProducts = primaryProducts.Data.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
             if (componentModel.Id.HasValue)
@@ -124,7 +121,6 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                     viewModel.Ean = product.Ean;
                     viewModel.IsPublished = product.IsPublished;
                     viewModel.CategoryId = product.CategoryId;
-                    viewModel.PrimaryProductId = product.PrimaryProductId;
                     viewModel.FormData = product.FormData;
 
                     var categorySchema = await this.categoriesRepository.GetCategorySchemaAsync(
@@ -136,6 +132,16 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                     {
                         viewModel.Schema = categorySchema.Schema;
                         viewModel.UiSchema = categorySchema.UiSchema;
+                    }
+
+                    if (product.PrimaryProductId.HasValue)
+                    {
+                        var primaryProduct = await this.productsRepository.GetProductAsync(componentModel.Token, componentModel.Language, product.PrimaryProductId);
+
+                        if (primaryProduct is not null)
+                        {
+                            viewModel.PrimaryProduct = new ListItemViewModel { Id = primaryProduct.Id, Name = primaryProduct.Name };
+                        }
                     }
 
                     if (product.Images != null && product.Images.Any())

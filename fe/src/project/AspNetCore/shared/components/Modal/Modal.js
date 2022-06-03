@@ -10,10 +10,10 @@ const Modal = (props) => {
     const [quantity, setQuantity] = useState(maxStockValue || maxOutletValue ? 0 : 1);
     const [stockQuantity, setStockQuantity] = useState(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 1 : maxStockValue && maxStockValue > 0 ? 1 : 0);
     const [outletQuantity, setOutletQuantity] = useState(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 0 : maxOutletValue && maxOutletValue > 0 ? 1 : 0);
-    const [externalReference, setExternalReference] = useState(null);
+    const [externalReference, setExternalReference] = useState("");
     const [deliveryFrom, setDeliveryFrom] = useState(null);
     const [deliveryTo, setDeliveryTo] = useState(null);
-    const [moreInfo, setMoreInfo] = useState(null);
+    const [moreInfo, setMoreInfo] = useState("");
 
     const handleAddItemToBasket = () => {
         const payload = {
@@ -33,10 +33,10 @@ const Modal = (props) => {
         setQuantity(maxStockValue || maxOutletValue ? 0 : 1);
         setStockQuantity(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 1 : maxStockValue && maxStockValue > 0 ? 1 : 0);
         setOutletQuantity(maxStockValue && maxStockValue > 0 && maxOutletValue && maxOutletValue > 0 ? 0 : maxOutletValue && maxOutletValue > 0 ? 1 : 0);
-        setExternalReference(null);
+        setExternalReference("");
         setDeliveryFrom(null);
         setDeliveryTo(null);
-        setMoreInfo(null)
+        setMoreInfo("")
     }, [isOpen])
     
     const maxStock = maxStockValue ? maxStockValue : 0;
@@ -148,7 +148,6 @@ const Modal = (props) => {
                             renderInput={(params) => 
                                 <TextField {...params} fullWidth={true} variant="standard" />}
                             onChange={(date) => {
-                                console.log(date)
                                 setDeliveryFrom(date);
                             }}
                         />
