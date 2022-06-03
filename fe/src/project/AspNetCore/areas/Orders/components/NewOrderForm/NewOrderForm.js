@@ -35,7 +35,7 @@ function NewOrderForm(props) {
     const [suggestions, setSuggestions] = useState([]);
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [entityToDelete, setEntityToDelete] = useState(null);
-    const [customOrder, setCustomOrder] = useState(null);
+    const [customOrder, setCustomOrder] = useState("");
     const [hasCustomOrder, setHasCustomOrder] = useState(false);
     const [isOrdered, setIsOrdered] = useState(false);
     const [attachments, setAttachments] = useState([]);
@@ -481,7 +481,6 @@ function NewOrderForm(props) {
                             control={
                                 <Checkbox 
                                     checked={hasCustomOrder}
-                                    defaultChecked
                                     onChange={(e) => {
                                         setHasCustomOrder(e.target.checked);
                                     }}

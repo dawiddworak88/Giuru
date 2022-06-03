@@ -34,6 +34,7 @@ namespace Ordering.Api.Services
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IOptionsMonitor<MailingConfiguration> mailingOptions;
+        private readonly IOptionsMonitor<AppSettings> orderingOptions;
         private readonly IMailingService mailingService;
         private readonly IOptions<AppSettings> configuration;
         private readonly IMediaHelperService mediaService;
@@ -46,6 +47,7 @@ namespace Ordering.Api.Services
             IMailingService mailingService,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IOptionsMonitor<MailingConfiguration> mailingOptions,
+            IOptionsMonitor<AppSettings> orderingOptions,
             IMediaHelperService mediaService,
             IOptions<AppSettings> options,
             IOptions<AppSettings> configuration)
@@ -57,6 +59,7 @@ namespace Ordering.Api.Services
             this.configuration = configuration;
             this.globalLocalizer = globalLocalizer;
             this.mailingOptions = mailingOptions;
+            this.orderingOptions = orderingOptions;
             this.mediaService = mediaService;
             this.options = options;
         }
@@ -146,10 +149,10 @@ namespace Ordering.Api.Services
                     RecipientName = this.configuration.Value.SenderName,
                     SenderEmailAddress = this.configuration.Value.SenderEmail,
                     SenderName = this.configuration.Value.SenderName,
-                    TemplateId = this.mailingOptions.CurrentValue.ActionSendGridCustomOrderTemplateId,
+                    TemplateId = this.orderingOptions.CurrentValue.ActionSendGridCustomOrderTemplateId,
                     DynamicTemplateData = new
                     {
-                        attachmentsLabel = this.globalLocalizer.GetString("Attachments").Value,
+                        attachmentsLabel = this.globalLocalizer.GetString("AttachedAttachments").Value,
                         attachments = attachments,
                         subject = this.orderLocalizer.GetString("CustomOrderSubject").Value + " " + serviceModel.ClientName + " (" + order.Id + ")",
                         text = serviceModel.MoreInfo

@@ -88,7 +88,8 @@ namespace Seller.Web.Shared.Repositories.Identity
                 EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.UsersApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<SaveUserRequestModel>, SaveUserRequestModel, BaseResponseModel>(apiRequest); 
+            var response = await this.apiClientService.PostAsync<ApiRequest<SaveUserRequestModel>, SaveUserRequestModel, BaseResponseModel>(apiRequest);
+
             if (!response.IsSuccessStatusCode || response?.Data?.Id == null)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);

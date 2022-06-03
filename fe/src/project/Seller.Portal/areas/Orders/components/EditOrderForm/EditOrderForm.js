@@ -58,7 +58,7 @@ function EditOrderForm(props) {
     return (
         <section className="section section-small-padding edit-order">
             <h1 className="subtitle is-4">{props.title}</h1>
-            <h2 className="subtitle is-5 edit-order__items-subtitle">{props.orderStatusLabel}</h2>
+            <h2 className="subtitle is-5 mb-2">{props.orderStatusLabel}</h2>
             <div className="columns is-desktop">
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOrderStatusSubmit} method="post">
@@ -105,7 +105,7 @@ function EditOrderForm(props) {
                         </div>
                     </form>
                     <div className="mt-5">
-                        <h2 className="subtitle is-5 edit-order__items-subtitle">{props.clientLabel}</h2>
+                        <h2 className="subtitle is-5 mb-2">{props.clientLabel}</h2>
                         <div>
                             <a href={props.clientUrl}>{props.clientName}</a>
                         </div>
@@ -115,7 +115,7 @@ function EditOrderForm(props) {
             </div>
             {props.orderItems && props.orderItems.length > 0 &&
                 <div className="mt-5">
-                    <h2 className="subtitle is-5 edit-order__items-subtitle">{props.orderItemsLabel}</h2>
+                    <h2 className="subtitle is-5 mb-2">{props.orderItemsLabel}</h2>
                     <div className="edit-order__items">
                         <section className="section">
                             <div className="orderitems__table">
@@ -162,14 +162,18 @@ function EditOrderForm(props) {
                 <Fragment>
                     <div className="mt-5">
                         <h2 className="subtitle is-5 mb-2">{props.customOrderLabel}</h2>
-                        <div className="edit-order__items">
+                        <div className="edit-order__custom-order">
                             <TextField 
+                                id="customOrder"
+                                name="customOrder"
+                                variant="standard"
                                 value={props.customOrder}
                                 fullWidth={true}
                                 multiline={true}
                                 disabled={true}
                                 InputProps={{ 
-                                    className: "p-2" 
+                                    disableUnderline: true,
+                                    className: "p-2"
                                 }}
                             />
                         </div>

@@ -6,4 +6,4 @@ import InventoriesPage from "./InventoriesPage";
 
 CssSsrRemovalHelper.remove();
 
-hydrateRoot(document.getElementById("root"), <InventoriesPage {...window.data} />)
+hydrateRoot(document.getElementById("root"), <InventoriesPage {...window.data} />);

@@ -570,4 +570,7 @@
   <data name="VicePresident" xml:space="preserve">
     <value>Wiceprezes</value>
   </data>
+  <data name="AttachedAttachments" xml:space="preserve">
+    <value>Klient załączył następujące pliki</value>
+  </data>
 </root>

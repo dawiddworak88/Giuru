@@ -17,11 +17,11 @@ namespace Foundation.Extensions.ExtensionMethods
             return default;
         }
 
-        public static IEnumerable<string> ToEnumerableString(this string skus)
+        public static IEnumerable<string> ToEnumerableString(this string values)
         {
-            if (!string.IsNullOrWhiteSpace(skus))
+            if (!string.IsNullOrWhiteSpace(values))
             {
-                return skus.Split(EndpointParameterConstants.ParameterSeparator);
+                return values.Split(EndpointParameterConstants.ParameterSeparator);
             }
 
             return default;

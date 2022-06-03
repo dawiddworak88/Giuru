@@ -11,5 +11,10 @@ namespace Identity.Api.Configurations
         public string Regulations { get; set; }
         public string PrivacyPolicy { get; set; }
         public string DevelopersEmail { get; set; }
+        public string ActionSendGridCreateTemplateId { get; set; }
+        public string ActionSendGridResetTemplateId { get; set; }
+        public string ActionSendGridClientApplyConfirmationTemplateId { get; set; }
+        public string ActionSendGridClientApplyTemplateId { get; set; }
+        public string ApplyRecipientEmail { get; set; }
     }
 }

@@ -8,6 +8,5 @@ namespace Identity.Api.Areas.Accounts.ComponentModels
         public string ReturnUrl { get; set; }
         public string Language { get; set; }
         public string Token { get; set; }
-        public bool IsAuthenticated { get; set; }
     }
 }

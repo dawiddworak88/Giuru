@@ -271,7 +271,7 @@ spec:
         - name: SendGridApiKey
           value: {{ .Values.sendGridApiKey }}
         - name: ActionSendGridCustomOrderTemplateId
-          value: {{ .Values.identityApi.actionSendGridCustomOrderTemplateId }}
+          value: {{ .Values.orderingApi.actionSendGridCustomOrderTemplateId }}
         - name: MediaUrl
           value: {{ .Values.mediaUrl }}
         - name: LogzIoToken
@@ -374,12 +374,20 @@ spec:
           value: {{ .Values.sendGridApiKey }}
         - name: SenderEmail
           value: {{ .Values.senderEmail }}
+        - name: ApplyRecipientEmail
+          value: {{ .Values.identityApi.applyRecipientEmail }}
+        - name: DevelopersEmail
+          value: {{ .Values.identityApi.developersEmail }}
         - name: SenderName
           value: {{ .Values.senderName }}
         - name: ActionSendGridCreateTemplateId
           value: {{ .Values.identityApi.actionSendGridCreateTemplateId }}
         - name: ActionSendGridResetTemplateId
           value: {{ .Values.identityApi.actionSendGridResetTemplateId }}
+        - name: ActionSendGridClientApplyConfirmationTemplateId
+          value: {{ .Values.identityApi.actionSendGridClientApplyConfirmationTemplateId }}
+        - name: ActionSendGridClientApplyTemplateId
+          value: {{ .Values.identityApi.actionSendGridClientApplyTemplateId }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType
@@ -540,6 +548,8 @@ spec:
           value: {{ .Values.buyerWeb.clientId }}
         - name: ClientSecret
           value: {{ .Values.buyerWeb.clientSecret }}
+        - name: ProductAttributes
+          value: {{ .Values.buyerWeb.productAttributes }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType
