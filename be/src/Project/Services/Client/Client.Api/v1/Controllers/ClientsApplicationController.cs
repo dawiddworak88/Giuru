@@ -52,37 +52,6 @@ namespace Client.Api.v1.Controllers
 
             if (request.Id.HasValue)
             {
-                var serviceModel = new CreateClientApplicationServiceModel
-                {
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    ContactJobTitle = request.ContactJobTitle,
-                    Email = request.Email,
-                    PhoneNumber = request.PhoneNumber,
-                    CompanyAddress = request.CompanyAddress,
-                    CompanyCity = request.CompanyCity,
-                    CompanyCountry = request.CompanyCountry,
-                    CompanyName = request.CompanyName,
-                    CompanyPostalCode = request.CompanyPostalCode,
-                    CompanyRegion = request.CompanyRegion,
-                    Language = CultureInfo.CurrentCulture.Name,
-                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
-                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
-                };
-
-                var validator = new CreateClientApplicationModelValidator();
-                var validationResult = await validator.ValidateAsync(serviceModel);
-
-                if (validationResult != null)
-                {
-                    var clientApplicationId = await this.clientsApplicationService.CreateAsync(serviceModel);
-
-                    return this.StatusCode((int)HttpStatusCode.Created, new { Id = clientApplicationId });
-                }
-                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
-            }
-            else
-            {
                 var serviceModel = new UpdateClientApplicationServiceModel
                 {
                     Id = request.Id,
@@ -105,11 +74,43 @@ namespace Client.Api.v1.Controllers
                 var validator = new UpdateClientApplicationModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
 
-                if (validationResult != null)
+                if (validationResult.IsValid)
                 {
                     var clientApplicationId = await this.clientsApplicationService.UpdateAsync(serviceModel);
 
                     return this.StatusCode((int)HttpStatusCode.OK, new { Id = clientApplicationId });
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
+            else
+            {
+                var serviceModel = new CreateClientApplicationServiceModel
+                {
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    ContactJobTitle = request.ContactJobTitle,
+                    Email = request.Email,
+                    PhoneNumber = request.PhoneNumber,
+                    CompanyAddress = request.CompanyAddress,
+                    CompanyCity = request.CompanyCity,
+                    CompanyCountry = request.CompanyCountry,
+                    CompanyName = request.CompanyName,
+                    CompanyPostalCode = request.CompanyPostalCode,
+                    CompanyRegion = request.CompanyRegion,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                };
+
+                var validator = new CreateClientApplicationModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var clientApplicationId = await this.clientsApplicationService.CreateAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.Created, new { Id = clientApplicationId });
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);

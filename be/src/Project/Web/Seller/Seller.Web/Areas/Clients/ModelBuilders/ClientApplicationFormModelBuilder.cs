@@ -51,7 +51,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 ClientsApplicationsUrl = this.linkGenerator.GetPathByAction("Index", "ClientApplications", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
                 EmailFormatErrorMessage = this.globalLocalizer.GetString("EmailFormatErrorMessage"),
-                SaveUrl = this.linkGenerator.GetPathByAction("Post", "ClientsApplicationApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ClientsApplicationApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 SelectJobTitle = this.globalLocalizer.GetString("SelectJobTitle")
             };

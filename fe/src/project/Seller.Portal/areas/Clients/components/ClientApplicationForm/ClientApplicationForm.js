@@ -101,7 +101,6 @@ const ClientApplicationForm = (props) => {
     };
 
     const onSubmitForm = (state) => {
-        console.log("sadasd")
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
         const requestOptions = {
