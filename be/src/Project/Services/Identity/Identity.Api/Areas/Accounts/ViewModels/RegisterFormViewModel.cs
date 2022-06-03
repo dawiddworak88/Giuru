@@ -33,5 +33,9 @@ namespace Identity.Api.Areas.Accounts.ViewModels
         public string AcceptTermsText { get; set; }
         public IEnumerable<ContactJobTitle> ContactJobTitles { get; set; }
         public IEnumerable<StepViewModel> Steps { get; set; }
+        public string PrivacyPolicyUrl { get; set; }
+        public string RegulationsUrl { get; set; }
+        public string PrivacyPolicy { get; set; }
+        public string Regulations { get; set; }
     }
 }

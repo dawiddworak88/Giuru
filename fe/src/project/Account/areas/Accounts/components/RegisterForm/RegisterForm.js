@@ -321,9 +321,8 @@ const RegisterForm = (props) => {
                                             onChange={(e) => {
                                                 setAcceptedTerms(e.target.checked);
                                             }}/>
-                                    }
-                                    label={props.acceptTermsText}
-                                />
+                                    }/>
+                                <span>{props.acceptTermsText} <a href={props.regulationsUrl} className="is-underlined" target="_blank">{props.regulations}</a>  &amp; <a href={props.privacyPolicyUrl} className="is-underlined" target="_blank">{props.privacyPolicy}</a></span>
                             </NoSsr>
                         </div>
                         <div className="is-flex is-justify-content-center">
@@ -368,7 +367,11 @@ RegisterForm.propTypes = {
     saveText: PropTypes.string.isRequired,
     selectJobTitle: PropTypes.string.isRequired,
     signInUrl: PropTypes.string.isRequired,
-    acceptTermsText: PropTypes.string.isRequired
+    acceptTermsText: PropTypes.string.isRequired,
+    privacyPolicyUrl: PropTypes.string.isRequired,
+    regulationsUrl: PropTypes.string.isRequired,
+    privacyPolicy: PropTypes.string.isRequired,
+    regulations: PropTypes.string.isRequired
 }
 
 export default RegisterForm;

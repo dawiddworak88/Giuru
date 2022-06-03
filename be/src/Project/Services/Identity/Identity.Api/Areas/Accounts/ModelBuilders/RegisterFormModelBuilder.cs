@@ -15,16 +15,19 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
     {
         private readonly IStringLocalizer<AccountResources> accountLocalizer;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IStringLocalizer<CookieConsentResources> cookieConsentLocalizer;
         private readonly LinkGenerator linkGenerator;
 
         public RegisterFormModelBuilder(
             IStringLocalizer<AccountResources> accountLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
+            IStringLocalizer<CookieConsentResources> cookieConsentLocalizer,
             LinkGenerator linkGenerator)
         {
             this.accountLocalizer = accountLocalizer;
             this.globalLocalizer = globalLocalizer;
             this.linkGenerator = linkGenerator;
+            this.cookieConsentLocalizer = cookieConsentLocalizer;
         }
 
         public async Task<RegisterFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -56,7 +59,11 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 SaveText = this.accountLocalizer.GetString("ApplySubmit"),
                 SelectJobTitle = this.accountLocalizer.GetString("SelectJobTitle"),
                 SignInUrl = this.linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
-                AcceptTermsText = this.globalLocalizer.GetString("AcceptTermsText")
+                AcceptTermsText = this.cookieConsentLocalizer.GetString("Accept"),
+                PrivacyPolicyUrl = this.linkGenerator.GetPathByAction("PrivacyPolicy", "Content", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
+                RegulationsUrl = this.linkGenerator.GetPathByAction("Regulations", "Content", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
+                PrivacyPolicy = this.globalLocalizer.GetString("PrivacyPolicy"),
+                Regulations = this.globalLocalizer.GetString("Regulations")
             };
 
             viewModel.ContactJobTitles = new List<ContactJobTitle>
