@@ -133,7 +133,7 @@ function StatusOrder(props) {
                 <Fragment>
                     <div className="mt-5">
                         <h2 className="subtitle is-5 mb-2">{props.customOrderLabel}</h2>
-                        <div className="status-order__items">
+                        <div className="status-order__custom-order">
                             <TextField 
                                 id="customOrder"
                                 name="customOrder"
@@ -142,8 +142,9 @@ function StatusOrder(props) {
                                 multiline={true}
                                 disabled={true}
                                 variant="standard"
-                                InputProps={{ 
-                                    className: "p-2" 
+                                InputProps={{
+                                    disableUnderline: true,
+                                    className: "p-2"
                                 }}
                             />
                         </div>

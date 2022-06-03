@@ -189,25 +189,22 @@ namespace Identity.Api.Services.Users
         public async Task<UserServiceModel> SetPasswordAsync(SetUserPasswordServiceModel serviceModel)
         { 
             var existingUser = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.ExpirationId == serviceModel.ExpirationId.Value);
+
             if (existingUser is null)
             {
                 throw new CustomException(this.accountLocalizer.GetString("UserNotFound"), (int)HttpStatusCode.NotFound);
             }
 
-            if (!existingUser.EmailConfirmed)
+            if (existingUser.EmailConfirmed is false)
             {
                 if (existingUser.VerifyExpirationDate >= DateTime.UtcNow)
                 {
                     existingUser.EmailConfirmed = true;
-                    existingUser.PasswordHash = userService.GeneratePasswordHash(existingUser, serviceModel.Password);
+                    existingUser.PasswordHash = this.userService.GeneratePasswordHash(existingUser, serviceModel.Password);
 
                     await this.identityContext.SaveChangesAsync();
 
                     return await this.GetById(new GetUserServiceModel { Id = Guid.Parse(existingUser.Id), Language = serviceModel.Language, Username = serviceModel.Username, OrganisationId = serviceModel.OrganisationId });
-                }
-                else
-                {
-                    throw new CustomException(this.accountLocalizer.GetString("VerifyDateExpired"), (int)HttpStatusCode.BadRequest);
                 }
             }
 
@@ -245,6 +242,7 @@ namespace Identity.Api.Services.Users
         public async Task ResetPasswordAsync(ResetUserPasswordServiceModel serviceModel)
         {
             var user = await this.identityContext.Accounts.FirstOrDefaultAsync(x => x.Email == serviceModel.Email);
+
             if (user is not null)
             {
                 var timeExpiration = DateTime.UtcNow.AddHours(IdentityConstants.VerifyTimeExpiration);
@@ -254,6 +252,7 @@ namespace Identity.Api.Services.Users
                 user.ExpirationId = Guid.NewGuid();
 
                 var userOrganisation = await this.identityContext.Organisations.FirstOrDefaultAsync(x => x.Id == user.OrganisationId && x.IsActive);
+
                 if (userOrganisation is null)
                 {
                     throw new CustomException(this.accountLocalizer.GetString("OrganisationNotFound"), (int)HttpStatusCode.NotFound);
