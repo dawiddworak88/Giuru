@@ -1,5 +1,6 @@
 ﻿using Client.Api.Infrastructure.Clients.Entities;
 using Client.Api.Infrastructure.Groups.Entities;
+using Client.Api.Infrastructure.Roles.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Client.Api.Infrastructure
@@ -20,5 +21,6 @@ namespace Client.Api.Infrastructure
         public DbSet<ClientGroup> ClientGroups { get; set; }
         public DbSet<ClientGroupTranslation> ClientGroupTranslations { get; set; }
         public DbSet<ClientsGroup> ClientsGroups { get; set; }
+        public DbSet<ClientRole> ClientRoles { get; set; }
     }
 }
