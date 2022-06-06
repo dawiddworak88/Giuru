@@ -123,6 +123,9 @@
   <data name="AccountText" xml:space="preserve">
     <value>Utwórz konto</value>
   </data>
+  <data name="BackToRoles" xml:space="preserve">
+    <value>Powróc do ról</value>
+  </data>
   <data name="Client" xml:space="preserve">
     <value>Klient</value>
   </data>
@@ -147,8 +150,14 @@
   <data name="ClientsGroups" xml:space="preserve">
     <value>Grupy klientów</value>
   </data>
+  <data name="ClientsRoles" xml:space="preserve">
+    <value>Role</value>
+  </data>
   <data name="EditClient" xml:space="preserve">
     <value>Edytuj klienta</value>
+  </data>
+  <data name="EditClientRole" xml:space="preserve">
+    <value>Edytuj rolę</value>
   </data>
   <data name="EditGroup" xml:space="preserve">
     <value>Edytuj grupę</value>

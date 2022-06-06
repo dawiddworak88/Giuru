@@ -570,4 +570,10 @@
   <data name="AttachedAttachments" xml:space="preserve">
     <value>The client attached following files</value>
   </data>
+  <data name="ClientsRoles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="NewRole" xml:space="preserve">
+    <value>New role</value>
+  </data>
 </root>
