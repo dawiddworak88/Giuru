@@ -82,8 +82,6 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 }
             };
 
-            //viewModel.PagedItems = await this.clientGroupsRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientGroup.CreatedDate)} desc");
-
             return viewModel;
         }
     }
