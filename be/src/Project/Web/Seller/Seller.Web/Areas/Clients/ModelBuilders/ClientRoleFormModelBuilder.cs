@@ -4,6 +4,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.ViewModels;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
@@ -28,7 +29,15 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         {
             var viewModel = new ClientRoleFormViewModel
             {
-
+                Title = this.clientLocalizer.GetString("EditClientRole"),
+                NameRequiredErrorMessage = this.globalLocalizer.GetString("NameRequiredErrorMessage"),
+                NameLabel = this.globalLocalizer.GetString("Name"),
+                SaveText = this.globalLocalizer.GetString("SaveText"),
+                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ClientRolesApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                IdLabel = this.globalLocalizer.GetString("Id"),
+                RolesUrl = this.linkGenerator.GetPathByAction("Index", "ClientRoles", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
+                NavigateToCliensRoles = this.clientLocalizer.GetString("BackToRoles")
             };
 
             return viewModel;
