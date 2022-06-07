@@ -192,4 +192,16 @@
   <data name="ResetPasswordText" xml:space="preserve">
     <value>Zresetuj hasło</value>
   </data>
+  <data name="RoleDeletedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie usunięto role.</value>
+  </data>
+  <data name="RoleIsExisting" xml:space="preserve">
+    <value>Rola już istnieje</value>
+  </data>
+  <data name="RoleNotFound" xml:space="preserve">
+    <value>Nie znaleziono roli.</value>
+  </data>
+  <data name="RoleSavedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie zapisano role.</value>
+  </data>
 </root>

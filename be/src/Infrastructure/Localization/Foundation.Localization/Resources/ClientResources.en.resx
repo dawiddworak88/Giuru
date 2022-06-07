@@ -192,4 +192,16 @@
   <data name="ResetPasswordText" xml:space="preserve">
     <value>Reset password</value>
   </data>
+  <data name="RoleDeletedSuccessfully" xml:space="preserve">
+    <value>Successfully deleted role.</value>
+  </data>
+  <data name="RoleIsExisting" xml:space="preserve">
+    <value>Role exist</value>
+  </data>
+  <data name="RoleNotFound" xml:space="preserve">
+    <value>Role not found</value>
+  </data>
+  <data name="RoleSavedSuccessfully" xml:space="preserve">
+    <value>Successfully saved role.</value>
+  </data>
 </root>
