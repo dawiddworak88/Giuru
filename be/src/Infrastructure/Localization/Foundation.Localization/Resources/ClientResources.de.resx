@@ -135,6 +135,9 @@
   <data name="ClientExists" xml:space="preserve">
     <value>Ein Kunde mit dieser E-Mail-Adresse existiert bereits.</value>
   </data>
+  <data name="ClientManagers" xml:space="preserve">
+    <value>Kundenmanager</value>
+  </data>
   <data name="ClientNotFound" xml:space="preserve">
     <value>Kunde wurde nicht gefunden.</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="EditClient" xml:space="preserve">
     <value>Kunde bearbeiten</value>
+  </data>
+  <data name="EditClientManager" xml:space="preserve">
+    <value>Kundenmanager bearbeiten</value>
   </data>
   <data name="EditGroup" xml:space="preserve">
     <value>Kundengruppe bearbeiten</value>
@@ -171,11 +177,20 @@
   <data name="NavigateToGroupsText" xml:space="preserve">
     <value>Zurück zu den Gruppen</value>
   </data>
+  <data name="NavigateToManagersText" xml:space="preserve">
+    <value>Zurück zu den Managern</value>
+  </data>
   <data name="NewClient" xml:space="preserve">
     <value>Neuer Kunde</value>
   </data>
   <data name="NewGroup" xml:space="preserve">
     <value>Neue Kundengruppe</value>
+  </data>
+  <data name="NewManager" xml:space="preserve">
+    <value>Neuer Manager</value>
+  </data>
+  <data name="NoClients" xml:space="preserve">
+    <value>Keine Kunden verfügbar</value>
   </data>
   <data name="NoGroupsText" xml:space="preserve">
     <value>Keine Kundengruppe verfügbar</value>

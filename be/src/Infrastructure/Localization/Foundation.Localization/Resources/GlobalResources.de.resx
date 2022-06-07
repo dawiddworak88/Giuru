@@ -570,4 +570,7 @@
   <data name="AttachedAttachments" xml:space="preserve">
     <value>Der Kunde hat folgende Dateien angehängt</value>
   </data>
+  <data name="ClientManagers" xml:space="preserve">
+    <value>Kundenmanager</value>
+  </data>
 </root>
