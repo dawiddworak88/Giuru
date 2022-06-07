@@ -3,7 +3,7 @@ using Foundation.Extensions.Validators;
 
 namespace Client.Api.Validators.Roles
 {
-    public class GetClientRolesModelVaidator : BasePagedServiceModelValidator<GetClientRolesServiceModel>
+    public class GetClientRolesModelValidator : BasePagedServiceModelValidator<GetClientRolesServiceModel>
     {
     }
 }

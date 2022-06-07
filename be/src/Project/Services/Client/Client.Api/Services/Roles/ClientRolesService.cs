@@ -49,6 +49,20 @@ namespace Client.Api.Services.Roles
             return role.Id;
         }
 
+        public async Task DeleteAsync(DeleteClientRoleServiceModel model)
+        {
+            var role = await this.context.ClientRoles.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+
+            if (role is null)
+            {
+                throw new CustomException(this.clientLocalizer.GetString("RoleNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            role.IsActive = false;
+            
+            await this.context.SaveChangesAsync();
+        }
+
         public async Task<PagedResults<IEnumerable<ClientRoleServiceModel>>> GetAsync(GetClientRolesServiceModel model)
         {
             var roles = from r in this.context.ClientRoles
@@ -69,6 +83,24 @@ namespace Client.Api.Services.Roles
             roles = roles.ApplySort(model.OrderBy);
 
             return roles.PagedIndex(new Pagination(roles.Count(), model.ItemsPerPage), model.PageIndex);
+        }
+
+        public async Task<ClientRoleServiceModel> GetAsync(GetClientRoleServiceModel model)
+        {
+            var role = await this.context.ClientRoles.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+
+            if (role is null)
+            {
+                throw new CustomException(this.clientLocalizer.GetString("RoleNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            return new ClientRoleServiceModel
+            {
+                Id = role.Id,
+                Name = role.Name,
+                LastModifiedDate = role.LastModifiedDate,
+                CreatedDate = role.CreatedDate
+            };
         }
 
         public async Task<PagedResults<IEnumerable<ClientRoleServiceModel>>> GetByIdsAsync(GetClientRolesByIdsServiceModel model)

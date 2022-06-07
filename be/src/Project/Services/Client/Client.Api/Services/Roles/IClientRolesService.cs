@@ -12,5 +12,7 @@ namespace Client.Api.Services.Roles
         Task<Guid> UpdateAsync(UpdateClientRoleServiceModel model);
         Task<PagedResults<IEnumerable<ClientRoleServiceModel>>> GetByIdsAsync(GetClientRolesByIdsServiceModel model);
         Task<PagedResults<IEnumerable<ClientRoleServiceModel>>> GetAsync(GetClientRolesServiceModel model);
+        Task<ClientRoleServiceModel> GetAsync(GetClientRoleServiceModel model);
+        Task DeleteAsync(DeleteClientRoleServiceModel model);
     }
 }
