@@ -44,12 +44,15 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 NavigateToCliensRoles = this.clientLocalizer.GetString("BackToRoles")
             };
 
-            var role = await this.clientRolesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
-
-            if (role is not null)
+            if (componentModel.Id.HasValue)
             {
-                viewModel.Id = role.Id;
-                viewModel.Name = role.Name;
+                var role = await this.clientRolesRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+
+                if (role is not null)
+                {
+                    viewModel.Id = role.Id;
+                    viewModel.Name = role.Name;
+                }
             }
 
             return viewModel;

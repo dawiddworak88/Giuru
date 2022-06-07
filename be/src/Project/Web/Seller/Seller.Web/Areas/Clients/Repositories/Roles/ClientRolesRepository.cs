@@ -94,6 +94,11 @@ namespace Seller.Web.Areas.Clients.Repositories.Roles
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ClientRole>(apiRequest);
 
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
             if (response.IsSuccessStatusCode && response.Data is not null)
             {
                 return response.Data;
