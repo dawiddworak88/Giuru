@@ -6,6 +6,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.DomainModels;
+using Seller.Web.Areas.Clients.Repositories.Roles;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
@@ -20,17 +21,20 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer clientLocalizer;
         private readonly LinkGenerator linkGenerator;
+        private readonly IClientRolesRepository clientRolesRepository;
 
         public ClientRolesPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
+            IClientRolesRepository clientRolesRepository,
             LinkGenerator linkGenerator)
         {
             this.catalogModelBuilder = catalogModelBuilder;
             this.globalLocalizer = globalLocalizer;
             this.clientLocalizer = clientLocalizer;
             this.linkGenerator = linkGenerator;
+            this.clientRolesRepository = clientRolesRepository;
         }
 
         public async Task<CatalogViewModel<ClientRole>> BuildModelAsync(ComponentModelBase componentModel)
@@ -71,6 +75,11 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
+                        Title = nameof(ClientRole.Name).ToCamelCase(),
+                        IsDateTime = true
+                    },
+                    new CatalogPropertyViewModel
+                    {
                         Title = nameof(ClientRole.LastModifiedDate).ToCamelCase(),
                         IsDateTime = true
                     },
@@ -81,6 +90,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     }
                 }
             };
+
+            viewModel.PagedItems = await this.clientRolesRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientRole.CreatedDate)} desc");
 
             return viewModel;
         }

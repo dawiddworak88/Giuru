@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.ApiRequestModels;
 using Seller.Web.Areas.Clients.DomainModels;
-using Seller.Web.Areas.Clients.Repositories.Groups;
+using Seller.Web.Areas.Clients.Repositories.Roles;
 using System;
 using System.Globalization;
 using System.Net;
@@ -15,28 +15,28 @@ using System.Threading.Tasks;
 namespace Seller.Web.Areas.Clients.ApiControllers
 {
     [Area("Clients")]
-    public class ClientGroupsApiController : BaseApiController
+    public class ClientRolesApiController : BaseApiController
     {
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
-        private readonly IClientGroupsRepository clientGroupsRepository;
+        private readonly IClientRolesRepository clientRolesRepository;
 
-        public ClientGroupsApiController(
+        public ClientRolesApiController(
             IStringLocalizer<ClientResources> clientLocalizer,
-            IClientGroupsRepository clientGroupsRepository)
+            IClientRolesRepository clientRolesRepository)
         {
             this.clientLocalizer = clientLocalizer;
-            this.clientGroupsRepository = clientGroupsRepository;
+            this.clientRolesRepository = clientRolesRepository;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index([FromBody] GroupRequestModel model)
+        public async Task<IActionResult> Index([FromBody] RoleRequestModel model)
         {
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var groupId = await this.clientGroupsRepository.SaveAsync(token, language, model.Id, model.Name);
+            var roleId = await this.clientRolesRepository.SaveAsync(token, language, model.Id, model.Name);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = groupId, Message = this.clientLocalizer.GetString("GroupSavedSuccessfully").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Id = roleId, Message = this.clientLocalizer.GetString("RoleSavedSuccessfully").Value });
         }
 
         [HttpDelete]
@@ -45,9 +45,9 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await this.clientGroupsRepository.DeleteAsync(token, language, id);
+            await this.clientRolesRepository.DeleteAsync(token, language, id);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.clientLocalizer.GetString("GroupDeletedSuccessfully").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.clientLocalizer.GetString("RoleDeletedSuccessfully").Value });
         }
 
         [HttpGet]
@@ -56,10 +56,10 @@ namespace Seller.Web.Areas.Clients.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var groups = await this.clientGroupsRepository.GetAsync(
-                token, language, searchTerm, pageIndex, itemsPerPage, $"{nameof(ClientGroup.CreatedDate)} desc");
+            var roles = await this.clientRolesRepository.GetAsync(
+                token, language, searchTerm, pageIndex, itemsPerPage, $"{nameof(ClientRole.CreatedDate)} desc");
 
-            return this.StatusCode((int)HttpStatusCode.OK, groups);
+            return this.StatusCode((int)HttpStatusCode.OK, roles);
         }
     }
 }

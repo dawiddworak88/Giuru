@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Clients.Repositories
+namespace Seller.Web.Areas.Clients.Repositories.Groups
 {
     public class ClientGroupsRepository : IClientGroupsRepository
     {
