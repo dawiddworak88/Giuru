@@ -76,7 +76,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     new CatalogPropertyViewModel
                     {
                         Title = nameof(ClientRole.Name).ToCamelCase(),
-                        IsDateTime = true
+                        IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {

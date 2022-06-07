@@ -40,7 +40,7 @@ namespace Seller.Web.Areas.Clients.Repositories.Roles
 
             var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
 
-            if (!response.IsSuccessStatusCode && response?.Data != null)
+            if (!response.IsSuccessStatusCode && response?.Data is not null)
             {
                 throw new CustomException(response.Data.Message, (int)response.StatusCode);
             }
@@ -66,7 +66,7 @@ namespace Seller.Web.Areas.Clients.Repositories.Roles
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientRole>>>(apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            if (response.IsSuccessStatusCode && response.Data?.Data is not null)
             {
                 return new PagedResults<IEnumerable<ClientRole>>(response.Data.Total, response.Data.PageSize)
                 {
@@ -89,17 +89,12 @@ namespace Seller.Web.Areas.Clients.Repositories.Roles
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.GroupsApiEndpoint}/{id}"
+                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.RolesApiEndpoint}/{id}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, ClientRole>(apiRequest);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
-
-            if (response.IsSuccessStatusCode && response.Data != null)
+            if (response.IsSuccessStatusCode && response.Data is not null)
             {
                 return response.Data;
             }
@@ -120,12 +115,12 @@ namespace Seller.Web.Areas.Clients.Repositories.Roles
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.GroupsApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.RolesApiEndpoint}"
             };
 
             var response = await this.apiClientService.PostAsync<ApiRequest<RoleRequestModel>, RoleRequestModel, BaseResponseModel>(apiRequest);
 
-            if (response.IsSuccessStatusCode && response.Data?.Id != null)
+            if (response.IsSuccessStatusCode && response.Data?.Id is not null)
             {
                 return response.Data.Id.Value;
             }

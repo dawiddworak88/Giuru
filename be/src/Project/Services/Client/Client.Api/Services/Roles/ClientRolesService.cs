@@ -31,14 +31,14 @@ namespace Client.Api.Services.Roles
 
         public async Task<Guid> CreateAsync(CreateClientRoleServiceModel model)
         {
-            var role = await this.context.ClientRoles.FirstOrDefaultAsync(x => x.Name == model.Name && x.IsActive);
+            var existingRole = await this.context.ClientRoles.FirstOrDefaultAsync(x => x.Name == model.Name && x.IsActive);
 
-            if (role is not null)
+            if (existingRole is not null)
             {
                 throw new CustomException(this.clientLocalizer.GetString("RoleIsExisting"), (int)HttpStatusCode.BadRequest);
             }
 
-            role = new ClientRole
+            var role = new ClientRole
             {
                 Name = model.Name
             };
