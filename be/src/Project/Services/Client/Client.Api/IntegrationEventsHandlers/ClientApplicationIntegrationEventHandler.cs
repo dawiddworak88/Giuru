@@ -18,12 +18,12 @@ namespace Client.Api.IntegrationEventsHandlers
         }
 
         /// <summary>
-        /// Integration event handler which saving
+        /// Integration event handler which saving clients applications
         /// </summary>
         /// <param name="event">
         /// Integration event message which is sent by the
-        /// basket.api once it has successfully process the 
-        /// order items.
+        /// identity.api once it has successfully process the 
+        /// client application.
         /// </param>
         /// <returns></returns>
         public async Task Handle(ClientApplicationIntegrationEvent @event)
