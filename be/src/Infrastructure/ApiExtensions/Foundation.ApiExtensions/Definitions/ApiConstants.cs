@@ -16,6 +16,7 @@
         public struct Client
         {
             public static readonly string GroupsApiEndpoint = "/api/v1/clientgroups";
+            public static readonly string ManagersApiEndpoint = "/api/v1/clientmanagers";
         }
 
         public struct Identity
