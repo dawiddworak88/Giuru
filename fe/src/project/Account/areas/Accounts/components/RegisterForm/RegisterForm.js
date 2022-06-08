@@ -14,7 +14,6 @@ const RegisterForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const [isSended, setIsSended] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
-    const [acceptedTerms, setAcceptedTerms] = useState(false);
     const stateSchema = {
        firstName: { value: "", error: "" },
        lastName: { value: "", error: "" },
@@ -26,7 +25,8 @@ const RegisterForm = (props) => {
        companyCity: { value: "", error: "" },
        companyRegion: { value: "", error: "" },
        companyPostalCode: { value: "", error: "" },
-       companyCountry: { value: "", error: "" }
+       companyCountry: { value: "", error: "" },
+       acceptedTerms: { value: false }
     };
 
     const stateValidatorSchema = {
@@ -135,12 +135,14 @@ const RegisterForm = (props) => {
     }
 
     const {
-        values, errors, dirty, disable, handleOnChange, handleOnSubmit
+        values, errors, dirty, disable, 
+        setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
     const { 
         firstName, lastName, email, phoneNumber, contactJobTitle, companyName, 
-        companyAddress, companyCity, companyCountry, companyRegion, companyPostalCode
+        companyAddress, companyCity, companyCountry, companyRegion, companyPostalCode,
+        acceptedTerms
     } = values;
     
     return (
@@ -319,7 +321,7 @@ const RegisterForm = (props) => {
                                         <Checkbox 
                                             checked={acceptedTerms}
                                             onChange={(e) => {
-                                                setAcceptedTerms(e.target.checked);
+                                                setFieldValue({name: "acceptedTerms", value: e.target.checked});
                                             }}/>
                                     }/>
                                 <span>{props.acceptTermsText} <a href={props.regulationsUrl} className="is-underlined" target="_blank">{props.regulations}</a>  &amp; <a href={props.privacyPolicyUrl} className="is-underlined" target="_blank">{props.privacyPolicy}</a></span>
