@@ -18,19 +18,16 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<ClientResources> clientLocalizer;
         private readonly LinkGenerator linkGenerator;
-        private readonly IClientsRepository clientsRepository;
 
         public ClientManagerFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
-            IClientsRepository clientsRepository,
             LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
             this.clientLocalizer = clientLocalizer;
             this.linkGenerator = linkGenerator;
             this.clientLocalizer = clientLocalizer;
-            this.clientsRepository = clientsRepository;
         }
 
         public async Task<ClientManagerFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -40,25 +37,16 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 IdLabel = this.globalLocalizer.GetString("Id"),
                 Title = this.clientLocalizer.GetString("EditClientManager"),
                 FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
-                ClientsLabel = this.clientLocalizer.GetString("Clients"),
-                NoClientsText = this.clientLocalizer.GetString("NoClients"),
-                SelectClients = this.clientLocalizer.GetString("SelectClients"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 NavigateToManagersText = this.clientLocalizer.GetString("NavigateToManagersText"),
                 ManagersUrl = this.linkGenerator.GetPathByAction("Index", "ClientManagers", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred")
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                EmailFormatErrorMessage = this.globalLocalizer.GetString("EmailFormatErrorMessage"),
+                FirstNameLabel = this.globalLocalizer.GetString("FirstName"),
+                LastNameLabel = this.globalLocalizer.GetString("LastName"),
+                EmailLabel = this.globalLocalizer.GetString("Email"),
+                PhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel")
             };
-
-            var clients = await this.clientsRepository.GetAllClientsAsync(componentModel.Token, componentModel.Language);
-
-            if (clients is not null)
-            {
-                viewModel.Clients = clients.Select(x => new ListItemViewModel
-                {
-                    Id = x.Id,
-                    Name = x.Name
-                });
-            }
 
             return viewModel;
         }
