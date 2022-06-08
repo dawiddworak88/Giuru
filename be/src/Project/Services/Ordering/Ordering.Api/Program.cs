@@ -18,6 +18,8 @@ using System.IO;
 using Foundation.Localization.Definitions;
 using Microsoft.Extensions.Options;
 using Foundation.Mailing.DependencyInjection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -87,6 +89,8 @@ builder.Services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
     return new DefaultRabbitMQPersistentConnection(factory, logger, int.Parse(builder.Configuration["EventBusRetryCount"]));
 });
 
+builder.Services.ConigureHealthChecks(builder.Configuration);
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Ordering API", Version = "v1" });
@@ -123,6 +127,17 @@ app.ConfigureEventBus();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
 });
 
 app.Run();

@@ -114,11 +114,13 @@ app.UseCustomHeaderRequestLocalizationProvider(builder.Configuration, app.Servic
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+
     endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
     {
         Predicate = _ => true,
         ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
     });
+
     endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
     {
         Predicate = r => r.Name.Contains("self")

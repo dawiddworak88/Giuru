@@ -12,6 +12,8 @@ using Foundation.EventBus.Abstractions;
 using Catalog.BackgroundTasks.IntegrationEvents;
 using Microsoft.Extensions.Options;
 using Foundation.Localization.Definitions;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +68,8 @@ builder.Services.RegisterCatalogBaseDependencies();
 
 builder.Services.RegisterCatalogBackgroundTasksDependencies();
 
+builder.Services.ConigureHealthChecks(builder.Configuration);
+
 var app = builder.Build();
 
 IdentityModelEventSource.ShowPII = true;
@@ -86,6 +90,17 @@ eventBus.Subscribe<RebuildCategorySchemasIntegrationEvent, IIntegrationEventHand
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
 });
 
 app.Run();

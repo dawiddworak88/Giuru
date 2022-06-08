@@ -16,6 +16,8 @@ using Foundation.Localization.Definitions;
 using Inventory.Api.DependencyInjection;
 using Foundation.EventBus.Abstractions;
 using Inventory.Api.IntegrationEvents;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +73,8 @@ builder.Services.RegisterEventBus(builder.Configuration);
 
 builder.Services.ConfigureSettings(builder.Configuration);
 
+builder.Services.ConigureHealthChecks(builder.Configuration);
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Inventory API", Version = "v1" });
@@ -81,6 +85,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
 IdentityModelEventSource.ShowPII = true;
 
 app.UseSwagger();
@@ -111,5 +116,16 @@ eventBus.Subscribe<DeletedProductIntegrationEvent, IIntegrationEventHandler<Dele
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
 });
 app.Run();

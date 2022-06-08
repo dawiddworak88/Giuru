@@ -18,6 +18,8 @@ using Buyer.Web.Areas.Orders.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using Foundation.Extensions.Filters;
 using Buyer.Web.Areas.News.DependencyInjection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -87,6 +89,8 @@ builder.Services.RegisterApiExtensionsDependencies();
 
 builder.Services.ConfigureSettings(builder.Configuration);
 
+builder.Services.ConigureHealthChecks(builder.Configuration);
+
 var app = builder.Build();
 
 IdentityModelEventSource.ShowPII = true;
@@ -123,6 +127,17 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
 });
 
 app.Run();

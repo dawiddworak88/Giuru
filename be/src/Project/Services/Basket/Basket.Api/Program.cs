@@ -18,6 +18,8 @@ using Basket.Api.DependencyInjection;
 using StackExchange.Redis;
 using Microsoft.Extensions.Options;
 using Foundation.Localization.Definitions;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,6 +95,8 @@ builder.Services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
     return new DefaultRabbitMQPersistentConnection(factory, logger, int.Parse(builder.Configuration["EventBusRetryCount"]));
 });
 
+builder.Services.ConigureHealthChecks(builder.Configuration);
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Basket API", Version = "v1" });
@@ -126,6 +130,17 @@ app.ConfigureEventBus();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
 });
 
 app.Run();

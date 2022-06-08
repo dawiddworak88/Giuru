@@ -16,6 +16,8 @@ using Microsoft.Extensions.Options;
 using Foundation.Localization.Definitions;
 using Media.Api.Services.Checksums;
 using Foundation.Extensions.Filters;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +73,8 @@ builder.Services.AddApiVersioning();
 
 builder.Services.RegisterGeneralDependencies();
 
+builder.Services.ConigureHealthChecks(builder.Configuration);
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Media API", Version = "v1" });
@@ -111,6 +115,17 @@ app.UseCustomHeaderRequestLocalizationProvider(builder.Configuration, app.Servic
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
 });
 
 app.Run();

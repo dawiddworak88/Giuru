@@ -14,6 +14,8 @@ using Foundation.Localization.Extensions;
 using Foundation.Localization.Definitions;
 using News.Api.DependencyInjection;
 using Foundation.Account.DependencyInjection;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,6 +69,8 @@ builder.Services.RegisterApiAccountDependencies(builder.Configuration);
 
 builder.Services.ConfigureSettings(builder.Configuration);
 
+builder.Services.ConigureHealthChecks(builder.Configuration);
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "News API", Version = "v1" });
@@ -101,6 +105,17 @@ app.UseCustomHeaderRequestLocalizationProvider(builder.Configuration, app.Servic
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
 });
 
 app.Run();

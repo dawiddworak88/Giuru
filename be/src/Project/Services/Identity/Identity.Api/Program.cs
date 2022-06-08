@@ -24,6 +24,8 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Identity.Api.Areas.Accounts.Services.UserServices;
 using Foundation.Mailing.DependencyInjection;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,6 +91,8 @@ builder.Services.ConfigureSettings(builder.Configuration);
 
 builder.Services.AddApiVersioning();
 
+builder.Services.ConigureHealthChecks(builder.Configuration);
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Identity API", Version = "v1" });
@@ -152,6 +156,17 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
         name: "error",
         pattern: "{controller=Content}/{action=Error}/{errorId?}");
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
 });
 
 app.Run();

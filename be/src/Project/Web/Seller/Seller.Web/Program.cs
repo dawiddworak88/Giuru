@@ -24,6 +24,8 @@ using Microsoft.AspNetCore.Http;
 using Seller.Web.Areas.Inventory.DependencyInjection;
 using Foundation.Account.Definitions;
 using Seller.Web.Areas.News.DependencyInjection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -101,6 +103,8 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("SellerOnly", policy => policy.RequireRole(AccountConstants.Roles.Seller));
 });
 
+builder.Services.ConigureHealthChecks(builder.Configuration);
+
 var app = builder.Build();
 
 IdentityModelEventSource.ShowPII = true;
@@ -137,6 +141,17 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{area:exists=Orders}/{controller=Orders}/{action=Index}/{id?}").RequireAuthorization("SellerOnly");
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
 });
 
 app.Run();

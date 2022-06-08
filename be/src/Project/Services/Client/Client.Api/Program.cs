@@ -14,6 +14,8 @@ using System.IO;
 using Client.Api.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Foundation.Localization.Definitions;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,7 +78,10 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
+builder.Services.ConigureHealthChecks(builder.Configuration);
+
 var app = builder.Build();
+
 IdentityModelEventSource.ShowPII = true;
 
 app.UseSwagger();
@@ -100,6 +105,17 @@ app.UseCustomHeaderRequestLocalizationProvider(builder.Configuration, app.Servic
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
 });
 
 app.Run();
