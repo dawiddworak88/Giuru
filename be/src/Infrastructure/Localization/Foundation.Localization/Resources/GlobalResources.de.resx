@@ -573,4 +573,7 @@
   <data name="ClientManagers" xml:space="preserve">
     <value>Kundenmanager</value>
   </data>
+  <data name="Manager" xml:space="preserve">
+    <value>Manager</value>
+  </data>
 </root>

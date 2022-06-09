@@ -1,5 +1,6 @@
 ﻿using Client.Api.Infrastructure;
 using Client.Api.Infrastructure.Groups.Entities;
+using Client.Api.Infrastructure.Managers.Entities;
 using Client.Api.ServicesModels.Clients;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
@@ -65,6 +66,13 @@ namespace Client.Api.Services.Clients
                     item.ClientGroupIds = clientGroups;
                 }
 
+                var clientManager = await this.context.ClientsManagers.FirstOrDefaultAsync(x => x.ClientId == client.Id && x.IsActive);
+
+                if (clientManager is not null)
+                {
+                    item.ClientManagerId = clientManager.Id;
+                }
+
                 clientsList.Add(item);
             }
 
@@ -98,6 +106,13 @@ namespace Client.Api.Services.Clients
             if (clientGroups is not null)
             {
                 client.ClientGroupIds = clientGroups;
+            }
+
+            var clientManager = await this.context.ClientsManagers.FirstOrDefaultAsync(x => x.ClientId == existingClient.Id && x.IsActive);
+
+            if (clientManager is not null)
+            {
+                client.ClientManagerId = clientManager.ClientManagerId;
             }
             
             return client;
@@ -150,6 +165,33 @@ namespace Client.Api.Services.Clients
                 await this.context.ClientsGroups.AddAsync(groupItem.FillCommonProperties());
             }
 
+            var clientManager = await this.context.ClientsManagers.FirstOrDefaultAsync(x => x.ClientId == client.Id && x.IsActive);
+
+            if (serviceModel.ClientManager.HasValue)
+            { 
+                if (clientManager is not null)
+                {
+                    clientManager.ClientManagerId = serviceModel.ClientManager.Value;
+                }
+                else
+                {
+                    clientManager = new ClientsManager
+                    {
+                        ClientId = client.Id,
+                        ClientManagerId = serviceModel.ClientManager.Value,
+                    };
+
+                    await this.context.ClientsManagers.AddAsync(clientManager.FillCommonProperties());
+                }
+            }
+            else
+            {
+                if (clientManager is not null)
+                {
+                    this.context.ClientsManagers.Remove(clientManager);
+                }
+            }
+
             await this.context.SaveChangesAsync();
 
             return await this.GetAsync(new GetClientServiceModel { Id = client.Id, Language = serviceModel.Language, OrganisationId = serviceModel.OrganisationId, Username = serviceModel.Username });
@@ -158,6 +200,7 @@ namespace Client.Api.Services.Clients
         public async Task<ClientServiceModel> CreateAsync(CreateClientServiceModel serviceModel)
         {
             var exsitingClient = this.context.Clients.FirstOrDefault(x => x.Email == serviceModel.Email && x.IsActive);
+
             if (exsitingClient is not null)
             {
                 throw new CustomException(this.clientLocalizer.GetString("ClientExists"), (int)HttpStatusCode.NotFound);
@@ -184,6 +227,17 @@ namespace Client.Api.Services.Clients
                 };
 
                 await this.context.ClientsGroups.AddAsync(clientGroup.FillCommonProperties());
+            }
+
+            if (serviceModel.ClientManager.HasValue)
+            {
+                var clientManager = new ClientsManager
+                {
+                    ClientId = client.Id,
+                    ClientManagerId = serviceModel.ClientManager.Value
+                };
+
+                await this.context.ClientsManagers.AddAsync(clientManager.FillCommonProperties());
             }
 
             await this.context.SaveChangesAsync();

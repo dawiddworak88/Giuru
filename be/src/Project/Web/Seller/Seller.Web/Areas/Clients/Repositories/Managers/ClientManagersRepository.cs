@@ -11,6 +11,7 @@ using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Shared.Configurations;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Clients.Repositories.Managers
@@ -102,6 +103,60 @@ namespace Seller.Web.Areas.Clients.Repositories.Managers
             if (response.IsSuccessStatusCode && response.Data != null)
             {
                 return response.Data;
+            }
+
+            return default;
+        }
+
+        public async Task<IEnumerable<ClientManager>> GetAsync(string token, string language)
+        {
+            var requestModel = new PagedRequestModelBase
+            {
+                PageIndex = PaginationConstants.DefaultPageIndex,
+                ItemsPerPage = PaginationConstants.DefaultPageSize
+            };
+
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.ManagersApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientManager>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                var managers = new List<ClientManager>();
+
+                managers.AddRange(response.Data.Data);
+
+                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
+
+                for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
+                {
+                    apiRequest.Data.PageIndex = i;
+
+                    var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientManager>>>(apiRequest);
+
+                    if (!nextPagesResponse.IsSuccessStatusCode)
+                    {
+                        throw new CustomException(response.Message, (int)response.StatusCode);
+                    }
+
+                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Count() > 0)
+                    {
+                        managers.AddRange(nextPagesResponse.Data.Data);
+                    }
+                }
+
+                return managers;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
             }
 
             return default;

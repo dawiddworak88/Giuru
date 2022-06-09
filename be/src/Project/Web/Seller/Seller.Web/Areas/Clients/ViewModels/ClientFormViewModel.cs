@@ -38,6 +38,11 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public string GroupsLabel { get; set; }
         public IEnumerable<LanguageViewModel> Languages { get; set; }
         public IEnumerable<ListItemViewModel> ClientGroups { get; set; }
+        public IEnumerable<ClientManagerViewModel> ClientManagers { get; set; }
         public IEnumerable<Guid> ClientGroupsIds { get; set; }
+        public Guid? ClientManagerId { get; set; }
+        public string SelectManager { get; set; }
+        public string NoManagersText { get; set; }
+        public string ClientManagerLabel { get; set; }
     }
 }

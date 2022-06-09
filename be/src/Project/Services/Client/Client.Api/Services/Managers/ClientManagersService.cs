@@ -35,7 +35,7 @@ namespace Client.Api.Services.Managers
 
             if (existingManager is not null)
             {
-                throw new CustomException(this.clientLocalizer.GetString("ManagerIsExisting"), (int)HttpStatusCode.BadRequest);
+                throw new CustomException(this.clientLocalizer.GetString("ManagerExist"), (int)HttpStatusCode.BadRequest);
             }
 
             var manager = new ClientManager

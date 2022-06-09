@@ -171,6 +171,21 @@
   <data name="GroupSavedSuccessfully" xml:space="preserve">
     <value>Client group has been saved successfully.</value>
   </data>
+  <data name="ManagerDeleteConflict" xml:space="preserve">
+    <value>Unassign clients from this manager.</value>
+  </data>
+  <data name="ManagerDeletedSuccessfully" xml:space="preserve">
+    <value>Manager has been deleted successfully.</value>
+  </data>
+  <data name="ManagerExist" xml:space="preserve">
+    <value>Manager exist</value>
+  </data>
+  <data name="ManagerNotFound" xml:space="preserve">
+    <value>Manager has not been found.</value>
+  </data>
+  <data name="ManagerSavedSuccessfully" xml:space="preserve">
+    <value>Manager has been saved successfully.</value>
+  </data>
   <data name="NavigateToClientsLabel" xml:space="preserve">
     <value>Back to clients</value>
   </data>
@@ -195,7 +210,13 @@
   <data name="NoGroupsText" xml:space="preserve">
     <value>No client groups available</value>
   </data>
+  <data name="NoManagers" xml:space="preserve">
+    <value>No managers available</value>
+  </data>
   <data name="ResetPasswordText" xml:space="preserve">
     <value>Reset password</value>
+  </data>
+  <data name="SelectManager" xml:space="preserve">
+    <value>Select client manager</value>
   </data>
 </root>

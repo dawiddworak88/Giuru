@@ -15,6 +15,7 @@ using Seller.Web.Shared.Repositories.Identity;
 using Seller.Web.Areas.Clients.Repositories;
 using System.Linq;
 using Foundation.PageContent.Components.ListItems.ViewModels;
+using Seller.Web.Areas.Clients.Repositories.Managers;
 
 namespace Seller.Web.Areas.Clients.ModelBuilders
 {
@@ -27,6 +28,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IIdentityRepository identityRepository;
         private readonly LinkGenerator linkGenerator;
         private readonly IClientGroupsRepository clientGroupsRepository;
+        private readonly IClientManagersRepository clientManagersRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -35,6 +37,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IOptionsMonitor<LocalizationSettings> localizationOptions,
             IIdentityRepository identityRepository,
             IClientGroupsRepository clientGroupsRepository,
+            IClientManagersRepository clientManagersRepository,
             LinkGenerator linkGenerator)
         {
             this.clientsRepository = clientsRepository;
@@ -44,6 +47,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             this.linkGenerator = linkGenerator;
             this.identityRepository = identityRepository;
             this.clientGroupsRepository = clientGroupsRepository;
+            this.clientManagersRepository = clientManagersRepository;
         }
 
         public async Task<ClientFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -83,7 +87,10 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 NavigateToClientsLabel = this.clientLocalizer.GetString("NavigateToClientsLabel"),
                 ResetPasswordText = this.clientLocalizer.GetString("ResetPasswordText"),
                 NoGroupsText = this.clientLocalizer.GetString("NoGroupsText"),
-                GroupsLabel = this.globalLocalizer.GetString("Groups")
+                GroupsLabel = this.globalLocalizer.GetString("Groups"),
+                NoManagersText = this.clientLocalizer.GetString("NoManagers"),
+                SelectManager = this.clientLocalizer.GetString("SelectManager"),
+                ClientManagerLabel = this.globalLocalizer.GetString("Manager")
             };
 
             if (componentModel.Id.HasValue)
@@ -97,6 +104,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.CommunicationLanguage = client.CommunicationLanguage;
                     viewModel.PhoneNumber = client.PhoneNumber;
                     viewModel.ClientGroupsIds = client.ClientGroupIds;
+                    viewModel.ClientManagerId = client.ClientManagerId;
 
                     var user = await this.identityRepository.GetAsync(componentModel.Token, componentModel.Language, client.Email);
 
@@ -114,6 +122,18 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 {
                     Id = x.Id,
                     Name = x.Name,
+                });
+            }
+
+            var managers = await this.clientManagersRepository.GetAsync(componentModel.Token, componentModel.Language);
+
+            if (managers is not null)
+            {
+                viewModel.ClientManagers = managers.Select(x => new ClientManagerViewModel
+                {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName
                 });
             }
 

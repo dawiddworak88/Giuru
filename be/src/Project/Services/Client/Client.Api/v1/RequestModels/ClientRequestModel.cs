@@ -12,5 +12,6 @@ namespace Client.Api.v1.RequestModels
         public string PhoneNumber { get; set; }
         public Guid? OrganisationId { get; set; }
         public IEnumerable<Guid> ClientGroupIds { get; set; }
+        public Guid? ClientManager { get; set; }
     }
 }
