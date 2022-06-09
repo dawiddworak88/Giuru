@@ -227,8 +227,6 @@ namespace Client.Api.v1.Controllers
             }
         }
 
-
-
         /// <summary>
         /// Creates or updates manager (if manager id is set).
         /// </summary>
