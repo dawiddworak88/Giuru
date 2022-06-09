@@ -6,6 +6,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.DomainModels;
+using Seller.Web.Areas.Clients.Repositories.Managers;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
@@ -20,17 +21,20 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer clientLocalizer;
         private readonly LinkGenerator linkGenerator;
+        private readonly IClientManagersRepository clientManagersRepository;
 
         public ClientManagersPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
+            IClientManagersRepository clientManagersRepository,
             LinkGenerator linkGenerator)
         {
             this.catalogModelBuilder = catalogModelBuilder;
             this.globalLocalizer = globalLocalizer;
             this.clientLocalizer = clientLocalizer;
             this.linkGenerator = linkGenerator;
+            this.clientManagersRepository = clientManagersRepository;
         }
 
         public async Task<CatalogViewModel<ClientManager>> BuildModelAsync(ComponentModelBase componentModel)
@@ -52,7 +56,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("Name"),
+                    this.globalLocalizer.GetString("FirstName"),
+                    this.globalLocalizer.GetString("LastName"),
                     this.globalLocalizer.GetString("LastModifiedDate"),
                     this.globalLocalizer.GetString("CreatedDate")
                 },
@@ -71,6 +76,16 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
+                        Title = nameof(ClientManager.FirstName).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(ClientManager.LastName).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
                         Title = nameof(ClientManager.LastModifiedDate).ToCamelCase(),
                         IsDateTime = true
                     },
@@ -81,6 +96,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     }
                 }
             };
+
+            viewModel.PagedItems = await this.clientManagersRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(ClientManager.CreatedDate)} desc");
 
             return viewModel;
         }

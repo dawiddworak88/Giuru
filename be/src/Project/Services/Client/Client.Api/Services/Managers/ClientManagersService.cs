@@ -117,7 +117,7 @@ namespace Client.Api.Services.Managers
             return managers.PagedIndex(new Pagination(managers.Count(), model.ItemsPerPage), model.PageIndex);
         }
 
-        public Task<PagedResults<IEnumerable<ClientManagerServiceModel>>> GetByIdsAsync(GetClientManagersByIdsServiceModel model)
+        public async Task<PagedResults<IEnumerable<ClientManagerServiceModel>>> GetByIdsAsync(GetClientManagersByIdsServiceModel model)
         {
             var managers = from m in this.context.ClientManagers
                            where model.Ids.Contains(m.Id)
