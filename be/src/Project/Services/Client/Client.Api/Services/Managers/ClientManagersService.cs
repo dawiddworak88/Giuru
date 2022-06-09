@@ -10,7 +10,9 @@ using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Linq;
 using System.Threading.Tasks;
+using Foundation.Extensions.ExtensionMethods;
 
 namespace Client.Api.Services.Managers
 {
@@ -44,7 +46,7 @@ namespace Client.Api.Services.Managers
                 PhoneNumber = model.PhoneNumber
             };
 
-            await this.context.AddAsync(manager.FillCommonProperties());
+            await this.context.ClientManagers.AddAsync(manager.FillCommonProperties());
             await this.context.SaveChangesAsync();
 
             return manager.Id;
@@ -92,12 +94,45 @@ namespace Client.Api.Services.Managers
 
         public async Task<PagedResults<IEnumerable<ClientManagerServiceModel>>> GetAsync(GetClientManagersServiceModel model)
         {
-            throw new NotImplementedException();
+            var managers = from m in this.context.ClientManagers
+                           where m.IsActive
+                           select new ClientManagerServiceModel
+                           {
+                               Id = m.Id,
+                               FirstName = m.FirstName,
+                               LastName = m.LastName,
+                               Email = m.Email,
+                               PhoneNumber = m.PhoneNumber,
+                               LastModifiedDate = m.LastModifiedDate,
+                               CreatedDate = m.CreatedDate
+                           };
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                managers = managers.Where(x => x.FirstName.StartsWith(model.SearchTerm) || x.LastName.StartsWith(model.SearchTerm) || x.Email.StartsWith(model.SearchTerm));
+            }
+
+            managers = managers.ApplySort(model.OrderBy);
+
+            return managers.PagedIndex(new Pagination(managers.Count(), model.ItemsPerPage), model.PageIndex);
         }
 
         public Task<PagedResults<IEnumerable<ClientManagerServiceModel>>> GetByIdsAsync(GetClientManagersByIdsServiceModel model)
         {
-            throw new NotImplementedException();
+            var managers = from m in this.context.ClientManagers
+                           where model.Ids.Contains(m.Id)
+                           select new ClientManagerServiceModel
+                           {
+                               Id = m.Id,
+                               FirstName = m.FirstName,
+                               LastName = m.LastName,
+                               Email = m.Email,
+                               PhoneNumber = m.PhoneNumber,
+                               LastModifiedDate = m.LastModifiedDate,
+                               CreatedDate = m.CreatedDate
+                           };
+
+            return managers.PagedIndex(new Pagination(managers.Count(), model.ItemsPerPage), model.PageIndex);
         }
 
         public async Task<Guid> UpdateAsync(UpdateClientManagerServiceModel model)

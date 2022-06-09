@@ -2,7 +2,7 @@
 
 namespace Seller.Web.Areas.Clients.ApiRequestModels
 {
-    public class ClientManagerRequestModel : RequestModelBase
+    public class ManagerRequestModel : RequestModelBase
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

@@ -45,7 +45,8 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 FirstNameLabel = this.globalLocalizer.GetString("FirstName"),
                 LastNameLabel = this.globalLocalizer.GetString("LastName"),
                 EmailLabel = this.globalLocalizer.GetString("Email"),
-                PhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel")
+                PhoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel"),
+                SaveUrl = this.linkGenerator.GetPathByAction("Index", "ClientManagersApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             return viewModel;
