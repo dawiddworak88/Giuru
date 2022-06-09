@@ -58,6 +58,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 {
                     this.globalLocalizer.GetString("FirstName"),
                     this.globalLocalizer.GetString("LastName"),
+                    this.globalLocalizer.GetString("Email"),
                     this.globalLocalizer.GetString("LastModifiedDate"),
                     this.globalLocalizer.GetString("CreatedDate")
                 },
@@ -82,6 +83,11 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     new CatalogPropertyViewModel
                     {
                         Title = nameof(ClientManager.LastName).ToCamelCase(),
+                        IsDateTime = false
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(ClientManager.Email).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
