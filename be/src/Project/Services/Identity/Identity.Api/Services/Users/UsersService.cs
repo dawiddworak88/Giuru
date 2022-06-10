@@ -1,5 +1,4 @@
 ﻿using Feature.Account;
-using Foundation.EventBus.Abstractions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Localization;
 using Foundation.Mailing.Configurations;
@@ -10,7 +9,6 @@ using Identity.Api.Configurations;
 using Identity.Api.Definitions;
 using Identity.Api.Infrastructure;
 using Identity.Api.Infrastructure.Accounts.Entities;
-using Identity.Api.IntegrationEvents;
 using Identity.Api.ServicesModels.Users;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -36,14 +34,12 @@ namespace Identity.Api.Services.Users
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IUserService userService;
         private readonly LinkGenerator linkGenerator;
-        private readonly IEventBus eventBus;
 
         public UsersService(
             IdentityContext identityContext,
             IOptionsMonitor<MailingConfiguration> mailingOptions,
             IOptionsMonitor<AppSettings> identityOptions,
             IMailingService mailingService,
-            IEventBus eventBus,
             IStringLocalizer<AccountResources> accountLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IUserService userService,
@@ -57,7 +53,6 @@ namespace Identity.Api.Services.Users
             this.userService = userService;
             this.linkGenerator = linkGenerator;
             this.globalLocalizer = globalLocalizer;
-            this.eventBus = eventBus;
         }
 
         public async Task<UserServiceModel> CreateAsync(CreateUserServiceModel serviceModel)
@@ -367,23 +362,6 @@ namespace Identity.Api.Services.Users
                     country = serviceModel.CompanyCountry
                 }
             });
-
-            var message = new ClientApplicationIntegrationEvent
-            {
-                FirstName = serviceModel.FirstName,
-                LastName = serviceModel.LastName,
-                Email = serviceModel.Email,
-                PhoneNumber = serviceModel.PhoneNumber,
-                ContactJobTitle = serviceModel.ContactJobTitle,
-                CompanyAddress = serviceModel.CompanyAddress,
-                CompanyCity = serviceModel.CompanyCity,
-                CompanyCountry = serviceModel.CompanyCountry,
-                CompanyName = serviceModel.CompanyName,
-                CompanyPostalCode = serviceModel.CompanyPostalCode,
-                CompanyRegion = serviceModel.CompanyRegion
-            };
-
-            this.eventBus.Publish(message);
         }
     }
 }

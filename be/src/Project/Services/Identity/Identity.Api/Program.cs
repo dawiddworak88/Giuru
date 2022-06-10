@@ -85,8 +85,6 @@ builder.Services.RegisterHomeViewsDependencies();
 
 builder.Services.RegisterMailingDependencies(builder.Configuration);
 
-builder.Services.RegisterEventBus(builder.Configuration);
-
 builder.Services.ConfigureSettings(builder.Configuration);
 
 builder.Services.AddApiVersioning();
