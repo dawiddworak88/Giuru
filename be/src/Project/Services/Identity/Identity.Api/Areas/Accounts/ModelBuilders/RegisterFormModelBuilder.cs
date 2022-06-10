@@ -48,7 +48,7 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 CompanyCityLabel = this.globalLocalizer.GetString("City"),
                 CompanyRegionLabel = this.globalLocalizer.GetString("Region"),
                 CompanyCountryLabel = this.globalLocalizer.GetString("Country"),
-                SaveUrl = this.linkGenerator.GetPathByAction("Register", "IdentityApi", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveUrl = this.linkGenerator.GetPathByAction("Application", "ClientsApi", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
                 OnlineRetailersLabel = this.accountLocalizer.GetString("OnlineRetailers"),
                 YesLabel = this.globalLocalizer.GetString("Yes"),
                 NoLabel = this.globalLocalizer.GetString("No"),

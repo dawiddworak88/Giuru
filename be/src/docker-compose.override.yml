@@ -169,8 +169,7 @@ services:
       - ActionSendGridClientApplyConfirmationTemplateId=${SENDGRID_CLIENT_APPLY_CONFIRMATION_TEMPLATE_ID}
       - ActionSendGridClientApplyTemplateId=${SENDGRID_CLIENT_APPLY_TEMPLATE_ID}
       - DevelopersEmail=it.developers@eltap.com
-      - EventBusConnection=amqp://rabbitmq
-      - EventBusRetryCount=5
+      - ClientUrl=http://client-api
     ports:
       - "5105:80"
 

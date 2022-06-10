@@ -354,6 +354,8 @@ spec:
           value: {{ .Values.mediaUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
+        - name: ClientUrl
+          value: {{ .Values.clientUrl }}
         - name: Clients
           value: {{ .Values.identityApi.clients }}
         - name: SellerClientId
@@ -402,10 +404,6 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
-        - name: EventBusConnection
-          value: {{ .Values.eventBusConnection }}
-        - name: EventBusRetryCount
-          value: {{ .Values.eventBusRetryCount }}
         ports:
         - containerPort: 80
 ---

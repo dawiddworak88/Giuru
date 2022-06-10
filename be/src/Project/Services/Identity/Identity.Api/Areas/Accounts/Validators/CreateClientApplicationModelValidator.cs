@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
-using Identity.Api.Areas.Accounts.ApiRequestModels;
+using Foundation.Extensions.Validators;
+using Identity.Api.ServicesModels.Applications;
 
 namespace Identity.Api.Areas.Accounts.Validators
 {
-    public class RegisterModelValidator : AbstractValidator<RegisterRequestModel>
+    public class CreateClientApplicationModelValidator : BaseServiceModelValidator<CreateClientApplicationServiceModel>
     {
-        public RegisterModelValidator()
+        public CreateClientApplicationModelValidator()
         {
             this.RuleFor(x => x.FirstName).NotNull().NotEmpty();
             this.RuleFor(x => x.LastName).NotNull().NotEmpty();

@@ -1,8 +1,6 @@
-﻿using Foundation.Extensions.Models;
-
-namespace Identity.Api.ServicesModels.Users
+﻿namespace Identity.Api.Areas.Accounts.ApiRequestModels
 {
-    public class RegisterServiceModel : BaseServiceModel
+    public class ClientApplicationRequestModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
