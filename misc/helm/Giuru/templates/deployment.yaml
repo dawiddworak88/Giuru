@@ -17,6 +17,18 @@ spec:
       containers:
       - name: media-api-container
         image: {{ .Values.image.registry }}/media-api:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -58,6 +70,18 @@ spec:
       containers:
       - name: client-api-container
         image: {{ .Values.image.registry }}/client-api:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
         resources:
           limits:
             memory: "250Mi"
@@ -100,6 +124,18 @@ spec:
       containers:
       - name: catalog-api-container
         image: {{ .Values.image.registry }}/catalog-api:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
         resources:
           limits:
             memory: "500Mi"
@@ -154,6 +190,18 @@ spec:
       containers:
       - name: catalog-backgroundtasks-container
         image: {{ .Values.image.registry }}/catalog-backgroundtasks:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
         resources:
           limits:
             memory: "250Mi"
@@ -204,6 +252,18 @@ spec:
       containers:
       - name: basket-api-container
         image: {{ .Values.image.registry }}/basket-api:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
         resources:
           limits:
             memory: "250Mi"
@@ -250,6 +310,18 @@ spec:
       containers:
       - name: ordering-api-container
         image: {{ .Values.image.registry }}/ordering-api:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
         resources:
           limits:
             memory: "250Mi"
@@ -334,6 +406,18 @@ spec:
       containers:
       - name: identity-api-container
         image: {{ .Values.image.registry }}/identity-api:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
         resources:
           limits:
             memory: "250Mi"
@@ -420,6 +504,18 @@ spec:
       containers:
       - name: inventory-api-container
         image: {{ .Values.image.registry }}/inventory-api:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
         resources:
           limits:
             memory: "250Mi"
@@ -466,6 +562,18 @@ spec:
       containers:
       - name: news-api-container
         image: {{ .Values.image.registry }}/news-api:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
         resources:
           limits:
             memory: "250Mi"
@@ -514,6 +622,18 @@ spec:
       containers:
       - name: buyer-web-container
         image: {{ .Values.image.registry }}/buyer-web:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
         resources:
           limits:
             memory: "250Mi"
@@ -584,6 +704,18 @@ spec:
       containers:
       - name: seller-web-container
         image: {{ .Values.image.registry }}/seller-web:{{ .Values.image.tag }}
+        readinessProbe:
+          httpGet:
+            path: /hc
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
         resources:
           limits:
             memory: "250Mi"
