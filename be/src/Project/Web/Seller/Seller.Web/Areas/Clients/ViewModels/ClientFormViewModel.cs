@@ -40,8 +40,7 @@ namespace Seller.Web.Areas.Clients.ViewModels
         public IEnumerable<ListItemViewModel> ClientGroups { get; set; }
         public IEnumerable<ClientAccountManagerViewModel> ClientManagers { get; set; }
         public IEnumerable<Guid> ClientGroupsIds { get; set; }
-        public Guid? ClientManagerId { get; set; }
-        public string SelectManager { get; set; }
+        public IEnumerable<Guid> ClientManagersIds { get; set; }
         public string NoManagersText { get; set; }
         public string ClientManagerLabel { get; set; }
     }

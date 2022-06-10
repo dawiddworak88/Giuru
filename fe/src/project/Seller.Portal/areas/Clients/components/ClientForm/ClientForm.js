@@ -18,7 +18,7 @@ function ClientForm(props) {
         communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null },
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
-        clientManager: { value: props.clientManagerId ? props.clientManagerId : null },
+        clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
         hasAccount: { value: props.hasAccount ? props.hasAccount : false }
     };
 
@@ -119,7 +119,7 @@ function ClientForm(props) {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, email, clientGroupIds, communicationLanguage, phoneNumber, clientManager } = values;
+    const { id, name, email, clientGroupIds, communicationLanguage, phoneNumber, clientManagerIds } = values;
     return (
         <section className="section section-small-padding product client-form">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -202,14 +202,14 @@ function ClientForm(props) {
                         </div>
                         <div className="field">
                             <FormControl fullWidth={true} variant="standard">
-                                <InputLabel id="clientManager-label">{props.clientManagerLabel}</InputLabel>
+                                <InputLabel id="clientManagers-label">{props.clientManagerLabel}</InputLabel>
                                 <Select
-                                    labelId="clientManager-label"
-                                    id="clientManager"
-                                    name="clientManager"
-                                    value={clientManager}
+                                    labelId="clientManagers-label"
+                                    id="clientManagerIds"
+                                    name="clientManagerIds"
+                                    value={clientManagerIds}
+                                    multiple={true}
                                     onChange={handleOnChange}>
-                                    <MenuItem value={null}>{props.selectManager}</MenuItem>
                                     {props.clientManagers && props.clientManagers.length > 0 ? (
                                         props.clientManagers.map((manager, index) => {
                                             return (
@@ -297,8 +297,7 @@ ClientForm.propTypes = {
     clientManagerLabel: PropTypes.string.isRequired,
     clientManagers: PropTypes.array,
     noManagersText: PropTypes.string.isRequired,
-    clientManager: PropTypes.string,
-    selectManager: PropTypes.string.isRequired
+    clientManagerIds: PropTypes.array
 };
 
 export default ClientForm;

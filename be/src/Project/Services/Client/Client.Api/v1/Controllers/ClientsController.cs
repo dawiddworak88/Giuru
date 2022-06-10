@@ -87,7 +87,7 @@ namespace Client.Api.v1.Controllers
                                 CommunicationLanguage = x.CommunicationLanguage,
                                 PhoneNumber = x.PhoneNumber,
                                 ClientGroupIds = x.ClientGroupIds,
-                                ClientManagerId = x.ClientManagerId,
+                                ClientManagerIds = x.ClientManagerIds,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -132,7 +132,7 @@ namespace Client.Api.v1.Controllers
                                 CommunicationLanguage = x.CommunicationLanguage,
                                 PhoneNumber = x.PhoneNumber,
                                 ClientGroupIds = x.ClientGroupIds,
-                                ClientManagerId = x.ClientManagerId,
+                                ClientManagerIds = x.ClientManagerIds,
                                 LastModifiedDate = x.LastModifiedDate,
                                 CreatedDate = x.CreatedDate
                             })
@@ -185,7 +185,7 @@ namespace Client.Api.v1.Controllers
                         CommunicationLanguage = client.CommunicationLanguage,
                         PhoneNumber = client.PhoneNumber,
                         ClientGroupIds = client.ClientGroupIds,
-                        ClientManagerId = client.ClientManagerId,
+                        ClientManagerIds = client.ClientManagerIds,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };
@@ -235,7 +235,7 @@ namespace Client.Api.v1.Controllers
                         CommunicationLanguage = client.CommunicationLanguage,
                         PhoneNumber = client.PhoneNumber,
                         ClientGroupIds = client.ClientGroupIds,
-                        ClientManagerId = client.ClientManagerId,
+                        ClientManagerIds = client.ClientManagerIds,
                         LastModifiedDate = client.LastModifiedDate,
                         CreatedDate = client.CreatedDate
                     };
@@ -277,7 +277,7 @@ namespace Client.Api.v1.Controllers
                     PhoneNumber = request.PhoneNumber,
                     ClientOrganisationId = request.OrganisationId,
                     ClientGroupIds = request.ClientGroupIds,
-                    ClientManager = request.ClientManager,
+                    ClientManagerIds = request.ClientManagerIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -306,7 +306,7 @@ namespace Client.Api.v1.Controllers
                     PhoneNumber = request.PhoneNumber,
                     ClientOrganisationId = request.OrganisationId,
                     ClientGroupIds = request.ClientGroupIds,
-                    ClientManager = request.ClientManager,
+                    ClientManagerIds = request.ClientManagerIds,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)

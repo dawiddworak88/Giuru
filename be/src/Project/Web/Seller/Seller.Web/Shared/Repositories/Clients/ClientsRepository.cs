@@ -218,7 +218,7 @@ namespace Seller.Web.Shared.Repositories.Clients
             return default;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string name, string email, string communicationLanguage, string phoneNumber, Guid organisationId, IEnumerable<Guid> clientGroupIds, Guid? clientManager)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string name, string email, string communicationLanguage, string phoneNumber, Guid organisationId, IEnumerable<Guid> clientGroupIds, IEnumerable<Guid> clientManagerIds)
         {
             var requestModel = new SaveClientRequestModel
             {
@@ -229,7 +229,7 @@ namespace Seller.Web.Shared.Repositories.Clients
                 PhoneNumber = phoneNumber,
                 OrganisationId = organisationId,
                 ClientGroupIds = clientGroupIds,
-                ClientManager = clientManager
+                ClientManagerIds = clientManagerIds
             };
 
             var apiRequest = new ApiRequest<SaveClientRequestModel>

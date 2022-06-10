@@ -11,7 +11,7 @@ namespace Client.Api.v1.ResponseModels
         public string CommunicationLanguage { get; set; }
         public string PhoneNumber { get; set; }
         public IEnumerable<Guid> ClientGroupIds { get; set; }
-        public Guid? ClientManagerId { get; set; }
+        public IEnumerable<Guid> ClientManagerIds { get; set; }
         public DateTime? LastModifiedDate { get; set; }
         public DateTime? CreatedDate { get; set; }
     }

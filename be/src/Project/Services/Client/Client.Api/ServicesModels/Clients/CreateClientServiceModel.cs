@@ -12,6 +12,6 @@ namespace Client.Api.ServicesModels.Clients
         public string PhoneNumber { get; set; }
         public Guid? ClientOrganisationId { get; set; }
         public IEnumerable<Guid> ClientGroupIds { get; set; }
-        public Guid? ClientManager { get; set; }
+        public IEnumerable<Guid> ClientManagerIds { get; set; }
     }
 }

@@ -89,7 +89,6 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 NoGroupsText = this.clientLocalizer.GetString("NoGroupsText"),
                 GroupsLabel = this.globalLocalizer.GetString("Groups"),
                 NoManagersText = this.clientLocalizer.GetString("NoManagers"),
-                SelectManager = this.clientLocalizer.GetString("SelectManager"),
                 ClientManagerLabel = this.globalLocalizer.GetString("Manager")
             };
 
@@ -104,7 +103,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                     viewModel.CommunicationLanguage = client.CommunicationLanguage;
                     viewModel.PhoneNumber = client.PhoneNumber;
                     viewModel.ClientGroupsIds = client.ClientGroupIds;
-                    viewModel.ClientManagerId = client.ClientManagerId;
+                    viewModel.ClientManagersIds = client.ClientManagerIds;
 
                     var user = await this.identityRepository.GetAsync(componentModel.Token, componentModel.Language, client.Email);
 

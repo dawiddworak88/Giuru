@@ -13,6 +13,6 @@ namespace Seller.Web.Areas.Clients.ApiRequestModels
         public Guid OrganisationId { get; set; }
         public bool HasAccount { get; set; }
         public IEnumerable<Guid> ClientGroupIds { get; set; }
-        public Guid? ClientManager { get; set; }
+        public IEnumerable<Guid> ClientManagerIds { get; set; }
     }
 }

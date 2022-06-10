@@ -216,7 +216,4 @@
   <data name="ResetPasswordText" xml:space="preserve">
     <value>Reset password</value>
   </data>
-  <data name="SelectManager" xml:space="preserve">
-    <value>Select client account manager</value>
-  </data>
 </root>
