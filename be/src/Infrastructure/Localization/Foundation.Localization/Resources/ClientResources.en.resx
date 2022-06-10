@@ -136,7 +136,7 @@
     <value>A customer with this e-mail address already exists.</value>
   </data>
   <data name="ClientManagers" xml:space="preserve">
-    <value>Client managers</value>
+    <value>Client  account managers</value>
   </data>
   <data name="ClientNotFound" xml:space="preserve">
     <value>Client has not been found.</value>
@@ -154,7 +154,7 @@
     <value>Edit client</value>
   </data>
   <data name="EditClientManager" xml:space="preserve">
-    <value>Edit client manager</value>
+    <value>Edit client account manager</value>
   </data>
   <data name="EditGroup" xml:space="preserve">
     <value>Edit client group</value>
@@ -172,19 +172,19 @@
     <value>Client group has been saved successfully.</value>
   </data>
   <data name="ManagerDeleteConflict" xml:space="preserve">
-    <value>Unassign clients from this manager.</value>
+    <value>Unassign clients from this account manager.</value>
   </data>
   <data name="ManagerDeletedSuccessfully" xml:space="preserve">
-    <value>Manager has been deleted successfully.</value>
+    <value>Account manager has been deleted successfully.</value>
   </data>
   <data name="ManagerExist" xml:space="preserve">
-    <value>Manager exist</value>
+    <value>Account manager exist</value>
   </data>
   <data name="ManagerNotFound" xml:space="preserve">
-    <value>Manager has not been found.</value>
+    <value>Account manager has not been found.</value>
   </data>
   <data name="ManagerSavedSuccessfully" xml:space="preserve">
-    <value>Manager has been saved successfully.</value>
+    <value>Account manager has been saved successfully.</value>
   </data>
   <data name="NavigateToClientsLabel" xml:space="preserve">
     <value>Back to clients</value>
@@ -193,7 +193,7 @@
     <value>Back to groups</value>
   </data>
   <data name="NavigateToManagersText" xml:space="preserve">
-    <value>Back to managers</value>
+    <value>Back to account managers</value>
   </data>
   <data name="NewClient" xml:space="preserve">
     <value>New client</value>
@@ -202,7 +202,7 @@
     <value>New client group</value>
   </data>
   <data name="NewManager" xml:space="preserve">
-    <value>New manager</value>
+    <value>New account manager</value>
   </data>
   <data name="NoClients" xml:space="preserve">
     <value>No clients available</value>
@@ -211,12 +211,12 @@
     <value>No client groups available</value>
   </data>
   <data name="NoManagers" xml:space="preserve">
-    <value>No managers available</value>
+    <value>No account managers available</value>
   </data>
   <data name="ResetPasswordText" xml:space="preserve">
     <value>Reset password</value>
   </data>
   <data name="SelectManager" xml:space="preserve">
-    <value>Select client manager</value>
+    <value>Select client account manager</value>
   </data>
 </root>
