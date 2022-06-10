@@ -15,7 +15,7 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
         public static void RegisterClientsAreaDependencies(this IServiceCollection services)
         {
             services.AddScoped<IClientGroupsRepository, ClientGroupsRepository>();
-            services.AddScoped<IClientManagersRepository, ClientManagersRepository>();
+            services.AddScoped<IClientAccountManagersRepository, ClientAccountManagersRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>>, ClientsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel>, ClientsPageModelBuilder>();
@@ -27,10 +27,10 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientGroupPageViewModel>, ClientGroupPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientGroupFormViewModel>, ClientGroupFormModelBuilder>();
 
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientManager>>, ClientManagersPageCatalogModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientManagersPageViewModel>, ClientManagersPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientManagerPageViewModel>, ClientManagerPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientManagerFormViewModel>, ClientManagerFormModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientAccountManager>>, ClientAccountManagersPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientAccountManagersPageViewModel>, ClientAccountManagersPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientAccountManagerPageViewModel>, ClientAccountManagerPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientAccountManagerFormViewModel>, ClientAccountManagerFormModelBuilder>();
         }
     }
 }

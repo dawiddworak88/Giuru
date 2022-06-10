@@ -28,7 +28,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
         private readonly IIdentityRepository identityRepository;
         private readonly LinkGenerator linkGenerator;
         private readonly IClientGroupsRepository clientGroupsRepository;
-        private readonly IClientManagersRepository clientManagersRepository;
+        private readonly IClientAccountManagersRepository clientManagersRepository;
 
         public ClientFormModelBuilder(
             IClientsRepository clientsRepository,
@@ -37,7 +37,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             IOptionsMonitor<LocalizationSettings> localizationOptions,
             IIdentityRepository identityRepository,
             IClientGroupsRepository clientGroupsRepository,
-            IClientManagersRepository clientManagersRepository,
+            IClientAccountManagersRepository clientManagersRepository,
             LinkGenerator linkGenerator)
         {
             this.clientsRepository = clientsRepository;
@@ -129,7 +129,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             if (managers is not null)
             {
-                viewModel.ClientManagers = managers.Select(x => new ClientManagerViewModel
+                viewModel.ClientManagers = managers.Select(x => new ClientAccountManagerViewModel
                 {
                     Id = x.Id,
                     FirstName = x.FirstName,

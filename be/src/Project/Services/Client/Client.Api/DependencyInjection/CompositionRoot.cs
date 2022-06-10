@@ -14,7 +14,7 @@ namespace Client.Api.DependencyInjection
         {
             services.AddScoped<IClientsService, ClientsService>();
             services.AddScoped<IClientGroupsService, ClientGroupsService>();
-            services.AddScoped<IClientManagersService, ClientManagersService>();
+            services.AddScoped<IClientAccountManagersService, ClientAccountManagersService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
