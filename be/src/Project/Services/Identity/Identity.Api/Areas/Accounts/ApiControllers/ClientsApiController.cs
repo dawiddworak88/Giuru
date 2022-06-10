@@ -1,6 +1,8 @@
 ﻿using Feature.Account;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
+using Foundation.Extensions.Definitions;
+using Foundation.Extensions.Exceptions;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
 using Identity.Api.Areas.Accounts.Repositories.Clients;
 using Identity.Api.Areas.Accounts.Validators;
@@ -10,6 +12,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -54,9 +57,9 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             };
 
             var validator = new CreateClientApplicationModelValidator();
-            var result = await validator.ValidateAsync(serivceModel);
+            var validationResult = await validator.ValidateAsync(serivceModel);
 
-            if (result.IsValid)
+            if (validationResult.IsValid)
             {
                 await this.clientsRepository.CreateClientApplicationAsync(
                     token, language, model.FirstName, model.LastName, model.ContactJobTitle, model.Email, model.PhoneNumber, model.CompanyName,
@@ -67,7 +70,7 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
                 return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.accountLocalizer.GetString("SuccessfullyClientApply").Value });
             }
 
-            return default;
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
     }
 }
