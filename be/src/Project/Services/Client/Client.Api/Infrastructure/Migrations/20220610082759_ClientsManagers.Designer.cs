@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Client.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(ClientContext))]
-    [Migration("20220608112723_ClientManager")]
-    partial class ClientManager
+    [Migration("20220610082759_ClientsManagers")]
+    partial class ClientsManagers
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -269,7 +269,7 @@ namespace Client.Api.Infrastructure.Migrations
                     b.ToTable("ClientManagers");
                 });
 
-            modelBuilder.Entity("Client.Api.Infrastructure.Managers.Entities.ClientsManager", b =>
+            modelBuilder.Entity("Client.Api.Infrastructure.Managers.Entities.ClientsManagers", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

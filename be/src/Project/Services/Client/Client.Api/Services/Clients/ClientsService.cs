@@ -175,7 +175,7 @@ namespace Client.Api.Services.Clients
                 }
                 else
                 {
-                    clientManager = new ClientsManager
+                    clientManager = new ClientsManagers
                     {
                         ClientId = client.Id,
                         ClientManagerId = serviceModel.ClientManager.Value,
@@ -231,7 +231,7 @@ namespace Client.Api.Services.Clients
 
             if (serviceModel.ClientManager.HasValue)
             {
-                var clientManager = new ClientsManager
+                var clientManager = new ClientsManagers
                 {
                     ClientId = client.Id,
                     ClientManagerId = serviceModel.ClientManager.Value

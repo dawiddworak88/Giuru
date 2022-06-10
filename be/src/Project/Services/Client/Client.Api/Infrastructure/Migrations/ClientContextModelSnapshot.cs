@@ -267,7 +267,7 @@ namespace Client.Api.Infrastructure.Migrations
                     b.ToTable("ClientManagers");
                 });
 
-            modelBuilder.Entity("Client.Api.Infrastructure.Managers.Entities.ClientsManager", b =>
+            modelBuilder.Entity("Client.Api.Infrastructure.Managers.Entities.ClientsManagers", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

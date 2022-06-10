@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Client.Api.Infrastructure.Migrations
 {
-    public partial class ClientManager : Migration
+    public partial class ClientsManagers : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
