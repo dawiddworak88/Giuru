@@ -134,11 +134,14 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                         viewModel.UiSchema = categorySchema.UiSchema;
                     }
 
-                    var primaryProduct = await this.productsRepository.GetProductAsync(componentModel.Token, componentModel.Language, product.PrimaryProductId);
-
-                    if (primaryProduct is not null)
+                    if (product.PrimaryProductId.HasValue)
                     {
-                        viewModel.PrimaryProduct = new ListItemViewModel { Id = primaryProduct.Id, Name = primaryProduct.Name };
+                        var primaryProduct = await this.productsRepository.GetProductAsync(componentModel.Token, componentModel.Language, product.PrimaryProductId);
+
+                        if (primaryProduct is not null)
+                        {
+                            viewModel.PrimaryProduct = new ListItemViewModel { Id = primaryProduct.Id, Name = primaryProduct.Name };
+                        }
                     }
 
                     if (product.Images != null && product.Images.Any())

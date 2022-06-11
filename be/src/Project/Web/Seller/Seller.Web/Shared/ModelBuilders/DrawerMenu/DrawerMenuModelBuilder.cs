@@ -116,6 +116,12 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                         },
                         new DrawerMenuItemViewModel
                         {
+                            Icon = IconsConstants.Briefcase,
+                            Title = this.globalLocalizer.GetString("ClientManagers"),
+                            Url = this.linkGenerator.GetPathByAction("Index", "ClientAccountManagers", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                        },
+                        new DrawerMenuItemViewModel
+                        {
                             Icon = IconsConstants.Users,
                             Title = this.globalLocalizer.GetString("ClientsGroups"),
                             Url = this.linkGenerator.GetPathByAction("Index", "ClientGroups", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
