@@ -378,9 +378,6 @@ spec:
       containers:
       - name: react-ssr-web-container
         image: {{ .Values.image.registry }}/react-ssr-web:{{ .Values.image.tag }}
-        resources:
-          limits:
-            memory: "1000Mi"
         env:
         - name: NODE_ENV
           value: {{ .Values.nodeEnvironment }}
