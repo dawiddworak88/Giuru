@@ -24,6 +24,8 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Identity.Api.Areas.Accounts.Services.UserServices;
 using Foundation.Mailing.DependencyInjection;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +43,7 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 
     if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogstashUrl"]))
     {
-        loggerConfiguration.WriteTo.Http(hostingContext.Configuration["LogstashUrl"]);
+        loggerConfiguration.WriteTo.Http(requestUri: hostingContext.Configuration["LogstashUrl"], queueLimitBytes: null);
     }
 
     if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoToken"])
@@ -88,6 +90,8 @@ builder.Services.RegisterMailingDependencies(builder.Configuration);
 builder.Services.ConfigureSettings(builder.Configuration);
 
 builder.Services.AddApiVersioning();
+
+builder.Services.ConigureHealthChecks(builder.Configuration);
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -152,6 +156,17 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
         name: "error",
         pattern: "{controller=Content}/{action=Error}/{errorId?}");
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
 });
 
 app.Run();

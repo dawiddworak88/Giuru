@@ -1,19 +1,11 @@
-﻿using Foundation.Localization.Definitions;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Seller.Web.Shared.Configurations;
 
-namespace Seller.Web.Shared.DependencyInjection
+namespace Buyer.Web.Shared.DependencyInjection
 {
     public static class ConfigurationRoot
     {
-        public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.Configure<AppSettings>(configuration);
-            services.Configure<LocalizationSettings>(configuration);
-        }
-
         public static IServiceCollection ConigureHealthChecks(this IServiceCollection services, IConfiguration configuration)
         {
             var hcBuilder = services.AddHealthChecks();
