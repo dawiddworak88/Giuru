@@ -51,6 +51,6 @@
 		<Folder Include="wwwroot\dist\" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="FluentValidation" Version="11.0.2" />
+		<PackageReference Include="FluentValidation" Version="11.0.3" />
 	</ItemGroup>
 </Project>
