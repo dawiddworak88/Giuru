@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Client.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(ClientContext))]
-    [Migration("20220610082759_ClientsManagers")]
-    partial class ClientsManagers
+    [Migration("20220613091421_ClientsAccountManagers")]
+    partial class ClientsAccountManagers
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -229,7 +229,7 @@ namespace Client.Api.Infrastructure.Migrations
                     b.ToTable("ClientsGroups");
                 });
 
-            modelBuilder.Entity("Client.Api.Infrastructure.Managers.Entities.ClientManager", b =>
+            modelBuilder.Entity("Client.Api.Infrastructure.Managers.Entities.ClientAccountManager", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -266,10 +266,10 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientManagers");
+                    b.ToTable("ClientAccountManagers");
                 });
 
-            modelBuilder.Entity("Client.Api.Infrastructure.Managers.Entities.ClientsManagers", b =>
+            modelBuilder.Entity("Client.Api.Infrastructure.Managers.Entities.ClientsAccountManagers", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -297,7 +297,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientsManagers");
+                    b.ToTable("ClientsAccountManagers");
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroupTranslation", b =>

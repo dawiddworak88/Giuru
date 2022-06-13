@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Client.Api.Infrastructure.Migrations
 {
-    public partial class ClientsManagers : Migration
+    public partial class ClientsAccountManagers : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ClientManagers",
+                name: "ClientAccountManagers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -25,11 +25,11 @@ namespace Client.Api.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientManagers", x => x.Id);
+                    table.PrimaryKey("PK_ClientAccountManagers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ClientsManagers",
+                name: "ClientsAccountManagers",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -42,17 +42,17 @@ namespace Client.Api.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientsManagers", x => x.Id);
+                    table.PrimaryKey("PK_ClientsAccountManagers", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ClientManagers");
+                name: "ClientAccountManagers");
 
             migrationBuilder.DropTable(
-                name: "ClientsManagers");
+                name: "ClientsAccountManagers");
         }
     }
 }
