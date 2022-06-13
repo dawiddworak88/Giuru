@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
@@ -25,20 +24,17 @@ namespace Buyer.Web.Areas.Products.Services.Products
         private readonly IMediaHelperService mediaService;
         private readonly IOptions<AppSettings> options;
         private readonly LinkGenerator linkGenerator;
-        private readonly ICdnService cdnService;
 
         public ProductsService(
             IProductsRepository productsRepository,
             IMediaHelperService mediaService,
             IOptions<AppSettings> options,
-            LinkGenerator linkGenerator,
-            ICdnService cdnService)
+            LinkGenerator linkGenerator)
         {
             this.productsRepository = productsRepository;
             this.mediaService = mediaService;
             this.options = options;
             this.linkGenerator = linkGenerator;
-            this.cdnService = cdnService;
         }
 
         public async Task<string> GetProductAttributesAsync(IEnumerable<ProductAttribute> productAttributes)
@@ -87,18 +83,18 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         var imageGuid = product.Images.FirstOrDefault();
 
                         catalogItem.ImageAlt = product.Name;
-                        catalogItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, ProductConstants.ProductsCatalogItemImageWidth, ProductConstants.ProductsCatalogItemImageHeight));
+                        catalogItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, ProductConstants.ProductsCatalogItemImageWidth, ProductConstants.ProductsCatalogItemImageHeight);
                         catalogItem.Sources = new List<SourceViewModel>
                         {
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 1024, 1024, true, MediaConstants.WebpExtension)) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 352, 352, true,MediaConstants.WebpExtension)) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 256, 256, true, MediaConstants.WebpExtension)) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 768, 768, true, MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 1024, 1024, true, MediaConstants.WebpExtension) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 352, 352, true,MediaConstants.WebpExtension) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 256, 256, true, MediaConstants.WebpExtension) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 768, 768, true, MediaConstants.WebpExtension) },
 
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 1024, 1024, true)) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 352, 352, true)) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 256, 256, true)) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 768, 768, true)) }
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 1024, 1024, true) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 352, 352, true) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 256, 256, true) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 768, 768, true) }
                         };
                     }
 

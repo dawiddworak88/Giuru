@@ -8,7 +8,6 @@ using System.Globalization;
 using Microsoft.Extensions.Options;
 using Buyer.Web.Shared.Configurations;
 using Foundation.PageContent.Components.Headers.Definitions;
-using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 
 namespace Buyer.Web.Shared.ModelBuilders.Headers
 {
@@ -18,20 +17,17 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers
         private readonly IOptions<AppSettings> options;
         private readonly LinkGenerator linkGenerator;
         private readonly IMediaHelperService mediaService;
-        private readonly ICdnService cdnService;
 
         public LogoModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IOptions<AppSettings> options,
             LinkGenerator linkGenerator,
-            IMediaHelperService mediaService,
-            ICdnService cdnService)
+            IMediaHelperService mediaService)
         {
             this.globalLocalizer = globalLocalizer;
             this.options = options;
             this.linkGenerator = linkGenerator;
             this.mediaService = mediaService;
-            this.cdnService = cdnService;
         }
 
         public LogoViewModel BuildModel()
@@ -40,7 +36,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Headers
             {
                 LogoAltLabel = this.globalLocalizer.GetString("Logo"),
                 TargetUrl = this.linkGenerator.GetPathByAction("Index", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
-                LogoUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, LogoConstants.LogoMediaId, true))
+                LogoUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, LogoConstants.LogoMediaId, true)
             };
         }
     }

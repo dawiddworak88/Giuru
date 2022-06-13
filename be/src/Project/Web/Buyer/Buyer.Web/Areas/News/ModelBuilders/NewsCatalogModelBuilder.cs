@@ -1,10 +1,8 @@
 ﻿using Buyer.Web.Areas.News.Definitions;
 using Buyer.Web.Areas.News.DomainModels;
-using Buyer.Web.Areas.News.Repositories.Categories;
 using Buyer.Web.Areas.News.ViewModel;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Repositories.News;
-using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Extensions.Services.MediaServices;
 using Foundation.Localization;
@@ -29,7 +27,6 @@ namespace Buyer.Web.Areas.News.ModelBuilders
         private readonly INewsRepository newsRepository;
         private readonly IStringLocalizer<NewsResources> newsLocalizer;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly ICdnService cdnService;
         private readonly IMediaHelperService mediaService;
 
         public NewsCatalogModelBuilder(
@@ -37,7 +34,6 @@ namespace Buyer.Web.Areas.News.ModelBuilders
             IStringLocalizer<NewsResources> newsLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
             INewsRepository newsRepository,
-            ICdnService cdnService,
             IMediaHelperService mediaService,
             LinkGenerator linkGenerator)
         {
@@ -46,7 +42,6 @@ namespace Buyer.Web.Areas.News.ModelBuilders
             this.newsLocalizer = newsLocalizer;
             this.globalLocalizer = globalLocalizer;
             this.newsRepository = newsRepository;
-            this.cdnService = cdnService;
             this.mediaService = mediaService;
         }
 
@@ -80,13 +75,13 @@ namespace Buyer.Web.Areas.News.ModelBuilders
 
                     if (newsItem.ThumbnailImageId.HasValue)
                     {
-                        newsItem.ThumbImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 1024, 1024, true, MediaConstants.WebpExtension));
+                        newsItem.ThumbImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 1024, 1024, true, MediaConstants.WebpExtension);
                         newsItem.ThumbImages = new List<SourceViewModel>
                         { 
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 1024, 1024, true, MediaConstants.WebpExtension)) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 352, 352, true,MediaConstants.WebpExtension)) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 608, 608, true, MediaConstants.WebpExtension)) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 768, 768, true, MediaConstants.WebpExtension)) }
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 1024, 1024, true, MediaConstants.WebpExtension) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 352, 352, true,MediaConstants.WebpExtension) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 608, 608, true, MediaConstants.WebpExtension) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 768, 768, true, MediaConstants.WebpExtension) }
                         };
                     }
                 };

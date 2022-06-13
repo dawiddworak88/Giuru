@@ -1,7 +1,6 @@
 ﻿using Buyer.Web.Areas.News.ApiResponseModels;
 using Buyer.Web.Areas.News.DomainModels;
 using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
@@ -26,20 +25,17 @@ namespace Buyer.Web.Shared.Repositories.News
         private readonly IOptions<AppSettings> settings;
         private readonly LinkGenerator linkGenerator;
         private readonly IMediaHelperService mediaService;
-        private readonly ICdnService cdnService;
 
         public NewsRepository(
             IApiClientService apiClientService,
             LinkGenerator linkGenerator,
             IMediaHelperService mediaService,
-            ICdnService cdnService,
             IOptions<AppSettings> settings)
         {
             this.apiClientService = apiClientService;
             this.settings = settings;
             this.mediaService = mediaService;
             this.linkGenerator = linkGenerator;
-            this.cdnService = cdnService;
         }
 
         public async Task<NewsItem> GetNewsItemAsync(string token, string language, Guid? id)
@@ -111,18 +107,18 @@ namespace Buyer.Web.Shared.Repositories.News
 
                     if (newsItem.ThumbnailImageId.HasValue)
                     {
-                        item.ThumbImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value));
+                        item.ThumbImageUrl = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value);
                         item.ThumbImages = new List<SourceViewModel>
                         {
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 1024, 1024, true, MediaConstants.WebpExtension)) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 352, 352, true,MediaConstants.WebpExtension)) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 608, 608, true, MediaConstants.WebpExtension)) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 768, 768, true, MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 1024, 1024, true, MediaConstants.WebpExtension) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 352, 352, true,MediaConstants.WebpExtension) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 608, 608, true, MediaConstants.WebpExtension) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 768, 768, true, MediaConstants.WebpExtension) },
 
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 1024, 1024, true)) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 352, 352, true)) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 608, 608, true)) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 768, 768, true)) },
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 1024, 1024, true) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 352, 352, true) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 608, 608, true) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 768, 768, true) },
                         };
                     }
 

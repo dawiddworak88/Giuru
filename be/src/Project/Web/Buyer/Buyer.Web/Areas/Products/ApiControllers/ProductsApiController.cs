@@ -5,7 +5,6 @@ using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.Services.Products;
 using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
@@ -35,7 +34,6 @@ namespace Buyer.Web.Areas.Products.ApiControllers
     {
         private readonly IProductsService productsService;
         private readonly IOptions<AppSettings> options;
-        private readonly ICdnService cdnService;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly IProductsRepository productsRepository;
         private readonly IInventoryRepository inventoryRepository;
@@ -46,7 +44,6 @@ namespace Buyer.Web.Areas.Products.ApiControllers
         public ProductsApiController(
             IProductsService productsService,
             IProductsRepository productsRepository,
-            ICdnService cdnService,
             IStringLocalizer<ProductResources> productLocalizer,
             IMediaHelperService mediaService,
             IOptions<AppSettings> options,
@@ -61,7 +58,6 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             this.mediaService = mediaService;
             this.productLocalizer = productLocalizer;
             this.options = options;
-            this.cdnService = cdnService;
             this.inventoryRepository = inventoryRepository;
             this.outletRepository = outletRepository;
         }
@@ -136,15 +132,15 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         var variantImage = productVariant.Images.FirstOrDefault();
                         carouselItem.Sources = new List<SourceViewModel>
                         {
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 1024, 1024, true, MediaConstants.WebpExtension)) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 352, 352, true,MediaConstants.WebpExtension)) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 608, 608, true, MediaConstants.WebpExtension)) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 768, 768, true, MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 1024, 1024, true, MediaConstants.WebpExtension) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 352, 352, true,MediaConstants.WebpExtension) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 608, 608, true, MediaConstants.WebpExtension) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 768, 768, true, MediaConstants.WebpExtension) },
 
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 1024, 1024, true)) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 352, 352, true)) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 608, 608, true)) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 768, 768, true)) }
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 1024, 1024, true) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 352, 352, true) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 608, 608, true) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 768, 768, true) }
                         };
 
                         var variantImages = new List<ImageVariantViewModel>();
@@ -157,7 +153,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             variantImages.Add(imageVariantViewModel);
                         }
                         carouselItem.Images = variantImages;
-                        carouselItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, CarouselGridConstants.CarouselItemImageMaxWidth, CarouselGridConstants.CarouselItemImageMaxHeight, true));
+                        carouselItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, CarouselGridConstants.CarouselItemImageMaxWidth, CarouselGridConstants.CarouselItemImageMaxHeight, true);
                     }
 
                     var availableProduct = availableProducts.Data.FirstOrDefault(x => x.ProductSku == productVariant.Sku);
