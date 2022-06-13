@@ -50,6 +50,7 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "OutletsApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(OutletItem.CreatedDate)} desc";
+            viewModel.ConfirmationDialogNameProperty = nameof(OutletItem.ProductName).ToCamelCase();
 
             viewModel.Table = new CatalogTableViewModel
             {

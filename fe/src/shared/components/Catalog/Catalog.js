@@ -284,7 +284,7 @@ function Catalog(props) {
                     titleId="alert-dialog-title"
                     title={props.deleteConfirmationLabel}
                     textId="alert-dialog-description"
-                    text={props.areYouSureLabel + (entityToDelete ? (entityToDelete.name ? ": " + entityToDelete.name : ": " + entityToDelete.productName) : "")}
+                    text={props.areYouSureLabel + ": " + (entityToDelete ? props.confirmationDialogNameProperty ? entityToDelete[props.confirmationDialogNameProperty] : entityToDelete["name"] : "")}
                     noLabel={props.noLabel}
                     yesLabel={props.yesLabel}
                 />
@@ -314,7 +314,8 @@ Catalog.propTypes = {
     deleteUrl: PropTypes.string,
     duplicateUrl: PropTypes.string,
     noResultsLabel: PropTypes.string.isRequired,
-    table: PropTypes.object.isRequired
+    table: PropTypes.object.isRequired,
+    confirmationDialogNameProperty: PropTypes.string
 }
 
 export default Catalog;
