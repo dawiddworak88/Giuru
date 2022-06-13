@@ -10,7 +10,7 @@ import {
     TextField, Button, InputLabel, CircularProgress, FormControl, Select, MenuItem
 } from "@mui/material";
 
-const ClientManagerForm = (props) => {
+const ClientAccountManagerForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: { value: props.id ? props.id : null },
@@ -169,7 +169,7 @@ const ClientManagerForm = (props) => {
     )
 }
 
-ClientManagerForm.propTypes = {
+ClientAccountManagerForm.propTypes = {
     title: PropTypes.string.isRequired,
     idLabel: PropTypes.string.isRequired,
     id: PropTypes.string,
@@ -190,4 +190,4 @@ ClientManagerForm.propTypes = {
     phoneNumber: PropTypes.string
 }
 
-export default ClientManagerForm;
+export default ClientAccountManagerForm;
