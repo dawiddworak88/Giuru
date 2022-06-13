@@ -49,7 +49,7 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "InventoriesApi", new { Area = "Inventory", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(InventoryItem.Sku)} ASC";
-            viewModel.ConfirmationDialogNameProperty = nameof(InventoryItem.ProductName).ToCamelCase();
+            viewModel.ConfirmationDialogDeleteNameProperty = nameof(InventoryItem.ProductName).ToCamelCase();
 
             viewModel.Table = new CatalogTableViewModel
             {

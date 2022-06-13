@@ -51,7 +51,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "ClientAccountManagersApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(ClientAccountManager.CreatedDate)} desc";
-            viewModel.ConfirmationDialogNameProperty = nameof(ClientAccountManager.FirstName).ToCamelCase();
+            viewModel.ConfirmationDialogDeleteNameProperty = nameof(ClientAccountManager.FirstName).ToCamelCase();
 
             viewModel.Table = new CatalogTableViewModel
             {
