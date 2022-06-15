@@ -431,6 +431,8 @@ spec:
           value: {{ .Values.mediaUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
+        - name: BuyerUrl
+          value: {{ .Values.buyerUrl }}
         - name: Clients
           value: {{ .Values.identityApi.clients }}
         - name: SellerClientId
