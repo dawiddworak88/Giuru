@@ -9,28 +9,30 @@ using Seller.Web.Shared.Configurations;
 using System;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Media.Repositories
+namespace Seller.Web.Areas.Media.Repositories.Files
 {
     public class FilesRepository : IFilesRepository
     {
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
 
-        public FilesRepository(IApiClientService apiClientService,
+        public FilesRepository(
+            IApiClientService apiClientService,
             IOptions<AppSettings> settings)
         {
             this.apiClientService = apiClientService;
             this.settings = settings;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, byte[] file, string filename)
+        public async Task<Guid> SaveAsync(string token, string language, byte[] file, string filename, string id)
         {
             var requestModel = new FileRequestModelBase
             {
                 File = file,
-                Filename = filename
+                Filename = filename,
+                Id = id
             };
-
+            
             var apiRequest = new ApiRequest<FileRequestModelBase>
             {
                 Language = language,
@@ -40,7 +42,6 @@ namespace Seller.Web.Areas.Media.Repositories
             };
 
             var response = await this.apiClientService.PostMultipartFormAsync<ApiRequest<FileRequestModelBase>, FileRequestModelBase, BaseResponseModel>(apiRequest);
-
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Data.Message, (int)response.StatusCode);

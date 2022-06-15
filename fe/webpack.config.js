@@ -182,8 +182,11 @@ const sellerPortalBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
+        mediapage: ["./src/project/Seller.Portal/areas/Medias/pages/MediaPage/index.js", "./src/project/Seller.Portal/areas/Medias/pages/MediaPage/MediaPage.scss"],
+        mediaitempage: ["./src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/index.js", "./src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage.scss"],
         clientaccountmanagerpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagerPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagerPage/ClientAccountManagerPage.scss"],
         clientaccountmanagerspage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagersPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagersPage/ClientAccountManagersPage.scss"],
+        mediaspage: ["./src/project/Seller.Portal/areas/Medias/pages/MediasPage/index.js", "./src/project/Seller.Portal/areas/Medias/pages/MediasPage/MediasPage.scss"],
         outletpage: ["./src/project/Seller.Portal/areas/Inventory/pages/OutletPage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/OutletPage/OutletPage.scss"],
         outletspage: ["./src/project/Seller.Portal/areas/Inventory/pages/OutletsPage/index.js", "./src/project/Seller.Portal/areas/Inventory/pages/OutletsPage/OutletsPage.scss"],
         clientgrouppage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientGroupPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientGroupPage/ClientGroupPage.scss"],
