@@ -31,14 +31,14 @@ namespace Client.Api.Services.Managers
 
         public async Task<Guid> CreateAsync(CreateClientAccountManagerServiceModel model)
         {
-            var existingManager = await this.context.ClientManagers.FirstOrDefaultAsync(x => x.Email == model.Email && x.IsActive);
+            var existingManager = await this.context.ClientAccountManagers.FirstOrDefaultAsync(x => x.Email == model.Email && x.IsActive);
 
             if (existingManager is not null)
             {
                 throw new CustomException(this.clientLocalizer.GetString("ManagerExist"), (int)HttpStatusCode.BadRequest);
             }
 
-            var manager = new ClientManager
+            var manager = new ClientAccountManager
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
@@ -46,7 +46,7 @@ namespace Client.Api.Services.Managers
                 PhoneNumber = model.PhoneNumber
             };
 
-            await this.context.ClientManagers.AddAsync(manager.FillCommonProperties());
+            await this.context.ClientAccountManagers.AddAsync(manager.FillCommonProperties());
             await this.context.SaveChangesAsync();
 
             return manager.Id;
@@ -54,14 +54,14 @@ namespace Client.Api.Services.Managers
 
         public async Task DeleteAsync(DeleteClientAccountManagerServiceModel model)
         {
-            var manager = await this.context.ClientManagers.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var manager = await this.context.ClientAccountManagers.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (manager is null)
             {
                 throw new CustomException(this.clientLocalizer.GetString("ManagerNotFound"), (int)HttpStatusCode.NotFound);
             }
 
-            if (await this.context.ClientsManagers.AnyAsync(x => x.ClientManagerId == model.Id && x.IsActive))
+            if (await this.context.ClientsAccountManagers.AnyAsync(x => x.ClientManagerId == model.Id && x.IsActive))
             {
                 throw new CustomException(this.clientLocalizer.GetString("ManagerDeleteConflict"), (int)HttpStatusCode.Conflict);
             }
@@ -73,7 +73,7 @@ namespace Client.Api.Services.Managers
 
         public async Task<ClientAccountManagerServiceModel> GetAsync(GetClientAccountManagerServiceModel model)
         {
-            var manager = await this.context.ClientManagers.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var manager = await this.context.ClientAccountManagers.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (manager is null)
             {
@@ -94,7 +94,7 @@ namespace Client.Api.Services.Managers
 
         public async Task<PagedResults<IEnumerable<ClientAccountManagerServiceModel>>> GetAsync(GetClientAccountManagersServiceModel model)
         {
-            var managers = from m in this.context.ClientManagers
+            var managers = from m in this.context.ClientAccountManagers
                            where m.IsActive
                            select new ClientAccountManagerServiceModel
                            {
@@ -119,7 +119,7 @@ namespace Client.Api.Services.Managers
 
         public async Task<PagedResults<IEnumerable<ClientAccountManagerServiceModel>>> GetByIdsAsync(GetClientAccountManagersByIdsServiceModel model)
         {
-            var managers = from m in this.context.ClientManagers
+            var managers = from m in this.context.ClientAccountManagers
                            where model.Ids.Contains(m.Id)
                            select new ClientAccountManagerServiceModel
                            {
@@ -137,7 +137,7 @@ namespace Client.Api.Services.Managers
 
         public async Task<Guid> UpdateAsync(UpdateClientAccountManagerServiceModel model)
         {
-            var manager = await this.context.ClientManagers.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var manager = await this.context.ClientAccountManagers.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
             if (manager is null)
             {

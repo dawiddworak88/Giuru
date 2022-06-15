@@ -66,7 +66,7 @@ namespace Client.Api.Services.Clients
                     item.ClientGroupIds = clientGroups;
                 }
 
-                var clientManagers = this.context.ClientsManagers.Where(x => x.ClientId == client.Id && x.IsActive).Select(x => x.ClientManagerId);
+                var clientManagers = this.context.ClientsAccountManagers.Where(x => x.ClientId == client.Id && x.IsActive).Select(x => x.ClientManagerId);
 
                 if (clientManagers is not null)
                 {
@@ -108,7 +108,7 @@ namespace Client.Api.Services.Clients
                 client.ClientGroupIds = clientGroups;
             }
 
-            var clientManagers = this.context.ClientsManagers.Where(x => x.ClientId == existingClient.Id && x.IsActive).Select(x => x.ClientManagerId);
+            var clientManagers = this.context.ClientsAccountManagers.Where(x => x.ClientId == existingClient.Id && x.IsActive).Select(x => x.ClientManagerId);
 
             if (clientManagers is not null)
             {
@@ -165,22 +165,22 @@ namespace Client.Api.Services.Clients
                 await this.context.ClientsGroups.AddAsync(groupItem.FillCommonProperties());
             }
 
-            var clientManagers = this.context.ClientsManagers.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
+            var clientManagers = this.context.ClientsAccountManagers.Where(x => x.ClientId == serviceModel.Id && x.IsActive);
 
             foreach (var clientManager in clientManagers.OrEmptyIfNull())
             {
-                this.context.ClientsManagers.Remove(clientManager);
+                this.context.ClientsAccountManagers.Remove(clientManager);
             }
 
             foreach (var managerId in serviceModel.ClientManagerIds.OrEmptyIfNull())
             {
-                var managerItem = new ClientsManagers
+                var managerItem = new ClientsAccountManagers
                 {
                     ClientId = client.Id,
                     ClientManagerId = managerId
                 };
 
-                await this.context.ClientsManagers.AddAsync(managerItem.FillCommonProperties());
+                await this.context.ClientsAccountManagers.AddAsync(managerItem.FillCommonProperties());
             }
 
             await this.context.SaveChangesAsync();
@@ -222,13 +222,13 @@ namespace Client.Api.Services.Clients
 
             foreach (var managerId in serviceModel.ClientManagerIds.OrEmptyIfNull())
             {
-                var clientManager = new ClientsManagers
+                var clientManager = new ClientsAccountManagers
                 {
                     ClientId = client.Id,
                     ClientManagerId = managerId
                 };
 
-                await this.context.ClientsManagers.AddAsync(clientManager.FillCommonProperties());
+                await this.context.ClientsAccountManagers.AddAsync(clientManager.FillCommonProperties());
             }
 
             await this.context.SaveChangesAsync();

@@ -4,6 +4,6 @@ namespace Seller.Web.Areas.Clients.ViewModels
 {
     public class ClientAccountManagerPageViewModel : BasePageViewModel
     {
-        public ClientAccountManagerFormViewModel ClientManagerForm { get; set; }
+        public ClientAccountManagerFormViewModel ClientAccountManagerForm { get; set; }
     }
 }

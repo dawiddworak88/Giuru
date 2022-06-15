@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Client.Api.Infrastructure.Managers.Entities
 {
-    public class ClientManager : Entity
+    public class ClientAccountManager : Entity
     {
         [Required]
         public string FirstName { get; set; }

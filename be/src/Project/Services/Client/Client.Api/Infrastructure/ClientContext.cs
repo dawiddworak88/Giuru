@@ -22,7 +22,7 @@ namespace Client.Api.Infrastructure
         public DbSet<ClientGroup> ClientGroups { get; set; }
         public DbSet<ClientGroupTranslation> ClientGroupTranslations { get; set; }
         public DbSet<ClientsGroup> ClientsGroups { get; set; }
-        public DbSet<ClientManager> ClientManagers { get; set; }
-        public DbSet<ClientsManagers> ClientsManagers { get; set; }
+        public DbSet<ClientAccountManager> ClientAccountManagers { get; set; }
+        public DbSet<ClientsAccountManagers> ClientsAccountManagers { get; set; }
     }
 }

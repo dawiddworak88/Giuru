@@ -227,7 +227,7 @@ namespace Client.Api.Infrastructure.Migrations
                     b.ToTable("ClientsGroups");
                 });
 
-            modelBuilder.Entity("Client.Api.Infrastructure.Managers.Entities.ClientManager", b =>
+            modelBuilder.Entity("Client.Api.Infrastructure.Managers.Entities.ClientAccountManager", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -264,10 +264,10 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientManagers");
+                    b.ToTable("ClientAccountManagers");
                 });
 
-            modelBuilder.Entity("Client.Api.Infrastructure.Managers.Entities.ClientsManagers", b =>
+            modelBuilder.Entity("Client.Api.Infrastructure.Managers.Entities.ClientsAccountManagers", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -295,7 +295,7 @@ namespace Client.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClientsManagers");
+                    b.ToTable("ClientsAccountManagers");
                 });
 
             modelBuilder.Entity("Client.Api.Infrastructure.Groups.Entities.ClientGroupTranslation", b =>

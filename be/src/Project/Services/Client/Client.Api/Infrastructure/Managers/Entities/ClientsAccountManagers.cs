@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Client.Api.Infrastructure.Managers.Entities
 {
-    public class ClientsManagers : Entity
+    public class ClientsAccountManagers : Entity
     {
         [Required]
         public Guid ClientId { get; set; }
