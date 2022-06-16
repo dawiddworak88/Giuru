@@ -1,5 +1,6 @@
 ﻿using Foundation.Account.Definitions;
 using Foundation.Localization.Definitions;
+using Foundation.Media.Configurations;
 using Identity.Api.Areas.Accounts.Configurations;
 using Identity.Api.Areas.Accounts.Services.ProfileServices;
 using Identity.Api.Areas.Accounts.Services.UserServices;
@@ -82,6 +83,7 @@ namespace Identity.Api.DependencyInjection
         {
             services.Configure<AppSettings>(configuration);
             services.Configure<LocalizationSettings>(configuration);
+            services.Configure<MediaAppSettings>(configuration);
         }
 
         public static void RegisterAccountsApiDependencies(this IServiceCollection services)

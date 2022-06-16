@@ -1,17 +1,15 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
-using Foundation.Extensions.Services.MediaServices;
+using Foundation.Media.Services.MediaServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Orders.ApiRequestModels;
 using Seller.Web.Areas.Orders.ApiResponseModels;
 using Seller.Web.Areas.Orders.Definitions;
 using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
-using Seller.Web.Shared.Configurations;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -24,18 +22,15 @@ namespace Seller.Web.Areas.Orders.ApiControllers
     {
         private readonly IBasketRepository basketRepository;
         private readonly LinkGenerator linkGenerator;
-        private readonly IOptions<AppSettings> options;
-        private readonly IMediaHelperService mediaService;
+        private readonly IMediaService mediaService;
 
         public BasketsApiController(
             IBasketRepository basketRepository,
             LinkGenerator linkGenerator,
-            IOptions<AppSettings> options,
-            IMediaHelperService mediaService)
+            IMediaService mediaService)
         {
             this.basketRepository = basketRepository;
             this.linkGenerator = linkGenerator;
-            this.options = options;
             this.mediaService = mediaService;
         }
 
@@ -51,7 +46,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                     ProductId = x.ProductId,
                     ProductSku = x.Sku,
                     ProductName = x.Name,
-                    PictureUrl = !string.IsNullOrWhiteSpace(x.ImageSrc) ? x.ImageSrc : (x.ImageId.HasValue ? this.mediaService.GetFileUrl(this.options.Value.MediaUrl, x.ImageId.Value, OrdersConstants.Basket.BasketProductImageMaxWidth, OrdersConstants.Basket.BasketProductImageMaxHeight, true) : null),
+                    PictureUrl = !string.IsNullOrWhiteSpace(x.ImageSrc) ? x.ImageSrc : (x.ImageId.HasValue ? this.mediaService.GetMediaUrl(x.ImageId.Value, OrdersConstants.Basket.BasketProductImageMaxWidth) : null),
                     Quantity = x.Quantity,
                     StockQuantity = x.StockQuantity,
                     OutletQuantity = x.OutletQuantity,

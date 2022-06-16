@@ -5,14 +5,13 @@ using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
-using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Media.Services.MediaServices;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Media.ApiRequestModels;
 using Seller.Web.Areas.Media.ApiResponseModels;
 using Seller.Web.Areas.Media.DomainModels;
 using Seller.Web.Shared.Configurations;
-using Seller.Web.Shared.Services.ContentDeliveryNetworks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,22 +23,16 @@ namespace Seller.Web.Areas.Media.Repositories.Media
     {
         private readonly IApiClientService apiService;
         private readonly IOptions<AppSettings> settings;
-        private readonly IMediaHelperService mediaService;
-        private readonly IOptions<AppSettings> options;
-        private readonly ICdnService cdnService;
+        private readonly IMediaService mediaService;
 
         public MediaRepository(
             IApiClientService apiService,
             IOptions<AppSettings> settings,
-            IMediaHelperService mediaService,
-            ICdnService cdnService,
-            IOptions<AppSettings> options)
+            IMediaService mediaService)
         {
             this.apiService = apiService;
             this.settings = settings;
             this.mediaService = mediaService;
-            this.options = options;
-            this.cdnService = cdnService;
         }
 
         public async Task DeleteAsync(string token, string language, Guid? mediaId)
@@ -89,7 +82,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                         Id = mediaItem.Id,
                         FileName = mediaItem.FileName,
                         Name = mediaItem.Name,
-                        Url = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, mediaItem.MediaItemVersionId.Value, 200, 120, true)),
+                        Url = this.mediaService.GetMediaUrl(mediaItem.MediaItemVersionId.Value, 200),
                         LastModifiedDate = mediaItem.LastModifiedDate,
                         CreatedDate = mediaItem.CreatedDate
                     };
@@ -140,7 +133,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                     {
                         Id = x.Id,
                         FileName = x.FileName,
-                        Url = this.cdnService.GetCdnUrl(x.MimeType.StartsWith("image") ? this.mediaService.GetFileUrl(this.options.Value.MediaUrl, x.Id, 200, 120, true) : this.mediaService.GetFileUrl(this.options.Value.MediaUrl, x.Id)),
+                        Url = x.MimeType.StartsWith("image") ? this.mediaService.GetMediaUrl(x.Id, 200) : this.mediaService.GetMediaUrl(x.Id),
                         MimeType = x.MimeType,
                         LastModifiedDate = x.LastModifiedDate,
                         CreatedDate = x.CreatedDate,

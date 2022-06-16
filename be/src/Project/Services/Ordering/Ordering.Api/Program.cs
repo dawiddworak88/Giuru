@@ -18,6 +18,7 @@ using System.IO;
 using Foundation.Localization.Definitions;
 using Microsoft.Extensions.Options;
 using Foundation.Mailing.DependencyInjection;
+using Foundation.Media.DependencyInjection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
 
@@ -60,6 +61,8 @@ builder.Services.AddControllers(options =>
     options.RespectBrowserAcceptHeader = true;
     options.Filters.Add(typeof(HttpGlobalExceptionFilter));
 }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
+
+builder.Services.RegisterFoundationMediaDependencies();
 
 builder.Services.AddLocalization();
 

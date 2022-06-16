@@ -1,18 +1,15 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
-using Foundation.Extensions.Services.MediaServices;
+using Foundation.Media.Services.MediaServices;
 using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Media.Repositories.Files;
 using Seller.Web.Areas.Media.Repositories.Media;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Shared.Repositories.Media;
-using Seller.Web.Shared.Configurations;
-using Seller.Web.Shared.Services.ContentDeliveryNetworks;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -27,29 +24,23 @@ namespace Seller.Web.Areas.Media.ApiControllers
     public class FilesApiController : BaseApiController
     {
         private readonly IFilesRepository filesRepository;
-        private readonly IMediaHelperService mediaHelperService;
-        private readonly IOptionsMonitor<AppSettings> settings;
+        private readonly IMediaService mediaService;
         private readonly IMediaItemsRepository mediaItemsRepository;
         private readonly IMediaRepository mediaRepository;
         private readonly IStringLocalizer mediaResources;
-        private readonly ICdnService cdnService;
 
         public FilesApiController(
             IFilesRepository filesRepository,
-            IMediaHelperService mediaHelperService,
-            IOptionsMonitor<AppSettings> settings,
+            IMediaService mediaService,
             IMediaItemsRepository mediaItemsRepository,
             IMediaRepository mediaRepository,
-            IStringLocalizer<MediaResources> mediaResources,
-            ICdnService cdnService)
+            IStringLocalizer<MediaResources> mediaResources)
         {
             this.filesRepository = filesRepository;
-            this.mediaHelperService = mediaHelperService;
-            this.settings = settings;
+            this.mediaService = mediaService;
             this.mediaRepository = mediaRepository;
             this.mediaResources = mediaResources;
             this.mediaItemsRepository = mediaItemsRepository;
-            this.cdnService = cdnService;
         }
 
         [HttpPost]
@@ -85,7 +76,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
                             new
                             {
                                 Id = mediaItem.Id,
-                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, mediaItem.Id, true),
+                                Url = this.mediaService.GetMediaUrl(mediaItem.Id),
                                 Name = mediaItem.Name,
                                 MimeType = mediaItem.MimeType,
                                 Filename = mediaItem.Filename,
@@ -128,7 +119,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
                             media.Select(mediaItem => new
                             {
                                 Id = mediaItem.Id,
-                                Url = this.cdnService.GetCdnUrl(this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, mediaItem.Id, true)),
+                                Url = this.mediaService.GetMediaUrl(mediaItem.Id),
                                 Name = mediaItem.Name,
                                 MimeType = mediaItem.MimeType,
                                 Filename = mediaItem.Filename,

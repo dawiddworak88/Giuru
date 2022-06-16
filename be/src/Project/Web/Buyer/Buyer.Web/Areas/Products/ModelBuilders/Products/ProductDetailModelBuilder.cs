@@ -1,22 +1,18 @@
 ﻿using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.ViewModels.Products;
-using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.ComponentModels.Files;
 using Buyer.Web.Shared.ViewModels.Files;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.Extensions.Services.MediaServices;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Foundation.PageContent.Components.CarouselGrids.ViewModels;
 using Foundation.GenericRepository.Paginations;
@@ -27,6 +23,7 @@ using Buyer.Web.Shared.ViewModels.Modals;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using ImageViewModel = Buyer.Web.Shared.ViewModels.Images.ImageViewModel;
+using Foundation.Media.Services.MediaServices;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -40,10 +37,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<OrderResources> orderResources;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
-        private readonly IOptions<AppSettings> options;
-        private readonly IMediaHelperService mediaService;
+        private readonly IMediaService mediaService;
         private readonly LinkGenerator linkGenerator;
-        private readonly ICdnService cdnService;
         private readonly IBasketService basketService;
 
         public ProductDetailModelBuilder(
@@ -55,23 +50,19 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IStringLocalizer<ProductResources> productLocalizer,
             IStringLocalizer<InventoryResources> inventoryResources,
             IStringLocalizer<OrderResources> orderResources,
-            IOptions<AppSettings> options,
-            IMediaHelperService mediaService,
+            IMediaService mediaService,
             IBasketService basketService,
-            LinkGenerator linkGenerator,
-            ICdnService cdnService)
+            LinkGenerator linkGenerator)
         {
             this.filesModelBuilder = filesModelBuilder;
             this.productsRepository = productsRepository;
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
-            this.options = options;
             this.mediaService = mediaService;
             this.sidebarModelBuilder = sidebarModelBuilder;
             this.inventoryResources = inventoryResources;
             this.linkGenerator = linkGenerator;
             this.basketService = basketService;
-            this.cdnService = cdnService;
             this.orderResources = orderResources;
             this.modalModelBuilder = modalModelBuilder;
         }
@@ -125,8 +116,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
                     var imageViewModel = new ImageViewModel
                     {
                         Id = image,
-                        Original = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.OriginalMaxWidth, ProductConstants.OriginalMaxHeight, true)),
-                        Thumbnail = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, image, ProductConstants.ThumbnailMaxWidth, ProductConstants.ThumbnailMaxHeight, true))
+                        Original = this.mediaService.GetMediaUrl(image, ProductConstants.OriginalMaxWidth),
+                        Thumbnail = this.mediaService.GetMediaUrl(image, ProductConstants.ThumbnailMaxWidth)
                     };
 
                     images.Add(imageViewModel);
@@ -188,17 +179,17 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                             if (productVariant.Images != null && productVariant.Images.Any())
                             {
-                                carouselItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), CarouselGridConstants.CarouselItemImageMaxWidth, CarouselGridConstants.CarouselItemImageMaxHeight, true));
+                                carouselItem.ImageUrl = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), CarouselGridConstants.CarouselItemImageMaxWidth);
                                 carouselItem.Sources = new List<SourceViewModel>
                                 {
-                                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), 1366, 1366, true, MediaConstants.WebpExtension)) },
-                                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), 470, 470, true,MediaConstants.WebpExtension)) },
-                                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), 342, 342, true, MediaConstants.WebpExtension)) },
-                                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), 768, 768, true, MediaConstants.WebpExtension)) },
-                                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), 1366, 1366, true)) },
-                                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), 470, 470, true)) },
-                                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), 342, 342, true)) },
-                                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, productVariant.Images.FirstOrDefault(), 768, 768, true)) }
+                                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 1366) },
+                                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 470) },
+                                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 342) },
+                                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 768) },
+                                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 1366) },
+                                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 470) },
+                                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 342) },
+                                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(productVariant.Images.FirstOrDefault(), 768) }
                                 };
                             }
 

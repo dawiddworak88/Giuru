@@ -21,7 +21,6 @@ using Buyer.Web.Shared.ViewModels.Files;
 using Buyer.Web.Shared.ModelBuilders.Files;
 using Buyer.Web.Shared.Repositories.Brands;
 using Buyer.Web.Shared.Repositories.Products;
-using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Buyer.Web.Shared.Repositories.Clients;
 using Buyer.Web.Shared.ViewModels.Sidebar;
 using Buyer.Web.Shared.ModelBuilders.Sidebar;
@@ -31,6 +30,7 @@ using Buyer.Web.Shared.ModelBuilders.Modal;
 using Buyer.Web.Shared.Repositories.News;
 using Buyer.Web.Shared.Repositories.Files;
 using Buyer.Web.Areas.Products.Repositories.Files;
+using Foundation.Media.Configurations;
 
 namespace Buyer.Web.Shared.DependencyInjection
 {
@@ -57,7 +57,6 @@ namespace Buyer.Web.Shared.DependencyInjection
             services.AddScoped<ICatalogProductsRepository, CatalogProductsRepository>();
 
             // Services
-            services.AddScoped<ICdnService, CdnService>();
             services.AddScoped<ICatalogService, CatalogService>();
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<INewsRepository, NewsRepository>();
@@ -73,6 +72,7 @@ namespace Buyer.Web.Shared.DependencyInjection
         {
             services.Configure<AppSettings>(configuration);
             services.Configure<LocalizationSettings>(configuration);
+            services.Configure<MediaAppSettings>(configuration);
         }
     }
 }
