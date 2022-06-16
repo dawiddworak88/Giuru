@@ -6,8 +6,8 @@ using Foundation.ApiExtensions.Models.Request;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
-using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Microsoft.AspNetCore.Routing;
@@ -24,12 +24,12 @@ namespace Buyer.Web.Shared.Repositories.News
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
         private readonly LinkGenerator linkGenerator;
-        private readonly IMediaHelperService mediaService;
+        private readonly IMediaService mediaService;
 
         public NewsRepository(
             IApiClientService apiClientService,
             LinkGenerator linkGenerator,
-            IMediaHelperService mediaService,
+            IMediaService mediaService,
             IOptions<AppSettings> settings)
         {
             this.apiClientService = apiClientService;
@@ -107,18 +107,18 @@ namespace Buyer.Web.Shared.Repositories.News
 
                     if (newsItem.ThumbnailImageId.HasValue)
                     {
-                        item.ThumbImageUrl = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value);
+                        item.ThumbImageUrl = this.mediaService.GetMediaUrl(newsItem.ThumbnailImageId.Value);
                         item.ThumbImages = new List<SourceViewModel>
                         {
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 1024, 1024, true, MediaConstants.WebpExtension) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 352, 352, true,MediaConstants.WebpExtension) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 608, 608, true, MediaConstants.WebpExtension) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 768, 768, true, MediaConstants.WebpExtension) },
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(newsItem.ThumbnailImageId.Value, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(newsItem.ThumbnailImageId.Value, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(newsItem.ThumbnailImageId.Value, 608) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(newsItem.ThumbnailImageId.Value, 768) },
 
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 1024, 1024, true) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 352, 352, true) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 608, 608, true) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.settings.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 768, 768, true) },
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(newsItem.ThumbnailImageId.Value, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(newsItem.ThumbnailImageId.Value, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(newsItem.ThumbnailImageId.Value, 608) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(newsItem.ThumbnailImageId.Value, 768) },
                         };
                     }
 

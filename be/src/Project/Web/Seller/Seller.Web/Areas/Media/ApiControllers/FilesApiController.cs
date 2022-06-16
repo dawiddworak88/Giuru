@@ -1,14 +1,12 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
-using Foundation.Extensions.Services.MediaServices;
+using Foundation.Media.Services.MediaServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Media.Repositories;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Shared.Repositories.Media;
-using Seller.Web.Shared.Configurations;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -22,19 +20,16 @@ namespace Seller.Web.Areas.Media.ApiControllers
     public class FilesApiController : BaseApiController
     {
         private readonly IFilesRepository filesRepository;
-        private readonly IMediaHelperService mediaHelperService;
-        private readonly IOptionsMonitor<AppSettings> settings;
+        private readonly IMediaService mediaService;
         private readonly IMediaItemsRepository mediaItemsRepository;
 
         public FilesApiController(
             IFilesRepository filesRepository,
-            IMediaHelperService mediaHelperService,
-            IOptionsMonitor<AppSettings> settings,
+            IMediaService mediaService,
             IMediaItemsRepository mediaItemsRepository)
         {
             this.filesRepository = filesRepository;
-            this.mediaHelperService = mediaHelperService;
-            this.settings = settings;
+            this.mediaService = mediaService;
             this.mediaItemsRepository = mediaItemsRepository;
         }
 
@@ -71,7 +66,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
                             new
                             {
                                 Id = mediaItem.Id,
-                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, mediaItem.Id, true),
+                                Url = this.mediaService.GetMediaUrl(mediaItem.Id),
                                 Name = mediaItem.Name,
                                 MimeType = mediaItem.MimeType,
                                 Filename = mediaItem.Filename,
@@ -115,7 +110,7 @@ namespace Seller.Web.Areas.Media.ApiControllers
                             media.Select(mediaItem => new
                             {
                                 Id = mediaItem.Id,
-                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, mediaItem.Id, true),
+                                Url = this.mediaService.GetMediaUrl(mediaItem.Id),
                                 Name = mediaItem.Name,
                                 MimeType = mediaItem.MimeType,
                                 Filename = mediaItem.Filename,

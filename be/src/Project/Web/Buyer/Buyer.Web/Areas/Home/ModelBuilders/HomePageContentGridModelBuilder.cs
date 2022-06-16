@@ -5,9 +5,9 @@ using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Services.Catalogs;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Definitions;
 using Foundation.Localization;
+using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ContentGrids.ViewModels;
 using Foundation.PageContent.Components.Images;
@@ -26,14 +26,14 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
     {
         private readonly ICatalogService catalogService;
         private readonly IOptions<AppSettings> options;
-        private readonly IMediaHelperService mediaService;
+        private readonly IMediaService mediaService;
         private readonly LinkGenerator linkGenerator;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
 
         public HomePageContentGridModelBuilder(
             ICatalogService catalogService,
             IOptions<AppSettings> options,
-            IMediaHelperService mediaService,
+            IMediaService mediaService,
             LinkGenerator linkGenerator,
             IStringLocalizer<GlobalResources> globalLocalizer)
         {
@@ -63,18 +63,18 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
 
                 if (category.ThumbnailMediaId.HasValue)
                 {
-                    contentItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, category.ThumbnailMediaId.Value, ProductConstants.ProductsCatalogItemImageWidth, ProductConstants.ProductsCatalogItemImageHeight, true);
+                    contentItem.ImageUrl = this.mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, ProductConstants.ProductsCatalogItemImageWidth);
                     contentItem.Sources = new List<SourceViewModel>
                     {
-                        new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, category.ThumbnailMediaId.Value, 1366, 1366, true, MediaConstants.WebpExtension) },
-                        new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, category.ThumbnailMediaId.Value, 470, 470, true,MediaConstants.WebpExtension) },
-                        new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, category.ThumbnailMediaId.Value, 342, 342, true, MediaConstants.WebpExtension) },
-                        new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, category.ThumbnailMediaId.Value, 768, 768, true, MediaConstants.WebpExtension) },
+                        new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 1366) },
+                        new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 470) },
+                        new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 342) },
+                        new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 768) },
 
-                        new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, category.ThumbnailMediaId.Value, 1366, 1366, true) },
-                        new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, category.ThumbnailMediaId.Value, 470, 470, true) },
-                        new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, category.ThumbnailMediaId.Value, 342, 342, true) },
-                        new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, category.ThumbnailMediaId.Value, 768, 768, true) }
+                        new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 1366) },
+                        new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 470) },
+                        new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 342) },
+                        new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(category.ThumbnailMediaId.Value, 768) }
                     };
                 }
 

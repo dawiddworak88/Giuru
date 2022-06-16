@@ -1,0 +1,10 @@
+﻿using System;
+
+namespace Foundation.Media.Services.MediaServices
+{
+    public interface IMediaService
+    {
+        string GetMediaUrl(Guid mediaId, int? maxWidth = null);
+        string GetMediaUrl(string mediaUrl, int? maxWidth = null);
+    }
+}

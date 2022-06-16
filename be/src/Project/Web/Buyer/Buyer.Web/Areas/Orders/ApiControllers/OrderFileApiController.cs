@@ -9,7 +9,7 @@ using Buyer.Web.Shared.Configurations;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
-using Foundation.Extensions.Services.MediaServices;
+using Foundation.Media.Services.MediaServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +33,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
         private readonly IBasketRepository basketRepository;
         private readonly LinkGenerator linkGenerator;
         private readonly IOptions<AppSettings> options;
-        private readonly IMediaHelperService mediaService;
+        private readonly IMediaService mediaService;
         private readonly ILogger<OrderFileApiController> logger;
 
         public OrderFileApiController(
@@ -42,7 +42,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
             IBasketRepository basketRepository,
             LinkGenerator linkGenerator,
             IOptions<AppSettings> options,
-            IMediaHelperService mediaService,
+            IMediaService mediaService,
             ILogger<OrderFileApiController> logger)
         {
             this.orderFileService = orderFileService;
@@ -77,7 +77,7 @@ namespace Buyer.Web.Areas.Orders.ApiControllers
                         ProductId = product.Id,
                         ProductSku = product.Sku,
                         ProductName = product.Name,
-                        PictureUrl = product.Images.OrEmptyIfNull().Any() ? this.mediaService.GetFileUrl(this.options.Value.MediaUrl, product.Images.First(), OrdersConstants.Basket.BasketProductImageMaxWidth, OrdersConstants.Basket.BasketProductImageMaxHeight, true) : null,
+                        PictureUrl = product.Images.OrEmptyIfNull().Any() ? this.mediaService.GetMediaUrl(product.Images.First(), OrdersConstants.Basket.BasketProductImageMaxWidth) : null,
                         Quantity = orderLine.Quantity,
                         ExternalReference = orderLine.ExternalReference,
                         DeliveryFrom = orderLine.DeliveryFrom,

@@ -3,7 +3,6 @@ using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using Buyer.Web.Shared.Configurations;
-using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
@@ -15,19 +14,20 @@ using System.Threading.Tasks;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.Media.Services.MediaServices;
 
 namespace Buyer.Web.Areas.Products.Services.Products
 {
     public class ProductsService : IProductsService
     {
         private readonly IProductsRepository productsRepository;
-        private readonly IMediaHelperService mediaService;
+        private readonly IMediaService mediaService;
         private readonly IOptions<AppSettings> options;
         private readonly LinkGenerator linkGenerator;
 
         public ProductsService(
             IProductsRepository productsRepository,
-            IMediaHelperService mediaService,
+            IMediaService mediaService,
             IOptions<AppSettings> options,
             LinkGenerator linkGenerator)
         {
@@ -83,18 +83,18 @@ namespace Buyer.Web.Areas.Products.Services.Products
                         var imageGuid = product.Images.FirstOrDefault();
 
                         catalogItem.ImageAlt = product.Name;
-                        catalogItem.ImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, ProductConstants.ProductsCatalogItemImageWidth, ProductConstants.ProductsCatalogItemImageHeight);
+                        catalogItem.ImageUrl = this.mediaService.GetMediaUrl(imageGuid, ProductConstants.ProductsCatalogItemImageWidth);
                         catalogItem.Sources = new List<SourceViewModel>
                         {
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 1024, 1024, true, MediaConstants.WebpExtension) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 352, 352, true,MediaConstants.WebpExtension) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 256, 256, true, MediaConstants.WebpExtension) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 768, 768, true, MediaConstants.WebpExtension) },
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 256) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 768) },
 
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 1024, 1024, true) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 352, 352, true) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 256, 256, true) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, imageGuid, 768, 768, true) }
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 256) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(imageGuid, 768) }
                         };
                     }
 

@@ -1,14 +1,12 @@
 ﻿using Buyer.Web.Areas.Home.Definitions;
-using Buyer.Web.Shared.Configurations;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.Extensions.Services.MediaServices;
+using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.HeroSliders.ViewModels;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -18,16 +16,13 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
     public class HeroSliderModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, HeroSliderViewModel>
     {
         private readonly IStringLocalizer<HeroSliderResources> heroSliderLocalizer;
-        private readonly IOptions<AppSettings> options;
-        private readonly IMediaHelperService mediaService;
+        private readonly IMediaService mediaService;
         private readonly LinkGenerator linkGenerator;
 
-        public HeroSliderModelBuilder(IOptions<AppSettings> options,
-            IMediaHelperService mediaService,
+        public HeroSliderModelBuilder(IMediaService mediaService,
             IStringLocalizer<HeroSliderResources> heroSliderLocalizer,
             LinkGenerator linkGenerator)
         {
-            this.options = options;
             this.mediaService = mediaService;
             this.heroSliderLocalizer = heroSliderLocalizer;
             this.linkGenerator = linkGenerator;
@@ -40,7 +35,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
             var heroSliderItems = new List<HeroSliderItemViewModel>();
 
             var cornersHeroSliderItem = GetHeroSliderItem(
-                this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.CornersMediaId, true),
+                this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.CornersMediaId),
                 this.heroSliderLocalizer.GetString("BrowseCorners"),
                 this.heroSliderLocalizer.GetString("BrowseCorners"),
                 this.heroSliderLocalizer.GetString("BrowseCorners"),
@@ -49,18 +44,18 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                 this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.Sectionals.Id }),
                 new List<SourceViewModel>
                 {
-                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.CornersMediaId, true, MediaConstants.WebpExtension) },
-                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Corners1600x400MediaId, true, MediaConstants.WebpExtension) },
-                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Corners1024x400MediaId, true, MediaConstants.WebpExtension) },
-                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Corners414x286MediaId, true, MediaConstants.WebpExtension) },
-                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.CornersMediaId, true) },
-                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Corners1600x400MediaId, true) },
-                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Corners1024x400MediaId, true) },
-                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Corners414x286MediaId, true) }
+                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.CornersMediaId) },
+                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Corners1600x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Corners1024x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Corners414x286MediaId) },
+                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.CornersMediaId) },
+                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Corners1600x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Corners1024x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Corners414x286MediaId) }
                 });
 
             var boxspringsHeroSliderItem = GetHeroSliderItem(
-                this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.BoxspringsMediaId, true),
+                this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.BoxspringsMediaId),
                 this.heroSliderLocalizer.GetString("DiscoverBeds"),
                 this.heroSliderLocalizer.GetString("DiscoverBeds"),
                 this.heroSliderLocalizer.GetString("DiscoverBeds"),
@@ -69,19 +64,19 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                 this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.Beds.Id }),
                 new List<SourceViewModel> 
                 {
-                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.BoxspringsMediaId, true, MediaConstants.WebpExtension) },
-                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Boxsprings1600x400MediaId, true, MediaConstants.WebpExtension) },
-                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Boxsprings1024x400MediaId, true, MediaConstants.WebpExtension) },
-                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Boxsprings414x286MediaId, true, MediaConstants.WebpExtension) },
+                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.BoxspringsMediaId) },
+                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Boxsprings1600x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Boxsprings1024x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Boxsprings414x286MediaId) },
 
-                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.BoxspringsMediaId, true) },
-                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Boxsprings1600x400MediaId, true) },
-                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Boxsprings1024x400MediaId, true) },
-                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Boxsprings414x286MediaId, true) }
+                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.BoxspringsMediaId) },
+                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Boxsprings1600x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Boxsprings1024x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Boxsprings414x286MediaId) }
                 });
 
             var chairsHeroSliderItem = GetHeroSliderItem(
-                this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.ChairsMediaId, true),
+                this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.ChairsMediaId),
                 this.heroSliderLocalizer.GetString("ShopChairs"),
                 this.heroSliderLocalizer.GetString("ShopChairs"),
                 this.heroSliderLocalizer.GetString("ShopChairs"),
@@ -90,19 +85,19 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                 this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.Chairs.Id }),
                 new List<SourceViewModel>
                 {
-                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.ChairsMediaId, true, MediaConstants.WebpExtension) },
-                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Chairs1600x400MediaId, true, MediaConstants.WebpExtension) },
-                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Chairs1024x400MediaId, true, MediaConstants.WebpExtension) },
-                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Chairs414x286MediaId, true, MediaConstants.WebpExtension) },
+                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.ChairsMediaId) },
+                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Chairs1600x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Chairs1024x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Chairs414x286MediaId) },
 
-                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.ChairsMediaId, true) },
-                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Chairs1600x400MediaId, true) },
-                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Chairs1024x400MediaId, true) },
-                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Chairs414x286MediaId, true) }
+                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.ChairsMediaId) },
+                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Chairs1600x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Chairs1024x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Chairs414x286MediaId) }
                 });
 
             var setsHeroSliderItem = GetHeroSliderItem(
-                this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.SetsMediaId, true),
+                this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.SetsMediaId),
                 this.heroSliderLocalizer.GetString("BrowseSets"),
                 this.heroSliderLocalizer.GetString("BrowseSets"),
                 this.heroSliderLocalizer.GetString("BrowseSets"),
@@ -111,15 +106,15 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                 this.linkGenerator.GetPathByAction("Index", "Category", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, HeroSliderItemConstants.Categories.Sets.Id }),
                 new List<SourceViewModel>
                 {
-                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.SetsMediaId, true, MediaConstants.WebpExtension) },
-                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Sets1600x400MediaId, true, MediaConstants.WebpExtension) },
-                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Sets1024x400MediaId, true, MediaConstants.WebpExtension) },
-                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Sets414x286MediaId, true, MediaConstants.WebpExtension) },
+                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.SetsMediaId) },
+                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Sets1600x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Sets1024x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Sets414x286MediaId) },
 
-                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.SetsMediaId, true) },
-                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Sets1600x400MediaId, true) },
-                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Sets1024x400MediaId, true) },
-                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, HeroSliderItemConstants.Media.Sets414x286MediaId, true) }
+                    new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.SetsMediaId) },
+                    new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Sets1600x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Sets1024x400MediaId) },
+                    new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(HeroSliderItemConstants.Media.Sets414x286MediaId) }
                 });
 
             heroSliderItems.Add(cornersHeroSliderItem);

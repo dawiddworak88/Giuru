@@ -1,7 +1,6 @@
 ﻿using Foundation.EventBus;
 using Foundation.EventBus.Abstractions;
 using Foundation.EventBusRabbitMq;
-using Foundation.Extensions.Services.MediaServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +18,6 @@ namespace Ordering.Api.DependencyInjection
         public static void RegisterOrderingApiDependencies(this IServiceCollection services)
         {
             services.AddScoped<IOrdersService, OrdersService>();
-            services.AddScoped<IMediaHelperService, MediaHelperService>();
         }
 
         public static void RegisterOrderingDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)

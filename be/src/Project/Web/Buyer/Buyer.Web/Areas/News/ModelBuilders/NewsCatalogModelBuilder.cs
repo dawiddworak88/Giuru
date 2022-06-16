@@ -1,18 +1,16 @@
 ﻿using Buyer.Web.Areas.News.Definitions;
 using Buyer.Web.Areas.News.DomainModels;
 using Buyer.Web.Areas.News.ViewModel;
-using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Repositories.News;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.Extensions.Services.MediaServices;
 using Foundation.Localization;
+using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Foundation.PageContent.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -22,22 +20,19 @@ namespace Buyer.Web.Areas.News.ModelBuilders
 {
     public class NewsCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, NewsCatalogViewModel>
     {
-        private readonly IOptions<AppSettings> options;
         private readonly LinkGenerator linkGenerator;
         private readonly INewsRepository newsRepository;
         private readonly IStringLocalizer<NewsResources> newsLocalizer;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IMediaHelperService mediaService;
+        private readonly IMediaService mediaService;
 
         public NewsCatalogModelBuilder(
-            IOptions<AppSettings> options,
             IStringLocalizer<NewsResources> newsLocalizer,
             IStringLocalizer<GlobalResources> globalLocalizer,
             INewsRepository newsRepository,
-            IMediaHelperService mediaService,
+            IMediaService mediaService,
             LinkGenerator linkGenerator)
         {
-            this.options = options;
             this.linkGenerator = linkGenerator;
             this.newsLocalizer = newsLocalizer;
             this.globalLocalizer = globalLocalizer;
@@ -75,13 +70,13 @@ namespace Buyer.Web.Areas.News.ModelBuilders
 
                     if (newsItem.ThumbnailImageId.HasValue)
                     {
-                        newsItem.ThumbImageUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 1024, 1024, true, MediaConstants.WebpExtension);
+                        newsItem.ThumbImageUrl = this.mediaService.GetMediaUrl(newsItem.ThumbnailImageId.Value, 1024);
                         newsItem.ThumbImages = new List<SourceViewModel>
                         { 
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 1024, 1024, true, MediaConstants.WebpExtension) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 352, 352, true,MediaConstants.WebpExtension) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 608, 608, true, MediaConstants.WebpExtension) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, newsItem.ThumbnailImageId.Value, 768, 768, true, MediaConstants.WebpExtension) }
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(newsItem.ThumbnailImageId.Value, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(newsItem.ThumbnailImageId.Value, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(newsItem.ThumbnailImageId.Value, 608) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(newsItem.ThumbnailImageId.Value, 768) }
                         };
                     }
                 };
