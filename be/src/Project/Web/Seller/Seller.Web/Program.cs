@@ -26,6 +26,7 @@ using Foundation.Account.Definitions;
 using Seller.Web.Areas.News.DependencyInjection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
+using Foundation.Media.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +72,8 @@ builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add(typeof(HttpWebGlobalExceptionFilter));
 }).AddNewtonsoftJson();
+
+builder.Services.RegisterFoundationMediaDependencies();
 
 builder.Services.RegisterClientAccountDependencies(builder.Configuration);
 

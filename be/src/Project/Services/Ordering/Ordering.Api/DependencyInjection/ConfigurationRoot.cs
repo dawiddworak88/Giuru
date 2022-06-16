@@ -1,5 +1,6 @@
 ﻿using Foundation.EventBus.Abstractions;
 using Foundation.Localization.Definitions;
+using Foundation.Media.Configurations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -33,6 +34,7 @@ namespace Ordering.Api.DependencyInjection
         {
             services.Configure<AppSettings>(configuration);
             services.Configure<LocalizationSettings>(configuration);
+            services.Configure<MediaAppSettings>(configuration);
         }
 
         public static void ConfigureEventBus(this IApplicationBuilder app)
