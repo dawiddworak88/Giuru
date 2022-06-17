@@ -5,7 +5,7 @@ metadata:
   labels:
     app: media-api
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: media-api
@@ -21,14 +21,14 @@ spec:
           httpGet:
             path: /hc
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
@@ -74,14 +74,14 @@ spec:
           httpGet:
             path: /hc
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         resources:
           limits:
             memory: "250Mi"
@@ -128,14 +128,14 @@ spec:
           httpGet:
             path: /hc
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         resources:
           limits:
             memory: "500Mi"
@@ -194,14 +194,14 @@ spec:
           httpGet:
             path: /hc
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         resources:
           limits:
             memory: "250Mi"
@@ -256,14 +256,14 @@ spec:
           httpGet:
             path: /hc
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         resources:
           limits:
             memory: "250Mi"
@@ -314,14 +314,14 @@ spec:
           httpGet:
             path: /hc
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         resources:
           limits:
             memory: "250Mi"
@@ -407,14 +407,14 @@ spec:
           httpGet:
             path: /hc
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         resources:
           limits:
             memory: "250Mi"
@@ -507,14 +507,14 @@ spec:
           httpGet:
             path: /hc
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         resources:
           limits:
             memory: "250Mi"
@@ -565,14 +565,14 @@ spec:
           httpGet:
             path: /hc
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         resources:
           limits:
             memory: "250Mi"
@@ -625,14 +625,14 @@ spec:
           httpGet:
             path: /hc
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         resources:
           limits:
             memory: "250Mi"
@@ -707,14 +707,14 @@ spec:
           httpGet:
             path: /hc
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
-          initialDelaySeconds: 10
-          periodSeconds: 10
+          initialDelaySeconds: 15
+          periodSeconds: 15
         resources:
           limits:
             memory: "250Mi"

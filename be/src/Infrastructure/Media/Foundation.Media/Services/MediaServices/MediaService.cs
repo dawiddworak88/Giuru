@@ -21,12 +21,30 @@ namespace Foundation.Media.Services.MediaServices
         public string GetMediaUrl(Guid mediaId, int? maxWidth)
         {
             var mediaUrl = $"{this.options.Value.MediaUrl}/api/v1/files/{mediaId}";
+
+            if (string.IsNullOrWhiteSpace(this.options.Value.CdnUrl) && maxWidth.HasValue)
+            {
+                mediaUrl += $"?o=true&w={maxWidth}&h={maxWidth}";
+            }
+
             return this.cdnService.GetCdnMediaUrl(mediaUrl, maxWidth);
         }
 
         public string GetMediaUrl(string mediaUrl, int? maxWidth = null)
         {
             return this.cdnService.GetCdnMediaUrl(mediaUrl, maxWidth);
+        }
+
+        public string GetNonCdnMediaUrl(Guid mediaId, int? maxWidth = null)
+        {
+            var mediaUrl = $"{this.options.Value.MediaUrl}/api/v1/files/{mediaId}";
+
+            if (string.IsNullOrWhiteSpace(this.options.Value.CdnUrl) && maxWidth.HasValue)
+            {
+                mediaUrl += $"?o=true&w={maxWidth}&h={maxWidth}";
+            }
+
+            return mediaUrl;
         }
     }
 }

@@ -136,8 +136,6 @@ namespace Media.Api.Services.Media
             {
                 var mediaItem = (from m in this.context.MediaItems
                                  join mv in this.context.MediaItemVersions on m.Id equals mv.MediaItemId
-                                 join t in this.context.MediaItemTranslations on mv.Id equals t.MediaItemVersionId into ct
-                                 from x in ct.DefaultIfEmpty()
                                  where m.Id == mediaId.Value || mv.Id == mediaId.Value && m.IsActive == true && mv.IsActive && m.IsProtected == false
                                  orderby mv.Version descending
                                  select new MediaFileItemServiceModel
@@ -153,6 +151,7 @@ namespace Media.Api.Services.Media
                 if (mediaItem != null)
                 {
                     var file = await this.mediaRepository.GetFileAsync(mediaItem.Folder, $"{mediaItem.VersionId}{mediaItem.Extension}");
+
                     if (file != null)
                     {
                         if (this.IsImage(mediaItem.ContentType) && (width.HasValue || height.HasValue || string.IsNullOrWhiteSpace(extension) is false))

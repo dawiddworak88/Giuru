@@ -87,7 +87,7 @@ namespace Buyer.Web.Shared.Services.Catalogs
                         var imageGuid = product.Images.FirstOrDefault();
 
                         catalogItem.ImageAlt = product.Name;
-                        catalogItem.ImageUrl = this.mediaService.GetMediaUrl(imageGuid, 1920);
+                        catalogItem.ImageUrl = this.mediaService.GetNonCdnMediaUrl(imageGuid);
                     }
 
                     catalogItemList.Add(catalogItem);
