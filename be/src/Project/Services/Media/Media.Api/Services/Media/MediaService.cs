@@ -136,7 +136,7 @@ namespace Media.Api.Services.Media
             {
                 var mediaItem = (from m in this.context.MediaItems
                                  join mv in this.context.MediaItemVersions on m.Id equals mv.MediaItemId
-                                 where m.Id == mediaId.Value || mv.Id == mediaId.Value && m.IsActive == true && mv.IsActive && m.IsProtected == false
+                                 where m.Id == mediaId.Value && m.IsActive == true && mv.IsActive && m.IsProtected == false
                                  orderby mv.Version descending
                                  select new MediaFileItemServiceModel
                                  {
