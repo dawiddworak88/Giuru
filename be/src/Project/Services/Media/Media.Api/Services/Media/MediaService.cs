@@ -130,7 +130,7 @@ namespace Media.Api.Services.Media
             return existingMediaItemVersion.FirstOrDefault().MediaItemId;
         }
 
-        public async Task<MediaFileServiceModel> GetFileAsync(Guid? mediaId, int? width, int? height, bool optimize, string? extension)
+        public MediaFileServiceModel GetFile(Guid? mediaId, int? width, int? height, bool optimize, string? extension)
         {
             if (mediaId.HasValue)
             {
@@ -150,7 +150,7 @@ namespace Media.Api.Services.Media
 
                 if (mediaItem != null)
                 {
-                    var file = await this.mediaRepository.GetFileAsync(mediaItem.Folder, $"{mediaItem.VersionId}{mediaItem.Extension}");
+                    var file = this.mediaRepository.GetFile(mediaItem.Folder, $"{mediaItem.VersionId}{mediaItem.Extension}");
 
                     if (file != null)
                     {

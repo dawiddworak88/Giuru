@@ -47,9 +47,9 @@ namespace Media.Api.v1.Controllers
         [Route("{mediaId}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof (FileContentResult))]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Get(Guid? mediaId, int? w, int? h, bool o, string? extension)
+        public IActionResult Get(Guid? mediaId, int? w, int? h, bool o, string? extension)
         {
-            var mediaFile = await this.mediaService.GetFileAsync(mediaId, w, h, o, extension);
+            var mediaFile = this.mediaService.GetFile(mediaId, w, h, o, extension);
 
             if (mediaFile != null)
             {

@@ -13,16 +13,16 @@ namespace Media.Api.DependencyInjection
     {
         public static void RegisterMediaApiDependencies(this IServiceCollection services)
         {
-            services.AddSingleton<IMediaService, MediaService>();
-            services.AddSingleton<IMediaRepository, MediaRepository>();
-            services.AddSingleton<IChecksumService, ChecksumService>();
-            services.AddSingleton<IImageResizeService, ImageResizeService>();
+            services.AddTransient<IMediaService, MediaService>();
+            services.AddTransient<IMediaRepository, MediaRepository>();
+            services.AddTransient<IChecksumService, ChecksumService>();
+            services.AddTransient<IImageResizeService, ImageResizeService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<MediaContext>();
-            services.AddDbContext<MediaContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()), ServiceLifetime.Singleton);
+            services.AddTransient<MediaContext>();
+            services.AddDbContext<MediaContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()), ServiceLifetime.Transient);
         }
     }
 }
