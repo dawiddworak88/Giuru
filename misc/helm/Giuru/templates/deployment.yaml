@@ -22,15 +22,15 @@ spec:
             path: /hc
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 3
-          timeoutSeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 3
-          timeoutSeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 15
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: {{ .Values.environment }}
