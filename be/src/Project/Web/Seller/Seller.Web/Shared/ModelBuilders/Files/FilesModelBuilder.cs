@@ -58,7 +58,7 @@ namespace Seller.Web.Shared.ModelBuilders.Files
                         {
                             Name = file.Name,
                             Filename = file.Filename,
-                            Url = this.mediaService.GetMediaUrl(file.Id),
+                            Url = this.mediaService.GetNonCdnMediaUrl(file.Id),
                             Description = file.Description ?? "-",
                             IsProtected = file.IsProtected,
                             Size = string.Format("{0:0.00} MB", file.Size / 1024f / 1024f),

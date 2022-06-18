@@ -16,7 +16,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
     {
         private readonly IMediaItemsRepository mediaRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IMediaService mediaHelperService;
+        private readonly IMediaService mediaService;
 
         public FilesModelBuilder(
             IMediaItemsRepository mediaRepository,
@@ -25,7 +25,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
         {
             this.mediaRepository = mediaRepository;
             this.globalLocalizer = globalLocalizer;
-            this.mediaHelperService = mediaHelperService;
+            this.mediaService = mediaHelperService;
         }
 
         public async Task<FilesViewModel> BuildModelAsync(FilesComponentModel componentModel)
@@ -58,7 +58,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         {
                             Name = file.Name,
                             Filename = file.Filename,
-                            Url = this.mediaHelperService.GetMediaUrl(file.Id),
+                            Url = this.mediaService.GetNonCdnMediaUrl(file.Id),
                             Description = file.Description ?? "-",
                             IsProtected = file.IsProtected,
                             Size = string.Format("{0:0.00} MB", file.Size / 1024f / 1024f),
