@@ -77,13 +77,15 @@ spec:
             path: /hc
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         resources:
           limits:
             memory: "250Mi"
@@ -131,13 +133,15 @@ spec:
             path: /hc
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         resources:
           limits:
             memory: "500Mi"
@@ -197,13 +201,15 @@ spec:
             path: /hc
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         resources:
           limits:
             memory: "250Mi"
@@ -259,13 +265,15 @@ spec:
             path: /hc
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         resources:
           limits:
             memory: "250Mi"
@@ -317,13 +325,15 @@ spec:
             path: /hc
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         resources:
           limits:
             memory: "250Mi"
@@ -410,13 +420,15 @@ spec:
             path: /hc
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         resources:
           limits:
             memory: "250Mi"
@@ -510,13 +522,15 @@ spec:
             path: /hc
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         resources:
           limits:
             memory: "250Mi"
@@ -568,13 +582,15 @@ spec:
             path: /hc
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         resources:
           limits:
             memory: "250Mi"
@@ -628,13 +644,15 @@ spec:
             path: /hc
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         resources:
           limits:
             memory: "250Mi"
@@ -710,13 +728,15 @@ spec:
             path: /hc
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         livenessProbe:
           httpGet:
             path: /liveness
             port: 80
           initialDelaySeconds: 15
-          periodSeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 15
         resources:
           limits:
             memory: "250Mi"

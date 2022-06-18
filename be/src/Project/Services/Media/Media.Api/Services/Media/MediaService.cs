@@ -9,7 +9,6 @@ using Media.Api.Infrastructure.Media.Entities;
 using MimeMapping;
 using System.IO;
 using Media.Api.Services.Checksums;
-using Media.Api.Services.ImageResizers;
 using System.Collections.Generic;
 using Foundation.GenericRepository.Paginations;
 using Foundation.GenericRepository.Predicates;
@@ -29,20 +28,17 @@ namespace Media.Api.Services.Media
         private readonly MediaContext context;
         private readonly IMediaRepository mediaRepository;
         private readonly IChecksumService checksumService;
-        private readonly IImageResizeService imageResizeService;
         private readonly IStringLocalizer mediaResources;
 
         public MediaService(MediaContext context, 
             IMediaRepository mediaRepository, 
             IChecksumService checksumService,
-            IImageResizeService imageResizeService,
             IStringLocalizer<MediaResources> mediaResources)
         {
             this.context = context;
             this.mediaRepository = mediaRepository;
             this.mediaResources = mediaResources;
             this.checksumService = checksumService;
-            this.imageResizeService = imageResizeService;
         }
 
         public async Task<Guid> CreateFileAsync(CreateMediaItemServiceModel serviceModel)
@@ -154,23 +150,6 @@ namespace Media.Api.Services.Media
 
                     if (file != null)
                     {
-                        if (this.IsImage(mediaItem.ContentType) && (width.HasValue || height.HasValue || string.IsNullOrWhiteSpace(extension) is false))
-                        {
-                            if (optimize)
-                            {
-                                file = this.imageResizeService.Compress(file, mediaItem.ContentType, MediaConstants.ImageConversion.ReducedImageQuality, width, height, extension);
-                            }
-                            else
-                            {
-                                file = this.imageResizeService.Compress(file, mediaItem.ContentType, MediaConstants.ImageConversion.ImageQuality, width, height, extension);
-                            }
-
-                            if (string.IsNullOrWhiteSpace(extension) is false)
-                            {
-                                mediaItem.Extension = $".{extension}";
-                            }
-                        }
-
                         return new MediaFileServiceModel
                         {
                             Id = mediaItem.Id,
