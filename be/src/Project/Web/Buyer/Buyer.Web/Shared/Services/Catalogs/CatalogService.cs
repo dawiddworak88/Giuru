@@ -12,11 +12,10 @@ using Buyer.Web.Shared.DomainModels.Categories;
 using System;
 using Buyer.Web.Shared.ViewModels.Catalogs;
 using System.Globalization;
-using Foundation.Extensions.Services.MediaServices;
 using Microsoft.AspNetCore.Routing;
-using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Shared.Repositories.Products;
 using Buyer.Web.Shared.DomainModels.CatalogProducts;
+using Foundation.Media.Services.MediaServices;
 
 namespace Buyer.Web.Shared.Services.Catalogs
 {
@@ -25,23 +24,20 @@ namespace Buyer.Web.Shared.Services.Catalogs
         private readonly ICatalogProductsRepository catalogProductsRepository;
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
-        private readonly IMediaHelperService mediaService;
-        private readonly IOptions<AppSettings> options;
+        private readonly IMediaService mediaService;
         private readonly LinkGenerator linkGenerator;
 
         public CatalogService(
             ICatalogProductsRepository catalogProductsRepository,
             IApiClientService apiClientService, 
             IOptions<AppSettings> settings,
-            IMediaHelperService mediaService,
-            IOptions<AppSettings> options,
+            IMediaService mediaService,
             LinkGenerator linkGenerator)
         {
             this.catalogProductsRepository = catalogProductsRepository;
             this.apiClientService = apiClientService;
             this.settings = settings;
             this.mediaService = mediaService;
-            this.options = options;
             this.linkGenerator = linkGenerator;
         }
 
@@ -91,9 +87,7 @@ namespace Buyer.Web.Shared.Services.Catalogs
                         var imageGuid = product.Images.FirstOrDefault();
 
                         catalogItem.ImageAlt = product.Name;
-                        catalogItem.ImageUrl = this.mediaService.GetFileUrl(
-                            this.options.Value.MediaUrl, 
-                            imageGuid);
+                        catalogItem.ImageUrl = this.mediaService.GetNonCdnMediaUrl(imageGuid);
                     }
 
                     catalogItemList.Add(catalogItem);

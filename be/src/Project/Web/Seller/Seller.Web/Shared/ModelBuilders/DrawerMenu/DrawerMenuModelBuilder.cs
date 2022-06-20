@@ -116,15 +116,27 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                         },
                         new DrawerMenuItemViewModel
                         {
-                            Icon = IconsConstants.List,
-                            Title = this.globalLocalizer.GetString("ClientsApplications"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "ClientApplications", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                            Icon = IconsConstants.Briefcase,
+                            Title = this.globalLocalizer.GetString("ClientManagers"),
+                            Url = this.linkGenerator.GetPathByAction("Index", "ClientAccountManagers", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
                         },
                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Users,
                             Title = this.globalLocalizer.GetString("ClientsGroups"),
                             Url = this.linkGenerator.GetPathByAction("Index", "ClientGroups", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name })
+                        }
+                    }
+                },
+                new DrawerMenuViewModel
+                {
+                    Items = new List<DrawerMenuItemViewModel>
+                    {
+                        new DrawerMenuItemViewModel
+                        {
+                            Icon = IconsConstants.Media,
+                            Title = this.globalLocalizer.GetString("Media"),
+                            Url = this.linkGenerator.GetPathByAction("Index", "Medias", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name })
                         }
                     }
                 },

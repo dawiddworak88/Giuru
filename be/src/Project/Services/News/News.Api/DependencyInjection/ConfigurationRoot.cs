@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using News.Api.Infrastructure;
 
 namespace News.Api.DependencyInjection
@@ -27,6 +28,24 @@ namespace News.Api.DependencyInjection
         public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<LocalizationSettings>(configuration);
+        }
+
+        public static IServiceCollection ConigureHealthChecks(this IServiceCollection services, IConfiguration configuration)
+        {
+            var hcBuilder = services.AddHealthChecks();
+
+            hcBuilder
+                .AddCheck("self", () => HealthCheckResult.Healthy());
+
+            if (string.IsNullOrWhiteSpace(configuration["ConnectionString"]) is false)
+            {
+                hcBuilder.AddSqlServer(
+                    configuration["ConnectionString"],
+                    name: "news-api-db",
+                    tags: new string[] { "newsapidb" });
+            }
+
+            return services;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Media.Api.Repositories
             this.configuration = configuration;
         }
 
-        public async Task<byte[]> GetFileAsync(string folder, string filename)
+        public byte[] GetFile(string folder, string filename)
         {
             var blobServiceClient = new BlobServiceClient(this.configuration.Value.StorageConnectionString);
 
@@ -28,7 +28,7 @@ namespace Media.Api.Repositories
             {
                 using (var ms = new MemoryStream())
                 {
-                    await containerClient.GetBlobClient(filename).DownloadToAsync(ms);
+                    containerClient.GetBlobClient(filename).DownloadTo(ms);
 
                     return ms.ToArray();
                 }

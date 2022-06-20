@@ -18,6 +18,7 @@ function ClientForm(props) {
         communicationLanguage: { value: props.communicationLanguage ? props.communicationLanguage : "", error: "" },
         phoneNumber: { value: props.phoneNumber ? props.phoneNumber : null },
         clientGroupIds: { value: props.clientGroupsIds ? props.clientGroupsIds : []},
+        clientManagerIds: { value: props.clientManagersIds ? props.clientManagersIds : []},
         hasAccount: { value: props.hasAccount ? props.hasAccount : false }
     };
 
@@ -118,7 +119,7 @@ function ClientForm(props) {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, email, clientGroupIds, communicationLanguage, phoneNumber } = values;
+    const { id, name, email, clientGroupIds, communicationLanguage, phoneNumber, clientManagerIds } = values;
     return (
         <section className="section section-small-padding product client-form">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -200,6 +201,28 @@ function ClientForm(props) {
                             </FormControl>
                         </div>
                         <div className="field">
+                            <FormControl fullWidth={true} variant="standard">
+                                <InputLabel id="clientManagers-label">{props.clientManagerLabel}</InputLabel>
+                                <Select
+                                    labelId="clientManagers-label"
+                                    id="clientManagerIds"
+                                    name="clientManagerIds"
+                                    value={clientManagerIds}
+                                    multiple={true}
+                                    onChange={handleOnChange}>
+                                    {props.clientManagers && props.clientManagers.length > 0 ? (
+                                        props.clientManagers.map((manager, index) => {
+                                            return (
+                                                <MenuItem key={index} value={manager.id}>{manager.firstName} {manager.lastName}</MenuItem>
+                                            );
+                                        })
+                                    ) : (
+                                        <MenuItem disabled>{props.noManagersText}</MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <div className="field">
                             <TextField 
                                 id="phoneNumber" 
                                 name="phoneNumber" 
@@ -270,7 +293,11 @@ ClientForm.propTypes = {
     resetPasswordText: PropTypes.string.isRequired,
     idLabel: PropTypes.string,
     noGroupsText: PropTypes.string.isRequired,
-    groupsLabel: PropTypes.string.isRequired
+    groupsLabel: PropTypes.string.isRequired,
+    clientManagerLabel: PropTypes.string.isRequired,
+    clientManagers: PropTypes.array,
+    noManagersText: PropTypes.string.isRequired,
+    clientManagerIds: PropTypes.array
 };
 
 export default ClientForm;

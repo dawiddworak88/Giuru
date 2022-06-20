@@ -7,6 +7,7 @@ using Client.Api.Services.Groups;
 using Foundation.EventBus;
 using Foundation.EventBus.Abstractions;
 using Foundation.EventBusRabbitMq;
+using Client.Api.Services.Managers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,7 @@ namespace Client.Api.DependencyInjection
             services.AddScoped<IClientsService, ClientsService>();
             services.AddScoped<IClientGroupsService, ClientGroupsService>();
             services.AddScoped<IClientsApplicationsService, ClientsApplicationsService>();
+            services.AddScoped<IClientAccountManagersService, ClientAccountManagersService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
