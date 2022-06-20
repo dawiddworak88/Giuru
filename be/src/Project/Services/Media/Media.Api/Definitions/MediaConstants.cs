@@ -7,6 +7,7 @@ namespace Media.Api.Definitions
         public struct General
         {
             public static readonly string ContainerName = "giuru";
+            public static readonly Guid DefaultOrganisationId = Guid.Parse("09affcc9-1665-45d6-919f-3d2026106ba1");
         }
 
         public struct Headers
