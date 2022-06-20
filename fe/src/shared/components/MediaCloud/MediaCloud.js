@@ -10,10 +10,8 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 
 function MediaCloud(props) {
-
     const [, dispatch] = useContext(Context);
-
-    const { setFieldValue, files } = props;
+    const { setFieldValue, files, mediaId } = props;
 
     function deleteMedia(e, id) {
 
@@ -61,9 +59,12 @@ function MediaCloud(props) {
                 });
         }
         else {
-            acceptedFiles.forEach((file) => {
-                const formData = new FormData();
+            const formData = new FormData();
+            if (props.mediaId){
+                formData.append("id", mediaId)
+            }
 
+            acceptedFiles.forEach((file) => {
                 formData.append("file", file);
 
                 const requestOptions = {
@@ -172,7 +173,7 @@ function MediaCloud(props) {
                                                     provided.draggableProps.style
                                                 )}>
                                                 <div>
-                                                    {file.mimeType === "image/jpeg" || file.mimeType === "image/png" ?
+                                                    {file.mimeType.startsWith("image") ?
                                                         <img src={file.url} alt={file.name} /> :
                                                         <div className="dropzone__preview-tile">
                                                             <a href={file.url} alt={file.name}>{file.filename}</a>

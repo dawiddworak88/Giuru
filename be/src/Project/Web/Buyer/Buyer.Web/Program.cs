@@ -18,6 +18,9 @@ using Buyer.Web.Areas.Orders.DependencyInjection;
 using Microsoft.AspNetCore.Http;
 using Foundation.Extensions.Filters;
 using Buyer.Web.Areas.News.DependencyInjection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
+using Foundation.Media.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +38,7 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 
     if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogstashUrl"]))
     {
-        loggerConfiguration.WriteTo.Http(hostingContext.Configuration["LogstashUrl"]);
+        loggerConfiguration.WriteTo.Http(requestUri: hostingContext.Configuration["LogstashUrl"], queueLimitBytes: null);
     }
 
     if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoToken"])
@@ -71,6 +74,8 @@ builder.Services.AddControllersWithViews(options =>
     options.Filters.Add(typeof(HttpWebGlobalExceptionFilter));
 }).AddNewtonsoftJson();
 
+builder.Services.RegisterFoundationMediaDependencies();
+
 builder.Services.RegisterClientAccountDependencies(builder.Configuration);
 
 builder.Services.RegisterLocalizationDependencies();
@@ -86,6 +91,8 @@ builder.Services.RegisterDependencies(builder.Configuration);
 builder.Services.RegisterApiExtensionsDependencies();
 
 builder.Services.ConfigureSettings(builder.Configuration);
+
+builder.Services.ConigureHealthChecks(builder.Configuration);
 
 var app = builder.Build();
 
@@ -123,6 +130,17 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{area:exists=Home}/{controller=Home}/{action=Index}/{id?}").RequireAuthorization();
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
 });
 
 app.Run();

@@ -135,6 +135,9 @@
   <data name="ClientExists" xml:space="preserve">
     <value>Klient o takim adresie e-mail już istnieje.</value>
   </data>
+  <data name="ClientManagers" xml:space="preserve">
+    <value>Account menedżerowie klientów</value>
+  </data>
   <data name="ClientNotFound" xml:space="preserve">
     <value>Klient nie został znaleziony.</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="EditClient" xml:space="preserve">
     <value>Edytuj klienta</value>
+  </data>
+  <data name="EditClientManager" xml:space="preserve">
+    <value>Edytuj account menedżera klienta</value>
   </data>
   <data name="EditGroup" xml:space="preserve">
     <value>Edytuj grupę</value>
@@ -165,11 +171,29 @@
   <data name="GroupSavedSuccessfully" xml:space="preserve">
     <value>Grupa została pomyślnie zapisana.</value>
   </data>
+  <data name="ManagerDeleteConflict" xml:space="preserve">
+    <value>Usuń przypisanie klientów do tego account menedzera.</value>
+  </data>
+  <data name="ManagerDeletedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie usunięto menedżera.</value>
+  </data>
+  <data name="ManagerExist" xml:space="preserve">
+    <value>Account menedżer już istnieje.</value>
+  </data>
+  <data name="ManagerNotFound" xml:space="preserve">
+    <value>Account menedżer nie został znaleziony.</value>
+  </data>
+  <data name="ManagerSavedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie zapisano menedżera.</value>
+  </data>
   <data name="NavigateToClientsLabel" xml:space="preserve">
     <value>Powróć do klientów</value>
   </data>
   <data name="NavigateToGroupsText" xml:space="preserve">
     <value>Powróć do grup klientów</value>
+  </data>
+  <data name="NavigateToManagersText" xml:space="preserve">
+    <value>Powróć do account menedżerów</value>
   </data>
   <data name="NewClient" xml:space="preserve">
     <value>Nowy klient</value>
@@ -177,8 +201,17 @@
   <data name="NewGroup" xml:space="preserve">
     <value>Nowa grupa</value>
   </data>
+  <data name="NewManager" xml:space="preserve">
+    <value>Nowy account menedżer</value>
+  </data>
+  <data name="NoClients" xml:space="preserve">
+    <value>Brak dostępnych klientów</value>
+  </data>
   <data name="NoGroupsText" xml:space="preserve">
     <value>Brak dostępnych grup</value>
+  </data>
+  <data name="NoManagers" xml:space="preserve">
+    <value>Brak dostępnych account menedzerów</value>
   </data>
   <data name="ResetPasswordText" xml:space="preserve">
     <value>Zresetuj hasło</value>

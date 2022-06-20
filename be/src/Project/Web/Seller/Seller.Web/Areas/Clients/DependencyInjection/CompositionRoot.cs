@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.ModelBuilders;
 using Seller.Web.Areas.Clients.Repositories;
+using Seller.Web.Areas.Clients.Repositories.Managers;
 using Seller.Web.Areas.Clients.ViewModels;
 using Seller.Web.Shared.ViewModels;
 
@@ -14,6 +15,7 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
         public static void RegisterClientsAreaDependencies(this IServiceCollection services)
         {
             services.AddScoped<IClientGroupsRepository, ClientGroupsRepository>();
+            services.AddScoped<IClientAccountManagersRepository, ClientAccountManagersRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>>, ClientsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel>, ClientsPageModelBuilder>();
@@ -24,6 +26,11 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientGroupsPageViewModel>, ClientGroupsPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientGroupPageViewModel>, ClientGroupPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientGroupFormViewModel>, ClientGroupFormModelBuilder>();
+
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientAccountManager>>, ClientAccountManagersPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientAccountManagersPageViewModel>, ClientAccountManagersPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientAccountManagerPageViewModel>, ClientAccountManagerPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientAccountManagerFormViewModel>, ClientAccountManagerFormModelBuilder>();
         }
     }
 }

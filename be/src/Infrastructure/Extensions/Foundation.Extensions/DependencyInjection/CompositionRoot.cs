@@ -1,5 +1,4 @@
-﻿using Foundation.Extensions.Services.MediaServices;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,8 +11,6 @@ namespace Foundation.Extensions.DependencyInjection
         public static void RegisterGeneralDependencies(this IServiceCollection services)
         {
             services.AddHttpContextAccessor();
-
-            services.AddScoped<IMediaHelperService, MediaHelperService>();
 
             services.Configure<GzipCompressionProviderOptions>(options =>
             {

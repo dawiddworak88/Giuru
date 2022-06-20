@@ -135,6 +135,9 @@
   <data name="ClientExists" xml:space="preserve">
     <value>Ein Kunde mit dieser E-Mail-Adresse existiert bereits.</value>
   </data>
+  <data name="ClientManagers" xml:space="preserve">
+    <value>Kundenbetreuer</value>
+  </data>
   <data name="ClientNotFound" xml:space="preserve">
     <value>Kunde wurde nicht gefunden.</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="EditClient" xml:space="preserve">
     <value>Kunde bearbeiten</value>
+  </data>
+  <data name="EditClientManager" xml:space="preserve">
+    <value>Kundenkontomanager bearbeiten</value>
   </data>
   <data name="EditGroup" xml:space="preserve">
     <value>Kundengruppe bearbeiten</value>
@@ -165,11 +171,29 @@
   <data name="GroupSavedSuccessfully" xml:space="preserve">
     <value>Gruppe wurde erfolgreich gespeichert.</value>
   </data>
+  <data name="ManagerDeleteConflict" xml:space="preserve">
+    <value>Heben Sie die Zuweisung von Clients zu diesem Account-Manager auf.</value>
+  </data>
+  <data name="ManagerDeletedSuccessfully" xml:space="preserve">
+    <value>Account-Manager wurde erfolgreich gelöscht.</value>
+  </data>
+  <data name="ManagerExist" xml:space="preserve">
+    <value>Account-Manager existiert bereit</value>
+  </data>
+  <data name="ManagerNotFound" xml:space="preserve">
+    <value>Account-Manager wurde nicht gefunden.</value>
+  </data>
+  <data name="ManagerSavedSuccessfully" xml:space="preserve">
+    <value>Account-Manager wurde erfolgreich gespeichert.</value>
+  </data>
   <data name="NavigateToClientsLabel" xml:space="preserve">
     <value>Zurück zu den Kunden</value>
   </data>
   <data name="NavigateToGroupsText" xml:space="preserve">
     <value>Zurück zu den Gruppen</value>
+  </data>
+  <data name="NavigateToManagersText" xml:space="preserve">
+    <value>Zurück zu den Account-Managern</value>
   </data>
   <data name="NewClient" xml:space="preserve">
     <value>Neuer Kunde</value>
@@ -177,8 +201,17 @@
   <data name="NewGroup" xml:space="preserve">
     <value>Neue Kundengruppe</value>
   </data>
+  <data name="NewManager" xml:space="preserve">
+    <value>Neuer Account-Manager</value>
+  </data>
+  <data name="NoClients" xml:space="preserve">
+    <value>Keine Kunden verfügbar</value>
+  </data>
   <data name="NoGroupsText" xml:space="preserve">
     <value>Keine Kundengruppe verfügbar</value>
+  </data>
+  <data name="NoManagers" xml:space="preserve">
+    <value>Keine Account-Manager verfügbar</value>
   </data>
   <data name="ResetPasswordText" xml:space="preserve">
     <value>Passwort zurücksetzen</value>

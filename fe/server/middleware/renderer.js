@@ -24,6 +24,11 @@ import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetP
 import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
 
 // Seller Portal
+import MediaPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage";
+import MediaItemPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage";
+import ClientAccountManagerPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagerPage/ClientAccountManagerPage";
+import ClientAccountManagersPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagersPage/ClientAccountManagersPage";
+import MediasPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediasPage/MediasPage"
 import OutletPage from "../../src/project/Seller.Portal/areas/Inventory/pages/OutletPage/OutletPage";
 import OutletsPage from "../../src/project/Seller.Portal/areas/Inventory/pages/OutletsPage/OutletsPage";
 import ClientGroupPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientGroupPage/ClientGroupPage";
@@ -69,6 +74,11 @@ const Components = {
 	SetPasswordPage,
 	ContentPage,
 
+	MediaPage,
+	MediaItemPage,
+	ClientAccountManagerPage,
+	ClientAccountManagersPage,
+	MediasPage,
 	OutletPage,
 	OutletsPage,
 	ClientGroupPage,

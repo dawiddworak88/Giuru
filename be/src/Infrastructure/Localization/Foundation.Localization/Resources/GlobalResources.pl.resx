@@ -426,6 +426,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Nazwisko</value>
   </data>
+  <data name="Miniature" xml:space="preserve">
+    <value>Miniaturka</value>
+  </data>
   <data name="BasketLabel" xml:space="preserve">
     <value>Dodaj do koszyka</value>
   </data>
@@ -569,5 +572,14 @@
   </data>
   <data name="VicePresident" xml:space="preserve">
     <value>Wiceprezes</value>
+  </data>
+  <data name="AttachedAttachments" xml:space="preserve">
+    <value>Klient załączył następujące pliki</value>
+  </data>
+  <data name="ClientManagers" xml:space="preserve">
+    <value>Menedżerowie klientów</value>
+  </data>
+  <data name="Manager" xml:space="preserve">
+    <value>Account Menedżer</value>
   </data>
 </root>

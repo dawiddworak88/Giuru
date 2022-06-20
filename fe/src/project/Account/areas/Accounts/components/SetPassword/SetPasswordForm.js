@@ -9,7 +9,6 @@ import ResponseStatusConstants from "../../../../../../shared/constants/Response
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
 function SetPasswordForm(props) {
-
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
@@ -42,10 +41,13 @@ function SetPasswordForm(props) {
             .then(response => {
                 if (response.status === ResponseStatusConstants.found()) {
                     toast.success(props.passwordSetSuccessMessage);
-                    setTimeout(() => NavigationHelper.redirect(props.returnUrl), 2000);
+                    setTimeout(() => {
+                        NavigationHelper.redirect(props.returnUrl)
+                    }, 2000);
                 } else {
                     toast.error(props.generalErrorMessage);
                 }
+                
             }).catch(() => {
                 dispatch({ type: "SET_IS_LOADING", payload: false });
                 toast.error(props.generalErrorMessage);
@@ -57,7 +59,6 @@ function SetPasswordForm(props) {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
     const { id, password } = values;
-
     return (
         <section className="section is-flex-centered set-password">
             <div className="account-card">
@@ -80,7 +81,12 @@ function SetPasswordForm(props) {
                             error={(errors.password.length > 0) && dirty.password} />
                     </div>
                     <div className="field">
-                        <Button type="submit" variant="contained" color="primary" disabled={state.isLoading || disable} fullWidth={true}>
+                        <Button 
+                            type="submit" 
+                            variant="contained" 
+                            color="primary" 
+                            disabled={state.isLoading || disable} 
+                            fullWidth={true}>
                             {props.setPasswordText}
                         </Button>
                     </div>

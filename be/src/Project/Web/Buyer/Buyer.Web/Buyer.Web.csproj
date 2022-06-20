@@ -10,15 +10,17 @@
   <ItemGroup>
 	<PackageReference Include="GraphQL.Client" Version="4.0.2" />
 	<PackageReference Include="GraphQL.Client.Serializer.Newtonsoft" Version="4.0.2" />
+	<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.6" />
 	<PackageReference Include="ClosedXML" Version="0.95.4" />
-	<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.5" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
-    <PackageReference Include="Serilog.Sinks.Http" Version="7.2.0" />
-    <PackageReference Include="Serilog.Sinks.Logz.Io" Version="2.2.1" />
+	<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="Serilog.Sinks.Http" Version="8.0.0" />
+    <PackageReference Include="Serilog.Sinks.Logz.Io" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="wwwroot\" />
@@ -30,6 +32,7 @@
     <ProjectReference Include="..\..\..\..\Infrastructure\Extensions\Foundation.Extensions\Foundation.Extensions.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\GenericRepository\Foundation.GenericRepository\Foundation.GenericRepository.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Localization\Foundation.Localization\Foundation.Localization.csproj" />
+    <ProjectReference Include="..\..\..\..\Infrastructure\Media\Foundation.Media\Foundation.Media.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Prerendering\Foundation.Prerendering\Foundation.Prerendering.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Presentation\Foundation.Presentation\Foundation.Presentation.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Security\Foundation.Security\Foundation.Security.csproj" />

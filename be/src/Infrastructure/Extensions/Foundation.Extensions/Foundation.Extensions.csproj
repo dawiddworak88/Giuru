@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="9.2.2" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.7" />
+    <PackageReference Include="FluentValidation" Version="11.0.3" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.18" />
   </ItemGroup>
   
   <ItemGroup>
