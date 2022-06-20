@@ -69,8 +69,6 @@ builder.Services.RegisterClientApiDependencies();
 
 builder.Services.RegisterDatabaseDependencies(builder.Configuration);
 
-builder.Services.RegisterEventBus(builder.Configuration);
-
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Client API", Version = "v1" });
@@ -101,8 +99,6 @@ app.UseRouting();
 app.UseAuthentication();
 
 app.UseAuthorization();
-
-app.ConfigureEventBus();
 
 app.UseCustomHeaderRequestLocalizationProvider(builder.Configuration, app.Services.GetService<IOptionsMonitor<LocalizationSettings>>());
 

@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Foundation.Localization.Definitions;
-using Foundation.EventBus.Abstractions;
-using Client.Api.IntegrationEvents;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Client.Api.DependencyInjection
@@ -32,11 +30,6 @@ namespace Client.Api.DependencyInjection
             services.Configure<LocalizationSettings>(configuration);
         }
 
-        public static void ConfigureEventBus(this IApplicationBuilder app)
-        {
-            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-
-            eventBus.Subscribe<ClientApplicationIntegrationEvent, IIntegrationEventHandler<ClientApplicationIntegrationEvent>>();
         public static IServiceCollection ConigureHealthChecks(this IServiceCollection services, IConfiguration configuration)
         {
             var hcBuilder = services.AddHealthChecks();
