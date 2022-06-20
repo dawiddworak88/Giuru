@@ -5,6 +5,8 @@ using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.ModelBuilders;
 using Seller.Web.Areas.Clients.Repositories.Groups;
 using Seller.Web.Areas.Clients.Repositories.Roles;
+using Seller.Web.Areas.Clients.Repositories;
+using Seller.Web.Areas.Clients.Repositories.Managers;
 using Seller.Web.Areas.Clients.ViewModels;
 using Seller.Web.Shared.ViewModels;
 
@@ -16,6 +18,7 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
         {
             services.AddScoped<IClientGroupsRepository, ClientGroupsRepository>();
             services.AddScoped<IClientRolesRepository, ClientRolesRepository>();
+            services.AddScoped<IClientAccountManagersRepository, ClientAccountManagersRepository>();
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<Client>>, ClientsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientsPageViewModel>, ClientsPageModelBuilder>();
@@ -31,6 +34,11 @@ namespace Seller.Web.Areas.Clients.DependencyInjection
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientRolesPageViewModel>, ClientRolesPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientRolePageViewModel>, ClientRolePageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientRoleFormViewModel>, ClientRoleFormModelBuilder>();
+            
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<ClientAccountManager>>, ClientAccountManagersPageCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientAccountManagersPageViewModel>, ClientAccountManagersPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientAccountManagerPageViewModel>, ClientAccountManagerPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ClientAccountManagerFormViewModel>, ClientAccountManagerFormModelBuilder>();
         }
     }
 }

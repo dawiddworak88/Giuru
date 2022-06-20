@@ -25,6 +25,7 @@ const ClientGroupForm = (props) => {
 
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
+        
         const requestOptions = {
             method: "POST",
             headers: { 

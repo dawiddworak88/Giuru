@@ -2,6 +2,7 @@
 using Client.Api.Services.Clients;
 using Client.Api.Services.Groups;
 using Client.Api.Services.Roles;
+using Client.Api.Services.Managers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,7 @@ namespace Client.Api.DependencyInjection
             services.AddScoped<IClientsService, ClientsService>();
             services.AddScoped<IClientGroupsService, ClientGroupsService>();
             services.AddScoped<IClientRolesService, ClientRolesService>();
+            services.AddScoped<IClientAccountManagersService, ClientAccountManagersService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)

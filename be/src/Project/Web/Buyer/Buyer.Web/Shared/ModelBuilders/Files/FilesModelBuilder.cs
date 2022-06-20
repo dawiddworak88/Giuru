@@ -1,16 +1,14 @@
 ﻿using Buyer.Web.Areas.Products.Repositories.Files;
-using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.ComponentModels.Files;
 using Buyer.Web.Shared.ViewModels.Files;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Foundation.Media.Services.MediaServices;
 
 namespace Buyer.Web.Shared.ModelBuilders.Files
 {
@@ -18,19 +16,16 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
     {
         private readonly IMediaItemsRepository mediaRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IMediaHelperService mediaHelperService;
-        private readonly IOptions<AppSettings> options;
+        private readonly IMediaService mediaService;
 
         public FilesModelBuilder(
             IMediaItemsRepository mediaRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IMediaHelperService mediaHelperService,
-            IOptions<AppSettings> options)
+            IMediaService mediaHelperService)
         {
             this.mediaRepository = mediaRepository;
             this.globalLocalizer = globalLocalizer;
-            this.mediaHelperService = mediaHelperService;
-            this.options = options;
+            this.mediaService = mediaHelperService;
         }
 
         public async Task<FilesViewModel> BuildModelAsync(FilesComponentModel componentModel)
@@ -63,7 +58,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         {
                             Name = file.Name,
                             Filename = file.Filename,
-                            Url = this.mediaHelperService.GetFileUrl(this.options.Value.MediaUrl, file.Id),
+                            Url = this.mediaService.GetNonCdnMediaUrl(file.Id),
                             Description = file.Description ?? "-",
                             IsProtected = file.IsProtected,
                             Size = string.Format("{0:0.00} MB", file.Size / 1024f / 1024f),

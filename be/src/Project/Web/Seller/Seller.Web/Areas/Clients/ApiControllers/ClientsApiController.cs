@@ -59,7 +59,6 @@ namespace Seller.Web.Areas.Clients.ApiControllers
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] SaveClientRequestModel model)
         {
-            
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
@@ -76,7 +75,7 @@ namespace Seller.Web.Areas.Clients.ApiControllers
                 organisationId = await this.organisationsRepository.SaveAsync(token, language, model.Name, model.Email, model.CommunicationLanguage);
             }
 
-            var clientId = await this.clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.PhoneNumber, organisationId.Value, model.ClientGroupIds);
+            var clientId = await this.clientsRepository.SaveAsync(token, language, model.Id, model.Name, model.Email, model.CommunicationLanguage, model.PhoneNumber, organisationId.Value, model.ClientGroupIds, model.ClientManagerIds);
 
             if (model.HasAccount)
             {

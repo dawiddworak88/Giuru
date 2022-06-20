@@ -18,6 +18,9 @@ using System.IO;
 using Foundation.Localization.Definitions;
 using Microsoft.Extensions.Options;
 using Foundation.Mailing.DependencyInjection;
+using Foundation.Media.DependencyInjection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +38,7 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
 
     if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogstashUrl"]))
     {
-        loggerConfiguration.WriteTo.Http(hostingContext.Configuration["LogstashUrl"]);
+        loggerConfiguration.WriteTo.Http(requestUri: hostingContext.Configuration["LogstashUrl"], queueLimitBytes: null);
     }
 
     if (!string.IsNullOrWhiteSpace(hostingContext.Configuration["LogzIoToken"])
@@ -58,6 +61,8 @@ builder.Services.AddControllers(options =>
     options.RespectBrowserAcceptHeader = true;
     options.Filters.Add(typeof(HttpGlobalExceptionFilter));
 }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
+
+builder.Services.RegisterFoundationMediaDependencies();
 
 builder.Services.AddLocalization();
 
@@ -86,6 +91,8 @@ builder.Services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
 
     return new DefaultRabbitMQPersistentConnection(factory, logger, int.Parse(builder.Configuration["EventBusRetryCount"]));
 });
+
+builder.Services.ConigureHealthChecks(builder.Configuration);
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -123,6 +130,17 @@ app.ConfigureEventBus();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+
+    endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    endpoints.MapHealthChecks("/liveness", new HealthCheckOptions
+    {
+        Predicate = r => r.Name.Contains("self")
+    });
 });
 
 app.Run();
