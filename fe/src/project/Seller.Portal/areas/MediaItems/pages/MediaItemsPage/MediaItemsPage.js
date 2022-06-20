@@ -9,7 +9,7 @@ import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
 import Catalog from "../../../../../../shared/components/Catalog/Catalog";
 import LocaleHelper from "../../../../../../shared/helpers/globals/LocaleHelper";
 
-function MediasPage(props) {
+const MediaItemsPage = (props) => {
 
   LocaleHelper.setMomentLocale(props.locale);
 
@@ -26,4 +26,4 @@ function MediasPage(props) {
   );
 }
 
-export default MediasPage;
+export default MediaItemsPage;

@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Media.ModelBuilders
 {
-    public class MediaPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, MediasPageViewModel>
+    public class MediaItemsPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, MediaItemsPageViewModel>
     {
         private readonly IModelBuilder<HeaderViewModel> headerModelBuilder;
         private readonly IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<MediaItem>> mediasCatalogModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
-        public MediaPageModelBuilder(
+        public MediaItemsPageModelBuilder(
             IModelBuilder<HeaderViewModel> headerModelBuilder,
             IModelBuilder<MenuTilesViewModel> menuTilesModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<MediaItem>> mediasCatalogModelBuilder,
@@ -30,9 +30,9 @@ namespace Seller.Web.Areas.Media.ModelBuilders
             this.footerModelBuilder = footerModelBuilder;
         }
 
-        public async Task<MediasPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<MediaItemsPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new MediasPageViewModel
+            var viewModel = new MediaItemsPageViewModel
             {
                 Locale = CultureInfo.CurrentUICulture.Name,
                 Header = this.headerModelBuilder.BuildModel(),

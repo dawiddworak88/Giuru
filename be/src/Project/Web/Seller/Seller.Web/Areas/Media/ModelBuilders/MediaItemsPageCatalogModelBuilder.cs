@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Media.ModelBuilders
 {
-    public class MediaPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<MediaItem>>
+    public class MediaItemsPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<MediaItem>>
     {
         private readonly ICatalogModelBuilder catalogModelBuilder;
         private readonly IStringLocalizer globalLocalizer;
@@ -23,7 +23,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
         private readonly LinkGenerator linkGenerator;
         private readonly IMediaRepository mediaRepository;
 
-        public MediaPageCatalogModelBuilder(
+        public MediaItemsPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<MediaResources> mediaLocalizer,

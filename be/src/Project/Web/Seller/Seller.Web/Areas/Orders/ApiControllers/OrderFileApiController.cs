@@ -48,7 +48,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index([FromForm] UploadMediaRequestModel model)
+        public async Task<IActionResult> Index([FromForm] UploadMediaItemRequestModel model)
         {
             var importedOrderLines = this.orderFileService.ImportOrderLines(model.File);
 
