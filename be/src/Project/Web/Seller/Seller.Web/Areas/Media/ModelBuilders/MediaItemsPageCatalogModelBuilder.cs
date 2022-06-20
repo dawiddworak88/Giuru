@@ -45,8 +45,8 @@ namespace Seller.Web.Areas.Media.ModelBuilders
             viewModel.NewText = this.mediaLocalizer.GetString("NewText");
             viewModel.IsAttachmentLabel = this.mediaLocalizer.GetString("IsAttachmentLabel");
 
-            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Index", "Media", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Item", "Medias", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Index", "MediaItem", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Item", "MediaItems", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "MediaApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name });
