@@ -106,10 +106,12 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
-        - name: EventBusConnection
-          value: {{ .Values.eventBusConnection }}
-        - name: EventBusRetryCount
-          value: {{ .Values.eventBusRetryCount }}
+        - name: SendGridApiKey
+          value: {{ .Values.sendGridApiKey }}
+        - name: ActionSendGridClientApplyConfirmationTemplateId
+          value: {{ .Values.clientApi.actionSendGridClientApplyConfirmationTemplateId }}
+        - name: ActionSendGridClientApplyTemplateId
+          value: {{ .Values.clientApi.actionSendGridClientApplyTemplateId }}
         ports:
         - containerPort: 80
 ---
@@ -487,10 +489,6 @@ spec:
           value: {{ .Values.identityApi.actionSendGridCreateTemplateId }}
         - name: ActionSendGridResetTemplateId
           value: {{ .Values.identityApi.actionSendGridResetTemplateId }}
-        - name: ActionSendGridClientApplyConfirmationTemplateId
-          value: {{ .Values.identityApi.actionSendGridClientApplyConfirmationTemplateId }}
-        - name: ActionSendGridClientApplyTemplateId
-          value: {{ .Values.identityApi.actionSendGridClientApplyTemplateId }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType

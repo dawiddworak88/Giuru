@@ -36,8 +36,8 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             {
                 Title = this.globalLocalizer.GetString("EltapPartner"),
                 Subtitle = this.globalLocalizer.GetString("EltapPartnerDescription"),
-                ContactInformationTitle = this.accountLocalizer.GetString("ContactInformation"),
-                BusinessInformationTitle = this.accountLocalizer.GetString("BusinessInformation"),
+                ContactInformationTitle = this.globalLocalizer.GetString("ContactInformation"),
+                BusinessInformationTitle = this.globalLocalizer.GetString("BusinessInformation"),
                 FirstNameLabel = this.globalLocalizer.GetString("FirstName"),
                 LastNameLabel = this.globalLocalizer.GetString("LastName"),
                 EmailLabel = this.globalLocalizer.GetString("Email"),
@@ -114,12 +114,12 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             {
                 new StepViewModel
                 {
-                    Title = this.accountLocalizer.GetString("ContactInformation"),
+                    Title = this.globalLocalizer.GetString("ContactInformation"),
                     Subtitle = this.accountLocalizer.GetString("ContactInformationDescription")
                 },
                 new StepViewModel
                 {
-                    Title = this.accountLocalizer.GetString("BusinessInformation"),
+                    Title = this.globalLocalizer.GetString("BusinessInformation"),
                     Subtitle = this.accountLocalizer.GetString("BusinessInformationDescription")
                 }
             };

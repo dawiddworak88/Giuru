@@ -585,4 +585,10 @@
   <data name="Manager" xml:space="preserve">
     <value>Account Manager</value>
   </data>
+  <data name="BusinessInformation" xml:space="preserve">
+    <value>Business information</value>
+  </data>
+  <data name="ContactInformation" xml:space="preserve">
+    <value>Contact information</value>
+  </data>
 </root>

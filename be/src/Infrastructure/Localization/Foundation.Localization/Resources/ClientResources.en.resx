@@ -141,6 +141,15 @@
   <data name="ClientApplicationSavedSuccessfully" xml:space="preserve">
     <value>Successfully saved client application</value>
   </data>
+  <data name="ClientApplyConfirmation" xml:space="preserve">
+    <value>Thank you for registering on our B2B platform. Your application has been sent and is waiting for verification by our team. We will notify you by e-mail about activating the account.</value>
+  </data>
+  <data name="ClientApplyConfirmationSubject" xml:space="preserve">
+    <value>Confirmation of sending the request for cooperation.</value>
+  </data>
+  <data name="ClientApplySubject" xml:space="preserve">
+    <value>New cooperation request</value>
+  </data>
   <data name="ClientDeletedSuccessfully" xml:space="preserve">
     <value>Client has been deleted successfully.</value>
   </data>

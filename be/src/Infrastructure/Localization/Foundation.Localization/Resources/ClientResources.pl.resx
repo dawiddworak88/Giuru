@@ -141,6 +141,15 @@
   <data name="ClientApplicationSavedSuccessfully" xml:space="preserve">
     <value>Wniosek klienta został pomyślnie zapisany</value>
   </data>
+  <data name="ClientApplyConfirmation" xml:space="preserve">
+    <value>Dziękujemy za rejestrację na naszej platformie B2B. Twój wniosek został przesłany i czeka na weryfikację naszego zespołu. O aktywacji konta powiadomimy Cię drogą mailową.</value>
+  </data>
+  <data name="ClientApplyConfirmationSubject" xml:space="preserve">
+    <value>Potwierdzenie przesłania prośby o współpracę.</value>
+  </data>
+  <data name="ClientApplySubject" xml:space="preserve">
+    <value>Nowa prośba współpracy</value>
+  </data>
   <data name="ClientDeletedSuccessfully" xml:space="preserve">
     <value>Klient został usunięty.</value>
   </data>

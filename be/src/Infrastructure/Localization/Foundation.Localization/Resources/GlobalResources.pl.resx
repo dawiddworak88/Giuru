@@ -588,4 +588,10 @@
   <data name="Manager" xml:space="preserve">
     <value>Account Menedżer</value>
   </data>
+  <data name="BusinessInformation" xml:space="preserve">
+    <value>Informacje biznesowe</value>
+  </data>
+  <data name="ContactInformation" xml:space="preserve">
+    <value>Informacje kontaktowe</value>
+  </data>
 </root>
