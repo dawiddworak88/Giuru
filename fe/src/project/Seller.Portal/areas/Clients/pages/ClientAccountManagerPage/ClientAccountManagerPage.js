@@ -6,7 +6,7 @@ import Header from "../../../../../../shared/components/Header/Header";
 import Store from "../../../../../../shared/stores/Store";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 import MenuTiles from "../../../../../../shared/components/MenuTiles/MenuTiles";
-import ClientManagerForm from "../../components/ClientManagerForm/ClientManagerForm";
+import ClientAccountManagerForm from "../../components/ClientAccountManagerForm/ClientAccountManagerForm";
 
 const ClientAccountManagerPage = (props) => {
   return (
@@ -15,7 +15,7 @@ const ClientAccountManagerPage = (props) => {
       <Store>
         <Header {...props.header}></Header>
         <MenuTiles {...props.menuTiles} />
-        <ClientManagerForm {...props.clientManagerForm} />
+        <ClientAccountManagerForm {...props.clientAccountManagerForm} />
         <Footer {...props.footer}></Footer>
       </Store>
     </ThemeProvider>

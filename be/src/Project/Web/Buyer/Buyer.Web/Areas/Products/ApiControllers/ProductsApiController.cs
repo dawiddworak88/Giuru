@@ -4,14 +4,12 @@ using Buyer.Web.Areas.Products.Repositories;
 using Buyer.Web.Areas.Products.Repositories.Inventories;
 using Buyer.Web.Areas.Products.Repositories.Products;
 using Buyer.Web.Areas.Products.Services.Products;
-using Buyer.Web.Shared.Configurations;
-using Buyer.Web.Shared.Services.ContentDeliveryNetworks;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
-using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
+using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.Components.CarouselGrids.Definitions;
 using Foundation.PageContent.Components.CarouselGrids.ViewModels;
 using Foundation.PageContent.Components.Images;
@@ -20,7 +18,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -34,22 +31,18 @@ namespace Buyer.Web.Areas.Products.ApiControllers
     public class ProductsApiController : BaseApiController
     {
         private readonly IProductsService productsService;
-        private readonly IOptions<AppSettings> options;
-        private readonly ICdnService cdnService;
         private readonly IStringLocalizer<ProductResources> productLocalizer;
         private readonly IProductsRepository productsRepository;
         private readonly IInventoryRepository inventoryRepository;
         private readonly IOutletRepository outletRepository;
-        private readonly IMediaHelperService mediaService;
+        private readonly IMediaService mediaService;
         private readonly LinkGenerator linkGenerator;
 
         public ProductsApiController(
             IProductsService productsService,
             IProductsRepository productsRepository,
-            ICdnService cdnService,
             IStringLocalizer<ProductResources> productLocalizer,
-            IMediaHelperService mediaService,
-            IOptions<AppSettings> options,
+            IMediaService mediaService,
             IInventoryRepository inventoryRepository,
             IOutletRepository outletRepository,
             LinkGenerator linkGenerator)
@@ -60,8 +53,6 @@ namespace Buyer.Web.Areas.Products.ApiControllers
             this.productLocalizer = productLocalizer;
             this.mediaService = mediaService;
             this.productLocalizer = productLocalizer;
-            this.options = options;
-            this.cdnService = cdnService;
             this.inventoryRepository = inventoryRepository;
             this.outletRepository = outletRepository;
         }
@@ -136,15 +127,15 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                         var variantImage = productVariant.Images.FirstOrDefault();
                         carouselItem.Sources = new List<SourceViewModel>
                         {
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 1024, 1024, true, MediaConstants.WebpExtension)) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 352, 352, true,MediaConstants.WebpExtension)) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 608, 608, true, MediaConstants.WebpExtension)) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 768, 768, true, MediaConstants.WebpExtension)) },
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 608) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 768) },
 
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 1024, 1024, true)) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 352, 352, true)) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 608, 608, true)) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, 768, 768, true)) }
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 608) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(variantImage, 768) }
                         };
 
                         var variantImages = new List<ImageVariantViewModel>();
@@ -157,7 +148,7 @@ namespace Buyer.Web.Areas.Products.ApiControllers
                             variantImages.Add(imageVariantViewModel);
                         }
                         carouselItem.Images = variantImages;
-                        carouselItem.ImageUrl = this.cdnService.GetCdnUrl(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, variantImage, CarouselGridConstants.CarouselItemImageMaxWidth, CarouselGridConstants.CarouselItemImageMaxHeight, true));
+                        carouselItem.ImageUrl = this.mediaService.GetMediaUrl(variantImage, CarouselGridConstants.CarouselItemImageMaxWidth);
                     }
 
                     var availableProduct = availableProducts.Data.FirstOrDefault(x => x.ProductSku == productVariant.Sku);

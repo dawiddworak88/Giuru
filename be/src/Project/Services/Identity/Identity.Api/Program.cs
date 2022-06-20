@@ -26,6 +26,7 @@ using Identity.Api.Areas.Accounts.Services.UserServices;
 using Foundation.Mailing.DependencyInjection;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Foundation.Media.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,6 +71,8 @@ builder.Services.AddCultureRouteConstraint();
 builder.Services.AddControllersWithViews();
 
 builder.Services.RegisterLocalizationDependencies();
+
+builder.Services.RegisterFoundationMediaDependencies();
 
 builder.Services.RegisterDatabaseDependencies(builder.Configuration);
 

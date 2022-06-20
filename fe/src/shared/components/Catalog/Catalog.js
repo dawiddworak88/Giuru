@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { Plus } from "react-feather";
 import {
-    Delete, Edit, FileCopyOutlined
+    Delete, Edit, FileCopyOutlined, Link
 } from "@mui/icons-material";
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
@@ -16,6 +16,7 @@ import { Context } from "../../stores/Store";
 import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializer";
 import PaginationConstants from "../../constants/PaginationConstants";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
+import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
 import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 
 function Catalog(props) {
@@ -139,9 +140,8 @@ function Catalog(props) {
     const handleDeleteEntity = () => {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
-
+        
         const deleteParameters = {
-
             id: entityToDelete.id
         };
 
@@ -178,6 +178,9 @@ function Catalog(props) {
             });
     };
 
+    const copyToClipboard = (text) => {
+        ClipboardHelper.copyToClipboard(text);
+    }
     useEffect(() => {
         setMounted(true)
     }, [])
@@ -214,7 +217,7 @@ function Catalog(props) {
                                     <TableHead>
                                         <TableRow>
                                             {props.table.actions &&
-                                                <TableCell width="11%"></TableCell>
+                                                <TableCell width="12%"></TableCell>
                                             }
                                             {props.table.labels.map((item, index) =>
                                                 <TableCell key={index} value={item}>{item}</TableCell>
@@ -225,7 +228,7 @@ function Catalog(props) {
                                         {items.map((item, index) => (
                                             <TableRow key={index}>
                                                 {props.table.actions &&
-                                                    <TableCell width="11%">
+                                                    <TableCell width="12%">
                                                         {props.table.actions.map((actionItem, index) => {
                                                             if (actionItem.isEdit) return (
                                                                 <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel} key={index}>
@@ -239,13 +242,21 @@ function Catalog(props) {
                                                                 <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary" aria-label={props.duplicateLabel} key={index}>
                                                                     <FileCopyOutlined />
                                                                 </Fab>)
+                                                            else if (actionItem.isPicture) return (
+                                                                <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary" aria-label={props.duplicateLabel}>
+                                                                    <Link />
+                                                                </Fab>)
                                                             else return (
                                                                 <div></div>)})}
                                                     </TableCell>
                                                 }
-
                                                 {props.table.properties && props.table.properties.map((property, index) => {
-                                                    if (property.isDateTime){
+                                                    if (property.isPicture){
+                                                        return (
+                                                            <TableCell key={index}><img src={item[property.title]} /></TableCell>
+                                                        )
+                                                    }
+                                                    else if (property.isDateTime){
                                                         return (
                                                             <TableCell key={index}>{isMounted ? moment.utc(item[property.title]).local().format("L LT") : moment.utc(item[property.title]).format("L LT")}</TableCell>
                                                         )

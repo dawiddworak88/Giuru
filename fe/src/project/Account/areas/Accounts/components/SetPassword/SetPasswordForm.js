@@ -59,7 +59,6 @@ function SetPasswordForm(props) {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
     const { id, password } = values;
-
     return (
         <section className="section is-flex-centered set-password">
             <div className="account-card">

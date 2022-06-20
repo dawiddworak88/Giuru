@@ -1,12 +1,11 @@
 ﻿using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.ExtensionMethods;
-using Foundation.Extensions.Services.MediaServices;
+using Foundation.Media.Services.MediaServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Media.ApiRequestModels;
 using Seller.Web.Areas.Orders.ApiResponseModels;
 using Seller.Web.Areas.Orders.Definitions;
@@ -14,7 +13,6 @@ using Seller.Web.Areas.Orders.DomainModels;
 using Seller.Web.Areas.Orders.Repositories.Baskets;
 using Seller.Web.Areas.Orders.Services.OrderFiles;
 using Seller.Web.Areas.Shared.Repositories.Products;
-using Seller.Web.Shared.Configurations;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -30,8 +28,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
         private readonly IProductsRepository productsRepository;
         private readonly IBasketRepository basketRepository;
         private readonly LinkGenerator linkGenerator;
-        private readonly IOptions<AppSettings> options;
-        private readonly IMediaHelperService mediaService;
+        private readonly IMediaService mediaService;
         private readonly ILogger<OrderFileApiController> logger;
 
         public OrderFileApiController(
@@ -39,15 +36,13 @@ namespace Seller.Web.Areas.Orders.ApiControllers
             IProductsRepository productsRepository,
             IBasketRepository basketRepository,
             LinkGenerator linkGenerator,
-            IOptions<AppSettings> options,
-            IMediaHelperService mediaService,
+            IMediaService mediaService,
             ILogger<OrderFileApiController> logger)
         {
             this.orderFileService = orderFileService;
             this.productsRepository = productsRepository;
             this.basketRepository = basketRepository;
             this.linkGenerator = linkGenerator;
-            this.options = options;
             this.mediaService = mediaService;
             this.logger = logger;
         }
@@ -77,7 +72,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
                         ProductId = product.Id,
                         ProductSku = product.Sku,
                         ProductName = product.Name,
-                        PictureUrl = product.Images.OrEmptyIfNull().Any() ? this.mediaService.GetFileUrl(this.options.Value.MediaUrl, product.Images.First(), OrdersConstants.Basket.BasketProductImageMaxWidth, OrdersConstants.Basket.BasketProductImageMaxHeight, true) : null,
+                        PictureUrl = product.Images.OrEmptyIfNull().Any() ? this.mediaService.GetMediaUrl(product.Images.First(), OrdersConstants.Basket.BasketProductImageMaxWidth) : null,
                         Quantity = orderLine.Quantity,
                         ExternalReference = orderLine.ExternalReference,
                         DeliveryFrom = orderLine.DeliveryFrom,

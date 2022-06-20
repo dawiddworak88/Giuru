@@ -5,9 +5,9 @@ using Foundation.Localization;
 using Seller.Web.Shared.Configurations;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Routing;
-using Foundation.Extensions.Services.MediaServices;
 using Foundation.PageContent.Components.Headers.Definitions;
 using System.Globalization;
+using Foundation.Media.Services.MediaServices;
 
 namespace Seller.Web.Shared.ModelBuilders.Headers
 {
@@ -16,13 +16,13 @@ namespace Seller.Web.Shared.ModelBuilders.Headers
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IOptions<AppSettings> options;
         private readonly LinkGenerator linkGenerator;
-        private readonly IMediaHelperService mediaService;
+        private readonly IMediaService mediaService;
 
         public LogoModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IOptions<AppSettings> options,
             LinkGenerator linkGenerator,
-            IMediaHelperService mediaService)
+            IMediaService mediaService)
         {
             this.globalLocalizer = globalLocalizer;
             this.options = options;
@@ -36,7 +36,7 @@ namespace Seller.Web.Shared.ModelBuilders.Headers
             {
                 LogoAltLabel = this.globalLocalizer.GetString("Logo"),
                 TargetUrl = this.linkGenerator.GetPathByAction("Index", "Orders", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name }),
-                LogoUrl = this.mediaService.GetFileUrl(this.options.Value.MediaUrl, LogoConstants.LogoMediaId, true)
+                LogoUrl = this.mediaService.GetMediaUrl(LogoConstants.LogoMediaId)
             };
         }
     }

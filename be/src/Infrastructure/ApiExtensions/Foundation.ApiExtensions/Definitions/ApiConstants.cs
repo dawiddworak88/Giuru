@@ -51,6 +51,7 @@
         public struct Media
         {
             public static readonly string MediaItemsApiEndpoint = "/api/v1/mediaitems";
+            public static readonly string MediaItemsVersionsApiEndpoint = "/api/v1/mediaitems/versions";
             public static readonly string FilesApiEndpoint = "/api/v1/files";
         }
 
@@ -71,6 +72,7 @@
         {
             public static readonly string FileContentName = "file";
             public static readonly string LanguageContentName = "language";
+            public static readonly string GuidContentName = "id";
         }
 
         public struct Request

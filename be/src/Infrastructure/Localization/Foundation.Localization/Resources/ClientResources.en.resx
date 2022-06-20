@@ -136,7 +136,7 @@
     <value>A customer with this e-mail address already exists.</value>
   </data>
   <data name="ClientManagers" xml:space="preserve">
-    <value>Client  account managers</value>
+    <value>Client account managers</value>
   </data>
   <data name="ClientNotFound" xml:space="preserve">
     <value>Client has not been found.</value>

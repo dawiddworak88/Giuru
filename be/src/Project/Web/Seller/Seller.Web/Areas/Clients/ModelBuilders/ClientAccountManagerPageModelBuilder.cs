@@ -35,7 +35,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
                 Locale = CultureInfo.CurrentUICulture.Name,
                 Header = headerModelBuilder.BuildModel(),
                 MenuTiles = menuTilesModelBuilder.BuildModel(),
-                ClientManagerForm = await this.managerFormModelBuilder.BuildModelAsync(componentModel),
+                ClientAccountManagerForm = await this.managerFormModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };
 

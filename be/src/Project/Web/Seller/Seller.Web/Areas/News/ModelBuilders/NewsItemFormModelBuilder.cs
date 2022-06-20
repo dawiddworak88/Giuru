@@ -1,18 +1,16 @@
 ﻿using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
+using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using Seller.Web.Areas.News.Repositories.Categories;
 using Seller.Web.Areas.News.Repositories.News;
 using Seller.Web.Areas.News.ViewModel;
 using Seller.Web.Areas.Shared.Repositories.Media;
-using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
@@ -29,9 +27,8 @@ namespace Seller.Web.Areas.News.ModelBuilders
         private readonly LinkGenerator linkGenerator;
         private readonly ICategoriesRepository categoriesRepository;
         private readonly IMediaItemsRepository mediaItemsRepository;
-        private readonly IMediaHelperService mediaHelperService;
+        private readonly IMediaService mediaService;
         private readonly INewsRepository newsRepository;
-        private readonly IOptionsMonitor<AppSettings> settings;
 
         public NewsItemFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -39,8 +36,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
             ICategoriesRepository categoriesRepository,
             IMediaItemsRepository mediaItemsRepository,
             INewsRepository newsRepository,
-            IMediaHelperService mediaHelperService,
-            IOptionsMonitor<AppSettings> settings,
+            IMediaService mediaService,
             LinkGenerator linkGenerator)
         {
             this.linkGenerator = linkGenerator;
@@ -49,8 +45,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
             this.categoriesRepository = categoriesRepository;
             this.newsRepository = newsRepository;
             this.mediaItemsRepository = mediaItemsRepository;
-            this.settings = settings;
-            this.mediaHelperService = mediaHelperService;
+            this.mediaService = mediaService;
         }
 
         public async Task<NewsItemFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -105,7 +100,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
                             files.Add(new FileViewModel
                             {
                                 Id = file.Id,
-                                Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, file.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
+                                Url = this.mediaService.GetMediaUrl(file.Id, Constants.PreviewMaxWidth),
                                 Name = file.Name,
                                 MimeType = file.MimeType,
                                 Filename = file.Filename,
@@ -127,7 +122,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
                                 new FileViewModel
                                 {
                                     Id = thumbnailImage.Id,
-                                    Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, thumbnailImage.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
+                                    Url = this.mediaService.GetMediaUrl(thumbnailImage.Id, Constants.PreviewMaxWidth),
                                     Name = thumbnailImage.Name,
                                     MimeType = thumbnailImage.MimeType,
                                     Filename = thumbnailImage.Filename,
@@ -147,7 +142,7 @@ namespace Seller.Web.Areas.News.ModelBuilders
                                 new FileViewModel
                                 {
                                     Id = previewImage.Id,
-                                    Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, previewImage.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
+                                    Url = this.mediaService.GetMediaUrl(previewImage.Id, Constants.PreviewMaxWidth),
                                     Name = previewImage.Name,
                                     MimeType = previewImage.MimeType,
                                     Filename = previewImage.Filename,

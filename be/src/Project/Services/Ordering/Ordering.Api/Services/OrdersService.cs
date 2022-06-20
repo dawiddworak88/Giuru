@@ -1,13 +1,12 @@
 ﻿using Foundation.EventBus.Abstractions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
-using Foundation.Extensions.Services.MediaServices;
 using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
-using Foundation.Mailing.Configurations;
 using Foundation.Mailing.Models;
 using Foundation.Mailing.Services;
+using Foundation.Media.Services.MediaServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
@@ -17,7 +16,6 @@ using Ordering.Api.Infrastructure.Orders.Definitions;
 using Ordering.Api.Infrastructure.Orders.Entities;
 using Ordering.Api.IntegrationEvents;
 using Ordering.Api.ServicesModels;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -33,12 +31,10 @@ namespace Ordering.Api.Services
         private readonly IEventBus eventBus;
         private readonly IStringLocalizer<OrderResources> orderLocalizer;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IOptionsMonitor<MailingConfiguration> mailingOptions;
         private readonly IOptionsMonitor<AppSettings> orderingOptions;
         private readonly IMailingService mailingService;
         private readonly IOptions<AppSettings> configuration;
-        private readonly IMediaHelperService mediaService;
-        private readonly IOptions<AppSettings> options;
+        private readonly IMediaService mediaService;
 
         public OrdersService(
             OrderingContext context,
@@ -46,11 +42,9 @@ namespace Ordering.Api.Services
             IStringLocalizer<OrderResources> orderLocalizer,
             IMailingService mailingService,
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IOptionsMonitor<MailingConfiguration> mailingOptions,
             IOptionsMonitor<AppSettings> orderingOptions,
-            IMediaHelperService mediaService,
-            IOptions<AppSettings> options,
-            IOptions<AppSettings> configuration)
+            IOptions<AppSettings> configuration,
+            IMediaService mediaService)
         {
             this.context = context;
             this.eventBus = eventBus;
@@ -58,10 +52,8 @@ namespace Ordering.Api.Services
             this.mailingService = mailingService;
             this.configuration = configuration;
             this.globalLocalizer = globalLocalizer;
-            this.mailingOptions = mailingOptions;
             this.orderingOptions = orderingOptions;
             this.mediaService = mediaService;
-            this.options = options;
         }
 
         public async Task CheckoutAsync(CheckoutBasketServiceModel serviceModel)
@@ -135,7 +127,8 @@ namespace Ordering.Api.Services
                         OrderId = order.Id,
                         MediaId = attachmentId
                     };
-                    attachments.Add(this.mediaService.GetFileUrl(this.options.Value.MediaUrl, attachmentId));
+
+                    attachments.Add(this.mediaService.GetMediaUrl(attachmentId));
 
                     await this.context.OrderAttachments.AddAsync(newAttachment.FillCommonProperties());
                 }

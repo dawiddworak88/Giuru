@@ -1,16 +1,14 @@
 ﻿using Foundation.Extensions.ModelBuilders;
-using Foundation.Extensions.Services.MediaServices;
 using Foundation.Localization;
+using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Products.DomainModels;
 using Seller.Web.Areas.Products.Repositories;
 using Seller.Web.Areas.Products.ViewModels;
 using Seller.Web.Areas.Shared.Repositories.Media;
-using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
@@ -26,8 +24,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
         private readonly IMediaItemsRepository mediaItemsRepository;
         private readonly IStringLocalizer globalLocalizer;
         private readonly IStringLocalizer productLocalizer;
-        private readonly IMediaHelperService mediaHelperService;
-        private readonly IOptionsMonitor<AppSettings> settings;
+        private readonly IMediaService mediaService;
         private readonly LinkGenerator linkGenerator;
 
         public CategoryFormModelBuilder(
@@ -35,16 +32,14 @@ namespace Seller.Web.Areas.ModelBuilders.Products
             IMediaItemsRepository mediaItemsRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ProductResources> productLocalizer,
-            IMediaHelperService mediaHelperService,
-            IOptionsMonitor<AppSettings> settings,
+            IMediaService mediaService,
             LinkGenerator linkGenerator)
         {
             this.categoriesRepository = categoriesRepository;
             this.mediaItemsRepository = mediaItemsRepository;
             this.globalLocalizer = globalLocalizer;
             this.productLocalizer = productLocalizer;
-            this.mediaHelperService = mediaHelperService;
-            this.settings = settings;
+            this.mediaService = mediaService;
             this.linkGenerator = linkGenerator;
         }
 
@@ -107,7 +102,7 @@ namespace Seller.Web.Areas.ModelBuilders.Products
                                 new FileViewModel
                                 {
                                     Id = mediaItem.Id,
-                                    Url = this.mediaHelperService.GetFileUrl(this.settings.CurrentValue.MediaUrl, mediaItem.Id, Constants.PreviewMaxWidth, Constants.PreviewMaxHeight, true),
+                                    Url = this.mediaService.GetMediaUrl(mediaItem.Id, Constants.PreviewMaxWidth),
                                     Name = mediaItem.Name,
                                     MimeType = mediaItem.MimeType,
                                     Filename = mediaItem.Filename,

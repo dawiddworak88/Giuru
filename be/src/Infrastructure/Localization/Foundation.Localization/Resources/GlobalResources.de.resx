@@ -423,6 +423,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Nachname</value>
   </data>
+  <data name="Miniature" xml:space="preserve">
+    <value>Miniatur</value>
+  </data>
   <data name="BasketLabel" xml:space="preserve">
     <value>zum Warenkorb hinzufügen</value>
   </data>
@@ -574,6 +577,6 @@
     <value>Kundenmanager</value>
   </data>
   <data name="Manager" xml:space="preserve">
-    <value>Manager</value>
+    <value>Account Manager</value>
   </data>
 </root>
