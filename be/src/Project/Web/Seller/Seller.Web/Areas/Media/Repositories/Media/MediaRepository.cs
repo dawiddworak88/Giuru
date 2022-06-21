@@ -84,7 +84,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                         Id = mediaItem.Id,
                         FileName = mediaItem.FileName,
                         Name = mediaItem.Name,
-                        Url = this.mediaService.GetMediaUrl(mediaItem.Id, 200),
+                        Url = mediaItem.MimeType.StartsWith("image") ? this.mediaService.GetMediaUrl(mediaItem.MediaItemVersionId.Value, 200) : this.mediaService.GetMediaUrl(mediaItem.MediaItemVersionId.Value),
                         LastModifiedDate = mediaItem.LastModifiedDate,
                         CreatedDate = mediaItem.CreatedDate
                     };
@@ -135,7 +135,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                     {
                         Id = x.Id,
                         FileName = x.FileName,
-                        Url = x.MimeType.StartsWith("image") ? this.mediaService.GetMediaUrl(x.Id, 200) : this.mediaService.GetMediaUrl(x.Id),
+                        Url = x.MimeType.StartsWith("image") ? this.mediaService.GetMediaUrl(x.MediaItemVersionId.Value, 200) : this.mediaService.GetMediaUrl(x.MediaItemVersionId.Value),
                         MimeType = x.MimeType,
                         LastModifiedDate = x.LastModifiedDate,
                         CreatedDate = x.CreatedDate,

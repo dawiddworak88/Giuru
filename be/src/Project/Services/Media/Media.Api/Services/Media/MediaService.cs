@@ -87,7 +87,7 @@ namespace Media.Api.Services.Media
 
             await this.mediaRepository.CreateFileAsync(mediaItemVersion.Id, serviceModel.OrganisationId.ToString(), serviceModel.File, serviceModel.File.FileName);
 
-            return mediaItem.Id;
+            return mediaItemVersion.Id;
         }
 
         public async Task<Guid> UpdateFileAsync(UpdateMediaItemServiceModel serviceModel)
@@ -113,6 +113,7 @@ namespace Media.Api.Services.Media
                 this.context.MediaItemVersions.Add(mediaItemVersion.FillCommonProperties());
                 
                 var translations = this.context.MediaItemTranslations.Where(x => x.MediaItemVersionId == existingMediaItemVersion.LastOrDefault().Id);
+
                 foreach(var translation in translations)
                 {
                     translation.MediaItemVersionId = mediaItemVersion.Id;
@@ -132,7 +133,7 @@ namespace Media.Api.Services.Media
             {
                 var mediaItem = (from m in this.context.MediaItems
                                  join mv in this.context.MediaItemVersions on m.Id equals mv.MediaItemId
-                                 where m.Id == mediaId.Value && m.IsActive == true && mv.IsActive && m.IsProtected == false
+                                 where m.Id == mediaId.Value || mv.Id == mediaId && m.IsActive == true && mv.IsActive && m.IsProtected == false
                                  orderby mv.Version descending
                                  select new MediaFileItemServiceModel
                                  {

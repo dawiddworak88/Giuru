@@ -67,9 +67,11 @@ namespace Media.Api.v1.Controllers
 
                 var validator = new GetMediaItemsByIdsModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
+
                 if (validationResult.IsValid)
                 {
                     var mediaItems = this.mediaService.GetMediaItemsByIds(serviceModel);
+
                     if (mediaItems != null)
                     {
                         var response = new PagedResults<IEnumerable<MediaItemResponseModel>>(mediaItems.Total, mediaItems.PageSize)
@@ -214,6 +216,7 @@ namespace Media.Api.v1.Controllers
 
             var validator = new UpdateMediaItemVersionModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
+
             if (validationResult.IsValid)
             {
                 await this.mediaService.UpdateMediaItemVersionAsync(serviceModel);
@@ -263,7 +266,8 @@ namespace Media.Api.v1.Controllers
                         MetaData = mediaItemVersions.MetaData,
                         Versions = mediaItemVersions.Versions.Select(x => new MediaItemServiceModel
                         {
-                            Id = x.Id,
+                            Id = x.MediaItemId.Value,
+                            MediaItemVersionId = x.Id,
                             Name = x.Name,
                             Description= x.Description,
                             MetaData = x.MetaData,
