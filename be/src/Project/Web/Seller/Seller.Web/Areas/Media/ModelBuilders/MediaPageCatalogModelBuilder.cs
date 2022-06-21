@@ -57,7 +57,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("Miniature"),
+                    this.globalLocalizer.GetString("Thumbnail"),
                     this.globalLocalizer.GetString("Filename"),
                     this.globalLocalizer.GetString("LastModifiedDate"),
                     this.globalLocalizer.GetString("CreatedDate")
