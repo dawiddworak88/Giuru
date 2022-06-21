@@ -244,9 +244,9 @@
     <value>Reichen Sie jetzt Ihre Bewerbung ein</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>datenschutz-bestimmungen</value>
+    <value>Datenschutz-Bestimmungen</value>
   </data>
   <data name="Regulations" xml:space="preserve">
-    <value>geschäftsbedingungen</value>
+    <value>Geschäftsbedingungen</value>
   </data>
 </root>
