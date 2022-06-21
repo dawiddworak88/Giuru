@@ -335,7 +335,7 @@ namespace Media.Api.Services.Media
         public async Task<MediaItemVerionsByIdServiceModel> GetMediaItemVerionsByIdAsync(GetMediaItemsByIdServiceModel model)
         {
             var mediaItemVersions = this.context.MediaItemVersions
-                .Where(x => x.MediaItemId == model.Id.Value)
+                .Where(x => x.MediaItemId == model.Id && x.IsActive)
                 .Select(x => new MediaItemServiceModel
                 {
                     Id = x.Id,
@@ -348,7 +348,7 @@ namespace Media.Api.Services.Media
                     Description = x.Translations.FirstOrDefault(x => x.Language == model.Language).Description,
                     MetaData = x.Translations.FirstOrDefault(x => x.Language == model.Language).Metadata,
                     LastModifiedDate = x.LastModifiedDate,
-                    CreatedDate = x.CreatedDate,
+                    CreatedDate = x.CreatedDate
                 }).OrderByDescending(x => x.CreatedDate).Take(5);
 
             if (mediaItemVersions.OrEmptyIfNull().Any())

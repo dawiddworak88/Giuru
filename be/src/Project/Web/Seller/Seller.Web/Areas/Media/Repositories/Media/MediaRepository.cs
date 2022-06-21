@@ -72,9 +72,11 @@ namespace Seller.Web.Areas.Media.Repositories.Media
             };
 
             var response = await this.apiService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<MediaItemResponseModel>>>(apiRequest);
+
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
                 var mediaItems = new List<MediaItem>();
+
                 foreach (var mediaItem in response.Data.Data)
                 {
                     var item = new MediaItem
@@ -82,7 +84,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                         Id = mediaItem.Id,
                         FileName = mediaItem.FileName,
                         Name = mediaItem.Name,
-                        Url = this.mediaService.GetMediaUrl(mediaItem.MediaItemVersionId.Value, 200),
+                        Url = this.mediaService.GetMediaUrl(mediaItem.Id, 200),
                         LastModifiedDate = mediaItem.LastModifiedDate,
                         CreatedDate = mediaItem.CreatedDate
                     };

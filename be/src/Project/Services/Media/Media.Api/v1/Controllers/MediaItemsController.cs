@@ -236,14 +236,19 @@ namespace Media.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetVersions(Guid? id)
         {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
             var serviceModel = new GetMediaItemsByIdServiceModel
             {
                 Id = id,
-                Language = CultureInfo.CurrentCulture.Name
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
             var validator = new GetMediaItemsByIdModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
+
             if (validationResult.IsValid)
             {
                 var mediaItemVersions = await this.mediaService.GetMediaItemVerionsByIdAsync(serviceModel);
@@ -265,6 +270,7 @@ namespace Media.Api.v1.Controllers
                             Filename = x.Filename,
                             IsProtected = x.IsProtected,
                             Size = x.Size,
+                            MimeType = x.MimeType,
                             Extension = x.Extension,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
