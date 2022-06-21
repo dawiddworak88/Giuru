@@ -27,7 +27,7 @@ namespace Seller.Web.Shared.ViewModels
         public string IsAttachmentLabel { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string OrderBy { get; set; }
-        public string ConfirmationDialogDeleteNameProperty { get; set; }
+        public IEnumerable<string> ConfirmationDialogDeleteNameProperty { get; set; }
         public CatalogTableViewModel Table { get; set; }
         public PagedResults<IEnumerable<T>> PagedItems { get; set; }
     }
