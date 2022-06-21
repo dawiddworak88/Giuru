@@ -24,7 +24,7 @@ import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetP
 import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
 
 // Seller Portal
-import MediaPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage";
+import MediaPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediaPage/MediaPage";
 import MediaItemPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage";
 import ClientAccountManagerPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagerPage/ClientAccountManagerPage";
 import ClientAccountManagersPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagersPage/ClientAccountManagersPage";

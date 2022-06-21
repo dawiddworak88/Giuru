@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 
-function UploadForm(props) {
+const MediaForm = (props) => {
     const [images, setImages] = useState([]);
     
     return (
@@ -47,7 +47,7 @@ function UploadForm(props) {
     );
 }
 
-UploadForm.propTypes = {
+MediaForm.propTypes = {
     title: PropTypes.string.isRequired,
     mediaItemsLabel: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
@@ -59,4 +59,4 @@ UploadForm.propTypes = {
     mediaUrl: PropTypes.string.isRequired
 }
 
-export default UploadForm;
+export default MediaForm;

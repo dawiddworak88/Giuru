@@ -15,13 +15,12 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 
 const MediaItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
-    const [versions, setVersions] = useState(props.versions ? props.versions : []);
     const [images, setImages] = useState([]);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
-        name: { value: props.name ? props.name : null, error: "" },
-        description: { value: props.description ? props.description : null, error: "" },
-        metadata: { value: props.metaData ? props.metaData : null, error: "" },
+        name: { value: props.name ? props.name : "", error: "" },
+        description: { value: props.description ? props.description : "", error: "" },
+        metadata: { value: props.metaData ? props.metaData : "", error: "" },
     };
 
     const stateValidatorSchema = {
@@ -90,15 +89,15 @@ const MediaItemForm = (props) => {
                                 setFieldValue={({value}) => setImages(value)}
                                 saveMediaUrl={props.saveMediaUrl} />
                         </div>
-                        {versions && versions.length > 0 &&
+                        {props.versions && props.versions.length > 0 &&
                             <div className="media-edit__last-files">
                                 <h2>{props.latestVersionsLabel}</h2>
                                 <div className="media-edit__versions">
-                                    {versions.map((version) => {
+                                    {props.versions.map((version, index) => {
                                         const url = version.url;
                                         if (version.mimeType.includes("pdf")) {
                                             return (
-                                                <div className="version icon-version" key={version.id} onClick={() => mediaHandle(url)}>
+                                                <div className="version icon-version" key={index} onClick={() => mediaHandle(url)}>
                                                     <div className="icon">
                                                         <PictureAsPdf />
                                                     </div>
@@ -106,13 +105,13 @@ const MediaItemForm = (props) => {
                                             )
                                         } else if (version.mimeType.startsWith("image")) {
                                             return (
-                                                <div className="version" key={version.id} onClick={() => mediaHandle(url)}>
+                                                <div className="version" key={index} onClick={() => mediaHandle(url)}>
                                                     <img src={url} alt={version.filename} />
                                                 </div>
                                             )
                                         } else  {
                                             return (
-                                                <div className="version icon-version" key={version.id} onClick={() => mediaHandle(url)}>
+                                                <div className="version icon-version" key={index} onClick={() => mediaHandle(url)}>
                                                     <div className="icon">
                                                         <Attachment/>
                                                     </div>

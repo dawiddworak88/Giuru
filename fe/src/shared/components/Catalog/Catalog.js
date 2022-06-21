@@ -243,7 +243,7 @@ function Catalog(props) {
                                                                     <FileCopyOutlined />
                                                                 </Fab>)
                                                             else if (actionItem.isPicture) return (
-                                                                <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary" aria-label={props.duplicateLabel}>
+                                                                <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary" aria-label={props.duplicateLabel} key={index}>
                                                                     <Link />
                                                                 </Fab>)
                                                             else return (
