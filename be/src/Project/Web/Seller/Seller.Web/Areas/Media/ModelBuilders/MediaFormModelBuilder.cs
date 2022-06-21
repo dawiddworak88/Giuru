@@ -35,7 +35,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                 DropOrSelectImagesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
                 MediaItemsLabel = this.mediaResources.GetString("MediaItemsLabel"),
                 BackToMediaText = this.mediaResources.GetString("BackToMediaText"),
-                MediaUrl = this.linkGenerator.GetPathByAction("Index", "MediaItems", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                MediaUrl = this.linkGenerator.GetPathByAction("Index", "Medias", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 DeleteLabel = this.globalLocalizer.GetString("Delete")
             };

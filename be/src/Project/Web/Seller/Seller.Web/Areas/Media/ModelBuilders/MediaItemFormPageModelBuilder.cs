@@ -48,7 +48,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                 UpdateMediaVersionUrl = this.linkGenerator.GetPathByAction("UpdateVersion", "MediaApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 LatestVersionsLabel = this.mediaResources.GetString("LatestVersionsLabel"),
                 MetaDataLabel = this.mediaResources.GetString("MetaDataLabel"),
-                MediaUrl = this.linkGenerator.GetPathByAction("Index", "MediaItems", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name })
+                MediaUrl = this.linkGenerator.GetPathByAction("Index", "Medias", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             if (componentModel.Id.HasValue)

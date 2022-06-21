@@ -15,11 +15,11 @@ using System.Threading.Tasks;
 namespace Seller.Web.Areas.Media.Controllers
 {
     [Area("Media")]
-    public class MediaItemController : BaseController
+    public class MediaController : BaseController
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel> uploadMediaPageModelBuilder;
 
-        public MediaItemController(
+        public MediaController(
             IAsyncComponentModelBuilder<ComponentModelBase, MediaPageViewModel> uploadMediaPageModelBuilder
         )
         {
