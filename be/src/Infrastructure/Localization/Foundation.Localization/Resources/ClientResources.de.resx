@@ -123,6 +123,9 @@
   <data name="AccountText" xml:space="preserve">
     <value>Benutzerkonto erstellen</value>
   </data>
+  <data name="BackToRoles" xml:space="preserve">
+    <value>Zurück zu den Rollen</value>
+  </data>
   <data name="ApplicationDeletedSuccessfully" xml:space="preserve">
     <value>Kundenanwendung erfolgreich gelöscht</value>
   </data>
@@ -174,8 +177,14 @@
   <data name="ClientsGroups" xml:space="preserve">
     <value>Kundengruppen</value>
   </data>
+  <data name="ClientsRoles" xml:space="preserve">
+    <value>Rollen</value>
+  </data>
   <data name="EditClient" xml:space="preserve">
     <value>Kunde bearbeiten</value>
+  </data>
+  <data name="EditClientRole" xml:space="preserve">
+    <value>Rolle bearbeiten</value>
   </data>
   <data name="EditClientApplication" xml:space="preserve">
     <value>Clientanwendung bearbeiten</value>
@@ -245,5 +254,17 @@
   </data>
   <data name="ResetPasswordText" xml:space="preserve">
     <value>Passwort zurücksetzen</value>
+  </data>
+  <data name="RoleDeletedSuccessfully" xml:space="preserve">
+    <value>Rolle erfolgreich gelöscht.</value>
+  </data>
+  <data name="RoleIsExisting" xml:space="preserve">
+    <value>Rolle vorhanden</value>
+  </data>
+  <data name="RoleNotFound" xml:space="preserve">
+    <value>Rolle nicht gefunden</value>
+  </data>
+  <data name="RoleSavedSuccessfully" xml:space="preserve">
+    <value>Rolle erfolgreich gespeichert.</value>
   </data>
 </root>

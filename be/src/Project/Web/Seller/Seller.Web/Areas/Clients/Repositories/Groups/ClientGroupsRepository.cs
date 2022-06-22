@@ -4,6 +4,7 @@ using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.Clients.ApiRequestModels;
@@ -27,6 +28,61 @@ namespace Seller.Web.Areas.Clients.Repositories.Groups
         {
             this.apiClientService = apiClientService;
             this.settings = settings;
+        }
+
+        public async Task<IEnumerable<ClientGroup>> GetClientGroupsAsync(string token, string language, IEnumerable<Guid> clientGroupIds)
+        {
+            var requestModel = new PagedRequestModelBase
+            {
+                Ids = clientGroupIds.ToEndpointParameterString(),
+                PageIndex = PaginationConstants.DefaultPageIndex,
+                ItemsPerPage = PaginationConstants.DefaultPageSize
+            };
+
+            var apiRequest = new ApiRequest<PagedRequestModelBase>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.GroupsApiEndpoint}"
+            };
+
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientGroup>>>(apiRequest);
+
+            if (response.IsSuccessStatusCode && response.Data?.Data != null)
+            {
+                var clients = new List<ClientGroup>();
+
+                clients.AddRange(response.Data.Data);
+
+                int totalPages = (int)Math.Ceiling(response.Data.Total / (double)PaginationConstants.DefaultPageSize);
+
+                for (int i = PaginationConstants.SecondPage; i <= totalPages; i++)
+                {
+                    apiRequest.Data.PageIndex = i;
+
+                    var nextPagesResponse = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<ClientGroup>>>(apiRequest);
+
+                    if (!nextPagesResponse.IsSuccessStatusCode)
+                    {
+                        throw new CustomException(response.Message, (int)response.StatusCode);
+                    }
+
+                    if (nextPagesResponse.IsSuccessStatusCode && nextPagesResponse.Data?.Data != null && nextPagesResponse.Data.Data.Any())
+                    {
+                        clients.AddRange(nextPagesResponse.Data.Data);
+                    }
+                }
+
+                return clients;
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            return default;
         }
 
         public async Task<IEnumerable<ClientGroup>> GetAsync(string token, string language)

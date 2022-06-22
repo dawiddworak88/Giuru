@@ -182,6 +182,8 @@ const sellerPortalBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
+        clientrolepage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientRolePage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientRolePage/ClientRolePage.scss"],
+        clientrolespage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/ClientRolesPage.scss"],
         clientapplicationpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/ClientApplicationPage.scss"],
         clientsapplicationspage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientsApplicationsPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientsApplicationsPage/ClientsApplicationsPage.scss"],
         mediapage: ["./src/project/Seller.Portal/areas/Medias/pages/MediaPage/index.js", "./src/project/Seller.Portal/areas/Medias/pages/MediaPage/MediaPage.scss"],

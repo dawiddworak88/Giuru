@@ -43,7 +43,7 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             viewModel.Title = this.clientLocalizer.GetString("ClientsGroups");
 
-            viewModel.NewText = this.clientLocalizer.GetString("NewGroup");
+            viewModel.NewText = this.clientLocalizer.GetString("NewRole");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "ClientGroup", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "ClientGroup", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name });
 

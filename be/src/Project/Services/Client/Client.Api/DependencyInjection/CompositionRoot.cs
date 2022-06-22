@@ -2,6 +2,7 @@
 using Client.Api.Services.Applications;
 using Client.Api.Services.Clients;
 using Client.Api.Services.Groups;
+using Client.Api.Services.Roles;
 using Client.Api.Services.Managers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,7 @@ namespace Client.Api.DependencyInjection
         {
             services.AddScoped<IClientsService, ClientsService>();
             services.AddScoped<IClientGroupsService, ClientGroupsService>();
+            services.AddScoped<IClientRolesService, ClientRolesService>();
             services.AddScoped<IClientsApplicationsService, ClientsApplicationsService>();
             services.AddScoped<IClientAccountManagersService, ClientAccountManagersService>();
         }
