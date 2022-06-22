@@ -243,4 +243,10 @@
   <data name="ApplySubmit" xml:space="preserve">
     <value>Submit your application now</value>
   </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>privacy policy</value>
+  </data>
+  <data name="Regulations" xml:space="preserve">
+    <value>regulations</value>
+  </data>
 </root>
