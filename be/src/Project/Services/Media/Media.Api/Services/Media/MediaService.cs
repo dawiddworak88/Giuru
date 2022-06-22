@@ -128,7 +128,7 @@ namespace Media.Api.Services.Media
             return existingMediaItemVersion.FirstOrDefault().MediaItemId;
         }
 
-        public MediaFileServiceModel GetFile(Guid? mediaId, int? width, int? height, bool optimize, string? extension)
+        public MediaFileServiceModel GetFile(Guid? mediaId)
         {
             if (mediaId.HasValue)
             {
