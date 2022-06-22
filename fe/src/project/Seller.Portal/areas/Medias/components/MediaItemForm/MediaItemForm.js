@@ -1,8 +1,8 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types"; 
 import {
-    TextField, Button,  CircularProgress
+    TextField, Button,  CircularProgress, InputLabel
 } from "@mui/material";
 import {
     PictureAsPdf, Attachment
@@ -66,13 +66,18 @@ const MediaItemForm = (props) => {
         values, disable, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm);
 
-    const {name, description, metadata} = values;
+    const { id, name, description, metadata } = values;
     return (
         <section className="section section-small-padding product client-form media-edit">
             <h1 className="subtitle is-4">{props.title}</h1>
             <div className="columns is-desktop">
                 <div className="column is-half">
                     <form className="is-modern-form" onSubmit={handleOnSubmit}>
+                        {id &&
+                            <div className="field">
+                                <InputLabel id="id-label">{props.idLabel} {id}</InputLabel>
+                            </div>
+                        }
                         <div className="field">
                             <MediaCloud
                                 id="images"
@@ -185,6 +190,8 @@ const MediaItemForm = (props) => {
 
 MediaItemForm.propTypes = {
     title: PropTypes.string.isRequired,
+    id: PropTypes.string,
+    idLabel: PropTypes.string,
     descriptionLabel: PropTypes.string.isRequired,
     nameLabel: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,

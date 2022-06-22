@@ -48,12 +48,14 @@ namespace Seller.Web.Areas.Media.ModelBuilders
                 UpdateMediaVersionUrl = this.linkGenerator.GetPathByAction("UpdateVersion", "MediaApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 LatestVersionsLabel = this.mediaResources.GetString("LatestVersionsLabel"),
                 MetaDataLabel = this.mediaResources.GetString("MetaDataLabel"),
-                MediaUrl = this.linkGenerator.GetPathByAction("Index", "Medias", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name })
+                MediaUrl = this.linkGenerator.GetPathByAction("Index", "Medias", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                IdLabel = this.globalLocalizer.GetString("Id")
             };
 
             if (componentModel.Id.HasValue)
             {
                 var itemVersions = await this.mediaRepository.GetMediaItemVersionsAsync(componentModel.Id.Value, componentModel.Token, componentModel.Language);
+
                 if (itemVersions is not null)
                 {
                     viewModel.Id = componentModel.Id.Value;
