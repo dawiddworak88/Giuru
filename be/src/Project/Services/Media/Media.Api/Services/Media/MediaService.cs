@@ -269,7 +269,7 @@ namespace Media.Api.Services.Media
 
             if (string.IsNullOrWhiteSpace(serviceModel.SearchTerm) is false)
             {
-                mediaItems = mediaItems.Where(x => x.Versions.Any(x => x.Filename.StartsWith(serviceModel.SearchTerm) || x.Id.ToString() == serviceModel.SearchTerm));
+                mediaItems = mediaItems.Where(x => x.Id.ToString() == serviceModel.SearchTerm || x.Versions.Any(x => x.Filename.StartsWith(serviceModel.SearchTerm) || x.Id.ToString() == serviceModel.SearchTerm));
             }
 
             mediaItems = mediaItems.ApplySort(serviceModel.OrderBy);
