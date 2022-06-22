@@ -8,3 +8,4 @@ namespace Seller.Web.Areas.Media.ApiRequestModels
         public IFormFile File { get; set; }
     }
 }
+ 

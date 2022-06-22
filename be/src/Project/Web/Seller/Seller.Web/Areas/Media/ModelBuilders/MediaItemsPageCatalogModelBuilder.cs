@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.Media.ModelBuilders
 {
-    public class MediaPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<MediaItem>>
+    public class MediaItemsPageCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<MediaItem>>
     {
         private readonly ICatalogModelBuilder catalogModelBuilder;
         private readonly IStringLocalizer globalLocalizer;
@@ -23,7 +23,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
         private readonly LinkGenerator linkGenerator;
         private readonly IMediaRepository mediaRepository;
 
-        public MediaPageCatalogModelBuilder(
+        public MediaItemsPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<MediaResources> mediaLocalizer,
@@ -46,7 +46,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
             viewModel.IsAttachmentLabel = this.mediaLocalizer.GetString("IsAttachmentLabel");
 
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Index", "Media", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Item", "Medias", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Item", "MediaItems", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "MediaApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name });
