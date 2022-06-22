@@ -53,6 +53,7 @@ namespace Media.Api.v1.Controllers
         {
             var sellerClaims = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
             var mediaItemsIds = ids.ToEnumerableGuidIds();
+
             if (mediaItemsIds != null)
             {
                 var serviceModel = new GetMediaItemsByIdsServiceModel
@@ -109,29 +110,37 @@ namespace Media.Api.v1.Controllers
                     OrderBy = orderBy,
                 };
 
-                var mediaItems = this.mediaService.GetAsync(serviceModel);
-                if (mediaItems != null)
-                {
-                    var response = new PagedResults<IEnumerable<MediaItemResponseModel>>(mediaItems.Result.Total, mediaItems.Result.PageSize)
-                    {
-                        Data = mediaItems.Result.Data.OrEmptyIfNull().Select(x => new MediaItemResponseModel
-                        {
-                            Id = x.Id,
-                            MediaItemVersionId = x.MediaItemVersionId,
-                            Description = x.Description,
-                            Extension = x.Extension,
-                            Filename = x.Filename,
-                            MimeType = x.MimeType,
-                            Name = x.Name,
-                            Size = x.Size,
-                            LastModifiedDate = x.LastModifiedDate,
-                            CreatedDate = x.CreatedDate
-                        })
-                    };
+                var validator = new GetMediaItemsModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
 
-                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                if (validationResult.IsValid)
+                {
+                    var mediaItems = this.mediaService.GetAsync(serviceModel);
+
+                    if (mediaItems != null)
+                    {
+                        var response = new PagedResults<IEnumerable<MediaItemResponseModel>>(mediaItems.Result.Total, mediaItems.Result.PageSize)
+                        {
+                            Data = mediaItems.Result.Data.OrEmptyIfNull().Select(x => new MediaItemResponseModel
+                            {
+                                Id = x.Id,
+                                MediaItemVersionId = x.MediaItemVersionId,
+                                Description = x.Description,
+                                Extension = x.Extension,
+                                Filename = x.Filename,
+                                MimeType = x.MimeType,
+                                Name = x.Name,
+                                Size = x.Size,
+                                LastModifiedDate = x.LastModifiedDate,
+                                CreatedDate = x.CreatedDate
+                            })
+                        };
+
+                        return this.StatusCode((int)HttpStatusCode.OK, response);
+                    }
                 }
-                throw new CustomException("", (int)HttpStatusCode.UnprocessableEntity);
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
             }
         }
 
@@ -155,7 +164,6 @@ namespace Media.Api.v1.Controllers
             };
 
             var validator = new GetMediaItemsByIdModelValidator();
-
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
