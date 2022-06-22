@@ -51,6 +51,11 @@ namespace Seller.Web.Areas.Inventory.ModelBuilders
 
             viewModel.OrderBy = $"{nameof(OutletItem.CreatedDate)} desc";
 
+            viewModel.ConfirmationDialogDeleteNameProperty = new List<string>
+            {
+                nameof(OutletItem.ProductName).ToCamelCase()
+            };
+
             viewModel.Table = new CatalogTableViewModel
             {
                 Labels = new string[]

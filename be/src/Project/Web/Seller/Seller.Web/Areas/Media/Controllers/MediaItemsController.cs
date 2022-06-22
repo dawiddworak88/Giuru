@@ -16,13 +16,13 @@ using System.Threading.Tasks;
 namespace Seller.Web.Areas.Media.Controllers
 {
     [Area("Media")]
-    public class MediasController : BaseController
+    public class MediaItemsController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MediasPageViewModel> mediasPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, MediaItemsPageViewModel> mediasPageModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MediaItemPageViewModel> mediaItemPageModelBuilder;
 
-        public MediasController(
-            IAsyncComponentModelBuilder<ComponentModelBase, MediasPageViewModel> mediasPageModelBuilder,
+        public MediaItemsController(
+            IAsyncComponentModelBuilder<ComponentModelBase, MediaItemsPageViewModel> mediasPageModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MediaItemPageViewModel> mediaItemPageModelBuilder
         )
         {

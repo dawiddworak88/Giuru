@@ -228,4 +228,10 @@
   <data name="SelectJobTitle" xml:space="preserve">
     <value>Wybierz stanowisko pracy</value>
   </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>politykę prywatności</value>
+  </data>
+  <data name="Regulations" xml:space="preserve">
+    <value>regulamin</value>
+  </data>
 </root>

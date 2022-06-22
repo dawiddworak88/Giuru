@@ -591,4 +591,7 @@
   <data name="ContactInformation" xml:space="preserve">
     <value>Kontaktinformationen</value>
   </data>
+  <data name="NewProducts" xml:space="preserve">
+    <value>Neue Produkte</value>
+  </data>
 </root>

@@ -80,7 +80,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders
                     contentGridCarouselItems.Add(carouselItem);
                 }
 
-                items.Add(new CarouselGridItemViewModel { Id = HomeConstants.Novelties.NoveltiesId, Title = this.globalLocalizer.GetString("Novelties"), CarouselItems = contentGridCarouselItems });
+                items.Add(new CarouselGridItemViewModel { Id = HomeConstants.Novelties.NoveltiesId, Title = this.globalLocalizer.GetString("NewProducts"), CarouselItems = contentGridCarouselItems });
             }
 
             var viewModel = new HomePageCarouselGridViewModel

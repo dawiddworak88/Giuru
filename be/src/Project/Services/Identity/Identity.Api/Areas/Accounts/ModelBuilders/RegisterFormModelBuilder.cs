@@ -62,8 +62,8 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 AcceptTermsText = this.cookieConsentLocalizer.GetString("Accept"),
                 PrivacyPolicyUrl = this.linkGenerator.GetPathByAction("PrivacyPolicy", "Content", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
                 RegulationsUrl = this.linkGenerator.GetPathByAction("Regulations", "Content", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
-                PrivacyPolicy = this.globalLocalizer.GetString("PrivacyPolicy"),
-                Regulations = this.globalLocalizer.GetString("Regulations")
+                PrivacyPolicy = this.accountLocalizer.GetString("PrivacyPolicy"),
+                Regulations = this.accountLocalizer.GetString("Regulations")
             };
 
             viewModel.ContactJobTitles = new List<ContactJobTitle>

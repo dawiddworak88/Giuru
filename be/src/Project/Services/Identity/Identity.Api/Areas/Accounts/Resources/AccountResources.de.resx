@@ -228,4 +228,10 @@
   <data name="ApplySubmit" xml:space="preserve">
     <value>Reichen Sie jetzt Ihre Bewerbung ein</value>
   </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Datenschutz-Bestimmungen</value>
+  </data>
+  <data name="Regulations" xml:space="preserve">
+    <value>Geschäftsbedingungen</value>
+  </data>
 </root>

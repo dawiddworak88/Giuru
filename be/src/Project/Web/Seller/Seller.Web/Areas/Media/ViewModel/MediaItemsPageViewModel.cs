@@ -3,7 +3,7 @@ using Seller.Web.Shared.ViewModels;
 
 namespace Seller.Web.Areas.Media.ViewModel
 {
-    public class MediasPageViewModel : BasePageViewModel
+    public class MediaItemsPageViewModel : BasePageViewModel
     {
         public CatalogViewModel<MediaItem> Catalog { get; set; }
     }

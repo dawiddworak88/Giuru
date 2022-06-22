@@ -69,6 +69,7 @@ services:
       - LogstashUrl=http://logstash:31311
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
+      - OrganisationId=${ORGANISATION_ID}
     ports:
       - "5131:80"
 
