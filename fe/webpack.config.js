@@ -186,8 +186,6 @@ const sellerPortalBrowserConfig = {
         clientrolespage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/ClientRolesPage.scss"],
         clientapplicationpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/ClientApplicationPage.scss"],
         clientsapplicationspage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientsApplicationsPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientsApplicationsPage/ClientsApplicationsPage.scss"],
-        mediapage: ["./src/project/Seller.Portal/areas/Medias/pages/MediaPage/index.js", "./src/project/Seller.Portal/areas/Medias/pages/MediaPage/MediaPage.scss"],
-        mediaitempage: ["./src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/index.js", "./src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage.scss"],
         mediapage: ["./src/project/Seller.Portal/areas/MediaItems/pages/MediaPage/index.js", "./src/project/Seller.Portal/areas/MediaItems/pages/MediaPage/MediaPage.scss"],
         mediaitempage: ["./src/project/Seller.Portal/areas/MediaItems/pages/MediaItemPage/index.js", "./src/project/Seller.Portal/areas/MediaItems/pages/MediaItemPage/MediaItemPage.scss"],
         clientaccountmanagerpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagerPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagerPage/ClientAccountManagerPage.scss"],
