@@ -31,7 +31,6 @@ namespace Identity.Api.Services.Users
         private readonly IOptionsMonitor<AppSettings> identityOptions;
         private readonly IMailingService mailingService;
         private readonly IStringLocalizer<AccountResources> accountLocalizer;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IUserService userService;
         private readonly LinkGenerator linkGenerator;
 
@@ -41,7 +40,6 @@ namespace Identity.Api.Services.Users
             IOptionsMonitor<AppSettings> identityOptions,
             IMailingService mailingService,
             IStringLocalizer<AccountResources> accountLocalizer,
-            IStringLocalizer<GlobalResources> globalLocalizer,
             IUserService userService,
             LinkGenerator linkGenerator)
         {
@@ -52,7 +50,6 @@ namespace Identity.Api.Services.Users
             this.accountLocalizer = accountLocalizer;
             this.userService = userService;
             this.linkGenerator = linkGenerator;
-            this.globalLocalizer = globalLocalizer;
         }
 
         public async Task<UserServiceModel> CreateAsync(CreateUserServiceModel serviceModel)
@@ -306,62 +303,6 @@ namespace Identity.Api.Services.Users
             }
 
             return default;
-        }
-
-        public async Task RegisterAsync(RegisterServiceModel serviceModel)
-        {
-            await this.mailingService.SendTemplateAsync(new TemplateEmail
-            {
-                RecipientEmailAddress = serviceModel.Email,
-                RecipientName = serviceModel.FirstName + " " + serviceModel.LastName,
-                SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
-                SenderName = this.mailingOptions.CurrentValue.SenderName,
-                TemplateId = this.identityOptions.CurrentValue.ActionSendGridClientApplyConfirmationTemplateId,
-                DynamicTemplateData = new
-                {
-                    welcomeLabel = this.globalLocalizer.GetString("Welcome").Value,
-                    firstName = serviceModel.FirstName,
-                    lastName = serviceModel.LastName,
-                    subject = this.accountLocalizer.GetString("ClientApplyConfirmationSubject").Value,
-                    lineOne = this.accountLocalizer.GetString("ClientApplyConfirmation").Value
-                }
-            });
-
-            await this.mailingService.SendTemplateAsync(new TemplateEmail
-            {
-                RecipientEmailAddress = this.identityOptions.CurrentValue.ApplyRecipientEmail,
-                RecipientName = this.mailingOptions.CurrentValue.SenderName,
-                SenderEmailAddress = this.mailingOptions.CurrentValue.SenderEmail,
-                SenderName = this.mailingOptions.CurrentValue.SenderName,
-                TemplateId = this.identityOptions.CurrentValue.ActionSendGridClientApplyTemplateId,
-                DynamicTemplateData = new
-                {
-                    firstName = serviceModel.FirstName,
-                    lastName = serviceModel.LastName,
-                    email = serviceModel.Email,
-                    phoneNumberLabel = this.globalLocalizer.GetString("PhoneNumberLabel").Value,
-                    phoneNumber = serviceModel.PhoneNumber,
-                    subject = $"{serviceModel.CompanyName} - {serviceModel.FirstName} {serviceModel.LastName} - {this.accountLocalizer.GetString("ClientApplySubject").Value}",
-                    contactInformation = this.accountLocalizer.GetString("ContactInformation").Value,
-                    businessInformation = this.accountLocalizer.GetString("BusinessInformation").Value,
-                    firstNameLabel = this.globalLocalizer.GetString("FirstName").Value,
-                    lastNameLabel = this.globalLocalizer.GetString("LastName").Value,
-                    companyNameLabel = this.globalLocalizer.GetString("CompanyName").Value,
-                    companyName = serviceModel.CompanyName,
-                    addressLabel = this.globalLocalizer.GetString("Address").Value,
-                    address = serviceModel.CompanyAddress,
-                    cityLabel = this.globalLocalizer.GetString("City").Value,
-                    city = serviceModel.CompanyCity,
-                    regionLabel = this.globalLocalizer.GetString("Region").Value,
-                    region = serviceModel.CompanyRegion,
-                    postalCodeLabel = this.globalLocalizer.GetString("PostalCode").Value,
-                    postalCode = serviceModel.CompanyPostalCode,
-                    contactJobLabel = this.globalLocalizer.GetString("ContactJobTitle").Value,
-                    contactJobTitle = serviceModel.ContactJobTitle,
-                    countryLabel = this.globalLocalizer.GetString("Country").Value,
-                    country = serviceModel.CompanyCountry
-                }
-            });
         }
     }
 }
