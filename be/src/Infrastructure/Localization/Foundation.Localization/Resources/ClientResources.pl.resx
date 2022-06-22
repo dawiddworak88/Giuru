@@ -126,11 +126,32 @@
   <data name="BackToRoles" xml:space="preserve">
     <value>Powróc do ról</value>
   </data>
+  <data name="ApplicationDeletedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie usunięto wniosek klienta</value>
+  </data>
+  <data name="BackToClientsApplications" xml:space="preserve">
+    <value>Powróc do aplikacji klientów</value>
+  </data>
   <data name="Client" xml:space="preserve">
     <value>Klient</value>
   </data>
   <data name="ClientAlreadyExists" xml:space="preserve">
     <value>Użytkownik o podanym adresie e-mail został już utworzony.</value>
+  </data>
+  <data name="ClientApplicationNotFound" xml:space="preserve">
+    <value>Nie znaleziono wniosku klienta</value>
+  </data>
+  <data name="ClientApplicationSavedSuccessfully" xml:space="preserve">
+    <value>Wniosek klienta został pomyślnie zapisany</value>
+  </data>
+  <data name="ClientApplyConfirmation" xml:space="preserve">
+    <value>Dziękujemy za rejestrację na naszej platformie B2B. Twój wniosek został przesłany i czeka na weryfikację naszego zespołu. O aktywacji konta powiadomimy Cię drogą mailową.</value>
+  </data>
+  <data name="ClientApplyConfirmationSubject" xml:space="preserve">
+    <value>Potwierdzenie przesłania prośby o współpracę.</value>
+  </data>
+  <data name="ClientApplySubject" xml:space="preserve">
+    <value>Nowa prośba współpracy</value>
   </data>
   <data name="ClientDeletedSuccessfully" xml:space="preserve">
     <value>Klient został usunięty.</value>
@@ -147,6 +168,9 @@
   <data name="Clients" xml:space="preserve">
     <value>Klienci</value>
   </data>
+  <data name="ClientsApplications" xml:space="preserve">
+    <value>Wnioski klientów</value>
+  </data>
   <data name="ClientSavedSuccessfully" xml:space="preserve">
     <value>Klient został pomyślnie zapisany.</value>
   </data>
@@ -161,6 +185,9 @@
   </data>
   <data name="EditClientRole" xml:space="preserve">
     <value>Edytuj rolę</value>
+  </data>
+  <data name="EditClientApplication" xml:space="preserve">
+    <value>Edytuj wniosek klienta</value>
   </data>
   <data name="EditClientManager" xml:space="preserve">
     <value>Edytuj account menedżera klienta</value>
@@ -206,6 +233,9 @@
   </data>
   <data name="NewClient" xml:space="preserve">
     <value>Nowy klient</value>
+  </data>
+  <data name="NewClientApplication" xml:space="preserve">
+    <value>Dodaj wniosek</value>
   </data>
   <data name="NewGroup" xml:space="preserve">
     <value>Nowa grupa</value>

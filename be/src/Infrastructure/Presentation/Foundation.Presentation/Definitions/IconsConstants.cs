@@ -16,6 +16,7 @@
         public static readonly string Outlet = "Tag";
         public static readonly string News = "BookOpen";
         public static readonly string Key = "Key";
+        public static readonly string List = "List";
         public static readonly string Briefcase = "Briefcase";
     }
 }

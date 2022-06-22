@@ -142,7 +142,7 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                         {
                             Icon = IconsConstants.Media,
                             Title = this.globalLocalizer.GetString("Media"),
-                            Url = this.linkGenerator.GetPathByAction("Index", "Medias", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name })
+                            Url = this.linkGenerator.GetPathByAction("Index", "MediaItems", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name })
                         }
                     }
                 },

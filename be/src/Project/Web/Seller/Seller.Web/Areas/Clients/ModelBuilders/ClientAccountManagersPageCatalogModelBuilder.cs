@@ -52,6 +52,12 @@ namespace Seller.Web.Areas.Clients.ModelBuilders
 
             viewModel.OrderBy = $"{nameof(ClientAccountManager.CreatedDate)} desc";
 
+            viewModel.ConfirmationDialogDeleteNameProperty = new List<string>
+            {
+                nameof(ClientAccountManager.FirstName).ToCamelCase(),
+                nameof(ClientAccountManager.LastName).ToCamelCase()
+            };
+
             viewModel.Table = new CatalogTableViewModel
             {
                 Labels = new string[]

@@ -257,7 +257,7 @@ const InventoryForm = (props) => {
                         </div>
                         <div className="field">
                             <Button 
-                                type="subbmit" 
+                                type="submit" 
                                 variant="contained"
                                 color="primary"
                                 disabled={state.isLoading || disable || !product}>
