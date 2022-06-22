@@ -579,4 +579,7 @@
   <data name="Manager" xml:space="preserve">
     <value>Account Manager</value>
   </data>
+  <data name="NewProducts" xml:space="preserve">
+    <value>Neue Produkte</value>
+  </data>
 </root>
