@@ -600,4 +600,7 @@
   <data name="NewProducts" xml:space="preserve">
     <value>Neue Produkte</value>
   </data>
+  <data name="Attachment" xml:space="preserve">
+    <value>Anhang</value>
+  </data>
 </root>

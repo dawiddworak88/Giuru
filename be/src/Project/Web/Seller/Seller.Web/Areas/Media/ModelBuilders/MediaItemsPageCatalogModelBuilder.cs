@@ -43,7 +43,7 @@ namespace Seller.Web.Areas.Media.ModelBuilders
 
             viewModel.Title = this.mediaLocalizer.GetString("Media");
             viewModel.NewText = this.mediaLocalizer.GetString("NewText");
-            viewModel.IsAttachmentLabel = this.mediaLocalizer.GetString("IsAttachmentLabel");
+            viewModel.AttachmentLabel = this.globalLocalizer.GetString("Attachment");
 
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Index", "Media", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Item", "MediaItems", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name });

@@ -61,6 +61,31 @@ namespace Media.Api.v1.Controllers
             return this.BadRequest();
         }
 
+        /// <summary>
+        /// Gets a file by media item version id.
+        /// </summary>
+        /// <param name="versionId">The media item version id.</param>
+        /// <returns>The file.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [AllowAnonymous]
+        [Route("version/{versionId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(FileContentResult))]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public IActionResult GetFileVersion(Guid? versionId)
+        {
+            var mediaVersionFile = this.mediaService.GetVersionFile(versionId);
+
+            if (mediaVersionFile is not null)
+            {
+                this.Response.Headers[HeaderNames.CacheControl] = "public,max-age=" + CacheControlConstants.CacheControlMaxAgeSeconds;
+
+                return this.File(mediaVersionFile.File, mediaVersionFile.ContentType, mediaVersionFile.Filename);
+            }
+
+            return this.BadRequest();
+        }
+
+
         /// <param name = "mediaId" > The media id</param>
         /// /// <returns>OK</returns>
         [HttpDelete, MapToApiVersion("1.0")]

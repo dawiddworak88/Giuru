@@ -84,7 +84,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                         Id = mediaItem.Id,
                         FileName = mediaItem.FileName,
                         Name = mediaItem.Name,
-                        Url = mediaItem.MimeType.StartsWith("image") ? this.mediaService.GetMediaUrl(mediaItem.MediaItemVersionId.Value, 200) : this.mediaService.GetMediaUrl(mediaItem.MediaItemVersionId.Value),
+                        Url = mediaItem.MimeType.StartsWith("image") ? this.mediaService.GetMediaVersionUrl(mediaItem.MediaItemVersionId.Value, 200) : null,
                         LastModifiedDate = mediaItem.LastModifiedDate,
                         CreatedDate = mediaItem.CreatedDate
                     };
@@ -135,7 +135,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                     {
                         Id = x.Id,
                         FileName = x.FileName,
-                        Url = x.MimeType.StartsWith("image") ? this.mediaService.GetMediaUrl(x.MediaItemVersionId.Value, 200) : this.mediaService.GetMediaUrl(x.MediaItemVersionId.Value),
+                        Url = x.MimeType.StartsWith("image") ? this.mediaService.GetMediaVersionUrl(x.MediaItemVersionId.Value, 200) : this.mediaService.GetMediaVersionUrl(x.MediaItemVersionId.Value),
                         MimeType = x.MimeType,
                         LastModifiedDate = x.LastModifiedDate,
                         CreatedDate = x.CreatedDate,
@@ -165,6 +165,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
             };
 
             var response = await this.apiService.PostAsync<ApiRequest<UpdateMediaItemVersionRequestModel>, UpdateMediaItemVersionRequestModel, BaseResponseModel>(apiRequest);
+
             if (!response.IsSuccessStatusCode && response?.Data != null)
             {
                 throw new CustomException(response.Data.Message, (int)response.StatusCode);

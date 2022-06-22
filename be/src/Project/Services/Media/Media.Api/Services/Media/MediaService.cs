@@ -87,12 +87,13 @@ namespace Media.Api.Services.Media
 
             await this.mediaRepository.CreateFileAsync(mediaItemVersion.Id, serviceModel.OrganisationId.ToString(), serviceModel.File, serviceModel.File.FileName);
 
-            return mediaItemVersion.Id;
+            return mediaItem.Id;
         }
 
         public async Task<Guid> UpdateFileAsync(UpdateMediaItemServiceModel serviceModel)
         {
             var existingMediaItemVersion = this.context.MediaItemVersions.Where(x => x.MediaItemId == serviceModel.Id.Value && x.IsActive).OrderBy(o => o.Version);
+
             if (existingMediaItemVersion is not null)
             {
                 var checksum = this.checksumService.GetMd5(serviceModel.File);
@@ -133,7 +134,7 @@ namespace Media.Api.Services.Media
             {
                 var mediaItem = (from m in this.context.MediaItems
                                  join mv in this.context.MediaItemVersions on m.Id equals mv.MediaItemId
-                                 where m.Id == mediaId.Value || mv.Id == mediaId && m.IsActive == true && mv.IsActive && m.IsProtected == false
+                                 where m.Id == mediaId.Value && m.IsActive == true && mv.IsActive && m.IsProtected == false
                                  orderby mv.Version descending
                                  select new MediaFileItemServiceModel
                                  {
@@ -232,6 +233,7 @@ namespace Media.Api.Services.Media
                 mediaItemResult.Size = mediaItemVersion.Size;
                 mediaItemResult.MimeType = mediaItemVersion.MimeType;
                 mediaItemResult.Extension = mediaItemVersion.Extension;
+                mediaItemResult.MediaItemVersionId = mediaItemVersion.Id;
 
                 var mediaItemVersionTranslation = this.context.MediaItemTranslations.FirstOrDefault(x => x.MediaItemVersionId == mediaItemVersion.Id && x.Language == language && x.IsActive);
 
@@ -385,6 +387,42 @@ namespace Media.Api.Services.Media
 
                 await this.context.SaveChangesAsync();
             }
+        }
+
+        public MediaFileServiceModel GetVersionFile(Guid? versionId)
+        {
+            if (versionId.HasValue)
+            {
+                var mediaItemVersion = (from mv in this.context.MediaItemVersions
+                                          join m in this.context.MediaItems on mv.MediaItemId equals m.Id
+                                          where mv.Id == versionId && m.IsProtected == false
+                                          select new MediaFileItemServiceModel
+                                          {
+                                              Id = mv.Id,
+                                              ContentType = mv.MimeType,
+                                              Filename = mv.Filename,
+                                              Extension = mv.Extension,
+                                              Folder = mv.Folder
+                                          }).FirstOrDefault();
+
+                if (mediaItemVersion is not null)
+                {
+                    var file = this.mediaRepository.GetFile(mediaItemVersion.Folder, $"{mediaItemVersion.Id}{mediaItemVersion.Extension}");
+
+                    if (file is not null)
+                    {
+                        return new MediaFileServiceModel
+                        {
+                            Id = mediaItemVersion.Id,
+                            Filename = $"{mediaItemVersion.Filename}{mediaItemVersion.Extension}",
+                            ContentType = mediaItemVersion.ContentType,
+                            File = file
+                        };
+                    }
+                }
+            }
+
+            return default;
         }
     }
 }

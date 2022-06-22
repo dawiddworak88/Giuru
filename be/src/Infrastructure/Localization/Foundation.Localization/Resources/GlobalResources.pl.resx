@@ -603,4 +603,7 @@
   <data name="NewProducts" xml:space="preserve">
     <value>Nowe produkty</value>
   </data>
+  <data name="Attachment" xml:space="preserve">
+    <value>Załącznik</value>
+  </data>
 </root>

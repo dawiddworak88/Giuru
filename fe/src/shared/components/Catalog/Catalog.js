@@ -253,7 +253,7 @@ function Catalog(props) {
                                                 {props.table.properties && props.table.properties.map((property, index) => {
                                                     if (property.isPicture){
                                                         return (
-                                                            <TableCell key={index}><img src={item[property.title]} /></TableCell>
+                                                            <TableCell key={index}>{item[property.title] ? <img src={item[property.title]} /> : props.attachmentLabel}</TableCell>
                                                         )
                                                     }
                                                     else if (property.isDateTime){
@@ -332,7 +332,8 @@ Catalog.propTypes = {
     duplicateUrl: PropTypes.string,
     noResultsLabel: PropTypes.string.isRequired,
     table: PropTypes.object.isRequired,
-    confirmationDialogDeleteNameProperty: PropTypes.array
+    confirmationDialogDeleteNameProperty: PropTypes.array,
+    attachmentLabel: PropTypes.string
 }
 
 export default Catalog;

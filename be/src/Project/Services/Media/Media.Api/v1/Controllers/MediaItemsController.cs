@@ -157,10 +157,14 @@ namespace Media.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Get(Guid? id)
         {
+            var sellerClaims = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
             var serviceModel = new GetMediaItemsByIdServiceModel
             {
                 Id = id,
-                Language = CultureInfo.CurrentCulture.Name
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaims?.Value)
             };
 
             var validator = new GetMediaItemsByIdModelValidator();
@@ -175,6 +179,7 @@ namespace Media.Api.v1.Controllers
                     var response = new MediaItemResponseModel
                     {
                         Id = mediaItem.Id,
+                        MediaItemVersionId = mediaItem.MediaItemVersionId,
                         Description = mediaItem.Description,
                         Extension = mediaItem.Extension,
                         Filename = mediaItem.Filename,
@@ -231,6 +236,7 @@ namespace Media.Api.v1.Controllers
                 
                 return this.StatusCode((int)HttpStatusCode.OK);
             }
+
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
         }
 
@@ -248,7 +254,6 @@ namespace Media.Api.v1.Controllers
         public async Task<IActionResult> GetVersions(Guid? id)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
-
             var serviceModel = new GetMediaItemsByIdServiceModel
             {
                 Id = id,
