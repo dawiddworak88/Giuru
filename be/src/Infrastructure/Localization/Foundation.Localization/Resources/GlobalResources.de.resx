@@ -573,11 +573,23 @@
   <data name="AttachedAttachments" xml:space="preserve">
     <value>Der Kunde hat folgende Dateien angehängt</value>
   </data>
+  <data name="SelectJobTitle" xml:space="preserve">
+    <value>Wähle einen Arbeitsplatz</value>
+  </data>
+  <data name="ClientsApplications" xml:space="preserve">
+    <value>Client-Anwendungen</value>
+  </data>
   <data name="ClientManagers" xml:space="preserve">
     <value>Kundenmanager</value>
   </data>
   <data name="Manager" xml:space="preserve">
     <value>Account Manager</value>
+  </data>
+  <data name="BusinessInformation" xml:space="preserve">
+    <value>Geschäftsinformationen</value>
+  </data>
+  <data name="ContactInformation" xml:space="preserve">
+    <value>Kontaktinformationen</value>
   </data>
   <data name="NewProducts" xml:space="preserve">
     <value>Neue Produkte</value>

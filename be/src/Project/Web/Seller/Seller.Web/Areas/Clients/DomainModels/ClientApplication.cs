@@ -1,9 +1,10 @@
-﻿using Foundation.Extensions.Models;
+﻿using System;
 
-namespace Identity.Api.ServicesModels.Users
+namespace Seller.Web.Areas.Clients.DomainModels
 {
-    public class RegisterServiceModel : BaseServiceModel
+    public class ClientApplication
     {
+        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ContactJobTitle { get; set; }
@@ -15,5 +16,7 @@ namespace Identity.Api.ServicesModels.Users
         public string CompanyCity { get; set; }
         public string CompanyRegion { get; set; }
         public string CompanyPostalCode { get; set; }
+        public DateTime LastModifiedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

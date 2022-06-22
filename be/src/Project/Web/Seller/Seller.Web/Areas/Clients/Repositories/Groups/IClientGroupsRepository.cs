@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Seller.Web.Areas.Clients.Repositories
+namespace Seller.Web.Areas.Clients.Repositories.Groups
 {
     public interface IClientGroupsRepository
     {

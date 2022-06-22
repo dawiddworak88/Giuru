@@ -106,6 +106,12 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        - name: SendGridApiKey
+          value: {{ .Values.sendGridApiKey }}
+        - name: ActionSendGridClientApplyConfirmationTemplateId
+          value: {{ .Values.clientApi.actionSendGridClientApplyConfirmationTemplateId }}
+        - name: ActionSendGridClientApplyTemplateId
+          value: {{ .Values.clientApi.actionSendGridClientApplyTemplateId }}
         ports:
         - containerPort: 80
 ---
@@ -445,6 +451,8 @@ spec:
           value: {{ .Values.mediaUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
+        - name: ClientUrl
+          value: {{ .Values.clientUrl }}
         - name: BuyerUrl
           value: {{ .Values.buyerUrl }}
         - name: Clients
@@ -481,10 +489,6 @@ spec:
           value: {{ .Values.identityApi.actionSendGridCreateTemplateId }}
         - name: ActionSendGridResetTemplateId
           value: {{ .Values.identityApi.actionSendGridResetTemplateId }}
-        - name: ActionSendGridClientApplyConfirmationTemplateId
-          value: {{ .Values.identityApi.actionSendGridClientApplyConfirmationTemplateId }}
-        - name: ActionSendGridClientApplyTemplateId
-          value: {{ .Values.identityApi.actionSendGridClientApplyTemplateId }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType

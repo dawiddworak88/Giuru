@@ -204,7 +204,7 @@ const RegisterForm = (props) => {
                                         <MenuItem key={0} value="">{props.selectJobTitle}</MenuItem>
                                         {props.contactJobTitles && props.contactJobTitles.map((title, index) => {
                                             return (
-                                                <MenuItem key={index} value={title.name}>{title.name}</MenuItem>
+                                                <MenuItem key={index} value={title.name}>{title.value}</MenuItem>
                                             )
                                         })}
                                     </Select>

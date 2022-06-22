@@ -138,20 +138,8 @@
   <data name="BackToLoginText" xml:space="preserve">
     <value>Zurück zur Anmeldung</value>
   </data>
-  <data name="BusinessInformation" xml:space="preserve">
-    <value>Geschäftsinformationen</value>
-  </data>
   <data name="BusinessInformationDescription" xml:space="preserve">
     <value>Teilen Sie uns Ihren Firmennamen und Standort mit</value>
-  </data>
-  <data name="ClientApplyConfirmation" xml:space="preserve">
-    <value>Vielen Dank für die Registrierung auf unserer B2B-Plattform. Ihre Bewerbung wurde gesendet und wartet auf die Überprüfung durch unser Team. Wir benachrichtigen Sie per E-Mail über die Aktivierung des Kontos.</value>
-  </data>
-  <data name="ClientApplyConfirmationSubject" xml:space="preserve">
-    <value>Bestätigung des Absendens der Kooperationsanfrage.</value>
-  </data>
-  <data name="ContactInformation" xml:space="preserve">
-    <value>Kontaktinformationen</value>
   </data>
   <data name="ContactInformationDescription" xml:space="preserve">
     <value>Ihr primärer Ansprechpartner für ELTAP ist der im Formular angegebene Ansprechpartner</value>
@@ -233,9 +221,6 @@
   </data>
   <data name="VerifyDateExpired" xml:space="preserve">
     <value>Der Link ist abgelaufen. Bitte wenden Sie sich an einen Administrator.</value>
-  </data>
-  <data name="ClientApplySubject" xml:space="preserve">
-    <value>Neue Kooperationsanfrage</value>
   </data>
   <data name="SelectJobTitle" xml:space="preserve">
     <value>Wähle einen Arbeitsplatz</value>

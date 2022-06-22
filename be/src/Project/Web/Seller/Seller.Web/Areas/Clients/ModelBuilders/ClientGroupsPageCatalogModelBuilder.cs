@@ -6,7 +6,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.Clients.DomainModels;
-using Seller.Web.Areas.Clients.Repositories;
+using Seller.Web.Areas.Clients.Repositories.Groups;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;

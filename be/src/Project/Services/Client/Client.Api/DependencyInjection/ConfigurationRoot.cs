@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Foundation.Localization.Definitions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Client.Api.Configurations;
 
 namespace Client.Api.DependencyInjection
 {
@@ -28,6 +29,7 @@ namespace Client.Api.DependencyInjection
         public static void ConfigureSettings(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<LocalizationSettings>(configuration);
+            services.Configure<AppSettings>(configuration);
         }
 
         public static IServiceCollection ConigureHealthChecks(this IServiceCollection services, IConfiguration configuration)
