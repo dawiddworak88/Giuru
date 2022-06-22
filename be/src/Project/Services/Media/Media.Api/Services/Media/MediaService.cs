@@ -250,19 +250,6 @@ namespace Media.Api.Services.Media
             return mediaItemResult;
         }
 
-        private bool IsImage(string contentType)
-        {
-            var imageContentTypes = new List<string>
-            {
-                MediaConstants.MimeTypes.Jpeg,
-                MediaConstants.MimeTypes.Png,
-                MediaConstants.MimeTypes.Svg,
-                MediaConstants.MimeTypes.Webp
-            };
-
-            return imageContentTypes.Contains(contentType);
-        }
-
         public async Task<PagedResults<IEnumerable<MediaItemServiceModel>>> GetAsync(GetMediaItemsServiceModel serviceModel)
         {
             var mediaItems = this.context.MediaItems.Where(x => x.IsActive && x.OrganisationId == serviceModel.OrganisationId.Value);
