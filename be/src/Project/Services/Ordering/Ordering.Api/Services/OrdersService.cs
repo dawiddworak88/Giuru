@@ -292,6 +292,7 @@ namespace Ordering.Api.Services
                                 OrderStatusId = o.OrderStatusId,
                                 OrderItems = o.OrderItems.Select(x => new OrderItemServiceModel
                                 {
+                                    Id = x.Id,
                                     OrderStateId = x.OrderStateId,
                                     OrderStatusId = x.OrderStatusId,
                                     ProductId = x.ProductId,
@@ -370,6 +371,7 @@ namespace Ordering.Api.Services
             {
                 var orderItem = new OrderItemServiceModel
                 {
+                    Id = orderProduct.Id,
                     OrderStateId = orderProduct.OrderStateId,
                     OrderStatusId = orderProduct.OrderStatusId,
                     ProductId = orderProduct.ProductId,

@@ -112,6 +112,7 @@ namespace Ordering.Api.v1.Controllers
                             OrderStatusName = x.OrderStatusName,
                             OrderItems = x.OrderItems.Select(y => new OrderItemResponseModel
                             {
+                                Id = y.Id,
                                 ProductId = y.ProductId,
                                 ProductSku = y.ProductSku,
                                 ProductName = y.ProductName,
@@ -207,6 +208,7 @@ namespace Ordering.Api.v1.Controllers
                         OrderStatusName = order.OrderStatusName,
                         OrderItems = order.OrderItems.Select(x => new OrderItemResponseModel
                         {
+                            Id = x.Id,
                             OrderStateId = x.OrderStateId,
                             OrderStatusId = x.OrderStatusId,
                             OrderStatusName = x.OrderStatusName,

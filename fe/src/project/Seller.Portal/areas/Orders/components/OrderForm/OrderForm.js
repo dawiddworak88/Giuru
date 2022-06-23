@@ -407,7 +407,7 @@ function OrderForm(props) {
                                         }}
                                         renderInput={(params) => 
                                             <TextField {...params} variant="standard" />}
-                                        disablePast={true}/>
+                                       disablePast={true}/>
                                 </LocalizationProvider>
                             </div>
                             <div className="column is-2 is-flex is-align-items-flex-end">

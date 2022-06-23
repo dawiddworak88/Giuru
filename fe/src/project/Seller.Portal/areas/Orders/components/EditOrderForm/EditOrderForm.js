@@ -1,4 +1,4 @@
-import React, { useContext, useState, Fragment } from "react";
+import React, { useContext, useState, Fragment, useEffect } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
 import { Context } from "../../../../../../shared/stores/Store";
@@ -13,6 +13,7 @@ import Files from "../../../../../../shared/components/Files/Files";
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
+    const [orderItemsStatuses, setOrderItemsStatuses] = useState([]);
 
     const handleOrderStatusSubmit = (e) => {
 
@@ -55,6 +56,35 @@ function EditOrderForm(props) {
             });
     };
 
+    const handleOrderItemStatusChange = (id, newOrderStatus) => {
+        const orderItemIndex = orderItemsStatuses.findIndex(x => x.orderItemId === id);
+        let prevOrderItemsStatuses = [...orderItemsStatuses];
+
+        let orderItem = prevOrderItemsStatuses.find(x => x.orderItemId === id);
+        orderItem.orderItemStatusId = newOrderStatus;
+
+        prevOrderItemsStatuses[orderItemIndex] = orderItem;
+
+        setOrderItemsStatuses(prevOrderItemsStatuses);
+    }
+
+    useEffect(() => {
+        if (props.orderItems && props.orderItems.length > 0){
+            let a = [];
+
+            props.orderItems.forEach((orderItem) => {
+                const item = {
+                    orderItemId: orderItem.id,
+                    orderItemStatusId: orderItem.orderStatusId
+                }
+
+                a.push(item);
+            })
+
+            setOrderItemsStatuses(a);
+        }
+    }, [])
+
     return (
         <section className="section section-small-padding edit-order">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -82,9 +112,9 @@ function EditOrderForm(props) {
                                                         e.preventDefault();
                                                         setOrderStatusId(e.target.value);
                                                     }}>
-                                                    {props.orderStatuses.map(status => {
+                                                    {props.orderStatuses.map((status, index) => {
                                                         return (
-                                                            <MenuItem key={status.id} value={status.id}>{status.name}</MenuItem>
+                                                            <MenuItem key={index} value={status.id}>{status.name}</MenuItem>
                                                         );
                                                     })}
                                                 </Select>
@@ -129,6 +159,7 @@ function EditOrderForm(props) {
                                                 <TableCell>{props.quantityLabel}</TableCell>
                                                 <TableCell>{props.stockQuantityLabel}</TableCell>
                                                 <TableCell>{props.outletQuantityLabel}</TableCell>
+                                                <TableCell>{props.orderStatusLabel}</TableCell>
                                                 <TableCell>{props.externalReferenceLabel}</TableCell>
                                                 <TableCell>{props.deliveryFromLabel}</TableCell>
                                                 <TableCell>{props.deliveryToLabel}</TableCell>
@@ -136,20 +167,42 @@ function EditOrderForm(props) {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {props.orderItems.map((item, index) => (
-                                                <TableRow key={index}>
-                                                    <TableCell><a href={item.productUrl} target="_blank"><img className="edit-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
-                                                    <TableCell>{item.sku}</TableCell>
-                                                    <TableCell>{item.name}</TableCell>
-                                                    <TableCell>{item.quantity}</TableCell>
-                                                    <TableCell>{item.stockQuantity}</TableCell>
-                                                    <TableCell>{item.outletQuantity}</TableCell>
-                                                    <TableCell>{item.externalReference}</TableCell>
-                                                    <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
-                                                    <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
-                                                    <TableCell>{item.moreInfo}</TableCell>
-                                                </TableRow>
-                                            ))}
+                                            {props.orderItems.map((item, index) => {
+                                                const orderStatusName = orderItemsStatuses.length > 0 ? orderItemsStatuses.find((orderItem) => orderItem.orderItemStatusId === item.orderStatusId) : item.orderStatusId;
+                                                
+                                                return (
+                                                    <TableRow key={index}>
+                                                        <TableCell><a href={item.productUrl} target="_blank"><img className="edit-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
+                                                        <TableCell>{item.sku}</TableCell>
+                                                        <TableCell>{item.name}</TableCell>
+                                                        <TableCell>{item.quantity}</TableCell>
+                                                        <TableCell>{item.stockQuantity}</TableCell>
+                                                        <TableCell>{item.outletQuantity}</TableCell>
+                                                        <TableCell>
+                                                            <FormControl variant="standard" fullWidth={true}>
+                                                                <Select
+                                                                    id={`orderItemStatus-${item.id}`}
+                                                                    name={`orderItemStatus-${item.id}`}
+                                                                    value={orderStatusName}
+                                                                    onChange={(e) => {
+                                                                        e.preventDefault();
+                                                                        handleOrderItemStatusChange(item.id, e.target.value);
+                                                                    }}>
+                                                                    {props.orderStatuses.map((status, index) => {
+                                                                        return (
+                                                                            <MenuItem key={index} value={status.id}>{status.name}</MenuItem>
+                                                                        );
+                                                                    })}
+                                                                </Select>
+                                                            </FormControl>
+                                                        </TableCell>
+                                                        <TableCell>{item.externalReference}</TableCell>
+                                                        <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
+                                                        <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
+                                                        <TableCell>{item.moreInfo}</TableCell>
+                                                    </TableRow>
+                                                )
+                                            })}
                                         </TableBody>
                                     </Table>
                                 </TableContainer>

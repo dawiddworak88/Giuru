@@ -78,6 +78,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 viewModel.UpdateOrderStatusUrl = this.linkGenerator.GetPathByAction("Index", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name, Id = order.ClientId });
                 viewModel.OrderItems = order.OrderItems.Select(x => new OrderItemViewModel
                 {
+                    Id = x.Id,
                     ProductId = x.ProductId,
                     Sku = x.ProductSku,
                     Name = x.ProductName,
@@ -87,6 +88,7 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo,
+                    OrderStatusId = x.OrderStatusId,
                     DeliveryFrom = x.ExpectedDeliveryFrom,
                     DeliveryTo = x.ExpectedDeliveryTo,
                     ImageAlt = x.ProductName,
