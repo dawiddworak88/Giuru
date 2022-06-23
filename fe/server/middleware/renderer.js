@@ -28,8 +28,6 @@ import ClientRolePage from "../../src/project/Seller.Portal/areas/Clients/pages/
 import ClientRolesPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/ClientRolesPage";
 import ClientApplicationPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/ClientApplicationPage";
 import ClientsApplicationsPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientsApplicationsPage/ClientsApplicationsPage";
-import MediaPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage";
-import MediaItemPage from "../../src/project/Seller.Portal/areas/Medias/pages/MediaItemPage/MediaItemPage";
 import MediaPage from "../../src/project/Seller.Portal/areas/MediaItems/pages/MediaItemPage/MediaItemPage";
 import MediaItemPage from "../../src/project/Seller.Portal/areas/MediaItems/pages/MediaItemPage/MediaItemPage";
 import ClientAccountManagerPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientAccountManagerPage/ClientAccountManagerPage";

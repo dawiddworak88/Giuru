@@ -100,6 +100,8 @@ namespace Ordering.Api.Services
                 var orderItem = new OrderItem
                 {
                     OrderId = order.Id,
+                    OrderStateId = OrderStatesConstants.NewId,
+                    OrderStatusId = OrderStatusesConstants.NewId,
                     ProductId = basketItem.ProductId.Value,
                     ProductSku = basketItem.ProductSku,
                     ProductName = basketItem.ProductName,
