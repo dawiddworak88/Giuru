@@ -15,6 +15,9 @@ namespace Ordering.Api.ServicesModels
         public DateTime? ExpectedDeliveryFrom { get; set; }
         public DateTime? ExpectedDeliveryTo { get; set; }
         public string MoreInfo { get; set; }
+        public Guid OrderStatusId { get; set; }
+        public Guid OrderStateId { get; set; }
+        public string OrderStatusName { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

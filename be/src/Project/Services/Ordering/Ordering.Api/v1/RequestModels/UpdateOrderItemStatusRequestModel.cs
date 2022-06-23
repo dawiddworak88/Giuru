@@ -2,9 +2,9 @@
 
 namespace Ordering.Api.v1.RequestModels
 {
-    public class UpdateOrderStatusRequestModel
+    public class UpdateOrderItemStatusRequestModel
     {
-        public Guid? OrderId { get; set; }
+        public Guid? OrderItemId { get; set; }
         public Guid? OrderStatusId { get; set; }
     }
 }

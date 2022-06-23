@@ -24,7 +24,7 @@ namespace Ordering.Api.v1.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Authorize]
+    [AllowAnonymous]
     [ApiController]
     public class OrdersController : BaseApiController
     {
@@ -207,6 +207,9 @@ namespace Ordering.Api.v1.Controllers
                         OrderStatusName = order.OrderStatusName,
                         OrderItems = order.OrderItems.Select(x => new OrderItemResponseModel
                         {
+                            OrderStateId = x.OrderStateId,
+                            OrderStatusId = x.OrderStatusId,
+                            OrderStatusName = x.OrderStatusName,
                             ProductId = x.ProductId,
                             ProductSku = x.ProductSku,
                             ProductName = x.ProductName,
@@ -233,6 +236,41 @@ namespace Ordering.Api.v1.Controllers
                     return this.StatusCode((int)HttpStatusCode.NotFound);
                 }
 
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        ///  Updates the order item status.
+        /// </summary>
+        /// <returns>The updated order item status.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [Route("orderitemstatus")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Status(UpdateOrderItemStatusRequestModel request)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new UpdateOrderItemStatusServiceModel
+            {
+                OrderItemId = request.OrderItemId,
+                OrderStatusId = request.OrderStatusId,
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value
+            };
+
+            var validator = new UpdateOrderItemStatusModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                await this.ordersService.UpdateOrderItemStatusAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);

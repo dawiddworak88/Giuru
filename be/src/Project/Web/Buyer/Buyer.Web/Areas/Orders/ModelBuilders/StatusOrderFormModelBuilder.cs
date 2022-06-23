@@ -67,6 +67,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
             }
 
             var order = await this.ordersRepository.GetOrderAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+
             if (order != null)
             {
                 viewModel.Id = order.Id;
@@ -84,6 +85,7 @@ namespace Buyer.Web.Areas.Orders.ModelBuilders
                     OutletQuantity = x.OutletQuantity,
                     ExternalReference = x.ExternalReference,
                     MoreInfo = x.MoreInfo,
+                    OrderStatusName = x.OrderStatusName,
                     ProductAttributes = x.ProductAttributes,
                     DeliveryFrom = x.ExpectedDeliveryFrom,
                     DeliveryTo = x.ExpectedDeliveryTo,

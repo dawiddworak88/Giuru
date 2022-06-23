@@ -16,6 +16,7 @@ using Ordering.Api.Infrastructure.Orders.Definitions;
 using Ordering.Api.Infrastructure.Orders.Entities;
 using Ordering.Api.IntegrationEvents;
 using Ordering.Api.ServicesModels;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -208,6 +209,8 @@ namespace Ordering.Api.Services
                              OrderStatusName = ost.Name,
                              OrderItems = c.OrderItems.Select(x => new OrderItemServiceModel
                              {
+                                 OrderStateId = x.OrderStateId,
+                                 OrderStatusId = x.OrderStatusId,
                                  ProductId = x.ProductId,
                                  ProductSku = x.ProductSku,
                                  ProductName = x.ProductName,
@@ -250,89 +253,155 @@ namespace Ordering.Api.Services
 
         public async Task<OrderServiceModel> GetAsync(GetOrderServiceModel model)
         {
-            var orderItem = await this.context.Orders.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
-            if (orderItem is not null)
+            var existingOrder = (from o in this.context.Orders
+                            join oi in this.context.OrderItems on o.Id equals oi.OrderId
+                            where o.Id == model.Id && o.IsActive
+                            select new OrderServiceModel
+                            {
+                                Id = o.Id,
+                                SellerId = o.Id,
+                                ClientId = o.ClientId.Value,
+                                ClientName = o.ClientName,
+                                BillingAddressId = o.BillingAddressId,
+                                BillingCity = o.BillingCity,
+                                BillingCompany = o.BillingCompany,
+                                BillingCountryCode = o.BillingCountryCode,
+                                BillingFirstName = o.BillingFirstName,
+                                BillingLastName = o.BillingLastName,
+                                BillingPhone = o.BillingPhone,
+                                BillingPhonePrefix = o.BillingPhonePrefix,
+                                BillingPostCode = o.BillingPostCode,
+                                BillingRegion = o.BillingRegion,
+                                BillingStreet = o.BillingStreet,
+                                ShippingAddressId = o.ShippingAddressId,
+                                ShippingCity = o.ShippingCity,
+                                ShippingCompany = o.ShippingCompany,
+                                ShippingCountryCode = o.ShippingCountryCode,
+                                ShippingFirstName = o.ShippingFirstName,
+                                ShippingLastName = o.ShippingLastName,
+                                ShippingPhone = o.ShippingPhone,
+                                ShippingPhonePrefix = o.ShippingPhonePrefix,
+                                ShippingPostCode = o.ShippingPostCode,
+                                ShippingRegion = o.ShippingRegion,
+                                ShippingStreet = o.ShippingStreet,
+                                ExternalReference = o.ExternalReference,
+                                ExpectedDeliveryDate = o.ExpectedDeliveryDate,
+                                MoreInfo = o.MoreInfo,
+                                Reason = o.Reason,
+                                OrderStateId = o.OrderStateId,
+                                OrderStatusId = o.OrderStatusId,
+                                OrderItems = o.OrderItems.Select(x => new OrderItemServiceModel
+                                {
+                                    OrderStateId = x.OrderStateId,
+                                    OrderStatusId = x.OrderStatusId,
+                                    ProductId = x.ProductId,
+                                    ProductSku = x.ProductSku,
+                                    ProductName = x.ProductName,
+                                    PictureUrl = x.PictureUrl,
+                                    Quantity = x.Quantity,
+                                    StockQuantity = x.StockQuantity,
+                                    OutletQuantity = x.OutletQuantity,
+                                    ExternalReference = x.ExternalReference,
+                                    ExpectedDeliveryFrom = x.ExpectedDeliveryFrom,
+                                    ExpectedDeliveryTo = x.ExpectedDeliveryTo,
+                                    MoreInfo = x.MoreInfo,
+                                    LastModifiedDate = x.LastModifiedDate,
+                                    CreatedDate = x.CreatedDate
+                                }),
+                                LastModifiedDate = o.LastModifiedDate,
+                                CreatedDate = o.CreatedDate
+                            }).FirstOrDefault();
+
+            if (existingOrder is null)
             {
-                var order = new OrderServiceModel
-                {
-                    Id = orderItem.Id,
-                    SellerId = orderItem.SellerId,
-                    ClientId = orderItem.ClientId.Value,
-                    ClientName = orderItem.ClientName,
-                    BillingAddressId = orderItem.BillingAddressId,
-                    BillingCity = orderItem.BillingCity,
-                    BillingCompany = orderItem.BillingCompany,
-                    BillingCountryCode = orderItem.BillingCountryCode,
-                    BillingFirstName = orderItem.BillingFirstName,
-                    BillingLastName = orderItem.BillingLastName,
-                    BillingPhone = orderItem.BillingPhone,
-                    BillingPhonePrefix = orderItem.BillingPhonePrefix,
-                    BillingPostCode = orderItem.BillingPostCode,
-                    BillingRegion = orderItem.BillingRegion,
-                    BillingStreet = orderItem.BillingStreet,
-                    ShippingAddressId = orderItem.ShippingAddressId,
-                    ShippingCity = orderItem.ShippingCity,
-                    ShippingCompany = orderItem.ShippingCompany,
-                    ShippingCountryCode = orderItem.ShippingCountryCode,
-                    ShippingFirstName = orderItem.ShippingFirstName,
-                    ShippingLastName = orderItem.ShippingLastName,
-                    ShippingPhone = orderItem.ShippingPhone,
-                    ShippingPhonePrefix = orderItem.ShippingPhonePrefix,
-                    ShippingPostCode = orderItem.ShippingPostCode,
-                    ShippingRegion = orderItem.ShippingRegion,
-                    ShippingStreet = orderItem.ShippingStreet,
-                    ExternalReference = orderItem.ExternalReference,
-                    ExpectedDeliveryDate = orderItem.ExpectedDeliveryDate,
-                    MoreInfo = orderItem.MoreInfo,
-                    Reason = orderItem.Reason,
-                    OrderStateId = orderItem.OrderStateId,
-                    OrderStatusId = orderItem.OrderStatusId,
-                    LastModifiedDate = orderItem.LastModifiedDate,
-                    CreatedDate = orderItem.CreatedDate
-                };
-
-                var orderStatusTranslation = await this.context.OrderStatusTranslations.FirstOrDefaultAsync(x => x.OrderStatusId == orderItem.OrderStatusId && x.IsActive && x.Language == model.Language);
-                
-                if (orderStatusTranslation is null)
-                {
-                    orderStatusTranslation = await this.context.OrderStatusTranslations.FirstOrDefaultAsync(x => x.OrderStatusId == orderItem.OrderStatusId && x.IsActive);
-                }
-
-                order.OrderStatusName = orderStatusTranslation?.Name;
-
-                var attachments = this.context.OrderAttachments.Where(x => x.OrderId == orderItem.Id && x.IsActive);
-                
-                if (attachments is not null)
-                {
-                    order.Attachments = attachments.Select(x => x.MediaId);
-                }
-
-                var orderItems = this.context.OrderItems.Where(x => x.OrderId == orderItem.Id && x.IsActive);
-
-                if (orderItems is not null)
-                {
-                    order.OrderItems = orderItems.Select(x => new OrderItemServiceModel
-                    {
-                        ProductId = x.ProductId,
-                        ProductSku = x.ProductSku,
-                        ProductName = x.ProductName,
-                        PictureUrl = x.PictureUrl,
-                        Quantity = x.Quantity,
-                        StockQuantity = x.StockQuantity,
-                        OutletQuantity = x.OutletQuantity,
-                        ExternalReference = x.ExternalReference,
-                        ExpectedDeliveryFrom = x.ExpectedDeliveryFrom,
-                        ExpectedDeliveryTo = x.ExpectedDeliveryTo,
-                        MoreInfo = x.MoreInfo,
-                        LastModifiedDate = x.LastModifiedDate,
-                        CreatedDate = x.CreatedDate
-                    });
-                }
-
-                return order;
+                throw new CustomException(this.orderLocalizer.GetString("OrderNotFound"), (int)HttpStatusCode.NotFound);
             }
 
-            return default;
+            var order = new OrderServiceModel
+            {
+                Id = existingOrder.Id,
+                SellerId = existingOrder.SellerId,
+                ClientId = existingOrder.ClientId,
+                ClientName = existingOrder.ClientName,
+                BillingAddressId = existingOrder.BillingAddressId,
+                BillingCity = existingOrder.BillingCity,
+                BillingCompany = existingOrder.BillingCompany,
+                BillingCountryCode = existingOrder.BillingCountryCode,
+                BillingFirstName = existingOrder.BillingFirstName,
+                BillingLastName = existingOrder.BillingLastName,
+                BillingPhone = existingOrder.BillingPhone,
+                BillingPhonePrefix = existingOrder.BillingPhonePrefix,
+                BillingPostCode = existingOrder.BillingPostCode,
+                BillingRegion = existingOrder.BillingRegion,
+                BillingStreet = existingOrder.BillingStreet,
+                ShippingAddressId = existingOrder.ShippingAddressId,
+                ShippingCity = existingOrder.ShippingCity,
+                ShippingCompany = existingOrder.ShippingCompany,
+                ShippingCountryCode = existingOrder.ShippingCountryCode,
+                ShippingFirstName = existingOrder.ShippingFirstName,
+                ShippingLastName = existingOrder.ShippingLastName,
+                ShippingPhone = existingOrder.ShippingPhone,
+                ShippingPhonePrefix = existingOrder.ShippingPhonePrefix,
+                ShippingPostCode = existingOrder.ShippingPostCode,
+                ShippingRegion = existingOrder.ShippingRegion,
+                ShippingStreet = existingOrder.ShippingStreet,
+                ExternalReference = existingOrder.ExternalReference,
+                ExpectedDeliveryDate = existingOrder.ExpectedDeliveryDate,
+                MoreInfo = existingOrder.MoreInfo,
+                Reason = existingOrder.Reason,
+                OrderStateId = existingOrder.OrderStateId,
+                OrderStatusId = existingOrder.OrderStatusId,
+                LastModifiedDate = existingOrder.LastModifiedDate,
+                CreatedDate = existingOrder.CreatedDate
+            };
+
+            var orderStatusTranslation = this.context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == existingOrder.OrderStatusId && x.IsActive && x.Language == model.Language);
+
+            if (orderStatusTranslation is null)
+            {
+                orderStatusTranslation = this.context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == existingOrder.OrderStatusId && x.IsActive);
+            }
+
+            order.OrderStatusName = orderStatusTranslation?.Name;
+
+            var orderItems = new List<OrderItemServiceModel>();
+
+            foreach (var orderProduct in existingOrder.OrderItems.OrEmptyIfNull())
+            {
+                var orderItem = new OrderItemServiceModel
+                {
+                    OrderStateId = orderProduct.OrderStateId,
+                    OrderStatusId = orderProduct.OrderStatusId,
+                    ProductId = orderProduct.ProductId,
+                    ProductSku = orderProduct.ProductSku,
+                    ProductName = orderProduct.ProductName,
+                    PictureUrl = orderProduct.PictureUrl,
+                    Quantity = orderProduct.Quantity,
+                    StockQuantity = orderProduct.StockQuantity,
+                    OutletQuantity = orderProduct.OutletQuantity,
+                    ExternalReference = orderProduct.ExternalReference,
+                    ExpectedDeliveryFrom = orderProduct.ExpectedDeliveryFrom,
+                    ExpectedDeliveryTo = orderProduct.ExpectedDeliveryTo,
+                    MoreInfo = orderProduct.MoreInfo,
+                    LastModifiedDate = orderProduct.LastModifiedDate,
+                    CreatedDate = orderProduct.CreatedDate
+                };
+
+                var orderItemStatusTranslation = this.context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == orderProduct.OrderStatusId && x.IsActive && x.Language == model.Language);
+
+                if (orderItemStatusTranslation is null)
+                {
+                    orderItemStatusTranslation = this.context.OrderStatusTranslations.FirstOrDefault(x => x.OrderStatusId == orderProduct.OrderStatusId && x.IsActive);
+                }
+
+                orderItem.OrderStatusName = orderItemStatusTranslation?.Name;
+
+                orderItems.Add(orderItem);
+            }
+
+            order.OrderItems = orderItems;
+
+            return order;
         }
 
         public async Task<IEnumerable<OrderStatusServiceModel>> GetOrderStatusesAsync(GetOrderStatusesServiceModel serviceModel)
@@ -370,15 +439,15 @@ namespace Ordering.Api.Services
                 throw new CustomException(this.orderLocalizer.GetString("OrderNotFound"), (int)HttpStatusCode.NotFound);
             }
 
-            var newOrderOstatus = await this.context.OrderStatuses.FirstOrDefaultAsync(x => x.Id == serviceModel.OrderStatusId && x.IsActive);
+            var newOrderStatus = await this.context.OrderStatuses.FirstOrDefaultAsync(x => x.Id == serviceModel.OrderStatusId && x.IsActive);
 
-            if (newOrderOstatus == null)
+            if (newOrderStatus == null)
             {
                 throw new CustomException(this.orderLocalizer.GetString("OrderStatusNotFound"), (int)HttpStatusCode.NotFound);
             }
 
-            order.OrderStatusId = newOrderOstatus.Id;
-            order.OrderStateId = newOrderOstatus.OrderStateId;
+            order.OrderStatusId = newOrderStatus.Id;
+            order.OrderStateId = newOrderStatus.OrderStateId;
 
             await this.context.SaveChangesAsync();
 
@@ -389,6 +458,29 @@ namespace Ordering.Api.Services
                 Language = serviceModel.Language,
                 IsSeller = serviceModel.IsSeller
             });
+        }
+
+        public async Task UpdateOrderItemStatusAsync(UpdateOrderItemStatusServiceModel model)
+        {
+            var orderItem = await this.context.OrderItems.FirstOrDefaultAsync(x => x.Id == model.OrderItemId && x.IsActive);
+
+            if (orderItem is null)
+            {
+                throw new CustomException(this.orderLocalizer.GetString("OrderItemNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            var newOrderItemStatus = await this.context.OrderStatuses.FirstOrDefaultAsync(x => x.Id == model.OrderStatusId && x.IsActive);
+
+            if (newOrderItemStatus is null)
+            {
+                throw new CustomException(this.orderLocalizer.GetString("OrderStatusNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            orderItem.OrderStateId = newOrderItemStatus.OrderStateId;
+            orderItem.OrderStatusId = newOrderItemStatus.Id;
+            orderItem.LastModifiedDate = DateTime.UtcNow;
+
+            await this.context.SaveChangesAsync();
         }
     }
 }

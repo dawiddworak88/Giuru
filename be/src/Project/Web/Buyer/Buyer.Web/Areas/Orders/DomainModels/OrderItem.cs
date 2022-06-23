@@ -15,9 +15,10 @@ namespace Buyer.Web.Areas.Orders.DomainModels
         public double OutletQuantity { get; set; }
         public string ExternalReference { get; set; }
         public string ProductAttributes { get; set; }
+        public string MoreInfo { get; set; }
+        public string OrderStatusName { get; set; }
         public DateTime? ExpectedDeliveryFrom { get; set; }
         public DateTime? ExpectedDeliveryTo { get; set; }
-        public string MoreInfo { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }
     }

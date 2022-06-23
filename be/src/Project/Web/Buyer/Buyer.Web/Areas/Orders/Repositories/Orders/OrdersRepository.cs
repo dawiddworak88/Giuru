@@ -47,9 +47,11 @@ namespace Buyer.Web.Areas.Orders.Repositories
             if (response.IsSuccessStatusCode && response.Data?.OrderItems is not null)
             {
                 var orderItems = new List<OrderItem>();
+
                 foreach (var item in response.Data.OrderItems)
                 {
                     var product = await this.productsRepository.GetProductAsync(item.ProductId, null, null);
+
                     if (product is not null)
                     {
                         orderItems.Add(new OrderItem
@@ -62,6 +64,7 @@ namespace Buyer.Web.Areas.Orders.Repositories
                             StockQuantity = item.StockQuantity,
                             OutletQuantity = item.OutletQuantity,
                             ExternalReference = item.ExternalReference,
+                            OrderStatusName = item.OrderStatusName,
                             ExpectedDeliveryFrom = item.ExpectedDeliveryFrom,
                             ProductAttributes = await this.productsService.GetProductAttributesAsync(product.ProductAttributes),
                             ExpectedDeliveryTo = item.ExpectedDeliveryTo,

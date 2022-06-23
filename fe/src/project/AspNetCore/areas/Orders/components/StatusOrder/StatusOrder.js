@@ -40,6 +40,7 @@ function StatusOrder(props) {
                                                 <TableCell>{props.quantityLabel}</TableCell>
                                                 <TableCell>{props.stockQuantityLabel}</TableCell>
                                                 <TableCell>{props.outletQuantityLabel}</TableCell>
+                                                <TableCell>{props.orderStatusLabel}</TableCell>
                                                 <TableCell>{props.externalReferenceLabel}</TableCell>
                                                 <TableCell>{props.deliveryFromLabel}</TableCell>
                                                 <TableCell>{props.deliveryToLabel}</TableCell>
@@ -57,6 +58,7 @@ function StatusOrder(props) {
                                                         <TableCell>{item.quantity}</TableCell>
                                                         <TableCell>{item.stockQuantity}</TableCell>
                                                         <TableCell>{item.outletQuantity}</TableCell>
+                                                        <TableCell>{item.orderStatusName}</TableCell>
                                                         <TableCell>{item.externalReference}</TableCell>
                                                         <TableCell>{item.deliveryFrom && <span>{moment(item.deliveryFrom).format("L")}</span>}</TableCell>
                                                         <TableCell>{item.deliveryTo && <span>{moment(item.deliveryTo).format("L")}</span>}</TableCell>
