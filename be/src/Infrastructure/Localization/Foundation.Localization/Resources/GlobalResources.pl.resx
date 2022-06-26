@@ -576,10 +576,31 @@
   <data name="AttachedAttachments" xml:space="preserve">
     <value>Klient załączył następujące pliki</value>
   </data>
+  <data name="ClientsRoles" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="NewRole" xml:space="preserve">
+    <value>Nowa rola</value>
+  </data>
+  <data name="SelectJobTitle" xml:space="preserve">
+    <value>Wybierz stanowisko pracy</value>
+  </data>
+  <data name="ClientsApplications" xml:space="preserve">
+    <value>Wnioski klientów</value>
+  </data>
   <data name="ClientManagers" xml:space="preserve">
     <value>Menedżerowie klientów</value>
   </data>
   <data name="Manager" xml:space="preserve">
     <value>Account Menedżer</value>
+  </data>
+  <data name="BusinessInformation" xml:space="preserve">
+    <value>Informacje biznesowe</value>
+  </data>
+  <data name="ContactInformation" xml:space="preserve">
+    <value>Informacje kontaktowe</value>
+  </data>
+  <data name="NewProducts" xml:space="preserve">
+    <value>Nowe produkty</value>
   </data>
 </root>

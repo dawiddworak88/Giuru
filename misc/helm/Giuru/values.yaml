@@ -34,6 +34,8 @@ inventoryApi:
   connectionString: "#{InventoryApi--ConnectionString}#"
 clientApi:
   connectionString: "#{ClientApi--ConnectionString}#"
+  actionSendGridClientApplyConfirmationTemplateId: "#{ClientApi--ActionSendGridClientApplyConfirmationTemplateId}#"
+  actionSendGridClientApplyTemplateId: "#{ClientApi--ActionSendGridClientApplyTemplateId}#"
 mediaApi:
   connectionString: "#{MediaApi--ConnectionString}#"
   storageConnectionString: "#{MediaApi--StorageConnectionString}#"
@@ -49,8 +51,6 @@ identityApi:
   connectionString: "#{IdentityApi--ConnectionString}#"
   actionSendGridCreateTemplateId: "#{IdentityApi--ActionSendGridCreateTemplateId}#"
   actionSendGridResetTemplateId: "#{IdentityApi--ActionSendGridResetTemplateId}#"
-  actionSendGridClientApplyConfirmationTemplateId: "#{IdentityApi--ActionSendGridClientApplyConfirmationTemplateId}#"
-  actionSendGridClientApplyTemplateId: "#{IdentityApi--ActionSendGridClientApplyTemplateId}#"
   clients: "#{IdentityApi--Clients}#"
   sellerClientId: "#{IdentityApi--SellerClientId}#"
   accounts: "#{IdentityApi--Accounts}#"

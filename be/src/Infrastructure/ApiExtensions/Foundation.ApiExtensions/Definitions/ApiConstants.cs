@@ -16,6 +16,8 @@
         public struct Client
         {
             public static readonly string GroupsApiEndpoint = "/api/v1/clientgroups";
+            public static readonly string RolesApiEndpoint = "/api/v1/clientroles";
+            public static readonly string ApplicationsApiEndpoint = "/api/v1/clientsapplication";
             public static readonly string ManagersApiEndpoint = "/api/v1/clientaccountmanagers";
         }
 
@@ -26,6 +28,7 @@
             public static readonly string ClientsApiEndpoint = "/api/v1/clients";
             public static readonly string ClientByOrganisationApiEndpoint = "/api/v1/clients/organisation";
             public static readonly string UsersApiEndpoint = "/api/v1/users";
+            public static readonly string RolesApiEndpoint = "/api/v1/roles";
         }
 
         public struct News

@@ -3,7 +3,7 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Seller.Web.Areas.Clients.Repositories;
+using Seller.Web.Areas.Clients.Repositories.Groups;
 using Seller.Web.Areas.Clients.ViewModels;
 using System.Globalization;
 using System.Threading.Tasks;
