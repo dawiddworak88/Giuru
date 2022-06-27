@@ -81,6 +81,8 @@ services:
       - LogstashUrl=http://logstash:31311
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
+      - SenderEmail=${SENDER_EMAIL}
+      - SenderName=${SENDER_NAME}
       - SendGridApiKey=${SENDGRID_API_KEY}
       - ActionSendGridClientApplyConfirmationTemplateId=${SENDGRID_CLIENT_APPLY_CONFIRMATION_TEMPLATE_ID}
       - ActionSendGridClientApplyTemplateId=${SENDGRID_CLIENT_APPLY_TEMPLATE_ID}
@@ -163,8 +165,8 @@ services:
       - BuyerUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5107
       - DefaultCulture=${DEFAULT_CULTURE}
       - ApplyRecipientEmail=office@eltap.com
-      - SenderEmail=orders@eltap.com
-      - SenderName=ELTAP
+      - SenderEmail=${SENDER_EMAIL}
+      - SenderName=${SENDER_NAME}
       - SendGridApiKey=${SENDGRID_API_KEY}
       - ActionSendGridCreateTemplateId=${SENDGRID_CREATE_ACCOUNT_TEMPLATE_ID}
       - ActionSendGridResetTemplateId=${SENDGRID_RESET_PASSWORD_TEMPLATE_ID}
