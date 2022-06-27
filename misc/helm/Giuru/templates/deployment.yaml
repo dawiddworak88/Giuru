@@ -106,6 +106,10 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        - name: SenderName
+          value: {{ .Values.senderName }}
+        - name: SenderEmail
+          value: {{ .Values.senderEmail }}
         - name: SendGridApiKey
           value: {{ .Values.sendGridApiKey }}
         - name: ActionSendGridClientApplyConfirmationTemplateId
