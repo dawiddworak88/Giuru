@@ -1,8 +1,6 @@
 ﻿using Feature.Account;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
-using Foundation.Extensions.Definitions;
-using Foundation.Extensions.Exceptions;
 using Identity.Api.Areas.Accounts.ApiRequestModels;
 using Identity.Api.Areas.Accounts.Repositories.Clients;
 using Microsoft.AspNetCore.Authentication;
