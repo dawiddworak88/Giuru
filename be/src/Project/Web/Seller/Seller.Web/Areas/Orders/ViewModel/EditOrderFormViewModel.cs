@@ -30,8 +30,10 @@ namespace Seller.Web.Areas.Orders.ViewModel
         public string IdLabel { get; set; }
         public string CustomOrderLabel { get; set; }
         public string CustomOrder { get; set; }
+        public string UpdateOrderItemStatusUrl { get; set; }
         public IEnumerable<ListItemViewModel> OrderStatuses { get; set; }
         public IEnumerable<OrderItemViewModel> OrderItems { get; set; }
+        public IEnumerable<OrderItemStatus> OrderItemsStatus { get; set; }
         public FilesViewModel Attachments { get; set; }
     }
 }

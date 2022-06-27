@@ -13,7 +13,7 @@ import Files from "../../../../../../shared/components/Files/Files";
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
-    const [orderItemsStatuses, setOrderItemsStatuses] = useState([]);
+    const [orderItemsStatuses, setOrderItemsStatuses] = useState(props.orderItemsStatus ? props.orderItemsStatus : []);
 
     const handleOrderStatusSubmit = (e) => {
 
@@ -57,33 +57,48 @@ function EditOrderForm(props) {
     };
 
     const handleOrderItemStatusChange = (id, newOrderStatus) => {
-        const orderItemIndex = orderItemsStatuses.findIndex(x => x.orderItemId === id);
+        dispatch({ type: "SET_IS_LOADING", payload: true });
+
+        const orderItemIndex = orderItemsStatuses.findIndex(x => x.id === id);
         let prevOrderItemsStatuses = [...orderItemsStatuses];
 
-        let orderItem = prevOrderItemsStatuses.find(x => x.orderItemId === id);
-        orderItem.orderItemStatusId = newOrderStatus;
+        let orderItem = prevOrderItemsStatuses.find(x => x.id === id);
+        orderItem.orderStatusId = newOrderStatus;
 
         prevOrderItemsStatuses[orderItemIndex] = orderItem;
 
         setOrderItemsStatuses(prevOrderItemsStatuses);
-    }
 
-    useEffect(() => {
-        if (props.orderItems && props.orderItems.length > 0){
-            let a = [];
-
-            props.orderItems.forEach((orderItem) => {
-                const item = {
-                    orderItemId: orderItem.id,
-                    orderItemStatusId: orderItem.orderStatusId
-                }
-
-                a.push(item);
-            })
-
-            setOrderItemsStatuses(a);
+        const payload = {
+            orderItemId: id,
+            orderStatusId: newOrderStatus
         }
-    }, [])
+
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
+            body: JSON.stringify(payload)
+        };
+
+        fetch(props.updateOrderItemStatusUrl, requestOptions)
+            .then((response) => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+
+                AuthenticationHelper.HandleResponse(response);
+
+                return response.json().then(jsonResponse => {
+                    if (response.ok) {
+                        toast.success(jsonResponse.message);
+                    }
+                    else {
+                        toast.error(props.generalErrorMessage);
+                    }
+                });
+            }).catch(() => {
+                dispatch({ type: "SET_IS_LOADING", payload: false });
+                toast.error(props.generalErrorMessage);
+            });
+    }
 
     return (
         <section className="section section-small-padding edit-order">
@@ -119,7 +134,7 @@ function EditOrderForm(props) {
                                                     })}
                                                 </Select>
                                             </FormControl>
-                                    </div>
+                                        </div>
                                     </div>
                                     <div className="column is-half">
                                         <div className="column">
@@ -168,8 +183,8 @@ function EditOrderForm(props) {
                                         </TableHead>
                                         <TableBody>
                                             {props.orderItems.map((item, index) => {
-                                                const orderStatusName = orderItemsStatuses.length > 0 ? orderItemsStatuses.find((orderItem) => orderItem.orderItemStatusId === item.orderStatusId) : item.orderStatusId;
-                                                
+                                                const orderItemStatus = orderItemsStatuses.find((orderItem) => orderItem.id === item.id);
+
                                                 return (
                                                     <TableRow key={index}>
                                                         <TableCell><a href={item.productUrl} target="_blank"><img className="edit-order__item-product-image" src={item.imageSrc} alt={item.imageAlt} /></a></TableCell>
@@ -183,7 +198,7 @@ function EditOrderForm(props) {
                                                                 <Select
                                                                     id={`orderItemStatus-${item.id}`}
                                                                     name={`orderItemStatus-${item.id}`}
-                                                                    value={orderStatusName}
+                                                                    value={orderItemStatus ? orderItemStatus.orderStatusId : item.orderStatusId}
                                                                     onChange={(e) => {
                                                                         e.preventDefault();
                                                                         handleOrderItemStatusChange(item.id, e.target.value);
@@ -261,7 +276,8 @@ EditOrderForm.propTypes = {
     clientName: PropTypes.string.isRequired,
     clientUrl: PropTypes.string.isRequired,
     updateOrderStatusUrl: PropTypes.string.isRequired,
-    idLabel: PropTypes.string
+    idLabel: PropTypes.string,
+    updateOrderItemStatusUrl: PropTypes.string.isRequired
 };
 
 export default EditOrderForm;

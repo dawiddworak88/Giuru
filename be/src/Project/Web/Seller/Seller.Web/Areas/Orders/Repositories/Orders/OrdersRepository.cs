@@ -1,5 +1,6 @@
 ﻿using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
+using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
@@ -140,6 +141,30 @@ namespace Seller.Web.Areas.Orders.Repositories.Orders
             }
 
             return default;
+        }
+
+        public async Task UpdateOrderItemStatusAsync(string token, string language, Guid orderItemId, Guid orderStatusId)
+        {
+            var requestModel = new UpdateOrderItemStatusRequestModel
+            {
+                OrderItemId = orderItemId,
+                OrderStatusId = orderStatusId
+            };
+
+            var apiRequest = new ApiRequest<UpdateOrderItemStatusRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.OrderUrl}{ApiConstants.Order.UpdateOrderItemStatusApiEndpoint}"
+            };
+
+            var response = await this.apiOrderService.PostAsync<ApiRequest<UpdateOrderItemStatusRequestModel>, UpdateOrderItemStatusRequestModel, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
         }
     }
 }

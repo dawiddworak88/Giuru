@@ -1,4 +1,5 @@
-﻿using Foundation.Extensions.ModelBuilders;
+﻿using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
@@ -8,6 +9,7 @@ using Seller.Web.Areas.Orders.Repositories.Orders;
 using Seller.Web.Areas.Orders.ViewModel;
 using Seller.Web.Shared.ComponentModels.Files;
 using Seller.Web.Shared.ViewModels;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -57,7 +59,8 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 ClientLabel = this.globalLocalizer.GetString("Client"),
                 OutletQuantityLabel = this.orderLocalizer.GetString("OutletQuantityLabel"),
                 StockQuantityLabel = this.orderLocalizer.GetString("StockQuantityLabel"),
-                CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel")
+                CustomOrderLabel = this.globalLocalizer.GetString("CustomOrderLabel"),
+                UpdateOrderItemStatusUrl = this.linkGenerator.GetPathByAction("Item", "OrderStatusApi", new { Area = "Orders", culture = CultureInfo.CurrentUICulture.Name })
             };
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
@@ -95,6 +98,19 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                     ImageSrc = x.PictureUrl
                 });
                 viewModel.CustomOrder = order.MoreInfo;
+
+                var orderItemStatuses = new List<OrderItemStatus>();
+
+                foreach (var orderItem in order.OrderItems.OrEmptyIfNull())
+                {
+                    orderItemStatuses.Add(new OrderItemStatus
+                    {
+                        Id = orderItem.Id,
+                        OrderStatusId = orderItem.OrderStatusId
+                    });
+                }
+
+                viewModel.OrderItemsStatus = orderItemStatuses;
 
                 viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = order.Attachments });
             }
