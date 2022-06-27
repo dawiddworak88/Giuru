@@ -482,6 +482,10 @@ namespace Ordering.Api.Services
             orderItem.OrderStatusId = newOrderItemStatus.Id;
             orderItem.LastModifiedDate = DateTime.UtcNow;
 
+            var order = await this.context.Orders.FirstOrDefaultAsync(x => x.Id == orderItem.OrderId && x.IsActive);
+
+            /*if (order.OrderItems.Any(x => x.OrderStatusId))*/
+
             await this.context.SaveChangesAsync();
         }
     }

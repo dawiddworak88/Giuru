@@ -46,7 +46,7 @@ namespace Seller.Web.Areas.Orders.ApiControllers
 
             await this.ordersRepository.UpdateOrderItemStatusAsync(token, language, request.OrderItemId, request.OrderStatusId);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.orderLocalizer.GetString("OrderStatusUpdatedSuccessfully") });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.orderLocalizer.GetString("OrderStatusUpdatedSuccessfully").Value });
         }
     }
 }

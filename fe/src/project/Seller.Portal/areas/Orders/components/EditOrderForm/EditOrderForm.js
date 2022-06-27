@@ -69,7 +69,7 @@ function EditOrderForm(props) {
 
         setOrderItemsStatuses(prevOrderItemsStatuses);
 
-        const payload = {
+        const requestPayload = {
             orderItemId: id,
             orderStatusId: newOrderStatus
         }
@@ -77,7 +77,7 @@ function EditOrderForm(props) {
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Requested-With": "XMLHttpRequest" },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(requestPayload)
         };
 
         fetch(props.updateOrderItemStatusUrl, requestOptions)
