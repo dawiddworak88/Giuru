@@ -484,7 +484,19 @@ namespace Ordering.Api.Services
 
             var order = await this.context.Orders.FirstOrDefaultAsync(x => x.Id == orderItem.OrderId && x.IsActive);
 
-            /*if (order.OrderItems.Any(x => x.OrderStatusId))*/
+            bool allSame = order.OrderItems.DistinctBy(x => x.OrderStatusId).Count() == 1;
+
+            if (allSame)
+            {
+                order.OrderStatusId = order.OrderItems.FirstOrDefault().OrderStatusId;
+                order.OrderStateId = order.OrderItems.FirstOrDefault().OrderStateId;
+                order.LastModifiedDate = DateTime.UtcNow;
+            } else
+            {
+                order.OrderStatusId = Guid.Parse("578480B3-15EF-492D-9F86-9827789C6804");
+                order.OrderStateId = Guid.Parse("77E3AEE6-6053-4D95-BBB5-FC2EBFA4F0DE");
+                order.LastModifiedDate = DateTime.UtcNow;
+            }
 
             await this.context.SaveChangesAsync();
         }

@@ -69,6 +69,14 @@ function EditOrderForm(props) {
 
         setOrderItemsStatuses(prevOrderItemsStatuses);
 
+        // ***
+
+        const allSame = orderItemsStatuses.map(item => item.orderStatusId).filter((v, i, s) => s.indexOf(v) === i).length === 1
+
+        console.log(allSame);
+
+        // ***
+
         const requestPayload = {
             orderItemId: id,
             orderStatusId: newOrderStatus
