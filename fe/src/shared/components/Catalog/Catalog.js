@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import { Plus } from "react-feather";
 import {
-    Delete, Edit, FileCopyOutlined
+    Delete, Edit, FileCopyOutlined, Link
 } from "@mui/icons-material";
 import {
     Button, TextField, Table, TableBody, TableCell, TableContainer,
@@ -16,6 +16,7 @@ import { Context } from "../../stores/Store";
 import QueryStringSerializer from "../../helpers/serializers/QueryStringSerializer";
 import PaginationConstants from "../../constants/PaginationConstants";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
+import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
 import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
 
 function Catalog(props) {
@@ -139,9 +140,8 @@ function Catalog(props) {
     const handleDeleteEntity = () => {
 
         dispatch({ type: "SET_IS_LOADING", payload: true });
-
+        
         const deleteParameters = {
-
             id: entityToDelete.id
         };
 
@@ -178,6 +178,9 @@ function Catalog(props) {
             });
     };
 
+    const copyToClipboard = (text) => {
+        ClipboardHelper.copyToClipboard(text);
+    }
     useEffect(() => {
         setMounted(true)
     }, [])
@@ -185,18 +188,18 @@ function Catalog(props) {
     return (
         <section className="section section-small-padding catalog">
             <h1 className="subtitle is-4">{props.title}</h1>
-            <div>
-              {props.newUrl &&
-                <a href={props.newUrl} className="button is-primary">
-                  <span className="icon">
-                    <Plus />
-                  </span>
-                  <span>
-                    {props.newText}
-                  </span>
-                </a>
-              }
-            </div>
+            {props.newUrl &&
+                <div>
+                    <a href={props.newUrl} className="button is-primary">
+                    <span className="icon">
+                        <Plus />
+                    </span>
+                    <span>
+                        {props.newText}
+                    </span>
+                    </a>
+                </div>
+            }
             <div>
                 {props.searchLabel &&
                     <div className="catalog__search is-flex-centered">
@@ -214,7 +217,7 @@ function Catalog(props) {
                                     <TableHead>
                                         <TableRow>
                                             {props.table.actions &&
-                                                <TableCell width="11%"></TableCell>
+                                                <TableCell width="12%"></TableCell>
                                             }
                                             {props.table.labels.map((item, index) =>
                                                 <TableCell key={index} value={item}>{item}</TableCell>
@@ -225,7 +228,7 @@ function Catalog(props) {
                                         {items.map((item, index) => (
                                             <TableRow key={index}>
                                                 {props.table.actions &&
-                                                    <TableCell width="11%">
+                                                    <TableCell width="12%">
                                                         {props.table.actions.map((actionItem, index) => {
                                                             if (actionItem.isEdit) return (
                                                                 <Fab href={props.editUrl + "/" + item.id} size="small" color="secondary" aria-label={props.editLabel} key={index}>
@@ -239,13 +242,21 @@ function Catalog(props) {
                                                                 <Fab href={props.duplicateUrl + "/" + item.id} size="small" color="secondary" aria-label={props.duplicateLabel} key={index}>
                                                                     <FileCopyOutlined />
                                                                 </Fab>)
+                                                            else if (actionItem.isPicture) return (
+                                                                <Fab onClick={() => copyToClipboard(item.url)} size="small" color="secondary" aria-label={props.duplicateLabel}>
+                                                                    <Link />
+                                                                </Fab>)
                                                             else return (
                                                                 <div></div>)})}
                                                     </TableCell>
                                                 }
-
                                                 {props.table.properties && props.table.properties.map((property, index) => {
-                                                    if (property.isDateTime){
+                                                    if (property.isPicture){
+                                                        return (
+                                                            <TableCell key={index}><img src={item[property.title]} /></TableCell>
+                                                        )
+                                                    }
+                                                    else if (property.isDateTime){
                                                         return (
                                                             <TableCell key={index}>{isMounted ? moment.utc(item[property.title]).local().format("L LT") : moment.utc(item[property.title]).format("L LT")}</TableCell>
                                                         )
@@ -284,7 +295,13 @@ function Catalog(props) {
                     titleId="alert-dialog-title"
                     title={props.deleteConfirmationLabel}
                     textId="alert-dialog-description"
-                    text={props.areYouSureLabel + (entityToDelete ? (entityToDelete.name ? ": " + entityToDelete.name : ": " + entityToDelete.productName) : "")}
+                    text={props.areYouSureLabel + ": " + (
+                        entityToDelete ? props.confirmationDialogDeleteNameProperty && props.confirmationDialogDeleteNameProperty.length > 0 ? 
+                            props.confirmationDialogDeleteNameProperty.map((property) => {
+                                return entityToDelete[`${property}`]
+                            }
+                        ).join(" ") : entityToDelete["name"] : ""
+                    )}
                     noLabel={props.noLabel}
                     yesLabel={props.yesLabel}
                 />
@@ -314,7 +331,8 @@ Catalog.propTypes = {
     deleteUrl: PropTypes.string,
     duplicateUrl: PropTypes.string,
     noResultsLabel: PropTypes.string.isRequired,
-    table: PropTypes.object.isRequired
+    table: PropTypes.object.isRequired,
+    confirmationDialogDeleteNameProperty: PropTypes.array
 }
 
 export default Catalog;

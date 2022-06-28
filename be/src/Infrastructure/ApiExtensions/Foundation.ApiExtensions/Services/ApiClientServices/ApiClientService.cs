@@ -44,6 +44,11 @@ namespace Foundation.ApiExtensions.Services.ApiClientServices
                         content.Add(new StreamContent(new MemoryStream(request.Data.File)), ApiConstants.ContentNames.FileContentName, request.Data.Filename);
                         content.Add(new StringContent(request.Language), ApiConstants.ContentNames.LanguageContentName);
 
+                        if (request.Data.Id != null)
+                        {
+                            content.Add(new StringContent(request.Data.Id), ApiConstants.ContentNames.GuidContentName);
+                        }
+
                         var response = await client.PostAsync(request.EndpointAddress, content);
 
                         var apiResponse = new ApiResponse<T>

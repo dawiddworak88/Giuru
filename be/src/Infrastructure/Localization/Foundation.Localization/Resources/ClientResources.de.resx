@@ -123,11 +123,35 @@
   <data name="AccountText" xml:space="preserve">
     <value>Benutzerkonto erstellen</value>
   </data>
+  <data name="BackToRoles" xml:space="preserve">
+    <value>Zurück zu den Rollen</value>
+  </data>
+  <data name="ApplicationDeletedSuccessfully" xml:space="preserve">
+    <value>Kundenanwendung erfolgreich gelöscht</value>
+  </data>
+  <data name="BackToClientsApplications" xml:space="preserve">
+    <value>Zurück zu den Kundenanwendungen</value>
+  </data>
   <data name="Client" xml:space="preserve">
     <value>Kunde</value>
   </data>
   <data name="ClientAlreadyExists" xml:space="preserve">
     <value>Der Kunder mit dieser E-Mail-Adresse wurde schon erstellt.</value>
+  </data>
+  <data name="ClientApplicationNotFound" xml:space="preserve">
+    <value>Kundenanwendung nicht gefunden</value>
+  </data>
+  <data name="ClientApplicationSavedSuccessfully" xml:space="preserve">
+    <value>Client-Anwendung erfolgreich gespeichert</value>
+  </data>
+  <data name="ClientApplyConfirmation" xml:space="preserve">
+    <value>Vielen Dank für die Registrierung auf unserer B2B-Plattform. Ihre Bewerbung wurde gesendet und wartet auf die Überprüfung durch unser Team. Wir benachrichtigen Sie per E-Mail über die Aktivierung des Kontos.</value>
+  </data>
+  <data name="ClientApplyConfirmationSubject" xml:space="preserve">
+    <value>Bestätigung des Absendens der Kooperationsanfrage.</value>
+  </data>
+  <data name="ClientApplySubject" xml:space="preserve">
+    <value>Neue Kooperationsanfrage</value>
   </data>
   <data name="ClientDeletedSuccessfully" xml:space="preserve">
     <value>Kunde wurde erfolgreich gelöscht.</value>
@@ -135,11 +159,17 @@
   <data name="ClientExists" xml:space="preserve">
     <value>Ein Kunde mit dieser E-Mail-Adresse existiert bereits.</value>
   </data>
+  <data name="ClientManagers" xml:space="preserve">
+    <value>Kundenbetreuer</value>
+  </data>
   <data name="ClientNotFound" xml:space="preserve">
     <value>Kunde wurde nicht gefunden.</value>
   </data>
   <data name="Clients" xml:space="preserve">
     <value>Kunden</value>
+  </data>
+  <data name="ClientsApplications" xml:space="preserve">
+    <value>Client-Anwendungen</value>
   </data>
   <data name="ClientSavedSuccessfully" xml:space="preserve">
     <value>Der Kunde wurde erfolgreich gespeichert.</value>
@@ -147,8 +177,20 @@
   <data name="ClientsGroups" xml:space="preserve">
     <value>Kundengruppen</value>
   </data>
+  <data name="ClientsRoles" xml:space="preserve">
+    <value>Rollen</value>
+  </data>
   <data name="EditClient" xml:space="preserve">
     <value>Kunde bearbeiten</value>
+  </data>
+  <data name="EditClientRole" xml:space="preserve">
+    <value>Rolle bearbeiten</value>
+  </data>
+  <data name="EditClientApplication" xml:space="preserve">
+    <value>Clientanwendung bearbeiten</value>
+  </data>
+  <data name="EditClientManager" xml:space="preserve">
+    <value>Kundenkontomanager bearbeiten</value>
   </data>
   <data name="EditGroup" xml:space="preserve">
     <value>Kundengruppe bearbeiten</value>
@@ -165,22 +207,64 @@
   <data name="GroupSavedSuccessfully" xml:space="preserve">
     <value>Gruppe wurde erfolgreich gespeichert.</value>
   </data>
+  <data name="ManagerDeleteConflict" xml:space="preserve">
+    <value>Heben Sie die Zuweisung von Clients zu diesem Account-Manager auf.</value>
+  </data>
+  <data name="ManagerDeletedSuccessfully" xml:space="preserve">
+    <value>Account-Manager wurde erfolgreich gelöscht.</value>
+  </data>
+  <data name="ManagerExist" xml:space="preserve">
+    <value>Account-Manager existiert bereit</value>
+  </data>
+  <data name="ManagerNotFound" xml:space="preserve">
+    <value>Account-Manager wurde nicht gefunden.</value>
+  </data>
+  <data name="ManagerSavedSuccessfully" xml:space="preserve">
+    <value>Account-Manager wurde erfolgreich gespeichert.</value>
+  </data>
   <data name="NavigateToClientsLabel" xml:space="preserve">
     <value>Zurück zu den Kunden</value>
   </data>
   <data name="NavigateToGroupsText" xml:space="preserve">
     <value>Zurück zu den Gruppen</value>
   </data>
+  <data name="NavigateToManagersText" xml:space="preserve">
+    <value>Zurück zu den Account-Managern</value>
+  </data>
   <data name="NewClient" xml:space="preserve">
     <value>Neuer Kunde</value>
+  </data>
+  <data name="NewClientApplication" xml:space="preserve">
+    <value>Anwendung hinzufügen</value>
   </data>
   <data name="NewGroup" xml:space="preserve">
     <value>Neue Kundengruppe</value>
   </data>
+  <data name="NewManager" xml:space="preserve">
+    <value>Neuer Account-Manager</value>
+  </data>
+  <data name="NoClients" xml:space="preserve">
+    <value>Keine Kunden verfügbar</value>
+  </data>
   <data name="NoGroupsText" xml:space="preserve">
     <value>Keine Kundengruppe verfügbar</value>
   </data>
+  <data name="NoManagers" xml:space="preserve">
+    <value>Keine Account-Manager verfügbar</value>
+  </data>
   <data name="ResetPasswordText" xml:space="preserve">
     <value>Passwort zurücksetzen</value>
+  </data>
+  <data name="RoleDeletedSuccessfully" xml:space="preserve">
+    <value>Rolle erfolgreich gelöscht.</value>
+  </data>
+  <data name="RoleIsExisting" xml:space="preserve">
+    <value>Rolle vorhanden</value>
+  </data>
+  <data name="RoleNotFound" xml:space="preserve">
+    <value>Rolle nicht gefunden</value>
+  </data>
+  <data name="RoleSavedSuccessfully" xml:space="preserve">
+    <value>Rolle erfolgreich gespeichert.</value>
   </data>
 </root>

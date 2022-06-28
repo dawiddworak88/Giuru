@@ -83,6 +83,7 @@ export var menuTiles = {
     { icon: "Box", title: "Inventory", url: "#" },
     { icon: "Tag", title: "Outlet", url: "#" },
     { icon: "Users", title: "Clients", url: "#" },
+    { icon: "Image", title: "Media", url: "#" },
     { icon: "Settings", title: "Settings", url: "#" }
   ],
 };

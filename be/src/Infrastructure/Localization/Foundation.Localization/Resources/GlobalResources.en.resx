@@ -423,6 +423,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Last name</value>
   </data>
+  <data name="Miniature" xml:space="preserve">
+    <value>Miniature</value>
+  </data>
   <data name="BasketLabel" xml:space="preserve">
     <value>Add to cart</value>
   </data>
@@ -569,5 +572,32 @@
   </data>
   <data name="AttachedAttachments" xml:space="preserve">
     <value>The client attached following files</value>
+  </data>
+  <data name="ClientsRoles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
+  <data name="NewRole" xml:space="preserve">
+    <value>New role</value>
+  </data>
+  <data name="SelectJobTitle" xml:space="preserve">
+    <value>Choose a workplace title</value>
+  </data>
+  <data name="ClientsApplications" xml:space="preserve">
+    <value>Clients applications</value>
+  </data>
+  <data name="ClientManagers" xml:space="preserve">
+    <value>Client managers</value>
+  </data>
+  <data name="Manager" xml:space="preserve">
+    <value>Account Manager</value>
+  </data>
+  <data name="BusinessInformation" xml:space="preserve">
+    <value>Business information</value>
+  </data>
+  <data name="ContactInformation" xml:space="preserve">
+    <value>Contact information</value>
+  </data>
+  <data name="NewProducts" xml:space="preserve">
+    <value>New products</value>
   </data>
 </root>

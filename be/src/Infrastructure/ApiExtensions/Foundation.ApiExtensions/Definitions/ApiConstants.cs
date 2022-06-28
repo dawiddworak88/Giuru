@@ -16,6 +16,9 @@
         public struct Client
         {
             public static readonly string GroupsApiEndpoint = "/api/v1/clientgroups";
+            public static readonly string RolesApiEndpoint = "/api/v1/clientroles";
+            public static readonly string ApplicationsApiEndpoint = "/api/v1/clientsapplication";
+            public static readonly string ManagersApiEndpoint = "/api/v1/clientaccountmanagers";
         }
 
         public struct Identity
@@ -25,6 +28,7 @@
             public static readonly string ClientsApiEndpoint = "/api/v1/clients";
             public static readonly string ClientByOrganisationApiEndpoint = "/api/v1/clients/organisation";
             public static readonly string UsersApiEndpoint = "/api/v1/users";
+            public static readonly string RolesApiEndpoint = "/api/v1/roles";
         }
 
         public struct News
@@ -50,6 +54,7 @@
         public struct Media
         {
             public static readonly string MediaItemsApiEndpoint = "/api/v1/mediaitems";
+            public static readonly string MediaItemsVersionsApiEndpoint = "/api/v1/mediaitems/versions";
             public static readonly string FilesApiEndpoint = "/api/v1/files";
         }
 
@@ -70,6 +75,7 @@
         {
             public static readonly string FileContentName = "file";
             public static readonly string LanguageContentName = "language";
+            public static readonly string GuidContentName = "id";
         }
 
         public struct Request
