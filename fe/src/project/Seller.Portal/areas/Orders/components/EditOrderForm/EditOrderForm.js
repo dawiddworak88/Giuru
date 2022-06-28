@@ -9,6 +9,7 @@ import {
 import moment from "moment";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import Files from "../../../../../../shared/components/Files/Files";
+import OrderConstants from "../../../../shared/constants/OrderConstants";;
 
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
@@ -69,17 +70,13 @@ function EditOrderForm(props) {
 
         setOrderItemsStatuses(prevOrderItemsStatuses);
 
-        // ***
+        const sameStatuses = orderItemsStatuses.map(item => item.orderStatusId).filter((v, i, s) => s.indexOf(v) === i).length === 1;
 
-        const allSame = orderItemsStatuses.map(item => item.orderStatusId).filter((v, i, s) => s.indexOf(v) === i).length === 1
-
-        if (allSame) {
+        if (sameStatuses) {
             setOrderStatusId(newOrderStatus)
         } else {
-            setOrderStatusId("578480b3-15ef-492d-9f86-9827789c6804")
+            setOrderStatusId(OrderConstants.inProgressStatusId())
         }
-
-        // ***
 
         const requestPayload = {
             orderItemId: id,
