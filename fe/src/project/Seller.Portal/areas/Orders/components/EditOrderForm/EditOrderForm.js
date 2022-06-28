@@ -73,7 +73,11 @@ function EditOrderForm(props) {
 
         const allSame = orderItemsStatuses.map(item => item.orderStatusId).filter((v, i, s) => s.indexOf(v) === i).length === 1
 
-        console.log(allSame);
+        if (allSame) {
+            setOrderStatusId(newOrderStatus)
+        } else {
+            setOrderStatusId("578480b3-15ef-492d-9f86-9827789c6804")
+        }
 
         // ***
 
