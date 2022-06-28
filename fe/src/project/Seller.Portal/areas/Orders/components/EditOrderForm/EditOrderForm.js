@@ -14,7 +14,7 @@ import OrderConstants from "../../../../shared/constants/OrderConstants";;
 function EditOrderForm(props) {
     const [state, dispatch] = useContext(Context);
     const [orderStatusId, setOrderStatusId] = useState(props.orderStatusId);
-    const [orderItemsStatuses, setOrderItemsStatuses] = useState(props.orderItemsStatus ? props.orderItemsStatus : []);
+    const [orderItemsStatuses, setOrderItemsStatuses] = useState(props.orderItemsStatuses ? props.orderItemsStatuses : []);
 
     const handleOrderStatusSubmit = (e) => {
 
@@ -286,7 +286,8 @@ EditOrderForm.propTypes = {
     clientUrl: PropTypes.string.isRequired,
     updateOrderStatusUrl: PropTypes.string.isRequired,
     idLabel: PropTypes.string,
-    updateOrderItemStatusUrl: PropTypes.string.isRequired
+    updateOrderItemStatusUrl: PropTypes.string.isRequired,
+    orderItemsStatuses: PropTypes.array
 };
 
 export default EditOrderForm;

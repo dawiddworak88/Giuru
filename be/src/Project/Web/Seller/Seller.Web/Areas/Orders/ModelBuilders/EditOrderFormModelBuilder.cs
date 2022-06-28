@@ -65,14 +65,14 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
 
             var orderStatuses = await this.ordersRepository.GetOrderStatusesAsync(componentModel.Token, componentModel.Language);
 
-            if (orderStatuses != null)
+            if (orderStatuses is not null)
             {
                 viewModel.OrderStatuses = orderStatuses.Select(x => new ListItemViewModel { Id = x.Id, Name = x.Name });
             }
 
             var order = await this.ordersRepository.GetOrderAsync(componentModel.Token, componentModel.Language, componentModel.Id);
 
-            if (order != null)
+            if (order is not null)
             {
                 viewModel.Id = order.Id;
                 viewModel.OrderStatusId = order.OrderStatusId;
@@ -99,18 +99,18 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 });
                 viewModel.CustomOrder = order.MoreInfo;
 
-                var orderItemStatuses = new List<OrderItemStatus>();
+                var orderItemStatuses = new List<OrderItemStatusViewModel>();
 
                 foreach (var orderItem in order.OrderItems.OrEmptyIfNull())
                 {
-                    orderItemStatuses.Add(new OrderItemStatus
+                    orderItemStatuses.Add(new OrderItemStatusViewModel
                     {
                         Id = orderItem.Id,
                         OrderStatusId = orderItem.OrderStatusId
                     });
                 }
 
-                viewModel.OrderItemsStatus = orderItemStatuses;
+                viewModel.OrderItemsStatuses = orderItemStatuses;
 
                 viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = order.Attachments });
             }
