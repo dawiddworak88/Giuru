@@ -99,18 +99,18 @@ namespace Seller.Web.Areas.Orders.ModelBuilders
                 });
                 viewModel.CustomOrder = order.MoreInfo;
 
-                var orderItemStatuses = new List<OrderItemStatusViewModel>();
+                var orderItemsStatuses = new List<OrderItemStatusViewModel>();
 
                 foreach (var orderItem in order.OrderItems.OrEmptyIfNull())
                 {
-                    orderItemStatuses.Add(new OrderItemStatusViewModel
+                    orderItemsStatuses.Add(new OrderItemStatusViewModel
                     {
                         Id = orderItem.Id,
                         OrderStatusId = orderItem.OrderStatusId
                     });
                 }
 
-                viewModel.OrderItemsStatuses = orderItemStatuses;
+                viewModel.OrderItemsStatuses = orderItemsStatuses;
 
                 viewModel.Attachments = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = order.Attachments });
             }
