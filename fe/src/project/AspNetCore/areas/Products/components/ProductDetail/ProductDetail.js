@@ -214,7 +214,7 @@ function ProductDetail(props) {
                     labels={props.sidebar}
                 />
             </div>
-            <CarouselGrid items={props.productVariants}/>
+            <CarouselGrid className="pt-6" items={props.productVariants}/>
             {props.files &&
                 <Files {...props.files} />
             }
