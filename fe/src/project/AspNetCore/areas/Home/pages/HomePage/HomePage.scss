@@ -5,3 +5,10 @@
 @import "../../../../shared/components/CarouselGrid/CarouselGrid.scss";
 @import "../../../../shared/components/ContentGrid/ContentGrid.scss";
 @import "../../../.../../../../../shared/components/Footer/Footer.scss";
+
+
+@media only screen and (max-width: $tablet) {
+    .test {
+        padding-top: 3rem;
+    }
+}
