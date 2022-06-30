@@ -6,6 +6,7 @@ using Foundation.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
+using System.Web;
 
 namespace Identity.Api.ModelBuilders.SignInForm
 {
@@ -39,7 +40,8 @@ namespace Identity.Api.ModelBuilders.SignInForm
                 ResetPasswordUrl = this.linkGenerator.GetPathByAction("Index", "ResetPassword", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
                 RegisterLabel = this.accountLocalizer.GetString("Register"),
                 RegisterButtonText = this.accountLocalizer.GetString("RegisterButton"),
-                RegisterUrl = this.linkGenerator.GetPathByAction("Index", "Register", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
+                RegisterUrl = this.linkGenerator.GetUriByAction("Index", "Application", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }, componentModel.Scheme, componentModel.Host),
+                //RegisterUrl = this.linkGenerator.GetUriByPage("Application", null, new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }, componentModel.Scheme, componentModel.Host, ""),
                 ContactText = this.accountLocalizer.GetString("RegisterContact"),
                 DevelopersEmail = componentModel.DevelopersEmail
             };

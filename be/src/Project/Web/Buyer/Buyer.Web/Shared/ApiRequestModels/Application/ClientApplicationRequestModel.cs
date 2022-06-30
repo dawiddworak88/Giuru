@@ -1,6 +1,6 @@
-﻿namespace Identity.Api.Areas.Accounts.ApiRequestModels
+﻿namespace Buyer.Web.Shared.ApiRequestModels.Application
 {
-    public class RegisterRequestModel
+    public class ClientApplicationRequestModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

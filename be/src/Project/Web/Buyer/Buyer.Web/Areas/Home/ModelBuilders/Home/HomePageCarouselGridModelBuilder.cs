@@ -1,5 +1,4 @@
 ﻿using Buyer.Web.Areas.Home.Definitions;
-using Buyer.Web.Areas.Home.ViewModel;
 using Buyer.Web.Shared.Services.Catalogs;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
@@ -13,8 +12,9 @@ using Foundation.Localization;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Foundation.Media.Services.MediaServices;
+using Buyer.Web.Areas.Home.ViewModel.Home;
 
-namespace Buyer.Web.Areas.Home.ModelBuilders
+namespace Buyer.Web.Areas.Home.ModelBuilders.Home
 {
     public class HomePageCarouselGridModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, HomePageCarouselGridViewModel>
     {

@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Home.ModelBuilders
+namespace Buyer.Web.Areas.Home.ModelBuilders.Home
 {
     public class HeroSliderModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, HeroSliderViewModel>
     {

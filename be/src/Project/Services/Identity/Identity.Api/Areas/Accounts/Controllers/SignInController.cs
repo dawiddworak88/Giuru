@@ -39,7 +39,15 @@ namespace Identity.Api.Areas.Accounts.Controllers
         [HttpGet]
         public IActionResult Index(string returnUrl)
         {
-            var viewModel = this.signInModelBuilder.BuildModel(new SignInComponentModel { ReturnUrl = returnUrl, DevelopersEmail = this.settings.Value.DevelopersEmail });
+            var signInComponentModel = new SignInComponentModel
+            {
+                ReturnUrl = returnUrl,
+                DevelopersEmail = this.settings.Value.DevelopersEmail,
+                Host = this.Request.Host,
+                Scheme = this.Request.Scheme
+            };
+
+            var viewModel = this.signInModelBuilder.BuildModel(signInComponentModel);
 
             return this.View(viewModel);
         }
