@@ -5,7 +5,6 @@ using Seller.Web.Areas.Clients.DomainModels;
 using Seller.Web.Areas.Clients.ModelBuilders;
 using Seller.Web.Areas.Clients.Repositories.Groups;
 using Seller.Web.Areas.Clients.Repositories.Roles;
-using Seller.Web.Areas.Clients.Repositories;
 using Seller.Web.Areas.Clients.Repositories.Managers;
 using Seller.Web.Areas.Clients.ViewModels;
 using Seller.Web.Shared.ViewModels;
