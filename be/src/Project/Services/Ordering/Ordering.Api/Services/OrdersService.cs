@@ -10,6 +10,7 @@ using Foundation.Media.Services.MediaServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Ordering.Api.Configurations;
 using Ordering.Api.Infrastructure;
 using Ordering.Api.Infrastructure.Orders.Definitions;
@@ -460,6 +461,29 @@ namespace Ordering.Api.Services
                 Language = serviceModel.Language,
                 IsSeller = serviceModel.IsSeller
             });
+        }
+
+        public async Task SyncOrderItemsStatusesAsync(UpdateOrderItemsStatusesServiceModel model)
+        {
+            foreach (var orderItem in model.OrderItems.OrEmptyIfNull())
+            {
+                var order = await this.context.Orders.FirstOrDefaultAsync(x => x.Id == orderItem.OrderId);
+
+                if (order is not null)
+                {
+                    var orderItems = order.OrderItems.ToList();
+
+                    var item = orderItems[orderItem.OrderItemIndex];
+
+                    if (orderItem.IsDone)
+                    {
+                        item.OrderStateId = OrderStatesConstants.CompleteId;
+                        item.OrderStatusId = OrderStatusesConstants.CompleteId;
+                    }
+
+                    await this.context.SaveChangesAsync();
+                }
+            };
         }
 
         public async Task UpdateOrderItemStatusAsync(UpdateOrderItemStatusServiceModel model)

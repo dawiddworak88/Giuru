@@ -13,5 +13,6 @@ namespace Ordering.Api.Infrastructure.Orders.Definitions
 
         public static readonly Guid NewId = Guid.Parse("287ee71a-d87f-4563-833a-8e2771d1e5a5");
         public static readonly Guid ProcessingId = Guid.Parse("578480b3-15ef-492d-9f86-9827789c6804");
+        public static readonly Guid CompleteId = Guid.Parse("3F48AABA-0EA5-4654-B753-4F3109F81BC5");
     }
 }

@@ -13,5 +13,6 @@ namespace Ordering.Api.Services
         Task<IEnumerable<OrderStatusServiceModel>> GetOrderStatusesAsync(GetOrderStatusesServiceModel serviceModel);
         Task<OrderServiceModel> SaveOrderStatusAsync(UpdateOrderStatusServiceModel serviceModel);
         Task UpdateOrderItemStatusAsync(UpdateOrderItemStatusServiceModel model);
+        Task SyncOrderItemsStatusesAsync(UpdateOrderItemsStatusesServiceModel model);
     }
 }

@@ -279,6 +279,46 @@ namespace Ordering.Api.v1.Controllers
         }
 
         /// <summary>
+        ///  Updates the order items statuses.
+        /// </summary>
+        /// <returns>The updated order item status.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [Route("orderitemsstatuses")]
+        [AllowAnonymous]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Sync(SyncOrderItemsStatusesRequestModel request)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new UpdateOrderItemsStatusesServiceModel
+            {
+                Language = CultureInfo.CurrentCulture.Name,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value),
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrderItems = request.OrderItems.OrEmptyIfNull().Select(x => new UpdateOrderItemsStatusServiceModel
+                {
+                    OrderId = x.OrderId,
+                    OrderItemIndex = x.OrderItemIndex,
+                    IsDone = x.IsDone
+                })
+            };
+
+            var validator = new UpdateOrderItemsStatusesModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                await this.ordersService.SyncOrderItemsStatusesAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
         ///  Updates the order status.
         /// </summary>
         /// <returns>The updated order status.</returns>
