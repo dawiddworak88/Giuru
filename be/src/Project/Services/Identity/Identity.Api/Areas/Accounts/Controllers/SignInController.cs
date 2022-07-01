@@ -42,9 +42,7 @@ namespace Identity.Api.Areas.Accounts.Controllers
             var signInComponentModel = new SignInComponentModel
             {
                 ReturnUrl = returnUrl,
-                DevelopersEmail = this.settings.Value.DevelopersEmail,
-                Host = this.Request.Host,
-                Scheme = this.Request.Scheme
+                DevelopersEmail = this.settings.Value.DevelopersEmail
             };
 
             var viewModel = this.signInModelBuilder.BuildModel(signInComponentModel);

@@ -1,9 +1,12 @@
 ﻿using Buyer.Web.Areas.Home.ViewModel.Application;
+using Buyer.Web.Shared.Configurations;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
+using Foundation.Security.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -14,16 +17,19 @@ namespace Buyer.Web.Areas.Home.ModelBuilders.Application
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<CookieConsentResources> cookieConsentLocalizer;
+        private readonly IOptions<AppSettings> options;
         private readonly LinkGenerator linkGenerator;
 
         public ApplicationFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<CookieConsentResources> cookieConsentLocalizer,
+            IOptions<AppSettings> options,
             LinkGenerator linkGenerator)
         {
             this.globalLocalizer = globalLocalizer;
             this.linkGenerator = linkGenerator;
             this.cookieConsentLocalizer = cookieConsentLocalizer;
+            this.options = options;
         }
 
         public async Task<ApplicationFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -54,10 +60,10 @@ namespace Buyer.Web.Areas.Home.ModelBuilders.Application
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 SaveText = this.globalLocalizer.GetString("ApplyApplicationSubmit"),
                 SelectJobTitle = this.globalLocalizer.GetString("SelectJobTitle"),
-                SignInUrl = this.linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
+                SignInUrl = this.linkGenerator.GetPathByAction("Index", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
                 AcceptTermsText = this.cookieConsentLocalizer.GetString("Accept"),
-                PrivacyPolicyUrl = this.linkGenerator.GetPathByAction("PrivacyPolicy", "Content", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
-                RegulationsUrl = this.linkGenerator.GetPathByAction("Regulations", "Content", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
+                PrivacyPolicyUrl = $"{this.options.Value.IdentityUrl}{SecurityConstants.PrivacyPolicyEndpoint}",
+                RegulationsUrl = $"{this.options.Value.IdentityUrl}{SecurityConstants.RegulationsEndpoint}",
                 PrivacyPolicy = this.globalLocalizer.GetString("LowerPrivacyPolicy"),
                 Regulations = this.globalLocalizer.GetString("LowerRegulations")
             };
