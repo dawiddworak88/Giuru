@@ -284,7 +284,6 @@ namespace Ordering.Api.v1.Controllers
         /// <returns>The updated order item status.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [Route("orderitemsstatuses")]
-        [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
