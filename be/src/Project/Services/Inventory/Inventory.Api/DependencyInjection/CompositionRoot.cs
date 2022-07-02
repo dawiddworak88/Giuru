@@ -51,6 +51,8 @@ namespace Inventory.Api.DependencyInjection
                     DispatchConsumersAsync = true
                 };
 
+                factory.RequestedHeartbeat = TimeSpan.FromSeconds(int.Parse(configuration["EventBusRequestedHeartbeat"]));
+
                 return new DefaultRabbitMQPersistentConnection(factory, logger, int.Parse(configuration["EventBusRetryCount"]));
             });
 
