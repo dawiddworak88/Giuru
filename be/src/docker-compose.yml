@@ -134,6 +134,14 @@ services:
       - catalog-api
       - rabbitmq
 
+  download-api:
+    image: ${REGISTRY:-giuru}/download-api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Project/Services/Download/Download.Api/Dockerfile
+    depends_on:
+      - sqldata
+
   seller-web:
     image: ${REGISTRY:-giuru}/seller-web:${PLATFORM:-linux}-${TAG:-latest}
     build:
