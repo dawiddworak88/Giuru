@@ -1,4 +1,5 @@
 ﻿using Download.Api.Infrastructure;
+using Download.Api.Services.Categories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +10,7 @@ namespace Download.Api.DependencyInjection
     {
         public static void RegisterDownloadApiDependencies(this IServiceCollection services)
         {
-            
+            services.AddScoped<ICategoriesService, CategoriesService>();
         }
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)

@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using Download.Api.Infrastructure.Entities.Categories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Download.Api.Infrastructure
 {
@@ -13,5 +13,8 @@ namespace Download.Api.Infrastructure
         {
             optionsBuilder.UseLazyLoadingProxies();
         }
+
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<CategoryTranslation> CategoryTranslations { get; set; }
     }
 }
