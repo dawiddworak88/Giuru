@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.Download.Controllers
 {
+    [Area("Download")]
     public class DownloadController : BaseController
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, DownloadPageViewModel> downloadPageModelBuilder;

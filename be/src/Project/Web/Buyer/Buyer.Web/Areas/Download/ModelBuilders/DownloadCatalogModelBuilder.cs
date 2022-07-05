@@ -25,7 +25,7 @@ namespace Buyer.Web.Areas.Download.ModelBuilders
         {
             var viewModel = new DownloadCatalogViewModel
             {
-               
+                Title = "asd"
             };
 
             return viewModel;

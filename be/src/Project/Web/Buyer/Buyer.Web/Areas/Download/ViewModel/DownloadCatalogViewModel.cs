@@ -2,5 +2,6 @@
 {
     public class DownloadCatalogViewModel
     {
+        public string Title { get; set; }
     }
 }
