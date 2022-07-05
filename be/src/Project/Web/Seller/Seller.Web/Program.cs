@@ -27,6 +27,7 @@ using Seller.Web.Areas.News.DependencyInjection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
 using Foundation.Media.DependencyInjection;
+using Seller.Web.Areas.Download.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,6 +93,8 @@ builder.Services.RegisterClientsAreaDependencies();
 builder.Services.RegisterInventoryAreaDependencies();
 
 builder.Services.RegisterNewsAreaDependencies();
+
+builder.Services.RegisterDownloadAreaDependencies();
 
 builder.Services.RegisterProductsAreaDependencies();
 

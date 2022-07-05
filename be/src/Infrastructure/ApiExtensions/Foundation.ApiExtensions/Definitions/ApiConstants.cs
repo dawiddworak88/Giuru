@@ -31,6 +31,11 @@
             public static readonly string RolesApiEndpoint = "/api/v1/roles";
         }
 
+        public struct Download
+        {
+            public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
+        }
+
         public struct News
         {
             public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
