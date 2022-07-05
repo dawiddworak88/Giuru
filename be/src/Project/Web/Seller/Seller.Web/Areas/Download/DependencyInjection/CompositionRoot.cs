@@ -1,7 +1,6 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.Extensions.DependencyInjection;
-using Seller.Web.Areas.Download.DomainModels;
 using Seller.Web.Areas.Download.ModelBuilders;
 using Seller.Web.Areas.Download.Repositories.Categories;
 using Seller.Web.Areas.Download.ViewModel;

@@ -192,7 +192,6 @@ namespace Download.Api.v1.Categories.Controllers
         /// <param name="orderBy">The optional order by.</param>
         /// <returns>The list of categories.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<CategoryResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
