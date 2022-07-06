@@ -51,7 +51,9 @@ namespace Identity.Api.ModelBuilders.SignInForm
                 RegisterButtonText = this.accountLocalizer.GetString("RegisterButton"),
                 RegisterUrl = $"{this.options.Value.BuyerUrl}{AccountsConstants.ApplicationEndpoint}",
                 ContactText = this.accountLocalizer.GetString("RegisterContact"),
-                DevelopersEmail = componentModel.DevelopersEmail
+                DevelopersEmail = componentModel.DevelopersEmail,
+                IsInvalidPassword = componentModel.IsInvalidPassword,
+                InvalidPasswordErrorMessage = this.accountLocalizer.GetString("InvalidPassword")
             };
 
             return viewModel;

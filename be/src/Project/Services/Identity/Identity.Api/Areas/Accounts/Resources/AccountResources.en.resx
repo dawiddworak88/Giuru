@@ -147,6 +147,9 @@
   <data name="ForgotPasswordLabel" xml:space="preserve">
     <value>Password reset</value>
   </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Incorrect password. Please try again or click "Password reset" to reset it.</value>
+  </data>
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Enter your last name</value>
   </data>

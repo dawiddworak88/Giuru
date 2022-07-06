@@ -70,7 +70,7 @@ namespace Identity.Api.Areas.Accounts.Controllers
                 }                
             }
 
-            var viewModel = this.signInModelBuilder.BuildModel(new SignInComponentModel { ReturnUrl = model.ReturnUrl, DevelopersEmail = this.settings.Value.DevelopersEmail });
+            var viewModel = this.signInModelBuilder.BuildModel(new SignInComponentModel { IsInvalidPassword = true, ReturnUrl = model.ReturnUrl, DevelopersEmail = this.settings.Value.DevelopersEmail });
 
             return this.View(viewModel);
         }
