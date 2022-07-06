@@ -4,7 +4,7 @@ import { resetServerContext } from 'react-beautiful-dnd';
 import { ServerStyleSheets } from "@mui/styles";
 
 // AspNetCore
-import DownloadPage from "../../src/project/AspNetCore/areas/Download/pages/DownloadPage/DownloadPage";
+import DownloadBuyerPage from "../../src/project/AspNetCore/areas/Download/pages/DownloadPage/DownloadPage";
 import ApplicationPage from "../../src/project/AspNetCore/areas/Home/pages/ApplicationPage/ApplicationPage";
 import OutletCatalogPage from "../../src/project/AspNetCore/areas/Products/pages/OutletPage/OutletPage";
 import NewsItemDetails from "../../src/project/AspNetCore/areas/News/pages/NewsItemPage/NewsItemPage";
@@ -26,6 +26,7 @@ import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetP
 import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
 
 // Seller Portal
+import DownloadPage from "../../src/project/Seller.Portal/areas/Download/pages/DownloadPage/DownloadPage";
 import DownloadsPage from "../../src/project/Seller.Portal/areas/Download/pages/DownloadsPage/DownloadsPage";
 import DownloadCategoryPage from "../../src/project/Seller.Portal/areas/Download/pages/CategoryPage/CategoryPage";
 import DownloadCategoriesPage from "../../src/project/Seller.Portal/areas/Download/pages/CategoriesPage/CategoriesPage";
@@ -65,7 +66,7 @@ import SellerCategoryPage from "../../src/project/Seller.Portal/areas/Products/p
 import SettingsPage from "../../src/project/Seller.Portal/areas/Settings/pages/SettingsPage/SettingsPage";
 
 const Components = {
-	DownloadPage,
+	DownloadBuyerPage,
 	ApplicationPage,
 	OutletCatalogPage,
 	NewsItemDetails,
@@ -85,6 +86,7 @@ const Components = {
 	SetPasswordPage,
 	ContentPage,
 
+	DownloadPage,
 	DownloadsPage,
 	DownloadCategoryPage,
 	DownloadCategoriesPage,
