@@ -603,4 +603,25 @@
   <data name="NewProducts" xml:space="preserve">
     <value>Nowe produkty</value>
   </data>
+  <data name="ApplyApplicationSubmit" xml:space="preserve">
+    <value>Wyślij wniosek teraz</value>
+  </data>
+  <data name="BusinessInformationDescription" xml:space="preserve">
+    <value>Podaj informacje o twojej firmie</value>
+  </data>
+  <data name="ContactInformationDescription" xml:space="preserve">
+    <value>Twoją główną osobą kontaktową z ELTAP będzie osoba kontaktowa podana w formularzu</value>
+  </data>
+  <data name="LowerPrivacyPolicy" xml:space="preserve">
+    <value>politykę prywatności</value>
+  </data>
+  <data name="LowerRegulations" xml:space="preserve">
+    <value>regulamin</value>
+  </data>
+  <data name="OnlineRetailers" xml:space="preserve">
+    <value>Gdzie prowadzisz największą sprzedaż online?</value>
+  </data>
+  <data name="SuccessfullyClientApply" xml:space="preserve">
+    <value>Pomyślnie przesłano prośbę o współpracę.</value>
+  </data>
 </root>
