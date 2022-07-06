@@ -1,6 +1,6 @@
 ﻿using Buyer.Web.Areas.Home.Definitions;
 using Buyer.Web.Areas.Home.DomainModels;
-using Buyer.Web.Areas.Home.ViewModel;
+using Buyer.Web.Areas.Home.ViewModel.Home;
 using Buyer.Web.Shared.Repositories.News;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Home.ModelBuilders
+namespace Buyer.Web.Areas.Home.ModelBuilders.Home
 {
     public class HomePageNewsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, HomePageNewsCarouselGridViewModel>
     {

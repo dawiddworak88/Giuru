@@ -5,6 +5,7 @@ import { ServerStyleSheets } from "@mui/styles";
 
 // AspNetCore
 import DownloadPage from "../../src/project/AspNetCore/areas/Download/pages/DownloadPage/DownloadPage";
+import ApplicationPage from "../../src/project/AspNetCore/areas/Home/pages/ApplicationPage/ApplicationPage";
 import OutletCatalogPage from "../../src/project/AspNetCore/areas/Products/pages/OutletPage/OutletPage";
 import NewsItemDetails from "../../src/project/AspNetCore/areas/News/pages/NewsItemPage/NewsItemPage";
 import NewsBuyerPage from "../../src/project/AspNetCore/areas/News/pages/NewsPage/NewsPage";
@@ -64,6 +65,7 @@ import SettingsPage from "../../src/project/Seller.Portal/areas/Settings/pages/S
 
 const Components = {
 	DownloadPage,
+	ApplicationPage,
 	OutletCatalogPage,
 	NewsItemDetails,
 	NewsBuyerPage,

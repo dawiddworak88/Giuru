@@ -1,5 +1,5 @@
 ﻿using Buyer.Web.Areas.Home.Definitions;
-using Buyer.Web.Areas.Home.ViewModel;
+using Buyer.Web.Areas.Home.ViewModel.Home;
 using Buyer.Web.Areas.Shared.Definitions.Products;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.Services.Catalogs;
@@ -20,7 +20,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Home.ModelBuilders
+namespace Buyer.Web.Areas.Home.ModelBuilders.Home
 {
     public class HomePageContentGridModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, HomePageContentGridViewModel>
     {
