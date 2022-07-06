@@ -92,9 +92,9 @@ builder.Services.RegisterClientsAreaDependencies();
 
 builder.Services.RegisterInventoryAreaDependencies();
 
-builder.Services.RegisterNewsAreaDependencies();
-
 builder.Services.RegisterDownloadAreaDependencies();
+
+builder.Services.RegisterNewsAreaDependencies();
 
 builder.Services.RegisterProductsAreaDependencies();
 
