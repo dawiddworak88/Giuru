@@ -22,6 +22,9 @@ namespace Seller.Web.Areas.Download.DependencyInjection
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CatalogViewModel<DomainModels.Download>>, DownloadsPageCatalogModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DownloadsPageViewModel>, DownloadsPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DownloadPageViewModel>, DownloadPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DownloadFormViewModel>, DownloadFormModelBuilder>();
+
         }
     }
 }

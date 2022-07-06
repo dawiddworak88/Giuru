@@ -34,11 +34,11 @@ namespace Seller.Web.Areas.Download.ModelBuilders
 
             viewModel.Title = this.globalLocalizer.GetString("Downloads");
             viewModel.NewText = this.globalLocalizer.GetString("NewText");
-            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Download", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Download", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Download", new { Area = "Download", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Download", new { Area = "Download", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "DownloadsApi", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "DownloadsApi", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "DownloadsApi", new { Area = "Download", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "DownloadsApi", new { Area = "Download", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(DomainModels.Download.CreatedDate)} desc";
 
