@@ -166,6 +166,8 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: MediaUrl
           value: {{ .Values.mediaUrl }}
         - name: ElasticsearchUrl
@@ -234,6 +236,8 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: ElasticsearchUrl
           value: {{ .Values.elasticsearchUrl }}
         - name: ElasticsearchIndex
@@ -298,6 +302,8 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType
@@ -358,6 +364,8 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: SenderEmail
           value: {{ .Values.senderEmail }}
         - name: SenderName
@@ -553,6 +561,8 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType
@@ -611,10 +621,6 @@ spec:
           value: {{ .Values.identityUrl }}
         - name: CdnUrl
           value: {{ .Values.cdnUrl }}
-        - name: EventBusConnection
-          value: {{ .Values.eventBusConnection }}
-        - name: EventBusRetryCount
-          value: {{ .Values.eventBusRetryCount }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType

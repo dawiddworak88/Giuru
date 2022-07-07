@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Home.ViewModel;
+using Buyer.Web.Areas.Home.ViewModel.Home;
 using Buyer.Web.Shared.Definitions.Basket;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;

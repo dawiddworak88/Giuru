@@ -1,26 +1,26 @@
-﻿using Foundation.ApiExtensions.Definitions;
+﻿using Buyer.Web.Areas.Home.ViewModel.Application;
+using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
-using Identity.Api.Areas.Accounts.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Identity.Api.Areas.Accounts.Controllers
+namespace Buyer.Web.Areas.Home.Controllers
 {
-    [Area("Accounts")]
+    [Area("Home")]
     [AllowAnonymous]
-    public class RegisterController : BaseController
+    public class ApplicationController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, RegisterPageViewModel> registerPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, ApplicationPageViewModel> applicationPageModelBuilder;
 
-        public RegisterController(
-            IAsyncComponentModelBuilder<ComponentModelBase, RegisterPageViewModel> registerPageModelBuilder)
+        public ApplicationController(
+            IAsyncComponentModelBuilder<ComponentModelBase, ApplicationPageViewModel> applicationPageModelBuilder)
         {
-            this.registerPageModelBuilder = registerPageModelBuilder;
+            this.applicationPageModelBuilder = applicationPageModelBuilder;
         }
 
         [HttpGet]
@@ -32,7 +32,7 @@ namespace Identity.Api.Areas.Accounts.Controllers
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
             };
 
-            var viewModel = await this.registerPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await this.applicationPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);
         }

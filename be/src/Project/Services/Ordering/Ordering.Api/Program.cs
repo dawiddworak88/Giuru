@@ -89,6 +89,8 @@ builder.Services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
         DispatchConsumersAsync = true
     };
 
+    factory.RequestedHeartbeat = TimeSpan.FromSeconds(int.Parse(builder.Configuration["EventBusRequestedHeartbeat"]));
+
     return new DefaultRabbitMQPersistentConnection(factory, logger, int.Parse(builder.Configuration["EventBusRetryCount"]));
 });
 

@@ -1,5 +1,4 @@
-﻿using Buyer.Web.Areas.Home.ViewModel;
-using Foundation.Extensions.ModelBuilders;
+﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;
 using Foundation.PageContent.Components.HeroSliders.ViewModels;
@@ -7,8 +6,9 @@ using Foundation.PageContent.ComponentModels;
 using System.Threading.Tasks;
 using Buyer.Web.Shared.ViewModels.Headers;
 using System.Globalization;
+using Buyer.Web.Areas.Home.ViewModel.Home;
 
-namespace Buyer.Web.Areas.Home.ModelBuilders
+namespace Buyer.Web.Areas.Home.ModelBuilders.Home
 {
     public class HomePageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, HomePageViewModel>
     {

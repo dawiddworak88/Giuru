@@ -99,6 +99,7 @@ services:
       - DefaultCulture=${DEFAULT_CULTURE}
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
+      - EventBusRequestedHeartbeat=60
     ports:
       - "5134:80"
 
@@ -121,6 +122,7 @@ services:
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
+      - EventBusRequestedHeartbeat=60
       - ElasticsearchUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:9200
       - LogstashUrl=http://logstash:31311
       - ElasticsearchIndex=catalog
@@ -138,6 +140,7 @@ services:
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
+      - EventBusRequestedHeartbeat=60
       - ElasticsearchUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:9200
       - LogstashUrl=http://logstash:31311
       - ElasticsearchIndex=catalog
@@ -189,6 +192,7 @@ services:
       - LogstashUrl=http://logstash:31311
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
+      - EventBusRequestedHeartbeat=60
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
     ports:
@@ -202,6 +206,7 @@ services:
       - LogstashUrl=http://logstash:31311
       - EventBusConnection=amqp://rabbitmq
       - EventBusRetryCount=5
+      - EventBusRequestedHeartbeat=60
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
       - SenderEmail=${SENDER_EMAIL}

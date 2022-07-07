@@ -1,38 +1,40 @@
-﻿using Feature.Account;
+﻿using Buyer.Web.Areas.Home.ViewModel.Application;
+using Buyer.Web.Shared.Configurations;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
-using Identity.Api.Areas.Accounts.ViewModels;
+using Foundation.Security.Definitions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Identity.Api.Areas.Accounts.ModelBuilders
+namespace Buyer.Web.Areas.Home.ModelBuilders.Application
 {
-    public class RegisterFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, RegisterFormViewModel>
+    public class ApplicationFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ApplicationFormViewModel>
     {
-        private readonly IStringLocalizer<AccountResources> accountLocalizer;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<CookieConsentResources> cookieConsentLocalizer;
+        private readonly IOptions<AppSettings> options;
         private readonly LinkGenerator linkGenerator;
 
-        public RegisterFormModelBuilder(
-            IStringLocalizer<AccountResources> accountLocalizer,
+        public ApplicationFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<CookieConsentResources> cookieConsentLocalizer,
+            IOptions<AppSettings> options,
             LinkGenerator linkGenerator)
         {
-            this.accountLocalizer = accountLocalizer;
             this.globalLocalizer = globalLocalizer;
             this.linkGenerator = linkGenerator;
             this.cookieConsentLocalizer = cookieConsentLocalizer;
+            this.options = options;
         }
 
-        public async Task<RegisterFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
+        public async Task<ApplicationFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new RegisterFormViewModel
+            var viewModel = new ApplicationFormViewModel
             {
                 Title = this.globalLocalizer.GetString("EltapPartner"),
                 Subtitle = this.globalLocalizer.GetString("EltapPartnerDescription"),
@@ -51,19 +53,19 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 CompanyCityLabel = this.globalLocalizer.GetString("City"),
                 CompanyRegionLabel = this.globalLocalizer.GetString("Region"),
                 CompanyCountryLabel = this.globalLocalizer.GetString("Country"),
-                SaveUrl = this.linkGenerator.GetPathByAction("Application", "ClientsApi", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
-                OnlineRetailersLabel = this.accountLocalizer.GetString("OnlineRetailers"),
+                SaveUrl = this.linkGenerator.GetPathByAction("Application", "ClientsApi", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
+                OnlineRetailersLabel = this.globalLocalizer.GetString("OnlineRetailers"),
                 YesLabel = this.globalLocalizer.GetString("Yes"),
                 NoLabel = this.globalLocalizer.GetString("No"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                SaveText = this.accountLocalizer.GetString("ApplySubmit"),
-                SelectJobTitle = this.accountLocalizer.GetString("SelectJobTitle"),
-                SignInUrl = this.linkGenerator.GetPathByAction("Index", "SignIn", new { Area = "Accounts", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveText = this.globalLocalizer.GetString("ApplyApplicationSubmit"),
+                SelectJobTitle = this.globalLocalizer.GetString("SelectJobTitle"),
+                SignInUrl = this.linkGenerator.GetPathByAction("Index", "Home", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
                 AcceptTermsText = this.cookieConsentLocalizer.GetString("Accept"),
-                PrivacyPolicyUrl = this.linkGenerator.GetPathByAction("PrivacyPolicy", "Content", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
-                RegulationsUrl = this.linkGenerator.GetPathByAction("Regulations", "Content", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
-                PrivacyPolicy = this.accountLocalizer.GetString("PrivacyPolicy"),
-                Regulations = this.accountLocalizer.GetString("Regulations")
+                PrivacyPolicyUrl = $"{this.options.Value.IdentityUrl}{SecurityConstants.PrivacyPolicyEndpoint}",
+                RegulationsUrl = $"{this.options.Value.IdentityUrl}{SecurityConstants.RegulationsEndpoint}",
+                PrivacyPolicy = this.globalLocalizer.GetString("LowerPrivacyPolicy"),
+                Regulations = this.globalLocalizer.GetString("LowerRegulations")
             };
 
             viewModel.ContactJobTitles = new List<ContactJobTitle>
@@ -115,12 +117,12 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
                 new StepViewModel
                 {
                     Title = this.globalLocalizer.GetString("ContactInformation"),
-                    Subtitle = this.accountLocalizer.GetString("ContactInformationDescription")
+                    Subtitle = this.globalLocalizer.GetString("ContactInformationDescription")
                 },
                 new StepViewModel
                 {
                     Title = this.globalLocalizer.GetString("BusinessInformation"),
-                    Subtitle = this.accountLocalizer.GetString("BusinessInformationDescription")
+                    Subtitle = this.globalLocalizer.GetString("BusinessInformationDescription")
                 }
             };
 
