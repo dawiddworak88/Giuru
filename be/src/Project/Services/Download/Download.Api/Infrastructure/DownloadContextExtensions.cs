@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Download.Api.Infrastructure.Seeds;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using System.Linq;
 
@@ -17,6 +18,12 @@ namespace Download.Api.Infrastructure
                 .Select(m => m.Key);
 
             return !total.Except(applied).Any();
+        }
+
+        public static void EnsureSeeded(this DownloadContext context)
+        {
+            CategoriesSeed.SeedCategories(context);
+            DownloadsSeed.SeedDownloads(context);
         }
     }
 }

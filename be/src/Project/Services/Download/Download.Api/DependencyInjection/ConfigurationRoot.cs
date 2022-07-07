@@ -26,6 +26,7 @@ namespace Download.Api.DependencyInjection
                 if (!dbContext.AllMigrationsApplied())
                 {
                     dbContext.Database.Migrate();
+                    dbContext.EnsureSeeded();
                 }
             }
         }
