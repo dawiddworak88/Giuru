@@ -11,12 +11,13 @@ function LanguageSwitcher(props) {
         }
     }
 
-    const languages = props.availableLanguages.map((language, index) => <option key={index} value={language.url}>{language.text}</option> );
-
     return (
         <div className="select">
             <select value={props.selectedLanguageUrl} onChange={(e) => handleLanguageChange(e)}>
-                {languages}
+                {props.availableLanguages && props.availableLanguages.length > 0 && props.availableLanguages.map((language, index) => 
+                        <option key={index} value={language.url}>{language.text}</option> 
+                    )
+                }
             </select>
         </div>
     );

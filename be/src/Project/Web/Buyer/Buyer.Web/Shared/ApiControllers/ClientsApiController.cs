@@ -1,31 +1,31 @@
-﻿using Feature.Account;
+﻿using Buyer.Web.Shared.ApiRequestModels.Application;
+using Buyer.Web.Shared.Repositories.Clients;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
-using Foundation.Extensions.Definitions;
-using Foundation.Extensions.Exceptions;
-using Identity.Api.Areas.Accounts.ApiRequestModels;
-using Identity.Api.Areas.Accounts.Repositories.Clients;
+using Foundation.Localization;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Identity.Api.Areas.Accounts.ApiControllers
+namespace Buyer.Web.Shared.ApiControllers
 {
-    [Area("Accounts")]
+    [Area("Home")]
+    [AllowAnonymous]
     public class ClientsApiController : BaseApiController
     {
-        private readonly IStringLocalizer<AccountResources> accountLocalizer;
         private readonly IClientsRepository clientsRepository;
+        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
 
         public ClientsApiController(
-            IStringLocalizer<AccountResources> accountLocalizer,
+            IStringLocalizer<GlobalResources> globalLocalizer,
             IClientsRepository clientsRepository)
         {
-            this.accountLocalizer = accountLocalizer;
             this.clientsRepository = clientsRepository;
+            this.globalLocalizer = globalLocalizer;
         }
 
         [HttpPost]
@@ -35,10 +35,10 @@ namespace Identity.Api.Areas.Accounts.ApiControllers
             var language = CultureInfo.CurrentUICulture.Name;
 
             await this.clientsRepository.CreateClientApplicationAsync(
-                token, language, model.FirstName, model.LastName, model.ContactJobTitle, model.Email, model.PhoneNumber, model.CompanyName, 
+                token, language, model.FirstName, model.LastName, model.ContactJobTitle, model.Email, model.PhoneNumber, model.CompanyName,
                 model.CompanyAddress, model.CompanyCountry, model.CompanyCity, model.CompanyRegion, model.CompanyPostalCode);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.accountLocalizer.GetString("SuccessfullyClientApply").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.globalLocalizer.GetString("SuccessfullyClientApply").Value });
         }
     }
 }

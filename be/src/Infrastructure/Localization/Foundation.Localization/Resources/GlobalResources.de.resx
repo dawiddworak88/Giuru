@@ -603,4 +603,25 @@
   <data name="Attachment" xml:space="preserve">
     <value>Anhang</value>
   </data>
+  <data name="ApplyApplicationSubmit" xml:space="preserve">
+    <value>Reichen Sie jetzt Ihre Bewerbung ein</value>
+  </data>
+  <data name="BusinessInformationDescription" xml:space="preserve">
+    <value>Teilen Sie uns Ihren Firmennamen und Standort mit</value>
+  </data>
+  <data name="ContactInformationDescription" xml:space="preserve">
+    <value>Ihr primärer Ansprechpartner für ELTAP ist der im Formular angegebene Ansprechpartner</value>
+  </data>
+  <data name="LowerPrivacyPolicy" xml:space="preserve">
+    <value>Datenschutz-Bestimmungen</value>
+  </data>
+  <data name="LowerRegulations" xml:space="preserve">
+    <value>Geschäftsbedingungen</value>
+  </data>
+  <data name="OnlineRetailers" xml:space="preserve">
+    <value>Wo verkaufen Sie online am meisten?</value>
+  </data>
+  <data name="SuccessfullyClientApply" xml:space="preserve">
+    <value>Die Kooperationsanfrage wurde erfolgreich übermittelt.</value>
+  </data>
 </root>
