@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace Download.Api.ServicesModels.Downloads
+{
+    public class DownloadServiceModel
+    {
+        public Guid Id { get; set; }
+        public Guid CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public IEnumerable<DownloadCategoryServiceModel> Categories { get; set; }
+        public int? Order { get; set; }
+        public DateTime? LastModifiedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
+    }
+}

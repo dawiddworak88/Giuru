@@ -10,16 +10,16 @@ namespace Download.Api.Infrastructure.Seeds
     {
         public static void SeedCategories(DownloadContext context)
         {
-            SeedCategory(context, DownloadConstants.Categories.CollectionsCategory, null, "Collections", "Kolekcje", "Sammlungen");
-            SeedCategory(context, DownloadConstants.Categories.ColorsOfProductsCategory, DownloadConstants.Categories.CollectionsCategory, "Colors of products", "Kolorystyka produktów", "Farben von Produkten");
-            SeedCategory(context, DownloadConstants.Categories.MarketingCategory, null, "Marketing", "Marketing", "Marketing");
-            SeedCategory(context, DownloadConstants.Categories.BannersCategory, DownloadConstants.Categories.MarketingCategory, "Banners", "Banery", "Banner");
-            SeedCategory(context, DownloadConstants.Categories.GifsCategory, DownloadConstants.Categories.MarketingCategory, "Gifs", "Gify", "Gifs");
-            SeedCategory(context, DownloadConstants.Categories.TechnicalCategory, null, "Technical data", "Dane techniczne", "Technische daten");
-            SeedCategory(context, DownloadConstants.Categories.TechnicalSheetsCategory, DownloadConstants.Categories.TechnicalCategory, "Technical cards", "Karty Techniczne", "Technische Karten");
+            SeedCategory(context, DownloadConstants.Categories.CollectionsCategory, null, true, "Collections", "Kolekcje", "Sammlungen");
+            SeedCategory(context, DownloadConstants.Categories.ColorsOfProductsCategory, DownloadConstants.Categories.CollectionsCategory, true, "Colors of products", "Kolorystyka produktów", "Farben von Produkten");
+            SeedCategory(context, DownloadConstants.Categories.MarketingCategory, null, true, "Marketing", "Marketing", "Marketing");
+            SeedCategory(context, DownloadConstants.Categories.BannersCategory, DownloadConstants.Categories.MarketingCategory, true, "Banners", "Banery", "Banner");
+            SeedCategory(context, DownloadConstants.Categories.GifsCategory, DownloadConstants.Categories.MarketingCategory, true, "Gifs", "Gify", "Gifs");
+            SeedCategory(context, DownloadConstants.Categories.TechnicalCategory, null, true, "Technical data", "Dane techniczne", "Technische daten");
+            SeedCategory(context, DownloadConstants.Categories.TechnicalSheetsCategory, DownloadConstants.Categories.TechnicalCategory, true, "Technical cards", "Karty Techniczne", "Technische Karten");
         }
 
-        private static void SeedCategory(DownloadContext context, Guid id, Guid? parentCategoryId, string englishName, string polishName, string germanName)
+        private static void SeedCategory(DownloadContext context, Guid id, Guid? parentCategoryId, bool isVisible, string englishName, string polishName, string germanName)
         {
             if (!context.Categories.Any(x => x.Id == id))
             {
@@ -27,6 +27,7 @@ namespace Download.Api.Infrastructure.Seeds
                 {
                     Id = id,
                     ParentCategoryId = parentCategoryId,
+                    IsVisible = isVisible,
                 };
 
                 var enCategoryTranslation = new CategoryTranslation
