@@ -37,15 +37,20 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             {
                 IdLabel = this.globalLocalizer.GetString("Id"),
                 Title = this.downloadCenterLocalizer.GetString("EditCategory"),
-                NameLabel = this.downloadCenterLocalizer.GetString("NameLabel"),
+                NameLabel = this.globalLocalizer.GetString("Name"),
                 NameRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
-                ParentCategoryLabel = this.downloadCenterLocalizer.GetString("ParentCategoryLabel"),
-                SelectCategoryLabel = this.downloadCenterLocalizer.GetString("SelectCategoryLabel"),
+                ParentCategoryLabel = this.downloadCenterLocalizer.GetString("ParentCategory"),
+                SelectCategoryLabel = this.downloadCenterLocalizer.GetString("SelectCategory"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
-                SaveUrl = this.linkGenerator.GetPathByAction("Post", "CategoriesApi", new { Area = "Download", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveUrl = this.linkGenerator.GetPathByAction("Post", "CategoriesApi", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name }),
                 NavigateToCategoriesLabel = this.downloadCenterLocalizer.GetString("NavigateToCategoriesLabel"),
-                CategoriesUrl = this.linkGenerator.GetPathByAction("Index", "Categories", new { Area = "Download", culture = CultureInfo.CurrentUICulture.Name }),
-                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred")
+                CategoriesUrl = this.linkGenerator.GetPathByAction("Index", "Categories", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name }),
+                GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
+                FilesLabel = this.globalLocalizer.GetString("Files"),
+                SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                DeleteLabel = this.globalLocalizer.GetString("Delete"),
+                DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
+                DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile")
             };
 
             var categories = await this.categoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language);

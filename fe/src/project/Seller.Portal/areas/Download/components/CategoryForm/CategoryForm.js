@@ -5,6 +5,7 @@ import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
+import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import { 
     TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress 
 } from "@mui/material";
@@ -15,6 +16,7 @@ const CategoryForm = (props) => {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
         parentCategoryId: { value: props.parentCategoryId ? props.parentCategoryId : null, error: "" },
+        files: { value: props.files ? props.files : [] }
     };
 
     const onSubmitForm = (state) => {
@@ -60,7 +62,7 @@ const CategoryForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, parentCategoryId } = values;
+    const { id, name, parentCategoryId, files } = values;
     return (
         <section className="section section-small-padding category">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -102,8 +104,23 @@ const CategoryForm = (props) => {
                             </FormControl>
                         </div>
                         <div className="field">
+                            <MediaCloud
+                                id="files"
+                                name="files"
+                                label={props.filesLabel}
+                                accept=".png, .jpg, .webp, .zip, .pdf, .docx"
+                                multiple={true}
+                                generalErrorMessage={props.generalErrorMessage}
+                                deleteLabel={props.deleteLabel}
+                                dropFilesLabel={props.dropFilesLabel}
+                                dropOrSelectFilesLabel={props.dropOrSelectFilesLabel}
+                                files={files}
+                                setFieldValue={setFieldValue}
+                                saveMediaUrl={props.saveMediaUrl} />
+                        </div>
+                        <div className="field">
                             <Button 
-                                type="submit" 
+                                type="submit"
                                 variant="contained" 
                                 color="primary"
                                 disabled={state.isLoading || disable}>

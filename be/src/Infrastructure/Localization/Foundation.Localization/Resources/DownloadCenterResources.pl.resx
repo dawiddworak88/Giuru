@@ -123,8 +123,23 @@
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Nie znaleziono kategorii</value>
   </data>
+  <data name="EditCategory" xml:space="preserve">
+    <value>Edytuj kategorię</value>
+  </data>
+  <data name="NavigateToCategoriesLabel" xml:space="preserve">
+    <value>Powróc do kategorii</value>
+  </data>
+  <data name="NewCategory" xml:space="preserve">
+    <value>Dodaj kategorię</value>
+  </data>
+  <data name="ParentCategory" xml:space="preserve">
+    <value>Kategoria nadrzędna</value>
+  </data>
   <data name="ParentCategoryNotFound" xml:space="preserve">
     <value>Nie znaleziono kategorii nadrzędnej.</value>
+  </data>
+  <data name="SelectCategory" xml:space="preserve">
+    <value>Wybierz kategorię</value>
   </data>
   <data name="SubcategoriesDeleteCategoryConflict" xml:space="preserve">
     <value>Usuń podkategorie należące do tej kategorii.</value>

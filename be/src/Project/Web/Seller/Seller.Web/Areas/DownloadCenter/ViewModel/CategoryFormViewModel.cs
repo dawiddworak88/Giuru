@@ -20,6 +20,11 @@ namespace Seller.Web.Areas.DownloadCenter.ViewModel
         public string CategoriesUrl { get; set; }
         public string SaveText { get; set; }
         public string IdLabel { get; set; }
+        public string FilesLabel { get; set; }
+        public string SaveMediaUrl { get; set; }
+        public string DeleteLabel { get; set; }
+        public string DropFilesLabel { get; set; }
+        public string DropOrSelectFilesLabel { get; set; }
         public IEnumerable<ListItemViewModel> ParentCategories { get; set; }
     }
 }

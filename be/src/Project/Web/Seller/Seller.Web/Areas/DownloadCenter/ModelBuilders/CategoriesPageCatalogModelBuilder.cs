@@ -19,12 +19,14 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
     {
         private readonly ICatalogModelBuilder catalogModelBuilder;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly ICategoriesRepository categoriesRepository;
 
         public CategoriesPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
+            IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer,
             LinkGenerator linkGenerator,
             ICategoriesRepository categoriesRepository)
         {
@@ -32,6 +34,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             this.globalLocalizer = globalLocalizer;
             this.linkGenerator = linkGenerator;
             this.categoriesRepository = categoriesRepository;
+            this.downloadCenterLocalizer = downloadCenterLocalizer;
         }
 
         public async Task<CatalogViewModel<Category>> BuildModelAsync(ComponentModelBase componentModel)
@@ -39,12 +42,12 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<Category>, Category>();
 
             viewModel.Title = this.globalLocalizer.GetString("DownloadCenterCategories");
-            viewModel.NewText = this.globalLocalizer.GetString("NewText");
-            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.NewText = this.downloadCenterLocalizer.GetString("NewCategory");
+            viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "Category", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "CategoriesApi", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name });
-            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "CategoriesApi", new { Area = "News", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "CategoriesApi", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name });
+            viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "CategoriesApi", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name });
 
             viewModel.OrderBy = $"{nameof(Category.CreatedDate)} desc";
 
