@@ -1,6 +1,6 @@
 ﻿namespace Foundation.Localization
 {
-    public class DownloadResources
+    public class DownloadCenterResources
     {
     }
 }

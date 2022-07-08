@@ -18,12 +18,14 @@ namespace DownloadCenter.Api.Services.Categories
 {
     public class CategoriesService : ICategoriesService
     {
-        private readonly IStringLocalizer<DownloadResources> downloadLocalizer;
+        private readonly IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer;
         private readonly DownloadContext context;
 
         public CategoriesService(
+            IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer,
             DownloadContext context)
         {
+            this.downloadCenterLocalizer = downloadCenterLocalizer;
             this.context = context;
         }
 
@@ -55,12 +57,17 @@ namespace DownloadCenter.Api.Services.Categories
 
             if (category is null)
             {
-                throw new CustomException(this.downloadLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             if (await this.context.Categories.AnyAsync(x => x.ParentCategoryId == category.Id && x.IsActive))
             {
-                throw new CustomException(this.downloadLocalizer.GetString("SubcategoriesDeleteCategoryConflict"), (int)HttpStatusCode.Conflict);
+                throw new CustomException(this.downloadCenterLocalizer.GetString("SubcategoriesDeleteCategoryConflict"), (int)HttpStatusCode.Conflict);
+            }
+
+            if (await this.context.Downloads.AnyAsync(x => x.CategoryId == category.Id && x.IsActive))
+            {
+                throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryDeleteDownloadCenterConflict"), (int)HttpStatusCode.Conflict);
             }
 
             category.IsActive = false;
@@ -74,7 +81,7 @@ namespace DownloadCenter.Api.Services.Categories
 
             if (category is null)
             {
-                throw new CustomException(this.downloadLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             var item = new CategoryServiceModel
@@ -171,7 +178,7 @@ namespace DownloadCenter.Api.Services.Categories
 
             if (category is null)
             {
-                throw new CustomException(this.downloadLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
+                throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryNotFound"), (int)HttpStatusCode.NotFound);
             }
 
             if (model.ParentCategoryId.HasValue)
@@ -180,7 +187,7 @@ namespace DownloadCenter.Api.Services.Categories
 
                 if (parentCategory is null)
                 {
-                    throw new CustomException(this.downloadLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NotFound);
+                    throw new CustomException(this.downloadCenterLocalizer.GetString("ParentCategoryNotFound"), (int)HttpStatusCode.NotFound);
                 }
 
                 category.ParentCategoryId = model.ParentCategoryId;

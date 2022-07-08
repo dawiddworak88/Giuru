@@ -117,4 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CategoryDeleteDownloadCenterConflict" xml:space="preserve">
+    <value>Löschen Sie das mit der Kategorie verknüpfte Download-Center-Element.</value>
+  </data>
+  <data name="CategoryNotFound" xml:space="preserve">
+    <value>Kategorie nicht gefunden</value>
+  </data>
+  <data name="ParentCategoryNotFound" xml:space="preserve">
+    <value>Übergeordnete Kategorie nicht gefunden.</value>
+  </data>
+  <data name="SubcategoriesDeleteCategoryConflict" xml:space="preserve">
+    <value>Zu dieser Kategorie gehörende Unterkategorien löschen</value>
+  </data>
 </root>

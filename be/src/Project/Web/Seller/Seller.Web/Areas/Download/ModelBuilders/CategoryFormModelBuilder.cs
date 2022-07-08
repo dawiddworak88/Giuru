@@ -15,19 +15,19 @@ namespace Seller.Web.Areas.Download.ModelBuilders
     public class CategoryFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CategoryFormViewModel>
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<DownloadResources> downloadLocalizer;
+        private readonly IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly ICategoriesRepository categoriesRepository;
 
         public CategoryFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IStringLocalizer<DownloadResources> downloadLocalizer,
+            IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer,
             ICategoriesRepository categoriesRepository,
             LinkGenerator linkGenerator)
         {
             this.linkGenerator = linkGenerator;
             this.globalLocalizer = globalLocalizer;
-            this.downloadLocalizer = downloadLocalizer;
+            this.downloadCenterLocalizer = downloadCenterLocalizer;
             this.categoriesRepository = categoriesRepository;
         }
 
@@ -36,14 +36,14 @@ namespace Seller.Web.Areas.Download.ModelBuilders
             var viewModel = new CategoryFormViewModel
             {
                 IdLabel = this.globalLocalizer.GetString("Id"),
-                Title = this.downloadLocalizer.GetString("EditCategory"),
-                NameLabel = this.downloadLocalizer.GetString("NameLabel"),
+                Title = this.downloadCenterLocalizer.GetString("EditCategory"),
+                NameLabel = this.downloadCenterLocalizer.GetString("NameLabel"),
                 NameRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
-                ParentCategoryLabel = this.downloadLocalizer.GetString("ParentCategoryLabel"),
-                SelectCategoryLabel = this.downloadLocalizer.GetString("SelectCategoryLabel"),
+                ParentCategoryLabel = this.downloadCenterLocalizer.GetString("ParentCategoryLabel"),
+                SelectCategoryLabel = this.downloadCenterLocalizer.GetString("SelectCategoryLabel"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Post", "CategoriesApi", new { Area = "Download", culture = CultureInfo.CurrentUICulture.Name }),
-                NavigateToCategoriesLabel = this.downloadLocalizer.GetString("NavigateToCategoriesLabel"),
+                NavigateToCategoriesLabel = this.downloadCenterLocalizer.GetString("NavigateToCategoriesLabel"),
                 CategoriesUrl = this.linkGenerator.GetPathByAction("Index", "Categories", new { Area = "Download", culture = CultureInfo.CurrentUICulture.Name }),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred")
             };

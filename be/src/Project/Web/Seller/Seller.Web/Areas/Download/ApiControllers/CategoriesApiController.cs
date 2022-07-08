@@ -17,14 +17,14 @@ namespace Seller.Web.Areas.Download.ApiControllers
     [Area("Download")]
     public class CategoriesApiController : BaseApiController
     {
-        private readonly IStringLocalizer<DownloadResources> downloadLocalizer;
+        private readonly IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer;
         private readonly ICategoriesRepository categoriesRepository;
 
         public CategoriesApiController(
-            IStringLocalizer<DownloadResources> downloadLocalizer,
+            IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer,
             ICategoriesRepository categoriesRepository)
         {
-            this.downloadLocalizer = downloadLocalizer;
+            this.downloadCenterLocalizer = downloadCenterLocalizer;
             this.categoriesRepository = categoriesRepository;
         }
 
@@ -49,7 +49,7 @@ namespace Seller.Web.Areas.Download.ApiControllers
             var category = await this.categoriesRepository.SaveAsync(
                 token, language, model.Id, model.Name, model.ParentCategoryId);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Id = category, Message = this.downloadLocalizer.GetString("CategorySavedSuccessfully").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Id = category, Message = this.downloadCenterLocalizer.GetString("CategorySavedSuccessfully").Value });
 
         }
 
@@ -61,7 +61,7 @@ namespace Seller.Web.Areas.Download.ApiControllers
 
             await this.categoriesRepository.DeleteAsync(token, language, id);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.downloadLocalizer.GetString("CategoryDeletedSuccessfully").Value });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.downloadCenterLocalizer.GetString("CategoryDeletedSuccessfully").Value });
         }
     }
 }

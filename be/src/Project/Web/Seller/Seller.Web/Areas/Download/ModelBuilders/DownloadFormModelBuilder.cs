@@ -14,19 +14,19 @@ namespace Seller.Web.Areas.Download.ModelBuilders
     public class DownloadFormModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, DownloadFormViewModel>
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
-        private readonly IStringLocalizer<DownloadResources> downloadLocalizer;
+        private readonly IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly ICategoriesRepository categoriesRepository;
 
         public DownloadFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IStringLocalizer<DownloadResources> downloadLocalizer,
+            IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer,
             ICategoriesRepository categoriesRepository,
             LinkGenerator linkGenerator)
         {
             this.linkGenerator = linkGenerator;
             this.globalLocalizer = globalLocalizer;
-            this.downloadLocalizer = downloadLocalizer;
+            this.downloadCenterLocalizer = downloadCenterLocalizer;
             this.categoriesRepository = categoriesRepository;
         }
 
