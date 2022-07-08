@@ -134,11 +134,11 @@ services:
       - catalog-api
       - rabbitmq
 
-  download-api:
+  downloadcenter-api:
     image: ${REGISTRY:-giuru}/download-api:${PLATFORM:-linux}-${TAG:-latest}
     build:
       context: .
-      dockerfile: Project/Services/Download/Download.Api/Dockerfile
+      dockerfile: Project/Services/DownloadCenter/DownloadCenter.Api/Dockerfile
     depends_on:
       - sqldata
 
