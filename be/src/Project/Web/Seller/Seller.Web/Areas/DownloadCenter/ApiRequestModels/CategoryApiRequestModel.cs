@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 namespace Seller.Web.Areas.DownloadCenter.ApiRequestModels
 {
-    public class CategoryRequestModel : RequestModelBase
+    public class CategoryApiRequestModel : RequestModelBase
     {
         public string Name { get; set; }
         public Guid? ParentCategoryId { get; set; }
-        public IEnumerable<FileRequestModel> Files { get; set; }
+        public IEnumerable<Guid> Files { get; set; }
     }
 }

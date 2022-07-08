@@ -45,6 +45,17 @@ namespace DownloadCenter.Api.Services.Categories
                 CategoryId = category.Id
             };
 
+            foreach (var fileId in model.Files.OrEmptyIfNull())
+            {
+                var file = new CategoryFile
+                {
+                    MediaId = fileId,
+                    CategoryId = category.Id
+                };
+
+                await this.context.CategoryFiles.AddAsync(file.FillCommonProperties());
+            }
+
             this.context.CategoryTranslations.Add(categoryTranslation.FillCommonProperties());
             await this.context.SaveChangesAsync();
 
@@ -113,6 +124,13 @@ namespace DownloadCenter.Api.Services.Categories
                 item.ParentCategoryName = categoryParentTranslations?.Name;
             }
 
+            var files = this.context.CategoryFiles.Where(x => x.CategoryId == category.Id && x.IsActive);
+
+            if (files.Any())
+            {
+                item.Files = files.Select(x => x.MediaId);
+            }
+
             return item;
         }
 
@@ -164,6 +182,13 @@ namespace DownloadCenter.Api.Services.Categories
                     category.ParentCategoryName = categoryParentTranslations?.Name;
                 }
 
+                var files = this.context.CategoryFiles.Where(x => x.CategoryId == category.Id && x.IsActive);
+
+                if (files.Any())
+                {
+                    category.Files = files.Select(x => x.MediaId);
+                }
+
                 categoriesItems.Add(category);
             };
 
@@ -209,6 +234,24 @@ namespace DownloadCenter.Api.Services.Categories
                 };
 
                 this.context.CategoryTranslations.Add(newCategoryTranslation.FillCommonProperties());
+            }
+
+            var categoryFiles = this.context.CategoryFiles.Where(x => x.CategoryId == category.Id);
+
+            foreach (var categoryFile in categoryFiles.OrEmptyIfNull())
+            {
+                this.context.CategoryFiles.Remove(categoryFile);
+            }
+
+            foreach (var fileId in model.Files.OrEmptyIfNull())
+            {
+                var file = new CategoryFile
+                {
+                    MediaId = fileId,
+                    CategoryId = category.Id
+                };
+
+                await this.context.CategoryFiles.AddAsync(file.FillCommonProperties());
             }
 
             category.LastModifiedDate = DateTime.UtcNow;

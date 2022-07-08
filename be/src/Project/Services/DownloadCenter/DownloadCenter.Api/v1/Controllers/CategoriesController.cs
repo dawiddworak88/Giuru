@@ -171,6 +171,7 @@ namespace DownloadCenter.Api.v1.Controllers
                         Name = category.Name,
                         ParentCategoryId = category.ParentCategoryId,
                         ParentCategoryName = category.ParentCategoryName,
+                        Files = category.Files,
                         LastModifiedDate = category.LastModifiedDate,
                         CreatedDate = category.CreatedDate
                     };
@@ -226,6 +227,7 @@ namespace DownloadCenter.Api.v1.Controllers
                             Name = x.Name,
                             ParentCategoryId = x.ParentCategoryId,
                             ParentCategoryName = x.ParentCategoryName,
+                            Files = x.Files,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         })

@@ -9,6 +9,7 @@ using Seller.Web.Areas.DownloadCenter.DomainModels;
 using Seller.Web.Areas.DownloadCenter.Repositories.Categories;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -34,8 +35,7 @@ namespace Seller.Web.Areas.DownloadCenter.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var categories = await this.categoriesRepository.GetCategoriesAsync(
-                token, language, searchTerm, pageIndex, itemsPerPage, $"{nameof(Category.CreatedDate)} desc");
+            var categories = await this.categoriesRepository.GetCategoriesAsync(token, language, searchTerm, pageIndex, itemsPerPage, $"{nameof(Category.CreatedDate)} desc");
 
             return this.StatusCode((int)HttpStatusCode.OK, categories);
         }
@@ -46,8 +46,7 @@ namespace Seller.Web.Areas.DownloadCenter.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var category = await this.categoriesRepository.SaveAsync(
-                token, language, model.Id, model.Name, model.ParentCategoryId);
+            var category = await this.categoriesRepository.SaveAsync(token, language, model.Id, model.Name, model.ParentCategoryId, model.Files.Select(x => x.Id.Value));
 
             return this.StatusCode((int)HttpStatusCode.OK, new { Id = category, Message = this.downloadCenterLocalizer.GetString("CategorySavedSuccessfully").Value });
 

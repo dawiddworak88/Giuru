@@ -162,16 +162,17 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.Categories
             return default;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string name, Guid? parentCategoryId)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string name, Guid? parentCategoryId, IEnumerable<Guid> files)
         {
-            var requestModel = new CategoryRequestModel
+            var requestModel = new CategoryApiRequestModel
             {
                 Id = id,
                 Name = name,
-                ParentCategoryId = parentCategoryId
+                ParentCategoryId = parentCategoryId,
+                Files = files
             };
 
-            var apiRequest = new ApiRequest<CategoryRequestModel>
+            var apiRequest = new ApiRequest<CategoryApiRequestModel>
             {
                 Language = language,
                 Data = requestModel,
@@ -179,7 +180,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.Categories
                 EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.Download.CategoriesApiEndpoint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<CategoryRequestModel>, CategoryRequestModel, BaseResponseModel>(apiRequest);
+            var response = await this.apiClientService.PostAsync<ApiRequest<CategoryApiRequestModel>, CategoryApiRequestModel, BaseResponseModel>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Id != null)
             {
