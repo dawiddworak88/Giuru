@@ -1,4 +1,5 @@
 ﻿using Foundation.PageContent.Components.ListItems.ViewModels;
+using Seller.Web.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
 
@@ -26,5 +27,6 @@ namespace Seller.Web.Areas.DownloadCenter.ViewModel
         public string DropFilesLabel { get; set; }
         public string DropOrSelectFilesLabel { get; set; }
         public IEnumerable<ListItemViewModel> ParentCategories { get; set; }
+        public IEnumerable<FileViewModel> Files { get; set; }
     }
 }

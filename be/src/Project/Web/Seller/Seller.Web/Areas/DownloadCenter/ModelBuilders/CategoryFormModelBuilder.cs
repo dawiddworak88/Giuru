@@ -1,11 +1,18 @@
-﻿using Foundation.Extensions.ModelBuilders;
+﻿using Foundation.Extensions.ExtensionMethods;
+using Foundation.Extensions.ModelBuilders;
+using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
+using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.DownloadCenter.Repositories.Categories;
 using Seller.Web.Areas.DownloadCenter.ViewModel;
+using Seller.Web.Areas.Shared.Repositories.Media;
+using Seller.Web.Shared.Definitions;
+using Seller.Web.Shared.ViewModels;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,17 +25,23 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
         private readonly IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly ICategoriesRepository categoriesRepository;
+        private readonly IMediaItemsRepository mediaItemsRepository;
+        private readonly IMediaService mediaService;
 
         public CategoryFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer,
             ICategoriesRepository categoriesRepository,
+            IMediaItemsRepository mediaItemsRepository,
+            IMediaService mediaService,
             LinkGenerator linkGenerator)
         {
             this.linkGenerator = linkGenerator;
             this.globalLocalizer = globalLocalizer;
             this.downloadCenterLocalizer = downloadCenterLocalizer;
             this.categoriesRepository = categoriesRepository;
+            this.mediaItemsRepository = mediaItemsRepository;
+            this.mediaService = mediaService;
         }
 
         public async Task<CategoryFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -69,6 +82,30 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                     viewModel.Id = category.Id;
                     viewModel.Name = category.Name;
                     viewModel.ParentCategoryId = category.ParentCategoryId;
+
+                    if (category.Files.Any())
+                    {
+                        var categoryFiles = new List<FileViewModel>();
+
+                        var files = await this.mediaItemsRepository.GetAllMediaItemsAsync(componentModel.Token, componentModel.Language, category.Files.Distinct().ToEndpointParameterString(), PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize);
+
+                        foreach (var file in files)
+                        {
+                            var categoryFile = new FileViewModel
+                            {
+                                Id = file.Id,
+                                Url = this.mediaService.GetMediaUrl(file.Id, Constants.PreviewMaxWidth),
+                                Name = file.Name,
+                                MimeType = file.MimeType,
+                                Filename = file.Filename,
+                                Extension = file.Extension
+                            };
+
+                            categoryFiles.Add(categoryFile);
+                        }
+
+                        viewModel.Files = categoryFiles;
+                    }
                 }
             }
 
