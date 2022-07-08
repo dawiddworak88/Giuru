@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DownloadCenter.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(DownloadContext))]
-    [Migration("20220706091438_Initial")]
+    [Migration("20220708104126_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Download.Api.Infrastructure.Entities.Categories.Category", b =>
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,7 +55,7 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Download.Api.Infrastructure.Entities.Categories.CategoryFile", b =>
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.CategoryFile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -89,7 +89,7 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                     b.ToTable("CategoryFiles");
                 });
 
-            modelBuilder.Entity("Download.Api.Infrastructure.Entities.Categories.CategoryTranslation", b =>
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.CategoryTranslation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -127,7 +127,7 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                     b.ToTable("CategoryTranslations");
                 });
 
-            modelBuilder.Entity("Download.Api.Infrastructure.Entities.Downloads.Download", b =>
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.DownloadCenter.DownloadCenter", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -155,19 +155,19 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Downloads");
+                    b.ToTable("DownloadCenter");
                 });
 
-            modelBuilder.Entity("Download.Api.Infrastructure.Entities.Categories.CategoryTranslation", b =>
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.CategoryTranslation", b =>
                 {
-                    b.HasOne("Download.Api.Infrastructure.Entities.Categories.Category", null)
+                    b.HasOne("DownloadCenter.Api.Infrastructure.Entities.Categories.Category", null)
                         .WithMany("Translations")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Download.Api.Infrastructure.Entities.Categories.Category", b =>
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.Category", b =>
                 {
                     b.Navigation("Translations");
                 });

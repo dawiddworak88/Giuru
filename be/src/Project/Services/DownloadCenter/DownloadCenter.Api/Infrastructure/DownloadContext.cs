@@ -14,7 +14,7 @@ namespace DownloadCenter.Api.Infrastructure
             optionsBuilder.UseLazyLoadingProxies();
         }
 
-        public DbSet<Entities.Downloads.Download> Downloads { get; set; }
+        public DbSet<Entities.DownloadCenter.DownloadCenter> DownloadCenter { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<CategoryTranslation> CategoryTranslations { get; set; }
         public DbSet<CategoryFile> CategoryFiles { get; set; }

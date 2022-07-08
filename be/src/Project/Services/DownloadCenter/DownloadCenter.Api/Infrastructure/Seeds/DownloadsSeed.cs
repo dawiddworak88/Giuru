@@ -16,16 +16,16 @@ namespace DownloadCenter.Api.Infrastructure.Seeds
 
         private static void SeedDownload(DownloadContext context, Guid id, Guid categoryId, int? order)
         {
-            if (!context.Downloads.Any(x => x.Id == id))
+            if (!context.DownloadCenter.Any(x => x.Id == id))
             {
-                var download = new Entities.Downloads.Download
+                var download = new Entities.DownloadCenter.DownloadCenter
                 {
                     Id = id,
                     CategoryId = categoryId,
                     Order = order
                 };
 
-                context.Downloads.Add(download.FillCommonProperties());
+                context.DownloadCenter.Add(download.FillCommonProperties());
                 context.SaveChanges();
             }
         }

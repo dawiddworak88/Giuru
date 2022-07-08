@@ -24,18 +24,18 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
         public async Task<PagedResults<IEnumerable<DownloadCenterServiceModel>>> GetAsync(GetDownloadCenterServiceModel model)
         {
-            var downloads = this.context.Downloads.Where(x => x.IsActive);
+            var downloadCenter = this.context.DownloadCenter.Where(x => x.IsActive);
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
                 var category = this.context.CategoryTranslations.Where(x => x.Name.StartsWith(model.Username)).FirstOrDefault();
 
-                downloads = downloads.Where(x => x.CategoryId == category.Id || x.Id.ToString() == model.SearchTerm);
+                downloadCenter = downloadCenter.Where(x => x.CategoryId == category.Id || x.Id.ToString() == model.SearchTerm);
             }
 
-            downloads = downloads.ApplySort(model.OrderBy);
+            downloadCenter = downloadCenter.ApplySort(model.OrderBy);
 
-            var pagedResults = downloads.PagedIndex(new Pagination(downloads.Count(), model.ItemsPerPage), model.PageIndex);
+            var pagedResults = downloadCenter.PagedIndex(new Pagination(downloadCenter.Count(), model.ItemsPerPage), model.PageIndex);
 
             var pagedDownloadsServiceModel = new PagedResults<IEnumerable<DownloadCenterServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 

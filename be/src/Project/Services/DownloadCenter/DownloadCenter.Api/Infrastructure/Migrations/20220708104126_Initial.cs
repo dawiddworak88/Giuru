@@ -45,7 +45,7 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Downloads",
+                name: "DownloadCenter",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -58,7 +58,7 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Downloads", x => x.Id);
+                    table.PrimaryKey("PK_DownloadCenter", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,7 +100,7 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                 name: "CategoryTranslations");
 
             migrationBuilder.DropTable(
-                name: "Downloads");
+                name: "DownloadCenter");
 
             migrationBuilder.DropTable(
                 name: "Categories");
