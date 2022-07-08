@@ -121,14 +121,14 @@ namespace Seller.Web.Shared.ModelBuilders.MenuTiles
                     new MenuTileViewModel
                     {
                         Icon = IconsConstants.Download,
-                        Title = this.globalLocalizer.GetString("Downloads"),
-                        Url = this.linkGenerator.GetPathByAction("Index", "Downloads", new { Area = "Download", culture = CultureInfo.CurrentUICulture.Name })
+                        Title = this.globalLocalizer.GetString("DownloadCenter"),
+                        Url = this.linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
                     },
                     new MenuTileViewModel
                     {
                         Icon = IconsConstants.Grid,
-                        Title = this.globalLocalizer.GetString("DownloadCategories"),
-                        Url = this.linkGenerator.GetPathByAction("Index", "Categories", new { Area = "Download", culture = CultureInfo.CurrentUICulture.Name })
+                        Title = this.globalLocalizer.GetString("DownloadCenterCategories"),
+                        Url = this.linkGenerator.GetPathByAction("Index", "Categories", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
                     },
                     new MenuTileViewModel
                     {
