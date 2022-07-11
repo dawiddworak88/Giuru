@@ -36,7 +36,7 @@ namespace DownloadCenter.Api.Services.Categories
                 ParentCategoryId = model.ParentCategoryId
             };
 
-            this.context.Categories.Add(category.FillCommonProperties());
+            await this.context.Categories.AddAsync(category.FillCommonProperties());
 
             var categoryTranslation = new CategoryTranslation
             {
@@ -56,7 +56,7 @@ namespace DownloadCenter.Api.Services.Categories
                 await this.context.CategoryFiles.AddAsync(file.FillCommonProperties());
             }
 
-            this.context.CategoryTranslations.Add(categoryTranslation.FillCommonProperties());
+            await this.context.CategoryTranslations.AddAsync(categoryTranslation.FillCommonProperties());
             await this.context.SaveChangesAsync();
 
             return category.Id;

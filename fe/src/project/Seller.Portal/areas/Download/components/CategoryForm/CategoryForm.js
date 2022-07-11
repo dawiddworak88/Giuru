@@ -96,7 +96,7 @@ const CategoryForm = (props) => {
                                     name="parentCategoryId"
                                     value={parentCategoryId}
                                     onChange={handleOnChange}>
-                                    <MenuItem key={0} value="">{props.selectCategoryLabel}</MenuItem>
+                                    <MenuItem key={0} value={""}>{props.selectCategoryLabel}</MenuItem>
                                     {props.parentCategories && props.parentCategories.map(category =>
                                         <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
                                     )}

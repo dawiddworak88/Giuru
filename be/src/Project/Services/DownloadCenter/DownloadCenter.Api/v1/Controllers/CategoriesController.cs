@@ -24,7 +24,7 @@ namespace DownloadCenter.Api.v1.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Authorize]
+    [AllowAnonymous]
     [ApiController]
     public class CategoriesController : BaseApiController
     {
@@ -56,6 +56,7 @@ namespace DownloadCenter.Api.v1.Controllers
                     Id = request.Id,
                     ParentCategoryId = request.ParentCategoryId,
                     Name = request.Name,
+                    Files = request.Files,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -79,6 +80,7 @@ namespace DownloadCenter.Api.v1.Controllers
                 {
                     ParentCategoryId = request.ParentCategoryId,
                     Name = request.Name,
+                    Files = request.Files,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)

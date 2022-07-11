@@ -34,8 +34,8 @@
         public struct Download
         {
             public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
-            public static readonly string DownloadsApiEndponint = "/api/v1/downloads";
-            public static readonly string DownloadCategoryApiEndpoint = "/api/v1/downloads/category";
+            public static readonly string DownloadsApiEndponint = "/api/v1/downloadcenter";
+            public static readonly string DownloadCategoryApiEndpoint = "/api/v1/downloadcenter/category";
         }
 
         public struct News

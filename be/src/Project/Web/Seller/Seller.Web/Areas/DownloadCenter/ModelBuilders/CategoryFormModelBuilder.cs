@@ -12,6 +12,7 @@ using Seller.Web.Areas.DownloadCenter.ViewModel;
 using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Definitions;
 using Seller.Web.Shared.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -83,7 +84,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                     viewModel.Name = category.Name;
                     viewModel.ParentCategoryId = category.ParentCategoryId;
 
-                    if (category.Files.Any())
+                    if (category.Files.OrEmptyIfNull().Any())
                     {
                         var categoryFiles = new List<FileViewModel>();
 
