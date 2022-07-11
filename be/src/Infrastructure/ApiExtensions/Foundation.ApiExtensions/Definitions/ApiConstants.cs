@@ -31,11 +31,11 @@
             public static readonly string RolesApiEndpoint = "/api/v1/roles";
         }
 
-        public struct Download
+        public struct DownloadCenter
         {
             public static readonly string CategoriesApiEndpoint = "/api/v1/categories";
-            public static readonly string DownloadsApiEndponint = "/api/v1/downloadcenter";
-            public static readonly string DownloadCategoryApiEndpoint = "/api/v1/downloadcenter/category";
+            public static readonly string DownloadCenterApiEndponint = "/api/v1/downloadcenter";
+            public static readonly string DownloadCenterCategoryApiEndpoint = "/api/v1/downloadcenter/category";
         }
 
         public struct News

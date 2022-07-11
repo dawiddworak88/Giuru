@@ -7,7 +7,7 @@ namespace DownloadCenter.Api.v1.ResponseModel
     {
         public Guid Id { get; set; }
         public string CategoryName { get; set; }
-        public IEnumerable<DownloadCategoryResponseModel> Categories { get; set; }
+        public IEnumerable<DownloadCenterCategoryResponseModel> Categories { get; set; }
         public DateTime? LastModifiedDate { get; set; }
         public DateTime? CreatedDate { get; set; }
     }

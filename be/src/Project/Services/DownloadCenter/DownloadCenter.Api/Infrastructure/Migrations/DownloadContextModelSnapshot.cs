@@ -125,7 +125,7 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                     b.ToTable("CategoryTranslations");
                 });
 
-            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.DownloadCenter.DownloadCenter", b =>
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.DownloadCenter.DownloadCenterItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -153,7 +153,7 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DownloadCenter");
+                    b.ToTable("DownloadCenterItems");
                 });
 
             modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.CategoryTranslation", b =>

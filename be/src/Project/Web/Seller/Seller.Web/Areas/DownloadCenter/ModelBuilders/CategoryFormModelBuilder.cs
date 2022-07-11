@@ -52,7 +52,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 IdLabel = this.globalLocalizer.GetString("Id"),
                 Title = this.downloadCenterLocalizer.GetString("EditCategory"),
                 NameLabel = this.globalLocalizer.GetString("Name"),
-                NameRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
+                FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
                 ParentCategoryLabel = this.downloadCenterLocalizer.GetString("ParentCategory"),
                 SelectCategoryLabel = this.downloadCenterLocalizer.GetString("SelectCategory"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),

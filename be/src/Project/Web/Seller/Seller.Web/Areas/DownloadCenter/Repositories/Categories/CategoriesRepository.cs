@@ -36,7 +36,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.Categories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.Download.CategoriesApiEndpoint}/{id}"
+                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.CategoriesApiEndpoint}/{id}"
             };
 
             var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
@@ -54,7 +54,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.Categories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.Download.CategoriesApiEndpoint}/{id}"
+                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.CategoriesApiEndpoint}/{id}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Category>(apiRequest);
@@ -87,7 +87,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.Categories
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.Download.CategoriesApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.CategoriesApiEndpoint}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Category>>>(apiRequest);
@@ -121,7 +121,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.Categories
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.Download.CategoriesApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.CategoriesApiEndpoint}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<Category>>>(apiRequest);
@@ -177,7 +177,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.Categories
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.Download.CategoriesApiEndpoint}"
+                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.CategoriesApiEndpoint}"
             };
 
             var response = await this.apiClientService.PostAsync<ApiRequest<CategoryApiRequestModel>, CategoryApiRequestModel, BaseResponseModel>(apiRequest);

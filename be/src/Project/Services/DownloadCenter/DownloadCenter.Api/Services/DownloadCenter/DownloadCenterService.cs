@@ -1,9 +1,14 @@
 ﻿using DownloadCenter.Api.Infrastructure;
+using DownloadCenter.Api.Infrastructure.Entities.DownloadCenter;
 using DownloadCenter.Api.ServicesModels.DownloadCenter;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
+using Foundation.GenericRepository.Extensions;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
@@ -14,17 +19,48 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 {
     public class DownloadCenterService : IDownloadCenterService
     {
-        public readonly DownloadContext context;
+        private readonly DownloadContext context;
+        private readonly IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer;
 
         public DownloadCenterService(
+            IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer,
             DownloadContext context)
         {
             this.context = context;
+            this.downloadCenterLocalizer = downloadCenterLocalizer;
+        }
+
+        public async Task<Guid> CreateAsync(CreateDownloadCenterItemServiceModel model)
+        {
+            var downloadCenterItem = new DownloadCenterItem
+            {
+                CategoryId = model.CategoryId.Value,
+                Order = model.Order.Value
+            };
+
+            await this.context.DownloadCenterItems.AddAsync(downloadCenterItem.FillCommonProperties());
+            await this.context.SaveChangesAsync();
+
+            return downloadCenterItem.Id;
+        }
+
+        public async Task DeleteAsync(DeleteDownloadCenterItemServiceModel model)
+        {
+            var downloadCenterItem = await this.context.DownloadCenterItems.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+
+            if (downloadCenterItem is null)
+            {
+                throw new CustomException(this.downloadCenterLocalizer.GetString("DownloadCenterNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            downloadCenterItem.IsActive = false;
+
+            await this.context.SaveChangesAsync();
         }
 
         public async Task<PagedResults<IEnumerable<DownloadCenterServiceModel>>> GetAsync(GetDownloadCenterServiceModel model)
         {
-            var downloadCenter = this.context.DownloadCenter.Where(x => x.IsActive);
+            var downloadCenter = this.context.DownloadCenterItems.Where(x => x.IsActive);
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
@@ -94,7 +130,37 @@ namespace DownloadCenter.Api.Services.DownloadCenter
             return pagedDownloadsServiceModel;
         }
 
-        public async Task<DownloadCategoriesServiceModel> GetAsync(GetDownloadCategoryServiceModel model)
+        public async Task<DownloadCenterItemServiceModel> GetAsync(GetDownloadCenterItemServiceModel model)
+        {
+            var downloadCenterItem = await this.context.DownloadCenterItems.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+
+            if (downloadCenterItem is null)
+            {
+                throw new CustomException("", (int)HttpStatusCode.NotFound);
+            }
+
+            var item = new DownloadCenterItemServiceModel
+            {
+                Id = downloadCenterItem.Id,
+                CategoryId = downloadCenterItem.CategoryId,
+                Order = downloadCenterItem.Order,
+                LastModifiedDate = downloadCenterItem.LastModifiedDate,
+                CreatedDate = downloadCenterItem.CreatedDate
+            };
+
+            var categoryTranslation = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == downloadCenterItem.Id && x.IsActive && x.Language == model.Language);
+
+            if (categoryTranslation is null)
+            {
+                categoryTranslation = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == downloadCenterItem.Id && x.IsActive);
+            }
+
+            item.CategoryName = categoryTranslation?.Name;
+
+            return item;
+        }
+
+        public async Task<DownloadCategoriesServiceModel> GetDownloadCenterCategoryAsync(GetDownloadCategoryServiceModel model)
         {
             var downloadCategory = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
@@ -145,6 +211,24 @@ namespace DownloadCenter.Api.Services.DownloadCenter
             item.Categories = downloadCategories;
 
             return item;
+        }
+
+        public async Task<Guid> UpdateAsync(UpdateDownloadCenterItemServiceModel model)
+        {
+            var downloadCenterItem = await this.context.DownloadCenterItems.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+
+            if (downloadCenterItem is null)
+            {
+                throw new CustomException("", (int)HttpStatusCode.NotFound);
+            }
+
+            downloadCenterItem.CategoryId = model.CategoryId.Value;
+            downloadCenterItem.Order = model.Order;
+            downloadCenterItem.LastModifiedDate = DateTime.UtcNow;
+
+            await this.context.SaveChangesAsync();
+
+            return downloadCenterItem.Id;
         }
     }
 }

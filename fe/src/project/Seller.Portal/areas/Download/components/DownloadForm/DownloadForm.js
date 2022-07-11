@@ -6,7 +6,8 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import PropTypes from "prop-types";
 import { 
-    TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress 
+    TextField, Select, FormControl, InputLabel, 
+    MenuItem, Button, CircularProgress, FormHelperText
 } from "@mui/material";
 
 const DownloadForm = (props) => {
@@ -14,6 +15,7 @@ const DownloadForm = (props) => {
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
         categoryId: { value: props.categoryId ? props.categoryId : null, error: "" },
+        order: { value: props.order ? props.order : null }
     };
 
     const onSubmitForm = (state) => {
@@ -59,7 +61,7 @@ const DownloadForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, categoryId } = values;
+    const { id, categoryId, order } = values;
     return (
         <section className="section section-small-padding category">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -91,6 +93,21 @@ const DownloadForm = (props) => {
                             </FormControl>
                         </div>
                         <div className="field">
+                            <TextField 
+                                id="order" 
+                                name="order" 
+                                label={props.orderLabel} 
+                                fullWidth={true}
+                                value={order}
+                                inputProps={{ 
+                                    min: 0, 
+                                    step: 1,
+                                }}
+                                type="number"
+                                onChange={handleOnChange} 
+                                variant="standard"/>
+                        </div>
+                        <div className="field">
                             <Button 
                                 type="submit" 
                                 variant="contained" 
@@ -105,14 +122,15 @@ const DownloadForm = (props) => {
                                 color="secondary" 
                                 onClick={(e) => {
                                     e.preventDefault();
-                                    NavigationHelper.redirect(props.downloadsUrl);
+                                    NavigationHelper.redirect(props.downloadCenterUrl);
                                 }}>
-                                {props.navigateToDownloadsLabel}
+                                {props.navigateToDownloadCenterLabel}
                             </Button> 
                         </div>
                     </form>
                 </div>
             </div>
+            {state.isLoading && <CircularProgress className="progressBar" />}
         </section>
     )
 }

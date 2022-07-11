@@ -76,7 +76,7 @@ namespace DownloadCenter.Api.Services.Categories
                 throw new CustomException(this.downloadCenterLocalizer.GetString("SubcategoriesDeleteCategoryConflict"), (int)HttpStatusCode.Conflict);
             }
 
-            if (await this.context.DownloadCenter.AnyAsync(x => x.CategoryId == category.Id && x.IsActive))
+            if (await this.context.DownloadCenterItems.AnyAsync(x => x.CategoryId == category.Id && x.IsActive))
             {
                 throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryDeleteDownloadCenterConflict"), (int)HttpStatusCode.Conflict);
             }

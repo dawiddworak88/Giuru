@@ -52,7 +52,7 @@ const CategoryForm = (props) => {
         name: {
             required: {
                 isRequired: true,
-                error: props.nameRequiredErrorMessage
+                error: props.fieldRequiredErrorMessage
             }
         }
     };

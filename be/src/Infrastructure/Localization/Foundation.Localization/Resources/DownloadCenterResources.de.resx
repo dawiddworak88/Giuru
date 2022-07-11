@@ -129,8 +129,14 @@
   <data name="NavigateToCategoriesLabel" xml:space="preserve">
     <value>Zurück zu den Kategorien</value>
   </data>
+  <data name="NavigateToDownloadCenter" xml:space="preserve">
+    <value>Zurück zum Downloadcenter</value>
+  </data>
   <data name="NewCategory" xml:space="preserve">
     <value>Kategorie hinzufügen</value>
+  </data>
+  <data name="NewDownloadCenter" xml:space="preserve">
+    <value>Downloadcenter hinzufügen</value>
   </data>
   <data name="ParentCategory" xml:space="preserve">
     <value>Eltern-Kategorie</value>

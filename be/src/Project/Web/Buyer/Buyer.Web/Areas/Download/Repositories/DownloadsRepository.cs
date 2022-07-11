@@ -42,7 +42,7 @@ namespace Buyer.Web.Areas.Download.Repositories
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.Download.DownloadsApiEndponint}"
+                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.DownloadCenterApiEndponint}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<DomainModels.Download>>>(apiRequest);
@@ -70,7 +70,7 @@ namespace Buyer.Web.Areas.Download.Repositories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.Download.DownloadCategoryApiEndpoint}/{id}"
+                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.DownloadCenterCategoryApiEndpoint}/{id}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, DownloadCategory2>(apiRequest);

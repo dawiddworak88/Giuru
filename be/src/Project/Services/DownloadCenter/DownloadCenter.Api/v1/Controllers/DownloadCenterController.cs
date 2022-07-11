@@ -1,5 +1,6 @@
 ﻿using DownloadCenter.Api.Services.DownloadCenter;
 using DownloadCenter.Api.ServicesModels.DownloadCenter;
+using DownloadCenter.Api.v1.RequestModel;
 using DownloadCenter.Api.v1.ResponseModel;
 using DownloadCenter.Api.Validators.DownloadCenter;
 using Foundation.Account.Definitions;
@@ -28,12 +29,12 @@ namespace DownloadCenter.Api.v1.Controllers
     public class DownloadCenterController : BaseApiController
     {
 
-        private readonly IDownloadCenterService downloadsService;
+        private readonly IDownloadCenterService downloadCenterService;
 
         public DownloadCenterController(
-            IDownloadCenterService downloadsService)
+            IDownloadCenterService downloadCenterService)
         {
-            this.downloadsService = downloadsService;
+            this.downloadCenterService = downloadCenterService;
         }
 
         /// <summary>
@@ -63,7 +64,7 @@ namespace DownloadCenter.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var downloadCategory = await this.downloadsService.GetAsync(serviceModel);
+                var downloadCategory = await this.downloadCenterService.GetDownloadCenterCategoryAsync(serviceModel);
 
                 if (downloadCategory is not null)
                 {
@@ -71,7 +72,7 @@ namespace DownloadCenter.Api.v1.Controllers
                     {
                         Id = downloadCategory.Id,
                         CategoryName = downloadCategory.CategoryName,
-                        Categories = downloadCategory.Categories.OrEmptyIfNull().Select(x => new DownloadCategoryResponseModel
+                        Categories = downloadCategory.Categories.OrEmptyIfNull().Select(x => new DownloadCenterCategoryResponseModel
                         {
                             Id = x.Id,
                             Name = x.Name
@@ -88,13 +89,13 @@ namespace DownloadCenter.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Gets list of downloads.
+        /// Gets list of download center items.
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
         /// <param name="orderBy">The optional order by.</param>
-        /// <returns>The list of downloads.</returns>
+        /// <returns>The list of download center items.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<CategoryResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -119,18 +120,18 @@ namespace DownloadCenter.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var categories = await this.downloadsService.GetAsync(serviceModel);
+                var categories = await this.downloadCenterService.GetAsync(serviceModel);
 
                 if (categories is not null)
                 {
-                    var response = new PagedResults<IEnumerable<DownloadResponseModel>>(categories.Total, categories.PageSize)
+                    var response = new PagedResults<IEnumerable<DownloadCenterResponseModel>>(categories.Total, categories.PageSize)
                     {
-                        Data = categories.Data.OrEmptyIfNull().Select(x => new DownloadResponseModel
+                        Data = categories.Data.OrEmptyIfNull().Select(x => new DownloadCenterResponseModel
                         {
                             Id = x.Id,
                             CategoryId = x.CategoryId,
                             CategoryName = x.CategoryName,
-                            Categories = x.Categories.OrEmptyIfNull().Select(y => new DownloadCategoryResponseModel
+                            Categories = x.Categories.OrEmptyIfNull().Select(y => new DownloadCenterCategoryResponseModel
                             {
                                 Id = y.Id,
                                 Name = y.Name
@@ -146,6 +147,152 @@ namespace DownloadCenter.Api.v1.Controllers
             }
 
             throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Delete download center item by id.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <returns>OK.</returns>
+        [HttpDelete, MapToApiVersion("1.0")]
+        [Route("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Conflict)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Delete(Guid? id)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new DeleteDownloadCenterItemServiceModel
+            {
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new DeleteDownloadCenterItemModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                await this.downloadCenterService.DeleteAsync(serviceModel);
+
+                return this.StatusCode((int)HttpStatusCode.OK);
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Get download center item by id.
+        /// </summary>
+        /// <param name="id">The id.</param>
+        /// <returns>The download center item.</returns>
+        [HttpGet, MapToApiVersion("1.0")]
+        [Route("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DownloadCenterItemResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetItem(Guid? id)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetDownloadCenterItemServiceModel
+            {
+                Id = id,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new GetDownloadCenterItemModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var downloadCenterItem = await this.downloadCenterService.GetAsync(serviceModel);
+
+                if (downloadCenterItem is not null)
+                {
+                    var response = new DownloadCenterItemResponseModel
+                    {
+                        Id = downloadCenterItem.Id,
+                        CategoryId = downloadCenterItem.CategoryId,
+                        CategoryName = downloadCenterItem.CategoryName,
+                        Order = downloadCenterItem.Order,
+                        LastModifiedDate = downloadCenterItem.LastModifiedDate,
+                        CreatedDate = downloadCenterItem.CreatedDate
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Creates or updates download center item (if id is set).
+        /// </summary>
+        /// <param name="request">The model.</param>
+        /// <returns>The download center item id.</returns>
+        [HttpPost, MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> Save(DownloadCenterItemRequestModel request)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            if (request.Id.HasValue)
+            {
+                var serviceModel = new UpdateDownloadCenterItemServiceModel
+                {
+                    Id = request.Id,
+                    CategoryId = request.CategoryId,
+                    Order = request.Order,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                };
+
+                var validator = new UpdateDownloadCenterItemModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var downloadCenterItemId = await this.downloadCenterService.UpdateAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = downloadCenterItemId });
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
+            else
+            {
+                var serviceModel = new CreateDownloadCenterItemServiceModel
+                {
+                    CategoryId = request.CategoryId,
+                    Order = request.Order,
+                    Language = CultureInfo.CurrentCulture.Name,
+                    Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+                };
+
+                var validator = new CreateDownloadCenterItemModelValidator();
+                var validationResult = await validator.ValidateAsync(serviceModel);
+
+                if (validationResult.IsValid)
+                {
+                    var downloadCenterItemId = await this.downloadCenterService.CreateAsync(serviceModel);
+
+                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = downloadCenterItemId });
+                }
+
+                throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+            }
         }
     }
 }

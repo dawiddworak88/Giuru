@@ -15,7 +15,7 @@ namespace Seller.Web.Areas.DownloadCenter.ViewModel
         public string NameLabel { get; set; }
         public string ParentCategoryLabel { get; set; }
         public string SelectCategoryLabel { get; set; }
-        public string NameRequiredErrorMessage { get; set; }
+        public string FieldRequiredErrorMessage { get; set; }
         public string NavigateToCategoriesLabel { get; set; }
         public string SaveUrl { get; set; }
         public string CategoriesUrl { get; set; }

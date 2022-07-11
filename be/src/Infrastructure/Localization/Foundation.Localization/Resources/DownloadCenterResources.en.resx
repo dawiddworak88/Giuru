@@ -129,8 +129,14 @@
   <data name="NavigateToCategoriesLabel" xml:space="preserve">
     <value>Back to categories</value>
   </data>
+  <data name="NavigateToDownloadCenter" xml:space="preserve">
+    <value>Back to download center</value>
+  </data>
   <data name="NewCategory" xml:space="preserve">
     <value>Add category</value>
+  </data>
+  <data name="NewDownloadCenter" xml:space="preserve">
+    <value>Add download center</value>
   </data>
   <data name="ParentCategory" xml:space="preserve">
     <value>Parent category</value>
