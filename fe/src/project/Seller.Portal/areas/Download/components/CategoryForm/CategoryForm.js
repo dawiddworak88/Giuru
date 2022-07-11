@@ -7,7 +7,8 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import { 
-    TextField, Select, FormControl, InputLabel, MenuItem, Button, CircularProgress 
+    TextField, Select, FormControl, InputLabel, MenuItem, Button, 
+    CircularProgress, NoSsr, FormControlLabel, Switch
 } from "@mui/material";
 
 const CategoryForm = (props) => {
@@ -16,7 +17,8 @@ const CategoryForm = (props) => {
         id: { value: props.id ? props.id : null, error: "" },
         name: { value: props.name ? props.name : "", error: "" },
         parentCategoryId: { value: props.parentCategoryId ? props.parentCategoryId : null, error: "" },
-        files: { value: props.files ? props.files : [] }
+        files: { value: props.files ? props.files : [] },
+        isVisible: { value: props.isVisible ? props.isVisible : false }
     };
 
     const onSubmitForm = (state) => {
@@ -62,7 +64,7 @@ const CategoryForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, parentCategoryId, files } = values;
+    const { id, name, parentCategoryId, files, isVisible } = values;
     return (
         <section className="section section-small-padding category">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -117,6 +119,23 @@ const CategoryForm = (props) => {
                                 files={files}
                                 setFieldValue={setFieldValue}
                                 saveMediaUrl={props.saveMediaUrl} />
+                        </div>
+                        <div className="field">
+                            <NoSsr>
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            onChange={e => {
+                                                setFieldValue({ name: "isVisible", value: e.target.checked });
+                                            }}
+                                            checked={isVisible}
+                                            id="isVisible"
+                                            name="isVisible"
+                                            color="secondary" 
+                                        />
+                                    }
+                                    label={props.visibleLabel} />
+                            </NoSsr>
                         </div>
                         <div className="field">
                             <Button 

@@ -8,6 +8,7 @@ namespace DownloadCenter.Api.v1.RequestModel
         public Guid? Id { get; set; }
         public Guid? ParentCategoryId { get; set; }
         public string Name { get; set; }
+        public bool IsVisible { get; set; }
         public IEnumerable<Guid> Files { get; set; }
     }
 }

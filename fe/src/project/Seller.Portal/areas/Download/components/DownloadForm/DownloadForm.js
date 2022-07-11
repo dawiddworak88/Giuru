@@ -51,7 +51,7 @@ const DownloadForm = (props) => {
         categoryId: {
             required: {
                 isRequired: true,
-                error: "asd"
+                error: props.fieldRequiredErrorMessage
             }
         }
     };

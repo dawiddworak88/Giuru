@@ -64,7 +64,8 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
                 DeleteLabel = this.globalLocalizer.GetString("Delete"),
                 DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
-                DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile")
+                DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
+                VisibleLabel = this.downloadCenterLocalizer.GetString("Visible")
             };
 
             var categories = await this.categoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language);
@@ -83,6 +84,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                     viewModel.Id = category.Id;
                     viewModel.Name = category.Name;
                     viewModel.ParentCategoryId = category.ParentCategoryId;
+                    viewModel.IsVisible = category.IsVisible;
 
                     if (category.Files.OrEmptyIfNull().Any())
                     {

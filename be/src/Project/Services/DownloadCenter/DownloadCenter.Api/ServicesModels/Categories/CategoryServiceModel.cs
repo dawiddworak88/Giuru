@@ -9,6 +9,7 @@ namespace DownloadCenter.Api.ServicesModels.Categories
         public string Name { get; set; }
         public Guid? ParentCategoryId { get; set; }
         public string ParentCategoryName { get; set; }
+        public bool IsVisible { get; set; }
         public IEnumerable<Guid> Files { get; set; }
         public DateTime LastModifiedDate { get; set; }
         public DateTime CreatedDate { get; set; }

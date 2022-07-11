@@ -33,7 +33,8 @@ namespace DownloadCenter.Api.Services.Categories
         {
             var category = new Category
             {
-                ParentCategoryId = model.ParentCategoryId
+                ParentCategoryId = model.ParentCategoryId,
+                IsVisible = model.IsVisible,
             };
 
             await this.context.Categories.AddAsync(category.FillCommonProperties());
@@ -98,6 +99,7 @@ namespace DownloadCenter.Api.Services.Categories
             var item = new CategoryServiceModel
             {
                 Id = category.Id,
+                IsVisible = category.IsVisible,
                 ParentCategoryId = category.ParentCategoryId,
                 LastModifiedDate = category.LastModifiedDate,
                 CreatedDate = category.CreatedDate
@@ -216,6 +218,7 @@ namespace DownloadCenter.Api.Services.Categories
                 }
 
                 category.ParentCategoryId = model.ParentCategoryId;
+                category.IsVisible = model.IsVisible;
             }
 
             var categoryTranslation =  await this.context.CategoryTranslations.FirstOrDefaultAsync(x => x.CategoryId == model.Id && x.Language == model.Language && x.IsActive);

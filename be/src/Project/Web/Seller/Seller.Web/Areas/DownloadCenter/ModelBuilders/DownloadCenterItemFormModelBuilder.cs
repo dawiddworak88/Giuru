@@ -48,7 +48,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 OrderLabel = this.globalLocalizer.GetString("Order"),
                 FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                SaveUrl = this.linkGenerator.GetPathByAction("Post", "DownloadCenterApi", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name })
+                SaveUrl = this.linkGenerator.GetPathByAction("Post", "DownloadCenterApi", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name }),
             };
 
             var categories = await this.categoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language);

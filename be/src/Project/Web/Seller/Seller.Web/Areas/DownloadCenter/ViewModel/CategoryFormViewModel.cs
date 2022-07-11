@@ -26,6 +26,8 @@ namespace Seller.Web.Areas.DownloadCenter.ViewModel
         public string DeleteLabel { get; set; }
         public string DropFilesLabel { get; set; }
         public string DropOrSelectFilesLabel { get; set; }
+        public string VisibleLabel { get; set; }
+        public bool IsVisible { get; set; }
         public IEnumerable<ListItemViewModel> ParentCategories { get; set; }
         public IEnumerable<FileViewModel> Files { get; set; }
     }
