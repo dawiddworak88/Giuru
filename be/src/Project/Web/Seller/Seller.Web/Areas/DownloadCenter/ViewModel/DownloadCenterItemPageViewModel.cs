@@ -4,6 +4,6 @@ namespace Seller.Web.Areas.DownloadCenter.ViewModel
 {
     public class DownloadCenterItemPageViewModel : BasePageViewModel
     {
-        public DownloadCenterItemFormViewModel DownloadForm { get; set; }
+        public DownloadCenterItemFormViewModel DownloadCenterItemForm { get; set; }
     }
 }

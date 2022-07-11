@@ -26,10 +26,10 @@ import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetP
 import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
 
 // Seller Portal
-import DownloadPage from "../../src/project/Seller.Portal/areas/Download/pages/DownloadPage/DownloadPage";
-import DownloadsPage from "../../src/project/Seller.Portal/areas/Download/pages/DownloadsPage/DownloadsPage";
-import DownloadCategoryPage from "../../src/project/Seller.Portal/areas/Download/pages/CategoryPage/CategoryPage";
-import DownloadCategoriesPage from "../../src/project/Seller.Portal/areas/Download/pages/CategoriesPage/CategoriesPage";
+import DownloadCenterItemPage from "../../src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/DownloadCenterItemPage";
+import DownloadCenterPage from "../../src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage";
+import DownloadCenterCategoryPage from "../../src/project/Seller.Portal/areas/DownloadCenter/pages/CategoryPage/CategoryPage";
+import DownloadCenterCategoriesPage from "../../src/project/Seller.Portal/areas/DownloadCenter/pages/CategoriesPage/CategoriesPage";
 import ClientRolePage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientRolePage/ClientRolePage";
 import ClientRolesPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/ClientRolesPage";
 import ClientApplicationPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/ClientApplicationPage";
@@ -86,10 +86,10 @@ const Components = {
 	SetPasswordPage,
 	ContentPage,
 
-	DownloadPage,
-	DownloadsPage,
-	DownloadCategoryPage,
-	DownloadCategoriesPage,
+	DownloadCenterItemPage,
+	DownloadCenterPage,
+	DownloadCenterCategoryPage,
+	DownloadCenterCategoriesPage,
 	ClientRolePage,
 	ClientRolesPage,
 	ClientApplicationPage,

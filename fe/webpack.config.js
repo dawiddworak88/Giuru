@@ -184,10 +184,10 @@ const sellerPortalBrowserConfig = {
         extensions: [".js", ".jsx"]
     },
     entry: {
-        downloadpage: ["./src/project/Seller.Portal/areas/Download/pages/DownloadPage/index.js", "./src/project/Seller.Portal/areas/Download/pages/DownloadPage/DownloadPage.scss"],
-        downloadspage: ["./src/project/Seller.Portal/areas/Download/pages/DownloadsPage/index.js", "./src/project/Seller.Portal/areas/Download/pages/DownloadsPage/DownloadsPage.scss"],
-        downloadcategorypage: ["./src/project/Seller.Portal/areas/Download/pages/CategoryPage/index.js", "./src/project/Seller.Portal/areas/Download/pages/CategoryPage/CategoryPage.scss"],
-        downloadcategoriespage: ["./src/project/Seller.Portal/areas/Download/pages/CategoriesPage/index.js", "./src/project/Seller.Portal/areas/Download/pages/CategoriesPage/CategoriesPage.scss"],
+        downloadcenteritempage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/DownloadCenterItemPage.scss"],
+        downloadcenterpage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage.scss"],
+        downloadcentercategorypage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/CategoryPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/CategoryPage/CategoryPage.scss"],
+        downloadcentercategoriespage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/CategoriesPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/CategoriesPage/CategoriesPage.scss"],
         clientrolepage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientRolePage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientRolePage/ClientRolePage.scss"],
         clientrolespage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/ClientRolesPage.scss"],
         clientapplicationpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/ClientApplicationPage.scss"],

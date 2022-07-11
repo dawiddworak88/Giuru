@@ -35,7 +35,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 Locale = CultureInfo.CurrentUICulture.Name,
                 Header = this.headerModelBuilder.BuildModel(),
                 MenuTiles = this.menuTilesModelBuilder.BuildModel(),
-                DownloadForm = await this.downloadCenterItemFormModelBuilder.BuildModelAsync(componentModel),
+                DownloadCenterItemForm = await this.downloadCenterItemFormModelBuilder.BuildModelAsync(componentModel),
                 Footer = this.footerModelBuilder.BuildModel()
             };
 
