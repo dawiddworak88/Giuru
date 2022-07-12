@@ -2,7 +2,7 @@
 
 namespace Buyer.Web.Areas.DownloadCenter.ApiResponseModels
 {
-    public class DownloadCategoryResponseModel
+    public class DownloadCenterItemCategoryResponseModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

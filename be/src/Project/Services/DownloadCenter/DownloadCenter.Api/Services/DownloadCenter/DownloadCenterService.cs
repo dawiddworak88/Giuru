@@ -160,7 +160,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
             return item;
         }
 
-        public async Task<DownloadCategoriesServiceModel> GetDownloadCenterCategoryAsync(GetDownloadCategoryServiceModel model)
+        public async Task<DownloadCategoriesServiceModel> GetDownloadCenterCategoryAsync(GetDownloadCenterCategoryServiceModel model)
         {
             var downloadCategory = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
 
@@ -172,6 +172,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
             var item = new DownloadCategoriesServiceModel
             {
                 Id = downloadCategory.Id,
+                ParentCategoryId = downloadCategory.ParentCategoryId,
                 LastModifiedDate = downloadCategory.LastModifiedDate,
                 CreatedDate = downloadCategory.CreatedDate
             };
@@ -184,6 +185,18 @@ namespace DownloadCenter.Api.Services.DownloadCenter
             }
 
             item.CategoryName = categoryTranslation?.Name;
+
+            if (downloadCategory.ParentCategoryId.HasValue)
+            {
+                var parentCategoryTranslation = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == downloadCategory.ParentCategoryId && x.IsActive && x.Language == model.Language);
+
+                if (parentCategoryTranslation is null)
+                {
+                    parentCategoryTranslation = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == downloadCategory.ParentCategoryId && x.IsActive);
+                }
+
+                item.ParentCategoryName = parentCategoryTranslation?.Name;
+            }
 
             var categories = this.context.Categories.Where(x => x.ParentCategoryId == downloadCategory.Id);
 
@@ -206,6 +219,13 @@ namespace DownloadCenter.Api.Services.DownloadCenter
                 categoryItem.Name = categoryItemTranslation?.Name;
 
                 downloadCategories.Add(categoryItem);
+            }
+
+            var files = this.context.CategoryFiles.Where(x => x.CategoryId == downloadCategory.Id && x.IsActive);
+
+            if (files.Any())
+            {
+                item.Files = files.Select(x => x.MediaId);
             }
 
             item.Categories = downloadCategories;

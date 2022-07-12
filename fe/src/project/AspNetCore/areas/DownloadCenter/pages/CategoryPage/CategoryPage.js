@@ -8,6 +8,7 @@ import Header from "../../../../shared/components/Header/Header";
 import MainNavigation from "../../../../shared/components/MainNavigation/MainNavigation";
 import Footer from "../../../../../../shared/components/Footer/Footer";
 import CategoryDetails from "../../components/CategoryDetails/CategoryDetails";
+import Breadcrumbs from "../../../../shared/components/Breadcrumb/Breadcrumbs";
 
 const CategoryPage = (props) => {
     
@@ -19,6 +20,7 @@ const CategoryPage = (props) => {
             <Store>
                 <Header {...props.header}></Header>
                 <MainNavigation {...props.mainNavigation} />
+                <Breadcrumbs {...props.breadcrumbs} />
                 <CategoryDetails {...props.categoryDetails} />
                 <Footer {...props.footer}></Footer>
             </Store>

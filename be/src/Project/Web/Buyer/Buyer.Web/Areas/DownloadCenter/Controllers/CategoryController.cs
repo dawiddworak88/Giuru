@@ -15,26 +15,27 @@ namespace Buyer.Web.Areas.DownloadCenter.Controllers
     [Area("DownloadCenter")]
     public class CategoryController : BaseController
     {
-        private readonly IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterPageViewModel> downloadPageModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryPageViewModel> categoryPageModelBuilder;
 
         public CategoryController(
-            IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterPageViewModel> downloadPageModelBuilder)
+            IAsyncComponentModelBuilder<ComponentModelBase, CategoryPageViewModel> categoryPageModelBuilder)
         {
-            this.downloadPageModelBuilder = downloadPageModelBuilder;
+            this.categoryPageModelBuilder = categoryPageModelBuilder;
         }
 
-        public async Task<IActionResult> Index(Guid? id)
+        public async Task<IActionResult> Detail(Guid? id)
         {
             var componentModel = new ComponentModelBase
             {
                 Id = id,
                 Language = CultureInfo.CurrentUICulture.Name,
+                IsAuthenticated = this.User.Identity.IsAuthenticated,
                 Name = this.User.Identity.Name,
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
                 BasketId = string.IsNullOrWhiteSpace(this.Request.Cookies[BasketConstants.BasketCookieName]) ? null : Guid.Parse(this.Request.Cookies[BasketConstants.BasketCookieName])
             };
 
-            var viewModel = await this.downloadPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await this.categoryPageModelBuilder.BuildModelAsync(componentModel);
 
             return this.View(viewModel);
         }

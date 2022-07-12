@@ -32,10 +32,10 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
             var viewModel = new DownloadCenterCatalogViewModel
             {
                 Title = "asd",
-                TestUrl = this.linkGenerator.GetPathByAction("GetCategory", "DownloadsApi", new { Area = "Download", culture = CultureInfo.CurrentUICulture.Name }),
+                TestUrl = this.linkGenerator.GetPathByAction("GetCategory", "DownloadCenterApi", new { Area = "Download", culture = CultureInfo.CurrentUICulture.Name }),
             };
 
-            viewModel.PagedResults = await this.downloadCenterRepository.GetAsync(componentModel.Token, componentModel.Language, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, null, $"{nameof(DomainModels.Download.Order)} desc");
+            viewModel.PagedResults = await this.downloadCenterRepository.GetAsync(componentModel.Token, componentModel.Language, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, null, $"{nameof(DomainModels.DownloadCenterItem.Order)} desc");
 
             return viewModel;
         }

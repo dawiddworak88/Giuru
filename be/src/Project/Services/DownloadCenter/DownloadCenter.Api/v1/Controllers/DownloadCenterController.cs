@@ -43,7 +43,7 @@ namespace DownloadCenter.Api.v1.Controllers
         /// <param name="id">The id.</param>
         /// <returns>The download category.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [Route("category/{id}")]
+        [Route("categories/{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DownloadCategoriesResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
@@ -51,7 +51,7 @@ namespace DownloadCenter.Api.v1.Controllers
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var serviceModel = new GetDownloadCategoryServiceModel
+            var serviceModel = new GetDownloadCenterCategoryServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
@@ -59,7 +59,7 @@ namespace DownloadCenter.Api.v1.Controllers
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var validator = new GetDownloadCategoryModelValidator();
+            var validator = new GetDownloadCenterCategoryModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
@@ -71,12 +71,15 @@ namespace DownloadCenter.Api.v1.Controllers
                     var response = new DownloadCategoriesResponseModel
                     {
                         Id = downloadCategory.Id,
+                        ParentCategoryId = downloadCategory.ParentCategoryId,
+                        ParentCategoryName = downloadCategory.ParentCategoryName,
                         CategoryName = downloadCategory.CategoryName,
                         Categories = downloadCategory.Categories.OrEmptyIfNull().Select(x => new DownloadCenterCategoryResponseModel
                         {
                             Id = x.Id,
                             Name = x.Name
                         }),
+                        Files = downloadCategory.Files,
                         LastModifiedDate = downloadCategory.LastModifiedDate,
                         CreatedDate = downloadCategory.CreatedDate
                     };

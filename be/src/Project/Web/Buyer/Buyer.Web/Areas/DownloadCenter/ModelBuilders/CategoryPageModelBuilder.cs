@@ -14,18 +14,21 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder;
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryDetailsViewModel> categoryDetailsModelBuilder;
+        private readonly IAsyncComponentModelBuilder<ComponentModelBase, CategoryBreadcrumbsViewModel> categoryBreadcrumbsModelBuilder;
         private readonly IModelBuilder<FooterViewModel> footerModelBuilder;
 
         public CategoryPageModelBuilder(
             IAsyncComponentModelBuilder<ComponentModelBase, BuyerHeaderViewModel> headerModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, MainNavigationViewModel> mainNavigationModelBuilder,
             IAsyncComponentModelBuilder<ComponentModelBase, CategoryDetailsViewModel> categoryDetailsModelBuilder,
+            IAsyncComponentModelBuilder<ComponentModelBase, CategoryBreadcrumbsViewModel> categoryBreadcrumbsModelBuilder,
             IModelBuilder<FooterViewModel> footerModelBuilder)
         {
             this.headerModelBuilder = headerModelBuilder;
             this.mainNavigationModelBuilder = mainNavigationModelBuilder;
             this.categoryDetailsModelBuilder = categoryDetailsModelBuilder;
             this.footerModelBuilder = footerModelBuilder;
+            this.categoryBreadcrumbsModelBuilder = categoryBreadcrumbsModelBuilder;
         }
 
         public async Task<CategoryPageViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -35,6 +38,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
                 Locale = CultureInfo.CurrentUICulture.Name,
                 Header = await this.headerModelBuilder.BuildModelAsync(componentModel),
                 MainNavigation = await this.mainNavigationModelBuilder.BuildModelAsync(componentModel),
+                Breadcrumbs = await this.categoryBreadcrumbsModelBuilder.BuildModelAsync(componentModel),
                 CategoryDetails = await this.categoryDetailsModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };

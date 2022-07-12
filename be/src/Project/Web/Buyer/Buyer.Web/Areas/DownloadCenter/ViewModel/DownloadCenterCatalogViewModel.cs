@@ -7,6 +7,6 @@ namespace Buyer.Web.Areas.DownloadCenter.ViewModel
     {
         public string Title { get; set; }
         public string TestUrl { get; set; }
-        public PagedResults<IEnumerable<DomainModels.Download>> PagedResults { get; set; }
+        public PagedResults<IEnumerable<DomainModels.DownloadCenterItem>> PagedResults { get; set; }
     }
 }

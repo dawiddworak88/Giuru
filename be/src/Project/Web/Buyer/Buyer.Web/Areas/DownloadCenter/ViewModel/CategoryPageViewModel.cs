@@ -6,6 +6,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ViewModel
     public class CategoryPageViewModel : BasePageViewModel
     {
         public MainNavigationViewModel MainNavigation { get; set; }
+        public CategoryBreadcrumbsViewModel Breadcrumbs { get; set; }
         public CategoryDetailsViewModel CategoryDetails { get; set; }
     }
 }

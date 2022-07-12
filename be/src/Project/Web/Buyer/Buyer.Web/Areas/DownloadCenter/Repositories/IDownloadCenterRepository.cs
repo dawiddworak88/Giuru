@@ -8,7 +8,7 @@ namespace Buyer.Web.Areas.DownloadCenter.Repositories
 {
     public interface IDownloadCenterRepository
     {
-        Task<PagedResults<IEnumerable<DomainModels.Download>>> GetAsync(string token, string language, int pageIndex, int itemsPerPage, string searchTerm, string orderBy);
-        Task<DownloadCategory2> GetAsync(string token, string language, Guid? id);
+        Task<PagedResults<IEnumerable<DownloadCenterItem>>> GetAsync(string token, string language, int pageIndex, int itemsPerPage, string searchTerm, string orderBy);
+        Task<DownloadCenterCategory> GetAsync(string token, string language, Guid? id);
     }
 }
