@@ -1,4 +1,7 @@
 import React from "react";
+import {
+    NoSsr, FormControlLabel, Checkbox
+} from "@mui/material"
 
 const CategoryDetails = (props) => {
     return (
@@ -6,7 +9,7 @@ const CategoryDetails = (props) => {
             <div className="container">
                 {props.categories ? (
                     <div className="list">
-                        <h3>{props.title}</h3>
+                        <h3 className="is-size-5 has-text-weight-bold is-uppercase">{props.title}</h3>
                         <div className="list-box">
                             {props.categories.length > 0 && props.categories.map((category, index) => {
                                 return (
@@ -17,7 +20,25 @@ const CategoryDetails = (props) => {
                             })}
                             {props.files && props.files.length > 0 && props.files.map((file, index) => {
                                 return (
-                                    <img src={file.url} alt={file.name} key={index}/>
+                                    <div className="fileasd">
+                                        {file.mimeType.startsWith("image") &&
+                                            <a href={file.url}>
+                                                <img src={file.url} alt={file.name} />
+                                            </a>
+                                        }
+                                        <div className="flex">
+                                            <NoSsr>
+                                                <FormControlLabel 
+                                                    control={
+                                                        <Checkbox 
+                                                            checked={false}
+                                                            />
+                                                    }
+                                                    label={file.name}
+                                                />
+                                            </NoSsr>
+                                        </div>
+                                    </div>
                                 )
                             })}
                         </div>
