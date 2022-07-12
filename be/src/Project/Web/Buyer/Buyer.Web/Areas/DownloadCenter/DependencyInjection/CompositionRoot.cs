@@ -15,6 +15,8 @@ namespace Buyer.Web.Areas.DownloadCenter.DependencyInjection
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterPageViewModel>, DownloadCenterPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCatalogViewModel>, DownloadCenterCatalogModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CategoryDetailsViewModel>, CategoryDetailsModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CategoryPageViewModel>, CategoryPageModelBuilder>();
         }
     }
 }
