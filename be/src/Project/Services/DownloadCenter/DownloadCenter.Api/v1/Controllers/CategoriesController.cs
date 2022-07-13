@@ -24,7 +24,7 @@ namespace DownloadCenter.Api.v1.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [AllowAnonymous]
+    [Authorize]
     [ApiController]
     public class CategoriesController : BaseApiController
     {
