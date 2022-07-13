@@ -136,7 +136,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (downloadCenterItem is null)
             {
-                throw new CustomException("", (int)HttpStatusCode.NotFound);
+                throw new CustomException("DownloadCenterNotFound", (int)HttpStatusCode.NotFound);
             }
 
             var item = new DownloadCenterItemServiceModel
@@ -239,7 +239,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (downloadCenterItem is null)
             {
-                throw new CustomException("", (int)HttpStatusCode.NotFound);
+                throw new CustomException("DownloadCenterNotFound", (int)HttpStatusCode.NotFound);
             }
 
             downloadCenterItem.CategoryId = model.CategoryId.Value;

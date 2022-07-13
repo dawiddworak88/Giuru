@@ -1,3 +1,40 @@
+.dc-category {
+
+    &__files {
+        margin-top: 3rem;
+        overflow: hidden;
+
+        &-list {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+
+            @media only screen and (max-width: $tablet) {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+            }
+        }
+
+        @media only screen and (max-width: $tablet) {
+            &-info {
+                flex-direction: column;
+            }
+        }
+
+    }
+
+    &__file {
+        max-width: 12.5rem;
+
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+    }
+}
+
 .download-catalog {
     .list-box {
         display: grid;
