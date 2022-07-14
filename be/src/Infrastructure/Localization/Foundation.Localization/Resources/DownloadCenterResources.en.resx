@@ -123,6 +123,15 @@
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Category not found</value>
   </data>
+  <data name="DownloadCenterItemDeletedSuccessfully" xml:space="preserve">
+    <value>Successfully deleted download center category.</value>
+  </data>
+  <data name="DownloadCenterItemSavedSuccessfully" xml:space="preserve">
+    <value>Successfully saved download center category.</value>
+  </data>
+  <data name="DownloadCenterNotFound" xml:space="preserve">
+    <value>Download center category not found.</value>
+  </data>
   <data name="EditCategory" xml:space="preserve">
     <value>Edit category</value>
   </data>
