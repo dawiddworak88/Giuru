@@ -2,16 +2,18 @@ import React, { useState } from "react";
 import {
     NoSsr, FormControlLabel, Checkbox,
 } from "@mui/material"
+import JsZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 const CategoryDetails = (props) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
 
-    const handleSelectItem = (id) => {
-        const selectedIndex = selectedFiles.indexOf(id);
+    const handleSelectItem = (file) => {
+        const selectedIndex = selectedFiles.indexOf(file);
         let newSelected = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selectedFiles, id);
+            newSelected = newSelected.concat(selectedFiles, file);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selectedFiles.slice(1));
         } else if (selectedIndex === selectedFiles.length - 1) {
@@ -23,17 +25,48 @@ const CategoryDetails = (props) => {
         setSelectedFiles(newSelected);
     }
 
+    const handleDownloadFiles = (checkedFiles) => {
+        let files = props.files;
+
+        if (checkedFiles && selectedFiles.length > 0){
+            files = selectedFiles;
+        }
+
+        if (files.length > 0){
+            const zip = JsZip();
+
+            for(let i = 0; i < files.length; i++ ){
+                let file = files[i]
+
+                const t = fetch(file.url, { mode: "no-cors" })
+                    .then(response => response.blob())
+                    .then(blob => {
+                        return blob;
+                    });
+
+                    zip.file(`${file.filename}`, t)
+            }
+
+            zip.generateAsync({type: 'blob'}).then(zipFile => {
+                const currentDate = new Date().getTime();
+                const fileName = `${props.title}-${currentDate}.zip`;
+
+                return saveAs(zipFile, fileName);
+            });
+        }
+    }
+
     return (
-        <div className="section download-catalog">
+        <div className="section dc-category">
             <div className="container">
                 {props.categories ? (
-                    <div className="list">
+                    <div className="dc-category-container">
                         <h3 className="is-size-5 has-text-weight-bold is-uppercase">{props.title}</h3>
-                        <div className="list-box">
+                        <div className="is-flex is-flex-wrap-wrap mt-5">
                             {props.categories.length > 0 && props.categories.map((category, index) => {
                                 return (
-                                    <a href={category.url} className="list-box__item" key={index}>
-                                        <span className="list-box__title">{category.name}</span>
+                                    <a href={category.url} className="dc-category__list-item is-flex is-justify-content-center is-align-items-center m-2" key={index}>
+                                        <span className="subtitle is-6">{category.name}</span>
                                     </a>
                                 )
                             })}
@@ -43,13 +76,13 @@ const CategoryDetails = (props) => {
                                 <div className="is-flex is-justify-content-space-between is-align-items-center dc-category__files-info">
                                     <h3 className="is-size-6 has-text-weight-bold is-uppercase">Materiały do pobrania</h3>
                                     <div className="dc-category__files-buttons">
-                                        <button className="button is-text">Pobierz wybrane</button>
-                                        <button className="button is-text">Pobierz wszystko</button>
+                                        <button className="button is-text" type="button" onClick={() => handleDownloadFiles(true)} disabled={selectedFiles.length > 0 ? false : true}>Pobierz wybrane</button>
+                                        <button className="button is-text" type="button" onClick={() => handleDownloadFiles()}>Pobierz wszystko</button>
                                     </div>
                                 </div>
                                 <div className="dc-category__files-list">
                                     {props.files.length > 0 && props.files.map((file, index) => {
-                                        const isFileSelected = selectedFiles.indexOf(file.id) !== -1;
+                                        const isFileSelected = selectedFiles.indexOf(file) !== -1;
 
                                         return (
                                             <div className="dc-category__file" key={index}>
@@ -64,7 +97,7 @@ const CategoryDetails = (props) => {
                                                             control={
                                                                 <Checkbox 
                                                                     checked={isFileSelected}
-                                                                    onChange={() => handleSelectItem(file.id)}
+                                                                    onChange={() => handleSelectItem(file)}
                                                                     />
                                                             }
                                                             label={file.name}

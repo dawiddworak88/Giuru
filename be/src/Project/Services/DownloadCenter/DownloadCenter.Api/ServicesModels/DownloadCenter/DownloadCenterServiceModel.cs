@@ -8,7 +8,7 @@ namespace DownloadCenter.Api.ServicesModels.DownloadCenter
         public Guid Id { get; set; }
         public Guid CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public IEnumerable<DownloadCategoryServiceModel> Categories { get; set; }
+        public IEnumerable<DownloadCenterCategoryServiceModel> Categories { get; set; }
         public int? Order { get; set; }
         public DateTime? LastModifiedDate { get; set; }
         public DateTime? CreatedDate { get; set; }

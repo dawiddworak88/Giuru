@@ -12,13 +12,13 @@ const DownloadCenterCatalog = (props) => {
                         {items ? (
                             items.map((item, index) => {
                                 return (
-                                    <div className="dc-catalog__item" key={index}>
+                                    <div className="dc-catalog__container" key={index}>
                                         <h3 className="is-size-5 has-text-weight-bold is-uppercase">{item.categoryName}</h3>
-                                        <div className="dc-catalog__list">
+                                        <div className="is-flex is-flex-wrap-wrap mt-2">
                                             {item.categories.length > 0 && item.categories.map((category, index) => {
                                                 return (
-                                                    <a href={category.url} className="dc-catalog__list-item" key={index}>
-                                                        <span className="dc-catalog__list-title">{category.name}</span>
+                                                    <a href={category.url} className="dc-catalog__list-item is-flex is-justify-content-center is-align-items-center m-2" key={index}>
+                                                        <span className="subtitle is-6">{category.name}</span>
                                                     </a>
                                                 )
                                             })}
@@ -37,7 +37,7 @@ const DownloadCenterCatalog = (props) => {
 }
 
 DownloadCenterCatalog.propTypes = {
-    pagedResults: PropTypes.array
+    pagedResults: PropTypes.object
 }
 
 export default DownloadCenterCatalog;

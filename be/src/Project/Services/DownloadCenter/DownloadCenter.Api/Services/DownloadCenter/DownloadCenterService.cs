@@ -75,7 +75,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             var pagedDownloadsServiceModel = new PagedResults<IEnumerable<DownloadCenterServiceModel>>(pagedResults.Total, pagedResults.PageSize);
 
-            var downloadItems = new List<DownloadCenterServiceModel>();
+            var downloadcenterItems = new List<DownloadCenterServiceModel>();
 
             foreach (var downloadItem in pagedResults.Data.OrEmptyIfNull().ToList())
             {
@@ -99,11 +99,11 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
                 var categories = this.context.Categories.Where(x => x.ParentCategoryId == downloadItem.CategoryId);
 
-                var downloadCategories = new List<DownloadCategoryServiceModel>();
+                var downloadCategories = new List<DownloadCenterCategoryServiceModel>();
 
                 foreach (var category in categories.OrEmptyIfNull().ToList())
                 {
-                    var categoryItem = new DownloadCategoryServiceModel
+                    var categoryItem = new DownloadCenterCategoryServiceModel
                     {
                         Id = category.Id
                     };
@@ -122,10 +122,10 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
                 item.Categories = downloadCategories;
 
-                downloadItems.Add(item);
+                downloadcenterItems.Add(item);
             }
 
-            pagedDownloadsServiceModel.Data = downloadItems;
+            pagedDownloadsServiceModel.Data = downloadcenterItems;
 
             return pagedDownloadsServiceModel;
         }
@@ -160,51 +160,51 @@ namespace DownloadCenter.Api.Services.DownloadCenter
             return item;
         }
 
-        public async Task<DownloadCategoriesServiceModel> GetDownloadCenterCategoryAsync(GetDownloadCenterCategoryServiceModel model)
+        public async Task<DownloadCenterCategoriesServiceModel> GetDownloadCenterCategoryAsync(GetDownloadCenterCategoryServiceModel model)
         {
-            var downloadCategory = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive);
+            var downloadCenterCategory = await this.context.Categories.FirstOrDefaultAsync(x => x.Id == model.Id && x.IsActive && x.IsVisible);
 
-            if (downloadCategory is null)
+            if (downloadCenterCategory is null)
             {
                 throw new CustomException("", (int)HttpStatusCode.NotFound);
             }
 
-            var item = new DownloadCategoriesServiceModel
+            var item = new DownloadCenterCategoriesServiceModel
             {
-                Id = downloadCategory.Id,
-                ParentCategoryId = downloadCategory.ParentCategoryId,
-                LastModifiedDate = downloadCategory.LastModifiedDate,
-                CreatedDate = downloadCategory.CreatedDate
+                Id = downloadCenterCategory.Id,
+                ParentCategoryId = downloadCenterCategory.ParentCategoryId,
+                LastModifiedDate = downloadCenterCategory.LastModifiedDate,
+                CreatedDate = downloadCenterCategory.CreatedDate
             };
 
-            var categoryTranslation = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == downloadCategory.Id && x.IsActive && x.Language == model.Language);
+            var categoryTranslation = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == downloadCenterCategory.Id && x.IsActive && x.Language == model.Language);
 
             if (categoryTranslation is null)
             {
-                categoryTranslation = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == downloadCategory.Id && x.IsActive);
+                categoryTranslation = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == downloadCenterCategory.Id && x.IsActive);
             }
 
             item.CategoryName = categoryTranslation?.Name;
 
-            if (downloadCategory.ParentCategoryId.HasValue)
+            if (downloadCenterCategory.ParentCategoryId.HasValue)
             {
-                var parentCategoryTranslation = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == downloadCategory.ParentCategoryId && x.IsActive && x.Language == model.Language);
+                var parentCategoryTranslation = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == downloadCenterCategory.ParentCategoryId && x.IsActive && x.Language == model.Language);
 
                 if (parentCategoryTranslation is null)
                 {
-                    parentCategoryTranslation = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == downloadCategory.ParentCategoryId && x.IsActive);
+                    parentCategoryTranslation = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == downloadCenterCategory.ParentCategoryId && x.IsActive);
                 }
 
                 item.ParentCategoryName = parentCategoryTranslation?.Name;
             }
 
-            var categories = this.context.Categories.Where(x => x.ParentCategoryId == downloadCategory.Id);
+            var categories = this.context.Categories.Where(x => x.ParentCategoryId == downloadCenterCategory.Id && x.IsVisible && x.IsActive);
 
-            var downloadCategories = new List<DownloadCategoryServiceModel>();
+            var downloadCenterCategories = new List<DownloadCenterCategoryServiceModel>();
 
             foreach (var category in categories.OrEmptyIfNull().ToList())
             {
-                var categoryItem = new DownloadCategoryServiceModel
+                var categoryItem = new DownloadCenterCategoryServiceModel
                 {
                     Id = category.Id
                 };
@@ -218,17 +218,17 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
                 categoryItem.Name = categoryItemTranslation?.Name;
 
-                downloadCategories.Add(categoryItem);
+                downloadCenterCategories.Add(categoryItem);
             }
 
-            var files = this.context.CategoryFiles.Where(x => x.CategoryId == downloadCategory.Id && x.IsActive);
+            var files = this.context.CategoryFiles.Where(x => x.CategoryId == downloadCenterCategory.Id && x.IsActive);
 
             if (files.Any())
             {
                 item.Files = files.Select(x => x.MediaId);
             }
 
-            item.Categories = downloadCategories;
+            item.Categories = downloadCenterCategories;
 
             return item;
         }

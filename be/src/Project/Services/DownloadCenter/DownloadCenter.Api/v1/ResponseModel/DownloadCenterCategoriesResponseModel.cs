@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DownloadCenter.Api.v1.ResponseModel
 {
-    public class DownloadCategoriesResponseModel
+    public class DownloadCenterCategoriesResponseModel
     {
         public Guid Id { get; set; }
         public Guid? ParentCategoryId { get; set; }

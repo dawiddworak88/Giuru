@@ -8,10 +8,7 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
-using Foundation.PageContent.Components.ListItems.ViewModels;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,7 +17,6 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
 {
     public class CategoryDetailsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CategoryDetailsViewModel>
     {
-        private readonly LinkGenerator linkGenerator;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IDownloadCenterRepository downloadCenterRepository;
         private readonly IMediaService mediaService;
@@ -30,10 +26,8 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
             IStringLocalizer<GlobalResources> globalLocalizer,
             IDownloadCenterRepository downloadCenterRepository,
             IMediaItemsRepository mediaItemsRepository,
-            IMediaService mediaService,
-            LinkGenerator linkGenerator)
+            IMediaService mediaService)
         {
-            this.linkGenerator = linkGenerator;
             this.globalLocalizer = globalLocalizer;
             this.downloadCenterRepository = downloadCenterRepository;
             this.mediaItemsRepository = mediaItemsRepository;
@@ -42,10 +36,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
 
         public async Task<CategoryDetailsViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new CategoryDetailsViewModel
-            {
-                
-            };
+            var viewModel = new CategoryDetailsViewModel();
 
             if (componentModel.Id.HasValue)
             {
@@ -54,7 +45,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
                 if (downloadCenterCategory is not null)
                 {
                     viewModel.Title = downloadCenterCategory.CategoryName;
-                    viewModel.Categories = downloadCenterCategory.Categories.OrEmptyIfNull().Select(x => new CategoryDetail
+                    viewModel.Categories = downloadCenterCategory.Categories.OrEmptyIfNull().Select(x => new CategoryDetailViewModel
                     {
                         Id = x.Id,
                         Name = x.Name,

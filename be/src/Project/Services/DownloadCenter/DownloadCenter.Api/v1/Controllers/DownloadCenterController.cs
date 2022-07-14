@@ -44,7 +44,7 @@ namespace DownloadCenter.Api.v1.Controllers
         /// <returns>The download category.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("categories/{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DownloadCategoriesResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DownloadCenterCategoriesResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
@@ -68,7 +68,7 @@ namespace DownloadCenter.Api.v1.Controllers
 
                 if (downloadCategory is not null)
                 {
-                    var response = new DownloadCategoriesResponseModel
+                    var response = new DownloadCenterCategoriesResponseModel
                     {
                         Id = downloadCategory.Id,
                         ParentCategoryId = downloadCategory.ParentCategoryId,

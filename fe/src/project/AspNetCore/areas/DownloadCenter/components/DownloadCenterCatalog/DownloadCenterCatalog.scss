@@ -1,5 +1,5 @@
 .dc-catalog {
-    &__item {
+    &__container {
         margin-bottom: 3rem;
 
         &:last-child {
@@ -7,36 +7,11 @@
         }
     }
 
-    &__list {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem;
-        margin-top: 0.5rem;
-
-        @media only screen and (max-width: $tablet) and (orientation: portrait) {
-            grid-template-columns: repeat(2, 1fr);
-        }
-
-        &-item {
-            display: block;
-            background: #f7f7f7;
-            position: relative;
-            width: 100%;
-            border-radius: 1rem;
-            overflow: hidden;
-            height: 220px;
-        }
-
-        &-title {
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.2;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-        }
+    &__list-item {
+        background: #f7f7f7;
+        border-radius: 1rem;
+        height: 10rem;
+        width: 10rem;
+        text-align: center;
     }
 }

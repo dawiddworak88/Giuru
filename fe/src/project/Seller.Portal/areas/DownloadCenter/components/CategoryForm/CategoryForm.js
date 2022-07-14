@@ -98,7 +98,7 @@ const CategoryForm = (props) => {
                                     name="parentCategoryId"
                                     value={parentCategoryId}
                                     onChange={handleOnChange}>
-                                    <MenuItem key={0} value={""}>{props.selectCategoryLabel}</MenuItem>
+                                    <MenuItem key={0} value="">{props.selectCategoryLabel}</MenuItem>
                                     {props.parentCategories && props.parentCategories.map(category =>
                                         <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
                                     )}
@@ -110,7 +110,7 @@ const CategoryForm = (props) => {
                                 id="files"
                                 name="files"
                                 label={props.filesLabel}
-                                accept=".png, .jpg, .webp, .zip, .pdf, .docx"
+                                accept=".png, .jpg, .webp, .zip, .pdf, .docx, .xls, .xlsx"
                                 multiple={true}
                                 generalErrorMessage={props.generalErrorMessage}
                                 deleteLabel={props.deleteLabel}

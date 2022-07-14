@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
+namespace Buyer.Web.Areas.DownloadCenter.ViewModel
 {
-    public class CategoryDetail
+    public class CategoryDetailViewModel
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
