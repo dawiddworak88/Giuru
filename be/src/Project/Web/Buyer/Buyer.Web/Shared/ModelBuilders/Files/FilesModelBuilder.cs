@@ -47,7 +47,8 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         CopyLinkLabel = this.globalLocalizer.GetString("CopyLink"),
                         CreatedDateLabel = this.globalLocalizer.GetString("CreatedDate"),
                         LastModifiedDateLabel = this.globalLocalizer.GetString("LastModifiedDate"),
-                        AttachmentsLabel = this.globalLocalizer.GetString("Attachments"),
+                        DownloadSelectedLabel = this.globalLocalizer.GetString("DownloadSelected"),
+                        DownloadEverythingLabel = this.globalLocalizer.GetString("DownloadEverything")
                     };
 
                     var fileViewModels = new List<FileViewModel>();
