@@ -145,7 +145,7 @@
     <value>Dodaj kategorię</value>
   </data>
   <data name="NewDownloadCenter" xml:space="preserve">
-    <value>Dodaj centrum pobierania</value>
+    <value>Dodaj kategorię centrum pobierania</value>
   </data>
   <data name="ParentCategory" xml:space="preserve">
     <value>Kategoria nadrzędna</value>

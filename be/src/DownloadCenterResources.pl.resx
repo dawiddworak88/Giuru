@@ -120,8 +120,14 @@
   <data name="CategoryDeleteDownloadCenterConflict" xml:space="preserve">
     <value>Usuń element centrum pobierania powiązanego z kategorią.</value>
   </data>
+  <data name="CategoryDeletedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie usunięto kategorię.</value>
+  </data>
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Nie znaleziono kategorii</value>
+  </data>
+  <data name="CategorySavedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie zapisano kategorię.</value>
   </data>
   <data name="EditCategory" xml:space="preserve">
     <value>Edytuj kategorię</value>

@@ -120,8 +120,14 @@
   <data name="CategoryDeleteDownloadCenterConflict" xml:space="preserve">
     <value>Löschen Sie das mit der Kategorie verknüpfte Download-Center-Element.</value>
   </data>
+  <data name="CategoryDeletedSuccessfully" xml:space="preserve">
+    <value>Kategorie erfolgreich gelöscht.</value>
+  </data>
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Kategorie nicht gefunden</value>
+  </data>
+  <data name="CategorySavedSuccessfully" xml:space="preserve">
+    <value>Kategorie erfolgreich gespeichert.</value>
   </data>
   <data name="DownloadCenterItemDeletedSuccessfully" xml:space="preserve">
     <value>Download-Center-Kategorie erfolgreich gelöscht.</value>
@@ -145,7 +151,7 @@
     <value>Kategorie hinzufügen</value>
   </data>
   <data name="NewDownloadCenter" xml:space="preserve">
-    <value>Downloadcenter hinzufügen</value>
+    <value>Fügen Sie eine Download-Center-Kategorie hinzu</value>
   </data>
   <data name="ParentCategory" xml:space="preserve">
     <value>Eltern-Kategorie</value>
