@@ -3,6 +3,7 @@ import {
     NoSsr, FormControlLabel, Checkbox,
 } from "@mui/material"
 import JsZip from 'jszip';
+import PropTypes from "prop-types";
 import { saveAs } from 'file-saver';
 
 const CategoryDetails = (props) => {
@@ -76,8 +77,8 @@ const CategoryDetails = (props) => {
                                 <div className="is-flex is-justify-content-space-between is-align-items-center dc-category__files-info">
                                     <h3 className="is-size-6 has-text-weight-bold is-uppercase">Materiały do pobrania</h3>
                                     <div className="dc-category__files-buttons">
-                                        <button className="button is-text" type="button" onClick={() => handleDownloadFiles(true)} disabled={selectedFiles.length > 0 ? false : true}>Pobierz wybrane</button>
-                                        <button className="button is-text" type="button" onClick={() => handleDownloadFiles()}>Pobierz wszystko</button>
+                                        <button className="button is-text" type="button" onClick={() => handleDownloadFiles(true)} disabled={selectedFiles.length > 0 ? false : true}>{props.downloadSelectedLabel}</button>
+                                        <button className="button is-text" type="button" onClick={() => handleDownloadFiles()}>{props.downloadEverythingLabel}</button>
                                     </div>
                                 </div>
                                 <div className="dc-category__files-list">
@@ -112,11 +113,20 @@ const CategoryDetails = (props) => {
                         }
                     </div>
                 ) : (
-                    <div>Brak</div>
+                    <h1 className="title">{props.noCategoriesLabel}</h1>
                 )}
             </div>
         </div>
     )
+}
+
+CategoryDetails.propTypes = {
+    title: PropTypes.string.isRequired,
+    downloadEverythingLabel: PropTypes.string.isRequired,
+    downloadSelectedLabel: PropTypes.string.isRequired,
+    noCategoriesLabel: PropTypes.string,
+    categories: PropTypes.array,
+    files: PropTypes.array
 }
 
 export default CategoryDetails;

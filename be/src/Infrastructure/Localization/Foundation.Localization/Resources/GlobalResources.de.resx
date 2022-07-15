@@ -633,4 +633,13 @@
   <data name="Category" xml:space="preserve">
     <value>Kategorie</value>
   </data>
+  <data name="DownloadEverything" xml:space="preserve">
+    <value>Laden Sie alles herunter</value>
+  </data>
+  <data name="DownloadSelected" xml:space="preserve">
+    <value>Herunterladen ausgewählt</value>
+  </data>
+  <data name="NoCategories" xml:space="preserve">
+    <value>Keine Kategorien</value>
+  </data>
 </root>

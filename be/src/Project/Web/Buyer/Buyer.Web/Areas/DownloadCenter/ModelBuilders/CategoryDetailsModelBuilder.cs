@@ -36,7 +36,12 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
 
         public async Task<CategoryDetailsViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new CategoryDetailsViewModel();
+            var viewModel = new CategoryDetailsViewModel
+            {
+                DownloadSelectedLabel = this.globalLocalizer.GetString("DownloadSelected"),
+                DownloadEverythingLabel = this.globalLocalizer.GetString("DownloadEverything"),
+                NoCategoriesLabel = this.globalLocalizer.GetString("NoCategories")
+            };
 
             if (componentModel.Id.HasValue)
             {

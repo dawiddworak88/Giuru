@@ -5,8 +5,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ViewModel
 {
     public class DownloadCenterCatalogViewModel
     {
-        public string Title { get; set; }
-        public string TestUrl { get; set; }
+        public string NoCategoriesLabel { get; set; }
         public PagedResults<IEnumerable<DomainModels.DownloadCenterItem>> PagedResults { get; set; }
     }
 }

@@ -27,7 +27,7 @@ const DownloadCenterCatalog = (props) => {
                                 )
                             })
                         ) : (
-                            <div>brak</div>
+                            <h1 className="title">{props.noCategoriesLabel}</h1>
                         )}
                     </div>
                 </div>
@@ -37,6 +37,7 @@ const DownloadCenterCatalog = (props) => {
 }
 
 DownloadCenterCatalog.propTypes = {
+    noCategoriesLabel: PropTypes.string,
     pagedResults: PropTypes.object
 }
 
