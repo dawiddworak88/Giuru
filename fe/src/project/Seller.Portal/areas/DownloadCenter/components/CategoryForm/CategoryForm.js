@@ -5,7 +5,6 @@ import { Context } from "../../../../../../shared/stores/Store";
 import useForm from "../../../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
-import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import { 
     TextField, InputLabel, Button, CircularProgress, 
     NoSsr, FormControlLabel, Switch, Autocomplete
@@ -16,20 +15,26 @@ const CategoryForm = (props) => {
     const stateSchema = {
         id: { value: props.id ? props.id : null },
         name: { value: props.name ? props.name : "", error: "" },
-        parentCategoryId: { value: props.parentCategoryId ? props.parentCategories.find((item) => item.id === props.parentCategoryId) : null },
-        files: { value: props.files ? props.files : [] },
+        parentCategory: { value: props.parentCategoryId ? props.parentCategories.find((item) => item.id === props.parentCategoryId) : null },
         isVisible: { value: props.isVisible ? props.isVisible : false }
     };
 
     const onSubmitForm = (state) => {
         dispatch({ type: "SET_IS_LOADING", payload: true });
 
+        const requestPayload = { 
+            id, 
+            name, 
+            parentCategoryId: parentCategory.id, 
+            isVisible
+        };
+
         const requestOptions = {
             method: "POST",
             headers: { 
                 "Content-Type": "application/json" 
             },
-            body: JSON.stringify(state)
+            body: JSON.stringify(requestPayload)
         };
 
         fetch(props.saveUrl, requestOptions)
@@ -64,7 +69,7 @@ const CategoryForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, name, parentCategoryId, files, isVisible } = values;
+    const { id, name, parentCategory, isVisible } = values;
     return (
         <section className="section section-small-padding category">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -93,13 +98,13 @@ const CategoryForm = (props) => {
                             <Autocomplete
                                 options={props.parentCategories}
                                 getOptionLabel={(option) => option.name}
-                                id="parentCategoryId"
-                                name="parentCategoryId"
+                                id="parentCategory "
+                                name="parentCategory"
                                 fullWidth={true}
-                                value={parentCategoryId}
+                                value={parentCategory}
                                 variant="standard"
                                 onChange={(event, newValue) => {
-                                    setFieldValue({name: "parentCategoryId", value: newValue.id});
+                                    setFieldValue({name: "parentCategory", value: newValue});
                                 }}
                                 autoComplete={true}
                                 renderInput={(params) => (
@@ -109,21 +114,6 @@ const CategoryForm = (props) => {
                                         variant="standard"
                                         margin="normal"/>
                                 )}/>
-                        </div>
-                        <div className="field">
-                            <MediaCloud
-                                id="files"
-                                name="files"
-                                label={props.filesLabel}
-                                accept=".png, .jpg, .webp, .zip, .pdf, .docx, .xls, .xlsx"
-                                multiple={true}
-                                generalErrorMessage={props.generalErrorMessage}
-                                deleteLabel={props.deleteLabel}
-                                dropFilesLabel={props.dropFilesLabel}
-                                dropOrSelectFilesLabel={props.dropOrSelectFilesLabel}
-                                files={files}
-                                setFieldValue={setFieldValue}
-                                saveMediaUrl={props.saveMediaUrl} />
                         </div>
                         <div className="field">
                             <NoSsr>
@@ -186,10 +176,6 @@ CategoryForm.propTypes = {
     navigateToCategoriesLabel: PropTypes.string.isRequired,
     categoriesUrl: PropTypes.string.isRequired,
     visibleLabel: PropTypes.string.isRequired,
-    saveMediaUrl: PropTypes.string.isRequired,
-    dropOrSelectFilesLabel: PropTypes.string.isRequired,
-    dropFilesLabel: PropTypes.string.isRequired,
-    deleteLabel: PropTypes.string.isRequired,
     filesLabel: PropTypes.string.isRequired,
     fieldRequiredErrorMessage: PropTypes.string.isRequired
 };

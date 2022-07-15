@@ -59,11 +59,6 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 NavigateToCategoriesLabel = this.downloadCenterLocalizer.GetString("NavigateToCategoriesLabel"),
                 CategoriesUrl = this.linkGenerator.GetPathByAction("Index", "Categories", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name }),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
-                FilesLabel = this.globalLocalizer.GetString("Files"),
-                SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
-                DeleteLabel = this.globalLocalizer.GetString("Delete"),
-                DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
-                DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile"),
                 VisibleLabel = this.downloadCenterLocalizer.GetString("Visible")
             };
 

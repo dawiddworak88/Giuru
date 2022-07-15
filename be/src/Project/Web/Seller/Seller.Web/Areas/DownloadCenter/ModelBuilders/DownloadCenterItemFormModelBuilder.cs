@@ -49,7 +49,12 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Post", "DownloadCenterApi", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name }),
-                CategoryLabel = this.globalLocalizer.GetString("Category")
+                CategoriesLabel = this.globalLocalizer.GetString("Categories"),
+                FilesLabel = this.globalLocalizer.GetString("Files"),
+                SaveMediaUrl = this.linkGenerator.GetPathByAction("Post", "FilesApi", new { Area = "Media", culture = CultureInfo.CurrentUICulture.Name }),
+                DeleteLabel = this.globalLocalizer.GetString("Delete"),
+                DropFilesLabel = this.globalLocalizer.GetString("DropFile"),
+                DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile")
             };
 
             var categories = await this.categoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language);
@@ -67,7 +72,6 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 {
                     viewModel.Id = downloadCenterItem.Id;
                     viewModel.CategoryId = downloadCenterItem.CategoryId;
-                    viewModel.Order = downloadCenterItem.Order;
                 }
             }
 

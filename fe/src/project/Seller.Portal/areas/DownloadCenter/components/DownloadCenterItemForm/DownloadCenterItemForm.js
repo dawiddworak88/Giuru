@@ -5,16 +5,18 @@ import useForm from "../../../../../../shared/helpers/forms/useForm";
 import AuthenticationHelper from "../../../../../../shared/helpers/globals/AuthenticationHelper";
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import PropTypes from "prop-types";
+import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import { 
-    TextField, InputLabel, Button, CircularProgress, Autocomplete
+    Select, FormControl, InputLabel, MenuItem,
+    Button, CircularProgress, FormHelperText
 } from "@mui/material";
 
 const DownloadCenterItemForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
         id: { value: props.id ? props.id : null, error: "" },
-        categoryId: { value: props.categoryId ? props.categories.find((item) => item.id === props.categoryId) : null, error: "" },
-        order: { value: props.order ? props.order : null }
+        categoriesIds: { value: props.categoriesIds ? props.categoriesIds : [], error: "" },
+        files: { value: props.files ? props.files : [] }
     };
 
     const onSubmitForm = (state) => {
@@ -47,7 +49,7 @@ const DownloadCenterItemForm = (props) => {
     }
 
     const stateValidatorSchema = {
-        categoryId: {
+        categoriesIds: {
             required: {
                 isRequired: true,
                 error: props.fieldRequiredErrorMessage
@@ -60,7 +62,7 @@ const DownloadCenterItemForm = (props) => {
         setFieldValue, handleOnChange, handleOnSubmit
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
-    const { id, categoryId, order } = values;
+    const { id, categoriesIds, files } = values;
     return (
         <section className="section section-small-padding category">
             <h1 className="subtitle is-4">{props.title}</h1>
@@ -73,42 +75,38 @@ const DownloadCenterItemForm = (props) => {
                             </div>
                         }
                         <div className="field">
-                            <Autocomplete
-                                options={props.categories}
-                                getOptionLabel={(option) => option.name}
-                                id="categoryId"
-                                name="categoryId"
-                                fullWidth={true}
-                                value={categoryId}
-                                variant="standard"
-                                onChange={(event, newValue) => {
-                                    setFieldValue({name: "categoryId", value: newValue.id});
-                                }}
-                                autoComplete={true}
-                                renderInput={(params) => (
-                                    <TextField 
-                                        {...params} 
-                                        label={props.categoryLabel}
-                                        helperText={dirty.categoryId ? errors.categoryId : ""} 
-                                        error={(errors.categoryId.length > 0) && dirty.categoryId}
-                                        variant="standard"
-                                        margin="normal"/>
-                                )}/>
+                            <FormControl fullWidth={true} variant="standard" error={(errors.categoriesIds.length > 0) && dirty.categoryId}>
+                                <InputLabel id="categoriesIds-label">{props.categoriesLabel}</InputLabel>
+                                <Select
+                                    labelId="categoriesIds-label"
+                                    id="categoriesIds"
+                                    name="categoriesIds"
+                                    value={categoriesIds}
+                                    multiple={true}
+                                    onChange={handleOnChange}>
+                                    {props.categories && props.categories.map(category =>
+                                        <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
+                                    )}
+                                </Select>
+                                {errors.categoriesIds && dirty.categoriesIds && (
+                                    <FormHelperText>{errors.categoriesIds}</FormHelperText>
+                                )}
+                            </FormControl>
                         </div>
                         <div className="field">
-                            <TextField 
-                                id="order" 
-                                name="order" 
-                                label={props.orderLabel} 
-                                fullWidth={true}
-                                value={order}
-                                inputProps={{ 
-                                    min: 0, 
-                                    step: 1,
-                                }}
-                                type="number"
-                                onChange={handleOnChange} 
-                                variant="standard"/>
+                            <MediaCloud
+                                id="files"
+                                name="files"
+                                label={props.filesLabel}
+                                accept=".png, .jpg, .webp, .zip, .pdf, .docx, .xls, .xlsx, .mp4"
+                                multiple={true}
+                                generalErrorMessage={props.generalErrorMessage}
+                                deleteLabel={props.deleteLabel}
+                                dropFilesLabel={props.dropFilesLabel}
+                                dropOrSelectFilesLabel={props.dropOrSelectFilesLabel}
+                                files={files}
+                                setFieldValue={setFieldValue}
+                                saveMediaUrl={props.saveMediaUrl} />
                         </div>
                         <div className="field">
                             <Button 
@@ -139,20 +137,22 @@ const DownloadCenterItemForm = (props) => {
 }
 
 DownloadCenterItemForm.propTypes = {
-    idLabel: PropTypes.string,
-    categoryLabel: PropTypes.string.isRequired,
-    orderLabel: PropTypes.string.isRequired,
-    saveUrl: PropTypes.string.isRequired,
-    saveText: PropTypes.string.isRequired,
-    order: PropTypes.number,
     navigateToDownloadCenterLabel: PropTypes.string.isRequired,
     downloadCenterUrl: PropTypes.string.isRequired,
-    fieldRequiredErrorMessage: PropTypes.string.isRequired,
-    categoryId: PropTypes.string,
+    saveText: PropTypes.string.isRequired,
+    saveMediaUrl: PropTypes.string.isRequired,
+    dropOrSelectFilesLabel: PropTypes.string.isRequired,
+    dropFilesLabel: PropTypes.string.isRequired,
+    deleteLabel: PropTypes.string.isRequired,
+    generalErrorMessage: PropTypes.string.isRequired,
+    filesLabel: PropTypes.string.isRequired,
+    categoriesIds: PropTypes.array,
+    categories: PropTypes.array,
+    categoriesLabel: PropTypes.string,
+    idLabel: PropTypes.string,
     id: PropTypes.string,
     title: PropTypes.string.isRequired,
-    generalErrorMessage: PropTypes.string.isRequired,
-    categories: PropTypes.array
+    files: PropTypes.array
 }
 
 export default DownloadCenterItemForm;
