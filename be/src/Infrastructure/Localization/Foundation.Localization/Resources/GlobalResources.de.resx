@@ -630,4 +630,7 @@
   <data name="EditDownloadCenter" xml:space="preserve">
     <value>Download-Center bearbeiten</value>
   </data>
+  <data name="Category" xml:space="preserve">
+    <value>Kategorie</value>
+  </data>
 </root>

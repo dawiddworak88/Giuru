@@ -60,7 +60,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 Labels = new string[]
                 {
                     this.globalLocalizer.GetString("Category"),
-                    this.globalLocalizer.GetString("Order"),
+                    this.globalLocalizer.GetString("Level"),
                     this.globalLocalizer.GetString("LastModifiedDate"),
                     this.globalLocalizer.GetString("CreatedDate")
                 },

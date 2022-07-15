@@ -54,7 +54,6 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 NameLabel = this.globalLocalizer.GetString("Name"),
                 FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
                 ParentCategoryLabel = this.downloadCenterLocalizer.GetString("ParentCategory"),
-                SelectCategoryLabel = this.downloadCenterLocalizer.GetString("SelectCategory"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Post", "CategoriesApi", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name }),
                 NavigateToCategoriesLabel = this.downloadCenterLocalizer.GetString("NavigateToCategoriesLabel"),

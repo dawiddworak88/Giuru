@@ -7,16 +7,16 @@ import AuthenticationHelper from "../../../../../../shared/helpers/globals/Authe
 import NavigationHelper from "../../../../../../shared/helpers/globals/NavigationHelper";
 import MediaCloud from "../../../../../../shared/components/MediaCloud/MediaCloud";
 import { 
-    TextField, Select, FormControl, InputLabel, MenuItem, Button, 
-    CircularProgress, NoSsr, FormControlLabel, Switch
+    TextField, InputLabel, Button, CircularProgress, 
+    NoSsr, FormControlLabel, Switch, Autocomplete
 } from "@mui/material";
 
 const CategoryForm = (props) => {
     const [state, dispatch] = useContext(Context);
     const stateSchema = {
-        id: { value: props.id ? props.id : null, error: "" },
+        id: { value: props.id ? props.id : null },
         name: { value: props.name ? props.name : "", error: "" },
-        parentCategoryId: { value: props.parentCategoryId ? props.parentCategoryId : null, error: "" },
+        parentCategoryId: { value: props.parentCategoryId ? props.parentCategories.find((item) => item.id === props.parentCategoryId) : null },
         files: { value: props.files ? props.files : [] },
         isVisible: { value: props.isVisible ? props.isVisible : false }
     };
@@ -90,20 +90,25 @@ const CategoryForm = (props) => {
                             />
                         </div>
                         <div className="field">
-                            <FormControl fullWidth={true} variant="standard">
-                                <InputLabel id="parent-category">{props.parentCategoryLabel}</InputLabel>
-                                <Select
-                                    labelId="parent-category"
-                                    id="parentCategoryId"
-                                    name="parentCategoryId"
-                                    value={parentCategoryId}
-                                    onChange={handleOnChange}>
-                                    <MenuItem key={0} value="">{props.selectCategoryLabel}</MenuItem>
-                                    {props.parentCategories && props.parentCategories.map(category =>
-                                        <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
-                                    )}
-                                </Select>
-                            </FormControl>
+                            <Autocomplete
+                                options={props.parentCategories}
+                                getOptionLabel={(option) => option.name}
+                                id="parentCategoryId"
+                                name="parentCategoryId"
+                                fullWidth={true}
+                                value={parentCategoryId}
+                                variant="standard"
+                                onChange={(event, newValue) => {
+                                    setFieldValue({name: "parentCategoryId", value: newValue.id});
+                                }}
+                                autoComplete={true}
+                                renderInput={(params) => (
+                                    <TextField 
+                                        {...params} 
+                                        label={props.parentCategoryLabel} 
+                                        variant="standard"
+                                        margin="normal"/>
+                                )}/>
                         </div>
                         <div className="field">
                             <MediaCloud
@@ -170,15 +175,23 @@ CategoryForm.propTypes = {
     name: PropTypes.string,
     parentCategoryId: PropTypes.string,
     files: PropTypes.array,
-    selectCategoryLabel: PropTypes.string.isRequired,
     parentCategoryLabel: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     nameLabel: PropTypes.string.isRequired,
     saveText: PropTypes.string.isRequired,
     generalErrorMessage: PropTypes.string.isRequired,
-    parentCategories: PropTypes.array.isRequired,
+    parentCategories: PropTypes.array,
     saveUrl: PropTypes.string.isRequired,
-    idLabel: PropTypes.string
+    idLabel: PropTypes.string,
+    navigateToCategoriesLabel: PropTypes.string.isRequired,
+    categoriesUrl: PropTypes.string.isRequired,
+    visibleLabel: PropTypes.string.isRequired,
+    saveMediaUrl: PropTypes.string.isRequired,
+    dropOrSelectFilesLabel: PropTypes.string.isRequired,
+    dropFilesLabel: PropTypes.string.isRequired,
+    deleteLabel: PropTypes.string.isRequired,
+    filesLabel: PropTypes.string.isRequired,
+    fieldRequiredErrorMessage: PropTypes.string.isRequired
 };
 
 export default CategoryForm;

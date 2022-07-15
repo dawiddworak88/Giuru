@@ -45,10 +45,11 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 SaveText = this.globalLocalizer.GetString("SaveText"),
                 DownloadCenterUrl = this.linkGenerator.GetPathByAction("Index", "DownloadCenter", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name }),
                 SelectCategoryLabel = this.downloadCenterLocalizer.GetString("SelectCategory"),
-                OrderLabel = this.globalLocalizer.GetString("Order"),
+                OrderLabel = this.globalLocalizer.GetString("Level"),
                 FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 SaveUrl = this.linkGenerator.GetPathByAction("Post", "DownloadCenterApi", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name }),
+                CategoryLabel = this.globalLocalizer.GetString("Category")
             };
 
             var categories = await this.categoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language);
