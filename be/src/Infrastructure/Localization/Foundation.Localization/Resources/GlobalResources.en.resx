@@ -189,8 +189,8 @@
   <data name="DisplayedRows" xml:space="preserve">
     <value>of</value>
   </data>
-  <data name="Download" xml:space="preserve">
-    <value>Download</value>
+  <data name="DownloadCenter" xml:space="preserve">
+    <value>Download Center</value>
   </data>
   <data name="DropFile" xml:space="preserve">
     <value>Drop here...</value>
@@ -622,7 +622,7 @@
     <value>The cooperation request was successfully submitted.</value>
   </data>
   <data name="DownloadCenterCategories" xml:space="preserve">
-    <value>Download center categories</value>
+    <value>Download Center Categories</value>
   </data>
   <data name="EditCategory" xml:space="preserve">
     <value>Edit category</value>

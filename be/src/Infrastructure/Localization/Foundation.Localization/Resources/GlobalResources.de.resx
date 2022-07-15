@@ -186,8 +186,8 @@
   <data name="DisplayedRows" xml:space="preserve">
     <value>von</value>
   </data>
-  <data name="Download" xml:space="preserve">
-    <value>Herunterladen</value>
+  <data name="DownloadCenter" xml:space="preserve">
+    <value>Download-Center</value>
   </data>
   <data name="DropFile" xml:space="preserve">
     <value>Hier ablegen...</value>
