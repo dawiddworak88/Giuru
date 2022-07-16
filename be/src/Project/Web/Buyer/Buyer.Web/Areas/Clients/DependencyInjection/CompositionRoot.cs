@@ -1,4 +1,5 @@
 ﻿using Buyer.Web.Areas.Clients.ModelBuilders;
+using Buyer.Web.Areas.Clients.Repositories;
 using Buyer.Web.Areas.Clients.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
@@ -10,6 +11,8 @@ namespace Buyer.Web.Areas.Clients.DependencyInjection
     {
         public static void RegisterClientsDependencies(this IServiceCollection services)
         {
+            services.AddScoped<IApplicationsRepository, ApplicationsRepository>();
+
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ApplicationPageViewModel>, ApplicationPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, ApplicationFormViewModel>, ApplicationFormModelBuilder>();
         }
