@@ -12,9 +12,9 @@ using Foundation.Localization;
 using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using Foundation.Media.Services.MediaServices;
-using Buyer.Web.Areas.Home.ViewModel.Home;
+using Buyer.Web.Areas.Home.ViewModel;
 
-namespace Buyer.Web.Areas.Home.ModelBuilders.Home
+namespace Buyer.Web.Areas.Home.ModelBuilders
 {
     public class HomePageCarouselGridModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, HomePageCarouselGridViewModel>
     {
@@ -39,7 +39,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders.Home
         {
             var items = new List<CarouselGridItemViewModel>();
 
-            var newProducts = await this.catalogService.GetCatalogProductsAsync(
+            var newProducts = await catalogService.GetCatalogProductsAsync(
                 componentModel.Token,
                 componentModel.Language,
                 null,
@@ -61,26 +61,26 @@ namespace Buyer.Web.Areas.Home.ModelBuilders.Home
                         Title = newProduct.Title,
                         Subtitle = newProduct.Sku,
                         ImageAlt = newProduct.ImageAlt,
-                        ImageUrl = this.mediaService.GetMediaUrl(newProduct.ImageUrl, 1920),
-                        Url = this.linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, newProduct.Id }),
+                        ImageUrl = mediaService.GetMediaUrl(newProduct.ImageUrl, 1920),
+                        Url = linkGenerator.GetPathByAction("Index", "Product", new { Area = "Products", culture = CultureInfo.CurrentUICulture.Name, newProduct.Id }),
                         Sources = new List<SourceViewModel>
                         {
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(newProduct.ImageUrl, 1024) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(newProduct.ImageUrl, 352) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(newProduct.ImageUrl, 608) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(newProduct.ImageUrl, 768) },
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = mediaService.GetMediaUrl(newProduct.ImageUrl, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = mediaService.GetMediaUrl(newProduct.ImageUrl, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = mediaService.GetMediaUrl(newProduct.ImageUrl, 608) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = mediaService.GetMediaUrl(newProduct.ImageUrl, 768) },
 
-                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = this.mediaService.GetMediaUrl(newProduct.ImageUrl, 1024) },
-                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = this.mediaService.GetMediaUrl(newProduct.ImageUrl, 352) },
-                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = this.mediaService.GetMediaUrl(newProduct.ImageUrl, 608) },
-                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = this.mediaService.GetMediaUrl(newProduct.ImageUrl, 768) }
+                            new SourceViewModel { Media = MediaConstants.FullHdMediaQuery, Srcset = mediaService.GetMediaUrl(newProduct.ImageUrl, 1024) },
+                            new SourceViewModel { Media = MediaConstants.DesktopMediaQuery, Srcset = mediaService.GetMediaUrl(newProduct.ImageUrl, 352) },
+                            new SourceViewModel { Media = MediaConstants.TabletMediaQuery, Srcset = mediaService.GetMediaUrl(newProduct.ImageUrl, 608) },
+                            new SourceViewModel { Media = MediaConstants.MobileMediaQuery, Srcset = mediaService.GetMediaUrl(newProduct.ImageUrl, 768) }
                         }
                     };
 
                     contentGridCarouselItems.Add(carouselItem);
                 }
 
-                items.Add(new CarouselGridItemViewModel { Id = HomeConstants.Novelties.NoveltiesId, Title = this.globalLocalizer.GetString("NewProducts"), CarouselItems = contentGridCarouselItems });
+                items.Add(new CarouselGridItemViewModel { Id = HomeConstants.Novelties.NoveltiesId, Title = globalLocalizer.GetString("NewProducts"), CarouselItems = contentGridCarouselItems });
             }
 
             var viewModel = new HomePageCarouselGridViewModel

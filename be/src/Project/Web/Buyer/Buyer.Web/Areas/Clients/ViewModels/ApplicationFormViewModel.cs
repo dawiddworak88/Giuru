@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Buyer.Web.Areas.Home.ViewModel.Application
+namespace Buyer.Web.Areas.Clients.ViewModels
 {
     public class ApplicationFormViewModel
     {

@@ -1,6 +1,6 @@
 ﻿using Buyer.Web.Areas.Home.Definitions;
 using Buyer.Web.Areas.Home.DomainModels;
-using Buyer.Web.Areas.Home.ViewModel.Home;
+using Buyer.Web.Areas.Home.ViewModel;
 using Buyer.Web.Shared.Repositories.News;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Home.ModelBuilders.Home
+namespace Buyer.Web.Areas.Home.ModelBuilders
 {
     public class HomePageNewsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, HomePageNewsCarouselGridViewModel>
     {
@@ -29,12 +29,12 @@ namespace Buyer.Web.Areas.Home.ModelBuilders.Home
         {
             var viewModel = new HomePageNewsCarouselGridViewModel
             {
-                Title = this.newsLocalizer.GetString("News")
+                Title = newsLocalizer.GetString("News")
             };
 
             var items = new List<CarouselGridItemViewModel>();
 
-            var news = await this.newsRepository.GetNewsItemsAsync(
+            var news = await newsRepository.GetNewsItemsAsync(
                 componentModel.Token, componentModel.Language, Foundation.GenericRepository.Definitions.Constants.DefaultPageIndex, Foundation.GenericRepository.Definitions.Constants.DefaultItemsPerPage, null, $"{nameof(NewsItem.CreatedDate)} desc");
 
             if (news is not null && news.Total > 0)
@@ -58,7 +58,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders.Home
                     contentGridCarouselItems.Add(carouselItem);
                 }
 
-                items.Add(new CarouselGridItemViewModel { Id = HomeConstants.News.NewsId, Title = this.newsLocalizer.GetString("News"), CarouselItems = contentGridCarouselItems });
+                items.Add(new CarouselGridItemViewModel { Id = HomeConstants.News.NewsId, Title = newsLocalizer.GetString("News"), CarouselItems = contentGridCarouselItems });
 
                 viewModel.Items = items;
             }

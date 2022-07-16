@@ -5,7 +5,7 @@ using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.HeroSliders.ViewModels;
 using Foundation.PageContent.Components.MainNavigations.ViewModels;
 
-namespace Buyer.Web.Areas.Home.ViewModel.Home
+namespace Buyer.Web.Areas.Home.ViewModel
 {
     public class HomePageViewModel
     {

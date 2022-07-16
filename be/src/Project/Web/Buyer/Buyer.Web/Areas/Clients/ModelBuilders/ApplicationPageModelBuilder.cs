@@ -1,11 +1,11 @@
-﻿using Buyer.Web.Areas.Home.ViewModel.Application;
+﻿using Buyer.Web.Areas.Clients.ViewModels;
 using Foundation.Extensions.ModelBuilders;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Home.ModelBuilders.Application
+namespace Buyer.Web.Areas.Clients.ModelBuilders
 {
     public class ApplicationPageModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, ApplicationPageViewModel>
     {
@@ -27,7 +27,7 @@ namespace Buyer.Web.Areas.Home.ModelBuilders.Application
             var viewModel = new ApplicationPageViewModel
             {
                 Header = headerModelBuilder.BuildModel(),
-                ApplicationForm = await this.applicationFormModelBuilder.BuildModelAsync(componentModel),
+                ApplicationForm = await applicationFormModelBuilder.BuildModelAsync(componentModel),
                 Footer = footerModelBuilder.BuildModel()
             };
 
