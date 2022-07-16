@@ -53,7 +53,7 @@ namespace Buyer.Web.Areas.Clients.ModelBuilders
                 CompanyCityLabel = globalLocalizer.GetString("City"),
                 CompanyRegionLabel = globalLocalizer.GetString("Region"),
                 CompanyCountryLabel = globalLocalizer.GetString("Country"),
-                SaveUrl = linkGenerator.GetPathByAction("Application", "ClientsApi", new { Area = "Home", culture = CultureInfo.CurrentUICulture.Name }),
+                SaveUrl = linkGenerator.GetPathByAction("Application", "ApplicationsApi", new { Area = "Clients", culture = CultureInfo.CurrentUICulture.Name }),
                 OnlineRetailersLabel = globalLocalizer.GetString("OnlineRetailers"),
                 YesLabel = globalLocalizer.GetString("Yes"),
                 NoLabel = globalLocalizer.GetString("No"),
