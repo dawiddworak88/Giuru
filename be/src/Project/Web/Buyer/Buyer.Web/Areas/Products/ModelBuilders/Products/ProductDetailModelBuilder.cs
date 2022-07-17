@@ -24,6 +24,7 @@ using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Definitions;
 using ImageViewModel = Buyer.Web.Shared.ViewModels.Images.ImageViewModel;
 using Foundation.Media.Services.MediaServices;
+using Microsoft.Extensions.Logging;
 
 namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 {
@@ -40,6 +41,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
         private readonly IMediaService mediaService;
         private readonly LinkGenerator linkGenerator;
         private readonly IBasketService basketService;
+        private readonly ILogger<ProductDetailModelBuilder> logger;
 
         public ProductDetailModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
@@ -52,7 +54,8 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             IStringLocalizer<OrderResources> orderResources,
             IMediaService mediaService,
             IBasketService basketService,
-            LinkGenerator linkGenerator)
+            LinkGenerator linkGenerator,
+            ILogger<ProductDetailModelBuilder> logger)
         {
             this.filesModelBuilder = filesModelBuilder;
             this.productsRepository = productsRepository;
@@ -65,6 +68,7 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
             this.basketService = basketService;
             this.orderResources = orderResources;
             this.modalModelBuilder = modalModelBuilder;
+            this.logger = logger;
         }
 
         public async Task<ProductDetailViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -125,7 +129,11 @@ namespace Buyer.Web.Areas.Products.ModelBuilders.Products
 
                 viewModel.Images = images;
 
+                this.logger.LogError("ProductDetailModelBuilder 132: " + product.Files.OrEmptyIfNull().Count());
+
                 viewModel.Files = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Id = componentModel.Id, IsAuthenticated = componentModel.IsAuthenticated, Language = componentModel.Language, Token = componentModel.Token, Files = product.Files });
+
+                this.logger.LogError("ProductDetailModelBuilder 136: " + viewModel.Files.Files.OrEmptyIfNull().Count());
 
                 var inventory = await this.productsRepository.GetProductStockAsync(componentModel.Id);
 
