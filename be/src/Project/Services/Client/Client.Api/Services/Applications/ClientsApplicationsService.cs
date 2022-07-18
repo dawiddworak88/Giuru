@@ -34,6 +34,7 @@ namespace Client.Api.Services.Applications
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<ClientResources> clientLocalizer,
             IOptionsMonitor<MailingConfiguration> mailingOptions,
+            IMailingService mailingService,
             IOptionsMonitor<AppSettings> options)
         {
             this.context = context;
@@ -41,6 +42,7 @@ namespace Client.Api.Services.Applications
             this.globalLocalizer = globalLocalizer;
             this.mailingOptions = mailingOptions;
             this.options = options;
+            this.mailingService = mailingService;
         }
 
         public async Task<Guid> CreateAsync(CreateClientApplicationServiceModel model)
@@ -60,7 +62,7 @@ namespace Client.Api.Services.Applications
                 CompanyPostalCode = model.CompanyPostalCode
             };
 
-            await this.context.AddAsync(clientApplication.FillCommonProperties());
+            await this.context.ClientsApplications.AddAsync(clientApplication.FillCommonProperties());
             await this.context.SaveChangesAsync();
 
             await this.mailingService.SendTemplateAsync(new TemplateEmail
@@ -75,8 +77,8 @@ namespace Client.Api.Services.Applications
                     welcomeLabel = this.globalLocalizer.GetString("Welcome").Value,
                     firstName = model.FirstName,
                     lastName = model.LastName,
-                    subject = this.globalLocalizer.GetString("ClientApplyConfirmationSubject").Value,
-                    lineOne = this.globalLocalizer.GetString("ClientApplyConfirmation").Value
+                    subject = this.clientLocalizer.GetString("ClientApplyConfirmationSubject").Value,
+                    lineOne = this.clientLocalizer.GetString("ClientApplyConfirmation").Value
                 }
             });
 

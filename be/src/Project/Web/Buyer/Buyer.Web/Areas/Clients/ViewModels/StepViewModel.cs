@@ -1,4 +1,4 @@
-﻿namespace Identity.Api.Areas.Accounts.ViewModels
+﻿namespace Buyer.Web.Areas.Clients.ViewModels
 {
     public class StepViewModel
     {

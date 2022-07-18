@@ -106,6 +106,10 @@ spec:
           value: {{ .Values.defaultCulture }}
         - name: SupportedCultures
           value: {{ .Values.supportedCultures }}
+        - name: SenderName
+          value: {{ .Values.senderName }}
+        - name: SenderEmail
+          value: {{ .Values.senderEmail }}
         - name: SendGridApiKey
           value: {{ .Values.sendGridApiKey }}
         - name: ActionSendGridClientApplyConfirmationTemplateId
@@ -162,6 +166,8 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: MediaUrl
           value: {{ .Values.mediaUrl }}
         - name: ElasticsearchUrl
@@ -230,6 +236,8 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: ElasticsearchUrl
           value: {{ .Values.elasticsearchUrl }}
         - name: ElasticsearchIndex
@@ -294,6 +302,8 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType
@@ -354,6 +364,8 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: SenderEmail
           value: {{ .Values.senderEmail }}
         - name: SenderName
@@ -451,8 +463,6 @@ spec:
           value: {{ .Values.mediaUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
-        - name: ClientUrl
-          value: {{ .Values.clientUrl }}
         - name: BuyerUrl
           value: {{ .Values.buyerUrl }}
         - name: Clients
@@ -549,6 +559,8 @@ spec:
           value: {{ .Values.eventBusConnection }}
         - name: EventBusRetryCount
           value: {{ .Values.eventBusRetryCount }}
+        - name: EventBusRequestedHeartbeat
+          value: {{ .Values.eventBusRequestedHeartbeat }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType
@@ -607,10 +619,6 @@ spec:
           value: {{ .Values.identityUrl }}
         - name: CdnUrl
           value: {{ .Values.cdnUrl }}
-        - name: EventBusConnection
-          value: {{ .Values.eventBusConnection }}
-        - name: EventBusRetryCount
-          value: {{ .Values.eventBusRetryCount }}
         - name: LogzIoToken
           value: {{ .Values.logzIoToken }}
         - name: LogzIoType

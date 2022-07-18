@@ -16,6 +16,7 @@ using Microsoft.Extensions.Options;
 using Foundation.Localization.Definitions;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Foundation.Mailing.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +67,8 @@ builder.Services.AddApiVersioning();
 builder.Services.ConfigureSettings(builder.Configuration);
 
 builder.Services.RegisterClientApiDependencies();
+
+builder.Services.RegisterMailingDependencies(builder.Configuration);
 
 builder.Services.RegisterDatabaseDependencies(builder.Configuration);
 

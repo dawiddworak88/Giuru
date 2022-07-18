@@ -600,4 +600,25 @@
   <data name="NewProducts" xml:space="preserve">
     <value>New products</value>
   </data>
+  <data name="ApplyApplicationSubmit" xml:space="preserve">
+    <value>Submit your application now</value>
+  </data>
+  <data name="BusinessInformationDescription" xml:space="preserve">
+    <value>Let us know your business details</value>
+  </data>
+  <data name="ContactInformationDescription" xml:space="preserve">
+    <value>Your primary contact person for ELTAP will be the contact person provided in the form</value>
+  </data>
+  <data name="LowerPrivacyPolicy" xml:space="preserve">
+    <value>privacy policy</value>
+  </data>
+  <data name="LowerRegulations" xml:space="preserve">
+    <value>regulations</value>
+  </data>
+  <data name="OnlineRetailers" xml:space="preserve">
+    <value>Where do you sell the most online?</value>
+  </data>
+  <data name="SuccessfullyClientApply" xml:space="preserve">
+    <value>The cooperation request was successfully submitted.</value>
+  </data>
 </root>

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Identity.Api.Areas.Accounts.ViewModels
+namespace Buyer.Web.Areas.Clients.ViewModels
 {
-    public class RegisterFormViewModel
+    public class ApplicationFormViewModel
     {
         public string Title { get; set; }
         public string Subtitle { get; set; }

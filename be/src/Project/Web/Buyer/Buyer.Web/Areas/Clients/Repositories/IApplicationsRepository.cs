@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Identity.Api.Areas.Accounts.Repositories.Clients
+namespace Buyer.Web.Areas.Clients.Repositories
 {
-    public interface IClientsRepository
+    public interface IApplicationsRepository
     {
         Task CreateClientApplicationAsync(
             string token, string language, string firstName, string lastName, string contactJobTitle, string email, string phoneNumber,

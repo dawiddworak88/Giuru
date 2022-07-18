@@ -1,21 +1,21 @@
-﻿using Foundation.ApiExtensions.Communications;
+﻿using Buyer.Web.Shared.ApiRequestModels.Application;
+using Buyer.Web.Shared.Configurations;
+using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
-using Identity.Api.Areas.Accounts.ApiRequestModels;
-using Identity.Api.Configurations;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 
-namespace Identity.Api.Areas.Accounts.Repositories.Clients
+namespace Buyer.Web.Areas.Clients.Repositories
 {
-    public class ClientsRepository : IClientsRepository
+    public class ApplicationsRepository : IApplicationsRepository
     {
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
 
-        public ClientsRepository(
+        public ApplicationsRepository(
             IApiClientService apiClientService,
             IOptions<AppSettings> settings)
         {
@@ -24,7 +24,7 @@ namespace Identity.Api.Areas.Accounts.Repositories.Clients
         }
 
         public async Task CreateClientApplicationAsync(
-            string token, string language, string firstName, string lastName, string contactJobTitle, string email, string phoneNumber, string companyName, 
+            string token, string language, string firstName, string lastName, string contactJobTitle, string email, string phoneNumber, string companyName,
             string companyAddress, string companyCountry, string companyCity, string companyRegion, string companyPostalCode)
         {
             var requestModel = new ClientApplicationRequestModel

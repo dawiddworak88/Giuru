@@ -8,6 +8,7 @@ using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.ComponentModels.Files;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Shared.ModelBuilders.Files
@@ -30,7 +31,7 @@ namespace Seller.Web.Shared.ModelBuilders.Files
 
         public async Task<FilesViewModel> BuildModelAsync(FilesComponentModel componentModel)
         {
-            if (componentModel.Files != null)
+            if (componentModel.Files is not null && componentModel.Files.Any())
             {
                 var files = await this.mediaRepository.GetMediaItemsAsync(componentModel.Files, componentModel.Language, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token);
 
