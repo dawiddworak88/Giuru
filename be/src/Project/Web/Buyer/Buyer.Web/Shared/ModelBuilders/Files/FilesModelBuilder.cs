@@ -49,7 +49,9 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         CreatedDateLabel = this.globalLocalizer.GetString("CreatedDate"),
                         LastModifiedDateLabel = this.globalLocalizer.GetString("LastModifiedDate"),
                         DownloadSelectedLabel = this.globalLocalizer.GetString("DownloadSelected"),
-                        DownloadEverythingLabel = this.globalLocalizer.GetString("DownloadEverything")
+                        DownloadEverythingLabel = this.globalLocalizer.GetString("DownloadEverything"),
+                        SelectFileLabel = this.globalLocalizer.GetString("SelectFile"),
+                        DownloadButtons = componentModel.DownloadButtons
                     };
 
                     var fileViewModels = new List<FileViewModel>();

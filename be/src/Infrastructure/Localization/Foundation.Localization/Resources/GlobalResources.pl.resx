@@ -648,4 +648,7 @@
   <data name="NoCategories" xml:space="preserve">
     <value>Brak kategorii.</value>
   </data>
+  <data name="SelectFile" xml:space="preserve">
+    <value>Wybierz plik</value>
+  </data>
 </root>

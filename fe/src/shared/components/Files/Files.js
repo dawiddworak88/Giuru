@@ -68,7 +68,7 @@ function Files(props) {
 
             zip.generateAsync({type: 'blob'}).then(zipFile => {
                 const currentDate = new Date().getTime();
-                const fileName = `${props.title}-${currentDate}.zip`;
+                const fileName = `${props.filesLabel}-${currentDate}.zip`;
 
                 return saveAs(zipFile, fileName);
             });
@@ -93,11 +93,13 @@ function Files(props) {
                                     <TableHead>
                                         <TableRow>
                                             <TableCell width="11%">
-                                                <Checkbox
-                                                    indeterminate={selectedFiles.length > 0 && selectedFiles.length < props.files.length}
-                                                    checked={props.files.length > 0 && selectedFiles.length === props.files.length}
-                                                    onChange={handleSelectAllItems} 
-                                                />
+                                                {props.downloadButtons &&
+                                                    <Checkbox
+                                                        indeterminate={selectedFiles.length > 0 && selectedFiles.length < props.files.length}
+                                                        checked={props.files.length > 0 && selectedFiles.length === props.files.length}
+                                                        onChange={handleSelectAllItems} 
+                                                    />
+                                                }
                                             </TableCell>
                                             <TableCell>{props.filenameLabel}</TableCell>
                                             <TableCell>{props.nameLabel}</TableCell>
@@ -115,18 +117,20 @@ function Files(props) {
                                                 <TableRow key={file.id}>
                                                     <TableCell width="20%">
                                                         <div className="files__tooltip">
-                                                            <Tooltip>
-                                                                <NoSsr>
-                                                                    <FormControlLabel 
-                                                                        control={
-                                                                            <Checkbox 
-                                                                                checked={isFileSelected}
-                                                                                onChange={() => handleSelectItem(file)}
-                                                                            />
-                                                                        }
-                                                                    />
-                                                                </NoSsr>
-                                                            </Tooltip>
+                                                            {props.downloadButtons && 
+                                                                <Tooltip title={props.selectFileLabel} aria-label={props.selectFileLabel}>
+                                                                    <NoSsr>
+                                                                        <FormControlLabel 
+                                                                            control={
+                                                                                <Checkbox 
+                                                                                    checked={isFileSelected}
+                                                                                    onChange={() => handleSelectItem(file)}
+                                                                                />
+                                                                            }
+                                                                        />
+                                                                    </NoSsr>
+                                                                </Tooltip>
+                                                            }
                                                             <Tooltip title={props.downloadLabel} aria-label={props.downloadLabel}>
                                                                 <Fab href={file.url} size="small" color="primary">
                                                                     <GetApp />
@@ -176,7 +180,9 @@ Files.propTypes = {
     nameLabel: PropTypes.string.isRequired,
     descriptionLabel: PropTypes.string.isRequired,
     lastModifiedDateLabel: PropTypes.string.isRequired,
-    createdDateLabel: PropTypes.string.isRequired
+    createdDateLabel: PropTypes.string.isRequired,
+    selectFileLabel: PropTypes.string.isRequired,
+    downloadButtons: PropTypes.bool
 };
 
 export default Files;

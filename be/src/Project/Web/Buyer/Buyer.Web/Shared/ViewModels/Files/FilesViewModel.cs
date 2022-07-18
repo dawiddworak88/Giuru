@@ -15,6 +15,8 @@ namespace Buyer.Web.Shared.ViewModels.Files
         public string CreatedDateLabel { get; set; }
         public string DownloadSelectedLabel { get; set; }
         public string DownloadEverythingLabel { get; set; }
+        public string SelectFileLabel { get; set; }
+        public bool DownloadButtons { get; set; }
         public IEnumerable<FileViewModel> Files { get; set; }
     }
 }

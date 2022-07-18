@@ -237,10 +237,10 @@ namespace DownloadCenter.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Creates or updates download center item (if id is set).
+        /// Creates or updates download center (if id is set).
         /// </summary>
         /// <param name="request">The model.</param>
-        /// <returns>The download center item id.</returns>
+        /// <returns>The download center.</returns>
         [HttpPost, MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]

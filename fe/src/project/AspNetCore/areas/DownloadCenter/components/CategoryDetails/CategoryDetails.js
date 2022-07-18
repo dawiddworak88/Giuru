@@ -34,7 +34,7 @@ CategoryDetails.propTypes = {
     title: PropTypes.string.isRequired,
     noCategoriesLabel: PropTypes.string,
     categories: PropTypes.array,
-    files: PropTypes.array
+    files: PropTypes.object
 }
 
 export default CategoryDetails;

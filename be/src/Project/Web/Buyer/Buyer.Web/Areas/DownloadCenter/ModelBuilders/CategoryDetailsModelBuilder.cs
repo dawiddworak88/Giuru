@@ -61,7 +61,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
 
                     if (downloadCenterCategory.Files.OrEmptyIfNull().Any())
                     {
-                        viewModel.Files = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Language = componentModel.Language, Token = componentModel.Token, Files = downloadCenterCategory.Files});
+                        viewModel.Files = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Language = componentModel.Language, Token = componentModel.Token, Files = downloadCenterCategory.Files, DownloadButtons = true });
                     }
                 }
             }
