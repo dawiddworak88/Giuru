@@ -1,7 +1,7 @@
 ﻿using Foundation.PageContent.Components.Footers.ViewModels;
 using Foundation.PageContent.Components.Headers.ViewModels;
 
-namespace Buyer.Web.Areas.Home.ViewModel.Application
+namespace Buyer.Web.Areas.Clients.ViewModels
 {
     public class ApplicationPageViewModel
     {

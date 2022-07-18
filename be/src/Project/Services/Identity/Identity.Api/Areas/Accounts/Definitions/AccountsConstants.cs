@@ -2,6 +2,6 @@
 {
     public static class AccountsConstants
     {
-        public static readonly string ApplicationEndpoint = "/Home/Application";
+        public static readonly string ApplicationEndpoint = "/Clients/Application";
     }
 }

@@ -7,8 +7,6 @@ using Foundation.Extensions.Exceptions;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Buyer.Web.Shared.Configurations;
 using Buyer.Web.Shared.DomainModels.Clients;
-using Buyer.Web.Shared.ApiRequestModels.Application;
-using Foundation.ApiExtensions.Models.Response;
 
 namespace Buyer.Web.Shared.Repositories.Clients
 {
@@ -48,41 +46,6 @@ namespace Buyer.Web.Shared.Repositories.Clients
             }
 
             return default;
-        }
-
-        public async Task CreateClientApplicationAsync(
-            string token, string language, string firstName, string lastName, string contactJobTitle, string email, string phoneNumber, string companyName,
-            string companyAddress, string companyCountry, string companyCity, string companyRegion, string companyPostalCode)
-        {
-            var requestModel = new ClientApplicationRequestModel
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                ContactJobTitle = contactJobTitle,
-                Email = email,
-                PhoneNumber = phoneNumber,
-                CompanyName = companyName,
-                CompanyAddress = companyAddress,
-                CompanyCountry = companyCountry,
-                CompanyCity = companyCity,
-                CompanyRegion = companyRegion,
-                CompanyPostalCode = companyPostalCode
-            };
-
-            var apiRequest = new ApiRequest<ClientApplicationRequestModel>
-            {
-                Language = language,
-                Data = requestModel,
-                AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.ClientUrl}{ApiConstants.Client.ApplicationsApiEndpoint}"
-            };
-
-            var response = await this.apiClientService.PostAsync<ApiRequest<ClientApplicationRequestModel>, ClientApplicationRequestModel, BaseResponseModel>(apiRequest);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new CustomException(response.Message, (int)response.StatusCode);
-            }
         }
     }
 }

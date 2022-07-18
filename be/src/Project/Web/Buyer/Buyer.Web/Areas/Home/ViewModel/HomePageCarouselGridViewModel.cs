@@ -1,6 +1,6 @@
 ﻿using Foundation.PageContent.Components.CarouselGrids.ViewModels;
 
-namespace Buyer.Web.Areas.Home.ViewModel.Home
+namespace Buyer.Web.Areas.Home.ViewModel
 {
     public class HomePageCarouselGridViewModel : CarouselGridViewModel
     {
