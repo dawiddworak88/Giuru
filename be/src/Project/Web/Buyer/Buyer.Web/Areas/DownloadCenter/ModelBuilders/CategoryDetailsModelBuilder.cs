@@ -1,16 +1,10 @@
 ﻿using Buyer.Web.Areas.DownloadCenter.Repositories;
 using Buyer.Web.Areas.DownloadCenter.ViewModel;
 using Buyer.Web.Shared.ComponentModels.Files;
-using Buyer.Web.Shared.Repositories.Media;
 using Buyer.Web.Shared.ViewModels.Files;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.Extensions.ModelBuilders;
-using Foundation.GenericRepository.Paginations;
-using Foundation.Localization;
-using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
-using Microsoft.Extensions.Localization;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,23 +13,14 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
     public class CategoryDetailsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CategoryDetailsViewModel>
     {
         private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder;
-        private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IDownloadCenterRepository downloadCenterRepository;
-        private readonly IMediaService mediaService;
-        private readonly IMediaItemsRepository mediaItemsRepository;
 
         public CategoryDetailsModelBuilder(
             IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
-            IStringLocalizer<GlobalResources> globalLocalizer,
-            IDownloadCenterRepository downloadCenterRepository,
-            IMediaItemsRepository mediaItemsRepository,
-            IMediaService mediaService)
+            IDownloadCenterRepository downloadCenterRepository)
         {
             this.filesModelBuilder = filesModelBuilder;
-            this.globalLocalizer = globalLocalizer;
             this.downloadCenterRepository = downloadCenterRepository;
-            this.mediaItemsRepository = mediaItemsRepository;
-            this.mediaService = mediaService;
         }
 
         public async Task<CategoryDetailsViewModel> BuildModelAsync(ComponentModelBase componentModel)
