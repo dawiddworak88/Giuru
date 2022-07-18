@@ -60,8 +60,8 @@ function SignInForm(props) {
                     <div className="is-flex is-justify-content-end">
                         <a className="button is-text is-size-7" href={props.resetPasswordUrl}>{props.forgotPasswordLabel}</a>
                     </div>
-                    {props.isInvalidPassword &&
-                        <p className="has-text-danger is-size-7">{props.invalidPasswordErrorMessage}</p>
+                    {props.errorMessage &&
+                        <p className="has-text-danger is-size-7">{props.errorMessage}</p>
                     }
                     <div className="field mt-4">
                         <Button type="submit" variant="contained" color="primary" disabled={disable} fullWidth={true}>
@@ -106,8 +106,7 @@ SignInForm.propTypes = {
     developersEmail: PropTypes.string.isRequired,
     contactText: PropTypes.string.isRequired,
     registerUrl: PropTypes.string.isRequired,
-    isInvalidPassword: PropTypes.bool,
-    InvalidPasswordErrorMessage: PropTypes.string.isRequired
+    errorMessage: PropTypes.string
 };
 
 export default SignInForm;

@@ -4,6 +4,6 @@
     {
         public string ReturnUrl { get; set; }
         public string DevelopersEmail { get; set; }
-        public bool IsInvalidPassword { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

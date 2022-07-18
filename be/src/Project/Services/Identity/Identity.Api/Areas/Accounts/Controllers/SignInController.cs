@@ -11,6 +11,8 @@ using Identity.Api.Areas.Accounts.Services.UserServices;
 using IdentityServer4.Services;
 using Identity.Api.Configurations;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Localization;
+using Feature.Account;
 
 namespace Identity.Api.Areas.Accounts.Controllers
 {
@@ -19,12 +21,14 @@ namespace Identity.Api.Areas.Accounts.Controllers
     public class SignInController : BaseController
     {
         private readonly IOptions<AppSettings> settings;
+        private readonly IStringLocalizer<AccountResources> accountLocalizer;
         private readonly IIdentityServerInteractionService interactionService;
         private readonly IUserService userService;
         private readonly IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder;
 
         public SignInController(
             IOptions<AppSettings> settings,
+            IStringLocalizer<AccountResources> accountLocalizer,
             IIdentityServerInteractionService interactionService,
             IUserService userService,
             IComponentModelBuilder<SignInComponentModel, SignInViewModel> signInModelBuilder
@@ -34,6 +38,7 @@ namespace Identity.Api.Areas.Accounts.Controllers
             this.userService = userService;
             this.signInModelBuilder = signInModelBuilder;
             this.settings = settings;
+            this.accountLocalizer = accountLocalizer;
         }
 
         [HttpGet]
@@ -70,7 +75,7 @@ namespace Identity.Api.Areas.Accounts.Controllers
                 }                
             }
 
-            var viewModel = this.signInModelBuilder.BuildModel(new SignInComponentModel { IsInvalidPassword = true, ReturnUrl = model.ReturnUrl, DevelopersEmail = this.settings.Value.DevelopersEmail });
+            var viewModel = this.signInModelBuilder.BuildModel(new SignInComponentModel { ErrorMessage = this.accountLocalizer.GetString("InvalidPassword").Value, ReturnUrl = model.ReturnUrl, DevelopersEmail = this.settings.Value.DevelopersEmail });
 
             return this.View(viewModel);
         }

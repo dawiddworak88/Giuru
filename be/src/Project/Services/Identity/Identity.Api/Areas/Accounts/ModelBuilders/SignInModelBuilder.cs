@@ -29,7 +29,7 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             {
                 ReturnUrl = componentModel.ReturnUrl,
                 DevelopersEmail = componentModel.DevelopersEmail,
-                IsInvalidPassword = componentModel.IsInvalidPassword
+                ErrorMessage = componentModel.ErrorMessage
             };
 
             var viewModel = new SignInViewModel
