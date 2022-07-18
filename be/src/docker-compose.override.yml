@@ -174,7 +174,6 @@ services:
       - ActionSendGridCreateTemplateId=${SENDGRID_CREATE_ACCOUNT_TEMPLATE_ID}
       - ActionSendGridResetTemplateId=${SENDGRID_RESET_PASSWORD_TEMPLATE_ID}
       - DevelopersEmail=it.developers@eltap.com
-      - ClientUrl=http://client-api
     ports:
       - "5105:80"
 
