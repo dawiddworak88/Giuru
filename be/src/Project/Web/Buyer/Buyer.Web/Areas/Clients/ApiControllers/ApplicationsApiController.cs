@@ -1,5 +1,5 @@
-﻿using Buyer.Web.Shared.ApiRequestModels.Application;
-using Buyer.Web.Shared.Repositories.Clients;
+﻿using Buyer.Web.Areas.Clients.Repositories;
+using Buyer.Web.Shared.ApiRequestModels.Application;
 using Foundation.ApiExtensions.Controllers;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Localization;
@@ -11,20 +11,20 @@ using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Shared.ApiControllers
+namespace Buyer.Web.Areas.Clients.ApiControllers
 {
-    [Area("Home")]
+    [Area("Clients")]
     [AllowAnonymous]
-    public class ClientsApiController : BaseApiController
+    public class ApplicationsApiController : BaseApiController
     {
-        private readonly IClientsRepository clientsRepository;
+        private readonly IApplicationsRepository applicationsRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
 
-        public ClientsApiController(
-            IStringLocalizer<GlobalResources> globalLocalizer,
-            IClientsRepository clientsRepository)
+        public ApplicationsApiController(
+            IApplicationsRepository applicationsRepository,
+            IStringLocalizer<GlobalResources> globalLocalizer)
         {
-            this.clientsRepository = clientsRepository;
+            this.applicationsRepository = applicationsRepository;
             this.globalLocalizer = globalLocalizer;
         }
 
@@ -34,11 +34,11 @@ namespace Buyer.Web.Shared.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            await this.clientsRepository.CreateClientApplicationAsync(
+            await this.applicationsRepository.CreateClientApplicationAsync(
                 token, language, model.FirstName, model.LastName, model.ContactJobTitle, model.Email, model.PhoneNumber, model.CompanyName,
                 model.CompanyAddress, model.CompanyCountry, model.CompanyCity, model.CompanyRegion, model.CompanyPostalCode);
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.globalLocalizer.GetString("SuccessfullyClientApply").Value });
+            return StatusCode((int)HttpStatusCode.OK, new { Message = globalLocalizer.GetString("SuccessfullyClientApply").Value });
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Buyer.Web.Areas.Home.ViewModel.Application
+﻿namespace Buyer.Web.Areas.Clients.ViewModels
 {
     public class StepViewModel
     {

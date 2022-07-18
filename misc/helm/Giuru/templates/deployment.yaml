@@ -463,8 +463,6 @@ spec:
           value: {{ .Values.mediaUrl }}
         - name: IdentityUrl
           value: {{ .Values.identityUrl }}
-        - name: ClientUrl
-          value: {{ .Values.clientUrl }}
         - name: BuyerUrl
           value: {{ .Values.buyerUrl }}
         - name: Clients

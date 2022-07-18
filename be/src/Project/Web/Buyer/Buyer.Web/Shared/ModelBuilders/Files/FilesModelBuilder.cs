@@ -9,6 +9,7 @@ using Microsoft.Extensions.Localization;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Foundation.Media.Services.MediaServices;
+using System.Linq;
 
 namespace Buyer.Web.Shared.ModelBuilders.Files
 {
@@ -30,11 +31,11 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
 
         public async Task<FilesViewModel> BuildModelAsync(FilesComponentModel componentModel)
         {
-            if (componentModel.Files != null)
+            if (componentModel.Files is not null && componentModel.Files.Any())
             {
                 var files = await this.mediaRepository.GetMediaItemsAsync(componentModel.Files, componentModel.Language, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, componentModel.Token);
 
-                if (files != null)
+                if (files is not null)
                 {
                     var filesViewModel = new FilesViewModel
                     {

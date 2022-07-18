@@ -1,4 +1,4 @@
-﻿using Buyer.Web.Areas.Home.ViewModel.Application;
+﻿using Buyer.Web.Areas.Clients.ViewModels;
 using Foundation.ApiExtensions.Definitions;
 using Foundation.Extensions.Controllers;
 using Foundation.Extensions.ModelBuilders;
@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace Buyer.Web.Areas.Home.Controllers
+namespace Buyer.Web.Areas.Clients.Controllers
 {
-    [Area("Home")]
+    [Area("Clients")]
     [AllowAnonymous]
     public class ApplicationController : BaseController
     {
@@ -32,9 +32,9 @@ namespace Buyer.Web.Areas.Home.Controllers
                 Token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName),
             };
 
-            var viewModel = await this.applicationPageModelBuilder.BuildModelAsync(componentModel);
+            var viewModel = await applicationPageModelBuilder.BuildModelAsync(componentModel);
 
-            return this.View(viewModel);
+            return View(viewModel);
         }
     }
 }

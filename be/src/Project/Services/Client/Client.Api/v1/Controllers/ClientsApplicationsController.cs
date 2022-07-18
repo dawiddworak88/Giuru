@@ -26,11 +26,11 @@ namespace Client.Api.v1.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [Authorize]
     [ApiController]
-    public class ClientsApplicationController : BaseApiController
+    public class ClientsApplicationsController : BaseApiController
     {
         private readonly IClientsApplicationsService clientsApplicationService;
 
-        public ClientsApplicationController(
+        public ClientsApplicationsController(
             IClientsApplicationsService clientsApplicationService)
         {
             this.clientsApplicationService = clientsApplicationService;
