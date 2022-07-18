@@ -2,7 +2,7 @@ import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import {
     Fab, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper, Button, Tooltip, NoSsr,
+    TableHead, TableRow, Paper, Button, Tooltip,
     FormControlLabel, Checkbox
 } from "@mui/material";
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
@@ -44,7 +44,7 @@ function Files(props) {
         setSelectedFiles([]);
     }
 
-    const handleDownloadFiles = (checkedFiles) => {
+    const handleDownloadFiles = async (checkedFiles) => {
         let files = props.files;
 
         if (checkedFiles && selectedFiles.length > 0){
@@ -57,13 +57,15 @@ function Files(props) {
             for(let i = 0; i < files.length; i++ ){
                 let file = files[i]
 
-                const t = fetch(file.url, { mode: "no-cors" })
+                const blobFile = await fetch(file.url, { 
+                        mode: "no-cors" 
+                    })
                     .then(response => response.blob())
                     .then(blob => {
                         return blob;
                     });
 
-                    zip.file(`${file.filename}`, t)
+                zip.file(`${file.filename}`, blobFile)
             }
 
             zip.generateAsync({type: 'blob'}).then(zipFile => {
@@ -79,12 +81,14 @@ function Files(props) {
         <Fragment>
             {props.files &&
                 <section className="section files">
-                    <div className="is-flex is-justify-content-space-between is-align-items-center files__info">
+                    <div className={`is-flex is-justify-content-space-between is-align-items-center ${props.downloadButtons ? "files__header" : ""}`}>
                         <h3 className="title is-4">{props.filesLabel}</h3>
-                        <div className="files__buttons">
-                            <button className="button is-text" type="button" onClick={() => handleDownloadFiles(true)} disabled={selectedFiles.length > 0 ? false : true}>{props.downloadSelectedLabel}</button>
-                            <button className="button is-text" type="button" onClick={() => handleDownloadFiles()}>{props.downloadEverythingLabel}</button>
-                        </div>
+                        {props.downloadButtons &&
+                            <div className="files__buttons">
+                                <button className="button is-text" type="button" onClick={() => handleDownloadFiles(true)} disabled={selectedFiles.length > 0 ? false : true}>{props.downloadSelectedLabel}</button>
+                                <button className="button is-text" type="button" onClick={() => handleDownloadFiles()}>{props.downloadEverythingLabel}</button>
+                            </div>
+                        }
                     </div>
                     <div className="table-container">
                         <div className="catalog__table">
@@ -110,25 +114,23 @@ function Files(props) {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {props.files.map((file) => {
+                                        {props.files.map((file, index) => {
                                             const isFileSelected = selectedFiles.indexOf(file) !== -1;
 
                                             return (
-                                                <TableRow key={file.id}>
+                                                <TableRow key={index}>
                                                     <TableCell width="20%">
                                                         <div className="files__tooltip">
                                                             {props.downloadButtons && 
                                                                 <Tooltip title={props.selectFileLabel} aria-label={props.selectFileLabel}>
-                                                                    <NoSsr>
-                                                                        <FormControlLabel 
-                                                                            control={
-                                                                                <Checkbox 
-                                                                                    checked={isFileSelected}
-                                                                                    onChange={() => handleSelectItem(file)}
-                                                                                />
-                                                                            }
-                                                                        />
-                                                                    </NoSsr>
+                                                                    <FormControlLabel 
+                                                                        control={
+                                                                            <Checkbox 
+                                                                                checked={isFileSelected}
+                                                                                onChange={() => handleSelectItem(file)}
+                                                                            />
+                                                                        }
+                                                                    />
                                                                 </Tooltip>
                                                             }
                                                             <Tooltip title={props.downloadLabel} aria-label={props.downloadLabel}>

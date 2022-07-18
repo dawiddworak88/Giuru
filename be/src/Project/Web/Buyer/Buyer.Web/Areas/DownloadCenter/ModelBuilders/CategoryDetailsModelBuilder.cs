@@ -40,10 +40,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
 
         public async Task<CategoryDetailsViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
-            var viewModel = new CategoryDetailsViewModel
-            {
-                NoCategoriesLabel = this.globalLocalizer.GetString("NoCategories")
-            };
+            var viewModel = new CategoryDetailsViewModel();
 
             if (componentModel.Id.HasValue)
             {
