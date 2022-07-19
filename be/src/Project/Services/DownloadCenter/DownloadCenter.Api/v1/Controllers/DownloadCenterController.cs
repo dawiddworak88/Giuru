@@ -28,7 +28,6 @@ namespace DownloadCenter.Api.v1.Controllers
     [ApiController]
     public class DownloadCenterController : BaseApiController
     {
-
         private readonly IDownloadCenterService downloadCenterService;
 
         public DownloadCenterController(

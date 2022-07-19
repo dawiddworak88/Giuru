@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CategoryDeleteDownloadCenterConflict" xml:space="preserve">
-    <value>Usuń element centrum pobierania powiązanego z kategorią.</value>
+    <value>Usuń pliki związane z kategorią centrum pobierania.</value>
   </data>
   <data name="CategoryNotFound" xml:space="preserve">
-    <value>Nie znaleziono kategorii</value>
+    <value>Nie znaleziono kategorii.</value>
   </data>
   <data name="DownloadCenterItemDeletedSuccessfully" xml:space="preserve">
     <value>Pomyślnie usunięto kategorię centrum pobierania.</value>
@@ -136,10 +136,10 @@
     <value>Edytuj kategorię</value>
   </data>
   <data name="NavigateToCategoriesLabel" xml:space="preserve">
-    <value>Powróc do kategorii</value>
+    <value>Powróć do kategorii</value>
   </data>
   <data name="NavigateToDownloadCenter" xml:space="preserve">
-    <value>Powróc do centrum pobierania</value>
+    <value>Powróć do centrum pobierania</value>
   </data>
   <data name="NewCategory" xml:space="preserve">
     <value>Dodaj kategorię</value>

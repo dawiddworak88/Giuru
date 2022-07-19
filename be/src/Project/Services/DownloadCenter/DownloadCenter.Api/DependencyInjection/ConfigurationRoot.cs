@@ -15,7 +15,7 @@ namespace DownloadCenter.Api.DependencyInjection
             services.Configure<LocalizationSettings>(configuration);
         }
 
-        public static void ConfigureDatabaseMigrations(this IApplicationBuilder app, IConfiguration configuration)
+        public static void ConfigureDatabaseMigrations(this IApplicationBuilder app)
         {
             var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
 

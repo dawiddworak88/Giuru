@@ -127,7 +127,7 @@
     <value>Category not found</value>
   </data>
   <data name="CategorySavedSuccessfully" xml:space="preserve">
-    <value>Successfully saved category.</value>
+    <value>Category has been saved successfully.</value>
   </data>
   <data name="DownloadCenterItemDeletedSuccessfully" xml:space="preserve">
     <value>Successfully deleted download center category.</value>

@@ -15,7 +15,6 @@ namespace Seller.Web.Areas.DownloadCenter.Controllers
     {
         private readonly IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterPageViewModel> downloadCenterPageModelBuilder;
 
-
         public DownloadCenterController(
             IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterPageViewModel> downloadCenterPageModelBuilder)
         {
