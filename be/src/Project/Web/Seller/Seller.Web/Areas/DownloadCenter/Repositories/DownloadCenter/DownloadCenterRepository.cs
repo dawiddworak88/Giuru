@@ -66,7 +66,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
                 EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.DownloadCenterApiEndponint}/{id}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Test>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, DownloadCenterFile>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
