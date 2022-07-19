@@ -56,7 +56,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
             }
         }
 
-        public async Task<Test> GetAsync(string token, string language, Guid? id)
+        public async Task<DownloadCenterFile> GetAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {

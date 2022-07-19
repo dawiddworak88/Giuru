@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Seller.Web.Areas.DownloadCenter.DomainModels
 {
-    public class Test
+    public class DownloadCenterFile
     {
         public Guid Id { get; set; }
         public IEnumerable<Guid> CategoriesIds { get; set; }
