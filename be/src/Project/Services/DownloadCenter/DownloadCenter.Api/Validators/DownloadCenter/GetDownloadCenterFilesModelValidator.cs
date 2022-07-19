@@ -3,7 +3,7 @@ using Foundation.Extensions.Validators;
 
 namespace DownloadCenter.Api.Validators.DownloadCenter
 {
-    public class GetDownloadCenterModelValidator : BasePagedServiceModelValidator<GetDownloadCenterServiceModel>
+    public class GetDownloadCenterFilesModelValidator : BasePagedServiceModelValidator<GetDownloadCenterFilesServiceModel>
     {
     }
 }

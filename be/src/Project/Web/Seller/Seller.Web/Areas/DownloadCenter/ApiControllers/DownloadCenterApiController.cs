@@ -9,6 +9,7 @@ using Seller.Web.Areas.DownloadCenter.DomainModels;
 using Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter;
 using System;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -45,9 +46,9 @@ namespace Seller.Web.Areas.DownloadCenter.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var downloadCenterItemId = await this.downloadCenterRepository.SaveAsync(token, language, model.Id, model.CategoryId, model.Order);
+            await this.downloadCenterRepository.SaveAsync(token, language, model.Id, model.CategoriesIds, model.Files.Select(x => x.Id.Value));
 
-            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.downloadCenterLocalizer.GetString("DownloadCenterItemSavedSuccessfully").Value, Id = downloadCenterItemId });
+            return this.StatusCode((int)HttpStatusCode.OK, new { Message = this.downloadCenterLocalizer.GetString("DownloadCenterItemSavedSuccessfully").Value });
 
         }
 

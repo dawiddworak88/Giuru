@@ -17,7 +17,7 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.6")
+                .HasAnnotation("ProductVersion", "6.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -123,37 +123,6 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("CategoryTranslations");
-                });
-
-            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.DownloadCenter.DownloadCenterItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DownloadCenterItems");
                 });
 
             modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.CategoryTranslation", b =>

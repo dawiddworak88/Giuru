@@ -4,10 +4,14 @@ using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
+using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Media.Services.MediaServices;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.DownloadCenter.ApiRequestModels;
+using Seller.Web.Areas.DownloadCenter.ApiResponseModels;
 using Seller.Web.Areas.DownloadCenter.DomainModels;
+using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Configurations;
 using System;
 using System.Collections.Generic;
@@ -19,13 +23,19 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
     {
         private readonly IApiClientService apiClientService;
         private readonly IOptions<AppSettings> settings;
+        private readonly IMediaItemsRepository mediaItemsRepository;
+        private readonly IMediaService mediaService;
 
         public DownloadCenterRepository(
             IApiClientService apiClientService,
+            IMediaItemsRepository mediaItemsRepository,
+            IMediaService mediaService,
             IOptions<AppSettings> settings)
         {
             this.apiClientService = apiClientService;
             this.settings = settings;
+            this.mediaService = mediaService;
+            this.mediaItemsRepository = mediaItemsRepository;
         }
 
         public async Task DeleteAsync(string token, string language, Guid? id)
@@ -46,7 +56,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
             }
         }
 
-        public async Task<DownloadCenterItem> GetAsync(string token, string language, Guid? id)
+        public async Task<Test> GetAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
@@ -56,7 +66,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
                 EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.DownloadCenterApiEndponint}/{id}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, DownloadCenterItem>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, Test>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -89,13 +99,36 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
                 EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.DownloadCenterApiEndponint}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<DownloadCenterItem>>>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<DownloadCenterItemApiResponseModel>>>(apiRequest);
 
             if (response.IsSuccessStatusCode && response.Data?.Data != null)
             {
+                var downloadCenterFiles = new List<DownloadCenterItem>();
+
+                foreach(var downloadCenterFile in response.Data.Data.OrEmptyIfNull())
+                {
+                    var downloadCenterFileItem = new DownloadCenterItem
+                    {
+                        Id = downloadCenterFile.Id,
+                        Categories = String.Join(", ", downloadCenterFile.Categories.OrEmptyIfNull()),
+                        LastModifiedDate = downloadCenterFile.LastModifiedDate,
+                        CreatedDate = downloadCenterFile.CreatedDate
+                    };
+
+                    var file = await this.mediaItemsRepository.GetMediaItemAsync(token, language, downloadCenterFile.Id);
+
+                    if (file is not null)
+                    {
+                        downloadCenterFileItem.Name = file.Name;
+                        downloadCenterFileItem.Url = file.MimeType.StartsWith("image") ? this.mediaService.GetMediaUrl(downloadCenterFile.Id, 200) : this.mediaService.GetNonCdnMediaUrl(downloadCenterFile.Id);
+                    }
+
+                    downloadCenterFiles.Add(downloadCenterFileItem);
+                }
+
                 return new PagedResults<IEnumerable<DownloadCenterItem>>(response.Data.Total, response.Data.PageSize)
                 {
-                    Data = response.Data.Data
+                    Data = downloadCenterFiles
                 };
             }
 
@@ -107,16 +140,16 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
             return default;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? categoryId, int? order)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, IEnumerable<Guid> categoriesIds, IEnumerable<Guid> files)
         {
-            var requestModel = new DownloadCenterItemRequestModel
+            var requestModel = new DownloadCenterItemApiRequestModel
             {
                 Id = id,
-                CategoryId = categoryId,
-                Order = order
+                CategoriesIds = categoriesIds,
+                Files = files
             };
 
-            var apiRequest = new ApiRequest<DownloadCenterItemRequestModel>
+            var apiRequest = new ApiRequest<DownloadCenterItemApiRequestModel>
             {
                 Language = language,
                 Data = requestModel,
@@ -124,16 +157,16 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
                 EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.DownloadCenterApiEndponint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<DownloadCenterItemRequestModel>, DownloadCenterItemRequestModel, BaseResponseModel>(apiRequest);
-
-            if (response.IsSuccessStatusCode && response.Data?.Id != null)
-            {
-                return response.Data.Id.Value;
-            }
+            var response = await this.apiClientService.PostAsync<ApiRequest<DownloadCenterItemApiRequestModel>, DownloadCenterItemApiRequestModel, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
                 throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data?.Id != null)
+            {
+                return response.Data.Id.Value;
             }
 
             return default;

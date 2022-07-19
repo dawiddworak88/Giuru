@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DownloadCenter.Api.ServicesModels.DownloadCenter
 {
-    public class DownloadCenterCategoriesServiceModel
+    public class DownloadCenterCategoryFilesServiceModel
     {
         public Guid Id { get; set; }
         public Guid? ParentCategoryId { get; set; }

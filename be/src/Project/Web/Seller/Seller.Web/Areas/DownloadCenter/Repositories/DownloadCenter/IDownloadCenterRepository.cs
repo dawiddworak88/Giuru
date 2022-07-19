@@ -9,8 +9,8 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
     public interface IDownloadCenterRepository
     {
         Task<PagedResults<IEnumerable<DownloadCenterItem>>> GetDownloadCenterAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy);
-        Task<DownloadCenterItem> GetAsync(string token, string language, Guid? id);
-        Task<Guid> SaveAsync(string token, string language, Guid? id, Guid? categoryId, int? order);
+        Task<Test> GetAsync(string token, string language, Guid? id);
+        Task<Guid> SaveAsync(string token, string language, Guid? id, IEnumerable<Guid> categoriesIds, IEnumerable<Guid> files);
         Task DeleteAsync(string token, string language, Guid? id);
     }
 }

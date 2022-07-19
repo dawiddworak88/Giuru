@@ -52,15 +52,16 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             viewModel.OrderBy = $"{nameof(DownloadCenterItem.CreatedDate)} desc";
             viewModel.ConfirmationDialogDeleteNameProperty = new List<string>
             {
-                nameof(DownloadCenterItem.CategoryName).ToCamelCase(),
+                nameof(DownloadCenterItem.Name).ToCamelCase(),
             };
 
             viewModel.Table = new CatalogTableViewModel
             {
                 Labels = new string[]
                 {
-                    this.globalLocalizer.GetString("Category"),
-                    this.globalLocalizer.GetString("Level"),
+                    this.globalLocalizer.GetString("Thumbnail"),
+                    this.globalLocalizer.GetString("Name"),
+                    this.globalLocalizer.GetString("Categories"),
                     this.globalLocalizer.GetString("LastModifiedDate"),
                     this.globalLocalizer.GetString("CreatedDate")
                 },
@@ -79,12 +80,17 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 {
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(DownloadCenterItem.CategoryName).ToCamelCase(),
+                        Title = nameof(DownloadCenterItem.Url).ToCamelCase(),
+                        IsPicture = true
+                    },
+                    new CatalogPropertyViewModel
+                    {
+                        Title = nameof(DownloadCenterItem.Name).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(DownloadCenterItem.Order).ToCamelCase(),
+                        Title = nameof(DownloadCenterItem.Categories).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel

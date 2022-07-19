@@ -4,9 +4,9 @@ using Foundation.Extensions.Validators;
 
 namespace DownloadCenter.Api.Validators.DownloadCenter
 {
-    public class GetDownloadCenterCategoryModelValidator : BaseServiceModelValidator<GetDownloadCenterCategoryServiceModel>
+    public class GetDownloadCenterCategoryFilesModelValidator : BaseServiceModelValidator<GetDownloadCenterCategoryFilesServiceModel>
     {
-        public GetDownloadCenterCategoryModelValidator()
+        public GetDownloadCenterCategoryFilesModelValidator()
         {
             this.RuleFor(x => x.Id).NotEmpty().NotNull();
         }

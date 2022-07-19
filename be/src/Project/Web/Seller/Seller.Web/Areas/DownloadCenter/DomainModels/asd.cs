@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DownloadCenter.Api.v1.ResponseModel
+namespace Seller.Web.Areas.DownloadCenter.DomainModels
 {
-    public class DownloadCenterItemResponseModel
+    public class Test
     {
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
         public IEnumerable<Guid> CategoriesIds { get; set; }
         public DateTime? LastModifiedDate { get; set; }
         public DateTime? CreatedDate { get; set; }

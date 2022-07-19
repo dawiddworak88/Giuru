@@ -8,11 +8,11 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 {
     public interface IDownloadCenterService
     {
-        Task<PagedResults<IEnumerable<DownloadCenterServiceModel>>> GetAsync(GetDownloadCenterServiceModel model);
-        Task<DownloadCenterCategoriesServiceModel> GetDownloadCenterCategoryAsync(GetDownloadCenterCategoryServiceModel model);
-        Task<DownloadCenterItemServiceModel> GetAsync(GetDownloadCenterItemServiceModel model);
-        Task DeleteAsync(DeleteDownloadCenterItemServiceModel model);
-        Task<Guid> CreateAsync(CreateDownloadCenterItemServiceModel model);
-        Task<Guid> UpdateAsync(UpdateDownloadCenterItemServiceModel model);
+        Task<PagedResults<IEnumerable<DownloadCenterServiceModel>>> GetAsync(GetDownloadCenterFilesServiceModel model);
+        Task<DownloadCenterCategoryFilesServiceModel> GetDownloadCenterCategoryAsync(GetDownloadCenterCategoryFilesServiceModel model);
+        Task<DownloadCenterFileServiceModel> GetAsync(GetDownloadCenterFileServiceModel model);
+        Task DeleteAsync(DeleteDownloadCenterFileServiceModel model);
+        Task<Guid> CreateAsync(CreateDownloadCenterFileServiceModel model);
+        Task<Guid> UpdateAsync(UpdateDownloadCenterFileServiceModel model);
     }
 }

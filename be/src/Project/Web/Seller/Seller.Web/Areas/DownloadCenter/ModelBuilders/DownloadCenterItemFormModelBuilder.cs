@@ -1,5 +1,6 @@
 ﻿using Foundation.Extensions.ModelBuilders;
 using Foundation.Localization;
+using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
@@ -7,6 +8,10 @@ using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.DownloadCenter.Repositories.Categories;
 using Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter;
 using Seller.Web.Areas.DownloadCenter.ViewModel;
+using Seller.Web.Areas.Shared.Repositories.Media;
+using Seller.Web.Shared.Definitions;
+using Seller.Web.Shared.ViewModels;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,12 +25,16 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
         private readonly LinkGenerator linkGenerator;
         private readonly ICategoriesRepository categoriesRepository;
         private readonly IDownloadCenterRepository downloadCenterRepository;
+        private readonly IMediaItemsRepository mediaItemsRepository;
+        private readonly IMediaService mediaService;
 
         public DownloadCenterItemFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer,
             IDownloadCenterRepository downloadCenterRepository,
             ICategoriesRepository categoriesRepository,
+            IMediaItemsRepository mediaItemsRepository,
+            IMediaService mediaService,
             LinkGenerator linkGenerator)
         {
             this.linkGenerator = linkGenerator;
@@ -33,6 +42,8 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             this.downloadCenterLocalizer = downloadCenterLocalizer;
             this.categoriesRepository = categoriesRepository;
             this.downloadCenterRepository = downloadCenterRepository;
+            this.mediaService = mediaService;
+            this.mediaItemsRepository = mediaItemsRepository;
         }
 
         public async Task<DownloadCenterItemFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -71,7 +82,25 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 if (downloadCenterItem is not null)
                 {
                     viewModel.Id = downloadCenterItem.Id;
-                    viewModel.CategoryId = downloadCenterItem.CategoryId;
+                    viewModel.CategoriesIds = downloadCenterItem.CategoriesIds;
+
+                    var file = await this.mediaItemsRepository.GetMediaItemAsync(componentModel.Token, componentModel.Language, downloadCenterItem.Id);
+
+                    if (file is not null)
+                    {
+                        viewModel.Files = new List<FileViewModel>
+                        {
+                           new FileViewModel
+                           {
+                               Id = file.Id,
+                               Url = file.MimeType.StartsWith("image") ? this.mediaService.GetMediaUrl(file.Id, Constants.PreviewMaxWidth) : this.mediaService.GetNonCdnMediaUrl(file.Id),
+                               Name = file.Name,
+                               MimeType = file.MimeType,
+                               Filename = file.Filename,
+                               Extension = file.Extension
+                           }
+                        };
+                    }
                 }
             }
 

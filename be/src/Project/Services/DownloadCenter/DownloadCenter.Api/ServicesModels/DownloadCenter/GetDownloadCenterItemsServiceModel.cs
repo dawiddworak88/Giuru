@@ -2,7 +2,7 @@
 
 namespace DownloadCenter.Api.ServicesModels.DownloadCenter
 {
-    public class GetDownloadCenterServiceModel : PagedBaseServiceModel
+    public class GetDownloadCenterItemsServiceModel : PagedBaseServiceModel
     {
     }
 }

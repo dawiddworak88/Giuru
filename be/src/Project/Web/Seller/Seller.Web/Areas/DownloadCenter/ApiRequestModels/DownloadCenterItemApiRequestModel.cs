@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace DownloadCenter.Api.v1.RequestModel
+namespace Seller.Web.Areas.DownloadCenter.ApiRequestModels
 {
-    public class DownloadCenterItemRequestModel : RequestModelBase
+    public class DownloadCenterItemApiRequestModel : RequestModelBase
     {
         public IEnumerable<Guid> CategoriesIds { get; set; }
         public IEnumerable<Guid> Files { get; set; }

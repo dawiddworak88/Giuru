@@ -45,23 +45,6 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DownloadCenterItems",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Order = table.Column<int>(type: "int", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
-                    LastModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DownloadCenterItems", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CategoryTranslations",
                 columns: table => new
                 {
@@ -98,9 +81,6 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "CategoryTranslations");
-
-            migrationBuilder.DropTable(
-                name: "DownloadCenterItems");
 
             migrationBuilder.DropTable(
                 name: "Categories");

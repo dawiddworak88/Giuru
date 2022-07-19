@@ -1,10 +1,10 @@
-﻿using Foundation.ApiExtensions.Models.Request;
+﻿using Foundation.Extensions.Models;
 using System;
 using System.Collections.Generic;
 
-namespace DownloadCenter.Api.v1.RequestModel
+namespace DownloadCenter.Api.ServicesModels.DownloadCenter
 {
-    public class DownloadCenterItemRequestModel : RequestModelBase
+    public class CreateDownloadCenterFileServiceModel : BaseServiceModel
     {
         public IEnumerable<Guid> CategoriesIds { get; set; }
         public IEnumerable<Guid> Files { get; set; }

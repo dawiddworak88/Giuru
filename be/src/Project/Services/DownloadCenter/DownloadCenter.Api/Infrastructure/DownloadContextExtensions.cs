@@ -23,7 +23,6 @@ namespace DownloadCenter.Api.Infrastructure
         public static void EnsureSeeded(this DownloadContext context)
         {
             CategoriesSeed.SeedCategories(context);
-            DownloadsSeed.SeedDownloads(context);
         }
     }
 }

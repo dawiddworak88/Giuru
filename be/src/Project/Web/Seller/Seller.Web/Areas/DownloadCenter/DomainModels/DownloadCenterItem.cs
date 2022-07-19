@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Seller.Web.Areas.DownloadCenter.DomainModels
 {
     public class DownloadCenterItem
     {
         public Guid Id { get; set; }
-        public Guid? CategoryId { get; set; }
-        public string CategoryName { get; set; }
-        public int? Order { get; set; }
-        public DateTime LastModifiedDate { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public string Url { get; set; }
+        public string Name { get; set; }
+        public string Categories { get; set; }
+        public DateTime? LastModifiedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
     }
 }
