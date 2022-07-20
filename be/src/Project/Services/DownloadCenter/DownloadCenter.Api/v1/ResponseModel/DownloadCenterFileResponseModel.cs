@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DownloadCenter.Api.v1.ResponseModel
 {
-    public class DownloadCenterResponseModel
+    public class DownloadCenterFileResponseModel
     {
         public Guid? Id { get; set; }
         public IEnumerable<string> Categories { get; set; }

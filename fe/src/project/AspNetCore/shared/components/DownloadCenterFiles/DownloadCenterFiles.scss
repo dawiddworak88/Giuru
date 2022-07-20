@@ -2,6 +2,12 @@
     .MuiFormControlLabel-root {
         margin: 0;
     }
+
+    @media only screen and (max-width: $widescreen) {
+        &__header {
+            flex-direction: column;
+        }
+    }
     
     &__tooltip {
         

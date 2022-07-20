@@ -13,13 +13,13 @@ using System.Linq;
 
 namespace Buyer.Web.Shared.ModelBuilders.Files
 {
-    public class FilesModelBuilder : IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel>
+    public class DownloadCenterFilesModelBuilder : IAsyncComponentModelBuilder<FilesComponentModel, DownloadCenterFilesViewModel>
     {
         private readonly IMediaItemsRepository mediaRepository;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IMediaService mediaService;
 
-        public FilesModelBuilder(
+        public DownloadCenterFilesModelBuilder(
             IMediaItemsRepository mediaRepository,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IMediaService mediaHelperService)
@@ -29,7 +29,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
             this.mediaService = mediaHelperService;
         }
 
-        public async Task<FilesViewModel> BuildModelAsync(FilesComponentModel componentModel)
+        public async Task<DownloadCenterFilesViewModel> BuildModelAsync(FilesComponentModel componentModel)
         {
             if (componentModel.Files is not null && componentModel.Files.Any())
             {
@@ -37,7 +37,7 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
 
                 if (files is not null)
                 {
-                    var filesViewModel = new FilesViewModel
+                    var filesViewModel = new DownloadCenterFilesViewModel
                     {
                         NameLabel = this.globalLocalizer.GetString("Name"),
                         FilenameLabel = this.globalLocalizer.GetString("Filename"),
@@ -47,7 +47,10 @@ namespace Buyer.Web.Shared.ModelBuilders.Files
                         DownloadLabel = this.globalLocalizer.GetString("Download"),
                         CopyLinkLabel = this.globalLocalizer.GetString("CopyLink"),
                         CreatedDateLabel = this.globalLocalizer.GetString("CreatedDate"),
-                        LastModifiedDateLabel = this.globalLocalizer.GetString("LastModifiedDate")
+                        LastModifiedDateLabel = this.globalLocalizer.GetString("LastModifiedDate"),
+                        DownloadSelectedLabel = this.globalLocalizer.GetString("DownloadSelected"),
+                        DownloadEverythingLabel = this.globalLocalizer.GetString("DownloadEverything"),
+                        SelectFileLabel = this.globalLocalizer.GetString("SelectFile")
                     };
 
                     var fileViewModels = new List<FileViewModel>();

@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CategoryDeleteDownloadCenterConflict" xml:space="preserve">
-    <value>Delete the download center item associated with the category.</value>
-  </data>
   <data name="CategoryDeletedSuccessfully" xml:space="preserve">
     <value>Successfully deleted category.</value>
   </data>
@@ -129,14 +126,14 @@
   <data name="CategorySavedSuccessfully" xml:space="preserve">
     <value>Category has been saved successfully.</value>
   </data>
+  <data name="DownloadCenterFileNotFound" xml:space="preserve">
+    <value>Download center file not found.</value>
+  </data>
   <data name="DownloadCenterItemDeletedSuccessfully" xml:space="preserve">
-    <value>Successfully deleted download center category.</value>
+    <value>Successfully deleted download center files.</value>
   </data>
   <data name="DownloadCenterItemSavedSuccessfully" xml:space="preserve">
-    <value>Successfully saved download center category.</value>
-  </data>
-  <data name="DownloadCenterNotFound" xml:space="preserve">
-    <value>Download center category not found.</value>
+    <value>Successfully saved download center files.</value>
   </data>
   <data name="EditCategory" xml:space="preserve">
     <value>Edit category</value>
@@ -151,7 +148,7 @@
     <value>Add category</value>
   </data>
   <data name="NewDownloadCenter" xml:space="preserve">
-    <value>Add download center category</value>
+    <value>Add download center files</value>
   </data>
   <data name="ParentCategory" xml:space="preserve">
     <value>Parent category</value>

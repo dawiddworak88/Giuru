@@ -64,7 +64,7 @@ namespace Buyer.Web.Areas.DownloadCenter.Repositories
                     {
                         Id = downloadCenterItem.Id,
                         Name = downloadCenterItem.Name,
-                        Categories = downloadCenterItem.Categories.Select(x => new DownloadCenterItemCategory
+                        Subcategories = downloadCenterItem.Subcategories.Select(x => new DownloadCenterItemCategory
                         {
                             Id = x.Id,
                             Name = x.Name,
@@ -116,7 +116,7 @@ namespace Buyer.Web.Areas.DownloadCenter.Repositories
                     ParentCategoryId = response.Data.ParentCategoryId,
                     ParentCategoryName = response.Data.ParentCategoryName,
                     CategoryName = response.Data.CategoryName,
-                    Categories = response.Data.Categories.OrEmptyIfNull().Select(x => new DownloadCenterItemCategory
+                    Subcategories = response.Data.Subcategories.OrEmptyIfNull().Select(x => new DownloadCenterItemCategory
                     {
                         Id = x.Id,
                         Name = x.Name,

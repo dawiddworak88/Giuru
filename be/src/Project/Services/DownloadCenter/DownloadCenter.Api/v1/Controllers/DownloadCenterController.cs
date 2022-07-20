@@ -24,7 +24,7 @@ namespace DownloadCenter.Api.v1.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [AllowAnonymous]
+    [Authorize]
     [ApiController]
     public class DownloadCenterController : BaseApiController
     {
@@ -37,20 +37,20 @@ namespace DownloadCenter.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Get download category by id.
+        /// Get download center category by id.
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <returns>The download category.</returns>
+        /// <returns>The download center category.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("categories/{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DownloadCenterCategoriesResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DownloadCenterCategoryResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(Guid? id)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var serviceModel = new GetDownloadCenterCategoryFilesServiceModel
+            var serviceModel = new GetDownloadCenterFilesCategoryServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
@@ -67,13 +67,13 @@ namespace DownloadCenter.Api.v1.Controllers
 
                 if (downloadCenterCategory is not null)
                 {
-                    var response = new DownloadCenterCategoriesResponseModel
+                    var response = new DownloadCenterCategoryResponseModel
                     {
                         Id = downloadCenterCategory.Id,
                         ParentCategoryId = downloadCenterCategory.ParentCategoryId,
                         ParentCategoryName = downloadCenterCategory.ParentCategoryName,
                         CategoryName = downloadCenterCategory.CategoryName,
-                        Categories = downloadCenterCategory.Categories.OrEmptyIfNull().Select(x => new DownloadCenterCategoryResponseModel
+                        Subcategories = downloadCenterCategory.Subcategories.OrEmptyIfNull().Select(x => new DownloadCenterSubcategoryResponseModel
                         {
                             Id = x.Id,
                             Name = x.Name
@@ -122,7 +122,7 @@ namespace DownloadCenter.Api.v1.Controllers
 
             if (validationResult.IsValid)
             {
-                var downloadCenterFiles = await this.downloadCenterService.GetTestAsync(serviceModel);
+                var downloadCenterFiles = await this.downloadCenterService.GetAsync(serviceModel);
 
                 if (downloadCenterFiles is not null)
                 {
@@ -132,7 +132,7 @@ namespace DownloadCenter.Api.v1.Controllers
                         {
                             Id = x.Id,
                             Name = x.Name,
-                            Categories = x.Categories.OrEmptyIfNull().Select(y => new DownloadCenterCategoryResponseModel
+                            Subcategories = x.Categories.OrEmptyIfNull().Select(y => new DownloadCenterSubcategoryResponseModel
                             {
                                 Id = y.Id,
                                 Name = y.Name
@@ -158,7 +158,7 @@ namespace DownloadCenter.Api.v1.Controllers
         /// <param name="orderBy">The optional order by.</param>
         /// <returns>The list of download center files.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<DownloadCenterResponseModel>>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<DownloadCenterFileResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
@@ -185,9 +185,9 @@ namespace DownloadCenter.Api.v1.Controllers
 
                 if (downloadCenterFiles is not null)
                 {
-                    var response = new PagedResults<IEnumerable<DownloadCenterResponseModel>>(downloadCenterFiles.Total, downloadCenterFiles.PageSize)
+                    var response = new PagedResults<IEnumerable<DownloadCenterFileResponseModel>>(downloadCenterFiles.Total, downloadCenterFiles.PageSize)
                     {
-                        Data = downloadCenterFiles.Data.OrEmptyIfNull().Select(x => new DownloadCenterResponseModel
+                        Data = downloadCenterFiles.Data.OrEmptyIfNull().Select(x => new DownloadCenterFileResponseModel
                         {
                             Id = x.Id,
                             Categories = x.Categories,
@@ -246,7 +246,7 @@ namespace DownloadCenter.Api.v1.Controllers
         /// <returns>The download center item.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DownloadCenterItemResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DownloadCenterFileCategoriesResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetItem(Guid? id)
@@ -270,7 +270,7 @@ namespace DownloadCenter.Api.v1.Controllers
 
                 if (downloadCenterFile is not null)
                 {
-                    var response = new DownloadCenterItemResponseModel
+                    var response = new DownloadCenterFileCategoriesResponseModel
                     {
                         Id = downloadCenterFile.Id,
                         CategoriesIds = downloadCenterFile.CategoriesIds,

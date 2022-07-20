@@ -7,7 +7,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ViewModel
     {
         public string Title { get; set; }
         public string NoCategoriesLabel { get; set; }
-        public IEnumerable<CategoryDetailViewModel> Categories { get; set; }
+        public IEnumerable<CategoryDetailViewModel> Subcategories { get; set; }
         public FilesViewModel Files { get; set; }
     }
 }

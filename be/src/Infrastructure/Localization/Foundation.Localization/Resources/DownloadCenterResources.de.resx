@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CategoryDeleteDownloadCenterConflict" xml:space="preserve">
-    <value>Löschen Sie das mit der Kategorie verknüpfte Download-Center-Element.</value>
-  </data>
   <data name="CategoryDeletedSuccessfully" xml:space="preserve">
     <value>Kategorie erfolgreich gelöscht.</value>
   </data>
@@ -129,14 +126,14 @@
   <data name="CategorySavedSuccessfully" xml:space="preserve">
     <value>Kategorie erfolgreich gespeichert.</value>
   </data>
+  <data name="DownloadCenterFileNotFound" xml:space="preserve">
+    <value>Download-Center-Dateien nicht gefunden.</value>
+  </data>
   <data name="DownloadCenterItemDeletedSuccessfully" xml:space="preserve">
-    <value>Download-Center-Kategorie erfolgreich gelöscht.</value>
+    <value>Download-Center-Dateien erfolgreich gelöscht.</value>
   </data>
   <data name="DownloadCenterItemSavedSuccessfully" xml:space="preserve">
-    <value>Download-Center-Kategorie erfolgreich gespeichert.</value>
-  </data>
-  <data name="DownloadCenterNotFound" xml:space="preserve">
-    <value>Download-Center-Kategorie nicht gefunden.</value>
+    <value>Download-Center-Dateien erfolgreich gespeichert.</value>
   </data>
   <data name="EditCategory" xml:space="preserve">
     <value>Kategorie bearbeiten</value>

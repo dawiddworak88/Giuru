@@ -12,14 +12,14 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
 {
     public class CategoryDetailsModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, CategoryDetailsViewModel>
     {
-        private readonly IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder;
+        private readonly IAsyncComponentModelBuilder<FilesComponentModel, DownloadCenterFilesViewModel> downloadCenterFilesModelBuilder;
         private readonly IDownloadCenterRepository downloadCenterRepository;
 
         public CategoryDetailsModelBuilder(
-            IAsyncComponentModelBuilder<FilesComponentModel, FilesViewModel> filesModelBuilder,
+            IAsyncComponentModelBuilder<FilesComponentModel, DownloadCenterFilesViewModel> downloadCenterFilesModelBuilder,
             IDownloadCenterRepository downloadCenterRepository)
         {
-            this.filesModelBuilder = filesModelBuilder;
+            this.downloadCenterFilesModelBuilder = downloadCenterFilesModelBuilder;
             this.downloadCenterRepository = downloadCenterRepository;
         }
 
@@ -34,7 +34,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
                 if (downloadCenterCategory is not null)
                 {
                     viewModel.Title = downloadCenterCategory.CategoryName;
-                    viewModel.Categories = downloadCenterCategory.Categories.OrEmptyIfNull().Select(x => new CategoryDetailViewModel
+                    viewModel.Subcategories = downloadCenterCategory.Subcategories.OrEmptyIfNull().Select(x => new CategoryDetailViewModel
                     {
                         Id = x.Id,
                         Name = x.Name,
@@ -43,7 +43,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
 
                     if (downloadCenterCategory.Files.OrEmptyIfNull().Any())
                     {
-                        viewModel.Files = await this.filesModelBuilder.BuildModelAsync(new FilesComponentModel { Language = componentModel.Language, Token = componentModel.Token, Files = downloadCenterCategory.Files, DownloadButtons = true });
+                        viewModel.Files = await this.downloadCenterFilesModelBuilder.BuildModelAsync(new FilesComponentModel { Language = componentModel.Language, Token = componentModel.Token, Files = downloadCenterCategory.Files });
                     }
                 }
             }
