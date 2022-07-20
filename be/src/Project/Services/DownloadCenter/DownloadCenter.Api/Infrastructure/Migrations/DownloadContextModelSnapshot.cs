@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DownloadCenter.Api.Infrastructure.Migrations
 {
-    [DbContext(typeof(DownloadContext))]
+    [DbContext(typeof(DownloadCenterContext))]
     partial class DownloadContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

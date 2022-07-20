@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DownloadCenter.Api.Infrastructure.Migrations
 {
-    [DbContext(typeof(DownloadContext))]
+    [DbContext(typeof(DownloadCenterContext))]
     [Migration("20220719070628_Initial")]
     partial class Initial
     {

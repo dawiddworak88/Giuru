@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace DownloadCenter.Api.Infrastructure
 {
-    public static class DownloadContextExtensions
+    public static class DownloadCenterContextExtensions
     {
-        public static bool AllMigrationsApplied(this DownloadContext context)
+        public static bool AllMigrationsApplied(this DownloadCenterContext context)
         {
             var applied = context.GetService<IHistoryRepository>()
                 .GetAppliedMigrations()
@@ -20,7 +20,7 @@ namespace DownloadCenter.Api.Infrastructure
             return !total.Except(applied).Any();
         }
 
-        public static void EnsureSeeded(this DownloadContext context)
+        public static void EnsureSeeded(this DownloadCenterContext context)
         {
             CategoriesSeed.SeedCategories(context);
         }

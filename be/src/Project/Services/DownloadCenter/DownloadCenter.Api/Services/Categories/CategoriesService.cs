@@ -19,11 +19,11 @@ namespace DownloadCenter.Api.Services.Categories
     public class CategoriesService : ICategoriesService
     {
         private readonly IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer;
-        private readonly DownloadContext context;
+        private readonly DownloadCenterContext context;
 
         public CategoriesService(
             IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer,
-            DownloadContext context)
+            DownloadCenterContext context)
         {
             this.downloadCenterLocalizer = downloadCenterLocalizer;
             this.context = context;

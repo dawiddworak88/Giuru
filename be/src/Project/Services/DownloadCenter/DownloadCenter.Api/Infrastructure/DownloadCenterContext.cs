@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DownloadCenter.Api.Infrastructure
 {
-    public class DownloadContext : DbContext
+    public class DownloadCenterContext : DbContext
     {
-        public DownloadContext(DbContextOptions<DownloadContext> options)
+        public DownloadCenterContext(DbContextOptions<DownloadCenterContext> options)
             : base(options)
         { }
 

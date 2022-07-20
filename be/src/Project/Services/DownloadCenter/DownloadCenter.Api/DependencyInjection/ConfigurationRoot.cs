@@ -21,7 +21,7 @@ namespace DownloadCenter.Api.DependencyInjection
 
             using (var scope = scopeFactory.CreateScope())
             {
-                var dbContext = scope.ServiceProvider.GetService<DownloadContext>();
+                var dbContext = scope.ServiceProvider.GetService<DownloadCenterContext>();
 
                 if (!dbContext.AllMigrationsApplied())
                 {

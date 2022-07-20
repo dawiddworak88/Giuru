@@ -17,8 +17,8 @@ namespace DownloadCenter.Api.DependencyInjection
 
         public static void RegisterDatabaseDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<DownloadContext>();
-            services.AddDbContext<DownloadContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
+            services.AddScoped<DownloadCenterContext>();
+            services.AddDbContext<DownloadCenterContext>(options => options.UseSqlServer(configuration["ConnectionString"], opt => opt.UseNetTopologySuite()));
         }
     }
 }

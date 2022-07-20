@@ -8,7 +8,7 @@ namespace DownloadCenter.Api.Infrastructure.Seeds
 {
     public static class CategoriesSeed
     {
-        public static void SeedCategories(DownloadContext context)
+        public static void SeedCategories(DownloadCenterContext context)
         {
             SeedCategory(context, DownloadCenterConstants.Categories.CollectionsCategory, null, true, "Collections", "Kolekcje", "Sammlungen");
             SeedCategory(context, DownloadCenterConstants.Categories.ColorsOfProductsCategory, DownloadCenterConstants.Categories.CollectionsCategory, true, "Colors of products", "Kolorystyka produktów", "Farben von Produkten");
@@ -19,7 +19,7 @@ namespace DownloadCenter.Api.Infrastructure.Seeds
             SeedCategory(context, DownloadCenterConstants.Categories.TechnicalSheetsCategory, DownloadCenterConstants.Categories.TechnicalCategory, true, "Technical cards", "Karty Techniczne", "Technische Karten");
         }
 
-        private static void SeedCategory(DownloadContext context, Guid id, Guid? parentCategoryId, bool isVisible, string englishName, string polishName, string germanName)
+        private static void SeedCategory(DownloadCenterContext context, Guid id, Guid? parentCategoryId, bool isVisible, string englishName, string polishName, string germanName)
         {
             if (!context.Categories.Any(x => x.Id == id))
             {

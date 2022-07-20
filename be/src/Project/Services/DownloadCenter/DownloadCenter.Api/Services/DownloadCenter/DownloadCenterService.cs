@@ -19,12 +19,12 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 {
     public class DownloadCenterService : IDownloadCenterService
     {
-        private readonly DownloadContext context;
+        private readonly DownloadCenterContext context;
         private readonly IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer;
 
         public DownloadCenterService(
             IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer,
-            DownloadContext context)
+            DownloadCenterContext context)
         {
             this.context = context;
             this.downloadCenterLocalizer = downloadCenterLocalizer;
