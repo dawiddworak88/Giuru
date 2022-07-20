@@ -75,7 +75,7 @@ namespace Identity.Api.Areas.Accounts.Controllers
                 }                
             }
 
-            var viewModel = this.signInModelBuilder.BuildModel(new SignInComponentModel { ErrorMessage = this.accountLocalizer.GetString("InvalidPassword").Value, ReturnUrl = model.ReturnUrl, DevelopersEmail = this.settings.Value.DevelopersEmail });
+            var viewModel = this.signInModelBuilder.BuildModel(new SignInComponentModel { ErrorMessage = this.accountLocalizer.GetString("IncorrectEmailOrPassword").Value, ReturnUrl = model.ReturnUrl, DevelopersEmail = this.settings.Value.DevelopersEmail });
 
             return this.View(viewModel);
         }

@@ -147,8 +147,8 @@
   <data name="ForgotPasswordLabel" xml:space="preserve">
     <value>Passwort zurücksetzen</value>
   </data>
-  <data name="InvalidPassword" xml:space="preserve">
-    <value>Falsches Passwort. Bitte versuchen Sie es erneut oder klicken Sie auf „Passwort zurücksetzen“, um es zurückzusetzen.</value>
+  <data name="IncorrectEmailOrPassword" xml:space="preserve">
+    <value>Falsche Email oder Passwort. Bitte versuchen Sie es erneut oder klicken Sie auf „Passwort zurücksetzen“, um es zurückzusetzen.</value>
   </data>
   <data name="LastNameRequiredErrorMessage" xml:space="preserve">
     <value>Geben Sie Ihren Nachnamen ein</value>
