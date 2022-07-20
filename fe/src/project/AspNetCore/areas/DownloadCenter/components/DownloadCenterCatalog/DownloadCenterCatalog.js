@@ -13,12 +13,12 @@ const DownloadCenterCatalog = (props) => {
                             items.map((item, index) => {
                                 return (
                                     <div className="dc-catalog__category" key={index}>
-                                        <h3 className="is-size-5 has-text-weight-bold is-uppercase">{item.categoryName}</h3>
+                                        <h3 className="is-size-5 has-text-weight-bold is-uppercase">{item.name}</h3>
                                         <div className="is-flex is-flex-wrap-wrap mt-2">
-                                            {item.categories && item.categories.length > 0 && item.categories.map((category, index) => {
+                                            {item.categories && item.categories.length > 0 && item.categories.map((subcategory, index) => {
                                                 return (
-                                                    <a href={category.url} className="dc-catalog__subcategory-link is-flex is-justify-content-center is-align-items-center m-2" key={index}>
-                                                        <div className="subtitle is-6">{category.name}</div>
+                                                    <a href={subcategory.url} className="dc-catalog__subcategory-link is-flex is-justify-content-center is-align-items-center m-2" key={index}>
+                                                        <div className="subtitle is-6">{subcategory.name}</div>
                                                     </a>
                                                 )
                                             })}

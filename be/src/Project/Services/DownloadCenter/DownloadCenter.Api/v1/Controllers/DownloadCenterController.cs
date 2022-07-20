@@ -24,7 +24,7 @@ namespace DownloadCenter.Api.v1.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    [Authorize]
+    [AllowAnonymous]
     [ApiController]
     public class DownloadCenterController : BaseApiController
     {
@@ -81,6 +81,65 @@ namespace DownloadCenter.Api.v1.Controllers
                         Files = downloadCenterCategory.Files,
                         LastModifiedDate = downloadCenterCategory.LastModifiedDate,
                         CreatedDate = downloadCenterCategory.CreatedDate
+                    };
+
+                    return this.StatusCode((int)HttpStatusCode.OK, response);
+                }
+            }
+
+            throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
+        }
+
+        /// <summary>
+        /// Get list of download center files.
+        /// </summary>
+        /// <param name="searchTerm">The search term.</param>
+        /// <param name="pageIndex">The page index.</param>
+        /// <param name="itemsPerPage">The items per page.</param>
+        /// <param name="orderBy">The optional order by.</param>
+        /// <returns>The list of download center files.</returns>
+        [HttpGet("categories"), MapToApiVersion("1.0")]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<DownloadCenterItemCategoriesResponseModel>>))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
+        public async Task<IActionResult> GetCategories(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        {
+            var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
+
+            var serviceModel = new GetDownloadCenterItemsServiceModel
+            {
+                SearchTerm = searchTerm,
+                PageIndex = pageIndex,
+                ItemsPerPage = itemsPerPage,
+                OrderBy = orderBy,
+                Language = CultureInfo.CurrentCulture.Name,
+                Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
+            };
+
+            var validator = new GetDownloadCenterItemsModelValidator();
+            var validationResult = await validator.ValidateAsync(serviceModel);
+
+            if (validationResult.IsValid)
+            {
+                var downloadCenterFiles = await this.downloadCenterService.GetTestAsync(serviceModel);
+
+                if (downloadCenterFiles is not null)
+                {
+                    var response = new PagedResults<IEnumerable<DownloadCenterItemCategoriesResponseModel>>(downloadCenterFiles.Total, downloadCenterFiles.PageSize)
+                    {
+                        Data = downloadCenterFiles.Data.OrEmptyIfNull().Select(x => new DownloadCenterItemCategoriesResponseModel
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            Categories = x.Categories.OrEmptyIfNull().Select(y => new DownloadCenterCategoryResponseModel
+                            {
+                                Id = y.Id,
+                                Name = y.Name
+                            }),
+                            LastModifiedDate = x.LastModifiedDate,
+                            CreatedDate = x.CreatedDate
+                        })
                     };
 
                     return this.StatusCode((int)HttpStatusCode.OK, response);

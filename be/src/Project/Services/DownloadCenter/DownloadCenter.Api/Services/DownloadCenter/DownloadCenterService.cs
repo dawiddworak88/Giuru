@@ -8,6 +8,7 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -148,6 +149,74 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             return downloadCenterFileItem;
 
+        }
+
+        public async Task<PagedResults<IEnumerable<DownloadCenterItemServiceModel>>> GetTestAsync(GetDownloadCenterItemsServiceModel model)
+        {
+            var downloadCenterCategories = this.context.Categories.Where(x => x.IsActive && x.IsVisible && x.ParentCategoryId == null);
+
+            if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
+            {
+                downloadCenterCategories = downloadCenterCategories.Where(x => x.Translations.Any(y => y.Name.StartsWith(model.SearchTerm)) || x.Id.ToString() == model.SearchTerm);
+            }
+
+            downloadCenterCategories = downloadCenterCategories.ApplySort(model.OrderBy);
+
+            var pagedResults = downloadCenterCategories.PagedIndex(new Pagination(downloadCenterCategories.Count(), model.ItemsPerPage), model.PageIndex);
+
+            var pagedDownloadCenterServiceModel = new PagedResults<IEnumerable<DownloadCenterItemServiceModel>>(pagedResults.Total, pagedResults.PageSize);
+
+            var downloadCenterItems = new List<DownloadCenterItemServiceModel>();
+
+            foreach (var downloadCenterItem in pagedResults.Data.OrEmptyIfNull().ToList())
+            {
+                var item = new DownloadCenterItemServiceModel
+                {
+                    Id = downloadCenterItem.Id,
+                    LastModifiedDate = downloadCenterItem.LastModifiedDate,
+                    CreatedDate = downloadCenterItem.CreatedDate
+                };
+
+                var categoryTranslation = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == downloadCenterItem.Id && x.IsActive && x.Language == model.Language);
+
+                if (categoryTranslation is null)
+                {
+                    categoryTranslation = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == downloadCenterItem.Id && x.IsActive);
+                }
+
+                item.Name = categoryTranslation?.Name;
+
+                var categories = this.context.Categories.Where(x => x.ParentCategoryId == downloadCenterItem.Id);
+
+                var downloadCategories = new List<DownloadCenterCategoryServiceModel>();
+
+                foreach (var category in categories.OrEmptyIfNull().ToList())
+                {
+                    var categoryItem = new DownloadCenterCategoryServiceModel
+                    {
+                        Id = category.Id
+                    };
+
+                    var categoryItemTranslation = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == category.Id && x.IsActive && x.Language == model.Language);
+
+                    if (categoryItemTranslation is null)
+                    {
+                        categoryItemTranslation = this.context.CategoryTranslations.FirstOrDefault(x => x.CategoryId == category.Id && x.IsActive);
+                    }
+
+                    categoryItem.Name = categoryItemTranslation?.Name;
+
+                    downloadCategories.Add(categoryItem);
+                }
+
+                item.Categories = downloadCategories;
+
+                downloadCenterItems.Add(item);
+            }
+
+            pagedDownloadCenterServiceModel.Data = downloadCenterItems;
+
+            return pagedDownloadCenterServiceModel;
         }
 
         public async Task<DownloadCenterCategoryFilesServiceModel> GetDownloadCenterCategoryAsync(GetDownloadCenterCategoryFilesServiceModel model)

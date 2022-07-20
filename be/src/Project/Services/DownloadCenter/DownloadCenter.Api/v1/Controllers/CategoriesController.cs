@@ -57,7 +57,6 @@ namespace DownloadCenter.Api.v1.Controllers
                     ParentCategoryId = request.ParentCategoryId,
                     Name = request.Name,
                     IsVisible = request.IsVisible,
-                    Files = request.Files,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -82,7 +81,6 @@ namespace DownloadCenter.Api.v1.Controllers
                     ParentCategoryId = request.ParentCategoryId,
                     Name = request.Name,
                     IsVisible = request.IsVisible,
-                    Files = request.Files,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -175,7 +173,6 @@ namespace DownloadCenter.Api.v1.Controllers
                         Name = category.Name,
                         ParentCategoryId = category.ParentCategoryId,
                         ParentCategoryName = category.ParentCategoryName,
-                        Files = category.Files,
                         IsVisible = category.IsVisible,
                         LastModifiedDate = category.LastModifiedDate,
                         CreatedDate = category.CreatedDate
@@ -232,7 +229,6 @@ namespace DownloadCenter.Api.v1.Controllers
                             Name = x.Name,
                             ParentCategoryId = x.ParentCategoryId,
                             ParentCategoryName = x.ParentCategoryName,
-                            Files = x.Files,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
                         })

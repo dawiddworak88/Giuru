@@ -9,6 +9,5 @@ namespace Seller.Web.Areas.DownloadCenter.ApiRequestModels
         public string Name { get; set; }
         public bool IsVisible { get; set; }
         public Guid? ParentCategoryId { get; set; }
-        public IEnumerable<FileRequestModel> Files { get; set; }
     }
 }

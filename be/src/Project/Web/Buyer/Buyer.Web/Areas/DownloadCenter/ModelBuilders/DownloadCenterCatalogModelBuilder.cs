@@ -4,25 +4,20 @@ using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
 {
     public class DownloadCenterCatalogModelBuilder : IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCatalogViewModel>
     {
-        private readonly LinkGenerator linkGenerator;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IDownloadCenterRepository downloadCenterRepository;
 
         public DownloadCenterCatalogModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IDownloadCenterRepository downloadCenterRepository,
-            LinkGenerator linkGenerator)
+            IDownloadCenterRepository downloadCenterRepository)
         {
-            this.linkGenerator = linkGenerator;
             this.globalLocalizer = globalLocalizer;
             this.downloadCenterRepository = downloadCenterRepository;
         }
@@ -34,7 +29,7 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
                 NoCategoriesLabel = this.globalLocalizer.GetString("NoCategories")
             };
 
-            viewModel.PagedResults = await this.downloadCenterRepository.GetAsync(componentModel.Token, componentModel.Language, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, null, $"{nameof(DomainModels.DownloadCenterItem.Order)} desc");
+            viewModel.PagedResults = await this.downloadCenterRepository.GetAsync(componentModel.Token, componentModel.Language, PaginationConstants.DefaultPageIndex, PaginationConstants.DefaultPageSize, null, $"{nameof(DomainModels.DownloadCenterItem.CreatedDate)} asc");
 
             return viewModel;
         }

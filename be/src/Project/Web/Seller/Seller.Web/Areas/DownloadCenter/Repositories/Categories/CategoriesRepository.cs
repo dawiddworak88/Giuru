@@ -162,14 +162,13 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.Categories
             return default;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string name, Guid? parentCategoryId, bool isVisible, IEnumerable<Guid> files)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string name, Guid? parentCategoryId, bool isVisible)
         {
             var requestModel = new CategoryApiRequestModel
             {
                 Id = id,
                 Name = name,
                 ParentCategoryId = parentCategoryId,
-                Files = files,
                 IsVisible = isVisible
             };
 

@@ -49,7 +49,7 @@ namespace Buyer.Web.Areas.DownloadCenter.Repositories
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.DownloadCenterApiEndponint}"
+                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.DownloadCenterCategoriesApiEndpoint}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<DownloadCenterItemResponseModel>>>(apiRequest);
@@ -63,15 +63,13 @@ namespace Buyer.Web.Areas.DownloadCenter.Repositories
                     var item = new DownloadCenterItem
                     {
                         Id = downloadCenterItem.Id,
-                        CategoryId = downloadCenterItem.CategoryId,
-                        CategoryName = downloadCenterItem.CategoryName,
+                        Name = downloadCenterItem.Name,
                         Categories = downloadCenterItem.Categories.Select(x => new DownloadCenterItemCategory
                         {
                             Id = x.Id,
                             Name = x.Name,
                             Url = this.linkGenerator.GetPathByAction("Detail", "Category", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name, Id = x.Id })
                         }),
-                        Order = downloadCenterItem.Order,
                         LastModifiedDate = downloadCenterItem.LastModifiedDate,
                         CreatedDate = downloadCenterItem.CreatedDate
                     };
@@ -100,7 +98,7 @@ namespace Buyer.Web.Areas.DownloadCenter.Repositories
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.DownloadCenterCategoryApiEndpoint}/{id}"
+                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.DownloadCenterCategoriesApiEndpoint}/{id}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, DownloadCenterCategoryResponseModel>(apiRequest);
