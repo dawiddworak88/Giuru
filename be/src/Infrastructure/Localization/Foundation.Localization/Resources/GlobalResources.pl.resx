@@ -651,4 +651,7 @@
   <data name="SelectFile" xml:space="preserve">
     <value>Wybierz plik</value>
   </data>
+  <data name="Thumbnail" xml:space="preserve">
+    <value>Miniaturka</value>
+  </data>
 </root>

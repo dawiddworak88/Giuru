@@ -10,7 +10,7 @@ const CategoryDetails = (props) => {
                 <div className="is-flex is-flex-wrap-wrap">
                     {props.subcategories.length > 0 && props.subcategories.map((subcategory, index) => {
                         return (
-                            <a href={subcategory.url} className="dc-category__subcategory-link is-flex is-justify-content-center is-align-items-center m-2" key={index}>
+                            <a href={subcategory.url} className="dc-category__subcategory-link is-flex is-justify-content-center is-align-items-center m-2 p-1" key={index}>
                                 <span className="subtitle is-6">{subcategory.name}</span>
                             </a>
                         )

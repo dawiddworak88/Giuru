@@ -15,7 +15,7 @@ const DownloadCenterCatalog = (props) => {
                                         <div className="is-flex is-flex-wrap-wrap mt-2">
                                             {category.subcategories && category.subcategories.length > 0 && category.subcategories.map((subcategory, index) => {
                                                 return (
-                                                    <a href={subcategory.url} className="dc-catalog__subcategory-link is-flex is-justify-content-center is-align-items-center m-2" key={index}>
+                                                    <a href={subcategory.url} className="dc-catalog__subcategory-link is-flex is-justify-content-center is-align-items-center m-2 p-1" key={index}>
                                                         <div className="subtitle is-6">{subcategory.name}</div>
                                                     </a>
                                                 )

@@ -113,7 +113,7 @@ const DownloadCenterItemForm = (props) => {
                                 type="submit" 
                                 variant="contained" 
                                 color="primary"
-                                disabled={state.isLoading || disable}>
+                                disabled={state.isLoading || disable || files.length == 0}>
                                 {props.saveText}
                             </Button>
                             <Button

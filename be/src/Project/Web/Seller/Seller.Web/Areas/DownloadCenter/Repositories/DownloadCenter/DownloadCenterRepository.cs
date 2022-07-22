@@ -13,6 +13,7 @@ using Seller.Web.Areas.DownloadCenter.ApiResponseModels;
 using Seller.Web.Areas.DownloadCenter.DomainModels;
 using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Configurations;
+using Seller.Web.Shared.Definitions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -120,7 +121,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
                     if (file is not null)
                     {
                         downloadCenterFileItem.Name = file.Name;
-                        downloadCenterFileItem.Url = file.MimeType.StartsWith("image") ? this.mediaService.GetMediaUrl(downloadCenterFile.Id, 200) : this.mediaService.GetNonCdnMediaUrl(downloadCenterFile.Id);
+                        downloadCenterFileItem.Url = file.MimeType.StartsWith("image") ? this.mediaService.GetMediaUrl(downloadCenterFile.Id, Constants.PreviewMaxWidth) : null;
                     }
 
                     downloadCenterFiles.Add(downloadCenterFileItem);

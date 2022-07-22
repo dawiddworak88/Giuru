@@ -18,6 +18,7 @@ import PaginationConstants from "../../constants/PaginationConstants";
 import ConfirmationDialog from "../ConfirmationDialog/ConfirmationDialog";
 import ClipboardHelper from "../../helpers/globals/ClipboardHelper";
 import AuthenticationHelper from "../../helpers/globals/AuthenticationHelper";
+import { TextSnippet } from "@mui/icons-material";
 
 function Catalog(props) {
     const [state, dispatch] = useContext(Context);
@@ -253,7 +254,15 @@ function Catalog(props) {
                                                 {props.table.properties && props.table.properties.map((property, index) => {
                                                     if (property.isPicture){
                                                         return (
-                                                            <TableCell key={index}><img src={item[property.title]} /></TableCell>
+                                                            <TableCell key={index}>
+                                                                {item[property.title] ? (
+                                                                    <img src={item[property.title]} />
+                                                                ) : (
+                                                                    <div className="is-flex is-justify-content-center">
+                                                                        <TextSnippet className="is-size-1" />
+                                                                    </div>
+                                                                )}
+                                                            </TableCell>
                                                         )
                                                     }
                                                     else if (property.isDateTime){

@@ -190,7 +190,7 @@
     <value>of</value>
   </data>
   <data name="DownloadCenter" xml:space="preserve">
-    <value>Download Center</value>
+    <value>Download center</value>
   </data>
   <data name="DropFile" xml:space="preserve">
     <value>Drop here...</value>
@@ -622,7 +622,7 @@
     <value>The cooperation request was successfully submitted.</value>
   </data>
   <data name="DownloadCenterCategories" xml:space="preserve">
-    <value>Download Center Categories</value>
+    <value>Download center categories</value>
   </data>
   <data name="EditCategory" xml:space="preserve">
     <value>Edit category</value>
@@ -644,5 +644,8 @@
   </data>
   <data name="SelectFile" xml:space="preserve">
     <value>Select file</value>
+  </data>
+  <data name="Thumbnail" xml:space="preserve">
+    <value>Thumbnail</value>
   </data>
 </root>
