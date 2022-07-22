@@ -28,7 +28,8 @@ namespace Identity.Api.Areas.Accounts.ModelBuilders
             var signInFormComponentModel = new SignInFormComponentModel
             {
                 ReturnUrl = componentModel.ReturnUrl,
-                DevelopersEmail = componentModel.DevelopersEmail
+                DevelopersEmail = componentModel.DevelopersEmail,
+                ErrorMessage = componentModel.ErrorMessage
             };
 
             var viewModel = new SignInViewModel
