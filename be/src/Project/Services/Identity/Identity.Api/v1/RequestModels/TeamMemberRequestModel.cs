@@ -1,10 +1,7 @@
-﻿using System;
-
-namespace Seller.Web.Areas.TeamMembers.DomainModels
+﻿namespace Identity.Api.v1.RequestModels
 {
-    public class TeamMember
-    {
-        public Guid Id { get; set; }
+    public class TeamMemberRequestModel
+    { 
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }

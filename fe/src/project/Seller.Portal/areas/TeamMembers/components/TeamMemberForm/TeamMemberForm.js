@@ -125,6 +125,9 @@ const TeamMemberForm = (props) => {
                                 value={email} 
                                 onChange={handleOnChange} 
                                 variant="standard"
+                                InputProps={{
+                                    readOnly: props.email ? true : false,
+                                }}
                                 helperText={dirty.email ? errors.email : ""} 
                                 error={(errors.email.length > 0) && dirty.email} 
                             />

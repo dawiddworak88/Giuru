@@ -6,6 +6,7 @@ using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Seller.Web.Areas.TeamMembers.DomainModels;
+using Seller.Web.Areas.TeamMembers.Repositories;
 using Seller.Web.Shared.Catalogs.ModelBuilders;
 using Seller.Web.Shared.ViewModels;
 using System.Collections.Generic;
@@ -19,16 +20,19 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
         private readonly ICatalogModelBuilder catalogModelBuilder;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly LinkGenerator linkGenerator;
+        private readonly ITeamMembersRepository teamMembersRepository;
 
         public TeamMembersPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<NewsResources> newsLocalizer,
+            ITeamMembersRepository teamMembersRepository,
             LinkGenerator linkGenerator)
         {
             this.catalogModelBuilder = catalogModelBuilder;
             this.globalLocalizer = globalLocalizer;
             this.linkGenerator = linkGenerator;
+            this.teamMembersRepository = teamMembersRepository;
         }
 
         public async Task<CatalogViewModel<TeamMember>> BuildModelAsync(ComponentModelBase componentModel)
@@ -43,7 +47,7 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "TeamMembersApi", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "TeamMembersApi", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name });
 
-            viewModel.OrderBy = $"{nameof(TeamMember.CreatedDate)} desc";
+            viewModel.OrderBy = $"{nameof(TeamMember.Email)} desc";
 
             viewModel.Table = new CatalogTableViewModel
             {
@@ -52,8 +56,6 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
                     this.globalLocalizer.GetString("FirstName"),
                     this.globalLocalizer.GetString("LastName"),
                     this.globalLocalizer.GetString("Email"),
-                    this.globalLocalizer.GetString("LastModifiedDate"),
-                    this.globalLocalizer.GetString("CreatedDate")
                 },
                 Actions = new List<CatalogActionViewModel>
                 {
@@ -82,19 +84,11 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
                     {
                         Title = nameof(TeamMember.Email).ToCamelCase(),
                         IsDateTime = false
-                    },
-                    new CatalogPropertyViewModel
-                    {
-                        Title = nameof(TeamMember.LastModifiedDate).ToCamelCase(),
-                        IsDateTime = true
-                    },
-                    new CatalogPropertyViewModel
-                    {
-                        Title = nameof(TeamMember.CreatedDate).ToCamelCase(),
-                        IsDateTime = true
                     }
                 }
             };
+
+            viewModel.PagedItems = await this.teamMembersRepository.GetAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(TeamMember.Email)} desc");
 
             return viewModel;
         }

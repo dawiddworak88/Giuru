@@ -3,7 +3,9 @@ using Foundation.Localization;
 using Foundation.PageContent.ComponentModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Seller.Web.Areas.TeamMembers.Repositories;
 using Seller.Web.Areas.TeamMembers.ViewModel;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.TeamMembers.ModelBuilders
@@ -12,19 +14,23 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
     {
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly LinkGenerator linkGenerator;
+        private readonly ITeamMembersRepository teamMembersRepository;
 
         public TeamMemberFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
+            ITeamMembersRepository teamMembersRepository,
             LinkGenerator linkGenerator)
         {
             this.linkGenerator = linkGenerator;
             this.globalLocalizer = globalLocalizer;
+            this.teamMembersRepository = teamMembersRepository;
         }
 
         public async Task<TeamMemberFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
         {
             var viewModel = new TeamMemberFormViewModel
             {
+                Title = this.globalLocalizer.GetString("EditTeamMember"),
                 GeneralErrorMessage = this.globalLocalizer.GetString("AnErrorOccurred"),
                 FieldRequiredErrorMessage = this.globalLocalizer.GetString("FieldRequiredErrorMessage"),
                 EmailFormatErrorMessage = this.globalLocalizer.GetString("EmailFormatErrorMessage"),
@@ -32,8 +38,23 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
                 LastNameLabel = this.globalLocalizer.GetString("LastName"),
                 EmailLabel = this.globalLocalizer.GetString("Email"),
                 SaveText = this.globalLocalizer.GetString("SaveText"),
-                NavigateToTeamMembersListText = this.globalLocalizer.GetString("NavigateToTeamMembers")
+                NavigateToTeamMembersListText = this.globalLocalizer.GetString("NavigateToTeamMembers"),
+                IdLabel = this.globalLocalizer.GetString("Id"),
+                TeamMembersUrl = this.linkGenerator.GetPathByAction("Index", "TeamMembers", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name })
             };
+
+            if (componentModel.Id.HasValue)
+            {
+                var teamMember = await this.teamMembersRepository.GetAsync(componentModel.Token, componentModel.Language, componentModel.Id);
+
+                if (teamMember is not null)
+                {
+                    viewModel.Id = teamMember.Id;
+                    viewModel.FirstName = teamMember.FirstName;
+                    viewModel.LastName = teamMember.LastName;
+                    viewModel.Email = teamMember.Email;
+                }
+            }
 
             return viewModel;
         }

@@ -5,6 +5,7 @@ namespace Seller.Web.Areas.TeamMembers.ViewModel
     public class TeamMemberFormViewModel
     {
         public Guid? Id { get; set; }
+        public string Title { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string FieldRequiredErrorMessage { get; set; }
         public string EmailFormatErrorMessage { get; set; }
@@ -17,5 +18,6 @@ namespace Seller.Web.Areas.TeamMembers.ViewModel
         public string EmailLabel { get; set; }
         public string IdLabel { get; set; }
         public string NavigateToTeamMembersListText { get; set; }
+        public string TeamMembersUrl { get; set; }
     }
 }
