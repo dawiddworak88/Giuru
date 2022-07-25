@@ -85,6 +85,18 @@ namespace Seller.Web.Shared.ModelBuilders.DrawerMenu
                     Items = new List<DrawerMenuItemViewModel>
                     {
                          new DrawerMenuItemViewModel
+                         {
+                            Icon = IconsConstants.Users,
+                            Title = this.globalLocalizer.GetString("TeamMembers"),
+                            Url = this.linkGenerator.GetPathByAction("Index", "TeamMembers", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name })
+                         }
+                    }
+                },
+                new DrawerMenuViewModel
+                {
+                    Items = new List<DrawerMenuItemViewModel>
+                    {
+                         new DrawerMenuItemViewModel
                         {
                             Icon = IconsConstants.Inventory,
                             Title = this.globalLocalizer.GetString("Inventory"),

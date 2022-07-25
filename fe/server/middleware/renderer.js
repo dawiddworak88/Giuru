@@ -25,6 +25,8 @@ import SetPasswordPage from "../../src/project/Account/areas/Accounts/pages/SetP
 import ContentPage from "../../src/project/Account/areas/Home/pages/Content/ContentPage";
 
 // Seller Portal
+import TeamMemberPage from "../../src/project/Seller.Portal/areas/TeamMembers/pages/TeamMember/TeamMember";
+import TeamMembersPage from "../../src/project/Seller.Portal/areas/TeamMembers/pages/TeamMembers/TeamMembers";
 import ClientRolePage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientRolePage/ClientRolePage";
 import ClientRolesPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/ClientRolesPage";
 import ClientApplicationPage from "../../src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/ClientApplicationPage";
@@ -80,6 +82,8 @@ const Components = {
 	SetPasswordPage,
 	ContentPage,
 
+	TeamMemberPage,
+	TeamMembersPage,
 	ClientRolePage,
 	ClientRolesPage,
 	ClientApplicationPage,
