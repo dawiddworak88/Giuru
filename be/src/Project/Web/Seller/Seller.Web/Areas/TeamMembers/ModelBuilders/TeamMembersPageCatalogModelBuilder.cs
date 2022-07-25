@@ -47,6 +47,12 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
             viewModel.DeleteApiUrl = this.linkGenerator.GetPathByAction("Delete", "TeamMembersApi", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.SearchApiUrl = this.linkGenerator.GetPathByAction("Get", "TeamMembersApi", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name });
 
+            viewModel.ConfirmationDialogDeleteNameProperty = new List<string>
+            {
+                nameof(TeamMember.FirstName).ToCamelCase(),
+                nameof(TeamMember.LastName).ToCamelCase()
+            };
+
             viewModel.OrderBy = $"{nameof(TeamMember.Email)} desc";
 
             viewModel.Table = new CatalogTableViewModel
