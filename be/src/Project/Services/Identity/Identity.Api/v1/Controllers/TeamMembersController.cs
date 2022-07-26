@@ -183,7 +183,7 @@ namespace Identity.Api.v1.Controllers
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            if (request.Email is not null)
+            if (request.Id.HasValue)
             {
                 var serviceModel = new UpdateTeamMemberServiceModel
                 {
@@ -200,9 +200,9 @@ namespace Identity.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    await this.teamMemberService.UpdateAsync(serviceModel);
+                    var teamMemberId = await this.teamMemberService.UpdateAsync(serviceModel);
 
-                    return this.StatusCode((int)HttpStatusCode.OK);
+                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = teamMemberId });
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);
@@ -214,6 +214,9 @@ namespace Identity.Api.v1.Controllers
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     Email = request.Email,
+                    Host = this.Request.Host,
+                    Scheme = this.Request.Scheme,
+                    ReturnUrl = request.ReturnUrl,
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -224,9 +227,9 @@ namespace Identity.Api.v1.Controllers
 
                 if (validationResult.IsValid)
                 {
-                    await this.teamMemberService.CreateAsync(serviceModel);
+                    var teamMemberId = await this.teamMemberService.CreateAsync(serviceModel);
 
-                    return this.StatusCode((int)HttpStatusCode.OK);
+                    return this.StatusCode((int)HttpStatusCode.OK, new { Id = teamMemberId });
                 }
 
                 throw new CustomException(string.Join(ErrorConstants.ErrorMessagesSeparator, validationResult.Errors.Select(x => x.ErrorMessage)), (int)HttpStatusCode.UnprocessableEntity);

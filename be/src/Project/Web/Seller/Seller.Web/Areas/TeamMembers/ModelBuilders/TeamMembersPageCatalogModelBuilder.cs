@@ -19,13 +19,14 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
     {
         private readonly ICatalogModelBuilder catalogModelBuilder;
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
+        private readonly IStringLocalizer<TeamMembersResources> teamMemberLocalizer;
         private readonly LinkGenerator linkGenerator;
         private readonly ITeamMembersRepository teamMembersRepository;
 
         public TeamMembersPageCatalogModelBuilder(
             ICatalogModelBuilder catalogModelBuilder,
             IStringLocalizer<GlobalResources> globalLocalizer,
-            IStringLocalizer<NewsResources> newsLocalizer,
+            IStringLocalizer<TeamMembersResources> teamMemberLocalizer,
             ITeamMembersRepository teamMembersRepository,
             LinkGenerator linkGenerator)
         {
@@ -33,6 +34,7 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
             this.globalLocalizer = globalLocalizer;
             this.linkGenerator = linkGenerator;
             this.teamMembersRepository = teamMembersRepository;
+            this.teamMemberLocalizer = teamMemberLocalizer;
         }
 
         public async Task<CatalogViewModel<TeamMember>> BuildModelAsync(ComponentModelBase componentModel)
@@ -40,7 +42,7 @@ namespace Seller.Web.Areas.TeamMembers.ModelBuilders
             var viewModel = this.catalogModelBuilder.BuildModel<CatalogViewModel<TeamMember>, TeamMember>();
 
             viewModel.Title = this.globalLocalizer.GetString("TeamMembers");
-            viewModel.NewText = this.globalLocalizer.GetString("NewText");
+            viewModel.NewText = this.teamMemberLocalizer.GetString("NewText");
             viewModel.NewUrl = this.linkGenerator.GetPathByAction("Edit", "TeamMember", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name });
             viewModel.EditUrl = this.linkGenerator.GetPathByAction("Edit", "TeamMember", new { Area = "TeamMembers", culture = CultureInfo.CurrentUICulture.Name });
 

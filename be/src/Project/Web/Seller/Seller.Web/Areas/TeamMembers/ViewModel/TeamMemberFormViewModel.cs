@@ -19,5 +19,6 @@ namespace Seller.Web.Areas.TeamMembers.ViewModel
         public string IdLabel { get; set; }
         public string NavigateToTeamMembersListText { get; set; }
         public string TeamMembersUrl { get; set; }
+        public string SaveUrl { get; set; }
     }
 }

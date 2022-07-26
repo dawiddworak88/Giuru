@@ -1,10 +1,12 @@
 ﻿using Foundation.ApiExtensions.Communications;
 using Foundation.ApiExtensions.Models.Request;
+using Foundation.ApiExtensions.Models.Response;
 using Foundation.ApiExtensions.Services.ApiClientServices;
 using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.GenericRepository.Paginations;
 using Microsoft.Extensions.Options;
+using Seller.Web.Areas.TeamMembers.ApiRequestModel;
 using Seller.Web.Areas.TeamMembers.DomainModels;
 using Seller.Web.Shared.Configurations;
 using System;
@@ -85,6 +87,58 @@ namespace Seller.Web.Areas.TeamMembers.Repositories
             }
 
             return default;
+        }
+
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, string firstName, string lastName, string email, string returnUrl)
+        {
+            var requestModel = new TeamMemberApiRequestModel
+            {
+                Id = id,
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                ReturnUrl = returnUrl
+            };
+
+            var apiRequest = new ApiRequest<TeamMemberApiRequestModel>
+            {
+                Language = language,
+                Data = requestModel,
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.TeamMembersEndpoint}"
+            };
+
+            var response = await this.apiClientService.PostAsync<ApiRequest<TeamMemberApiRequestModel>, TeamMemberApiRequestModel, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new CustomException(response.Message, (int)response.StatusCode);
+            }
+
+            if (response.IsSuccessStatusCode && response.Data?.Id != null)
+            {
+                return response.Data.Id.Value;
+            }
+
+            return default;
+        }
+
+        public async Task DeleteAsync(string token, string language, Guid? id)
+        {
+            var apiRequest = new ApiRequest<RequestModelBase>
+            {
+                Language = language,
+                Data = new RequestModelBase(),
+                AccessToken = token,
+                EndpointAddress = $"{this.settings.Value.IdentityUrl}{ApiConstants.Identity.TeamMembersEndpoint}/{id}"
+            };
+
+            var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
+
+            if (!response.IsSuccessStatusCode && response?.Data != null)
+            {
+                throw new CustomException(response.Data.Message, (int)response.StatusCode);
+            }
         }
     }
 }

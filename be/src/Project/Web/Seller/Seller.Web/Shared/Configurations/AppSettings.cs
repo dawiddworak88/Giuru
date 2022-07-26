@@ -12,5 +12,6 @@
         public string InventoryUrl { get; set; }
         public string NewsUrl { get; set; }
         public string BuyerUrl { get; set; }
+        public string SellerUrl { get; set; }
     }
 }

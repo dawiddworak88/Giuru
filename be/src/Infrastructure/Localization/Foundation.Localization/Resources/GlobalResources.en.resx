@@ -621,4 +621,7 @@
   <data name="SuccessfullyClientApply" xml:space="preserve">
     <value>The cooperation request was successfully submitted.</value>
   </data>
+  <data name="TeamMembers" xml:space="preserve">
+    <value>Team members</value>
+  </data>
 </root>
