@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CategoryDeletedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie usunięto kategorie.</value>
+  </data>
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Nie znaleziono kategorii.</value>
+  </data>
+  <data name="CategorySavedSuccessfully" xml:space="preserve">
+    <value>Pomyślnie zapisano kategorie.</value>
   </data>
   <data name="DownloadCenterFileNotFound" xml:space="preserve">
     <value>Nie znaleziono pliku centrum pobierania.</value>
