@@ -259,7 +259,7 @@ function Catalog(props) {
                                                                     <img src={item[property.title]} />
                                                                 ) : (
                                                                     <div className="is-flex is-justify-content-center">
-                                                                        <TextSnippet className="is-size-1" />
+                                                                        <TextSnippet size="3rem" color="primary"/>
                                                                     </div>
                                                                 )}
                                                             </TableCell>
