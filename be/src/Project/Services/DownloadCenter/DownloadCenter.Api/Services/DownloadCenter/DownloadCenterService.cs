@@ -184,7 +184,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
                 item.Name = categoryTranslation?.Name;
 
-                var categories = this.context.Categories.Where(x => x.ParentCategoryId == downloadCenterItem.Id);
+                var categories = this.context.Categories.Where(x => x.ParentCategoryId == downloadCenterItem.Id && x.IsActive && x.IsVisible);
 
                 var downloadCategories = new List<DownloadCenterSubcategoryServiceModel>();
 
