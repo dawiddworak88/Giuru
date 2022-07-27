@@ -52,28 +52,24 @@ const DownloadCenterFiles = (props) => {
         }
 
         if (files.length > 0){
-            const zip = JsZip();
 
-            for(let i = 0; i < files.length; i++ ){
-                let file = files[i]
+            const zip = new JsZip();
+            const folder = zip.folder(`${props.filesLabel}-${currentDate}`);
 
-                const blobFile = await fetch(file.url, { 
-                        mode: "no-cors" 
-                    })
-                    .then(response => response.blob())
-                    .then(blob => {
-                        return blob;
-                    });
+            for(let i = 0; i < files.length; i++ ) {
+                let file = files[i];
 
-                zip.file(`${file.filename}`, blobFile)
+                const blobPromise = fetch(file.url).then((r) => {
+                    if (r.status === 200) return r.blob();
+                    return Promise.reject(new Error(r.statusText));
+                });
+
+                const name = file.url.substring(file.url.lastIndexOf("/") + 1);
+
+                folder.file(name, blobPromise);
             }
 
-            zip.generateAsync({type: 'blob'}).then(zipFile => {
-                const currentDate = new Date().getTime();
-                const fileName = `${props.filesLabel}-${currentDate}.zip`;
-
-                return saveAs(zipFile, fileName);
-            });
+            zip.generateAsync({ type: "blob" }).then((blob) => saveAs(blob, `${props.filesLabel}-${new Date().getTime()}.zip`));
         }
     }
 
