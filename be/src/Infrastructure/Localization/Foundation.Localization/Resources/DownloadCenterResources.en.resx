@@ -120,6 +120,9 @@
   <data name="CategoryDeletedSuccessfully" xml:space="preserve">
     <value>Successfully deleted category.</value>
   </data>
+  <data name="CategoryFileConflict" xml:space="preserve">
+    <value>Delete files assigned to categories.</value>
+  </data>
   <data name="CategoryNotFound" xml:space="preserve">
     <value>Category not found</value>
   </data>
