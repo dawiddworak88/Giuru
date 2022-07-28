@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DownloadCenter.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(DownloadCenterContext))]
-    partial class DownloadContextModelSnapshot : ModelSnapshot
+    partial class DownloadCenterContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -64,6 +64,10 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Filename")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
