@@ -67,6 +67,8 @@ builder.Services.RegisterDatabaseDependencies(builder.Configuration);
 
 builder.Services.RegisterMediaApiDependencies();
 
+builder.Services.RegisterEventBus(builder.Configuration);
+
 builder.Services.ConfigureSettings(builder.Configuration);
 
 builder.Services.AddApiVersioning();

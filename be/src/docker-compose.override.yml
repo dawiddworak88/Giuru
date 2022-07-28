@@ -70,6 +70,9 @@ services:
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
       - OrganisationId=${ORGANISATION_ID}
+      - EventBusConnection=amqp://rabbitmq
+      - EventBusRetryCount=5
+      - EventBusRequestedHeartbeat=60
     ports:
       - "5131:80"
 
@@ -225,6 +228,9 @@ services:
       - SupportedCultures=${SUPPORTED_CULTURES}
       - DefaultCulture=${DEFAULT_CULTURE}
       - IdentityUrl=http://${GIURU_EXTERNAL_DNS_NAME_OR_IP}:5105
+      - EventBusConnection=amqp://rabbitmq
+      - EventBusRetryCount=5
+      - EventBusRequestedHeartbeat=60
     ports:
       - "5136:80"
 

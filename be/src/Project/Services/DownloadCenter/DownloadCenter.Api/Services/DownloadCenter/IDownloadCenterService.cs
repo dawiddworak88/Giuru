@@ -15,5 +15,6 @@ namespace DownloadCenter.Api.Services.DownloadCenter
         Task DeleteAsync(DeleteDownloadCenterFileServiceModel model);
         Task<Guid> CreateAsync(CreateDownloadCenterFileServiceModel model);
         Task<Guid> UpdateAsync(UpdateDownloadCenterFileServiceModel model);
+        Task UpdateFileNameAsync(Guid? id, string name);
     }
 }

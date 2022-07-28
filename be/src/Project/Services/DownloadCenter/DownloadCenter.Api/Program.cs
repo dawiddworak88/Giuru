@@ -16,6 +16,8 @@ using Foundation.Account.DependencyInjection;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using DownloadCenter.Api.DependencyInjection;
+using Foundation.EventBus.Abstractions;
+using DownloadCenter.Api.IntegrationEvents;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,6 +69,8 @@ builder.Services.RegisterDatabaseDependencies(builder.Configuration);
 
 builder.Services.RegisterApiAccountDependencies(builder.Configuration);
 
+builder.Services.RegisterEventBus(builder.Configuration);
+
 builder.Services.ConfigureSettings(builder.Configuration);
 
 builder.Services.ConigureHealthChecks(builder.Configuration);
@@ -117,5 +121,9 @@ app.UseEndpoints(endpoints =>
         Predicate = r => r.Name.Contains("self")
     });
 });
+
+var eventBus = app.Services.GetService<IEventBus>();
+
+eventBus.Subscribe<UpdatedFileIntegrationEvent, IIntegrationEventHandler<UpdatedFileIntegrationEvent>>();
 
 app.Run();

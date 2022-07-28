@@ -8,7 +8,6 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -332,6 +331,20 @@ namespace DownloadCenter.Api.Services.DownloadCenter
             await this.context.SaveChangesAsync();
 
             return model.Files.FirstOrDefault().Id;
+        }
+
+        public async Task UpdateFileNameAsync(Guid? id, string name)
+        {
+            var file = await this.context.CategoryFiles.FirstOrDefaultAsync();
+
+            if (file is null)
+            {
+                throw new CustomException(this.downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            file.Name = name;
+
+            await this.context.SaveChangesAsync();
         }
     }
 }

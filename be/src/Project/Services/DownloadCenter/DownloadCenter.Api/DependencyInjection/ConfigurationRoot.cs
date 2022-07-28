@@ -46,6 +46,15 @@ namespace DownloadCenter.Api.DependencyInjection
                     tags: new string[] { "downloadcenterapidb" });
             }
 
+            if (string.IsNullOrWhiteSpace(configuration["EventBusConnection"]) is false)
+            {
+                hcBuilder
+                    .AddRabbitMQ(
+                        configuration["EventBusConnection"],
+                        name: "downloadcenter-api-messagebus",
+                        tags: new string[] { "messagebus" });
+            }
+
             return services;
         }
     }
