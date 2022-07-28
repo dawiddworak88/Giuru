@@ -8,6 +8,7 @@ using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,12 +35,13 @@ namespace DownloadCenter.Api.Services.DownloadCenter
         {
             foreach(var categoryId in model.CategoriesIds.OrEmptyIfNull())
             {
-                foreach(var fileId in model.Files.OrEmptyIfNull())
+                foreach(var file in model.Files.OrEmptyIfNull())
                 {
                     var categoryFile = new CategoryFile
                     {
                         CategoryId = categoryId,
-                        MediaId = fileId
+                        MediaId = file.Id,
+                        Name = file.Name
                     };
 
                     await this.context.CategoryFiles.AddAsync(categoryFile.FillCommonProperties());
@@ -48,7 +50,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             await this.context.SaveChangesAsync();
 
-            return model.Files.FirstOrDefault();
+            return model.Files.FirstOrDefault().Id;
         }
 
         public async Task DeleteAsync(DeleteDownloadCenterFileServiceModel model)
@@ -77,7 +79,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
             {
                 var category = this.context.CategoryTranslations.Where(x => x.Name.StartsWith(model.SearchTerm)).FirstOrDefault();
 
-                downloadCenterFiles = downloadCenterFiles.Where(x => x.CategoryId == category.Id || x.Id.ToString() == model.SearchTerm);
+                downloadCenterFiles = downloadCenterFiles.Where(x => x.Id.ToString() == model.SearchTerm || x.Name.StartsWith(model.SearchTerm) || x.CategoryId == category.Id);
             }
 
             downloadCenterFiles = downloadCenterFiles.ApplySort(model.OrderBy);
@@ -95,6 +97,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
                 var fileGroup = new DownloadCenterFileServiceModel
                 {
                     Id = downloadCenterFileGroup.FirstOrDefault().MediaId,
+                    Name = downloadCenterFileGroup.FirstOrDefault().Name,
                     LastModifiedDate = downloadCenterFileGroup.FirstOrDefault().LastModifiedDate,
                     CreatedDate = downloadCenterFileGroup.FirstOrDefault().CreatedDate,
                 };
@@ -306,11 +309,12 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             foreach (var categoryId in model.CategoriesIds.OrEmptyIfNull())
             {
-                foreach(var fileId in model.Files.OrEmptyIfNull())
+                foreach(var downloadCenterFile in model.Files.OrEmptyIfNull())
                 {
                     var file = new CategoryFile
                     {
-                        MediaId = fileId,
+                        MediaId = downloadCenterFile.Id,
+                        Name = downloadCenterFile.Name,
                         CategoryId = categoryId
                     };
 
@@ -320,7 +324,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             await this.context.SaveChangesAsync();
 
-            return model.Files.FirstOrDefault();
+            return model.Files.FirstOrDefault().Id;
         }
     }
 }

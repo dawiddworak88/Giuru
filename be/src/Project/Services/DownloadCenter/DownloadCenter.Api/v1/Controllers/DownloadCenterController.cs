@@ -190,6 +190,7 @@ namespace DownloadCenter.Api.v1.Controllers
                         Data = downloadCenterFiles.Data.OrEmptyIfNull().Select(x => new DownloadCenterFileResponseModel
                         {
                             Id = x.Id,
+                            Name = x.Name,
                             Categories = x.Categories,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
@@ -304,7 +305,11 @@ namespace DownloadCenter.Api.v1.Controllers
                 {
                     Id = request.Id,
                     CategoriesIds = request.CategoriesIds,
-                    Files = request.Files,
+                    Files = request.Files.Select(x => new DownloadCenterFilesServiceModel
+                    {
+                        Id = x.Id,
+                        Name = x.Name
+                    }),
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
@@ -327,7 +332,11 @@ namespace DownloadCenter.Api.v1.Controllers
                 var serviceModel = new CreateDownloadCenterFileServiceModel
                 {
                     CategoriesIds = request.CategoriesIds,
-                    Files = request.Files,
+                    Files = request.Files.Select(x => new DownloadCenterFilesServiceModel
+                    {
+                        Id = x.Id,
+                        Name = x.Name
+                    }),
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)

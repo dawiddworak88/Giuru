@@ -10,6 +10,6 @@ namespace DownloadCenter.Api.Infrastructure.Entities.Categories
         public Guid CategoryId { get; set; }
 
         [Required]
-        public string Filename { get; set; }
+        public string Name { get; set; }
     }
 }
