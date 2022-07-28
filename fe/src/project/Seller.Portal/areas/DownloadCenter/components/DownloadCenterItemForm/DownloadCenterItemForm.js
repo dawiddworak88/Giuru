@@ -63,7 +63,7 @@ const DownloadCenterItemForm = (props) => {
     } = useForm(stateSchema, stateValidatorSchema, onSubmitForm, !props.id);
 
     const { id, categoriesIds, files } = values;
-    console.log(files)
+
     return (
         <section className="section section-small-padding category">
             <h1 className="subtitle is-4">{props.title}</h1>

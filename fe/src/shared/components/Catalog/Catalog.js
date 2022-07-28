@@ -260,7 +260,7 @@ function Catalog(props) {
                                                                         <img src={item[property.title]}/>
                                                                     ) : (
                                                                         <div className="is-flex is-justify-content-center">
-                                                                            <TextSnippet color="primary"/>
+                                                                            <TextSnippet className="is-size-2" color="primary"/>
                                                                         </div>
                                                                     )}
                                                                 </div>

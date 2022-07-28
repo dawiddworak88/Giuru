@@ -77,9 +77,16 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                var category = this.context.CategoryTranslations.Where(x => x.Name.StartsWith(model.SearchTerm)).FirstOrDefault();
+                var searchFiles = downloadCenterFiles.Where(x => x.Id.ToString() == model.SearchTerm || x.Name.StartsWith(model.SearchTerm));
 
-                downloadCenterFiles = downloadCenterFiles.Where(x => x.Id.ToString() == model.SearchTerm || x.Name.StartsWith(model.SearchTerm) || x.CategoryId == category.Id);
+                var categoryTranslation = await this.context.CategoryTranslations.FirstOrDefaultAsync(x => x.Name.StartsWith(model.SearchTerm));
+
+                if (categoryTranslation is not null)
+                {
+                    searchFiles = downloadCenterFiles.Where(x => x.CategoryId == categoryTranslation.CategoryId);
+                }
+
+                downloadCenterFiles = searchFiles;
             }
 
             downloadCenterFiles = downloadCenterFiles.ApplySort(model.OrderBy);
