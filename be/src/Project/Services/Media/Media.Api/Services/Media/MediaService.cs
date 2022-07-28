@@ -126,12 +126,6 @@ namespace Media.Api.Services.Media
 
                 await this.context.SaveChangesAsync();
                 await this.mediaRepository.CreateFileAsync(mediaItemVersion.Id, serviceModel.OrganisationId.ToString(), serviceModel.File, serviceModel.File.FileName);
-
-                var message = new UpdatedFileIntegrationEvent
-                {
-                    FileId = mediaItemVersion.Id,
-                    Name = mediaItemVersion.Filename
-                };
             }
 
             return existingMediaItemVersion.FirstOrDefault().MediaItemId;
