@@ -8,8 +8,9 @@ import {
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
 import ClipboardHelper from "../../../../../shared/helpers/globals/ClipboardHelper";
-import JsZip from 'jszip';
+import JsZip, { file } from 'jszip';
 import { saveAs } from 'file-saver';
+import ResponseStatusConstants from "../../../../../shared/constants/ResponseStatusConstants";
 
 const DownloadCenterFiles = (props) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -44,32 +45,31 @@ const DownloadCenterFiles = (props) => {
         setSelectedFiles([]);
     }
 
-    const handleDownloadFiles = async (checkedFiles) => {
+    const handleDownloadFiles = checkedFiles => {
         let files = props.files;
 
-        if (checkedFiles && selectedFiles.length > 0){
+        if (checkedFiles && selectedFiles.length > 0) {
             files = selectedFiles;
         }
 
-        if (files.length > 0){
-
+        if (files.length > 0) {
             const zip = new JsZip();
-            const folder = zip.folder(`${props.filesLabel}-${currentDate}`);
+            const filename = `${props.filesLabel}-${moment().local().toISOString()}`;
+            const folder = zip.folder(`${filename}`);
 
-            for(let i = 0; i < files.length; i++ ) {
-                let file = files[i];
+            for(let i = 0; i < files.length; i++) {
+                const blobPromise = fetch(files[i].url).then((r) => {
+                    if (r.status === ResponseStatusConstants.ok()) {
+                        return r.blob();
+                    }
 
-                const blobPromise = fetch(file.url).then((r) => {
-                    if (r.status === 200) return r.blob();
                     return Promise.reject(new Error(r.statusText));
                 });
 
-                const name = file.url.substring(file.url.lastIndexOf("/") + 1);
-
-                folder.file(name, blobPromise);
+                folder.file(files[i].filename, blobPromise);
             }
 
-            zip.generateAsync({ type: "blob" }).then((blob) => saveAs(blob, `${props.filesLabel}-${new Date().getTime()}.zip`));
+            zip.generateAsync({ type: "blob" }).then((blob) => saveAs(blob, `${filename}.zip`));
         }
     }
 
