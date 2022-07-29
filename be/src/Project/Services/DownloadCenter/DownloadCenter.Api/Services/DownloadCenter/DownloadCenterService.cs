@@ -34,12 +34,13 @@ namespace DownloadCenter.Api.Services.DownloadCenter
         {
             foreach(var categoryId in model.CategoriesIds.OrEmptyIfNull())
             {
-                foreach(var fileId in model.Files.OrEmptyIfNull())
+                foreach(var file in model.Files.OrEmptyIfNull())
                 {
                     var categoryFile = new CategoryFile
                     {
                         CategoryId = categoryId,
-                        MediaId = fileId
+                        MediaId = file.Id,
+                        Name = file.Name
                     };
 
                     await this.context.CategoryFiles.AddAsync(categoryFile.FillCommonProperties());
@@ -48,7 +49,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             await this.context.SaveChangesAsync();
 
-            return model.Files.FirstOrDefault();
+            return model.Files.FirstOrDefault().Id;
         }
 
         public async Task DeleteAsync(DeleteDownloadCenterFileServiceModel model)
@@ -75,9 +76,16 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             if (string.IsNullOrWhiteSpace(model.SearchTerm) is false)
             {
-                var category = this.context.CategoryTranslations.Where(x => x.Name.StartsWith(model.SearchTerm)).FirstOrDefault();
+                var searchFiles = downloadCenterFiles.Where(x => x.Id.ToString() == model.SearchTerm || x.Name.StartsWith(model.SearchTerm));
 
-                downloadCenterFiles = downloadCenterFiles.Where(x => x.CategoryId == category.Id || x.Id.ToString() == model.SearchTerm);
+                var categoryTranslation = await this.context.CategoryTranslations.FirstOrDefaultAsync(x => x.Name.StartsWith(model.SearchTerm));
+
+                if (categoryTranslation is not null)
+                {
+                    searchFiles = downloadCenterFiles.Where(x => x.CategoryId == categoryTranslation.CategoryId);
+                }
+
+                downloadCenterFiles = searchFiles;
             }
 
             downloadCenterFiles = downloadCenterFiles.ApplySort(model.OrderBy);
@@ -95,6 +103,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
                 var fileGroup = new DownloadCenterFileServiceModel
                 {
                     Id = downloadCenterFileGroup.FirstOrDefault().MediaId,
+                    Name = downloadCenterFileGroup.FirstOrDefault().Name,
                     LastModifiedDate = downloadCenterFileGroup.FirstOrDefault().LastModifiedDate,
                     CreatedDate = downloadCenterFileGroup.FirstOrDefault().CreatedDate,
                 };
@@ -184,7 +193,7 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
                 item.Name = categoryTranslation?.Name;
 
-                var categories = this.context.Categories.Where(x => x.ParentCategoryId == downloadCenterItem.Id);
+                var categories = this.context.Categories.Where(x => x.ParentCategoryId == downloadCenterItem.Id && x.IsActive && x.IsVisible);
 
                 var downloadCategories = new List<DownloadCenterSubcategoryServiceModel>();
 
@@ -306,11 +315,12 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             foreach (var categoryId in model.CategoriesIds.OrEmptyIfNull())
             {
-                foreach(var fileId in model.Files.OrEmptyIfNull())
+                foreach(var downloadCenterFile in model.Files.OrEmptyIfNull())
                 {
                     var file = new CategoryFile
                     {
-                        MediaId = fileId,
+                        MediaId = downloadCenterFile.Id,
+                        Name = downloadCenterFile.Name,
                         CategoryId = categoryId
                     };
 
@@ -320,7 +330,21 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
             await this.context.SaveChangesAsync();
 
-            return model.Files.FirstOrDefault();
+            return model.Files.FirstOrDefault().Id;
+        }
+
+        public async Task UpdateFileNameAsync(Guid? id, string name)
+        {
+            var file = await this.context.CategoryFiles.FirstOrDefaultAsync();
+
+            if (file is null)
+            {
+                throw new CustomException(this.downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NotFound);
+            }
+
+            file.Name = name;
+
+            await this.context.SaveChangesAsync();
         }
     }
 }

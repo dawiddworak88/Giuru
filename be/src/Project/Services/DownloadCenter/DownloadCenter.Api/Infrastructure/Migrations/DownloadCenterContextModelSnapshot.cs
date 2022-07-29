@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DownloadCenter.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(DownloadCenterContext))]
-    partial class DownloadContextModelSnapshot : ModelSnapshot
+    partial class DownloadCenterContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -73,6 +73,10 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
 
                     b.Property<Guid>("MediaId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Order")
                         .HasColumnType("int");

@@ -8,5 +8,8 @@ namespace DownloadCenter.Api.Infrastructure.Entities.Categories
     {
         [Required]
         public Guid CategoryId { get; set; }
+
+        [Required]
+        public string Name { get; set; }
     }
 }

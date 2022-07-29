@@ -8,6 +8,6 @@ namespace DownloadCenter.Api.ServicesModels.DownloadCenter
     {
         public Guid? Id { get; set; }
         public IEnumerable<Guid> CategoriesIds { get; set; }
-        public IEnumerable<Guid> Files { get; set; }
+        public IEnumerable<DownloadCenterFilesServiceModel> Files { get; set; }
     }
 }

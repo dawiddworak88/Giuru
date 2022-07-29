@@ -66,6 +66,10 @@ namespace DownloadCenter.Api.Services.Categories
                 throw new CustomException(this.downloadCenterLocalizer.GetString("SubcategoriesDeleteCategoryConflict"), (int)HttpStatusCode.Conflict);
             }
 
+            if (await this.context.CategoryFiles.AnyAsync(x => x.CategoryId == model.Id && x.IsActive)){
+                throw new CustomException(this.downloadCenterLocalizer.GetString("CategoryFileConflict"), (int)HttpStatusCode.Conflict);
+            }
+
             category.IsActive = false;
 
             await this.context.SaveChangesAsync();

@@ -255,13 +255,15 @@ function Catalog(props) {
                                                     if (property.isPicture){
                                                         return (
                                                             <TableCell key={index}>
-                                                                {item[property.title] ? (
-                                                                    <img src={item[property.title]} />
-                                                                ) : (
-                                                                    <div className="is-flex is-justify-content-center">
-                                                                        <TextSnippet size="3rem" color="primary"/>
-                                                                    </div>
-                                                                )}
+                                                                <div className="property-image">
+                                                                    {item[property.title] ? (
+                                                                        <img src={item[property.title]}/>
+                                                                    ) : (
+                                                                        <div className="is-flex is-justify-content-center">
+                                                                            <TextSnippet className="is-size-2" color="primary"/>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
                                                             </TableCell>
                                                         )
                                                     }

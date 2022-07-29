@@ -16,6 +16,7 @@ using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.Definitions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
@@ -111,6 +112,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
                     var downloadCenterFileItem = new DownloadCenterItem
                     {
                         Id = downloadCenterFile.Id,
+                        Name = downloadCenterFile.Name,
                         Categories = String.Join(", ", downloadCenterFile.Categories.OrEmptyIfNull()),
                         LastModifiedDate = downloadCenterFile.LastModifiedDate,
                         CreatedDate = downloadCenterFile.CreatedDate
@@ -120,7 +122,6 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
 
                     if (file is not null)
                     {
-                        downloadCenterFileItem.Name = file.Name;
                         downloadCenterFileItem.Url = file.MimeType.StartsWith("image") ? this.mediaService.GetMediaUrl(downloadCenterFile.Id, Constants.PreviewMaxWidth) : null;
                     }
 
@@ -141,16 +142,16 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
             return default;
         }
 
-        public async Task<Guid> SaveAsync(string token, string language, Guid? id, IEnumerable<Guid> categoriesIds, IEnumerable<Guid> files)
+        public async Task<Guid> SaveAsync(string token, string language, Guid? id, IEnumerable<Guid> categoriesIds, IEnumerable<DownloadCenterApiFile> files)
         {
-            var requestModel = new DownloadCenterItemApiRequestModel
+            var requestModel = new DownloadCenterItemRequestModel
             {
                 Id = id,
                 CategoriesIds = categoriesIds,
                 Files = files
             };
 
-            var apiRequest = new ApiRequest<DownloadCenterItemApiRequestModel>
+            var apiRequest = new ApiRequest<DownloadCenterItemRequestModel>
             {
                 Language = language,
                 Data = requestModel,
@@ -158,7 +159,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
                 EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.DownloadCenterApiEndponint}"
             };
 
-            var response = await this.apiClientService.PostAsync<ApiRequest<DownloadCenterItemApiRequestModel>, DownloadCenterItemApiRequestModel, BaseResponseModel>(apiRequest);
+            var response = await this.apiClientService.PostAsync<ApiRequest<DownloadCenterItemRequestModel>, DownloadCenterItemRequestModel, BaseResponseModel>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {

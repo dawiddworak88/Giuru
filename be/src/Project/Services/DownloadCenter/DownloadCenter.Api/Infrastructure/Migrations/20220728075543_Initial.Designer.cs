@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DownloadCenter.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(DownloadCenterContext))]
-    [Migration("20220719070628_Initial")]
+    [Migration("20220728075543_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,6 +75,10 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
 
                     b.Property<Guid>("MediaId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Order")
                         .HasColumnType("int");
