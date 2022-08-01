@@ -12,6 +12,7 @@ using Seller.Web.Areas.Media.ApiRequestModels;
 using Seller.Web.Areas.Media.ApiResponseModels;
 using Seller.Web.Areas.Media.DomainModels;
 using Seller.Web.Shared.Configurations;
+using Seller.Web.Shared.Definitions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,7 +85,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                         Id = mediaItem.Id,
                         FileName = mediaItem.FileName,
                         Name = mediaItem.Name,
-                        Url = mediaItem.MimeType.StartsWith("image") ? this.mediaService.GetMediaVersionUrl(mediaItem.MediaItemVersionId.Value, 200) : null,
+                        Url = mediaItem.MimeType.StartsWith("image") ? this.mediaService.GetMediaVersionUrl(mediaItem.MediaItemVersionId.Value, Constants.PreviewMaxWidth) : null,
                         LastModifiedDate = mediaItem.LastModifiedDate,
                         CreatedDate = mediaItem.CreatedDate
                     };
@@ -135,7 +136,7 @@ namespace Seller.Web.Areas.Media.Repositories.Media
                     {
                         Id = x.Id,
                         FileName = x.FileName,
-                        Url = x.MimeType.StartsWith("image") ? this.mediaService.GetMediaVersionUrl(x.MediaItemVersionId.Value, 200) : this.mediaService.GetMediaVersionUrl(x.MediaItemVersionId.Value),
+                        Url = x.MimeType.StartsWith("image") ? this.mediaService.GetMediaVersionUrl(x.MediaItemVersionId.Value, Constants.PreviewMaxWidth) : this.mediaService.GetMediaVersionUrl(x.MediaItemVersionId.Value),
                         MimeType = x.MimeType,
                         LastModifiedDate = x.LastModifiedDate,
                         CreatedDate = x.CreatedDate,
