@@ -335,14 +335,12 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 
         public async Task UpdateFileNameAsync(Guid? id, string name)
         {
-            var file = await this.context.CategoryFiles.FirstOrDefaultAsync();
+            var files = this.context.CategoryFiles.Where(x => x.MediaId == id && x.IsActive);
 
-            if (file is null)
+            foreach(var file in files.OrEmptyIfNull())
             {
-                throw new CustomException(this.downloadCenterLocalizer.GetString("DownloadCenterFileNotFound"), (int)HttpStatusCode.NotFound);
+                file.Name = name;
             }
-
-            file.Name = name;
 
             await this.context.SaveChangesAsync();
         }

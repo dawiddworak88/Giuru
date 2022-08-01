@@ -37,10 +37,10 @@ namespace DownloadCenter.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Get download center category by id.
+        /// Get download center files by category id.
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <returns>The download center category.</returns>
+        /// <returns>The download center files.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("categories/{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DownloadCenterCategoryResponseModel))]
@@ -91,18 +91,18 @@ namespace DownloadCenter.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Get list of download center files.
+        /// Get list of download center.
         /// </summary>
         /// <param name="searchTerm">The search term.</param>
         /// <param name="pageIndex">The page index.</param>
         /// <param name="itemsPerPage">The items per page.</param>
         /// <param name="orderBy">The optional order by.</param>
-        /// <returns>The list of download center files.</returns>
+        /// <returns>The list of download center.</returns>
         [HttpGet("categories"), MapToApiVersion("1.0")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<DownloadCenterItemCategoriesResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetCategories(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<IActionResult> GetDownloadCenter(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -205,7 +205,7 @@ namespace DownloadCenter.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Delete download center file by media id.
+        /// Delete download center file by id.
         /// </summary>
         /// <param name="id">The id.</param>
         /// <returns>OK.</returns>
@@ -241,16 +241,16 @@ namespace DownloadCenter.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Get download center item by id.
+        /// Get download center file by id.
         /// </summary>
         /// <param name="id">The id.</param>
-        /// <returns>The download center item.</returns>
+        /// <returns>The download center file.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DownloadCenterFileCategoriesResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
-        public async Task<IActionResult> GetItem(Guid? id)
+        public async Task<IActionResult> GetDownloadCenterFile(Guid? id)
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
@@ -287,7 +287,7 @@ namespace DownloadCenter.Api.v1.Controllers
         }
 
         /// <summary>
-        /// Creates or updates download center file (if id is set).
+        /// Creates or updates download center files (if id is set).
         /// </summary>
         /// <param name="request">The model.</param>
         /// <returns>The download center file id.</returns>
