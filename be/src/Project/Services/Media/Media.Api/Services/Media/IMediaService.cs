@@ -18,6 +18,6 @@ namespace Media.Api.Services.Media
         MediaItemServiceModel GetMediaItemById(GetMediaItemsByIdServiceModel model);
         Task DeleteAsync(DeleteFileServiceModel model);
         MediaFileServiceModel GetFile(Guid? mediaId);
-        MediaFileServiceModel GetVersionFile(Guid? versionId);
+        MediaFileServiceModel GetFileVersion(Guid? versionId);
     }
 }

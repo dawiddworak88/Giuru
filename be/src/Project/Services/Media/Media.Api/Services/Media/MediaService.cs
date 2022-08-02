@@ -389,7 +389,7 @@ namespace Media.Api.Services.Media
             }
         }
 
-        public MediaFileServiceModel GetVersionFile(Guid? versionId)
+        public MediaFileServiceModel GetFileVersion(Guid? versionId)
         {
             if (versionId.HasValue)
             {

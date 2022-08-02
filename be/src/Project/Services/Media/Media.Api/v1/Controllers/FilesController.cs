@@ -69,7 +69,7 @@ namespace Media.Api.v1.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult GetFileVersion(Guid? versionId)
         {
-            var mediaVersionFile = this.mediaService.GetVersionFile(versionId);
+            var mediaVersionFile = this.mediaService.GetFileVersion(versionId);
 
             if (mediaVersionFile is not null)
             {
