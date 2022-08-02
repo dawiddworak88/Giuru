@@ -8,7 +8,7 @@ import {
 import { GetApp, Link, LockOutlined } from "@mui/icons-material";
 import moment from "moment";
 import ClipboardHelper from "../../../../../shared/helpers/globals/ClipboardHelper";
-import JsZip, { file } from 'jszip';
+import JsZip from 'jszip';
 import { saveAs } from 'file-saver';
 import ResponseStatusConstants from "../../../../../shared/constants/ResponseStatusConstants";
 
