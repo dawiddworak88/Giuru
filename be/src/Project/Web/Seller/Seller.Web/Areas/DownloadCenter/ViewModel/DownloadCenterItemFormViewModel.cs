@@ -20,7 +20,6 @@ namespace Seller.Web.Areas.DownloadCenter.ViewModel
         public string SaveUrl { get; set; }
         public string GeneralErrorMessage { get; set; }
         public string FieldRequiredErrorMessage { get; set; }
-        public int? Order { get; set; }
         public string FilesLabel { get; set; }
         public string SaveMediaUrl { get; set; }
         public string DeleteLabel { get; set; }

@@ -187,8 +187,8 @@ const sellerPortalBrowserConfig = {
     entry: {
         downloadcenteritempage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterItemPage/DownloadCenterItemPage.scss"],
         downloadcenterpage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterPage/DownloadCenterPage.scss"],
-        downloadcentercategorypage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/CategoryPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/CategoryPage/CategoryPage.scss"],
-        downloadcentercategoriespage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/CategoriesPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/CategoriesPage/CategoriesPage.scss"],
+        downloadcentercategorypage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterCategoryPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterCategoryPage/DownloadCenterCategoryPage.scss"],
+        downloadcentercategoriespage: ["./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterCategoriesPage/index.js", "./src/project/Seller.Portal/areas/DownloadCenter/pages/DownloadCenterCategoriesPage/DownloadCenterCategoriesPage.scss"],
         clientrolepage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientRolePage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientRolePage/ClientRolePage.scss"],
         clientrolespage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientRolesPage/ClientRolesPage.scss"],
         clientapplicationpage: ["./src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/index.js", "./src/project/Seller.Portal/areas/Clients/pages/ClientApplicationPage/ClientApplicationPage.scss"],

@@ -15,7 +15,7 @@ namespace DownloadCenter.Api.DependencyInjection
             services.Configure<LocalizationSettings>(configuration);
         }
 
-        public static void ConfigureDatabaseMigrations(this IApplicationBuilder app)
+        public static void ConfigureDatabaseMigrations(this IApplicationBuilder app, IConfiguration configuration)
         {
             var scopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
 
@@ -26,7 +26,7 @@ namespace DownloadCenter.Api.DependencyInjection
                 if (!dbContext.AllMigrationsApplied())
                 {
                     dbContext.Database.Migrate();
-                    dbContext.EnsureSeeded();
+                    dbContext.EnsureSeeded(configuration);
                 }
             }
         }

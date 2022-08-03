@@ -11,7 +11,7 @@
         public string OrderUrl { get; set; }
         public string InventoryUrl { get; set; }
         public string NewsUrl { get; set; }
-        public string DownloadUrl { get; set; }
+        public string DownloadCenterUrl { get; set; }
         public string BuyerUrl { get; set; }
     }
 }

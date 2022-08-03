@@ -1,6 +1,8 @@
 ﻿using DownloadCenter.Api.Infrastructure.Seeds;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Linq;
 
 namespace DownloadCenter.Api.Infrastructure
@@ -20,9 +22,9 @@ namespace DownloadCenter.Api.Infrastructure
             return !total.Except(applied).Any();
         }
 
-        public static void EnsureSeeded(this DownloadCenterContext context)
+        public static void EnsureSeeded(this DownloadCenterContext context, IConfiguration configuration)
         {
-            CategoriesSeed.SeedCategories(context);
+            CategoriesSeed.SeedCategories(context, Guid.Parse(configuration["OrganisationId"]));
         }
     }
 }

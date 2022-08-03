@@ -5,8 +5,8 @@ using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Seller.Web.Areas.DownloadCenter.Repositories.Categories;
 using Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter;
+using Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenterCategories;
 using Seller.Web.Areas.DownloadCenter.ViewModel;
 using Seller.Web.Areas.Shared.Repositories.Media;
 using Seller.Web.Shared.Definitions;
@@ -23,7 +23,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
         private readonly IStringLocalizer<GlobalResources> globalLocalizer;
         private readonly IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer;
         private readonly LinkGenerator linkGenerator;
-        private readonly ICategoriesRepository categoriesRepository;
+        private readonly IDownloadCenterCategoriesRepository downloadCenterCategoriesRepository;
         private readonly IDownloadCenterRepository downloadCenterRepository;
         private readonly IMediaItemsRepository mediaItemsRepository;
         private readonly IMediaService mediaService;
@@ -32,7 +32,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             IStringLocalizer<GlobalResources> globalLocalizer,
             IStringLocalizer<DownloadCenterResources> downloadCenterLocalizer,
             IDownloadCenterRepository downloadCenterRepository,
-            ICategoriesRepository categoriesRepository,
+            IDownloadCenterCategoriesRepository downloadCenterCategoriesRepository,
             IMediaItemsRepository mediaItemsRepository,
             IMediaService mediaService,
             LinkGenerator linkGenerator)
@@ -40,7 +40,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             this.linkGenerator = linkGenerator;
             this.globalLocalizer = globalLocalizer;
             this.downloadCenterLocalizer = downloadCenterLocalizer;
-            this.categoriesRepository = categoriesRepository;
+            this.downloadCenterCategoriesRepository = downloadCenterCategoriesRepository;
             this.downloadCenterRepository = downloadCenterRepository;
             this.mediaService = mediaService;
             this.mediaItemsRepository = mediaItemsRepository;
@@ -68,7 +68,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 DropOrSelectFilesLabel = this.globalLocalizer.GetString("DropOrSelectFile")
             };
 
-            var categories = await this.categoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language);
+            var categories = await this.downloadCenterCategoriesRepository.GetCategoriesAsync(componentModel.Token, componentModel.Language);
 
             if (categories is not null)
             {

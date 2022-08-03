@@ -843,6 +843,8 @@ spec:
           value: {{ .Values.newsUrl }}
         - name: BuyerUrl
           value: {{ .Values.buyerUrl }}
+        - name: DownloadCenterUrl
+          value: {{ .Values.downloadCenterUrl }}
         - name: ClientId
           value: {{ .Values.sellerWeb.clientId }}
         - name: ClientSecret

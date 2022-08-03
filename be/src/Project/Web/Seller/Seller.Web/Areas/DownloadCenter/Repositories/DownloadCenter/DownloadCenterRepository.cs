@@ -16,7 +16,6 @@ using Seller.Web.Shared.Configurations;
 using Seller.Web.Shared.Definitions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
@@ -47,7 +46,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.DownloadCenterApiEndponint}/{id}"
+                EndpointAddress = $"{this.settings.Value.DownloadCenterUrl}{ApiConstants.DownloadCenter.DownloadCenterApiEndponint}/{id}"
             };
 
             var response = await this.apiClientService.DeleteAsync<ApiRequest<RequestModelBase>, RequestModelBase, BaseResponseModel>(apiRequest);
@@ -58,17 +57,17 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
             }
         }
 
-        public async Task<DownloadCenterFile> GetAsync(string token, string language, Guid? id)
+        public async Task<DownloadCenterCategoryFile> GetAsync(string token, string language, Guid? id)
         {
             var apiRequest = new ApiRequest<RequestModelBase>
             {
                 Language = language,
                 Data = new RequestModelBase(),
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.DownloadCenterApiEndponint}/{id}"
+                EndpointAddress = $"{this.settings.Value.DownloadCenterUrl}{ApiConstants.DownloadCenter.DownloadCenterApiEndponint}/{id}"
             };
 
-            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, DownloadCenterFile>(apiRequest);
+            var response = await this.apiClientService.GetAsync<ApiRequest<RequestModelBase>, RequestModelBase, DownloadCenterCategoryFile>(apiRequest);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -83,7 +82,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
             return default;
         }
 
-        public async Task<PagedResults<IEnumerable<DownloadCenterItem>>> GetDownloadCenterAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
+        public async Task<PagedResults<IEnumerable<DownloadCenterItem>>> GetDownloadCenterItemsAsync(string token, string language, string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
         {
             var requestModel = new PagedRequestModelBase
             {
@@ -98,7 +97,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.DownloadCenterApiEndponint}"
+                EndpointAddress = $"{this.settings.Value.DownloadCenterUrl}{ApiConstants.DownloadCenter.DownloadCenterApiEndponint}"
             };
 
             var response = await this.apiClientService.GetAsync<ApiRequest<PagedRequestModelBase>, PagedRequestModelBase, PagedResults<IEnumerable<DownloadCenterItemApiResponseModel>>>(apiRequest);
@@ -112,7 +111,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
                     var downloadCenterFileItem = new DownloadCenterItem
                     {
                         Id = downloadCenterFile.Id,
-                        Name = downloadCenterFile.Name,
+                        Filename = downloadCenterFile.Filename,
                         Categories = String.Join(", ", downloadCenterFile.Categories.OrEmptyIfNull()),
                         LastModifiedDate = downloadCenterFile.LastModifiedDate,
                         CreatedDate = downloadCenterFile.CreatedDate
@@ -156,7 +155,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
                 Language = language,
                 Data = requestModel,
                 AccessToken = token,
-                EndpointAddress = $"{this.settings.Value.DownloadUrl}{ApiConstants.DownloadCenter.DownloadCenterApiEndponint}"
+                EndpointAddress = $"{this.settings.Value.DownloadCenterUrl}{ApiConstants.DownloadCenter.DownloadCenterApiEndponint}"
             };
 
             var response = await this.apiClientService.PostAsync<ApiRequest<DownloadCenterItemRequestModel>, DownloadCenterItemRequestModel, BaseResponseModel>(apiRequest);

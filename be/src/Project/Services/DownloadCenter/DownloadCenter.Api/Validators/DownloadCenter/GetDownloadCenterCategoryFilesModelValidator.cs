@@ -4,7 +4,7 @@ using Foundation.Extensions.Validators;
 
 namespace DownloadCenter.Api.Validators.DownloadCenter
 {
-    public class GetDownloadCenterCategoryFilesModelValidator : BaseServiceModelValidator<GetDownloadCenterFilesCategoryServiceModel>
+    public class GetDownloadCenterCategoryFilesModelValidator : BaseServiceModelValidator<GetDownloadCenterCategoryFilesServiceModel>
     {
         public GetDownloadCenterCategoryFilesModelValidator()
         {

@@ -50,7 +50,7 @@ namespace DownloadCenter.Api.v1.Controllers
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var serviceModel = new GetDownloadCenterFilesCategoryServiceModel
+            var serviceModel = new GetDownloadCenterCategoryFilesServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
@@ -99,7 +99,7 @@ namespace DownloadCenter.Api.v1.Controllers
         /// <param name="orderBy">The optional order by.</param>
         /// <returns>The list of download center.</returns>
         [HttpGet("categories"), MapToApiVersion("1.0")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<DownloadCenterItemCategoriesResponseModel>>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<DownloadCenterCategoryItemResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetDownloadCenter(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
@@ -126,13 +126,13 @@ namespace DownloadCenter.Api.v1.Controllers
 
                 if (downloadCenterFiles is not null)
                 {
-                    var response = new PagedResults<IEnumerable<DownloadCenterItemCategoriesResponseModel>>(downloadCenterFiles.Total, downloadCenterFiles.PageSize)
+                    var response = new PagedResults<IEnumerable<DownloadCenterCategoryItemResponseModel>>(downloadCenterFiles.Total, downloadCenterFiles.PageSize)
                     {
-                        Data = downloadCenterFiles.Data.OrEmptyIfNull().Select(x => new DownloadCenterItemCategoriesResponseModel
+                        Data = downloadCenterFiles.Data.OrEmptyIfNull().Select(x => new DownloadCenterCategoryItemResponseModel
                         {
                             Id = x.Id,
                             Name = x.Name,
-                            Subcategories = x.Categories.OrEmptyIfNull().Select(y => new DownloadCenterSubcategoryResponseModel
+                            Subcategories = x.Subcategories.OrEmptyIfNull().Select(y => new DownloadCenterSubcategoryResponseModel
                             {
                                 Id = y.Id,
                                 Name = y.Name
@@ -158,7 +158,7 @@ namespace DownloadCenter.Api.v1.Controllers
         /// <param name="orderBy">The optional order by.</param>
         /// <returns>The list of download center files.</returns>
         [HttpGet, MapToApiVersion("1.0")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<DownloadCenterFileResponseModel>>))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(PagedResults<IEnumerable<DownloadCenterItemResponseModel>>))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> Get(string searchTerm, int pageIndex, int itemsPerPage, string orderBy)
@@ -185,12 +185,12 @@ namespace DownloadCenter.Api.v1.Controllers
 
                 if (downloadCenterFiles is not null)
                 {
-                    var response = new PagedResults<IEnumerable<DownloadCenterFileResponseModel>>(downloadCenterFiles.Total, downloadCenterFiles.PageSize)
+                    var response = new PagedResults<IEnumerable<DownloadCenterItemResponseModel>>(downloadCenterFiles.Total, downloadCenterFiles.PageSize)
                     {
-                        Data = downloadCenterFiles.Data.OrEmptyIfNull().Select(x => new DownloadCenterFileResponseModel
+                        Data = downloadCenterFiles.Data.OrEmptyIfNull().Select(x => new DownloadCenterItemResponseModel
                         {
                             Id = x.Id,
-                            Name = x.Name,
+                            Filename = x.Filename,
                             Categories = x.Categories,
                             LastModifiedDate = x.LastModifiedDate,
                             CreatedDate = x.CreatedDate
@@ -219,7 +219,7 @@ namespace DownloadCenter.Api.v1.Controllers
         {
             var sellerClaim = this.User.Claims.FirstOrDefault(x => x.Type == AccountConstants.Claims.OrganisationIdClaim);
 
-            var serviceModel = new DeleteDownloadCenterFileServiceModel
+            var serviceModel = new DeleteDownloadCenterItemServiceModel
             {
                 Id = id,
                 Language = CultureInfo.CurrentCulture.Name,
@@ -227,7 +227,7 @@ namespace DownloadCenter.Api.v1.Controllers
                 OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
             };
 
-            var validator = new DeleteDownloadCenterFileModelValidator();
+            var validator = new DeleteDownloadCenterItemModelValidator();
             var validationResult = await validator.ValidateAsync(serviceModel);
 
             if (validationResult.IsValid)
@@ -247,7 +247,7 @@ namespace DownloadCenter.Api.v1.Controllers
         /// <returns>The download center file.</returns>
         [HttpGet, MapToApiVersion("1.0")]
         [Route("{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DownloadCenterFileCategoriesResponseModel))]
+        [ProducesResponseType((int)HttpStatusCode.OK, Type = typeof(DownloadCenterItemFileResponseModel))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.UnprocessableEntity)]
         public async Task<IActionResult> GetDownloadCenterFile(Guid? id)
@@ -271,7 +271,7 @@ namespace DownloadCenter.Api.v1.Controllers
 
                 if (downloadCenterFile is not null)
                 {
-                    var response = new DownloadCenterFileCategoriesResponseModel
+                    var response = new DownloadCenterItemFileResponseModel
                     {
                         Id = downloadCenterFile.Id,
                         CategoriesIds = downloadCenterFile.CategoriesIds,
@@ -301,21 +301,21 @@ namespace DownloadCenter.Api.v1.Controllers
 
             if (request.Id.HasValue)
             {
-                var serviceModel = new UpdateDownloadCenterFileServiceModel
+                var serviceModel = new UpdateDownloadCenterItemServiceModel
                 {
                     Id = request.Id,
                     CategoriesIds = request.CategoriesIds,
-                    Files = request.Files.Select(x => new DownloadCenterFilesServiceModel
+                    Files = request.Files.Select(x => new DownloadCenterFileServiceModel
                     {
                         Id = x.Id,
-                        Name = x.Name
+                        Filename = x.Name
                     }),
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
-                var validator = new UpdateDownloadCenterFileModelValidator();
+                var validator = new UpdateDownloadCenterItemModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
 
                 if (validationResult.IsValid)
@@ -329,20 +329,20 @@ namespace DownloadCenter.Api.v1.Controllers
             }
             else
             {
-                var serviceModel = new CreateDownloadCenterFileServiceModel
+                var serviceModel = new CreateDownloadCenterItemServiceModel
                 {
                     CategoriesIds = request.CategoriesIds,
-                    Files = request.Files.Select(x => new DownloadCenterFilesServiceModel
+                    Files = request.Files.Select(x => new DownloadCenterFileServiceModel
                     {
                         Id = x.Id,
-                        Name = x.Name
+                        Filename = x.Name
                     }),
                     Language = CultureInfo.CurrentCulture.Name,
                     Username = this.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
                     OrganisationId = GuidHelper.ParseNullable(sellerClaim?.Value)
                 };
 
-                var validator = new CreateDownloadCenterFileModelValidator();
+                var validator = new CreateDownloadCenterItemModelValidator();
                 var validationResult = await validator.ValidateAsync(serviceModel);
 
                 if (validationResult.IsValid)

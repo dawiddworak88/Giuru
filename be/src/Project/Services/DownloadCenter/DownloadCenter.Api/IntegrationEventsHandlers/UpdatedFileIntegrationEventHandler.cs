@@ -16,7 +16,7 @@ namespace DownloadCenter.Api.IntegrationEventsHandlers
         }
 
         /// <summary>
-        /// Integration event handler which update file name
+        /// Integration event handler which updates the file name
         /// </summary>
         /// <param name="event">
         /// Integration event message which is sent by the

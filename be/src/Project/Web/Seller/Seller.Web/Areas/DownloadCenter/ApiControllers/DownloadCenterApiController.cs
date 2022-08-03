@@ -34,7 +34,7 @@ namespace Seller.Web.Areas.DownloadCenter.ApiControllers
             var token = await HttpContext.GetTokenAsync(ApiExtensionsConstants.TokenName);
             var language = CultureInfo.CurrentUICulture.Name;
 
-            var downloadCenterItems = await this.downloadCenterRepository.GetDownloadCenterAsync(token, language, searchTerm, pageIndex, itemsPerPage, $"{nameof(DownloadCenterItem.CreatedDate)} desc");
+            var downloadCenterItems = await this.downloadCenterRepository.GetDownloadCenterItemsAsync(token, language, searchTerm, pageIndex, itemsPerPage, $"{nameof(DownloadCenterItem.CreatedDate)} desc");
 
             return this.StatusCode((int)HttpStatusCode.OK, downloadCenterItems);
         }

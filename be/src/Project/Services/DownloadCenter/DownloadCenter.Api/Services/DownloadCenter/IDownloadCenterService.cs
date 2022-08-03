@@ -8,13 +8,13 @@ namespace DownloadCenter.Api.Services.DownloadCenter
 {
     public interface IDownloadCenterService
     {
-        Task<PagedResults<IEnumerable<DownloadCenterFileServiceModel>>> GetAsync(GetDownloadCenterFilesServiceModel model);
-        Task<DownloadCenterCategoryServiceModel> GetDownloadCenterCategoryAsync(GetDownloadCenterFilesCategoryServiceModel model);
-        Task<PagedResults<IEnumerable<DownloadCenterItemServiceModel>>> GetAsync(GetDownloadCenterItemsServiceModel model);
-        Task<DownloadCenterCategoriesServiceModel> GetAsync(GetDownloadCenterFileServiceModel model);
-        Task DeleteAsync(DeleteDownloadCenterFileServiceModel model);
-        Task<Guid> CreateAsync(CreateDownloadCenterFileServiceModel model);
-        Task<Guid> UpdateAsync(UpdateDownloadCenterFileServiceModel model);
+        Task<PagedResults<IEnumerable<DownloadCenterItemServiceModel>>> GetAsync(GetDownloadCenterFilesServiceModel model);
+        Task<DownloadCenterCategoryServiceModel> GetDownloadCenterCategoryAsync(GetDownloadCenterCategoryFilesServiceModel model);
+        Task<PagedResults<IEnumerable<DownloadCenterCategoryItemServiceModel>>> GetAsync(GetDownloadCenterItemsServiceModel model);
+        Task<DownloadCenterItemFileServiceModel> GetAsync(GetDownloadCenterFileServiceModel model);
+        Task DeleteAsync(DeleteDownloadCenterItemServiceModel model);
+        Task<Guid> CreateAsync(CreateDownloadCenterItemServiceModel model);
+        Task<Guid> UpdateAsync(UpdateDownloadCenterItemServiceModel model);
         Task UpdateFileNameAsync(Guid? id, string name);
     }
 }

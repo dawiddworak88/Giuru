@@ -52,7 +52,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             viewModel.OrderBy = $"{nameof(DownloadCenterItem.CreatedDate)} desc";
             viewModel.ConfirmationDialogDeleteNameProperty = new List<string>
             {
-                nameof(DownloadCenterItem.Name).ToCamelCase(),
+                nameof(DownloadCenterItem.Filename).ToCamelCase(),
             };
 
             viewModel.Table = new CatalogTableViewModel
@@ -85,7 +85,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                     },
                     new CatalogPropertyViewModel
                     {
-                        Title = nameof(DownloadCenterItem.Name).ToCamelCase(),
+                        Title = nameof(DownloadCenterItem.Filename).ToCamelCase(),
                         IsDateTime = false
                     },
                     new CatalogPropertyViewModel
@@ -106,7 +106,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                 }
             };
 
-            viewModel.PagedItems = await this.downloadCenterRepository.GetDownloadCenterAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(DownloadCenterItem.CreatedDate)} desc");
+            viewModel.PagedItems = await this.downloadCenterRepository.GetDownloadCenterItemsAsync(componentModel.Token, componentModel.Language, null, Constants.DefaultPageIndex, Constants.DefaultItemsPerPage, $"{nameof(DownloadCenterItem.CreatedDate)} desc");
 
             return viewModel;
         }

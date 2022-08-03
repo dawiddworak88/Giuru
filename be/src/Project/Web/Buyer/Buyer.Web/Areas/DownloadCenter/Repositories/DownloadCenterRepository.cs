@@ -68,7 +68,7 @@ namespace Buyer.Web.Areas.DownloadCenter.Repositories
                         {
                             Id = x.Id,
                             Name = x.Name,
-                            Url = this.linkGenerator.GetPathByAction("Detail", "Category", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name, Id = x.Id })
+                            Url = this.linkGenerator.GetPathByAction("Detail", "DownloadCenterCategory", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name, Id = x.Id })
                         }),
                         LastModifiedDate = downloadCenterItem.LastModifiedDate,
                         CreatedDate = downloadCenterItem.CreatedDate

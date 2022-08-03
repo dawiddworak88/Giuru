@@ -22,7 +22,7 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.Category", b =>
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.DownloadCenterCategory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -40,6 +40,9 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("Order")
+                        .HasColumnType("int");
+
                     b.Property<Guid?>("ParentCategoryId")
                         .HasColumnType("uniqueidentifier");
 
@@ -48,12 +51,15 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
+                    b.Property<Guid>("SellerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("DownloadCenterCategories");
                 });
 
-            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.CategoryFile", b =>
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.DownloadCenterCategoryFile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -65,6 +71,10 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Filename")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -73,10 +83,6 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
 
                     b.Property<Guid>("MediaId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Order")
                         .HasColumnType("int");
@@ -88,10 +94,10 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CategoryFiles");
+                    b.ToTable("DownloadCenterCategoryFiles");
                 });
 
-            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.CategoryTranslation", b =>
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.DownloadCenterCategoryTranslation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -102,6 +108,9 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DownloadCenterCategoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -124,21 +133,19 @@ namespace DownloadCenter.Api.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("DownloadCenterCategoryId");
 
-                    b.ToTable("CategoryTranslations");
+                    b.ToTable("DownloadCenterCategoryTranslations");
                 });
 
-            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.CategoryTranslation", b =>
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.DownloadCenterCategoryTranslation", b =>
                 {
-                    b.HasOne("DownloadCenter.Api.Infrastructure.Entities.Categories.Category", null)
+                    b.HasOne("DownloadCenter.Api.Infrastructure.Entities.Categories.DownloadCenterCategory", null)
                         .WithMany("Translations")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DownloadCenterCategoryId");
                 });
 
-            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.Category", b =>
+            modelBuilder.Entity("DownloadCenter.Api.Infrastructure.Entities.Categories.DownloadCenterCategory", b =>
                 {
                     b.Navigation("Translations");
                 });

@@ -1,4 +1,4 @@
-﻿using DownloadCenter.Api.Infrastructure.Entities.Categories;
+﻿using DownloadCenter.Api.Infrastructure.Entities.DownloadCenterCategories;
 using Microsoft.EntityFrameworkCore;
 
 namespace DownloadCenter.Api.Infrastructure
@@ -14,8 +14,8 @@ namespace DownloadCenter.Api.Infrastructure
             optionsBuilder.UseLazyLoadingProxies();
         }
 
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<CategoryTranslation> CategoryTranslations { get; set; }
-        public DbSet<CategoryFile> CategoryFiles { get; set; }
+        public DbSet<DownloadCenterCategory> DownloadCenterCategories { get; set; }
+        public DbSet<DownloadCenterCategoryTranslation> DownloadCenterCategoryTranslations { get; set; }
+        public DbSet<DownloadCenterCategoryFile> DownloadCenterCategoryFiles { get; set; }
     }
 }

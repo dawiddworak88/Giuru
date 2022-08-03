@@ -17,9 +17,9 @@ namespace Buyer.Web.Areas.DownloadCenter.DependencyInjection
 
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterPageViewModel>, DownloadCenterPageModelBuilder>();
             services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCatalogViewModel>, DownloadCenterCatalogModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CategoryDetailsViewModel>, CategoryDetailsModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CategoryPageViewModel>, CategoryPageModelBuilder>();
-            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, CategoryBreadcrumbsViewModel>, CategoryBreadcrumbsModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryDetailsViewModel>, DownloadCenterCategoryDetailsModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryPageViewModel>, DownloadCenterCategoryPageModelBuilder>();
+            services.AddScoped<IAsyncComponentModelBuilder<ComponentModelBase, DownloadCenterCategoryBreadcrumbsViewModel>, DownloadCenterCategoryBreadcrumbsModelBuilder>();
         }
     }
 }
