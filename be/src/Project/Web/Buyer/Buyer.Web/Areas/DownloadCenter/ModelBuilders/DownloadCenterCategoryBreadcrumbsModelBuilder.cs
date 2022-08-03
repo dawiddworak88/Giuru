@@ -48,16 +48,6 @@ namespace Buyer.Web.Areas.DownloadCenter.ModelBuilders
 
                 if (downloadCenterCategory is not null)
                 {
-                    if (downloadCenterCategory.ParentCategoryId.HasValue)
-                    {
-                        viewModel.Items.Add(new BreadcrumbViewModel
-                        {
-                            Name = downloadCenterCategory.ParentCategoryName,
-                            Url = this.linkGenerator.GetPathByAction("Detail", "Category", new { Area = "DownloadCenter", culture = CultureInfo.CurrentUICulture.Name, Id = downloadCenterCategory.ParentCategoryId }),
-                            IsActive = false
-                        });
-                    }
-
                     viewModel.Items.Add(new BreadcrumbViewModel
                     {
                         Name = downloadCenterCategory.CategoryName,
