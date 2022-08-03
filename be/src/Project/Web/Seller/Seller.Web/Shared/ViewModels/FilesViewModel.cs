@@ -13,7 +13,6 @@ namespace Seller.Web.Shared.ViewModels
         public string SizeLabel { get; set; }
         public string LastModifiedDateLabel { get; set; }
         public string CreatedDateLabel { get; set; }
-        public string AttachmentsLabel { get; set; }
         public IEnumerable<FileViewModel> Files { get; set; }
     }
 }

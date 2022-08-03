@@ -1,13 +1,17 @@
 .files {
+    .MuiFormControlLabel-root {
+        margin: 0;
+    }
+
     &__tooltip {
-        
-        .MuiButtonBase-root:nth-child(2){
+
+        .MuiButtonBase-root:not(:first-child) {
             margin-left: 0.5rem;
         }
 
         @media only screen and (max-width: $widescreen) {
 
-            .MuiButtonBase-root:nth-child(2) {
+            .MuiButtonBase-root:not(:first-child) {
                 margin-left: 0;
                 margin-top: 0.5rem;
             }

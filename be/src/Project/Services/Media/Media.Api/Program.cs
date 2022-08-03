@@ -53,6 +53,8 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
     loggerConfiguration.ReadFrom.Configuration(hostingContext.Configuration);
 });
 
+builder.Services.AddCors();
+
 builder.Services.AddControllers(options =>
 {
     options.RespectBrowserAcceptHeader = true;
@@ -66,6 +68,8 @@ builder.Services.RegisterApiAccountDependencies(builder.Configuration);
 builder.Services.RegisterDatabaseDependencies(builder.Configuration);
 
 builder.Services.RegisterMediaApiDependencies();
+
+builder.Services.RegisterEventBus(builder.Configuration);
 
 builder.Services.ConfigureSettings(builder.Configuration);
 
@@ -111,6 +115,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseCustomHeaderRequestLocalizationProvider(builder.Configuration, app.Services.GetService<IOptionsMonitor<LocalizationSettings>>());
+
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true)
+    .AllowCredentials());
 
 app.UseEndpoints(endpoints =>
 {
