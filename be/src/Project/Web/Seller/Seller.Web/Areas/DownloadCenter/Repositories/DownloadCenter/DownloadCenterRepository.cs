@@ -6,6 +6,7 @@ using Foundation.ApiExtensions.Shared.Definitions;
 using Foundation.Extensions.Exceptions;
 using Foundation.Extensions.ExtensionMethods;
 using Foundation.GenericRepository.Paginations;
+using Foundation.Media.Services.FileTypeServices;
 using Foundation.Media.Services.MediaServices;
 using Microsoft.Extensions.Options;
 using Seller.Web.Areas.DownloadCenter.ApiRequestModels;
@@ -26,17 +27,20 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
         private readonly IOptions<AppSettings> settings;
         private readonly IMediaItemsRepository mediaItemsRepository;
         private readonly IMediaService mediaService;
+        private readonly IFileTypeService fileTypeService;
 
         public DownloadCenterRepository(
             IApiClientService apiClientService,
             IMediaItemsRepository mediaItemsRepository,
             IMediaService mediaService,
+            IFileTypeService fileTypeService,
             IOptions<AppSettings> settings)
         {
             this.apiClientService = apiClientService;
             this.settings = settings;
             this.mediaService = mediaService;
             this.mediaItemsRepository = mediaItemsRepository;
+            this.fileTypeService = fileTypeService;
         }
 
         public async Task DeleteAsync(string token, string language, Guid? id)
@@ -121,7 +125,7 @@ namespace Seller.Web.Areas.DownloadCenter.Repositories.DownloadCenter
 
                     if (file is not null)
                     {
-                        downloadCenterFileItem.Url = file.MimeType.StartsWith("image") ? this.mediaService.GetMediaUrl(downloadCenterFile.Id, Constants.PreviewMaxWidth) : null;
+                        downloadCenterFileItem.Url = fileTypeService.IsImage(file.MimeType) ? this.mediaService.GetMediaUrl(downloadCenterFile.Id, Constants.PreviewMaxWidth) : null;
                     }
 
                     downloadCenterFiles.Add(downloadCenterFileItem);

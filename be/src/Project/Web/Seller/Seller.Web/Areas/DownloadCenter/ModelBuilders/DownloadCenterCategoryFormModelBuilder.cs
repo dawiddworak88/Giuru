@@ -2,6 +2,7 @@
 using Foundation.Extensions.ModelBuilders;
 using Foundation.GenericRepository.Paginations;
 using Foundation.Localization;
+using Foundation.Media.Services.FileTypeServices;
 using Foundation.Media.Services.MediaServices;
 using Foundation.PageContent.ComponentModels;
 using Foundation.PageContent.Components.ListItems.ViewModels;
@@ -27,6 +28,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
         private readonly IDownloadCenterCategoriesRepository downloadCenterCategoriesRepository;
         private readonly IMediaItemsRepository mediaItemsRepository;
         private readonly IMediaService mediaService;
+        private readonly IFileTypeService fileTypeService;
 
         public DownloadCenterCategoryFormModelBuilder(
             IStringLocalizer<GlobalResources> globalLocalizer,
@@ -34,6 +36,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             IDownloadCenterCategoriesRepository downloadCenterCategoriesRepository,
             IMediaItemsRepository mediaItemsRepository,
             IMediaService mediaService,
+            IFileTypeService fileTypeService,
             LinkGenerator linkGenerator)
         {
             this.linkGenerator = linkGenerator;
@@ -42,6 +45,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
             this.downloadCenterCategoriesRepository = downloadCenterCategoriesRepository;
             this.mediaItemsRepository = mediaItemsRepository;
             this.mediaService = mediaService;
+            this.fileTypeService = fileTypeService;
         }
 
         public async Task<DownloadCenterCategoryFormViewModel> BuildModelAsync(ComponentModelBase componentModel)
@@ -90,7 +94,7 @@ namespace Seller.Web.Areas.DownloadCenter.ModelBuilders
                             var categoryFile = new FileViewModel
                             {
                                 Id = file.Id,
-                                Url = this.mediaService.GetMediaUrl(file.Id, Constants.PreviewMaxWidth),
+                                Url = fileTypeService.IsImage(file.MimeType) ? this.mediaService.GetMediaUrl(file.Id, Constants.PreviewMaxWidth) : this.mediaService.GetNonCdnMediaUrl(file.Id),
                                 Name = file.Name,
                                 MimeType = file.MimeType,
                                 Filename = file.Filename,
