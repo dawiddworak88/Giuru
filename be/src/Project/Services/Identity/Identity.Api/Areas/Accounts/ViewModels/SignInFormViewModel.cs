@@ -18,5 +18,6 @@
         public string ContactText{ get; set; }
         public string RegisterUrl { get; set; }
         public string DevelopersEmail { get; set; }
+        public string ErrorMessage { get; set; }
     }
 }

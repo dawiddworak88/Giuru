@@ -186,8 +186,8 @@
   <data name="DisplayedRows" xml:space="preserve">
     <value>von</value>
   </data>
-  <data name="Download" xml:space="preserve">
-    <value>Herunterladen</value>
+  <data name="DownloadCenter" xml:space="preserve">
+    <value>Download-Center</value>
   </data>
   <data name="DropFile" xml:space="preserve">
     <value>Hier ablegen...</value>
@@ -620,5 +620,32 @@
   </data>
   <data name="SuccessfullyClientApply" xml:space="preserve">
     <value>Die Kooperationsanfrage wurde erfolgreich übermittelt.</value>
+  </data>
+  <data name="DownloadCenterCategories" xml:space="preserve">
+    <value>Download-Center-Kategorien</value>
+  </data>
+  <data name="EditCategory" xml:space="preserve">
+    <value>Kategorie bearbeiten</value>
+  </data>
+  <data name="EditDownloadCenter" xml:space="preserve">
+    <value>Download-Center bearbeiten</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Kategorie</value>
+  </data>
+  <data name="DownloadEverything" xml:space="preserve">
+    <value>Laden Sie alles herunter</value>
+  </data>
+  <data name="DownloadSelected" xml:space="preserve">
+    <value>Herunterladen ausgewählt</value>
+  </data>
+  <data name="NoCategories" xml:space="preserve">
+    <value>Keine Kategorien</value>
+  </data>
+  <data name="SelectFile" xml:space="preserve">
+    <value>Datei aussuchen</value>
+  </data>
+  <data name="Thumbnail" xml:space="preserve">
+    <value>Miniaturansicht</value>
   </data>
 </root>

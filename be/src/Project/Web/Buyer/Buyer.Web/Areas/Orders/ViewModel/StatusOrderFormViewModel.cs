@@ -1,5 +1,4 @@
 ﻿using Buyer.Web.Shared.ViewModels.Files;
-using Foundation.PageContent.Components.Images;
 using Foundation.PageContent.Components.ListItems.ViewModels;
 using System;
 using System.Collections.Generic;
